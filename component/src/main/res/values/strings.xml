@@ -11,6 +11,8 @@
     <string name="no_internet">网络连接失败，请检查网络连接</string>
     <string name="parse_error">数据异常，解析失败</string>
 
+    <string name="money_sign">¥</string>
+
     <string name="succeed">成功</string>
     <string name="code1">参数错误</string>
     <string name="code2">服务人员验证失败</string>

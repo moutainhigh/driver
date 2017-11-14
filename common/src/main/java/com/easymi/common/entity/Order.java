@@ -5,4 +5,20 @@ package com.easymi.common.entity;
  */
 
 public class Order {
+    public String orderType;
+
+    public String orderTime;
+
+    public String orderStatus;
+
+    public String orderStartPlace;
+
+    public String orderEndPlace;
+
+    public double orderPrice;
+
+    public String orderNumber;
+
+//    public String
+
 }

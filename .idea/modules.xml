@@ -3,12 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://D:\Android\AndroidPro\EasyminPro\v5driver\personal\base.iml" filepath="D:\Android\AndroidPro\EasyminPro\v5driver\personal\base.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
       <module fileurl="file://$PROJECT_DIR$/component/component.iml" filepath="$PROJECT_DIR$/component/component.iml" />
       <module fileurl="file://$PROJECT_DIR$/daijia/daijia.iml" filepath="$PROJECT_DIR$/daijia/daijia.iml" />
       <module fileurl="file://$PROJECT_DIR$/personal/personal.iml" filepath="$PROJECT_DIR$/personal/personal.iml" />
-      <module fileurl="file://$PROJECT_DIR$/v5driver.iml" filepath="$PROJECT_DIR$/v5driver.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/v5_driver.iml" filepath="$PROJECT_DIR$/.idea/v5_driver.iml" />
     </modules>
   </component>
 </project>

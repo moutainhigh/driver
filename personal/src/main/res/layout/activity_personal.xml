@@ -100,6 +100,7 @@
             android:layout_marginTop="20dp"/>
 
         <RelativeLayout
+            android:onClick="toLiushui"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@color/white">
@@ -137,6 +138,7 @@
             android:layout_height="0.1dp"
             android:background="@color/dark_gray"/>
         <RelativeLayout
+            android:onClick="toPocket"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@color/white">
@@ -175,6 +177,7 @@
             android:background="@color/dark_gray"/>
 
         <RelativeLayout
+            android:onClick="toRefer"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@color/white">
@@ -213,6 +216,7 @@
             android:background="@color/dark_gray"/>
 
         <RelativeLayout
+            android:onClick="toEva"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
@@ -252,6 +256,7 @@
             android:background="@color/dark_gray"/>
 
         <RelativeLayout
+            android:onClick="toMessage"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@color/white">
@@ -290,6 +295,7 @@
             android:background="@color/dark_gray"/>
 
         <RelativeLayout
+            android:onClick="toSet"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@color/white">

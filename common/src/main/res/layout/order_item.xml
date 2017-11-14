@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/dark_gray"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="10dp">
+        <ImageView
+            android:id="@+id/time_icon"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@mipmap/ic_time"
+            android:layout_centerVertical="true"
+            />
+
+        <TextView
+            android:id="@+id/order_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/white"
+            android:text="执行中 >"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:id="@+id/order_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/time_icon"
+            android:textColor="@color/white"
+            android:text="11月12日 14:03"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+            <ImageView
+                android:id="@+id/start_icon"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginTop="2dp"
+                android:src="@drawable/circle_accent"
+                />
+
+            <View
+                android:layout_width="0.1dp"
+                android:layout_height="20dp"
+                android:background="@color/dark_gray"/>
+
+            <ImageView
+                android:id="@+id/end_icon"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginBottom="2dp"
+                android:src="@drawable/circle_yellow"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0.0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/order_start_place"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:text="锦绣大道南段小卡科技"/>
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="0.0dp"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/order_end_place"
+                android:layout_width="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:layout_height="20dp"
+                android:text="花样年花样城5期"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/order_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="日常代驾"
+            android:textColor="@color/white"
+            android:background="@drawable/corners_alpha"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:layout_gravity="bottom"/>
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="15dp"/>
+</LinearLayout>
