@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="70dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <ImageView
+            android:id="@+id/ic_time"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/circle_accent"
+            android:layout_margin="10dp"/>
+
+        <TextView
+            android:id="@+id/detail_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2017-08-13 10:10"
+            android:textColor="#333333"
+            android:layout_toRightOf="@+id/ic_time"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/detail_purpose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="费用报销"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="35dp"
+        android:layout_marginBottom="10dp"
+        android:textColor="#999999"/>
+
+    <TextView
+        android:id="@+id/detail_money"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="¥-200"
+        android:textColor="#3c98e3"
+        android:textSize="18sp"
+        android:layout_alignParentRight="true"
+        android:layout_margin="10dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="35dp"
+        android:background="@color/dark_gray"/>
+
+</RelativeLayout>

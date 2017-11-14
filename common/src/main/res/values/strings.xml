@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">v5driver</string>
+    
+    <!-- 工作台界面str-->
+    <string name="work_fin_order">完成订单</string>
+    <string name="work_hour">时</string>
+    <string name="work_minute">分</string>
+    <string name="work_online_time">在线时长</string>
+    <string name="work_today_income">今日收入</string>
+    <string name="work_driver">司机</string>
+    <string name="work_order">订单</string>
+    <string name="work_online">上线</string>
+    <string name="work_create">创建订单</string>
+    <string name="work_offline">下线</string>
+    <string name="work_listen_order">听单中...</string>
+
+    <!-- 抢单界面str -->
+    <string name="grab_dis">距您约</string>
+    <string name="grab_map">地图</string>
+
+
+</resources>

@@ -1,0 +1,160 @@
+<resources>
+    <string name="app_name">base</string>
+
+    <!-- 登录界面str-->
+    <string name="login_title">服务端登录</string>
+    <string name="login_pl_phone">请输入手机号码</string>
+    <string name="login_pl_psw">请输入密码</string>
+    <string name="login_agg">同意《服务人员合作协议》</string>
+    <string name="login_rem_psw">记住密码</string>
+    <string name="login">登录</string>
+    <string name="login_new">新用户？</string>
+    <string name="login_reg">注册</string>
+    <string name="login_forget">忘记密码？</string>
+    <string name="login_reset">重置</string>
+
+    <!-- 个人中心str -->
+    <string name="person_order">我的订单</string>
+    <string name="person_money">我的钱包</string>
+    <string name="person_jiangli">推荐奖励</string>
+    <string name="person_pingjia">乘客评价</string>
+    <string name="person_message">消息中心</string>
+    <string name="person_set">设置</string>
+
+    <!-- 设置str -->
+    <string name="set_change_psw">修改密码</string>
+    <string name="set_voice_play">语音播报</string>
+    <string name="set_shake">震动</string>
+    <string name="set_orientation">始终横屏显示计价器</string>
+    <string name="set_language">选择语言</string>
+    <string name="set_statistics">统计中心</string>
+    <string name="set_help">帮助中心</string>
+    <string name="set_feedback">意见反馈</string>
+    <string name="set_contract_us">联系我们</string>
+    <string name="set_about_us">关于我们</string>
+    <string name="set_logout">注销</string>
+
+    <!-- 注册字符串 -->
+    <string name="register_base_msg">基本信息</string>
+    <string name="register_please_photo">请上传自己的照片</string>
+    <string name="register_name">司机姓名</string>
+    <string name="register_phone">手机号码</string>
+    <string name="register_ic_card">身份证号</string>
+    <string name="register_contract">紧急联系人</string>
+
+    <string name="register_please_name">请输入您的姓名</string>
+    <string name="register_please_phone">请输入手机号码</string>
+    <string name="register_please_id_card">请输入身份证号</string>
+    <string name="register_please_contract">紧急联系人（姓名+电话+关系）</string>
+
+    <string name="register_business">开展业务</string>
+
+    <string name="register_daijia">代驾</string>
+    <string name="register_zhuanche">专车</string>
+    <string name="register_errand">跑腿</string>
+    <string name="register_freight">货运</string>
+    <string name="register_zhuanxian">专线</string>
+
+    <string name="register_refer">推荐人工号</string>
+    <string name="register_refer_no">输入推荐人工号</string>
+    <string name="register_agree">同意《服务人员服务协议》</string>
+    <string name="register_next_step">下一步</string>
+
+    <string name="register_upload_card">上传身份证</string>
+    <string name="register_upload_driving">上传驾驶证</string>
+    <string name="register_front">正面</string>
+    <string name="register_back">反面</string>
+
+    <string name="register_hint_driving">确保驾驶证真实有效</string>
+    <string name="register_hint_id_card">必须为本人身份证\n身份证上的信息必须真实有效且清晰可见</string>
+    <string name="register_hint_photo">请上传您的半身照</string>
+
+    <string name="register_known">知道了</string>
+    <string name="register_apply">提交资料</string>
+
+
+    <!-- 设置密码str-->
+    <string name="reset_login_psw">设置登录密码</string>
+    <string name="reset_please_6">请输入6–16新位密码</string>
+    <string name="reset_please_code">请输入验证码</string>
+    <string name="reset_confirm">确定</string>
+    <string name="reset_edit_words">输入图片文字</string>
+    <string name="reset_refresh">点击刷新</string>
+    <string name="reset_edit_code">输入验证码</string>
+    <string name="reset_code_to_where">验证码发送至</string>
+    <string name="reset_sec_resend">秒后重发</string>
+    <string name="reset_resend_code">重新获取></string>
+
+    <!--充值str -->
+    <string name="recharge_balance">我的余额(元)</string>
+    <string name="recharge_please_money">请输入充值金额</string>
+    <string name="recharge_50">¥50</string>
+    <string name="recharge_100">¥100</string>
+    <string name="recharge_200">¥200</string>
+    <string name="recharge_pay_wechat">微信支付</string>
+    <string name="recharge_pay_zfb">支付宝支付</string>
+    <string name="recharge_pay_union">银联支付</string>
+
+    <!-- 钱包str-->
+    <string name="pocket_balance">账户余额(元)</string>
+    <string name="pocket_recharge">充值</string>
+    <string name="pocket_detail">账户明细</string>
+
+    <!--我的消息str-->
+    <string name="msg_notify">通知</string>
+    <string name="msg_notice">公告</string>
+
+    <!-- 推荐人str-->
+    <string name="recommend_yi">已推荐人数</string>
+    <string name="recommend_unit">(人)</string>
+    <string name="recommend_money">奖励金额</string>
+
+    <!-- 统计中心str -->
+    <string name="stats_today">今日</string>
+    <string name="stats_yesterday">昨日</string>
+    <string name="stats_week">本周</string>
+    <string name="stats_month">本月</string>
+    <string name="stats_order">订单</string>
+    <string name="stats_accept_order_no">接单数</string>
+    <string name="stats_complete_order_no">完成订单数</string>
+    <string name="stats_accept_percent">接单率</string>
+    <string name="stats_refuse_percent">拒单率</string>
+    <string name="stats_income">收入</string>
+    <string name="stats_order_statement">订单流水</string>
+    <string name="stats_income_statement">收入流水</string>
+    <string name="stats_service">服务</string>
+    <string name="stats_star">乘客评价得分</string>
+    <string name="stats_complain">被投诉的次数</string>
+
+    <!-- 账户明细str-->
+    <string name="detail_balance">我的余额</string>
+
+    <!--提现str-->
+    <string name="tixian_please_money">请输入提现金额</string>
+    <string name="tixian_please_bank">请输入银行</string>
+    <string name="tixian_please_number">请输入本人银行卡号</string>
+    <string name="tixian_please_name">请输入持卡人姓名</string>
+    <string name="tixian_confirm">确认提现</string>
+    <string name="tixian_rule">提现规则</string>
+    <string name="tixian_record">提现记录</string>
+    <string name="tixian_this_most">本次可提现</string>
+    <string name="tixian_my_balance">我的余额（元）</string>
+
+    <!-- 提现规则str-->
+    <string name="tixian_hint">温馨提示</string>
+
+    <!-- 修改密码str-->
+    <string name="change_psw_old">请输入旧密码</string>
+    <string name="change_psw_new">请输入新密码</string>
+    <string name="change_psw_confirm">请确认新密码</string>
+    <string name="change_confirm">确定</string>
+    
+    <!-- 语言设置str-->
+    <string name="language_flow_sys">跟随系统</string>
+    <string name="language_sin_cn">简体中文</string>
+    <string name="language_fan_cn">繁体中文</string>
+
+    <!--意见反馈str-->
+    <string name="feedback_please">请留下您的宝贵意见</string>
+    <string name="feedback_apply">提交</string>
+</resources>

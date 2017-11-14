@@ -1,0 +1,59 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext.kotlin_version = '1.1.51'
+    repositories {
+        //https://maven.google.com //google()仓库的地址不能再网页打开,这个地址可以在网页上打开
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+//统一配置工程用到的编译版本和support版本
+ext {
+    supportLibraryVersion = "26.1.0"    //support库的版本
+    android = [
+            compileSdkVersion: 26,
+            minSdkVersion    : 15,
+            targetSdkVersion : 26,
+    ]
+
+    dependencies = ['appcompat-v7'     : "com.android.support:appcompat-v7:$supportLibraryVersion",
+                    'design'           : "com.android.support:design:$supportLibraryVersion",
+                    'junit'            : 'junit:junit:4.12',
+                    'multidex'         : 'com.android.support:multidex:1.0.1',
+                    'constraint-layout': 'com.android.support.constraint:constraint-layout:1.0.2',
+                    'pull-load-more-recycler': 'com.wuxiaolong.pullloadmorerecyclerview:library:1.1.2',
+
+                    //伸缩layout
+                    'expandable-layout': 'net.cachapa.expandablelayout:expandablelayout:2.3',
+
+                    //3D地图so及jar
+                    'amap-base': 'com.amap.api:3dmap:5.4.0',
+                    //定位功能
+                    'amap-loc': 'com.amap.api:location:3.6.1',
+                    //搜索功能
+                    'amap-seo': 'com.amap.api:search:5.3.1',
+    ]
+}
+

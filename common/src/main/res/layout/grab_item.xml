@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/dark_gray" />
+
+        <LinearLayout
+            android:id="@+id/left_con"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/order_time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@mipmap/order_time_type_bg"
+                android:gravity="center"
+                android:paddingBottom="5dp"
+                android:text="即时"
+                android:textColor="@color/white" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:src="@mipmap/blue_dot" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="60dp"
+                android:background="@color/dark_gray" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/yellow_dot" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/order_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="41dp"
+            android:layout_toRightOf="@+id/left_con"
+            android:text="成都锦绣大道南段成都锦绣大道南段成都锦绣大道南段"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/order_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="113dp"
+            android:layout_toRightOf="@+id/left_con"
+            android:text="成都锦绣大道南段成都锦绣大道南段成都锦绣大道南段"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/require_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="5dp" />
+
+
+</LinearLayout>

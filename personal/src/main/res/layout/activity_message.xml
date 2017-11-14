@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.easymi.component.widget.CusToolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@color/white">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@mipmap/msg_img"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="#dcdcdc"/>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:background="@color/white">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="#dcdcdc"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp">
+
+            <ImageView
+                android:id="@+id/ic_trumpet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/ic_trumpet"
+                android:layout_margin="10dp"/>
+
+            <View
+                android:id="@+id/center_line"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:layout_centerVertical="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/ic_trumpet"
+                android:layout_above="@+id/center_line"
+                android:textSize="16sp"
+                android:textColor="#232323"
+                android:text="@string/msg_notify"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_toLeftOf="@+id/ic_row_1"
+                android:layout_toRightOf="@+id/ic_trumpet"
+                android:layout_below="@+id/center_line"
+                android:text="您的余额提现已经被驳回"/>
+
+            <ImageView
+                android:id="@+id/ic_row_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_row"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/ic_row_1"
+                android:layout_above="@+id/center_line"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="10dp"
+                android:text="2017-08-11 12:00"/>
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="#dcdcdc"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp">
+
+            <ImageView
+                android:id="@+id/ic_word"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/ic_word"
+                android:layout_margin="10dp"/>
+
+            <View
+                android:id="@+id/center_line_1"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:layout_centerVertical="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/ic_word"
+                android:layout_above="@+id/center_line_1"
+                android:textSize="16sp"
+                android:textColor="#232323"
+                android:text="@string/msg_notice"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_toLeftOf="@+id/ic_row_2"
+                android:layout_toRightOf="@+id/ic_word"
+                android:layout_below="@+id/center_line_1"
+                android:text="上线需知"/>
+
+            <ImageView
+                android:id="@+id/ic_row_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_row"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/ic_row_2"
+                android:layout_above="@+id/center_line_1"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="10dp"
+                android:text="2017-08-11 12:00"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
