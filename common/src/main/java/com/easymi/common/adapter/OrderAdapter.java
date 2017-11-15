@@ -1,12 +1,15 @@
 package com.easymi.common.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.easymi.common.R;
 import com.easymi.common.entity.Order;
 
@@ -17,7 +20,7 @@ import java.util.List;
  * Created by liuzihao on 2017/11/14.
  */
 
-public class OrderAdapter extends  RecyclerView.Adapter<OrderAdapter.Holder> {
+public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.Holder> {
 
     private Context context;
 
@@ -35,9 +38,10 @@ public class OrderAdapter extends  RecyclerView.Adapter<OrderAdapter.Holder> {
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_item,null);
-
-        return new Holder(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_item, null);
+        Holder holder = new Holder(view);
+        holder.root = view;
+        return holder;
     }
 
     @Override
@@ -48,7 +52,8 @@ public class OrderAdapter extends  RecyclerView.Adapter<OrderAdapter.Holder> {
         holder.orderStartPlace.setText(order.orderStartPlace);
         holder.orderStatus.setText(order.orderStatus);
         holder.orderTime.setText(order.orderTime);
-
+        holder.root.setOnClickListener(view -> ARouter.getInstance().build("/daijia/FlowActivity")
+                .withLong("orderId", order.orderId).navigation());
     }
 
     @Override
@@ -56,13 +61,14 @@ public class OrderAdapter extends  RecyclerView.Adapter<OrderAdapter.Holder> {
         return orders.size();
     }
 
-    class Holder extends RecyclerView.ViewHolder{
+    class Holder extends RecyclerView.ViewHolder {
 
         TextView orderTime;
         TextView orderStatus;
         TextView orderStartPlace;
         TextView orderEndPlace;
         TextView orderType;
+        View root;
 
         public Holder(View itemView) {
             super(itemView);

@@ -107,6 +107,7 @@ public class WorkActivity extends RxBaseActivity implements BaseView {
         List<Order> orders = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             Order order = new Order();
+            order.orderId = 1L;
             order.orderEndPlace = "锦绣大道南段99号";
             order.orderStartPlace = "花样年花样城5期";
             order.orderStatus = "执行中 >";

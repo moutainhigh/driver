@@ -15,16 +15,12 @@ import com.easymi.component.widget.RxProgressHUD;
 import com.trello.rxlifecycle.components.support.RxFragment;
 
 /**
- * 懒加载fragment
- * 适用于ViewPager中预加载的那种fragment
+ *
+ * 普通fragment
  */
-public abstract class RxLazyFragment extends RxFragment {
+public abstract class RxBaseFragment extends RxFragment {
     private View parentView;
     private FragmentActivity activity;
-    // 标志位 标志已经初始化完成。
-    protected boolean isPrepared;
-    //标志位 fragment是否可见
-    protected boolean isVisible;
 
     protected RxProgressHUD hud;
 
@@ -100,21 +96,6 @@ public abstract class RxLazyFragment extends RxFragment {
                 null : getActivity().getApplicationContext()) : this.activity.getApplicationContext();
     }
 
-
-    /**
-     * Fragment数据的懒加载
-     */
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (getUserVisibleHint()) {
-            isVisible = true;
-            onVisible();
-        } else {
-            isVisible = false;
-            onInvisible();
-        }
-    }
 
     /**
      * fragment显示时才加载数据

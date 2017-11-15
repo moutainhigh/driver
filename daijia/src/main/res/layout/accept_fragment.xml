@@ -13,6 +13,7 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/accept_btn"
             android:layout_width="0.0dp"
             android:layout_height="50dp"
             android:layout_weight="8"
@@ -21,6 +22,7 @@
             android:textColor="@color/white" />
 
         <LinearLayout
+            android:id="@+id/refuse_con"
             android:layout_width="0.0dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
@@ -87,12 +89,14 @@
             android:gravity="center_vertical">
 
             <TextView
+                android:id="@+id/start_place"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="锦绣大道南段小咖科技"
                 android:textColor="#232323"
                 android:textSize="18sp"/>
             <TextView
+                android:id="@+id/end_place"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="17dp"

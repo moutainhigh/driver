@@ -1,5 +1,6 @@
 package com.easymi.component.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -12,6 +13,10 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
+import com.easymi.component.permission.RxPermissions;
+
+import rx.functions.Action1;
 
 /**
  * Created by xyin on 2017/4/10.
@@ -132,6 +137,28 @@ public class PhoneUtil {
             if (localIBinder != null)
                 localInputMethodManager
                         .hideSoftInputFromWindow(localIBinder, 0);
+        }
+    }
+
+    public static void call(final Activity context, final String phoneNumber) {
+        try {
+            RxPermissions rxPermissions = new RxPermissions(context);
+            rxPermissions.request(Manifest.permission.CALL_PHONE)
+                    .subscribe(new Action1<Boolean>() {
+                        @Override
+                        public void call(Boolean granted) {
+                            if (granted) {
+                                Intent intent = new Intent();
+                                intent.setAction(Intent.ACTION_CALL);
+                                intent.setData(Uri.parse("tel:" + phoneNumber));
+                                context.startActivity(intent);
+                            } else {
+
+                            }
+                        }
+                    });
+        } catch (Exception e) {
+
         }
     }
 

@@ -13,6 +13,7 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/start_wait"
             android:layout_width="0.0dp"
             android:layout_height="50dp"
             android:layout_weight="8"
@@ -21,6 +22,7 @@
             android:textColor="@color/white" />
 
         <LinearLayout
+            android:id="@+id/settle"
             android:layout_width="0.0dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
@@ -86,6 +88,7 @@
                         />
 
                     <TextView
+                        android:id="@+id/service_money"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="120"
@@ -117,6 +120,7 @@
                     android:layout_marginTop="12dp">
 
                     <TextView
+                        android:id="@+id/distance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="6.8"
@@ -159,6 +163,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/drive_time"/>
             <TextView
+                android:id="@+id/drive_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="20"
@@ -184,6 +189,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/wait_time"/>
                 <TextView
+                    android:id="@+id/wait_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="20"

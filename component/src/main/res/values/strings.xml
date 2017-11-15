@@ -13,6 +13,8 @@
 
     <string name="money_sign">¥</string>
 
+    <string name="slide_arrive">滑动到达预约地</string>
+
     <string name="succeed">成功</string>
     <string name="code1">参数错误</string>
     <string name="code2">服务人员验证失败</string>

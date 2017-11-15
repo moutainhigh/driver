@@ -5,6 +5,8 @@ package com.easymi.common.entity;
  */
 
 public class Order {
+    public long orderId;
+
     public String orderType;
 
     public String orderTime;
