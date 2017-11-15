@@ -7,7 +7,8 @@
       <module fileurl="file://$PROJECT_DIR$/component/component.iml" filepath="$PROJECT_DIR$/component/component.iml" />
       <module fileurl="file://$PROJECT_DIR$/daijia/daijia.iml" filepath="$PROJECT_DIR$/daijia/daijia.iml" />
       <module fileurl="file://$PROJECT_DIR$/personal/personal.iml" filepath="$PROJECT_DIR$/personal/personal.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/v5_driver.iml" filepath="$PROJECT_DIR$/.idea/v5_driver.iml" />
+      <module fileurl="file://D:\Android\AndroidPro\EasyminPro\v5driver\.idea\v5_driver.iml" filepath="D:\Android\AndroidPro\EasyminPro\v5driver\.idea\v5_driver.iml" />
+      <module fileurl="file://$PROJECT_DIR$/v5driver.iml" filepath="$PROJECT_DIR$/v5driver.iml" />
     </modules>
   </component>
 </project>

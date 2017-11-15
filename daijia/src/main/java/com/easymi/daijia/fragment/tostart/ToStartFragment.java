@@ -12,7 +12,7 @@ import com.easymi.daijia.R;
 public class ToStartFragment extends RxLazyFragment {
     @Override
     public int getLayoutResId() {
-        return R.layout.to_start_fragmnet;
+        return R.layout.to_start_fragment;
     }
 
     @Override

@@ -157,4 +157,15 @@
     <!--意见反馈str-->
     <string name="feedback_please">请留下您的宝贵意见</string>
     <string name="feedback_apply">提交</string>
+    
+    <!--评价str-->
+    <string name="total_score">累计得分</string>
+    <string name="total_order">累计接单</string>
+    <string name="total_score_dis">累计星级分布</string>
+    <string name="star_5">5星</string>
+    <string name="star_4">4星</string>
+    <string name="star_3">3星</string>
+    <string name="star_2">2星</string>
+    <string name="star_1">1星</string>
+    <string name="consumer_eva">乘客评价</string>
 </resources>

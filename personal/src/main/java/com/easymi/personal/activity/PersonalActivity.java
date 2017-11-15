@@ -41,8 +41,8 @@ public class PersonalActivity extends RxBaseActivity {
     }
 
     public void toEva(View view) {
-//        Intent intent = new Intent(this,RecommendMoneyActivity.class);
-//        startActivity(intent);
+        Intent intent = new Intent(this, EvaActivity.class);
+        startActivity(intent);
     }
 
     public void toMessage(View view) {

@@ -12,7 +12,7 @@ import com.easymi.daijia.R;
 public class FlowActivity extends RxBaseActivity {
     @Override
     public int getLayoutId() {
-        return R.layout.accept_fragmnet;
+        return R.layout.accept_fragment;
     }
 
     @Override
