@@ -12,7 +12,7 @@ import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -20,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * 网络请求client.
  */
 
-public class HttpClient {
+public class ApiManager {
 
     private OkHttpClient mOkHttpClient;
 
@@ -28,7 +28,7 @@ public class HttpClient {
      * 内部静态类实现单例,且在第一次使用时才加载.
      */
     private static class SingletonHolder {
-        private static final HttpClient INSTANCE = new HttpClient();
+        private static final ApiManager INSTANCE = new ApiManager();
     }
 
     /**
@@ -36,14 +36,14 @@ public class HttpClient {
      *
      * @return Api对象
      */
-    public static HttpClient getInstance() {
+    public static ApiManager getInstance() {
         return SingletonHolder.INSTANCE;
     }
 
     /**
      * 私有化构造方法,配置okhttpClient.
      */
-    private HttpClient() {
+    private ApiManager() {
         File cacheFile = new File(XApp.context().getCacheDir(), "cache");
         Cache cache = new Cache(cacheFile, 1024 * 1024 * 2); //2M
         HttpLoggingInterceptor logInterceptor = new HttpLoggingInterceptor();   //拦截器用来输出请求日志方便调试
@@ -55,6 +55,7 @@ public class HttpClient {
                 .connectTimeout(16000, TimeUnit.MILLISECONDS)
                 .addInterceptor(logInterceptor) //添加日志拦截器,进行输出日志
                 .retryOnConnectionFailure(true)    //失败重连
+                .addInterceptor(new SignInterceptor())
                 .cache(cache)
                 .build();
     }
@@ -71,7 +72,7 @@ public class HttpClient {
         Retrofit retrofit = new Retrofit.Builder()
                 .client(mOkHttpClient)
                 .addConverterFactory(GsonConverterFactory.create()) //添加一个Gson转化
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create()) //添加一个rxjava转换
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create()) //添加一个rxjava转换
                 .baseUrl(hostUrl)
                 .build();
 

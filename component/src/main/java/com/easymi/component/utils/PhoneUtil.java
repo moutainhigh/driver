@@ -140,26 +140,121 @@ public class PhoneUtil {
         }
     }
 
+    public static void showKeyboard(View view){
+        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
+    }
+
     public static void call(final Activity context, final String phoneNumber) {
         try {
             RxPermissions rxPermissions = new RxPermissions(context);
             rxPermissions.request(Manifest.permission.CALL_PHONE)
-                    .subscribe(new Action1<Boolean>() {
-                        @Override
-                        public void call(Boolean granted) {
-                            if (granted) {
-                                Intent intent = new Intent();
-                                intent.setAction(Intent.ACTION_CALL);
-                                intent.setData(Uri.parse("tel:" + phoneNumber));
-                                context.startActivity(intent);
-                            } else {
+                    .subscribe(granted -> {
+                        if (granted) {
+                            Intent intent = new Intent();
+                            intent.setAction(Intent.ACTION_CALL);
+                            intent.setData(Uri.parse("tel:" + phoneNumber));
+                            context.startActivity(intent);
+                        } else {
 
-                            }
                         }
                     });
         } catch (Exception e) {
 
         }
+    }
+
+    /**
+     * 键盘keyCode转为英文字母
+     *
+     * @param code
+     * @return
+     */
+    public static String code2Str(int code) {
+        String str = "";
+        switch (code) {
+            case 29:
+                str = "A";
+                break;
+            case 30:
+                str = "B";
+                break;
+            case 31:
+                str = "C";
+                break;
+            case 32:
+                str = "D";
+                break;
+            case 33:
+                str = "E";
+                break;
+            case 34:
+                str = "F";
+                break;
+            case 35:
+                str = "G";
+                break;
+            case 36:
+                str = "H";
+                break;
+            case 37:
+                str = "I";
+                break;
+            case 38:
+                str = "J";
+                break;
+            case 39:
+                str = "K";
+                break;
+            case 40:
+                str = "L";
+                break;
+            case 41:
+                str = "M";
+                break;
+            case 42:
+                str = "N";
+                break;
+            case 43:
+                str = "O";
+                break;
+            case 44:
+                str = "P";
+                break;
+            case 45:
+                str = "Q";
+                break;
+            case 46:
+                str = "R";
+                break;
+            case 47:
+                str = "S";
+                break;
+            case 48:
+                str = "T";
+                break;
+            case 49:
+                str = "U";
+                break;
+            case 50:
+                str = "V";
+                break;
+            case 51:
+                str = "W";
+                break;
+            case 52:
+                str = "X";
+                break;
+            case 53:
+                str = "Y";
+                break;
+            case 54:
+                str = "Z";
+                break;
+
+
+        }
+        return str;
     }
 
 }

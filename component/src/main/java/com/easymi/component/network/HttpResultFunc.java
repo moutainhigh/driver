@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.easymi.component.result.EmResult;
 
+import rx.functions.Func0;
 import rx.functions.Func1;
 
 /**
@@ -16,7 +17,7 @@ import rx.functions.Func1;
  *
  * @param <T> Subscriber真正需要的数据类型，也就是Data部分的数据类型
  */
-public class HttpResultFunc<T> implements Func1<EmResult<T>, T> {
+public class HttpResultFunc<T extends EmResult> implements Func1<T,Boolean> {
     private Context context;
 
     public HttpResultFunc(Context context) {
@@ -24,10 +25,11 @@ public class HttpResultFunc<T> implements Func1<EmResult<T>, T> {
     }
 
     @Override
-    public T call(EmResult<T> httpResult) {
-        if (httpResult.getCode() != 0) {
-            throw new ApiException(context, httpResult.getCode());
+    public Boolean call(T t) {
+        if (t.getCode() != 1) {
+            throw new ApiException(context, t.getCode());
+        } else {
+            return true;
         }
-        return httpResult.getData();
     }
 }

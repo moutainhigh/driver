@@ -26,6 +26,7 @@
                 android:background="@color/dark_gray" />
 
             <RelativeLayout
+                android:onClick="changePsw"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@color/white">
@@ -77,6 +78,7 @@
                     android:textSize="16sp" />
 
                 <com.easymi.component.widget.switchButton.SwitchButton
+                    android:id="@+id/voice_able_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -107,6 +109,7 @@
                     android:textSize="16sp" />
 
                 <com.easymi.component.widget.switchButton.SwitchButton
+                    android:id="@+id/shake_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -137,6 +140,7 @@
                     android:textSize="16sp" />
 
                 <com.easymi.component.widget.switchButton.SwitchButton
+                    android:id="@+id/oren_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -152,6 +156,7 @@
                 android:background="@color/dark_gray" />
 
             <RelativeLayout
+                android:onClick="choiceLanguage"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@color/white">
@@ -188,6 +193,7 @@
                 android:background="@color/dark_gray" />
 
             <RelativeLayout
+                android:onClick="toStats"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@color/white">
@@ -218,6 +224,7 @@
                 android:background="@color/dark_gray" />
 
             <RelativeLayout
+                android:onClick="helpCenter"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@color/white">
@@ -254,6 +261,7 @@
                 android:background="@color/dark_gray" />
 
             <RelativeLayout
+                android:onClick="feedBack"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@color/white">
@@ -284,6 +292,7 @@
                 android:background="@color/dark_gray" />
 
             <RelativeLayout
+                android:onClick="contractUs"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@color/white">
@@ -314,6 +323,7 @@
                 android:background="@color/dark_gray" />
 
             <RelativeLayout
+                android:onClick="aboutUs"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@color/white">
@@ -349,9 +359,11 @@
                 android:layout_marginTop="20dp"
                 android:background="@color/dark_gray" />
             <Button
+                android:onClick="logOut"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:textColor="@color/colorAccent"
+                style="?android:attr/borderlessButtonStyle"
                 android:text="@string/set_logout"
                 android:background="@color/white"/>
 

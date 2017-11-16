@@ -1,23 +1,24 @@
 package com.easymi.component.rxmvp;
 
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 
 /**
- * Created by xyin on 2016/10/9.
- * 用于管理Rxjava相关代码的生命周期.
+ * @Description: Rx管理者
+ * @author: developerLzh
+ * @date: 2017/1/21
  */
 
 public class RxManager {
 
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();    //同一管理subscribe后返回的Disposable
+    private CompositeSubscription mCompositeSubscription = new CompositeSubscription(); //管理订阅者
 
-    public void add(Disposable disposable) {
-        compositeDisposable.add(disposable);  //增加订阅源
+    public void add(Subscription m) {
+        mCompositeSubscription.add(m);  //增加订阅源
     }
 
     public void clear() {
-        compositeDisposable.clear(); //取消订阅
+        mCompositeSubscription.unsubscribe(); //取消订阅
     }
 
 }

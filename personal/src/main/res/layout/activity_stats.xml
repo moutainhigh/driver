@@ -35,7 +35,6 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/radio_selector"
                     android:button="@null"
-                    android:checked="true"
                     android:paddingBottom="3dp"
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
@@ -58,7 +57,7 @@
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
                     android:paddingTop="3dp"
-                    android:text="@string/stats_today"
+                    android:text="@string/stats_yesterday"
                     android:textColor="@color/stats_color"
                     android:textSize="14sp" />
 
@@ -76,7 +75,7 @@
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
                     android:paddingTop="3dp"
-                    android:text="@string/stats_today"
+                    android:text="@string/stats_week"
                     android:textColor="@color/stats_color"
                     android:textSize="14sp" />
 
@@ -94,7 +93,7 @@
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
                     android:paddingTop="3dp"
-                    android:text="@string/stats_today"
+                    android:text="@string/stats_month"
                     android:textColor="@color/stats_color"
                     android:textSize="14sp" />
 

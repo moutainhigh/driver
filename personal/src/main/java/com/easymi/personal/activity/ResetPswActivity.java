@@ -2,6 +2,7 @@ package com.easymi.personal.activity;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
@@ -13,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.OnCodeListener;
@@ -60,7 +62,11 @@ public class ResetPswActivity extends RxBaseActivity {
         authInput = findViewById(R.id.auth_input);
 
         secCodeCon = findViewById(R.id.edit_security_code_con);
+        timerText = findViewById(R.id.timer_text);
+        secInput = findViewById(R.id.sec_code_input);
+        phoneNumber = findViewById(R.id.phone_number);
 
+        confirmPsw.setEnabled(false);
         editPsw.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -76,12 +82,17 @@ public class ResetPswActivity extends RxBaseActivity {
             public void afterTextChanged(Editable s) {
                 if (StringUtils.isBlank(s.toString()) || s.toString().length() < 6 || s.toString().length() > 16) {
                     confirmPsw.setEnabled(false);
+                    confirmPsw.setBackgroundDrawable(getResources().getDrawable(R.drawable.corners_button_press_bg));
                 } else {
                     confirmPsw.setEnabled(true);
+                    confirmPsw.setBackgroundDrawable(getResources().getDrawable(R.drawable.corners_button_bg));
                 }
             }
         });
+        editPsw.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
         confirmPsw.setOnClickListener(v -> {
+            PhoneUtil.hideKeyboard(ResetPswActivity.this);
             pswCon.setVisibility(View.GONE);
             authCodeCon.setVisibility(View.VISIBLE);
         });

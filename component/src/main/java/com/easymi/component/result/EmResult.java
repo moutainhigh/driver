@@ -4,12 +4,10 @@ package com.easymi.component.result;
  * Created by Administrator on 2017/1/22.
  */
 
-public class EmResult<T> {
+public class EmResult {
     private int code;
 
-    private String message;
-
-    private T data;
+    private String msg;
 
     public int getCode() {
         return code;
@@ -20,18 +18,11 @@ public class EmResult<T> {
     }
 
     public String getMessage() {
-        return message;
+        return msg;
     }
 
     public void setMessage(String message) {
-        this.message = message;
+        this.msg = message;
     }
 
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
-    }
 }

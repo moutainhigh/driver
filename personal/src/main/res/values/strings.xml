@@ -12,6 +12,7 @@
     <string name="login_reg">注册</string>
     <string name="login_forget">忘记密码？</string>
     <string name="login_reset">重置</string>
+    <string name="login_agreement">服务人员协议</string>
 
     <!-- 个人中心str -->
     <string name="person_order">我的订单</string>
@@ -33,6 +34,10 @@
     <string name="set_contract_us">联系我们</string>
     <string name="set_about_us">关于我们</string>
     <string name="set_logout">注销</string>
+    <string name="set_hint">提示</string>
+    <string name="set_sure_exit">您确定退出当前账号吗？</string>
+    <string name="set_sure">确定</string>
+    <string name="set_cancel">取消</string>
 
     <!-- 注册字符串 -->
     <string name="register_base_msg">基本信息</string>

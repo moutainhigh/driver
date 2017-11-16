@@ -24,7 +24,7 @@ public class ApiException extends RuntimeException {
      * 需要根据错误码对错误信息进行一个转换，在显示给用户
      */
     private static String getApiExceptionMessage(Context context, int code) {
-        return HttpClient.codeString(context, code);
+        return ApiManager.codeString(context, code);
     }
 
     /**

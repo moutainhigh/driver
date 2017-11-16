@@ -19,6 +19,7 @@ import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 
 import com.easymi.component.R;
+import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 
 
@@ -210,6 +211,9 @@ public class VerifyCodeView extends View {
         } else if (keyCode >= 7 && keyCode <= 16 && codeBuilder.length() < boxNum) {
             codeBuilder.append(keyCode - 7);
             invalidate();
+        } else if (keyCode >= 29 && keyCode <= 54 && inputType.equals("text") && codeBuilder.length() < boxNum) {//inputType为text
+            codeBuilder.append(PhoneUtil.code2Str(keyCode));
+            invalidate();
         }
         if (codeBuilder.length() >= boxNum) {
             //达到位数自动隐藏键盘
@@ -228,16 +232,15 @@ public class VerifyCodeView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         //在View上点击时弹出软键盘
-        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.viewClicked(this);
-        imm.showSoftInput(this, 0);
+        requestFocus();
+        PhoneUtil.showKeyboard(this);
         return super.onTouchEvent(event);
     }
 
     @Override
     public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
         if (inputType.equals("text")) {
-            outAttrs.inputType = InputType.TYPE_CLASS_TEXT;
+            outAttrs.inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD;
         } else if (inputType.equals("phone")) {
             outAttrs.inputType = InputType.TYPE_CLASS_PHONE;
         } else if (inputType.equals("number")) {

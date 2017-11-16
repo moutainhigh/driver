@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextView
             android:layout_width="wrap_content"
@@ -41,8 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="30dp"
-            android:background="@drawable/corners_button_selector"
-            android:enabled="false"
+            android:background="@drawable/corners_button_press_bg"
             android:text="@string/reset_confirm"
             android:textColor="@color/white" />
 
@@ -112,7 +111,7 @@
         android:id="@+id/edit_security_code_con"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:visibility="gone"
         android:orientation="vertical">
 
         <TextView
