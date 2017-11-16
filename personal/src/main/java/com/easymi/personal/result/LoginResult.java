@@ -1,7 +1,7 @@
 package com.easymi.personal.result;
 
 import com.easymi.component.result.EmResult;
-import com.easymi.personal.entity.Employ;
+import com.easymi.component.entity.Employ;
 
 /**
  * Created by liuzihao on 2017/11/16.

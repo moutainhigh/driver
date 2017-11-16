@@ -217,6 +217,7 @@
             android:layout_height="80dp">
 
             <LinearLayout
+                android:id="@+id/create_order"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:background="#3e4250"
@@ -237,6 +238,7 @@
 
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/offline"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_alignParentRight="true"
@@ -262,6 +264,8 @@
                 android:id="@+id/ripple_ground"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_toRightOf="@+id/create_order"
+                android:layout_toLeftOf="@+id/offline"
                 app:rb_color="#2a3f57"
                 app:rb_duration="5000"
                 app:rb_radius="25dp"

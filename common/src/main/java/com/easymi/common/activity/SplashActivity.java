@@ -1,5 +1,6 @@
 package com.easymi.common.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Window;
@@ -29,7 +30,6 @@ public class SplashActivity extends RxBaseActivity {
             ARouter.getInstance()
                     .build("/personal/LoginActivity")
                     .navigation();
-            finish();
         }), 2000);
     }
 }

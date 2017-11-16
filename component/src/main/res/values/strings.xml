@@ -15,6 +15,15 @@
 
     <string name="slide_arrive">滑动到达预约地</string>
 
+    <string name="cancel">取消</string>
+    <string name="confirm">确定</string>
+
+    <string name="today">今天</string>
+    <string name="tomorrow">明天</string>
+    <string name="houtian">后天</string>
+    <string name="shi">时</string>
+    <string name="now">现在</string>
+
     <string name="succeed">成功</string>
     <string name="code1">参数错误</string>
     <string name="code2">服务人员验证失败</string>

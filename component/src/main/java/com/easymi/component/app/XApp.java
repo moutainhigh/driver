@@ -7,6 +7,7 @@ import android.support.multidex.MultiDexApplication;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.easymi.component.BuildConfig;
+import com.easymi.component.db.SqliteHelper;
 
 /**
  * Created by xyin on 2016/9/30.
@@ -30,6 +31,7 @@ public class XApp extends MultiDexApplication {
             ARouter.openLog();
         }
         ARouter.init(this);
+        SqliteHelper.init(this);
     }
 
     /**

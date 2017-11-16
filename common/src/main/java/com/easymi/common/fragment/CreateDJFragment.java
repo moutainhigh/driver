@@ -8,12 +8,14 @@ import android.widget.TextView;
 
 import com.easymi.common.R;
 import com.easymi.component.base.RxLazyFragment;
+import com.easymi.component.widget.CusBottomSheetDialog;
+import com.easymi.component.widget.TimePickerView;
 
 /**
  * Created by liuzihao on 2017/11/16.
  */
 
-public class CreateFragment extends RxLazyFragment {
+public class CreateDJFragment extends RxLazyFragment {
 
     TextView timeText;
     EditText nameText;
@@ -56,7 +58,7 @@ public class CreateFragment extends RxLazyFragment {
     }
 
     private void initClick() {
-        timeText.setOnClickListener(view -> showTimeDialog());
+        timeText.setOnClickListener(view -> showTimeDialog(timeText));
         startPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,8 +73,24 @@ public class CreateFragment extends RxLazyFragment {
         });
     }
 
-    private void showTimeDialog(){
+    CusBottomSheetDialog bottomSheetDialog;
 
+    private void showTimeDialog(TextView tv) {
+        bottomSheetDialog = new CusBottomSheetDialog(getActivity());
+        TimePickerView timePickerView = new TimePickerView(getActivity());
+
+        timePickerView.setPositiveButton(getString(R.string.confirm), (View v) -> {
+            String day = timePickerView.getDayStr();
+            String hourStr = timePickerView.getHourStr();
+            String minStr = timePickerView.getMinStr();
+            tv.setText(day + hourStr + minStr);
+            bottomSheetDialog.dismiss();
+        }).setNegativeButton(getString(R.string.cancel), v -> {
+            bottomSheetDialog.dismiss();
+        });
+
+        bottomSheetDialog.setContentView(timePickerView);
+        bottomSheetDialog.show();
     }
 
 }

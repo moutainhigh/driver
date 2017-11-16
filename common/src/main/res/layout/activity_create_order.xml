@@ -21,11 +21,9 @@
         app:tabIndicatorColor="@color/colorAccent"
         app:tabIndicatorHeight="4dp"
         app:tabMode="fixed"
-        app:tabPadding="5dp"
-        app:tabPaddingBottom="5dp"
-        app:tabPaddingEnd="5dp"
-        app:tabPaddingStart="5dp"
-        app:tabPaddingTop="5dp"
+        app:tabPaddingStart="10dp"
+        app:tabPaddingTop="10dp"
+        app:textSize="16sp"
         app:tabSelectedTextColor="@color/white"
         app:tabTextColor="@color/dark_gray">
 

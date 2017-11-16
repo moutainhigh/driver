@@ -6,7 +6,6 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -18,20 +17,20 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.easymi.component.Config;
+import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
-import com.easymi.component.network.NoErrSubscriberListener;
+import com.easymi.component.utils.AesUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.personal.R;
-import com.easymi.personal.entity.Employ;
+import com.easymi.component.entity.Employ;
 import com.easymi.personal.network.McService;
 import com.easymi.personal.result.LoginResult;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -190,7 +189,7 @@ public class LoginActivity extends RxBaseActivity {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
         Observable<LoginResult> observable = api
-                .login(name, psw, Config.APP_KEY)
+                .login(AesUtil.aesEncrypt(name, AesUtil.AAAAA), AesUtil.aesEncrypt(psw, AesUtil.AAAAA), Config.APP_KEY)
                 .filter(new HttpResultFunc<>(this))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -198,6 +197,8 @@ public class LoginActivity extends RxBaseActivity {
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, loginResult -> {
             Employ employ = loginResult.getEmployInfo();
             Log.e("okhttp", employ.toString());
+            employ.saveOrUpdate();
+            XApp.getPreferencesEditor().putLong("driverId", employ.id).apply();
             ARouter.getInstance()
                     .build("/common/WorkActivity")
                     .navigation();
