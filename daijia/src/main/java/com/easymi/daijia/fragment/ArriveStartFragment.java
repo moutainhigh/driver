@@ -52,8 +52,8 @@ public class ArriveStartFragment extends RxBaseFragment {
         startDrive = getActivity().findViewById(R.id.start_drive);
         startWait = getActivity().findViewById(R.id.start_wait);
 
-        startPlaceText.setText(djOrder.orderStartPlace);
-        endPlaceText.setText(djOrder.orderEndPlace);
+        startPlaceText.setText(djOrder.startPlace);
+        endPlaceText.setText(djOrder.endPlace);
         startDrive.setOnClickListener(view -> bridge.doStartDrive());
         startWait.setOnClickListener(view -> bridge.doOutBeforeWait());
     }

@@ -52,8 +52,8 @@ public class AcceptFragment extends RxBaseFragment {
         startPlaceText = getActivity().findViewById(R.id.start_place);
         endPlaceText = getActivity().findViewById(R.id.end_place);
 
-        startPlaceText.setText(djOrder.orderStartPlace);
-        endPlaceText.setText(djOrder.orderEndPlace);
+        startPlaceText.setText(djOrder.startPlace);
+        endPlaceText.setText(djOrder.endPlace);
         acceptBtn.setOnClickListener(view -> {
             if(null != bridge){
                 bridge.doAccept();

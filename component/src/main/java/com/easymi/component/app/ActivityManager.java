@@ -1,7 +1,10 @@
 package com.easymi.component.app;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.text.TextUtils;
+
+import com.easymi.component.Config;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -178,6 +181,10 @@ public class ActivityManager {
                     activityStack.get(i).finish();
                 }
             }
+            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+            editor.putBoolean(Config.SP_ISLOGIN,false);
+            editor.putLong(Config.SP_DRIVERID,-1L);
+            editor.apply();
             activityStack.clear();
         }
     }

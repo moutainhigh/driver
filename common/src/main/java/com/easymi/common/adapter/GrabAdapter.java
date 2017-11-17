@@ -4,10 +4,9 @@ import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.easymi.common.R;
-import com.easymi.common.entity.Order;
+import com.easymi.common.entity.BaseOrder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,24 +17,24 @@ import java.util.List;
 
 public class GrabAdapter extends PagerAdapter {
 
-    private List<Order> orderList;
+    private List<BaseOrder> baseOrderList;
     private Context context;
 
     private List<View> mViewList = new ArrayList<>();   //View重用缓存列表
 
     public GrabAdapter(Context context) {
         this.context = context;
-        orderList = new ArrayList<>();
+        baseOrderList = new ArrayList<>();
     }
 
-    public void setOrderList(List<Order> orderList) {
-        this.orderList = orderList;
+    public void setBaseOrderList(List<BaseOrder> baseOrderList) {
+        this.baseOrderList = baseOrderList;
         notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return orderList.size();
+        return baseOrderList.size();
     }
 
     @Override
@@ -62,7 +61,7 @@ public class GrabAdapter extends PagerAdapter {
         }
 
         //设置view上相关数据
-        final Order order = orderList.get(position);
+        final BaseOrder baseOrder = baseOrderList.get(position);
 
         //添加到ViewPager中，并显示
         container.addView(view);

@@ -9,8 +9,8 @@ public class ApiException extends RuntimeException {
 
     private int code;
 
-    public ApiException(Context context, int resultCode) {
-        this(getApiExceptionMessage(context, resultCode));
+    public ApiException(int resultCode,String message) {
+        this(message);
         this.code = resultCode;
     }
 

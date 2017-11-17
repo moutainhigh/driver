@@ -6,7 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.easymi.common.R;
 import com.easymi.common.adapter.LiuShuiAdapter;
-import com.easymi.common.entity.Order;
+import com.easymi.common.entity.BaseOrder;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.widget.SwipeRecyclerView;
 
@@ -33,14 +33,14 @@ public class LiushuiActivity extends RxBaseActivity {
         recyclerView = findViewById(R.id.recyclerView);
         adapter = new LiuShuiAdapter(this);
 
-        recyclerView.getRecyclerView().setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
+        recyclerView.getRecyclerView().setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
         recyclerView.setAdapter(adapter);
 
         recyclerView.setOnLoadListener(new SwipeRecyclerView.OnLoadListener() {
             @Override
             public void onRefresh() {
-                adapter.setOrders(initRecyclerData());
+                adapter.setBaseOrders(initRecyclerData());
                 recyclerView.complete();
             }
 
@@ -51,19 +51,18 @@ public class LiushuiActivity extends RxBaseActivity {
         });
     }
 
-    private List<Order> initRecyclerData(){
-        List<Order> orders = new ArrayList<>();
+    private List<BaseOrder> initRecyclerData() {
+        List<BaseOrder> baseOrders = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            Order order = new Order();
-            order.orderEndPlace = "锦绣大道南段99号";
-            order.orderStartPlace = "花样年花样城5期";
-            order.orderStatus = "执行中 >";
-            order.orderTime = "11月14日 19:00";
-            order.orderType = "代驾";
-            order.orderNumber = "DJ101111";
-            order.orderPrice = 12.5;
-            orders.add(order);
+            BaseOrder baseOrder = new BaseOrder();
+            baseOrder.orderEndPlace = "锦绣大道南段99号";
+            baseOrder.orderStartPlace = "花样年花样城5期";
+            baseOrder.orderStatus = 1;
+            baseOrder.orderTime = System.currentTimeMillis();
+            baseOrder.orderType = "代驾";
+            baseOrder.orderNumber = "DJ101111";
+            baseOrders.add(baseOrder);
         }
-        return orders;
+        return baseOrders;
     }
 }

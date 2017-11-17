@@ -1,17 +1,14 @@
 package com.easymi.common.mvp.grab;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.LinearLayout;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.amap.api.maps.MapView;
 import com.easymi.common.R;
 import com.easymi.common.adapter.GrabAdapter;
-import com.easymi.common.entity.Order;
+import com.easymi.common.entity.BaseOrder;
 import com.easymi.component.base.RxBaseActivity;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
@@ -51,12 +48,12 @@ public class GrabActivity extends RxBaseActivity {
         adapter = new GrabAdapter(this);
         viewPager.setAdapter(adapter);
 
-        List<Order> orders = new ArrayList<>();
-        orders.add(new Order());
-        orders.add(new Order());
-        orders.add(new Order());
-        orders.add(new Order());
-        adapter.setOrderList(orders);
+        List<BaseOrder> baseOrders = new ArrayList<>();
+        baseOrders.add(new BaseOrder());
+        baseOrders.add(new BaseOrder());
+        baseOrders.add(new BaseOrder());
+        baseOrders.add(new BaseOrder());
+        adapter.setBaseOrderList(baseOrders);
 
         expandBtnCon.setOnClickListener(v -> {
             if (expandableLayout.isExpanded()) {

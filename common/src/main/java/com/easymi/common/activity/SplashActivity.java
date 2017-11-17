@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.easymi.common.R;
+import com.easymi.common.mvp.work.WorkActivity;
 import com.easymi.component.base.RxBaseActivity;
 
 /**
@@ -27,9 +28,10 @@ public class SplashActivity extends RxBaseActivity {
     public void initViews(Bundle savedInstanceState) {
         Handler handler = new Handler();
         handler.postDelayed(() -> runOnUiThread(() -> {
-            ARouter.getInstance()
-                    .build("/personal/LoginActivity")
-                    .navigation();
+//            ARouter.getInstance()
+//                    .build("/personal/LoginActivity")
+//                    .navigation();
+            startActivity(new Intent(SplashActivity.this, WorkActivity.class));
         }), 2000);
     }
 }

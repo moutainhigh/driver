@@ -1,4 +1,4 @@
-package com.easymi.personal.network;
+package com.easymi.personal;
 
 import com.easymi.personal.result.LoginResult;
 
@@ -15,7 +15,7 @@ import rx.Observable;
 public interface McService {
 
     @FormUrlEncoded
-    @POST("api/v1/employLogin")
+    @POST("driver/api/v1/employLogin")
     Observable<LoginResult> login(@Field("username") String userName,
                                   @Field("password") String psw,
                                   @Field("app_key")String appKey);

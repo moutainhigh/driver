@@ -1,6 +1,7 @@
 package com.easymi.personal.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -26,7 +27,7 @@ import com.easymi.component.utils.AesUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.personal.R;
 import com.easymi.component.entity.Employ;
-import com.easymi.personal.network.McService;
+import com.easymi.personal.McService;
 import com.easymi.personal.result.LoginResult;
 
 import rx.Observable;
@@ -190,7 +191,7 @@ public class LoginActivity extends RxBaseActivity {
 
         Observable<LoginResult> observable = api
                 .login(AesUtil.aesEncrypt(name, AesUtil.AAAAA), AesUtil.aesEncrypt(psw, AesUtil.AAAAA), Config.APP_KEY)
-                .filter(new HttpResultFunc<>(this))
+                .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
@@ -198,7 +199,10 @@ public class LoginActivity extends RxBaseActivity {
             Employ employ = loginResult.getEmployInfo();
             Log.e("okhttp", employ.toString());
             employ.saveOrUpdate();
-            XApp.getPreferencesEditor().putLong("driverId", employ.id).apply();
+            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+            editor.putBoolean(Config.SP_ISLOGIN,true);
+            editor.putLong(Config.SP_DRIVERID,employ.id);
+            editor.apply();
             ARouter.getInstance()
                     .build("/common/WorkActivity")
                     .navigation();

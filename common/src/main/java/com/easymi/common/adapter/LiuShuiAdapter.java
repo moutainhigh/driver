@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.easymi.common.R;
-import com.easymi.common.entity.Order;
+import com.easymi.common.entity.BaseOrder;
 import com.easymi.component.utils.ToastUtil;
 
 import java.util.ArrayList;
@@ -22,15 +22,15 @@ public class LiuShuiAdapter extends  RecyclerView.Adapter<LiuShuiAdapter.Holder>
 
     private Context context;
 
-    private List<Order> orders;
+    private List<BaseOrder> baseOrders;
 
     public LiuShuiAdapter(Context context) {
         this.context = context;
-        orders = new ArrayList<>();
+        baseOrders = new ArrayList<>();
     }
 
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
+    public void setBaseOrders(List<BaseOrder> baseOrders) {
+        this.baseOrders = baseOrders;
         notifyDataSetChanged();
     }
 
@@ -43,21 +43,20 @@ public class LiuShuiAdapter extends  RecyclerView.Adapter<LiuShuiAdapter.Holder>
 
     @Override
     public void onBindViewHolder(Holder holder, int position) {
-        Order order = orders.get(position);
-        holder.orderType.setText(order.orderType);
-        holder.orderEndPlace.setText(order.orderEndPlace);
-        holder.orderStartPlace.setText(order.orderStartPlace);
-        holder.orderStatus.setText(order.orderStatus);
-        holder.orderTime.setText(order.orderTime);
-        holder.orderMoney.setText(order.orderPrice+"");
-        holder.orderNumber.setText(order.orderNumber);
+        BaseOrder baseOrder = baseOrders.get(position);
+        holder.orderType.setText(baseOrder.orderType);
+        holder.orderEndPlace.setText(baseOrder.orderEndPlace);
+        holder.orderStartPlace.setText(baseOrder.orderStartPlace);
+        holder.orderStatus.setText(""+baseOrder.orderStatus);
+        holder.orderTime.setText(""+baseOrder.orderTime);
+        holder.orderNumber.setText(baseOrder.orderNumber);
         holder.orderBaoxiao.setOnClickListener(view -> ToastUtil.showMessage(context,"点击了报销"));
 
     }
 
     @Override
     public int getItemCount() {
-        return orders.size();
+        return baseOrders.size();
     }
 
     class Holder extends RecyclerView.ViewHolder{

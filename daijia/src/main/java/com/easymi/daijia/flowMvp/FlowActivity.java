@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.daijia.R;
 import com.easymi.daijia.entity.DJOrder;
@@ -58,19 +59,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View {
             return;
         }
 
-        djOrder = new DJOrder();
-        djOrder.orderEndPlace = "锦绣大道南段";
-        djOrder.subStatus = 0;
-        djOrder.orderNumber = "DJ20171122";
-        djOrder.orderPrice = 39.0;
-        djOrder.orderStartPlace = "金马镇花样城";
-        djOrder.orderStatus = "执行中";
-        djOrder.orderTime = "2017-11-15 18:30";
-        djOrder.orderType = "日常代驾";
-        djOrder.passengerPhone = "18148140090";
-
-        //TODO 从数据库查找订单
-
         presenter = new FlowPresenter(this, this);
 
         nextPlace = findViewById(R.id.next_place);
@@ -82,15 +70,13 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View {
         naviCon = findViewById(R.id.navi_con);
         expandableLayout = findViewById(R.id.expandable_layout);
 
-        showTopView();
-        initBridge();
-        showBottomFragment(djOrder);
+        presenter.findOne(orderId);
     }
 
     @Override
     public void showTopView() {
         orderNumberText.setText(djOrder.orderNumber);
-        orderTypeText.setText(djOrder.orderType);
+        orderTypeText.setText(djOrder.orderDetailType);
         tagContainerLayout.addTag("嘻嘻");
         tagContainerLayout.addTag("哈哈");
         tagContainerLayout.addTag("傻逼");
@@ -102,13 +88,13 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View {
                 expandableLayout.expand();
             }
         });
-
         naviCon.setOnClickListener(view -> presenter.navi(djOrder));
+        nextPlace.setText(djOrder.startPlace);
     }
 
     @Override
     public void showBottomFragment(DJOrder djOrder) {
-        if (djOrder.subStatus == 0) {
+        if (djOrder.orderStatus == DJOrder.PAIDAN_ORDER || djOrder.orderStatus == DJOrder.NEW_ORDER) {
             AcceptFragment acceptFragment = new AcceptFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("djOrder", djOrder);
@@ -120,7 +106,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View {
             transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
             transaction.replace(R.id.flow_frame, acceptFragment);
             transaction.commit();
-        } else if (djOrder.subStatus == 1) {
+        } else if (djOrder.orderStatus == DJOrder.TAKE_ORDER) {
             ToStartFragment toStartFragment = new ToStartFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("djOrder", djOrder);
@@ -132,7 +118,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View {
             transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
             transaction.replace(R.id.flow_frame, toStartFragment);
             transaction.commit();
-        } else if (djOrder.subStatus == 2) {
+        } else if (djOrder.orderStatus == DJOrder.GOTO_BOOKPALCE_ORDER) {
             SlideArriveStartFragment fragment = new SlideArriveStartFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("djOrder", djOrder);
@@ -144,7 +130,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View {
             transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
             transaction.replace(R.id.flow_frame, fragment);
             transaction.commit();
-        } else if (djOrder.subStatus == 3) {
+        } else if (djOrder.orderStatus == DJOrder.ARRIVAL_BOOKPLACE_ORDER) {
             ArriveStartFragment fragment = new ArriveStartFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("djOrder", djOrder);
@@ -156,7 +142,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View {
             transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
             transaction.replace(R.id.flow_frame, fragment);
             transaction.commit();
-        } else if (djOrder.subStatus == 4) {
+        } else if (djOrder.orderStatus == DJOrder.ARRIVAL_BOOKPLACE_ORDER) {
             WaitFragment fragment = new WaitFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("djOrder", djOrder);
@@ -168,7 +154,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View {
             transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
             transaction.replace(R.id.flow_frame, fragment);
             transaction.commit();
-        } else if (djOrder.subStatus == 5) {
+        } else if (djOrder.orderStatus == DJOrder.GOTO_DESTINATION_ORDER) {
             RunningFragment fragment = new RunningFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("djOrder", djOrder);
@@ -180,7 +166,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View {
             transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
             transaction.replace(R.id.flow_frame, fragment);
             transaction.commit();
-        } else if (djOrder.subStatus == 6) {
+        } else if (djOrder.orderStatus == DJOrder.ARRIVAL_BOOKPLACE_ORDER) {
             WaitFragment fragment = new WaitFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("djOrder", djOrder);
@@ -193,6 +179,23 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View {
             transaction.replace(R.id.flow_frame, fragment);
             transaction.commit();
         }
+    }
+
+    @Override
+    public void showOrder(DJOrder djOrder) {
+        if (null == djOrder) {
+            finish();
+        } else {
+            this.djOrder = djOrder;
+            showTopView();
+            initBridge();
+            showBottomFragment(djOrder);
+        }
+    }
+
+    @Override
+    public RxManager getManager() {
+        return mRxManager;
     }
 
     @Override
@@ -210,50 +213,31 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View {
         bridge = new ActFraCommBridge() {
             @Override
             public void doAccept() {
-                ToastUtil.showMessage(FlowActivity.this, "接单");
-                djOrder.subStatus = 1;
-                showBottomFragment(djOrder);
+                presenter.acceptOrder(djOrder.orderId);
             }
 
             @Override
             public void doRefuse() {
-                ToastUtil.showMessage(FlowActivity.this, "拒单");
-                finish();
             }
 
             @Override
             public void doToStart() {
-                ToastUtil.showMessage(FlowActivity.this, "前往预约地");
-                djOrder.subStatus = 2;
-                showBottomFragment(djOrder);
             }
 
             @Override
             public void doArriveStart() {
-                ToastUtil.showMessage(FlowActivity.this, "到达预约地");
-                djOrder.subStatus = 3;
-                showBottomFragment(djOrder);
             }
 
             @Override
             public void doOutBeforeWait() {
-                ToastUtil.showMessage(FlowActivity.this, "出发前等待");
-                djOrder.subStatus = 4;
-                showBottomFragment(djOrder);
             }
 
             @Override
             public void doOutAfterWait() {
-                ToastUtil.showMessage(FlowActivity.this, "出发后等待");
-                djOrder.subStatus = 6;
-                showBottomFragment(djOrder);
             }
 
             @Override
             public void doStartDrive() {
-                ToastUtil.showMessage(FlowActivity.this, "前往目的地");
-                djOrder.subStatus = 5;
-                showBottomFragment(djOrder);
             }
 
             @Override

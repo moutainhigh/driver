@@ -53,8 +53,8 @@ public class ToStartFragment extends RxBaseFragment {
         controlCon = getActivity().findViewById(R.id.to_start_btn);
         callPhoneCon = getActivity().findViewById(R.id.call_phone_con);
 
-        startPlaceText.setText(djOrder.orderStartPlace);
-        endPlaceText.setText(djOrder.orderEndPlace);
+        startPlaceText.setText(djOrder.startPlace);
+        endPlaceText.setText(djOrder.endPlace);
         controlCon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -1,83 +1,51 @@
 package com.easymi.common.adapter;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 import com.easymi.common.R;
-import com.easymi.common.entity.Order;
+import com.easymi.common.entity.BaseOrder;
+import com.easymi.component.utils.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2017/11/14.
+ * Created by hiwhitley on 2016/10/17.
  */
 
-public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.Holder> {
-
-    private Context context;
-
-    private List<Order> orders;
-
-    public OrderAdapter(Context context) {
-        this.context = context;
-        orders = new ArrayList<>();
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-        notifyDataSetChanged();
+public class OrderAdapter extends BaseMultiItemQuickAdapter<BaseOrder> {
+    public OrderAdapter(List<BaseOrder> data) {
+        super(data);
+        addItemType(BaseOrder.ITEM_HEADER, R.layout.order_pinned_layout);
+        addItemType(BaseOrder.ITEM_POSTER, R.layout.order_item);
     }
 
     @Override
-    public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_item, null);
-        Holder holder = new Holder(view);
-        holder.root = view;
-        return holder;
-    }
-
-    @Override
-    public void onBindViewHolder(Holder holder, int position) {
-        Order order = orders.get(position);
-        holder.orderType.setText(order.orderType);
-        holder.orderEndPlace.setText(order.orderEndPlace);
-        holder.orderStartPlace.setText(order.orderStartPlace);
-        holder.orderStatus.setText(order.orderStatus);
-        holder.orderTime.setText(order.orderTime);
-        holder.root.setOnClickListener(view -> ARouter.getInstance().build("/daijia/FlowActivity")
-                .withLong("orderId", order.orderId).navigation());
-    }
-
-    @Override
-    public int getItemCount() {
-        return orders.size();
-    }
-
-    class Holder extends RecyclerView.ViewHolder {
-
-        TextView orderTime;
-        TextView orderStatus;
-        TextView orderStartPlace;
-        TextView orderEndPlace;
-        TextView orderType;
-        View root;
-
-        public Holder(View itemView) {
-            super(itemView);
-            orderTime = itemView.findViewById(R.id.order_time);
-            orderStatus = itemView.findViewById(R.id.order_status);
-            orderStartPlace = itemView.findViewById(R.id.order_start_place);
-            orderEndPlace = itemView.findViewById(R.id.order_end_place);
-            orderType = itemView.findViewById(R.id.order_type);
-
+    protected void convert(BaseViewHolder baseViewHolder, BaseOrder baseOrder) {
+        if (baseOrder.getItemType() == BaseOrder.ITEM_HEADER) {
+            if (baseOrder.isBookOrder == 2) {
+                baseViewHolder.setText(R.id.pinned_text, "即时订单");
+            } else {
+                baseViewHolder.setText(R.id.pinned_text, "预约订单");
+            }
+        } else if (baseOrder.getItemType() == BaseOrder.ITEM_POSTER) {
+            baseViewHolder.setText(R.id.order_time, "" + baseOrder.orderTime);
+            baseViewHolder.setText(R.id.order_start_place, "" + baseOrder.orderStartPlace);
+            baseViewHolder.setText(R.id.order_end_place, "" + baseOrder.orderEndPlace);
+            baseViewHolder.setText(R.id.order_status, "" + baseOrder.orderStatus);
+            baseViewHolder.setText(R.id.order_type, "" + baseOrder.orderDetailType);
+            baseViewHolder.setOnClickListener(R.id.root, v -> {
+                if (StringUtils.isNotBlank(baseOrder.orderType)) {
+                    if (baseOrder.orderType.equals("daijia")) {
+                        ARouter.getInstance()
+                                .build("/daijia/FlowActivity")
+                                .withLong("orderId", baseOrder.orderId).navigation();
+                    }
+                }
+            });
         }
     }
+
 }

@@ -1,6 +1,8 @@
 package com.easymi.daijia.flowMvp;
 
+import com.easymi.component.rxmvp.RxManager;
 import com.easymi.daijia.entity.DJOrder;
+import com.easymi.daijia.result.DJOrderResult;
 
 import rx.Observable;
 
@@ -20,16 +22,22 @@ public interface FlowContract {
         void initBridge();
 
         void showBottomFragment(DJOrder djOrder);
+
+        void showOrder(DJOrder djOrder);
+
+        RxManager getManager();
     }
 
     interface Presenter{
-        void acceptOrder();
-        void refuseOrder();
+        void acceptOrder(Long orderId);
+        void refuseOrder(Long orderId);
         void navi(DJOrder djOrder);
+        void findOne(Long orderId);
         //...
     }
 
     interface Model{
-        Observable<Object> accept();
+        Observable<DJOrderResult> doAccept(Long orderId);
+        Observable<DJOrderResult> findOne(Long orderId);
     }
 }

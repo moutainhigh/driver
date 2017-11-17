@@ -1,5 +1,7 @@
 package com.easymi.daijia.entity;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -8,21 +10,85 @@ import java.io.Serializable;
 
 public class DJOrder implements Serializable{
 
-    public String orderType;
+    /**
+     * 新单
+     */
+    public static final int NEW_ORDER = 1;
+    /**
+     * 已派单
+     */
+    public static final int PAIDAN_ORDER = 5;
 
-    public String orderTime;
+    /**
+     * 已接单
+     */
+    public static final int TAKE_ORDER = 10;
+    /**
+     * 前往预约地
+     */
+    public static final int GOTO_BOOKPALCE_ORDER = 15;
+    /**
+     * 到达预约地
+     */
+    public static final int ARRIVAL_BOOKPLACE_ORDER = 20;
+    /**
+     * 前往目的地
+     */
+    public static final int GOTO_DESTINATION_ORDER = 25;
+    /**
+     * 到达目的地
+     */
+    public static final int ARRIVAL_DESTINATION_ORDER = 30;
+    /**
+     * 已结算
+     */
+    public static final int FINISH_ORDER = 35;
+    /**
+     * 已评价
+     */
+    public static final int RATED_ORDER = 40;
+    /**
+     * 已销单
+     */
+    public static final int CANCEL_ORDER = 45;
 
-    public String orderStatus;
+    @SerializedName("id")
+    public long orderId;
 
-    public String orderStartPlace;
+    public String orderDetailType;
 
-    public String orderEndPlace;
-
-    public double orderPrice;
-
+    @SerializedName("order_no")
     public String orderNumber;
 
+    @SerializedName("status")
+    public int orderStatus;
+
+    @SerializedName("book_time")
+    public long bookTime;
+
+    @SerializedName("passenger_id")
+    public long passengerId;
+
+    @SerializedName("passenger_name")
+    public String passengerName;
+
+    @SerializedName("passenger_phone")
     public String passengerPhone;
+
+    @SerializedName("company_id")
+    public long companyId;
+
+    @SerializedName("company_name")
+    public String companyName;
+
+    @SerializedName("book_address")
+    public String startPlace;
+
+    @SerializedName("destination")
+    public String endPlace;
+
+    @SerializedName("budget_fee")
+    public double budgetFee;
 
     public double orderMoney;
 
@@ -34,17 +100,4 @@ public class DJOrder implements Serializable{
 
     public double waitFee;//
 
-    /**
-     * 本地订单状态约定：
-     *   0：新单
-     *   1：已结单
-     *   2：前往预约地中
-     *   3：到达预约地
-     *   4：出发前等待
-     *   5：前往目的地中
-     *   6：中途等待
-     *   7：已确认费用
-     *
-     */
-    public int subStatus;
 }
