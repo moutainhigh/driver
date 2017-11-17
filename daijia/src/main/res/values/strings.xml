@@ -42,4 +42,8 @@
     <string name="help_pay_fee">垫付费用</string>
     <string name="hint_edit">点击价格文字可以直接输入</string>
     <string name="please_remark">请输入备注信息</string>
+
+    <string name="please_consumer_phone">请输入客户电话号码</string>
+    <string name="please_consumer_name">请输入客户姓名</string>
+    <string name="create_order">创建订单</string>
 </resources>

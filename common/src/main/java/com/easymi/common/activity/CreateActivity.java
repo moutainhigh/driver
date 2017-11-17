@@ -1,16 +1,13 @@
 package com.easymi.common.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.easymi.common.R;
 import com.easymi.common.adapter.VpAdapter;
-import com.easymi.common.fragment.CreateDJFragment;
 import com.easymi.component.base.RxBaseActivity;
 
 import java.util.ArrayList;
@@ -24,8 +21,6 @@ public class CreateActivity extends RxBaseActivity {
 
     TabLayout tabLayout;
     ViewPager viewPager;
-
-    CreateDJFragment djFragment;
 
     private VpAdapter adapter;
 
@@ -45,13 +40,22 @@ public class CreateActivity extends RxBaseActivity {
     List<Fragment> fragments;
 
     private void initTabLayout() {
-
         fragments = new ArrayList<>();
-        fragments.add(new CreateDJFragment());
-        fragments.add(new CreateDJFragment());
-        fragments.add(new CreateDJFragment());
-        fragments.add(new CreateDJFragment());
-        fragments.add(new CreateDJFragment());
+        try {
+            Class  clazz =  Class.forName("com.easymi.daijia.fragment.CreateDJFragment");
+            fragments.add((Fragment) clazz.newInstance());
+            fragments.add((Fragment) clazz.newInstance());
+            fragments.add((Fragment) clazz.newInstance());
+            fragments.add((Fragment) clazz.newInstance());
+            fragments.add((Fragment) clazz.newInstance());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (java.lang.InstantiationException e) {
+            e.printStackTrace();
+        }
+
         adapter = new VpAdapter(getSupportFragmentManager(), fragments);
 
         viewPager.setOffscreenPageLimit(5);

@@ -1,4 +1,4 @@
-package com.easymi.common.fragment;
+package com.easymi.daijia.fragment;
 
 import android.os.Bundle;
 import android.view.View;
@@ -6,13 +6,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.easymi.common.R;
 import com.easymi.component.base.RxLazyFragment;
 import com.easymi.component.widget.CusBottomSheetDialog;
 import com.easymi.component.widget.TimePickerView;
+import com.easymi.daijia.R;
 
 /**
  * Created by liuzihao on 2017/11/16.
+ * 反射调用
  */
 
 public class CreateDJFragment extends RxLazyFragment {

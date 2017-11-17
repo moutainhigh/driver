@@ -27,8 +27,6 @@
     <string name="create_paotui">跑腿</string>
     <string name="create_huoyun">货运</string>
     <string name="create_zhuanxian">城际专线</string>
-    <string name="please_consumer_phone">请输入客户电话号码</string>
-    <string name="please_consumer_name">请输入客户姓名</string>
-    <string name="create_order">创建订单</string>
+
 
 </resources>

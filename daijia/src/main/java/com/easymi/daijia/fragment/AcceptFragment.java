@@ -1,6 +1,7 @@
 package com.easymi.daijia.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,6 +26,8 @@ public class AcceptFragment extends RxBaseFragment {
     private DJOrder djOrder;
 
     private ActFraCommBridge bridge;
+
+    private Fragment createFragment;
 
     public void setBridge(ActFraCommBridge bridge){
         this.bridge = bridge;
