@@ -31,7 +31,7 @@ public class FlowPresenter implements FlowContract.Presenter {
     public void acceptOrder(Long orderId) {
         Observable<DJOrderResult> observable = model.doAccept(orderId);
 
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<DJOrderResult>() {
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, new HaveErrSubscriberListener<DJOrderResult>() {
             @Override
             public void onNext(DJOrderResult djOrderResult) {
                 view.showOrder(djOrderResult.order);

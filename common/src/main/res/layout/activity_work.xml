@@ -324,6 +324,7 @@
                 android:textSize="16sp" />
 
             <ImageView
+                android:id="@+id/pull_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -338,6 +339,7 @@
             layout="@layout/near_driver_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="-5dp"
             android:layout_marginBottom="?attr/actionBarSize" />
 
     </LinearLayout>

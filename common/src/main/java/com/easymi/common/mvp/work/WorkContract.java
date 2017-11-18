@@ -23,6 +23,8 @@ public interface WorkContract {
 
         void showOrders(List<BaseOrder> baseOrders);
 
+        void initMap();
+
         RxManager getRxManager();
     }
 

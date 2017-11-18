@@ -8,6 +8,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -51,6 +55,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View {
     CusToolbar toolbar;
 
     LinearLayout createOrder;
+
+    ImageView pullIcon;
 
     private WorkPresenter presenter;
 
@@ -97,6 +103,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View {
         recyclerView = findViewById(R.id.recyclerView);
         createOrder = findViewById(R.id.create_order);
         swipeRefreshLayout = findViewById(R.id.swipe_layout);
+        pullIcon = findViewById(R.id.pull_icon);
     }
 
     /**
@@ -162,6 +169,11 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View {
     }
 
     @Override
+    public void initMap() {
+
+    }
+
+    @Override
     public RxManager getRxManager() {
         return mRxManager;
     }
@@ -193,8 +205,14 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View {
     public void mapHideShow(View view) {
         if (behavior.getState() == BottomBehavior.STATE_COLLAPSED) {
             behavior.setState(BottomBehavior.STATE_EXPANDED);
+            RotateAnimation animation = new RotateAnimation(0f,180f);
+            animation.setDuration(1000);
+            pullIcon.startAnimation(animation);
         } else {
             behavior.setState(BottomBehavior.STATE_COLLAPSED);
+            RotateAnimation animation = new RotateAnimation(180f,0f);
+            animation.setDuration(1000);
+            pullIcon.startAnimation(animation);
         }
     }
 

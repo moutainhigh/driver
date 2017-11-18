@@ -28,10 +28,10 @@ public class SplashActivity extends RxBaseActivity {
     public void initViews(Bundle savedInstanceState) {
         Handler handler = new Handler();
         handler.postDelayed(() -> runOnUiThread(() -> {
-            ARouter.getInstance()
-                    .build("/personal/LoginActivity")
-                    .navigation();
-//            startActivity(new Intent(SplashActivity.this, WorkActivity.class));
+//            ARouter.getInstance()
+//                    .build("/personal/LoginActivity")
+//                    .navigation();
+            startActivity(new Intent(SplashActivity.this, WorkActivity.class));
         }), 2000);
     }
 }
