@@ -1,5 +1,7 @@
 package com.easymi.common.mvp.work;
 
+import android.content.Context;
+
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.common.entity.BaseOrder;
 import com.easymi.component.rxmvp.RxManager;
@@ -25,6 +27,8 @@ public interface WorkContract {
 
         void initMap();
 
+        void initRefreshBtn();
+
         RxManager getRxManager();
     }
 
@@ -32,6 +36,8 @@ public interface WorkContract {
         void queryStats();
 
         void indexOrders();
+
+        void startLocService(Context context);
         //...
     }
 

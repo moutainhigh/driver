@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <com.amap.api.maps.MapView
         android:id="@+id/map_view"
@@ -10,55 +11,88 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="bottom|right"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="15dp">
+        android:layout_marginBottom="15dp"
+        android:layout_marginRight="10dp">
+
+        <FrameLayout
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:id="@+id/refresh_img"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/corners_alpha"
+                android:padding="2dp"
+                android:src="@mipmap/ic_refresh_loc" />
+
+            <FrameLayout
+                android:id="@+id/loading_frame"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/corners_alpha_black"
+                android:visibility="invisible">
+
+                <ImageView
+                    android:id="@+id/spinnerImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/spinner" />
+            </FrameLayout>
+        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/show_driver"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@mipmap/blue_re_bg"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:background="@mipmap/blue_re_bg"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/driver_icon"/>
+                android:src="@mipmap/driver_icon" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:text="@string/work_driver"
-                android:textColor="@color/white"
-                android:layout_marginTop="5dp"/>
+                android:textColor="@color/white" />
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/show_heat_map"
-            android:layout_toLeftOf="@+id/show_driver"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/show_driver"
             android:background="@mipmap/white_re_bg"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/order_icon"/>
+                android:src="@mipmap/order_icon" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:text="@string/work_order"
-                android:textColor="@color/blue"
-                android:layout_marginTop="5dp"/>
+                android:textColor="@color/blue" />
 
         </LinearLayout>
 

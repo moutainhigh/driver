@@ -14,4 +14,5 @@ public class Config {
 
     public static final String SP_DRIVERID = "driverId";
     public static final String SP_ISLOGIN = "isLogin";
+    public static final String SP_LAST_LOC = "lastLoc";
 }

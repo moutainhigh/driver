@@ -48,12 +48,9 @@ ext {
                     //伸缩layout
                     'expandable-layout': 'net.cachapa.expandablelayout:expandablelayout:2.3',
 
-                    //3D地图so及jar
-                    'amap-base': 'com.amap.api:3dmap:5.4.0',
-                    //定位功能
-                    'amap-loc': 'com.amap.api:location:3.6.1',
-                    //搜索功能
-                    'amap-seo': 'com.amap.api:search:5.3.1',
+                    'amap-loc': 'com.amap.api:location:latest.integration',
+                    'amap-navi': 'com.amap.api:navi-3dmap:latest.integration',
+                    'amap-search': 'com.amap.api:search:latest.integration',
     ]
 }
 

@@ -1,14 +1,7 @@
 package com.easymi.component.base;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.FrameLayout;
 
-import com.easymi.component.R;
 import com.easymi.component.app.ActivityManager;
 import com.easymi.component.rxmvp.RxManager;
 import com.luck.picture.lib.PictureSelector;

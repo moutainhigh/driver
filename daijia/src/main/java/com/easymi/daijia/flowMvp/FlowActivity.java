@@ -89,7 +89,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View {
             }
         });
         naviCon.setOnClickListener(view -> presenter.navi(djOrder));
-        nextPlace.setText(djOrder.startPlace);
+        if (djOrder.orderStatus == DJOrder.NEW_ORDER
+                || djOrder.orderStatus == DJOrder.PAIDAN_ORDER
+                || djOrder.orderStatus == DJOrder.TAKE_ORDER
+                || djOrder.orderStatus == DJOrder.GOTO_BOOKPALCE_ORDER) {
+            nextPlace.setText(djOrder.startPlace);
+        }
     }
 
     @Override

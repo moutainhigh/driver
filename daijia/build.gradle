@@ -25,6 +25,7 @@ android {
                 arguments = [moduleName: project.getName()]
             }
         }
+
     }
     buildTypes {
         release {
@@ -49,11 +50,13 @@ dependencies {
     api libs['design']
     api libs['pull-load-more-recycler']
     api libs['expandable-layout']
-    api libs['amap-base']
+
+    api libs['amap-search']
+    api libs['amap-navi']
     api libs['amap-loc']
-    api libs['amap-seo']
 
     api 'co.lujun:androidtagview:1.1.4'
+
 
     annotationProcessor 'com.alibaba:arouter-compiler:1.1.3'
 

@@ -19,6 +19,10 @@ android {
         //不能正常跳转
         defaultPublishConfig "debug"
         multiDexEnabled true
+        ndk {
+            //只兼容下面的型号
+            abiFilters "armeabi", "armeabi-v7a"
+        }
     }
     buildTypes {
         release {
@@ -43,6 +47,9 @@ dependencies {
     api libs['multidex']
     api libs['design']
 
+    api libs['amap-search']
+    api libs['amap-navi']
+    api libs['amap-loc']
     //第三方
     api 'io.reactivex.rxjava2:rxandroid:2.0.1'
     api 'io.reactivex.rxjava2:rxjava:2.1.5'
@@ -57,6 +64,7 @@ dependencies {
 
     api 'com.nineoldandroids:library:2.4.0'
     api 'com.github.florent37:viewanimator:1.0.0@aar'
+
 
     api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.1.6'
 

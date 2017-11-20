@@ -28,5 +28,10 @@
     <string name="create_huoyun">货运</string>
     <string name="create_zhuanxian">城际专线</string>
 
+    <string name="hint">提示</string>
+    <string name="sure">确定</string>
+    <string name="message">亲爱的司机师傅，我们需要获取以下权限来保证应用正常运行，请授予</string>
+
+    <string name="exit">未能获得必要应用权限，即将退出</string>
 
 </resources>

@@ -1,34 +1,48 @@
 package com.easymi.common.mvp.work;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.RotateAnimation;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.amap.api.maps.AMap;
+import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Marker;
+import com.amap.api.maps.model.MarkerOptions;
 import com.easymi.common.R;
 import com.easymi.common.activity.CreateActivity;
 import com.easymi.common.adapter.OrderAdapter;
 import com.easymi.common.entity.BaseOrder;
 import com.easymi.common.mvp.grab.GrabActivity;
+import com.easymi.component.Config;
+import com.easymi.component.LocService;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.widget.BottomBehavior;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.pinned.PinnedHeaderDecoration;
+import com.google.gson.Gson;
 import com.skyfishjy.library.RippleBackground;
 
 import java.util.ArrayList;
@@ -58,6 +72,10 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View {
 
     ImageView pullIcon;
 
+    ImageView refreshImg;
+    FrameLayout loadingFrame;
+    ImageView loadingImg;
+
     private WorkPresenter presenter;
 
     @Override
@@ -68,8 +86,12 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View {
     @Override
     public void initViews(Bundle savedInstanceState) {
 
+        presenter = new WorkPresenter(this, this);
+
         findById();
         initToolbar();
+
+        initMap();
 
         mapView.onCreate(savedInstanceState);
 
@@ -84,12 +106,10 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View {
             startActivity(intent);
         });
 
-        presenter = new WorkPresenter(this, this);
-
         initRecycler();
 
         Employ employ = Employ.findByID(XApp.getMyPreferences().getLong("driverId", -1));
-        Log.e("employ", employ.toString());
+//        Log.e("employ", employ.toString());
     }
 
     private OrderAdapter adapter;
@@ -104,6 +124,10 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View {
         createOrder = findViewById(R.id.create_order);
         swipeRefreshLayout = findViewById(R.id.swipe_layout);
         pullIcon = findViewById(R.id.pull_icon);
+
+        loadingFrame = findViewById(R.id.loading_frame);
+        loadingImg = findViewById(R.id.spinnerImageView);
+        refreshImg = findViewById(R.id.refresh_img);
     }
 
     /**
@@ -168,10 +192,33 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View {
         }
     }
 
+    private AMap aMap;
+
     @Override
     public void initMap() {
+        aMap = mapView.getMap();
+        aMap.getUiSettings().setZoomControlsEnabled(false);
+        aMap.getUiSettings().setRotateGesturesEnabled(false);
+        aMap.getUiSettings().setRotateGesturesEnabled(false);
+        aMap.getUiSettings().setTiltGesturesEnabled(false);//倾斜手势
+
+        initRefreshBtn();
+
+        refreshImg.callOnClick();
+    }
+
+    @Override
+    public void initRefreshBtn() {
+        refreshImg.setOnClickListener(v -> {
+            refreshImg.setVisibility(View.INVISIBLE);
+            loadingFrame.setVisibility(View.VISIBLE);
+            AnimationDrawable spinner = (AnimationDrawable) loadingImg.getBackground();
+            spinner.start();
+            presenter.startLocService(this);
+        });
 
     }
+
 
     @Override
     public RxManager getRxManager() {
@@ -202,18 +249,72 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View {
         mapView.onDestroy();
     }
 
+    LocReceiver locReceiver;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        locReceiver = new LocReceiver();
+        IntentFilter filter = new IntentFilter(LocService.LOC_CHANGED);
+        registerReceiver(locReceiver, filter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(locReceiver);
+    }
+
     public void mapHideShow(View view) {
         if (behavior.getState() == BottomBehavior.STATE_COLLAPSED) {
             behavior.setState(BottomBehavior.STATE_EXPANDED);
-            RotateAnimation animation = new RotateAnimation(0f,180f);
-            animation.setDuration(1000);
-            pullIcon.startAnimation(animation);
+            RotateAnimation rotateAnimation = new RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5F,
+                    Animation.RELATIVE_TO_SELF, 0.5f);
+            rotateAnimation.setDuration(500);
+            rotateAnimation.setFillAfter(true); //旋转后停留在这个状态
+            pullIcon.startAnimation(rotateAnimation);
         } else {
             behavior.setState(BottomBehavior.STATE_COLLAPSED);
-            RotateAnimation animation = new RotateAnimation(180f,0f);
-            animation.setDuration(1000);
-            pullIcon.startAnimation(animation);
+            RotateAnimation rotateAnimation = new RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5F,
+                    Animation.RELATIVE_TO_SELF, 0.5f);
+            rotateAnimation.setDuration(500);
+            rotateAnimation.setFillAfter(true); //旋转后停留在这个状态
+            pullIcon.startAnimation(rotateAnimation);
         }
     }
+
+    private EmLoc location;
+
+    private Marker myLocMarker;
+
+
+    class LocReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            location = new Gson().fromJson(XApp.getMyPreferences().getString(Config.SP_LAST_LOC, ""), EmLoc.class);
+            LatLng latLng = new LatLng(location.latitude, location.longitude);
+            if (null == myLocMarker) {
+                MarkerOptions markerOption = new MarkerOptions();
+                markerOption.position(latLng);
+                markerOption.draggable(false);//设置Marker可拖动
+                markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                        .decodeResource(getResources(), R.mipmap.ic_my_loc)));
+                // 将Marker设置为贴地显示，可以双指下拉地图查看效果
+                markerOption.setFlat(true);//设置marker平贴地图效果
+                myLocMarker = aMap.addMarker(markerOption);
+            } else {
+                myLocMarker.setPosition(latLng);
+            }
+
+            if (loadingFrame.getVisibility() == View.VISIBLE) {
+                ((AnimationDrawable) loadingImg.getBackground()).stop();
+                loadingFrame.setVisibility(View.INVISIBLE);
+                refreshImg.setVisibility(View.VISIBLE);
+
+                aMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+            }
+        }
+    }
+
 
 }

@@ -305,7 +305,7 @@
         android:orientation="vertical"
         android:tag="drag_view"
         app:layout_behavior="com.easymi.component.widget.BottomBehavior"
-        app:x_margin_top="?attr/actionBarSize"
+        app:x_margin_top="42dp"
         app:x_peekHeight="40dp">
 
         <RelativeLayout
@@ -339,8 +339,7 @@
             layout="@layout/near_driver_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-5dp"
-            android:layout_marginBottom="?attr/actionBarSize" />
+            android:layout_marginBottom="@dimen/bar_height" />
 
     </LinearLayout>
 

@@ -1,16 +1,17 @@
 package com.easymi.component.entity;
 
+import android.location.Location;
+
 import com.amap.api.location.AMapLocation;
 
 /**
  * Created by developerLzh on 2017/11/18 0018.
- *
+ * <p>
  * doc:
  * http://amappc.cn-hangzhou.oss-pub.aliyun-inc.com/lbs/static/unzip/Android_Location_Doc/index.html
- *
  */
 
-public class LocationInfo {
+public class EmLoc {
 
     /**
      * 示例：
@@ -99,11 +100,11 @@ public class LocationInfo {
 
     public int satellites;//卫星颗数
 
-    public static LocationInfo ALocToLoc(AMapLocation aLoc) {
+    public static EmLoc ALocToLoc(AMapLocation aLoc) {
         if (null == aLoc) {
             return null;
         }
-        LocationInfo locationInfo = new LocationInfo();
+        EmLoc locationInfo = new EmLoc();
         locationInfo.latitude = aLoc.getLatitude();
         locationInfo.longitude = aLoc.getLongitude();
         locationInfo.accuracy = aLoc.getAccuracy();
@@ -132,9 +133,24 @@ public class LocationInfo {
         return locationInfo;
     }
 
+    public static Location emLoc2Loc(EmLoc loc) {
+        if (loc == null) {
+            return null;
+        }
+        Location location = new Location("em");
+        location.setLatitude(loc.latitude);
+        location.setLongitude(loc.longitude);
+        location.setAccuracy((float) loc.accuracy);
+        location.setAltitude(loc.altitude);
+        location.setBearing(loc.bearing);
+        location.setTime(loc.locTime);
+        location.setSpeed(loc.speed);
+        return location;
+    }
+
     @Override
     public String toString() {
-        return "LocationInfo{" +
+        return "EmLoc{" +
                 "latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", accuracy=" + accuracy +

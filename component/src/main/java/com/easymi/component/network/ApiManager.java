@@ -44,7 +44,7 @@ public class ApiManager {
      * 私有化构造方法,配置okhttpClient.
      */
     private ApiManager() {
-        File cacheFile = new File(XApp.context().getCacheDir(), "cache");
+        File cacheFile = new File(XApp.getInstance().getCacheDir(), "cache");
         Cache cache = new Cache(cacheFile, 1024 * 1024 * 2); //2M
         HttpLoggingInterceptor logInterceptor = new HttpLoggingInterceptor();   //拦截器用来输出请求日志方便调试
         logInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY); //日志输出等级为BODY(打印请求和返回值的头部和body信息)

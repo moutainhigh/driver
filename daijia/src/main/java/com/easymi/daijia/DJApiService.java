@@ -14,7 +14,7 @@ import rx.Observable;
  */
 
 public interface DJApiService {
-    @GET("driver/api/v1/findOne")
+    @GET("driver/api/v1/orderFindOne")
     Observable<DJOrderResult> indexOrders(@Query("order_id") Long orderId,
                                           @Query("app_key") String appKey);
 
