@@ -1,12 +1,11 @@
 package com.easymi.common.adapter;
 
-import android.view.View;
-
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.easymi.common.R;
 import com.easymi.common.entity.BaseOrder;
+import com.easymi.common.util.DJStatus2Str;
 import com.easymi.component.utils.StringUtils;
 
 import java.util.List;
@@ -34,7 +33,7 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<BaseOrder> {
             baseViewHolder.setText(R.id.order_time, "" + baseOrder.orderTime);
             baseViewHolder.setText(R.id.order_start_place, "" + baseOrder.orderStartPlace);
             baseViewHolder.setText(R.id.order_end_place, "" + baseOrder.orderEndPlace);
-            baseViewHolder.setText(R.id.order_status, "" + baseOrder.orderStatus);
+            baseViewHolder.setText(R.id.order_status, "" + DJStatus2Str.int2Str(baseOrder.orderType,baseOrder.orderStatus));
             baseViewHolder.setText(R.id.order_type, "" + baseOrder.orderDetailType);
             baseViewHolder.setOnClickListener(R.id.root, v -> {
                 if (StringUtils.isNotBlank(baseOrder.orderType)) {
@@ -47,5 +46,4 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<BaseOrder> {
             });
         }
     }
-
 }

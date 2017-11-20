@@ -12,6 +12,7 @@ import com.amap.api.navi.model.AMapNaviLocation;
 import com.easymi.component.app.XApp;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.daijia.entity.Address;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.result.DJOrderResult;
 
@@ -41,6 +42,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, new HaveErrSubscriberListener<DJOrderResult>() {
             @Override
             public void onNext(DJOrderResult djOrderResult) {
+                djOrderResult.order.addresses = djOrderResult.address;
                 view.showOrder(djOrderResult.order);
             }
 
@@ -57,11 +59,100 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback 
     }
 
     @Override
-    public void navi(DJOrder djOrder) {
-        LatLng p2 = new LatLng(39.917337, 116.397056);//故宫博物院
+    public void toStart(Long orderId) {
+        Observable<DJOrderResult> observable = model.toStart(orderId);
+
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<DJOrderResult>() {
+            @Override
+            public void onNext(DJOrderResult djOrderResult) {
+                djOrderResult.order.addresses = djOrderResult.address;
+                view.showOrder(djOrderResult.order);
+            }
+
+            @Override
+            public void onError(int code) {
+                view.showOrder(null);
+            }
+        })));
+    }
+
+    @Override
+    public void arriveStart(Long orderId) {
+        Observable<DJOrderResult> observable = model.arriveStart(orderId);
+
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<DJOrderResult>() {
+            @Override
+            public void onNext(DJOrderResult djOrderResult) {
+                djOrderResult.order.addresses = djOrderResult.address;
+                view.showOrder(djOrderResult.order);
+            }
+
+            @Override
+            public void onError(int code) {
+                view.showOrder(null);
+            }
+        })));
+    }
+
+    @Override
+    public void startWait(Long orderId) {
+        Observable<DJOrderResult> observable = model.startWait(orderId);
+
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<DJOrderResult>() {
+            @Override
+            public void onNext(DJOrderResult djOrderResult) {
+                djOrderResult.order.addresses = djOrderResult.address;
+                view.showOrder(djOrderResult.order);
+            }
+
+            @Override
+            public void onError(int code) {
+                view.showOrder(null);
+            }
+        })));
+    }
+
+    @Override
+    public void startDrive(Long orderId) {
+        Observable<DJOrderResult> observable = model.startDrive(orderId);
+
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<DJOrderResult>() {
+            @Override
+            public void onNext(DJOrderResult djOrderResult) {
+                djOrderResult.order.addresses = djOrderResult.address;
+                view.showOrder(djOrderResult.order);
+            }
+
+            @Override
+            public void onError(int code) {
+                view.showOrder(null);
+            }
+        })));
+    }
+
+    @Override
+    public void arriveDes(Long orderId) {
+        Observable<DJOrderResult> observable = model.arriveDes(orderId);
+
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<DJOrderResult>() {
+            @Override
+            public void onNext(DJOrderResult djOrderResult) {
+                djOrderResult.order.addresses = djOrderResult.address;
+                view.showOrder(djOrderResult.order);
+            }
+
+            @Override
+            public void onError(int code) {
+                view.showOrder(null);
+            }
+        })));
+    }
+
+    @Override
+    public void navi(LatLng latLng,String poi) {
         AmapNaviPage.getInstance()
                 .showRouteActivity(context,
-                        new AmapNaviParams(null, null, new Poi("故宫博物院", p2, ""), AmapNaviType.DRIVER),
+                        new AmapNaviParams(null, null, new Poi(poi, latLng, ""), AmapNaviType.DRIVER),
                         this);
     }
 
@@ -72,6 +163,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<DJOrderResult>() {
             @Override
             public void onNext(DJOrderResult djOrderResult) {
+                djOrderResult.order.addresses = djOrderResult.address;
                 view.showOrder(djOrderResult.order);
             }
 

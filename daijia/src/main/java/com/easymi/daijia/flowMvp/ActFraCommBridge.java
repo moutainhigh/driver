@@ -12,11 +12,12 @@ public interface ActFraCommBridge {
 
     void doToStart();
     void doArriveStart();
-    void doOutBeforeWait();
-    void doOutAfterWait();
+    void doStartWait();
     void doStartDrive();
+    void doConfirmMoney();
+    void doPay();
+    void showSettleDialog();
 
     void changeEnd();
 
-    void showSettleDialog();
 }

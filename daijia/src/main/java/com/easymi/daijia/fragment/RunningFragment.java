@@ -22,7 +22,7 @@ public class RunningFragment extends RxBaseFragment {
 
     private ActFraCommBridge bridge;
 
-    public void setBridge(ActFraCommBridge bridge){
+    public void setBridge(ActFraCommBridge bridge) {
         this.bridge = bridge;
     }
 
@@ -60,12 +60,12 @@ public class RunningFragment extends RxBaseFragment {
         startWaitBtn = getActivity().findViewById(R.id.start_wait);
         settleBtn = getActivity().findViewById(R.id.settle);
 
-        serviceMoneyText.setText(djOrder.orderMoney+"");
-        distanceText.setText(djOrder.orderDistance+"");
-        driveTimeText.setText(djOrder.driveTime+"");
-        waitTimeText.setText(djOrder.waitTime+"");
+        serviceMoneyText.setText(djOrder.orderMoney + "");
+        distanceText.setText(djOrder.orderDistance + "");
+        driveTimeText.setText(djOrder.driveTime + "");
+        waitTimeText.setText(djOrder.waitTime + "");
 
-        startWaitBtn.setOnClickListener(view -> bridge.doOutAfterWait());
+        startWaitBtn.setOnClickListener(view -> bridge.doStartWait());
         settleBtn.setOnClickListener(view -> bridge.showSettleDialog());
     }
 }

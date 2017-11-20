@@ -6,7 +6,7 @@ import android.content.Intent;
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.common.entity.BaseOrder;
 import com.easymi.component.Config;
-import com.easymi.component.LocService;
+import com.easymi.component.loc.LocService;
 import com.easymi.component.app.XApp;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;

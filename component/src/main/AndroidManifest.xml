@@ -4,7 +4,7 @@
     <application>
 
         <activity
-            android:name=".WebActivity"
+            android:name=".app.WebActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait" />
 
@@ -12,7 +12,7 @@
             android:name="com.amap.api.navi.AmapRouteActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
 
-        <service android:name=".LocService">
+        <service android:name=".loc.LocService">
             <intent-filter>
                 <action android:name="com.easymi.eomponent.START_LOC" />
                 <action android:name="com.easymi.eomponent.STOP_LOC" />

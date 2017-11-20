@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.easymi.component.base.RxBaseFragment;
@@ -30,6 +31,7 @@ public class ToStartFragment extends RxBaseFragment {
     FrameLayout callPhoneCon;
     TextView startPlaceText;
     TextView endPlaceText;
+    LinearLayout changEndCon;
 
     @Override
     public void setArguments(Bundle args) {
@@ -52,22 +54,18 @@ public class ToStartFragment extends RxBaseFragment {
         endPlaceText = getActivity().findViewById(R.id.end_place);
         controlCon = getActivity().findViewById(R.id.to_start_btn);
         callPhoneCon = getActivity().findViewById(R.id.call_phone_con);
+        changEndCon = getActivity().findViewById(R.id.change_end_con);
 
         startPlaceText.setText(djOrder.startPlace);
         endPlaceText.setText(djOrder.endPlace);
-        controlCon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.e("tag", "onClick");
-                bridge.doToStart();
-            }
+        controlCon.setOnClickListener(view -> {
+            Log.e("tag", "onClick");
+            bridge.doToStart();
         });
-        callPhoneCon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.e("tag", "onClick");
-                PhoneUtil.call(getActivity(), djOrder.passengerPhone);
-            }
+        callPhoneCon.setOnClickListener(view -> {
+            Log.e("tag", "onClick");
+            PhoneUtil.call(getActivity(), djOrder.passengerPhone);
         });
+        changEndCon.setOnClickListener(v -> bridge.changeEnd());
     }
 }

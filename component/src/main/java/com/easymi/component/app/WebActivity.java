@@ -1,4 +1,4 @@
-package com.easymi.component;
+package com.easymi.component.app;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.easymi.component.R;
 import com.easymi.component.base.RxBaseActivity;
 
 /**

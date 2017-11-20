@@ -36,6 +36,7 @@
     <string name="confirm_money">确认费用</string>
     <string name="consumer_prepay">客户预付</string>
     <string name="more_pay">还需支付</string>
+    <string name="dai_fu">代付</string>
 
     <string name="watch_detail">查看费用详情 ></string>
     <string name="extra_fee">附加服务费</string>
@@ -46,4 +47,7 @@
     <string name="please_consumer_phone">请输入客户电话号码</string>
     <string name="please_consumer_name">请输入客户姓名</string>
     <string name="create_order">创建订单</string>
+
+    <string name="illegality_place">无效的目的地,无法导航</string>
+
 </resources>

@@ -1,7 +1,5 @@
 package com.easymi.common.mvp.work;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
@@ -25,6 +23,7 @@ import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.easymi.common.R;
@@ -33,11 +32,13 @@ import com.easymi.common.adapter.OrderAdapter;
 import com.easymi.common.entity.BaseOrder;
 import com.easymi.common.mvp.grab.GrabActivity;
 import com.easymi.component.Config;
-import com.easymi.component.LocService;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
+import com.easymi.component.loc.LocReceiver;
+import com.easymi.component.loc.LocService;
+import com.easymi.component.loc.ReceiveLocInterface;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.widget.BottomBehavior;
 import com.easymi.component.widget.CusToolbar;
@@ -53,7 +54,7 @@ import java.util.List;
  */
 
 @Route(path = "/common/WorkActivity")
-public class WorkActivity extends RxBaseActivity implements WorkContract.View {
+public class WorkActivity extends RxBaseActivity implements WorkContract.View, ReceiveLocInterface {
 
     LinearLayout bottomBar;
 
@@ -254,7 +255,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View {
     @Override
     protected void onStart() {
         super.onStart();
-        locReceiver = new LocReceiver();
+        locReceiver = new LocReceiver(this);
         IntentFilter filter = new IntentFilter(LocService.LOC_CHANGED);
         registerReceiver(locReceiver, filter);
     }
@@ -287,34 +288,29 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View {
 
     private Marker myLocMarker;
 
+    @Override
+    public void receiveLoc() {
+        location = new Gson().fromJson(XApp.getMyPreferences().getString(Config.SP_LAST_LOC, ""), EmLoc.class);
+        LatLng latLng = new LatLng(location.latitude, location.longitude);
+        if (null == myLocMarker) {
+            MarkerOptions markerOption = new MarkerOptions();
+            markerOption.position(latLng);
+            markerOption.draggable(false);//设置Marker可拖动
+            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                    .decodeResource(getResources(), R.mipmap.ic_my_loc)));
+            // 将Marker设置为贴地显示，可以双指下拉地图查看效果
+            markerOption.setFlat(true);//设置marker平贴地图效果
+            myLocMarker = aMap.addMarker(markerOption);
+        } else {
+            myLocMarker.setPosition(latLng);
+        }
 
-    class LocReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            location = new Gson().fromJson(XApp.getMyPreferences().getString(Config.SP_LAST_LOC, ""), EmLoc.class);
-            LatLng latLng = new LatLng(location.latitude, location.longitude);
-            if (null == myLocMarker) {
-                MarkerOptions markerOption = new MarkerOptions();
-                markerOption.position(latLng);
-                markerOption.draggable(false);//设置Marker可拖动
-                markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                        .decodeResource(getResources(), R.mipmap.ic_my_loc)));
-                // 将Marker设置为贴地显示，可以双指下拉地图查看效果
-                markerOption.setFlat(true);//设置marker平贴地图效果
-                myLocMarker = aMap.addMarker(markerOption);
-            } else {
-                myLocMarker.setPosition(latLng);
-            }
+        if (loadingFrame.getVisibility() == View.VISIBLE) {
+            ((AnimationDrawable) loadingImg.getBackground()).stop();
+            loadingFrame.setVisibility(View.INVISIBLE);
+            refreshImg.setVisibility(View.VISIBLE);
 
-            if (loadingFrame.getVisibility() == View.VISIBLE) {
-                ((AnimationDrawable) loadingImg.getBackground()).stop();
-                loadingFrame.setVisibility(View.INVISIBLE);
-                refreshImg.setVisibility(View.VISIBLE);
-
-                aMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-            }
+            aMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
         }
     }
-
-
 }

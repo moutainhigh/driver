@@ -1,6 +1,7 @@
 package com.easymi.common.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -23,6 +24,8 @@ public class LiushuiActivity extends RxBaseActivity {
 
     LiuShuiAdapter adapter;
 
+    TabLayout tabLayout;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_liushui;
@@ -31,7 +34,14 @@ public class LiushuiActivity extends RxBaseActivity {
     @Override
     public void initViews(Bundle savedInstanceState) {
         recyclerView = findViewById(R.id.recyclerView);
+        tabLayout = findViewById(R.id.tab_layout);
         adapter = new LiuShuiAdapter(this);
+
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.create_daijia)));
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.create_zhuanche)));
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.create_paotui)));
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.create_huoyun)));
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.create_zhuanxian)));
 
         recyclerView.getRecyclerView().setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 

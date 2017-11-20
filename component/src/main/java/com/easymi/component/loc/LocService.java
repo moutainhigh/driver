@@ -1,4 +1,4 @@
-package com.easymi.component;
+package com.easymi.component.loc;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -13,6 +13,8 @@ import android.util.Log;
 
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
+import com.easymi.component.Config;
+import com.easymi.component.R;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.EmLoc;
 import com.google.gson.Gson;

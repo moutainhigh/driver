@@ -92,7 +92,7 @@ public class CustomSlideToUnlockView extends RelativeLayout {
      **/
     private void init(TypedArray mTypedArray) {
 
-        slideImageViewWidth= (int) mTypedArray.getDimension(R.styleable.SlideToUnlockView_slideImageViewWidth, DensityUtil.dp2px(getContext(), 20));
+        slideImageViewWidth= (int) mTypedArray.getDimension(R.styleable.SlideToUnlockView_slideImageViewWidth, DensityUtil.dp2px(getContext(), 60));
         slideImageViewResId= mTypedArray.getResourceId(R.styleable.SlideToUnlockView_slideImageViewResId, -1);
         slideImageViewResIdAfter= mTypedArray.getResourceId(R.styleable.SlideToUnlockView_slideImageViewResIdAfter, -1);
         viewBackgroundResId= mTypedArray.getResourceId(R.styleable.SlideToUnlockView_sliderViewBackgroundResId, -1);

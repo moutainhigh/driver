@@ -27,6 +27,8 @@ public class CusBottomSheetDialog extends AppCompatDialog {
 
     private BottomSheetBehavior bottomSheetBehavior;
 
+    private boolean cancelAble = true;
+
     public CusBottomSheetDialog(@NonNull Context context) {
         this(context, 0);
     }
@@ -66,6 +68,12 @@ public class CusBottomSheetDialog extends AppCompatDialog {
         super.setContentView(wrapInBottomSheet(0, view, params));
     }
 
+    @Override
+    public void setCancelable(boolean flag) {
+        cancelAble = flag;
+        super.setCancelable(flag);
+    }
+
     private View wrapInBottomSheet(int layoutResId, View view, ViewGroup.LayoutParams params) {
         final CoordinatorLayout coordinator = (CoordinatorLayout) View.inflate(getContext(),
                 R.layout.my_layout_bottom, null);
@@ -81,14 +89,11 @@ public class CusBottomSheetDialog extends AppCompatDialog {
             bottomSheet.addView(view, params);
         }
         // We treat the CoordinatorLayout as outside the dialog though it is technically inside
-        if (shouldWindowCloseOnTouchOutside()) {
+        if (shouldWindowCloseOnTouchOutside() && cancelAble) {
             coordinator.findViewById(android.support.design.R.id.touch_outside).setOnClickListener(
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (isShowing()) {
-                                cancel();
-                            }
+                    view1 -> {
+                        if (isShowing()) {
+                            cancel();
                         }
                     });
         }

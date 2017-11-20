@@ -3,6 +3,7 @@ package com.easymi.daijia.entity;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by liuzihao on 2017/11/15.
@@ -35,6 +36,10 @@ public class DJOrder implements Serializable{
      * 前往目的地
      */
     public static final int GOTO_DESTINATION_ORDER = 25;
+    /**
+     * 中途等待
+     */
+    public static final int START_WAIT_ORDER = 28;
     /**
      * 到达目的地
      */
@@ -99,5 +104,7 @@ public class DJOrder implements Serializable{
     public int waitTime;//等待时间
 
     public double waitFee;//
+
+    public List<Address> addresses;
 
 }

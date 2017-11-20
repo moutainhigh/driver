@@ -16,7 +16,7 @@
         <com.easymi.component.widget.CustomSlideToUnlockView
             android:id="@+id/slider"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="60dp"
             android:layout_gravity="center_horizontal|bottom"
             />
 

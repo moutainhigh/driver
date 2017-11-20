@@ -14,13 +14,78 @@ import rx.Observable;
  */
 
 public interface DJApiService {
+
+    /**
+     * 查询单个订单
+     * @param orderId
+     * @param appKey
+     * @return
+     */
     @GET("driver/api/v1/orderFindOne")
     Observable<DJOrderResult> indexOrders(@Query("order_id") Long orderId,
                                           @Query("app_key") String appKey);
 
+    /**
+     * 接单
+     * @param orderId
+     * @param driverId
+     * @param appKey
+     * @return
+     */
     @FormUrlEncoded
     @POST("driver/api/v1/takeOrder")
     Observable<DJOrderResult> takeOrder(@Field("order_id") Long orderId,
                                         @Field("driver_id") Long driverId,
+                                        @Field("app_key") String appKey);
+
+    /**
+     * 前往预约地
+     * @param orderId
+     * @param appKey
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("driver/api/v1/goToBookAddress")
+    Observable<DJOrderResult> goToBookAddress(@Field("order_id") Long orderId,
+                                        @Field("app_key") String appKey);
+    /**
+     * 到达预约地
+     * @param orderId
+     * @param appKey
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("driver/api/v1/arrivalBookAddress")
+    Observable<DJOrderResult> arrivalBookAddress(@Field("order_id") Long orderId,
+                                        @Field("app_key") String appKey);
+    /**
+     * 前往目的地
+     * @param orderId
+     * @param appKey
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("driver/api/v1/goToDistination")
+    Observable<DJOrderResult> goToDistination(@Field("order_id") Long orderId,
+                                        @Field("app_key") String appKey);
+    /**
+     * 开始中途等待
+     * @param orderId
+     * @param appKey
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("driver/api/v1/waitOrder")
+    Observable<DJOrderResult> waitOrder(@Field("order_id") Long orderId,
+                                        @Field("app_key") String appKey);
+    /**
+     * 到达目的地
+     * @param orderId
+     * @param appKey
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("driver/api/v1/arrivalDistination")
+    Observable<DJOrderResult> arrivalDistination(@Field("order_id") Long orderId,
                                         @Field("app_key") String appKey);
 }

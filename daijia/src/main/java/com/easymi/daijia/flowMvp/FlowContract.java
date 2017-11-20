@@ -1,5 +1,6 @@
 package com.easymi.daijia.flowMvp;
 
+import com.amap.api.maps.model.LatLng;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.result.DJOrderResult;
@@ -25,13 +26,23 @@ public interface FlowContract {
 
         void showOrder(DJOrder djOrder);
 
+        void initMap();
+
+        void showMapBounds();
+
         RxManager getManager();
     }
 
     interface Presenter{
         void acceptOrder(Long orderId);
         void refuseOrder(Long orderId);
-        void navi(DJOrder djOrder);
+        void toStart(Long orderId);
+        void arriveStart(Long orderId);
+        void startWait(Long orderId);
+        void startDrive(Long orderId);
+        void arriveDes(Long orderId);
+
+        void navi(LatLng latLng,String poi);
         void findOne(Long orderId);
         //...
     }
@@ -39,5 +50,12 @@ public interface FlowContract {
     interface Model{
         Observable<DJOrderResult> doAccept(Long orderId);
         Observable<DJOrderResult> findOne(Long orderId);
+
+        Observable<DJOrderResult> refuseOrder(Long orderId);
+        Observable<DJOrderResult> toStart(Long orderId);
+        Observable<DJOrderResult> arriveStart(Long orderId);
+        Observable<DJOrderResult> startWait(Long orderId);
+        Observable<DJOrderResult> startDrive(Long orderId);
+        Observable<DJOrderResult> arriveDes(Long orderId);
     }
 }

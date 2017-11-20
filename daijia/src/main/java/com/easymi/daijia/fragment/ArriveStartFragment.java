@@ -21,7 +21,7 @@ public class ArriveStartFragment extends RxBaseFragment {
 
     private ActFraCommBridge bridge;
 
-    public void setBridge(ActFraCommBridge bridge){
+    public void setBridge(ActFraCommBridge bridge) {
         this.bridge = bridge;
     }
 
@@ -55,6 +55,6 @@ public class ArriveStartFragment extends RxBaseFragment {
         startPlaceText.setText(djOrder.startPlace);
         endPlaceText.setText(djOrder.endPlace);
         startDrive.setOnClickListener(view -> bridge.doStartDrive());
-        startWait.setOnClickListener(view -> bridge.doOutBeforeWait());
+        startWait.setOnClickListener(view -> bridge.doStartWait());
     }
 }

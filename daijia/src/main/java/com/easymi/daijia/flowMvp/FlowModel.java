@@ -34,4 +34,54 @@ public class FlowModel implements FlowContract.Model {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    @Override
+    public Observable<DJOrderResult> refuseOrder(Long orderId) {
+        return null;
+    }
+
+    @Override
+    public Observable<DJOrderResult> toStart(Long orderId) {
+        return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
+                .goToBookAddress(orderId, Config.APP_KEY)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<DJOrderResult> arriveStart(Long orderId) {
+        return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
+                .arrivalBookAddress(orderId, Config.APP_KEY)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<DJOrderResult> startWait(Long orderId) {
+        return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
+                .waitOrder(orderId, Config.APP_KEY)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<DJOrderResult> startDrive(Long orderId) {
+        return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
+                .goToDistination(orderId, Config.APP_KEY)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<DJOrderResult> arriveDes(Long orderId) {
+        return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
+                .arrivalDistination(orderId, Config.APP_KEY)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }
