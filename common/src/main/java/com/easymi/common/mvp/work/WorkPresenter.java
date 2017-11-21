@@ -10,6 +10,8 @@ import com.easymi.component.loc.LocService;
 import com.easymi.component.app.XApp;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.network.NoErrSubscriberListener;
+import com.easymi.component.result.EmResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +94,21 @@ public class WorkPresenter implements WorkContract.Presenter {
         intent.setPackage(context.getPackageName());
         context.startService(intent);
     }
+
+    @Override
+    public void online() {
+        long driverId = XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1L);
+
+        Observable<EmResult> observable = model.online(driverId,Config.APP_KEY);
+        view.getRxManager().add(observable.subscribe(new MySubscriber<EmResult>(context, true,
+                true, new NoErrSubscriberListener<EmResult>() {
+            @Override
+            public void onNext(EmResult emResult) {
+                view.onlineSuc();
+            }
+        })));
+    }
+
 
 //    private List<BaseOrder> initRecyclerData() {
 //

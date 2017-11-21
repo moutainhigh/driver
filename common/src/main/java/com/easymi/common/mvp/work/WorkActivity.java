@@ -12,9 +12,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -77,6 +79,10 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
     FrameLayout loadingFrame;
     ImageView loadingImg;
 
+    Button onLineBtn;
+
+    RelativeLayout listenOrderCon;
+
     private WorkPresenter presenter;
 
     @Override
@@ -98,8 +104,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
 
         behavior = BottomBehavior.from(bottomBar);
 
-        rippleBackground.startRippleAnimation();
-
         rippleBackground.setOnClickListener(v -> startActivity(new Intent(WorkActivity.this, GrabActivity.class)));
 
         createOrder.setOnClickListener(v -> {
@@ -108,6 +112,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
         });
 
         initRecycler();
+
+        onLineBtn.setOnClickListener(v -> presenter.online());
 
         Employ employ = Employ.findByID(XApp.getMyPreferences().getLong("driverId", -1));
 //        Log.e("employ", employ.toString());
@@ -125,6 +131,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
         createOrder = findViewById(R.id.create_order);
         swipeRefreshLayout = findViewById(R.id.swipe_layout);
         pullIcon = findViewById(R.id.pull_icon);
+
+        listenOrderCon = findViewById(R.id.listen_order_con);
+        onLineBtn = findViewById(R.id.online_btn);
 
         loadingFrame = findViewById(R.id.loading_frame);
         loadingImg = findViewById(R.id.spinnerImageView);
@@ -218,6 +227,13 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
             presenter.startLocService(this);
         });
 
+    }
+
+    @Override
+    public void onlineSuc() {
+        listenOrderCon.setVisibility(View.VISIBLE);
+        rippleBackground.startRippleAnimation();
+        onLineBtn.setVisibility(View.GONE);
     }
 
 

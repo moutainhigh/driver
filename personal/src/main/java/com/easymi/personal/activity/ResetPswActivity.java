@@ -13,16 +13,30 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HttpResultFunc;
+import com.easymi.component.network.MySubscriber;
+import com.easymi.component.network.NoErrSubscriberListener;
+import com.easymi.component.result.EmResult;
+import com.easymi.component.utils.AesUtil;
+import com.easymi.component.utils.CodeUtil;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.OnCodeListener;
 import com.easymi.component.widget.VerifyCodeView;
+import com.easymi.personal.McService;
 import com.easymi.personal.R;
+import com.easymi.personal.result.LoginResult;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by developerLzh on 2017/11/7 0007.
@@ -49,6 +63,12 @@ public class ResetPswActivity extends RxBaseActivity {
     TextView phoneNumber;
     TextView timerText;
     VerifyCodeView secInput;
+
+    private String psw;
+
+    private String authCode;
+
+    private String phone;
 
     @Override
     public void initViews(Bundle savedInstanceState) {
@@ -92,18 +112,29 @@ public class ResetPswActivity extends RxBaseActivity {
         editPsw.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
         confirmPsw.setOnClickListener(v -> {
+            psw = editPsw.getText().toString();
             PhoneUtil.hideKeyboard(ResetPswActivity.this);
             pswCon.setVisibility(View.GONE);
             authCodeCon.setVisibility(View.VISIBLE);
+
+            authImg.setImageBitmap(CodeUtil.getInstance().createBitmap());
+            authCode = CodeUtil.getInstance().getCode();
         });
 
-        clickRefresh.setOnClickListener(v -> ToastUtil.showMessage(ResetPswActivity.this, "refresh"));
+        clickRefresh.setOnClickListener(v -> {
+            authImg.setImageBitmap(CodeUtil.getInstance().createBitmap());
+            authCode = CodeUtil.getInstance().getCode();
+        });
         authInput.setOnCodeListener(code -> {
-            ToastUtil.showMessage(ResetPswActivity.this, "CodeComplete");
-            secCodeCon.setVisibility(View.VISIBLE);
-            authCodeCon.setVisibility(View.GONE);
+            if(code.equals(authCode)){
+                secCodeCon.setVisibility(View.VISIBLE);
+                authCodeCon.setVisibility(View.GONE);
 
-            initSecView();
+                initSecView();
+            } else {
+                ToastUtil.showMessage(ResetPswActivity.this,getString(R.string.reset_error_auth));
+                authInput = new VerifyCodeView(this);
+            }
         });
 
         timerText.setOnClickListener(v -> {
@@ -115,6 +146,27 @@ public class ResetPswActivity extends RxBaseActivity {
             finish();
         });
 
+    }
+
+    private void resetPsw(){
+        McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
+        Observable<EmResult> observable = api
+                .changePsw(phone,psw,Config.APP_KEY)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<EmResult>(ResetPswActivity.this, true, true, new NoErrSubscriberListener<EmResult>() {
+            @Override
+            public void onNext(EmResult emResult) {
+                ToastUtil.showMessage(ResetPswActivity.this,getString(R.string.reset_change_suc));
+                ResetPswActivity.this.finish();
+            }
+        })));
+    }
+
+    public void backAction(View view) {
+        finish();
     }
 
     private Timer timer;

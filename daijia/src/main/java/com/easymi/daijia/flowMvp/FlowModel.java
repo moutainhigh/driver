@@ -36,8 +36,12 @@ public class FlowModel implements FlowContract.Model {
     }
 
     @Override
-    public Observable<DJOrderResult> refuseOrder(Long orderId) {
-        return null;
+    public Observable<DJOrderResult> refuseOrder(Long orderId,String remark) {
+        return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
+                .refuseOrder(orderId, XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1), Config.APP_KEY,remark)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override

@@ -218,9 +218,11 @@
             android:background="@drawable/corners_button_bg"
             android:text="@string/work_online"
             android:textColor="@color/white"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <RelativeLayout
+            android:id="@+id/listen_order_con"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="80dp">
 

@@ -285,6 +285,4 @@ public class VerifyCodeView extends View {
     public void setOnCodeListener(OnCodeListener listener) {
         this.listener = listener;
     }
-
-
 }

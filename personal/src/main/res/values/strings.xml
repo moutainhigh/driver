@@ -89,6 +89,8 @@
     <string name="reset_code_to_where">验证码发送至</string>
     <string name="reset_sec_resend">秒后重发</string>
     <string name="reset_resend_code">重新获取></string>
+    <string name="reset_error_auth">图形验证码错误</string>
+    <string name="reset_change_suc">修改密码成功</string>
 
     <!--充值str -->
     <string name="recharge_balance">我的余额(元)</string>

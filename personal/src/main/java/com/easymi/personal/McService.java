@@ -1,5 +1,6 @@
 package com.easymi.personal;
 
+import com.easymi.component.result.EmResult;
 import com.easymi.personal.result.LoginResult;
 
 import retrofit2.http.Field;
@@ -18,6 +19,12 @@ public interface McService {
     @POST("driver/api/v1/employLogin")
     Observable<LoginResult> login(@Field("username") String userName,
                                   @Field("password") String psw,
-                                  @Field("app_key")String appKey);
+                                  @Field("app_key") String appKey);
+
+    @FormUrlEncoded
+    @POST("driver/api/v1/modifyPassword")
+    Observable<EmResult> changePsw(@Field("phone") String phone,
+                                   @Field("password") String password,
+                                   @Field("app_key") String appKey);
 
 }

@@ -12,6 +12,7 @@ import com.amap.api.navi.model.AMapNaviLocation;
 import com.easymi.component.app.XApp;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.result.EmResult;
 import com.easymi.daijia.entity.Address;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.result.DJOrderResult;
@@ -54,8 +55,20 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback 
     }
 
     @Override
-    public void refuseOrder(Long orderId) {
+    public void refuseOrder(Long orderId, String remark) {
+        Observable<DJOrderResult> observable = model.refuseOrder(orderId, remark);
 
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, new HaveErrSubscriberListener<DJOrderResult>() {
+            @Override
+            public void onNext(DJOrderResult djOrderResult) {
+                view.cancelSuc();
+            }
+
+            @Override
+            public void onError(int code) {
+                view.showOrder(null);
+            }
+        })));
     }
 
     @Override
@@ -149,7 +162,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback 
     }
 
     @Override
-    public void navi(LatLng latLng,String poi) {
+    public void navi(LatLng latLng, String poi) {
         AmapNaviPage.getInstance()
                 .showRouteActivity(context,
                         new AmapNaviParams(null, null, new Poi(poi, latLng, ""), AmapNaviType.DRIVER),

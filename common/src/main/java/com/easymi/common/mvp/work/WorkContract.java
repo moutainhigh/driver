@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.common.entity.BaseOrder;
+import com.easymi.component.result.EmResult;
 import com.easymi.component.rxmvp.RxManager;
 
 import java.util.List;
@@ -29,6 +30,8 @@ public interface WorkContract {
 
         void initRefreshBtn();
 
+        void onlineSuc();
+
         RxManager getRxManager();
     }
 
@@ -38,11 +41,14 @@ public interface WorkContract {
         void indexOrders();
 
         void startLocService(Context context);
+
+        void online();
         //...
     }
 
     interface Model {
         Observable<QueryOrdersResult> indexOrders(Long driverId, String appKey);
+        Observable<EmResult> online(Long driverId, String appKey);
     }
 
 }

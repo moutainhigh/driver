@@ -48,6 +48,8 @@
     <string name="please_consumer_name">请输入客户姓名</string>
     <string name="create_order">创建订单</string>
 
+    <string name="cancel_suc">取消订单成功</string>
+
     <string name="illegality_place">无效的目的地,无法导航</string>
 
 </resources>

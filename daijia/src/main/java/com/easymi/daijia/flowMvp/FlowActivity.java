@@ -321,6 +321,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
         }
     }
 
+    @Override
+    public void cancelSuc() {
+        ToastUtil.showMessage(this, getString(R.string.cancel_suc));
+        finish();
+    }
+
     private Address getStartAddr() {
         Address startAddress = null;
         if (djOrder.addresses != null && djOrder.addresses.size() != 0) {
@@ -372,6 +378,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
 
             @Override
             public void doRefuse() {
+                presenter.refuseOrder(djOrder.orderId, "不想要了");
             }
 
             @Override

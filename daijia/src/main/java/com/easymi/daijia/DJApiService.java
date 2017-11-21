@@ -39,6 +39,20 @@ public interface DJApiService {
                                         @Field("app_key") String appKey);
 
     /**
+     * 拒单
+     * @param orderId
+     * @param driverId
+     * @param appKey
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("driver/api/v1/refuseOrder")
+    Observable<DJOrderResult> refuseOrder(@Field("order_id") Long orderId,
+                                        @Field("driver_id") Long driverId,
+                                        @Field("app_key") String appKey,
+                                          @Field("remark")String remark);
+
+    /**
      * 前往预约地
      * @param orderId
      * @param appKey
