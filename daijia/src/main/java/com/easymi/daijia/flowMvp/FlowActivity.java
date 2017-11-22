@@ -511,19 +511,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
-                String reason = "";
-                int reasonId = data.getIntExtra("reasonId", 1);
-                if (reasonId == 1) {
-                    reason = getString(R.string.cancel_reason_1);
-                } else if (reasonId == 2) {
-                    reason = getString(R.string.cancel_reason_2);
-                } else if (reasonId == 3) {
-                    reason = getString(R.string.cancel_reason_3);
-                } else if (reasonId == 4) {
-                    reason = getString(R.string.cancel_reason_4);
-                } else if (reasonId == 5) {
-                    reason = getString(R.string.cancel_reason_5);
-                }
+                String reason = data.getStringExtra("reason");
+
                 presenter.refuseOrder(djOrder.orderId, reason);
             }
         }

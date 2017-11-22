@@ -213,6 +213,19 @@
 
             </RelativeLayout>
 
+            <EditText
+                android:id="@+id/edit_reason"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="top|left"
+                android:visibility="gone"
+                android:hint="@string/please_cancel_reason"
+                android:padding="5dp"
+                android:background="@drawable/corners_white_gray_stroke"/>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"

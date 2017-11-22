@@ -39,13 +39,13 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<BaseOrder> {
                 if (StringUtils.isNotBlank(baseOrder.orderType)) {
 
                     if (baseOrder.orderType.equals("daijia")) {
-//                        if (baseOrder.orderStatus == 0) {
+                        if (baseOrder.orderStatus == 1) {
                             ARouter.getInstance().build("/daijia/GrabActivity").withLong("orderId", baseOrder.orderId).navigation();
-//                        } else {
-//                            ARouter.getInstance()
-//                                    .build("/daijia/FlowActivity")
-//                                    .withLong("orderId", baseOrder.orderId).navigation();
-//                        }
+                        } else {
+                            ARouter.getInstance()
+                                    .build("/daijia/FlowActivity")
+                                    .withLong("orderId", baseOrder.orderId).navigation();
+                        }
                     }
                 }
             });

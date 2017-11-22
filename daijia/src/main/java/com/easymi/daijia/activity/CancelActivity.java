@@ -5,8 +5,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.utils.StringUtils;
+import com.easymi.component.utils.ToastUtil;
 import com.easymi.daijia.R;
 
 /**
@@ -20,6 +23,8 @@ public class CancelActivity extends RxBaseActivity {
     CheckBox checkBox3;
     CheckBox checkBox4;
     CheckBox checkBox5;
+
+    EditText editReason;
 
     private int checkId = 1;
 
@@ -35,6 +40,8 @@ public class CancelActivity extends RxBaseActivity {
         checkBox3 = findViewById(R.id.check_3);
         checkBox4 = findViewById(R.id.check_4);
         checkBox5 = findViewById(R.id.check_5);
+
+        editReason = findViewById(R.id.edit_reason);
 
         checkBox1.setOnCheckedChangeListener(new MyCheckChange(1));
         checkBox2.setOnCheckedChangeListener(new MyCheckChange(2));
@@ -62,6 +69,12 @@ public class CancelActivity extends RxBaseActivity {
                 checkBox5.setChecked(false);
 
                 buttonView.setChecked(true);
+
+                if (checkId == 5) {
+                    editReason.setVisibility(View.VISIBLE);
+                } else {
+                    editReason.setVisibility(View.GONE);
+                }
             }
         }
     }
@@ -72,7 +85,24 @@ public class CancelActivity extends RxBaseActivity {
 
     public void cancel_order(View view) {
         Intent intent = new Intent();
-        intent.putExtra("reasonId", checkId);
+        String reason = "";
+        if (checkId == 1) {
+            reason = getString(R.string.cancel_reason_1);
+        } else if (checkId == 2) {
+            reason = getString(R.string.cancel_reason_2);
+        } else if (checkId == 3) {
+            reason = getString(R.string.cancel_reason_3);
+        } else if (checkId == 4) {
+            reason = getString(R.string.cancel_reason_4);
+        } else if (checkId == 5) {
+            reason = editReason.getText().toString();
+        }
+        if (StringUtils.isBlank(reason)) {
+            ToastUtil.showMessage(CancelActivity.this, getString(R.string.please_cancel_reason));
+            return;
+        }
+        intent.putExtra("reason", reason);
         setResult(RESULT_OK, intent);
+        finish();
     }
 }

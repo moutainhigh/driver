@@ -69,4 +69,6 @@
     <string name="grab_map">地图</string>
     <string name="grab_order">抢单</string>
     <string name="sec">秒</string>
+    <string name="please_cancel_reason">请输入取消理由</string>
+
 </resources>
