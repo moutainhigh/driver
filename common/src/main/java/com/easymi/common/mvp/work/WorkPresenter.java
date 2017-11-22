@@ -101,12 +101,7 @@ public class WorkPresenter implements WorkContract.Presenter {
 
         Observable<EmResult> observable = model.online(driverId,Config.APP_KEY);
         view.getRxManager().add(observable.subscribe(new MySubscriber<EmResult>(context, true,
-                true, new NoErrSubscriberListener<EmResult>() {
-            @Override
-            public void onNext(EmResult emResult) {
-                view.onlineSuc();
-            }
-        })));
+                true, emResult -> view.onlineSuc())));
     }
 
 

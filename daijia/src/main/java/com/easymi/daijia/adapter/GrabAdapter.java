@@ -1,15 +1,20 @@
-package com.easymi.common.adapter;
+package com.easymi.daijia.adapter;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import com.easymi.common.R;
-import com.easymi.common.entity.BaseOrder;
+import com.easymi.daijia.R;
+import com.easymi.daijia.entity.DJOrder;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import co.lujun.androidtagview.ColorFactory;
+import co.lujun.androidtagview.TagContainerLayout;
 
 /**
  * Created by developerLzh on 2017/11/3 0003.
@@ -17,7 +22,7 @@ import java.util.List;
 
 public class GrabAdapter extends PagerAdapter {
 
-    private List<BaseOrder> baseOrderList;
+    private List<DJOrder> baseOrderList;
     private Context context;
 
     private List<View> mViewList = new ArrayList<>();   //View重用缓存列表
@@ -27,7 +32,7 @@ public class GrabAdapter extends PagerAdapter {
         baseOrderList = new ArrayList<>();
     }
 
-    public void setBaseOrderList(List<BaseOrder> baseOrderList) {
+    public void setDJOrderList(List<DJOrder> baseOrderList) {
         this.baseOrderList = baseOrderList;
         notifyDataSetChanged();
     }
@@ -51,7 +56,10 @@ public class GrabAdapter extends PagerAdapter {
             //不存在可重用的视图，new 视图
             holder = new Holder();
             view = View.inflate(context, R.layout.grab_item, null);
-//            holder.dingDanId = (TextView) view.findViewById(R.id.dingDan_Id);
+            holder.startPlace = view.findViewById(R.id.start_place);
+            holder.endPlace = view.findViewById(R.id.end_place);
+            holder.orderTimeText = view.findViewById(R.id.order_time_text);
+            holder.tagContainer = view.findViewById(R.id.tag_container);
 
             view.setTag(holder);
         } else {
@@ -61,7 +69,13 @@ public class GrabAdapter extends PagerAdapter {
         }
 
         //设置view上相关数据
-        final BaseOrder baseOrder = baseOrderList.get(position);
+        DJOrder djOrder = baseOrderList.get(position);
+        holder.startPlace.setText(djOrder.startPlace);
+        holder.endPlace.setText(djOrder.endPlace);
+        holder.orderTimeText.setText(djOrder.isBookOrder == 1 ? "预约" : "即时");
+        holder.tagContainer.setTheme(ColorFactory.NONE);
+        holder.tagContainer.addTag("不要抽烟");
+        holder.tagContainer.addTag("带手套开车");
 
         //添加到ViewPager中，并显示
         container.addView(view);
@@ -88,7 +102,10 @@ public class GrabAdapter extends PagerAdapter {
         mViewList.clear();  //清空缓存队列
     }
 
-    class Holder{
-
+    class Holder {
+        TextView startPlace;
+        TextView endPlace;
+        TextView orderTimeText;
+        TagContainerLayout tagContainer;
     }
 }

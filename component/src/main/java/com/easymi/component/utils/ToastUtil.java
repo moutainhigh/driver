@@ -1,7 +1,10 @@
 package com.easymi.component.utils;
 
 import android.content.Context;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.easymi.component.R;
 
 public class ToastUtil {
     private static Toast sToast = null;
@@ -21,7 +24,6 @@ public class ToastUtil {
             }
             sToast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
             sToast.show();
-            return;
         } catch (Exception e) {
         }
     }
@@ -33,7 +35,6 @@ public class ToastUtil {
             }
             sToast = Toast.makeText(context, msg, len);
             sToast.show();
-            return;
         } catch (Exception e) {
         }
     }

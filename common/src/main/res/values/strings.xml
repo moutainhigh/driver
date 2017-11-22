@@ -15,10 +15,6 @@
     <string name="work_listen_order">听单中...</string>
     <string name="work_title">工作台</string>
 
-    <!-- 抢单界面str -->
-    <string name="grab_dis">距您约</string>
-    <string name="grab_map">地图</string>
-
     <!-- 流水str-->
     <string name="liushui_baoxiao">报销</string>
 

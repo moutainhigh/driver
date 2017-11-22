@@ -1,5 +1,6 @@
 package com.easymi.daijia.flowMvp;
 
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.MapUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.daijia.R;
+import com.easymi.daijia.activity.CancelActivity;
 import com.easymi.daijia.entity.Address;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.fragment.AcceptFragment;
@@ -378,7 +380,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
 
             @Override
             public void doRefuse() {
-                presenter.refuseOrder(djOrder.orderId, "不想要了");
+                Intent intent = new Intent(FlowActivity.this, CancelActivity.class);
+                startActivityForResult(intent, 0);
             }
 
             @Override
@@ -499,6 +502,29 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
             if (djOrder.orderStatus == DJOrder.GOTO_DESTINATION_ORDER
                     || djOrder.orderStatus == DJOrder.GOTO_BOOKPALCE_ORDER) {
                 aMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 0) {
+            if (resultCode == RESULT_OK) {
+                String reason = "";
+                int reasonId = data.getIntExtra("reasonId", 1);
+                if (reasonId == 1) {
+                    reason = getString(R.string.cancel_reason_1);
+                } else if (reasonId == 2) {
+                    reason = getString(R.string.cancel_reason_2);
+                } else if (reasonId == 3) {
+                    reason = getString(R.string.cancel_reason_3);
+                } else if (reasonId == 4) {
+                    reason = getString(R.string.cancel_reason_4);
+                } else if (reasonId == 5) {
+                    reason = getString(R.string.cancel_reason_5);
+                }
+                presenter.refuseOrder(djOrder.orderId, reason);
             }
         }
     }

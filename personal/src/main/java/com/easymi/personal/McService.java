@@ -6,6 +6,7 @@ import com.easymi.personal.result.LoginResult;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import rx.Observable;
 
 /**
@@ -22,7 +23,7 @@ public interface McService {
                                   @Field("app_key") String appKey);
 
     @FormUrlEncoded
-    @POST("driver/api/v1/modifyPassword")
+    @PUT("driver/api/v1/modifyPassword")
     Observable<EmResult> changePsw(@Field("phone") String phone,
                                    @Field("password") String password,
                                    @Field("app_key") String appKey);

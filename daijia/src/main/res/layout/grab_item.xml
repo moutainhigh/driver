@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -51,7 +52,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/order_start"
+            android:id="@+id/start_place"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -62,7 +63,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/order_end"
+            android:id="@+id/end_place"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -73,13 +74,21 @@
             android:textSize="20sp" />
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/require_recycler"
+    <co.lujun.androidtagview.TagContainerLayout
+        android:id="@+id/tag_container"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="5dp" />
+        android:padding="10dp"
+        app:container_enable_drag="false"
+        app:horizontal_interval="10dp"
+        app:tag_background_color="@color/white"
+        app:tag_border_color="@color/white"
+        app:tag_clickable="true"
+        app:tag_text_color="@color/colorAccent"
+        app:vertical_interval="10dp" />
 
 
 </LinearLayout>

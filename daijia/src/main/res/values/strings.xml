@@ -52,4 +52,21 @@
 
     <string name="illegality_place">无效的目的地,无法导航</string>
 
+    <string name="cancel_reason">请选择消单原因</string>
+    <string name="cancel_reason_1">与客户协商一致取消订单</string>
+    <string name="cancel_reason_2">客户呼叫多人，只用先到司机</string>
+    <string name="cancel_reason_3">客户拒接电话</string>
+    <string name="cancel_reason_4">客户单方面取消</string>
+    <string name="cancel_reason_5">其他原因</string>
+
+    <string name="cancel_cancel">暂不取消</string>
+    <string name="cancel_order">取消订单</string>
+
+    <string name="order_not_exist">订单不存在</string>
+
+    <!-- 抢单界面str -->
+    <string name="grab_dis">距您约</string>
+    <string name="grab_map">地图</string>
+    <string name="grab_order">抢单</string>
+    <string name="sec">秒</string>
 </resources>

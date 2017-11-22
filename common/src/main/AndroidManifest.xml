@@ -4,12 +4,6 @@
     <application>
 
         <activity
-            android:name=".mvp.grab.GrabActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask"/>
-
-        <activity
             android:name=".mvp.work.WorkActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"

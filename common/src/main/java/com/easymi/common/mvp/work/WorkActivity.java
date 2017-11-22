@@ -25,14 +25,12 @@ import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.easymi.common.R;
 import com.easymi.common.activity.CreateActivity;
 import com.easymi.common.adapter.OrderAdapter;
 import com.easymi.common.entity.BaseOrder;
-import com.easymi.common.mvp.grab.GrabActivity;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
@@ -103,8 +101,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
         mapView.onCreate(savedInstanceState);
 
         behavior = BottomBehavior.from(bottomBar);
-
-        rippleBackground.setOnClickListener(v -> startActivity(new Intent(WorkActivity.this, GrabActivity.class)));
 
         createOrder.setOnClickListener(v -> {
             Intent intent = new Intent(WorkActivity.this, CreateActivity.class);

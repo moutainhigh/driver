@@ -56,6 +56,10 @@ public class DJOrder implements Serializable{
      * 已销单
      */
     public static final int CANCEL_ORDER = 45;
+    /**
+     * 是否是预约单
+     */
+    public int isBookOrder;//1是预约单 2是即时单
 
     @SerializedName("id")
     public long orderId;

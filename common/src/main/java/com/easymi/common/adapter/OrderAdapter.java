@@ -33,14 +33,19 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<BaseOrder> {
             baseViewHolder.setText(R.id.order_time, "" + baseOrder.orderTime);
             baseViewHolder.setText(R.id.order_start_place, "" + baseOrder.orderStartPlace);
             baseViewHolder.setText(R.id.order_end_place, "" + baseOrder.orderEndPlace);
-            baseViewHolder.setText(R.id.order_status, "" + DJStatus2Str.int2Str(baseOrder.orderType,baseOrder.orderStatus));
+            baseViewHolder.setText(R.id.order_status, "" + DJStatus2Str.int2Str(baseOrder.orderType, baseOrder.orderStatus));
             baseViewHolder.setText(R.id.order_type, "" + baseOrder.orderDetailType);
             baseViewHolder.setOnClickListener(R.id.root, v -> {
                 if (StringUtils.isNotBlank(baseOrder.orderType)) {
+
                     if (baseOrder.orderType.equals("daijia")) {
-                        ARouter.getInstance()
-                                .build("/daijia/FlowActivity")
-                                .withLong("orderId", baseOrder.orderId).navigation();
+//                        if (baseOrder.orderStatus == 0) {
+                            ARouter.getInstance().build("/daijia/GrabActivity").withLong("orderId", baseOrder.orderId).navigation();
+//                        } else {
+//                            ARouter.getInstance()
+//                                    .build("/daijia/FlowActivity")
+//                                    .withLong("orderId", baseOrder.orderId).navigation();
+//                        }
                     }
                 }
             });
