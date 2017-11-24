@@ -53,12 +53,17 @@ public class WorkPresenter implements WorkContract.Presenter {
                 List<BaseOrder> orders = emResult.orders;
                 List<BaseOrder> nowOrders = new ArrayList<>();
                 List<BaseOrder> yuyueOrders = new ArrayList<>();
+                XApp.getPreferencesEditor().putBoolean(Config.SP_NEED_TRACE, false).apply();
                 for (BaseOrder order : orders) {
                     order.viewType = BaseOrder.ITEM_POSTER;
                     if (order.isBookOrder == 2) {
                         nowOrders.add(order);
                     } else {
                         yuyueOrders.add(order);
+                    }
+                    //有任何一个订单的状态是前往目的地就置成需要纠偏
+                    if (order.orderType.equals("daijia") && order.orderStatus == 25) {
+                        XApp.getPreferencesEditor().putBoolean(Config.SP_NEED_TRACE, true).apply();
                     }
                 }
                 orders.clear();
@@ -81,6 +86,7 @@ public class WorkPresenter implements WorkContract.Presenter {
 
             @Override
             public void onError(int code) {
+                XApp.getPreferencesEditor().putBoolean(Config.SP_NEED_TRACE, false).apply();
                 view.showOrders(null);
             }
         })));
@@ -99,7 +105,7 @@ public class WorkPresenter implements WorkContract.Presenter {
     public void online() {
         long driverId = XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1L);
 
-        Observable<EmResult> observable = model.online(driverId,Config.APP_KEY);
+        Observable<EmResult> observable = model.online(driverId, Config.APP_KEY);
         view.getRxManager().add(observable.subscribe(new MySubscriber<EmResult>(context, true,
                 true, emResult -> view.onlineSuc())));
     }

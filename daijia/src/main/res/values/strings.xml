@@ -71,4 +71,6 @@
     <string name="sec">秒</string>
     <string name="please_cancel_reason">请输入取消理由</string>
 
+    <string name="loc_failed">定位失败,无法继续操作</string>
+
 </resources>

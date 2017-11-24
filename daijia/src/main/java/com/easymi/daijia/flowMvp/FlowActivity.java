@@ -3,6 +3,7 @@ package com.easymi.daijia.flowMvp;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +21,9 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
+import com.amap.api.maps.model.Polyline;
+import com.amap.api.maps.model.PolylineOptions;
+import com.amap.api.maps.utils.overlay.SmoothMoveMarker;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
@@ -41,6 +45,8 @@ import com.easymi.daijia.fragment.SettleFragmentDialog;
 import com.easymi.daijia.fragment.SlideArriveStartFragment;
 import com.easymi.daijia.fragment.ToStartFragment;
 import com.easymi.daijia.fragment.WaitFragment;
+import com.easymi.daijia.trace.TraceInterface;
+import com.easymi.daijia.trace.TraceReceiver;
 import com.google.gson.Gson;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
@@ -54,7 +60,7 @@ import co.lujun.androidtagview.TagContainerLayout;
  * Created by developerLzh on 2017/11/13 0013.
  */
 @Route(path = "/daijia/FlowActivity")
-public class FlowActivity extends RxBaseActivity implements FlowContract.View, ReceiveLocInterface {
+public class FlowActivity extends RxBaseActivity implements FlowContract.View, ReceiveLocInterface, TraceInterface {
 
     TextView nextPlace;
     TextView leftTimeText;
@@ -76,7 +82,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
 
     private LocReceiver locReceiver;
 
+    private TraceReceiver traceReceiver;
+
     private AMap aMap;
+
+    private long orderId;
 
     @Override
     public int getLayoutId() {
@@ -85,7 +95,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
 
     @Override
     public void initViews(Bundle savedInstanceState) {
-        long orderId = getIntent().getLongExtra("orderId", -1);
+        orderId = getIntent().getLongExtra("orderId", -1);
         if (orderId == -1) {
             finish();
             return;
@@ -106,8 +116,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
         mapView.onCreate(savedInstanceState);
 
         initMap();
-
-        presenter.findOne(orderId);
     }
 
     @Override
@@ -269,7 +277,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
             if (null != getEndAddr()) {
                 latLngs.add(new LatLng(getEndAddr().lat, getEndAddr().lng));
             }
-            LatLngBounds bounds = MapUtil.getBounds(latLngs, new LatLng(location.latitude, location.longitude));
+            LatLngBounds bounds = MapUtil.getBounds(latLngs, new LatLng(lastLatlng.latitude, lastLatlng.longitude));
             aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 200));
         } else if (djOrder.orderStatus == DJOrder.GOTO_BOOKPALCE_ORDER) {
             if (null != getStartAddr()) {
@@ -278,7 +286,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
             } else {
                 naviCon.setOnClickListener(v -> ToastUtil.showMessage(FlowActivity.this, getString(R.string.illegality_place)));
             }
-            LatLngBounds bounds = MapUtil.getBounds(latLngs, new LatLng(location.latitude, location.longitude));
+            LatLngBounds bounds = MapUtil.getBounds(latLngs, new LatLng(lastLatlng.latitude, lastLatlng.longitude));
             aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 200));
         } else if (djOrder.orderStatus == DJOrder.ARRIVAL_BOOKPLACE_ORDER
                 || djOrder.orderStatus == DJOrder.GOTO_DESTINATION_ORDER
@@ -290,7 +298,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
             } else {
                 naviCon.setOnClickListener(v -> ToastUtil.showMessage(FlowActivity.this, getString(R.string.illegality_place)));
             }
-            LatLngBounds bounds = MapUtil.getBounds(latLngs, new LatLng(location.latitude, location.longitude));
+            LatLngBounds bounds = MapUtil.getBounds(latLngs, new LatLng(lastLatlng.latitude, lastLatlng.longitude));
             aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 40));
         }
         if (null != getStartAddr()) {
@@ -433,6 +441,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
         locReceiver = new LocReceiver(this);
         IntentFilter filter = new IntentFilter(LocService.LOC_CHANGED);
         registerReceiver(locReceiver, filter);
+
+        traceReceiver = new TraceReceiver(this);
+        IntentFilter filter2 = new IntentFilter();
+        filter2.addAction(LocService.BROAD_TRACE_SUC);
+        registerReceiver(traceReceiver, filter2);
     }
 
     //是否退出到了重新进来，如果是则要CameraUpdate
@@ -441,8 +454,16 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
     @Override
     protected void onResume() {
         super.onResume();
+        EmLoc location = new Gson().fromJson(XApp.getMyPreferences().getString(Config.SP_LAST_LOC, ""), EmLoc.class);
+        if (location == null) {
+            ToastUtil.showMessage(this, getString(R.string.loc_failed));
+            finish();
+            return;
+        }
         mapView.onResume();
         onResumeIn = true;
+        lastLatlng = new LatLng(location.latitude, location.longitude);
+        presenter.findOne(orderId);
     }
 
     @Override
@@ -467,29 +488,50 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
     protected void onStop() {
         super.onStop();
         unregisterReceiver(locReceiver);
+        unregisterReceiver(traceReceiver);
     }
 
-    private EmLoc location;
-    private Marker myLocMarker;
+    SmoothMoveMarker smoothMoveMarker;
+
+    private LatLng lastLatlng;
 
     @Override
     public void receiveLoc() {
-        location = new Gson().fromJson(XApp.getMyPreferences().getString(Config.SP_LAST_LOC, ""), EmLoc.class);
+        EmLoc location = new Gson().fromJson(XApp.getMyPreferences().getString(Config.SP_LAST_LOC, ""), EmLoc.class);
         LatLng latLng = new LatLng(location.latitude, location.longitude);
-        if (null == myLocMarker) {
-            MarkerOptions markerOption = new MarkerOptions();
-            markerOption.position(latLng);
-            markerOption.rotateAngle(location.bearing);
-            markerOption.draggable(false);//设置Marker可拖动
-            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+
+        if (null == smoothMoveMarker) {//首次进入
+            smoothMoveMarker = new SmoothMoveMarker(aMap);
+            smoothMoveMarker.setDescriptor(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                     .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
-            // 将Marker设置为贴地显示，可以双指下拉地图查看效果
-            markerOption.setFlat(true);//设置marker平贴地图效果
-            myLocMarker = aMap.addMarker(markerOption);
+            smoothMoveMarker.setPosition(lastLatlng);
+            smoothMoveMarker.setRotate(location.bearing);
         } else {
-            myLocMarker.setPosition(latLng);
-            myLocMarker.setRotateAngle(location.bearing);
+            List<LatLng> latLngs = new ArrayList<>();
+            latLngs.add(lastLatlng);
+            latLngs.add(latLng);
+            smoothMoveMarker.setPoints(latLngs);
+            smoothMoveMarker.setTotalDuration(LocService.scanTime / 1000);
+            smoothMoveMarker.setRotate(location.bearing);
+            smoothMoveMarker.startSmoothMove();
         }
+
+//        if (null == myLocMarker) {
+//            MarkerOptions markerOption = new MarkerOptions();
+//            markerOption.position(latLng);
+//            markerOption.rotateAngle(location.bearing);
+//            markerOption.anchor(0.5f, 0.5f);
+//            markerOption.draggable(false);//设置Marker可拖动
+//            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+//                    .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
+//            // 将Marker设置为贴地显示，可以双指下拉地图查看效果
+//            markerOption.setFlat(true);//设置marker平贴地图效果
+//            myLocMarker = aMap.addMarker(markerOption);
+//        } else {
+//            myLocMarker.setPosition(latLng);
+//            myLocMarker.setRotateAngle(location.bearing);
+//            myLocMarker.setAnchor(0.5f, 0.5f);
+//        }
         if (onResumeIn) {
             if (djOrder == null) {
                 aMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -501,9 +543,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
         if (null != djOrder) {
             if (djOrder.orderStatus == DJOrder.GOTO_DESTINATION_ORDER
                     || djOrder.orderStatus == DJOrder.GOTO_BOOKPALCE_ORDER) {
-                aMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+//                aMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
             }
         }
+        lastLatlng = latLng;
     }
 
     @Override
@@ -516,5 +559,33 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
                 presenter.refuseOrder(djOrder.orderId, reason);
             }
         }
+    }
+
+    private Polyline tracePolyLine;
+    private Polyline orignialPolyLine;
+
+    @Override
+    public void showTraceAfter(List<LatLng> before, List<LatLng> after) {
+
+        if (null != before && before.size() != 0) {
+            if (null == orignialPolyLine) {
+                orignialPolyLine = aMap.addPolyline(new PolylineOptions().
+                        addAll(before).width(10).color(Color.rgb(255, 0, 0)));
+            } else {
+                orignialPolyLine.setPoints(before);
+            }
+        }
+
+
+        if (null != after && after.size() != 0) {
+            if (null == tracePolyLine) {
+                tracePolyLine = aMap.addPolyline(new PolylineOptions().
+                        addAll(after).width(10).color(Color.rgb(0, 255, 0)));
+            } else {
+                tracePolyLine.setPoints(after);
+            }
+        }
+
+
     }
 }

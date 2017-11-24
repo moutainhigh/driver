@@ -2,9 +2,8 @@ package com.easymi.component;
 
 /**
  * Created by developerLzh on 2017/11/3 0003.
- *
+ * <p>
  * 系统地址
- *
  */
 
 public class Config {
@@ -15,4 +14,5 @@ public class Config {
     public static final String SP_DRIVERID = "driverId";
     public static final String SP_ISLOGIN = "isLogin";
     public static final String SP_LAST_LOC = "lastLoc";
+    public static final String SP_NEED_TRACE = "needTrace";//是否需要纠偏
 }

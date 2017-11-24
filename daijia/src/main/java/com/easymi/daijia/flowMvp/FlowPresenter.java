@@ -9,6 +9,7 @@ import com.amap.api.navi.AmapNaviParams;
 import com.amap.api.navi.AmapNaviType;
 import com.amap.api.navi.INaviInfoCallback;
 import com.amap.api.navi.model.AMapNaviLocation;
+import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
@@ -128,7 +129,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback 
     @Override
     public void startDrive(Long orderId) {
         Observable<DJOrderResult> observable = model.startDrive(orderId);
-
+        XApp.getPreferencesEditor().putBoolean(Config.SP_NEED_TRACE, true).apply();//将其置为需要纠偏
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<DJOrderResult>() {
             @Override
             public void onNext(DJOrderResult djOrderResult) {
