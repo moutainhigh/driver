@@ -1,59 +1,80 @@
 package com.easymi.daijia.fragment.create;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.core.PoiItem;
 import com.easymi.component.Config;
+import com.easymi.component.activity.PlaceActivity;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxLazyFragment;
-import com.easymi.component.entity.Employ;
-import com.easymi.component.network.ApiManager;
-import com.easymi.component.network.HaveErrSubscriberListener;
-import com.easymi.component.network.HttpResultFunc;
-import com.easymi.component.network.MySubscriber;
-import com.easymi.component.network.NoErrSubscriberListener;
+import com.easymi.component.entity.EmLoc;
+import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.StringUtils;
+import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusBottomSheetDialog;
 import com.easymi.component.widget.TimePickerView;
-import com.easymi.daijia.DJApiService;
 import com.easymi.daijia.R;
+import com.easymi.daijia.entity.Budget;
 import com.easymi.daijia.entity.DJType;
+import com.easymi.daijia.entity.Passenger;
+import com.easymi.daijia.flowMvp.FlowActivity;
+import com.easymi.daijia.result.BudgetResult;
 import com.easymi.daijia.result.DJOrderResult;
 import com.easymi.daijia.result.DJTypeResult;
 import com.easymi.daijia.result.PassengerResult;
+import com.google.gson.Gson;
 
 import java.util.List;
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by liuzihao on 2017/11/16.
  * 反射调用
  */
 
-public class CreateDJFragment extends RxLazyFragment {
+public class CreateDJFragment extends RxLazyFragment implements CreateDJContract.View {
 
     TextView timeText;
-    EditText nameText;
+    TextView nameText;
     EditText phoneText;
     TextView startPlace;
     TextView endPlace;
     TextView esMoney;
+    TextView about;
+    TextView unit;
 
     Button createOrder;
     TabLayout tabLayout;
 
-    private Employ employ;
+    LinearLayout esMoneyCon;
 
-    private long pid = -1;
+    private DJType selectedDJType = null;
+    private Passenger passenger = null;
+
+    private PoiItem startPoi = null;
+    private PoiItem endPoi = null;
+
+    private Double distance;//单位千米
+    private Integer duration;//单位分钟
+
+    private Budget budget;//预估价格
+
+    private CreateDJPresenter presenter;
+
+    private static final int START_CODE = 0X00;
+    private static final int END_CODE = 0X01;
 
     @Override
     public int getLayoutResId() {
@@ -71,11 +92,19 @@ public class CreateDJFragment extends RxLazyFragment {
         if (!isPrepared || !isVisible) {
             return;
         }
-        initView();
+
+        presenter = new CreateDJPresenter(this, getActivity());
         isPrepared = false;
+        findById();
+
+        init();
+
+        presenter.queryDJType();//查询代驾子类型
     }
 
-    private void initView() {
+
+    @Override
+    public void findById() {
         timeText = getActivity().findViewById(R.id.time_text);
         nameText = getActivity().findViewById(R.id.name_text);
         phoneText = getActivity().findViewById(R.id.phone_text);
@@ -84,29 +113,13 @@ public class CreateDJFragment extends RxLazyFragment {
         esMoney = getActivity().findViewById(R.id.es_money_text);
         createOrder = getActivity().findViewById(R.id.create_order);
         tabLayout = getActivity().findViewById(R.id.sub_tab_layout);
-        initData();
-        initClick();
+        esMoneyCon = getActivity().findViewById(R.id.es_money_con);
+        about = getActivity().findViewById(R.id.about);
+        unit = getActivity().findViewById(R.id.unit);
     }
 
-    private void initData() {
-        employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1));
-        querySubType(employ.company_id);
-    }
-
-    private void initClick() {
-        timeText.setOnClickListener(view -> showTimeDialog(timeText));
-        startPlace.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        endPlace.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
+    @Override
+    public void initPhoneEdit() {
         phoneText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -122,24 +135,156 @@ public class CreateDJFragment extends RxLazyFragment {
             public void afterTextChanged(Editable s) {
                 String str = s.toString();
                 if (StringUtils.isNotBlank(str) && str.length() == 11) {
-                    queryPassengerInfo(str);
+                    presenter.queryPassenger(str);
                 }
             }
         });
     }
 
-    CusBottomSheetDialog bottomSheetDialog;
+    @Override
+    public void initPlace() {
+        //起始地默认为当前地址
+        EmLoc emLoc = new Gson().fromJson(XApp.getMyPreferences().getString(Config.SP_LAST_LOC, ""), EmLoc.class);
+        startPlace.setText(emLoc.poiName);
+        startPlace.setTextColor(getResources().getColor(R.color.text_color_black));
+        startPoi = new PoiItem("", new LatLonPoint(emLoc.latitude, emLoc.longitude), emLoc.poiName, emLoc.address);
 
-    private void showTimeDialog(TextView tv) {
+        startPlace.setOnClickListener(view -> {
+            Intent intent = new Intent(getActivity(), PlaceActivity.class);
+            intent.putExtra("hint", getString(R.string.where_start));
+            startActivityForResult(intent, START_CODE);
+        });
+        endPlace.setOnClickListener(view -> {
+            Intent intent = new Intent(getActivity(), PlaceActivity.class);
+            intent.putExtra("hint", getString(R.string.where_end));
+            startActivityForResult(intent, END_CODE);
+        });
+    }
+
+    @Override
+    public void init() {
+        day = getString(R.string.today);
+        hourStr = getString(R.string.now);
+        timeText.setOnClickListener(view -> showTimePickDialog(timeText));
+        initPhoneEdit();
+        initPlace();
+        createOrder.setOnClickListener(view -> {
+            if (selectedDJType == null) {
+                ToastUtil.showMessage(getActivity(), getString(R.string.no_type));
+                return;
+            }
+            if (passenger == null) {
+                ToastUtil.showMessage(getActivity(), getString(R.string.no_passenger));
+                return;
+            }
+            if (startPoi == null) {
+                ToastUtil.showMessage(getActivity(), getString(R.string.no_start));
+                return;
+            }
+//            if (budget == null) {
+//                ToastUtil.showMessage(getActivity(), getString(R.string.no_budget));
+//                return;
+//            }
+            presenter.createOrder(passenger.id, passenger.name, passenger.phone,
+                    TimePickerView.getTime(day, hourStr, minStr), startPoi.getTitle(),
+                    startPoi.getLatLonPoint().getLatitude(), startPoi.getLatLonPoint().getLongitude(),
+                    endPoi == null ? "" : endPoi.getTitle(),
+                    endPoi == null ? null : endPoi.getLatLonPoint().getLatitude(),
+                    endPoi == null ? null : endPoi.getLatLonPoint().getLongitude(),
+                    budget == null ? null : budget.fee, selectedDJType.pid);
+        });
+    }
+
+    @Override
+    public RxManager getManager() {
+        return mRxManager;
+    }
+
+    @Override
+    public void showTypeTab(DJTypeResult result) {
+        tabLayout.removeAllTabs();
+        List<DJType> djTypes = result.categories;
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                selectedDJType = (DJType) tab.getTag();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        for (int i = 0; i < djTypes.size(); i++) {
+            DJType djType = djTypes.get(i);
+            TabLayout.Tab tab = tabLayout.newTab().setText(djType.name);
+            tab.setTag(djType);
+            if (i == 0) {
+                tab.select();//设置选中
+            }
+            tabLayout.addTab(tab);
+        }
+    }
+
+    @Override
+    public void showPassenger(PassengerResult result) {
+        passenger = result.passenger;
+        nameText.setText(passenger.name);
+        getBudget();
+    }
+
+    @Override
+    public void showBudget(BudgetResult result) {
+        budget = result.budget;
+        esMoneyCon.setVisibility(View.VISIBLE);
+        if (distance == null || duration == null) {
+            about.setVisibility(View.GONE);
+            unit.setText(getString(R.string.yuan_qi));
+        } else {
+            about.setVisibility(View.VISIBLE);
+            unit.setText(getString(R.string.yuan));
+        }
+//        esMoney.setText(result.budget.);
+    }
+
+    @Override
+    public void showQueryTypeErr(int tag) {
+        selectedDJType = null;
+    }
+
+    @Override
+    public void showQueryPasErr(int tag) {
+        passenger = null;
+    }
+
+    @Override
+    public void showQueryBudgetErr(int tag) {
+        budget = null;
+        esMoneyCon.setVisibility(View.GONE);
+    }
+
+    private String day;
+    private String hourStr;
+    private String minStr;
+
+    @Override
+    public void showTimePickDialog(TextView tv) {
+        CusBottomSheetDialog bottomSheetDialog;
         bottomSheetDialog = new CusBottomSheetDialog(getActivity());
         TimePickerView timePickerView = new TimePickerView(getActivity());
 
         timePickerView.setPositiveButton(getString(R.string.confirm), (View v) -> {
-            String day = timePickerView.getDayStr();
-            String hourStr = timePickerView.getHourStr();
-            String minStr = timePickerView.getMinStr();
+            day = timePickerView.getDayStr();
+            hourStr = timePickerView.getHourStr();
+            minStr = timePickerView.getMinStr();
             tv.setText(day + hourStr + minStr);
             bottomSheetDialog.dismiss();
+            getBudget();
         }).setNegativeButton(getString(R.string.cancel), v -> {
             bottomSheetDialog.dismiss();
         });
@@ -148,69 +293,56 @@ public class CreateDJFragment extends RxLazyFragment {
         bottomSheetDialog.show();
     }
 
-    /**
-     * 查询代驾子类型
-     */
-    private void querySubType(Long companyId) {
-        Observable<DJTypeResult> observable = ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .getBusiness(companyId, "daijia", Config.APP_KEY)
-                .filter(new HttpResultFunc<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        mRxManager.add(observable.subscribe(new MySubscriber<>(getActivity(), true, false, new HaveErrSubscriberListener<DJTypeResult>() {
-            @Override
-            public void onNext(DJTypeResult djTypeResult) {
-                tabLayout.removeAllTabs();
-                List<DJType> djTypes = djTypeResult.categories;
-                for (int i = 0; i < djTypes.size(); i++) {
-                    DJType djType = djTypes.get(i);
-                    TabLayout.Tab tab = tabLayout.newTab().setText(djType.name);
-                    tab.setTag(djType.pid);
-                    tabLayout.addTab(tab);
-                }
-                tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                    @Override
-                    public void onTabSelected(TabLayout.Tab tab) {
-                        pid = (long) tab.getTag();
-                    }
-
-                    @Override
-                    public void onTabUnselected(TabLayout.Tab tab) {
-
-                    }
-
-                    @Override
-                    public void onTabReselected(TabLayout.Tab tab) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onError(int code) {
-
-            }
-        })));
+    @Override
+    public void showDisAndTime(float mile, float sec) {
+        distance = (double) (mile / 1000);
+        duration = (int) sec / 60;
+        getBudget();
     }
 
-    /**
-     * 查询客户信息
-     * @param phone
-     */
-    private void queryPassengerInfo(String phone) {
-        Observable<PassengerResult> observable = ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .queryPassenger(employ.company_id, "小咖科技", phone, Config.APP_KEY)
-                .filter(new HttpResultFunc<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        mRxManager.add(observable.subscribe(new MySubscriber<>(getActivity(), true, true, new NoErrSubscriberListener<PassengerResult>() {
-            @Override
-            public void onNext(PassengerResult passengerResult) {
-
-            }
-        })));
+    @Override
+    public void showDisAndTimeErr() {
+        distance = null;
+        duration = null;
     }
 
+    @Override
+    public void createSuc(DJOrderResult djOrderResult) {
+        ToastUtil.showMessage(getActivity(), getString(R.string.create_suc));
+        Intent intent = new Intent(getActivity(), FlowActivity.class);
+        intent.putExtra("orderId", djOrderResult.order.orderId);
+        startActivity(intent);
+        getActivity().finish();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == START_CODE) {
+                startPoi = data.getParcelableExtra("poiItem");
+                Log.e("poi", startPoi.toString());
+                startPlace.setText(startPoi.getTitle());
+                startPlace.setTextColor(getResources().getColor(R.color.text_color_black));
+                getBudget();
+            } else if (requestCode == END_CODE) {
+                endPoi = data.getParcelableExtra("poiItem");
+                endPlace.setText(endPoi.getTitle());
+                endPlace.setTextColor(getResources().getColor(R.color.text_color_black));
+                getBudget();
+            }
+            if (null != startPoi && null != endPoi) {
+                presenter.routePlan(startPoi.getLatLonPoint(), endPoi.getLatLonPoint());
+            }
+        }
+    }
+
+    private void getBudget() {
+        if (null == passenger || selectedDJType == null) {
+            return;
+        }
+
+        presenter.queryBudget(passenger.id, distance, duration,
+                TimePickerView.getTime(day, hourStr, minStr), selectedDJType.pid);
+    }
 }

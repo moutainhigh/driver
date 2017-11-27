@@ -26,6 +26,8 @@
 
     <string name="houtai">正在运行中..</string>
 
+    <string name="please_edit_place">您要去哪儿</string>
+
     <string name="succeed">成功</string>
     <string name="code1">参数错误</string>
     <string name="code2">服务人员验证失败</string>

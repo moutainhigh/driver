@@ -5,4 +5,5 @@ package com.easymi.daijia.entity;
  */
 
 public class Budget {
+    public double fee;
 }
