@@ -80,11 +80,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
         //一有数据库的更新就将sp里的东西归为默认值
         SharedPreferences.Editor editor = XApp.getPreferencesEditor();
-        editor.putBoolean("exit_flag", true);
-        editor.putBoolean("isLogin", false);
-        editor.putBoolean("bindDevice", false);
-        editor.putLong("driverID", 0);
-        editor.apply();
+        editor.clear().apply();
 
         List<String> tableNames = findAllTableName(db);
         for (String s : tableNames) {
@@ -106,6 +102,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("real_name").append(" ").append("TEXT").append(",")
                 .append("phone").append(" ").append("TEXT").append(",")
                 .append("sex").append(" ").append("TEXT").append(",")
+                .append("company_name").append(" ").append("TEXT").append(",")
                 .append("company_id").append(" ").append("LONG")
                 .append(");");
         execCreateTableSQL(db);

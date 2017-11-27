@@ -17,6 +17,7 @@ import com.easymi.component.ILocationServiceAIDL;
 
 public class LocationHelperService extends Service {
 
+    public static final String ACTIVATE = "com.easymi.component.loc.ACTIVATE";
 
     private Utils.CloseServiceReceiver mCloseReceiver;
 
@@ -47,7 +48,7 @@ public class LocationHelperService extends Service {
 
     private ServiceConnection mInnerConnection;
     private void startBind() {
-        final String locationServiceName = "com.amap.locationservicedemo.LocationService";
+        final String locationServiceName = LocService.START_LOC;
         mInnerConnection = new ServiceConnection() {
 
             @Override

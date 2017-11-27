@@ -197,7 +197,7 @@ public class Utils {
 		return Build.MANUFACTURER;
 	}
 
-	private static String CLOSE_BRODECAST_INTENT_ACTION_NAME="com.amap.locationservicedemo.CloseService";
+	private static String CLOSE_BRODECAST_INTENT_ACTION_NAME="com.easymi.component.loc.CloseService";
 
 
 	public static Intent getCloseBrodecastIntent() {

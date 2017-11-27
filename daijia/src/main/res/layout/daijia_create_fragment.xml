@@ -2,9 +2,29 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
+    <android.support.design.widget.TabLayout
+        android:id="@+id/sub_tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="-10dp"
+        android:paddingTop="10dp"
+        android:background="@color/colorPrimary"
+        app:tabBackground="@color/colorPrimary"
+        app:tabGravity="center"
+        app:tabIndicatorColor="@color/colorAccent"
+        app:tabIndicatorHeight="4dp"
+        app:tabMode="fixed"
+        app:tabPaddingStart="10dp"
+        app:tabPaddingTop="10dp"
+        app:textSize="16sp"
+        app:tabSelectedTextColor="@color/white"
+        app:tabTextColor="@color/dark_gray"/>
+
     <LinearLayout
+        android:layout_below="@+id/sub_tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"

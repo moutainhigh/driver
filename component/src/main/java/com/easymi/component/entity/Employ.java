@@ -21,6 +21,7 @@ public class Employ implements Parcelable{
     public String real_name;
     public String sex;
     public long company_id;
+    public String company_name;
     public String phone;
 
 
@@ -57,7 +58,9 @@ public class Employ implements Parcelable{
         values.put("real_name", real_name);
         values.put("sex", sex);
         values.put("company_id", company_id);
+        values.put("company_name", company_name);
         values.put("phone", phone);
+
         /*
          * values.put("age", age); values.put("jialing", jialing);
 		 */
@@ -114,6 +117,8 @@ public class Employ implements Parcelable{
                         .getColumnIndex("sex"));
                 driverInfo.company_id = cursor.getLong(cursor
                         .getColumnIndex("company_id"));
+                driverInfo.company_name = cursor.getString(cursor
+                        .getColumnIndex("company_name"));
                 driverInfo.phone = cursor.getString(cursor
                         .getColumnIndex("phone"));
 
@@ -146,6 +151,7 @@ public class Employ implements Parcelable{
         values.put("real_name", real_name);
         values.put("sex", sex);
         values.put("company_id", company_id);
+        values.put("company_name", company_name);
         values.put("phone", phone);
 		/*
 		 * values.put("age", age); values.put("jialing", jialing);

@@ -111,7 +111,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
 
         onLineBtn.setOnClickListener(v -> presenter.online());
 
-        Employ employ = Employ.findByID(XApp.getMyPreferences().getLong("driverId", -1));
+        Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1));
 //        Log.e("employ", employ.toString());
     }
 

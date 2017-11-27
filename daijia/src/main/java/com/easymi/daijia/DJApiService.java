@@ -1,6 +1,9 @@
 package com.easymi.daijia;
 
+import com.easymi.daijia.result.BudgetResult;
 import com.easymi.daijia.result.DJOrderResult;
+import com.easymi.daijia.result.DJTypeResult;
+import com.easymi.daijia.result.PassengerResult;
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -18,6 +21,7 @@ public interface DJApiService {
 
     /**
      * 查询单个订单
+     *
      * @param orderId
      * @param appKey
      * @return
@@ -28,6 +32,7 @@ public interface DJApiService {
 
     /**
      * 抢单
+     *
      * @param orderId
      * @param driverId
      * @param appKey
@@ -41,6 +46,7 @@ public interface DJApiService {
 
     /**
      * 接单
+     *
      * @param orderId
      * @param driverId
      * @param appKey
@@ -54,6 +60,7 @@ public interface DJApiService {
 
     /**
      * 拒单
+     *
      * @param orderId
      * @param driverId
      * @param appKey
@@ -62,12 +69,13 @@ public interface DJApiService {
     @FormUrlEncoded
     @PUT("driver/api/v1/refuseOrder")
     Observable<DJOrderResult> refuseOrder(@Field("order_id") Long orderId,
-                                        @Field("driver_id") Long driverId,
-                                        @Field("app_key") String appKey,
-                                          @Field("remark")String remark);
+                                          @Field("driver_id") Long driverId,
+                                          @Field("app_key") String appKey,
+                                          @Field("remark") String remark);
 
     /**
      * 前往预约地
+     *
      * @param orderId
      * @param appKey
      * @return
@@ -75,9 +83,11 @@ public interface DJApiService {
     @FormUrlEncoded
     @POST("driver/api/v1/goToBookAddress")
     Observable<DJOrderResult> goToBookAddress(@Field("order_id") Long orderId,
-                                        @Field("app_key") String appKey);
+                                              @Field("app_key") String appKey);
+
     /**
      * 到达预约地
+     *
      * @param orderId
      * @param appKey
      * @return
@@ -85,9 +95,11 @@ public interface DJApiService {
     @FormUrlEncoded
     @POST("driver/api/v1/arrivalBookAddress")
     Observable<DJOrderResult> arrivalBookAddress(@Field("order_id") Long orderId,
-                                        @Field("app_key") String appKey);
+                                                 @Field("app_key") String appKey);
+
     /**
      * 前往目的地
+     *
      * @param orderId
      * @param appKey
      * @return
@@ -95,9 +107,11 @@ public interface DJApiService {
     @FormUrlEncoded
     @POST("driver/api/v1/goToDistination")
     Observable<DJOrderResult> goToDistination(@Field("order_id") Long orderId,
-                                        @Field("app_key") String appKey);
+                                              @Field("app_key") String appKey);
+
     /**
      * 开始中途等待
+     *
      * @param orderId
      * @param appKey
      * @return
@@ -106,8 +120,10 @@ public interface DJApiService {
     @POST("driver/api/v1/waitOrder")
     Observable<DJOrderResult> waitOrder(@Field("order_id") Long orderId,
                                         @Field("app_key") String appKey);
+
     /**
      * 到达目的地
+     *
      * @param orderId
      * @param appKey
      * @return
@@ -115,5 +131,93 @@ public interface DJApiService {
     @FormUrlEncoded
     @POST("driver/api/v1/arrivalDistination")
     Observable<DJOrderResult> arrivalDistination(@Field("order_id") Long orderId,
-                                        @Field("app_key") String appKey);
+                                                 @Field("app_key") String appKey);
+
+    /**
+     * 补单
+     *
+     * @param passengerId
+     * @param passengerName
+     * @param passengerPhone
+     * @param bookTime
+     * @param bookAddress
+     * @param bookAddressLat
+     * @param bookAddressLng
+     * @param destination
+     * @param destinationLat
+     * @param destinationLng
+     * @param companyId
+     * @param companyName
+     * @param budgetFee
+     * @param appKey
+     * @param cid            订单类型id
+     * @param orderPerson
+     * @param orderPersonId
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/driver/api/v1/createOrder")
+    Observable<DJOrderResult> createOrder(@Field("passenger_id") Long passengerId,
+                                          @Field("passenger_name") String passengerName,
+                                          @Field("passenger_phone") String passengerPhone,
+                                          @Field("book_time") Long bookTime,
+                                          @Field("book_address") String bookAddress,
+                                          @Field("book_address_lat") Double bookAddressLat,
+                                          @Field("book_address_lng") Double bookAddressLng,
+                                          @Field("destination") String destination,
+                                          @Field("destination_lat") Double destinationLat,
+                                          @Field("destination_lng") Double destinationLng,
+                                          @Field("company_id") Long companyId,
+                                          @Field("company_name") String companyName,
+                                          @Field("budget_fee") Double budgetFee,
+                                          @Field("app_key") String appKey,
+                                          @Field("cid") Long cid,
+                                          @Field("oder_person") String orderPerson,
+                                          @Field("order_person_id") Long orderPersonId
+    );
+
+    /**
+     * 预估价格
+     *
+     * @param passengerId
+     * @param companyId
+     * @param distance
+     * @param time
+     * @param orderTime
+     * @param channel
+     * @param typeId
+     * @param appKey
+     * @return
+     */
+    @GET("driver/api/v1/getBudgetPrice")
+    Observable<BudgetResult> getBudgetPrice(@Query("passenger_id") Long passengerId,
+                                             @Query("company_id") Long companyId,
+                                             @Query("distance") Double distance,
+                                             @Query("time") Integer time,
+                                             @Query("order_time") Long orderTime,
+                                             @Query("channel") String channel,
+                                             @Query("typeId") Long typeId,
+                                             @Query("app_key") String appKey
+    );
+
+    /**
+     * 获取代驾子类型
+     *
+     * @param companyId
+     * @param business
+     * @param appKey
+     * @return
+     */
+    @GET("driver/api/v1/getBusiness")
+    Observable<DJTypeResult> getBusiness(@Query("company_id") Long companyId,
+                                         @Query("business") String business,
+                                         @Query("app_key") String appKey
+    );
+
+    @GET("api/v1/passengerMustBe")
+    Observable<PassengerResult> queryPassenger(@Query("company_id") Long companyId,
+                                               @Query("company_name") String companyName,
+                                               @Query("phone") String phone,
+                                               @Query("app_key") String appKey
+    );
 }

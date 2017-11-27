@@ -1,16 +1,22 @@
 package com.easymi.component.loc;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.BitmapFactory;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 
 import com.easymi.component.ILocationHelperServiceAIDL;
 import com.easymi.component.ILocationServiceAIDL;
+import com.easymi.component.R;
 
 /**
  * Created by liangchao_suxun on 17/1/16.
@@ -21,7 +27,8 @@ import com.easymi.component.ILocationServiceAIDL;
 
 public class NotiService extends Service {
 
-    /**i
+    /**
+     * i
      * startForeground的 noti_id
      */
     private static int NOTI_ID = 123321;
@@ -42,17 +49,17 @@ public class NotiService extends Service {
             unregisterReceiver(mCloseReceiver);
             mCloseReceiver = null;
         }
-
         super.onDestroy();
     }
 
 
-    private final String mHelperServiceName = "com.amap.locationservicedemo.LocationHelperService";
+    private final String mHelperServiceName = LocationHelperService.ACTIVATE;
+
     /**
      * 触发利用notification增加进程优先级
      */
     protected void applyNotiKeepMech() {
-        startForeground(NOTI_ID, Utils.buildNotification(getBaseContext()));
+        showNotify(this, R.mipmap.ic_launcher);
         startBindHelperService();
     }
 
@@ -62,12 +69,13 @@ public class NotiService extends Service {
 
     public Binder mBinder;
 
-    public class LocationServiceBinder extends ILocationServiceAIDL.Stub{
-        public void onFinishBind(){
+    public class LocationServiceBinder extends ILocationServiceAIDL.Stub {
+        public void onFinishBind() {
         }
     }
 
     private ILocationHelperServiceAIDL mHelperAIDL;
+
     private void startBindHelperService() {
         connection = new ServiceConnection() {
             @Override
@@ -100,6 +108,37 @@ public class NotiService extends Service {
             mBinder = new LocationServiceBinder();
         }
         return mBinder;
+    }
+
+    private void showNotify(Context context, int largeIcon) {
+
+        Intent intent = new Intent();
+        intent.setClassName(context, "com.easymi.common.mvp.work.WorkActivity");
+        intent.setAction(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+                intent, 0);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                context);
+
+        builder.setSmallIcon(R.mipmap.role_driver);
+        builder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), largeIcon));
+        builder.setColor(getResources().getColor(R.color.colorPrimary));
+        builder.setContentTitle(getResources().getString(R.string.app_name));
+        builder.setContentText(getResources().getString(R.string.app_name)
+                + context.getResources().getString(R.string.houtai));
+        builder.setWhen(System.currentTimeMillis());
+        builder.setContentIntent(pendingIntent);
+        builder.setOngoing(true);
+//        builder.setTicker(getResources().getString(R.string.app_name)
+//                + "正在后台运行");
+
+        Notification notification = builder.build();
+        notification.flags = Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
+
+        startForeground(NOTI_ID, notification);
+
     }
 
 }
