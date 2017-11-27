@@ -172,7 +172,7 @@ public interface DJApiService {
                                           @Field("budget_fee") Double budgetFee,
                                           @Field("app_key") String appKey,
                                           @Field("cid") Long cid,
-                                          @Field("oder_person") String orderPerson,
+                                          @Field("order_person") String orderPerson,
                                           @Field("order_person_id") Long orderPersonId
     );
 
