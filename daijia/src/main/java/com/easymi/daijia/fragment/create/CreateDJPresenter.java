@@ -63,7 +63,7 @@ public class CreateDJPresenter implements CreateDJContract.Presenter {
         view.getManager().add(model.getBudgetPrice(passengerId,employ.company_id,distance,time,orderTime,typeId).subscribe(new MySubscriber<BudgetResult>(context, false, false, new HaveErrSubscriberListener<BudgetResult>() {
             @Override
             public void onNext(BudgetResult budgetResult) {
-                
+
             }
 
             @Override
