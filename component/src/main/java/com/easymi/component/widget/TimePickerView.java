@@ -11,6 +11,7 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.easymi.component.R;
+import com.easymi.component.utils.TimeUtil;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -316,6 +317,36 @@ public class TimePickerView extends LinearLayout {
 
     public String getMinStr() {
         return minStr;
+    }
+
+    public static long getTime(String day, String hour, String min) {
+        if (hour.equals("现在") || hour.equals("現在")) {
+            long time = System.currentTimeMillis();
+//            LogUtil.e("getTime",""+ time  + DateFormatUtils.format(time,"yyyy-MM--dd HH:mm"));
+            return time;
+        } else {
+            int hourNum = Integer.parseInt(hour.substring(0, hour.length() - 1));
+            int minNum = Integer.parseInt(min);
+            if (hourNum < 10) {
+                hour = "0" + String.valueOf(hourNum);
+            } else {
+                hour = String.valueOf(hourNum);
+            }
+            if (minNum < 10) {
+                min = "0" + String.valueOf(minNum);
+            } else {
+                min = String.valueOf(minNum);
+            }
+            if (day.equals("今天")) {
+                day = TimeUtil.getTime(TimeUtil.YMD_2, System.currentTimeMillis());
+            } else if (day.equals("明天")) {
+                day = TimeUtil.getTime(TimeUtil.YMD_2, System.currentTimeMillis() + 86400000);
+            } else if (day.equals("后天") || day.equals("後天")) {
+                day = TimeUtil.getTime(TimeUtil.YMD_2, System.currentTimeMillis() + 2 * 86400000);
+            }
+            String timeStr = day + " " + hour + ":" + min;
+            return TimeUtil.parseTime(TimeUtil.YMD_HM, timeStr);
+        }
     }
 
 }

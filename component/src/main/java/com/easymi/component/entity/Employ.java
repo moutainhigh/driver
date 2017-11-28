@@ -12,7 +12,7 @@ import com.easymi.component.db.SqliteHelper;
  * Created by liuzihao on 2017/11/16.
  */
 
-public class Employ implements Parcelable{
+public class Employ implements Parcelable {
 
     public long id;
     public String user_name;
@@ -95,9 +95,9 @@ public class Employ implements Parcelable{
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
         Cursor cursor = db.query("t_driverinfo", new String[]{"id",
-                        "user_name", "password", "name", "real_name", "sex",
-                        "company_id", "phone"},
-                "id = ?", new String[]{String.valueOf(driverID)},
+                "user_name", "password", "name", "real_name", "sex",
+                "company_id", "company_name","phone"},
+        "id = ?", new String[]{String.valueOf(driverID)},
                 null, null, null);
         Employ driverInfo = null;
         try {
@@ -123,7 +123,7 @@ public class Employ implements Parcelable{
                         .getColumnIndex("phone"));
 
 				/*
-				 * driverInfo.age =
+                 * driverInfo.age =
 				 * cursor.getString(cursor.getColumnIndex("age"));
 				 * driverInfo.jialing =
 				 * cursor.getString(cursor.getColumnIndex("jialing"));

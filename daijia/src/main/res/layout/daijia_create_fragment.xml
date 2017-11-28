@@ -81,7 +81,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:background="@null"
-                android:text="15102875535"
+                android:text=""
                 android:inputType="phone"
                 android:layout_marginLeft="10dp"
                 android:textSize="18sp"
@@ -106,7 +106,7 @@
                 android:src="@mipmap/ic_create_person"
                 android:layout_marginLeft="20dp"/>
 
-            <EditText
+            <TextView
                 android:id="@+id/name_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -163,9 +163,9 @@
                     android:layout_height="0.0dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="锦绣大道南段"
+                    android:text="@string/please_start"
                     android:textSize="18sp"
-                    android:textColor="#232323"/>
+                    android:textColor="@color/text_color_hint"/>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
@@ -176,9 +176,9 @@
                     android:layout_height="0.0dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="锦绣大道南段"
+                    android:text="@string/please_end"
                     android:textSize="18sp"
-                    android:textColor="#232323"/>
+                    android:textColor="@color/text_color_hint"/>
 
             </LinearLayout>
 
@@ -201,6 +201,8 @@
         android:textColor="@color/white"
         android:text="@string/create_order"/>
     <LinearLayout
+        android:id="@+id/es_money_con"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -208,24 +210,26 @@
         android:gravity="center_horizontal">
 
         <TextView
+            android:id="@+id/about"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="约"/>
+            android:text="@string/about"/>
 
         <TextView
             android:id="@+id/es_money_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="20.0"
+            android:text="0.0"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:textColor="@color/yellow"
             android:textSize="28sp"/>
 
         <TextView
+            android:id="@+id/unit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="元"/>
+            android:text="@string/yuan"/>
 
     </LinearLayout>
 

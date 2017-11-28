@@ -303,6 +303,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
     @Override
     public void receiveLoc() {
         location = new Gson().fromJson(XApp.getMyPreferences().getString(Config.SP_LAST_LOC, ""), EmLoc.class);
+        if (null == location) {
+            return;
+        }
         LatLng latLng = new LatLng(location.latitude, location.longitude);
         if (null == myLocMarker) {
             MarkerOptions markerOption = new MarkerOptions();

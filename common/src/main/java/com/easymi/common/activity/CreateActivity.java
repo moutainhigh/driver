@@ -42,7 +42,7 @@ public class CreateActivity extends RxBaseActivity {
     private void initTabLayout() {
         fragments = new ArrayList<>();
         try {
-            Class  clazz =  Class.forName("com.easymi.daijia.fragment.CreateDJFragment");
+            Class  clazz =  Class.forName("com.easymi.daijia.fragment.create.CreateDJFragment");
             fragments.add((Fragment) clazz.newInstance());
             fragments.add((Fragment) clazz.newInstance());
             fragments.add((Fragment) clazz.newInstance());

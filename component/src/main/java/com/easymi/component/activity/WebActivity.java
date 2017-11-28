@@ -1,4 +1,4 @@
-package com.easymi.component.app;
+package com.easymi.component.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;

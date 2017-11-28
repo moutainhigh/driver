@@ -171,7 +171,7 @@ public class LocService extends NotiService implements AMapLocationListener {
     @Override
     public void onLocationChanged(AMapLocation amapLocation) {
         if (amapLocation != null) {
-            if (amapLocation.getErrorCode() == 0) {
+            if (amapLocation.getErrorCode() == AMapLocation.LOCATION_SUCCESS) {
                 EmLoc locationInfo = EmLoc.ALocToLoc(amapLocation);
 
                 XApp.getPreferencesEditor().putString(Config.SP_LAST_LOC, new Gson().toJson(locationInfo)).apply();//保存上次的位置信息 json格式字符创
