@@ -51,6 +51,9 @@ public class SettleFragmentDialog {
         remarkEdit = view.findViewById(R.id.remark);
         confirmBtn = view.findViewById(R.id.confirm_button);
 
+        extraFeeEdit.setSelection(extraFeeEdit.getText().toString().length());
+        paymentEdit.setSelection(paymentEdit.getText().toString().length());
+
         dialog = new CusBottomSheetDialog(context);
         initView();
         dialog.setCancelable(false);

@@ -2,7 +2,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- 绘制的颜色-->
-    <solid android:color="@color/white" />
+    <solid android:color="@color/colorPrimary" />
 
     <!-- 绘制弧度-->
     <corners android:radius="3dp" />

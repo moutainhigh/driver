@@ -8,5 +8,5 @@ import com.easymi.daijia.entity.Budget;
  */
 
 public class BudgetResult extends EmResult{
-    public Budget budget;
+    public Budget budgetFee;
 }

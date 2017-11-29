@@ -216,15 +216,16 @@
             <EditText
                 android:id="@+id/edit_reason"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="100dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
+                android:background="@drawable/corners_stroke_alpha"
                 android:gravity="top|left"
-                android:visibility="gone"
                 android:hint="@string/please_cancel_reason"
-                android:padding="5dp"
-                android:background="@drawable/corners_white_gray_stroke"/>
+                android:padding="10dp"
+                android:textSize="14sp"
+                android:visibility="gone" />
 
             <View
                 android:layout_width="match_parent"
@@ -235,28 +236,30 @@
                 android:background="@color/dark_gray" />
 
             <Button
-                android:onClick="cancel_cancel"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="30dp"
-                android:textColor="@color/white"
+                android:background="@drawable/corners_accent"
+                android:onClick="cancel_cancel"
                 android:text="@string/cancel_cancel"
-                android:background="@drawable/corners_accent"/>
+                android:textColor="@color/white" />
+
             <Button
-                android:onClick="cancel_order"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="10dp"
-                android:textColor="@color/white"
-                android:text="@string/cancel_order"/>
+                android:background="@drawable/corners_d6d6d7"
+                android:onClick="cancel_order"
+                android:text="@string/cancel_order"
+                android:textColor="@color/white" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="60dp"/>
+                android:layout_height="60dp" />
 
         </LinearLayout>
 

@@ -14,6 +14,10 @@ import rx.Observable;
 public interface FlowContract {
 
     interface View {
+        void initToolbar();
+
+        void initPop();
+
         void showTopView();
 
         void showToPlace(String toPlace);
@@ -32,13 +36,15 @@ public interface FlowContract {
 
         void cancelSuc();
 
+        void refuseSuc();
+
         RxManager getManager();
     }
 
     interface Presenter {
         void acceptOrder(Long orderId);
 
-        void refuseOrder(Long orderId,String remark);
+        void refuseOrder(Long orderId, String remark);
 
         void toStart(Long orderId);
 
@@ -48,11 +54,15 @@ public interface FlowContract {
 
         void startDrive(Long orderId);
 
-        void arriveDes(Long orderId);
+        void arriveDes(DJOrder djOrder);
 
         void navi(LatLng latLng, String poi);
 
         void findOne(Long orderId);
+
+        void changeEnd(Long orderId, Double lat, Double lng, String address);
+
+        void cancelOrder(Long orderId, String remark);
         //...
     }
 
@@ -71,6 +81,10 @@ public interface FlowContract {
 
         Observable<DJOrderResult> startDrive(Long orderId);
 
-        Observable<DJOrderResult> arriveDes(Long orderId);
+        Observable<DJOrderResult> arriveDes(DJOrder djOrder);
+
+        Observable<DJOrderResult> changeEnd(Long orderId, Double lat, Double lng, String address);
+
+        Observable<DJOrderResult> cancelOrder(Long orderId, String remark);
     }
 }

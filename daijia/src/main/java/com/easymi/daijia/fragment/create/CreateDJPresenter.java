@@ -59,7 +59,6 @@ public class CreateDJPresenter implements CreateDJContract.Presenter {
 
     @Override
     public void queryPassenger(String phone) {
-        //TODO 公司名改为司机所在的公司
         Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1));
         view.getManager().add(model.queryPassenger(employ.company_id, employ.company_name, phone).subscribe(new MySubscriber<>(context, true, true, new HaveErrSubscriberListener<PassengerResult>() {
             @Override

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -10,217 +9,141 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <FrameLayout
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:text="¥20"
+        android:textColor="@color/yellow"
+        android:textSize="30sp" />
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="5dp">
 
-        <com.amap.api.maps.MapView
-            android:id="@+id/map_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="100dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="true"
-            android:orientation="vertical">
+            android:text="@string/qb_fee" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="@color/white">
+        <TextView
+            android:id="@+id/start_fee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="20元" />
 
-                <TextView
-                    android:id="@+id/go_text"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="15dp"
-                    android:background="@drawable/circle_accent"
-                    android:gravity="center"
-                    android:text="@string/go"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
+    </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="5dp">
 
-                <LinearLayout
+        <TextView
+            android:id="@+id/lc_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lc_fee" />
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toLeftOf="@+id/navi_con"
-                    android:layout_toRightOf="@+id/go_text"
-                    android:orientation="vertical">
+        <TextView
+            android:id="@+id/distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/lc_text"
+            android:text="（0公里）" />
 
-                    <TextView
-                        android:id="@+id/next_place"
-                        android:layout_width="wrap_content"
-                        android:layout_height="28dp"
-                        android:layout_marginTop="15dp"
-                        android:gravity="center"
-                        android:marqueeRepeatLimit="marquee_forever"
-                        android:paddingRight="5dp"
-                        android:singleLine="true"
-                        android:text="成都SBI创业街"
-                        android:textColor="#232323"
-                        android:textSize="18sp" />
+        <TextView
+            android:id="@+id/distance_fee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="20元" />
 
-                    <TextView
-                        android:id="@+id/left_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="23.5dp"
-                        android:layout_marginTop="5dp"
-                        android:text="剩余3公里30分钟" />
+    </RelativeLayout>
 
-                </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="5dp">
 
-                <LinearLayout
-                    android:id="@+id/navi_con"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/corners_f2f2f2_stroke"
-                    android:gravity="center"
-                    android:orientation="vertical">
+        <TextView
+            android:id="@+id/time_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/time_fee" />
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/time_text"
+            android:text="（0分钟）" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/navi_icon" />
+        <TextView
+            android:id="@+id/time_fee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="20元" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
-                        android:text="@string/navigation" />
+    </RelativeLayout>
 
-                </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="5dp">
 
-            </RelativeLayout>
+        <TextView
+            android:id="@+id/dh_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dh_fee" />
+        <TextView
+            android:id="@+id/dh_fee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/dh_text"
+            android:text="（0分钟）" />
+        <TextView
+            android:id="@+id/wait_fee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="20元" />
 
+    </RelativeLayout>
 
-            <net.cachapa.expandablelayout.ExpandableLayout
-                android:id="@+id/expandable_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:el_expanded="true">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="5dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/coupon_text" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/coupon_fee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="@string/no_coupon" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/order_number"
-                            android:textColor="#232323"
-                            android:textSize="16sp" />
+    </RelativeLayout>
 
-                        <TextView
-                            android:id="@+id/order_number_text"
-                            android:layout_width="0.0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_weight="1"
-                            android:text=""
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/order_type"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:background="@drawable/corners_f2f2f2_stroke"
-                            android:paddingBottom="3dp"
-                            android:paddingLeft="5dp"
-                            android:paddingRight="5dp"
-                            android:paddingTop="3dp"
-                            android:text="日常代驾" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <co.lujun.androidtagview.TagContainerLayout
-                            android:id="@+id/tag_container"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:padding="10dp"
-                            app:container_enable_drag="false"
-                            app:horizontal_interval="10dp"
-                            app:tag_background_color="@color/white"
-                            app:tag_border_color="@color/white"
-                            app:tag_clickable="true"
-                            app:tag_text_color="@color/colorAccent"
-                            app:vertical_interval="10dp" />
-                    </LinearLayout>
-
-                </LinearLayout>
-            </net.cachapa.expandablelayout.ExpandableLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <View
-                    android:layout_width="0.0dp"
-                    android:layout_height="0.1dp"
-                    android:layout_weight="1"
-                    android:background="@color/dark_gray" />
-
-                <LinearLayout
-                    android:id="@+id/drawer_frame"
-                    android:layout_width="60dp"
-                    android:layout_height="20dp"
-                    android:layout_marginTop="-2dp"
-                    android:background="@drawable/corners_white_bottom"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <View
-                        android:layout_width="30dp"
-                        android:layout_height="1dp"
-                        android:background="@color/dark_gray" />
-
-                    <View
-                        android:layout_width="30dp"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@color/dark_gray" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="0.0dp"
-                    android:layout_height="0.1dp"
-                    android:layout_weight="1"
-                    android:background="@color/dark_gray" />
-
-            </LinearLayout>
-        </LinearLayout>
-
-        <FrameLayout
-            android:id="@+id/flow_frame"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </FrameLayout>
 
 </LinearLayout>

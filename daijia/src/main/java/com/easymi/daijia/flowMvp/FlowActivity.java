@@ -24,7 +24,9 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.maps.utils.overlay.SmoothMoveMarker;
+import com.amap.api.services.core.PoiItem;
 import com.easymi.component.Config;
+import com.easymi.component.activity.PlaceActivity;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
@@ -34,6 +36,7 @@ import com.easymi.component.loc.ReceiveLocInterface;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.MapUtil;
 import com.easymi.component.utils.ToastUtil;
+import com.easymi.component.widget.CusToolbar;
 import com.easymi.daijia.R;
 import com.easymi.daijia.activity.CancelActivity;
 import com.easymi.daijia.entity.Address;
@@ -47,6 +50,8 @@ import com.easymi.daijia.fragment.ToStartFragment;
 import com.easymi.daijia.fragment.WaitFragment;
 import com.easymi.daijia.trace.TraceInterface;
 import com.easymi.daijia.trace.TraceReceiver;
+import com.easymi.daijia.widget.FlowPopWindow;
+import com.easymi.daijia.widget.InputRemarkDialog;
 import com.google.gson.Gson;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
@@ -61,7 +66,10 @@ import co.lujun.androidtagview.TagContainerLayout;
  */
 @Route(path = "/daijia/FlowActivity")
 public class FlowActivity extends RxBaseActivity implements FlowContract.View, ReceiveLocInterface, TraceInterface {
+    public static final int CANCEL_ORDER = 0X01;
+    public static final int CHANGE_END = 0X02;
 
+    CusToolbar toolbar;
     TextView nextPlace;
     TextView leftTimeText;
     TextView orderNumberText;
@@ -73,6 +81,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
     LinearLayout naviCon;
 
     ExpandableLayout expandableLayout;
+
+    FlowPopWindow popWindow;
 
     private DJOrder djOrder;
 
@@ -103,6 +113,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
 
         presenter = new FlowPresenter(this, this);
 
+        toolbar = findViewById(R.id.toolbar);
         nextPlace = findViewById(R.id.next_place);
         leftTimeText = findViewById(R.id.left_time);
         orderNumberText = findViewById(R.id.order_number_text);
@@ -116,6 +127,38 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
         mapView.onCreate(savedInstanceState);
 
         initMap();
+        initPop();
+        initToolbar();
+    }
+
+    @Override
+    public void initToolbar() {
+        toolbar.setLeftIcon(View.VISIBLE, R.drawable.ic_arrow_back, v -> finish());
+        toolbar.setRightIcon(View.VISIBLE, R.drawable.ic_more_horiz_white_24dp, v -> {
+            if (popWindow.isShowing()) {
+                popWindow.dismiss();
+            } else {
+                popWindow.show(v);
+            }
+        });
+    }
+
+    @Override
+    public void initPop() {
+        popWindow = new FlowPopWindow(this);
+        popWindow.setOnClickListener(view -> {
+            int i = view.getId();
+            if (i == R.id.pop_cancel_order) {
+                Intent intent = new Intent(FlowActivity.this, CancelActivity.class);
+                startActivityForResult(intent, CANCEL_ORDER);
+            } else if (i == R.id.pop_contract_service) {
+
+            } else if (i == R.id.pop_same_order) {
+
+            } else if (i == R.id.pop_consumer_msg) {
+
+            }
+        });
     }
 
     @Override
@@ -337,6 +380,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
         finish();
     }
 
+    @Override
+    public void refuseSuc() {
+        ToastUtil.showMessage(this, getString(R.string.refuse_suc));
+        finish();
+    }
+
     private Address getStartAddr() {
         Address startAddress = null;
         if (djOrder.addresses != null && djOrder.addresses.size() != 0) {
@@ -388,8 +437,14 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
 
             @Override
             public void doRefuse() {
-                Intent intent = new Intent(FlowActivity.this, CancelActivity.class);
-                startActivityForResult(intent, 0);
+                InputRemarkDialog.Builder inputBuilder = new InputRemarkDialog.Builder(FlowActivity.this);
+                inputBuilder.setPositiveButton(getString(R.string.ok), (dialog, which) -> {
+                    dialog.dismiss();
+                    presenter.refuseOrder(djOrder.orderId, inputBuilder.getEditStr());
+                });
+                InputRemarkDialog dialog = inputBuilder.create();
+                dialog.setCanceledOnTouchOutside(true);
+                dialog.show();
             }
 
             @Override
@@ -414,12 +469,14 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
 
             @Override
             public void changeEnd() {
-
+                Intent intent = new Intent(FlowActivity.this, PlaceActivity.class);
+                intent.putExtra("hint", getString(R.string.please_end));
+                startActivityForResult(intent, CHANGE_END);
             }
 
             @Override
             public void doConfirmMoney() {
-                presenter.arriveDes(djOrder.orderId);
+                presenter.arriveDes(djOrder);
             }
 
             @Override
@@ -498,6 +555,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
     @Override
     public void receiveLoc() {
         EmLoc location = new Gson().fromJson(XApp.getMyPreferences().getString(Config.SP_LAST_LOC, ""), EmLoc.class);
+        if (null == location) {
+            return;
+        }
         LatLng latLng = new LatLng(location.latitude, location.longitude);
 
         if (null == smoothMoveMarker) {//首次进入
@@ -552,11 +612,13 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 0) {
-            if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == CANCEL_ORDER) {
                 String reason = data.getStringExtra("reason");
-
-                presenter.refuseOrder(djOrder.orderId, reason);
+                presenter.cancelOrder(djOrder.orderId, reason);
+            } else if (requestCode == CHANGE_END) {
+                PoiItem poiItem = data.getParcelableExtra("poiItem");
+                presenter.changeEnd(orderId, poiItem.getLatLonPoint().getLatitude(), poiItem.getLatLonPoint().getLongitude(), poiItem.getTitle());
             }
         }
     }

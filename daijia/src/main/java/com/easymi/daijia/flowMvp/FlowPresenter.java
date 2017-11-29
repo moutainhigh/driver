@@ -62,7 +62,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, new HaveErrSubscriberListener<DJOrderResult>() {
             @Override
             public void onNext(DJOrderResult djOrderResult) {
-                view.cancelSuc();
+                view.refuseSuc();
             }
 
             @Override
@@ -145,8 +145,8 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback 
     }
 
     @Override
-    public void arriveDes(Long orderId) {
-        Observable<DJOrderResult> observable = model.arriveDes(orderId);
+    public void arriveDes(DJOrder djOrder) {
+        Observable<DJOrderResult> observable = model.arriveDes(djOrder);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<DJOrderResult>() {
             @Override
@@ -179,6 +179,41 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback 
             public void onNext(DJOrderResult djOrderResult) {
                 djOrderResult.order.addresses = djOrderResult.address;
                 view.showOrder(djOrderResult.order);
+            }
+
+            @Override
+            public void onError(int code) {
+                view.showOrder(null);
+            }
+        })));
+    }
+
+    @Override
+    public void changeEnd(Long orderId, Double lat, Double lng, String address) {
+        Observable<DJOrderResult> observable = model.changeEnd(orderId, lat, lng, address);
+
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<DJOrderResult>() {
+            @Override
+            public void onNext(DJOrderResult djOrderResult) {
+                djOrderResult.order.addresses = djOrderResult.address;
+                view.showOrder(djOrderResult.order);
+            }
+
+            @Override
+            public void onError(int code) {
+                view.showOrder(null);
+            }
+        })));
+    }
+
+    @Override
+    public void cancelOrder(Long orderId, String remark) {
+        Observable<DJOrderResult> observable = model.cancelOrder(orderId, remark);
+
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, new HaveErrSubscriberListener<DJOrderResult>() {
+            @Override
+            public void onNext(DJOrderResult djOrderResult) {
+                view.cancelSuc();
             }
 
             @Override

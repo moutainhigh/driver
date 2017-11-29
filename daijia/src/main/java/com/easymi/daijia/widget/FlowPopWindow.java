@@ -1,21 +1,19 @@
-package com.easymin.daijia.driver.yuegeshifudaijia.widget;
+package com.easymi.daijia.widget;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.easymin.daijia.driver.yuegeshifudaijia.R;
-import com.easymin.daijia.driver.yuegeshifudaijia.bean.SettingInfo;
+import com.easymi.daijia.R;
 
 /**
- * Created by Administrator on 2016/5/22. 点击后显示
+ *
  */
-public class BeginOrderPopupWindow extends PopupWindow implements View.OnClickListener {
+public class FlowPopWindow extends PopupWindow implements View.OnClickListener {
 
     Context context;
     View anchor;
@@ -36,7 +34,7 @@ public class BeginOrderPopupWindow extends PopupWindow implements View.OnClickLi
         mOnMenuClickListener = onMenuClickListener;
     }
 
-    public BeginOrderPopupWindow(Context context, String orderType, int subStatus) {
+    public FlowPopWindow(Context context) {
         this.context = context;
 
         setFocusable(true);  //设置可以获得焦点
@@ -51,7 +49,7 @@ public class BeginOrderPopupWindow extends PopupWindow implements View.OnClickLi
         setBackgroundDrawable(new ColorDrawable()); //设置背景,否则不会消失
 
         //设置需要显示的veiw
-        View view = View.inflate(context, R.layout.begin_order_popup, null);
+        View view = View.inflate(context, R.layout.flow_pop_layout, null);
         setContentView(view);
 
         //在没有绘制出来前,测量控件的尺寸
@@ -61,32 +59,14 @@ public class BeginOrderPopupWindow extends PopupWindow implements View.OnClickLi
         viewWidth = view.getMeasuredWidth();    //得到实际的宽度
 
         //设置监听
-        TextView cancel = (TextView) view.findViewById(R.id.begin_cancel_order);   //取消订单
-        TextView change = (TextView) view.findViewById(R.id.begin_assignment_order);    //转单
-        TextView contact = (TextView) view.findViewById(R.id.begin_contact);        //联系后台
-        TextView same = (TextView) view.findViewById(R.id.begin_same_driver);   //同单司机
-
-        if (orderType.equals("daijia")) {
-            same.setVisibility(View.VISIBLE);
-        } else {
-            same.setVisibility(View.GONE);
-        }
-        SettingInfo settingInfo = SettingInfo.findOne();
-        if (settingInfo.allowDriverCancel && subStatus != 3 && subStatus != 5) {
-            cancel.setVisibility(View.VISIBLE);
-        } else {
-            cancel.setVisibility(View.GONE);
-        }
-
-        if (settingInfo.allowDriverZhuandan && subStatus != 3 && subStatus != 5 && orderType.equals("daijia")) {
-            change.setVisibility(View.VISIBLE);
-        } else {
-            change.setVisibility(View.GONE);
-        }
+        TextView cancel =  view.findViewById(R.id.pop_cancel_order);   //取消订单
+        TextView contract =  view.findViewById(R.id.pop_contract_service);    //转单
+        TextView same =  view.findViewById(R.id.pop_same_order);        //联系后台
+        TextView consumer =  view.findViewById(R.id.pop_consumer_msg);   //同单司机
 
         cancel.setOnClickListener(this);
-        change.setOnClickListener(this);
-        contact.setOnClickListener(this);
+        contract.setOnClickListener(this);
+        consumer.setOnClickListener(this);
         same.setOnClickListener(this);
 
     }
@@ -114,10 +94,6 @@ public class BeginOrderPopupWindow extends PopupWindow implements View.OnClickLi
 
         this.anchor = anchor;
 
-        if (anchor instanceof ImageView) {
-            ((ImageView) anchor).setImageResource(R.mipmap.close);
-        }
-
         int[] mLocation = new int[2];   //存放位置坐标
 
         anchor.getLocationInWindow(mLocation);  //将anchor右上角坐标存放在mlocation数组中
@@ -135,10 +111,6 @@ public class BeginOrderPopupWindow extends PopupWindow implements View.OnClickLi
     //消失时候调用该方法
     @Override
     public void dismiss() {
-
-        if (anchor instanceof ImageView) {
-            ((ImageView) anchor).setImageResource(R.mipmap.icon_more);
-        }
         super.dismiss();
     }
 

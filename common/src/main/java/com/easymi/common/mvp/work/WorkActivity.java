@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
@@ -31,6 +32,7 @@ import com.easymi.common.R;
 import com.easymi.common.activity.CreateActivity;
 import com.easymi.common.adapter.OrderAdapter;
 import com.easymi.common.entity.BaseOrder;
+import com.easymi.common.entity.NearDriver;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
@@ -210,7 +212,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
 
         initRefreshBtn();
 
-        refreshImg.callOnClick();
     }
 
     @Override
@@ -232,6 +233,27 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
         onLineBtn.setVisibility(View.GONE);
     }
 
+    List<Marker> markers = new ArrayList<>();
+
+    @Override
+    public void showDrivers(List<NearDriver> drivers) {
+        for (Marker marker : markers) {
+            marker.remove();
+        }
+        markers.clear();
+        MarkerOptions options = new MarkerOptions();
+        options.draggable(false);//设置Marker可拖动
+        options.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                .decodeResource(getResources(), R.mipmap.ic_driver)));
+        // 将Marker设置为贴地显示，可以双指下拉地图查看效果
+        options.setFlat(true);//设置marker平贴地图效果
+        for (NearDriver driver : drivers) {
+            options.position(new LatLng(driver.lat, driver.lng));
+            Marker marker = aMap.addMarker(options);
+            markers.add(marker);
+        }
+    }
+
 
     @Override
     public RxManager getRxManager() {
@@ -242,6 +264,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
     protected void onResume() {
         super.onResume();
         mapView.onResume();
+        refreshImg.callOnClick();
     }
 
     @Override
@@ -302,7 +325,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
 
     @Override
     public void receiveLoc() {
-        location = new Gson().fromJson(XApp.getMyPreferences().getString(Config.SP_LAST_LOC, ""), EmLoc.class);
+        EmLoc location = new Gson().fromJson(XApp.getMyPreferences().getString(Config.SP_LAST_LOC, ""), EmLoc.class);
         if (null == location) {
             return;
         }
@@ -320,12 +343,38 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
             myLocMarker.setPosition(latLng);
         }
 
-        if (loadingFrame.getVisibility() == View.VISIBLE) {
+        if (loadingFrame.getVisibility() == View.VISIBLE) { //重新启动了定位服务
             ((AnimationDrawable) loadingImg.getBackground()).stop();
             loadingFrame.setVisibility(View.INVISIBLE);
             refreshImg.setVisibility(View.VISIBLE);
 
             aMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+            presenter.queryNearDriver(location.latitude, location.longitude);
+        } else {
+            if (this.location != null) {
+                LatLng last = new LatLng(this.location.latitude, this.location.longitude);
+                LatLng current = new LatLng(location.latitude, location.longitude);
+                double dis = AMapUtils.calculateLineDistance(last, current);
+                if (dis > 30) {//大于30米重新加载司机
+                    presenter.queryNearDriver(location.latitude, location.longitude);
+                }
+            }
+        }
+
+        this.location = location;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (behavior.getState() == BottomBehavior.STATE_EXPANDED) {
+            behavior.setState(BottomBehavior.STATE_COLLAPSED);
+            RotateAnimation rotateAnimation = new RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5F,
+                    Animation.RELATIVE_TO_SELF, 0.5f);
+            rotateAnimation.setDuration(500);
+            rotateAnimation.setFillAfter(true); //旋转后停留在这个状态
+            pullIcon.startAnimation(rotateAnimation);
+        } else {
+            super.onBackPressed();
         }
     }
 }

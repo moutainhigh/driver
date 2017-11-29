@@ -2,6 +2,8 @@ package com.easymi.common.mvp.work;
 
 import android.content.Context;
 
+import com.easymi.common.entity.NearDriver;
+import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.common.entity.BaseOrder;
 import com.easymi.component.result.EmResult;
@@ -32,6 +34,8 @@ public interface WorkContract {
 
         void onlineSuc();
 
+        void showDrivers(List<NearDriver> drivers);
+
         RxManager getRxManager();
     }
 
@@ -43,12 +47,17 @@ public interface WorkContract {
         void startLocService(Context context);
 
         void online();
+
+        void queryNearDriver( Double lat, Double lng);
         //...
     }
 
     interface Model {
         Observable<QueryOrdersResult> indexOrders(Long driverId, String appKey);
+
         Observable<EmResult> online(Long driverId, String appKey);
+
+        Observable<NearDriverResult> queryNearDriver(Long driverId, Double lat, Double lng, Double distance);
     }
 
 }

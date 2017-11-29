@@ -191,7 +191,7 @@ public class CreateDJFragment extends RxLazyFragment implements CreateDJContract
                     endPoi == null ? "" : endPoi.getTitle(),
                     endPoi == null ? null : endPoi.getLatLonPoint().getLatitude(),
                     endPoi == null ? null : endPoi.getLatLonPoint().getLongitude(),
-                    budget == null ? null : budget.fee, selectedDJType.pid);
+                    budget == null ? null : budget.total, selectedDJType.pid);
         });
     }
 
@@ -240,7 +240,7 @@ public class CreateDJFragment extends RxLazyFragment implements CreateDJContract
 
     @Override
     public void showBudget(BudgetResult result) {
-        budget = result.budget;
+        budget = result.budgetFee;
         esMoneyCon.setVisibility(View.VISIBLE);
         if (distance == null || duration == null) {
             about.setVisibility(View.GONE);
@@ -249,7 +249,7 @@ public class CreateDJFragment extends RxLazyFragment implements CreateDJContract
             about.setVisibility(View.VISIBLE);
             unit.setText(getString(R.string.yuan));
         }
-//        esMoney.setText(result.budget.);
+        esMoney.setText(String.valueOf(result.budgetFee.total));
     }
 
     @Override
@@ -324,12 +324,10 @@ public class CreateDJFragment extends RxLazyFragment implements CreateDJContract
                 Log.e("poi", startPoi.toString());
                 startPlace.setText(startPoi.getTitle());
                 startPlace.setTextColor(getResources().getColor(R.color.text_color_black));
-                getBudget();
             } else if (requestCode == END_CODE) {
                 endPoi = data.getParcelableExtra("poiItem");
                 endPlace.setText(endPoi.getTitle());
                 endPlace.setTextColor(getResources().getColor(R.color.text_color_black));
-                getBudget();
             }
             if (null != startPoi && null != endPoi) {
                 presenter.routePlan(startPoi.getLatLonPoint(), endPoi.getLatLonPoint());

@@ -15,6 +15,10 @@
             android:name=".activity.grab.GrabActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.FeeDetailActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name="com.amap.api.navi.AmapRouteActivity"

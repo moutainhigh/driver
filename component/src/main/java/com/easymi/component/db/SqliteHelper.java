@@ -103,6 +103,16 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("phone").append(" ").append("TEXT").append(",")
                 .append("sex").append(" ").append("TEXT").append(",")
                 .append("company_name").append(" ").append("TEXT").append(",")
+                .append("portrait_path").append(" ").append("TEXT").append(",")
+                .append("score").append(" ").append("DOUBLE").append(",")
+
+                .append("balance").append(" ").append("DOUBLE").append(",")
+                .append("service_type").append(" ").append("TEXT").append(",")
+                .append("child_type").append(" ").append("TEXT").append(",")
+                .append("bank_name").append(" ").append("TEXT").append(",")
+                .append("bank_card_no").append(" ").append("TEXT").append(",")
+                .append("cash_person_name").append(" ").append("TEXT").append(",")
+
                 .append("company_id").append(" ").append("LONG")
                 .append(");");
         execCreateTableSQL(db);

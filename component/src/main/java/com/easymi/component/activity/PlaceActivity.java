@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.core.PoiItem;
@@ -17,26 +19,33 @@ import com.easymi.component.adapter.PlaceAdapter;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
+import com.easymi.component.entity.Employ;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.SwipeRecyclerView;
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by liuzihao on 2017/11/27.
  */
 
 public class PlaceActivity extends RxBaseActivity {
+    public static final int CITY_CODE = 0X11;
 
     EditText editText;
     SwipeRecyclerView recyclerView;
+    TextView cityName;
 
     private PlaceAdapter adapter;
 
     private PoiSearch search;
 
-    private int page = 1;
+    private int page = 0;
 
-    private EmLoc emLoc;
+    private String keyWord = "";
+    private String city = "";
 
     @Override
     public int getLayoutId() {
@@ -48,11 +57,23 @@ public class PlaceActivity extends RxBaseActivity {
 
         editText = findViewById(R.id.edit_search);
         recyclerView = findViewById(R.id.recyclerView);
+        cityName = findViewById(R.id.city_name);
 
         String hint = getIntent().getStringExtra("hint");
         if (StringUtils.isNotBlank(hint)) {
             editText.setHint(hint);
         }
+
+        EmLoc loc = new Gson().fromJson(XApp.getMyPreferences().getString(Config.SP_LAST_LOC, ""), EmLoc.class);
+        if (null != loc) {
+            cityName.setText(loc.city);
+            city = loc.city;
+        }
+
+        cityName.setOnClickListener(v -> {
+            Intent intent = new Intent(PlaceActivity.this, CityActivity.class);
+            startActivityForResult(intent, CITY_CODE);
+        });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         adapter = new PlaceAdapter(this);
@@ -68,17 +89,15 @@ public class PlaceActivity extends RxBaseActivity {
             @Override
             public void onRefresh() {
                 page = 0;
-                searchNearBy("", emLoc.cityCode);
+                searchNearBy(keyWord, city);
             }
 
             @Override
             public void onLoadMore() {
                 page++;
-                searchNearBy("", emLoc.cityCode);
+                searchNearBy(keyWord, city);
             }
         });
-
-        emLoc = new Gson().fromJson(XApp.getMyPreferences().getString(Config.SP_LAST_LOC, ""), EmLoc.class);
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -93,32 +112,49 @@ public class PlaceActivity extends RxBaseActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                String s = editable.toString();
-                if (StringUtils.isNotBlank(s)) {
-                    searchNearBy(s, emLoc.cityCode);
-                }
+                keyWord = editable.toString();
+                page = 0;
+                searchNearBy(keyWord, city);
             }
         });
 
-        searchNearBy("", emLoc.cityCode);
+        searchNearBy("", city);
     }
 
-    private void searchNearBy(String keyWord, String cityCode) {
+    private List<PoiItem> items = new ArrayList<>();
 
-        PoiSearch.Query query = new PoiSearch.Query(keyWord, "", cityCode);
+    private void searchNearBy(String keyWord, String city) {
+
+        PoiSearch.Query query = new PoiSearch.Query(keyWord, "", city);
         //keyWord表示搜索字符串，
         //第二个参数表示POI搜索类型，二者选填其一，选用POI搜索类型时建议填写类型代码，码表可以参考下方（而非文字）
         //cityCode表示POI搜索区域，可以是城市编码也可以是城市名称，也可以传空字符串，空字符串代表全国在全国范围内进行搜索
         query.setPageNum(page);
         query.setPageSize(10);
         search = new PoiSearch(this, query);
-        search.setBound(new PoiSearch.SearchBound(new LatLonPoint(emLoc.latitude,
-                emLoc.longitude), 2000));
+
+        EmLoc loc = new Gson().fromJson(XApp.getMyPreferences().getString(Config.SP_LAST_LOC, ""), EmLoc.class);
+        if (StringUtils.isBlank(keyWord) && city.equals(loc.city)) {
+            search.setBound(new PoiSearch.SearchBound(new LatLonPoint(loc.latitude,
+                    loc.longitude), 0));
+        } else if (!city.equals(loc.city) && StringUtils.isBlank(keyWord)) {
+            keyWord = "汽车站|火车站|机场";
+            query = new PoiSearch.Query(keyWord, "", city);
+            search.setQuery(query);
+        }
+
         search.setOnPoiSearchListener(new PoiSearch.OnPoiSearchListener() {
             @Override
             public void onPoiSearched(PoiResult poiResult, int i) {
+                recyclerView.complete();
                 if (null != poiResult && poiResult.getPois() != null) {
-                    adapter.setPoiList(poiResult.getPois());
+                    if (page == 0) {
+                        items.clear();
+                        items.addAll(poiResult.getPois());
+                    } else {
+                        items.addAll(poiResult.getPois());
+                    }
+                    adapter.setPoiList(items);
                     if (poiResult.getPageCount() > page) {
                         recyclerView.setLoadMoreEnable(true);
                     } else {
@@ -133,5 +169,22 @@ public class PlaceActivity extends RxBaseActivity {
             }
         });
         search.searchPOIAsyn();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == CITY_CODE) {
+                page = 0;
+                city = data.getStringExtra("city");
+                cityName.setText(city);
+                searchNearBy(keyWord, city);
+            }
+        }
+    }
+
+    public void cancel(View view) {
+        finish();
     }
 }

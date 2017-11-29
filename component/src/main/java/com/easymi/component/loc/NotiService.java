@@ -87,11 +87,11 @@ public class NotiService extends Service {
             public void onServiceConnected(ComponentName name, IBinder service) {
                 ILocationHelperServiceAIDL l = ILocationHelperServiceAIDL.Stub.asInterface(service);
                 mHelperAIDL = l;
-                try {
-                    l.onFinishBind(NOTI_ID);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    l.onFinishBind(NOTI_ID);
+//                } catch (RemoteException e) {
+//                    e.printStackTrace();
+//                }
             }
         };
         Intent intent = new Intent();

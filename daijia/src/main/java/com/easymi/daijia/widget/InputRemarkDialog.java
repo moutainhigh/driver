@@ -1,4 +1,4 @@
-package com.easymin.daijia.driver.emdaijia.widget;
+package com.easymi.daijia.widget;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -10,9 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import com.easymin.daijia.driver.emdaijia.R;
-import com.easymin.daijia.driver.emdaijia.utils.StringUtils;
-import com.easymin.daijia.driver.emdaijia.utils.ToastUtil;
+import com.easymi.component.utils.StringUtils;
+import com.easymi.component.utils.ToastUtil;
+import com.easymi.daijia.R;
 
 public class InputRemarkDialog extends Dialog {
 

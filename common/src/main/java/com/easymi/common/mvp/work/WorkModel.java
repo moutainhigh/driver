@@ -1,6 +1,7 @@
 package com.easymi.common.mvp.work;
 
 import com.easymi.common.CommApiService;
+import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.component.Config;
 import com.easymi.component.network.ApiManager;
@@ -20,7 +21,7 @@ public class WorkModel implements WorkContract.Model {
     @Override
     public Observable<QueryOrdersResult> indexOrders(Long driverId, String appKey) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .queryAllOrders(driverId, appKey,1,100)
+                .queryRunningOrders(driverId, appKey, 1, 100)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -30,6 +31,15 @@ public class WorkModel implements WorkContract.Model {
     public Observable<EmResult> online(Long driverId, String appKey) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .online(driverId, appKey)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<NearDriverResult> queryNearDriver(Long driverId, Double lat, Double lng, Double distance) {
+        return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .getNearDrivers(driverId, lat, lng, distance, Config.APP_KEY)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

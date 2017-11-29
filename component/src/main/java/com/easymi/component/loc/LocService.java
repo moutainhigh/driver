@@ -100,8 +100,6 @@ public class LocService extends NotiService implements AMapLocationListener {
         if (null == lbsTraceClient) {
             lbsTraceClient = LBSTraceClient.getInstance(this);
             lbsTraceClient.startTrace((list, list1, s) -> {
-                ToastUtil.showMessage(LocService.this, "纠偏失败：-->" + s);
-
                 List<LatLng> originalLatlngs = new ArrayList<>();
                 for (TraceLocation traceLocation : list) {
                     LatLng latLng = new LatLng(traceLocation.getLatitude(), traceLocation.getLongitude());

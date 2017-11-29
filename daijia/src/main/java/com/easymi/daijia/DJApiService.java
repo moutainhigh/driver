@@ -74,6 +74,18 @@ public interface DJApiService {
                                           @Field("remark") String remark);
 
     /**
+     * 司机修改终点
+     */
+    @FormUrlEncoded
+    @PUT("driver/api/v1/modifyDestination")
+    Observable<DJOrderResult> changeEnd(@Field("id") Long orderId,
+                                        @Field("lat") Double lat,
+                                        @Field("lng") Double lng,
+                                        @Field("destination") String destination,
+                                        @Field("app_key") String appKey
+    );
+
+    /**
      * 前往预约地
      *
      * @param orderId
@@ -131,7 +143,23 @@ public interface DJApiService {
     @FormUrlEncoded
     @POST("driver/api/v1/arrivalDistination")
     Observable<DJOrderResult> arrivalDistination(@Field("order_id") Long orderId,
-                                                 @Field("app_key") String appKey);
+                                                 @Field("app_key") String appKey,
+                                                 @Field("advance_price") Double advance_price,
+                                                 @Field("other_price") Double other_price,
+                                                 @Field("remark") String remark,
+                                                 @Field("distance") Double distance,
+                                                 @Field("distance_fee") Double distance_fee,
+                                                 @Field("time") Integer time,
+                                                 @Field("time_fee") Double time_fee,
+                                                 @Field("wait_time") Integer wait_time,
+                                                 @Field("wait_fee") Double wait_fee,
+                                                 @Field("add_distance") Double add_distance,
+                                                 @Field("add_fee") Double add_fee,
+                                                 @Field("coupon_fee") Double coupon_fee,
+                                                 @Field("total_fee") Double total_fee,
+                                                 @Field("real_pay") Double real_pay,
+                                                 @Field("start_price") Double start_price
+    );
 
     /**
      * 补单
@@ -191,13 +219,13 @@ public interface DJApiService {
      */
     @GET("driver/api/v1/getBudgetPrice")
     Observable<BudgetResult> getBudgetPrice(@Query("passenger_id") Long passengerId,
-                                             @Query("company_id") Long companyId,
-                                             @Query("distance") Double distance,
-                                             @Query("time") Integer time,
-                                             @Query("order_time") Long orderTime,
-                                             @Query("channel") String channel,
-                                             @Query("typeId") Long typeId,
-                                             @Query("app_key") String appKey
+                                            @Query("company_id") Long companyId,
+                                            @Query("distance") Double distance,
+                                            @Query("time") Integer time,
+                                            @Query("order_time") Long orderTime,
+                                            @Query("channel") String channel,
+                                            @Query("typeId") Long typeId,
+                                            @Query("app_key") String appKey
     );
 
     /**
@@ -220,4 +248,19 @@ public interface DJApiService {
                                                @Query("phone") String phone,
                                                @Query("app_key") String appKey
     );
+
+    /**
+     * 销单
+     *
+     * @param orderId
+     * @param driverId
+     * @param appKey
+     * @return
+     */
+    @FormUrlEncoded
+    @PUT("driver/api/v1/cancelOrder")
+    Observable<DJOrderResult> cancelOrder(@Field("order_id") Long orderId,
+                                          @Field("driver_id") Long driverId,
+                                          @Field("app_key") String appKey,
+                                          @Field("remark") String remark);
 }

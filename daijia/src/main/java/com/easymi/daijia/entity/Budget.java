@@ -5,5 +5,9 @@ package com.easymi.daijia.entity;
  */
 
 public class Budget {
-    public double fee;
+    public double total;
+    public double startPrice;
+    public double distancePrice;
+    public double timePrice;
+    public String memo;
 }

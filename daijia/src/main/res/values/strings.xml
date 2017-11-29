@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">daijia</string>
-    
+
     <string name="go">去</string>
     <string name="navigation">导航</string>
     <string name="order_number">订单编号</string>
@@ -49,6 +49,7 @@
     <string name="create_order">创建订单</string>
 
     <string name="cancel_suc">取消订单成功</string>
+    <string name="refuse_suc">拒单成功</string>
 
     <string name="illegality_place">无效的目的地,无法导航</string>
 
@@ -79,6 +80,20 @@
 
     <string name="please_start">请选择预约地</string>
     <string name="please_end">请选择目的地</string>
+
+    <string name="contract_service">联系客服</string>
+    <string name="same_order_driver">同单司机</string>
+    <string name="consumer_msg">客户信息</string>
+
+    <string name="refuse_reason">请输入拒单理由</string>
+    <string name="ok">确定</string>
+
+    <string name="qb_fee">起步费用</string>
+    <string name="lc_fee">里程费用</string>
+    <string name="time_fee">时间费用</string>
+    <string name="dh_fee">等候费用</string>
+    <string name="coupon_text">优惠券</string>
+    <string name="no_coupon">暂无优惠券</string>
 
 
     <!-- 抢单界面str -->

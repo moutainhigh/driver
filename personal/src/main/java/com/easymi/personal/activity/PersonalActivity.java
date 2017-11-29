@@ -3,10 +3,20 @@ package com.easymi.personal.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.easymi.component.Config;
+import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.entity.Employ;
+import com.easymi.component.utils.GlideCircleTransform;
+import com.easymi.component.utils.StringUtils;
 import com.easymi.personal.R;
 
 /**
@@ -14,6 +24,13 @@ import com.easymi.personal.R;
  */
 @Route(path = "/personal/PersonalActivity")
 public class PersonalActivity extends RxBaseActivity {
+
+    TextView driverName;
+    TextView userName;
+    TextView driverScore;
+
+    ImageView driverPhoto;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_personal;
@@ -21,7 +38,29 @@ public class PersonalActivity extends RxBaseActivity {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
+        driverName = findViewById(R.id.real_name);
+        userName = findViewById(R.id.user_name);
+        driverScore = findViewById(R.id.driver_score);
 
+        driverPhoto = findViewById(R.id.driver_photo);
+
+        Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1));
+        if (employ != null) {
+            driverName.setText(employ.real_name);
+            userName.setText(employ.user_name);
+            driverScore.setText(String.valueOf(employ.score));
+            if (StringUtils.isNotBlank(employ.portrait_path)) {
+                RequestOptions options = new RequestOptions()
+                        .centerCrop()
+                        .transform(new GlideCircleTransform())
+                        .placeholder(R.mipmap.photo_default)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL);
+                Glide.with(PersonalActivity.this)
+                        .load(Config.IMG_SERVER + employ.portrait_path)
+                        .apply(options)
+                        .into(driverPhoto);
+            }
+        }
     }
 
     public void toLiushui(View view) {

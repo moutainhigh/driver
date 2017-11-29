@@ -30,4 +30,10 @@
 
     <string name="exit">未能获得必要应用权限，即将退出</string>
 
+    <string name="liushui_today">今天</string>
+    <string name="liushui_yesterday">昨天</string>
+    <string name="liushui_this_week">本周</string>
+    <string name="liushui_this_month">本月</string>
+    <string name="liushui_all">全部</string>
+
 </resources>

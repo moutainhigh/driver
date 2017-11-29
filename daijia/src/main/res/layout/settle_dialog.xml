@@ -6,7 +6,9 @@
     android:layout_alignParentBottom="true"
     android:layout_gravity="bottom"
     android:background="@color/white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -135,6 +137,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/fee_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -174,6 +177,7 @@
                 android:background="@null"
                 android:gravity="center"
                 android:text="0"
+                android:inputType="number"
                 android:textColor="@color/yellow"
                 android:textSize="18sp" />
 
@@ -212,6 +216,7 @@
                 android:background="@null"
                 android:gravity="center"
                 android:text="0"
+                android:inputType="number"
                 android:textColor="@color/yellow"
                 android:textSize="18sp" />
 

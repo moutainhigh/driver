@@ -1,5 +1,6 @@
 package com.easymi.daijia.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -11,6 +12,7 @@ import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.widget.CustomSlideToUnlockView;
 import com.easymi.component.widget.SlideView;
 import com.easymi.daijia.R;
+import com.easymi.daijia.activity.FeeDetailActivity;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.flowMvp.ActFraCommBridge;
 
@@ -32,6 +34,7 @@ public class SlideArriveStartFragment extends RxBaseFragment {
     TextView endPlaceText;
     LinearLayout changeEndCon;
     FrameLayout callPhoneCon;
+    TextView feeDetail;
 
     @Override
     public void setArguments(Bundle args) {
@@ -55,6 +58,7 @@ public class SlideArriveStartFragment extends RxBaseFragment {
         slideView = getActivity().findViewById(R.id.slider);
         changeEndCon = getActivity().findViewById(R.id.change_end_con);
         callPhoneCon = getActivity().findViewById(R.id.call_phone_con);
+        feeDetail = getActivity().findViewById(R.id.fee_detail);
 
         startPlaceText.setText(djOrder.startPlace);
         endPlaceText.setText(djOrder.endPlace);
@@ -69,17 +73,12 @@ public class SlideArriveStartFragment extends RxBaseFragment {
                 bridge.doArriveStart();
             }
         });
-        callPhoneCon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PhoneUtil.call(getActivity(),djOrder.passengerPhone);
-            }
-        });
-        changeEndCon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                bridge.changeEnd();
-            }
+        callPhoneCon.setOnClickListener(view -> PhoneUtil.call(getActivity(),djOrder.passengerPhone));
+        changeEndCon.setOnClickListener(view -> bridge.changeEnd());
+        feeDetail.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), FeeDetailActivity.class);
+            intent.putExtra("djOrder",djOrder);
+            startActivity(intent);
         });
     }
 }

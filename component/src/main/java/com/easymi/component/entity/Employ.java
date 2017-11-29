@@ -24,25 +24,18 @@ public class Employ implements Parcelable {
     public String company_name;
     public String phone;
 
+    public String portrait_path;
 
-    public String id_card;
-    public String home_address;
-    public String emergency;
-    public String emergency_phone;
-    public String drive_license_type;
-    public String introducer;
-    public String remark;
-    public int is_freezed;
-    public String order_status;
+
     public double balance;
-    public double pre_money;
-    public int driver_type;
-    public String service_type;
-    public String errand_child_type;
-    public long service_times;
+    public String service_type;//服务类型
+    public String child_type;//服务子类型
+
     public String bank_name;
     public String bank_card_no;
     public String cash_person_name;
+
+    public double score;
 
     /**
      * 保存数据
@@ -60,6 +53,17 @@ public class Employ implements Parcelable {
         values.put("company_id", company_id);
         values.put("company_name", company_name);
         values.put("phone", phone);
+
+        values.put("balance", balance);
+        values.put("service_type", service_type);
+        values.put("child_type", child_type);
+
+        values.put("bank_name", bank_name);
+        values.put("bank_card_no", bank_card_no);
+        values.put("cash_person_name", cash_person_name);
+
+        values.put("portrait_path", portrait_path);
+        values.put("score", score);
 
         /*
          * values.put("age", age); values.put("jialing", jialing);
@@ -95,9 +99,11 @@ public class Employ implements Parcelable {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
         Cursor cursor = db.query("t_driverinfo", new String[]{"id",
-                "user_name", "password", "name", "real_name", "sex",
-                "company_id", "company_name","phone"},
-        "id = ?", new String[]{String.valueOf(driverID)},
+                        "user_name", "password", "name", "real_name", "sex",
+                        "company_id", "company_name", "phone", "balance", "service_type",
+                        "child_type", "bank_name", "bank_card_no", "cash_person_name",
+                        "portrait_path","score"},
+                "id = ?", new String[]{String.valueOf(driverID)},
                 null, null, null);
         Employ driverInfo = null;
         try {
@@ -121,6 +127,23 @@ public class Employ implements Parcelable {
                         .getColumnIndex("company_name"));
                 driverInfo.phone = cursor.getString(cursor
                         .getColumnIndex("phone"));
+
+                driverInfo.balance = cursor.getDouble(cursor
+                        .getColumnIndex("balance"));
+                driverInfo.service_type = cursor.getString(cursor
+                        .getColumnIndex("service_type"));
+                driverInfo.child_type = cursor.getString(cursor
+                        .getColumnIndex("child_type"));
+                driverInfo.bank_name = cursor.getString(cursor
+                        .getColumnIndex("bank_name"));
+                driverInfo.bank_card_no = cursor.getString(cursor
+                        .getColumnIndex("bank_card_no"));
+                driverInfo.cash_person_name = cursor.getString(cursor
+                        .getColumnIndex("cash_person_name"));
+                driverInfo.portrait_path = cursor.getString(cursor
+                        .getColumnIndex("portrait_path"));
+                driverInfo.score = cursor.getDouble(cursor
+                        .getColumnIndex("score"));
 
 				/*
                  * driverInfo.age =
@@ -153,8 +176,18 @@ public class Employ implements Parcelable {
         values.put("company_id", company_id);
         values.put("company_name", company_name);
         values.put("phone", phone);
-		/*
-		 * values.put("age", age); values.put("jialing", jialing);
+        values.put("portrait_path", portrait_path);
+
+        values.put("balance", balance);
+        values.put("service_type", service_type);
+        values.put("child_type", child_type);
+
+        values.put("bank_name", bank_name);
+        values.put("bank_card_no", bank_card_no);
+        values.put("cash_person_name", cash_person_name);
+        values.put("score", score);
+        /*
+         * values.put("age", age); values.put("jialing", jialing);
 		 */
         boolean flag = db.update("t_driverinfo", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
@@ -181,24 +214,13 @@ public class Employ implements Parcelable {
         sex = in.readString();
         company_id = in.readLong();
         phone = in.readString();
-        id_card = in.readString();
-        home_address = in.readString();
-        emergency = in.readString();
-        emergency_phone = in.readString();
-        drive_license_type = in.readString();
-        introducer = in.readString();
-        remark = in.readString();
-        is_freezed = in.readInt();
-        order_status = in.readString();
         balance = in.readDouble();
-        pre_money = in.readDouble();
-        driver_type = in.readInt();
         service_type = in.readString();
-        errand_child_type = in.readString();
-        service_times = in.readLong();
         bank_name = in.readString();
         bank_card_no = in.readString();
         cash_person_name = in.readString();
+        portrait_path = in.readString();
+        score = in.readDouble();
     }
 
     public static final Creator<Employ> CREATOR = new Creator<Employ>() {
@@ -222,26 +244,15 @@ public class Employ implements Parcelable {
                 ", name='" + name + '\'' +
                 ", real_name='" + real_name + '\'' +
                 ", sex='" + sex + '\'' +
-                ", id_card='" + id_card + '\'' +
                 ", phone='" + phone + '\'' +
-                ", home_address='" + home_address + '\'' +
-                ", emergency='" + emergency + '\'' +
-                ", emergency_phone='" + emergency_phone + '\'' +
-                ", drive_license_type='" + drive_license_type + '\'' +
-                ", introducer='" + introducer + '\'' +
-                ", remark='" + remark + '\'' +
-                ", is_freezed=" + is_freezed +
-                ", order_status='" + order_status + '\'' +
                 ", company_id=" + company_id +
                 ", balance=" + balance +
-                ", pre_money=" + pre_money +
-                ", driver_type=" + driver_type +
                 ", service_type='" + service_type + '\'' +
-                ", errand_child_type='" + errand_child_type + '\'' +
-                ", service_times=" + service_times +
                 ", bank_name='" + bank_name + '\'' +
                 ", bank_card_no='" + bank_card_no + '\'' +
                 ", cash_person_name='" + cash_person_name + '\'' +
+                ", portrait_path='" + portrait_path + '\'' +
+                ", score='" + score + '\'' +
                 '}';
     }
 
@@ -260,23 +271,12 @@ public class Employ implements Parcelable {
         dest.writeString(sex);
         dest.writeLong(company_id);
         dest.writeString(phone);
-        dest.writeString(id_card);
-        dest.writeString(home_address);
-        dest.writeString(emergency);
-        dest.writeString(emergency_phone);
-        dest.writeString(drive_license_type);
-        dest.writeString(introducer);
-        dest.writeString(remark);
-        dest.writeInt(is_freezed);
-        dest.writeString(order_status);
         dest.writeDouble(balance);
-        dest.writeDouble(pre_money);
-        dest.writeInt(driver_type);
         dest.writeString(service_type);
-        dest.writeString(errand_child_type);
-        dest.writeLong(service_times);
         dest.writeString(bank_name);
         dest.writeString(bank_card_no);
         dest.writeString(cash_person_name);
+        dest.writeString(portrait_path);
+        dest.writeDouble(score);
     }
 }

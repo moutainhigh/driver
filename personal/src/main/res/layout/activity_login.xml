@@ -80,7 +80,7 @@
                 <ImageView
                     android:layout_width="12dp"
                     android:layout_height="12dp"
-                    android:src="@drawable/ic_chevron_right_black_24dp" />
+                    android:src="@drawable/ic_right_row" />
             </LinearLayout>
 
             <EditText

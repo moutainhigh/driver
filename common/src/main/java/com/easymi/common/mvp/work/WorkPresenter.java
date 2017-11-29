@@ -3,6 +3,7 @@ package com.easymi.common.mvp.work;
 import android.content.Context;
 import android.content.Intent;
 
+import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.common.entity.BaseOrder;
 import com.easymi.component.Config;
@@ -106,8 +107,18 @@ public class WorkPresenter implements WorkContract.Presenter {
         long driverId = XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1L);
 
         Observable<EmResult> observable = model.online(driverId, Config.APP_KEY);
-        view.getRxManager().add(observable.subscribe(new MySubscriber<EmResult>(context, true,
+        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, true,
                 true, emResult -> view.onlineSuc())));
+    }
+
+    @Override
+    public void queryNearDriver(Double lat, Double lng) {
+        long driverId = XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1L);
+        double dis = 20;
+
+        Observable<NearDriverResult> observable = model.queryNearDriver(driverId, lat, lng, dis);
+        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
+                true, nearDriverResult -> view.showDrivers(nearDriverResult.emploies))));
     }
 
 

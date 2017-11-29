@@ -4,6 +4,6 @@
     <!-- 绘制弧度-->
     <corners android:radius="3dp" />
 
-    <solid android:color="#404456"/>
+    <solid android:color="#d6d6d7"/>
 
 </shape>
