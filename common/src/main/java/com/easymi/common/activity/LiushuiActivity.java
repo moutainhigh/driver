@@ -23,6 +23,7 @@ import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.widget.CusBottomSheetDialog;
 import com.easymi.component.widget.CusToolbar;
@@ -176,7 +177,7 @@ public class LiushuiActivity extends RxBaseActivity {
     }
 
     private void queryOrders() {
-        Long driverId = XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1);
+        Long driverId = EmUtil.getEmployId();
 
         Observable<QueryOrdersResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .queryOverOrdersByBunsiness(driverId, business, startTime, endTime, Config.APP_KEY, 1, 100)

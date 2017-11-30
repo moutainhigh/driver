@@ -4,6 +4,7 @@ import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.daijia.DJApiService;
 import com.easymi.daijia.result.DJOrderResult;
 
@@ -28,7 +29,7 @@ public class GrabModel implements GrabContract.Model {
     @Override
     public Observable<DJOrderResult> grabOrder(Long orderId) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .grabOrder(orderId, XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1), Config.APP_KEY)
+                .grabOrder(orderId, EmUtil.getEmployId(), Config.APP_KEY)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

@@ -198,7 +198,6 @@ public class LoginActivity extends RxBaseActivity {
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, loginResult -> {
             Employ employ = loginResult.getEmployInfo();
             Log.e("okhttp", employ.toString());
-            employ.company_name = "小咖科技";
             employ.saveOrUpdate();
             SharedPreferences.Editor editor = XApp.getPreferencesEditor();
             editor.putBoolean(Config.SP_ISLOGIN,true);

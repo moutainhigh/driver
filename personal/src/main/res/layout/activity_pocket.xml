@@ -20,9 +20,10 @@
             android:text="@string/pocket_balance"/>
 
         <TextView
+            android:id="@+id/balance_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="9980.0"
+            android:text="0.0"
             android:textSize="30sp"
             android:layout_marginTop="20dp"/>
 

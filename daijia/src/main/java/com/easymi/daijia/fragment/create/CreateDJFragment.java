@@ -20,6 +20,7 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxLazyFragment;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusBottomSheetDialog;
@@ -144,7 +145,7 @@ public class CreateDJFragment extends RxLazyFragment implements CreateDJContract
     @Override
     public void initPlace() {
         //起始地默认为当前地址
-        EmLoc emLoc = new Gson().fromJson(XApp.getMyPreferences().getString(Config.SP_LAST_LOC, ""), EmLoc.class);
+        EmLoc emLoc = EmUtil.getLastLoc();
         startPlace.setText(emLoc.poiName);
         startPlace.setTextColor(getResources().getColor(R.color.text_color_black));
         startPoi = new PoiItem("", new LatLonPoint(emLoc.latitude, emLoc.longitude), emLoc.poiName, emLoc.address);

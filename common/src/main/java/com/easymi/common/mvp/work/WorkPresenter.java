@@ -13,6 +13,7 @@ import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult;
+import com.easymi.component.utils.EmUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,7 @@ public class WorkPresenter implements WorkContract.Presenter {
     public void indexOrders() {
         view.showOrders(null);
 
-        long driverId = XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1L);
+        long driverId = EmUtil.getEmployId();
 
         Observable<QueryOrdersResult> observable = model.indexOrders(driverId, Config.APP_KEY);
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false, false, new HaveErrSubscriberListener<QueryOrdersResult>() {
@@ -104,7 +105,7 @@ public class WorkPresenter implements WorkContract.Presenter {
 
     @Override
     public void online() {
-        long driverId = XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1L);
+        long driverId = EmUtil.getEmployId();
 
         Observable<EmResult> observable = model.online(driverId, Config.APP_KEY);
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, true,
@@ -113,7 +114,7 @@ public class WorkPresenter implements WorkContract.Presenter {
 
     @Override
     public void queryNearDriver(Double lat, Double lng) {
-        long driverId = XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1L);
+        long driverId = EmUtil.getEmployId();
         double dis = 20;
 
         Observable<NearDriverResult> observable = model.queryNearDriver(driverId, lat, lng, dis);

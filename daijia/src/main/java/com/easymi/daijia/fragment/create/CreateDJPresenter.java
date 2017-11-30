@@ -17,6 +17,7 @@ import com.easymi.component.entity.Employ;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.daijia.result.BudgetResult;
 import com.easymi.daijia.result.DJOrderResult;
 import com.easymi.daijia.result.DJTypeResult;
@@ -43,7 +44,7 @@ public class CreateDJPresenter implements CreateDJContract.Presenter {
 
     @Override
     public void queryDJType() {
-        Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1));
+        Employ employ = EmUtil.getEmployInfo();
         view.getManager().add(model.queryDJType(employ.company_id).subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<DJTypeResult>() {
             @Override
             public void onNext(DJTypeResult djTypeResult) {
@@ -59,7 +60,7 @@ public class CreateDJPresenter implements CreateDJContract.Presenter {
 
     @Override
     public void queryPassenger(String phone) {
-        Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1));
+        Employ employ = EmUtil.getEmployInfo();
         view.getManager().add(model.queryPassenger(employ.company_id, employ.company_name, phone).subscribe(new MySubscriber<>(context, true, true, new HaveErrSubscriberListener<PassengerResult>() {
             @Override
             public void onNext(PassengerResult result) {
@@ -75,7 +76,7 @@ public class CreateDJPresenter implements CreateDJContract.Presenter {
 
     @Override
     public void queryBudget(Long passengerId, Double distance, Integer time, Long orderTime, Long typeId) {
-        Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1));
+        Employ employ = EmUtil.getEmployInfo();
         view.getManager().add(model.getBudgetPrice(passengerId, employ.company_id,
                 distance == null ? 0.0 : distance, time == null ? 0 : time, orderTime, typeId)
                 .subscribe(new MySubscriber<BudgetResult>(context, false,
@@ -139,7 +140,7 @@ public class CreateDJPresenter implements CreateDJContract.Presenter {
 
     @Override
     public void createOrder(Long passengerId, String passengerName, String passengerPhone, long orderTime, String bookAddress, Double bookAddressLat, Double bookAddressLng, String destination, Double destinationLat, Double destinationLng, Double budgetFee, Long cid) {
-        Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1));
+        Employ employ = EmUtil.getEmployInfo();
         view.getManager().add(model.createOrder(passengerId, passengerName, passengerPhone, orderTime,
                 bookAddress, bookAddressLat, bookAddressLng, destination, destinationLat, destinationLng,
                 employ.company_id, employ.company_name, budgetFee, cid, employ.name, employ.id).subscribe(

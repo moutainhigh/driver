@@ -42,6 +42,7 @@ import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.loc.LocService;
 import com.easymi.component.loc.ReceiveLocInterface;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.widget.BottomBehavior;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.pinned.PinnedHeaderDecoration;
@@ -113,7 +114,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
 
         onLineBtn.setOnClickListener(v -> presenter.online());
 
-        Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1));
+        Employ employ = EmUtil.getEmployInfo();
 //        Log.e("employ", employ.toString());
     }
 
@@ -325,7 +326,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
 
     @Override
     public void receiveLoc() {
-        EmLoc location = new Gson().fromJson(XApp.getMyPreferences().getString(Config.SP_LAST_LOC, ""), EmLoc.class);
+        EmLoc location = EmUtil.getLastLoc();
         if (null == location) {
             return;
         }

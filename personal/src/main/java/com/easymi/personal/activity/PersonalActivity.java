@@ -15,6 +15,7 @@ import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.Employ;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.GlideCircleTransform;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.personal.R;
@@ -44,7 +45,7 @@ public class PersonalActivity extends RxBaseActivity {
 
         driverPhoto = findViewById(R.id.driver_photo);
 
-        Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1));
+        Employ employ = EmUtil.getEmployInfo();
         if (employ != null) {
             driverName.setText(employ.real_name);
             userName.setText(employ.user_name);

@@ -34,6 +34,7 @@ import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.loc.LocService;
 import com.easymi.component.loc.ReceiveLocInterface;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.MapUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
@@ -511,7 +512,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
     @Override
     protected void onResume() {
         super.onResume();
-        EmLoc location = new Gson().fromJson(XApp.getMyPreferences().getString(Config.SP_LAST_LOC, ""), EmLoc.class);
+        EmLoc location = EmUtil.getLastLoc();
         if (location == null) {
             ToastUtil.showMessage(this, getString(R.string.loc_failed));
             finish();
@@ -554,7 +555,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
 
     @Override
     public void receiveLoc() {
-        EmLoc location = new Gson().fromJson(XApp.getMyPreferences().getString(Config.SP_LAST_LOC, ""), EmLoc.class);
+        EmLoc location =EmUtil.getLastLoc();
         if (null == location) {
             return;
         }

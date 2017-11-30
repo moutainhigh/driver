@@ -4,6 +4,7 @@ import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.daijia.DJApiService;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.result.DJOrderResult;
@@ -21,7 +22,7 @@ public class FlowModel implements FlowContract.Model {
     @Override
     public Observable<DJOrderResult> doAccept(Long orderId) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .takeOrder(orderId, XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1), Config.APP_KEY)
+                .takeOrder(orderId, EmUtil.getEmployId(), Config.APP_KEY)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -39,7 +40,7 @@ public class FlowModel implements FlowContract.Model {
     @Override
     public Observable<DJOrderResult> refuseOrder(Long orderId, String remark) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .refuseOrder(orderId, XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1), Config.APP_KEY, remark)
+                .refuseOrder(orderId, EmUtil.getEmployId(), Config.APP_KEY, remark)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -105,7 +106,7 @@ public class FlowModel implements FlowContract.Model {
     @Override
     public Observable<DJOrderResult> cancelOrder(Long orderId, String remark) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .cancelOrder(orderId, XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1), Config.APP_KEY, remark)
+                .cancelOrder(orderId, EmUtil.getEmployId(), Config.APP_KEY, remark)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

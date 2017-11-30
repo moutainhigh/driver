@@ -5,8 +5,10 @@ import com.easymi.personal.result.LoginResult;
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -27,5 +29,9 @@ public interface McService {
     Observable<EmResult> changePsw(@Field("phone") String phone,
                                    @Field("password") String password,
                                    @Field("app_key") String appKey);
+
+    @GET("driver/api/v1/employInfo")
+    Observable<LoginResult> getDriverInfo(@Query("id") Long driverId,
+                                          @Query("app_key") String appKey);
 
 }
