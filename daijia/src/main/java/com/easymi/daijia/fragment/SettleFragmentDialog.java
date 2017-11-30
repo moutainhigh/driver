@@ -1,6 +1,7 @@
 package com.easymi.daijia.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.easymi.component.widget.CusBottomSheetDialog;
 import com.easymi.daijia.R;
+import com.easymi.daijia.activity.FeeDetailActivity;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.flowMvp.ActFraCommBridge;
 
@@ -37,6 +39,8 @@ public class SettleFragmentDialog {
 
     private CusBottomSheetDialog dialog;
 
+    TextView feeDetail;
+
     public SettleFragmentDialog(Context context, DJOrder djOrder, ActFraCommBridge bridge) {
         this.context = context;
         this.djOrder = djOrder;
@@ -50,6 +54,7 @@ public class SettleFragmentDialog {
         carNoText = view.findViewById(R.id.car_no);
         remarkEdit = view.findViewById(R.id.remark);
         confirmBtn = view.findViewById(R.id.confirm_button);
+        feeDetail = view.findViewById(R.id.fee_detail);
 
         extraFeeEdit.setSelection(extraFeeEdit.getText().toString().length());
         paymentEdit.setSelection(paymentEdit.getText().toString().length());
@@ -88,5 +93,11 @@ public class SettleFragmentDialog {
             }
         });
         closeFragment.setOnClickListener(v -> dialog.dismiss());
+
+        feeDetail.setOnClickListener(v -> {
+            Intent intent = new Intent(context, FeeDetailActivity.class);
+            intent.putExtra("djOrder", djOrder);
+            context.startActivity(intent);
+        });
     }
 }

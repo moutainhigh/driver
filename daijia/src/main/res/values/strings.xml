@@ -95,6 +95,7 @@
     <string name="coupon_text">优惠券</string>
     <string name="no_coupon">暂无优惠券</string>
 
+    <string name="route_failed">路径规划失败</string>
 
     <!-- 抢单界面str -->
     <string name="grab_dis">距您约</string>

@@ -1,9 +1,16 @@
 package com.easymi.daijia.flowMvp;
 
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.navi.model.AMapNaviPath;
+import com.amap.api.navi.model.NaviPath;
+import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.route.DrivePath;
+import com.amap.api.services.route.DriveRouteResult;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.result.DJOrderResult;
+
+import java.util.List;
 
 import rx.Observable;
 
@@ -38,6 +45,10 @@ public interface FlowContract {
 
         void refuseSuc();
 
+        void showPath(int[] ints, AMapNaviPath path);
+
+        void showPath(DriveRouteResult result);
+
         RxManager getManager();
     }
 
@@ -63,6 +74,10 @@ public interface FlowContract {
         void changeEnd(Long orderId, Double lat, Double lng, String address);
 
         void cancelOrder(Long orderId, String remark);
+
+        void routePlanByNavi(Double endLat, Double endLng);
+
+        void routePlanByRouteSearch(Double endLat, Double endLng);
         //...
     }
 

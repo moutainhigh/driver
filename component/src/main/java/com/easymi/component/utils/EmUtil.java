@@ -14,7 +14,7 @@ import com.google.gson.Gson;
 public class EmUtil {
 
     public static Long getEmployId() {
-        return EmUtil.getEmployId();
+        return XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1);
     }
 
     public static Employ getEmployInfo() {

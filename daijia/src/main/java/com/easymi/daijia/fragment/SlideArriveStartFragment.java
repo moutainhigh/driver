@@ -34,7 +34,6 @@ public class SlideArriveStartFragment extends RxBaseFragment {
     TextView endPlaceText;
     LinearLayout changeEndCon;
     FrameLayout callPhoneCon;
-    TextView feeDetail;
 
     @Override
     public void setArguments(Bundle args) {
@@ -58,7 +57,6 @@ public class SlideArriveStartFragment extends RxBaseFragment {
         slideView = getActivity().findViewById(R.id.slider);
         changeEndCon = getActivity().findViewById(R.id.change_end_con);
         callPhoneCon = getActivity().findViewById(R.id.call_phone_con);
-        feeDetail = getActivity().findViewById(R.id.fee_detail);
 
         startPlaceText.setText(djOrder.startPlace);
         endPlaceText.setText(djOrder.endPlace);
@@ -75,10 +73,5 @@ public class SlideArriveStartFragment extends RxBaseFragment {
         });
         callPhoneCon.setOnClickListener(view -> PhoneUtil.call(getActivity(),djOrder.passengerPhone));
         changeEndCon.setOnClickListener(view -> bridge.changeEnd());
-        feeDetail.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), FeeDetailActivity.class);
-            intent.putExtra("djOrder",djOrder);
-            startActivity(intent);
-        });
     }
 }

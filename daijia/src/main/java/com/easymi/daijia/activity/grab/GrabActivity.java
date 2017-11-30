@@ -143,26 +143,20 @@ public class GrabActivity extends RxBaseActivity implements GrabContract.View {
             public void run() {
                 if (shade) {
                     shadeTime--;
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            shadeCountdown.setText("" + shadeTime);
-                            if (shadeTime == 0) {
-                                cancelTimer();
-                                showGrabCountDown();
-                            }
+                    runOnUiThread(() -> {
+                        shadeCountdown.setText("" + shadeTime);
+                        if (shadeTime == 0) {
+                            cancelTimer();
+                            showGrabCountDown();
                         }
                     });
                 } else {
                     countTime--;
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            grabCountdown.setText("" + countTime);
-                            if (countTime == 0) {
-                                cancelTimer();
-                                finish();
-                            }
+                    runOnUiThread(() -> {
+                        grabCountdown.setText("" + countTime);
+                        if (countTime == 0) {
+                            cancelTimer();
+                            finish();
                         }
                     });
                 }

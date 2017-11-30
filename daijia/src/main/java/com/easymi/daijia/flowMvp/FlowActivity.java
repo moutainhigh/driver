@@ -24,7 +24,15 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.maps.utils.overlay.SmoothMoveMarker;
+import com.amap.api.navi.AMapNaviException;
+import com.amap.api.navi.model.AMapNaviPath;
+import com.amap.api.navi.model.NaviPath;
+import com.amap.api.navi.model.RouteOverlayOptions;
+import com.amap.api.navi.view.RouteOverLay;
+import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.core.PoiItem;
+import com.amap.api.services.route.DrivePath;
+import com.amap.api.services.route.DriveRouteResult;
 import com.easymi.component.Config;
 import com.easymi.component.activity.PlaceActivity;
 import com.easymi.component.app.XApp;
@@ -38,6 +46,7 @@ import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.MapUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
+import com.easymi.component.widget.overlay.DrivingRouteOverlay;
 import com.easymi.daijia.R;
 import com.easymi.daijia.activity.CancelActivity;
 import com.easymi.daijia.entity.Address;
@@ -315,6 +324,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
             if (null != getStartAddr()) {
                 latLngs.add(new LatLng(getStartAddr().lat, getStartAddr().lng));
                 naviCon.setOnClickListener(view -> presenter.navi(new LatLng(getStartAddr().lat, getStartAddr().lng), getStartAddr().poi));
+                presenter.routePlanByNavi(getStartAddr().lat, getStartAddr().lng);
             } else {
                 naviCon.setOnClickListener(v -> ToastUtil.showMessage(FlowActivity.this, getString(R.string.illegality_place)));
             }
@@ -327,6 +337,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
             if (null != getStartAddr()) {
                 latLngs.add(new LatLng(getStartAddr().lat, getStartAddr().lng));
                 naviCon.setOnClickListener(view -> presenter.navi(new LatLng(getStartAddr().lat, getStartAddr().lng), getStartAddr().poi));
+                presenter.routePlanByNavi(getStartAddr().lat, getStartAddr().lng);
             } else {
                 naviCon.setOnClickListener(v -> ToastUtil.showMessage(FlowActivity.this, getString(R.string.illegality_place)));
             }
@@ -339,6 +350,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
             if (null != getEndAddr()) {
                 latLngs.add(new LatLng(getEndAddr().lat, getEndAddr().lng));
                 naviCon.setOnClickListener(view -> presenter.navi(new LatLng(getEndAddr().lat, getEndAddr().lng), getEndAddr().poi));
+                presenter.routePlanByNavi(getEndAddr().lat, getEndAddr().lng);
             } else {
                 naviCon.setOnClickListener(v -> ToastUtil.showMessage(FlowActivity.this, getString(R.string.illegality_place)));
             }
@@ -385,6 +397,44 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
     public void refuseSuc() {
         ToastUtil.showMessage(this, getString(R.string.refuse_suc));
         finish();
+    }
+
+    RouteOverLay routeOverLay;
+
+    /**
+     * 绘制路径规划结果
+     *
+     * @param path AMapNaviPath
+     */
+    @Override
+    public void showPath(int[] ints, AMapNaviPath path) {
+        if (null != routeOverLay) {
+            routeOverLay.removeFromMap();
+        }
+        aMap.moveCamera(CameraUpdateFactory.changeTilt(0));
+        routeOverLay = new RouteOverLay(aMap, path, this);
+        routeOverLay.setStartPointBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.blue_dot));
+        routeOverLay.setEndPointBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.yellow_dot));
+        try {
+            routeOverLay.setWidth(60f);
+        } catch (AMapNaviException e) {
+            e.printStackTrace();
+        }
+        routeOverLay.setTrafficLine(true);
+        routeOverLay.addToMap();
+    }
+
+    @Override
+    public void showPath(DriveRouteResult result) {
+        DrivingRouteOverlay overlay = new DrivingRouteOverlay(this, aMap,
+                result.getPaths().get(0), result.getStartPos()
+                , result.getTargetPos(), null);
+        overlay.setNodeIconVisibility(false);//隐藏转弯的节点
+        overlay.addToMap();
+        overlay.zoomToSpan();
+        aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(new LatLngBounds(
+                new LatLng(result.getStartPos().getLatitude(), result.getStartPos().getLongitude()),
+                new LatLng(result.getTargetPos().getLatitude(), result.getTargetPos().getLongitude())), 50));
     }
 
     private Address getStartAddr() {
@@ -555,7 +605,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
 
     @Override
     public void receiveLoc() {
-        EmLoc location =EmUtil.getLastLoc();
+        EmLoc location = EmUtil.getLastLoc();
         if (null == location) {
             return;
         }
