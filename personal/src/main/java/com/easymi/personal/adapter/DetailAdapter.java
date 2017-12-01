@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.easymi.component.utils.TimeUtil;
 import com.easymi.personal.R;
 import com.easymi.personal.entity.Detail;
 
@@ -43,9 +44,9 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailHold
     @Override
     public void onBindViewHolder(DetailHolder holder, int position) {
         Detail detail = list.get(position);
-        holder.detailTime.setText(detail.time);
+        holder.detailTime.setText(TimeUtil.getTime("yyyy-MM-dd HH:mm", detail.time));
         holder.detailPurpose.setText(detail.purpose);
-        holder.detailMoney.setText("¥"+detail.money);
+        holder.detailMoney.setText("¥" + detail.money);
     }
 
     @Override

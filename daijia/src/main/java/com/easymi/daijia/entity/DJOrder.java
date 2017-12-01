@@ -1,5 +1,6 @@
 package com.easymi.daijia.entity;
 
+import com.easymi.daijia.activity.grab.GrabActivity;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -108,6 +109,8 @@ public class DJOrder implements Serializable{
     public int waitTime;//等待时间
 
     public double waitFee;//
+
+    public int countTime = GrabActivity.GRAB_TOTAL_TIME;
 
     public List<Address> addresses;
 

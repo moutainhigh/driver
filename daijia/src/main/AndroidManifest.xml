@@ -14,6 +14,7 @@
         <activity
             android:name=".activity.grab.GrabActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.FeeDetailActivity"
@@ -22,6 +23,7 @@
 
         <activity
             android:name="com.amap.api.navi.AmapRouteActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme.NoTitleBar" />
     </application>
 </manifest>

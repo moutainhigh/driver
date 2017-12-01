@@ -84,6 +84,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
 
     RelativeLayout listenOrderCon;
 
+    RelativeLayout notifityCon;
+
     private WorkPresenter presenter;
 
     @Override
@@ -100,6 +102,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
         initToolbar();
 
         initMap();
+        initNotifity();
 
         mapView.onCreate(savedInstanceState);
 
@@ -116,6 +119,15 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
 
         Employ employ = EmUtil.getEmployInfo();
 //        Log.e("employ", employ.toString());
+    }
+
+    private void initNotifity() {
+        notifityCon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     private OrderAdapter adapter;
@@ -137,6 +149,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
         loadingFrame = findViewById(R.id.loading_frame);
         loadingImg = findViewById(R.id.spinnerImageView);
         refreshImg = findViewById(R.id.refresh_img);
+
+        notifityCon = findViewById(R.id.notifity_con);
     }
 
     /**

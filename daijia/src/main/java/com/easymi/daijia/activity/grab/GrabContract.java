@@ -1,8 +1,12 @@
 package com.easymi.daijia.activity.grab;
 
+import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.route.DriveRouteResult;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.result.DJOrderResult;
+
+import java.util.List;
 
 import rx.Observable;
 
@@ -16,7 +20,9 @@ public interface GrabContract {
         void showBase(DJOrder djOrder);
         void showShade();
         void showGrabCountDown();
+        void initViewPager();
         void finishActivity();
+        void showPath(DriveRouteResult result);
         RxManager getManager();
     }
 
@@ -24,6 +30,8 @@ public interface GrabContract {
         void queryOrder(Long orderId);
 
         void grabOrder(Long orderId);
+
+        void routePlanByRouteSearch(LatLonPoint endPoint, List<LatLonPoint> pass);
     }
 
     interface Model {

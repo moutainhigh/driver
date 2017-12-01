@@ -55,8 +55,6 @@ dependencies {
     api libs['amap-navi']
     api libs['amap-loc']
 
-    api 'com.github.ronaldsmartin:Material-ViewPagerIndicator:1.0.2'
-
     api 'com.skyfishjy.ripplebackground:library:1.0.1'
 
     annotationProcessor 'com.alibaba:arouter-compiler:1.1.3'

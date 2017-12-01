@@ -49,6 +49,7 @@ import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.overlay.DrivingRouteOverlay;
 import com.easymi.daijia.R;
 import com.easymi.daijia.activity.CancelActivity;
+import com.easymi.daijia.activity.grab.GrabActivity;
 import com.easymi.daijia.entity.Address;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.fragment.AcceptFragment;
@@ -70,6 +71,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.lujun.androidtagview.TagContainerLayout;
+import co.lujun.androidtagview.TagView;
 
 /**
  * Created by developerLzh on 2017/11/13 0013.
@@ -193,6 +195,31 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
                 || djOrder.orderStatus == DJOrder.GOTO_BOOKPALCE_ORDER) {
             nextPlace.setText(djOrder.startPlace);
         }
+        tagContainerLayout.setOnTagClickListener(new TagView.OnTagClickListener() {
+            @Override
+            public void onTagClick(int position, String text) {
+                if(position == 1){
+                    Intent intent = new Intent(FlowActivity.this, GrabActivity.class);
+                    intent.putExtra("order",djOrder);
+                    startActivity(intent);
+                    startActivity(intent);
+                    startActivity(intent);
+                    startActivity(intent);
+                    startActivity(intent);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onTagLongClick(int position, String text) {
+
+            }
+
+            @Override
+            public void onTagCrossClick(int position) {
+
+            }
+        });
     }
 
     @Override
@@ -324,7 +351,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
             if (null != getStartAddr()) {
                 latLngs.add(new LatLng(getStartAddr().lat, getStartAddr().lng));
                 naviCon.setOnClickListener(view -> presenter.navi(new LatLng(getStartAddr().lat, getStartAddr().lng), getStartAddr().poi));
-                presenter.routePlanByNavi(getStartAddr().lat, getStartAddr().lng);
+                presenter.routePlanByRouteSearch(getStartAddr().lat, getStartAddr().lng);
             } else {
                 naviCon.setOnClickListener(v -> ToastUtil.showMessage(FlowActivity.this, getString(R.string.illegality_place)));
             }
@@ -337,7 +364,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
             if (null != getStartAddr()) {
                 latLngs.add(new LatLng(getStartAddr().lat, getStartAddr().lng));
                 naviCon.setOnClickListener(view -> presenter.navi(new LatLng(getStartAddr().lat, getStartAddr().lng), getStartAddr().poi));
-                presenter.routePlanByNavi(getStartAddr().lat, getStartAddr().lng);
+                presenter.routePlanByRouteSearch(getStartAddr().lat, getStartAddr().lng);
             } else {
                 naviCon.setOnClickListener(v -> ToastUtil.showMessage(FlowActivity.this, getString(R.string.illegality_place)));
             }
@@ -350,7 +377,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
             if (null != getEndAddr()) {
                 latLngs.add(new LatLng(getEndAddr().lat, getEndAddr().lng));
                 naviCon.setOnClickListener(view -> presenter.navi(new LatLng(getEndAddr().lat, getEndAddr().lng), getEndAddr().poi));
-                presenter.routePlanByNavi(getEndAddr().lat, getEndAddr().lng);
+                presenter.routePlanByRouteSearch(getEndAddr().lat, getEndAddr().lng);
             } else {
                 naviCon.setOnClickListener(v -> ToastUtil.showMessage(FlowActivity.this, getString(R.string.illegality_place)));
             }
@@ -429,6 +456,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
         DrivingRouteOverlay overlay = new DrivingRouteOverlay(this, aMap,
                 result.getPaths().get(0), result.getStartPos()
                 , result.getTargetPos(), null);
+        overlay.setRouteWidth(50);
+        overlay.setIsColorfulline(false);
         overlay.setNodeIconVisibility(false);//隐藏转弯的节点
         overlay.addToMap();
         overlay.zoomToSpan();
