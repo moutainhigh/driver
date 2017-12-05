@@ -1,6 +1,9 @@
 package com.easymi.common;
 
+import com.easymi.common.entity.Notifity;
+import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.NearDriverResult;
+import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.component.result.EmResult;
 
@@ -43,6 +46,12 @@ public interface CommApiService {
                                 @Field("app_key") String appKey);
 
 
+    @FormUrlEncoded
+    @PUT("driver/api/v1/offline")
+    Observable<EmResult> offline(@Field("driver_id") Long driverId,
+                                @Field("app_key") String appKey);
+
+
     /**
      * 查询附近司机
      *
@@ -61,6 +70,17 @@ public interface CommApiService {
             @Query("app_key") String appKey
     );
 
+    /**
+     * 查询未支付和已完成订单
+     * @param driverId
+     * @param business
+     * @param startTime
+     * @param endTime
+     * @param appKey
+     * @param page
+     * @param limit
+     * @return
+     */
     @GET("driver/api/v1/orders")
     Observable<QueryOrdersResult> queryOverOrdersByBunsiness(@Query("driver_id") Long driverId,
                                                              @Query("business") String business,
@@ -69,4 +89,22 @@ public interface CommApiService {
                                                              @Query("app_key") String appKey,
                                                              @Query("page") int page,
                                                              @Query("limit") int limit);
+
+    /**
+     * 查询通知
+     * @param noticeId
+     * @return
+     */
+    @GET("driver/api/v1/notice")
+    Observable<NotitfyResult> loadNotice(@Query("id")Long noticeId,
+                                         @Query("app_key")String appKey);
+
+    /**
+     * 查询通知
+     * @param noticeId
+     * @return
+     */
+    @GET("driver/api/v1/employAfficheById")
+    Observable<AnnouncementResult> employAfficheById(@Query("id")Long noticeId,
+                                                     @Query("app_key")String appKey);
 }

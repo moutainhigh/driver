@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">v5driver</string>
-    
+
     <!-- 工作台界面str-->
     <string name="work_fin_order">完成订单</string>
     <string name="work_hour">时</string>
@@ -9,9 +9,9 @@
     <string name="work_today_income">今日收入</string>
     <string name="work_driver">司机</string>
     <string name="work_order">订单</string>
-    <string name="work_online">上线</string>
+    <string name="work_online">开始听单</string>
     <string name="work_create">创建订单</string>
-    <string name="work_offline">下线</string>
+    <string name="work_offline">停止听单</string>
     <string name="work_listen_order">听单中...</string>
     <string name="work_title">工作台</string>
 
@@ -36,4 +36,9 @@
     <string name="liushui_this_month">本月</string>
     <string name="liushui_all">全部</string>
 
+    <string name="new_ann">新公告：</string>
+    <string name="new_notify">新通知：</string>
+
+    <string name="start_lis_order">开始听单啦！</string>
+    <string name="stop_lis_order">停止听单啦！</string>
 </resources>

@@ -1,6 +1,9 @@
 package com.easymi.personal.activity;
 
 import android.os.Bundle;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
 
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.personal.R;
@@ -10,6 +13,16 @@ import com.easymi.personal.R;
  */
 
 public class RechargeActivity extends RxBaseActivity {
+
+    CheckBox pay50;
+    CheckBox pay100;
+    CheckBox pay200;
+    EditText payCus;
+
+    RelativeLayout payWx;
+    RelativeLayout payZfb;
+    RelativeLayout payUnion;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_recharge;

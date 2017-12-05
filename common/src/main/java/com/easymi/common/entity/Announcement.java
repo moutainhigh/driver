@@ -1,4 +1,4 @@
-package com.easymi.personal.entity;
+package com.easymi.common.entity;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -6,14 +6,13 @@ import com.google.gson.annotations.SerializedName;
  * Created by developerLzh on 2017/11/11 0011.
  */
 
-public class Notifity {
+public class Announcement {
     public long id;
 
     @SerializedName("created")
     public long time;
 
-    @SerializedName("notice_content")
+    @SerializedName("Affiche_title")
     public String message;
 
-    public int state;//1是未读 2是已读
 }

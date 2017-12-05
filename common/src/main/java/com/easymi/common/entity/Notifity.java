@@ -1,4 +1,4 @@
-package com.easymi.personal.entity;
+package com.easymi.common.entity;
 
 import com.google.gson.annotations.SerializedName;
 

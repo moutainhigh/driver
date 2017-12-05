@@ -1,4 +1,4 @@
-package com.easymi.component.activity;
+package com.easymi.personal.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -17,16 +17,23 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.easymi.component.Config;
 import com.easymi.component.R;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HttpResultFunc;
+import com.easymi.component.network.MySubscriber;
+import com.easymi.personal.McService;
+import com.easymi.personal.result.ArticleResult;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by developerLzh on 2017/5/4.
  */
-@Route(path = "/component/WebActivity")
-public class WebActivity extends RxBaseActivity implements View.OnClickListener {
-    public String name, url;
-
+public class ArticleActivity extends RxBaseActivity implements View.OnClickListener {
     WebView webView;
 
     TextView title;
@@ -81,21 +88,39 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
         super.onDestroy();
     }
 
+    private String tag;
+
     public void init() {
 
         Intent localIntent = getIntent();
-        url = localIntent.getStringExtra("url");
-        if (url != null && !url.contains("http")) {
-            url = "http://" + url;
-        }
+
+        tag = getIntent().getStringExtra("tag");
+
         String titleStr = localIntent.getStringExtra("title");
+
         title = findViewById(R.id.title);
         title.setText(titleStr);
         webView = findViewById(R.id.web_view);
+
         closeAll = findViewById(R.id.close_all);
         closeAll.setOnClickListener(this);
+
         myProgressBar = findViewById(R.id.myProgressBar);
 
+        getArticle(tag);
+    }
+
+    private void getArticle(String alias) {
+        McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
+
+        Observable<ArticleResult> observable = api
+                .getArticle(Config.APP_KEY, alias)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
+                true, emResult -> webView.loadData(emResult.article.contents, "text/html;charset=UTF-8", null))));
     }
 
     Handler handler = new Handler(new Handler.Callback() {
@@ -121,14 +146,12 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
         webView.getSettings().setLoadWithOverviewMode(true);
 
         webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
-        webView.loadUrl(url);
 
 
         webView.setWebViewClient(new WebViewClient() {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                view.loadUrl(url);
                 return true;
             }
 

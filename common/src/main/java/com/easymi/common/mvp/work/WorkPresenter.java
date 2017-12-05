@@ -3,7 +3,10 @@ package com.easymi.common.mvp.work;
 import android.content.Context;
 import android.content.Intent;
 
+import com.easymi.common.R;
+import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.NearDriverResult;
+import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.common.entity.BaseOrder;
 import com.easymi.component.Config;
@@ -105,11 +108,38 @@ public class WorkPresenter implements WorkContract.Presenter {
 
     @Override
     public void online() {
+        XApp.getInstance().syntheticVoice(context.getString(R.string.start_lis_order),true);
+
         long driverId = EmUtil.getEmployId();
 
         Observable<EmResult> observable = model.online(driverId, Config.APP_KEY);
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, true,
                 true, emResult -> view.onlineSuc())));
+    }
+
+    @Override
+    public void offline() {
+        XApp.getInstance().syntheticVoice(context.getString(R.string.stop_lis_order),true);
+
+        long driverId = EmUtil.getEmployId();
+
+        Observable<EmResult> observable = model.offline(driverId, Config.APP_KEY);
+        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, true,
+                true, emResult -> view.offlineSuc())));
+    }
+
+    @Override
+    public void loadNotice(long id) {
+        Observable<NotitfyResult> observable = model.loadNotice(id);
+        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
+                false, notitfyResult -> view.showNotify(notitfyResult.employNoticeRecord))));
+    }
+
+    @Override
+    public void loadAnn(long id) {
+        Observable<AnnouncementResult> observable = model.loadAnn(id);
+        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
+                false, notitfyResult -> view.showAnn(notitfyResult.EmployAfficheRequest))));
     }
 
     @Override
@@ -121,39 +151,4 @@ public class WorkPresenter implements WorkContract.Presenter {
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
                 true, nearDriverResult -> view.showDrivers(nearDriverResult.emploies))));
     }
-
-
-//    private List<BaseOrder> initRecyclerData() {
-//
-//        List<BaseOrder> baseOrders = new ArrayList<>();
-//        BaseOrder header1 = new BaseOrder(BaseOrder.ITEM_HEADER);
-//        header1.ifNow = false;
-//        baseOrders.add(header1);
-//        for (int i = 0; i < 10; i++) {
-//            BaseOrder item = new BaseOrder(BaseOrder.ITEM_POSTER);
-//            item.orderId = 1L;
-//            item.orderEndPlace = "锦绣大道南段99号";
-//            item.orderStartPlace = "花样年花样城5期";
-//            item.orderStatus = 1;
-//            item.orderTime = System.currentTimeMillis();
-//            item.orderType = "日常代驾";
-//            baseOrders.add(item);
-//        }
-//
-//        BaseOrder header2 = new BaseOrder(BaseOrder.ITEM_HEADER);
-//        header1.ifNow = true;
-//        baseOrders.add(header2);
-//        for (int i = 0; i < 10; i++) {
-//            BaseOrder item = new BaseOrder(BaseOrder.ITEM_POSTER);
-//            item.orderId = 1L;
-//            item.orderEndPlace = "锦绣大道南段99号";
-//            item.orderStartPlace = "花样年花样城5期";
-//            item.orderStatus = 1;
-//            item.orderTime = System.currentTimeMillis();
-//            item.orderType = "日常代驾";
-//            baseOrders.add(item);
-//        }
-//
-//        return baseOrders;
-//    }
 }

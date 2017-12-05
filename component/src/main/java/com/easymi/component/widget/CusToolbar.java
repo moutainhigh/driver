@@ -41,13 +41,18 @@ public class CusToolbar extends RelativeLayout {
         title = view.findViewById(R.id.title);
         rightIcon = view.findViewById(R.id.right_icon);
         rightText = view.findViewById(R.id.right_text);
+
     }
 
-    public CusToolbar setLeftIcon(int visible, int resId, OnClickListener listener) {
-        leftIcon.setVisibility(visible);
+    public CusToolbar setLeftIcon(int resId, OnClickListener listener) {
+        leftIcon.setVisibility(View.VISIBLE);
         leftIcon.setImageResource(resId);
         leftIcon.setOnClickListener(listener);
+        return this;
+    }
 
+    public CusToolbar setLeftBack(OnClickListener listener) {
+        leftIcon.setOnClickListener(listener);
         return this;
     }
 
@@ -56,17 +61,19 @@ public class CusToolbar extends RelativeLayout {
         return this;
     }
 
-    public CusToolbar setRightIcon(int visible, int resId, OnClickListener listener) {
-        rightIcon.setVisibility(visible);
+    public CusToolbar setRightIcon(int resId, OnClickListener listener) {
+        rightIcon.setVisibility(View.VISIBLE);
         rightIcon.setImageResource(resId);
         rightIcon.setOnClickListener(listener);
+        rightText.setVisibility(View.GONE);
         return this;
     }
 
-    public CusToolbar setRightText(int visible, String textResId) {
+    public CusToolbar setRightText(int visible, String textResId,OnClickListener listener) {
         rightText.setVisibility(visible);
         rightText.setText(textResId);
-
+        rightText.setOnClickListener(listener);
+        rightIcon.setVisibility(View.GONE);
         return this;
     }
 }

@@ -145,8 +145,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
 
     @Override
     public void initToolbar() {
-        toolbar.setLeftIcon(View.VISIBLE, R.drawable.ic_arrow_back, v -> finish());
-        toolbar.setRightIcon(View.VISIBLE, R.drawable.ic_more_horiz_white_24dp, v -> {
+        toolbar.setLeftIcon( R.drawable.ic_arrow_back, v -> finish());
+        toolbar.setRightIcon( R.drawable.ic_more_horiz_white_24dp, v -> {
             if (popWindow.isShowing()) {
                 popWindow.dismiss();
             } else {

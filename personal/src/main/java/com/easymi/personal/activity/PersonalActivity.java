@@ -31,6 +31,7 @@ public class PersonalActivity extends RxBaseActivity {
     TextView driverScore;
 
     ImageView driverPhoto;
+    ImageView driverTuiguang;
 
     @Override
     public int getLayoutId() {
@@ -44,6 +45,15 @@ public class PersonalActivity extends RxBaseActivity {
         driverScore = findViewById(R.id.driver_score);
 
         driverPhoto = findViewById(R.id.driver_photo);
+
+        driverTuiguang = findViewById(R.id.driver_tuiguang);
+
+        driverTuiguang.setOnClickListener(v -> {
+            Intent intent = new Intent(PersonalActivity.this, ArticleActivity.class);
+            intent.putExtra("tag", "DriverPromotion");
+            intent.putExtra("title", getString(R.string.person_tuiguang));
+            startActivity(intent);
+        });
 
         Employ employ = EmUtil.getEmployInfo();
         if (employ != null) {
@@ -86,7 +96,7 @@ public class PersonalActivity extends RxBaseActivity {
     }
 
     public void toMessage(View view) {
-        Intent intent = new Intent(this, NotifityActivity.class);
+        Intent intent = new Intent(this, MsgActivity.class);
         startActivity(intent);
     }
 

@@ -11,14 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:orientation="vertical"
+        android:onClick="tuijian"
         android:gravity="center"
         android:background="@color/white">
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scaleType="fitXY"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_margin="10dp"
             android:src="@mipmap/msg_img"/>
 
     </LinearLayout>
@@ -40,6 +40,7 @@
             android:background="#dcdcdc"/>
 
         <RelativeLayout
+            android:onClick="toNotice"
             android:layout_width="match_parent"
             android:layout_height="80dp">
 
@@ -58,6 +59,7 @@
                 android:layout_centerVertical="true"/>
 
             <TextView
+                android:id="@+id/notice_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/ic_trumpet"
@@ -66,13 +68,16 @@
                 android:textColor="#232323"
                 android:text="@string/msg_notify"/>
             <TextView
+                android:id="@+id/notice_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:singleLine="true"
+                android:ellipsize="end"
                 android:layout_toLeftOf="@+id/ic_row_1"
                 android:layout_toRightOf="@+id/ic_trumpet"
                 android:layout_below="@+id/center_line"
-                android:text="您的余额提现已经被驳回"/>
+                android:text="暂无通知"/>
 
             <ImageView
                 android:id="@+id/ic_row_1"
@@ -84,13 +89,14 @@
                 android:layout_marginRight="10dp"/>
 
             <TextView
+                android:id="@+id/notice_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@+id/ic_row_1"
                 android:layout_above="@+id/center_line"
                 android:layout_marginBottom="2dp"
                 android:layout_marginRight="10dp"
-                android:text="2017-08-11 12:00"/>
+                android:text=""/>
 
         </RelativeLayout>
 
@@ -100,6 +106,7 @@
             android:background="#dcdcdc"/>
 
         <RelativeLayout
+            android:onClick="toAnnouncement"
             android:layout_width="match_parent"
             android:layout_height="80dp">
 
@@ -126,13 +133,16 @@
                 android:textColor="#232323"
                 android:text="@string/msg_notice"/>
             <TextView
+                android:id="@+id/announcement_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_toLeftOf="@+id/ic_row_2"
                 android:layout_toRightOf="@+id/ic_word"
+                android:singleLine="true"
+                android:ellipsize="end"
                 android:layout_below="@+id/center_line_1"
-                android:text="上线需知"/>
+                android:text="暂无公告"/>
 
             <ImageView
                 android:id="@+id/ic_row_2"
@@ -144,13 +154,14 @@
                 android:layout_marginRight="10dp"/>
 
             <TextView
+                android:id="@+id/announcement_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@+id/ic_row_2"
                 android:layout_above="@+id/center_line_1"
                 android:layout_marginBottom="2dp"
                 android:layout_marginRight="10dp"
-                android:text="2017-08-11 12:00"/>
+                android:text=""/>
 
         </RelativeLayout>
 

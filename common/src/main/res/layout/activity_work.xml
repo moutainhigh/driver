@@ -23,7 +23,8 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
-            android:background="@mipmap/corners_alpha_bg">
+            android:background="@mipmap/corners_alpha_bg"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/ic_laba"
@@ -34,15 +35,16 @@
                 android:src="@mipmap/ic_laba" />
 
             <TextView
+                android:id="@+id/notifity_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:layout_toLeftOf="@+id/ic_close"
                 android:layout_toRightOf="@+id/ic_laba"
-                android:ellipsize="middle"
+                android:ellipsize="marquee"
                 android:singleLine="true"
-                android:text="您的余额提现（500元）已通过"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="16sp" />
 

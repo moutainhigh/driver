@@ -21,6 +21,7 @@
     <string name="person_pingjia">乘客评价</string>
     <string name="person_message">消息中心</string>
     <string name="person_set">设置</string>
+    <string name="person_tuiguang">司机推广</string>
 
     <!-- 设置str -->
     <string name="set_change_psw">修改密码</string>
@@ -164,7 +165,9 @@
     <!--意见反馈str-->
     <string name="feedback_please">请留下您的宝贵意见</string>
     <string name="feedback_apply">提交</string>
-    
+    <string name="feedback_please_msg">请填写您的意见</string>
+    <string name="feedback_suc">我们已收到您的宝贵意见</string>
+
     <!--评价str-->
     <string name="total_score">累计得分</string>
     <string name="total_order">累计接单</string>
@@ -175,4 +178,9 @@
     <string name="star_2">2星</string>
     <string name="star_1">1星</string>
     <string name="consumer_eva">乘客评价</string>
+
+
+    <string name="all_read">全部已读</string>
+    <string name="click_read">点击查看详情 ></string>
+    <string name="announcement">公告</string>
 </resources>

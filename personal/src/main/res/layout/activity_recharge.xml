@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    android:focusable="true"
     android:orientation="vertical">
 
     <com.easymi.component.widget.CusToolbar
@@ -33,6 +35,7 @@
                     android:textColor="#232323" />
 
                 <TextView
+                    android:id="@+id/balance_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="9980.0"
@@ -50,7 +53,7 @@
                         android:layout_height="match_parent" />
 
                     <CheckBox
-                        android:id="@+id/pay_100yuan"
+                        android:id="@+id/pay_50yuan"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -66,7 +69,7 @@
                         android:layout_height="match_parent" />
 
                     <CheckBox
-                        android:id="@+id/pay_300yuan"
+                        android:id="@+id/pay_100yuan"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -81,7 +84,7 @@
                         android:layout_height="match_parent" />
 
                     <CheckBox
-                        android:id="@+id/pay_500yuan"
+                        android:id="@+id/pay_200yuan"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"

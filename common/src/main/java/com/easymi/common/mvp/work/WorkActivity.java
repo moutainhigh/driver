@@ -17,6 +17,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -31,13 +32,13 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.easymi.common.R;
 import com.easymi.common.activity.CreateActivity;
 import com.easymi.common.adapter.OrderAdapter;
+import com.easymi.common.entity.Announcement;
 import com.easymi.common.entity.BaseOrder;
 import com.easymi.common.entity.NearDriver;
-import com.easymi.component.Config;
+import com.easymi.common.entity.Notifity;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
-import com.easymi.component.entity.Employ;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.loc.LocService;
 import com.easymi.component.loc.ReceiveLocInterface;
@@ -46,7 +47,6 @@ import com.easymi.component.utils.EmUtil;
 import com.easymi.component.widget.BottomBehavior;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.pinned.PinnedHeaderDecoration;
-import com.google.gson.Gson;
 import com.skyfishjy.library.RippleBackground;
 
 import java.util.ArrayList;
@@ -80,11 +80,15 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
     FrameLayout loadingFrame;
     ImageView loadingImg;
 
+    LinearLayout offlineCon;
+
     Button onLineBtn;
 
     RelativeLayout listenOrderCon;
 
     RelativeLayout notifityCon;
+    TextView notifityContent;
+    ImageView notifityClose;
 
     private WorkPresenter presenter;
 
@@ -116,18 +120,19 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
         initRecycler();
 
         onLineBtn.setOnClickListener(v -> presenter.online());
+        offlineCon.setOnClickListener(v -> presenter.offline());
 
-        Employ employ = EmUtil.getEmployInfo();
-//        Log.e("employ", employ.toString());
     }
 
     private void initNotifity() {
-        notifityCon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        notifityClose.setOnClickListener(v -> notifityCon.setVisibility(View.GONE));
 
-            }
-        });
+        //模拟收到推送去查询通知
+        presenter.loadNotice(1);
+
+        //模拟收到推送去查询公告
+        presenter.loadAnn(1);
+
     }
 
     private OrderAdapter adapter;
@@ -151,6 +156,10 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
         refreshImg = findViewById(R.id.refresh_img);
 
         notifityCon = findViewById(R.id.notifity_con);
+        notifityContent = findViewById(R.id.notifity_content);
+        notifityClose = findViewById(R.id.ic_close);
+
+        offlineCon = findViewById(R.id.offline);
     }
 
     /**
@@ -158,13 +167,13 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
      */
     @Override
     public void initToolbar() {
-        toolbar.setLeftIcon(View.VISIBLE, R.mipmap.drawer_icon, view -> {
+        toolbar.setLeftIcon(R.mipmap.drawer_icon, view -> {
             ARouter.getInstance()
                     .build("/personal/PersonalActivity")
                     .navigation();
         });
         toolbar.setTitle(R.string.work_title);
-        toolbar.setRightIcon(View.VISIBLE, R.mipmap.menu_icon, view -> {
+        toolbar.setRightIcon(R.mipmap.menu_icon, view -> {
             ARouter.getInstance()
                     .build("/personal/SetActivity")
                     .navigation();
@@ -248,6 +257,25 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
         onLineBtn.setVisibility(View.GONE);
     }
 
+    @Override
+    public void offlineSuc() {
+        listenOrderCon.setVisibility(View.GONE);
+        rippleBackground.stopRippleAnimation();
+        onLineBtn.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showNotify(Notifity notifity) {
+        notifityCon.setVisibility(View.VISIBLE);
+        notifityContent.setText(getString(R.string.new_notify) + notifity.message);
+        XApp.getInstance().syntheticVoice(getString(R.string.new_notify) + notifity.message, true);
+        notifityCon.setOnClickListener(v -> {
+            notifityCon.setVisibility(View.GONE);
+            ARouter.getInstance().build("/personal/NotifityActivity")
+                    .navigation();
+        });
+    }
+
     List<Marker> markers = new ArrayList<>();
 
     @Override
@@ -267,6 +295,18 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
             Marker marker = aMap.addMarker(options);
             markers.add(marker);
         }
+    }
+
+    @Override
+    public void showAnn(Announcement announcement) {
+        notifityCon.setVisibility(View.VISIBLE);
+        notifityContent.setText(getString(R.string.new_ann) + announcement.message);
+        XApp.getInstance().syntheticVoice(getString(R.string.new_ann) + announcement.message, true);
+        notifityCon.setOnClickListener(v -> {
+            notifityCon.setVisibility(View.GONE);
+            ARouter.getInstance().build("/personal/AnnouncementActivity")
+                    .navigation();
+        });
     }
 
 

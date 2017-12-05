@@ -20,6 +20,10 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.AnnouncementActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.RechargeActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait" />
@@ -33,6 +37,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PocketActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ArticleActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait" />
         <activity
