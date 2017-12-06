@@ -17,6 +17,7 @@
 
     <!-- 流水str-->
     <string name="liushui_baoxiao">报销</string>
+    <string name="liushui_title">业务流水</string>
 
     <string name="create_daijia">代驾</string>
     <string name="create_zhuanche">专车</string>

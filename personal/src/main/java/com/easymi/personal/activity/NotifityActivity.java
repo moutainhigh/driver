@@ -55,7 +55,7 @@ public class NotifityActivity extends RxBaseActivity {
     public void initToolBar() {
         toolbar = findViewById(R.id.cus_toolbar);
         toolbar.setLeftBack(v -> finish());
-        toolbar.setRightText(View.VISIBLE, getString(R.string.all_read), v -> readAll());
+        toolbar.setRightText(R.string.all_read, v -> readAll());
     }
 
     @Override

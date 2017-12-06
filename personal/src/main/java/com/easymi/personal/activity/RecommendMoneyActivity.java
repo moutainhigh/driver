@@ -3,8 +3,10 @@ package com.easymi.personal.activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.R;
 import com.easymi.personal.adapter.RecommendMoneyAdapter;
 import com.easymi.personal.entity.RecommendMoney;
@@ -21,6 +23,8 @@ public class RecommendMoneyActivity extends RxBaseActivity {
     RecyclerView recyclerView;
 
     RecommendMoneyAdapter adapter;
+
+    CusToolbar cusToolbar;
 
     @Override
     public int getLayoutId() {
@@ -43,5 +47,12 @@ public class RecommendMoneyActivity extends RxBaseActivity {
             list.add(recommendMoney);
         }
         adapter.setList(list);
+    }
+
+    @Override
+    public void initToolBar() {
+        cusToolbar = findViewById(R.id.cus_toolbar);
+        cusToolbar.setLeftBack(view -> finish());
+        cusToolbar.setTitle(R.string.recommend_title);
     }
 }

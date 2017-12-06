@@ -129,8 +129,9 @@ public class LiushuiActivity extends RxBaseActivity {
     @Override
     public void initToolBar() {
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setLeftIcon( R.drawable.ic_arrow_back, v -> finish());
-        toolbar.setRightIcon( R.drawable.ic_more_horiz_white_24dp, v -> {
+        toolbar.setTitle(R.string.liushui_title);
+        toolbar.setLeftIcon(R.drawable.ic_arrow_back, v -> finish());
+        toolbar.setRightIcon(R.drawable.ic_more_horiz_white_24dp, v -> {
             CusBottomSheetDialog dialog = new CusBottomSheetDialog(LiushuiActivity.this);
             View view = LayoutInflater.from(LiushuiActivity.this).
                     inflate(R.layout.timezone_dialog, null, false);

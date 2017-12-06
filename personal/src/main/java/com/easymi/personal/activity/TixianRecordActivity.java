@@ -3,8 +3,10 @@ package com.easymi.personal.activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.R;
 import com.easymi.personal.adapter.TixianRecordAdapter;
 import com.easymi.personal.entity.TixianRecord;
@@ -16,11 +18,20 @@ import java.util.List;
  * Created by developerLzh on 2017/11/11 0011.
  */
 
-public class TixinaRecordActivity extends RxBaseActivity {
+public class TixianRecordActivity extends RxBaseActivity {
 
     RecyclerView recyclerView;
 
     TixianRecordAdapter adapter;
+
+    CusToolbar toolbar;
+
+    @Override
+    public void initToolBar() {
+        toolbar = findViewById(R.id.cus_toolbar);
+        toolbar.setLeftBack(view -> finish());
+        toolbar.setTitle(R.string.tixian_record);
+    }
 
     @Override
     public int getLayoutId() {

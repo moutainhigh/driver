@@ -69,8 +69,8 @@ public class CusToolbar extends RelativeLayout {
         return this;
     }
 
-    public CusToolbar setRightText(int visible, String textResId,OnClickListener listener) {
-        rightText.setVisibility(visible);
+    public CusToolbar setRightText(int textResId, OnClickListener listener) {
+        rightText.setVisibility(View.VISIBLE);
         rightText.setText(textResId);
         rightText.setOnClickListener(listener);
         rightIcon.setVisibility(View.GONE);

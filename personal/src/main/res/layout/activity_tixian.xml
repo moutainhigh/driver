@@ -2,6 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical">
 
     <LinearLayout
@@ -10,6 +12,7 @@
         android:orientation="vertical">
 
         <com.easymi.component.widget.CusToolbar
+            android:id="@+id/cus_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -27,16 +30,19 @@
                 android:text="@string/tixian_my_balance" />
 
             <TextView
+                android:id="@+id/balance_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="9980.0"
+                android:text="0.0"
                 android:textSize="25sp" />
 
             <EditText
+                android:id="@+id/edit_money"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:hint="@string/tixian_please_money"
+                android:inputType="numberDecimal"
                 android:paddingBottom="5dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
@@ -49,14 +55,33 @@
                 android:layout_marginRight="10dp"
                 android:background="@color/dark_gray" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="3dp"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:paddingTop="8dp"
-                android:text="@string/tixian_this_most" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="12dp"
+                    android:paddingTop="8dp"
+                    android:text="@string/tixian_this_most" />
+
+                <TextView
+                    android:id="@+id/max_tixian"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:text="0.0" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/yuan" />
+            </LinearLayout>
+
 
         </LinearLayout>
 
@@ -68,6 +93,7 @@
             android:orientation="vertical">
 
             <EditText
+                android:id="@+id/edit_bank_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
@@ -85,6 +111,7 @@
                 android:background="@color/dark_gray" />
 
             <EditText
+                android:id="@+id/edit_bank_no"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
@@ -102,6 +129,7 @@
                 android:background="@color/dark_gray" />
 
             <EditText
+                android:id="@+id/edit_bank_owner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
@@ -122,6 +150,7 @@
         </LinearLayout>
 
         <Button
+            android:id="@+id/apply"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -135,26 +164,31 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
         android:gravity="center"
-        android:layout_marginBottom="10dp">
+        android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/tixian_rule"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tixian_rule"/>
+            android:padding="5dp"
+            android:text="@string/tixian_rule" />
 
         <View
             android:layout_width="0.1dp"
             android:layout_height="10dp"
-            android:background="@color/dark_gray"
             android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"/>
+            android:layout_marginRight="15dp"
+            android:background="@color/dark_gray" />
+
         <TextView
+            android:id="@+id/tixian_record"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tixian_record"/>
+            android:padding="5dp"
+            android:text="@string/tixian_record" />
     </LinearLayout>
 
 </RelativeLayout>

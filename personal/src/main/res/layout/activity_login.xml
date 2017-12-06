@@ -91,7 +91,7 @@
                 android:background="@null"
                 android:gravity="center_vertical"
                 android:hint="@string/login_pl_phone"
-                android:inputType="text"
+                android:inputType="phone"
                 android:paddingBottom="10dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"

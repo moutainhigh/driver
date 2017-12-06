@@ -55,6 +55,7 @@ public class SplashActivity extends RxBaseActivity {
             ARouter.getInstance()
                     .build("/personal/LoginActivity")
                     .navigation();
+            finish();
 //            startActivity(new Intent(SplashActivity.this, WorkActivity.class));
         }), 2000);
     }

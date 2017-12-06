@@ -94,6 +94,7 @@
     <string name="reset_change_suc">修改密码成功</string>
 
     <!--充值str -->
+    <string name="recharge_title">余额充值</string>
     <string name="recharge_balance">我的余额(元)</string>
     <string name="recharge_please_money">请输入充值金额</string>
     <string name="recharge_50">¥50</string>
@@ -102,8 +103,10 @@
     <string name="recharge_pay_wechat">微信支付</string>
     <string name="recharge_pay_zfb">支付宝支付</string>
     <string name="recharge_pay_union">银联支付</string>
+    <string name="recharge_0_money">请选择或输入充值金额</string>
 
     <!-- 钱包str-->
+    <string name="pocket_title">我的钱包</string>
     <string name="pocket_balance">账户余额(元)</string>
     <string name="pocket_recharge">充值</string>
     <string name="pocket_detail">账户明细</string>
@@ -113,6 +116,7 @@
     <string name="msg_notice">公告</string>
 
     <!-- 推荐人str-->
+    <string name="recommend_title">推荐奖励</string>
     <string name="recommend_yi">已推荐人数</string>
     <string name="recommend_unit">(人)</string>
     <string name="recommend_money">奖励金额</string>
@@ -139,6 +143,7 @@
 
     <!--提现str-->
     <string name="tixian_please_money">请输入提现金额</string>
+    <string name="tixian_title">余额提现</string>
     <string name="tixian_please_bank">请输入银行</string>
     <string name="tixian_please_number">请输入本人银行卡号</string>
     <string name="tixian_please_name">请输入持卡人姓名</string>
@@ -156,7 +161,7 @@
     <string name="change_psw_new">请输入新密码</string>
     <string name="change_psw_confirm">请确认新密码</string>
     <string name="change_confirm">确定</string>
-    
+
     <!-- 语言设置str-->
     <string name="language_flow_sys">跟随系统</string>
     <string name="language_sin_cn">简体中文</string>
@@ -183,4 +188,8 @@
     <string name="all_read">全部已读</string>
     <string name="click_read">点击查看详情 ></string>
     <string name="announcement">公告</string>
+
+    <string name="ti_xian">提现</string>
+
+    <string name="yuan">元</string>
 </resources>

@@ -18,6 +18,7 @@ import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.AesUtil;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
 import com.easymi.personal.result.LoginResult;
@@ -36,6 +37,8 @@ public class PocketActivity extends RxBaseActivity {
     RelativeLayout rechargeCon;
     RelativeLayout detailCon;
 
+    CusToolbar toolbar;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_pocket;
@@ -50,6 +53,15 @@ public class PocketActivity extends RxBaseActivity {
         rechargeCon.setOnClickListener(v -> startActivity(new Intent(PocketActivity.this, RechargeActivity.class)));
 
         detailCon.setOnClickListener(v -> startActivity(new Intent(PocketActivity.this, DetailActivity.class)));
+    }
+
+    @Override
+    public void initToolBar() {
+        toolbar = findViewById(R.id.cus_toolbar);
+        toolbar.setLeftBack(view -> finish());
+        toolbar.setTitle(R.string.pocket_title);
+        toolbar.setRightText(R.string.ti_xian,
+                view -> startActivity(new Intent(PocketActivity.this, TixianActivity.class)));
     }
 
     @Override

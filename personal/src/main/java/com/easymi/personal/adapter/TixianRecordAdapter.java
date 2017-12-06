@@ -36,7 +36,7 @@ public class TixianRecordAdapter extends RecyclerView.Adapter<TixianRecordAdapte
 
     @Override
     public TixianRecordHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tixian_record_item, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tixian_record_item, parent,false);
 
         return new TixianRecordHolder(view);
     }

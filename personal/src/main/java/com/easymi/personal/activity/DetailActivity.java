@@ -2,6 +2,7 @@ package com.easymi.personal.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 import android.widget.TextView;
 
 import com.easymi.component.Config;
@@ -13,6 +14,7 @@ import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.SwipeRecyclerView;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
@@ -39,6 +41,8 @@ public class DetailActivity extends RxBaseActivity {
 
     TextView balanceText;
 
+    CusToolbar cusToolbar;
+
     private int page = 1;
 
     private List<Detail> details = new ArrayList<>();
@@ -52,6 +56,7 @@ public class DetailActivity extends RxBaseActivity {
     public void initViews(Bundle savedInstanceState) {
         recyclerView = findViewById(R.id.recyclerView);
         balanceText = findViewById(R.id.balance_text);
+        cusToolbar = findViewById(R.id.cus_toolbar);
         adapter = new DetailAdapter(this);
 
         Employ employ = EmUtil.getEmployInfo();
@@ -76,7 +81,12 @@ public class DetailActivity extends RxBaseActivity {
 
         getLiushui();
         recyclerView.setRefreshing(true);
+    }
 
+    @Override
+    public void initToolBar() {
+        cusToolbar.setLeftBack(view -> finish());
+        cusToolbar.setTitle(R.string.pocket_detail);
     }
 
     private void getLiushui() {
