@@ -192,4 +192,10 @@
     <string name="ti_xian">提现</string>
 
     <string name="yuan">元</string>
+    <string name="more">更多</string>
+
+    <string name="near_wc">附近厕所</string>
+    <string name="reli_pic">热力图</string>
+    <string name="weather_forecast">天气预报</string>
+    <string name="contract_service">联系客服</string>
 </resources>

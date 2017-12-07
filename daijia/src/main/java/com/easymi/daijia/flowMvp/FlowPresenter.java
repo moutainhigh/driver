@@ -1,6 +1,7 @@
 package com.easymi.daijia.flowMvp;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Poi;
@@ -31,6 +32,7 @@ import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
 import com.autonavi.tbt.TrafficFacilityInfo;
 import com.easymi.component.Config;
+import com.easymi.component.activity.NaviActivity;
 import com.easymi.component.app.XApp;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
@@ -188,16 +190,23 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void navi(LatLng latLng, String poi) {
-        String startPoi = EmUtil.getLastLoc().poiName;
-        LatLng startLatlng = new LatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
-        AmapNaviPage.getInstance()
-                .showRouteActivity(
-                        context,
-                        new AmapNaviParams(new Poi(startPoi, startLatlng, ""),
-                                null,
-                                new Poi(poi, latLng, ""),
-                                AmapNaviType.DRIVER),
-                        this);
+//        String startPoi = EmUtil.getLastLoc().poiName;
+//        LatLng startLatlng = new LatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
+//        AmapNaviPage.getInstance()
+//                .showRouteActivity(
+//                        context,
+//                        new AmapNaviParams(new Poi(startPoi, startLatlng, ""),
+//                                null,
+//                                new Poi(poi, latLng, ""),
+//                                AmapNaviType.DRIVER),
+//                        this);
+
+        NaviLatLng start = new NaviLatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
+        NaviLatLng end = new NaviLatLng(latLng.latitude, latLng.longitude);
+        Intent intent = new Intent(context, NaviActivity.class);
+        intent.putExtra("startLatlng", start);
+        intent.putExtra("endLatlng", end);
+        context.startActivity(intent);
     }
 
     @Override

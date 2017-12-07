@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -17,13 +18,16 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.amap.api.navi.model.NaviLatLng;
 import com.easymi.component.Config;
+import com.easymi.component.activity.NaviActivity;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.AesUtil;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.personal.R;
 import com.easymi.component.entity.Employ;
@@ -76,7 +80,20 @@ public class LoginActivity extends RxBaseActivity {
         loginBtn.setEnabled(false);
 
         registerText = findViewById(R.id.login_register);
-        registerText.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
+        registerText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                lat / lng:(30.641184, 103.803611);
+//                startActivity(new Intent(LoginActivity.this, RegisterActivity.class);
+
+                NaviLatLng start = new NaviLatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
+                NaviLatLng end = new NaviLatLng(30.641184, 103.803611);
+                Intent intent = new Intent(LoginActivity.this, NaviActivity.class);
+                intent.putExtra("startLatlng", start);
+                intent.putExtra("endLatlng", end);
+                startActivity(intent);
+            }
+        });
 
         resetPsw = findViewById(R.id.login_forget);
         resetPsw.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, ResetPswActivity.class)));
@@ -200,8 +217,8 @@ public class LoginActivity extends RxBaseActivity {
             Log.e("okhttp", employ.toString());
             employ.saveOrUpdate();
             SharedPreferences.Editor editor = XApp.getPreferencesEditor();
-            editor.putBoolean(Config.SP_ISLOGIN,true);
-            editor.putLong(Config.SP_DRIVERID,employ.id);
+            editor.putBoolean(Config.SP_ISLOGIN, true);
+            editor.putLong(Config.SP_DRIVERID, employ.id);
             editor.apply();
             ARouter.getInstance()
                     .build("/common/WorkActivity")

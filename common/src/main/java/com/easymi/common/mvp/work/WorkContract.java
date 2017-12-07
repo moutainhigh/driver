@@ -26,8 +26,6 @@ public interface WorkContract {
     interface View {
         void findById();
 
-        void initToolbar();
-
         void initRecycler();
 
         void showOrders(List<BaseOrder> baseOrders);

@@ -103,7 +103,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
         presenter = new WorkPresenter(this, this);
 
         findById();
-        initToolbar();
 
         initMap();
         initNotifity();
@@ -139,7 +138,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
 
     @Override
     public void findById() {
-        toolbar = findViewById(R.id.toolbar);
         bottomBar = findViewById(R.id.bottom_bar);
         mapView = findViewById(R.id.map_view);
         rippleBackground = findViewById(R.id.ripple_ground);
@@ -162,11 +160,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
         offlineCon = findViewById(R.id.offline);
     }
 
-    /**
-     * 初始化Toolbar
-     */
     @Override
-    public void initToolbar() {
+    public void initToolBar() {
+        toolbar = findViewById(R.id.toolbar);
         toolbar.setLeftIcon(R.mipmap.drawer_icon, view -> {
             ARouter.getInstance()
                     .build("/personal/PersonalActivity")
@@ -175,7 +171,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
         toolbar.setTitle(R.string.work_title);
         toolbar.setRightIcon(R.mipmap.menu_icon, view -> {
             ARouter.getInstance()
-                    .build("/personal/SetActivity")
+                    .build("/personal/MoreActivity")
                     .navigation();
         });
     }

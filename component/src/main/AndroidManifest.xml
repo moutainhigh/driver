@@ -17,6 +17,9 @@
         <activity
             android:name=".activity.CityActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity
+            android:name=".activity.NaviActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
 
         <service
             android:name=".loc.LocService"

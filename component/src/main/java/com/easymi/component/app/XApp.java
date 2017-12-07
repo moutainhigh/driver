@@ -2,6 +2,7 @@ package com.easymi.component.app;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.StringRes;
@@ -50,7 +51,7 @@ public class XApp extends MultiDexApplication {
         ARouter.init(this);
         SqliteHelper.init(this);
 
-        SpeechUtility.createUtility(XApp.this, "appid=" +"57c91477");
+        SpeechUtility.createUtility(XApp.this, "appid=" + "57c91477");
         initIflytekTTS();
     }
 
@@ -127,7 +128,7 @@ public class XApp extends MultiDexApplication {
         //设置合成音量
         iflytekSpe.setParameter(SpeechConstant.VOLUME, "100");
         //设置播放器音频流类型
-        iflytekSpe.setParameter(SpeechConstant.STREAM_TYPE, "3");
+        iflytekSpe.setParameter(SpeechConstant.STREAM_TYPE, String.valueOf(AudioManager.STREAM_RING));
         // 设置播放合成音频打断音乐播放，默认为true
         iflytekSpe.setParameter(SpeechConstant.KEY_REQUEST_FOCUS, "true");
 
