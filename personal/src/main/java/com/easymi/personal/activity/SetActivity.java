@@ -65,6 +65,11 @@ public class SetActivity extends RxBaseActivity {
         startActivity(intent);
     }
 
+    public void naviPrefence(View view) {
+        Intent intent = new Intent(this, NaviSetActivity.class);
+        startActivity(intent);
+    }
+
     public void contractUs(View view) {
         Intent intent = new Intent(SetActivity.this, ArticleActivity.class);
         intent.putExtra("tag", "ContactUs");

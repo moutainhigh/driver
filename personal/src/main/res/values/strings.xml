@@ -29,6 +29,7 @@
     <string name="set_shake">震动</string>
     <string name="set_orientation">始终横屏显示计价器</string>
     <string name="set_language">选择语言</string>
+    <string name="set_navi">导航偏好</string>
     <string name="set_statistics">统计中心</string>
     <string name="set_help">帮助中心</string>
     <string name="set_feedback">意见反馈</string>
@@ -198,4 +199,9 @@
     <string name="reli_pic">热力图</string>
     <string name="weather_forecast">天气预报</string>
     <string name="contract_service">联系客服</string>
+
+    <string name="congestion">躲避拥堵</string>
+    <string name="avoidhightspeed">不走高速</string>
+    <string name="cost">避免收费</string>
+    <string name="hightspeed">高速优先</string>
 </resources>
