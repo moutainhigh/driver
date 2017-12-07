@@ -76,10 +76,6 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.TixinaRecordActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.ShareActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait" />

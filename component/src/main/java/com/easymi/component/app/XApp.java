@@ -2,6 +2,7 @@ package com.easymi.component.app;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -36,6 +37,10 @@ public class XApp extends MultiDexApplication {
     private static XApp instance;    //实例化对象
 
     public static SpeechSynthesizer iflytekSpe;
+
+    AudioManager audioManager;
+
+    private AudioManager.OnAudioFocusChangeListener mFocusChangeListener;
 
     @Override
     public void onCreate() {
@@ -111,6 +116,39 @@ public class XApp extends MultiDexApplication {
                 }
             }
         });
+
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
+        mFocusChangeListener = focusChange -> {
+            if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
+                // Pause playback
+            } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+                // Stop playback
+            } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
+                // Lower the volume
+            } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+                // Resume playback or Raise it back to normal
+            }
+        };
+    }
+
+    public boolean requestFocus() {
+        if (mFocusChangeListener != null) {
+            return AudioManager.AUDIOFOCUS_REQUEST_GRANTED ==
+                    audioManager.requestAudioFocus(mFocusChangeListener,
+                            AudioManager.STREAM_MUSIC,
+                            AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
+            //这种方式获取焦点 会将其他音量调低而不中断其他播放
+        }
+        return false;
+    }
+
+    public boolean abandonFocus() {
+        if (mFocusChangeListener != null) {
+            return AudioManager.AUDIOFOCUS_REQUEST_GRANTED ==
+                    audioManager.abandonAudioFocus(mFocusChangeListener);
+        }
+        return false;
     }
 
     private void setTtsParam() {
@@ -128,14 +166,10 @@ public class XApp extends MultiDexApplication {
         //设置合成音量
         iflytekSpe.setParameter(SpeechConstant.VOLUME, "100");
         //设置播放器音频流类型
-        iflytekSpe.setParameter(SpeechConstant.STREAM_TYPE, String.valueOf(AudioManager.STREAM_RING));
+        iflytekSpe.setParameter(SpeechConstant.STREAM_TYPE, String.valueOf(AudioManager.STREAM_MUSIC));
         // 设置播放合成音频打断音乐播放，默认为true
-        iflytekSpe.setParameter(SpeechConstant.KEY_REQUEST_FOCUS, "true");
+        iflytekSpe.setParameter(SpeechConstant.KEY_REQUEST_FOCUS, "false");
 
-        // 设置音频保存路径，保存音频格式支持pcm、wav，设置路径为sd卡请注意WRITE_EXTERNAL_STORAGE权限
-        // 注：AUDIO_FORMAT参数语记需要更新版本才能生效
-        iflytekSpe.setParameter(SpeechConstant.AUDIO_FORMAT, "wav");
-        iflytekSpe.setParameter(SpeechConstant.TTS_AUDIO_PATH, Environment.getExternalStorageDirectory() + "/msc/tts.wav");
     }
 
     private LinkedList<String> voiceList;
@@ -160,7 +194,7 @@ public class XApp extends MultiDexApplication {
     }
 
     public void syntheticVoice(String msg) {
-        if (null != iflytekSpe) {
+        if (requestFocus() && null != iflytekSpe) {
             int code = iflytekSpe.startSpeaking(msg, new SynthesizerListener() {
                 @Override
                 public void onSpeakBegin() {
@@ -193,6 +227,7 @@ public class XApp extends MultiDexApplication {
                     if (voiceList != null && voiceList.size() != 0) {
                         syntheticVoice(voiceList.removeFirst());
                     }
+                    abandonFocus();
                 }
 
                 @Override

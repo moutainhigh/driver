@@ -52,7 +52,7 @@ public class LocService extends NotiService implements AMapLocationListener {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (null != intent && intent.getAction().equals(START_LOC)) {
+        if (null != intent.getAction() && intent.getAction().equals(START_LOC)) {
             applyNotiKeepMech(); //开启利用notification提高进程优先级的机制
             if (mWifiAutoCloseDelegate.isUseful(getApplicationContext())) {
                 mIsWifiCloseable = true;
