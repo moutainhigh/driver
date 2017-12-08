@@ -16,4 +16,9 @@ public class Config {
     public static final String SP_ISLOGIN = "isLogin";
     public static final String SP_LAST_LOC = "lastLoc";
     public static final String SP_NEED_TRACE = "needTrace";//是否需要纠偏
+
+    public static final String SP_CONGESTION = "congestion";//躲避拥堵
+    public static final String SP_AVOID_HIGH_SPEED = "avoidhightspeed";//不走高速
+    public static final String SP_COST = "cost";//避免收费
+    public static final String SP_HIGHT_SPEED = "hightspeed";//高速优先
 }

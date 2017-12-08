@@ -145,8 +145,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
 
     @Override
     public void initToolbar() {
-        toolbar.setLeftIcon( R.drawable.ic_arrow_back, v -> finish());
-        toolbar.setRightIcon( R.drawable.ic_more_horiz_white_24dp, v -> {
+        toolbar.setLeftIcon(R.drawable.ic_arrow_back, v -> finish());
+        toolbar.setRightIcon(R.drawable.ic_more_horiz_white_24dp, v -> {
             if (popWindow.isShowing()) {
                 popWindow.dismiss();
             } else {
@@ -198,9 +198,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
         tagContainerLayout.setOnTagClickListener(new TagView.OnTagClickListener() {
             @Override
             public void onTagClick(int position, String text) {
-                if(position == 1){
+                if (position == 1) {
                     Intent intent = new Intent(FlowActivity.this, GrabActivity.class);
-                    intent.putExtra("order",djOrder);
+                    intent.putExtra("order", djOrder);
                     startActivity(intent);
                     startActivity(intent);
                     startActivity(intent);
@@ -440,8 +440,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
         }
         aMap.moveCamera(CameraUpdateFactory.changeTilt(0));
         routeOverLay = new RouteOverLay(aMap, path, this);
-        routeOverLay.setStartPointBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.blue_dot));
-        routeOverLay.setEndPointBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.yellow_dot));
+        routeOverLay.setStartPointBitmap(BitmapFactory.decodeResource(getResources(), R.layout.empty));
+        routeOverLay.setEndPointBitmap(BitmapFactory.decodeResource(getResources(), R.layout.empty));
         try {
             routeOverLay.setWidth(60f);
         } catch (AMapNaviException e) {

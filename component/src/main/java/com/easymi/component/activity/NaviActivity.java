@@ -8,6 +8,8 @@ import com.amap.api.navi.AMapNavi;
 import com.amap.api.navi.AMapNaviListener;
 import com.amap.api.navi.AMapNaviView;
 import com.amap.api.navi.AMapNaviViewListener;
+import com.amap.api.navi.AmapNaviParams;
+import com.amap.api.navi.AmapNaviType;
 import com.amap.api.navi.model.AMapLaneInfo;
 import com.amap.api.navi.model.AMapModelCross;
 import com.amap.api.navi.model.AMapNaviCameraInfo;
@@ -21,6 +23,7 @@ import com.amap.api.navi.model.AimLessModeStat;
 import com.amap.api.navi.model.NaviInfo;
 import com.amap.api.navi.model.NaviLatLng;
 import com.autonavi.tbt.TrafficFacilityInfo;
+import com.easymi.component.Config;
 import com.easymi.component.R;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
@@ -118,7 +121,12 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
         int strategy = 0;
         try {
             //再次强调，最后一个参数为true时代表多路径，否则代表单路径
-            strategy = mAMapNavi.strategyConvert(true, false, false, false, false);
+            strategy = mAMapNavi.strategyConvert(
+                    XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION,true),
+                    XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION,false),
+                    XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION,true),
+                    XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION,false),
+                    false);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -167,12 +175,12 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     @Override
     public void onReCalculateRouteForYaw() {
-
+        XApp.getInstance().syntheticVoice("您已偏航，正在重新规划路径");
     }
 
     @Override
     public void onReCalculateRouteForTrafficJam() {
-
+        XApp.getInstance().syntheticVoice("为躲避拥堵，正在重新规划路径");
     }
 
     @Override
@@ -237,7 +245,8 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     @Override
     public void onCalculateRouteSuccess(int[] ints) {
-
+//        XApp.getInstance().syntheticVoice("路径规划成功");
+        mAMapNavi.startNavi(AMapNavi.GPSNaviMode);//驾车导航
     }
 
     @Override
@@ -272,7 +281,7 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     @Override
     public void onPlayRing(int i) {
-
+        XApp.getInstance().syntheticVoice("叮咚",false);
     }
 
     @Override
