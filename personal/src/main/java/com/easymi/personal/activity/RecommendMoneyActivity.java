@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.widget.CusErrLayout;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.R;
 import com.easymi.personal.adapter.RecommendMoneyAdapter;
@@ -24,6 +25,8 @@ public class RecommendMoneyActivity extends RxBaseActivity {
 
     RecommendMoneyAdapter adapter;
 
+    CusErrLayout errLayout;
+
     CusToolbar cusToolbar;
 
     @Override
@@ -34,6 +37,7 @@ public class RecommendMoneyActivity extends RxBaseActivity {
     @Override
     public void initViews(Bundle savedInstanceState) {
         recyclerView = findViewById(R.id.recyclerView);
+        errLayout = findViewById(R.id.cus_err_layout);
         adapter = new RecommendMoneyAdapter(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -54,5 +58,21 @@ public class RecommendMoneyActivity extends RxBaseActivity {
         cusToolbar = findViewById(R.id.cus_toolbar);
         cusToolbar.setLeftBack(view -> finish());
         cusToolbar.setTitle(R.string.recommend_title);
+    }
+
+    /**
+     * @param tag 0代表空数据  其他代表网络问题
+     */
+    private void showErr(int tag) {
+        if (tag != 0) {
+            errLayout.setErrText(tag);
+            errLayout.setErrImg();
+        }
+        errLayout.setVisibility(View.VISIBLE);
+        errLayout.setText(R.string.no_recommend);
+    }
+
+    private void hideErr() {
+        errLayout.setVisibility(View.GONE);
     }
 }

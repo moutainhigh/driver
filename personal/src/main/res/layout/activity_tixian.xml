@@ -44,7 +44,7 @@
                 android:hint="@string/tixian_please_money"
                 android:inputType="numberDecimal"
                 android:paddingBottom="5dp"
-                android:paddingLeft="10dp"
+                android:paddingLeft="15dp"
                 android:paddingRight="10dp"
                 android:paddingTop="10dp" />
 
@@ -99,7 +99,7 @@
                 android:background="@null"
                 android:hint="@string/tixian_please_bank"
                 android:paddingBottom="3dp"
-                android:paddingLeft="10dp"
+                android:paddingLeft="15dp"
                 android:paddingRight="10dp"
                 android:paddingTop="15dp" />
 
@@ -115,9 +115,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
+                android:inputType="textVisiblePassword"
                 android:hint="@string/tixian_please_number"
                 android:paddingBottom="3dp"
-                android:paddingLeft="10dp"
+                android:paddingLeft="15dp"
                 android:paddingRight="10dp"
                 android:paddingTop="15dp" />
 
@@ -135,7 +136,7 @@
                 android:background="@null"
                 android:hint="@string/tixian_please_name"
                 android:paddingBottom="10dp"
-                android:paddingLeft="10dp"
+                android:paddingLeft="15dp"
                 android:paddingRight="10dp"
                 android:paddingTop="15dp" />
 

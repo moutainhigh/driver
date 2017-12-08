@@ -204,4 +204,12 @@
     <string name="avoidhightspeed">不走高速</string>
     <string name="cost">避免收费</string>
     <string name="hightspeed">高速优先</string>
+
+
+    <string name="please_money">请输入合法的提现金额</string>
+    <string name="please_bank_name">请输入银行名</string>
+    <string name="please_bank_number">请输入银行卡号</string>
+    <string name="please_bank_owner">请输入持卡人姓名</string>
+
+    <string name="no_recommend">您还未有任何推荐奖励，快去多多分享吧</string>
 </resources>

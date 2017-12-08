@@ -82,8 +82,6 @@ public class PocketActivity extends RxBaseActivity {
             Log.e("okhttp", employ.toString());
             employ.saveOrUpdate();
             SharedPreferences.Editor editor = XApp.getPreferencesEditor();
-            editor.putBoolean(Config.SP_ISLOGIN, true);
-            editor.putLong(Config.SP_DRIVERID, employ.id);
             editor.apply();
 
             balanceText.setText(String.valueOf(employ.balance));

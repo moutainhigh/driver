@@ -80,19 +80,16 @@ public class LoginActivity extends RxBaseActivity {
         loginBtn.setEnabled(false);
 
         registerText = findViewById(R.id.login_register);
-        registerText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        registerText.setOnClickListener(v -> {
 //                lat / lng:(30.641184, 103.803611);
 //                startActivity(new Intent(LoginActivity.this, RegisterActivity.class);
 
-                NaviLatLng start = new NaviLatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
-                NaviLatLng end = new NaviLatLng(30.641184, 103.803611);
-                Intent intent = new Intent(LoginActivity.this, NaviActivity.class);
-                intent.putExtra("startLatlng", start);
-                intent.putExtra("endLatlng", end);
-                startActivity(intent);
-            }
+            NaviLatLng start = new NaviLatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
+            NaviLatLng end = new NaviLatLng(30.641184, 103.803611);
+            Intent intent = new Intent(LoginActivity.this, NaviActivity.class);
+            intent.putExtra("startLatlng", start);
+            intent.putExtra("endLatlng", end);
+            startActivity(intent);
         });
 
         resetPsw = findViewById(R.id.login_forget);

@@ -6,7 +6,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.widget.CusErrLayout;
 import com.easymi.component.widget.CusToolbar;
+import com.easymi.component.widget.SwipeRecyclerView;
 import com.easymi.personal.R;
 import com.easymi.personal.adapter.TixianRecordAdapter;
 import com.easymi.personal.entity.TixianRecord;
@@ -20,7 +22,9 @@ import java.util.List;
 
 public class TixianRecordActivity extends RxBaseActivity {
 
-    RecyclerView recyclerView;
+    SwipeRecyclerView recyclerView;
+
+    CusErrLayout errLayout;
 
     TixianRecordAdapter adapter;
 
@@ -41,6 +45,7 @@ public class TixianRecordActivity extends RxBaseActivity {
     @Override
     public void initViews(Bundle savedInstanceState) {
         recyclerView = findViewById(R.id.recyclerView);
+        errLayout = findViewById(R.id.cus_err_layout);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
         adapter = new TixianRecordAdapter(this);
@@ -57,5 +62,24 @@ public class TixianRecordActivity extends RxBaseActivity {
 
         adapter.setList(recordList);
 
+    }
+
+    /**
+     * @param tag 0代表空数据  其他代表网络问题
+     */
+    private void showErr(int tag) {
+        if (tag != 0) {
+            errLayout.setErrText(tag);
+            errLayout.setErrImg();
+        }
+        errLayout.setVisibility(View.VISIBLE);
+        errLayout.setOnClickListener(v -> {
+            hideErr();
+            recyclerView.setRefreshing(true);
+        });
+    }
+
+    private void hideErr() {
+        errLayout.setVisibility(View.GONE);
     }
 }

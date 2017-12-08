@@ -14,6 +14,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.easymi.common.R;
 import com.easymi.common.mvp.work.WorkActivity;
+import com.easymi.component.Config;
 import com.easymi.component.app.ActivityManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
@@ -52,9 +53,14 @@ public class SplashActivity extends RxBaseActivity {
     private void delayIn() {
         Handler handler = new Handler();
         handler.postDelayed(() -> runOnUiThread(() -> {
-            ARouter.getInstance()
-                    .build("/personal/LoginActivity")
-                    .navigation();
+            boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
+            if (isLogin) {
+                startActivity(new Intent(SplashActivity.this, WorkActivity.class));
+            } else {
+                ARouter.getInstance()
+                        .build("/personal/LoginActivity")
+                        .navigation();
+            }
             finish();
 //            startActivity(new Intent(SplashActivity.this, WorkActivity.class));
         }), 2000);

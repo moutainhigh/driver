@@ -14,6 +14,7 @@ import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.widget.CusErrLayout;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.SwipeRecyclerView;
 import com.easymi.personal.McService;
@@ -43,6 +44,8 @@ public class DetailActivity extends RxBaseActivity {
 
     CusToolbar cusToolbar;
 
+    CusErrLayout errLayout;
+
     private int page = 1;
 
     private List<Detail> details = new ArrayList<>();
@@ -57,6 +60,7 @@ public class DetailActivity extends RxBaseActivity {
         recyclerView = findViewById(R.id.recyclerView);
         balanceText = findViewById(R.id.balance_text);
         cusToolbar = findViewById(R.id.cus_toolbar);
+        errLayout = findViewById(R.id.cus_err_layout);
         adapter = new DetailAdapter(this);
 
         Employ employ = EmUtil.getEmployInfo();
@@ -112,12 +116,37 @@ public class DetailActivity extends RxBaseActivity {
                     recyclerView.setLoadMoreEnable(false);
                 }
                 adapter.setList(details);
+                if(details.size() == 0){
+                    showErr(0);
+                } else {
+                    hideErr();
+                }
             }
 
             @Override
             public void onError(int code) {
                 recyclerView.complete();
+                showErr(code);
             }
         })));
+    }
+
+    /**
+     * @param tag 0代表空数据  其他代表网络问题
+     */
+    private void showErr(int tag) {
+        if (tag != 0) {
+            errLayout.setErrText(tag);
+            errLayout.setErrImg();
+        }
+        errLayout.setVisibility(View.VISIBLE);
+        errLayout.setOnClickListener(v -> {
+            hideErr();
+            recyclerView.setRefreshing(true);
+        });
+    }
+
+    private void hideErr() {
+        errLayout.setVisibility(View.GONE);
     }
 }
