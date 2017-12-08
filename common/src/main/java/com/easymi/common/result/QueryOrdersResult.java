@@ -12,5 +12,6 @@ import java.util.List;
 public class QueryOrdersResult extends EmResult {
 
     public List<BaseOrder> orders;
+    public int total;
 
 }

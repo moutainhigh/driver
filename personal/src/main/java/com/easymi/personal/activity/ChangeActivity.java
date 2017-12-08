@@ -19,4 +19,9 @@ public class ChangeActivity extends RxBaseActivity {
     public void initViews(Bundle savedInstanceState) {
 
     }
+
+    @Override
+    public void initToolBar() {
+
+    }
 }

@@ -1,8 +1,6 @@
 package com.easymi.personal.activity;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.CompoundButton;
 
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
@@ -25,7 +23,7 @@ public class NaviSetActivity extends RxBaseActivity {
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_navi;
+        return R.layout.activity_navi_set;
     }
 
     @Override

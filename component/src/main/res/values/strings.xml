@@ -30,6 +30,9 @@
 
     <string name="input_pingyin">请输入名字或者拼音</string>
 
+    <string name="err_empty">john snow,you have nothing</string>
+    <string name="err_error">网络请求错误,错误码</string>
+
     <string name="succeed">成功</string>
     <string name="code1">参数错误</string>
     <string name="code2">服务人员验证失败</string>

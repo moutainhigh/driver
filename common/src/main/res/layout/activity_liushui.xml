@@ -13,10 +13,10 @@
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="-10dp"
-        android:paddingTop="10dp"
+        android:layout_height="@dimen/bar_height"
+        android:layout_marginTop="-6dp"
         android:background="@color/colorPrimary"
+        android:paddingTop="10dp"
         app:tabBackground="@color/colorPrimary"
         app:tabGravity="center"
         app:tabIndicatorColor="@color/colorAccent"
@@ -24,16 +24,27 @@
         app:tabMode="fixed"
         app:tabPaddingStart="10dp"
         app:tabPaddingTop="10dp"
-        app:textSize="16sp"
         app:tabSelectedTextColor="@color/white"
-        app:tabTextColor="@color/dark_gray">
+        app:tabTextColor="@color/dark_gray"
+        app:textSize="16sp">
 
     </android.support.design.widget.TabLayout>
 
-    <com.easymi.component.widget.SwipeRecyclerView
-        android:id="@+id/recyclerView"
-        android:background="#f3f3f3"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <com.easymi.component.widget.SwipeRecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white" />
+
+        <com.easymi.component.widget.CusErrLayout
+            android:id="@+id/cus_err_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+    </FrameLayout>
 
 </LinearLayout>

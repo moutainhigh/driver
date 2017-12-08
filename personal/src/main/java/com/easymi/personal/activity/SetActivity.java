@@ -19,6 +19,7 @@ import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.PhoneUtil;
+import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
 
@@ -40,6 +41,13 @@ public class SetActivity extends RxBaseActivity {
     public void initViews(Bundle savedInstanceState) {
     }
 
+    @Override
+    public void initToolBar() {
+        CusToolbar cusToolbar = findViewById(R.id.cus_toolbar);
+        cusToolbar.setOnClickListener(v -> finish());
+        cusToolbar.setTitle(R.string.person_set);
+    }
+
     public void changePsw(View view) {
         Intent intent = new Intent(this, ChangeActivity.class);
         startActivity(intent);
@@ -56,7 +64,9 @@ public class SetActivity extends RxBaseActivity {
     }
 
     public void helpCenter(View view) {
-        Intent intent = new Intent(this, HelpCenterActivity.class);
+        Intent intent = new Intent(SetActivity.this, ArticleActivity.class);
+        intent.putExtra("tag", "ContactUs");
+        intent.putExtra("title", getString(R.string.set_help));
         startActivity(intent);
     }
 

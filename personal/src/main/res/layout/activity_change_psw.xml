@@ -2,9 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <com.easymi.component.widget.CusToolbar
+        android:id="@+id/cus_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -16,6 +19,7 @@
         android:orientation="vertical">
 
         <EditText
+            android:id="@+id/edit_old"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@null"
@@ -29,6 +33,7 @@
             android:background="@color/dark_gray" />
 
         <EditText
+            android:id="@+id/edit_new"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@null"
@@ -42,6 +47,7 @@
             android:background="@color/dark_gray" />
 
         <EditText
+            android:id="@+id/confirm_new"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@null"
