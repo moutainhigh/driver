@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <com.easymi.component.widget.CusToolbar
         android:id="@+id/cus_toolbar"
@@ -14,12 +15,23 @@
         android:layout_height="0.0dp"
         android:layout_weight="1" />
 
-    <com.easymi.component.widget.SwipeRecyclerView
-        android:id="@+id/wc_recycler"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0.0dp"
-        android:background="@color/white"
+        android:layout_margin="8dp"
         android:layout_weight="1"
-        android:padding="8dp"/>
+        android:background="@color/white">
+
+        <com.easymi.component.widget.SwipeRecyclerView
+            android:id="@+id/wc_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.easymi.component.widget.CusErrLayout
+            android:id="@+id/cus_err_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+    </FrameLayout>
 
 </LinearLayout>

@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -160,7 +161,7 @@ public class PhoneUtil {
                         }
                     });
         } catch (Exception e) {
-
+            Log.e("exception",e.getMessage());
         }
     }
 

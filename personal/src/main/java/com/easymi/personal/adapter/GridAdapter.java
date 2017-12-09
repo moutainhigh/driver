@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.easymi.component.utils.PhoneUtil;
+import com.easymi.component.utils.StringUtils;
 import com.easymi.personal.R;
 import com.easymi.personal.activity.NearWcActivity;
 import com.easymi.personal.activity.ReliActivity;
@@ -58,7 +59,7 @@ public class GridAdapter extends BaseAdapter {
         ViewHolder holder = null;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(
-                    R.layout.item_more, null);
+                    R.layout.item_more, parent, false);
             holder = new ViewHolder();
             holder.item_pic = convertView
                     .findViewById(R.id.item_pic);
@@ -70,6 +71,9 @@ public class GridAdapter extends BaseAdapter {
         }
 
         String str = stringList.get(position);
+        if (StringUtils.isBlank(str)) {
+            return convertView;
+        }
         holder.item_txt.setText(str);
         if (str.equals(context.getString(R.string.near_wc))) {
             holder.item_pic.setImageResource(R.mipmap.near_wc);
@@ -79,16 +83,16 @@ public class GridAdapter extends BaseAdapter {
             });
         } else if (str.equals(context.getString(R.string.reli_pic))) {
             holder.item_pic.setImageResource(R.mipmap.hot_img);
-            holder.item_root.setOnClickListener(v -> {
-                Intent intent = new Intent(context, ReliActivity.class);
-                context.startActivity(intent);
-            });
+//            holder.item_root.setOnClickListener(v -> {
+//                Intent intent = new Intent(context, ReliActivity.class);
+//                context.startActivity(intent);
+//            });
         } else if (str.equals(context.getString(R.string.weather_forecast))) {
             holder.item_pic.setImageResource(R.mipmap.weather_report);
-            holder.item_root.setOnClickListener(v -> {
-                Intent intent = new Intent(context, WeatherActivity.class);
-                context.startActivity(intent);
-            });
+//            holder.item_root.setOnClickListener(v -> {
+//                Intent intent = new Intent(context, WeatherActivity.class);
+//                context.startActivity(intent);
+//            });
         } else if (str.equals(context.getString(R.string.contract_service))) {
             holder.item_pic.setImageResource(R.mipmap.contract_service);
             holder.item_root.setOnClickListener(v -> PhoneUtil.call(context, "15102875535"));

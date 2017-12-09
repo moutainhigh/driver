@@ -15,12 +15,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:background="@color/white"
-        android:horizontalSpacing="5dp"
+        android:background="#f9f9f9"
+        android:horizontalSpacing="1dp"
         android:numColumns="3"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:paddingTop="5dp"
-        android:verticalSpacing="5dp" />
+        android:verticalSpacing="1dp" />
 
 </LinearLayout>

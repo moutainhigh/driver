@@ -1,6 +1,8 @@
 package com.easymi.personal.activity;
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdate;
@@ -20,9 +22,11 @@ import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.MapUtil;
+import com.easymi.component.widget.CusErrLayout;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.SwipeRecyclerView;
 import com.easymi.personal.R;
+import com.easymi.personal.adapter.NearWcAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,10 +35,11 @@ import java.util.List;
  * Created by developerLzh on 2017/12/7 0007.
  */
 
-public class NearWcActivity extends RxBaseActivity {
+public class NearWcActivity extends RxBaseActivity implements AMap.OnMarkerClickListener {
     CusToolbar cusToolbar;
     MapView mapView;
     SwipeRecyclerView recyclerView;
+    CusErrLayout cusErrLayout;
 
     AMap aMap;
 
@@ -47,6 +52,8 @@ public class NearWcActivity extends RxBaseActivity {
     private List<PoiItem> items;
     private List<Marker> markers;
 
+    private NearWcAdapter adapter;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_near_wc;
@@ -56,13 +63,44 @@ public class NearWcActivity extends RxBaseActivity {
     public void initViews(Bundle savedInstanceState) {
         mapView = findViewById(R.id.map_view);
         recyclerView = findViewById(R.id.wc_recycler);
+        cusErrLayout = findViewById(R.id.cus_err_layout);
         items = new ArrayList<>();
         markers = new ArrayList<>();
 
         bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.mipmap.ic_wc);
 
         mapView.onCreate(savedInstanceState);
+
+        adapter = new NearWcAdapter(this);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerView.setAdapter(adapter);
+        recyclerView.setOnLoadListener(new SwipeRecyclerView.OnLoadListener() {
+            @Override
+            public void onRefresh() {
+                page = 0;
+                searchNearBy();
+            }
+
+            @Override
+            public void onLoadMore() {
+                page++;
+                searchNearBy();
+            }
+        });
+        adapter.setOnItemClickLis(poiItem -> {
+            CameraUpdate update = CameraUpdateFactory.
+                    newLatLngZoom(new LatLng(poiItem.getLatLonPoint().getLatitude(),
+                            poiItem.getLatLonPoint().getLongitude()), 20);
+            aMap.animateCamera(update);
+        });
+
         aMap = mapView.getMap();
+        aMap.getUiSettings().setZoomControlsEnabled(false);
+        aMap.getUiSettings().setRotateGesturesEnabled(false);
+        aMap.getUiSettings().setRotateGesturesEnabled(false);
+        aMap.getUiSettings().setTiltGesturesEnabled(false);//倾斜手势
+
         showCamera();
         searchNearBy();
     }
@@ -115,11 +153,9 @@ public class NearWcActivity extends RxBaseActivity {
                 if (null != poiResult && poiResult.getPois() != null) {
                     if (page == 0) {
                         items.clear();
-                        items.addAll(poiResult.getPois());
                         removeAllMarker();
-                    } else {
-                        items.addAll(poiResult.getPois());
                     }
+                    items.addAll(poiResult.getPois() == null ? new ArrayList<>() : poiResult.getPois());
                     for (PoiItem poiItem : poiResult.getPois()) {
                         Marker marker;
                         MarkerOptions options = new MarkerOptions().
@@ -127,17 +163,25 @@ public class NearWcActivity extends RxBaseActivity {
                                 .icon(bitmapDescriptor)
                                 .draggable(false);
                         marker = aMap.addMarker(options);
+                        marker.setClickable(true);
                         markers.add(marker);
                     }
 
                     showCamera();
 
-//                    adapter.setPoiList(items);
+                    adapter.setItems(items);
+                    if (items.size() == 0) {
+                        showErr(0);
+                    } else {
+                        hideErr();
+                    }
                     if (poiResult.getPageCount() > page) {
                         recyclerView.setLoadMoreEnable(true);
                     } else {
                         recyclerView.setLoadMoreEnable(false);
                     }
+                } else {
+                    showErr(-100);
                 }
             }
 
@@ -170,9 +214,11 @@ public class NearWcActivity extends RxBaseActivity {
                 .position(new LatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude))
                 .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_my_loc));
         myMarker = aMap.addMarker(options);
+        myMarker.setClickable(false);
+
         if (items.size() == 0) {
             CameraUpdate update = CameraUpdateFactory
-                    .newLatLngZoom(new LatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude), 15);
+                    .newLatLngZoom(new LatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude), 20);
             aMap.animateCamera(update);
         } else {
             List<LatLng> latLngs = new ArrayList<>();
@@ -183,5 +229,28 @@ public class NearWcActivity extends RxBaseActivity {
             LatLngBounds bounds = MapUtil.getBounds(latLngs, new LatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude));
             aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 200));
         }
+    }
+
+    /**
+     * @param tag 0代表空数据  其他代表网络问题
+     */
+    private void showErr(int tag) {
+        if (tag != 0) {
+            cusErrLayout.setErrText(tag);
+            cusErrLayout.setErrImg();
+        }
+        cusErrLayout.setVisibility(View.VISIBLE);
+        cusErrLayout.setText(R.string.no_recommend);
+    }
+
+    private void hideErr() {
+        cusErrLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 20);
+        aMap.animateCamera(update);
+        return true;
     }
 }

@@ -28,6 +28,16 @@ public class NearWcAdapter extends RecyclerView.Adapter<NearWcAdapter.Holder> {
     private Context context;
     private List<PoiItem> items;
 
+    public interface OnItemClickLis{
+        void onItemClick(PoiItem poiItem);
+    }
+
+    public OnItemClickLis onItemClickLis;
+
+    public void setOnItemClickLis(OnItemClickLis onItemClickLis) {
+        this.onItemClickLis = onItemClickLis;
+    }
+
     public NearWcAdapter(Context context) {
         this.context = context;
         items = new ArrayList<>();
@@ -66,6 +76,13 @@ public class NearWcAdapter extends RecyclerView.Adapter<NearWcAdapter.Holder> {
             intent.putExtra("endLatlng", end);
             context.startActivity(intent);
         });
+        if(null != onItemClickLis){
+            holder.root.setOnClickListener(view -> {
+                if(null != onItemClickLis){
+                    onItemClickLis.onItemClick(item);
+                }
+            });
+        }
     }
 
     @Override
@@ -79,9 +96,11 @@ public class NearWcAdapter extends RecyclerView.Adapter<NearWcAdapter.Holder> {
         TextView wcAddress;
         TextView wcDis;
         ImageView naviIcon;
+        View root;
 
         public Holder(View itemView) {
             super(itemView);
+            root = itemView;
             wcName = itemView.findViewById(R.id.wc_name);
             wcAddress = itemView.findViewById(R.id.wc_address);
             wcDis = itemView.findViewById(R.id.wc_dis);
