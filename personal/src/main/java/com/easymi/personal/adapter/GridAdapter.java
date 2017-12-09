@@ -89,10 +89,10 @@ public class GridAdapter extends BaseAdapter {
 //            });
         } else if (str.equals(context.getString(R.string.weather_forecast))) {
             holder.item_pic.setImageResource(R.mipmap.weather_report);
-//            holder.item_root.setOnClickListener(v -> {
-//                Intent intent = new Intent(context, WeatherActivity.class);
-//                context.startActivity(intent);
-//            });
+            holder.item_root.setOnClickListener(v -> {
+                Intent intent = new Intent(context, WeatherActivity.class);
+                context.startActivity(intent);
+            });
         } else if (str.equals(context.getString(R.string.contract_service))) {
             holder.item_pic.setImageResource(R.mipmap.contract_service);
             holder.item_root.setOnClickListener(v -> PhoneUtil.call(context, "15102875535"));
