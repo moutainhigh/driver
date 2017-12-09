@@ -30,6 +30,9 @@ public class TixianRecordActivity extends RxBaseActivity {
 
     CusToolbar toolbar;
 
+    private int page = 0;
+    private int limit = 10;
+
     @Override
     public void initToolBar() {
         toolbar = findViewById(R.id.cus_toolbar);
@@ -61,6 +64,10 @@ public class TixianRecordActivity extends RxBaseActivity {
         }
 
         adapter.setList(recordList);
+
+    }
+
+    private void queryData() {
 
     }
 

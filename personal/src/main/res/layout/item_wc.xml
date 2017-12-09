@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/wc_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="公厕"
+        android:textColor="@color/text_color_black"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/wc_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="温江区锦绣大道南段"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/wc_name"/>
+
+    <TextView
+        android:id="@+id/wc_dis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="231米"
+        android:layout_toRightOf="@+id/wc_name"
+        android:layout_marginLeft="8dp"
+        android:background="@drawable/corners_stroke_yellow"
+        android:padding="3dp"/>
+
+    <ImageView
+        android:id="@+id/navi_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/navi_icon"/>
+
+</RelativeLayout>

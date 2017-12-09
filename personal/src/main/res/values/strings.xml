@@ -212,4 +212,7 @@
     <string name="please_bank_owner">请输入持卡人姓名</string>
 
     <string name="no_recommend">您还未有任何推荐奖励，快去多多分享吧</string>
+
+    <string name="meter">米</string>
+    <string name="k_meter">千米</string>
 </resources>
