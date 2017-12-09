@@ -97,7 +97,11 @@ public class WeatherActivity extends RxBaseActivity implements WeatherSearch.OnW
         if (rCode == 1000) {
             if (weatherLiveResult != null && weatherLiveResult.getLiveResult() != null) {
                 LocalWeatherLive weatherlive = weatherLiveResult.getLiveResult();
-                reportTime.setText(weatherlive.getReportTime() + getString(R.string.fabu));
+                String fabuTime = weatherlive.getReportTime();
+                if(weatherlive.getReportTime().contains(" ")){
+                    fabuTime = fabuTime.split(" ")[1];
+                }
+                reportTime.setText(fabuTime + getString(R.string.fabu));
                 todayType.setText(weatherlive.getWeather());
                 todayTem.setText(weatherlive.getTemperature() + "°");
                 weatherCity.setText(EmUtil.getLastLoc().city);

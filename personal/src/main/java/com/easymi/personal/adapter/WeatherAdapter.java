@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.amap.api.services.weather.LocalDayWeatherForecast;
+import com.easymi.component.utils.TimeUtil;
 import com.easymi.personal.R;
 
 import java.util.ArrayList;
@@ -50,8 +51,24 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.Holder> 
             holder.weatherImg.setImageResource(R.mipmap.icon_cloudy2);
         }
         holder.weatherText.setText(weatherForecast.getDayWeather());
-        holder.weatherTime.setText(weatherForecast.getDate());
-        holder.weatherTmp.setText(weatherForecast.getDayTemp() + "/" + weatherForecast.getNightTemp());
+
+        String date = weatherForecast.getDate();
+        long timestamp = TimeUtil.parseTime("yyyy-MM-dd", date);
+        long todayStamp = TimeUtil.parseTime("yyyy-MM-dd", TimeUtil.getTime("yyyy-MM-dd", System.currentTimeMillis()));
+
+        if (timestamp == todayStamp) {
+            holder.weatherTime.setText(context.getString(R.string.today));
+        } else if (timestamp - todayStamp == (long) 24 * 60 * 60 * 1000) {
+            holder.weatherTime.setText(context.getString(R.string.tomorrow));
+        } else if (timestamp - todayStamp == (long) 2 * 24 * 60 * 60 * 1000) {
+            holder.weatherTime.setText(context.getString(R.string.houtian));
+        } else if (timestamp - todayStamp == (long) 3 * 24 * 60 * 60 * 1000) {
+            holder.weatherTime.setText(context.getString(R.string.waitian));
+        } else {
+            holder.weatherTime.setText(date);
+        }
+
+        holder.weatherTmp.setText(weatherForecast.getDayTemp() + "°/" + weatherForecast.getNightTemp() + "°");
     }
 
     @Override
