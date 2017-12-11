@@ -9,13 +9,10 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.animation.LinearInterpolator;
 
 import com.easymi.component.R;
 import com.easymi.component.utils.DensityUtil;
-import com.easymi.component.utils.PhoneUtil;
 
 /**
  * Created by xyin on 2017/12/3.
