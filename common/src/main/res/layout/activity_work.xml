@@ -214,15 +214,19 @@
         </android.support.v4.widget.SwipeRefreshLayout>
 
 
-        <Button
+        <com.easymi.component.widget.LoadingButton
             android:id="@+id/online_btn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/btn_height"
+            android:gravity="center"
             android:layout_margin="10dp"
             android:background="@drawable/corners_button_bg"
             android:text="@string/work_online"
             android:textColor="@color/white"
-            android:visibility="visible" />
+            android:visibility="visible"
+            app:lb_duration="1000"
+            app:lb_radius="10dp"
+            />
 
         <RelativeLayout
             android:id="@+id/listen_order_con"

@@ -15,10 +15,11 @@
         android:layout_marginTop="5dp"
         android:orientation="horizontal">
 
-        <Button
+        <com.easymi.component.widget.LoadingButton
             android:id="@+id/start_wait"
             android:layout_width="0.0dp"
-            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_height="@dimen/btn_height"
             android:layout_weight="8"
             android:background="@drawable/corners_button_bg"
             android:text="@string/click_wait"
@@ -27,7 +28,7 @@
         <LinearLayout
             android:id="@+id/settle"
             android:layout_width="0.0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/btn_height"
             android:layout_marginLeft="10dp"
             android:layout_weight="2"
             android:background="@drawable/corners_404456"
@@ -42,7 +43,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="1dp"
                 android:text="@string/settle"
                 android:textColor="@color/white" />
         </LinearLayout>

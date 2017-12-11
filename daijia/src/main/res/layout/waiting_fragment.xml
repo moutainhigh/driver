@@ -12,12 +12,13 @@
         android:layout_margin="10dp"
         android:orientation="horizontal">
 
-        <Button
+        <com.easymi.component.widget.LoadingButton
             android:id="@+id/start_drive"
             android:layout_width="0.0dp"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/btn_height"
             android:layout_weight="8"
             android:background="@drawable/corners_button_bg"
+            android:gravity="center"
             android:text="@string/click_start"
             android:textColor="@color/white" />
 
@@ -26,14 +27,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/corners_white"
         android:layout_above="@+id/control_con"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:background="@drawable/corners_white"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp">
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,37 +43,36 @@
 
             <LinearLayout
                 android:layout_width="0.0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/wait_time"
-                    android:textSize="16sp"
-                    />
+                    android:textSize="16sp" />
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/wait_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="3"
-                        android:textSize="25sp"
                         android:textColor="@color/yellow"
-                        />
+                        android:textSize="25sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/minutes"
-                        android:textSize="16sp"
-                        />
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
@@ -81,36 +81,37 @@
 
             <LinearLayout
                 android:layout_width="0.0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/wait_fee"
-                    android:textSize="16sp"
-                    />
+                    android:textSize="16sp" />
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="12dp">
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/money_sign"
-                        android:textSize="16sp"
                         android:textColor="@color/yellow"
-                        />
+                        android:textSize="16sp" />
+
                     <TextView
                         android:id="@+id/wait_fee"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="6.8"
-                        android:textSize="25sp"
                         android:textColor="@color/yellow"
-                        />
+                        android:textSize="25sp" />
 
                 </LinearLayout>
 

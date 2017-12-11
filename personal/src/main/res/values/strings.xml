@@ -218,4 +218,6 @@
     <string name="query_live_failed">查询实况天气失败</string>
     <string name="query_forecast_failed">查询天气预报失败</string>
     <string name="fabu">发布</string>
+    <string name="different_new_confirm">新密码与确认密码不一致</string>
+    <string name="same_old_new">新密码与旧密码相同</string>
 </resources>

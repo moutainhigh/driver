@@ -3,9 +3,11 @@ package com.easymi.component.network;
 import android.content.Context;
 import android.net.ParseException;
 import android.util.Log;
+import android.view.View;
 
 import com.easymi.component.R;
 import com.easymi.component.utils.ToastUtil;
+import com.easymi.component.widget.LoadingButton;
 import com.google.gson.JsonParseException;
 
 import org.json.JSONException;
@@ -26,9 +28,12 @@ public class MySubscriber<T> extends Subscriber<T> implements ProgressDismissLis
     private Context context;
 
     private ProgressHandler progressHandler;
+    private LoadingBtnHandler loadingBtnHandler;
 
     private NoErrSubscriberListener<T> noErrSubscriberListener;
     private HaveErrSubscriberListener<T> haveErrSubscriberListener;
+
+    private LoadingButton loadingButton;
 
     /**
      * @param needShowProgress        是否显示加载框
@@ -64,12 +69,38 @@ public class MySubscriber<T> extends Subscriber<T> implements ProgressDismissLis
         }
     }
 
+    /**
+     * @param context
+     * @param button                    加载的按钮
+     * @param haveErrSubscriberListener
+     */
+    public MySubscriber(Context context, LoadingButton button, HaveErrSubscriberListener<T> haveErrSubscriberListener) {
+        this.context = context;
+        this.loadingButton = button;
+        this.haveErrSubscriberListener = haveErrSubscriberListener;
+        loadingBtnHandler = new LoadingBtnHandler(button, this);
+    }
+
+    /**
+     * @param context
+     * @param button                  加载的按钮
+     * @param noErrSubscriberListener
+     */
+    public MySubscriber(Context context, LoadingButton button, NoErrSubscriberListener<T> noErrSubscriberListener) {
+        this.context = context;
+        this.loadingButton = button;
+        this.noErrSubscriberListener = noErrSubscriberListener;
+        loadingBtnHandler = new LoadingBtnHandler(button, this);
+    }
+
     @Override
     public void onCompleted() {
         Log.e("MySubscriber", "mission complete");
 
         if (null != progressHandler) {
             progressHandler.sendEmptyMessage(ProgressHandler.DISMISS_DIALOG);
+        } else if (null != loadingBtnHandler) {
+            loadingBtnHandler.sendEmptyMessage(LoadingBtnHandler.HIDE_BTN_LOADING);
         } else {
             this.onProgressDismiss();
         }
@@ -98,6 +129,8 @@ public class MySubscriber<T> extends Subscriber<T> implements ProgressDismissLis
 
         if (null != progressHandler) {
             progressHandler.sendEmptyMessage(ProgressHandler.DISMISS_DIALOG);
+        } else if (null != loadingBtnHandler) {
+            loadingBtnHandler.sendEmptyMessage(LoadingBtnHandler.HIDE_BTN_LOADING);
         } else {
             this.onProgressDismiss();
         }
@@ -122,6 +155,8 @@ public class MySubscriber<T> extends Subscriber<T> implements ProgressDismissLis
         super.onStart();
         if (null != progressHandler) {
             progressHandler.sendEmptyMessage(ProgressHandler.SHOW_DIALOG);
+        } else if (null != loadingBtnHandler) {
+            loadingBtnHandler.sendEmptyMessage(LoadingBtnHandler.SHOW_BTN_LOADING);
         }
     }
 

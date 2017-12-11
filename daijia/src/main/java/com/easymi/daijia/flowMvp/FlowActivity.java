@@ -46,6 +46,7 @@ import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.MapUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
+import com.easymi.component.widget.LoadingButton;
 import com.easymi.component.widget.overlay.DrivingRouteOverlay;
 import com.easymi.daijia.R;
 import com.easymi.daijia.activity.CancelActivity;
@@ -511,8 +512,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
     public void initBridge() {
         bridge = new ActFraCommBridge() {
             @Override
-            public void doAccept() {
-                presenter.acceptOrder(djOrder.orderId);
+            public void doAccept(LoadingButton btn) {
+                presenter.acceptOrder(djOrder.orderId,btn);
             }
 
             @Override
@@ -528,8 +529,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
             }
 
             @Override
-            public void doToStart() {
-                presenter.toStart(djOrder.orderId);
+            public void doToStart(LoadingButton btn) {
+                presenter.toStart(djOrder.orderId,btn);
             }
 
             @Override
@@ -538,13 +539,13 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
             }
 
             @Override
-            public void doStartWait() {
-                presenter.startWait(djOrder.orderId);
+            public void doStartWait(LoadingButton btn) {
+                presenter.startWait(djOrder.orderId,btn);
             }
 
             @Override
-            public void doStartDrive() {
-                presenter.startDrive(djOrder.orderId);
+            public void doStartDrive(LoadingButton btn) {
+                presenter.startDrive(djOrder.orderId,btn);
             }
 
             @Override
@@ -555,8 +556,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
             }
 
             @Override
-            public void doConfirmMoney() {
-                presenter.arriveDes(djOrder);
+            public void doConfirmMoney(LoadingButton btn) {
+                presenter.arriveDes(djOrder,btn);
             }
 
             @Override

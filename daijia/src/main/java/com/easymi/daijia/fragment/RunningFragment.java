@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.utils.PhoneUtil;
+import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.R;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.flowMvp.ActFraCommBridge;
@@ -33,7 +34,7 @@ public class RunningFragment extends RxBaseFragment {
     TextView driveTimeText;
     TextView waitTimeText;
 
-    Button startWaitBtn;
+    LoadingButton startWaitBtn;
     LinearLayout settleBtn;
 
     @Override
@@ -65,7 +66,7 @@ public class RunningFragment extends RxBaseFragment {
         driveTimeText.setText(djOrder.driveTime + "");
         waitTimeText.setText(djOrder.waitTime + "");
 
-        startWaitBtn.setOnClickListener(view -> bridge.doStartWait());
+        startWaitBtn.setOnClickListener(view -> bridge.doStartWait(startWaitBtn));
         settleBtn.setOnClickListener(view -> bridge.showSettleDialog());
     }
 }

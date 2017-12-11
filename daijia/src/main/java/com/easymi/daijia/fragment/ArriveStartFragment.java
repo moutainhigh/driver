@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.utils.PhoneUtil;
+import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.R;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.flowMvp.ActFraCommBridge;
@@ -25,8 +26,8 @@ public class ArriveStartFragment extends RxBaseFragment {
         this.bridge = bridge;
     }
 
-    Button startDrive;
-    LinearLayout startWait;
+    LoadingButton startDrive;
+    LoadingButton startWait;
     TextView startPlaceText;
     TextView endPlaceText;
 
@@ -54,7 +55,7 @@ public class ArriveStartFragment extends RxBaseFragment {
 
         startPlaceText.setText(djOrder.startPlace);
         endPlaceText.setText(djOrder.endPlace);
-        startDrive.setOnClickListener(view -> bridge.doStartDrive());
-        startWait.setOnClickListener(view -> bridge.doStartWait());
+        startDrive.setOnClickListener(view -> bridge.doStartDrive(startDrive));
+        startWait.setOnClickListener(view -> bridge.doStartWait(startWait));
     }
 }

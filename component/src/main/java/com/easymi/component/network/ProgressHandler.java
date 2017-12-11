@@ -36,12 +36,7 @@ public class ProgressHandler extends Handler {
                 .setTitle("")
                 .setMessage(context.getString(R.string.wait))
                 .setCancelable(cancelable)
-                .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        progressDismissListener.onProgressDismiss();
-                    }
-                }).create();
+                .setOnDismissListener(dialog -> progressDismissListener.onProgressDismiss()).create();
         if (!progressHUD.isShowing()) {
             progressHUD.show();
         }

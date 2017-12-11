@@ -12,10 +12,11 @@
         android:layout_margin="10dp"
         android:orientation="horizontal">
 
-        <Button
+        <com.easymi.component.widget.LoadingButton
             android:id="@+id/to_start_btn"
             android:layout_width="0.0dp"
-            android:layout_height="50dp"
+            android:gravity="center"
+            android:layout_height="@dimen/btn_height"
             android:layout_weight="8"
             android:background="@drawable/corners_button_bg"
             android:text="@string/to_start"

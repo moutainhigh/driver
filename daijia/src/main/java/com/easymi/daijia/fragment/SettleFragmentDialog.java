@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.easymi.component.widget.CusBottomSheetDialog;
+import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.R;
 import com.easymi.daijia.activity.FeeDetailActivity;
 import com.easymi.daijia.entity.DJOrder;
@@ -29,7 +30,7 @@ public class SettleFragmentDialog {
     TextView carNoText;
     EditText remarkEdit;
 
-    Button confirmBtn;
+    LoadingButton confirmBtn;
 
     DJOrder djOrder;
 
@@ -84,11 +85,11 @@ public class SettleFragmentDialog {
         confirmBtn.setOnClickListener(v -> {
             if (djOrder.orderStatus == DJOrder.GOTO_DESTINATION_ORDER) {
                 if (null != bridge) {
-                    bridge.doConfirmMoney();
+                    bridge.doConfirmMoney(confirmBtn);
                 }
             } else {
                 if (null != bridge) {
-                    bridge.doConfirmMoney();
+                    bridge.doPay();
                 }
             }
         });

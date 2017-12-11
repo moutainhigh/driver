@@ -37,6 +37,7 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.result.DJOrderResult;
 
@@ -64,10 +65,10 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     }
 
     @Override
-    public void acceptOrder(Long orderId) {
+    public void acceptOrder(Long orderId, LoadingButton btn) {
         Observable<DJOrderResult> observable = model.doAccept(orderId);
 
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, new HaveErrSubscriberListener<DJOrderResult>() {
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, new HaveErrSubscriberListener<DJOrderResult>() {
             @Override
             public void onNext(DJOrderResult djOrderResult) {
                 djOrderResult.order.addresses = djOrderResult.address;
@@ -99,10 +100,10 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     }
 
     @Override
-    public void toStart(Long orderId) {
+    public void toStart(Long orderId, LoadingButton btn) {
         Observable<DJOrderResult> observable = model.toStart(orderId);
 
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<DJOrderResult>() {
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, new HaveErrSubscriberListener<DJOrderResult>() {
             @Override
             public void onNext(DJOrderResult djOrderResult) {
                 djOrderResult.order.addresses = djOrderResult.address;
@@ -135,10 +136,10 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     }
 
     @Override
-    public void startWait(Long orderId) {
+    public void startWait(Long orderId, LoadingButton btn) {
         Observable<DJOrderResult> observable = model.startWait(orderId);
 
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<DJOrderResult>() {
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, new HaveErrSubscriberListener<DJOrderResult>() {
             @Override
             public void onNext(DJOrderResult djOrderResult) {
                 djOrderResult.order.addresses = djOrderResult.address;
@@ -153,10 +154,10 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     }
 
     @Override
-    public void startDrive(Long orderId) {
+    public void startDrive(Long orderId, LoadingButton btn) {
         Observable<DJOrderResult> observable = model.startDrive(orderId);
         XApp.getPreferencesEditor().putBoolean(Config.SP_NEED_TRACE, true).apply();//将其置为需要纠偏
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<DJOrderResult>() {
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, new HaveErrSubscriberListener<DJOrderResult>() {
             @Override
             public void onNext(DJOrderResult djOrderResult) {
                 djOrderResult.order.addresses = djOrderResult.address;
@@ -171,10 +172,10 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     }
 
     @Override
-    public void arriveDes(DJOrder djOrder) {
+    public void arriveDes(DJOrder djOrder, LoadingButton btn) {
         Observable<DJOrderResult> observable = model.arriveDes(djOrder);
 
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<DJOrderResult>() {
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, new HaveErrSubscriberListener<DJOrderResult>() {
             @Override
             public void onNext(DJOrderResult djOrderResult) {
                 djOrderResult.order.addresses = djOrderResult.address;

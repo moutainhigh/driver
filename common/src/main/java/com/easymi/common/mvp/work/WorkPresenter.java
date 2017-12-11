@@ -113,7 +113,7 @@ public class WorkPresenter implements WorkContract.Presenter {
         long driverId = EmUtil.getEmployId();
 
         Observable<EmResult> observable = model.online(driverId, Config.APP_KEY);
-        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, true,
+        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
                 true, emResult -> view.onlineSuc())));
     }
 

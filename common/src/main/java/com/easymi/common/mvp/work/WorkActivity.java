@@ -46,6 +46,7 @@ import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.widget.BottomBehavior;
 import com.easymi.component.widget.CusToolbar;
+import com.easymi.component.widget.LoadingButton;
 import com.easymi.component.widget.pinned.PinnedHeaderDecoration;
 import com.skyfishjy.library.RippleBackground;
 
@@ -82,7 +83,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
 
     LinearLayout offlineCon;
 
-    Button onLineBtn;
+    LoadingButton onLineBtn;
 
     RelativeLayout listenOrderCon;
 
@@ -118,7 +119,11 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
 
         initRecycler();
 
-        onLineBtn.setOnClickListener(v -> presenter.online());
+        onLineBtn.setOnClickListener(view -> {
+            onLineBtn.setClickable(false);
+            onLineBtn.setStatus(LoadingButton.STATUS_LOADING);
+            presenter.online();
+        });
         offlineCon.setOnClickListener(v -> presenter.offline());
 
     }
@@ -248,6 +253,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
 
     @Override
     public void onlineSuc() {
+        onLineBtn.setClickable(true);
+        onLineBtn.setStatus(LoadingButton.STATUS_NORMAL);
         listenOrderCon.setVisibility(View.VISIBLE);
         rippleBackground.startRippleAnimation();
         onLineBtn.setVisibility(View.GONE);

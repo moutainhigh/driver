@@ -12,11 +12,12 @@
         android:layout_margin="10dp"
         android:orientation="horizontal">
 
-        <Button
+        <com.easymi.component.widget.LoadingButton
             android:id="@+id/accept_btn"
             android:layout_width="0.0dp"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/btn_height"
             android:layout_weight="8"
+            android:gravity="center"
             android:background="@drawable/corners_button_bg"
             android:text="@string/accept_order"
             android:textColor="@color/white" />
@@ -24,7 +25,7 @@
         <LinearLayout
             android:id="@+id/refuse_con"
             android:layout_width="0.0dp"
-            android:layout_height="match_parent"
+            android:layout_height="@dimen/btn_height"
             android:layout_marginLeft="10dp"
             android:layout_weight="2"
             android:background="@drawable/corners_404456"
@@ -39,7 +40,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="1dp"
                 android:text="@string/refuse_order"
                 android:textColor="@color/white" />
         </LinearLayout>
@@ -92,7 +93,7 @@
                 android:id="@+id/start_place"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="锦绣大道南段小咖科技"
+                android:text=""
                 android:textColor="#232323"
                 android:textSize="18sp"/>
             <TextView
@@ -100,7 +101,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="17dp"
-                android:text="锦绣大道南段小咖科技"
+                android:text=""
                 android:textColor="#232323"
                 android:textSize="18sp"/>
 
