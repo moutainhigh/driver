@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.utils.PhoneUtil;
+import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.R;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.flowMvp.ActFraCommBridge;
@@ -27,7 +28,7 @@ public class ToStartFragment extends RxBaseFragment {
         this.bridge = bridge;
     }
 
-    Button controlCon;
+    LoadingButton controlCon;
     FrameLayout callPhoneCon;
     TextView startPlaceText;
     TextView endPlaceText;
@@ -60,7 +61,7 @@ public class ToStartFragment extends RxBaseFragment {
         endPlaceText.setText(djOrder.endPlace);
         controlCon.setOnClickListener(view -> {
             Log.e("tag", "onClick");
-            bridge.doToStart();
+            bridge.doToStart(controlCon);
         });
         callPhoneCon.setOnClickListener(view -> {
             Log.e("tag", "onClick");

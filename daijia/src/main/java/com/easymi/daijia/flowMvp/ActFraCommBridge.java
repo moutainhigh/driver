@@ -1,5 +1,7 @@
 package com.easymi.daijia.flowMvp;
 
+import com.easymi.component.widget.LoadingButton;
+
 /**
  * Created by liuzihao on 2017/11/15.
  *
@@ -7,14 +9,14 @@ package com.easymi.daijia.flowMvp;
  */
 
 public interface ActFraCommBridge {
-    void doAccept();
+    void doAccept(LoadingButton btn);
     void doRefuse();
 
-    void doToStart();
+    void doToStart(LoadingButton btn);
     void doArriveStart();
-    void doStartWait();
-    void doStartDrive();
-    void doConfirmMoney();
+    void doStartWait(LoadingButton btn);
+    void doStartDrive(LoadingButton btn);
+    void doConfirmMoney(LoadingButton btn);
     void doPay();
     void showSettleDialog();
 

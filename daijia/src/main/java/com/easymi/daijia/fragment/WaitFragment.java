@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.utils.PhoneUtil;
+import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.R;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.flowMvp.ActFraCommBridge;
@@ -29,7 +30,7 @@ public class WaitFragment extends RxBaseFragment {
     TextView waitTimeText;
     TextView waitFeeText;
 
-    Button startDrive;
+    LoadingButton startDrive;
 
     @Override
     public void setArguments(Bundle args) {
@@ -58,7 +59,7 @@ public class WaitFragment extends RxBaseFragment {
         startDrive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bridge.doStartDrive();
+                bridge.doStartDrive(startDrive);
             }
         });
     }

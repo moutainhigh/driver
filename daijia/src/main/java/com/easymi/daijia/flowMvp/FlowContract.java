@@ -7,6 +7,7 @@ import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.route.DrivePath;
 import com.amap.api.services.route.DriveRouteResult;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.result.DJOrderResult;
 
@@ -53,19 +54,19 @@ public interface FlowContract {
     }
 
     interface Presenter {
-        void acceptOrder(Long orderId);
+        void acceptOrder(Long orderId, LoadingButton btn);
 
         void refuseOrder(Long orderId, String remark);
 
-        void toStart(Long orderId);
+        void toStart(Long orderId,LoadingButton btn);
 
         void arriveStart(Long orderId);
 
-        void startWait(Long orderId);
+        void startWait(Long orderId, LoadingButton btn);
 
-        void startDrive(Long orderId);
+        void startDrive(Long orderId, LoadingButton btn);
 
-        void arriveDes(DJOrder djOrder);
+        void arriveDes(DJOrder djOrder, LoadingButton btn);
 
         void navi(LatLng latLng, String poi);
 

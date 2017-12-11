@@ -10,9 +10,12 @@ import android.graphics.RectF;
 import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.animation.LinearInterpolator;
 
 import com.easymi.component.R;
+import com.easymi.component.utils.DensityUtil;
+import com.easymi.component.utils.PhoneUtil;
 
 /**
  * Created by xyin on 2017/12/3.
@@ -51,9 +54,9 @@ public class LoadingButton extends AppCompatButton {
         super(context, attrs, defStyleAttr);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.LoadingButton, defStyleAttr, 0);
-        duration = a.getInt(R.styleable.LoadingButton_lb_duration, 800);
+        duration = a.getInt(R.styleable.LoadingButton_lb_duration, 1000);
         int color = a.getColor(R.styleable.LoadingButton_lb_strokeColor, Color.rgb(255, 255, 255));
-        radius = a.getDimension(R.styleable.LoadingButton_lb_radius, 0);
+        radius = a.getDimension(R.styleable.LoadingButton_lb_radius, DensityUtil.dp2px(getContext(), 10));
         float strokeWidth = a.getDimension(R.styleable.LoadingButton_lb_strokeWidth, 10);
         a.recycle();
 

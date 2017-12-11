@@ -167,10 +167,11 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
-            <Button
+            <com.easymi.component.widget.LoadingButton
                 android:id="@+id/sure_change"
                 android:layout_width="0.0dp"
                 android:layout_height="40dp"
+                android:gravity="center"
                 android:layout_weight="1"
                 android:background="@drawable/corners_accent"
                 android:text="@string/change_confirm"

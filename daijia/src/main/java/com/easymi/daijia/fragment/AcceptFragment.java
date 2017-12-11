@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.base.RxLazyFragment;
+import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.R;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.flowMvp.ActFraCommBridge;
@@ -18,7 +19,7 @@ import com.easymi.daijia.flowMvp.ActFraCommBridge;
 
 public class AcceptFragment extends RxBaseFragment {
 
-    Button acceptBtn;
+    LoadingButton acceptBtn;
     LinearLayout refuseCon;
     TextView startPlaceText;
     TextView endPlaceText;
@@ -59,7 +60,9 @@ public class AcceptFragment extends RxBaseFragment {
         endPlaceText.setText(djOrder.endPlace);
         acceptBtn.setOnClickListener(view -> {
             if(null != bridge){
-                bridge.doAccept();
+                acceptBtn.setClickable(false);
+                acceptBtn.setStatus(LoadingButton.STATUS_LOADING);
+                bridge.doAccept(acceptBtn);
             }
         });
 
