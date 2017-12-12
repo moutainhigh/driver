@@ -33,8 +33,6 @@ public class MySubscriber<T> extends Subscriber<T> implements ProgressDismissLis
     private NoErrSubscriberListener<T> noErrSubscriberListener;
     private HaveErrSubscriberListener<T> haveErrSubscriberListener;
 
-    private LoadingButton loadingButton;
-
     /**
      * @param needShowProgress        是否显示加载框
      * @param dialogCancelable        加载框是否可以取消
@@ -76,7 +74,6 @@ public class MySubscriber<T> extends Subscriber<T> implements ProgressDismissLis
      */
     public MySubscriber(Context context, LoadingButton button, HaveErrSubscriberListener<T> haveErrSubscriberListener) {
         this.context = context;
-        this.loadingButton = button;
         this.haveErrSubscriberListener = haveErrSubscriberListener;
         loadingBtnHandler = new LoadingBtnHandler(button, this);
     }
@@ -88,7 +85,6 @@ public class MySubscriber<T> extends Subscriber<T> implements ProgressDismissLis
      */
     public MySubscriber(Context context, LoadingButton button, NoErrSubscriberListener<T> noErrSubscriberListener) {
         this.context = context;
-        this.loadingButton = button;
         this.noErrSubscriberListener = noErrSubscriberListener;
         loadingBtnHandler = new LoadingBtnHandler(button, this);
     }
