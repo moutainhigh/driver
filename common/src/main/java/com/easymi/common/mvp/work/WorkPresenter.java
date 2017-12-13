@@ -48,7 +48,7 @@ public class WorkPresenter implements WorkContract.Presenter {
         model = new WorkModel();
 
         initDaemon();
-        startLocService(context);
+        startLocService();
     }
 
     /**
@@ -121,11 +121,8 @@ public class WorkPresenter implements WorkContract.Presenter {
     }
 
     @Override
-    public void startLocService(Context context) {
-        Intent intent = new Intent();
-        intent.setAction(LocService.START_LOC);
-        intent.setPackage(context.getPackageName());
-        context.startService(intent);
+    public void startLocService() {
+        XApp.getInstance().startLocService();
     }
 
     @Override

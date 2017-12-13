@@ -1,7 +1,6 @@
 package com.easymi.common.activity;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,12 +14,10 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.easymi.common.R;
 import com.easymi.common.mvp.work.WorkActivity;
 import com.easymi.component.Config;
-import com.easymi.component.app.ActivityManager;
+import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.permission.RxPermissions;
-
-import rx.functions.Action1;
 
 /**
  * Created by developerLzh on 2017/11/3 0003.
@@ -51,6 +48,7 @@ public class SplashActivity extends RxBaseActivity {
     }
 
     private void delayIn() {
+        XApp.getInstance().startLocService();
         Handler handler = new Handler();
         handler.postDelayed(() -> runOnUiThread(() -> {
             boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
@@ -69,7 +67,7 @@ public class SplashActivity extends RxBaseActivity {
     private void delayExit() {
         Handler handler = new Handler();
         handler.postDelayed(() -> runOnUiThread(() -> {
-            ActivityManager.getInstance().finishAllActivity();
+            ActManager.getInstance().finishAllActivity();
         }), 1000);
     }
 

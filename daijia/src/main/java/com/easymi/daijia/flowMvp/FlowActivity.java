@@ -9,13 +9,11 @@ import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.amap.api.maps.AMap;
-import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
@@ -28,21 +26,16 @@ import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.maps.utils.overlay.SmoothMoveMarker;
 import com.amap.api.navi.AMapNaviException;
 import com.amap.api.navi.model.AMapNaviPath;
-import com.amap.api.navi.model.NaviPath;
-import com.amap.api.navi.model.RouteOverlayOptions;
 import com.amap.api.navi.view.RouteOverLay;
-import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.core.PoiItem;
-import com.amap.api.services.route.DrivePath;
 import com.amap.api.services.route.DriveRouteResult;
 import com.easymi.component.Config;
 import com.easymi.component.activity.PlaceActivity;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
-import com.easymi.component.loc.LocReceiver;
+import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocService;
-import com.easymi.component.loc.ReceiveLocInterface;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.MapUtil;
@@ -80,7 +73,7 @@ import co.lujun.androidtagview.TagView;
  * Created by developerLzh on 2017/11/13 0013.
  */
 @Route(path = "/daijia/FlowActivity")
-public class FlowActivity extends RxBaseActivity implements FlowContract.View, ReceiveLocInterface, TraceInterface {
+public class FlowActivity extends RxBaseActivity implements FlowContract.View, LocObserver, TraceInterface {
     public static final int CANCEL_ORDER = 0X01;
     public static final int CHANGE_END = 0X02;
 
@@ -104,8 +97,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
     private FlowPresenter presenter;
 
     private ActFraCommBridge bridge;
-
-    private LocReceiver locReceiver;
 
     private TraceReceiver traceReceiver;
 
@@ -579,9 +570,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
     @Override
     protected void onStart() {
         super.onStart();
-        locReceiver = new LocReceiver(this);
-        IntentFilter filter = new IntentFilter(LocService.LOC_CHANGED);
-        registerReceiver(locReceiver, filter);
+        XApp.getInstance().addObserver(this);//添加位置订阅
 
         traceReceiver = new TraceReceiver(this);
         IntentFilter filter2 = new IntentFilter();
@@ -628,7 +617,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
     @Override
     protected void onStop() {
         super.onStop();
-        unregisterReceiver(locReceiver);
+        XApp.getInstance().deleteObserver(this);//取消位置订阅
+
         unregisterReceiver(traceReceiver);
     }
 

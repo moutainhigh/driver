@@ -56,7 +56,7 @@ public interface WorkContract {
 
         void indexOrders();
 
-        void startLocService(Context context);
+        void startLocService();
 
         void online(LoadingButton btn);
         void offline();

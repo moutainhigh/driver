@@ -1,7 +1,6 @@
 package com.easymi.common.mvp.work;
 
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -40,13 +38,10 @@ import com.easymi.common.entity.Notifity;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
-import com.easymi.component.loc.LocReceiver;
-import com.easymi.component.loc.LocService;
-import com.easymi.component.loc.ReceiveLocInterface;
+import com.easymi.component.loc.LocObserver;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.MapUtil;
-import com.easymi.component.widget.BottomBehavior;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.component.widget.pinned.PinnedHeaderDecoration;
@@ -62,7 +57,7 @@ import java.util.List;
  */
 
 @Route(path = "/common/WorkActivity")
-public class WorkActivity extends RxBaseActivity implements WorkContract.View, ReceiveLocInterface {
+public class WorkActivity extends RxBaseActivity implements WorkContract.View, LocObserver {
 
     LinearLayout bottomBar;
 
@@ -253,7 +248,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
             loadingFrame.setVisibility(View.VISIBLE);
             AnimationDrawable spinner = (AnimationDrawable) loadingImg.getBackground();
             spinner.start();
-            presenter.startLocService(this);
+            presenter.startLocService();
         });
 
     }
@@ -358,20 +353,16 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
         mapView.onDestroy();
     }
 
-    LocReceiver locReceiver;
-
     @Override
     protected void onStart() {
         super.onStart();
-        locReceiver = new LocReceiver(this);
-        IntentFilter filter = new IntentFilter(LocService.LOC_CHANGED);
-        registerReceiver(locReceiver, filter);
+        XApp.getInstance().addObserver(this);//添加位置改变的订阅
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        unregisterReceiver(locReceiver);
+        XApp.getInstance().deleteObserver(this);//取消位置改变的订阅
     }
 
     public void mapHideShow(View view) {

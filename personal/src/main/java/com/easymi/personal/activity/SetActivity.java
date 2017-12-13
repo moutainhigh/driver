@@ -1,26 +1,21 @@
 package com.easymi.personal.activity;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CompoundButton;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.easymi.component.Config;
-import com.easymi.component.app.ActivityManager;
+import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
-import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.switchButton.SwitchButton;
 import com.easymi.personal.McService;
@@ -151,7 +146,7 @@ public class SetActivity extends RxBaseActivity {
 
         mRxManager.add(observable.subscribe(new MySubscriber<EmResult>(this, true,
                 true, emResult -> {
-            ActivityManager.getInstance().finishAllActivity();
+            ActManager.getInstance().finishAllActivity();
             startActivity(new Intent(SetActivity.this, LoginActivity.class));
         })));
     }

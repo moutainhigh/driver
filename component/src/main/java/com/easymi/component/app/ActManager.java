@@ -15,11 +15,11 @@ import java.util.Stack;
  * 管理activity,使用内部容器法实现单例模式.
  */
 
-public class ActivityManager {
+public class ActManager {
 
     private static Stack<Activity> activityStack;
 
-    private ActivityManager() {
+    private ActManager() {
         activityStack = new Stack<>();
     }
 
@@ -27,7 +27,7 @@ public class ActivityManager {
      * SingletonHolder实现单例模式.
      */
     private static class SingletonHolder {
-        private static final ActivityManager INSTANCE = new ActivityManager();
+        private static final ActManager INSTANCE = new ActManager();
     }
 
     /**
@@ -35,7 +35,7 @@ public class ActivityManager {
      *
      * @return 返回单例对象
      */
-    public static ActivityManager getInstance() {
+    public static ActManager getInstance() {
         return SingletonHolder.INSTANCE;
     }
 

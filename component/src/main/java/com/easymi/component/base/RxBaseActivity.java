@@ -2,7 +2,7 @@ package com.easymi.component.base;
 
 import android.os.Bundle;
 
-import com.easymi.component.app.ActivityManager;
+import com.easymi.component.app.ActManager;
 import com.easymi.component.rxmvp.RxManager;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
@@ -23,7 +23,7 @@ public abstract class RxBaseActivity extends RxAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mRxManager = new RxManager();
-        ActivityManager.getInstance().addActivity(this);
+        ActManager.getInstance().addActivity(this);
         //设置布局内容
         setContentView(getLayoutId());
         //初始化控件
