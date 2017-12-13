@@ -175,13 +175,13 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
     @Override
     public void initToolBar() {
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setLeftIcon(R.mipmap.drawer_icon, view -> {
+        toolbar.setLeftIcon(R.drawable.ic_person_white_24dp, view -> {
             ARouter.getInstance()
                     .build("/personal/PersonalActivity")
                     .navigation();
         });
         toolbar.setTitle(R.string.work_title);
-        toolbar.setRightIcon(R.mipmap.menu_icon, view -> {
+        toolbar.setRightIcon(R.drawable.ic_more_icon, view -> {
             ARouter.getInstance()
                     .build("/personal/MoreActivity")
                     .navigation();
