@@ -2,10 +2,8 @@ package com.easymi.component.app;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.StringRes;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
@@ -22,9 +20,7 @@ import com.iflytek.cloud.SpeechSynthesizer;
 import com.iflytek.cloud.SpeechUtility;
 import com.iflytek.cloud.SynthesizerListener;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created by xyin on 2016/9/30.

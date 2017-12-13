@@ -8,8 +8,8 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.easymi.component.Config;
-import com.easymi.component.R;
 import com.easymi.component.utils.ToastUtil;
+import com.easymi.personal.R;
 import com.tencent.mm.sdk.modelbase.BaseReq;
 import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.openapi.IWXAPI;
@@ -49,10 +49,10 @@ public class WXPayEntryActivity extends AppCompatActivity implements IWXAPIEvent
         errcode = resp.errCode;
         Log.e("datadata", "resp.code--->" + resp.errCode);
         if (errcode == 0) {
-            ToastUtil.showMessage(this,getString(R.string.wx_pay_suc));
+            ToastUtil.showMessage(this,getString(R.string.wx_pay_success));
             finish();
         } else {
-            ToastUtil.showMessage(this,getString(R.string.wx_pay_failed));
+            ToastUtil.showMessage(this,getString(R.string.wx_pay_fail));
             finish();
         }
     }

@@ -1,1 +1,1 @@
-include ':app', ':personal', ':common', ':component', ':daijia'
+include ':app', ':personal', ':common', ':component', ':daijia', ':daemon'

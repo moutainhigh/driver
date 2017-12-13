@@ -48,6 +48,9 @@ public interface WorkContract {
     }
 
     interface Presenter {
+
+        void initDaemon();
+
         void queryStats();
 
         void indexOrders();

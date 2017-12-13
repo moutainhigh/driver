@@ -59,9 +59,10 @@ dependencies {
 
 
     api 'com.aliyun.ams:alicloud-android-push:3.0.12'
-
-
     api 'com.aliyun.ams:alicloud-android-third-push:3.0.5@aar'
+
+    api 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.1.0'
+    api 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.0'
 
 
     annotationProcessor 'com.alibaba:arouter-compiler:1.1.3'

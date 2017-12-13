@@ -197,6 +197,26 @@
             android:process=":channel"
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
         <!-- 阿里云推送配置结束-->
+
+
+        <!-- Mqtt Service -->
+        <service android:name="org.eclipse.paho.android.service.MqttService" />
+
+        <service
+            android:name="com.easymi.common.daemon.DaemonService"
+            android:process=":process1" />
+
+        <receiver
+            android:name="com.easymi.common.daemon.PuppetReceiver1"
+            android:process=":process1" />
+
+        <service
+            android:name="com.easymi.common.daemon.PuppetService"
+            android:process=":process2" />
+        <receiver
+            android:name="com.easymi.common.daemon.PuppetReceiver2"
+            android:process=":process2" />
+
     </application>
 
 </manifest>

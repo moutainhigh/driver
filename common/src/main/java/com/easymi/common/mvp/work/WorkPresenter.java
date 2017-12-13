@@ -2,8 +2,15 @@ package com.easymi.common.mvp.work;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
+import com.alibaba.sdk.android.push.CloudPushService;
+import com.alibaba.sdk.android.push.CommonCallback;
+import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.easymi.common.R;
+import com.easymi.common.daemon.DaemonService;
+import com.easymi.common.push.AliDetailService;
+import com.easymi.common.push.MQTTService;
 import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
@@ -38,6 +45,20 @@ public class WorkPresenter implements WorkContract.Presenter {
         this.context = context;
         this.view = view;
         model = new WorkModel();
+
+        initDaemon();
+
+    }
+
+    /**
+     * 开启保活服务
+     */
+    @Override
+    public void initDaemon() {
+        //开起保活service
+        Intent daemonIntent = new Intent(context, DaemonService.class);
+        daemonIntent.setPackage(context.getPackageName());
+        context.startService(daemonIntent);
     }
 
     @Override
@@ -108,7 +129,7 @@ public class WorkPresenter implements WorkContract.Presenter {
 
     @Override
     public void online() {
-        XApp.getInstance().syntheticVoice(context.getString(R.string.start_lis_order),true);
+        XApp.getInstance().syntheticVoice(context.getString(R.string.start_lis_order), true);
 
         long driverId = EmUtil.getEmployId();
 
@@ -119,7 +140,7 @@ public class WorkPresenter implements WorkContract.Presenter {
 
     @Override
     public void offline() {
-        XApp.getInstance().syntheticVoice(context.getString(R.string.stop_lis_order),true);
+        XApp.getInstance().syntheticVoice(context.getString(R.string.stop_lis_order), true);
 
         long driverId = EmUtil.getEmployId();
 
