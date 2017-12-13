@@ -35,6 +35,7 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.loc.LocObserver;
+import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.loc.LocService;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
@@ -570,7 +571,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
     @Override
     protected void onStart() {
         super.onStart();
-        XApp.getInstance().addObserver(this);//添加位置订阅
+        LocReceiver.getInstance().addObserver(this);//添加位置订阅
 
         traceReceiver = new TraceReceiver(this);
         IntentFilter filter2 = new IntentFilter();
@@ -617,7 +618,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
     @Override
     protected void onStop() {
         super.onStop();
-        XApp.getInstance().deleteObserver(this);//取消位置订阅
+        LocReceiver.getInstance().deleteObserver(this);//取消位置订阅
 
         unregisterReceiver(traceReceiver);
     }

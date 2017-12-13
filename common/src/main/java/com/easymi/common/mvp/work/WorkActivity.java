@@ -39,6 +39,7 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.loc.LocObserver;
+import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.MapUtil;
@@ -356,13 +357,13 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     @Override
     protected void onStart() {
         super.onStart();
-        XApp.getInstance().addObserver(this);//添加位置改变的订阅
+        LocReceiver.getInstance().addObserver(this);//添加位置改变的订阅
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        XApp.getInstance().deleteObserver(this);//取消位置改变的订阅
+        LocReceiver.getInstance().deleteObserver(this);//取消位置改变的订阅
     }
 
     public void mapHideShow(View view) {

@@ -21,7 +21,6 @@ import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.loc.LocService;
 import com.easymi.component.loc.LocSubject;
-import com.easymi.component.loc.ReceiveLocInterface;
 import com.easymi.component.utils.StringUtils;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
@@ -41,12 +40,11 @@ import java.util.List;
  * application 注:每启动一个新的进程就会调用application的onCreate方法(需要注意某些方法是否允许多次初始化).
  */
 
-public class XApp extends MultiDexApplication implements ReceiveLocInterface, LocSubject {
+public class XApp extends MultiDexApplication {
 
     private static final String SHARED_PREFERENCES_NAME = "em"; //SharedPreferences 文件名
-    private static XApp instance;    //实例化对象
 
-    private static EmLoc lastLoc;
+    private static XApp instance;    //实例化对象
 
     public static SpeechSynthesizer iflytekSpe;
 
@@ -54,15 +52,11 @@ public class XApp extends MultiDexApplication implements ReceiveLocInterface, Lo
 
     private AudioManager.OnAudioFocusChangeListener mFocusChangeListener;
 
-    private LocReceiver locReceiver;
-
-    private List<LocObserver> observers = new ArrayList<>();
-
     @Override
     public void onCreate() {
         super.onCreate();
 
-        if(!isAppProcess()){
+        if (!isAppProcess()) {
             return;
         }
 
@@ -78,10 +72,6 @@ public class XApp extends MultiDexApplication implements ReceiveLocInterface, Lo
 
         SpeechUtility.createUtility(XApp.this, "appid=" + "57c91477");
         initIflytekTTS();
-
-        locReceiver = new LocReceiver(this);
-        IntentFilter filter = new IntentFilter(LocService.LOC_CHANGED);
-        registerReceiver(locReceiver, filter);
     }
 
     /**
@@ -287,38 +277,6 @@ public class XApp extends MultiDexApplication implements ReceiveLocInterface, Lo
         }
     }
 
-    @Override
-    public void receiveLoc(EmLoc emLoc) {
-        Log.e("receiveLoc", "xapp receive loc-->" + emLoc.toString());
-        lastLoc = emLoc;
-        notifyObserver();
-    }
-
-    /**
-     * 添加观察者
-     *
-     * @param obj
-     */
-    @Override
-    public void addObserver(LocObserver obj) {
-        observers.add(obj);
-    }
-
-    /**
-     * @param obj
-     */
-    @Override
-    public void deleteObserver(LocObserver obj) {
-        observers.remove(obj);
-    }
-
-    @Override
-    public void notifyObserver() {
-        for (LocObserver observer : observers) {
-            observer.receiveLoc(lastLoc);
-        }
-    }
-
     /**
      * 开启定位服务
      */
@@ -331,21 +289,26 @@ public class XApp extends MultiDexApplication implements ReceiveLocInterface, Lo
 
     /**
      * 因为应用内存在多进程 会重复调用Application的onCreate() 这里做个判断
+     *
      * @return
      */
     protected boolean isAppProcess() {
         int pid = android.os.Process.myPid();
         List<ActivityManager.RunningAppProcessInfo> processInfos
                 = AndroidProcesses.getRunningAppProcessInfo(this);
-        for (ActivityManager.RunningAppProcessInfo processInfo : processInfos) {
-            if (pid == processInfo.pid) {
-                String currentProcessName = processInfo.processName;
-                if (StringUtils.isNotBlank(currentProcessName)
-                        && currentProcessName.equals(Config.APP_PACKGE_NAME)) {
-                    return true;
+        if (processInfos.size() != 0) {
+            for (ActivityManager.RunningAppProcessInfo processInfo : processInfos) {
+                if (pid == processInfo.pid) {
+                    String currentProcessName = processInfo.processName;
+                    if (StringUtils.isNotBlank(currentProcessName)
+                            && currentProcessName.equals(Config.APP_PACKGE_NAME)) {
+                        return true;
+                    }
                 }
             }
+            return false;
+        } else { //在7.0以上或者部分手机还是不能获取到
+            return true;
         }
-        return false;
     }
 }

@@ -38,5 +38,11 @@
             </intent-filter>
         </service>
 
+        <receiver android:name=".loc.LocReceiver">
+            <intent-filter>
+                <action android:name="com.easymi.eomponent.LOC_CHANGED" />
+            </intent-filter>
+        </receiver>
+
     </application>
 </manifest>
