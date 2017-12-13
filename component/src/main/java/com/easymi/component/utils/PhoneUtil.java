@@ -2,6 +2,7 @@ package com.easymi.component.utils;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +17,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.easymi.component.permission.RxPermissions;
+
+import java.util.List;
 
 import rx.functions.Action1;
 
@@ -141,7 +144,7 @@ public class PhoneUtil {
         }
     }
 
-    public static void showKeyboard(View view){
+    public static void showKeyboard(View view) {
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
     }
@@ -161,8 +164,26 @@ public class PhoneUtil {
                         }
                     });
         } catch (Exception e) {
-            Log.e("exception",e.getMessage());
+            Log.e("exception", e.getMessage());
         }
+    }
+
+    /**
+     * 判断服务是否处于运行状态.
+     *
+     * @param servicename
+     * @param context
+     * @return
+     */
+    public static boolean isServiceRunning(String servicename, Context context) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo> infos = am.getRunningServices(100);
+        for (ActivityManager.RunningServiceInfo info : infos) {
+            if (servicename.equals(info.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

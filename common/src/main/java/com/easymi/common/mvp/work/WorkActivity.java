@@ -126,7 +126,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
         onLineBtn.setOnClickListener(view -> {
             onLineBtn.setClickable(false);
             onLineBtn.setStatus(LoadingButton.STATUS_LOADING);
-            presenter.online();
+            presenter.online(onLineBtn);
         });
         offlineCon.setOnClickListener(v -> presenter.offline());
 
@@ -260,8 +260,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
 
     @Override
     public void onlineSuc() {
-        onLineBtn.setClickable(true);
-        onLineBtn.setStatus(LoadingButton.STATUS_NORMAL);
+        XApp.getInstance().syntheticVoice(getString(R.string.start_lis_order), true);
         listenOrderCon.setVisibility(View.VISIBLE);
         rippleBackground.startRippleAnimation();
         onLineBtn.setVisibility(View.GONE);
@@ -269,6 +268,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
 
     @Override
     public void offlineSuc() {
+        XApp.getInstance().syntheticVoice(getString(R.string.stop_lis_order), true);
         listenOrderCon.setVisibility(View.GONE);
         rippleBackground.stopRippleAnimation();
         onLineBtn.setVisibility(View.VISIBLE);
@@ -397,8 +397,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
     private Marker myLocMarker;
 
     @Override
-    public void receiveLoc() {
-        EmLoc location = EmUtil.getLastLoc();
+    public void receiveLoc(EmLoc location) {
         if (null == location) {
             return;
         }

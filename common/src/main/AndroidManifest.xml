@@ -88,6 +88,8 @@
             </intent-filter>
         </service>
 
+        <service android:name=".push.MQTTService" />
+
     </application>
 
 </manifest>

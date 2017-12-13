@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/component" />
+            <option value="$PROJECT_DIR$/daemon" />
             <option value="$PROJECT_DIR$/daijia" />
             <option value="$PROJECT_DIR$/personal" />
           </set>
