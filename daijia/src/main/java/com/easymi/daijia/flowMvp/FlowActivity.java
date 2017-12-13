@@ -8,12 +8,14 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
@@ -336,7 +338,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
         aMap.getUiSettings().setRotateGesturesEnabled(false);
         aMap.getUiSettings().setTiltGesturesEnabled(false);//倾斜手势
 
-        receiveLoc();//手动调用上次位置 减少从北京跳过来的时间
+        String locStr = XApp.getMyPreferences().getString(Config.SP_LAST_LOC, "");
+        receiveLoc(new Gson().fromJson(locStr, EmLoc.class));//手动调用上次位置 减少从北京跳过来的时间
     }
 
     private Marker startMarker;
@@ -513,7 +516,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
         bridge = new ActFraCommBridge() {
             @Override
             public void doAccept(LoadingButton btn) {
-                presenter.acceptOrder(djOrder.orderId,btn);
+                presenter.acceptOrder(djOrder.orderId, btn);
             }
 
             @Override
@@ -530,7 +533,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
 
             @Override
             public void doToStart(LoadingButton btn) {
-                presenter.toStart(djOrder.orderId,btn);
+                presenter.toStart(djOrder.orderId, btn);
             }
 
             @Override
@@ -540,12 +543,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
 
             @Override
             public void doStartWait(LoadingButton btn) {
-                presenter.startWait(djOrder.orderId,btn);
+                presenter.startWait(djOrder.orderId, btn);
             }
 
             @Override
             public void doStartDrive(LoadingButton btn) {
-                presenter.startDrive(djOrder.orderId,btn);
+                presenter.startDrive(djOrder.orderId, btn);
             }
 
             @Override
@@ -557,7 +560,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
 
             @Override
             public void doConfirmMoney(LoadingButton btn) {
-                presenter.arriveDes(djOrder,btn);
+                presenter.arriveDes(djOrder, btn);
             }
 
             @Override
@@ -634,11 +637,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, R
     private LatLng lastLatlng;
 
     @Override
-    public void receiveLoc() {
-        EmLoc location = EmUtil.getLastLoc();
+    public void receiveLoc(EmLoc location) {
         if (null == location) {
             return;
         }
+        Log.e("locPos", "bearing 2 >>>>" + location.bearing);
         LatLng latLng = new LatLng(location.latitude, location.longitude);
 
         if (null == smoothMoveMarker) {//首次进入

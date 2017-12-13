@@ -1,6 +1,7 @@
 package com.easymi.component.loc;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -23,6 +24,8 @@ import java.util.List;
 
 /**
  * Created by developerLzh on 2017/11/18 0018.
+ * -------------注意注意！！！！！！-------------
+ * 这是在另外一个进程里面，不要直接改变其他进程的数据
  */
 
 public class LocService extends NotiService implements AMapLocationListener {
@@ -113,50 +116,6 @@ public class LocService extends NotiService implements AMapLocationListener {
                 sendBroadcast(intent);
             });
         }
-
-//        List<TraceLocation> traceLocations = new ArrayList<>();
-//        for (EmLoc loc : locs) {
-//            TraceLocation traceLocation = new TraceLocation();
-//            traceLocation.setBearing(loc.bearing);
-//            traceLocation.setLatitude(loc.latitude);
-//            traceLocation.setLongitude(loc.longitude);
-//            traceLocation.setSpeed(loc.speed);
-//            traceLocation.setTime(loc.locTime);
-//            traceLocations.add(traceLocation);
-//        }
-
-//        lbsTraceClient.queryProcessedTrace(lineId, traceLocations, LBSTraceClient.TYPE_AMAP, new TraceListener() {
-//            @Override
-//            public void onRequestFailed(int lineId, String errInfo) {
-//                Intent intent1 = new Intent();
-//                intent1.setAction(BROAD_TRACE_FAILED);
-//                intent1.putExtra("originalLoc", new Gson().toJson(locs));
-//                intent1.putExtra("reason", errInfo);
-//                sendBroadcast(intent1);
-//
-//                locs.clear();
-//            }
-//
-//            @Override
-//            public void onTraceProcessing(int lineId, int index, List<LatLng> list) {
-//
-//            }
-//
-//            @Override
-//            public void onFinished(int lineId,
-//                                   List<LatLng> linepoints,
-//                                   int distance,
-//                                   int waitingtime) {
-//
-//                Intent intent = new Intent();
-//                intent.setAction(BROAD_TRACE_SUC);
-//                intent.putExtra("originalLoc", new Gson().toJson(locs));
-//                intent.putExtra("traceLatLngs", new Gson().toJson(linepoints));
-//                sendBroadcast(intent);
-//
-//                locs.clear();
-//            }
-//        });
     }
 
     private void stopTrace() {
@@ -172,17 +131,16 @@ public class LocService extends NotiService implements AMapLocationListener {
             if (amapLocation.getErrorCode() == AMapLocation.LOCATION_SUCCESS) {
                 EmLoc locationInfo = EmLoc.ALocToLoc(amapLocation);
 
-                XApp.getPreferencesEditor().putString(Config.SP_LAST_LOC, new Gson().toJson(locationInfo)).apply();//保存上次的位置信息 json格式字符创
+//                if (XApp.getMyPreferences().getBoolean(Config.SP_NEED_TRACE, false)) {
+//                    startTrace();
+//                } else {
+//                    stopTrace();
+//                }
 
-                if (XApp.getMyPreferences().getBoolean(Config.SP_NEED_TRACE, false)) {
-                    startTrace();
-                } else {
-                    stopTrace();
-                }
-
-                Log.e("locPos", locationInfo.toString());
+                Log.e("locPos", "bearing>>>>" + locationInfo.bearing);
                 Intent intent = new Intent();
                 intent.setAction(LOC_CHANGED);
+                intent.putExtra("locPos", new Gson().toJson(locationInfo));
                 sendBroadcast(intent);//发送位置变化广播
 
             } else {

@@ -12,6 +12,7 @@ import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.common.entity.BaseOrder;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.widget.LoadingButton;
 
 import java.util.List;
 
@@ -57,7 +58,7 @@ public interface WorkContract {
 
         void startLocService(Context context);
 
-        void online();
+        void online(LoadingButton btn);
         void offline();
 
         void loadNotice(long id);

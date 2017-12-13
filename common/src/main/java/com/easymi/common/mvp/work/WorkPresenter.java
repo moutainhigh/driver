@@ -24,6 +24,7 @@ import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.widget.LoadingButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,7 @@ public class WorkPresenter implements WorkContract.Presenter {
         model = new WorkModel();
 
         initDaemon();
-
+        startLocService(context);
     }
 
     /**
@@ -128,20 +129,15 @@ public class WorkPresenter implements WorkContract.Presenter {
     }
 
     @Override
-    public void online() {
-        XApp.getInstance().syntheticVoice(context.getString(R.string.start_lis_order), true);
-
+    public void online(LoadingButton btn) {
         long driverId = EmUtil.getEmployId();
 
         Observable<EmResult> observable = model.online(driverId, Config.APP_KEY);
-        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
-                true, emResult -> view.onlineSuc())));
+        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, btn, emResult -> view.onlineSuc())));
     }
 
     @Override
     public void offline() {
-        XApp.getInstance().syntheticVoice(context.getString(R.string.stop_lis_order), true);
-
         long driverId = EmUtil.getEmployId();
 
         Observable<EmResult> observable = model.offline(driverId, Config.APP_KEY);
