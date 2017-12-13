@@ -17,6 +17,7 @@ import com.easymi.component.entity.Employ;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.pay.Payer;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
@@ -100,7 +101,7 @@ public class RechargeActivity extends RxBaseActivity {
     }
 
     private void payWx(double money) {
-
+//        new Payer().wxPay();
     }
 
     private void payZfb(double money) {

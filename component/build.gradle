@@ -38,7 +38,7 @@ android {
 
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    api fileTree(include: ['*.jar'], dir: 'libs')
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -64,7 +64,6 @@ dependencies {
 
     api 'com.nineoldandroids:library:2.4.0'
     api 'com.github.florent37:viewanimator:1.0.0@aar'
-
 
     api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.1.6'
 

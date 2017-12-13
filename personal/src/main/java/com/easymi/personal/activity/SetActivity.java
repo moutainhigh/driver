@@ -3,8 +3,10 @@ package com.easymi.personal.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CompoundButton;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -20,6 +22,7 @@ import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.widget.CusToolbar;
+import com.easymi.component.widget.switchButton.SwitchButton;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
 
@@ -32,6 +35,11 @@ import rx.schedulers.Schedulers;
  */
 @Route(path = "/personal/SetActivity")
 public class SetActivity extends RxBaseActivity {
+
+    SwitchButton voiceAble;
+    SwitchButton shakeAble;
+    SwitchButton alwaysOren;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_set;
@@ -39,6 +47,33 @@ public class SetActivity extends RxBaseActivity {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
+        voiceAble = findViewById(R.id.voice_able_btn);
+        shakeAble = findViewById(R.id.shake_btn);
+        alwaysOren = findViewById(R.id.oren_btn);
+
+        voiceAble.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_VOICE_ABLE, true));
+        shakeAble.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_SHAKE_ABLE, true));
+        alwaysOren.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_ALWAYS_OREN, false));
+
+        initSwitch();
+    }
+
+    private void initSwitch() {
+        voiceAble.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+            editor.putBoolean(Config.SP_VOICE_ABLE, isChecked);
+            editor.apply();
+        });
+        shakeAble.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+            editor.putBoolean(Config.SP_SHAKE_ABLE, isChecked);
+            editor.apply();
+        });
+        alwaysOren.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+            editor.putBoolean(Config.SP_ALWAYS_OREN, isChecked);
+            editor.apply();
+        });
     }
 
     @Override

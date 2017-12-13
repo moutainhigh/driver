@@ -220,4 +220,9 @@
     <string name="fabu">发布</string>
     <string name="different_new_confirm">新密码与确认密码不一致</string>
     <string name="same_old_new">新密码与旧密码相同</string>
+
+    <string name="wx_pay_suc">微信充值成功</string>
+    <string name="wx_pay_failed">微信充值失败</string>
+    <string name="wx_share_suc">微信分享成功</string>
+    <string name="wx_share_failed">微信分享失败</string>
 </resources>

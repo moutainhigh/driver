@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.CusBottomSheetDialog;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.R;
@@ -100,5 +101,19 @@ public class SettleFragmentDialog {
             intent.putExtra("djOrder", djOrder);
             context.startActivity(intent);
         });
+
+        setText();
+    }
+
+    private void setText() {
+        prepayMoneyText.setText(String.valueOf(djOrder.budgetFee));
+        needPayText.setText(String.valueOf(djOrder.orderMoney));
+
+        if (StringUtils.isBlank(djOrder.carNo)) {
+            carNoText.setVisibility(View.GONE);
+        } else {
+            carNoText.setText(djOrder.carNo);
+            carNoText.setVisibility(View.VISIBLE);
+        }
     }
 }

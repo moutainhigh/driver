@@ -42,4 +42,7 @@
 
     <string name="start_lis_order">开始听单啦！</string>
     <string name="stop_lis_order">停止听单啦！</string>
+
+    <string name="current_place">当前地址：</string>
+
 </resources>

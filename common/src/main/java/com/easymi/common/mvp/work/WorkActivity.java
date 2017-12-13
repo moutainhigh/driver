@@ -27,6 +27,7 @@ import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.easymi.common.R;
@@ -44,11 +45,14 @@ import com.easymi.component.loc.LocService;
 import com.easymi.component.loc.ReceiveLocInterface;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.MapUtil;
 import com.easymi.component.widget.BottomBehavior;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.component.widget.pinned.PinnedHeaderDecoration;
 import com.skyfishjy.library.RippleBackground;
+
+import net.cachapa.expandablelayout.ExpandableLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,8 +69,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
     MapView mapView;
 
     RippleBackground rippleBackground;
-
-    BottomBehavior behavior;
 
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
@@ -91,6 +93,10 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
     TextView notifityContent;
     ImageView notifityClose;
 
+    TextView currentPlace;
+
+    ExpandableLayout expandableLayout;
+
     private WorkPresenter presenter;
 
     @Override
@@ -109,8 +115,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
         initNotifity();
 
         mapView.onCreate(savedInstanceState);
-
-        behavior = BottomBehavior.from(bottomBar);
 
         createOrder.setOnClickListener(v -> {
             Intent intent = new Intent(WorkActivity.this, CreateActivity.class);
@@ -163,6 +167,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
         notifityClose = findViewById(R.id.ic_close);
 
         offlineCon = findViewById(R.id.offline);
+        currentPlace = findViewById(R.id.current_place);
+
+        expandableLayout = findViewById(R.id.map_expand);
     }
 
     @Override
@@ -298,6 +305,14 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
             Marker marker = aMap.addMarker(options);
             markers.add(marker);
         }
+        List<LatLng> latLngs = new ArrayList<>();
+        for (NearDriver driver : drivers) {
+            LatLng latLng = new LatLng(driver.lat, driver.lng);
+            latLngs.add(latLng);
+        }
+        LatLng center = new LatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
+        LatLngBounds bounds = MapUtil.getBounds(latLngs, center);
+        aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50));
     }
 
     @Override
@@ -360,15 +375,15 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
     }
 
     public void mapHideShow(View view) {
-        if (behavior.getState() == BottomBehavior.STATE_COLLAPSED) {
-            behavior.setState(BottomBehavior.STATE_EXPANDED);
+        if (!expandableLayout.isExpanded()) {
+            expandableLayout.expand();
             RotateAnimation rotateAnimation = new RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5F,
                     Animation.RELATIVE_TO_SELF, 0.5f);
             rotateAnimation.setDuration(500);
             rotateAnimation.setFillAfter(true); //旋转后停留在这个状态
             pullIcon.startAnimation(rotateAnimation);
         } else {
-            behavior.setState(BottomBehavior.STATE_COLLAPSED);
+            expandableLayout.collapse();
             RotateAnimation rotateAnimation = new RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5F,
                     Animation.RELATIVE_TO_SELF, 0.5f);
             rotateAnimation.setDuration(500);
@@ -388,6 +403,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
             return;
         }
         LatLng latLng = new LatLng(location.latitude, location.longitude);
+        currentPlace.setText(getString(R.string.current_place)
+                + location.street + "  " + location.poiName);
         if (null == myLocMarker) {
             MarkerOptions markerOption = new MarkerOptions();
             markerOption.position(latLng);
@@ -424,8 +441,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, R
 
     @Override
     public void onBackPressed() {
-        if (behavior.getState() == BottomBehavior.STATE_EXPANDED) {
-            behavior.setState(BottomBehavior.STATE_COLLAPSED);
+        if (expandableLayout.isExpanded()) {
+            expandableLayout.collapse();
             RotateAnimation rotateAnimation = new RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5F,
                     Animation.RELATIVE_TO_SELF, 0.5f);
             rotateAnimation.setDuration(500);

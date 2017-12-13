@@ -11,6 +11,7 @@ public class Config {
     public static final String HOST = "http://192.168.0.72:8082/";
     public static final String IMG_SERVER = "http://192.168.0.111:8088/v1/img?img=";
     public static final String APP_KEY = "1f462eb305a2417c9564f2dfaf89da9c";
+    public static final String WX_APPID = "";
 
     public static final String SP_DRIVERID = "driverId";
     public static final String SP_ISLOGIN = "isLogin";
@@ -21,4 +22,9 @@ public class Config {
     public static final String SP_AVOID_HIGH_SPEED = "avoidhightspeed";//不走高速
     public static final String SP_COST = "cost";//避免收费
     public static final String SP_HIGHT_SPEED = "hightspeed";//高速优先
+
+
+    public static final String SP_VOICE_ABLE = "voice_able";//能否语音播报
+    public static final String SP_SHAKE_ABLE = "shake_able";//能否震动
+    public static final String SP_ALWAYS_OREN = "always_oren";//是否始终横屏计价
 }

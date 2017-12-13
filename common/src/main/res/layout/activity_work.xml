@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -218,15 +218,14 @@
             android:id="@+id/online_btn"
             android:layout_width="match_parent"
             android:layout_height="@dimen/btn_height"
-            android:gravity="center"
             android:layout_margin="10dp"
             android:background="@drawable/corners_button_bg"
+            android:gravity="center"
             android:text="@string/work_online"
             android:textColor="@color/white"
             android:visibility="visible"
             app:lb_duration="1000"
-            app:lb_radius="10dp"
-            />
+            app:lb_radius="10dp" />
 
         <RelativeLayout
             android:id="@+id/listen_order_con"
@@ -309,29 +308,27 @@
     <LinearLayout
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@mipmap/deep_blue"
-        android:orientation="vertical"
-        android:tag="drag_view"
-        app:layout_behavior="com.easymi.component.widget.BottomBehavior"
-        app:x_margin_top="42dp"
-        app:x_peekHeight="40dp">
+        android:layout_marginTop="45dp"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical">
 
         <RelativeLayout
             android:id="@+id/peek_con"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:onClick="mapHideShow">
 
             <TextView
+                android:id="@+id/current_place"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="45dp"
                 android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"
-                android:text="当前地址：锦绣大道南段"
+                android:text="@string/current_place"
                 android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:textSize="12sp" />
 
             <ImageView
                 android:id="@+id/pull_icon"
@@ -345,12 +342,18 @@
                 android:src="@mipmap/ic_push" />
         </RelativeLayout>
 
-        <include
-            layout="@layout/near_driver_layout"
+        <net.cachapa.expandablelayout.ExpandableLayout
+            android:id="@+id/map_expand"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/bar_height" />
+            app:el_expanded="false">
+
+            <include
+                layout="@layout/near_driver_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </net.cachapa.expandablelayout.ExpandableLayout>
 
     </LinearLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+</FrameLayout>

@@ -10,7 +10,7 @@ import java.util.List;
  * Created by liuzihao on 2017/11/15.
  */
 
-public class DJOrder implements Serializable{
+public class DJOrder implements Serializable {
 
     /**
      * 新单
@@ -109,6 +109,8 @@ public class DJOrder implements Serializable{
     public int waitTime;//等待时间
 
     public double waitFee;//
+
+    public String carNo;//车牌号
 
     public int countTime = GrabActivity.GRAB_TOTAL_TIME;
 

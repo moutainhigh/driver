@@ -227,7 +227,7 @@ public class NearWcActivity extends RxBaseActivity implements AMap.OnMarkerClick
                 latLngs.add(latLng);
             }
             LatLngBounds bounds = MapUtil.getBounds(latLngs, new LatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude));
-            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 200));
+            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
         }
     }
 

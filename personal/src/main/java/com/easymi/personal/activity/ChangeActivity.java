@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.LoadingButton;
@@ -48,13 +49,18 @@ public class ChangeActivity extends RxBaseActivity {
 
             if (oldPsw.equals(newPsw)) {
                 ToastUtil.showMessage(ChangeActivity.this, getString(R.string.same_old_new));
+                return;
             } else if (!newPsw.equals(confirmPsw)) {
                 ToastUtil.showMessage(ChangeActivity.this, getString(R.string.different_new_confirm));
-            } else {
-                btn.setClickable(false);
-                btn.setStatus(LoadingButton.STATUS_LOADING);
+                return;
             }
+            PhoneUtil.hideKeyboard(this);
+            changePsw();
         });
+    }
+
+    private void changePsw() {
+
     }
 
     @Override
