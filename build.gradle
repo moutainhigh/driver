@@ -40,7 +40,7 @@ ext {
     supportLibraryVersion = "26.1.0"    //support库的版本
     android = [
             compileSdkVersion: 26,
-            minSdkVersion    : 15,
+            minSdkVersion    : 17,
             targetSdkVersion : 25,
     ]
 

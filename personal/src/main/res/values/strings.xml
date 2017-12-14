@@ -79,6 +79,8 @@
     <string name="register_known">知道了</string>
     <string name="register_apply">提交资料</string>
 
+    <string name="register_title">服务人员注册</string>
+
 
     <!-- 设置密码str-->
     <string name="reset_login_psw">设置登录密码</string>

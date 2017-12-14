@@ -86,15 +86,7 @@ public class LoginActivity extends RxBaseActivity implements LocObserver {
 
         registerText = findViewById(R.id.login_register);
         registerText.setOnClickListener(v -> {
-//                lat / lng:(30.641184, 103.803611);
-//                startActivity(new Intent(LoginActivity.this, RegisterActivity.class);
-
-            NaviLatLng start = new NaviLatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
-            NaviLatLng end = new NaviLatLng(30.641184, 103.803611);
-            Intent intent = new Intent(LoginActivity.this, NaviActivity.class);
-            intent.putExtra("startLatlng", start);
-            intent.putExtra("endLatlng", end);
-            startActivity(intent);
+            startActivity(new Intent(LoginActivity.this, RegisterWebActivity.class));
         });
 
         resetPsw = findViewById(R.id.login_forget);
