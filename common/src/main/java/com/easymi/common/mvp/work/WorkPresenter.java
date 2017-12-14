@@ -1,7 +1,11 @@
 package com.easymi.common.mvp.work;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 
 import com.alibaba.sdk.android.push.CloudPushService;
@@ -9,6 +13,7 @@ import com.alibaba.sdk.android.push.CommonCallback;
 import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.easymi.common.R;
 import com.easymi.common.daemon.DaemonService;
+import com.easymi.common.daemon.JobKeepLiveService;
 import com.easymi.common.push.AliDetailService;
 import com.easymi.common.push.MQTTService;
 import com.easymi.common.result.AnnouncementResult;
@@ -56,10 +61,29 @@ public class WorkPresenter implements WorkContract.Presenter {
      */
     @Override
     public void initDaemon() {
-        //开起保活service
-        Intent daemonIntent = new Intent(context, DaemonService.class);
-        daemonIntent.setPackage(context.getPackageName());
-        context.startService(daemonIntent);
+        if (Build.VERSION.SDK_INT > 21) {//21版本以上使用JobScheduler
+            try {
+                ComponentName mServiceComponent = new ComponentName(context, JobKeepLiveService.class);
+                JobInfo.Builder builder = new JobInfo.Builder(0x139888, mServiceComponent);
+                builder.setPersisted(true);//持续的
+                builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);//任何网络情况下
+                builder.setRequiresDeviceIdle(false);//是否需要设备闲置
+                builder.setRequiresCharging(false);//是否需要充电状态下
+
+                JobScheduler tm = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+                if (tm != null) {
+                    tm.schedule(builder.build());
+                }
+            } catch (Exception e) {
+                Log.e("DriverApp", "初始化失败JobScheduler失败");
+            }
+        } else {//21版本以下使用native保活
+            //开起保活service
+            Intent daemonIntent = new Intent(context, DaemonService.class);
+            daemonIntent.setPackage(context.getPackageName());
+            context.startService(daemonIntent);
+        }
+
     }
 
     @Override

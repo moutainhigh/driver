@@ -14,6 +14,7 @@ import android.util.Log;
 import com.easymi.common.push.MQTTService;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
+import com.easymi.component.loc.LocService;
 import com.easymi.component.utils.PhoneUtil;
 
 import java.util.Timer;
@@ -42,14 +43,14 @@ public class DaemonService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e("DaemonService", "onStartCommand");
-        checkPush();
+        checkAlive();
         return START_STICKY;
     }
 
     private Timer timer;
     private TimerTask timerTask;
 
-    private void checkPush() {
+    private void checkAlive() {
         if (timer != null) {
             timer.cancel();
             timer = null;
@@ -63,14 +64,19 @@ public class DaemonService extends Service {
         timerTask = new TimerTask() {
             @Override
             public void run() {
-                Log.e("DaemonService", "checkPush");
+                Log.e("DaemonService", "start daemon,check service is alive?");
                 boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
-                Log.e("DaemonService", "" + isLogin);
-                if (isLogin && !PhoneUtil.isServiceRunning(MQTTService.class.getName(), DaemonService.this)) {
-                    Log.e("DaemonService", "!isServiceRunning");
-                    Intent mqtt = new Intent(DaemonService.this, MQTTService.class);
-                    mqtt.setPackage(DaemonService.this.getPackageName());
-                    startService(mqtt);
+                Log.e("DaemonService", "isLogin-->" + isLogin);
+                if (isLogin) {
+                    if (!PhoneUtil.isServiceRunning(MQTTService.class.getName(), DaemonService.this)) {
+                        Log.e("DaemonService", "!isServiceRunning");
+                        Intent mqtt = new Intent(DaemonService.this, MQTTService.class);
+                        mqtt.setPackage(DaemonService.this.getPackageName());
+                        startService(mqtt);
+                    }
+                    if (!PhoneUtil.isServiceRunning(LocService.class.getName(), DaemonService.this)) {
+                        XApp.getInstance().startLocService();
+                    }
                 }
             }
         };

@@ -41,7 +41,7 @@ ext {
     android = [
             compileSdkVersion: 26,
             minSdkVersion    : 15,
-            targetSdkVersion : 26,
+            targetSdkVersion : 25,
     ]
 
     dependencies = ['appcompat-v7'     : "com.android.support:appcompat-v7:$supportLibraryVersion",

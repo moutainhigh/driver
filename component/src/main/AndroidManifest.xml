@@ -1,6 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.easymi.component">
 
+    <permission
+        android:name="com.example.broadcast.permission"
+        android:protectionLevel="normal" />
+
     <application>
 
         <activity

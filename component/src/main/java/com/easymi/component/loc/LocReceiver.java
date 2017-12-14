@@ -23,15 +23,19 @@ import java.util.List;
 
 public class LocReceiver extends BroadcastReceiver implements LocSubject {
 
-    private List<LocObserver> observers = new ArrayList<>();
+    private static List<LocObserver> observers;
 
     private static LocReceiver locReceiver;
 
     public LocReceiver() {
-        locReceiver = this;
+
     }
 
     public static LocReceiver getInstance() {
+        if (null == locReceiver) {
+            locReceiver = new LocReceiver();
+            observers = new ArrayList<>();
+        }
         return locReceiver;
     }
 
@@ -45,7 +49,7 @@ public class LocReceiver extends BroadcastReceiver implements LocSubject {
 
             EmLoc emLoc = new Gson().fromJson(loc, EmLoc.class);
 
-            Log.e("locReceiver", "bearing>>>>"+emLoc.bearing);
+            Log.e("locReceiver", "bearing>>>>" + emLoc.bearing);
             notifyObserver(emLoc);
         }
 

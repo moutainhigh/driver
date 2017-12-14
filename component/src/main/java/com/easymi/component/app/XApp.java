@@ -55,12 +55,10 @@ public class XApp extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        instance = this;
         if (!isAppProcess()) {
             return;
         }
-
-        instance = this;
 
         //初始化路由
         if (BuildConfig.DEBUG) {
@@ -283,6 +281,16 @@ public class XApp extends MultiDexApplication {
     public void startLocService() {
         Intent intent = new Intent();
         intent.setAction(LocService.START_LOC);
+        intent.setPackage(this.getPackageName());
+        startService(intent);
+    }
+
+    /**
+     * 关闭定位服务
+     */
+    public void stopLocService() {
+        Intent intent = new Intent(this, LocService.class);
+        intent.setAction(LocService.STOP_LOC);
         intent.setPackage(this.getPackageName());
         startService(intent);
     }

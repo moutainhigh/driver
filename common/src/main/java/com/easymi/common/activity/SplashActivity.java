@@ -48,7 +48,6 @@ public class SplashActivity extends RxBaseActivity {
     }
 
     private void delayIn() {
-        XApp.getInstance().startLocService();
         Handler handler = new Handler();
         handler.postDelayed(() -> runOnUiThread(() -> {
             boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);

@@ -14,9 +14,11 @@ import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 
+import com.easymi.component.Config;
 import com.easymi.component.ILocationHelperServiceAIDL;
 import com.easymi.component.ILocationServiceAIDL;
 import com.easymi.component.R;
+import com.easymi.component.app.XApp;
 
 /**
  * Created by liangchao_suxun on 17/1/16.
@@ -113,7 +115,12 @@ public class NotiService extends Service {
     private void showNotify(Context context, int largeIcon) {
 
         Intent intent = new Intent();
-        intent.setClassName(context, "com.easymi.common.mvp.work.WorkActivity");
+        boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
+        if (isLogin) {
+            intent.setClassName(context, "com.easymi.common.mvp.work.WorkActivity");
+        } else {
+            intent.setClassName(context, "com.easymi.personal.activity.LoginActivity");
+        }
         intent.setAction(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,

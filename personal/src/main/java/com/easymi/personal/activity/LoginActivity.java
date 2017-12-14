@@ -23,12 +23,17 @@ import com.easymi.component.Config;
 import com.easymi.component.activity.NaviActivity;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.entity.EmLoc;
+import com.easymi.component.loc.LocObserver;
+import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.utils.AesUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.StringUtils;
+import com.easymi.component.widget.LoadingButton;
 import com.easymi.personal.R;
 import com.easymi.component.entity.Employ;
 import com.easymi.personal.McService;
@@ -42,9 +47,9 @@ import rx.schedulers.Schedulers;
  * Created by developerLzh on 2017/11/3 0003.
  */
 @Route(path = "/personal/LoginActivity")
-public class LoginActivity extends RxBaseActivity {
+public class LoginActivity extends RxBaseActivity implements LocObserver {
 
-    Button loginBtn;
+    LoadingButton loginBtn;
 
     TextView registerText;
 
@@ -106,6 +111,8 @@ public class LoginActivity extends RxBaseActivity {
         initEye();
 
         initBox();
+
+        XApp.getInstance().startLocService();
     }
 
     private void initBox() {
@@ -117,6 +124,18 @@ public class LoginActivity extends RxBaseActivity {
     }
 
     private boolean eyeOn = false;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LocReceiver.getInstance().addObserver(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocReceiver.getInstance().deleteObserver(this);
+    }
 
     private void initEye() {
         eye.setOnClickListener(view -> {
@@ -209,7 +228,7 @@ public class LoginActivity extends RxBaseActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, loginResult -> {
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, loginBtn, loginResult -> {
             Employ employ = loginResult.getEmployInfo();
             Log.e("okhttp", employ.toString());
             employ.saveOrUpdate();
@@ -221,5 +240,10 @@ public class LoginActivity extends RxBaseActivity {
                     .build("/common/WorkActivity")
                     .navigation();
         })));
+    }
+
+    @Override
+    public void receiveLoc(EmLoc loc) {
+        XApp.getInstance().stopLocService();
     }
 }

@@ -93,6 +93,7 @@ public class LocService extends NotiService implements AMapLocationListener {
         if (null != locClient) {
             locClient.stopLocation();
             locClient.onDestroy();
+            stopSelf();
         }
     }
 
@@ -138,7 +139,7 @@ public class LocService extends NotiService implements AMapLocationListener {
 //                }
 
                 Log.e("locPos", "bearing>>>>" + locationInfo.bearing);
-                Intent intent = new Intent();
+                Intent intent = new Intent(LocService.this, LocReceiver.class);
                 intent.setAction(LOC_CHANGED);
                 intent.putExtra("locPos", new Gson().toJson(locationInfo));
                 sendBroadcast(intent);//发送位置变化广播
