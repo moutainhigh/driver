@@ -83,7 +83,8 @@ public class RegisterWebActivity extends RxBaseActivity implements View.OnClickL
 
     public void init() {
 
-        url = "file:///android_asset/web.html";
+//        url = "file:///android_asset/web.html";
+        url = "http://192.168.0.106:3000";
         String titleStr = getString(R.string.register_title);
         title = findViewById(R.id.title);
         title.setText(titleStr);
@@ -104,6 +105,9 @@ public class RegisterWebActivity extends RxBaseActivity implements View.OnClickL
                     } else {
                         closeAll.setVisibility(View.GONE);
                     }
+
+                    webView.loadUrl("javascript:getBusinesses(" + "'代驾'" + ")");
+
                     break;
             }
             return true;
@@ -116,7 +120,7 @@ public class RegisterWebActivity extends RxBaseActivity implements View.OnClickL
         webView.getSettings().setUseWideViewPort(true);
         webView.getSettings().setLoadWithOverviewMode(true);
 
-        webView.addJavascriptInterface(this,"android");
+        webView.addJavascriptInterface(this, "android");
 
         webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
         webView.loadUrl(url);
@@ -195,7 +199,7 @@ public class RegisterWebActivity extends RxBaseActivity implements View.OnClickL
     }
 
     @JavascriptInterface
-    public void finishActivity(){
+    public void finishActivity() {
         runOnUiThread(() -> finish());
     }
 }

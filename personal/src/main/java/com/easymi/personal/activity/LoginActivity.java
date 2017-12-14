@@ -231,6 +231,7 @@ public class LoginActivity extends RxBaseActivity implements LocObserver {
             ARouter.getInstance()
                     .build("/common/WorkActivity")
                     .navigation();
+            finish();
         })));
     }
 

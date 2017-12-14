@@ -38,6 +38,7 @@ import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.loc.LocService;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.MapUtil;
 import com.easymi.component.utils.ToastUtil;
@@ -355,7 +356,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
                 latLngs.add(new LatLng(getEndAddr().lat, getEndAddr().lng));
             }
             LatLngBounds bounds = MapUtil.getBounds(latLngs, new LatLng(lastLatlng.latitude, lastLatlng.longitude));
-            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 200));
+            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this)/2, DensityUtil.getDisplayWidth(this)/2, 20));
         } else if (djOrder.orderStatus == DJOrder.GOTO_BOOKPALCE_ORDER) {
             if (null != getStartAddr()) {
                 latLngs.add(new LatLng(getStartAddr().lat, getStartAddr().lng));
@@ -365,7 +366,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
                 naviCon.setOnClickListener(v -> ToastUtil.showMessage(FlowActivity.this, getString(R.string.illegality_place)));
             }
             LatLngBounds bounds = MapUtil.getBounds(latLngs, new LatLng(lastLatlng.latitude, lastLatlng.longitude));
-            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 200));
+            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this)/2, DensityUtil.getDisplayWidth(this)/2, 20));
         } else if (djOrder.orderStatus == DJOrder.ARRIVAL_BOOKPLACE_ORDER
                 || djOrder.orderStatus == DJOrder.GOTO_DESTINATION_ORDER
                 || djOrder.orderStatus == DJOrder.START_WAIT_ORDER
@@ -378,7 +379,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
                 naviCon.setOnClickListener(v -> ToastUtil.showMessage(FlowActivity.this, getString(R.string.illegality_place)));
             }
             LatLngBounds bounds = MapUtil.getBounds(latLngs, new LatLng(lastLatlng.latitude, lastLatlng.longitude));
-            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 40));
+            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this)/2, DensityUtil.getDisplayWidth(this)/2, 20));
         }
         if (null != getStartAddr()) {
             if (null == startMarker) {
@@ -646,7 +647,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
             latLngs.add(lastLatlng);
             latLngs.add(latLng);
             smoothMoveMarker.setPoints(latLngs);
-            smoothMoveMarker.setTotalDuration(LocService.scanTime / 1000);
+            smoothMoveMarker.setTotalDuration(LocService.scanTime / DensityUtil.getDisplayWidth(this));
             smoothMoveMarker.setRotate(location.bearing);
             smoothMoveMarker.startSmoothMove();
         }
@@ -678,7 +679,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
         if (null != djOrder) {
             if (djOrder.orderStatus == DJOrder.GOTO_DESTINATION_ORDER
                     || djOrder.orderStatus == DJOrder.GOTO_BOOKPALCE_ORDER) {
-//                aMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                aMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
             }
         }
         lastLatlng = latLng;

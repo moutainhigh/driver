@@ -101,6 +101,10 @@ public class NotiService extends Service {
         bindService(Utils.getExplicitIntent(getApplicationContext(), intent), connection, Service.BIND_AUTO_CREATE);
     }
 
+    protected void unbind() {
+        unbindService(connection);
+    }
+
     private ServiceConnection connection;
 
     @Nullable

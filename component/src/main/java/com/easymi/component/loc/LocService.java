@@ -91,8 +91,11 @@ public class LocService extends NotiService implements AMapLocationListener {
 
     private void stopLoc() {
         if (null != locClient) {
+            unbind();
+            unApplyNotiKeepMech();
             locClient.stopLocation();
             locClient.onDestroy();
+            locClient = null;
             stopSelf();
         }
     }

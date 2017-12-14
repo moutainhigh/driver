@@ -333,7 +333,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     protected void onResume() {
         super.onResume();
         mapView.onResume();
-        refreshImg.callOnClick();
     }
 
     @Override
@@ -358,6 +357,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     protected void onStart() {
         super.onStart();
         LocReceiver.getInstance().addObserver(this);//添加位置改变的订阅
+        refreshImg.callOnClick();
     }
 
     @Override
