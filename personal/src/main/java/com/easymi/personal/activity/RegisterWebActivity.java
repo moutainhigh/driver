@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -17,8 +18,28 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.entity.EmLoc;
+import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HaveErrSubscriberListener;
+import com.easymi.component.network.HttpResultFunc;
+import com.easymi.component.network.MySubscriber;
+import com.easymi.component.result.EmResult;
+import com.easymi.component.utils.AesUtil;
+import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.ToastUtil;
+import com.easymi.personal.McService;
 import com.easymi.personal.R;
+import com.easymi.personal.entity.BigBusiness;
+import com.easymi.personal.result.BusinessResult;
+import com.easymi.personal.result.CompanyResult;
+import com.easymi.personal.result.LoginResult;
+import com.google.gson.Gson;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by developerLzh on 2017/5/4.
@@ -105,9 +126,6 @@ public class RegisterWebActivity extends RxBaseActivity implements View.OnClickL
                     } else {
                         closeAll.setVisibility(View.GONE);
                     }
-
-                    webView.loadUrl("javascript:getBusinesses(" + "'代驾'" + ")");
-
                     break;
             }
             return true;
@@ -120,7 +138,7 @@ public class RegisterWebActivity extends RxBaseActivity implements View.OnClickL
         webView.getSettings().setUseWideViewPort(true);
         webView.getSettings().setLoadWithOverviewMode(true);
 
-        webView.addJavascriptInterface(this, "android");
+        webView.addJavascriptInterface(this, "xiaoka");
 
         webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
         webView.loadUrl(url);
@@ -138,6 +156,7 @@ public class RegisterWebActivity extends RxBaseActivity implements View.OnClickL
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 handler.sendEmptyMessage(0);
+                getCompanyId();
             }
 
             @Override
@@ -201,5 +220,75 @@ public class RegisterWebActivity extends RxBaseActivity implements View.OnClickL
     @JavascriptInterface
     public void finishActivity() {
         runOnUiThread(() -> finish());
+    }
+
+    public int reloadTime = 0;
+
+    private void getCompanyId() {
+        EmLoc emLoc = EmUtil.getLastLoc();
+        if (null == emLoc) {
+            ToastUtil.showMessage(RegisterWebActivity.this, getString(R.string.register_no_loc));
+            return;
+        }
+
+        McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
+
+        Observable<CompanyResult> observable = api
+                .getCompany(emLoc.cityCode, emLoc.adCode, Config.APP_KEY)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
+                true, new HaveErrSubscriberListener<CompanyResult>() {
+            @Override
+            public void onNext(CompanyResult emResult) {
+                webView.loadUrl("javascript:getBusinesses(" + "'" + new Gson().toJson(emResult) + "'" + ")");
+//                webView.loadUrl("javascript:getChildrenBusinesses(" + "'代驾'" + ")");
+            }
+
+            @Override
+            public void onError(int code) {
+                if (reloadTime < 3) {
+                    ToastUtil.showMessage(RegisterWebActivity.this, getString(R.string.register_re_company));
+                    getCompanyId();
+                    reloadTime++;
+                } else {
+                    ToastUtil.showMessage(RegisterWebActivity.this, getString(R.string.register_finish));
+                    finish();
+                }
+            }
+        })));
+    }
+
+    @JavascriptInterface
+    public void childrenBusiness(String obj) {
+
+        Log.e("obj", obj);
+
+        BigBusiness business = new Gson().fromJson(obj, BigBusiness.class);
+
+        McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
+
+        Observable<BusinessResult> observable = api
+                .getBusiness(business.companyId, business.business, Config.APP_KEY)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
+                true, new HaveErrSubscriberListener<BusinessResult>() {
+            @Override
+            public void onNext(BusinessResult emResult) {
+//                webView.loadUrl("javascript:getChildrenBusinesses(" + "'代驾'" + ")");
+                emResult.business = business.business;
+                webView.loadUrl("javascript:getChildrenBusinesses(" + "'" + new Gson().toJson(emResult) + "'" + ")");
+            }
+
+            @Override
+            public void onError(int code) {
+                ToastUtil.showMessage(RegisterWebActivity.this, getString(R.string.register_re_company));
+            }
+        })));
     }
 }

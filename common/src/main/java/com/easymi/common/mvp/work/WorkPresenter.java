@@ -21,6 +21,7 @@ import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.common.entity.BaseOrder;
+import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.Config;
 import com.easymi.component.loc.LocService;
 import com.easymi.component.app.XApp;
@@ -29,6 +30,7 @@ import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.widget.LoadingButton;
 
 import java.util.ArrayList;
@@ -83,11 +85,6 @@ public class WorkPresenter implements WorkContract.Presenter {
             daemonIntent.setPackage(context.getPackageName());
             context.startService(daemonIntent);
         }
-
-    }
-
-    @Override
-    public void queryStats() {
 
     }
 
@@ -188,5 +185,20 @@ public class WorkPresenter implements WorkContract.Presenter {
         Observable<NearDriverResult> observable = model.queryNearDriver(driverId, lat, lng, dis);
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
                 true, nearDriverResult -> view.showDrivers(nearDriverResult.emploies))));
+    }
+
+    @Override
+    public void queryStatis() {
+        long driverId = EmUtil.getEmployId();
+        String nowDate = TimeUtil.getTime("yyyy-MM-dd", System.currentTimeMillis());
+        Observable<WorkStatisticsResult> observable = model.getDriverStatistics(driverId, nowDate);
+        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
+                true, result -> view.showStatis(result.workStatistics))));
+    }
+
+    @Override
+    public void loadDataOnResume() {
+        indexOrders();//查询订单
+        queryStatis();
     }
 }

@@ -5,11 +5,13 @@ import android.content.Context;
 import com.easymi.common.entity.Announcement;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.entity.Notifity;
+import com.easymi.common.entity.WorkStatistics;
 import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.common.entity.BaseOrder;
+import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.widget.LoadingButton;
@@ -45,6 +47,8 @@ public interface WorkContract {
 
         void showAnn(Announcement announcement);
 
+        void showStatis(WorkStatistics statistics);
+
         RxManager getRxManager();
     }
 
@@ -52,19 +56,23 @@ public interface WorkContract {
 
         void initDaemon();
 
-        void queryStats();
-
         void indexOrders();
 
         void startLocService();
 
         void online(LoadingButton btn);
+
         void offline();
 
         void loadNotice(long id);
+
         void loadAnn(long id);
 
         void queryNearDriver(Double lat, Double lng);
+
+        void queryStatis();
+
+        void loadDataOnResume();
         //...
     }
 
@@ -72,10 +80,14 @@ public interface WorkContract {
         Observable<QueryOrdersResult> indexOrders(Long driverId, String appKey);
 
         Observable<EmResult> online(Long driverId, String appKey);
+
         Observable<EmResult> offline(Long driverId, String appKey);
 
         Observable<NotitfyResult> loadNotice(Long id);
+
         Observable<AnnouncementResult> loadAnn(Long id);
+
+        Observable<WorkStatisticsResult> getDriverStatistics(Long id,String nowDate);
 
         Observable<NearDriverResult> queryNearDriver(Long driverId, Double lat, Double lng, Double distance);
     }

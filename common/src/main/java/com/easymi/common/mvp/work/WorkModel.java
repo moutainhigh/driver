@@ -5,6 +5,7 @@ import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.QueryOrdersResult;
+import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.Config;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
@@ -60,6 +61,15 @@ public class WorkModel implements WorkContract.Model {
     public Observable<AnnouncementResult> loadAnn(Long id) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .employAfficheById(id, Config.APP_KEY)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<WorkStatisticsResult> getDriverStatistics(Long id, String nowDate) {
+        return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .workStatistics(id, nowDate,Config.APP_KEY)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

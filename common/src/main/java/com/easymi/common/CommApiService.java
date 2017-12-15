@@ -5,6 +5,7 @@ import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.QueryOrdersResult;
+import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.result.EmResult;
 
 import retrofit2.http.Field;
@@ -49,7 +50,7 @@ public interface CommApiService {
     @FormUrlEncoded
     @PUT("driver/api/v1/offline")
     Observable<EmResult> offline(@Field("driver_id") Long driverId,
-                                @Field("app_key") String appKey);
+                                 @Field("app_key") String appKey);
 
 
     /**
@@ -72,6 +73,7 @@ public interface CommApiService {
 
     /**
      * 查询未支付和已完成订单
+     *
      * @param driverId
      * @param business
      * @param startTime
@@ -92,19 +94,33 @@ public interface CommApiService {
 
     /**
      * 查询通知
+     *
      * @param noticeId
      * @return
      */
     @GET("driver/api/v1/notice")
-    Observable<NotitfyResult> loadNotice(@Query("id")Long noticeId,
-                                         @Query("app_key")String appKey);
+    Observable<NotitfyResult> loadNotice(@Query("id") Long noticeId,
+                                         @Query("app_key") String appKey);
 
     /**
      * 查询通知
+     *
      * @param noticeId
      * @return
      */
     @GET("driver/api/v1/employAfficheById")
-    Observable<AnnouncementResult> employAfficheById(@Query("id")Long noticeId,
-                                                     @Query("app_key")String appKey);
+    Observable<AnnouncementResult> employAfficheById(@Query("id") Long noticeId,
+                                                     @Query("app_key") String appKey);
+
+    /**
+     * 首页统计
+     * @param driverId
+     * @param nowDate
+     * @param appKey
+     * @return
+     */
+    @GET("driver/api/v1/driverInfo")
+    Observable<WorkStatisticsResult> workStatistics(@Query("driver_id") Long driverId,
+                                                    @Query("now_date") String nowDate,
+                                                    @Query("app_key") String appKey);
 }

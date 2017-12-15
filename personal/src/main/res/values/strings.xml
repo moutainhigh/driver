@@ -80,6 +80,11 @@
     <string name="register_apply">提交资料</string>
 
     <string name="register_title">服务人员注册</string>
+    <string name="register_no_loc">未获取到定位信息</string>
+    <string name="register_re_company">加载公司信息失败，正在重试</string>
+    <string name="register_re_business">加载业务类型失败，正在重试</string>
+
+    <string name="register_finish">获取公司信息失败,请稍候再试</string>
 
 
     <!-- 设置密码str-->

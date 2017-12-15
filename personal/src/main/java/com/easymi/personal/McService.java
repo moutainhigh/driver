@@ -3,6 +3,8 @@ package com.easymi.personal;
 import com.easymi.component.result.EmResult;
 import com.easymi.personal.result.AnnouncementResult;
 import com.easymi.personal.result.ArticleResult;
+import com.easymi.personal.result.BusinessResult;
+import com.easymi.personal.result.CompanyResult;
 import com.easymi.personal.result.LiushuiResult;
 import com.easymi.personal.result.LoginResult;
 import com.easymi.personal.result.NotifityResult;
@@ -151,6 +153,7 @@ public interface McService {
 
     /**
      * 注销
+     *
      * @param driverId
      * @param appKey
      * @return
@@ -158,5 +161,33 @@ public interface McService {
     @FormUrlEncoded
     @PUT("driver/api/v1/employLoginOut")
     Observable<EmResult> employLoginOut(@Field("id") Long driverId,
-                                 @Field("app_key") String appKey);
+                                        @Field("app_key") String appKey);
+
+    /**
+     * 根据区域编码获取公司
+     *
+     * @param cityCode
+     * @param adCode
+     * @param appKey
+     * @return
+     */
+    @GET("/driver/api/v1/company")
+    Observable<CompanyResult> getCompany(@Query("city_code") String cityCode,
+                                         @Query("ad_code") String adCode,
+                                         @Query("app_key") String appKey
+    );
+
+    /**
+     * 根据公司id业务类型获取子类型
+     *
+     * @param companyId
+     * @param business
+     * @param app_key
+     * @return
+     */
+    @GET("/driver/api/v1/getBusiness")
+    Observable<BusinessResult> getBusiness(@Query("company_id") Long companyId,
+                                           @Query("business") String business,
+                                           @Query("app_key") String app_key
+    );
 }

@@ -35,6 +35,7 @@ import com.easymi.common.entity.Announcement;
 import com.easymi.common.entity.BaseOrder;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.entity.Notifity;
+import com.easymi.common.entity.WorkStatistics;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
@@ -92,6 +93,11 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     TextView currentPlace;
 
     ExpandableLayout expandableLayout;
+
+    TextView finishNo;
+    TextView onLineHour;
+    TextView onLineMonute;
+    TextView todayIncome;
 
     private WorkPresenter presenter;
 
@@ -166,6 +172,11 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         currentPlace = findViewById(R.id.current_place);
 
         expandableLayout = findViewById(R.id.map_expand);
+
+        finishNo = findViewById(R.id.finish_no);
+        onLineHour = findViewById(R.id.online_time_hour);
+        onLineMonute = findViewById(R.id.online_time_minute);
+        todayIncome = findViewById(R.id.today_income);
     }
 
     @Override
@@ -193,7 +204,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
         swipeRefreshLayout.setOnRefreshListener(() -> presenter.indexOrders());
         swipeRefreshLayout.setRefreshing(true);
-        presenter.indexOrders();
     }
 
     List<BaseOrder> orders = new ArrayList<>();
@@ -323,6 +333,18 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         });
     }
 
+    @Override
+    public void showStatis(WorkStatistics statistics) {
+        int minutes = statistics.minute;
+        int hour = minutes / 60;
+        int minute = minutes % 60;
+
+        finishNo.setText(String.valueOf(statistics.finishCount));
+        onLineHour.setText(String.valueOf(hour));
+        onLineMonute.setText(String.valueOf(minute));
+        todayIncome.setText(String.valueOf(statistics.totalAmount));
+    }
+
 
     @Override
     public RxManager getRxManager() {
@@ -333,6 +355,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     protected void onResume() {
         super.onResume();
         mapView.onResume();
+        presenter.loadDataOnResume();
     }
 
     @Override

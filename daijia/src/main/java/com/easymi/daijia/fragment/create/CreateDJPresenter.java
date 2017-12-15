@@ -144,12 +144,7 @@ public class CreateDJPresenter implements CreateDJContract.Presenter {
         view.getManager().add(model.createOrder(passengerId, passengerName, passengerPhone, orderTime,
                 bookAddress, bookAddressLat, bookAddressLng, destination, destinationLat, destinationLng,
                 employ.company_id, employ.company_name, budgetFee, cid, employ.name, employ.id).subscribe(
-                new MySubscriber<DJOrderResult>(context, true, false, new NoErrSubscriberListener<DJOrderResult>() {
-                    @Override
-                    public void onNext(DJOrderResult djOrderResult) {
-                        view.createSuc(djOrderResult);
-                    }
-                })
+                new MySubscriber<>(context, true, false, djOrderResult -> view.createSuc(djOrderResult))
         ));
     }
 }
