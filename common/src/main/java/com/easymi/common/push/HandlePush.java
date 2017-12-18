@@ -18,8 +18,10 @@ import com.easymi.component.app.XApp;
  */
 
 public class HandlePush {
-    public HandlePush(Context context, PushMessage pushMessage) {
+    private Context context;
 
+    public HandlePush(Context context, PushMessage pushMessage) {
+        this.context = context;
     }
 
 

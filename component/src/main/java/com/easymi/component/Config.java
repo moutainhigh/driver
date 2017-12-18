@@ -28,7 +28,7 @@ public class Config {
     public static final String MQTT_HOST = "tcp://123.57.84.216:1883";
     public static final String MQTT_USER_NAME = "admin";
     public static final String MQTT_PSW = "dsajkdghj**@@##$$sagdgha";
-    public static final String MQTT_TOPIC = "/driver";
+    public static final String MQTT_PUSH_TOPIC = "/driver";
 
     /**
      * SharedPrefence 常量配置

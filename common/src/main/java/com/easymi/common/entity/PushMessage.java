@@ -5,14 +5,8 @@ package com.easymi.common.entity;
  */
 public class PushMessage {
 
-    public String code;//（例：0X00）
+    public String msg;//
 
-    public String type;//（例：0X00）
-
-    public String data;//（通常为id,例：1）
-
-    public String time;//（延迟时间，单位为秒,例：0）
-
-    public Extra extra;
+    public String data;//（
 
 }
