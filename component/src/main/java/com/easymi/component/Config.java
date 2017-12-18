@@ -8,15 +8,35 @@ package com.easymi.component;
 
 public class Config {
 
+    /**
+     * 主机地址
+     */
     public static final String HOST = "http://192.168.0.72:8082/";
+    /**
+     * 图片服务器地址
+     */
     public static final String IMG_SERVER = "http://192.168.0.111:8088/v1/img?img=";
+    /**
+     * APP_KEY
+     */
     public static final String APP_KEY = "1f462eb305a2417c9564f2dfaf89da9c";
     public static final String WX_APPID = "";
 
+    /**
+     * MQTT配置
+     */
+    public static final String MQTT_HOST = "tcp://123.57.84.216:1883";
+    public static final String MQTT_USER_NAME = "admin";
+    public static final String MQTT_PSW = "dsajkdghj**@@##$$sagdgha";
+    public static final String MQTT_TOPIC = "/driver";
+
+    /**
+     * SharedPrefence 常量配置
+     */
     public static final String SP_DRIVERID = "driverId";
     public static final String SP_ISLOGIN = "isLogin";
     public static final String SP_LAST_LOC = "lastLoc";
-    public static final String SP_NEED_TRACE = "needTrace";//是否需要纠偏
+    public static final String SP_ORDER_RUNNING = "orderRunning";//是否有订单在执行
 
     public static final String SP_CONGESTION = "congestion";//躲避拥堵
     public static final String SP_AVOID_HIGH_SPEED = "avoidhightspeed";//不走高速

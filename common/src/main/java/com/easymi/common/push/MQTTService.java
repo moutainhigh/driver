@@ -13,6 +13,14 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.easymi.component.entity.GpsPush;
+import com.easymi.component.entity.PushBean;
+import com.easymi.component.Config;
+import com.easymi.component.entity.EmLoc;
+import com.easymi.component.loc.LocObserver;
+import com.easymi.component.loc.LocReceiver;
+import com.google.gson.Gson;
+
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -28,7 +36,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  * @author 一口仨馍 联系方式 : yikousamo@gmail.com
  * @version 创建时间：2016/9/16 22:06
  */
-public class MQTTService extends Service {
+public class MQTTService extends Service implements LocObserver {
 
     public static final String TAG = MQTTService.class.getSimpleName();
 
@@ -36,11 +44,11 @@ public class MQTTService extends Service {
     private MqttConnectOptions conOpt;
 
     //    private String host = "tcp://10.0.2.2:61613";
-    private String host = "tcp://192.168.0.84:1883";
-    private String userName = "admin";
-    private String passWord = "public";
-    private static String myTopic = "topic";
-    private String clientId = "T111";
+    private String host = Config.MQTT_HOST;
+    private String userName = Config.MQTT_USER_NAME;
+    private String passWord = Config.MQTT_PSW;
+    private static String myTopic = Config.MQTT_TOPIC;
+    private String clientId = "T111";//身份唯一码
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -50,12 +58,13 @@ public class MQTTService extends Service {
 
     /**
      * 推消息
+     *
      * @param msg
      */
-    public static void publish(String msg){
+    public static void publish(String msg) {
         String topic = myTopic;
-        Integer qos = 0;
-        Boolean retained = false;
+        Integer qos = 1;//与后端约定为1
+        Boolean retained = true;
         try {
             client.publish(topic, msg.getBytes(), qos, retained);
         } catch (MqttException e) {
@@ -115,7 +124,9 @@ public class MQTTService extends Service {
         super.onDestroy();
     }
 
-    /** 连接MQTT服务器 */
+    /**
+     * 连接MQTT服务器
+     */
     private void doClientConnection() {
         if (!client.isConnected() && isConnectIsNomarl()) {
             try {
@@ -135,7 +146,8 @@ public class MQTTService extends Service {
             Log.i(TAG, "连接成功 ");
             try {
                 // 订阅myTopic话题
-                client.subscribe(myTopic,1);
+                LocReceiver.getInstance().addObserver(MQTTService.this);
+                client.subscribe(myTopic, 1);
             } catch (MqttException e) {
                 e.printStackTrace();
             }
@@ -171,13 +183,19 @@ public class MQTTService extends Service {
         @Override
         public void connectionLost(Throwable arg0) {
             // 失去连接，重连
+            LocReceiver.getInstance().deleteObserver(MQTTService.this);
         }
     };
 
-    /** 判断网络是否连接 */
+    /**
+     * 判断网络是否连接
+     */
     private boolean isConnectIsNomarl() {
         ConnectivityManager connectivityManager = (ConnectivityManager) this.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo info = connectivityManager.getActiveNetworkInfo();
+        NetworkInfo info = null;
+        if (connectivityManager != null) {
+            info = connectivityManager.getActiveNetworkInfo();
+        }
         if (info != null && info.isAvailable()) {
             String name = info.getTypeName();
             Log.i(TAG, "MQTT当前网络名称：" + name);
@@ -192,5 +210,31 @@ public class MQTTService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    private Gson gson;
+
+    private long lastUploadTime = 0;
+
+    @Override
+    public void receiveLoc(EmLoc loc) {
+        if (lastUploadTime != 0) {
+            if (System.currentTimeMillis() - lastUploadTime < 10 * 1000) {
+                return;
+            }
+        }
+        GpsPush gpsPush = new GpsPush();
+        if (gpsPush.employ2This()) {
+            gpsPush.appKey = Config.APP_KEY;
+            gpsPush.lat = loc.latitude;
+            gpsPush.lng = loc.longitude;
+            if (gson == null) {
+                gson = new Gson();
+            }
+            PushBean<GpsPush> pushBean = new PushBean<>("gps", gpsPush);
+            publish(gson.toJson(pushBean));
+            Log.e("pushBean", gson.toJson(pushBean));
+        }
+        lastUploadTime = System.currentTimeMillis();
     }
 }

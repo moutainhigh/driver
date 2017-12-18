@@ -62,7 +62,15 @@ public class LocReceiver extends BroadcastReceiver implements LocSubject {
      */
     @Override
     public void addObserver(LocObserver obj) {
-        observers.add(obj);
+        boolean hasd = false;
+        for (LocObserver observer : observers) {
+            if (obj == observer) {
+                hasd = true;
+            }
+        }
+        if (!hasd) {//避免重复添加观察者
+            observers.add(obj);
+        }
     }
 
     /**

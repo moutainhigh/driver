@@ -8,6 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/daemon/daemon.iml" filepath="$PROJECT_DIR$/daemon/daemon.iml" />
       <module fileurl="file://$PROJECT_DIR$/daijia/daijia.iml" filepath="$PROJECT_DIR$/daijia/daijia.iml" />
       <module fileurl="file://$PROJECT_DIR$/personal/personal.iml" filepath="$PROJECT_DIR$/personal/personal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/v5_driver.iml" filepath="$PROJECT_DIR$/v5_driver.iml" />
       <module fileurl="file://D:\Android\AndroidPro\EasyminPro\v5driver\v5_driver.iml" filepath="D:\Android\AndroidPro\EasyminPro\v5driver\v5_driver.iml" />
       <module fileurl="file://$PROJECT_DIR$/v5driver.iml" filepath="$PROJECT_DIR$/v5driver.iml" />
     </modules>

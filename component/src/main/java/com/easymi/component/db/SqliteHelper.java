@@ -112,6 +112,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("bank_name").append(" ").append("TEXT").append(",")
                 .append("bank_card_no").append(" ").append("TEXT").append(",")
                 .append("cash_person_name").append(" ").append("TEXT").append(",")
+                .append("status").append(" ").append("INTEGER").append(",")
 
                 .append("company_id").append(" ").append("LONG")
                 .append(");");

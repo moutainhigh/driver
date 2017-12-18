@@ -55,18 +55,19 @@ public class JobKeepLiveService extends JobService {
                 boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
                 Log.e("JobKeepLiveService", "isLogin-->" + isLogin);
                 if (isLogin) {
-                    if (!PhoneUtil.isServiceRunning(MQTTService.class.getName(), JobKeepLiveService.this)) {
-                        Log.e("JobKeepLiveService", "!isServiceRunning");
-                        Intent mqtt = new Intent(JobKeepLiveService.this, MQTTService.class);
-                        mqtt.setPackage(JobKeepLiveService.this.getPackageName());
-                        startService(mqtt);
-                    }
-                    if (!PhoneUtil.isServiceRunning(LocService.class.getName(), JobKeepLiveService.this)) {
-                        XApp.getInstance().startLocService();
-                    }
+//                    if (!PhoneUtil.isServiceRunning(MQTTService.class.getName(), JobKeepLiveService.this)) {
+                    Log.e("JobKeepLiveService", "!isServiceRunning MQTTService");
+                    Intent mqtt = new Intent(JobKeepLiveService.this, MQTTService.class);
+                    mqtt.setPackage(JobKeepLiveService.this.getPackageName());
+                    startService(mqtt);
+//                    }
+//                    if (!PhoneUtil.isServiceRunning(LocService.class.getName(), JobKeepLiveService.this)) {
+                    Log.e("JobKeepLiveService", "!isServiceRunning LocService");
+                    XApp.getInstance().startLocService();
+//                    }
                 }
             }
         };
-        timer.schedule(timerTask, 0, 10 * 1000);
+        timer.schedule(timerTask, 0, 60 * 1000);
     }
 }

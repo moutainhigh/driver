@@ -36,6 +36,7 @@ import com.easymi.common.entity.BaseOrder;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.entity.Notifity;
 import com.easymi.common.entity.WorkStatistics;
+import com.easymi.common.push.MQTTService;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
@@ -267,6 +268,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     @Override
     public void onlineSuc() {
         XApp.getInstance().syntheticVoice(getString(R.string.start_lis_order), true);
+        MQTTService.publish("开始上班了~~");
         listenOrderCon.setVisibility(View.VISIBLE);
         rippleBackground.startRippleAnimation();
         onLineBtn.setVisibility(View.GONE);

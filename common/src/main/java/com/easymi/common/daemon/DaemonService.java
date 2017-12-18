@@ -4,7 +4,6 @@ package com.easymi.common.daemon;
  * Created by developerLzh on 2017/12/13 0013.
  */
 
-import android.app.ActivityManager;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -68,15 +67,16 @@ public class DaemonService extends Service {
                 boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
                 Log.e("DaemonService", "isLogin-->" + isLogin);
                 if (isLogin) {
-                    if (!PhoneUtil.isServiceRunning(MQTTService.class.getName(), DaemonService.this)) {
-                        Log.e("DaemonService", "!isServiceRunning");
+//                    if (!PhoneUtil.isServiceRunning(MQTTService.class.getName(), DaemonService.this)) {
+                        Log.e("DaemonService", "!isServiceRunning MQTTService");
                         Intent mqtt = new Intent(DaemonService.this, MQTTService.class);
                         mqtt.setPackage(DaemonService.this.getPackageName());
                         startService(mqtt);
-                    }
-                    if (!PhoneUtil.isServiceRunning(LocService.class.getName(), DaemonService.this)) {
+//                    }
+//                    if (!PhoneUtil.isServiceRunning(LocService.class.getName(), DaemonService.this)) {
+                        Log.e("DaemonService", "!isServiceRunning LocService");
                         XApp.getInstance().startLocService();
-                    }
+//                    }
                 }
             }
         };

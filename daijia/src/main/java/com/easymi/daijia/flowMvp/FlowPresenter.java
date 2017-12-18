@@ -61,6 +61,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     public FlowPresenter(Context context, FlowContract.View view) {
         this.context = context;
         this.view = view;
+        XApp.getPreferencesEditor().putBoolean(Config.SP_ORDER_RUNNING, true).apply();
         model = new FlowModel();
     }
 
@@ -156,7 +157,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     @Override
     public void startDrive(Long orderId, LoadingButton btn) {
         Observable<DJOrderResult> observable = model.startDrive(orderId);
-        XApp.getPreferencesEditor().putBoolean(Config.SP_NEED_TRACE, true).apply();//将其置为需要纠偏
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, new HaveErrSubscriberListener<DJOrderResult>() {
             @Override
             public void onNext(DJOrderResult djOrderResult) {

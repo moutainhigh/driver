@@ -12,24 +12,20 @@ import com.easymi.component.db.SqliteHelper;
  * Created by liuzihao on 2017/11/16.
  */
 
-public class Employ implements Parcelable {
+public class Employ extends BaseEmploy implements Parcelable {
 
-    public long id;
     public String user_name;
     public String password;
     public String name;
-    public String real_name;
+
     public String sex;
-    public long company_id;
+
     public String company_name;
-    public String phone;
 
     public String portrait_path;
 
-
     public double balance;
     public String service_type;//服务类型
-    public String child_type;//服务子类型
 
     public String bank_name;
     public String bank_card_no;
@@ -61,6 +57,7 @@ public class Employ implements Parcelable {
         values.put("bank_name", bank_name);
         values.put("bank_card_no", bank_card_no);
         values.put("cash_person_name", cash_person_name);
+        values.put("status", status);
 
         values.put("portrait_path", portrait_path);
         values.put("score", score);
@@ -102,7 +99,7 @@ public class Employ implements Parcelable {
                         "user_name", "password", "name", "real_name", "sex",
                         "company_id", "company_name", "phone", "balance", "service_type",
                         "child_type", "bank_name", "bank_card_no", "cash_person_name",
-                        "portrait_path","score"},
+                        "portrait_path", "score", "status"},
                 "id = ?", new String[]{String.valueOf(driverID)},
                 null, null, null);
         Employ driverInfo = null;
@@ -144,6 +141,8 @@ public class Employ implements Parcelable {
                         .getColumnIndex("portrait_path"));
                 driverInfo.score = cursor.getDouble(cursor
                         .getColumnIndex("score"));
+                driverInfo.status = cursor.getInt(cursor
+                        .getColumnIndex("status"));
 
 				/*
                  * driverInfo.age =
@@ -163,7 +162,7 @@ public class Employ implements Parcelable {
     /**
      * 根据ID修改数据
      */
-    public boolean update() {
+    public boolean updateAll() {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
         ContentValues values = new ContentValues();
@@ -186,6 +185,7 @@ public class Employ implements Parcelable {
         values.put("bank_card_no", bank_card_no);
         values.put("cash_person_name", cash_person_name);
         values.put("score", score);
+        values.put("status", status);
         /*
          * values.put("age", age); values.put("jialing", jialing);
 		 */
@@ -196,7 +196,7 @@ public class Employ implements Parcelable {
 
     public boolean saveOrUpdate() {
         if (exists(this.id)) {
-            return this.update();
+            return this.updateAll();
         } else {
             return this.save();
         }
@@ -221,6 +221,7 @@ public class Employ implements Parcelable {
         cash_person_name = in.readString();
         portrait_path = in.readString();
         score = in.readDouble();
+        status = in.readInt();
     }
 
     public static final Creator<Employ> CREATOR = new Creator<Employ>() {
@@ -253,6 +254,7 @@ public class Employ implements Parcelable {
                 ", cash_person_name='" + cash_person_name + '\'' +
                 ", portrait_path='" + portrait_path + '\'' +
                 ", score='" + score + '\'' +
+                ", status='" + status + '\'' +
                 '}';
     }
 
@@ -278,5 +280,6 @@ public class Employ implements Parcelable {
         dest.writeString(cash_person_name);
         dest.writeString(portrait_path);
         dest.writeDouble(score);
+        dest.writeInt(status);
     }
 }

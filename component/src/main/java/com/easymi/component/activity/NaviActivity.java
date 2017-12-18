@@ -43,8 +43,8 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     protected NaviLatLng mEndLatlng;
     protected NaviLatLng mStartLatlng;
-    protected final List<NaviLatLng> sList = new ArrayList<NaviLatLng>();
-    protected final List<NaviLatLng> eList = new ArrayList<NaviLatLng>();
+    protected final List<NaviLatLng> sList = new ArrayList<>();
+    protected final List<NaviLatLng> eList = new ArrayList<>();
 
     protected List<NaviLatLng> wayPoints;
 
