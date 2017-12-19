@@ -1,6 +1,7 @@
 package com.easymi.common.mvp.work;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.os.PersistableBundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -33,13 +35,18 @@ import com.easymi.common.activity.CreateActivity;
 import com.easymi.common.adapter.OrderAdapter;
 import com.easymi.common.entity.Announcement;
 import com.easymi.common.entity.BaseOrder;
+import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.entity.Notifity;
 import com.easymi.common.entity.WorkStatistics;
+import com.easymi.common.mvp.grab.GrabActivity;
 import com.easymi.common.push.MQTTService;
+import com.easymi.common.receiver.CancelOrderReceiver;
+import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
+import com.easymi.component.entity.Employ;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.rxmvp.RxManager;
@@ -60,7 +67,7 @@ import java.util.List;
  */
 
 @Route(path = "/common/WorkActivity")
-public class WorkActivity extends RxBaseActivity implements WorkContract.View, LocObserver {
+public class WorkActivity extends RxBaseActivity implements WorkContract.View, LocObserver, CancelOrderReceiver.OnCancelListener {
 
     LinearLayout bottomBar;
 
@@ -99,6 +106,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     TextView onLineHour;
     TextView onLineMonute;
     TextView todayIncome;
+
+    private CancelOrderReceiver cancelOrderReceiver;
 
     private WorkPresenter presenter;
 
@@ -178,6 +187,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         onLineHour = findViewById(R.id.online_time_hour);
         onLineMonute = findViewById(R.id.online_time_minute);
         todayIncome = findViewById(R.id.today_income);
+
+        Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1));
+        Log.e("employ", "" + employ);
     }
 
     @Override
@@ -383,12 +395,16 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         super.onStart();
         LocReceiver.getInstance().addObserver(this);//添加位置改变的订阅
         refreshImg.callOnClick();
+
+        cancelOrderReceiver = new CancelOrderReceiver(this);
+        registerReceiver(cancelOrderReceiver, new IntentFilter(Config.BROAD_CANCEL_ORDER));
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         LocReceiver.getInstance().deleteObserver(this);//取消位置改变的订阅
+        unregisterReceiver(cancelOrderReceiver);
     }
 
     public void mapHideShow(View view) {
@@ -467,5 +483,11 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void onCancelOrder(long orderId, String orderType) {
+        swipeRefreshLayout.setRefreshing(true);
+        presenter.indexOrders();
     }
 }

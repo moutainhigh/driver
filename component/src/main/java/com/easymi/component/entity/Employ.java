@@ -8,6 +8,9 @@ import android.os.Parcelable;
 
 import com.easymi.component.db.SqliteHelper;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Created by liuzihao on 2017/11/16.
  */
@@ -156,6 +159,96 @@ public class Employ extends BaseEmploy implements Parcelable {
         } finally {
             cursor.close();
         }
+        return driverInfo;
+    }
+
+    /**
+     * main进程 查询所有司机
+     * @return
+     */
+    public static List<Employ> findAll() {
+
+        SqliteHelper helper = SqliteHelper.getInstance();
+        SQLiteDatabase db = helper.openSqliteDatabase();
+
+        Cursor cursor = db.rawQuery("select * from t_driverinfo", new String[]{});
+
+        List<Employ> list = new LinkedList<>();
+
+        try {
+            while (cursor.moveToNext()) {
+                Employ employ = cursorToOrder(cursor);
+                list.add(employ);
+            }
+        } finally {
+            cursor.close();
+        }
+        return list;
+    }
+
+    /**
+     * 其他进程 查询所有司机
+     * @return
+     */
+    public static List<Employ> findAll(SqliteHelper helper) {
+
+        SQLiteDatabase db = helper.openSqliteDatabase();
+
+        Cursor cursor = db.rawQuery("select * from t_driverinfo", new String[]{});
+
+        List<Employ> list = new LinkedList<>();
+
+        try {
+            while (cursor.moveToNext()) {
+                Employ employ = cursorToOrder(cursor);
+                list.add(employ);
+            }
+        } finally {
+            cursor.close();
+        }
+        return list;
+    }
+
+    public static Employ cursorToOrder(Cursor cursor) {
+        Employ driverInfo = new Employ();
+
+        driverInfo.id = cursor.getLong(cursor
+                .getColumnIndex("id"));
+        driverInfo.user_name = cursor.getString(cursor
+                .getColumnIndex("user_name"));
+        driverInfo.password = cursor.getString(cursor
+                .getColumnIndex("password"));
+        driverInfo.name = cursor.getString(cursor
+                .getColumnIndex("name"));
+        driverInfo.real_name = cursor.getString(cursor
+                .getColumnIndex("real_name"));
+        driverInfo.sex = cursor.getString(cursor
+                .getColumnIndex("sex"));
+        driverInfo.company_id = cursor.getLong(cursor
+                .getColumnIndex("company_id"));
+        driverInfo.company_name = cursor.getString(cursor
+                .getColumnIndex("company_name"));
+        driverInfo.phone = cursor.getString(cursor
+                .getColumnIndex("phone"));
+
+        driverInfo.balance = cursor.getDouble(cursor
+                .getColumnIndex("balance"));
+        driverInfo.service_type = cursor.getString(cursor
+                .getColumnIndex("service_type"));
+        driverInfo.child_type = cursor.getString(cursor
+                .getColumnIndex("child_type"));
+        driverInfo.bank_name = cursor.getString(cursor
+                .getColumnIndex("bank_name"));
+        driverInfo.bank_card_no = cursor.getString(cursor
+                .getColumnIndex("bank_card_no"));
+        driverInfo.cash_person_name = cursor.getString(cursor
+                .getColumnIndex("cash_person_name"));
+        driverInfo.portrait_path = cursor.getString(cursor
+                .getColumnIndex("portrait_path"));
+        driverInfo.score = cursor.getDouble(cursor
+                .getColumnIndex("score"));
+        driverInfo.status = cursor.getInt(cursor
+                .getColumnIndex("status"));
         return driverInfo;
     }
 

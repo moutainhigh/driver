@@ -22,7 +22,7 @@ public class CreateDJMoldel implements CreateDJContract.Model {
     @Override
     public Observable<DJTypeResult> queryDJType(Long companyId) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .getBusiness(companyId, "daijia", Config.APP_KEY)
+                .getBusiness(companyId, Config.DAIJIA, Config.APP_KEY)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

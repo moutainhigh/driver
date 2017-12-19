@@ -57,6 +57,8 @@ ext {
                     'amap-loc': 'com.amap.api:location:latest.integration',
                     'amap-navi': 'com.amap.api:navi-3dmap:latest.integration',
                     'amap-search': 'com.amap.api:search:latest.integration',
+
+                    'tag-view': 'co.lujun:androidtagview:1.1.4',
     ]
 }
 

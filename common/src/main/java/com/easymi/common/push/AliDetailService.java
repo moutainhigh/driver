@@ -30,12 +30,9 @@ public class AliDetailService extends AliyunMessageIntentService {
         if (null != cPushMessage) {
             String payload = cPushMessage.getContent();
             if (StringUtils.isNotBlank(payload)) {
-                Gson gson = new Gson();
-                PushMessage pushMessage = gson.fromJson(payload, PushMessage.class);
-
                 long driverId = EmUtil.getEmployId();
                 if (driverId != 0) {
-                    new HandlePush(context, pushMessage);
+                    new HandlePush(context, payload);
                 }
                 Log.d(TAG, "ali receiver payload : " + payload);
             }

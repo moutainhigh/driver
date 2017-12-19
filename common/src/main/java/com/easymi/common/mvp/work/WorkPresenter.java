@@ -93,23 +93,12 @@ public class WorkPresenter implements WorkContract.Presenter {
                 List<BaseOrder> orders = emResult.orders;
                 List<BaseOrder> nowOrders = new ArrayList<>();
                 List<BaseOrder> yuyueOrders = new ArrayList<>();
-                XApp.getPreferencesEditor().putBoolean(Config.SP_ORDER_RUNNING, false).apply();
                 for (BaseOrder order : orders) {
                     order.viewType = BaseOrder.ITEM_POSTER;
                     if (order.isBookOrder == 2) {
                         nowOrders.add(order);
                     } else {
                         yuyueOrders.add(order);
-                    }
-                    //有任何一个订单的状态是前往目的地就置成需要纠偏
-                    if (order.orderType.equals("daijia") &&
-                            (order.orderStatus == 5
-                                    || order.orderStatus == 10
-                                    || order.orderStatus == 15
-                                    || order.orderStatus == 20
-                                    || order.orderStatus == 25
-                                    || order.orderStatus == 28)) {
-                        XApp.getPreferencesEditor().putBoolean(Config.SP_ORDER_RUNNING, true).apply();
                     }
                 }
                 orders.clear();
@@ -132,7 +121,6 @@ public class WorkPresenter implements WorkContract.Presenter {
 
             @Override
             public void onError(int code) {
-                XApp.getPreferencesEditor().putBoolean(Config.SP_ORDER_RUNNING, false).apply();
                 view.showOrders(null);
             }
         })));

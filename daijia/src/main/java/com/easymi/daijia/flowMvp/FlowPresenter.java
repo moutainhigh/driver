@@ -61,7 +61,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     public FlowPresenter(Context context, FlowContract.View view) {
         this.context = context;
         this.view = view;
-        XApp.getPreferencesEditor().putBoolean(Config.SP_ORDER_RUNNING, true).apply();
         model = new FlowModel();
     }
 

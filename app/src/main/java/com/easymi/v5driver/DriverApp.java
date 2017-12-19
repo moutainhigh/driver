@@ -1,7 +1,6 @@
 package com.easymi.v5driver;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -13,7 +12,6 @@ import com.easymi.common.daemon.PuppetReceiver1;
 import com.easymi.common.daemon.PuppetReceiver2;
 import com.easymi.common.daemon.PuppetService;
 import com.easymi.common.push.AliDetailService;
-import com.easymi.common.push.MQTTService;
 import com.easymi.component.app.XApp;
 import com.marswin89.marsdaemon.DaemonClient;
 import com.marswin89.marsdaemon.DaemonConfigurations;
@@ -65,15 +63,6 @@ public class DriverApp extends XApp {
                 Log.d("DriverApp", "init cloudchannel failed -- errorcode:" + errorCode + " -- errorMessage:" + errorMessage);
             }
         });
-    }
-
-    /**
-     * 开启MQTT服务
-     */
-    public void initMQTT() {
-        Intent mqtt = new Intent(this, MQTTService.class);
-        mqtt.setPackage(this.getPackageName());
-        this.startService(mqtt);
     }
 
     protected DaemonConfigurations getDaemonConfigurations() {

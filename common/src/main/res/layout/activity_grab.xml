@@ -6,7 +6,7 @@
     android:background="@color/colorPrimary">
 
     <ImageView
-        android:id="@+id/ic_close"
+        android:onClick="closeGrab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"

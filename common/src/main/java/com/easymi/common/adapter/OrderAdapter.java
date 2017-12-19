@@ -6,6 +6,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.easymi.common.R;
 import com.easymi.common.entity.BaseOrder;
 import com.easymi.common.util.DJStatus2Str;
+import com.easymi.component.Config;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.TimeUtil;
 
@@ -39,9 +40,9 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<BaseOrder> {
             baseViewHolder.setOnClickListener(R.id.root, v -> {
                 if (StringUtils.isNotBlank(baseOrder.orderType)) {
 
-                    if (baseOrder.orderType.equals("daijia")) {
+                    if (baseOrder.orderType.equals(Config.DAIJIA)) {
                         if (baseOrder.orderStatus == 1) {
-                            ARouter.getInstance().build("/daijia/GrabActivity").withLong("orderId", baseOrder.orderId).navigation();
+//                            ARouter.getInstance().build("/daijia/GrabActivity").withLong("orderId", baseOrder.orderId).navigation();
                         } else {
                             ARouter.getInstance()
                                     .build("/daijia/FlowActivity")

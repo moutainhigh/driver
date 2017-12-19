@@ -45,4 +45,27 @@
 
     <string name="current_place">当前地址：</string>
 
+    <string name="grab_order_content">抢单</string>
+    <string name="send_order">派单</string>
+    <string name="accept_order">接单</string>
+    <string name="send_order_content">您有新的订单了，快去接单吧</string>
+
+    <string name="cancel_order">消单</string>
+    <string name="you_have_order_cancel">您有订单被取消，请注意查看</string>
+
+    <!-- 抢单界面str -->
+    <string name="grab_dis">距您约</string>
+    <string name="grab_map">地图</string>
+    <string name="grab_order">抢单</string>
+    <string name="sec">秒</string>
+
+    <string name="from">从</string>
+    <string name="out">出发</string>
+    <string name="to">到</string>
+    <string name="order">订单</string>
+    <string name="to_you">距您</string>
+
+    <string name="meter">米</string>
+    <string name="k_meter">千米</string>
+
 </resources>

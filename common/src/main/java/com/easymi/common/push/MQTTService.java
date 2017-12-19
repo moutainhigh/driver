@@ -14,11 +14,10 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.easymi.common.entity.PushMessage;
-import com.easymi.component.app.XApp;
-import com.easymi.component.entity.GpsPush;
-import com.easymi.component.entity.PushBean;
 import com.easymi.component.Config;
 import com.easymi.component.entity.EmLoc;
+import com.easymi.component.entity.GpsPush;
+import com.easymi.component.entity.PushBean;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.utils.EmUtil;
@@ -52,7 +51,7 @@ public class MQTTService extends Service implements LocObserver {
     private String passWord = Config.MQTT_PSW;
     private static String pushTopic = Config.MQTT_PUSH_TOPIC;
     private String pullTopic;
-    private String clientId = "T111";//身份唯一码
+    private String clientId = "driver-" + EmUtil.getEmployId();//身份唯一码
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -85,7 +84,7 @@ public class MQTTService extends Service implements LocObserver {
         // last will message
         boolean doConnect = true;
         String message = "{\"terminal_uid\":\"" + clientId + "\"}";
-        pullTopic = "/driver" + "/" + EmUtil.getEmployId();
+        pullTopic = "/driver" + "/" + Config.APP_KEY + "/" + EmUtil.getEmployId();
         Integer qos = 0;
         Boolean retained = false;
         if ((!message.equals("")) || (!pullTopic.equals(""))) {
@@ -170,13 +169,13 @@ public class MQTTService extends Service implements LocObserver {
     private MqttCallback mqttCallback = new MqttCallback() {
 
         @Override
-        public void messageArrived(String topic, MqttMessage message) throws Exception {
+        public void messageArrived(String topic, MqttMessage message) {
 
             String str1 = new String(message.getPayload());
 
-            PushMessage pushMessage = gson.fromJson(str1, PushMessage.class);
-            new HandlePush(MQTTService.this, pushMessage);
             Log.i(TAG, "MqttReceivePull:" + str1);
+
+            new HandlePush(MQTTService.this, str1);//处理推送消息
         }
 
         @Override
@@ -216,8 +215,6 @@ public class MQTTService extends Service implements LocObserver {
         return null;
     }
 
-    private Gson gson;
-
     private long lastUploadTime = 0;
 
     @Override
@@ -232,12 +229,9 @@ public class MQTTService extends Service implements LocObserver {
             gpsPush.appKey = Config.APP_KEY;
             gpsPush.lat = loc.latitude;
             gpsPush.lng = loc.longitude;
-            if (gson == null) {
-                gson = new Gson();
-            }
             PushBean<GpsPush> pushBean = new PushBean<>("gps", gpsPush);
-            publish(gson.toJson(pushBean));
-            Log.e("pushBean", gson.toJson(pushBean));
+            publish(new Gson().toJson(pushBean));
+            Log.e("pushBean", new Gson().toJson(pushBean));
         }
         lastUploadTime = System.currentTimeMillis();
     }

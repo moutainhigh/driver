@@ -1,4 +1,4 @@
-package com.easymi.daijia.activity.grab;
+package com.easymi.common.mvp.grab;
 
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -10,28 +10,25 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.alibaba.android.arouter.facade.annotation.Route;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
-import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.route.DriveRouteResult;
+import com.easymi.common.R;
+import com.easymi.common.adapter.GrabAdapter;
+import com.easymi.common.entity.Address;
+import com.easymi.common.entity.MultipleOrder;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.HLoadView;
 import com.easymi.component.widget.RotateImageView;
 import com.easymi.component.widget.overlay.DrivingRouteOverlay;
-import com.easymi.daijia.R;
-import com.easymi.daijia.adapter.GrabAdapter;
-import com.easymi.daijia.entity.Address;
-import com.easymi.daijia.entity.DJOrder;
 import com.itsronald.widget.ViewPagerIndicator;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
@@ -45,7 +42,6 @@ import java.util.TimerTask;
  * Created by developerLzh on 2017/11/2 0002.
  */
 
-@Route(path = "/daijia/GrabActivity")
 public class GrabActivity extends RxBaseActivity implements GrabContract.View {
 
     public static final int GRAB_TOTAL_TIME = 18;//加上预览订单的时间
@@ -69,11 +65,13 @@ public class GrabActivity extends RxBaseActivity implements GrabContract.View {
     GrabAdapter adapter;
     GrabPresenter presenter;
 
-    private DJOrder showIngOrder = null;
+    TextView bottomText;
+
+    private MultipleOrder showIngOrder = null;
 
     private AMap aMap;
 
-    List<DJOrder> djOrders = new ArrayList<>();
+    List<MultipleOrder> multipleOrders = new ArrayList<>();
 
     private int pageIndex = 0; //page索引
 
@@ -84,13 +82,13 @@ public class GrabActivity extends RxBaseActivity implements GrabContract.View {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
-        showIngOrder = (DJOrder) getIntent().getSerializableExtra("order");
+        showIngOrder = (MultipleOrder) getIntent().getSerializableExtra("order");
         if (showIngOrder == null) {
             finish();
             return;
         }
         presenter = new GrabPresenter(this, this);
-        djOrders.add(showIngOrder);
+        multipleOrders.add(showIngOrder);
 
         expandBtnCon = findViewById(R.id.expand_btn_con);
         mapView = findViewById(R.id.map_view);
@@ -104,6 +102,8 @@ public class GrabActivity extends RxBaseActivity implements GrabContract.View {
         loadView = findViewById(R.id.load_view);
         grabCon = findViewById(R.id.grab_con);
         grabCountdown = findViewById(R.id.count_down_grab);
+
+        bottomText = findViewById(R.id.button_text);
 
         pagerIndicator = findViewById(R.id.view_pager_indicator);
 
@@ -120,9 +120,9 @@ public class GrabActivity extends RxBaseActivity implements GrabContract.View {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        DJOrder djOrder = (DJOrder) intent.getSerializableExtra("order");
-        djOrders.add(djOrder);
-        adapter.setDJOrderList(djOrders);
+        MultipleOrder multipleOrder = (MultipleOrder) intent.getSerializableExtra("order");
+        multipleOrders.add(multipleOrder);
+        adapter.setDJOrderList(multipleOrders);
     }
 
     private void initMap() {
@@ -183,7 +183,7 @@ public class GrabActivity extends RxBaseActivity implements GrabContract.View {
     }
 
     @Override
-    public void showBase(DJOrder djOrder) {
+    public void showBase(MultipleOrder multipleOrder) {
 
     }
 
@@ -219,12 +219,12 @@ public class GrabActivity extends RxBaseActivity implements GrabContract.View {
                             } else { //为0时+1
                                 pageIndex += 1;
                             }
-                            if (pageIndex >= djOrders.size()) {
+                            if (pageIndex >= multipleOrders.size()) {
                                 finish();
                             } else {
                                 viewPager.setCurrentItem(pageIndex);
-                                djOrders.remove(showIngOrder);
-                                adapter.setDJOrderList(djOrders);
+                                multipleOrders.remove(showIngOrder);
+                                adapter.setDJOrderList(multipleOrders);
                                 pageIndex = viewPager.getCurrentItem();
                             }
                         }
@@ -255,6 +255,7 @@ public class GrabActivity extends RxBaseActivity implements GrabContract.View {
 
     @Override
     public void initViewPager() {
+        showBottomByStatus();
         adapter = new GrabAdapter(this);
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -265,7 +266,8 @@ public class GrabActivity extends RxBaseActivity implements GrabContract.View {
 
             @Override
             public void onPageSelected(int position) {
-                showIngOrder = djOrders.get(position);
+                showIngOrder = multipleOrders.get(position);
+                showBottomByStatus();
                 countTime();
             }
 
@@ -274,7 +276,7 @@ public class GrabActivity extends RxBaseActivity implements GrabContract.View {
 
             }
         });
-        adapter.setDJOrderList(djOrders);
+        adapter.setDJOrderList(multipleOrders);
         countTime();
     }
 
@@ -301,5 +303,19 @@ public class GrabActivity extends RxBaseActivity implements GrabContract.View {
     @Override
     public RxManager getManager() {
         return mRxManager;
+    }
+
+    private void showBottomByStatus(){
+        if(showIngOrder.orderStatus == MultipleOrder.NEW_ORDER){
+            bottomText.setText(R.string.grab_order);
+            grabCon.setOnClickListener(v -> presenter.grabOrder(showIngOrder.orderId));
+        } else if(showIngOrder.orderStatus == MultipleOrder.PAIDAN_ORDER){
+            bottomText.setText(R.string.send_order);
+            grabCon.setOnClickListener(v -> presenter.takeOrder(showIngOrder.orderId));
+        }
+    }
+
+    public void closeGrab(View view){
+        finishActivity();
     }
 }

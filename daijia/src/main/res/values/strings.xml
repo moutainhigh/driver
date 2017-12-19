@@ -97,13 +97,18 @@
 
     <string name="route_failed">路径规划失败</string>
 
-    <!-- 抢单界面str -->
-    <string name="grab_dis">距您约</string>
-    <string name="grab_map">地图</string>
-    <string name="grab_order">抢单</string>
-    <string name="sec">秒</string>
-    <string name="please_cancel_reason">请输入取消理由</string>
-
     <string name="loc_failed">定位失败,无法继续操作</string>
+
+    <string name="status_pai">已派单</string>
+    <string name="status_jie">已接单</string>
+    <string name="status_to_start">前往预约地</string>
+    <string name="status_arrive_start">已到达预约地</string>
+    <string name="status_wait">等待..</string>
+    <string name="status_to_end">前往目的地</string>
+    <string name="status_confirm">确认费用</string>
+
+    <string name="canceled_order">当前订单已被取消:)</string>
+
+    <string name="please_cancel_reason">请输入取消理由</string>
 
 </resources>

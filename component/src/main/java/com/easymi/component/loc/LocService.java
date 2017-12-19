@@ -15,7 +15,10 @@ import com.amap.api.trace.LBSTraceClient;
 import com.amap.api.trace.TraceLocation;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
+import com.easymi.component.db.SqliteHelper;
 import com.easymi.component.entity.EmLoc;
+import com.easymi.component.entity.Employ;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.google.gson.Gson;
 
@@ -78,7 +81,8 @@ public class LocService extends NotiService implements AMapLocationListener {
         } else {
             locClient.stopLocation();
         }
-        if (XApp.getMyPreferences().getBoolean(Config.SP_ORDER_RUNNING, false)) {//通过是否有订单在执行设置周期
+
+        if (isDriverBusy()) {//通过是否有订单在执行设置周期
             scanTime = 2000;
         } else {
             scanTime = 8000;
@@ -92,6 +96,31 @@ public class LocService extends NotiService implements AMapLocationListener {
         locClient.setLocationOption(mLocationOption);
 
         locClient.startLocation();
+    }
+
+    private static SqliteHelper helper;
+
+    /**
+     * 司机是否忙碌
+     */
+    private boolean isDriverBusy() {
+        boolean isBusy = false;
+        if (helper == null) {
+            SqliteHelper.init(this);
+            helper = SqliteHelper.getInstance();
+        }
+        Employ employ = Employ.findAll(helper).size() == 0 ? null : Employ.findAll().get(0);
+        if (null != employ) {
+            int status = employ.status;
+            if (status == 2 || status == 3
+                    || status == 4 || status == 5
+                    || status == 6 || status == 7) {
+                isBusy = true;
+            } else {
+                isBusy = false;
+            }
+        }
+        return isBusy;
     }
 
     private void stopLoc() {

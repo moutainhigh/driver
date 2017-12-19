@@ -1,25 +1,28 @@
+<!doctype html>
 <html>
 <head>
-<meta http-equiv="Content-Type"	content="text/html;charset=gb2312">
+    <meta charset="UTF-8">
+    <title>WebView Test</title>
+</head>
+
 <script type="text/javascript">
 
-function javacalljs(){
-	 document.getElementById("content").innerHTML =
-         "<br\>JAVA调用了JS的无参函数";
+  function  alertSomething(){
+      alert("浣犲ソ")
+      }
+
+function delete_confirm() <!--璋冪敤鏂规硶-->
+{
+    event.returnValue = confirm("纭畾 or 鍙栨秷");
 }
 
-function javacalljswith(arg){
-	 document.getElementById("content").innerHTML =
-         ("<br\>"+arg);
-}
 </script>
-</head>
 <body>
-HTML 内容显示 <br/>
-<h1><div id="content">内容显示</div></h1>
-<br/>
-<input type="button"  value="关闭界面" onclick="window.android.finishActivity()" />
-<br/>
-<input type="button"  value="点击调用java代码并传递参数" onclick="window.android.startFunction('http://blog.csdn.net/Leejizhou')"  />
+<input type="button" name="button" id="button" value="js鎻愮ず瀵硅瘽妗�" onClick="alertSomething()"></p>
+<input type="button" name="button2" id="button2" value="js纭畾or鍙栨秷瀵硅瘽妗�" onClick="delete_confirm()"></p>
+
+
+<input type="file" value="" class='zj-up-btn pa' name="uploadfile" id="uploadfile" onchange="form.submit()" /></p>
+
 </body>
 </html>

@@ -1,5 +1,6 @@
-package com.easymi.daijia.entity;
+package com.easymi.common.entity;
 
+import com.easymi.common.mvp.grab.GrabActivity;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -7,9 +8,12 @@ import java.util.List;
 
 /**
  * Created by liuzihao on 2017/11/15.
+ *
+ * 复合型订单，包含了所有业务订单的字段
+ *
  */
 
-public class DJOrder implements Serializable {
+public class MultipleOrder implements Serializable {
 
     /**
      * 新单
@@ -69,9 +73,6 @@ public class DJOrder implements Serializable {
     @SerializedName("order_no")
     public String orderNumber;
 
-    @SerializedName("business")
-    public String orderType;
-
     @SerializedName("status")
     public int orderStatus;
 
@@ -99,20 +100,10 @@ public class DJOrder implements Serializable {
     @SerializedName("destination")
     public String endPlace;
 
-    @SerializedName("budget_fee")
-    public double budgetFee;
+    @SerializedName("business")
+    public String orderType;
 
-    public double orderMoney;
-
-    public double orderDistance;
-
-    public int driveTime;//行驶时间
-
-    public int waitTime;//等待时间
-
-    public double waitFee;//
-
-    public String carNo;//车牌号
+    public int countTime = GrabActivity.GRAB_TOTAL_TIME;
 
     public List<Address> addresses;
 

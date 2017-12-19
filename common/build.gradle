@@ -55,6 +55,8 @@ dependencies {
     api libs['amap-navi']
     api libs['amap-loc']
 
+    api libs['tag-view']
+
     api 'com.skyfishjy.ripplebackground:library:1.0.1'
 
 
@@ -63,6 +65,8 @@ dependencies {
 
     api 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.1.0'
     api 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.0'
+
+    api 'com.github.ronaldsmartin:Material-ViewPagerIndicator:1.0.2'
 
 
     annotationProcessor 'com.alibaba:arouter-compiler:1.1.3'

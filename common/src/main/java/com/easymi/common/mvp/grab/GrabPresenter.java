@@ -1,20 +1,20 @@
-package com.easymi.daijia.activity.grab;
+package com.easymi.common.mvp.grab;
 
 import android.content.Context;
-import android.content.Intent;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.route.BusRouteResult;
 import com.amap.api.services.route.DriveRouteResult;
 import com.amap.api.services.route.RideRouteResult;
 import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
+import com.easymi.common.entity.MultipleOrder;
+import com.easymi.common.result.MultipleOrderResult;
+import com.easymi.component.Config;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.ToastUtil;
-import com.easymi.daijia.flowMvp.FlowActivity;
-import com.easymi.daijia.result.DJOrderResult;
 
 import java.util.List;
 
@@ -39,13 +39,13 @@ public class GrabPresenter implements GrabContract.Presenter {
 
     @Override
     public void queryOrder(Long orderId) {
-        Observable<DJOrderResult> observable = model.queryOrder(orderId);
+        Observable<MultipleOrderResult> observable = model.queryOrder(orderId);
 
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<DJOrderResult>() {
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<MultipleOrderResult>() {
             @Override
-            public void onNext(DJOrderResult djOrderResult) {
-                djOrderResult.order.addresses = djOrderResult.address;
-                view.showBase(djOrderResult.order);
+            public void onNext(MultipleOrderResult multipleOrderResult) {
+                multipleOrderResult.order.addresses = multipleOrderResult.address;
+                view.showBase(multipleOrderResult.order);
             }
 
             @Override
@@ -57,16 +57,43 @@ public class GrabPresenter implements GrabContract.Presenter {
 
     @Override
     public void grabOrder(Long orderId) {
-        Observable<DJOrderResult> observable = model.grabOrder(orderId);
+        Observable<MultipleOrderResult> observable = model.grabOrder(orderId);
 
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<DJOrderResult>() {
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<MultipleOrderResult>() {
             @Override
-            public void onNext(DJOrderResult djOrderResult) {
-                ToastUtil.showMessage(context, "抢单成功");
-                Intent intent = new Intent(context, FlowActivity.class);
-                intent.putExtra("orderId", djOrderResult.order.orderId);
-                context.startActivity(intent);
-                view.finishActivity();
+            public void onNext(MultipleOrderResult multipleOrderResult) {
+                MultipleOrder order = multipleOrderResult.order;
+                if (order != null) {
+                    if(order.orderType.equals(Config.DAIJIA)){
+                        ARouter.getInstance()
+                                .build("/daijia/FlowActivity")
+                                .withLong("orderId", order.orderId).navigation();
+                    }
+                }
+            }
+
+            @Override
+            public void onError(int code) {
+                view.showBase(null);
+            }
+        })));
+    }
+
+    @Override
+    public void takeOrder(Long orderId) {
+        Observable<MultipleOrderResult> observable = model.takeOrder(orderId);
+
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<MultipleOrderResult>() {
+            @Override
+            public void onNext(MultipleOrderResult multipleOrderResult) {
+                MultipleOrder order = multipleOrderResult.order;
+                if (order != null) {
+                    if(order.orderType.equals(Config.DAIJIA)){
+                        ARouter.getInstance()
+                                .build("/daijia/FlowActivity")
+                                .withLong("orderId", order.orderId).navigation();
+                    }
+                }
             }
 
             @Override
@@ -79,7 +106,7 @@ public class GrabPresenter implements GrabContract.Presenter {
     RouteSearch routeSearch;
 
     @Override
-    public void routePlanByRouteSearch(LatLonPoint endPoint, List<LatLonPoint>pass) {
+    public void routePlanByRouteSearch(LatLonPoint endPoint, List<LatLonPoint> pass) {
         if (null == routeSearch) {
             routeSearch = new RouteSearch(context);
             routeSearch.setRouteSearchListener(new RouteSearch.OnRouteSearchListener() {

@@ -25,7 +25,7 @@ public class Config {
     /**
      * MQTT配置
      */
-    public static final String MQTT_HOST = "tcp://123.57.84.216:1883";
+    public static final String MQTT_HOST = "tcp://192.168.0.84:1883";
     public static final String MQTT_USER_NAME = "admin";
     public static final String MQTT_PSW = "dsajkdghj**@@##$$sagdgha";
     public static final String MQTT_PUSH_TOPIC = "/driver";
@@ -36,7 +36,6 @@ public class Config {
     public static final String SP_DRIVERID = "driverId";
     public static final String SP_ISLOGIN = "isLogin";
     public static final String SP_LAST_LOC = "lastLoc";
-    public static final String SP_ORDER_RUNNING = "orderRunning";//是否有订单在执行
 
     public static final String SP_CONGESTION = "congestion";//躲避拥堵
     public static final String SP_AVOID_HIGH_SPEED = "avoidhightspeed";//不走高速
@@ -49,4 +48,8 @@ public class Config {
     public static final String SP_ALWAYS_OREN = "always_oren";//是否始终横屏计价
 
     public static final String APP_PACKGE_NAME = "com.easymi.v5driver";
+
+    public static final String DAIJIA = "daijia";
+
+    public static final String BROAD_CANCEL_ORDER = "com.easymi.v5driver.BROAD_CANCEL_ORDER";
 }

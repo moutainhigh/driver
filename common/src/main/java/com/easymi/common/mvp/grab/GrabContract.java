@@ -1,10 +1,10 @@
-package com.easymi.daijia.activity.grab;
+package com.easymi.common.mvp.grab;
 
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.route.DriveRouteResult;
+import com.easymi.common.entity.MultipleOrder;
+import com.easymi.common.result.MultipleOrderResult;
 import com.easymi.component.rxmvp.RxManager;
-import com.easymi.daijia.entity.DJOrder;
-import com.easymi.daijia.result.DJOrderResult;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import rx.Observable;
 public interface GrabContract {
 
     interface View {
-        void showBase(DJOrder djOrder);
+        void showBase(MultipleOrder multipleOrder);
         void showShade();
         void showGrabCountDown();
         void initViewPager();
@@ -30,14 +30,16 @@ public interface GrabContract {
         void queryOrder(Long orderId);
 
         void grabOrder(Long orderId);
+        void takeOrder(Long orderId);
 
         void routePlanByRouteSearch(LatLonPoint endPoint, List<LatLonPoint> pass);
     }
 
     interface Model {
-        Observable<DJOrderResult> queryOrder(Long orderId);
+        Observable<MultipleOrderResult> queryOrder(Long orderId);
 
-        Observable<DJOrderResult> grabOrder(Long orderId);
+        Observable<MultipleOrderResult> grabOrder(Long orderId);
+        Observable<MultipleOrderResult> takeOrder(Long orderId);
     }
 
 }

@@ -1,5 +1,7 @@
 package com.easymi.common.util;
 
+import com.easymi.component.Config;
+
 /**
  * Created by developerLzh on 2017/11/20 0020.
  */
@@ -52,7 +54,7 @@ public class DJStatus2Str {
     public static final int CANCEL_ORDER = 45;
 
     public static String int2Str(String business, int status) {
-        if (business.equals("daijia")) {
+        if (business.equals(Config.DAIJIA)) {
             switch (status) {
                 case NEW_ORDER:
                     return "新单 >";

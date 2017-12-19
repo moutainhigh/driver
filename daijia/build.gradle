@@ -54,9 +54,9 @@ dependencies {
     api libs['amap-search']
     api libs['amap-navi']
     api libs['amap-loc']
+    api libs['tag-view']
 
     api 'co.lujun:androidtagview:1.1.4'
-    api 'com.github.ronaldsmartin:Material-ViewPagerIndicator:1.0.2'
 
     annotationProcessor 'com.alibaba:arouter-compiler:1.1.3'
 

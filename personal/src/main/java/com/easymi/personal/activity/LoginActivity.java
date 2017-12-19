@@ -21,6 +21,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.amap.api.navi.model.NaviLatLng;
 import com.easymi.component.Config;
 import com.easymi.component.activity.NaviActivity;
+import com.easymi.component.activity.WebActivity;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
@@ -90,7 +91,7 @@ public class LoginActivity extends RxBaseActivity implements LocObserver {
         });
 
         resetPsw = findViewById(R.id.login_forget);
-        resetPsw.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, ResetPswActivity.class)));
+        resetPsw.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, RegisterWebActivity.class)));
 
         eye = findViewById(R.id.eye);
 

@@ -13,7 +13,10 @@ import com.easymi.component.db.SqliteHelper;
 
 public class BaseEmploy {
     public long id;
+
     public int status;
+    //0在线 1空闲 2派单 3接单 4前往预约地 5到达预约地 6前往目的地 7中途等待 8离线 9冻结
+
     public String real_name;
     public long company_id;
     public String phone;

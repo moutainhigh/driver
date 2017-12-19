@@ -1,5 +1,6 @@
 package com.easymi.daijia.flowMvp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -47,7 +49,6 @@ import com.easymi.component.widget.LoadingButton;
 import com.easymi.component.widget.overlay.DrivingRouteOverlay;
 import com.easymi.daijia.R;
 import com.easymi.daijia.activity.CancelActivity;
-import com.easymi.daijia.activity.grab.GrabActivity;
 import com.easymi.daijia.entity.Address;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.fragment.AcceptFragment;
@@ -57,6 +58,7 @@ import com.easymi.daijia.fragment.SettleFragmentDialog;
 import com.easymi.daijia.fragment.SlideArriveStartFragment;
 import com.easymi.daijia.fragment.ToStartFragment;
 import com.easymi.daijia.fragment.WaitFragment;
+import com.easymi.daijia.receiver.CancelOrderReceiver;
 import com.easymi.daijia.trace.TraceInterface;
 import com.easymi.daijia.trace.TraceReceiver;
 import com.easymi.daijia.widget.FlowPopWindow;
@@ -75,7 +77,7 @@ import co.lujun.androidtagview.TagView;
  * Created by developerLzh on 2017/11/13 0013.
  */
 @Route(path = "/daijia/FlowActivity")
-public class FlowActivity extends RxBaseActivity implements FlowContract.View, LocObserver, TraceInterface {
+public class FlowActivity extends RxBaseActivity implements FlowContract.View, LocObserver, TraceInterface, CancelOrderReceiver.OnCancelListener {
     public static final int CANCEL_ORDER = 0X01;
     public static final int CHANGE_END = 0X02;
 
@@ -101,6 +103,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
     private ActFraCommBridge bridge;
 
     private TraceReceiver traceReceiver;
+    private CancelOrderReceiver cancelOrderReceiver;
 
     private AMap aMap;
 
@@ -194,16 +197,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
         tagContainerLayout.setOnTagClickListener(new TagView.OnTagClickListener() {
             @Override
             public void onTagClick(int position, String text) {
-                if (position == 1) {
-                    Intent intent = new Intent(FlowActivity.this, GrabActivity.class);
-                    intent.putExtra("order", djOrder);
-                    startActivity(intent);
-                    startActivity(intent);
-                    startActivity(intent);
-                    startActivity(intent);
-                    startActivity(intent);
-                    startActivity(intent);
-                }
+
             }
 
             @Override
@@ -221,6 +215,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
     @Override
     public void showBottomFragment(DJOrder djOrder) {
         if (djOrder.orderStatus == DJOrder.PAIDAN_ORDER || djOrder.orderStatus == DJOrder.NEW_ORDER) {
+            toolbar.setTitle(R.string.status_pai);
             AcceptFragment acceptFragment = new AcceptFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("djOrder", djOrder);
@@ -233,6 +228,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
             transaction.replace(R.id.flow_frame, acceptFragment);
             transaction.commit();
         } else if (djOrder.orderStatus == DJOrder.TAKE_ORDER) {
+            toolbar.setTitle(R.string.status_jie);
             ToStartFragment toStartFragment = new ToStartFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("djOrder", djOrder);
@@ -245,6 +241,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
             transaction.replace(R.id.flow_frame, toStartFragment);
             transaction.commit();
         } else if (djOrder.orderStatus == DJOrder.GOTO_BOOKPALCE_ORDER) {
+            toolbar.setTitle(R.string.status_to_start);
             SlideArriveStartFragment fragment = new SlideArriveStartFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("djOrder", djOrder);
@@ -257,6 +254,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
             transaction.replace(R.id.flow_frame, fragment);
             transaction.commit();
         } else if (djOrder.orderStatus == DJOrder.ARRIVAL_BOOKPLACE_ORDER) {
+            toolbar.setTitle(R.string.status_arrive_start);
             ArriveStartFragment fragment = new ArriveStartFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("djOrder", djOrder);
@@ -269,6 +267,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
             transaction.replace(R.id.flow_frame, fragment);
             transaction.commit();
         } else if (djOrder.orderStatus == DJOrder.START_WAIT_ORDER) {
+            toolbar.setTitle(R.string.status_wait);
             WaitFragment fragment = new WaitFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("djOrder", djOrder);
@@ -281,6 +280,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
             transaction.replace(R.id.flow_frame, fragment);
             transaction.commit();
         } else if (djOrder.orderStatus == DJOrder.GOTO_DESTINATION_ORDER) {
+            toolbar.setTitle(R.string.status_to_end);
             RunningFragment fragment = new RunningFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("djOrder", djOrder);
@@ -293,6 +293,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
             transaction.replace(R.id.flow_frame, fragment);
             transaction.commit();
         } else if (djOrder.orderStatus == DJOrder.ARRIVAL_DESTINATION_ORDER) {
+            toolbar.setTitle(R.string.status_confirm);
             RunningFragment fragment = new RunningFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("djOrder", djOrder);
@@ -332,7 +333,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
         aMap.getUiSettings().setTiltGesturesEnabled(false);//倾斜手势
 
         String locStr = XApp.getMyPreferences().getString(Config.SP_LAST_LOC, "");
-        receiveLoc(new Gson().fromJson(locStr, EmLoc.class));//手动调用上次位置 减少从北京跳过来的时间
+        EmLoc emLoc = new Gson().fromJson(locStr, EmLoc.class);
+        if (null != emLoc) {
+            lastLatlng = new LatLng(emLoc.latitude, emLoc.longitude);
+            receiveLoc(emLoc);//手动调用上次位置 减少从北京跳过来的时间
+        }
     }
 
     private Marker startMarker;
@@ -356,7 +361,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
                 latLngs.add(new LatLng(getEndAddr().lat, getEndAddr().lng));
             }
             LatLngBounds bounds = MapUtil.getBounds(latLngs, new LatLng(lastLatlng.latitude, lastLatlng.longitude));
-            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this)/2, DensityUtil.getDisplayWidth(this)/2, 20));
+            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this) / 2, DensityUtil.getDisplayWidth(this) / 2, 20));
         } else if (djOrder.orderStatus == DJOrder.GOTO_BOOKPALCE_ORDER) {
             if (null != getStartAddr()) {
                 latLngs.add(new LatLng(getStartAddr().lat, getStartAddr().lng));
@@ -366,7 +371,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
                 naviCon.setOnClickListener(v -> ToastUtil.showMessage(FlowActivity.this, getString(R.string.illegality_place)));
             }
             LatLngBounds bounds = MapUtil.getBounds(latLngs, new LatLng(lastLatlng.latitude, lastLatlng.longitude));
-            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this)/2, DensityUtil.getDisplayWidth(this)/2, 20));
+            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this) / 2, DensityUtil.getDisplayWidth(this) / 2, 20));
         } else if (djOrder.orderStatus == DJOrder.ARRIVAL_BOOKPLACE_ORDER
                 || djOrder.orderStatus == DJOrder.GOTO_DESTINATION_ORDER
                 || djOrder.orderStatus == DJOrder.START_WAIT_ORDER
@@ -379,7 +384,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
                 naviCon.setOnClickListener(v -> ToastUtil.showMessage(FlowActivity.this, getString(R.string.illegality_place)));
             }
             LatLngBounds bounds = MapUtil.getBounds(latLngs, new LatLng(lastLatlng.latitude, lastLatlng.longitude));
-            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this)/2, DensityUtil.getDisplayWidth(this)/2, 20));
+            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this) / 2, DensityUtil.getDisplayWidth(this) / 2, 20));
         }
         if (null != getStartAddr()) {
             if (null == startMarker) {
@@ -578,6 +583,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
         IntentFilter filter2 = new IntentFilter();
         filter2.addAction(LocService.BROAD_TRACE_SUC);
         registerReceiver(traceReceiver, filter2);
+
+        cancelOrderReceiver = new CancelOrderReceiver(this);
+        registerReceiver(cancelOrderReceiver, new IntentFilter(Config.BROAD_CANCEL_ORDER));
     }
 
     //是否退出到了重新进来，如果是则要CameraUpdate
@@ -622,6 +630,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
         LocReceiver.getInstance().deleteObserver(this);//取消位置订阅
 
         unregisterReceiver(traceReceiver);
+        unregisterReceiver(cancelOrderReceiver);
     }
 
     SmoothMoveMarker smoothMoveMarker;
@@ -642,6 +651,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
                     .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
             smoothMoveMarker.setPosition(lastLatlng);
             smoothMoveMarker.setRotate(location.bearing);
+            smoothMoveMarker.startSmoothMove();
         } else {
             List<LatLng> latLngs = new ArrayList<>();
             latLngs.add(lastLatlng);
@@ -725,5 +735,21 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
         }
 
 
+    }
+
+    @Override
+    public void onCancelOrder(long orderId, String orderType) {
+        if (orderId == djOrder.orderId
+                && orderType.equals(djOrder.orderType)) {
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setMessage(getString(R.string.canceled_order))
+                    .setPositiveButton(R.string.ok, (dialog1, which) -> {
+                        dialog1.dismiss();
+                        finish();
+                    })
+                    .setOnDismissListener(dialog12 -> finish())
+                    .create();
+            dialog.show();
+        }
     }
 }

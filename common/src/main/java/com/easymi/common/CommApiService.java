@@ -1,7 +1,7 @@
 package com.easymi.common;
 
-import com.easymi.common.entity.Notifity;
 import com.easymi.common.result.AnnouncementResult;
+import com.easymi.common.result.MultipleOrderResult;
 import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.QueryOrdersResult;
@@ -11,6 +11,7 @@ import com.easymi.component.result.EmResult;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Query;
 import rx.Observable;
@@ -114,6 +115,7 @@ public interface CommApiService {
 
     /**
      * 首页统计
+     *
      * @param driverId
      * @param nowDate
      * @param appKey
@@ -123,4 +125,43 @@ public interface CommApiService {
     Observable<WorkStatisticsResult> workStatistics(@Query("driver_id") Long driverId,
                                                     @Query("now_date") String nowDate,
                                                     @Query("app_key") String appKey);
+
+    /**
+     * 代驾 --> 查询单个订单
+     *
+     * @param orderId
+     * @param appKey
+     * @return
+     */
+    @GET("driver/api/v1/orderFindOne")
+    Observable<MultipleOrderResult> queryDJOrder(@Query("order_id") Long orderId,
+                                                 @Query("app_key") String appKey);
+
+    /**
+     * 代驾 --> 抢单
+     *
+     * @param orderId
+     * @param driverId
+     * @param appKey
+     * @return
+     */
+    @FormUrlEncoded
+    @PUT("driver/api/v1/grabOrder")
+    Observable<MultipleOrderResult> grabDJOrder(@Field("order_id") Long orderId,
+                                              @Field("driver_id") Long driverId,
+                                              @Field("app_key") String appKey);
+
+    /**
+     * 代驾 -->接单
+     *
+     * @param orderId
+     * @param driverId
+     * @param appKey
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("driver/api/v1/takeOrder")
+    Observable<MultipleOrderResult> takeDJOrder(@Field("order_id") Long orderId,
+                                              @Field("driver_id") Long driverId,
+                                              @Field("app_key") String appKey);
 }
