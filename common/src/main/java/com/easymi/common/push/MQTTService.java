@@ -220,7 +220,7 @@ public class MQTTService extends Service implements LocObserver {
     @Override
     public void receiveLoc(EmLoc loc) {
         if (lastUploadTime != 0) {
-            if (System.currentTimeMillis() - lastUploadTime < 10 * 1000) {
+            if (System.currentTimeMillis() - lastUploadTime < 5 * 1000) {
                 return;
             }
         }

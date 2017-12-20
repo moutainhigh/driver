@@ -16,7 +16,7 @@ android {
 
         ndk {
             //只兼容下面的型号
-            abiFilters "armeabi", "armeabi-v7a"
+            abiFilters "armeabi", "armeabi-v7a", "armeabi-v8a"
         }
     }
     buildTypes {
