@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.easymi.common.R;
-import com.easymi.common.entity.BaseOrder;
+import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.utils.ToastUtil;
 
 import java.util.ArrayList;
@@ -45,8 +45,8 @@ public class LiuShuiAdapter extends  RecyclerView.Adapter<LiuShuiAdapter.Holder>
     public void onBindViewHolder(Holder holder, int position) {
         BaseOrder baseOrder = baseOrders.get(position);
         holder.orderType.setText(baseOrder.orderType);
-        holder.orderEndPlace.setText(baseOrder.orderEndPlace);
-        holder.orderStartPlace.setText(baseOrder.orderStartPlace);
+        holder.orderEndPlace.setText(baseOrder.endPlace);
+        holder.orderStartPlace.setText(baseOrder.startPlace);
         holder.orderStatus.setText(""+baseOrder.orderStatus);
         holder.orderTime.setText(""+baseOrder.orderTime);
         holder.orderNumber.setText(baseOrder.orderNumber);

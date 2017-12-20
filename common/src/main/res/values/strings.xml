@@ -68,4 +68,8 @@
     <string name="meter">米</string>
     <string name="k_meter">千米</string>
 
+    <string name="jishi_order">即时订单</string>
+    <string name="yuyue_order">预约订单</string>
+    <string name="time_format">MM月dd日 HH:mm</string>
+
 </resources>

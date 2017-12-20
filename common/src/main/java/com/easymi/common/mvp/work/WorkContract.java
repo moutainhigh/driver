@@ -1,8 +1,7 @@
 package com.easymi.common.mvp.work;
 
-import android.content.Context;
-
 import com.easymi.common.entity.Announcement;
+import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.entity.Notifity;
 import com.easymi.common.entity.WorkStatistics;
@@ -10,7 +9,6 @@ import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.QueryOrdersResult;
-import com.easymi.common.entity.BaseOrder;
 import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.rxmvp.RxManager;
@@ -31,7 +29,7 @@ public interface WorkContract {
 
         void initRecycler();
 
-        void showOrders(List<BaseOrder> baseOrders);
+        void showOrders(List<MultipleOrder> MultipleOrders);
 
         void initMap();
 

@@ -34,12 +34,10 @@ import com.easymi.common.R;
 import com.easymi.common.activity.CreateActivity;
 import com.easymi.common.adapter.OrderAdapter;
 import com.easymi.common.entity.Announcement;
-import com.easymi.common.entity.BaseOrder;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.entity.Notifity;
 import com.easymi.common.entity.WorkStatistics;
-import com.easymi.common.mvp.grab.GrabActivity;
 import com.easymi.common.push.MQTTService;
 import com.easymi.common.receiver.CancelOrderReceiver;
 import com.easymi.component.Config;
@@ -219,32 +217,32 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         swipeRefreshLayout.setRefreshing(true);
     }
 
-    List<BaseOrder> orders = new ArrayList<>();
+    List<MultipleOrder> orders = new ArrayList<>();
 
     @Override
-    public void showOrders(List<BaseOrder> baseOrders) {
+    public void showOrders(List<MultipleOrder> MultipleOrders) {
         swipeRefreshLayout.setRefreshing(false);
         orders.clear();
-        if (baseOrders == null) {
-            BaseOrder header1 = new BaseOrder(BaseOrder.ITEM_HEADER);
+        if (MultipleOrders == null) {
+            MultipleOrder header1 = new MultipleOrder(MultipleOrder.ITEM_HEADER);
             header1.isBookOrder = 1;
             orders.add(header1);
 
             //即时header
-            BaseOrder header2 = new BaseOrder(BaseOrder.ITEM_HEADER);
+            MultipleOrder header2 = new MultipleOrder(MultipleOrder.ITEM_HEADER);
             header1.isBookOrder = 2;
             orders.add(header2);
         } else {
-            orders.addAll(baseOrders);
+            orders.addAll(MultipleOrders);
         }
         if (null == adapter) {
-            adapter = new OrderAdapter(baseOrders);
+            adapter = new OrderAdapter(orders, this);
             recyclerView.setAdapter(adapter);
             PinnedHeaderDecoration pinnedHeaderDecoration = new PinnedHeaderDecoration();
             //设置只有RecyclerItem.ITEM_HEADER的item显示标签
-            pinnedHeaderDecoration.setPinnedTypeHeader(BaseOrder.ITEM_HEADER);
-            pinnedHeaderDecoration.registerTypePinnedHeader(BaseOrder.ITEM_HEADER, (parent, adapterPosition) -> true);
-            pinnedHeaderDecoration.registerTypePinnedHeader(BaseOrder.ITEM_DESC, (parent, adapterPosition) -> true);
+            pinnedHeaderDecoration.setPinnedTypeHeader(MultipleOrder.ITEM_HEADER);
+            pinnedHeaderDecoration.registerTypePinnedHeader(MultipleOrder.ITEM_HEADER, (parent, adapterPosition) -> true);
+            pinnedHeaderDecoration.registerTypePinnedHeader(MultipleOrder.ITEM_DESC, (parent, adapterPosition) -> true);
             recyclerView.addItemDecoration(pinnedHeaderDecoration);
         } else {
             adapter.setNewData(orders);

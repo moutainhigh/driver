@@ -10,7 +10,7 @@ import android.util.Log;
 
 import com.easymi.common.daemon.DaemonService;
 import com.easymi.common.daemon.JobKeepLiveService;
-import com.easymi.common.entity.BaseOrder;
+import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
@@ -90,11 +90,11 @@ public class WorkPresenter implements WorkContract.Presenter {
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false, false, new HaveErrSubscriberListener<QueryOrdersResult>() {
             @Override
             public void onNext(QueryOrdersResult emResult) {
-                List<BaseOrder> orders = emResult.orders;
-                List<BaseOrder> nowOrders = new ArrayList<>();
-                List<BaseOrder> yuyueOrders = new ArrayList<>();
-                for (BaseOrder order : orders) {
-                    order.viewType = BaseOrder.ITEM_POSTER;
+                List<MultipleOrder> orders = emResult.orders;
+                List<MultipleOrder> nowOrders = new ArrayList<>();
+                List<MultipleOrder> yuyueOrders = new ArrayList<>();
+                for (MultipleOrder order : orders) {
+                    order.viewType = MultipleOrder.ITEM_POSTER;
                     if (order.isBookOrder == 2) {
                         nowOrders.add(order);
                     } else {
@@ -103,14 +103,14 @@ public class WorkPresenter implements WorkContract.Presenter {
                 }
                 orders.clear();
                 //预约header
-                BaseOrder header1 = new BaseOrder(BaseOrder.ITEM_HEADER);
+                MultipleOrder header1 = new MultipleOrder(MultipleOrder.ITEM_HEADER);
                 header1.isBookOrder = 1;
                 orders.add(header1);
                 //预约单
                 orders.addAll(yuyueOrders);
 
                 //即时header
-                BaseOrder header2 = new BaseOrder(BaseOrder.ITEM_HEADER);
+                MultipleOrder header2 = new MultipleOrder(MultipleOrder.ITEM_HEADER);
                 header1.isBookOrder = 2;
                 orders.add(header2);
                 //即时单

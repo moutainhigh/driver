@@ -25,8 +25,8 @@ public class DriverApp extends XApp {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-            DaemonClient daemonClient = new DaemonClient(getDaemonConfigurations());//保活client
-            daemonClient.onAttachBaseContext(base);
+        DaemonClient daemonClient = new DaemonClient(getDaemonConfigurations());//保活client
+        daemonClient.onAttachBaseContext(base);
     }
 
     @Override
@@ -42,6 +42,7 @@ public class DriverApp extends XApp {
         ARouter.init(this); // 尽可能早，推荐在Application中初始化
 
         initCloudChannel();
+
     }
 
     /**

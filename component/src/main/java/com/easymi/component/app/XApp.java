@@ -3,7 +3,6 @@ package com.easymi.component.app;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -16,11 +15,8 @@ import com.amap.api.navi.AMapNavi;
 import com.easymi.component.BuildConfig;
 import com.easymi.component.Config;
 import com.easymi.component.db.SqliteHelper;
-import com.easymi.component.entity.EmLoc;
-import com.easymi.component.loc.LocObserver;
-import com.easymi.component.loc.LocReceiver;
+import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.loc.LocService;
-import com.easymi.component.loc.LocSubject;
 import com.easymi.component.utils.StringUtils;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
@@ -31,7 +27,6 @@ import com.iflytek.cloud.SpeechUtility;
 import com.iflytek.cloud.SynthesizerListener;
 import com.jaredrummler.android.processes.AndroidProcesses;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -70,6 +65,12 @@ public class XApp extends MultiDexApplication {
 
         SpeechUtility.createUtility(XApp.this, "appid=" + "57c91477");
         initIflytekTTS();
+
+        initDataBase();
+    }
+
+    private void initDataBase() {
+        SqliteHelper.init(this);
     }
 
     /**

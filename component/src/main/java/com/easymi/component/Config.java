@@ -25,7 +25,7 @@ public class Config {
     /**
      * MQTT配置
      */
-    public static final String MQTT_HOST = "tcp://192.168.0.84:1883";
+    public static final String MQTT_HOST = "tcp://123.57.84.216:1883";
     public static final String MQTT_USER_NAME = "admin";
     public static final String MQTT_PSW = "dsajkdghj**@@##$$sagdgha";
     public static final String MQTT_PUSH_TOPIC = "/driver";

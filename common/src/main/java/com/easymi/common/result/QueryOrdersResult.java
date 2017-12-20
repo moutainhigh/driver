@@ -1,6 +1,6 @@
 package com.easymi.common.result;
 
-import com.easymi.common.entity.BaseOrder;
+import com.easymi.common.entity.MultipleOrder;
 import com.easymi.component.result.EmResult;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
 
 public class QueryOrdersResult extends EmResult {
 
-    public List<BaseOrder> orders;
+    public List<MultipleOrder> orders;
     public int total;
 
 }
