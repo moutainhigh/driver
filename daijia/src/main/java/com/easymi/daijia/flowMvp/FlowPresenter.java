@@ -31,9 +31,11 @@ import com.amap.api.services.route.RideRouteResult;
 import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
 import com.autonavi.tbt.TrafficFacilityInfo;
+import com.easymi.common.push.MQTTService;
 import com.easymi.component.Config;
 import com.easymi.component.activity.NaviActivity;
 import com.easymi.component.app.XApp;
+import com.easymi.component.entity.DymOrder;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.EmUtil;
@@ -73,6 +75,8 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             public void onNext(DJOrderResult djOrderResult) {
                 djOrderResult.order.addresses = djOrderResult.address;
                 view.showOrder(djOrderResult.order);
+                updateDymOrder(djOrderResult.order);
+
             }
 
             @Override
@@ -89,6 +93,10 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, new HaveErrSubscriberListener<DJOrderResult>() {
             @Override
             public void onNext(DJOrderResult djOrderResult) {
+                DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
+                if (null != dymOrder) {
+                    dymOrder.delete();
+                }
                 view.refuseSuc();
             }
 
@@ -108,6 +116,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             public void onNext(DJOrderResult djOrderResult) {
                 djOrderResult.order.addresses = djOrderResult.address;
                 view.showOrder(djOrderResult.order);
+                updateDymOrder(djOrderResult.order);
             }
 
             @Override
@@ -126,6 +135,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             public void onNext(DJOrderResult djOrderResult) {
                 djOrderResult.order.addresses = djOrderResult.address;
                 view.showOrder(djOrderResult.order);
+                updateDymOrder(djOrderResult.order);
             }
 
             @Override
@@ -144,6 +154,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             public void onNext(DJOrderResult djOrderResult) {
                 djOrderResult.order.addresses = djOrderResult.address;
                 view.showOrder(djOrderResult.order);
+                updateDymOrder(djOrderResult.order);
             }
 
             @Override
@@ -161,6 +172,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             public void onNext(DJOrderResult djOrderResult) {
                 djOrderResult.order.addresses = djOrderResult.address;
                 view.showOrder(djOrderResult.order);
+                updateDymOrder(djOrderResult.order);
             }
 
             @Override
@@ -179,6 +191,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             public void onNext(DJOrderResult djOrderResult) {
                 djOrderResult.order.addresses = djOrderResult.address;
                 view.showOrder(djOrderResult.order);
+                updateDymOrder(djOrderResult.order);
             }
 
             @Override
@@ -190,17 +203,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void navi(LatLng latLng, String poi) {
-//        String startPoi = EmUtil.getLastLoc().poiName;
-//        LatLng startLatlng = new LatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
-//        AmapNaviPage.getInstance()
-//                .showRouteActivity(
-//                        context,
-//                        new AmapNaviParams(new Poi(startPoi, startLatlng, ""),
-//                                null,
-//                                new Poi(poi, latLng, ""),
-//                                AmapNaviType.DRIVER),
-//                        this);
-
         NaviLatLng start = new NaviLatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
         NaviLatLng end = new NaviLatLng(latLng.latitude, latLng.longitude);
         Intent intent = new Intent(context, NaviActivity.class);
@@ -218,6 +220,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             public void onNext(DJOrderResult djOrderResult) {
                 djOrderResult.order.addresses = djOrderResult.address;
                 view.showOrder(djOrderResult.order);
+                updateDymOrder(djOrderResult.order);
             }
 
             @Override
@@ -236,6 +239,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             public void onNext(DJOrderResult djOrderResult) {
                 djOrderResult.order.addresses = djOrderResult.address;
                 view.showOrder(djOrderResult.order);
+                updateDymOrder(djOrderResult.order);
             }
 
             @Override
@@ -252,6 +256,10 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, new HaveErrSubscriberListener<DJOrderResult>() {
             @Override
             public void onNext(DJOrderResult djOrderResult) {
+                DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
+                if (null != dymOrder) {
+                    dymOrder.delete();
+                }
                 view.cancelSuc();
             }
 
@@ -338,6 +346,20 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         RouteSearch.DriveRouteQuery query = new RouteSearch.DriveRouteQuery(fromAndTo,
                 RouteSearch.DRIVING_MULTI_STRATEGY_FASTEST_SHORTEST, null, null, "");
         routeSearch.calculateDriveRouteAsyn(query);
+    }
+
+    @Override
+    public void updateDymOrder(DJOrder djOrder) {
+        DymOrder dymOrder = DymOrder.findByIDType(djOrder.orderId, djOrder.orderType);
+        if (null == dymOrder) {
+            dymOrder = new DymOrder(djOrder.orderId, djOrder.orderType,
+                    djOrder.passengerId, djOrder.orderStatus);
+            dymOrder.save();
+        } else {
+            dymOrder.orderStatus = djOrder.orderStatus;
+            dymOrder.updateStatus();
+        }
+        MQTTService.pushLoc(EmUtil.getLastLoc());
     }
 
     @Override

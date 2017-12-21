@@ -47,9 +47,12 @@ public class Config {
     public static final String SP_SHAKE_ABLE = "shake_able";//能否震动
     public static final String SP_ALWAYS_OREN = "always_oren";//是否始终横屏计价
 
+    public static final String SP_SERIAL_CODE = "serial_code";//是否始终横屏计价
+
     public static final String APP_PACKGE_NAME = "com.easymi.v5driver";
 
     public static final String DAIJIA = "daijia";
 
     public static final String BROAD_CANCEL_ORDER = "com.easymi.v5driver.BROAD_CANCEL_ORDER";
+    public static final String BROAD_UPLOAD_MSG = "com.easymi.v5driver.BROAD_CANCEL_ORDER";
 }

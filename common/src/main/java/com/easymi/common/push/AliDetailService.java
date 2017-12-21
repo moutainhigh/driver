@@ -5,10 +5,8 @@ import android.util.Log;
 
 import com.alibaba.sdk.android.push.AliyunMessageIntentService;
 import com.alibaba.sdk.android.push.notification.CPushMessage;
-import com.easymi.common.entity.PushMessage;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.StringUtils;
-import com.google.gson.Gson;
 
 import java.util.Map;
 
@@ -32,7 +30,7 @@ public class AliDetailService extends AliyunMessageIntentService {
             if (StringUtils.isNotBlank(payload)) {
                 long driverId = EmUtil.getEmployId();
                 if (driverId != 0) {
-                    new HandlePush(context, payload);
+                    HandlePush.getInstance().handPush(payload);
                 }
                 Log.d(TAG, "ali receiver payload : " + payload);
             }

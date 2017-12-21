@@ -72,6 +72,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         createDriverInfoTable(db);
+        createDymTable(db);
     }
 
     @Override
@@ -91,6 +92,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
             }
         }
         createDriverInfoTable(db);
+        createDymTable(db);
     }
 
     private void createDriverInfoTable(SQLiteDatabase db) {
@@ -115,6 +117,22 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("status").append(" ").append("INTEGER").append(",")
 
                 .append("company_id").append(" ").append("LONG")
+                .append(");");
+        execCreateTableSQL(db);
+    }
+
+    private void createDymTable(SQLiteDatabase db) {
+        sqlBuf.append("CREATE TABLE ").append("t_dyminfo").append(" (")
+                .append("id").append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
+                .append("orderId").append(" ").append("LONG").append(",")
+                .append("orderType").append(" ").append("TEXT").append(",")
+                .append("startFee").append(" ").append("DOUBLE").append(",")
+                .append("waitTime").append(" ").append("INTEGER").append(",")
+                .append("waitTimeFee").append(" ").append("DOUBLE").append(",")
+                .append("travelTime").append(" ").append("INTEGER").append(",")
+                .append("passengerId").append(" ").append("LONG").append(",")
+                .append("travelFee").append(" ").append("DOUBLE").append(",")
+                .append("orderStatus").append(" ").append("INTEGER")
                 .append(");");
         execCreateTableSQL(db);
     }

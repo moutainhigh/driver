@@ -10,8 +10,6 @@ import android.util.Log;
 import com.easymi.common.push.MQTTService;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
-import com.easymi.component.loc.LocService;
-import com.easymi.component.utils.PhoneUtil;
 
 import java.util.Timer;
 import java.util.TimerTask;

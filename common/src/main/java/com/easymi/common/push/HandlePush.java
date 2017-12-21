@@ -21,6 +21,7 @@ import com.easymi.common.mvp.work.WorkActivity;
 import com.easymi.common.result.MultipleOrderResult;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
+import com.easymi.component.loc.LocObserver;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
@@ -33,6 +34,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -42,13 +45,27 @@ import rx.schedulers.Schedulers;
  * Created by Administrator on 2017/1/11.
  */
 
-public class HandlePush {
+public class HandlePush implements FeeChangeSubject {
 
-    private Context context;
     private RxManager rxManager;
 
-    public HandlePush(Context context, String jsonStr) {
-        this.context = context;
+    private static List<FeeChangeObserver> observers;
+    private static HandlePush instance;
+
+    private HandlePush() {
+        rxManager = new RxManager();
+    }
+
+    public static HandlePush getInstance() {
+        if (instance == null) {
+            instance = new HandlePush();
+            observers = new ArrayList<>();
+        }
+        return instance;
+    }
+
+    public void handPush(String jsonStr) {
+
         rxManager = new RxManager();
         try {
             JSONObject jb = new JSONObject(jsonStr);
@@ -64,7 +81,7 @@ public class HandlePush {
                 order.orderId = jb.optJSONObject("data").optLong("id");
                 order.orderType = jb.optJSONObject("data").optString("business");
                 loadOrder(order);
-                newShowNotify(context, "", context.getString(R.string.send_order), context.getString(R.string.send_order_content));
+                newShowNotify(XApp.getInstance(), "", XApp.getInstance().getString(R.string.send_order), XApp.getInstance().getString(R.string.send_order_content));
             } else if (msg.equals("cancelOrder")) {
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("id");
@@ -97,7 +114,7 @@ public class HandlePush {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        rxManager.add(observable.subscribe(new MySubscriber<>(context, false,
+        rxManager.add(observable.subscribe(new MySubscriber<>(XApp.getInstance(), false,
                 false, new HaveErrSubscriberListener<MultipleOrderResult>() {
             @Override
             public void onNext(MultipleOrderResult multipleOrderResult) {
@@ -151,37 +168,37 @@ public class HandlePush {
                 order.addresses = multipleOrderResult.address;
                 String voiceStr = "";
                 if (order.orderStatus == MultipleOrder.NEW_ORDER) {
-                    voiceStr += context.getString(R.string.grab_order) + ",";//抢单
+                    voiceStr += XApp.getInstance().getString(R.string.grab_order) + ",";//抢单
                 } else {
-                    voiceStr += context.getString(R.string.send_order) + ",";//派单
+                    voiceStr += XApp.getInstance().getString(R.string.send_order) + ",";//派单
                 }
                 if (orderType.equals(Config.DAIJIA)) {
-                    voiceStr += context.getString(R.string.create_daijia)
-                            + context.getString(R.string.order) + ",";//代驾订单
+                    voiceStr += XApp.getInstance().getString(R.string.create_daijia)
+                            + XApp.getInstance().getString(R.string.order) + ",";//代驾订单
                 }
-                String dis = 0 + context.getString(R.string.meter);
+                String dis = 0 + XApp.getInstance().getString(R.string.meter);
                 if (EmUtil.getLastLoc() != null && order.addresses != null && order.addresses.size() != 0) {
                     LatLng my = new LatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
                     LatLng start = new LatLng(order.addresses.get(0).lat, order.addresses.get(0).lat);
                     double meter = AMapUtils.calculateLineDistance(my, start);
                     DecimalFormat format = new DecimalFormat("#0.0");
                     if (meter > 1000) {
-                        dis = format.format(meter / (double) 1000) + context.getString(R.string.k_meter);
+                        dis = format.format(meter / (double) 1000) + XApp.getInstance().getString(R.string.k_meter);
                     } else {
-                        dis = format.format(meter) + context.getString(R.string.meter);
+                        dis = format.format(meter) + XApp.getInstance().getString(R.string.meter);
                     }
                 }
                 voiceStr += order.orderDetailType//酒后代驾
                         + ","
-                        + context.getString(R.string.to_you)//距您
+                        + XApp.getInstance().getString(R.string.to_you)//距您
                         + dis //0.5公里
                         + ","
-                        + context.getString(R.string.from)//从
+                        + XApp.getInstance().getString(R.string.from)//从
                         + order.startPlace //xxx
-                        + context.getString(R.string.out)//出发
+                        + XApp.getInstance().getString(R.string.out)//出发
                         + ",";
                 if (StringUtils.isNotBlank(order.endPlace)) {
-                    voiceStr += context.getString(R.string.to) + order.endPlace;//到xxx
+                    voiceStr += XApp.getInstance().getString(R.string.to) + order.endPlace;//到xxx
                 }
                 XApp.getInstance().syntheticVoice(voiceStr);
                 Message message = new Message();
@@ -194,15 +211,15 @@ public class HandlePush {
         }
     };
 
-    Handler handler = new Handler(msg -> {
+    private Handler handler = new Handler(msg -> {
         switch (msg.what) {
             case 0:
                 Bundle bundle = msg.getData();
                 MultipleOrder order = (MultipleOrder) bundle.getSerializable("order");
-                Intent intent = new Intent(context, GrabActivity.class);
+                Intent intent = new Intent(XApp.getInstance(), GrabActivity.class);
                 intent.putExtra("order", order);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+                XApp.getInstance().startActivity(intent);
                 break;
             case 1:
                 Bundle bundle1 = msg.getData();
@@ -212,16 +229,41 @@ public class HandlePush {
                     intent1.setAction(Config.BROAD_CANCEL_ORDER);
                     intent1.putExtra("orderId", order1.orderId);
                     intent1.putExtra("orderType", order1.orderType);
-                    context.sendBroadcast(intent1);
+                    XApp.getInstance().sendBroadcast(intent1);
                 }
-                XApp.getInstance().syntheticVoice(context.getString(R.string.you_have_order_cancel));
-                newShowNotify(context, "", context.getString(R.string.cancel_order)
-                        , context.getString(R.string.you_have_order_cancel));
+                XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.you_have_order_cancel));
+                newShowNotify(XApp.getInstance(), "", XApp.getInstance().getString(R.string.cancel_order)
+                        , XApp.getInstance().getString(R.string.you_have_order_cancel));
 
                 break;
         }
         return true;
     });
+
+    @Override
+    public void addObserver(FeeChangeObserver obj) {
+        boolean hasd = false;
+        for (FeeChangeObserver observer : observers) {
+            if (obj == observer) {
+                hasd = true;
+            }
+        }
+        if (!hasd) {//避免重复添加观察者
+            observers.add(obj);
+        }
+    }
+
+    @Override
+    public void deleteObserver(FeeChangeObserver obj) {
+        observers.remove(obj);
+    }
+
+    @Override
+    public void notifyObserver(long orderId, String orderType) {
+        for (FeeChangeObserver observer : observers) {
+            observer.feeChanged(orderId, orderType);
+        }
+    }
 
     interface OnLoadOrderCallback {
         void callback(MultipleOrderResult multipleOrderResult, String orderType);

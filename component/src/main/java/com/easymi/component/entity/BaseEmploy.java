@@ -43,10 +43,10 @@ public class BaseEmploy {
         return flag;
     }
 
-    public boolean employ2This() {
+    public BaseEmploy employ2This() {
         Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1));
         if (employ == null) {
-            return false;
+            return null;
         } else {
             id = employ.id;
             status = employ.status;
@@ -54,7 +54,7 @@ public class BaseEmploy {
             company_id = employ.company_id;
             phone = employ.phone;
             child_type = employ.child_type;
-            return true;
+            return this;
         }
     }
 }

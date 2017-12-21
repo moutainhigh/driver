@@ -66,15 +66,6 @@ public class MultipleOrder extends BaseOrder implements Serializable, MultiItemE
      */
     public int isBookOrder;//1是预约单 2是即时单
 
-    @SerializedName("passenger_id")
-    public long passengerId;
-
-    @SerializedName("passenger_name")
-    public String passengerName;
-
-    @SerializedName("passenger_phone")
-    public String passengerPhone;
-
     @SerializedName("company_id")
     public long companyId;
 

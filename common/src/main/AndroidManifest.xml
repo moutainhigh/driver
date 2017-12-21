@@ -61,8 +61,28 @@
         </activity>
 
 
+        <service
+            android:name="com.easymi.common.daemon.DaemonService"
+            android:process=":process1" />
+
+        <receiver
+            android:name="com.easymi.common.daemon.PuppetReceiver1"
+            android:process=":process1" />
+
+        <service
+            android:name="com.easymi.common.daemon.PuppetService"
+            android:process=":process2" />
+        <receiver
+            android:name="com.easymi.common.daemon.PuppetReceiver2"
+            android:process=":process2" />
+
+        <service
+            android:name=".daemon.JobKeepLiveService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <!--消息接收监听器-->
-        <service android:name=".push.AliDetailService">
+        <service android:name="com.easymi.common.push.AliDetailService">
             <intent-filter>
                 <action android:name="com.alibaba.push2.action.NOTIFICATION_OPENED" />
             </intent-filter>
@@ -93,27 +113,7 @@
             </intent-filter>
         </service>
 
-        <service
-            android:name="com.easymi.common.daemon.DaemonService"
-            android:process=":process1" />
-
-        <receiver
-            android:name="com.easymi.common.daemon.PuppetReceiver1"
-            android:process=":process1" />
-
-        <service
-            android:name="com.easymi.common.daemon.PuppetService"
-            android:process=":process2" />
-        <receiver
-            android:name="com.easymi.common.daemon.PuppetReceiver2"
-            android:process=":process2" />
-
-        <service android:name=".push.MQTTService" />
-
-        <service
-            android:name=".daemon.JobKeepLiveService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="true"/>
+        <service android:name="com.easymi.common.push.MQTTService" />
 
     </application>
 

@@ -177,7 +177,7 @@ public class Employ extends BaseEmploy implements Parcelable {
 
         try {
             while (cursor.moveToNext()) {
-                Employ employ = cursorToOrder(cursor);
+                Employ employ = cursorToEmploy(cursor);
                 list.add(employ);
             }
         } finally {
@@ -200,7 +200,7 @@ public class Employ extends BaseEmploy implements Parcelable {
 
         try {
             while (cursor.moveToNext()) {
-                Employ employ = cursorToOrder(cursor);
+                Employ employ = cursorToEmploy(cursor);
                 list.add(employ);
             }
         } finally {
@@ -209,7 +209,7 @@ public class Employ extends BaseEmploy implements Parcelable {
         return list;
     }
 
-    public static Employ cursorToOrder(Cursor cursor) {
+    public static Employ cursorToEmploy(Cursor cursor) {
         Employ driverInfo = new Employ();
 
         driverInfo.id = cursor.getLong(cursor

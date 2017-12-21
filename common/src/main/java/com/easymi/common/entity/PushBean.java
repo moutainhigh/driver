@@ -1,4 +1,4 @@
-package com.easymi.component.entity;
+package com.easymi.common.entity;
 
 /**
  * Created by liuzihao on 2017/12/18.

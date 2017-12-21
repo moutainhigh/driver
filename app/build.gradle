@@ -39,7 +39,6 @@ dependencies {
     implementation libs["appcompat-v7"]
     implementation libs["design"]
 
-    implementation project(path: ':common')
     implementation project(path: ':personal')
     implementation project(path: ':daijia')
     implementation project(path: ':daemon')

@@ -31,6 +31,8 @@ import com.amap.api.navi.model.AMapNaviPath;
 import com.amap.api.navi.view.RouteOverLay;
 import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.route.DriveRouteResult;
+import com.easymi.common.push.FeeChangeObserver;
+import com.easymi.common.push.HandlePush;
 import com.easymi.component.Config;
 import com.easymi.component.activity.PlaceActivity;
 import com.easymi.component.app.XApp;
@@ -77,7 +79,11 @@ import co.lujun.androidtagview.TagView;
  * Created by developerLzh on 2017/11/13 0013.
  */
 @Route(path = "/daijia/FlowActivity")
-public class FlowActivity extends RxBaseActivity implements FlowContract.View, LocObserver, TraceInterface, CancelOrderReceiver.OnCancelListener {
+public class FlowActivity extends RxBaseActivity implements FlowContract.View,
+        LocObserver,
+        TraceInterface,
+        FeeChangeObserver,
+        CancelOrderReceiver.OnCancelListener {
     public static final int CANCEL_ORDER = 0X01;
     public static final int CHANGE_END = 0X02;
 
@@ -578,6 +584,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
     protected void onStart() {
         super.onStart();
         LocReceiver.getInstance().addObserver(this);//添加位置订阅
+        HandlePush.getInstance().addObserver(this);//添加订单变化订阅
 
         traceReceiver = new TraceReceiver(this);
         IntentFilter filter2 = new IntentFilter();
@@ -628,6 +635,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
     protected void onStop() {
         super.onStop();
         LocReceiver.getInstance().deleteObserver(this);//取消位置订阅
+        HandlePush.getInstance().deleteObserver(this);//取消订单变化订阅
 
         unregisterReceiver(traceReceiver);
         unregisterReceiver(cancelOrderReceiver);
@@ -750,6 +758,13 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View, L
                     .setOnDismissListener(dialog12 -> finish())
                     .create();
             dialog.show();
+        }
+    }
+
+    @Override
+    public void feeChanged(long orderId, String orderType) {
+        if(orderId == djOrder.orderId && orderType.equals(Config.DAIJIA)){
+            //TODO 改变订单信息
         }
     }
 }

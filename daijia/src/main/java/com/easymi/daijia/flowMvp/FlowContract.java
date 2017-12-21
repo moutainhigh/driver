@@ -79,6 +79,8 @@ public interface FlowContract {
         void routePlanByNavi(Double endLat, Double endLng);
 
         void routePlanByRouteSearch(Double endLat, Double endLng);
+
+        void updateDymOrder(DJOrder djOrder);
         //...
     }
 

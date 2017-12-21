@@ -18,6 +18,7 @@ import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
+import com.easymi.component.entity.DymOrder;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
@@ -93,7 +94,20 @@ public class WorkPresenter implements WorkContract.Presenter {
                 List<MultipleOrder> orders = emResult.orders;
                 List<MultipleOrder> nowOrders = new ArrayList<>();
                 List<MultipleOrder> yuyueOrders = new ArrayList<>();
+                List<DymOrder> shouldExistDyms = new ArrayList<>();
                 for (MultipleOrder order : orders) {
+                    DymOrder dymOrder;
+                    if (DymOrder.exists(order.orderId, order.orderType)) {//校验本地订单与服务器订单
+                        dymOrder = DymOrder.findByIDType(order.orderId, order.orderType);
+                        dymOrder.orderStatus = order.orderStatus;
+                        dymOrder.updateStatus();
+                    } else {//服务器有本地没得 创建数据
+                        dymOrder = new DymOrder(order.orderId, order.orderType,
+                                order.passengerId, order.orderStatus);
+                        dymOrder.save();
+                    }
+                    shouldExistDyms.add(dymOrder);
+
                     order.viewType = MultipleOrder.ITEM_POSTER;
                     if (order.isBookOrder == 2) {
                         nowOrders.add(order);
@@ -101,6 +115,23 @@ public class WorkPresenter implements WorkContract.Presenter {
                         yuyueOrders.add(order);
                     }
                 }
+
+                List<DymOrder> allDym = DymOrder.findAll();
+                for (DymOrder dymOrder : allDym) {
+                    boolean isExist = false;
+                    for (MultipleOrder order : orders) {
+                        if (dymOrder.orderId == order.orderId
+                                && dymOrder.orderType.equals(order.orderType)) {
+                            isExist = true;
+                            break;
+                        }
+                    }
+                    if (!isExist) {
+                        dymOrder.delete();
+                    }
+                }
+
+
                 orders.clear();
                 //预约header
                 MultipleOrder header1 = new MultipleOrder(MultipleOrder.ITEM_HEADER);

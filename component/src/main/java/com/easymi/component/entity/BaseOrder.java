@@ -34,6 +34,15 @@ public class BaseOrder implements Serializable {
     @SerializedName("order_no")
     public String orderNumber;
 
+    @SerializedName("passenger_id")
+    public long passengerId;
+
+    @SerializedName("passenger_name")
+    public String passengerName;
+
+    @SerializedName("passenger_phone")
+    public String passengerPhone;
+
 //    /**
 //     * 保存数据
 //     */

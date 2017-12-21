@@ -13,11 +13,15 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.easymi.common.entity.PushMessage;
+import com.easymi.common.entity.PushBean;
+import com.easymi.common.entity.PushData;
+import com.easymi.common.entity.PushDataLoc;
+import com.easymi.common.entity.PushDataOrder;
 import com.easymi.component.Config;
+import com.easymi.component.app.XApp;
+import com.easymi.component.entity.BaseEmploy;
+import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
-import com.easymi.component.entity.GpsPush;
-import com.easymi.component.entity.PushBean;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.utils.EmUtil;
@@ -31,6 +35,9 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * MQTT长连接服务
@@ -175,7 +182,7 @@ public class MQTTService extends Service implements LocObserver {
 
             Log.i(TAG, "MqttReceivePull:" + str1);
 
-            new HandlePush(MQTTService.this, str1);//处理推送消息
+            HandlePush.getInstance().handPush(str1);
         }
 
         @Override
@@ -219,20 +226,59 @@ public class MQTTService extends Service implements LocObserver {
 
     @Override
     public void receiveLoc(EmLoc loc) {
-        if (lastUploadTime != 0) {
-            if (System.currentTimeMillis() - lastUploadTime < 5 * 1000) {
-                return;
+//        if (lastUploadTime != 0) {
+//            if (System.currentTimeMillis() - lastUploadTime < 5 * 1000) {
+//                return;
+//            }
+//        }
+        Log.e("MQTTService",loc.toString());
+        pushLoc(loc);
+//        lastUploadTime = System.currentTimeMillis();
+    }
+
+    public static void pushLoc(EmLoc emLoc) {
+        if (emLoc == null) {
+            return;
+        }
+        PushData pushData = new PushData();
+        pushData.employ = new BaseEmploy().employ2This();
+        pushData.calc = new PushDataLoc();
+        pushData.calc.lat = emLoc.latitude;
+        pushData.calc.lng = emLoc.longitude;
+        pushData.calc.appKey = Config.APP_KEY;
+        pushData.calc.serialCode = XApp.getMyPreferences().getInt(Config.SP_SERIAL_CODE, 1) + 1;
+        pushData.calc.darkCost = 0;
+        pushData.calc.darkMileage = 0;
+        pushData.calc.positionTime = System.currentTimeMillis();
+        pushData.calc.accuracy = emLoc.bearing;
+
+        List<PushDataOrder> orderList = new ArrayList<>();
+        for (DymOrder dymOrder : DymOrder.findAll()) {
+            PushDataOrder dataOrder = new PushDataOrder();
+            dataOrder.OrderId = dymOrder.orderId;
+            dataOrder.OrderType = dymOrder.orderType;
+            dataOrder.Status = 0;
+            if (dymOrder.orderType.equals("daijia")) {
+                if (dymOrder.orderStatus < 25) {//出发前
+                    dataOrder.Status = 1;
+                } else if (dymOrder.orderStatus == 25) {//行驶中
+                    dataOrder.Status = 2;
+                } else if (dymOrder.orderStatus == 28) {//中途等待
+                    dataOrder.Status = 3;
+                }
+            }
+            if (dataOrder.Status != 0) {
+                orderList.add(dataOrder);
             }
         }
-        GpsPush gpsPush = new GpsPush();
-        if (gpsPush.employ2This()) {
-            gpsPush.appKey = Config.APP_KEY;
-            gpsPush.lat = loc.latitude;
-            gpsPush.lng = loc.longitude;
-            PushBean<GpsPush> pushBean = new PushBean<>("gps", gpsPush);
-            publish(new Gson().toJson(pushBean));
-            Log.e("pushBean", new Gson().toJson(pushBean));
-        }
-        lastUploadTime = System.currentTimeMillis();
+        pushData.calc.orderInfo = orderList;
+
+        PushBean<PushData> pushBean = new PushBean<>("gps", pushData);
+        String pushStr = new Gson().toJson(pushBean);
+        Log.e("pushBean", pushStr);
+        publish(pushStr);
+
+        XApp.getPreferencesEditor().putInt(Config.SP_SERIAL_CODE, pushData.calc.serialCode).apply();
     }
+
 }
