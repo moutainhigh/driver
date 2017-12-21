@@ -310,7 +310,7 @@ public class GrabActivity extends RxBaseActivity implements GrabContract.View {
             bottomText.setText(R.string.grab_order);
             grabCon.setOnClickListener(v -> presenter.grabOrder(showIngOrder.orderId));
         } else if(showIngOrder.orderStatus == MultipleOrder.PAIDAN_ORDER){
-            bottomText.setText(R.string.send_order);
+            bottomText.setText(R.string.accept_order);
             grabCon.setOnClickListener(v -> presenter.takeOrder(showIngOrder.orderId));
         }
     }
