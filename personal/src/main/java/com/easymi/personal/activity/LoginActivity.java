@@ -77,7 +77,8 @@ public class LoginActivity extends RxBaseActivity implements LocObserver {
     public void initViews(Bundle savedInstanceState) {
         loginBtn = findViewById(R.id.login_button);
         loginBtn.setOnClickListener(v -> {
-            login("13518181189", "1234");
+//            login("13518181189", "1234");
+            login(editAccount.getText().toString(), editPsw.getText().toString());
 
         });
         editAccount = findViewById(R.id.login_et_account);
