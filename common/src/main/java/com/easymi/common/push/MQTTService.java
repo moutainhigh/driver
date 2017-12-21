@@ -255,19 +255,19 @@ public class MQTTService extends Service implements LocObserver {
         List<PushDataOrder> orderList = new ArrayList<>();
         for (DymOrder dymOrder : DymOrder.findAll()) {
             PushDataOrder dataOrder = new PushDataOrder();
-            dataOrder.OrderId = dymOrder.orderId;
-            dataOrder.OrderType = dymOrder.orderType;
-            dataOrder.Status = 0;
+            dataOrder.orderId = dymOrder.orderId;
+            dataOrder.orderType = dymOrder.orderType;
+            dataOrder.status = 0;
             if (dymOrder.orderType.equals("daijia")) {
                 if (dymOrder.orderStatus < 25) {//出发前
-                    dataOrder.Status = 1;
+                    dataOrder.status = 1;
                 } else if (dymOrder.orderStatus == 25) {//行驶中
-                    dataOrder.Status = 2;
+                    dataOrder.status = 2;
                 } else if (dymOrder.orderStatus == 28) {//中途等待
-                    dataOrder.Status = 3;
+                    dataOrder.status = 3;
                 }
             }
-            if (dataOrder.Status != 0) {
+            if (dataOrder.status != 0) {
                 orderList.add(dataOrder);
             }
         }

@@ -16,6 +16,7 @@ import com.amap.api.trace.TraceLocation;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.db.SqliteHelper;
+import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.utils.EmUtil;
@@ -67,7 +68,9 @@ public class LocService extends NotiService implements AMapLocationListener {
             startLoc();
             return START_STICKY;
         } else {
-            stopLoc();
+            if (intent.getAction() != null && intent.getAction().equals(STOP_LOC)) {
+                stopService();
+            }
         }
         return START_NOT_STICKY;
     }
@@ -85,7 +88,7 @@ public class LocService extends NotiService implements AMapLocationListener {
         if (isDriverBusy()) {//通过是否有订单在执行设置周期
             scanTime = 2000;
         } else {
-            scanTime = 2000;
+            scanTime = 8000;
         }
         AMapLocationClientOption mLocationOption = new AMapLocationClientOption()
                 .setInterval(scanTime)
@@ -104,29 +107,24 @@ public class LocService extends NotiService implements AMapLocationListener {
      * 司机是否忙碌
      */
     private boolean isDriverBusy() {
-        boolean isBusy = false;
+        boolean isBusy;
         if (helper == null) {
             SqliteHelper.init(this);
             helper = SqliteHelper.getInstance();
         }
-        Employ employ = Employ.findAll(helper).size() == 0 ? null : Employ.findAll().get(0);
-        if (null != employ) {
-            int status = employ.status;
-            if (status == 2 || status == 3
-                    || status == 4 || status == 5
-                    || status == 6 || status == 7) {
-                isBusy = true;
-            } else {
-                isBusy = false;
-            }
+        List<DymOrder> dymOrders = DymOrder.findAll();
+        if (dymOrders.size() == 0) {
+            isBusy = false;
+        } else {
+            isBusy = true;
         }
         return isBusy;
     }
 
-    private void stopLoc() {
+    @Override
+    protected void stopService() {
+        super.stopService();
         if (null != locClient) {
-            unbind();
-            unApplyNotiKeepMech();
             locClient.stopLocation();
             locClient.onDestroy();
             locClient = null;

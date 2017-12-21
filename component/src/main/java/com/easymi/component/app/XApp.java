@@ -280,7 +280,7 @@ public class XApp extends MultiDexApplication {
      * 开启定位服务
      */
     public void startLocService() {
-        Intent intent = new Intent();
+        Intent intent = new Intent(this, LocService.class);
         intent.setAction(LocService.START_LOC);
         intent.setPackage(this.getPackageName());
         startService(intent);

@@ -48,7 +48,6 @@ public class WorkPresenter implements WorkContract.Presenter {
         model = new WorkModel();
 
         initDaemon();
-        startLocService();
     }
 
     /**
@@ -147,11 +146,14 @@ public class WorkPresenter implements WorkContract.Presenter {
                 //即时单
                 orders.addAll(nowOrders);
 
+                startLocService();//重启定位更改定位周期
+
                 view.showOrders(orders);
             }
 
             @Override
             public void onError(int code) {
+                startLocService();//重启定位更改定位周期
                 view.showOrders(null);
             }
         })));

@@ -37,6 +37,7 @@ import com.easymi.component.Config;
 import com.easymi.component.activity.PlaceActivity;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
@@ -218,6 +219,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         });
     }
 
+    WaitFragment waitFragment;
+    RunningFragment runningFragment;
+
     @Override
     public void showBottomFragment(DJOrder djOrder) {
         if (djOrder.orderStatus == DJOrder.PAIDAN_ORDER || djOrder.orderStatus == DJOrder.NEW_ORDER) {
@@ -274,42 +278,42 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.commit();
         } else if (djOrder.orderStatus == DJOrder.START_WAIT_ORDER) {
             toolbar.setTitle(R.string.status_wait);
-            WaitFragment fragment = new WaitFragment();
+            waitFragment = new WaitFragment();
             Bundle bundle = new Bundle();
-            bundle.putSerializable("djOrder", djOrder);
-            fragment.setArguments(bundle);
-            fragment.setBridge(bridge);
+            bundle.putSerializable("djOrder", DymOrder.findByIDType(orderId, Config.DAIJIA));
+            waitFragment.setArguments(bundle);
+            waitFragment.setBridge(bridge);
 
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
             transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
-            transaction.replace(R.id.flow_frame, fragment);
+            transaction.replace(R.id.flow_frame, waitFragment);
             transaction.commit();
         } else if (djOrder.orderStatus == DJOrder.GOTO_DESTINATION_ORDER) {
             toolbar.setTitle(R.string.status_to_end);
-            RunningFragment fragment = new RunningFragment();
+            runningFragment = new RunningFragment();
             Bundle bundle = new Bundle();
-            bundle.putSerializable("djOrder", djOrder);
-            fragment.setArguments(bundle);
-            fragment.setBridge(bridge);
+            bundle.putSerializable("djOrder", DymOrder.findByIDType(orderId, Config.DAIJIA));
+            runningFragment.setArguments(bundle);
+            runningFragment.setBridge(bridge);
 
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
             transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
-            transaction.replace(R.id.flow_frame, fragment);
+            transaction.replace(R.id.flow_frame, runningFragment);
             transaction.commit();
         } else if (djOrder.orderStatus == DJOrder.ARRIVAL_DESTINATION_ORDER) {
             toolbar.setTitle(R.string.status_confirm);
-            RunningFragment fragment = new RunningFragment();
+            runningFragment = new RunningFragment();
             Bundle bundle = new Bundle();
-            bundle.putSerializable("djOrder", djOrder);
-            fragment.setArguments(bundle);
-            fragment.setBridge(bridge);
+            bundle.putSerializable("djOrder", DymOrder.findByIDType(orderId, Config.DAIJIA));
+            runningFragment.setArguments(bundle);
+            runningFragment.setBridge(bridge);
 
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
             transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
-            transaction.replace(R.id.flow_frame, fragment);
+            transaction.replace(R.id.flow_frame, runningFragment);
             transaction.commit();
 
             SettleFragmentDialog dialog = new SettleFragmentDialog(this, djOrder, bridge);
@@ -763,8 +767,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void feeChanged(long orderId, String orderType) {
-        if(orderId == djOrder.orderId && orderType.equals(Config.DAIJIA)){
-            //TODO 改变订单信息
+        if (orderId == djOrder.orderId && orderType.equals(Config.DAIJIA)) {
+            if (null != waitFragment && waitFragment.isVisible()) {
+                waitFragment.showFee(DymOrder.findByIDType(orderId, orderType));
+            } else if (null != runningFragment && runningFragment.isVisible()) {
+                runningFragment.showFee(DymOrder.findByIDType(orderId, orderType));
+            }
         }
     }
 }

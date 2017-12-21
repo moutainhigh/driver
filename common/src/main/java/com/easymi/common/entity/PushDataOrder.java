@@ -5,7 +5,7 @@ package com.easymi.common.entity;
  */
 
 public class PushDataOrder {
-    public long OrderId;
-    public String OrderType;
-    public int Status;//订单状态(出发前1，行驶中2，等待中3)
+    public long orderId;
+    public String orderType;
+    public int status;//订单状态(出发前1，行驶中2，等待中3)
 }

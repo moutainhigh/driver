@@ -152,4 +152,13 @@ public class NotiService extends Service {
 
     }
 
+    protected void stopService(){
+        unbind();
+        unApplyNotiKeepMech();
+        if (mCloseReceiver != null) {
+            unregisterReceiver(mCloseReceiver);
+            mCloseReceiver = null;
+        }
+    }
+
 }

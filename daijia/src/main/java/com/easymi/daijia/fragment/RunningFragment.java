@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.easymi.component.base.RxBaseFragment;
+import com.easymi.component.entity.DymOrder;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.R;
@@ -19,7 +20,7 @@ import com.easymi.daijia.flowMvp.ActFraCommBridge;
  */
 
 public class RunningFragment extends RxBaseFragment {
-    private DJOrder djOrder;
+    private DymOrder djOrder;
 
     private ActFraCommBridge bridge;
 
@@ -40,7 +41,7 @@ public class RunningFragment extends RxBaseFragment {
     @Override
     public void setArguments(Bundle args) {
         super.setArguments(args);
-        djOrder = (DJOrder) args.getSerializable("djOrder");
+        djOrder = (DymOrder) args.getSerializable("djOrder");
     }
 
     @Override
@@ -54,6 +55,9 @@ public class RunningFragment extends RxBaseFragment {
     }
 
     private void initView() {
+        if(djOrder == null){
+            djOrder = new DymOrder();
+        }
         serviceMoneyText = getActivity().findViewById(R.id.service_money);
         distanceText = getActivity().findViewById(R.id.distance);
         driveTimeText = getActivity().findViewById(R.id.drive_time);
@@ -61,12 +65,20 @@ public class RunningFragment extends RxBaseFragment {
         startWaitBtn = getActivity().findViewById(R.id.start_wait);
         settleBtn = getActivity().findViewById(R.id.settle);
 
-        serviceMoneyText.setText(djOrder.orderMoney + "");
-        distanceText.setText(djOrder.orderDistance + "");
-        driveTimeText.setText(djOrder.driveTime + "");
+        serviceMoneyText.setText(djOrder.totalFee + "");
+        distanceText.setText(djOrder.distance + "");
+        driveTimeText.setText(djOrder.travelTime + "");
         waitTimeText.setText(djOrder.waitTime + "");
 
         startWaitBtn.setOnClickListener(view -> bridge.doStartWait(startWaitBtn));
         settleBtn.setOnClickListener(view -> bridge.showSettleDialog());
+    }
+
+    public void showFee(DymOrder dymOrder){
+        this.djOrder = dymOrder;
+        serviceMoneyText.setText(djOrder.totalFee + "");
+        distanceText.setText(djOrder.distance + "");
+        driveTimeText.setText(djOrder.travelTime + "");
+        waitTimeText.setText(djOrder.waitTime + "");
     }
 }

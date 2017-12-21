@@ -21,6 +21,7 @@ import com.easymi.common.mvp.work.WorkActivity;
 import com.easymi.common.result.MultipleOrderResult;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
+import com.easymi.component.entity.DymOrder;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HaveErrSubscriberListener;
@@ -93,6 +94,24 @@ public class HandlePush implements FeeChangeSubject {
                 bundle.putSerializable("order", order);
                 message.setData(bundle);
                 handler.sendMessage(message);
+            } else if (msg.equals("calc")) {
+                long orderId = jb.optJSONObject("data").optLong("OrderId");
+                String orderType = jb.optJSONObject("data").optString("OrderType");
+                DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
+                if (dymOrder != null) {
+                    dymOrder.startFee = jb.optJSONObject("data").optDouble("MileageCost");
+                    dymOrder.waitTime = jb.optJSONObject("data").optInt("WaitTime");
+                    dymOrder.waitTimeFee = jb.optJSONObject("data").optDouble("WaitTimeFee");
+                    dymOrder.travelTime = jb.optJSONObject("data").optInt("DriverTime");
+                    dymOrder.travelFee = jb.optJSONObject("data").optDouble("DriveTimeCost");
+                    dymOrder.totalFee = jb.optJSONObject("data").optDouble("TotalAmount");
+
+                    dymOrder.disFee = jb.optJSONObject("data").optDouble("MileageCost");
+                    dymOrder.distance = jb.optJSONObject("data").optDouble("Mileage");
+
+                    dymOrder.updateFee();
+                    notifyObserver(orderId, orderType);
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();

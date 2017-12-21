@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.easymi.component.db.SqliteHelper;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
  * 本地保存的费用信息字段 保存到数据库的
  */
 
-public class DymOrder {
+public class DymOrder implements Serializable{
 
     public long id;
 
@@ -37,8 +38,17 @@ public class DymOrder {
     //行驶时间 分
     public int travelTime;
 
-    //行驶费
+    //行驶时间费
     public double travelFee;
+
+    //行驶里程
+    public double distance;
+
+    //行驶时间费
+    public double disFee;
+
+    //总价
+    public double totalFee;
 
     //订单状态
     public int orderStatus;
@@ -68,6 +78,9 @@ public class DymOrder {
         values.put("waitTimeFee", waitTimeFee);
         values.put("travelTime", travelTime);
         values.put("travelFee", travelFee);
+        values.put("totalFee", totalFee);
+        values.put("distance", distance);
+        values.put("disFee", disFee);
         values.put("orderStatus", orderStatus);
         /*
          * values.put("age", age); values.put("jialing", jialing);
@@ -169,6 +182,10 @@ public class DymOrder {
         orderInfo.waitTimeFee = cursor.getDouble(cursor.getColumnIndex("waitTimeFee"));
         orderInfo.travelTime = cursor.getInt(cursor.getColumnIndex("travelTime"));
         orderInfo.travelFee = cursor.getDouble(cursor.getColumnIndex("travelFee"));
+        orderInfo.totalFee = cursor.getDouble(cursor.getColumnIndex("totalFee"));
+        orderInfo.distance = cursor.getDouble(cursor.getColumnIndex("distance"));
+        orderInfo.disFee = cursor.getDouble(cursor.getColumnIndex("disFee"));
+
         orderInfo.orderStatus = cursor.getInt(cursor.getColumnIndex("orderStatus"));
 
         return orderInfo;
@@ -196,6 +213,10 @@ public class DymOrder {
         values.put("waitTimeFee", waitTimeFee);
         values.put("travelTime", travelTime);
         values.put("travelFee", travelFee);
+        values.put("totalFee", totalFee);
+        values.put("distance", distance);
+        values.put("disFee", disFee);
+
         values.put("orderStatus", orderStatus);
         /*
          * values.put("age", age); values.put("jialing", jialing);
@@ -214,6 +235,9 @@ public class DymOrder {
         values.put("waitTimeFee", waitTimeFee);
         values.put("travelTime", travelTime);
         values.put("travelFee", travelFee);
+        values.put("totalFee", totalFee);
+        values.put("distance", distance);
+        values.put("disFee", disFee);
         /*
          * values.put("age", age); values.put("jialing", jialing);
 		 */

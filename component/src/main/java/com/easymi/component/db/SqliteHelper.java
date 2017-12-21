@@ -132,6 +132,9 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("travelTime").append(" ").append("INTEGER").append(",")
                 .append("passengerId").append(" ").append("LONG").append(",")
                 .append("travelFee").append(" ").append("DOUBLE").append(",")
+                .append("totalFee").append(" ").append("DOUBLE").append(",")
+                .append("disFee").append(" ").append("DOUBLE").append(",")
+                .append("distance").append(" ").append("DOUBLE").append(",")
                 .append("orderStatus").append(" ").append("INTEGER")
                 .append(");");
         execCreateTableSQL(db);
