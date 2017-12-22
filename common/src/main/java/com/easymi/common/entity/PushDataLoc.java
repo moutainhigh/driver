@@ -1,5 +1,7 @@
 package com.easymi.common.entity;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -9,10 +11,20 @@ import java.util.List;
 public class PushDataLoc {
     public double lat;
     public double lng;
+
+    @SerializedName("app_key")
     public String appKey;
+
+    @SerializedName("dark_cost")
     public double darkCost;
+
+    @SerializedName("dark_mileage")
     public int darkMileage;
+
+    @SerializedName("position_time")
     public long positionTime;
     public float accuracy;
+
+    @SerializedName("order_info")
     public List<PushDataOrder> orderInfo;
 }

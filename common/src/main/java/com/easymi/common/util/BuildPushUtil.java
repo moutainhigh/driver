@@ -8,10 +8,11 @@ import com.easymi.common.entity.PushData;
 import com.easymi.common.entity.PushDataLoc;
 import com.easymi.common.entity.PushDataOrder;
 import com.easymi.component.Config;
-import com.easymi.component.app.XApp;
+import com.easymi.component.DJOrderStatus;
 import com.easymi.component.entity.BaseEmploy;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
+import com.easymi.component.utils.FileUtil;
 import com.easymi.component.utils.StringUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -45,11 +46,11 @@ public class BuildPushUtil {
             dataOrder.orderType = dymOrder.orderType;
             dataOrder.status = 0;
             if (dymOrder.orderType.equals("daijia")) {
-                if (dymOrder.orderStatus < 25) {//出发前
+                if (dymOrder.orderStatus < DJOrderStatus.GOTO_DESTINATION_ORDER) {//出发前
                     dataOrder.status = 1;
-                } else if (dymOrder.orderStatus == 25) {//行驶中
+                } else if (dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {//行驶中
                     dataOrder.status = 2;
-                } else if (dymOrder.orderStatus == 28) {//中途等待
+                } else if (dymOrder.orderStatus == DJOrderStatus.START_WAIT_ORDER) {//中途等待
                     dataOrder.status = 3;
                 }
             }
@@ -61,14 +62,13 @@ public class BuildPushUtil {
 
         List<PushData> dataList;
         //历史未上传的点
-        String pushCacheStr = XApp.getMyPreferences().getString(Config.SP_PUSH_CACHE, "");
+        String pushCacheStr = FileUtil.readPushCache();
         if (StringUtils.isBlank(pushCacheStr)) {
             dataList = new ArrayList<>();
         } else {
             dataList = new Gson().fromJson(pushCacheStr,
                     new TypeToken<List<PushData>>() {
                     }.getType());
-            XApp.getPreferencesEditor().putString(Config.SP_PUSH_CACHE, "").apply();
         }
 
         dataList.add(pushData);
@@ -76,7 +76,7 @@ public class BuildPushUtil {
         PushBean<List<PushData>> pushBean = new PushBean<>("gps", dataList);
 
         String pushStr = new Gson().toJson(pushBean);
-        Log.e("pushBean", pushStr);
+        Log.e("MQTTService", "push loc data--->" + pushStr);
         return pushStr;
     }
 
@@ -100,11 +100,11 @@ public class BuildPushUtil {
             dataOrder.orderType = dymOrder.orderType;
             dataOrder.status = 0;
             if (dymOrder.orderType.equals("daijia")) {
-                if (dymOrder.orderStatus < 25) {//出发前
+                if (dymOrder.orderStatus < DJOrderStatus.GOTO_DESTINATION_ORDER) {//出发前
                     dataOrder.status = 1;
-                } else if (dymOrder.orderStatus == 25) {//行驶中
+                } else if (dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {//行驶中
                     dataOrder.status = 2;
-                } else if (dymOrder.orderStatus == 28) {//中途等待
+                } else if (dymOrder.orderStatus == DJOrderStatus.START_WAIT_ORDER) {//中途等待
                     dataOrder.status = 3;
                 }
             }
@@ -116,14 +116,13 @@ public class BuildPushUtil {
 
         List<PushData> dataList;
         //历史未上传的点
-        String pushCacheStr = XApp.getMyPreferences().getString(Config.SP_PUSH_CACHE, "");
+        String pushCacheStr = FileUtil.readPushCache();
         if (StringUtils.isBlank(pushCacheStr)) {
             dataList = new ArrayList<>();
         } else {
             dataList = new Gson().fromJson(pushCacheStr,
                     new TypeToken<List<PushData>>() {
                     }.getType());
-            XApp.getPreferencesEditor().putString(Config.SP_PUSH_CACHE, "").apply();
         }
 
         dataList.add(pushData);
@@ -131,7 +130,7 @@ public class BuildPushUtil {
         PushBean<List<PushData>> pushBean = new PushBean<>("gps", dataList);
 
         String pushStr = new Gson().toJson(pushBean);
-        Log.e("pushBean", pushStr);
+        Log.e("MQTTService", "push trace data--->" + pushStr);
         return pushStr;
     }
 

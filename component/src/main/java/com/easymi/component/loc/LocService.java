@@ -195,13 +195,13 @@ public class LocService extends NotiService implements AMapLocationListener {
     public static boolean needTrace() {
         List<DymOrder> dymOrders = DymOrder.findAll();
         boolean needTrace = false;
-        for (DymOrder dymOrder : dymOrders) {
-            if (dymOrder.orderType.equals(Config.DAIJIA)) {
-                if (dymOrder.orderStatus == 25) {
-                    needTrace = true;
-                }
-            }
-        }
+//        for (DymOrder dymOrder : dymOrders) {
+//            if (dymOrder.orderType.equals(Config.DAIJIA)) {
+//                if (dymOrder.orderStatus == 25) {
+//                    needTrace = true;
+//                }
+//            }
+//        }
         return needTrace;
     }
 }

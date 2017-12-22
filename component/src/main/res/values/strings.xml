@@ -34,6 +34,18 @@
     <string name="err_empty">john snow,you have nothing</string>
     <string name="err_error">网络请求错误,错误码</string>
 
+    <string name="new_order">新单</string>
+    <string name="sended_order">已派单</string>
+    <string name="accepted_order">已接单</string>
+    <string name="to_start">前往预约地</string>
+    <string name="arrive_start">到达预约地</string>
+    <string name="to_end">前往目的地</string>
+    <string name="middle_wait">中途等待</string>
+    <string name="arrive_end">到达目的地</string>
+    <string name="settled">已结算</string>
+    <string name="exculated">已评价</string>
+    <string name="canceled">已消单</string>
+
     <string name="succeed">成功</string>
     <string name="code1">参数错误</string>
     <string name="code2">服务人员验证失败</string>

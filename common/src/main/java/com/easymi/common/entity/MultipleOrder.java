@@ -15,52 +15,6 @@ import java.util.List;
  */
 
 public class MultipleOrder extends BaseOrder implements Serializable, MultiItemEntity {
-
-    /**
-     * 新单
-     */
-    public static final int NEW_ORDER = 1;
-    /**
-     * 已派单
-     */
-    public static final int PAIDAN_ORDER = 5;
-
-    /**
-     * 已接单
-     */
-    public static final int TAKE_ORDER = 10;
-    /**
-     * 前往预约地
-     */
-    public static final int GOTO_BOOKPALCE_ORDER = 15;
-    /**
-     * 到达预约地
-     */
-    public static final int ARRIVAL_BOOKPLACE_ORDER = 20;
-    /**
-     * 前往目的地
-     */
-    public static final int GOTO_DESTINATION_ORDER = 25;
-    /**
-     * 中途等待
-     */
-    public static final int START_WAIT_ORDER = 28;
-    /**
-     * 到达目的地
-     */
-    public static final int ARRIVAL_DESTINATION_ORDER = 30;
-    /**
-     * 已结算
-     */
-    public static final int FINISH_ORDER = 35;
-    /**
-     * 已评价
-     */
-    public static final int RATED_ORDER = 40;
-    /**
-     * 已销单
-     */
-    public static final int CANCEL_ORDER = 45;
     /**
      * 是否是预约单
      */

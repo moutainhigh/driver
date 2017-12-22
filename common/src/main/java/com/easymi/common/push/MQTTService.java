@@ -25,6 +25,7 @@ import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.loc.LocService;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.FileUtil;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
@@ -34,8 +35,6 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-
-import java.util.List;
 
 /**
  * MQTT长连接服务
@@ -58,9 +57,15 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
     private TraceReceiver traceReceiver;
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public void onCreate() {
+        super.onCreate();
+        Log.e(TAG, "MQTTService onCreate~~");
         traceReceiver = new TraceReceiver(this);
         registerReceiver(traceReceiver, new IntentFilter(LocService.BROAD_TRACE_SUC));
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
         initConn();
         return START_STICKY;
     }
@@ -97,7 +102,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
             try {
                 conOpt.setWill(pullTopic, message.getBytes(), qos, retained);
             } catch (Exception e) {
-                Log.i(TAG, "Exception Occured", e);
+                Log.e(TAG, "Exception Occured", e);
                 doConnect = false;
                 iMqttActionListener.onFailure(null, e);
             }
@@ -155,7 +160,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 
         @Override
         public void onSuccess(IMqttToken arg0) {
-            Log.i(TAG, "连接成功 ");
+            Log.e(TAG, "连接成功 ");
             try {
                 // 订阅myTopic话题
                 LocReceiver.getInstance().addObserver(MQTTService.this);
@@ -181,7 +186,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 
             String str1 = new String(message.getPayload());
 
-            Log.i(TAG, "MqttReceivePull:" + str1);
+            Log.e(TAG, "MqttReceivePull:" + str1);
 
             HandlePush.getInstance().handPush(str1);
         }
@@ -210,10 +215,10 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
         }
         if (info != null && info.isAvailable()) {
             String name = info.getTypeName();
-            Log.i(TAG, "MQTT当前网络名称：" + name);
+            Log.e(TAG, "MQTT当前网络名称：" + name);
             return true;
         } else {
-            Log.i(TAG, "MQTT 没有可用网络");
+            Log.e(TAG, "MQTT 没有可用网络");
             return false;
         }
     }
@@ -233,7 +238,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 //                return;
 //            }
 //        }
-        Log.e("MQTTService", loc.toString());
+        Log.e("MQTTService", "receiveLoc~~");
         pushLoc(loc);
 //        lastUploadTime = System.currentTimeMillis();
     }
@@ -249,7 +254,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
             if (client != null && client.isConnected()) {
                 publish(pushStr);
             } else {
-                XApp.getPreferencesEditor().putString(Config.SP_PUSH_CACHE, pushStr).apply();
+                FileUtil.savePushCache(XApp.getInstance(), pushStr);
                 Intent intent = new Intent(XApp.getInstance(), MQTTService.class);
                 intent.setPackage(XApp.getInstance().getPackageName());
                 XApp.getInstance().startService(intent);//重启推送
@@ -263,14 +268,14 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
             return;
         }
 
-        Log.e("trace", "trace receive");
+        Log.e(TAG, "trace receive");
 
         String pushStr = BuildPushUtil.buildPush(emLoc);
 
         if (client != null && client.isConnected()) {
             publish(pushStr);
         } else {
-            XApp.getPreferencesEditor().putString(Config.SP_PUSH_CACHE, pushStr).apply();
+            FileUtil.savePushCache(this, pushStr);
             Intent intent = new Intent(XApp.getInstance(), MQTTService.class);
             intent.setPackage(XApp.getInstance().getPackageName());
             XApp.getInstance().startService(intent);//重启推送

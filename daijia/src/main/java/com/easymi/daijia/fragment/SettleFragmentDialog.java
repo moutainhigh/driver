@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.easymi.component.DJOrderStatus;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.CusBottomSheetDialog;
 import com.easymi.component.widget.LoadingButton;
@@ -77,14 +78,14 @@ public class SettleFragmentDialog {
 
     private void initView() {
 
-        if (djOrder.orderStatus == DJOrder.GOTO_DESTINATION_ORDER) {
+        if (djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
             confirmBtn.setText(context.getString(R.string.confirm_money));
         } else {
             confirmBtn.setText(context.getString(R.string.dai_fu));
         }
 
         confirmBtn.setOnClickListener(v -> {
-            if (djOrder.orderStatus == DJOrder.GOTO_DESTINATION_ORDER) {
+            if (djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
                 if (null != bridge) {
                     bridge.doConfirmMoney(confirmBtn);
                 }

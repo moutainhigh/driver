@@ -20,8 +20,10 @@ import com.easymi.common.mvp.grab.GrabActivity;
 import com.easymi.common.mvp.work.WorkActivity;
 import com.easymi.common.result.MultipleOrderResult;
 import com.easymi.component.Config;
+import com.easymi.component.DJOrderStatus;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
+import com.easymi.component.entity.Employ;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
@@ -92,15 +94,15 @@ public class HandlePush implements FeeChangeSubject {
                 bundle.putSerializable("order", order);
                 message.setData(bundle);
                 handler.sendMessage(message);
-            } else if (msg.equals("calc")) {
+            } else if (msg.equals("costInfo")) {
                 long orderId = jb.optJSONObject("data").optLong("OrderId");
                 String orderType = jb.optJSONObject("data").optString("OrderType");
                 DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
                 if (dymOrder != null) {
-                    dymOrder.startFee = jb.optJSONObject("data").optDouble("MileageCost");
-                    dymOrder.waitTime = jb.optJSONObject("data").optInt("WaitTime");
+                    dymOrder.startFee = jb.optJSONObject("data").optDouble("StartPrice");
+                    dymOrder.waitTime = jb.optJSONObject("data").optInt("WaitTime")/60;
                     dymOrder.waitTimeFee = jb.optJSONObject("data").optDouble("WaitTimeFee");
-                    dymOrder.travelTime = jb.optJSONObject("data").optInt("DriverTime");
+                    dymOrder.travelTime = jb.optJSONObject("data").optInt("DriverTime")/60;
                     dymOrder.travelFee = jb.optJSONObject("data").optDouble("DriveTimeCost");
                     dymOrder.totalFee = jb.optJSONObject("data").optDouble("TotalAmount");
 
@@ -109,6 +111,12 @@ public class HandlePush implements FeeChangeSubject {
 
                     dymOrder.updateFee();
                     notifyObserver(orderId, orderType);
+                }
+            } else if (msg.equals("driver_status")) {
+                Employ employ = EmUtil.getEmployInfo();
+                if (null != employ) {
+                    employ.status = jb.optJSONObject("data").optInt("status");
+                    employ.updateBase();
                 }
             }
         } catch (JSONException e) {
@@ -179,12 +187,12 @@ public class HandlePush implements FeeChangeSubject {
         public void callback(MultipleOrderResult multipleOrderResult, String orderType) {
             MultipleOrder order = multipleOrderResult.order;
             if (order != null) {
-                if (order.orderStatus != MultipleOrder.NEW_ORDER && order.orderStatus != MultipleOrder.PAIDAN_ORDER) {
+                if (order.orderStatus != DJOrderStatus.NEW_ORDER && order.orderStatus != DJOrderStatus.PAIDAN_ORDER) {
                     return;
                 }
                 order.addresses = multipleOrderResult.address;
                 String voiceStr = "";
-                if (order.orderStatus == MultipleOrder.NEW_ORDER) {
+                if (order.orderStatus == DJOrderStatus.NEW_ORDER) {
                     voiceStr += XApp.getInstance().getString(R.string.grab_order) + ",";//抢单
                 } else {
                     voiceStr += XApp.getInstance().getString(R.string.send_order) + ",";//派单

@@ -8,7 +8,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.easymi.common.R;
+import com.easymi.common.util.DJStatus2Str;
+import com.easymi.component.Config;
+import com.easymi.component.DJOrderStatus;
 import com.easymi.component.entity.BaseOrder;
+import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
 
 import java.util.ArrayList;
@@ -18,7 +22,7 @@ import java.util.List;
  * Created by liuzihao on 2017/11/14.
  */
 
-public class LiuShuiAdapter extends  RecyclerView.Adapter<LiuShuiAdapter.Holder> {
+public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> {
 
     private Context context;
 
@@ -36,7 +40,7 @@ public class LiuShuiAdapter extends  RecyclerView.Adapter<LiuShuiAdapter.Holder>
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.liushui_item,null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.liushui_item, null);
 
         return new Holder(view);
     }
@@ -47,10 +51,10 @@ public class LiuShuiAdapter extends  RecyclerView.Adapter<LiuShuiAdapter.Holder>
         holder.orderType.setText(baseOrder.orderType);
         holder.orderEndPlace.setText(baseOrder.endPlace);
         holder.orderStartPlace.setText(baseOrder.startPlace);
-        holder.orderStatus.setText(""+baseOrder.orderStatus);
-        holder.orderTime.setText(""+baseOrder.orderTime);
+        holder.orderStatus.setText(DJStatus2Str.int2Str(baseOrder.orderType, baseOrder.orderStatus));
+        holder.orderTime.setText(TimeUtil.getTime("yyyy-MM-dd HH:mm", baseOrder.orderTime));
         holder.orderNumber.setText(baseOrder.orderNumber);
-        holder.orderBaoxiao.setOnClickListener(view -> ToastUtil.showMessage(context,"点击了报销"));
+        holder.orderBaoxiao.setOnClickListener(view -> ToastUtil.showMessage(context, "点击了报销"));
 
     }
 
@@ -59,7 +63,7 @@ public class LiuShuiAdapter extends  RecyclerView.Adapter<LiuShuiAdapter.Holder>
         return baseOrders.size();
     }
 
-    class Holder extends RecyclerView.ViewHolder{
+    class Holder extends RecyclerView.ViewHolder {
 
         TextView orderTime;
         TextView orderStatus;

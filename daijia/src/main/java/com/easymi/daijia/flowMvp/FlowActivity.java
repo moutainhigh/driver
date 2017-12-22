@@ -3,7 +3,6 @@ package com.easymi.daijia.flowMvp;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
@@ -23,7 +22,6 @@ import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.Polyline;
-import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.maps.utils.overlay.SmoothMoveMarker;
 import com.amap.api.navi.AMapNaviException;
 import com.amap.api.navi.model.AMapNaviPath;
@@ -32,7 +30,10 @@ import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.route.DriveRouteResult;
 import com.easymi.common.push.FeeChangeObserver;
 import com.easymi.common.push.HandlePush;
+import com.easymi.common.trace.TraceInterface;
+import com.easymi.common.trace.TraceReceiver;
 import com.easymi.component.Config;
+import com.easymi.component.DJOrderStatus;
 import com.easymi.component.activity.PlaceActivity;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
@@ -61,8 +62,6 @@ import com.easymi.daijia.fragment.SlideArriveStartFragment;
 import com.easymi.daijia.fragment.ToStartFragment;
 import com.easymi.daijia.fragment.WaitFragment;
 import com.easymi.daijia.receiver.CancelOrderReceiver;
-import com.easymi.common.trace.TraceInterface;
-import com.easymi.common.trace.TraceReceiver;
 import com.easymi.daijia.widget.FlowPopWindow;
 import com.easymi.daijia.widget.InputRemarkDialog;
 import com.google.gson.Gson;
@@ -194,10 +193,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 expandableLayout.expand();
             }
         });
-        if (djOrder.orderStatus == DJOrder.NEW_ORDER
-                || djOrder.orderStatus == DJOrder.PAIDAN_ORDER
-                || djOrder.orderStatus == DJOrder.TAKE_ORDER
-                || djOrder.orderStatus == DJOrder.GOTO_BOOKPALCE_ORDER) {
+        if (djOrder.orderStatus == DJOrderStatus.NEW_ORDER
+                || djOrder.orderStatus == DJOrderStatus.PAIDAN_ORDER
+                || djOrder.orderStatus == DJOrderStatus.TAKE_ORDER
+                || djOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) {
             nextPlace.setText(djOrder.startPlace);
         }
         tagContainerLayout.setOnTagClickListener(new TagView.OnTagClickListener() {
@@ -223,7 +222,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void showBottomFragment(DJOrder djOrder) {
-        if (djOrder.orderStatus == DJOrder.PAIDAN_ORDER || djOrder.orderStatus == DJOrder.NEW_ORDER) {
+        if (djOrder.orderStatus == DJOrderStatus.PAIDAN_ORDER || djOrder.orderStatus == DJOrderStatus.NEW_ORDER) {
             toolbar.setTitle(R.string.status_pai);
             AcceptFragment acceptFragment = new AcceptFragment();
             Bundle bundle = new Bundle();
@@ -236,7 +235,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
             transaction.replace(R.id.flow_frame, acceptFragment);
             transaction.commit();
-        } else if (djOrder.orderStatus == DJOrder.TAKE_ORDER) {
+        } else if (djOrder.orderStatus == DJOrderStatus.TAKE_ORDER) {
             toolbar.setTitle(R.string.status_jie);
             ToStartFragment toStartFragment = new ToStartFragment();
             Bundle bundle = new Bundle();
@@ -249,7 +248,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
             transaction.replace(R.id.flow_frame, toStartFragment);
             transaction.commit();
-        } else if (djOrder.orderStatus == DJOrder.GOTO_BOOKPALCE_ORDER) {
+        } else if (djOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) {
             toolbar.setTitle(R.string.status_to_start);
             SlideArriveStartFragment fragment = new SlideArriveStartFragment();
             Bundle bundle = new Bundle();
@@ -262,7 +261,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
             transaction.replace(R.id.flow_frame, fragment);
             transaction.commit();
-        } else if (djOrder.orderStatus == DJOrder.ARRIVAL_BOOKPLACE_ORDER) {
+        } else if (djOrder.orderStatus == DJOrderStatus.ARRIVAL_BOOKPLACE_ORDER) {
             toolbar.setTitle(R.string.status_arrive_start);
             ArriveStartFragment fragment = new ArriveStartFragment();
             Bundle bundle = new Bundle();
@@ -275,7 +274,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
             transaction.replace(R.id.flow_frame, fragment);
             transaction.commit();
-        } else if (djOrder.orderStatus == DJOrder.START_WAIT_ORDER) {
+        } else if (djOrder.orderStatus == DJOrderStatus.START_WAIT_ORDER) {
             toolbar.setTitle(R.string.status_wait);
             waitFragment = new WaitFragment();
             Bundle bundle = new Bundle();
@@ -288,7 +287,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
             transaction.replace(R.id.flow_frame, waitFragment);
             transaction.commit();
-        } else if (djOrder.orderStatus == DJOrder.GOTO_DESTINATION_ORDER) {
+        } else if (djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
             toolbar.setTitle(R.string.status_to_end);
             runningFragment = new RunningFragment();
             Bundle bundle = new Bundle();
@@ -301,7 +300,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
             transaction.replace(R.id.flow_frame, runningFragment);
             transaction.commit();
-        } else if (djOrder.orderStatus == DJOrder.ARRIVAL_DESTINATION_ORDER) {
+        } else if (djOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {
             toolbar.setTitle(R.string.status_confirm);
             runningFragment = new RunningFragment();
             Bundle bundle = new Bundle();
@@ -355,9 +354,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     @Override
     public void showMapBounds() {
         List<LatLng> latLngs = new ArrayList<>();
-        if (djOrder.orderStatus == DJOrder.NEW_ORDER
-                || djOrder.orderStatus == DJOrder.PAIDAN_ORDER
-                || djOrder.orderStatus == DJOrder.TAKE_ORDER
+        if (djOrder.orderStatus == DJOrderStatus.NEW_ORDER
+                || djOrder.orderStatus == DJOrderStatus.PAIDAN_ORDER
+                || djOrder.orderStatus == DJOrderStatus.TAKE_ORDER
                 ) {
             if (null != getStartAddr()) {
                 latLngs.add(new LatLng(getStartAddr().lat, getStartAddr().lng));
@@ -371,7 +370,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             }
             LatLngBounds bounds = MapUtil.getBounds(latLngs, new LatLng(lastLatlng.latitude, lastLatlng.longitude));
             aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this) / 2, DensityUtil.getDisplayWidth(this) / 2, 20));
-        } else if (djOrder.orderStatus == DJOrder.GOTO_BOOKPALCE_ORDER) {
+        } else if (djOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) {
             if (null != getStartAddr()) {
                 latLngs.add(new LatLng(getStartAddr().lat, getStartAddr().lng));
                 naviCon.setOnClickListener(view -> presenter.navi(new LatLng(getStartAddr().lat, getStartAddr().lng), getStartAddr().poi));
@@ -381,9 +380,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             }
             LatLngBounds bounds = MapUtil.getBounds(latLngs, new LatLng(lastLatlng.latitude, lastLatlng.longitude));
             aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this) / 2, DensityUtil.getDisplayWidth(this) / 2, 20));
-        } else if (djOrder.orderStatus == DJOrder.ARRIVAL_BOOKPLACE_ORDER
-                || djOrder.orderStatus == DJOrder.GOTO_DESTINATION_ORDER
-                || djOrder.orderStatus == DJOrder.START_WAIT_ORDER
+        } else if (djOrder.orderStatus == DJOrderStatus.ARRIVAL_BOOKPLACE_ORDER
+                || djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER
+                || djOrder.orderStatus == DJOrderStatus.START_WAIT_ORDER
                 ) {
             if (null != getEndAddr()) {
                 latLngs.add(new LatLng(getEndAddr().lat, getEndAddr().lng));
@@ -698,8 +697,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             onResumeIn = false;
         }
         if (null != djOrder) {
-            if (djOrder.orderStatus == DJOrder.GOTO_DESTINATION_ORDER
-                    || djOrder.orderStatus == DJOrder.GOTO_BOOKPALCE_ORDER) {
+            if (djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER
+                    || djOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) {
                 aMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
             }
         }

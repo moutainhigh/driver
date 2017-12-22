@@ -23,6 +23,7 @@ import com.easymi.common.R;
 import com.easymi.common.adapter.GrabAdapter;
 import com.easymi.common.entity.Address;
 import com.easymi.common.entity.MultipleOrder;
+import com.easymi.component.DJOrderStatus;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
@@ -306,10 +307,10 @@ public class GrabActivity extends RxBaseActivity implements GrabContract.View {
     }
 
     private void showBottomByStatus(){
-        if(showIngOrder.orderStatus == MultipleOrder.NEW_ORDER){
+        if(showIngOrder.orderStatus == DJOrderStatus.NEW_ORDER){
             bottomText.setText(R.string.grab_order);
             grabCon.setOnClickListener(v -> presenter.grabOrder(showIngOrder.orderId));
-        } else if(showIngOrder.orderStatus == MultipleOrder.PAIDAN_ORDER){
+        } else if(showIngOrder.orderStatus == DJOrderStatus.PAIDAN_ORDER){
             bottomText.setText(R.string.accept_order);
             grabCon.setOnClickListener(v -> presenter.takeOrder(showIngOrder.orderId));
         }

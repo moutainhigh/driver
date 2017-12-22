@@ -47,8 +47,6 @@ public class Config {
     public static final String SP_SHAKE_ABLE = "shake_able";//能否震动
     public static final String SP_ALWAYS_OREN = "always_oren";//是否始终横屏计价
 
-    public static final String SP_PUSH_CACHE = "push_cache";
-
     public static final String APP_PACKGE_NAME = "com.easymi.v5driver";
 
     public static final String DAIJIA = "daijia";

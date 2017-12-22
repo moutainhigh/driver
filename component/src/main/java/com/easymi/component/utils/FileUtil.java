@@ -9,9 +9,15 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 
 import okio.BufferedSink;
@@ -290,6 +296,127 @@ public class FileUtil {
      */
     public static boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());
+    }
+
+    public static String readFile(File file) throws IOException {
+
+        if (!file.exists() || !file.isFile()) {
+            //文件不存在,或者不为文件类型
+            return null;
+        }
+
+        FileInputStream is = new FileInputStream(file);
+
+        return readFile(is);
+
+    }
+
+
+    public static String readFile(InputStream is) throws IOException {
+
+        if (is == null) {
+            return null;
+        }
+
+        StringBuilder content = new StringBuilder();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));  //字符流
+
+        String line = "";
+        while ((line = reader.readLine()) != null) {
+            content.append(line);
+        }
+
+        reader.close();
+
+        return content.toString();
+    }
+
+
+    public static String readByByte(InputStream is) throws IOException {
+        if (is == null) {
+            return null;
+        }
+
+        int len = is.available();
+        byte[] luaByte = new byte[len];
+        is.read(luaByte);
+        is.close();
+
+        return new String(luaByte, "UTF-8");
+    }
+
+    public static void write(Context context, String DirectoryName, String fileName, String content) throws IOException {
+        if (!ExistSDCard()) {
+            return;
+        }
+
+        File rootDire = Environment.getExternalStorageDirectory();
+        File directory = new File(rootDire, DirectoryName);
+
+        if (!directory.exists()) {
+            if (!directory.mkdirs()) {
+                //Toast.makeText(context,"创建文件夹失败",Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        File file = new File(directory, fileName);
+        if (!file.exists()) {
+
+            if (!file.createNewFile()) {
+                // Toast.makeText(context,"创建文件失败",Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        Log.e("dirName", file.getAbsolutePath());
+
+        FileWriter fileWriter = new FileWriter(file, false);//覆盖以前的
+        fileWriter.write(content);
+        fileWriter.close();
+
+    }
+
+    public static void delete(String DirectoryName, String fileName) {
+        if (!ExistSDCard()) {
+            //不存在SD卡
+            return;
+        }
+        File rootDire = Environment.getExternalStorageDirectory();
+        File directory = new File(rootDire, DirectoryName);
+        if (directory.exists()) {
+            File file = new File(directory, fileName);
+            if (file.exists()) {
+                file.delete();
+            }
+        }
+    }
+
+    private static boolean ExistSDCard() {
+        if (Environment.getExternalStorageState().equals(
+                android.os.Environment.MEDIA_MOUNTED)) {
+            return true;
+        } else
+            return false;
+    }
+
+    public static boolean savePushCache(Context context, String content) {
+        try {
+            FileUtil.write(context, "v5driver", "pushCache.json", content);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public static String readPushCache() {
+        try {
+            return readFile(new File(Environment.getExternalStorageState() + "/v5driver" + "/pushCache.json"));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
 }
