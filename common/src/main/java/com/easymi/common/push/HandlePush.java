@@ -22,7 +22,6 @@ import com.easymi.common.result.MultipleOrderResult;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
-import com.easymi.component.loc.LocObserver;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
@@ -60,7 +59,6 @@ public class HandlePush implements FeeChangeSubject {
     public static HandlePush getInstance() {
         if (instance == null) {
             instance = new HandlePush();
-            observers = new ArrayList<>();
         }
         return instance;
     }
@@ -107,7 +105,7 @@ public class HandlePush implements FeeChangeSubject {
                     dymOrder.totalFee = jb.optJSONObject("data").optDouble("TotalAmount");
 
                     dymOrder.disFee = jb.optJSONObject("data").optDouble("MileageCost");
-                    dymOrder.distance = jb.optJSONObject("data").optDouble("Mileage");
+                    dymOrder.distance = jb.optJSONObject("data").optDouble("Mileges");
 
                     dymOrder.updateFee();
                     notifyObserver(orderId, orderType);
@@ -261,6 +259,9 @@ public class HandlePush implements FeeChangeSubject {
 
     @Override
     public void addObserver(FeeChangeObserver obj) {
+        if (null == observers) {
+            observers = new ArrayList<>();
+        }
         boolean hasd = false;
         for (FeeChangeObserver observer : observers) {
             if (obj == observer) {
@@ -274,11 +275,17 @@ public class HandlePush implements FeeChangeSubject {
 
     @Override
     public void deleteObserver(FeeChangeObserver obj) {
+        if (null == observers) {
+            return;
+        }
         observers.remove(obj);
     }
 
     @Override
     public void notifyObserver(long orderId, String orderType) {
+        if (null == observers) {
+            return;
+        }
         for (FeeChangeObserver observer : observers) {
             observer.feeChanged(orderId, orderType);
         }

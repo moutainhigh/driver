@@ -7,25 +7,24 @@ package com.easymi.common.push;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.easymi.common.entity.PushBean;
-import com.easymi.common.entity.PushData;
-import com.easymi.common.entity.PushDataLoc;
-import com.easymi.common.entity.PushDataOrder;
+import com.amap.api.maps.model.LatLng;
+import com.easymi.common.trace.TraceInterface;
+import com.easymi.common.trace.TraceReceiver;
+import com.easymi.common.util.BuildPushUtil;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
-import com.easymi.component.entity.BaseEmploy;
-import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
+import com.easymi.component.loc.LocService;
 import com.easymi.component.utils.EmUtil;
-import com.google.gson.Gson;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
@@ -36,16 +35,12 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * MQTT长连接服务
- *
- * @author 一口仨馍 联系方式 : yikousamo@gmail.com
- * @version 创建时间：2016/9/16 22:06
  */
-public class MQTTService extends Service implements LocObserver {
+public class MQTTService extends Service implements LocObserver, TraceInterface {
 
     public static final String TAG = MQTTService.class.getSimpleName();
 
@@ -60,8 +55,12 @@ public class MQTTService extends Service implements LocObserver {
     private String pullTopic;
     private String clientId = "driver-" + EmUtil.getEmployId();//身份唯一码
 
+    private TraceReceiver traceReceiver;
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        traceReceiver = new TraceReceiver(this);
+        registerReceiver(traceReceiver, new IntentFilter(LocService.BROAD_TRACE_SUC));
         initConn();
         return START_STICKY;
     }
@@ -118,7 +117,7 @@ public class MQTTService extends Service implements LocObserver {
         Integer qos = 1;//与后端约定为1
         Boolean retained = true;
         try {
-            if (null != client) {
+            if (null != client && client.isConnected()) {
                 client.publish(pushTopic, msg.getBytes(), qos, retained);
             }
         } catch (MqttException e) {
@@ -129,6 +128,7 @@ public class MQTTService extends Service implements LocObserver {
     @Override
     public void onDestroy() {
         try {
+            unregisterReceiver(traceReceiver);
             client.disconnect();
         } catch (MqttException e) {
             e.printStackTrace();
@@ -169,6 +169,7 @@ public class MQTTService extends Service implements LocObserver {
         public void onFailure(IMqttToken arg0, Throwable arg1) {
             arg1.printStackTrace();
             // 连接失败，重连
+            doClientConnection();
         }
     };
 
@@ -192,8 +193,9 @@ public class MQTTService extends Service implements LocObserver {
 
         @Override
         public void connectionLost(Throwable arg0) {
-            // 失去连接，重连
             LocReceiver.getInstance().deleteObserver(MQTTService.this);
+            // 失去连接，重连
+            doClientConnection();
         }
     };
 
@@ -231,7 +233,7 @@ public class MQTTService extends Service implements LocObserver {
 //                return;
 //            }
 //        }
-        Log.e("MQTTService",loc.toString());
+        Log.e("MQTTService", loc.toString());
         pushLoc(loc);
 //        lastUploadTime = System.currentTimeMillis();
     }
@@ -240,45 +242,38 @@ public class MQTTService extends Service implements LocObserver {
         if (emLoc == null) {
             return;
         }
-        PushData pushData = new PushData();
-        pushData.employ = new BaseEmploy().employ2This();
-        pushData.calc = new PushDataLoc();
-        pushData.calc.lat = emLoc.latitude;
-        pushData.calc.lng = emLoc.longitude;
-        pushData.calc.appKey = Config.APP_KEY;
-        pushData.calc.serialCode = XApp.getMyPreferences().getInt(Config.SP_SERIAL_CODE, 1) + 1;
-        pushData.calc.darkCost = 0;
-        pushData.calc.darkMileage = 0;
-        pushData.calc.positionTime = System.currentTimeMillis();
-        pushData.calc.accuracy = emLoc.bearing;
 
-        List<PushDataOrder> orderList = new ArrayList<>();
-        for (DymOrder dymOrder : DymOrder.findAll()) {
-            PushDataOrder dataOrder = new PushDataOrder();
-            dataOrder.orderId = dymOrder.orderId;
-            dataOrder.orderType = dymOrder.orderType;
-            dataOrder.status = 0;
-            if (dymOrder.orderType.equals("daijia")) {
-                if (dymOrder.orderStatus < 25) {//出发前
-                    dataOrder.status = 1;
-                } else if (dymOrder.orderStatus == 25) {//行驶中
-                    dataOrder.status = 2;
-                } else if (dymOrder.orderStatus == 28) {//中途等待
-                    dataOrder.status = 3;
-                }
-            }
-            if (dataOrder.status != 0) {
-                orderList.add(dataOrder);
+        if (!LocService.needTrace()) {
+            String pushStr = BuildPushUtil.buildPush(emLoc);
+
+            if (client != null && client.isConnected()) {
+                publish(pushStr);
+            } else {
+                XApp.getPreferencesEditor().putString(Config.SP_PUSH_CACHE, pushStr).apply();
+                Intent intent = new Intent(XApp.getInstance(), MQTTService.class);
+                intent.setPackage(XApp.getInstance().getPackageName());
+                XApp.getInstance().startService(intent);//重启推送
             }
         }
-        pushData.calc.orderInfo = orderList;
-
-        PushBean<PushData> pushBean = new PushBean<>("gps", pushData);
-        String pushStr = new Gson().toJson(pushBean);
-        Log.e("pushBean", pushStr);
-        publish(pushStr);
-
-        XApp.getPreferencesEditor().putInt(Config.SP_SERIAL_CODE, pushData.calc.serialCode).apply();
     }
 
+    @Override
+    public void showTraceAfter(LatLng emLoc) {
+        if (emLoc == null) {
+            return;
+        }
+
+        Log.e("trace", "trace receive");
+
+        String pushStr = BuildPushUtil.buildPush(emLoc);
+
+        if (client != null && client.isConnected()) {
+            publish(pushStr);
+        } else {
+            XApp.getPreferencesEditor().putString(Config.SP_PUSH_CACHE, pushStr).apply();
+            Intent intent = new Intent(XApp.getInstance(), MQTTService.class);
+            intent.setPackage(XApp.getInstance().getPackageName());
+            XApp.getInstance().startService(intent);//重启推送
+        }
+    }
 }

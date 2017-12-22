@@ -10,7 +10,6 @@ public class PushDataLoc {
     public double lat;
     public double lng;
     public String appKey;
-    public int serialCode;
     public double darkCost;
     public int darkMileage;
     public long positionTime;

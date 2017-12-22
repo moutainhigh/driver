@@ -139,17 +139,12 @@ public class LocService extends NotiService implements AMapLocationListener {
         if (null == lbsTraceClient) {
             lbsTraceClient = LBSTraceClient.getInstance(this);
             lbsTraceClient.startTrace((list, list1, s) -> {
-                List<LatLng> originalLatlngs = new ArrayList<>();
-                for (TraceLocation traceLocation : list) {
-                    LatLng latLng = new LatLng(traceLocation.getLatitude(), traceLocation.getLongitude());
-                    originalLatlngs.add(latLng);
+                if (list1 != null && list1.size() != 0) {
+                    Intent intent = new Intent();
+                    intent.setAction(BROAD_TRACE_SUC);
+                    intent.putExtra("traceLatLng", list1.get(list1.size() - 1));
+                    sendBroadcast(intent);
                 }
-
-                Intent intent = new Intent();
-                intent.setAction(BROAD_TRACE_SUC);
-                intent.putExtra("traceLatLngs", new Gson().toJson(list1));
-                intent.putExtra("originalLatlngs", new Gson().toJson(originalLatlngs));
-                sendBroadcast(intent);
             });
         }
     }
@@ -167,11 +162,11 @@ public class LocService extends NotiService implements AMapLocationListener {
             if (amapLocation.getErrorCode() == AMapLocation.LOCATION_SUCCESS) {
                 EmLoc locationInfo = EmLoc.ALocToLoc(amapLocation);
 
-//                if (XApp.getMyPreferences().getBoolean(Config.SP_ORDER_RUNNING, false)) {
-//                    startTrace();
-//                } else {
-//                    stopTrace();
-//                }
+                if (needTrace()) {
+                    startTrace();
+                } else {
+                    stopTrace();
+                }
 
                 Log.e("locPos", "bearing>>>>" + locationInfo.bearing);
                 Intent intent = new Intent(LocService.this, LocReceiver.class);
@@ -195,5 +190,18 @@ public class LocService extends NotiService implements AMapLocationListener {
                 mWifiAutoCloseDelegate.onLocateFail(getApplicationContext(), amapLocation.getErrorCode(), PowerManagerUtil.getInstance().isScreenOn(getApplicationContext()), NetUtil.getInstance().isWifiCon(getApplicationContext()));
             }
         }
+    }
+
+    public static boolean needTrace() {
+        List<DymOrder> dymOrders = DymOrder.findAll();
+        boolean needTrace = false;
+        for (DymOrder dymOrder : dymOrders) {
+            if (dymOrder.orderType.equals(Config.DAIJIA)) {
+                if (dymOrder.orderStatus == 25) {
+                    needTrace = true;
+                }
+            }
+        }
+        return needTrace;
     }
 }

@@ -8,10 +8,14 @@ import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 
+import com.google.gson.Gson;
+
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
@@ -172,6 +176,19 @@ public class CommonUtil {
                 return result;
             }
         }
+    }
+
+    /**
+     * @author I321533
+     * @param json
+     * @param clazz
+     * @return
+     */
+    public static <T> List<T> jsonToList(String json, Class<T[]> clazz)
+    {
+        Gson gson = new Gson();
+        T[] array = gson.fromJson(json, clazz);
+        return Arrays.asList(array);
     }
 
 

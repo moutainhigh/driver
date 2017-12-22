@@ -1,13 +1,11 @@
-package com.easymi.daijia.trace;
+package com.easymi.common.trace;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
 import com.amap.api.maps.model.LatLng;
-import com.easymi.component.entity.EmLoc;
 import com.easymi.component.loc.LocService;
-import com.easymi.component.utils.ToastUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -34,22 +32,27 @@ public class TraceReceiver extends BroadcastReceiver {
         }
 
         if (intent.getAction().equals(LocService.BROAD_TRACE_SUC)) {
-            Gson gson = new Gson();
+//            Gson gson = new Gson();
 
-            List<LatLng> tracelatLngs;
-            Type typeTrace = new TypeToken<ArrayList<LatLng>>() {
-            }.getType();
-            tracelatLngs = gson.fromJson(intent.getStringExtra("traceLatLngs"), typeTrace);
+//            List<LatLng> tracelatLngs;
+//            Type typeTrace = new TypeToken<ArrayList<LatLng>>() {
+//            }.getType();
+//            tracelatLngs = gson.fromJson(intent.getStringExtra("traceLatLngs"), typeTrace);
+//
+//            List<LatLng> originallatLngs;
+//            Type typeTrace2 = new TypeToken<ArrayList<LatLng>>() {
+//            }.getType();
+//            originallatLngs = gson.fromJson(intent.getStringExtra("originalLatlngs"), typeTrace2);
 
-            List<LatLng> originallatLngs;
-            Type typeTrace2 = new TypeToken<ArrayList<LatLng>>() {
-            }.getType();
-            originallatLngs = gson.fromJson(intent.getStringExtra("originalLatlngs"), typeTrace2);
+//            if (traceInterface != null) {
+//                traceInterface.showTraceAfter(originallatLngs, tracelatLngs);
+//            }
+
+            LatLng latLng = intent.getParcelableExtra("traceLatLng");
 
             if (traceInterface != null) {
-                traceInterface.showTraceAfter(originallatLngs, tracelatLngs);
+                traceInterface.showTraceAfter(latLng);
             }
-
         }
     }
 }

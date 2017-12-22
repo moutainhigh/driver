@@ -34,7 +34,6 @@ public class LocReceiver extends BroadcastReceiver implements LocSubject {
     public static LocReceiver getInstance() {
         if (null == locReceiver) {
             locReceiver = new LocReceiver();
-            observers = new ArrayList<>();
         }
         return locReceiver;
     }
@@ -62,6 +61,9 @@ public class LocReceiver extends BroadcastReceiver implements LocSubject {
      */
     @Override
     public void addObserver(LocObserver obj) {
+        if (null == observers) {
+            observers = new ArrayList<>();
+        }
         boolean hasd = false;
         for (LocObserver observer : observers) {
             if (obj == observer) {
@@ -78,11 +80,17 @@ public class LocReceiver extends BroadcastReceiver implements LocSubject {
      */
     @Override
     public void deleteObserver(LocObserver obj) {
+        if (null == observers) {
+            return;
+        }
         observers.remove(obj);
     }
 
     @Override
     public void notifyObserver(EmLoc loc) {
+        if (null == observers) {
+            return;
+        }
         for (LocObserver observer : observers) {
             observer.receiveLoc(loc);
         }

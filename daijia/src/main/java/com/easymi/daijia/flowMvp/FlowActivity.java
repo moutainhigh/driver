@@ -1,6 +1,5 @@
 package com.easymi.daijia.flowMvp;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
@@ -62,8 +61,8 @@ import com.easymi.daijia.fragment.SlideArriveStartFragment;
 import com.easymi.daijia.fragment.ToStartFragment;
 import com.easymi.daijia.fragment.WaitFragment;
 import com.easymi.daijia.receiver.CancelOrderReceiver;
-import com.easymi.daijia.trace.TraceInterface;
-import com.easymi.daijia.trace.TraceReceiver;
+import com.easymi.common.trace.TraceInterface;
+import com.easymi.common.trace.TraceReceiver;
 import com.easymi.daijia.widget.FlowPopWindow;
 import com.easymi.daijia.widget.InputRemarkDialog;
 import com.google.gson.Gson;
@@ -724,28 +723,32 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     private Polyline tracePolyLine;
     private Polyline orignialPolyLine;
 
+//    @Override
+//    public void showTraceAfter(List<LatLng> before, List<LatLng> after) {
+//
+//        if (null != before && before.size() != 0) {
+//            if (null == orignialPolyLine) {
+//                orignialPolyLine = aMap.addPolyline(new PolylineOptions().
+//                        addAll(before).width(10).color(Color.rgb(255, 0, 0)));
+//            } else {
+//                orignialPolyLine.setPoints(before);
+//            }
+//        }
+//
+//
+//        if (null != after && after.size() != 0) {
+//            if (null == tracePolyLine) {
+//                tracePolyLine = aMap.addPolyline(new PolylineOptions().
+//                        addAll(after).width(10).color(Color.rgb(0, 255, 0)));
+//            } else {
+//                tracePolyLine.setPoints(after);
+//            }
+//        }
+//    }
+
+
     @Override
-    public void showTraceAfter(List<LatLng> before, List<LatLng> after) {
-
-        if (null != before && before.size() != 0) {
-            if (null == orignialPolyLine) {
-                orignialPolyLine = aMap.addPolyline(new PolylineOptions().
-                        addAll(before).width(10).color(Color.rgb(255, 0, 0)));
-            } else {
-                orignialPolyLine.setPoints(before);
-            }
-        }
-
-
-        if (null != after && after.size() != 0) {
-            if (null == tracePolyLine) {
-                tracePolyLine = aMap.addPolyline(new PolylineOptions().
-                        addAll(after).width(10).color(Color.rgb(0, 255, 0)));
-            } else {
-                tracePolyLine.setPoints(after);
-            }
-        }
-
+    public void showTraceAfter(LatLng afterLatlngs) {
 
     }
 
