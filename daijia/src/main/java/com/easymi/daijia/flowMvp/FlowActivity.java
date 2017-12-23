@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
@@ -26,6 +27,7 @@ import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.Polyline;
+import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.maps.utils.overlay.SmoothMoveMarker;
 import com.amap.api.navi.AMapNaviException;
 import com.amap.api.navi.model.AMapNaviPath;
@@ -787,6 +789,14 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 //    @Override
 //    public void showTraceAfter(List<LatLng> before, List<LatLng> after) {
 //
+
+//    }
+
+
+    private List<LatLng> traceLatlngs = new ArrayList<>();
+
+    @Override
+    public void showTraceAfter(EmLoc traceLoc) {
 //        if (null != before && before.size() != 0) {
 //            if (null == orignialPolyLine) {
 //                orignialPolyLine = aMap.addPolyline(new PolylineOptions().
@@ -797,20 +807,15 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 //        }
 //
 //
-//        if (null != after && after.size() != 0) {
-//            if (null == tracePolyLine) {
-//                tracePolyLine = aMap.addPolyline(new PolylineOptions().
-//                        addAll(after).width(10).color(Color.rgb(0, 255, 0)));
-//            } else {
-//                tracePolyLine.setPoints(after);
-//            }
-//        }
-//    }
-
-
-    @Override
-    public void showTraceAfter(LatLng afterLatlngs) {
-
+        traceLatlngs.add(new LatLng(traceLoc.latitude, traceLoc.longitude));
+        if (null != traceLatlngs && traceLatlngs.size() != 0) {
+            if (null == tracePolyLine) {
+                tracePolyLine = aMap.addPolyline(new PolylineOptions().
+                        addAll(traceLatlngs).width(10).color(Color.rgb(0, 255, 0)));
+            } else {
+                tracePolyLine.setPoints(traceLatlngs);
+            }
+        }
     }
 
     @Override

@@ -263,7 +263,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
     }
 
     @Override
-    public void showTraceAfter(LatLng emLoc) {
+    public void showTraceAfter(EmLoc emLoc) {
         if (emLoc == null) {
             return;
         }

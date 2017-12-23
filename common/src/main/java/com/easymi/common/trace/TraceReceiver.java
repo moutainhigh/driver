@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.amap.api.maps.model.LatLng;
+import com.easymi.component.entity.EmLoc;
 import com.easymi.component.loc.LocService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -48,10 +49,10 @@ public class TraceReceiver extends BroadcastReceiver {
 //                traceInterface.showTraceAfter(originallatLngs, tracelatLngs);
 //            }
 
-            LatLng latLng = intent.getParcelableExtra("traceLatLng");
+            EmLoc emLoc = new Gson().fromJson(intent.getStringExtra("traceLoc"),EmLoc.class);
 
             if (traceInterface != null) {
-                traceInterface.showTraceAfter(latLng);
+                traceInterface.showTraceAfter(emLoc);
             }
         }
     }

@@ -14,6 +14,7 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.trace.LBSTraceClient;
 import com.amap.api.trace.TraceLocation;
 import com.easymi.component.Config;
+import com.easymi.component.DJOrderStatus;
 import com.easymi.component.app.XApp;
 import com.easymi.component.db.SqliteHelper;
 import com.easymi.component.entity.DymOrder;
@@ -139,10 +140,16 @@ public class LocService extends NotiService implements AMapLocationListener {
         if (null == lbsTraceClient) {
             lbsTraceClient = LBSTraceClient.getInstance(this);
             lbsTraceClient.startTrace((list, list1, s) -> {
-                if (list1 != null && list1.size() != 0) {
+                if (list1 != null && list1.size() != 0
+                        && list != null && list.size() != 0) {
+                    EmLoc emLoc = new EmLoc();
+                    emLoc.speed = list.get(list1.size() - 1).getSpeed();
+                    emLoc.accuracy = list.get(list1.size() - 1).getBearing();
+                    emLoc.latitude = list1.get(list1.size() - 1).latitude;
+                    emLoc.longitude = list1.get(list1.size() - 1).longitude;
                     Intent intent = new Intent();
                     intent.setAction(BROAD_TRACE_SUC);
-                    intent.putExtra("traceLatLng", list1.get(list1.size() - 1));
+                    intent.putExtra("traceLoc", new Gson().toJson(emLoc));
                     sendBroadcast(intent);
                 }
             });
@@ -193,11 +200,11 @@ public class LocService extends NotiService implements AMapLocationListener {
     }
 
     public static boolean needTrace() {
-        List<DymOrder> dymOrders = DymOrder.findAll();
+//        List<DymOrder> dymOrders = DymOrder.findAll();
         boolean needTrace = false;
 //        for (DymOrder dymOrder : dymOrders) {
 //            if (dymOrder.orderType.equals(Config.DAIJIA)) {
-//                if (dymOrder.orderStatus == 25) {
+//                if (dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
 //                    needTrace = true;
 //                }
 //            }

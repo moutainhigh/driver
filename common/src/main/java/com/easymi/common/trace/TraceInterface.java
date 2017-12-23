@@ -1,6 +1,6 @@
 package com.easymi.common.trace;
 
-import com.amap.api.maps.model.LatLng;
+import com.easymi.component.entity.EmLoc;
 
 /**
  * Created by developerLzh on 2017/11/24 0024.
@@ -8,5 +8,5 @@ import com.amap.api.maps.model.LatLng;
 
 public interface TraceInterface {
 
-    void showTraceAfter(LatLng afterLatlngs);
+    void showTraceAfter(EmLoc traceLoc);
 }
