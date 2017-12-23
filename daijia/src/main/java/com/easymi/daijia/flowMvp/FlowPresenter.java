@@ -4,12 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.Poi;
 import com.amap.api.navi.AMapNavi;
 import com.amap.api.navi.AMapNaviListener;
-import com.amap.api.navi.AmapNaviPage;
-import com.amap.api.navi.AmapNaviParams;
-import com.amap.api.navi.AmapNaviType;
 import com.amap.api.navi.INaviInfoCallback;
 import com.amap.api.navi.model.AMapLaneInfo;
 import com.amap.api.navi.model.AMapModelCross;

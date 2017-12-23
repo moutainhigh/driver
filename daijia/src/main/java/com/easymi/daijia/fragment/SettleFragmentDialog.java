@@ -68,6 +68,17 @@ public class SettleFragmentDialog {
         dialog.setContentView(view);
     }
 
+    private void initEdit() {
+        extraFeeEdit.setOnFocusChangeListener((view, b) -> {
+            if (StringUtils.isNotBlank(extraFeeEdit.getText().toString())) {
+                extraFeeEdit.setSelection(extraFeeEdit.getText().toString().length());
+            }
+            if (StringUtils.isNotBlank(paymentEdit.getText().toString())) {
+                paymentEdit.setSelection(paymentEdit.getText().toString().length());
+            }
+        });
+    }
+
     public void show() {
         dialog.show();
     }
@@ -77,7 +88,7 @@ public class SettleFragmentDialog {
     }
 
     private void initView() {
-
+        initEdit();
         if (djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
             confirmBtn.setText(context.getString(R.string.confirm_money));
         } else {
@@ -107,7 +118,7 @@ public class SettleFragmentDialog {
     }
 
     private void setText() {
-        prepayMoneyText.setText(String.valueOf(djOrder.budgetFee));
+        prepayMoneyText.setText(String.valueOf(djOrder.prepay));
         needPayText.setText(String.valueOf(djOrder.orderMoney));
 
         if (StringUtils.isBlank(djOrder.carNo)) {

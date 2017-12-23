@@ -219,6 +219,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     WaitFragment waitFragment;
     RunningFragment runningFragment;
+    SettleFragmentDialog settleFragmentDialog;
 
     @Override
     public void showBottomFragment(DJOrder djOrder) {
@@ -314,8 +315,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.replace(R.id.flow_frame, runningFragment);
             transaction.commit();
 
-            SettleFragmentDialog dialog = new SettleFragmentDialog(this, djOrder, bridge);
-            dialog.show();
+            settleFragmentDialog = new SettleFragmentDialog(this, djOrder, bridge);
+            settleFragmentDialog.show();
         }
     }
 
@@ -576,8 +577,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void showSettleDialog() {
-                SettleFragmentDialog dialog = new SettleFragmentDialog(FlowActivity.this, djOrder, bridge);
-                dialog.show();
+                settleFragmentDialog = new SettleFragmentDialog(FlowActivity.this, djOrder, bridge);
+                settleFragmentDialog.show();
             }
         };
     }

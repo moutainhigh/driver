@@ -54,9 +54,16 @@ public class DJOrder implements Serializable {
     public String endPlace;
 
     @SerializedName("budget_fee")
-    public double budgetFee;
+    public double budgetFee;//预算费用 定价时取这字段当钱
 
-    public double orderMoney;
+    @SerializedName("coupon_fee")
+    public double couponFee;//优惠券金额
+
+    @SerializedName("pre_pay")
+    public double prepay;//预付金额
+
+    @SerializedName("order_money")
+    public double orderMoney;//应付金额
 
     public String carNo;//车牌号
 
