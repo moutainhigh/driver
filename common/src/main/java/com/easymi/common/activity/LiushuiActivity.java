@@ -190,7 +190,8 @@ public class LiushuiActivity extends RxBaseActivity {
         Long driverId = EmUtil.getEmployId();
 
         Observable<QueryOrdersResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .queryOverOrdersByBunsiness(driverId, business, startTime / 1000, endTime / 10000, Config.APP_KEY, page, limit)
+                .queryOverOrdersByBunsiness(driverId, business, startTime == null ? null : startTime / 1000,
+                        endTime == null ? null : endTime / 1000, Config.APP_KEY, page, limit)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

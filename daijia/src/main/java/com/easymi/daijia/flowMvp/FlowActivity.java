@@ -730,8 +730,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             List<LatLng> latLngs = new ArrayList<>();
             latLngs.add(lastLatlng);
             latLngs.add(latLng);
+            smoothMoveMarker.setPosition(lastLatlng);
             smoothMoveMarker.setPoints(latLngs);
-            smoothMoveMarker.setTotalDuration(LocService.scanTime / 1000);
+            smoothMoveMarker.setTotalDuration(djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER ?
+                    2 : 8);
             smoothMoveMarker.setRotate(location.bearing);
             smoothMoveMarker.startSmoothMove();
         }
@@ -763,7 +765,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         if (null != djOrder) {
             if (djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER
                     || djOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) {
-                aMap.animateCamera(CameraUpdateFactory.newLatLng(latLng), LocService.scanTime, null);
+                aMap.animateCamera(CameraUpdateFactory.newLatLng(latLng),
+                        djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER ? 2000 : 8000, null);
             }
         }
         lastLatlng = latLng;
