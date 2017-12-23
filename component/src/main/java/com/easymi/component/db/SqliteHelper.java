@@ -77,7 +77,6 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        int current = oldVersion;
 
         //一有数据库的更新就将sp里的东西归为默认值
         SharedPreferences.Editor editor = XApp.getPreferencesEditor();
@@ -135,6 +134,15 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("totalFee").append(" ").append("DOUBLE").append(",")
                 .append("disFee").append(" ").append("DOUBLE").append(",")
                 .append("distance").append(" ").append("DOUBLE").append(",")
+
+                .append("paymentFee").append(" ").append("DOUBLE").append(",")
+                .append("extraFee").append(" ").append("DOUBLE").append(",")
+                .append("remark").append(" ").append("TEXT").append(",")
+                .append("couponFee").append(" ").append("DOUBLE").append(",")
+                .append("orderTotalFee").append(" ").append("DOUBLE").append(",")
+                .append("orderShouldPay").append(" ").append("DOUBLE").append(",")
+                .append("prepay").append(" ").append("DOUBLE").append(",")
+
                 .append("orderStatus").append(" ").append("INTEGER")
                 .append(");");
         execCreateTableSQL(db);

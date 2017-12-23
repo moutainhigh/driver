@@ -93,6 +93,7 @@
     <string name="time_fee">时间费用</string>
     <string name="dh_fee">等候费用</string>
     <string name="coupon_text">优惠券</string>
+    <string name="prepay_text">预付金额</string>
     <string name="no_coupon">暂无优惠券</string>
 
     <string name="route_failed">路径规划失败</string>
@@ -110,5 +111,19 @@
     <string name="canceled_order">当前订单已被取消:)</string>
 
     <string name="please_cancel_reason">请输入取消理由</string>
+
+    <string name="pay_suc">支付成功</string>
+
+    <string name="k_k_meter">公里</string>
+    <string name="yuan_coupon">元优惠券</string>
+
+    <string name="help_pay">司机代付</string>
+    <string name="cus_balance">客户余额</string>
+    <string name="qiandan">签单支付</string>
+
+    <string name="pay_title">选择支付类型</string>
+    <string name="please_pay_title">请选择支付类型</string>
+
+    <string name="fee_hint">注:附加服务费与垫付费用不参与优惠券计算</string>
 
 </resources>

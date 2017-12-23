@@ -6,6 +6,8 @@ import com.amap.api.navi.model.NaviPath;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.route.DrivePath;
 import com.amap.api.services.route.DriveRouteResult;
+import com.easymi.component.entity.DymOrder;
+import com.easymi.component.result.EmResult;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.entity.DJOrder;
@@ -50,6 +52,10 @@ public interface FlowContract {
 
         void showPath(DriveRouteResult result);
 
+        void showPayType();
+
+        void paySuc();
+
         RxManager getManager();
     }
 
@@ -58,7 +64,7 @@ public interface FlowContract {
 
         void refuseOrder(Long orderId, String remark);
 
-        void toStart(Long orderId,LoadingButton btn);
+        void toStart(Long orderId, LoadingButton btn);
 
         void arriveStart(Long orderId);
 
@@ -66,7 +72,7 @@ public interface FlowContract {
 
         void startDrive(Long orderId, LoadingButton btn);
 
-        void arriveDes(DJOrder djOrder, LoadingButton btn);
+        void arriveDes(LoadingButton btn, DymOrder dymOrder);
 
         void navi(LatLng latLng, String poi);
 
@@ -81,6 +87,8 @@ public interface FlowContract {
         void routePlanByRouteSearch(Double endLat, Double endLng);
 
         void updateDymOrder(DJOrder djOrder);
+
+        void payOrder(Long orderId, String payType);
         //...
     }
 
@@ -99,10 +107,12 @@ public interface FlowContract {
 
         Observable<DJOrderResult> startDrive(Long orderId);
 
-        Observable<DJOrderResult> arriveDes(DJOrder djOrder);
+        Observable<DJOrderResult> arriveDes(DymOrder dymOrder);
 
         Observable<DJOrderResult> changeEnd(Long orderId, Double lat, Double lng, String address);
 
         Observable<DJOrderResult> cancelOrder(Long orderId, String remark);
+
+        Observable<EmResult> payOrder(Long orderId, String payType);
     }
 }

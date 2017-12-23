@@ -34,11 +34,14 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.network.NoErrSubscriberListener;
+import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.result.DJOrderResult;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -66,19 +69,11 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     public void acceptOrder(Long orderId, LoadingButton btn) {
         Observable<DJOrderResult> observable = model.doAccept(orderId);
 
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, new HaveErrSubscriberListener<DJOrderResult>() {
-            @Override
-            public void onNext(DJOrderResult djOrderResult) {
-                djOrderResult.order.addresses = djOrderResult.address;
-                view.showOrder(djOrderResult.order);
-                updateDymOrder(djOrderResult.order);
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, djOrderResult -> {
+            djOrderResult.order.addresses = djOrderResult.address;
+            view.showOrder(djOrderResult.order);
+            updateDymOrder(djOrderResult.order);
 
-            }
-
-            @Override
-            public void onError(int code) {
-                view.showOrder(null);
-            }
         })));
     }
 
@@ -86,20 +81,12 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     public void refuseOrder(Long orderId, String remark) {
         Observable<DJOrderResult> observable = model.refuseOrder(orderId, remark);
 
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, new HaveErrSubscriberListener<DJOrderResult>() {
-            @Override
-            public void onNext(DJOrderResult djOrderResult) {
-                DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
-                if (null != dymOrder) {
-                    dymOrder.delete();
-                }
-                view.refuseSuc();
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, djOrderResult -> {
+            DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
+            if (null != dymOrder) {
+                dymOrder.delete();
             }
-
-            @Override
-            public void onError(int code) {
-                view.showOrder(null);
-            }
+            view.refuseSuc();
         })));
     }
 
@@ -107,18 +94,10 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     public void toStart(Long orderId, LoadingButton btn) {
         Observable<DJOrderResult> observable = model.toStart(orderId);
 
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, new HaveErrSubscriberListener<DJOrderResult>() {
-            @Override
-            public void onNext(DJOrderResult djOrderResult) {
-                djOrderResult.order.addresses = djOrderResult.address;
-                view.showOrder(djOrderResult.order);
-                updateDymOrder(djOrderResult.order);
-            }
-
-            @Override
-            public void onError(int code) {
-                view.showOrder(null);
-            }
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, djOrderResult -> {
+            djOrderResult.order.addresses = djOrderResult.address;
+            view.showOrder(djOrderResult.order);
+            updateDymOrder(djOrderResult.order);
         })));
     }
 
@@ -126,18 +105,10 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     public void arriveStart(Long orderId) {
         Observable<DJOrderResult> observable = model.arriveStart(orderId);
 
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<DJOrderResult>() {
-            @Override
-            public void onNext(DJOrderResult djOrderResult) {
-                djOrderResult.order.addresses = djOrderResult.address;
-                view.showOrder(djOrderResult.order);
-                updateDymOrder(djOrderResult.order);
-            }
-
-            @Override
-            public void onError(int code) {
-                view.showOrder(null);
-            }
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, djOrderResult -> {
+            djOrderResult.order.addresses = djOrderResult.address;
+            view.showOrder(djOrderResult.order);
+            updateDymOrder(djOrderResult.order);
         })));
     }
 
@@ -145,55 +116,33 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     public void startWait(Long orderId, LoadingButton btn) {
         Observable<DJOrderResult> observable = model.startWait(orderId);
 
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, new HaveErrSubscriberListener<DJOrderResult>() {
-            @Override
-            public void onNext(DJOrderResult djOrderResult) {
-                djOrderResult.order.addresses = djOrderResult.address;
-                view.showOrder(djOrderResult.order);
-                updateDymOrder(djOrderResult.order);
-            }
-
-            @Override
-            public void onError(int code) {
-                view.showOrder(null);
-            }
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, djOrderResult -> {
+            djOrderResult.order.addresses = djOrderResult.address;
+            view.showOrder(djOrderResult.order);
+            updateDymOrder(djOrderResult.order);
         })));
     }
 
     @Override
     public void startDrive(Long orderId, LoadingButton btn) {
         Observable<DJOrderResult> observable = model.startDrive(orderId);
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, new HaveErrSubscriberListener<DJOrderResult>() {
-            @Override
-            public void onNext(DJOrderResult djOrderResult) {
-                djOrderResult.order.addresses = djOrderResult.address;
-                view.showOrder(djOrderResult.order);
-                updateDymOrder(djOrderResult.order);
-            }
-
-            @Override
-            public void onError(int code) {
-                view.showOrder(null);
-            }
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, djOrderResult -> {
+            djOrderResult.order.addresses = djOrderResult.address;
+            view.showOrder(djOrderResult.order);
+            updateDymOrder(djOrderResult.order);
         })));
     }
 
     @Override
-    public void arriveDes(DJOrder djOrder, LoadingButton btn) {
-        Observable<DJOrderResult> observable = model.arriveDes(djOrder);
+    public void arriveDes(LoadingButton btn,DymOrder dymOrder) {
 
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, new HaveErrSubscriberListener<DJOrderResult>() {
-            @Override
-            public void onNext(DJOrderResult djOrderResult) {
-                djOrderResult.order.addresses = djOrderResult.address;
-                view.showOrder(djOrderResult.order);
-                updateDymOrder(djOrderResult.order);
-            }
+        Observable<DJOrderResult> observable = model.arriveDes(dymOrder);
 
-            @Override
-            public void onError(int code) {
-                view.showOrder(null);
-            }
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, djOrderResult -> {
+            dymOrder.updateConfirm();
+            djOrderResult.order.addresses = djOrderResult.address;
+            view.showOrder(djOrderResult.order);
+            updateDymOrder(djOrderResult.order);
         })));
     }
 
@@ -230,18 +179,10 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     public void changeEnd(Long orderId, Double lat, Double lng, String address) {
         Observable<DJOrderResult> observable = model.changeEnd(orderId, lat, lng, address);
 
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<DJOrderResult>() {
-            @Override
-            public void onNext(DJOrderResult djOrderResult) {
-                djOrderResult.order.addresses = djOrderResult.address;
-                view.showOrder(djOrderResult.order);
-                updateDymOrder(djOrderResult.order);
-            }
-
-            @Override
-            public void onError(int code) {
-                view.showOrder(null);
-            }
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, djOrderResult -> {
+            djOrderResult.order.addresses = djOrderResult.address;
+            view.showOrder(djOrderResult.order);
+            updateDymOrder(djOrderResult.order);
         })));
     }
 
@@ -249,20 +190,12 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     public void cancelOrder(Long orderId, String remark) {
         Observable<DJOrderResult> observable = model.cancelOrder(orderId, remark);
 
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, new HaveErrSubscriberListener<DJOrderResult>() {
-            @Override
-            public void onNext(DJOrderResult djOrderResult) {
-                DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
-                if (null != dymOrder) {
-                    dymOrder.delete();
-                }
-                view.cancelSuc();
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, djOrderResult -> {
+            DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
+            if (null != dymOrder) {
+                dymOrder.delete();
             }
-
-            @Override
-            public void onError(int code) {
-                view.showOrder(null);
-            }
+            view.cancelSuc();
         })));
     }
 
@@ -356,6 +289,19 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             dymOrder.updateStatus();
         }
         MQTTService.pushLoc(EmUtil.getLastLoc());
+    }
+
+    @Override
+    public void payOrder(Long orderId, String payType) {
+        Observable<EmResult> observable = model.payOrder(orderId, payType);
+
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, emResult -> {
+            DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
+            if (null != dymOrder) {
+                dymOrder.delete();
+            }
+            view.paySuc();
+        })));
     }
 
     @Override

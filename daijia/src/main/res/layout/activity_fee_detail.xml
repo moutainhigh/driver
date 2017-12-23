@@ -10,12 +10,13 @@
         android:layout_height="wrap_content" />
 
     <TextView
+        android:id="@+id/total_fee"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
-        android:text="¥20"
+        android:text=""
         android:textColor="@color/yellow"
         android:textSize="30sp" />
 
@@ -36,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="20元" />
+            android:text="0元" />
 
     </RelativeLayout>
 
@@ -65,7 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="20元" />
+            android:text="0元" />
 
     </RelativeLayout>
 
@@ -81,6 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/time_fee" />
+
         <TextView
             android:id="@+id/time"
             android:layout_width="wrap_content"
@@ -93,7 +95,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="20元" />
+            android:text="0元" />
 
     </RelativeLayout>
 
@@ -109,18 +111,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/dh_fee" />
+
         <TextView
-            android:id="@+id/dh_fee"
+            android:id="@+id/wait_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/dh_text"
             android:text="（0分钟）" />
+
         <TextView
             android:id="@+id/wait_fee"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="20元" />
+            android:text="0元" />
 
     </RelativeLayout>
 
@@ -134,16 +138,100 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/prepay_text" />
+
+        <TextView
+            android:id="@+id/prepay_fee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="0元"
+            android:textColor="@color/colorAccent" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/coupon_con"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/coupon_type_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/coupon_text" />
+
+        <TextView
+            android:id="@+id/coupon_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/coupon_type_text"
+            android:text="" />
 
         <TextView
             android:id="@+id/coupon_fee"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="@string/no_coupon" />
+            android:text="0元"
+            android:textColor="@color/colorAccent" />
 
     </RelativeLayout>
 
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/extra_fee" />
+
+        <TextView
+            android:id="@+id/extra_fee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="0元"
+            android:textColor="@color/colorPrimary" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/help_pay_fee" />
+
+        <TextView
+            android:id="@+id/help_pay_fee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="0元"
+            android:textColor="@color/colorPrimary" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="5dp"
+        android:textSize="12sp"
+        android:text="@string/fee_hint"/>
 
 </LinearLayout>

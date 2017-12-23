@@ -25,6 +25,8 @@ public class PushDataLoc {
     public long positionTime;
     public float accuracy;
 
+    public float speed;//速度
+
     @SerializedName("order_info")
     public List<PushDataOrder> orderInfo;
 }

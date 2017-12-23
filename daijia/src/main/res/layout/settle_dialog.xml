@@ -277,8 +277,22 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/corners_accent"
         android:text="@string/confirm_money"
+        android:background="@drawable/corners_accent"
+        android:textColor="@color/white" />
+
+    <com.easymi.component.widget.LoadingButton
+        android:id="@+id/pay_button"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/btn_height"
+        android:gravity="center"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/settle"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/corners_accent"
         android:textColor="@color/white" />
 
 </LinearLayout>

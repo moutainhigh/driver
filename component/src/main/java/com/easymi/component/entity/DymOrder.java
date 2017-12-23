@@ -16,7 +16,7 @@ import java.util.List;
  * 本地保存的费用信息字段 保存到数据库的
  */
 
-public class DymOrder implements Serializable{
+public class DymOrder implements Serializable {
 
     public long id;
 
@@ -47,11 +47,32 @@ public class DymOrder implements Serializable{
     //行驶时间费
     public double disFee;
 
-    //总价
+    //总价(计价算出来的钱)
     public double totalFee;
 
     //订单状态
     public int orderStatus;
+
+    //垫付的钱
+    public double paymentFee;
+
+    //附加的服务费用
+    public double extraFee;
+
+    //备注
+    public String remark;
+
+    //优惠券抵扣的金额
+    public double couponFee;
+
+    //订单总价钱 计价算出来的钱 + 垫付 + 附加费用 (不算优惠券的钱)
+    public double orderTotalFee;
+
+    //还需支付的钱 订单总价钱 - 优惠金额 - 预付费
+    public double orderShouldPay;
+
+    //预付费用
+    public double prepay;
 
     public DymOrder(long orderId, String orderType, long passengerId, int orderStatus) {
         this.orderId = orderId;
@@ -82,6 +103,14 @@ public class DymOrder implements Serializable{
         values.put("distance", distance);
         values.put("disFee", disFee);
         values.put("orderStatus", orderStatus);
+
+        values.put("paymentFee", paymentFee);
+        values.put("extraFee", extraFee);
+        values.put("remark", remark);
+        values.put("couponFee", couponFee);
+        values.put("orderTotalFee", orderTotalFee);
+        values.put("orderShouldPay", orderShouldPay);
+        values.put("prepay", prepay);
         /*
          * values.put("age", age); values.put("jialing", jialing);
 		 */
@@ -188,6 +217,14 @@ public class DymOrder implements Serializable{
 
         orderInfo.orderStatus = cursor.getInt(cursor.getColumnIndex("orderStatus"));
 
+        orderInfo.paymentFee = cursor.getDouble(cursor.getColumnIndex("paymentFee"));
+        orderInfo.extraFee = cursor.getDouble(cursor.getColumnIndex("extraFee"));
+        orderInfo.remark = cursor.getString(cursor.getColumnIndex("remark"));
+        orderInfo.couponFee = cursor.getDouble(cursor.getColumnIndex("couponFee"));
+        orderInfo.orderTotalFee = cursor.getDouble(cursor.getColumnIndex("orderTotalFee"));
+        orderInfo.orderShouldPay = cursor.getDouble(cursor.getColumnIndex("orderShouldPay"));
+        orderInfo.prepay = cursor.getDouble(cursor.getColumnIndex("prepay"));
+
         return orderInfo;
     }
 
@@ -218,6 +255,14 @@ public class DymOrder implements Serializable{
         values.put("disFee", disFee);
 
         values.put("orderStatus", orderStatus);
+
+        values.put("paymentFee", paymentFee);
+        values.put("extraFee", extraFee);
+        values.put("remark", remark);
+        values.put("couponFee", couponFee);
+        values.put("orderTotalFee", orderTotalFee);
+        values.put("orderShouldPay", orderShouldPay);
+        values.put("prepay", prepay);
         /*
          * values.put("age", age); values.put("jialing", jialing);
 		 */
@@ -238,6 +283,25 @@ public class DymOrder implements Serializable{
         values.put("totalFee", totalFee);
         values.put("distance", distance);
         values.put("disFee", disFee);
+        /*
+         * values.put("age", age); values.put("jialing", jialing);
+		 */
+        boolean flag = db.update("t_dyminfo", values, " id = ? ",
+                new String[]{String.valueOf(id)}) == 1;
+        return flag;
+    }
+
+    public boolean updateConfirm() {
+        SqliteHelper helper = SqliteHelper.getInstance();
+        SQLiteDatabase db = helper.openSqliteDatabase();
+        ContentValues values = new ContentValues();
+        values.put("paymentFee", paymentFee);
+        values.put("extraFee", extraFee);
+        values.put("remark", remark);
+        values.put("couponFee", couponFee);
+        values.put("orderTotalFee", orderTotalFee);
+        values.put("orderShouldPay", orderShouldPay);
+        values.put("prepay", prepay);
         /*
          * values.put("age", age); values.put("jialing", jialing);
 		 */

@@ -33,6 +33,7 @@ public class BuildPushUtil {
         pushData.calc = new PushDataLoc();
         pushData.calc.lat = emLoc.latitude;
         pushData.calc.lng = emLoc.longitude;
+        pushData.calc.speed = emLoc.speed;
         pushData.calc.appKey = Config.APP_KEY;
         pushData.calc.darkCost = 0;
         pushData.calc.darkMileage = 0;
