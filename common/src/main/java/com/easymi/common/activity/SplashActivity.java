@@ -40,7 +40,7 @@ public class SplashActivity extends RxBaseActivity {
 
         if (!rxPermissions.isGranted(Manifest.permission.ACCESS_COARSE_LOCATION)
                 || !rxPermissions.isGranted(Manifest.permission.READ_PHONE_STATE)
-                || !rxPermissions.isGranted(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                || !rxPermissions.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             showDialog();
         } else {
             delayIn();

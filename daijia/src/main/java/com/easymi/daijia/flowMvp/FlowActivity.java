@@ -1,5 +1,6 @@
 package com.easymi.daijia.flowMvp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
@@ -9,7 +10,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -315,8 +319,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.replace(R.id.flow_frame, runningFragment);
             transaction.commit();
 
-            settleFragmentDialog = new SettleFragmentDialog(this, djOrder, bridge);
-            settleFragmentDialog.show();
+            if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
+                settleFragmentDialog.setDjOrder(djOrder);
+            } else {
+                settleFragmentDialog = new SettleFragmentDialog(this, djOrder, bridge);
+                settleFragmentDialog.show();
+            }
         }
     }
 
@@ -477,6 +485,55 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 new LatLng(result.getTargetPos().getLatitude(), result.getTargetPos().getLongitude())), 50));
     }
 
+    @Override
+    public void showPayType() {
+        RadioGroup group = new RadioGroup(this);
+        RadioButton helpPayBtn;
+        RadioButton balanceBtn;
+        RadioButton qiandanBtn;
+
+        helpPayBtn = new RadioButton(this);
+        helpPayBtn.setText(getString(R.string.help_pay));
+
+        balanceBtn = new RadioButton(this);
+        balanceBtn.setText(getString(R.string.cus_balance));
+
+        qiandanBtn = new RadioButton(this);
+        qiandanBtn.setText(getString(R.string.qiandan));
+
+        RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(DensityUtil.dp2px(this, 20), DensityUtil.dp2px(this, 10),
+                DensityUtil.dp2px(this, 20), DensityUtil.dp2px(this, 10));
+
+        group.addView(helpPayBtn, params);
+        group.addView(balanceBtn, params);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.pay_title))
+                .setView(group)
+                .setPositiveButton(R.string.ok, (dialog1, which) -> {
+                    if (helpPayBtn.isChecked() || balanceBtn.isChecked() || qiandanBtn.isChecked()) {
+                        if (helpPayBtn.isChecked()) {
+                            presenter.payOrder(orderId, "helppay");
+                        } else if (balanceBtn.isChecked()) {
+                            presenter.payOrder(orderId, "balance");
+                        }
+                        dialog1.dismiss();
+                    } else {
+                        ToastUtil.showMessage(this, getString(R.string.please_pay_title));
+                    }
+                })
+                .create();
+        dialog.show();
+    }
+
+    @Override
+    public void paySuc() {
+        ToastUtil.showMessage(this, getString(R.string.pay_suc));
+        finish();
+    }
+
     private Address getStartAddr() {
         Address startAddress = null;
         if (djOrder.addresses != null && djOrder.addresses.size() != 0) {
@@ -566,13 +623,18 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             }
 
             @Override
-            public void doConfirmMoney(LoadingButton btn) {
-                presenter.arriveDes(djOrder, btn);
+            public void doFinish() {
+                finish();
+            }
+
+            @Override
+            public void doConfirmMoney(LoadingButton btn, DymOrder dymOrder) {
+                presenter.arriveDes(btn, dymOrder);
             }
 
             @Override
             public void doPay() {
-
+                showPayType();
             }
 
             @Override
@@ -662,13 +724,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                     .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
             smoothMoveMarker.setPosition(lastLatlng);
             smoothMoveMarker.setRotate(location.bearing);
-            smoothMoveMarker.startSmoothMove();
         } else {
             List<LatLng> latLngs = new ArrayList<>();
             latLngs.add(lastLatlng);
             latLngs.add(latLng);
             smoothMoveMarker.setPoints(latLngs);
-            smoothMoveMarker.setTotalDuration(LocService.scanTime / DensityUtil.getDisplayWidth(this));
+            smoothMoveMarker.setTotalDuration(LocService.scanTime / 1000);
             smoothMoveMarker.setRotate(location.bearing);
             smoothMoveMarker.startSmoothMove();
         }
@@ -700,7 +761,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         if (null != djOrder) {
             if (djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER
                     || djOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) {
-                aMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                aMap.animateCamera(CameraUpdateFactory.newLatLng(latLng), LocService.scanTime, null);
             }
         }
         lastLatlng = latLng;
@@ -775,6 +836,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 waitFragment.showFee(DymOrder.findByIDType(orderId, orderType));
             } else if (null != runningFragment && runningFragment.isVisible()) {
                 runningFragment.showFee(DymOrder.findByIDType(orderId, orderType));
+            } else if (null != settleFragmentDialog && settleFragmentDialog.isShowing()) {
+                settleFragmentDialog.setDymOrder(DymOrder.findByIDType(orderId, orderType));
             }
         }
     }

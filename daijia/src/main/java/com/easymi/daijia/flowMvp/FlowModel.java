@@ -2,8 +2,10 @@ package com.easymi.daijia.flowMvp;
 
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
+import com.easymi.component.entity.DymOrder;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
+import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.daijia.DJApiService;
 import com.easymi.daijia.entity.DJOrder;
@@ -83,12 +85,13 @@ public class FlowModel implements FlowContract.Model {
     }
 
     @Override
-    public Observable<DJOrderResult> arriveDes(DJOrder djOrder) {
+    public Observable<DJOrderResult> arriveDes(DymOrder dymOrder) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .arrivalDistination(djOrder.orderId, Config.APP_KEY, 0.0, 0.0,
-                        "", 0.0, 0.0, 0, 0.0, 0,
-                        0.0, 0.0, 0.0, 0.0,
-                        0.0, 0.0, 0.0)
+                .arrivalDistination(dymOrder.orderId, Config.APP_KEY, dymOrder.paymentFee, dymOrder.extraFee,
+                        dymOrder.remark, dymOrder.distance, dymOrder.disFee, dymOrder.travelTime,
+                        dymOrder.travelFee, dymOrder.waitTime,
+                        dymOrder.waitTimeFee, 0.0, 0.0, dymOrder.couponFee,
+                        dymOrder.orderTotalFee, dymOrder.orderShouldPay, dymOrder.startFee)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -107,6 +110,15 @@ public class FlowModel implements FlowContract.Model {
     public Observable<DJOrderResult> cancelOrder(Long orderId, String remark) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
                 .cancelOrder(orderId, EmUtil.getEmployId(), Config.APP_KEY, remark)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<EmResult> payOrder(Long orderId, String payType) {
+        return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
+                .payOrder(orderId, Config.APP_KEY, payType)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

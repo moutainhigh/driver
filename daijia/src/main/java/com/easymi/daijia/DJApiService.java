@@ -1,5 +1,6 @@
 package com.easymi.daijia;
 
+import com.easymi.component.result.EmResult;
 import com.easymi.daijia.result.BudgetResult;
 import com.easymi.daijia.result.DJOrderResult;
 import com.easymi.daijia.result.DJTypeResult;
@@ -144,9 +145,9 @@ public interface DJApiService {
     @POST("driver/api/v1/arrivalDistination")
     Observable<DJOrderResult> arrivalDistination(@Field("order_id") Long orderId,
                                                  @Field("app_key") String appKey,
-                                                 @Field("advance_price") Double advance_price,
-                                                 @Field("other_price") Double other_price,
-                                                 @Field("remark") String remark,
+                                                 @Field("advance_price") Double advance_price,//垫付
+                                                 @Field("other_price") Double other_price,//附加费用
+                                                 @Field("remark") String remark,//备注
                                                  @Field("distance") Double distance,
                                                  @Field("distance_fee") Double distance_fee,
                                                  @Field("time") Integer time,
@@ -155,11 +156,27 @@ public interface DJApiService {
                                                  @Field("wait_fee") Double wait_fee,
                                                  @Field("add_distance") Double add_distance,
                                                  @Field("add_fee") Double add_fee,
-                                                 @Field("coupon_fee") Double coupon_fee,
-                                                 @Field("total_fee") Double total_fee,
-                                                 @Field("real_pay") Double real_pay,
+                                                 @Field("coupon_fee") Double coupon_fee,//优惠券
+                                                 @Field("total_fee") Double total_fee,//跑出来的钱 + 垫付 + 附加费用 (不算优惠券的钱)
+                                                 @Field("real_pay") Double real_pay,//total_fee - 优惠金额 - 预付费
                                                  @Field("start_price") Double start_price
     );
+
+    /**
+     * 结算订单  /api/v1/finishOrder  PUT  id  int  是  订单id
+     * app_key  string  是  系统key
+     * pay_type  string  是  支付类型(代付helppay，客户余额支付balance)
+     *
+     * @param orderId
+     * @param appKey
+     * @param payType
+     * @return
+     */
+    @FormUrlEncoded
+    @PUT("/api/v1/finishOrder")
+    Observable<EmResult> payOrder(@Field("id") Long orderId,
+                                  @Field("app_key") String appKey,
+                                  @Field("pay_type") String payType);
 
     /**
      * 补单
