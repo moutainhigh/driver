@@ -187,7 +187,7 @@ public class CreateDJFragment extends RxLazyFragment implements CreateDJContract
 //                return;
 //            }
             presenter.createOrder(passenger.id, passenger.name, passenger.phone,
-                    TimePickerView.getTime(day, hourStr, minStr), startPoi.getTitle(),
+                    TimePickerView.getTime(day, hourStr, minStr) / 1000, startPoi.getTitle(),
                     startPoi.getLatLonPoint().getLatitude(), startPoi.getLatLonPoint().getLongitude(),
                     endPoi == null ? "" : endPoi.getTitle(),
                     endPoi == null ? null : endPoi.getLatLonPoint().getLatitude(),
