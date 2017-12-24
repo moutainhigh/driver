@@ -1,6 +1,7 @@
 package com.easymi.common.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.easymi.common.R;
+import com.easymi.common.activity.BaoxiaoActivity;
 import com.easymi.common.util.DJStatus2Str;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
@@ -54,7 +56,11 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
         holder.orderStatus.setText(DJStatus2Str.int2Str(baseOrder.orderType, baseOrder.orderStatus));
         holder.orderTime.setText(TimeUtil.getTime("yyyy-MM-dd HH:mm", baseOrder.orderTime));
         holder.orderNumber.setText(baseOrder.orderNumber);
-        holder.orderBaoxiao.setOnClickListener(view -> ToastUtil.showMessage(context, "点击了报销"));
+        holder.orderBaoxiao.setOnClickListener(view -> {
+            Intent intent = new Intent(context, BaoxiaoActivity.class);
+            intent.putExtra("orderId", baseOrder.orderId);
+            context.startActivity(intent);
+        });
 
     }
 

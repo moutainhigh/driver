@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.easymi.component.widget.CusToolbar
+        android:id="@+id/cus_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bar_height" />
+
+    <EditText
+        android:id="@+id/edit_baoxiao_money"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@mipmap/baoxiao_edit_bg"
+        android:hint="@string/baoxiao_hint_1"
+        android:inputType="numberDecimal"
+        android:paddingLeft="5dp"
+        android:singleLine="true"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/edit_baoxiao_reason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@mipmap/baoxiao_edit_bg_2"
+        android:gravity="left|top"
+        android:hint="@string/baoxiao_hint_2"
+        android:maxLength="100"
+        android:padding="5dp"
+        android:textSize="14sp" />
+
+    <com.easymi.component.widget.LoadingButton
+        android:id="@+id/apply_btn"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:clickable="false"
+        android:background="@drawable/corners_button_press_bg"
+        android:gravity="center"
+        android:text="@string/baoxiao_apply"
+        android:textColor="@color/white" />
+
+</LinearLayout>

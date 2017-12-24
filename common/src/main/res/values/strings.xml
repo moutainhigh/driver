@@ -72,4 +72,11 @@
     <string name="yuyue_order">预约订单</string>
     <string name="time_format">MM月dd日 HH:mm</string>
 
+
+    <string name="baoxiao_hint_1">请输入报销金额</string>
+    <string name="baoxiao_hint_2">请输入报销原因</string>
+
+    <string name="baoxiao_apply">提交</string>
+    <string name="baoxiao_suc">您的报销请求已提交，等待审核</string>
+
 </resources>

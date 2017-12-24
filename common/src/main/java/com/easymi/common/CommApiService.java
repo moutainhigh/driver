@@ -148,8 +148,8 @@ public interface CommApiService {
     @FormUrlEncoded
     @PUT("driver/api/v1/grabOrder")
     Observable<MultipleOrderResult> grabDJOrder(@Field("order_id") Long orderId,
-                                              @Field("driver_id") Long driverId,
-                                              @Field("app_key") String appKey);
+                                                @Field("driver_id") Long driverId,
+                                                @Field("app_key") String appKey);
 
     /**
      * 代驾 -->接单
@@ -162,6 +162,21 @@ public interface CommApiService {
     @FormUrlEncoded
     @POST("driver/api/v1/takeOrder")
     Observable<MultipleOrderResult> takeDJOrder(@Field("order_id") Long orderId,
-                                              @Field("driver_id") Long driverId,
-                                              @Field("app_key") String appKey);
+                                                @Field("driver_id") Long driverId,
+                                                @Field("app_key") String appKey);
+
+    /**
+     *
+     * @param orderId
+     * @param baoxiaoMoney 报销金额
+     * @param baoxiaoReason 报销理由
+     * @param appKey
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("driver/api/v1/baoxiao")
+    Observable<EmResult> baoxiao(@Field("order_id") Long orderId,
+                                                @Field("baoxiao_money") Double baoxiaoMoney,
+                                                @Field("baoxiao_reason") String baoxiaoReason,
+                                                @Field("app_key") String appKey);
 }
