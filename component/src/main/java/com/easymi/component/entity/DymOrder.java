@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.easymi.component.db.SqliteHelper;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -27,24 +28,30 @@ public class DymOrder implements Serializable {
     public long passengerId;
 
     //起步费
+    @SerializedName("start_price")
     public double startFee;
 
     //等候时间 分
+    @SerializedName("wait_time")
     public int waitTime;
 
     //等候费
+    @SerializedName("wait_fee")
     public double waitTimeFee;
 
     //行驶时间 分
+    @SerializedName("time")
     public int travelTime;
 
     //行驶时间费
+    @SerializedName("time_fee")
     public double travelFee;
 
     //行驶里程
     public double distance;
 
     //行驶时间费
+    @SerializedName("distance_fee")
     public double disFee;
 
     //总价(计价算出来的钱)
@@ -54,24 +61,30 @@ public class DymOrder implements Serializable {
     public int orderStatus;
 
     //垫付的钱
+    @SerializedName("cross_fee")
     public double paymentFee;
 
     //附加的服务费用
+    @SerializedName("other_fee")
     public double extraFee;
 
     //备注
     public String remark;
 
     //优惠券抵扣的金额
+    @SerializedName("coupon_fee")
     public double couponFee;
 
     //订单总价钱 计价算出来的钱 + 垫付 + 附加费用 (不算优惠券的钱)
+    @SerializedName("total_fee")
     public double orderTotalFee;
 
     //还需支付的钱 订单总价钱 - 优惠金额 - 预付费
+    @SerializedName("real_pay")
     public double orderShouldPay;
 
     //预付费用
+    @SerializedName("pre_pay")
     public double prepay;
 
     public DymOrder(long orderId, String orderType, long passengerId, int orderStatus) {

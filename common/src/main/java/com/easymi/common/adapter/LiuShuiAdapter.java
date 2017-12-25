@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.easymi.common.R;
 import com.easymi.common.activity.BaoxiaoActivity;
 import com.easymi.common.util.DJStatus2Str;
@@ -15,7 +16,6 @@ import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
 import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.utils.TimeUtil;
-import com.easymi.component.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +50,11 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
     @Override
     public void onBindViewHolder(Holder holder, int position) {
         BaseOrder baseOrder = baseOrders.get(position);
-        holder.orderType.setText(baseOrder.orderType);
+        String typeStr = "";
+        if (baseOrder.orderType.equals(Config.DAIJIA)) {
+            typeStr = context.getString(R.string.create_daijia);
+        }
+        holder.orderType.setText(typeStr);
         holder.orderEndPlace.setText(baseOrder.endPlace);
         holder.orderStartPlace.setText(baseOrder.startPlace);
         holder.orderStatus.setText(DJStatus2Str.int2Str(baseOrder.orderType, baseOrder.orderStatus));
@@ -61,7 +65,17 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
             intent.putExtra("orderId", baseOrder.orderId);
             context.startActivity(intent);
         });
-
+        if (baseOrder.orderType.equals(Config.DAIJIA) &&
+                baseOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {
+            holder.rootView.setOnClickListener(v -> {
+                ARouter.getInstance().build("/daijia/FlowActivity")
+                        .withLong("orderId", baseOrder.orderId)
+                        .navigation();
+            });
+            holder.orderBaoxiao.setVisibility(View.GONE);
+        } else {
+            holder.orderBaoxiao.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -79,9 +93,11 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
         TextView orderNumber;
         TextView orderMoney;
         TextView orderBaoxiao;
+        View rootView;
 
         public Holder(View itemView) {
             super(itemView);
+            rootView = itemView;
             orderTime = itemView.findViewById(R.id.order_time);
             orderStatus = itemView.findViewById(R.id.order_status);
             orderStartPlace = itemView.findViewById(R.id.order_start_place);

@@ -36,6 +36,7 @@ public class SettleFragmentDialog {
     EditText paymentEdit;
     TextView carNoText;
     EditText remarkEdit;
+    TextView dialogTitle;
 
     LoadingButton confirmBtn;
     LoadingButton payButton;
@@ -59,7 +60,11 @@ public class SettleFragmentDialog {
         this.bridge = bridge;
         dymOrder = DymOrder.findByIDType(djOrder.orderId, djOrder.orderType);
         if (null == dymOrder) {
-            return;
+            if (djOrder.orderFee != null) {
+                dymOrder = djOrder.orderFee;
+            } else {
+                return;
+            }
         }
         View view = LayoutInflater.from(context).inflate(R.layout.settle_dialog, null, false);
         closeFragment = view.findViewById(R.id.close_fragment);
@@ -72,6 +77,7 @@ public class SettleFragmentDialog {
         confirmBtn = view.findViewById(R.id.confirm_button);
         payButton = view.findViewById(R.id.pay_button);
         feeDetail = view.findViewById(R.id.fee_detail);
+        dialogTitle = view.findViewById(R.id.dialog_title);
 
         extraFeeEdit.setSelection(extraFeeEdit.getText().toString().length());
         paymentEdit.setSelection(paymentEdit.getText().toString().length());
@@ -184,9 +190,11 @@ public class SettleFragmentDialog {
         if (djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
             confirmBtn.setVisibility(View.VISIBLE);
             payButton.setVisibility(View.GONE);
+            dialogTitle.setText(context.getString(R.string.confirm_money));
         } else {
             confirmBtn.setVisibility(View.GONE);
             payButton.setVisibility(View.VISIBLE);
+            dialogTitle.setText(context.getString(R.string.settle));
             extraFeeEdit.setEnabled(false);
             paymentEdit.setEnabled(false);
             remarkEdit.setEnabled(false);

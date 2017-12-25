@@ -79,26 +79,30 @@ public class NotiService extends Service {
     private ILocationHelperServiceAIDL mHelperAIDL;
 
     private void startBindHelperService() {
-        connection = new ServiceConnection() {
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-                //doing nothing
-            }
+        try {
+            connection = new ServiceConnection() {
+                @Override
+                public void onServiceDisconnected(ComponentName name) {
+                    //doing nothing
+                }
 
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                ILocationHelperServiceAIDL l = ILocationHelperServiceAIDL.Stub.asInterface(service);
-                mHelperAIDL = l;
+                @Override
+                public void onServiceConnected(ComponentName name, IBinder service) {
+                    ILocationHelperServiceAIDL l = ILocationHelperServiceAIDL.Stub.asInterface(service);
+                    mHelperAIDL = l;
 //                try {
 //                    l.onFinishBind(NOTI_ID);
 //                } catch (RemoteException e) {
 //                    e.printStackTrace();
 //                }
-            }
-        };
-        Intent intent = new Intent();
-        intent.setAction(mHelperServiceName);
-        bindService(Utils.getExplicitIntent(getApplicationContext(), intent), connection, Service.BIND_AUTO_CREATE);
+                }
+            };
+            Intent intent = new Intent();
+            intent.setAction(mHelperServiceName);
+            bindService(Utils.getExplicitIntent(getApplicationContext(), intent), connection, Service.BIND_AUTO_CREATE);
+        } catch (Exception e) {
+
+        }
     }
 
     protected void unbind() {
@@ -152,7 +156,7 @@ public class NotiService extends Service {
 
     }
 
-    protected void stopService(){
+    protected void stopService() {
         unbind();
         unApplyNotiKeepMech();
         if (mCloseReceiver != null) {

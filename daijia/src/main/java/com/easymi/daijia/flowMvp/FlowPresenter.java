@@ -134,7 +134,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     }
 
     @Override
-    public void arriveDes(LoadingButton btn,DymOrder dymOrder) {
+    public void arriveDes(LoadingButton btn, DymOrder dymOrder) {
 
         Observable<DJOrderResult> observable = model.arriveDes(dymOrder);
 
@@ -164,6 +164,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             @Override
             public void onNext(DJOrderResult djOrderResult) {
                 djOrderResult.order.addresses = djOrderResult.address;
+                djOrderResult.order.orderFee = djOrderResult.orderFee;
                 view.showOrder(djOrderResult.order);
                 updateDymOrder(djOrderResult.order);
             }

@@ -1,5 +1,6 @@
 package com.easymi.daijia.entity;
 
+import com.easymi.component.entity.DymOrder;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -71,5 +72,7 @@ public class DJOrder implements Serializable {
     public String carNo;//车牌号
 
     public List<Address> addresses;
+
+    public DymOrder orderFee;
 
 }

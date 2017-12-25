@@ -27,7 +27,11 @@ public class DJStatus2Str {
                 case DJOrderStatus.START_WAIT_ORDER:
                     return "等待中 >";
                 case DJOrderStatus.ARRIVAL_DESTINATION_ORDER:
-                    return "已确认 >";
+                    return "未支付 >";
+                case DJOrderStatus.FINISH_ORDER:
+                    return "已完成 >";
+                case DJOrderStatus.CANCEL_ORDER:
+                    return "已销单 >";
             }
         }
         return "";

@@ -1,6 +1,5 @@
 package com.easymi.daijia.flowMvp;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
@@ -52,6 +51,7 @@ import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.MapUtil;
+import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.LoadingButton;
@@ -204,6 +204,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 || djOrder.orderStatus == DJOrderStatus.TAKE_ORDER
                 || djOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) {
             nextPlace.setText(djOrder.startPlace);
+        } else {
+            if (StringUtils.isNotBlank(djOrder.endPlace)) {
+                nextPlace.setText(djOrder.endPlace);
+            } else {
+                nextPlace.setText(getString(R.string.des_place));
+            }
         }
         tagContainerLayout.setOnTagClickListener(new TagView.OnTagClickListener() {
             @Override
@@ -308,7 +314,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.replace(R.id.flow_frame, runningFragment);
             transaction.commit();
         } else if (djOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {
-            toolbar.setTitle(R.string.status_confirm);
+            toolbar.setTitle(R.string.settle);
             runningFragment = new RunningFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("djOrder", DymOrder.findByIDType(orderId, Config.DAIJIA));
