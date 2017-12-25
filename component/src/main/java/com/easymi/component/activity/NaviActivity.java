@@ -1,7 +1,12 @@
 package com.easymi.component.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amap.api.navi.AMapNavi;
@@ -24,12 +29,17 @@ import com.amap.api.navi.model.NaviInfo;
 import com.amap.api.navi.model.NaviLatLng;
 import com.autonavi.tbt.TrafficFacilityInfo;
 import com.easymi.component.Config;
+import com.easymi.component.DJOrderStatus;
 import com.easymi.component.R;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.entity.DymOrder;
+import com.easymi.component.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by developerLzh on 2017/12/7 0007.
@@ -48,6 +58,13 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     protected List<NaviLatLng> wayPoints;
 
+    private long orderId;
+    private String orderType;
+
+    LinearLayout simpleFeeCon;
+    TextView lcTxt;
+    TextView feeTxt;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_navi;
@@ -58,6 +75,9 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
         mStartLatlng = getIntent().getParcelableExtra("startLatlng");
         mEndLatlng = getIntent().getParcelableExtra("endLatlng");
+
+        orderId = getIntent().getLongExtra("orderId", -1);
+        orderType = getIntent().getStringExtra("orderType");
 
         wayPoints = getIntent().getParcelableArrayListExtra("wayPoints");
 
@@ -75,6 +95,58 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
         mAMapNavi = AMapNavi.getInstance(getApplicationContext());
         mAMapNavi.addAMapNaviListener(this);
+
+    }
+
+    private Timer timer;
+    private TimerTask timerTask;
+
+    private void showFee() {
+        simpleFeeCon = findViewById(R.id.simple_fee_con);
+        lcTxt = findViewById(R.id.lc);
+        feeTxt = findViewById(R.id.fee);
+        DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
+        if (dymOrder != null && dymOrder.orderType.equals(Config.DAIJIA)) {
+            if (dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
+                simpleFeeCon.setVisibility(View.VISIBLE);
+                lcTxt.setText("订单里程：" + dymOrder.distance + "Km");
+                feeTxt.setText("订单费用：" + dymOrder.totalFee + "元");
+
+                timer = new Timer();
+                timerTask = new TimerTask() {
+                    @Override
+                    public void run() {
+                        runOnUiThread(() -> {
+                            DymOrder dymOrder1 = DymOrder.findByIDType(orderId, orderType);
+                            lcTxt.setText("订单里程：" + dymOrder1.distance + "Km");
+                            feeTxt.setText("订单费用：" + dymOrder1.totalFee + "元");
+                        });
+                    }
+                };
+                timer.schedule(timerTask, 2000, 2000);
+            } else {
+                simpleFeeCon.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (orderId != -1 && StringUtils.isNotBlank(orderType)) {
+            showFee();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (null != timer) {
+            timer.cancel();
+        }
+        if (null != timerTask) {
+            timerTask.cancel();
+        }
     }
 
     @Override
@@ -122,10 +194,10 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
         try {
             //再次强调，最后一个参数为true时代表多路径，否则代表单路径
             strategy = mAMapNavi.strategyConvert(
-                    XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION,true),
-                    XApp.getMyPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED,false),
-                    XApp.getMyPreferences().getBoolean(Config.SP_COST,true),
-                    XApp.getMyPreferences().getBoolean(Config.SP_HIGHT_SPEED,false),
+                    XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, true),
+                    XApp.getMyPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
+                    XApp.getMyPreferences().getBoolean(Config.SP_COST, true),
+                    XApp.getMyPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
                     false);
         } catch (Exception e) {
             e.printStackTrace();
@@ -170,7 +242,7 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     @Override
     public void onCalculateRouteFailure(int i) {
-        Toast.makeText(this,"路线规划失败", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "路线规划失败", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -281,7 +353,7 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     @Override
     public void onPlayRing(int i) {
-        XApp.getInstance().syntheticVoice("叮咚",false);
+        XApp.getInstance().syntheticVoice("叮咚", false);
     }
 
     @Override

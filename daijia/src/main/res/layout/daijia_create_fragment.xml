@@ -1,34 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/sub_tab_layout"
+    <FrameLayout
+        android:id="@+id/sub_tab_layout_con"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-10dp"
-        android:paddingTop="10dp"
-        android:background="@color/colorPrimary"
-        app:tabBackground="@color/colorPrimary"
-        app:tabGravity="center"
-        app:tabIndicatorColor="@color/colorAccent"
-        app:tabIndicatorHeight="4dp"
-        app:tabMode="fixed"
-        app:tabPaddingStart="10dp"
-        app:tabPaddingTop="10dp"
-        app:textSize="16sp"
-        app:tabSelectedTextColor="@color/white"
-        app:tabTextColor="@color/dark_gray"/>
+        android:background="@color/colorPrimary">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/sub_tab_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-10dp"
+            android:background="@color/colorPrimary"
+            android:paddingTop="10dp"
+            app:tabBackground="@color/colorPrimary"
+            app:tabGravity="center"
+            app:tabIndicatorColor="@color/colorAccent"
+            app:tabIndicatorHeight="4dp"
+            app:tabMode="scrollable"
+            app:tabPaddingStart="10dp"
+            app:tabPaddingTop="10dp"
+            app:tabSelectedTextColor="@color/white"
+            app:tabTextColor="@color/dark_gray"
+            app:textSize="16sp" />
+    </FrameLayout>
+
 
     <LinearLayout
-        android:layout_below="@+id/sub_tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:layout_below="@+id/sub_tab_layout_con"
         android:layout_marginTop="10dp"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <View
@@ -41,115 +51,124 @@
             android:layout_height="50dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
-        <ImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:src="@mipmap/ic_time_gray"
-            android:layout_marginLeft="20dp"/>
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginLeft="20dp"
+                android:src="@mipmap/ic_time_gray" />
 
             <TextView
                 android:id="@+id/time_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"
                 android:text="现在"
-                android:layout_marginLeft="10dp"
-                android:textSize="18sp"
-                android:textColor="#232323"/>
+                android:textColor="#232323"
+                android:textSize="18sp" />
 
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.1dp"
-            android:background="@color/dark_gray"
-            android:layout_marginLeft="45dp"/>
+            android:layout_marginLeft="45dp"
+            android:background="@color/dark_gray" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:src="@mipmap/ic_create_phone"
-                android:layout_marginLeft="20dp"/>
+                android:layout_marginLeft="20dp"
+                android:src="@mipmap/ic_create_phone" />
 
             <EditText
                 android:id="@+id/phone_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:background="@null"
-                android:text=""
-                android:inputType="phone"
                 android:layout_marginLeft="10dp"
-                android:textSize="18sp"
+                android:background="@null"
+                android:gravity="center_vertical"
                 android:hint="@string/please_consumer_phone"
-                android:textColor="#232323"/>
+                android:inputType="phone"
+                android:text=""
+                android:textColor="#232323"
+                android:textSize="18sp" />
 
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.1dp"
-            android:background="@color/dark_gray"
-            android:layout_marginLeft="45dp"/>
+            android:layout_marginLeft="45dp"
+            android:background="@color/dark_gray" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:src="@mipmap/ic_create_person"
-                android:layout_marginLeft="20dp"/>
+                android:layout_marginLeft="20dp"
+                android:src="@mipmap/ic_create_person" />
 
             <TextView
                 android:id="@+id/name_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:background="@null"
-                android:text="先生/女士"
                 android:layout_marginLeft="10dp"
-                android:textSize="18sp"
+                android:background="@null"
+                android:gravity="center_vertical"
                 android:hint="@string/please_consumer_phone"
-                android:textColor="#232323"/>
+                android:text="先生/女士"
+                android:textColor="#232323"
+                android:textSize="18sp" />
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.1dp"
-            android:background="@color/dark_gray"
-            android:layout_marginLeft="45dp"/>
+            android:layout_marginLeft="45dp"
+            android:background="@color/dark_gray" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:orientation="horizontal">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="17.5dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="17.5dp"
                 android:gravity="center"
-                android:layout_marginBottom="17.5dp"
                 android:orientation="vertical">
+
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:src="@drawable/circle_accent"/>
+                    android:src="@drawable/circle_accent" />
+
                 <View
                     android:layout_width="0.1dp"
                     android:layout_height="0.0dp"
                     android:layout_weight="1"
-                    android:background="@color/dark_gray"/>
+                    android:background="@color/dark_gray" />
+
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:src="@drawable/circle_yellow"/>
+                    android:src="@drawable/circle_yellow" />
             </LinearLayout>
 
             <LinearLayout
@@ -157,6 +176,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
                 android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/start_place"
                     android:layout_width="match_parent"
@@ -164,12 +184,14 @@
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:text="@string/please_start"
-                    android:textSize="18sp"
-                    android:textColor="@color/text_color_hint"/>
+                    android:textColor="@color/text_color_hint"
+                    android:textSize="18sp" />
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
-                    android:background="@color/dark_gray"/>
+                    android:background="@color/dark_gray" />
+
                 <TextView
                     android:id="@+id/end_place"
                     android:layout_width="match_parent"
@@ -177,8 +199,8 @@
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:text="@string/please_end"
-                    android:textSize="18sp"
-                    android:textColor="@color/text_color_hint"/>
+                    android:textColor="@color/text_color_hint"
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
@@ -187,7 +209,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0.1dp"
-            android:background="@color/dark_gray"/>
+            android:background="@color/dark_gray" />
 
     </LinearLayout>
 
@@ -195,41 +217,42 @@
         android:id="@+id/create_order"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/corners_button_bg"
         android:layout_alignParentBottom="true"
         android:layout_margin="10dp"
-        android:textColor="@color/white"
-        android:text="@string/create_order"/>
+        android:background="@drawable/corners_button_bg"
+        android:text="@string/create_order"
+        android:textColor="@color/white" />
+
     <LinearLayout
         android:id="@+id/es_money_con"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_above="@+id/create_order"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/about"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/about"/>
+            android:text="@string/about" />
 
         <TextView
             android:id="@+id/es_money_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0.0"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
+            android:text="0.0"
             android:textColor="@color/yellow"
-            android:textSize="28sp"/>
+            android:textSize="28sp" />
 
         <TextView
             android:id="@+id/unit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/yuan"/>
+            android:text="@string/yuan" />
 
     </LinearLayout>
 

@@ -147,12 +147,14 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     }
 
     @Override
-    public void navi(LatLng latLng, String poi) {
+    public void navi(LatLng latLng, String poi, Long orderId) {
         NaviLatLng start = new NaviLatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
         NaviLatLng end = new NaviLatLng(latLng.latitude, latLng.longitude);
         Intent intent = new Intent(context, NaviActivity.class);
         intent.putExtra("startLatlng", start);
         intent.putExtra("endLatlng", end);
+        intent.putExtra("orderId", orderId);
+        intent.putExtra("orderType", Config.DAIJIA);
         context.startActivity(intent);
     }
 

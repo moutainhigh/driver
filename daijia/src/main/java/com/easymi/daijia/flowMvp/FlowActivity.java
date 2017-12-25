@@ -377,7 +377,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 ) {
             if (null != getStartAddr()) {
                 latLngs.add(new LatLng(getStartAddr().lat, getStartAddr().lng));
-                naviCon.setOnClickListener(view -> presenter.navi(new LatLng(getStartAddr().lat, getStartAddr().lng), getStartAddr().poi));
+                naviCon.setOnClickListener(view -> presenter.navi(new LatLng(getStartAddr().lat, getStartAddr().lng), getStartAddr().poi, orderId));
                 presenter.routePlanByRouteSearch(getStartAddr().lat, getStartAddr().lng);
             } else {
                 naviCon.setOnClickListener(v -> ToastUtil.showMessage(FlowActivity.this, getString(R.string.illegality_place)));
@@ -386,30 +386,30 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 latLngs.add(new LatLng(getEndAddr().lat, getEndAddr().lng));
             }
             LatLngBounds bounds = MapUtil.getBounds(latLngs, new LatLng(lastLatlng.latitude, lastLatlng.longitude));
-            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this) / 2, DensityUtil.getDisplayWidth(this) / 2, 20));
+            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this) / 2, DensityUtil.getDisplayWidth(this) / 2, 120));
         } else if (djOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) {
             if (null != getStartAddr()) {
                 latLngs.add(new LatLng(getStartAddr().lat, getStartAddr().lng));
-                naviCon.setOnClickListener(view -> presenter.navi(new LatLng(getStartAddr().lat, getStartAddr().lng), getStartAddr().poi));
+                naviCon.setOnClickListener(view -> presenter.navi(new LatLng(getStartAddr().lat, getStartAddr().lng), getStartAddr().poi, orderId));
                 presenter.routePlanByRouteSearch(getStartAddr().lat, getStartAddr().lng);
             } else {
                 naviCon.setOnClickListener(v -> ToastUtil.showMessage(FlowActivity.this, getString(R.string.illegality_place)));
             }
             LatLngBounds bounds = MapUtil.getBounds(latLngs, new LatLng(lastLatlng.latitude, lastLatlng.longitude));
-            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this) / 2, DensityUtil.getDisplayWidth(this) / 2, 20));
+            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this) / 2, DensityUtil.getDisplayWidth(this) / 2, 120));
         } else if (djOrder.orderStatus == DJOrderStatus.ARRIVAL_BOOKPLACE_ORDER
                 || djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER
                 || djOrder.orderStatus == DJOrderStatus.START_WAIT_ORDER
                 ) {
             if (null != getEndAddr()) {
                 latLngs.add(new LatLng(getEndAddr().lat, getEndAddr().lng));
-                naviCon.setOnClickListener(view -> presenter.navi(new LatLng(getEndAddr().lat, getEndAddr().lng), getEndAddr().poi));
+                naviCon.setOnClickListener(view -> presenter.navi(new LatLng(getEndAddr().lat, getEndAddr().lng), getEndAddr().poi, orderId));
                 presenter.routePlanByRouteSearch(getEndAddr().lat, getEndAddr().lng);
             } else {
                 naviCon.setOnClickListener(v -> ToastUtil.showMessage(FlowActivity.this, getString(R.string.illegality_place)));
             }
             LatLngBounds bounds = MapUtil.getBounds(latLngs, new LatLng(lastLatlng.latitude, lastLatlng.longitude));
-            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this) / 2, DensityUtil.getDisplayWidth(this) / 2, 20));
+            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this) / 2, DensityUtil.getDisplayWidth(this) / 2, 120));
         }
         if (null != getStartAddr()) {
             if (null == startMarker) {
@@ -478,19 +478,28 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         routeOverLay.addToMap();
     }
 
+    private DrivingRouteOverlay drivingRouteOverlay;
+
     @Override
     public void showPath(DriveRouteResult result) {
-        DrivingRouteOverlay overlay = new DrivingRouteOverlay(this, aMap,
+        if (drivingRouteOverlay != null) {
+            drivingRouteOverlay.removeFromMap();
+        }
+        drivingRouteOverlay = new DrivingRouteOverlay(this, aMap,
                 result.getPaths().get(0), result.getStartPos()
                 , result.getTargetPos(), null);
-        overlay.setRouteWidth(50);
-        overlay.setIsColorfulline(false);
-        overlay.setNodeIconVisibility(false);//隐藏转弯的节点
-        overlay.addToMap();
-        overlay.zoomToSpan();
-        aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(new LatLngBounds(
-                new LatLng(result.getStartPos().getLatitude(), result.getStartPos().getLongitude()),
-                new LatLng(result.getTargetPos().getLatitude(), result.getTargetPos().getLongitude())), 50));
+        drivingRouteOverlay.setRouteWidth(50);
+        drivingRouteOverlay.setIsColorfulline(false);
+        drivingRouteOverlay.setNodeIconVisibility(false);//隐藏转弯的节点
+        drivingRouteOverlay.addToMap();
+        drivingRouteOverlay.zoomToSpan();
+        List<LatLng> latLngs = new ArrayList<>();
+        latLngs.add(new LatLng(result.getStartPos().getLatitude(), result.getStartPos().getLongitude()));
+        latLngs.add(new LatLng(result.getTargetPos().getLatitude(), result.getTargetPos().getLongitude()));
+        EmLoc lastLoc = EmUtil.getLastLoc();
+        latLngs.add(new LatLng(lastLoc.latitude, lastLoc.longitude));
+        LatLngBounds bounds = MapUtil.getBounds(latLngs);
+        aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this) / 2, DensityUtil.getDisplayWidth(this) / 2, 80));
     }
 
     @Override
@@ -669,7 +678,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     }
 
     //是否退出到了重新进来，如果是则要CameraUpdate
-    private boolean onResumeIn = true;
+//    private boolean onResumeIn = true;
 
     @Override
     protected void onResume() {
@@ -681,7 +690,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             return;
         }
         mapView.onResume();
-        onResumeIn = true;
+//        onResumeIn = true;
         lastLatlng = new LatLng(location.latitude, location.longitude);
         presenter.findOne(orderId);
     }
@@ -738,8 +747,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             latLngs.add(latLng);
             smoothMoveMarker.setPosition(lastLatlng);
             smoothMoveMarker.setPoints(latLngs);
-            smoothMoveMarker.setTotalDuration(djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER ?
-                    2 : 8);
+            if (djOrder != null) {
+                smoothMoveMarker.setTotalDuration(djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER ?
+                        2 : 8);
+            } else {
+                smoothMoveMarker.setTotalDuration(8);
+            }
             smoothMoveMarker.setRotate(location.bearing);
             smoothMoveMarker.startSmoothMove();
         }
@@ -760,14 +773,14 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 //            myLocMarker.setRotateAngle(location.bearing);
 //            myLocMarker.setAnchor(0.5f, 0.5f);
 //        }
-        if (onResumeIn) {
-            if (djOrder == null) {
-                aMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-            } else {
-                showMapBounds();
-            }
-            onResumeIn = false;
-        }
+//        if (onResumeIn) {
+//            if (djOrder == null) {
+//                aMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+//            } else {
+//                showMapBounds();
+//            }
+//            onResumeIn = false;
+//        }
         if (null != djOrder) {
             if (djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER
                     || djOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) {
@@ -829,6 +842,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void onCancelOrder(long orderId, String orderType) {
+        if (djOrder == null) {
+            return;
+        }
         if (orderId == djOrder.orderId
                 && orderType.equals(djOrder.orderType)) {
             AlertDialog dialog = new AlertDialog.Builder(this)
@@ -845,6 +861,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void feeChanged(long orderId, String orderType) {
+        if (djOrder == null) {
+            return;
+        }
         if (orderId == djOrder.orderId && orderType.equals(Config.DAIJIA)) {
             if (null != waitFragment && waitFragment.isVisible()) {
                 waitFragment.showFee(DymOrder.findByIDType(orderId, orderType));

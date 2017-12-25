@@ -59,7 +59,7 @@
         android:background="@drawable/corners_white"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        android:paddingTop="10dp">
+        android:paddingTop="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -77,7 +77,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/service_fee"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -98,7 +98,7 @@
                         android:layout_height="wrap_content"
                         android:text="120"
                         android:textColor="@color/yellow"
-                        android:textSize="25sp" />
+                        android:textSize="22sp" />
 
                 </LinearLayout>
 
@@ -116,7 +116,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/drive_distance"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -130,7 +130,7 @@
                         android:layout_height="wrap_content"
                         android:text="6.8"
                         android:textColor="@color/yellow"
-                        android:textSize="25sp" />
+                        android:textSize="22sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -161,7 +161,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/drive_time" />
+                    android:text="@string/drive_time"
+                    android:textSize="12sp"/>
 
                 <TextView
                     android:id="@+id/drive_time"
@@ -176,6 +177,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="12sp"
                     android:text="@string/minutes" />
             </LinearLayout>
 
@@ -189,7 +191,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/wait_time" />
+                    android:text="@string/wait_time"
+                    android:textSize="12sp"/>
 
                 <TextView
                     android:id="@+id/wait_time"
@@ -204,6 +207,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="12sp"
                     android:text="@string/minutes" />
             </LinearLayout>
 

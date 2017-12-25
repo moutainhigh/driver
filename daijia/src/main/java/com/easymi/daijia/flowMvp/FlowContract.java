@@ -74,7 +74,7 @@ public interface FlowContract {
 
         void arriveDes(LoadingButton btn, DymOrder dymOrder);
 
-        void navi(LatLng latLng, String poi);
+        void navi(LatLng latLng, String poi,Long orderId);
 
         void findOne(Long orderId);
 

@@ -42,12 +42,12 @@ public class CreateActivity extends RxBaseActivity {
     private void initTabLayout() {
         fragments = new ArrayList<>();
         try {
-            Class  clazz =  Class.forName("com.easymi.daijia.fragment.create.CreateDJFragment");
+            Class clazz = Class.forName("com.easymi.daijia.fragment.create.CreateDJFragment");
             fragments.add((Fragment) clazz.newInstance());
-            fragments.add((Fragment) clazz.newInstance());
-            fragments.add((Fragment) clazz.newInstance());
-            fragments.add((Fragment) clazz.newInstance());
-            fragments.add((Fragment) clazz.newInstance());
+//            fragments.add((Fragment) clazz.newInstance());
+//            fragments.add((Fragment) clazz.newInstance());
+//            fragments.add((Fragment) clazz.newInstance());
+//            fragments.add((Fragment) clazz.newInstance());
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -65,10 +65,10 @@ public class CreateActivity extends RxBaseActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         tabLayout.getTabAt(0).setText(getString(R.string.create_daijia));
-        tabLayout.getTabAt(1).setText(getString(R.string.create_zhuanche));
-        tabLayout.getTabAt(2).setText(getString(R.string.create_paotui));
-        tabLayout.getTabAt(3).setText(getString(R.string.create_huoyun));
-        tabLayout.getTabAt(4).setText(getString(R.string.create_zhuanxian));
+//        tabLayout.getTabAt(1).setText(getString(R.string.create_zhuanche));
+//        tabLayout.getTabAt(2).setText(getString(R.string.create_paotui));
+//        tabLayout.getTabAt(3).setText(getString(R.string.create_huoyun));
+//        tabLayout.getTabAt(4).setText(getString(R.string.create_zhuanxian));
 
     }
 }
