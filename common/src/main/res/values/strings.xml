@@ -53,6 +53,8 @@
     <string name="cancel_order">消单</string>
     <string name="you_have_order_cancel">您有订单被取消，请注意查看</string>
 
+    <string name="force_offline">您已被管理员强制下线</string>
+
     <!-- 抢单界面str -->
     <string name="grab_dis">距您约</string>
     <string name="grab_map">地图</string>

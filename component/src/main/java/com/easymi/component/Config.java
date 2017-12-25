@@ -52,5 +52,5 @@ public class Config {
     public static final String DAIJIA = "daijia";
 
     public static final String BROAD_CANCEL_ORDER = "com.easymi.v5driver.BROAD_CANCEL_ORDER";
-    public static final String BROAD_UPLOAD_MSG = "com.easymi.v5driver.BROAD_CANCEL_ORDER";
+    public static final String BROAD_EMPLOY_STATUS_CHANGE = "com.easymi.v5driver.EMPLOY_STATUS_CHANGE";
 }

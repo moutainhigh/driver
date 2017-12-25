@@ -31,6 +31,7 @@ import com.easymi.component.network.MySubscriber;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.StringUtils;
+import com.easymi.component.widget.EmployStatus;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -100,9 +101,9 @@ public class HandlePush implements FeeChangeSubject {
                 DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
                 if (dymOrder != null) {
                     dymOrder.startFee = jb.optJSONObject("data").optDouble("StartPrice");
-                    dymOrder.waitTime = jb.optJSONObject("data").optInt("WaitTime")/60;
+                    dymOrder.waitTime = jb.optJSONObject("data").optInt("WaitTime") / 60;
                     dymOrder.waitTimeFee = jb.optJSONObject("data").optDouble("WaitTimeFee");
-                    dymOrder.travelTime = jb.optJSONObject("data").optInt("DriverTime")/60;
+                    dymOrder.travelTime = jb.optJSONObject("data").optInt("DriverTime") / 60;
                     dymOrder.travelFee = jb.optJSONObject("data").optDouble("DriveTimeCost");
                     dymOrder.totalFee = jb.optJSONObject("data").optDouble("TotalAmount");
 
@@ -113,11 +114,14 @@ public class HandlePush implements FeeChangeSubject {
                     notifyObserver(orderId, orderType);
                 }
             } else if (msg.equals("driver_status")) {
-                Employ employ = EmUtil.getEmployInfo();
-                if (null != employ) {
-                    employ.status = jb.optJSONObject("data").optInt("status");
-                    employ.updateBase();
-                }
+                int status = jb.optJSONObject("data").optInt("status");
+
+                Message message = new Message();
+                message.what = 2;
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("status", status);
+                message.setData(bundle);
+                handler.sendMessage(message);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -260,6 +264,25 @@ public class HandlePush implements FeeChangeSubject {
                 newShowNotify(XApp.getInstance(), "", XApp.getInstance().getString(R.string.cancel_order)
                         , XApp.getInstance().getString(R.string.you_have_order_cancel));
 
+                break;
+            case 2:
+                Bundle bundle2 = msg.getData();
+                int status = bundle2.getInt("status");
+                Employ employ = EmUtil.getEmployInfo();
+                if (null != employ) {
+//                    if (employ.status != EmployStatus.OFFLINE
+//                            && employ.status != EmployStatus.FROZEN
+//                            && status != employ.status) {
+//                        XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.force_offline));
+//                    }
+                    employ.status = status;
+                    employ.updateBase();
+
+                    Intent intent2 = new Intent();
+                    intent2.setAction(Config.BROAD_EMPLOY_STATUS_CHANGE);
+                    intent2.putExtra("status", employ.status);
+                    XApp.getInstance().sendBroadcast(intent2);
+                }
                 break;
         }
         return true;

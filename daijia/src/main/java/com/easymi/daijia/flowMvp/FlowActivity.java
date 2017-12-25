@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -33,6 +34,7 @@ import com.amap.api.navi.model.AMapNaviPath;
 import com.amap.api.navi.view.RouteOverLay;
 import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.route.DriveRouteResult;
+import com.amap.api.services.route.DriveStep;
 import com.easymi.common.push.FeeChangeObserver;
 import com.easymi.common.push.HandlePush;
 import com.easymi.common.trace.TraceInterface;
@@ -74,6 +76,7 @@ import com.google.gson.Gson;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,7 +91,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         LocObserver,
         TraceInterface,
         FeeChangeObserver,
-        CancelOrderReceiver.OnCancelListener {
+        CancelOrderReceiver.OnCancelListener, AMap.OnMapTouchListener {
     public static final int CANCEL_ORDER = 0X01;
     public static final int CHANGE_END = 0X02;
 
@@ -357,6 +360,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         aMap.getUiSettings().setRotateGesturesEnabled(false);
         aMap.getUiSettings().setTiltGesturesEnabled(false);//倾斜手势
 
+        aMap.setOnMapTouchListener(this);
+
         String locStr = XApp.getMyPreferences().getString(Config.SP_LAST_LOC, "");
         EmLoc emLoc = new Gson().fromJson(locStr, EmLoc.class);
         if (null != emLoc) {
@@ -370,6 +375,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void showMapBounds() {
+        leftTimeText.setText("");
         List<LatLng> latLngs = new ArrayList<>();
         if (djOrder.orderStatus == DJOrderStatus.NEW_ORDER
                 || djOrder.orderStatus == DJOrderStatus.PAIDAN_ORDER
@@ -378,25 +384,25 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             if (null != getStartAddr()) {
                 latLngs.add(new LatLng(getStartAddr().lat, getStartAddr().lng));
                 naviCon.setOnClickListener(view -> presenter.navi(new LatLng(getStartAddr().lat, getStartAddr().lng), getStartAddr().poi, orderId));
-                presenter.routePlanByRouteSearch(getStartAddr().lat, getStartAddr().lng);
+                presenter.routePlanByNavi(getStartAddr().lat, getStartAddr().lng);
             } else {
                 naviCon.setOnClickListener(v -> ToastUtil.showMessage(FlowActivity.this, getString(R.string.illegality_place)));
             }
             if (null != getEndAddr()) {
                 latLngs.add(new LatLng(getEndAddr().lat, getEndAddr().lng));
             }
-            LatLngBounds bounds = MapUtil.getBounds(latLngs, new LatLng(lastLatlng.latitude, lastLatlng.longitude));
-            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this) / 2, DensityUtil.getDisplayWidth(this) / 2, 120));
+            LatLngBounds bounds = MapUtil.getBounds(latLngs, lastLatlng);
+            aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this) / 2, DensityUtil.getDisplayWidth(this) / 2, 120));
         } else if (djOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) {
             if (null != getStartAddr()) {
                 latLngs.add(new LatLng(getStartAddr().lat, getStartAddr().lng));
                 naviCon.setOnClickListener(view -> presenter.navi(new LatLng(getStartAddr().lat, getStartAddr().lng), getStartAddr().poi, orderId));
-                presenter.routePlanByRouteSearch(getStartAddr().lat, getStartAddr().lng);
+                presenter.routePlanByNavi(getStartAddr().lat, getStartAddr().lng);
             } else {
                 naviCon.setOnClickListener(v -> ToastUtil.showMessage(FlowActivity.this, getString(R.string.illegality_place)));
             }
-            LatLngBounds bounds = MapUtil.getBounds(latLngs, new LatLng(lastLatlng.latitude, lastLatlng.longitude));
-            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this) / 2, DensityUtil.getDisplayWidth(this) / 2, 120));
+            LatLngBounds bounds = MapUtil.getBounds(latLngs, lastLatlng);
+            aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this) / 2, DensityUtil.getDisplayWidth(this) / 2, 120));
         } else if (djOrder.orderStatus == DJOrderStatus.ARRIVAL_BOOKPLACE_ORDER
                 || djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER
                 || djOrder.orderStatus == DJOrderStatus.START_WAIT_ORDER
@@ -404,12 +410,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             if (null != getEndAddr()) {
                 latLngs.add(new LatLng(getEndAddr().lat, getEndAddr().lng));
                 naviCon.setOnClickListener(view -> presenter.navi(new LatLng(getEndAddr().lat, getEndAddr().lng), getEndAddr().poi, orderId));
-                presenter.routePlanByRouteSearch(getEndAddr().lat, getEndAddr().lng);
+                presenter.routePlanByNavi(getEndAddr().lat, getEndAddr().lng);
             } else {
                 naviCon.setOnClickListener(v -> ToastUtil.showMessage(FlowActivity.this, getString(R.string.illegality_place)));
             }
-            LatLngBounds bounds = MapUtil.getBounds(latLngs, new LatLng(lastLatlng.latitude, lastLatlng.longitude));
-            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this) / 2, DensityUtil.getDisplayWidth(this) / 2, 120));
+            LatLngBounds bounds = MapUtil.getBounds(latLngs, lastLatlng);
+            aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this) / 2, DensityUtil.getDisplayWidth(this) / 2, 120));
         }
         if (null != getStartAddr()) {
             if (null == startMarker) {
@@ -467,8 +473,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
         aMap.moveCamera(CameraUpdateFactory.changeTilt(0));
         routeOverLay = new RouteOverLay(aMap, path, this);
-        routeOverLay.setStartPointBitmap(BitmapFactory.decodeResource(getResources(), R.layout.empty));
-        routeOverLay.setEndPointBitmap(BitmapFactory.decodeResource(getResources(), R.layout.empty));
+        routeOverLay.setStartPointBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.yellow_dot_small));
+        routeOverLay.setEndPointBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.blue_dot_small));
         try {
             routeOverLay.setWidth(60f);
         } catch (AMapNaviException e) {
@@ -476,6 +482,17 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
         routeOverLay.setTrafficLine(true);
         routeOverLay.addToMap();
+
+//        if (!isRecalc) { //重新算路后就不缩放地图
+//            List<LatLng> latLngs = new ArrayList<>();
+//            latLngs.add(new LatLng(path.getStartPoint().getLatitude(), path.getStartPoint().getLongitude()));
+//            latLngs.add(new LatLng(path.getEndPoint().getLatitude(), path.getEndPoint().getLongitude()));
+//            EmLoc lastLoc = EmUtil.getLastLoc();
+//            latLngs.add(new LatLng(lastLoc.latitude, lastLoc.longitude));
+//            LatLngBounds bounds = MapUtil.getBounds(latLngs);
+//            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this) / 2, DensityUtil.getDisplayWidth(this) / 2, 80));
+//        }
+//        isRecalc = false;
     }
 
     private DrivingRouteOverlay drivingRouteOverlay;
@@ -549,6 +566,35 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     public void paySuc() {
         ToastUtil.showMessage(this, getString(R.string.pay_suc));
         finish();
+    }
+
+    @Override
+    public void showLeft(int dis, int time) {
+        String disStr;
+        int km = dis / 1000;
+        if (km > 1) {
+            String disKm = new DecimalFormat("#0.0").format((double) dis / 1000);
+            disStr = "剩余" + disKm + "公里";
+        } else {
+            disStr = "剩余" + dis + "米";
+        }
+
+        String timeStr;
+        int hour = time / 60 / 60;
+        int minute = time / 60;
+        if (hour > 0) {
+            timeStr = "大约" + hour + "小时" + time / 60 % 60 + "分";
+        } else {
+            timeStr = "大约" + minute + "分";
+        }
+        leftTimeText.setText(disStr + timeStr);
+    }
+
+//    boolean isRecalc = false;
+
+    @Override
+    public void showReCal() {
+//        isRecalc = true;
     }
 
     private Address getStartAddr() {
@@ -645,6 +691,17 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             }
 
             @Override
+            public void doQuanlan() {
+                showMapBounds();
+            }
+
+            @Override
+            public void doRefresh() {
+                isMapTouched = false;
+                aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLatlng, 19));
+            }
+
+            @Override
             public void doConfirmMoney(LoadingButton btn, DymOrder dymOrder) {
                 presenter.arriveDes(btn, dymOrder);
             }
@@ -677,9 +734,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         registerReceiver(cancelOrderReceiver, new IntentFilter(Config.BROAD_CANCEL_ORDER));
     }
 
-    //是否退出到了重新进来，如果是则要CameraUpdate
-//    private boolean onResumeIn = true;
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -690,7 +744,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             return;
         }
         mapView.onResume();
-//        onResumeIn = true;
         lastLatlng = new LatLng(location.latitude, location.longitude);
         presenter.findOne(orderId);
     }
@@ -711,6 +764,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     protected void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
+        presenter.onDestory();
     }
 
     @Override
@@ -784,8 +838,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         if (null != djOrder) {
             if (djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER
                     || djOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) {
-                aMap.animateCamera(CameraUpdateFactory.newLatLng(latLng),
-                        djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER ? 2000 : 8000, null);
+                if (!isMapTouched) {
+                    aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 19),
+                            djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER ? 2000 : 8000, null);
+                }
             }
         }
         lastLatlng = latLng;
@@ -871,6 +927,20 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 runningFragment.showFee(DymOrder.findByIDType(orderId, orderType));
             } else if (null != settleFragmentDialog && settleFragmentDialog.isShowing()) {
                 settleFragmentDialog.setDymOrder(DymOrder.findByIDType(orderId, orderType));
+            }
+        }
+    }
+
+    public static boolean isMapTouched = false;
+
+    @Override
+    public void onTouch(MotionEvent motionEvent) {
+        if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
+            if(djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER){
+                isMapTouched = true;
+            }
+            if (null != runningFragment) {
+                runningFragment.mapStatusChanged();
             }
         }
     }

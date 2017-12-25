@@ -9,6 +9,7 @@ import com.easymi.common.entity.PushDataLoc;
 import com.easymi.common.entity.PushDataOrder;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
+import com.easymi.component.app.XApp;
 import com.easymi.component.entity.BaseEmploy;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
@@ -17,6 +18,7 @@ import com.easymi.component.utils.StringUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +66,8 @@ public class BuildPushUtil {
         List<PushData> dataList;
         //历史未上传的点
         String pushCacheStr = FileUtil.readPushCache();
+        //读取完后删除文件
+        FileUtil.delete("v5driver","pushCache.json");
         if (StringUtils.isBlank(pushCacheStr)) {
             dataList = new ArrayList<>();
         } else {

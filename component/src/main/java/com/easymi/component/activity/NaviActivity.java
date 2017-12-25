@@ -15,6 +15,7 @@ import com.amap.api.navi.AMapNaviView;
 import com.amap.api.navi.AMapNaviViewListener;
 import com.amap.api.navi.AmapNaviParams;
 import com.amap.api.navi.AmapNaviType;
+import com.amap.api.navi.enums.NaviType;
 import com.amap.api.navi.model.AMapLaneInfo;
 import com.amap.api.navi.model.AMapModelCross;
 import com.amap.api.navi.model.AMapNaviCameraInfo;
@@ -318,7 +319,7 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
     @Override
     public void onCalculateRouteSuccess(int[] ints) {
 //        XApp.getInstance().syntheticVoice("路径规划成功");
-        mAMapNavi.startNavi(AMapNavi.GPSNaviMode);//驾车导航
+        mAMapNavi.startNavi(NaviType.GPS);//驾车导航
     }
 
     @Override

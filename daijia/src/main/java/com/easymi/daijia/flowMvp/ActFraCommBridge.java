@@ -30,4 +30,8 @@ public interface ActFraCommBridge {
 
     void doFinish();
 
+    void doQuanlan();
+
+    void doRefresh();
+
 }

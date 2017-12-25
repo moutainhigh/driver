@@ -4,11 +4,13 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.easymi.common.R;
 import com.easymi.common.adapter.VpAdapter;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.widget.CusToolbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,8 @@ public class CreateActivity extends RxBaseActivity {
 
     TabLayout tabLayout;
     ViewPager viewPager;
+
+    CusToolbar toolbar;
 
     private VpAdapter adapter;
 
@@ -35,6 +39,13 @@ public class CreateActivity extends RxBaseActivity {
         viewPager = findViewById(R.id.view_pager);
 
         initTabLayout();
+    }
+
+    @Override
+    public void initToolBar() {
+        toolbar = findViewById(R.id.cus_toolbar);
+        toolbar.setTitle(R.string.work_create);
+        toolbar.setLeftBack(v -> finish());
     }
 
     List<Fragment> fragments;

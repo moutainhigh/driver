@@ -47,6 +47,10 @@ public interface WorkContract {
 
         void showStatis(WorkStatistics statistics);
 
+        void showOnline();
+
+        void showOffline();
+
         RxManager getRxManager();
     }
 
@@ -85,7 +89,7 @@ public interface WorkContract {
 
         Observable<AnnouncementResult> loadAnn(Long id);
 
-        Observable<WorkStatisticsResult> getDriverStatistics(Long id,String nowDate);
+        Observable<WorkStatisticsResult> getDriverStatistics(Long id, String nowDate);
 
         Observable<NearDriverResult> queryNearDriver(Long driverId, Double lat, Double lng, Double distance);
     }

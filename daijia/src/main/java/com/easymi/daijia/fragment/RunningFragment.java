@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.R;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.flowMvp.ActFraCommBridge;
+import com.easymi.daijia.flowMvp.FlowActivity;
 
 /**
  * Created by developerLzh on 2017/11/13 0013.
@@ -38,6 +40,12 @@ public class RunningFragment extends RxBaseFragment {
     LoadingButton startWaitBtn;
     LinearLayout settleBtn;
 
+    LinearLayout quanlanCon;
+    ImageView quanlanImg;
+    TextView quanlanText;
+
+    ImageView refreshImg;
+
     @Override
     public void setArguments(Bundle args) {
         super.setArguments(args);
@@ -55,7 +63,7 @@ public class RunningFragment extends RxBaseFragment {
     }
 
     private void initView() {
-        if(djOrder == null){
+        if (djOrder == null) {
             djOrder = new DymOrder();
         }
         serviceMoneyText = getActivity().findViewById(R.id.service_money);
@@ -65,6 +73,12 @@ public class RunningFragment extends RxBaseFragment {
         startWaitBtn = getActivity().findViewById(R.id.start_wait);
         settleBtn = getActivity().findViewById(R.id.settle);
 
+        quanlanCon = getActivity().findViewById(R.id.quanlan_con);
+        quanlanImg = getActivity().findViewById(R.id.quanlan_img);
+        quanlanText = getActivity().findViewById(R.id.quanlan_text);
+
+        refreshImg = getActivity().findViewById(R.id.ic_refresh);
+
         serviceMoneyText.setText(djOrder.totalFee + "");
         distanceText.setText(djOrder.distance + "");
         driveTimeText.setText(djOrder.travelTime + "");
@@ -72,13 +86,39 @@ public class RunningFragment extends RxBaseFragment {
 
         startWaitBtn.setOnClickListener(view -> bridge.doStartWait(startWaitBtn));
         settleBtn.setOnClickListener(view -> bridge.showSettleDialog());
+
+        refreshImg.setOnClickListener(v -> {
+            bridge.doRefresh();
+            refreshImg.setVisibility(View.GONE);
+            quanlanImg.setImageResource(R.drawable.ic_quan_lan_normal);
+            quanlanText.setTextColor(getResources().getColor(R.color.text_default));
+        });
+
+        quanlanCon.setOnClickListener(v -> {
+            if (FlowActivity.isMapTouched) {
+                quanlanImg.setImageResource(R.drawable.ic_quan_lan_normal);
+                quanlanText.setTextColor(getResources().getColor(R.color.text_default));
+                refreshImg.setVisibility(View.GONE);
+                bridge.doRefresh();
+            } else {
+                FlowActivity.isMapTouched = true;
+                refreshImg.setVisibility(View.VISIBLE);
+                quanlanImg.setImageResource(R.drawable.ic_quan_lan_pressed);
+                quanlanText.setTextColor(getResources().getColor(R.color.colorAccent));
+                bridge.doQuanlan();
+            }
+        });
     }
 
-    public void showFee(DymOrder dymOrder){
+    public void showFee(DymOrder dymOrder) {
         this.djOrder = dymOrder;
         serviceMoneyText.setText(djOrder.totalFee + "");
         distanceText.setText(djOrder.distance + "");
         driveTimeText.setText(djOrder.travelTime + "");
         waitTimeText.setText(djOrder.waitTime + "");
+    }
+
+    public void mapStatusChanged() {
+        refreshImg.setVisibility(View.VISIBLE);
     }
 }

@@ -16,6 +16,7 @@
 
     <color name="text_color_black">#232323</color>
     <color name="text_color_hint">#cccccc</color>
+    <color name="text_default">#767676</color>
 
     <color name="ff7c7c7c">#ff7c7c7c</color>
 

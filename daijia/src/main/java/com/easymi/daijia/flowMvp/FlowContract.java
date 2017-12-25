@@ -56,6 +56,10 @@ public interface FlowContract {
 
         void paySuc();
 
+        void showLeft(int dis,int time);
+
+        void showReCal();//重新规划路径开始
+
         RxManager getManager();
     }
 
@@ -89,6 +93,8 @@ public interface FlowContract {
         void updateDymOrder(DJOrder djOrder);
 
         void payOrder(Long orderId, String payType);
+
+        void onDestory();
         //...
     }
 

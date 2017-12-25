@@ -413,6 +413,7 @@ public class FileUtil {
     public static String readPushCache() {
         try {
             return readFile(new File(Environment.getExternalStorageState() + "/v5driver" + "/pushCache.json"));
+
         } catch (IOException e) {
             e.printStackTrace();
             return "";

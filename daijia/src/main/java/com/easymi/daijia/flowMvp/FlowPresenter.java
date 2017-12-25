@@ -2,11 +2,13 @@ package com.easymi.daijia.flowMvp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.navi.AMapNavi;
 import com.amap.api.navi.AMapNaviListener;
 import com.amap.api.navi.INaviInfoCallback;
+import com.amap.api.navi.enums.NaviType;
 import com.amap.api.navi.model.AMapLaneInfo;
 import com.amap.api.navi.model.AMapModelCross;
 import com.amap.api.navi.model.AMapNaviCameraInfo;
@@ -308,6 +310,15 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     }
 
     @Override
+    public void onDestory() {
+        //since 1.6.0 不再在naviview destroy的时候自动执行AMapNavi.stopNavi();请自行执行
+        if (null != mAMapNavi) {
+            mAMapNavi.stopNavi();
+            mAMapNavi.destroy();
+        }
+    }
+
+    @Override
     public void onInitNaviFailure() {
 
     }
@@ -344,11 +355,14 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void onCalculateRouteSuccess(int[] ints) {
+        Log.e("FlowerPresenter", "onCalculateRouteSuccess()");
         HashMap<Integer, AMapNaviPath> paths = mAMapNavi.getNaviPaths();
         if (null != paths && paths.size() != 0) {
             AMapNaviPath path = paths.get(ints[0]);
             if (path != null) {
                 view.showPath(ints, path);
+                view.showLeft(path.getAllLength(), path.getAllTime());
+                mAMapNavi.startNavi(NaviType.GPS);
             }
         }
     }
@@ -393,14 +407,22 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     }
 
+    /**
+     * 重新算路前的回调
+     */
     @Override
     public void onReCalculateRouteForYaw() {
-
+        Log.e("FlowerPresenter", "onReCalculateRouteForYaw()");
+        view.showReCal();
     }
 
+    /**
+     * 重新算路前的回调
+     */
     @Override
     public void onReCalculateRouteForTrafficJam() {
-
+        Log.e("FlowerPresenter", "onReCalculateRouteForTrafficJam()");
+        view.showReCal();
     }
 
     @Override
@@ -413,9 +435,14 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     }
 
+    /**
+     * 导航信息更新
+     *
+     * @param naviInfo
+     */
     @Override
     public void onNaviInfoUpdate(NaviInfo naviInfo) {
-
+        view.showLeft(naviInfo.getPathRetainDistance(), naviInfo.getPathRetainTime());
     }
 
     @Override
@@ -465,7 +492,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void onGetNavigationText(String s) {
-        XApp.getInstance().syntheticVoice(s, true);
+//        XApp.getInstance().syntheticVoice(s, true);
     }
 
     @Override

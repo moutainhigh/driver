@@ -40,6 +40,8 @@ import com.easymi.common.entity.Notifity;
 import com.easymi.common.entity.WorkStatistics;
 import com.easymi.common.push.MQTTService;
 import com.easymi.common.receiver.CancelOrderReceiver;
+import com.easymi.common.receiver.EmployStatusChangeReceiver;
+import com.easymi.common.widget.NearInfoWindowAdapter;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
@@ -51,6 +53,7 @@ import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.MapUtil;
 import com.easymi.component.widget.CusToolbar;
+import com.easymi.component.widget.EmployStatus;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.component.widget.pinned.PinnedHeaderDecoration;
 import com.skyfishjy.library.RippleBackground;
@@ -65,7 +68,7 @@ import java.util.List;
  */
 
 @Route(path = "/common/WorkActivity")
-public class WorkActivity extends RxBaseActivity implements WorkContract.View, LocObserver, CancelOrderReceiver.OnCancelListener {
+public class WorkActivity extends RxBaseActivity implements WorkContract.View, LocObserver, CancelOrderReceiver.OnCancelListener, EmployStatusChangeReceiver.OnStatusChangeListener, AMap.OnMarkerClickListener, AMap.OnMapClickListener {
 
     LinearLayout bottomBar;
 
@@ -106,6 +109,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     TextView todayIncome;
 
     private CancelOrderReceiver cancelOrderReceiver;
+    private EmployStatusChangeReceiver employStatusChangeReceiver;
 
     private WorkPresenter presenter;
 
@@ -261,6 +265,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
         initRefreshBtn();
 
+        aMap.setOnMarkerClickListener(this);
+        aMap.setOnMapClickListener(this);
+        aMap.setInfoWindowAdapter(new NearInfoWindowAdapter(this));
     }
 
     @Override
@@ -277,8 +284,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
     @Override
     public void onlineSuc() {
-        XApp.getInstance().syntheticVoice(getString(R.string.start_lis_order), true);
-        MQTTService.publish("开始上班了~~");
+        XApp.getInstance().syntheticVoice(getString(R.string.start_lis_order));
         listenOrderCon.setVisibility(View.VISIBLE);
         rippleBackground.startRippleAnimation();
         onLineBtn.setVisibility(View.GONE);
@@ -286,7 +292,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
     @Override
     public void offlineSuc() {
-        XApp.getInstance().syntheticVoice(getString(R.string.stop_lis_order), true);
+        XApp.getInstance().syntheticVoice(getString(R.string.stop_lis_order));
         listenOrderCon.setVisibility(View.GONE);
         rippleBackground.stopRippleAnimation();
         onLineBtn.setVisibility(View.VISIBLE);
@@ -305,6 +311,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     }
 
     List<Marker> markers = new ArrayList<>();
+    List<NearDriver> drivers = new ArrayList<>();
 
     @Override
     public void showDrivers(List<NearDriver> drivers) {
@@ -312,6 +319,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
             marker.remove();
         }
         markers.clear();
+        this.drivers = drivers;
         MarkerOptions options = new MarkerOptions();
         options.draggable(false);//设置Marker可拖动
         options.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
@@ -321,6 +329,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         for (NearDriver driver : drivers) {
             options.position(new LatLng(driver.lat, driver.lng));
             Marker marker = aMap.addMarker(options);
+            marker.setInfoWindowEnable(true);
+            marker.setSnippet(driver.employ_name);
             markers.add(marker);
         }
         List<LatLng> latLngs = new ArrayList<>();
@@ -331,6 +341,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         LatLng center = new LatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
         LatLngBounds bounds = MapUtil.getBounds(latLngs, center);
         aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50));
+
     }
 
     @Override
@@ -357,6 +368,20 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         todayIncome.setText(String.valueOf(statistics.totalAmount));
     }
 
+    @Override
+    public void showOnline() {
+        listenOrderCon.setVisibility(View.VISIBLE);
+        rippleBackground.startRippleAnimation();
+        onLineBtn.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showOffline() {
+        listenOrderCon.setVisibility(View.GONE);
+        rippleBackground.stopRippleAnimation();
+        onLineBtn.setVisibility(View.VISIBLE);
+    }
+
 
     @Override
     public RxManager getRxManager() {
@@ -368,6 +393,13 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         super.onResume();
         mapView.onResume();
         presenter.loadDataOnResume();
+        Employ employ = EmUtil.getEmployInfo();
+        if (employ.status == EmployStatus.OFFLINE
+                || employ.status == EmployStatus.FROZEN) {
+            showOffline();
+        } else {
+            showOnline();
+        }
     }
 
     @Override
@@ -396,6 +428,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
         cancelOrderReceiver = new CancelOrderReceiver(this);
         registerReceiver(cancelOrderReceiver, new IntentFilter(Config.BROAD_CANCEL_ORDER));
+
+        employStatusChangeReceiver = new EmployStatusChangeReceiver(this);
+        registerReceiver(employStatusChangeReceiver, new IntentFilter(Config.BROAD_EMPLOY_STATUS_CHANGE));
     }
 
     @Override
@@ -403,6 +438,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         super.onStop();
         LocReceiver.getInstance().deleteObserver(this);//取消位置改变的订阅
         unregisterReceiver(cancelOrderReceiver);
+        unregisterReceiver(employStatusChangeReceiver);
     }
 
     public void mapHideShow(View view) {
@@ -438,6 +474,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         if (null == myLocMarker) {
             MarkerOptions markerOption = new MarkerOptions();
             markerOption.position(latLng);
+            markerOption.infoWindowEnable(false);
             markerOption.draggable(false);//设置Marker可拖动
             markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                     .decodeResource(getResources(), R.mipmap.ic_my_loc)));
@@ -487,5 +524,28 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     public void onCancelOrder(long orderId, String orderType) {
         swipeRefreshLayout.setRefreshing(true);
         presenter.indexOrders();
+    }
+
+    @Override
+    public void onStatusChange(int status) {
+        if (status == EmployStatus.OFFLINE
+                || status == EmployStatus.FROZEN) {
+            showOffline();
+        } else {
+            showOnline();
+        }
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        marker.showInfoWindow();
+        return true;
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        for (Marker marker : markers) {
+            marker.hideInfoWindow();
+        }
     }
 }
