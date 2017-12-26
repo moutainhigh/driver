@@ -375,7 +375,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void showMapBounds() {
-        leftTimeText.setText("");
         List<LatLng> latLngs = new ArrayList<>();
         if (djOrder.orderStatus == DJOrderStatus.NEW_ORDER
                 || djOrder.orderStatus == DJOrderStatus.PAIDAN_ORDER
@@ -406,6 +405,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         } else if (djOrder.orderStatus == DJOrderStatus.ARRIVAL_BOOKPLACE_ORDER
                 || djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER
                 || djOrder.orderStatus == DJOrderStatus.START_WAIT_ORDER
+                || djOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER
                 ) {
             if (null != getEndAddr()) {
                 latLngs.add(new LatLng(getEndAddr().lat, getEndAddr().lng));

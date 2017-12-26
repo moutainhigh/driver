@@ -61,7 +61,7 @@
                         android:marqueeRepeatLimit="marquee_forever"
                         android:paddingRight="5dp"
                         android:singleLine="true"
-                        android:text="成都SBI创业街"
+                        android:text=""
                         android:textColor="#232323"
                         android:textSize="18sp" />
 
@@ -148,7 +148,7 @@
                             android:paddingLeft="5dp"
                             android:paddingRight="5dp"
                             android:paddingTop="3dp"
-                            android:text="日常代驾" />
+                            android:text="" />
                     </LinearLayout>
 
                     <LinearLayout

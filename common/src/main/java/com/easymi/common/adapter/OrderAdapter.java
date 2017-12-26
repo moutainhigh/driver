@@ -39,7 +39,7 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder> {
         } else if (baseOrder.getItemType() == MultipleOrder.ITEM_POSTER) {
             baseViewHolder.setText(R.id.order_time, TimeUtil.getTime(context.getString(R.string.time_format), baseOrder.orderTime));
             baseViewHolder.setText(R.id.order_start_place, "" + baseOrder.startPlace);
-            baseViewHolder.setText(R.id.order_end_place, "" + baseOrder.endPlace);
+            baseViewHolder.setText(R.id.order_end_place, StringUtils.isBlank(baseOrder.endPlace) ? "" : baseOrder.endPlace);
             baseViewHolder.setText(R.id.order_status, "" + DJStatus2Str.int2Str(baseOrder.orderType, baseOrder.orderStatus));
             baseViewHolder.setText(R.id.order_type, "" + baseOrder.orderDetailType);
             baseViewHolder.setOnClickListener(R.id.root, v -> {
