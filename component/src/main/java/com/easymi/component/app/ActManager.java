@@ -175,16 +175,14 @@ public class ActManager {
      * finish掉所有的activity,并清空stack.
      */
     public void finishAllActivity() {
+        SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+        editor.clear().apply();
         if (activityStack != null) {
             for (int i = 0, size = activityStack.size(); i < size; i++) {
                 if (null != activityStack.get(i)) {
                     activityStack.get(i).finish();
                 }
             }
-            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
-            editor.putBoolean(Config.SP_ISLOGIN,false);
-            editor.putLong(Config.SP_DRIVERID,-1L);
-            editor.apply();
             activityStack.clear();
         }
     }
