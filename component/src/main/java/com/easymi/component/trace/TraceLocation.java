@@ -6,9 +6,16 @@ package com.easymi.component.trace;
 
 public class TraceLocation {
     private long time;
+
     private double lat;
+
     private double lng;
+
+    private String locType;
+
     private double speed;
+
+    private float bearing;
 
     public void setTime(long time) {
         this.time = time;
@@ -40,5 +47,21 @@ public class TraceLocation {
 
     public double getSpeed() {
         return speed;
+    }
+
+    public String getLocType() {
+        return locType;
+    }
+
+    public void setLocType(String locType) {
+        this.locType = locType;
+    }
+
+    public float getBearing() {
+        return bearing;
+    }
+
+    public void setBearing(float bearing) {
+        this.bearing = bearing;
     }
 }
