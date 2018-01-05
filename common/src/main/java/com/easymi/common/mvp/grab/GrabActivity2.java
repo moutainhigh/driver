@@ -1,11 +1,18 @@
 package com.easymi.common.mvp.grab;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,8 +28,11 @@ import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.route.DriveRouteResult;
 import com.easymi.common.R;
 import com.easymi.common.adapter.GrabAdapter;
+import com.easymi.common.adapter.GrabFragmentAdapter;
+import com.easymi.common.adapter.VpAdapter;
 import com.easymi.common.entity.Address;
 import com.easymi.common.entity.MultipleOrder;
+import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.rxmvp.RxManager;
@@ -33,6 +43,13 @@ import com.easymi.component.widget.overlay.DrivingRouteOverlay;
 import com.itsronald.widget.ViewPagerIndicator;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
+import net.lucode.hackware.magicindicator.MagicIndicator;
+import net.lucode.hackware.magicindicator.ViewPagerHelper;
+import net.lucode.hackware.magicindicator.buildins.circlenavigator.CircleNavigator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +60,7 @@ import java.util.TimerTask;
  * Created by developerLzh on 2017/11/2 0002.
  */
 
-public class GrabActivity extends RxBaseActivity implements GrabContract.View {
+public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
 
     public static final int GRAB_TOTAL_TIME = 18;//加上预览订单的时间
     public static final int GRAB_VALID_TIME = 15;//可以抢单的时间
@@ -61,18 +78,26 @@ public class GrabActivity extends RxBaseActivity implements GrabContract.View {
     RelativeLayout grabCon;
     TextView grabCountdown;
 
-    GrabAdapter adapter;
+    GrabFragmentAdapter adapter;
     GrabPresenter presenter;
+
+    MagicIndicator magicIndicator;
 
     TextView bottomText;
 
+    ImageView topArrow;
+    ImageView bottomArrow;
+
     private MultipleOrder showIngOrder = null;
+    private Fragment showIngFragment = null;
 
     private AMap aMap;
 
     List<MultipleOrder> multipleOrders = new ArrayList<>();
 
     private int pageIndex = 0; //page索引
+
+    private List<Fragment> fragments;
 
     @Override
     public int getLayoutId() {
@@ -86,12 +111,17 @@ public class GrabActivity extends RxBaseActivity implements GrabContract.View {
             finish();
             return;
         }
+
+        fragments = new ArrayList<>();
+
         presenter = new GrabPresenter(this, this);
         multipleOrders.add(showIngOrder);
+        buildFragments(showIngOrder, true);//添加一个fragment
 
         expandBtnCon = findViewById(R.id.expand_btn_con);
         mapView = findViewById(R.id.map_view);
         expandableLayout = findViewById(R.id.expand_layout);
+
         viewPager = findViewById(R.id.view_pager);
 
         shadeFrame = findViewById(R.id.shade_frame);
@@ -102,7 +132,12 @@ public class GrabActivity extends RxBaseActivity implements GrabContract.View {
         grabCon = findViewById(R.id.grab_con);
         grabCountdown = findViewById(R.id.count_down_grab);
 
+        topArrow = findViewById(R.id.top_arrow);
+        bottomArrow = findViewById(R.id.bottom_arrow);
+
         bottomText = findViewById(R.id.button_text);
+
+        magicIndicator = findViewById(R.id.magic_indicator);
 
         mapView.onCreate(savedInstanceState);
 
@@ -114,12 +149,23 @@ public class GrabActivity extends RxBaseActivity implements GrabContract.View {
 
     }
 
+    private void initIndicator() {
+        CircleNavigator circleNavigator = new CircleNavigator(this);
+        circleNavigator.setCircleCount(multipleOrders.size());
+        circleNavigator.setCircleColor(Color.WHITE);
+        magicIndicator.setNavigator(circleNavigator);
+        magicIndicator.onPageSelected(pageIndex);
+        ViewPagerHelper.bind(magicIndicator, viewPager);
+    }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         MultipleOrder multipleOrder = (MultipleOrder) intent.getSerializableExtra("order");
         multipleOrders.add(multipleOrder);
-        adapter.setDJOrderList(multipleOrders);
+        buildFragments(showIngOrder, false);//添加一个fragment
+        adapter.setData(fragments);
+        initIndicator();
     }
 
     private void initMap() {
@@ -142,9 +188,13 @@ public class GrabActivity extends RxBaseActivity implements GrabContract.View {
         expandBtnCon.setOnClickListener(v -> {
             if (expandableLayout.isExpanded()) {
                 expandableLayout.collapse();
+                topArrow.setVisibility(View.VISIBLE);
+                bottomArrow.setVisibility(View.GONE);
             } else {
                 expandableLayout.expand();
                 if (null != showIngOrder) {
+                    topArrow.setVisibility(View.GONE);
+                    bottomArrow.setVisibility(View.VISIBLE);
                     List<LatLonPoint> pass = new ArrayList<>();
                     LatLonPoint end = null;
                     for (Address address : showIngOrder.addresses) {
@@ -206,24 +256,31 @@ public class GrabActivity extends RxBaseActivity implements GrabContract.View {
                         showShade();
                         shadeCountdown.setText(String.valueOf(showIngOrder.countTime - GRAB_VALID_TIME));
                     } else {
-                        showGrabCountDown();
-                        grabCountdown.setText(String.valueOf(showIngOrder.countTime));
                         if (showIngOrder.countTime <= 0) {
                             cancelTimer();
-
-                            if (pageIndex >= 1) { //在移除时，如果pageIndex大于1就减去1
-                                pageIndex -= 1;
-                            } else { //为0时+1
-                                pageIndex += 1;
-                            }
-                            if (pageIndex >= multipleOrders.size()) {
+                            multipleOrders.remove(showIngOrder);//移除当前订单
+                            fragments.remove(showIngFragment);
+                            if (multipleOrders.size() == 0) {
                                 finish();
                             } else {
-                                viewPager.setCurrentItem(pageIndex);
-                                multipleOrders.remove(showIngOrder);
-                                adapter.setDJOrderList(multipleOrders);
-                                pageIndex = viewPager.getCurrentItem();
+                                adapter.setData(fragments);
+                                initIndicator();
+                                if (pageIndex > multipleOrders.size() - 1) {
+                                    pageIndex = multipleOrders.size() - 1;
+                                }
+
+                                viewPager.setCurrentItem(pageIndex,true);
+
+                                //setCurrentItem不触发onPageSelected,手动调用里面的内容
+                                showIngOrder = multipleOrders.get(pageIndex);
+                                showIngFragment = fragments.get(pageIndex);
+                                showBottomByStatus();
+                                countTime();
                             }
+
+                        } else {
+                            showGrabCountDown();
+                            grabCountdown.setText(String.valueOf(showIngOrder.countTime));
                         }
                     }
                 });
@@ -253,8 +310,11 @@ public class GrabActivity extends RxBaseActivity implements GrabContract.View {
     @Override
     public void initViewPager() {
         showBottomByStatus();
-        adapter = new GrabAdapter(this);
+
+        viewPager.setOffscreenPageLimit(Integer.MAX_VALUE);
+        adapter = new GrabFragmentAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -263,7 +323,9 @@ public class GrabActivity extends RxBaseActivity implements GrabContract.View {
 
             @Override
             public void onPageSelected(int position) {
+                pageIndex = position;
                 showIngOrder = multipleOrders.get(position);
+                showIngFragment = fragments.get(position);
                 showBottomByStatus();
                 countTime();
             }
@@ -273,7 +335,8 @@ public class GrabActivity extends RxBaseActivity implements GrabContract.View {
 
             }
         });
-        adapter.setDJOrderList(multipleOrders);
+        adapter.setData(fragments);
+        initIndicator();
         countTime();
     }
 
@@ -302,17 +365,41 @@ public class GrabActivity extends RxBaseActivity implements GrabContract.View {
         return mRxManager;
     }
 
-    private void showBottomByStatus(){
-        if(showIngOrder.orderStatus == DJOrderStatus.NEW_ORDER){
+    private void showBottomByStatus() {
+        if (showIngOrder.orderStatus == DJOrderStatus.NEW_ORDER) {
             bottomText.setText(R.string.grab_order);
             grabCon.setOnClickListener(v -> presenter.grabOrder(showIngOrder.orderId));
-        } else if(showIngOrder.orderStatus == DJOrderStatus.PAIDAN_ORDER){
+        } else if (showIngOrder.orderStatus == DJOrderStatus.PAIDAN_ORDER) {
             bottomText.setText(R.string.accept_order);
             grabCon.setOnClickListener(v -> presenter.takeOrder(showIngOrder.orderId));
         }
     }
 
-    public void closeGrab(View view){
+    private void buildFragments(MultipleOrder order, boolean showing) {
+        try {
+            if (order.orderType.equals(Config.DAIJIA)) {
+                Class clazz = Class.forName("com.easymi.daijia.fragment.grab.DJGrabFragment");
+                Fragment fragment = (Fragment) clazz.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("order", order);
+                fragment.setArguments(bundle);
+                fragments.add(fragment);
+                if (showing) {
+                    showIngFragment = fragment;
+                }
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (java.lang.InstantiationException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void closeGrab(View view) {
         finishActivity();
     }
+
 }

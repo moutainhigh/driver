@@ -1,147 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimary">
 
     <ImageView
-        android:onClick="closeGrab"
+        android:id="@+id/close_grab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
+        android:onClick="closeGrab"
         android:src="@mipmap/grab_close" />
-
-    <TextView
-        android:id="@+id/order_type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ic_close"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:text="日常代驾"
-        android:textColor="@color/white" />
-
-    <TextView
-        android:id="@+id/order_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/order_type"
-        android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true"
-        android:text="14:40"
-        android:textColor="@color/white"
-        android:textSize="30sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/order_time"
-        android:layout_marginRight="2dp"
-        android:layout_toLeftOf="@+id/order_time"
-        android:paddingBottom="4dp"
-        android:text="今天"
-        android:textColor="#727784" />
-
-
-    <LinearLayout
-        android:id="@+id/order_dis_con"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/order_time"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/grab_dis"
-            android:textColor="#727784" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="5公里"
-            android:textColor="@color/colorAccent" />
-
-    </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/grab_bottom"
-        android:layout_below="@+id/order_dis_con">
+        android:layout_below="@+id/close_grab">
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/view_pager"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="40dp">
+            android:layout_height="match_parent">
 
-            <!-- Add as a direct child of your ViewPager -->
-            <com.itsronald.widget.ViewPagerIndicator
-                android:id="@+id/view_pager_indicator"
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/view_pager"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center_horizontal"
-                android:gravity="center_vertical" />
+                android:layout_height="match_parent"
+                android:layout_marginBottom="40dp"
+                android:layout_marginTop="40dp">
+            </android.support.v4.view.ViewPager>
 
-        </android.support.v4.view.ViewPager>
+            <net.lucode.hackware.magicindicator.MagicIndicator
+                android:id="@+id/magic_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginBottom="40dp"
+                android:layout_gravity="center_horizontal|bottom" />
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center_horizontal|bottom">
+            android:gravity="center_horizontal|bottom"
+            android:orientation="vertical">
+
             <LinearLayout
                 android:id="@+id/expand_btn_con"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:orientation="horizontal"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal">
 
                 <View
                     android:layout_width="0.0dp"
-                    android:layout_weight="1"
                     android:layout_height="0.1dp"
-                    android:background="@color/dark_gray"/>
+                    android:layout_weight="1"
+                    android:background="@color/dark_gray" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <ImageView
+                        android:id="@+id/top_arrow"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@mipmap/top_arrow"/>
+                        android:src="@mipmap/top_arrow" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
                         android:text="@string/grab_map"
                         android:textColor="@color/colorAccent"
-                        android:textSize="18sp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"/>
+                        android:textSize="18sp" />
 
                     <ImageView
+                        android:id="@+id/bottom_arrow"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        android:src="@mipmap/bottom_row"/>
+                        android:src="@mipmap/bottom_row"
+                        android:visibility="gone" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="0.0dp"
-                    android:layout_weight="1"
                     android:layout_height="0.1dp"
-                    android:background="@color/dark_gray"/>
+                    android:layout_weight="1"
+                    android:background="@color/dark_gray" />
 
             </LinearLayout>
 
@@ -150,8 +103,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="bottom"
-                app:el_expanded="false"
-                >
+                app:el_expanded="false">
 
                 <com.amap.api.maps.MapView
                     android:id="@+id/map_view"
@@ -169,7 +121,7 @@
         layout="@layout/grab_bottom"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:layout_marginTop="10dp"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="10dp" />
 
 </RelativeLayout>

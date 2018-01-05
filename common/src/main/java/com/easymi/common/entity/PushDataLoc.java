@@ -27,6 +27,8 @@ public class PushDataLoc {
 
     public float speed;//速度
 
+    public int locationType;//定位类型
+
     @SerializedName("order_info")
     public List<PushDataOrder> orderInfo;
 }

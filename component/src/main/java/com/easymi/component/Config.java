@@ -53,4 +53,6 @@ public class Config {
 
     public static final String BROAD_CANCEL_ORDER = "com.easymi.v5driver.BROAD_CANCEL_ORDER";
     public static final String BROAD_EMPLOY_STATUS_CHANGE = "com.easymi.v5driver.EMPLOY_STATUS_CHANGE";
+    public static final String BROAD_NOTICE = "com.easymi.v5driver.BROAD_NOTICE";
+    public static final String BROAD_ANN = "com.easymi.v5driver.BROAD_ANN";
 }

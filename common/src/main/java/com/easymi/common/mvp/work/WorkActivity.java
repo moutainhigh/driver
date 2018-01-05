@@ -39,8 +39,10 @@ import com.easymi.common.entity.NearDriver;
 import com.easymi.common.entity.Notifity;
 import com.easymi.common.entity.WorkStatistics;
 import com.easymi.common.push.MQTTService;
+import com.easymi.common.receiver.AnnReceiver;
 import com.easymi.common.receiver.CancelOrderReceiver;
 import com.easymi.common.receiver.EmployStatusChangeReceiver;
+import com.easymi.common.receiver.NoticeReceiver;
 import com.easymi.common.widget.NearInfoWindowAdapter;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
@@ -68,7 +70,7 @@ import java.util.List;
  */
 
 @Route(path = "/common/WorkActivity")
-public class WorkActivity extends RxBaseActivity implements WorkContract.View, LocObserver, CancelOrderReceiver.OnCancelListener, EmployStatusChangeReceiver.OnStatusChangeListener, AMap.OnMarkerClickListener, AMap.OnMapClickListener {
+public class WorkActivity extends RxBaseActivity implements WorkContract.View, LocObserver, CancelOrderReceiver.OnCancelListener, EmployStatusChangeReceiver.OnStatusChangeListener, AMap.OnMarkerClickListener, AMap.OnMapClickListener, NoticeReceiver.OnReceiveNotice, AnnReceiver.OnReceiveAnn {
 
     LinearLayout bottomBar;
 
@@ -111,6 +113,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     private CancelOrderReceiver cancelOrderReceiver;
     private EmployStatusChangeReceiver employStatusChangeReceiver;
 
+    private NoticeReceiver noticeReceiver;
+    private AnnReceiver annReceiver;
+
     private WorkPresenter presenter;
 
     @Override
@@ -149,11 +154,11 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     private void initNotifity() {
         notifityClose.setOnClickListener(v -> notifityCon.setVisibility(View.GONE));
 
-        //模拟收到推送去查询通知
-        presenter.loadNotice(1);
-
-        //模拟收到推送去查询公告
-        presenter.loadAnn(1);
+//        //模拟收到推送去查询通知
+//        presenter.loadNotice(1);
+//
+//        //模拟收到推送去查询公告
+//        presenter.loadAnn(1);
 
     }
 
@@ -302,7 +307,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     public void showNotify(Notifity notifity) {
         notifityCon.setVisibility(View.VISIBLE);
         notifityContent.setText(getString(R.string.new_notify) + notifity.message);
-        XApp.getInstance().syntheticVoice(getString(R.string.new_notify) + notifity.message, true);
+//        XApp.getInstance().syntheticVoice(getString(R.string.new_notify) + notifity.message, true);
         notifityCon.setOnClickListener(v -> {
             notifityCon.setVisibility(View.GONE);
             ARouter.getInstance().build("/personal/NotifityActivity")
@@ -348,7 +353,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     public void showAnn(Announcement announcement) {
         notifityCon.setVisibility(View.VISIBLE);
         notifityContent.setText(getString(R.string.new_ann) + announcement.message);
-        XApp.getInstance().syntheticVoice(getString(R.string.new_ann) + announcement.message, true);
+//        XApp.getInstance().syntheticVoice(getString(R.string.new_ann) + announcement.message, true);
         notifityCon.setOnClickListener(v -> {
             notifityCon.setVisibility(View.GONE);
             ARouter.getInstance().build("/personal/AnnouncementActivity")
@@ -431,6 +436,12 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
         employStatusChangeReceiver = new EmployStatusChangeReceiver(this);
         registerReceiver(employStatusChangeReceiver, new IntentFilter(Config.BROAD_EMPLOY_STATUS_CHANGE));
+
+        noticeReceiver = new NoticeReceiver(this);
+        registerReceiver(noticeReceiver, new IntentFilter(Config.BROAD_NOTICE));
+
+        annReceiver = new AnnReceiver(this);
+        registerReceiver(annReceiver, new IntentFilter(Config.BROAD_ANN));
     }
 
     @Override
@@ -439,6 +450,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         LocReceiver.getInstance().deleteObserver(this);//取消位置改变的订阅
         unregisterReceiver(cancelOrderReceiver);
         unregisterReceiver(employStatusChangeReceiver);
+
+        unregisterReceiver(noticeReceiver);
+        unregisterReceiver(annReceiver);
     }
 
     public void mapHideShow(View view) {
@@ -547,5 +561,19 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         for (Marker marker : markers) {
             marker.hideInfoWindow();
         }
+    }
+
+    @Override
+    public void onReceiveNotice(String message) {
+        Notifity notifity = new Notifity();
+        notifity.message = message;
+        showNotify(notifity);
+    }
+
+    @Override
+    public void onReceiveAnn(String message) {
+        Announcement announcement = new Announcement();
+        announcement.message = message;
+        showAnn(announcement);
     }
 }

@@ -16,9 +16,11 @@ import com.amap.api.maps.model.LatLng;
 import com.easymi.common.CommApiService;
 import com.easymi.common.R;
 import com.easymi.common.entity.MultipleOrder;
-import com.easymi.common.mvp.grab.GrabActivity;
+import com.easymi.common.mvp.grab.GrabActivity2;
 import com.easymi.common.mvp.work.WorkActivity;
+import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.MultipleOrderResult;
+import com.easymi.common.result.NotitfyResult;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
 import com.easymi.component.app.XApp;
@@ -122,6 +124,14 @@ public class HandlePush implements FeeChangeSubject {
                 bundle.putSerializable("status", status);
                 message.setData(bundle);
                 handler.sendMessage(message);
+            } else if (msg.equals("notice")) {
+                int id = jb.optJSONObject("data").optInt("id");
+
+                loadNotice(id);
+            } else if (msg.equals("announcement")) {
+                int id = jb.optJSONObject("data").optInt("id");
+
+                loadAnn(id);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -155,8 +165,71 @@ public class HandlePush implements FeeChangeSubject {
                 rxManager.clear();
             }
         })));
-
     }
+
+    /**
+     * 加载通知
+     *
+     * @param id
+     */
+    private void loadNotice(long id) {
+        Observable<NotitfyResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .loadNotice(id, Config.APP_KEY)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+        ;
+
+        rxManager.add(observable.subscribe(new MySubscriber<>(XApp.getInstance(), false,
+                false, new HaveErrSubscriberListener<NotitfyResult>() {
+            @Override
+            public void onNext(NotitfyResult multipleOrderResult) {
+                XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.new_notify)
+                        + multipleOrderResult.employNoticeRecord.message, true);
+                Intent intent = new Intent();
+                intent.setAction(Config.BROAD_NOTICE);
+                intent.putExtra("notice", multipleOrderResult.employNoticeRecord.message);
+                XApp.getInstance().sendBroadcast(intent);
+            }
+
+            @Override
+            public void onError(int code) {
+                rxManager.clear();
+            }
+        })));
+    }
+
+    /**
+     * 查询公告
+     *
+     * @param id
+     */
+    private void loadAnn(long id) {
+        Observable<AnnouncementResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .employAfficheById(id, Config.APP_KEY)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+        ;
+
+        rxManager.add(observable.subscribe(new MySubscriber<>(XApp.getInstance(), false,
+                false, new HaveErrSubscriberListener<AnnouncementResult>() {
+            @Override
+            public void onNext(AnnouncementResult announcementResult) {
+                XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.new_ann) + announcementResult.employAfficheRequest.message, true);
+                Intent intent = new Intent();
+                intent.setAction(Config.BROAD_NOTICE);
+                intent.putExtra("ann", announcementResult.employAfficheRequest.message);
+                XApp.getInstance().sendBroadcast(intent);
+            }
+
+            @Override
+            public void onError(int code) {
+                rxManager.clear();
+            }
+        })));
+    }
+
 
     private void newShowNotify(Context context, String tips, String title,
                                String content) {
@@ -245,7 +318,7 @@ public class HandlePush implements FeeChangeSubject {
             case 0:
                 Bundle bundle = msg.getData();
                 MultipleOrder order = (MultipleOrder) bundle.getSerializable("order");
-                Intent intent = new Intent(XApp.getInstance(), GrabActivity.class);
+                Intent intent = new Intent(XApp.getInstance(), GrabActivity2.class);
                 intent.putExtra("order", order);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 XApp.getInstance().startActivity(intent);

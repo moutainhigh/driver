@@ -128,4 +128,7 @@
 
     <string name="quan_lan">全览</string>
 
+    <string name="jishi">即时</string>
+    <string name="appoint">预约</string>
+
 </resources>

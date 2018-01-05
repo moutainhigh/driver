@@ -9,5 +9,5 @@ import com.easymi.component.result.EmResult;
  */
 
 public class AnnouncementResult extends EmResult{
-    public Announcement EmployAfficheRequest;
+    public Announcement employAfficheRequest;
 }

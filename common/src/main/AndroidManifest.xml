@@ -49,7 +49,7 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".mvp.grab.GrabActivity"
+            android:name=".mvp.grab.GrabActivity2"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
