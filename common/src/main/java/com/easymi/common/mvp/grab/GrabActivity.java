@@ -212,7 +212,7 @@ public class GrabActivity extends RxBaseActivity implements GrabContract.View {
                     } else {
                         showGrabCountDown();
                         grabCountdown.setText(String.valueOf(showIngOrder.countTime));
-                        if (showIngOrder.countTime == 0) {
+                        if (showIngOrder.countTime <= 0) {
                             cancelTimer();
 
                             if (pageIndex >= 1) { //在移除时，如果pageIndex大于1就减去1
