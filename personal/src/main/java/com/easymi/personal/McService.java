@@ -8,6 +8,7 @@ import com.easymi.personal.result.CompanyResult;
 import com.easymi.personal.result.LiushuiResult;
 import com.easymi.personal.result.LoginResult;
 import com.easymi.personal.result.NotifityResult;
+import com.easymi.personal.result.RechargeResult;
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -190,4 +191,26 @@ public interface McService {
                                            @Query("business") String business,
                                            @Query("app_key") String app_key
     );
+
+    /**
+     * 充值  /api/v1/recharge  PUT  user_id  int  是  用户id
+     * app_key  string  是  系统key
+     * pay_type  string  是  支付类型
+     * money  float  是  充值金额
+     * type  string  是  用户类型（1客户，2司机）
+     *
+     * @param userId
+     * @param appKey
+     * @param payType
+     * @param money
+     * @param type
+     * @return
+     */
+    @PUT("/api/v1/recharge")
+    @FormUrlEncoded
+    Observable<RechargeResult> recharge(@Field("user_id") Long userId,
+                                        @Field("app_key") String appKey,
+                                        @Field("pay_type") String payType,
+                                        @Field("money") Double money,
+                                        @Field("type") Integer type);
 }
