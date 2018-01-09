@@ -61,16 +61,9 @@ public class MapUtil {
 
             return new LatLngBounds.Builder().include(leftTopLatLng).include(rightBottomLatLng).build();
 
+        } else {
+            return new LatLngBounds.Builder().include(center).build();
         }
-        return null;
-
-//        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-//        for (LatLng latLng : latLngs) {
-//            builder.include(latLng);
-//        }
-//        builder.include(center);
-//
-//        return builder.build();
     }
 
     public static LatLngBounds getBounds(List<LatLng> latLngs) {

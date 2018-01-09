@@ -193,7 +193,7 @@ public class WorkPresenter implements WorkContract.Presenter {
     public void loadAnn(long id) {
         Observable<AnnouncementResult> observable = model.loadAnn(id);
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
-                false, notitfyResult -> view.showAnn(notitfyResult.EmployAfficheRequest))));
+                false, notitfyResult -> view.showAnn(notitfyResult.employAfficheRequest))));
     }
 
     @Override

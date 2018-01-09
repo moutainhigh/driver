@@ -1,7 +1,7 @@
 package com.easymi.common.entity;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
-import com.easymi.common.mvp.grab.GrabActivity;
+import com.easymi.common.mvp.grab.GrabActivity2;
 import com.easymi.component.entity.BaseOrder;
 import com.google.gson.annotations.SerializedName;
 
@@ -26,7 +26,7 @@ public class MultipleOrder extends BaseOrder implements Serializable, MultiItemE
     @SerializedName("company_name")
     public String companyName;
 
-    public int countTime = GrabActivity.GRAB_TOTAL_TIME;
+    public int countTime = GrabActivity2.GRAB_TOTAL_TIME;
 
     public List<Address> addresses;
 

@@ -232,4 +232,10 @@
     <string name="wx_pay_fail">微信充值失败</string>
     <string name="wx_share_suc">微信分享成功</string>
     <string name="wx_share_failed">微信分享失败</string>
+
+    <string name="wx_pay_failed">微信支付数据错误:</string>
+
+    <string name="alipay_success">支付宝充值成功</string>
+    <string name="alipay_failed">支付宝充值失败</string>
+
 </resources>

@@ -19,6 +19,7 @@ public class DJOrder implements Serializable {
     @SerializedName("id")
     public long orderId;
 
+    @SerializedName("orderTypeName")
     public String orderDetailType;
 
     @SerializedName("order_no")
