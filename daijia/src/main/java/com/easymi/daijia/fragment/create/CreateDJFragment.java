@@ -192,7 +192,7 @@ public class CreateDJFragment extends RxLazyFragment implements CreateDJContract
                     endPoi == null ? "" : endPoi.getTitle(),
                     endPoi == null ? null : endPoi.getLatLonPoint().getLatitude(),
                     endPoi == null ? null : endPoi.getLatLonPoint().getLongitude(),
-                    budget == null ? null : budget.total, selectedDJType.pid);
+                    budget == null ? null : budget.total, selectedDJType.id);
         });
     }
 
@@ -342,6 +342,6 @@ public class CreateDJFragment extends RxLazyFragment implements CreateDJContract
         }
 
         presenter.queryBudget(passenger.id, distance, duration,
-                TimePickerView.getTime(day, hourStr, minStr), selectedDJType.pid);
+                TimePickerView.getTime(day, hourStr, minStr), selectedDJType.id);
     }
 }

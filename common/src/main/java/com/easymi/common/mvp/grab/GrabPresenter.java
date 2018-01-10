@@ -70,6 +70,7 @@ public class GrabPresenter implements GrabContract.Presenter {
                                 .withLong("orderId", order.orderId).navigation();
                     }
                 }
+                view.finishActivity();
             }
 
             @Override
@@ -94,6 +95,7 @@ public class GrabPresenter implements GrabContract.Presenter {
                                 .withLong("orderId", order.orderId).navigation();
                     }
                 }
+                view.finishActivity();
             }
 
             @Override
