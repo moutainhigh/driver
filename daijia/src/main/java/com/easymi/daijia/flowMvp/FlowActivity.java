@@ -795,6 +795,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                     .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
             smoothMoveMarker.setPosition(lastLatlng);
             smoothMoveMarker.setRotate(location.bearing);
+            smoothMoveMarker.getMarker().setClickable(false);
         } else {
             List<LatLng> latLngs = new ArrayList<>();
             latLngs.add(lastLatlng);
