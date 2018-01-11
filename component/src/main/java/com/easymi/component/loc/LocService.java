@@ -87,12 +87,16 @@ public class LocService extends NotiService implements AMapLocationListener {
         }
 
         if (isDriverBusy()) {//通过是否有订单在执行设置周期
-            scanTime = 2000;
+            scanTime = 4000;
         } else {
             scanTime = 8000;
         }
         AMapLocationClientOption mLocationOption = new AMapLocationClientOption()
                 .setInterval(scanTime)
+                .setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.Transport)
+                .setGpsFirst(true)
+                .setWifiScan(false)
+                .setLocationCacheEnable(false)
                 .setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy)
                 .setNeedAddress(true)
                 .setMockEnable(false)
