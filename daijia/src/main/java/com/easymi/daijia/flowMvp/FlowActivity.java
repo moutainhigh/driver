@@ -367,11 +367,22 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         if (null != emLoc) {
             lastLatlng = new LatLng(emLoc.latitude, emLoc.longitude);
             receiveLoc(emLoc);//手动调用上次位置 减少从北京跳过来的时间
+
+            MarkerOptions markerOption = new MarkerOptions();
+            markerOption.position(new LatLng(emLoc.latitude, emLoc.longitude));
+            markerOption.draggable(false);//设置Marker可拖动
+            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                    .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
+            // 将Marker设置为贴地显示，可以双指下拉地图查看效果
+            markerOption.setFlat(true);//设置marker平贴地图效果
+            myFirstMarker = aMap.addMarker(markerOption);
         }
     }
 
     private Marker startMarker;
     private Marker endMarker;
+
+    private Marker myFirstMarker;//首次进入时默认位置的marker
 
     @Override
     public void showMapBounds() {
@@ -795,8 +806,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                     .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
             smoothMoveMarker.setPosition(lastLatlng);
             smoothMoveMarker.setRotate(location.bearing);
-            smoothMoveMarker.getMarker().setClickable(false);
         } else {
+            if (null != myFirstMarker) {//去除掉首次的位置marker
+                myFirstMarker.remove();
+            }
             List<LatLng> latLngs = new ArrayList<>();
             latLngs.add(lastLatlng);
             latLngs.add(latLng);
@@ -804,13 +817,19 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             smoothMoveMarker.setPoints(latLngs);
             if (djOrder != null) {
                 smoothMoveMarker.setTotalDuration(djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER ?
-                        2 : 8);
+                        Config.BUSY_LOC_TIME / 1000 : Config.FREE_LOC_TIME / 1000);
             } else {
                 smoothMoveMarker.setTotalDuration(8);
             }
             smoothMoveMarker.setRotate(location.bearing);
             smoothMoveMarker.startSmoothMove();
+            Marker marker = smoothMoveMarker.getMarker();
+            if (null != marker) {
+                marker.setDraggable(false);
+                marker.setClickable(false);
+            }
         }
+
 
 //        if (null == myLocMarker) {
 //            MarkerOptions markerOption = new MarkerOptions();
@@ -937,7 +956,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     @Override
     public void onTouch(MotionEvent motionEvent) {
         if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
-            if(djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER){
+            if (djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
                 isMapTouched = true;
             }
             if (null != runningFragment) {

@@ -1,14 +1,10 @@
 package com.easymi.common.mvp.grab;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -27,9 +23,7 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.route.DriveRouteResult;
 import com.easymi.common.R;
-import com.easymi.common.adapter.GrabAdapter;
 import com.easymi.common.adapter.GrabFragmentAdapter;
-import com.easymi.common.adapter.VpAdapter;
 import com.easymi.common.entity.Address;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.component.Config;
@@ -40,16 +34,11 @@ import com.easymi.component.utils.EmUtil;
 import com.easymi.component.widget.HLoadView;
 import com.easymi.component.widget.RotateImageView;
 import com.easymi.component.widget.overlay.DrivingRouteOverlay;
-import com.itsronald.widget.ViewPagerIndicator;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
 import net.lucode.hackware.magicindicator.buildins.circlenavigator.CircleNavigator;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView;
 
 import java.util.ArrayList;
 import java.util.List;

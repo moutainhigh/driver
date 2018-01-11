@@ -41,7 +41,7 @@ public class LocService extends NotiService implements AMapLocationListener {
     public static final String LOC_CHANGED = "com.easymi.eomponent.LOC_CHANGED";
     public static final String BROAD_TRACE_SUC = "com.easymi.eomponent.BROAD_TRACE_SUC";
 
-    public static int scanTime = 8000;
+    private int scanTime = Config.FREE_LOC_TIME;
 
     /**
      * 处理息屏关掉wifi的delegate类
@@ -87,9 +87,9 @@ public class LocService extends NotiService implements AMapLocationListener {
         }
 
         if (isDriverBusy()) {//通过是否有订单在执行设置周期
-            scanTime = 4000;
+            scanTime = Config.BUSY_LOC_TIME;
         } else {
-            scanTime = 8000;
+            scanTime = Config.FREE_LOC_TIME;
         }
         AMapLocationClientOption mLocationOption = new AMapLocationClientOption()
                 .setInterval(scanTime)

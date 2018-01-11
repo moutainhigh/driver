@@ -1,9 +1,22 @@
 package com.easymi.component.base;
 
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 
+import com.easymi.component.R;
 import com.easymi.component.app.ActManager;
+import com.easymi.component.receiver.GpsReceiver;
+import com.easymi.component.receiver.NetWorkChangeReceiver;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.NetUtil;
+import com.easymi.component.utils.PhoneFunc;
+import com.easymi.component.utils.ToastUtil;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -15,9 +28,13 @@ import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
  * <p/>
  * Activity基类
  */
-public abstract class RxBaseActivity extends RxAppCompatActivity {
+public abstract class RxBaseActivity extends RxAppCompatActivity implements GpsReceiver.OnGpsStatusChangeListener, NetWorkChangeReceiver.OnNetChange {
 
     protected RxManager mRxManager;
+    private GpsReceiver gpsReceiver;
+
+    private NetWorkChangeReceiver netChangeReceiver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +47,37 @@ public abstract class RxBaseActivity extends RxAppCompatActivity {
         initViews(savedInstanceState);
         //初始化ToolBar
         initToolBar();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        gpsReceiver = new GpsReceiver();
+        gpsReceiver.setListener(this);
+        IntentFilter intentFilter = new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION);
+        registerReceiver(gpsReceiver, intentFilter);
+
+        netChangeReceiver = new NetWorkChangeReceiver();
+        netChangeReceiver.setEvent(this);
+        IntentFilter netFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(netChangeReceiver, netFilter);
+
+    }
+
+    @Override
+    protected void onStop() {
+
+        if (null != netDialog && netDialog.isShowing()) {
+            netDialog.dismiss();
+        }
+        if (null != gpsDialog && gpsDialog.isShowing()) {
+            gpsDialog.dismiss();
+        }
+
+        super.onStop();
+        unregisterReceiver(gpsReceiver);
+        unregisterReceiver(netChangeReceiver);
     }
 
     /**
@@ -93,6 +141,72 @@ public abstract class RxBaseActivity extends RxAppCompatActivity {
     protected void onDestroy() {
         mRxManager.clear();
         super.onDestroy();
+    }
+
+    private AlertDialog gpsDialog;
+
+    /**
+     * 提醒用户前往设置界面开启GPS
+     */
+    @Override
+    public void showGpsState(boolean isOpen) {
+        if (!isOpen) {
+            if (null == netDialog) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(getResources().getString(R.string.please_open_gps));
+                builder.setNegativeButton(getResources().getString(R.string.ok),
+                        (dialog, which) -> {
+                            if (!PhoneFunc.isGPSEnable(RxBaseActivity.this)) {
+                                try {
+                                    if ("ZTE".equalsIgnoreCase(Build.MANUFACTURER)) {
+                                        ToastUtil.showMessage(RxBaseActivity.this, getResources().getString(R.string.please_open_gps));
+                                    } else {
+                                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                                    }
+                                } catch (Exception e) {
+                                    ToastUtil.showMessage(RxBaseActivity.this, getResources().getString(R.string.please_open_gps));
+                                }
+                            } else {
+                                dialog.dismiss();
+                            }
+                        });
+                gpsDialog = builder.create();
+            } else {
+                if (gpsDialog.isShowing()) {
+                    return;
+                }
+            }
+            gpsDialog.show();
+        } else {
+            if (null != gpsDialog && gpsDialog.isShowing()) {
+                gpsDialog.dismiss();
+            }
+        }
+
+    }
+
+    private AlertDialog netDialog;
+
+    @Override
+    public void onNetChange(int status) {
+        if (status == NetUtil.NETWORK_NONE) {
+            if(netDialog == null){
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(getResources().getString(R.string.lost_net_work));
+                builder.setPositiveButton(getResources().getString(R.string.ok), (dialogInterface, i) -> dialogInterface.dismiss());
+                netDialog = builder.create();
+            } else {
+                if(netDialog.isShowing()){
+                    return;
+                }
+            }
+            netDialog.show();
+        } else {
+            if (null != netDialog && netDialog.isShowing()) {
+                netDialog.dismiss();
+            }
+        }
+
     }
 
     protected void choosePic(int x, int y) {

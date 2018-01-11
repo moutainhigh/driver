@@ -5,17 +5,23 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.IBinder;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
+import com.easymi.component.R;
 import com.easymi.component.permission.RxPermissions;
 
 import java.util.List;
@@ -184,6 +190,45 @@ public class PhoneUtil {
             }
         }
         return false;
+    }
+
+    /**
+     * 检查GPS是否可用
+     *
+     * @param context
+     * @return
+     */
+    public static boolean checkGps(final Context context) {
+        if (!PhoneFunc.hasGps(context)) {
+            ToastUtil.showMessage(context, context.getResources().getString(R.string.no_gps), Toast.LENGTH_LONG);
+        }
+        if (!PhoneFunc.checkWifi(context)) {
+            ToastUtil.showMessage(context, context.getResources().getString(R.string.closed_wifi), Toast.LENGTH_LONG);
+        }
+        if (!PhoneFunc.isGPSEnable(context)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setMessage(context.getResources().getString(R.string.please_open_gps));
+            builder.setNegativeButton(context.getResources().getString(R.string.ok),
+                    (dialog, which) -> {
+                        if (!PhoneFunc.isGPSEnable(context)) {
+                            try {
+                                if ("ZTE".equalsIgnoreCase(Build.MANUFACTURER)) {
+                                    ToastUtil.showMessage(context, context.getResources().getString(R.string.please_open_gps));
+                                } else {
+                                    context.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                                }
+                            } catch (Exception e) {
+                                ToastUtil.showMessage(context, context.getResources().getString(R.string.please_open_gps));
+                            }
+                        } else {
+                            dialog.dismiss();
+                        }
+                    });
+            builder.show();
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**

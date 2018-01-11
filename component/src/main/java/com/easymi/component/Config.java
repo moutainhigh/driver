@@ -55,4 +55,7 @@ public class Config {
     public static final String BROAD_EMPLOY_STATUS_CHANGE = "com.easymi.v5driver.EMPLOY_STATUS_CHANGE";
     public static final String BROAD_NOTICE = "com.easymi.v5driver.BROAD_NOTICE";
     public static final String BROAD_ANN = "com.easymi.v5driver.BROAD_ANN";
+
+    public static final int FREE_LOC_TIME = 8000;//闲时定位时间 毫秒
+    public static final int BUSY_LOC_TIME = 4000;//闲时定位时间 毫秒
 }

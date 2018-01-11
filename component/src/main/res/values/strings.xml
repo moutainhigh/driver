@@ -48,6 +48,14 @@
 
     <string name="des_place">[目的地]</string>
 
+    <string name="no_gps">该设备未发现GPS定位芯片，无法准确定位</string>
+    <string name="closed_wifi">请打开你的WiFi，有助于精确定位</string>
+
+    <string name="please_open_gps">请开启GPS定位服务</string>
+    <string name="ok">确定</string>
+
+    <string name="lost_net_work">网络连接已断开</string>
+
     <string name="succeed">成功</string>
     <string name="code1">参数错误</string>
     <string name="code2">服务人员验证失败</string>
