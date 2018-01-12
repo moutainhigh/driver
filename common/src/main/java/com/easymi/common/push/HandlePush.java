@@ -15,6 +15,7 @@ import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.model.LatLng;
 import com.easymi.common.CommApiService;
 import com.easymi.common.R;
+import com.easymi.common.entity.Address;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.mvp.grab.GrabActivity2;
 import com.easymi.common.mvp.work.WorkActivity;
@@ -281,14 +282,23 @@ public class HandlePush implements FeeChangeSubject {
                 String dis = 0 + XApp.getInstance().getString(R.string.meter);
                 if (EmUtil.getLastLoc() != null && order.addresses != null && order.addresses.size() != 0) {
                     LatLng my = new LatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
-                    LatLng start = new LatLng(order.addresses.get(0).lat, order.addresses.get(0).lat);
-                    double meter = AMapUtils.calculateLineDistance(my, start);
-                    DecimalFormat format = new DecimalFormat("#0.0");
-                    if (meter > 1000) {
-                        dis = format.format(meter / (double) 1000) + XApp.getInstance().getString(R.string.k_meter);
-                    } else {
-                        dis = format.format(meter) + XApp.getInstance().getString(R.string.meter);
+
+                    for (Address address : order.addresses) {
+                        if (address.addrType == 1) {
+                            LatLng start = new LatLng(address.lat, address.lng);
+                            double meter = AMapUtils.calculateLineDistance(my, start);
+                            DecimalFormat format;
+                            if (meter > 1000) {
+                                format = new DecimalFormat("#0.0");
+                                dis = format.format(meter / (double) 1000) + XApp.getInstance().getString(R.string.k_meter);
+                            } else {
+                                format = new DecimalFormat("#0");
+                                dis = format.format(meter) + XApp.getInstance().getString(R.string.meter);
+                            }
+                        }
                     }
+
+
                 }
                 voiceStr += order.orderDetailType//酒后代驾
                         + ","

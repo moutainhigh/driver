@@ -9,7 +9,9 @@ import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+
 import com.easymi.component.utils.Log;
+
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -819,7 +821,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 smoothMoveMarker.setTotalDuration(djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER ?
                         Config.BUSY_LOC_TIME / 1000 : Config.FREE_LOC_TIME / 1000);
             } else {
-                smoothMoveMarker.setTotalDuration(8);
+                smoothMoveMarker.setTotalDuration(Config.FREE_LOC_TIME / 1000);
             }
             smoothMoveMarker.setRotate(location.bearing);
             smoothMoveMarker.startSmoothMove();
@@ -860,7 +862,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                     || djOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) {
                 if (!isMapTouched) {
                     aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 19),
-                            djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER ? 2000 : 8000, null);
+                            djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER ? Config.BUSY_LOC_TIME / 1000 : Config.FREE_LOC_TIME / 1000, null);
                 }
             }
         }

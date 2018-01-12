@@ -29,6 +29,7 @@ import com.easymi.common.entity.Address;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
+import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
@@ -92,6 +93,11 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
     private Marker startMarker;//起点marker
     private List<Marker> passMarkers;//途经点marker
     private Marker endMarker;//终点marker
+
+    @Override
+    public void onBackPressed() {
+        finishActivity();
+    }
 
     @Override
     public int getLayoutId() {
@@ -236,6 +242,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
     protected void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
+        XApp.getInstance().stopVoice();
     }
 
     @Override
