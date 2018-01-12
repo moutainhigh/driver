@@ -18,11 +18,25 @@ public interface GrabContract {
 
     interface View {
         void showBase(MultipleOrder multipleOrder);
+
         void showShade();
+
         void showGrabCountDown();
+
         void initViewPager();
+
         void finishActivity();
+
         void showPath(DriveRouteResult result);
+
+        void showStartMarker(LatLonPoint start);
+
+        void showPassMarker(List<LatLonPoint> pass);
+
+        void showEndMarker(LatLonPoint end);
+
+        void removeAllOrderMarker();
+
         RxManager getManager();
     }
 
@@ -30,6 +44,7 @@ public interface GrabContract {
         void queryOrder(Long orderId);
 
         void grabOrder(Long orderId);
+
         void takeOrder(Long orderId);
 
         void routePlanByRouteSearch(LatLonPoint endPoint, List<LatLonPoint> pass);
@@ -39,6 +54,7 @@ public interface GrabContract {
         Observable<MultipleOrderResult> queryOrder(Long orderId);
 
         Observable<MultipleOrderResult> grabOrder(Long orderId);
+
         Observable<MultipleOrderResult> takeOrder(Long orderId);
     }
 

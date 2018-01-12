@@ -298,6 +298,26 @@ public class GrabActivity extends RxBaseActivity implements GrabContract.View {
     }
 
     @Override
+    public void showStartMarker(LatLonPoint start) {
+
+    }
+
+    @Override
+    public void showPassMarker(List<LatLonPoint> pass) {
+
+    }
+
+    @Override
+    public void showEndMarker(LatLonPoint end) {
+
+    }
+
+    @Override
+    public void removeAllOrderMarker() {
+
+    }
+
+    @Override
     public RxManager getManager() {
         return mRxManager;
     }

@@ -19,6 +19,7 @@ import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
+import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.route.DriveRouteResult;
@@ -87,6 +88,10 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
     private int pageIndex = 0; //page索引
 
     private List<Fragment> fragments;
+
+    private Marker startMarker;//起点marker
+    private List<Marker> passMarkers;//途经点marker
+    private Marker endMarker;//终点marker
 
     @Override
     public int getLayoutId() {
@@ -186,15 +191,30 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
                     bottomArrow.setVisibility(View.VISIBLE);
                     List<LatLonPoint> pass = new ArrayList<>();
                     LatLonPoint end = null;
+                    boolean hasEnd = false;
+                    removeAllOrderMarker();//移除订单的位置信息marker
                     for (Address address : showIngOrder.addresses) {
-                        if (address.addrType == 1 || address.addrType == 2) {
+                        if (address.addrType == 1) {
+                            LatLonPoint point = new LatLonPoint(address.lat, address.lng);
+                            pass.add(point);
+                            showStartMarker(point);
+                        } else if (address.addrType == 2) {
                             LatLonPoint point = new LatLonPoint(address.lat, address.lng);
                             pass.add(point);
                         } else if (address.addrType == 3) {
                             end = new LatLonPoint(address.lat, address.lng);
+                            hasEnd = true;
+                            showEndMarker(end);
                         }
                     }
-                    presenter.routePlanByRouteSearch(end, pass);
+                    if (!hasEnd) {//没有终点时，起点就是路径规划的终点
+                        end = pass.get(0);
+                        presenter.routePlanByRouteSearch(end, null);
+                    } else {
+                        presenter.routePlanByRouteSearch(end, pass);
+                    }
+                    pass.remove(0);//这是起点的位置
+                    showPassMarker(pass);
                 }
             }
         });
@@ -258,7 +278,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
                                     pageIndex = multipleOrders.size() - 1;
                                 }
 
-                                viewPager.setCurrentItem(pageIndex,true);
+                                viewPager.setCurrentItem(pageIndex, true);
 
                                 //setCurrentItem不触发onPageSelected,手动调用里面的内容
                                 showIngOrder = multipleOrders.get(pageIndex);
@@ -347,6 +367,65 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
         aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(new LatLngBounds(
                 new LatLng(result.getStartPos().getLatitude(), result.getStartPos().getLongitude()),
                 new LatLng(result.getTargetPos().getLatitude(), result.getTargetPos().getLongitude())), 50));
+    }
+
+    @Override
+    public void showStartMarker(LatLonPoint start) {
+
+        MarkerOptions options = new MarkerOptions();
+        options.position(new LatLng(start.getLatitude(), start.getLongitude()));
+        options.anchor(0.5f, 0.5f);
+        options.rotateAngle(EmUtil.getLastLoc().bearing);
+        options.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                .decodeResource(getResources(), R.mipmap.ic_start)));
+        startMarker = aMap.addMarker(options);
+    }
+
+    @Override
+    public void showPassMarker(List<LatLonPoint> pass) {
+
+        if (null != pass && pass.size() != 0) {
+            for (LatLonPoint latLonPoint : pass) {
+                MarkerOptions options = new MarkerOptions();
+                options.position(new LatLng(latLonPoint.getLatitude(), latLonPoint.getLongitude()));
+                options.anchor(0.5f, 0.5f);
+                options.rotateAngle(EmUtil.getLastLoc().bearing);
+                options.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                        .decodeResource(getResources(), R.mipmap.ic_end)));
+                Marker marker = aMap.addMarker(options);
+                if (null == passMarkers) {
+                    passMarkers = new ArrayList<>();
+                    passMarkers.add(marker);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void showEndMarker(LatLonPoint end) {
+
+        MarkerOptions options = new MarkerOptions();
+        options.position(new LatLng(end.getLatitude(), end.getLongitude()));
+        options.anchor(0.5f, 0.5f);
+        options.rotateAngle(EmUtil.getLastLoc().bearing);
+        options.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                .decodeResource(getResources(), R.mipmap.ic_pass)));
+        endMarker = aMap.addMarker(options);
+    }
+
+    @Override
+    public void removeAllOrderMarker() {
+        if (startMarker != null) {
+            startMarker.remove();
+        }
+        if (endMarker != null) {
+            endMarker.remove();
+        }
+        if (null != passMarkers && passMarkers.size() != 0) {
+            for (Marker passMarker : passMarkers) {
+                passMarker.remove();
+            }
+        }
     }
 
     @Override
