@@ -12,5 +12,5 @@ public class RechargeResult extends EmResult {
 //    public Article article;
     public JsonElement weixinResult;
     public JsonElement aliPayResult;
-    public JsonElement unionResult;
+    public UnionResult unionResult;
 }

@@ -148,6 +148,12 @@ public class SetActivity extends RxBaseActivity {
     private void employLogout() {
         stopAllService(this);
         ActManager.getInstance().finishAllActivity();
+
+        Intent i = getPackageManager()
+                .getLaunchIntentForPackage(getPackageName());
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
+
         ActivityManager activityMgr = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         if (activityMgr != null) {
             activityMgr.killBackgroundProcesses(getPackageName());
@@ -163,15 +169,19 @@ public class SetActivity extends RxBaseActivity {
             Service daemonService = (Service) Class.forName("com.easymi.common.daemon.DaemonService").newInstance();
 
             Intent daemonIntent = new Intent(context, daemonService.getClass());
+            daemonIntent.setPackage(getPackageName());
             context.stopService(daemonIntent);
 
             Intent jobkeepIntent = new Intent(context, jobKeepLiveService.getClass());
+            jobkeepIntent.setPackage(getPackageName());
             context.stopService(jobkeepIntent);
 
             Intent puppetIntent = new Intent(context, puppetService.getClass());
+            puppetIntent.setPackage(getPackageName());
             context.stopService(puppetIntent);
 
             Intent mqttIntent = new Intent(context, mQTTService.getClass());
+            mqttIntent.setPackage(getPackageName());
             context.stopService(mqttIntent);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

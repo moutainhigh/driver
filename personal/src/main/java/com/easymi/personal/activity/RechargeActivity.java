@@ -255,7 +255,7 @@ public class RechargeActivity extends RxBaseActivity {
             } else if (payType.equals("alipay")) {
                 launchZfb(rechargeResult.aliPayResult);
             } else if (payType.equals("unionpay")) {
-                launchYiPay(rechargeResult.unionResult);
+                launchYiPay(rechargeResult.unionResult.data);
             }
         })));
     }
@@ -300,9 +300,9 @@ public class RechargeActivity extends RxBaseActivity {
         }.start();
     }
 
-    private void launchYiPay(JsonElement data) {
-        String serverMode = "00";
-        UPPayAssistEx.startPay(RechargeActivity.this, null, null, data.toString().replace("\"", ""), serverMode);
+    private void launchYiPay(String data) {
+        String serverMode = "01";//00测试环境 01真实环境
+        UPPayAssistEx.startPay(RechargeActivity.this, null, null, data, serverMode);
     }
 
     Handler handler = new Handler(msg -> {

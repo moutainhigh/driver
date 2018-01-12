@@ -133,16 +133,22 @@ public class WorkPresenter implements WorkContract.Presenter {
 
                 orders.clear();
                 //预约header
-                MultipleOrder header1 = new MultipleOrder(MultipleOrder.ITEM_HEADER);
-                header1.isBookOrder = 1;
-                orders.add(header1);
+                if(yuyueOrders.size()!= 0){
+                    MultipleOrder header1 = new MultipleOrder(MultipleOrder.ITEM_HEADER);
+                    header1.isBookOrder = 1;
+                    orders.add(header1);
+                }
+
                 //预约单
                 orders.addAll(yuyueOrders);
 
                 //即时header
-                MultipleOrder header2 = new MultipleOrder(MultipleOrder.ITEM_HEADER);
-                header1.isBookOrder = 2;
-                orders.add(header2);
+                if(nowOrders.size()!=0){
+                    MultipleOrder header2 = new MultipleOrder(MultipleOrder.ITEM_HEADER);
+                    header2.isBookOrder = 2;
+                    orders.add(header2);
+                }
+
                 //即时单
                 orders.addAll(nowOrders);
 

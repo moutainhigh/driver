@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+
 import com.easymi.component.utils.Log;
 
 import com.amap.api.maps.model.LatLng;
@@ -66,12 +67,14 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        initConn();
+        synchronized (this) {
+            initConn();
+        }
         return START_STICKY;
     }
 
     private void initConn() {
-        if (client != null && client.isConnected()) {
+        if (client != null && client.isConnected() || isConning) {
             return;
         }
         // 服务器地址（协议+地址+端口号）
@@ -95,6 +98,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
         // last will message
         boolean doConnect = true;
         String message = "{\"terminal_uid\":\"" + clientId + "\"}";
+        Log.e("Mqtt", message);
         pullTopic = "/driver" + "/" + Config.APP_KEY + "/" + EmUtil.getEmployId();
         Integer qos = 0;
         Boolean retained = false;
@@ -132,24 +136,33 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 
     @Override
     public void onDestroy() {
+        Log.e(TAG, "onDestroy:");
         try {
             unregisterReceiver(traceReceiver);
-            client.disconnect();
+            if (null != client) {
+                client.disconnect();
+            }
         } catch (MqttException e) {
             e.printStackTrace();
         }
         super.onDestroy();
     }
 
+    private boolean isConning = false;//是否正在连接中
+
     /**
      * 连接MQTT服务器
      */
     private void doClientConnection() {
-        if (!client.isConnected() && isConnectIsNomarl()) {
-            try {
-                client.connect(conOpt, null, iMqttActionListener);
-            } catch (MqttException e) {
-                e.printStackTrace();
+        if (null != client) {
+            if (!client.isConnected() && isConnectIsNomarl()) {
+                try {
+                    Log.e(TAG, "doClient Conn");
+                    isConning = true;
+                    client.connect(conOpt, null, iMqttActionListener);
+                } catch (MqttException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -161,6 +174,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
         @Override
         public void onSuccess(IMqttToken arg0) {
             Log.e(TAG, "连接成功 ");
+            isConning = false;
             try {
                 // 订阅myTopic话题
                 LocReceiver.getInstance().addObserver(MQTTService.this);
@@ -172,6 +186,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 
         @Override
         public void onFailure(IMqttToken arg0, Throwable arg1) {
+            isConning = false;
             arg1.printStackTrace();
             // 连接失败，重连
             doClientConnection();

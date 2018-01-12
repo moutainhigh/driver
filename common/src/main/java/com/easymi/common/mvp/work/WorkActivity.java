@@ -233,14 +233,14 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         swipeRefreshLayout.setRefreshing(false);
         orders.clear();
         if (MultipleOrders == null) {
-            MultipleOrder header1 = new MultipleOrder(MultipleOrder.ITEM_HEADER);
-            header1.isBookOrder = 1;
-            orders.add(header1);
-
-            //即时header
-            MultipleOrder header2 = new MultipleOrder(MultipleOrder.ITEM_HEADER);
-            header1.isBookOrder = 2;
-            orders.add(header2);
+//            MultipleOrder header1 = new MultipleOrder(MultipleOrder.ITEM_HEADER);
+//            header1.isBookOrder = 1;
+//            orders.add(header1);
+//
+//            //即时header
+//            MultipleOrder header2 = new MultipleOrder(MultipleOrder.ITEM_HEADER);
+//            header1.isBookOrder = 2;
+//            orders.add(header2);
         } else {
             orders.addAll(MultipleOrders);
         }

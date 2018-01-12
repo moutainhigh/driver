@@ -49,6 +49,7 @@ dependencies {
     api libs['design']
     api libs['pull-load-more-recycler']
 
+
     api 'co.lujun:androidtagview:1.1.4'
 
     api 'com.github.LuckSiege.PictureSelector:picture_library:v2.1.1'

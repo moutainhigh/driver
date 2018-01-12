@@ -61,8 +61,6 @@ public class PinnedHeaderDecoration extends RecyclerView.ItemDecoration {
                 mPinnedHeaderTop = 0;
             }
 
-            Log.d(TAG, "onDraw" + v.getTop());
-            Log.d(TAG, "mPinnedHeaderView.getHeight()" + mPinnedHeaderView.getHeight());
             mClipBounds = c.getClipBounds();
             mClipBounds.top = mPinnedHeaderTop + mPinnedHeaderView.getHeight();
             c.clipRect(mClipBounds);
