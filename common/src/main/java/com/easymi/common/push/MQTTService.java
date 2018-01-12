@@ -12,7 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 
 import com.amap.api.maps.model.LatLng;
 import com.easymi.common.trace.TraceInterface;

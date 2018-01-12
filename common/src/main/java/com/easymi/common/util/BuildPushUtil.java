@@ -1,6 +1,6 @@
 package com.easymi.common.util;
 
-import android.util.Log;
+import com.easymi.component.utils.Log;
 
 import com.amap.api.maps.model.LatLng;
 import com.easymi.common.entity.PushBean;

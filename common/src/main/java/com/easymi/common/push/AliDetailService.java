@@ -1,7 +1,7 @@
 package com.easymi.common.push;
 
 import android.content.Context;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 
 import com.alibaba.sdk.android.push.AliyunMessageIntentService;
 import com.alibaba.sdk.android.push.notification.CPushMessage;

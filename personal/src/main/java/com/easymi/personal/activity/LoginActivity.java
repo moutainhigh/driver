@@ -6,11 +6,9 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.View;
+import com.easymi.component.utils.Log;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -18,26 +16,22 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.amap.api.navi.model.NaviLatLng;
 import com.easymi.component.Config;
-import com.easymi.component.activity.NaviActivity;
-import com.easymi.component.activity.WebActivity;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
+import com.easymi.component.entity.Employ;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
-import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.utils.AesUtil;
-import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.LoadingButton;
-import com.easymi.personal.R;
-import com.easymi.component.entity.Employ;
 import com.easymi.personal.McService;
+import com.easymi.personal.R;
 import com.easymi.personal.result.LoginResult;
 
 import rx.Observable;
@@ -216,8 +210,12 @@ public class LoginActivity extends RxBaseActivity implements LocObserver {
     private void login(String name, String psw) {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
+        String udid = PhoneUtil.getUDID(this);
+
+        Log.e("LoginActivity", "udid-->" + udid);
+
         Observable<LoginResult> observable = api
-                .login(AesUtil.aesEncrypt(name, AesUtil.AAAAA), AesUtil.aesEncrypt(psw, AesUtil.AAAAA), Config.APP_KEY)
+                .login(AesUtil.aesEncrypt(name, AesUtil.AAAAA), AesUtil.aesEncrypt(psw, AesUtil.AAAAA), udid, Config.APP_KEY)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

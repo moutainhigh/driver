@@ -9,7 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;

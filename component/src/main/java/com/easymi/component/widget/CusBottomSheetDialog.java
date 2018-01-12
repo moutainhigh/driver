@@ -9,7 +9,7 @@ import android.support.annotation.StyleRes;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatDialog;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;

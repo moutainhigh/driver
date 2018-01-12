@@ -16,7 +16,7 @@
 package com.easymi.component.widget.wheelView.adapters;
 
 import android.content.Context;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;

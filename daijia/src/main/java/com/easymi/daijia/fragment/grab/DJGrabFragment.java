@@ -75,7 +75,7 @@ public class DJGrabFragment extends Fragment {
         order_type.setText(djOrder.orderDetailType);
 
         long today = TimeUtil.parseTime("yyyy-MM-dd", TimeUtil.getTime("yyyy-MM-dd", System.currentTimeMillis()));
-        long orderDay = TimeUtil.parseTime("yyyy-MM-dd", TimeUtil.getTime("yyyy-MM-dd", djOrder.orderTime));
+        long orderDay = TimeUtil.parseTime("yyyy-MM-dd", TimeUtil.getTime("yyyy-MM-dd", djOrder.orderTime * 1000));
 
         String day;
         if (today == orderDay) {

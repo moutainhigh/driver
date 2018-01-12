@@ -28,7 +28,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;

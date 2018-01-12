@@ -2,7 +2,7 @@ package com.easymi.component.rxmvp;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 
 import com.easymi.component.utils.ReflectUtil;
 

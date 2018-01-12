@@ -5,7 +5,7 @@ import android.app.job.JobService;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 
 import com.easymi.common.push.MQTTService;
 import com.easymi.component.Config;

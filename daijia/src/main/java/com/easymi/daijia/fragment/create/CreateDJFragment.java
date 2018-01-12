@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;

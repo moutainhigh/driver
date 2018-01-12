@@ -96,8 +96,10 @@
                     android:id="@+id/order_start_place"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
+                    android:ellipsize="end"
                     android:gravity="center"
-                    android:text="锦绣大道南段小卡科技"
+                    android:lines="1"
+                    android:text=""
                     android:textColor="@color/white"
                     android:textSize="14sp" />
 
@@ -110,7 +112,9 @@
                     android:id="@+id/order_end_place"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
-                    android:text="花样年花样城5期"
+                    android:text=""
+                    android:lines="1"
+                    android:ellipsize="end"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
 

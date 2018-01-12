@@ -52,5 +52,7 @@ dependencies {
     })
     api libs['appcompat-v7']
     api libs['multidex']
+
+    compile project(path: ':component')
 }
 

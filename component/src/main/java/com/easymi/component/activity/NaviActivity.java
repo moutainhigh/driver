@@ -3,7 +3,7 @@ package com.easymi.component.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;

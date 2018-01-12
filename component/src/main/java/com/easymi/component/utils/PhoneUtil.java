@@ -1,22 +1,27 @@
 package com.easymi.component.utils;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.provider.ContactsContract;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -24,7 +29,9 @@ import android.widget.Toast;
 import com.easymi.component.R;
 import com.easymi.component.permission.RxPermissions;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.UUID;
 
 import rx.functions.Action1;
 
@@ -229,6 +236,42 @@ public class PhoneUtil {
         } else {
             return true;
         }
+    }
+
+    public static String getUDID(Context context) {
+        String udid = "";
+        synchronized (context) {
+            @SuppressLint("HardwareIds")
+            String androidId = Settings.Secure
+                    .getString(context.getContentResolver(),
+                            Settings.Secure.ANDROID_ID);
+            try {
+                if (!"9774d56d682e549c".equals(androidId)) {
+                    udid = UUID.nameUUIDFromBytes(
+                            androidId.getBytes("utf8")).toString();
+                } else {
+                    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+
+                        TelephonyManager manager = ((TelephonyManager) context
+                                .getSystemService(Context.TELEPHONY_SERVICE));
+                        if (manager != null) {
+                            @SuppressLint("HardwareIds")
+                            String deviceId = manager.getDeviceId();
+                            udid =
+                                    deviceId != null ? UUID
+                                            .nameUUIDFromBytes(
+                                                    deviceId.getBytes("utf8"))
+                                            .toString() : UUID.randomUUID()
+                                            .toString();
+                        }
+                    }
+
+                }
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return udid;
     }
 
     /**

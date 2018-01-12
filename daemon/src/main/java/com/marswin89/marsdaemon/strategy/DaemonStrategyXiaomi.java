@@ -16,7 +16,7 @@ import android.os.IBinder;
 import android.os.Parcel;
 import android.os.RemoteException;
 import android.text.TextUtils;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 
 import com.marswin89.marsdaemon.DaemonConfigurations;
 import com.marswin89.marsdaemon.IDaemonStrategy;

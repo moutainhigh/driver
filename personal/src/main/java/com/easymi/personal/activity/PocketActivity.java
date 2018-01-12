@@ -3,7 +3,7 @@ package com.easymi.personal.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;

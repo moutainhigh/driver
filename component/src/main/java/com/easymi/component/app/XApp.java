@@ -8,7 +8,7 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.multidex.MultiDexApplication;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.amap.api.navi.AMapNavi;

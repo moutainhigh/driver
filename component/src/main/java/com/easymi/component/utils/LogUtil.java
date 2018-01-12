@@ -1,7 +1,7 @@
 package com.easymi.component.utils;
 
 import android.text.TextUtils;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 
 /**
  * Created by xyin on 2016/10/9. 日志输出工具

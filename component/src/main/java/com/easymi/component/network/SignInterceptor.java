@@ -2,7 +2,7 @@ package com.easymi.component.network;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 
 
 import com.easymi.component.Config;

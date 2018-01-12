@@ -2,7 +2,7 @@ package com.easymi.component.network;
 
 import android.content.Context;
 import android.net.ParseException;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 import android.view.View;
 
 import com.easymi.component.R;

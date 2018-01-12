@@ -6,7 +6,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 
 import com.easymi.common.daemon.DaemonService;
 import com.easymi.common.daemon.JobKeepLiveService;

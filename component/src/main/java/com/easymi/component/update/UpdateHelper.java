@@ -2,7 +2,7 @@ package com.easymi.component.update;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 
 import com.google.gson.Gson;
 

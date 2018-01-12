@@ -1,7 +1,7 @@
 package com.easymi.daijia.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;

@@ -2,7 +2,7 @@ package com.easymi.daijia.flowMvp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.navi.AMapNavi;
