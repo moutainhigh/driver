@@ -25,6 +25,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/wait_msg_con"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/control_con"
@@ -119,5 +120,30 @@
 
         </LinearLayout>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/change_end_con"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_above="@+id/wait_msg_con"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/corners_white_gray_stroke_2"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/change_end" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@string/change_end"
+            android:textSize="8sp" />
     </LinearLayout>
 </RelativeLayout>

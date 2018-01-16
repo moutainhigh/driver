@@ -10,6 +10,7 @@ import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
+import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.personal.R;
 
@@ -59,13 +60,23 @@ public class ChangeActivity extends RxBaseActivity {
         });
     }
 
+
     private void changePsw() {
 
     }
 
+    CusToolbar cusToolbar;
+
     @Override
     public void initToolBar() {
-
+        cusToolbar = findViewById(R.id.cus_toolbar);
+        cusToolbar.setLeftIcon(R.drawable.ic_arrow_back, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+        cusToolbar.setTitle(R.string.set_change_psw);
     }
 
     class MyTextWatcher implements TextWatcher {

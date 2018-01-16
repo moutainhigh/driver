@@ -687,6 +687,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             }
 
             @Override
+            public void doStartWait() {
+                presenter.startWait(djOrder.orderId);
+            }
+
+            @Override
             public void doStartDrive(LoadingButton btn) {
                 presenter.startDrive(djOrder.orderId, btn);
             }

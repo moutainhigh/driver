@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.easymi.component.DJOrderStatus;
 import com.easymi.component.entity.DymOrder;
+import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.CusBottomSheetDialog;
 import com.easymi.component.widget.LoadingButton;
@@ -89,18 +90,34 @@ public class SettleFragmentDialog {
     }
 
     private void initEdit() {
-        extraFeeEdit.setOnFocusChangeListener((view, b) -> {
-            if (b) {
-                if (StringUtils.isNotBlank(extraFeeEdit.getText().toString())) {
-                    extraFeeEdit.setSelection(extraFeeEdit.getText().toString().length());
+        extraFeeEdit.setOnFocusChangeListener((view, hasFocus) -> {
+            if (hasFocus) {
+                String s = extraFeeEdit.getText().toString();
+                if (StringUtils.isNotBlank(s)) {
+                    extraFeeEdit.setSelection(s.length());
+
+                    if (s.equals("0")) {
+                        extraFeeEdit.setText("");
+                    }
                 }
+                Log.e("SettleFragmentDialog","extraFeeEdit has focus");
+            } else {
+                Log.e("SettleFragmentDialog","extraFeeEdit lose focus");
             }
         });
         paymentEdit.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
-                if (StringUtils.isNotBlank(paymentEdit.getText().toString())) {
-                    paymentEdit.setSelection(paymentEdit.getText().toString().length());
+                String s = paymentEdit.getText().toString();
+                if (StringUtils.isNotBlank(s)) {
+                    paymentEdit.setSelection(s.length());
+
+                    if (s.equals("0")) {
+                        paymentEdit.setText("");
+                    }
                 }
+                Log.e("SettleFragmentDialog","paymentEdit has focus");
+            } else {
+                Log.e("SettleFragmentDialog","paymentEdit lose focus");
             }
         });
         remarkEdit.setOnFocusChangeListener((v, hasFocus) -> {
@@ -110,6 +127,7 @@ public class SettleFragmentDialog {
                 }
             }
         });
+
         addEditWatcher();
     }
 

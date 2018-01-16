@@ -18,6 +18,8 @@ public interface ActFraCommBridge {
 
     void doStartWait(LoadingButton btn);
 
+    void doStartWait();
+
     void doStartDrive(LoadingButton btn);
 
     void doConfirmMoney(LoadingButton btn, DymOrder dymOrder);

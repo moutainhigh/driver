@@ -36,7 +36,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailHold
 
     @Override
     public DetailHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.detail_item, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.detail_item, parent,false);
 
         return new DetailHolder(view);
     }
@@ -44,7 +44,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailHold
     @Override
     public void onBindViewHolder(DetailHolder holder, int position) {
         Detail detail = list.get(position);
-        holder.detailTime.setText(TimeUtil.getTime("yyyy-MM-dd HH:mm", detail.time));
+        holder.detailTime.setText(TimeUtil.getTime("yyyy-MM-dd HH:mm", detail.time * 1000));
         holder.detailPurpose.setText(detail.purpose);
         holder.detailMoney.setText("¥" + detail.money);
     }

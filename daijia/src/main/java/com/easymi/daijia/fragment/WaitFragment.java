@@ -61,6 +61,8 @@ public class WaitFragment extends RxBaseFragment {
         waitTimeText.setText(djOrder.waitTime + "");
 
         startDrive.setOnClickListener(view -> bridge.doStartDrive(startDrive));
+
+        getActivity().findViewById(R.id.change_end_con).setOnClickListener(view -> bridge.changeEnd());
     }
 
     public void showFee(DymOrder dymOrder) {

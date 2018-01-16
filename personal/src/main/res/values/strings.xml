@@ -174,6 +174,7 @@
     <string name="language_flow_sys">跟随系统</string>
     <string name="language_sin_cn">简体中文</string>
     <string name="language_fan_cn">繁体中文</string>
+    <string name="language_english">英语</string>
 
     <!--意见反馈str-->
     <string name="feedback_please">请留下您的宝贵意见</string>

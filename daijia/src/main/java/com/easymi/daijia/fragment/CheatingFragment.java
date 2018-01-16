@@ -1,6 +1,7 @@
 package com.easymi.daijia.fragment;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -41,6 +42,11 @@ public class CheatingFragment extends RxBaseFragment {
     }
 
     private void initView() {
-
+        getActivity().findViewById(R.id.change_end_con).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bridge.changeEnd();
+            }
+        });
     }
 }

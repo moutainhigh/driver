@@ -58,8 +58,9 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
         holder.orderEndPlace.setText(baseOrder.endPlace);
         holder.orderStartPlace.setText(baseOrder.startPlace);
         holder.orderStatus.setText(DJStatus2Str.int2Str(baseOrder.orderType, baseOrder.orderStatus));
-        holder.orderTime.setText(TimeUtil.getTime("yyyy-MM-dd HH:mm", baseOrder.orderTime));
+        holder.orderTime.setText(TimeUtil.getTime("yyyy-MM-dd HH:mm", baseOrder.orderTime * 1000));
         holder.orderNumber.setText(baseOrder.orderNumber);
+        holder.orderMoney.setText(String.valueOf(baseOrder.orderMoney));
         holder.orderBaoxiao.setOnClickListener(view -> {
             Intent intent = new Intent(context, BaoxiaoActivity.class);
             intent.putExtra("orderId", baseOrder.orderId);

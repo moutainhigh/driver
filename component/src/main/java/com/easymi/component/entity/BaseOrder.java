@@ -43,4 +43,6 @@ public class BaseOrder implements Serializable {
     @SerializedName("passenger_phone")
     public String passengerPhone;
 
+    public double orderMoney;
+
 }

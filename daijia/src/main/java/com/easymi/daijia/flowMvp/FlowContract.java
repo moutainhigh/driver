@@ -74,6 +74,8 @@ public interface FlowContract {
 
         void startWait(Long orderId, LoadingButton btn);
 
+        void startWait(Long orderId);
+
         void startDrive(Long orderId, LoadingButton btn);
 
         void arriveDes(LoadingButton btn, DymOrder dymOrder);

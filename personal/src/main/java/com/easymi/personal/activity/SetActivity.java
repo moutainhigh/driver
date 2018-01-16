@@ -92,7 +92,7 @@ public class SetActivity extends RxBaseActivity {
     }
 
     public void choiceLanguage(View view) {
-        Intent intent = new Intent(this, SetActivity.class);
+        Intent intent = new Intent(this, LanguageActivity.class);
         startActivity(intent);
     }
 
@@ -148,6 +148,9 @@ public class SetActivity extends RxBaseActivity {
     private void employLogout() {
         stopAllService(this);
         ActManager.getInstance().finishAllActivity();
+
+        SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+        editor.clear().apply();//清空
 
         Intent i = getPackageManager()
                 .getLaunchIntentForPackage(getPackageName());

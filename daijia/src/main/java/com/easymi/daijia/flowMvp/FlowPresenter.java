@@ -126,6 +126,17 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     }
 
     @Override
+    public void startWait(Long orderId) {
+        Observable<DJOrderResult> observable = model.startWait(orderId);
+
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true,true, djOrderResult -> {
+            djOrderResult.order.addresses = djOrderResult.address;
+            view.showOrder(djOrderResult.order);
+            updateDymOrder(djOrderResult.order);
+        })));
+    }
+
+    @Override
     public void startDrive(Long orderId, LoadingButton btn) {
         Observable<DJOrderResult> observable = model.startDrive(orderId);
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, djOrderResult -> {

@@ -12,6 +12,7 @@ import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.TimeUtil;
+import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
 import com.easymi.personal.entity.Announcement;
@@ -36,6 +37,8 @@ public class MsgActivity extends RxBaseActivity {
     TextView announcementContent;
     TextView announcementTime;
 
+    CusToolbar toolbar;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_message;
@@ -50,6 +53,13 @@ public class MsgActivity extends RxBaseActivity {
 
         queryNotify();
         queryAnn();
+    }
+
+    @Override
+    public void initToolBar() {
+        toolbar = findViewById(R.id.cus_toolbar);
+        toolbar.setLeftIcon(R.drawable.ic_arrow_back, view -> onBackPressed());
+        toolbar.setTitle(R.string.person_message);
     }
 
     public void tuijian(View view) {
@@ -80,7 +90,7 @@ public class MsgActivity extends RxBaseActivity {
             if (null != notifityList && notifityList.size() != 0) {
                 Notifity notifity = notifityList.get(0);
                 noticeContent.setText(notifity.message);
-                noticeTime.setText(TimeUtil.getTime("yyy-MM-dd HH:mm", notifity.time));
+                noticeTime.setText(TimeUtil.getTime("yyy-MM-dd HH:mm", notifity.time * 1000));
             }
         })));
     }
@@ -98,7 +108,7 @@ public class MsgActivity extends RxBaseActivity {
             if (null != announcements && announcements.size() != 0) {
                 Announcement announcement = announcements.get(0);
                 announcementContent.setText(announcement.message);
-                announcementTime.setText(TimeUtil.getTime("yyy-MM-dd HH:mm", announcement.time));
+                announcementTime.setText(TimeUtil.getTime("yyy-MM-dd HH:mm", announcement.time * 1000));
             }
         })));
     }

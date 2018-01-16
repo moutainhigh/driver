@@ -42,6 +42,12 @@ public class Config {
     public static final String SP_COST = "cost";//避免收费
     public static final String SP_HIGHT_SPEED = "hightspeed";//高速优先
 
+    public static final String SP_USER_LANGUAGE = "user_choice_language";
+    public static final int SP_LANGUAGE_AUTO = 0x01;   //语言跟随系统
+    public static final int SP_SIMPLIFIED_CHINESE = 0x02; //简体中文
+    public static final int SP_TRADITIONAL_CHINESE = 0x03; //繁体中文
+    public static final int SP_ENGLISH = 0x04; //英文
+
 
     public static final String SP_VOICE_ABLE = "voice_able";//能否语音播报
     public static final String SP_SHAKE_ABLE = "shake_able";//能否震动
@@ -58,4 +64,6 @@ public class Config {
 
     public static final int FREE_LOC_TIME = 8000;//闲时定位时间 毫秒
     public static final int BUSY_LOC_TIME = 4000;//闲时定位时间 毫秒
+
+
 }

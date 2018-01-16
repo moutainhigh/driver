@@ -4,10 +4,12 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.multidex.MultiDexApplication;
+
 import com.easymi.component.utils.Log;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -29,6 +31,7 @@ import com.jaredrummler.android.processes.AndroidProcesses;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by xyin on 2016/9/30.
@@ -319,5 +322,38 @@ public class XApp extends MultiDexApplication {
         } else { //在7.0以上或者部分手机还是不能获取到
             return true;
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        loadLanguage();
+    }
+
+    /**
+     * 加载本地设置的语言
+     */
+    private void loadLanguage() {
+        SharedPreferences preferences = getMyPreferences();
+        Configuration config = getResources().getConfiguration();   //获取默认配置
+        int language = preferences.getInt(Config.SP_USER_LANGUAGE, Config.SP_LANGUAGE_AUTO);
+        switch (language) {
+            case Config.SP_SIMPLIFIED_CHINESE:
+                config.locale = Locale.SIMPLIFIED_CHINESE;  //加载简体中文
+                break;
+
+            case Config.SP_TRADITIONAL_CHINESE:
+                config.locale = Locale.TAIWAN;  //加载台湾繁体
+                break;
+
+            case Config.SP_LANGUAGE_AUTO:
+                config.locale = Locale.getDefault();    //获取默认区域
+                break;
+
+            case Config.SP_ENGLISH:
+                config.locale = Locale.ENGLISH;    //获取默认区域
+                break;
+        }
+        getBaseContext().getResources().updateConfiguration(config, null);   //更新配置文件
     }
 }

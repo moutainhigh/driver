@@ -16,6 +16,7 @@ import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
+import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
@@ -41,6 +42,13 @@ public class FeedbackActivity extends RxBaseActivity {
     }
 
     @Override
+    public void initToolBar() {
+        CusToolbar cusToolbar = findViewById(R.id.cus_toolbar);
+        cusToolbar.setLeftIcon(R.drawable.ic_arrow_back, view -> onBackPressed());
+        cusToolbar.setTitle(R.string.set_feedback);
+    }
+
+    @Override
     public void initViews(Bundle savedInstanceState) {
         editText = findViewById(R.id.edit_text);
         editText.addTextChangedListener(new TextWatcher() {
@@ -58,9 +66,9 @@ public class FeedbackActivity extends RxBaseActivity {
             public void afterTextChanged(Editable editable) {
                 String s = editable.toString();
                 if (StringUtils.isBlank(s)) {
-                    editText.setEnabled(false);
+                    btn.setEnabled(false);
                 } else {
-                    editText.setEnabled(true);
+                    btn.setEnabled(true);
                 }
             }
         });

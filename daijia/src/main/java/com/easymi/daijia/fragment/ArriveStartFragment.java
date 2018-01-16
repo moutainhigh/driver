@@ -1,6 +1,7 @@
 package com.easymi.daijia.fragment;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -27,7 +28,7 @@ public class ArriveStartFragment extends RxBaseFragment {
     }
 
     LoadingButton startDrive;
-    LoadingButton startWait;
+    LinearLayout startWait;
     TextView startPlaceText;
     TextView endPlaceText;
 
@@ -56,6 +57,7 @@ public class ArriveStartFragment extends RxBaseFragment {
         startPlaceText.setText(djOrder.startPlace);
         endPlaceText.setText(djOrder.endPlace);
         startDrive.setOnClickListener(view -> bridge.doStartDrive(startDrive));
-        startWait.setOnClickListener(view -> bridge.doStartWait(startWait));
+        startWait.setOnClickListener(view -> bridge.doStartWait());
+        getActivity().findViewById(R.id.change_end_con).setOnClickListener(view -> bridge.changeEnd());
     }
 }

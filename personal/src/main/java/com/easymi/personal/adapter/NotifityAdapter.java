@@ -68,12 +68,12 @@ public class NotifityAdapter extends RecyclerView.Adapter<NotifityAdapter.Notifi
     public void onBindViewHolder(NotifityHolder holder, int position) {
         Notifity notifity = list.get(position);
         holder.notifityContent.setText(notifity.message);
-        holder.notifityTime.setText(TimeUtil.getTime("yyyy-MM-dd HH:mm", notifity.time));
+        holder.notifityTime.setText(TimeUtil.getTime("yyyy-MM-dd HH:mm", notifity.time * 1000));
         holder.isNew.setVisibility(notifity.state == 1 ? View.VISIBLE : View.GONE);
 
         holder.rootView.setOnClickListener(v -> {
             if (null != listener) {
-                if(notifity.state == 1){
+                if (notifity.state == 1) {
                     listener.onClick(notifity.id, position);
                 }
             }

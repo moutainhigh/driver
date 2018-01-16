@@ -108,6 +108,13 @@ public class RunningFragment extends RxBaseFragment {
                 bridge.doQuanlan();
             }
         });
+
+        getSupportActivity().findViewById(R.id.change_end_con).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bridge.changeEnd();
+            }
+        });
     }
 
     public void showFee(DymOrder dymOrder) {
