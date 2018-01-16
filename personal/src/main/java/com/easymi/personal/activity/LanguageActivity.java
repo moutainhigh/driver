@@ -1,5 +1,6 @@
 package com.easymi.personal.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -99,6 +100,7 @@ public class LanguageActivity extends RxBaseActivity implements View.OnClickList
         //需要重启Activity才会刷新
         ActManager.getInstance().finishAllActivity();
 
-        ARouter.getInstance().build("/common/SplashActivity").navigation();//重启应用
+        ARouter.getInstance().build("/common/SplashActivity")
+                .withFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK).navigation();//重启应用
     }
 }

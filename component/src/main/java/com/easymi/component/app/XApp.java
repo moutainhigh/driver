@@ -323,37 +323,4 @@ public class XApp extends MultiDexApplication {
             return true;
         }
     }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        loadLanguage();
-    }
-
-    /**
-     * 加载本地设置的语言
-     */
-    private void loadLanguage() {
-        SharedPreferences preferences = getMyPreferences();
-        Configuration config = getResources().getConfiguration();   //获取默认配置
-        int language = preferences.getInt(Config.SP_USER_LANGUAGE, Config.SP_LANGUAGE_AUTO);
-        switch (language) {
-            case Config.SP_SIMPLIFIED_CHINESE:
-                config.locale = Locale.SIMPLIFIED_CHINESE;  //加载简体中文
-                break;
-
-            case Config.SP_TRADITIONAL_CHINESE:
-                config.locale = Locale.TAIWAN;  //加载台湾繁体
-                break;
-
-            case Config.SP_LANGUAGE_AUTO:
-                config.locale = Locale.getDefault();    //获取默认区域
-                break;
-
-            case Config.SP_ENGLISH:
-                config.locale = Locale.ENGLISH;    //获取默认区域
-                break;
-        }
-        getBaseContext().getResources().updateConfiguration(config, null);   //更新配置文件
-    }
 }

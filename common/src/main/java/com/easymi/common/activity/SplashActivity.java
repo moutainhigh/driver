@@ -2,6 +2,8 @@ package com.easymi.common.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
@@ -18,6 +20,8 @@ import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.permission.RxPermissions;
+
+import java.util.Locale;
 
 /**
  * Created by developerLzh on 2017/11/3 0003.
@@ -37,6 +41,8 @@ public class SplashActivity extends RxBaseActivity {
     public void initViews(Bundle savedInstanceState) {
 
         rxPermissions = new RxPermissions(this);
+
+        loadLanguage();
 
         if (!rxPermissions.isGranted(Manifest.permission.ACCESS_COARSE_LOCATION)
                 || !rxPermissions.isGranted(Manifest.permission.READ_PHONE_STATE)
@@ -93,5 +99,32 @@ public class SplashActivity extends RxBaseActivity {
                         delayExit();
                     }
                 });
+    }
+
+    /**
+     * 加载本地设置的语言
+     */
+    private void loadLanguage() {
+        SharedPreferences preferences = XApp.getMyPreferences();
+        Configuration config = getResources().getConfiguration();   //获取默认配置
+        int language = preferences.getInt(Config.SP_USER_LANGUAGE, Config.SP_LANGUAGE_AUTO);
+        switch (language) {
+            case Config.SP_SIMPLIFIED_CHINESE:
+                config.locale = Locale.SIMPLIFIED_CHINESE;  //加载简体中文
+                break;
+
+            case Config.SP_TRADITIONAL_CHINESE:
+                config.locale = Locale.TAIWAN;  //加载台湾繁体
+                break;
+
+            case Config.SP_LANGUAGE_AUTO:
+                config.locale = Locale.getDefault();    //获取默认区域
+                break;
+
+            case Config.SP_ENGLISH:
+                config.locale = Locale.ENGLISH;    //获取默认区域
+                break;
+        }
+        getBaseContext().getResources().updateConfiguration(config, null);   //更新配置文件
     }
 }
