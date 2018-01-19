@@ -3,16 +3,22 @@ package com.easymi.common.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.easymi.common.R;
 import com.easymi.common.mvp.work.WorkActivity;
 import com.easymi.component.Config;
@@ -20,8 +26,15 @@ import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.permission.RxPermissions;
+import com.easymi.component.utils.GlideCircleTransform;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Locale;
+
+import pl.droidsonroids.gif.AnimationListener;
+import pl.droidsonroids.gif.GifDrawable;
+import pl.droidsonroids.gif.GifImageView;
 
 /**
  * Created by developerLzh on 2017/11/3 0003.
@@ -37,12 +50,22 @@ public class SplashActivity extends RxBaseActivity {
 
     RxPermissions rxPermissions;
 
+    GifDrawable gifFromAssets;
+
     @Override
     public void initViews(Bundle savedInstanceState) {
 
         rxPermissions = new RxPermissions(this);
 
         loadLanguage();
+
+        GifImageView view = findViewById(R.id.splash);
+        try {
+            gifFromAssets = new GifDrawable(getAssets(), "splash_gif.gif");
+            view.setBackground(gifFromAssets);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         if (!rxPermissions.isGranted(Manifest.permission.ACCESS_COARSE_LOCATION)
                 || !rxPermissions.isGranted(Manifest.permission.READ_PHONE_STATE)
@@ -54,19 +77,26 @@ public class SplashActivity extends RxBaseActivity {
     }
 
     private void delayIn() {
-        Handler handler = new Handler();
-        handler.postDelayed(() -> runOnUiThread(() -> {
-            boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
-            if (isLogin) {
-                startActivity(new Intent(SplashActivity.this, WorkActivity.class));
-            } else {
-                ARouter.getInstance()
-                        .build("/personal/LoginActivity")
-                        .navigation();
-            }
-            finish();
-//            startActivity(new Intent(SplashActivity.this, WorkActivity.class));
-        }), 2000);
+        if (null != gifFromAssets) {
+            gifFromAssets.start();
+            gifFromAssets.addAnimationListener(loopNumber -> jump());
+        } else {
+            Handler handler = new Handler();
+            handler.postDelayed(this::jump, 2000);
+        }
+
+    }
+
+    private void jump() {
+        boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
+        if (isLogin) {
+            startActivity(new Intent(SplashActivity.this, WorkActivity.class));
+        } else {
+            ARouter.getInstance()
+                    .build("/personal/LoginActivity")
+                    .navigation();
+        }
+        finish();
     }
 
     private void delayExit() {
