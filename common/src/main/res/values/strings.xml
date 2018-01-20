@@ -81,4 +81,6 @@
     <string name="baoxiao_apply">提交</string>
     <string name="baoxiao_suc">您的报销请求已提交，等待审核</string>
 
+    <string name="jump_gif">跳过</string>
+
 </resources>

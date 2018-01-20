@@ -1,0 +1,99 @@
+<resources>
+    <string name="app_name">rvakva driver v5</string>
+    <string name="lib_no_more_data">no more data ~</string>
+        
+    <string name="lib_again_up">failed, slide up and try again? (⊙﹏⊙)</string>
+        
+    <string name="lib_loading">Trying to load ...</string>
+
+        
+    <string name="wait">loading ..</string>
+        
+    <string name="response_error">Request no response, error code:</string>
+        
+    <string name="out_time">The network connection times out, check the network connection</string>
+        
+    <string name="no_internet">The network connection failed, check the network connection</string>
+        
+    <string name="parse_error">Data exception, parse failed</string>
+
+        
+    <string name="money_sign">¥</string>
+
+        
+    <string name="slide_arrive">Swipe to reserve</string>
+
+        
+    <string name="cancel">cancel</string>
+        
+    <string name="confirm">OK</string>
+
+        
+    <string name="today">today</string>
+        
+    <string name="tomorrow">Tomorrow</string>
+        
+    <string name="houtian">acquired</string>
+        
+    <string name="waitian">outer</string>
+        
+    <string name="shi">when</string>
+        
+    <string name="now">now</string>
+
+        
+    <string name="houtai">running ..</string>
+
+        
+    <string name="please_edit_place">Where do you want to go</string>
+
+        
+    <string name="input_pingyin">Please enter a name or pinyin</string>
+
+        
+    <string name="err_empty">john snow, you have nothing</string>
+        
+    <string name="err_error">Network request error, error code</string>
+
+        
+    <string name="new_order">new single</string>
+        
+    <string name="sended_order">sent single</string>
+        
+    <string name="accepted_order">orders received</string>
+        
+    <string name="to_start">go to reservation</string>
+        
+    <string name="arrive_start">arrival reservation</string>
+        
+    <string name="to_end">go to destination</string>
+        
+    <string name="middle_wait">waiting halfway</string>
+        
+    <string name="arrive_end">destination</string>
+        
+    <string name="settled">Billed</string>
+        
+    <string name="exculated">evaluated</string>
+        
+    <string name="canceled">Canceled single</string>
+
+        
+    <string name="des_place">[destination]</string>
+
+        
+    <string name="no_gps">The device did not find the GPS positioning chip, can not be accurately positioned</string>
+        
+    <string name="closed_wifi">Please turn on your WiFi to help pinpoint</string>
+
+        
+    <string name="please_open_gps">Please turn on GPS positioning service</string>
+        
+    <string name="ok">OK</string>
+
+        
+    <string name="lost_net_work">Network connection disconnected</string>
+
+        
+    <string name="succeed">success</string>
+</resources>

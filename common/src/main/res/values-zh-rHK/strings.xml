@@ -1,0 +1,85 @@
+<resources>
+    <string name="app_name">軟咖司機端V5</string>
+
+    <!-- 工作台界面str-->
+        <string name="work_fin_order">完成訂單</string>
+        <string name="work_hour">時</string>
+        <string name="work_minute">分</string>
+        <string name="work_online_time">在線時長</string>
+        <string name="work_today_income">今日收入</string>
+        <string name="work_driver">司機</string>
+        <string name="work_order">訂單</string>
+        <string name="work_online">開始聽單</string>
+        <string name="work_create">創建訂單</string>
+        <string name="work_offline">停止聽單</string>
+        <string name="work_listen_order">聽單中...</string>
+        <string name="work_title">工作台</string>
+
+        <!-- 流水str-->
+        <string name="liushui_baoxiao">報銷</string>
+        <string name="liushui_title">業務流水</string>
+
+        <string name="create_daijia">代駕</string>
+        <string name="create_zhuanche">專車</string>
+        <string name="create_paotui">跑腿</string>
+        <string name="create_huoyun">貨運</string>
+        <string name="create_zhuanxian">城際專線</string>
+
+        <string name="hint">提示</string>
+        <string name="sure">確定</string>
+        <string name="message">親愛的司機師傅，我們需要獲取以下權限來保證應用正常運行，請授予</string>
+
+        <string name="exit">未能獲得必要應用權限，即將退出</string>
+
+        <string name="liushui_today">今天</string>
+        <string name="liushui_yesterday">昨天</string>
+        <string name="liushui_this_week">本週</string>
+        <string name="liushui_this_month">本月</string>
+        <string name="liushui_all">全部</string>
+
+        <string name="new_ann">新公告：</string>
+        <string name="new_notify">新通知：</string>
+
+        <string name="start_lis_order">開始聽單啦！ </string>
+        <string name="stop_lis_order">停止聽單啦！ </string>
+
+        <string name="current_place">當前地址：</string>
+
+        <string name="grab_order_content">搶單</string>
+        <string name="send_order">派單</string>
+        <string name="accept_order">接單</string>
+        <string name="send_order_content">您有新的訂單了，快去接單吧</string>
+
+        <string name="cancel_order">消單</string>
+        <string name="you_have_order_cancel">您有訂單被取消，請注意查看</string>
+
+        <string name="force_offline">您已被管理員強制下線</string>
+
+        <!-- 搶單界面str -->
+        <string name="grab_dis">距您約</string>
+        <string name="grab_map">地圖</string>
+        <string name="grab_order">搶單</string>
+        <string name="sec">秒</string>
+
+        <string name="from">從</string>
+        <string name="out">出發</string>
+        <string name="to">到</string>
+        <string name="order">訂單</string>
+        <string name="to_you">距您</string>
+
+        <string name="meter">米</string>
+        <string name="k_meter">千米</string>
+
+        <string name="jishi_order">即時訂單</string>
+        <string name="yuyue_order">預約訂單</string>
+        <string name="time_format">MM月dd日 HH:mm</string>
+
+
+        <string name="baoxiao_hint_1">請輸入報銷金額</string>
+        <string name="baoxiao_hint_2">請輸入報銷原因</string>
+
+        <string name="baoxiao_apply">提交</string>
+        <string name="baoxiao_suc">您的報銷請求已提交，等待審核</string>
+
+    <string name="jump_gif">跳過</string>
+</resources>
