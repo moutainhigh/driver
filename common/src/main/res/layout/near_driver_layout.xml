@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/corners_alpha"
-                android:padding="2dp"
+                android:padding="7dp"
                 android:src="@mipmap/ic_refresh_loc" />
 
             <FrameLayout

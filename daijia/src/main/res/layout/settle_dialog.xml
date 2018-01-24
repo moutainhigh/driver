@@ -29,9 +29,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="15dp"
-            android:background="@mipmap/ic_close_gray"
-            android:padding="8dp"/>
+            android:src="@mipmap/ic_close_gray"
+            android:padding="15dp"/>
 
     </RelativeLayout>
 

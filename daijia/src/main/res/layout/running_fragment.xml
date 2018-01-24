@@ -228,17 +228,17 @@
 
         <ImageView
             android:id="@+id/ic_refresh"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:background="@drawable/corners_white_gray_stroke_2"
-            android:padding="2dp"
+            android:padding="7.5dp"
             android:src="@mipmap/ic_refresh_2"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <LinearLayout
             android:id="@+id/quanlan_con"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:background="@drawable/corners_white_gray_stroke_2"
             android:gravity="center"
             android:layout_marginTop="2dp"
@@ -262,8 +262,8 @@
 
         <LinearLayout
             android:id="@+id/change_end_con"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_marginTop="2dp"
             android:layout_above="@+id/wait_msg_con"
             android:background="@drawable/corners_white_gray_stroke_2"
@@ -271,14 +271,13 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:src="@mipmap/change_end" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
                 android:text="@string/change_end"
                 android:textSize="8sp" />
         </LinearLayout>
