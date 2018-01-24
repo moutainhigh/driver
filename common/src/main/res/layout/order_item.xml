@@ -27,7 +27,7 @@
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_centerVertical="true"
-                android:src="@mipmap/ic_time" />
+                android:src="@mipmap/ic_time_black" />
 
             <TextView
                 android:id="@+id/order_status"

@@ -40,7 +40,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/ic_order" />
+                    android:src="@mipmap/ic_order_black" />
 
                 <TextView
                     android:id="@+id/order_no"
@@ -60,7 +60,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/ic_time" />
+                    android:src="@mipmap/ic_time_black" />
 
                 <TextView
                     android:id="@+id/order_time"
@@ -118,6 +118,7 @@
                         android:ellipsize="end"
                         android:gravity="center"
                         android:lines="1"
+                        android:textColor="#232323"
                         android:text="锦绣大道南段小卡科技"
                         android:textSize="14sp" />
 
@@ -133,6 +134,7 @@
                         android:ellipsize="end"
                         android:lines="1"
                         android:text="花样年花样城5期"
+                        android:textColor="#232323"
                         android:textSize="14sp" />
 
                 </LinearLayout>
