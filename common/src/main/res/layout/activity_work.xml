@@ -232,13 +232,13 @@
         <RelativeLayout
             android:id="@+id/listen_order_con"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="80dp"
             android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/create_order"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:background="#3e4250"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -259,8 +259,8 @@
 
             <LinearLayout
                 android:id="@+id/offline"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_alignParentRight="true"
                 android:background="#3e4250"
                 android:gravity="center"
@@ -293,8 +293,8 @@
                 app:rb_scale="5">
 
                 <TextView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_centerInParent="true"
                     android:gravity="center"
                     android:src="@drawable/dot_bg_blue"
