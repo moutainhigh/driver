@@ -156,6 +156,37 @@
                 android:background="@color/dark_gray" />
 
             <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/white">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:text="@string/set_defult_navi"
+                    android:textColor="#232323"
+                    android:textSize="16sp" />
+
+                <com.easymi.component.widget.switchButton.SwitchButton
+                    android:id="@+id/default_navi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:src="@mipmap/ic_row" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/dark_gray" />
+
+            <RelativeLayout
                 android:onClick="choiceLanguage"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -222,6 +253,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
                 android:background="@color/dark_gray" />
+
+
 
             <View
                 android:layout_width="match_parent"

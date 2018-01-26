@@ -40,6 +40,7 @@
     <string name="set_sure_exit">您确定退出当前账号吗？</string>
     <string name="set_sure">确定</string>
     <string name="set_cancel">取消</string>
+    <string name="set_defult_navi">默认启动导航</string>
 
     <!-- 注册字符串 -->
     <string name="register_base_msg">基本信息</string>
