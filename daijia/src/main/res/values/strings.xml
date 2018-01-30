@@ -133,4 +133,20 @@
     <string name="jishi">即时</string>
     <string name="appoint">预约</string>
 
+
+    <string name="taxi_meter">计价器</string>
+    <string name="back">返回</string>
+    <string name="waited">已等候</string>
+    <string name="lc_km">里程(公里)</string>
+    <string name="total_fee_yuan">总金额(元)</string>
+
+
+    <string name="yi_xingshi">已行驶</string>
+    <string name="you_waited">您已经等待</string>
+    <string name="kuohao_minutes">(分钟)</string>
+
+
+    <string name="middle_start_drive">出发</string>
+
+
 </resources>
