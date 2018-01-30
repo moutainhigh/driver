@@ -240,4 +240,6 @@
     <string name="alipay_success">支付宝充值成功</string>
     <string name="alipay_failed">支付宝充值失败</string>
 
+    <string name="near_no_wc">附近暂无厕所</string>
+
 </resources>
