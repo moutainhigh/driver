@@ -22,7 +22,7 @@ public class Config {
      */
     public static final String APP_KEY = "1f462eb305a2417c9564f2dfaf89da9c";
     public static final String WX_APPID = "";
-    
+
 
     /**
      * MQTT配置
