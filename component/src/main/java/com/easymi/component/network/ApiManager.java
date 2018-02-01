@@ -1,5 +1,6 @@
 package com.easymi.component.network;
 
+import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.utils.Log;
 
@@ -52,15 +53,19 @@ public class ApiManager {
         Ssl ssl = new Ssl(XApp.getInstance(), "");
 
         //创建okhttp客户端
-        mOkHttpClient = new OkHttpClient.Builder()
-                .readTimeout(16000, TimeUnit.MILLISECONDS)
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.readTimeout(16000, TimeUnit.MILLISECONDS)
                 .connectTimeout(16000, TimeUnit.MILLISECONDS)
                 .addInterceptor(new SignInterceptor())
                 .addInterceptor(logInterceptor) //添加日志拦截器,进行输出日志
-                .sslSocketFactory(ssl.getSslSocketFactory(), ssl.getTrustManager())
                 .retryOnConnectionFailure(true)    //失败重连
-                .cache(cache)
-                .build();
+                .cache(cache);
+
+        if (Config.HOST.contains("https://")) {
+            builder.sslSocketFactory(ssl.getSslSocketFactory(), ssl.getTrustManager());
+        }
+
+        mOkHttpClient = builder.build();
     }
 
     /**
