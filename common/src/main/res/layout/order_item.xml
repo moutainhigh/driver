@@ -125,7 +125,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:background="@drawable/corners_alpha"
+                android:background="@drawable/corners_alpha_a"
                 android:paddingBottom="2dp"
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp"

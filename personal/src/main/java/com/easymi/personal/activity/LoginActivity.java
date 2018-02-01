@@ -83,11 +83,15 @@ public class LoginActivity extends RxBaseActivity implements LocObserver {
 
         registerText = findViewById(R.id.login_register);
         registerText.setOnClickListener(v -> {
-            startActivity(new Intent(LoginActivity.this, RegisterWebActivity.class));
+            ARouter.getInstance()
+                    .build("/component/WebActivity")
+                    .withString("url", Config.REGISTER_URL)
+                    .withString("title", getString(R.string.register_title))
+                    .navigation();
         });
 
         resetPsw = findViewById(R.id.login_forget);
-        resetPsw.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, RegisterWebActivity.class)));
+        resetPsw.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, RegisterLocalActivity.class)));
 
         eye = findViewById(R.id.eye);
 
@@ -107,7 +111,7 @@ public class LoginActivity extends RxBaseActivity implements LocObserver {
     private void initBox() {
         textAgreement.setOnClickListener(view -> ARouter.getInstance()
                 .build("/component/WebActivity")
-                .withString("url", "www.baidu.com")
+                .withString("url", Config.AGREEMENT_URL)
                 .withString("title", getString(R.string.login_agreement))
                 .navigation());
     }

@@ -11,8 +11,8 @@ public class Config {
     /**
      * 主机地址
      */
-    public static final String HOST = "http://192.168.0.72:8082/";
-//    public static final String HOST = "https://api.xiaokayun.cn/";
+//    public static final String HOST = "http://192.168.0.72:8082/";
+    public static final String HOST = "https://api.xiaokayun.cn/";
     /**
      * 图片服务器地址
      */
@@ -23,6 +23,14 @@ public class Config {
     public static final String APP_KEY = "1f462eb305a2417c9564f2dfaf89da9c";
     public static final String WX_APPID = "";
 
+    /**
+     * 服务协议地址
+     */
+    public static final String AGREEMENT_URL = "http://192.168.0.72:8082/";
+    /**
+     * 司机注册地址
+     */
+    public static final String REGISTER_URL = "http://192.168.0.72:8082/";
 
     /**
      * MQTT配置

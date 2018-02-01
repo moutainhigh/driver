@@ -21,7 +21,6 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.alibaba.android.arouter.facade.annotation.Route;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.widget.MyWebChomeClient;
 import com.easymi.personal.R;
@@ -36,8 +35,7 @@ import java.util.List;
 /**
  * Created by developerLzh on 2017/5/4.
  */
-@Route(path = "/component/WebActivity")
-public class RegisterWebActivity extends RxBaseActivity implements View.OnClickListener {
+public class RegisterLocalActivity extends RxBaseActivity implements View.OnClickListener {
     public String url;
 
     WebView webView;
@@ -245,7 +243,7 @@ public class RegisterWebActivity extends RxBaseActivity implements View.OnClickL
 
     public void choosePic(int x, int y) {
         // 进入相册 以下是例子：用不到的api可以不写
-        PictureSelector.create(RegisterWebActivity.this)
+        PictureSelector.create(RegisterLocalActivity.this)
                 .openGallery(PictureMimeType.ofImage())//全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()
                 .maxSelectNum(1)// 最大图片选择数量 int
                 .minSelectNum(1)// 最小选择数量 int

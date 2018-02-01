@@ -120,7 +120,7 @@
     <string name="yuan_coupon">元优惠券</string>
 
     <string name="help_pay">司机代付</string>
-    <string name="cus_balance">客户余额</string>
+    <string name="cus_balance">余额支付</string>
     <string name="qiandan">签单支付</string>
 
     <string name="pay_title">选择支付类型</string>
@@ -147,6 +147,9 @@
 
 
     <string name="middle_start_drive">出发</string>
+
+
+    <string name="choice_pay_type">选择支付方式</string>
 
 
 </resources>

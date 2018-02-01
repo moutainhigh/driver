@@ -178,6 +178,7 @@ public class LiushuiActivity extends RxBaseActivity {
                         startTime = TimeUtil.getBeginDayOfMonth().getTime();
                         endTime = TimeUtil.getEndDayOfMonth().getTime();
                     }
+                    page = 1;
                     queryOrders();
                 });
                 dialog.setContentView(view);

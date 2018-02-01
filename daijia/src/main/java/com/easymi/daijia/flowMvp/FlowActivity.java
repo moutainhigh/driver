@@ -1,5 +1,6 @@
 package com.easymi.daijia.flowMvp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
@@ -16,9 +17,15 @@ import com.easymi.component.Config;
 import com.easymi.component.utils.Log;
 
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -60,6 +67,7 @@ import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.MapUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
+import com.easymi.component.widget.CusBottomSheetDialog;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.component.widget.overlay.DrivingRouteOverlay;
@@ -354,6 +362,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 settleFragmentDialog = new SettleFragmentDialog(this, djOrder, bridge);
                 settleFragmentDialog.show();
             }
+
+            showPayType();//直接显示出结算支付方式dialog
         }
 
         boolean forceOre = XApp.getMyPreferences().getBoolean(Config.SP_ALWAYS_OREN, false);
@@ -559,45 +569,54 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void showPayType() {
-        RadioGroup group = new RadioGroup(this);
-        RadioButton helpPayBtn;
-        RadioButton balanceBtn;
-        RadioButton qiandanBtn;
 
-        helpPayBtn = new RadioButton(this);
-        helpPayBtn.setText(getString(R.string.help_pay));
+        if (null != settleFragmentDialog) {
+            settleFragmentDialog.dismiss();
+        }
 
-        balanceBtn = new RadioButton(this);
-        balanceBtn.setText(getString(R.string.cus_balance));
+        CusBottomSheetDialog bottomSheetDialog = new CusBottomSheetDialog(this);
 
-        qiandanBtn = new RadioButton(this);
-        qiandanBtn.setText(getString(R.string.qiandan));
+        View view = LayoutInflater.from(this).inflate(R.layout.pay_type_dialog, null, false);
+        CheckBox payBalance = view.findViewById(R.id.pay_balance);
+        CheckBox payHelpPay = view.findViewById(R.id.pay_help_pay);
+        Button sure = view.findViewById(R.id.pay_button);
+        ImageView close = view.findViewById(R.id.ic_close);
 
-        RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(DensityUtil.dp2px(this, 20), DensityUtil.dp2px(this, 10),
-                DensityUtil.dp2px(this, 20), DensityUtil.dp2px(this, 10));
+        payBalance.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b) {
+                payHelpPay.setChecked(false);
+            }
+        });
 
-        group.addView(helpPayBtn, params);
-        group.addView(balanceBtn, params);
+        payHelpPay.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b) {
+                payBalance.setChecked(false);
+            }
+        });
 
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.pay_title))
-                .setView(group)
-                .setPositiveButton(R.string.ok, (dialog1, which) -> {
-                    if (helpPayBtn.isChecked() || balanceBtn.isChecked() || qiandanBtn.isChecked()) {
-                        if (helpPayBtn.isChecked()) {
-                            presenter.payOrder(orderId, "helppay");
-                        } else if (balanceBtn.isChecked()) {
-                            presenter.payOrder(orderId, "balance");
-                        }
-                        dialog1.dismiss();
-                    } else {
-                        ToastUtil.showMessage(this, getString(R.string.please_pay_title));
-                    }
-                })
-                .create();
-        dialog.show();
+        sure.setOnClickListener(view12 -> {
+            if (payBalance.isChecked() || payHelpPay.isChecked()) {
+                if (payHelpPay.isChecked()) {
+                    presenter.payOrder(orderId, "helppay");
+                } else if (payBalance.isChecked()) {
+                    presenter.payOrder(orderId, "balance");
+                }
+                bottomSheetDialog.dismiss();
+            } else {
+                ToastUtil.showMessage(FlowActivity.this, getString(R.string.please_pay_title));
+            }
+        });
+
+        close.setOnClickListener(view1 -> bottomSheetDialog.dismiss());
+
+        bottomSheetDialog.setContentView(view);
+        bottomSheetDialog.setCancelable(false);
+        bottomSheetDialog.setOnDismissListener(dialogInterface -> {
+            if (null != settleFragmentDialog) {
+                settleFragmentDialog.show();
+            }
+        });
+        bottomSheetDialog.show();
     }
 
     @Override
