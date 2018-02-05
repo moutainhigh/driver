@@ -117,7 +117,7 @@ public class HandlePush implements FeeChangeSubject {
                     notifyObserver(orderId, orderType);
                 }
             } else if (msg.equals("driver_status")) {
-                int status = jb.optJSONObject("data").optInt("status");
+                String status = jb.optJSONObject("data").optString("status");
 
                 Message message = new Message();
                 message.what = 2;
@@ -350,7 +350,7 @@ public class HandlePush implements FeeChangeSubject {
                 break;
             case 2:
                 Bundle bundle2 = msg.getData();
-                int status = bundle2.getInt("status");
+                String status = bundle2.getString("status");
                 Employ employ = EmUtil.getEmployInfo();
                 if (null != employ) {
 //                    if (employ.status != EmployStatus.OFFLINE
@@ -361,17 +361,19 @@ public class HandlePush implements FeeChangeSubject {
                     employ.status = status;
                     employ.updateBase();
 
-                    if (status == EmployStatus.FROZEN) {
-                        XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.please_admin));
-                        EmUtil.employLogout(XApp.getInstance());
-                    } else if (status == EmployStatus.OFFLINE) {
-                        XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.force_offline));
-                        EmUtil.employLogout(XApp.getInstance());
-                    } else {
-                        Intent intent2 = new Intent();
-                        intent2.setAction(Config.BROAD_EMPLOY_STATUS_CHANGE);
-                        intent2.putExtra("status", employ.status);
-                        XApp.getInstance().sendBroadcast(intent2);
+                    if (status != null) {
+                        if (status.equals(EmployStatus.FROZEN)) {
+                            XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.please_admin));
+                            EmUtil.employLogout(XApp.getInstance());
+                        } else if (status.equals(EmployStatus.OFFLINE)) {
+                            XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.force_offline));
+                            EmUtil.employLogout(XApp.getInstance());
+                        } else {
+                            Intent intent2 = new Intent();
+                            intent2.setAction(Config.BROAD_EMPLOY_STATUS_CHANGE);
+                            intent2.putExtra("status", employ.status);
+                            XApp.getInstance().sendBroadcast(intent2);
+                        }
                     }
                 }
                 break;

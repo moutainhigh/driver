@@ -66,6 +66,7 @@ public class DJGrabFragment extends Fragment {
     }
 
     private void showBase() {
+        djOrder.orderTime = djOrder.orderTime * 1000;
         start_place.setText(djOrder.startPlace);
         end_place.setText(djOrder.endPlace);
         order_time_text.setText(djOrder.isBookOrder == 1 ? getString(R.string.appoint) : getString(R.string.jishi));
@@ -75,7 +76,7 @@ public class DJGrabFragment extends Fragment {
         order_type.setText(djOrder.orderDetailType);
 
         long today = TimeUtil.parseTime("yyyy-MM-dd", TimeUtil.getTime("yyyy-MM-dd", System.currentTimeMillis()));
-        long orderDay = TimeUtil.parseTime("yyyy-MM-dd", TimeUtil.getTime("yyyy-MM-dd", djOrder.orderTime * 1000));
+        long orderDay = TimeUtil.parseTime("yyyy-MM-dd", TimeUtil.getTime("yyyy-MM-dd", djOrder.orderTime));
 
         String day;
         if (today == orderDay) {
@@ -91,7 +92,7 @@ public class DJGrabFragment extends Fragment {
         }
         order_time_day.setText(day);
 
-        String minSec = TimeUtil.getTime("MM:ss", djOrder.orderTime);
+        String minSec = TimeUtil.getTime("HH:mm", djOrder.orderTime);
         order_time.setText(minSec);
 
         List<Address> addresses = djOrder.addresses;

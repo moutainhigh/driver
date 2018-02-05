@@ -144,7 +144,7 @@ public class Employ extends BaseEmploy implements Parcelable {
                         .getColumnIndex("portrait_path"));
                 driverInfo.score = cursor.getDouble(cursor
                         .getColumnIndex("score"));
-                driverInfo.status = cursor.getInt(cursor
+                driverInfo.status = cursor.getString(cursor
                         .getColumnIndex("status"));
 
 				/*
@@ -164,6 +164,7 @@ public class Employ extends BaseEmploy implements Parcelable {
 
     /**
      * main进程 查询所有司机
+     *
      * @return
      */
     public static List<Employ> findAll() {
@@ -188,6 +189,7 @@ public class Employ extends BaseEmploy implements Parcelable {
 
     /**
      * 其他进程 查询所有司机
+     *
      * @return
      */
     public static List<Employ> findAll(SqliteHelper helper) {
@@ -247,7 +249,7 @@ public class Employ extends BaseEmploy implements Parcelable {
                 .getColumnIndex("portrait_path"));
         driverInfo.score = cursor.getDouble(cursor
                 .getColumnIndex("score"));
-        driverInfo.status = cursor.getInt(cursor
+        driverInfo.status = cursor.getString(cursor
                 .getColumnIndex("status"));
         return driverInfo;
     }
@@ -314,7 +316,7 @@ public class Employ extends BaseEmploy implements Parcelable {
         cash_person_name = in.readString();
         portrait_path = in.readString();
         score = in.readDouble();
-        status = in.readInt();
+        status = in.readString();
     }
 
     public static final Creator<Employ> CREATOR = new Creator<Employ>() {
@@ -373,6 +375,6 @@ public class Employ extends BaseEmploy implements Parcelable {
         dest.writeString(cash_person_name);
         dest.writeString(portrait_path);
         dest.writeDouble(score);
-        dest.writeInt(status);
+        dest.writeString(status);
     }
 }

@@ -4,7 +4,6 @@
         <string name = "work_fin_order">Complete Order</string>
         <string name = "work_hour">when</string>
         <string name = "work_minute">minutes</string>
-        <string name = "work_online_time">online duration</string>
         <string name = "work_today_income">Revenue Today</string>
         <string name = "work_driver">driver</string>
         <string name = "work_order">order</string>

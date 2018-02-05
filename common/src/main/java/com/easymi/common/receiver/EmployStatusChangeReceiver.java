@@ -24,7 +24,7 @@ public class EmployStatusChangeReceiver extends BroadcastReceiver {
             String action = intent.getAction();
             if (action.equals(Config.BROAD_CANCEL_ORDER)) {
                 if (null != changeListener) {
-                    int status = intent.getIntExtra("status", -1);
+                    String status = intent.getStringExtra("status");
                     changeListener.onStatusChange(status);
                 }
             }
@@ -32,6 +32,6 @@ public class EmployStatusChangeReceiver extends BroadcastReceiver {
     }
 
     public interface OnStatusChangeListener {
-        void onStatusChange(int status);
+        void onStatusChange(String status);
     }
 }

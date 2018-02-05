@@ -153,7 +153,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         offlineCon.setOnClickListener(v -> presenter.offline());
 
         EmLoc emLoc = EmUtil.getLastLoc();
-        if(emLoc != null){
+        if (emLoc != null) {
             receiveLoc(emLoc);
         }
     }
@@ -406,11 +406,10 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         mapView.onResume();
         presenter.loadDataOnResume();
         Employ employ = EmUtil.getEmployInfo();
-        if (employ.status == EmployStatus.OFFLINE
-                || employ.status == EmployStatus.FROZEN) {
-            showOffline();
+        if (employ.status.equals(EmployStatus.ONLINE)) {
+            showOffline();//非听单状态
         } else {
-            showOnline();
+            showOnline();//听单状态
         }
     }
 
@@ -548,9 +547,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     }
 
     @Override
-    public void onStatusChange(int status) {
-        if (status == EmployStatus.OFFLINE
-                || status == EmployStatus.FROZEN) {
+    public void onStatusChange(String status) {
+        if (status.equals(EmployStatus.ONLINE)) {
             showOffline();
         } else {
             showOnline();

@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.db.SqliteHelper;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by liuzihao on 2017/12/18.
@@ -14,7 +15,7 @@ import com.easymi.component.db.SqliteHelper;
 public class BaseEmploy {
     public long id;
 
-    public int status;
+    public String status;
     //0在线 1空闲 2派单 3接单 4前往预约地 5到达预约地 6前往目的地 7中途等待 8离线 9冻结
 
     public String real_name;
