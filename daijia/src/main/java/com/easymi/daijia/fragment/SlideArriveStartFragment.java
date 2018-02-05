@@ -1,8 +1,6 @@
 package com.easymi.daijia.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -10,9 +8,7 @@ import android.widget.TextView;
 import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.widget.CustomSlideToUnlockView;
-import com.easymi.component.widget.SlideView;
 import com.easymi.daijia.R;
-import com.easymi.daijia.activity.FeeDetailActivity;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.flowMvp.ActFraCommBridge;
 

@@ -377,7 +377,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         finishNo.setText(String.valueOf(statistics.finishCount));
         onLineHour.setText(String.valueOf(hour));
         onLineMonute.setText(String.valueOf(minute));
-        todayIncome.setText(String.valueOf(statistics.totalAmount));
+        todayIncome.setText(String.valueOf(statistics.income));
     }
 
     @Override

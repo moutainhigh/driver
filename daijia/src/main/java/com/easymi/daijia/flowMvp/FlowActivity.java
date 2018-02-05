@@ -756,7 +756,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                     LatLng end = new LatLng(getEndAddr().lat, getEndAddr().lng);
                     latLngs.add(end);
                 }
-                LatLngBounds bounds = MapUtil.getBounds(latLngs, lastLatlng);
+                latLngs.add(lastLatlng);
+                LatLngBounds bounds = MapUtil.getBounds(latLngs);
                 aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(FlowActivity.this) / 2,
                         DensityUtil.getDisplayWidth(FlowActivity.this) / 2, 120));
             }

@@ -50,9 +50,9 @@ public class MapUtil {
             double maxDiffLng = Math.max(Math.abs(maxLng - center.longitude), (minLng - center.longitude));
 
             //左上
-            LatLng leftTopLatLng = new LatLng(center.latitude + maxDiffLat, center.longitude - maxDiffLng);
+            LatLng leftTopLatLng = new LatLng(center.latitude - maxDiffLat, center.longitude + maxDiffLng);
             //右下
-            LatLng rightBottomLatLng = new LatLng(center.latitude - maxDiffLat, center.longitude + maxDiffLng);
+            LatLng rightBottomLatLng = new LatLng(center.latitude + maxDiffLat, center.longitude - maxDiffLng);
 
             return new LatLngBounds.Builder().include(leftTopLatLng).include(rightBottomLatLng).build();
 

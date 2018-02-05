@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,12 +33,12 @@ import com.nineoldandroids.view.ViewHelper;
  **/
 public class CustomSlideToUnlockView extends RelativeLayout {
 
-    private static final String TAG="CustomSlideToUnlockView";
+    private static final String TAG = "CustomSlideToUnlockView";
     private static final long DEAFULT_DURATIN_LONG = 200;//左弹回,动画时长
     private static final long DEAFULT_DURATIN_SHORT = 100;//右弹,动画时长
     private static final boolean LOG = true;//打印开关
-    private static int  DISTANCE_LIMIT = 600;//滑动阈值
-    private static float  THRESHOLD = 0.5F;//滑动阈值比例:默认是0.5,即滑动超过父容器宽度的一半再松手就会触发
+    private static int DISTANCE_LIMIT = 600;//滑动阈值
+    private static float THRESHOLD = 0.5F;//滑动阈值比例:默认是0.5,即滑动超过父容器宽度的一半再松手就会触发
     protected Context mContext;
     private ImageView iv_slide;//滑块
     private TextView tv_hint;//提示文本
@@ -48,9 +49,9 @@ public class CustomSlideToUnlockView extends RelativeLayout {
 
 
     private int slideImageViewWidth;//滑块宽度
-    private int  slideImageViewResId;//滑块资源
-    private int  slideImageViewResIdAfter;//滑动到右边时,滑块资源id
-    private int  viewBackgroundResId;//root 背景
+    private int slideImageViewResId;//滑块资源
+    private int slideImageViewResIdAfter;//滑动到右边时,滑块资源id
+    private int viewBackgroundResId;//root 背景
     private String textHint;//文本
     private int textSize;//单位是sp,只拿数值
     private int textColorResId;//颜色,@color
@@ -84,23 +85,23 @@ public class CustomSlideToUnlockView extends RelativeLayout {
     }
 
     /**
-     * @method name:init
-     * @des:获取自定义属性
      * @param :[mTypedArray]
      * @return type:void
+     * @method name:init
+     * @des:获取自定义属性
      * @date 创建时间:2017/5/24
      * @author Chuck
      **/
     private void init(TypedArray mTypedArray) {
 
-        slideImageViewWidth= (int) mTypedArray.getDimension(R.styleable.SlideToUnlockView_slideImageViewWidth, DensityUtil.dp2px(getContext(), 60));
-        slideImageViewResId= mTypedArray.getResourceId(R.styleable.SlideToUnlockView_slideImageViewResId, -1);
-        slideImageViewResIdAfter= mTypedArray.getResourceId(R.styleable.SlideToUnlockView_slideImageViewResIdAfter, -1);
-        viewBackgroundResId= mTypedArray.getResourceId(R.styleable.SlideToUnlockView_sliderViewBackgroundResId, -1);
-        textHint=mTypedArray.getString(R.styleable.SlideToUnlockView_sliderTextHint);
-        textSize=mTypedArray.getInteger(R.styleable.SlideToUnlockView_sliderTextSize, 7);
-        textColorResId= mTypedArray.getColor(R.styleable.SlideToUnlockView_sliderTextColorResId, getResources().getColor(android.R.color.white));
-        THRESHOLD=mTypedArray.getFloat(R.styleable.SlideToUnlockView_slideThreshold, 0.5f);
+        slideImageViewWidth = (int) mTypedArray.getDimension(R.styleable.SlideToUnlockView_slideImageViewWidth, DensityUtil.dp2px(getContext(), 60));
+        slideImageViewResId = mTypedArray.getResourceId(R.styleable.SlideToUnlockView_slideImageViewResId, -1);
+        slideImageViewResIdAfter = mTypedArray.getResourceId(R.styleable.SlideToUnlockView_slideImageViewResIdAfter, -1);
+        viewBackgroundResId = mTypedArray.getResourceId(R.styleable.SlideToUnlockView_sliderViewBackgroundResId, -1);
+        textHint = mTypedArray.getString(R.styleable.SlideToUnlockView_sliderTextHint);
+        textSize = mTypedArray.getInteger(R.styleable.SlideToUnlockView_sliderTextSize, 7);
+        textColorResId = mTypedArray.getColor(R.styleable.SlideToUnlockView_sliderTextColorResId, getResources().getColor(android.R.color.white));
+        THRESHOLD = mTypedArray.getFloat(R.styleable.SlideToUnlockView_slideThreshold, 0.5f);
 
         mTypedArray.recycle();
     }
@@ -122,35 +123,35 @@ public class CustomSlideToUnlockView extends RelativeLayout {
         iv_slide = (ImageView) findViewById(R.id.iv_slide);
         tv_hint = (TextView) findViewById(R.id.tv_hint);
 
-        LayoutParams params= (LayoutParams) iv_slide .getLayoutParams();
+        LayoutParams params = (LayoutParams) iv_slide.getLayoutParams();
         //获取当前控件的布局对象
-        params.width= slideImageViewWidth;//设置当前控件布局的高度
+        params.width = slideImageViewWidth;//设置当前控件布局的高度
         iv_slide.setLayoutParams(params);//将设置好的布局参数应用到控件中
 
         setImageDefault();
-        if(viewBackgroundResId>0){
+        if (viewBackgroundResId > 0) {
             rl_slide.setBackgroundResource(viewBackgroundResId);//rootView设置背景
         }
 
         MarginLayoutParams tvParams = (MarginLayoutParams) tv_hint.getLayoutParams();
         tvParams.setMargins(0, 0, slideImageViewWidth, 0);//textview的marginRight设置为和滑块的宽度一致
         tv_hint.setLayoutParams(tvParams);
-        tv_hint.setTextSize(DensityUtil.sp2px(getContext(), textSize));
+        tv_hint.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
         tv_hint.setTextColor(textColorResId);
-        tv_hint.setText(TextUtils.isEmpty(textHint)? mContext.getString(R.string.slide_arrive):textHint);
+        tv_hint.setText(TextUtils.isEmpty(textHint) ? mContext.getString(R.string.slide_arrive) : textHint);
 
         //添加滑动监听
         rl_slide.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                DISTANCE_LIMIT= (int) (CustomSlideToUnlockView.this.getWidth()*THRESHOLD);//默认阈值是控件宽度的一半
+                DISTANCE_LIMIT = (int) (CustomSlideToUnlockView.this.getWidth() * THRESHOLD);//默认阈值是控件宽度的一半
 
                 switch (event.getAction()) {
 
                     case MotionEvent.ACTION_DOWN://按下时记录纵坐标
 
-                        if(mIsUnLocked){//滑块已经在最右边则不处理touch
+                        if (mIsUnLocked) {//滑块已经在最右边则不处理touch
                             return false;
                         }
 
@@ -162,13 +163,13 @@ public class CustomSlideToUnlockView extends RelativeLayout {
                     case MotionEvent.ACTION_MOVE://上滑才处理,如果用户一开始就下滑,则过掉不处理
 
                         logI(TAG, "=============================ACTION_MOVE");
-                        logI(TAG, "event.getRawX()============================="+event.getRawX());
+                        logI(TAG, "event.getRawX()=============================" + event.getRawX());
 
                         int dX = (int) event.getRawX() - mLastX;
-                        logI(TAG, "dX============================="+dX);
+                        logI(TAG, "dX=============================" + dX);
 
                         mSlidedDistance = (int) event.getRawX() - mActionDownX;
-                        logI(TAG, "mSlidedDistance============================="+ mSlidedDistance);
+                        logI(TAG, "mSlidedDistance=============================" + mSlidedDistance);
 
                         final MarginLayoutParams params = (MarginLayoutParams) v.getLayoutParams();
                         int left = params.leftMargin;
@@ -176,10 +177,10 @@ public class CustomSlideToUnlockView extends RelativeLayout {
                         int right = params.rightMargin;
                         int bottom = params.bottomMargin;
 
-                        logI(TAG, "left:"+left+",top:"+top+",right:"+right+",bottom"+bottom);
+                        logI(TAG, "left:" + left + ",top:" + top + ",right:" + right + ",bottom" + bottom);
 
                         int leftNew = left + dX;
-                        int rightNew =right - dX;
+                        int rightNew = right - dX;
 
                         if (mSlidedDistance > 0) {//直接通过margin实现滑动
                             params.setMargins(leftNew, top, rightNew, bottom);
@@ -188,7 +189,7 @@ public class CustomSlideToUnlockView extends RelativeLayout {
                             resetTextViewAlpha(mSlidedDistance);
 
                             //回调
-                            if(mCallBack!=null){
+                            if (mCallBack != null) {
                                 mCallBack.onSlide(mSlidedDistance);
                             }
                             mLastX = (int) event.getRawX();
@@ -230,40 +231,38 @@ public class CustomSlideToUnlockView extends RelativeLayout {
         });
 
 
-
     }
 
 
-    private void logI(String tag,String content){
-        if(LOG){
-            Log.i(tag,content);
+    private void logI(String tag, String content) {
+        if (LOG) {
+            Log.i(tag, content);
         }
     }
 
     /**
-     * @method name:resetTextViewAlpha
-     * @des:  重置提示文本的透明度
      * @param :[mSlidedDistance]
      * @return type:void
+     * @method name:resetTextViewAlpha
+     * @des: 重置提示文本的透明度
      * @date 创建时间:2017/5/24
      * @author Chuck
      **/
     private void resetTextViewAlpha(int distance) {
 
-        if(Math.abs(distance)>=Math.abs(DISTANCE_LIMIT)){
+        if (Math.abs(distance) >= Math.abs(DISTANCE_LIMIT)) {
             tv_hint.setAlpha(0.0f);
-        }
-        else{
-            tv_hint.setAlpha(1.0f-Math.abs(distance)*1.0f/Math.abs(DISTANCE_LIMIT));
+        } else {
+            tv_hint.setAlpha(1.0f - Math.abs(distance) * 1.0f / Math.abs(DISTANCE_LIMIT));
         }
     }
 
 
     /**
-     * @method name:scrollToLeft
-     * @des:  滑动未到阈值时松开手指,弹回到最左边
      * @param :[v]
      * @return type:void
+     * @method name:scrollToLeft
+     * @des: 滑动未到阈值时松开手指, 弹回到最左边
      * @date 创建时间:2017/5/24
      * @author Chuck
      **/
@@ -277,7 +276,7 @@ public class CustomSlideToUnlockView extends RelativeLayout {
 
 
         ViewAnimator
-                .animate( rl_slide)
+                .animate(rl_slide)
                 .translationX(ViewHelper.getTranslationX(v), -params1.leftMargin)
                 .interpolator(new AccelerateInterpolator())
                 .duration(DEAFULT_DURATIN_LONG)
@@ -290,8 +289,8 @@ public class CustomSlideToUnlockView extends RelativeLayout {
                         logI(TAG, "scrollToLeft动画结束,ViewHelper.getTranslationX(v):" + ViewHelper.getTranslationX(v));
                         mSlidedDistance = 0;
                         tv_hint.setAlpha(1.0f);
-                        mIsUnLocked=false;
-                        if(mCallBack!=null){
+                        mIsUnLocked = false;
+                        if (mCallBack != null) {
                             mCallBack.onSlide(mSlidedDistance);
                         }
                         setImageDefault();
@@ -302,10 +301,10 @@ public class CustomSlideToUnlockView extends RelativeLayout {
 
 
     /**
-     * @method name:scrollToRight
-     * @des:滑动到右边,并触发回调
      * @param :[v]
      * @return type:void
+     * @method name:scrollToRight
+     * @des:滑动到右边,并触发回调
      * @date 创建时间:2017/5/24
      * @author Chuck
      **/
@@ -319,9 +318,9 @@ public class CustomSlideToUnlockView extends RelativeLayout {
 
         //移动到最右端  移动的距离是 父容器宽度-leftMargin
         ViewAnimator
-                .animate( rl_slide)
+                .animate(rl_slide)
                 //.translationX(ViewHelper.getTranslationX(v), ViewHelper.getTranslationX(v)+100)
-                .translationX(ViewHelper.getTranslationX(v), ( rl_slide.getWidth() - params1.leftMargin-slideImageViewWidth))
+                .translationX(ViewHelper.getTranslationX(v), (rl_slide.getWidth() - params1.leftMargin - slideImageViewWidth))
                 //.translationX(params1.leftMargin, ( rl_slide.getWidth() - params1.leftMargin-100))
                 .interpolator(new AccelerateInterpolator())
                 .duration(DEAFULT_DURATIN_SHORT)
@@ -334,14 +333,14 @@ public class CustomSlideToUnlockView extends RelativeLayout {
                         logI(TAG, "scrollToRight动画结束,ViewHelper.getTranslationX(v):" + ViewHelper.getTranslationX(v));
                         mSlidedDistance = 0;
                         tv_hint.setAlpha(0.0f);
-                        mIsUnLocked=true;
+                        mIsUnLocked = true;
 
-                        if(slideImageViewResIdAfter>0){
+                        if (slideImageViewResIdAfter > 0) {
                             iv_slide.setImageResource(slideImageViewResIdAfter);//滑块imagview设置资源
                         }
 
                         //回调
-                        if(mCallBack!=null){
+                        if (mCallBack != null) {
                             mCallBack.onUnlocked();
                         }
                     }
@@ -352,8 +351,8 @@ public class CustomSlideToUnlockView extends RelativeLayout {
     }
 
 
-    public void resetView(){
-        mIsUnLocked=false;
+    public void resetView() {
+        mIsUnLocked = false;
         setImageDefault();
         scrollToLeft(rl_slide);
     }
@@ -361,20 +360,21 @@ public class CustomSlideToUnlockView extends RelativeLayout {
     private void setImageDefault() {
         /**
          * @method name:setImageDefault
-         * @des:  设置默认图片
+         * @des: 设置默认图片
          * @param :[]
          * @return type:void
          * @date 创建时间:2017/5/25
          * @author Chuck
          **/
 
-        if(slideImageViewResId>0){
+        if (slideImageViewResId > 0) {
             iv_slide.setImageResource(slideImageViewResId);//滑块imagview设置资源
         }
     }
 
-    public interface CallBack{
+    public interface CallBack {
         void onSlide(int distance);//右滑距离回调
+
         void onUnlocked();//滑动到了右边,事件回调
     }
 
