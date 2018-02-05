@@ -83,4 +83,7 @@
 
     <string name="jump_gif">跳过</string>
 
+    <string name="please_admin">您的账户已被冻结，请联系管理员</string>
+    <string name="force_offline_please_admin">您已被强制下线，请联系管理员</string>
+
 </resources>

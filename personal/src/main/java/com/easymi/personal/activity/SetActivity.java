@@ -16,9 +16,20 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.loc.LocService;
 import com.easymi.component.loc.LocationHelperService;
+import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HttpResultFunc;
+import com.easymi.component.network.MySubscriber;
+import com.easymi.component.result.EmResult;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.switchButton.SwitchButton;
+import com.easymi.personal.McService;
 import com.easymi.personal.R;
+import com.easymi.personal.result.ArticleResult;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by developerLzh on 2017/11/6 0006.
@@ -132,7 +143,7 @@ public class SetActivity extends RxBaseActivity {
                 .setTitle(getString(R.string.set_hint))
                 .setMessage(getString(R.string.set_sure_exit))
                 .setPositiveButton(getString(R.string.set_sure), (dialogInterface, i) -> {
-                    employLogout();
+                    doLogOut();
                 })
                 .setNegativeButton(getString(R.string.set_cancel), (dialogInterface, i) -> dialogInterface.dismiss())
                 .create();
@@ -140,61 +151,16 @@ public class SetActivity extends RxBaseActivity {
 
     }
 
-    private void employLogout() {
-        SharedPreferences.Editor editor = XApp.getPreferencesEditor();
-        editor.putBoolean(Config.SP_ISLOGIN, false);
-        editor.putLong(Config.SP_DRIVERID, -1);
-        editor.apply();
+    private void doLogOut() {
+        McService mcService = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
-        stopAllService(this);
-        ActManager.getInstance().finishAllActivity();
+        Observable<EmResult> observable = mcService
+                .employLoginOut(EmUtil.getEmployId(), Config.APP_KEY)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
 
-        Intent i = getPackageManager()
-                .getLaunchIntentForPackage(getPackageName());
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
-
-        ActivityManager activityMgr = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        if (activityMgr != null) {
-            activityMgr.killBackgroundProcesses(getPackageName());
-        }
-        System.exit(0);
-    }
-
-    private void stopAllService(Context context) {
-
-        Intent locIntent = new Intent(context, LocService.class);
-        context.stopService(locIntent);
-
-        Intent locHelpIntent = new Intent(context, LocationHelperService.class);
-        context.stopService(locHelpIntent);
-        try {
-            Service mQTTService = (Service) (Class.forName("com.easymi.common.push.MQTTService").newInstance());
-            Service jobKeepLiveService = (Service) Class.forName("com.easymi.common.daemon.JobKeepLiveService").newInstance();
-            Service puppetService = (Service) Class.forName("com.easymi.common.daemon.PuppetService").newInstance();
-            Service daemonService = (Service) Class.forName("com.easymi.common.daemon.DaemonService").newInstance();
-
-            Intent mqttIntent = new Intent(context, mQTTService.getClass());
-            mqttIntent.setPackage(getPackageName());
-            context.stopService(mqttIntent);
-
-            Intent daemonIntent = new Intent(context, daemonService.getClass());
-            daemonIntent.setPackage(getPackageName());
-            context.stopService(daemonIntent);
-
-            Intent jobkeepIntent = new Intent(context, jobKeepLiveService.getClass());
-            jobkeepIntent.setPackage(getPackageName());
-            context.stopService(jobkeepIntent);
-
-            Intent puppetIntent = new Intent(context, puppetService.getClass());
-            puppetIntent.setPackage(getPackageName());
-            context.stopService(puppetIntent);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        }
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
+                true, emResult -> EmUtil.employLogout(SetActivity.this))));
     }
 }

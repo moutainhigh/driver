@@ -34,6 +34,7 @@ import com.easymi.component.network.MySubscriber;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.StringUtils;
+import com.easymi.component.EmployStatus;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -360,10 +361,18 @@ public class HandlePush implements FeeChangeSubject {
                     employ.status = status;
                     employ.updateBase();
 
-                    Intent intent2 = new Intent();
-                    intent2.setAction(Config.BROAD_EMPLOY_STATUS_CHANGE);
-                    intent2.putExtra("status", employ.status);
-                    XApp.getInstance().sendBroadcast(intent2);
+                    if (status == EmployStatus.FROZEN) {
+                        XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.please_admin));
+                        EmUtil.employLogout(XApp.getInstance());
+                    } else if (status == EmployStatus.OFFLINE) {
+                        XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.force_offline));
+                        EmUtil.employLogout(XApp.getInstance());
+                    } else {
+                        Intent intent2 = new Intent();
+                        intent2.setAction(Config.BROAD_EMPLOY_STATUS_CHANGE);
+                        intent2.putExtra("status", employ.status);
+                        XApp.getInstance().sendBroadcast(intent2);
+                    }
                 }
                 break;
         }

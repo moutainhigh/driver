@@ -9,6 +9,7 @@ import android.text.TextWatcher;
 
 import com.easymi.component.Config;
 import com.easymi.component.utils.Log;
+
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
@@ -201,6 +202,14 @@ public class LoginActivity extends RxBaseActivity implements LocObserver {
             }
         });
 
+        String enAcc = XApp.getMyPreferences().getString(Config.SP_LOGIN_ACCOUNT, "");
+        String enPsw = XApp.getMyPreferences().getString(Config.SP_LOGIN_PSW, "");
+        if (StringUtils.isNotBlank(enAcc) && StringUtils.isNotBlank(enPsw)) {
+            String acc = AesUtil.aesDecrypt(enAcc, AesUtil.AAAAA);
+            String psw = AesUtil.aesDecrypt(enPsw, AesUtil.AAAAA);
+            editAccount.setText(acc);
+            editPsw.setText(psw);
+        }
     }
 
     private void setLoginBtnEnable(boolean enable) {
@@ -232,6 +241,8 @@ public class LoginActivity extends RxBaseActivity implements LocObserver {
             SharedPreferences.Editor editor = XApp.getPreferencesEditor();
             editor.putBoolean(Config.SP_ISLOGIN, true);
             editor.putLong(Config.SP_DRIVERID, employ.id);
+            editor.putString(Config.SP_LOGIN_ACCOUNT, AesUtil.aesEncrypt(name, AesUtil.AAAAA));
+            editor.putString(Config.SP_LOGIN_PSW, AesUtil.aesEncrypt(psw, AesUtil.AAAAA));
             editor.apply();
             ARouter.getInstance()
                     .build("/common/WorkActivity")

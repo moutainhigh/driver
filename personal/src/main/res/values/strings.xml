@@ -229,6 +229,7 @@
     <string name="fabu">发布</string>
     <string name="different_new_confirm">新密码与确认密码不一致</string>
     <string name="same_old_new">新密码与旧密码相同</string>
+    <string name="not_same_old">您输入的旧密码与所登录的账户密码不匹配</string>
 
     <string name="wx_pay_success">微信充值成功</string>
     <string name="wx_pay_fail">微信充值失败</string>
@@ -241,5 +242,6 @@
     <string name="alipay_failed">支付宝充值失败</string>
 
     <string name="near_no_wc">附近暂无厕所</string>
+    <string name="change_psw_suc">修改密码成功</string>
 
 </resources>

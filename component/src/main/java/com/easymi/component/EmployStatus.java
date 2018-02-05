@@ -1,4 +1,4 @@
-package com.easymi.component.widget;
+package com.easymi.component;
 
 /**
  * Created by liuzihao on 2017/12/22.
@@ -8,7 +8,7 @@ public class EmployStatus {
     /**
      * 离线
      */
-    public static final int OFFLINE = 1;
+    public static final int OFFLINE = 0;
     /**
      * 在线
      */

@@ -6,13 +6,27 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 
+import com.easymi.component.Config;
+import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HttpResultFunc;
+import com.easymi.component.network.MySubscriber;
+import com.easymi.component.network.NoErrSubscriberListener;
+import com.easymi.component.result.EmResult;
+import com.easymi.component.utils.AesUtil;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.LoadingButton;
+import com.easymi.personal.McService;
 import com.easymi.personal.R;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by developerLzh on 2017/11/11 0011.
@@ -48,7 +62,12 @@ public class ChangeActivity extends RxBaseActivity {
             String newPsw = editNew.getText().toString();
             String confirmPsw = editConfirm.getText().toString();
 
-            if (oldPsw.equals(newPsw)) {
+            String oldPswSave = AesUtil.aesDecrypt(XApp.getMyPreferences().getString(Config.SP_LOGIN_PSW, ""), AesUtil.AAAAA);
+
+            if (!oldPsw.equals(oldPswSave)) {
+                ToastUtil.showMessage(ChangeActivity.this, getString(R.string.not_same_old));
+                return;
+            } else if (oldPsw.equals(newPsw)) {
                 ToastUtil.showMessage(ChangeActivity.this, getString(R.string.same_old_new));
                 return;
             } else if (!newPsw.equals(confirmPsw)) {
@@ -62,7 +81,22 @@ public class ChangeActivity extends RxBaseActivity {
 
 
     private void changePsw() {
+        McService mcService = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
+        Observable<EmResult> observable = mcService
+                .updatePsw(EmUtil.getEmployId(),
+                        AesUtil.aesEncrypt(editOld.getText().toString(), AesUtil.AAAAA),
+                        AesUtil.aesEncrypt(editNew.getText().toString(), AesUtil.AAAAA),
+                        Config.APP_KEY)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, btn, emResult -> {
+            ToastUtil.showMessage(ChangeActivity.this, getString(R.string.change_psw_suc));
+            XApp.getPreferencesEditor().putString(Config.SP_LOGIN_PSW, AesUtil.aesEncrypt(editNew.getText().toString(), AesUtil.AAAAA)).apply();
+            finish();
+        })));
     }
 
     CusToolbar cusToolbar;
@@ -70,12 +104,7 @@ public class ChangeActivity extends RxBaseActivity {
     @Override
     public void initToolBar() {
         cusToolbar = findViewById(R.id.cus_toolbar);
-        cusToolbar.setLeftIcon(R.drawable.ic_arrow_back, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
+        cusToolbar.setLeftIcon(R.drawable.ic_arrow_back, view -> onBackPressed());
         cusToolbar.setTitle(R.string.set_change_psw);
     }
 

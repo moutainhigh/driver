@@ -86,7 +86,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="@string/work_fin_order"
-                    android:textColor="@color/white"
+                    android:textColor="#aaffffff"
                     android:textSize="18sp" />
 
             </LinearLayout>
@@ -162,7 +162,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="@string/work_online_time"
-                    android:textColor="@color/white"
+                    android:textColor="#aaffffff"
                     android:textSize="18sp" />
 
             </LinearLayout>
@@ -193,7 +193,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="@string/work_today_income"
-                    android:textColor="@color/white"
+                    android:textColor="#aaffffff"
                     android:textSize="18sp" />
 
             </LinearLayout>

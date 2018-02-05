@@ -55,7 +55,7 @@ public class CusErrLayout extends LinearLayout {
     }
 
     public CusErrLayout setErrImg(){
-        imageView.setImageResource(R.drawable.ic_net_error);
+        imageView.setImageResource(R.mipmap.ic_net_error);
         return this;
     }
 }

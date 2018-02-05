@@ -46,7 +46,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/time_icon"
                 android:text="11月12日 14:03"
-                android:textColor="@color/white" />
+                android:textColor="#aaffffff" />
         </RelativeLayout>
 
         <LinearLayout
@@ -65,20 +65,20 @@
 
                 <ImageView
                     android:id="@+id/start_icon"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
                     android:layout_marginTop="2dp"
                     android:src="@drawable/circle_accent" />
 
                 <View
                     android:layout_width="0.1dp"
                     android:layout_height="20dp"
-                    android:background="@color/dark_gray" />
+                    android:background="#aaffffff" />
 
                 <ImageView
                     android:id="@+id/end_icon"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
                     android:layout_marginBottom="2dp"
                     android:src="@drawable/circle_yellow" />
 
@@ -99,7 +99,7 @@
                     android:ellipsize="end"
                     android:gravity="center"
                     android:lines="1"
-                    android:text=""
+                    android:text="成都市温江区锦绣大道"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
 
@@ -112,9 +112,10 @@
                     android:id="@+id/order_end_place"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
-                    android:text=""
-                    android:lines="1"
+                    android:layout_marginTop="10dp"
                     android:ellipsize="end"
+                    android:lines="1"
+                    android:text="成都市温江区锦绣大道"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
 
@@ -131,7 +132,7 @@
                 android:paddingRight="3dp"
                 android:paddingTop="2dp"
                 android:text="日常代驾"
-                android:textColor="@color/white" />
+                android:textColor="#aaffffff" />
 
 
         </LinearLayout>

@@ -216,4 +216,18 @@ public interface McService {
                                         @Field("type") Integer type);
 
 
+    /**
+     * 登录后修改密码
+     * @param driver_id
+     * @param old_password
+     * @param new_password
+     * @param app_key
+     * @return
+     */
+    @PUT("/driver/api/v1/updatePassword")
+    @FormUrlEncoded
+    Observable<EmResult> updatePsw(@Field("driver_id") Long driver_id,
+                                   @Field("old_password") String old_password,
+                                   @Field("new_password") String new_password,
+                                   @Field("app_key") String app_key);
 }

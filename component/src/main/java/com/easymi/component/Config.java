@@ -64,6 +64,10 @@ public class Config {
     public static final String SP_ALWAYS_OREN = "always_oren";//是否始终横屏计价
     public static final String SP_DEFAULT_NAVI = "default_navi";//默认启动导航
 
+
+    public static final String SP_LOGIN_ACCOUNT = "login_account";//账号
+    public static final String SP_LOGIN_PSW = "login_psw";//密码
+
     public static final String APP_PACKGE_NAME = "com.easymi.v5driver";
 
     public static final String DAIJIA = "daijia";
