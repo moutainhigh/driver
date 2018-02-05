@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <com.easymi.component.widget.CusToolbar
+        android:id="@+id/cus_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bar_height" />
 

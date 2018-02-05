@@ -52,7 +52,7 @@ public class EmUtil {
         if (activityMgr != null) {
             activityMgr.killBackgroundProcesses(context.getPackageName());
         }
-        System.exit(0);
+//        System.exit(0);
     }
 
     private static void stopAllService(Context context) {

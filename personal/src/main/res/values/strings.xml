@@ -91,6 +91,8 @@
     <!-- 设置密码str-->
     <string name="reset_login_psw">设置登录密码</string>
     <string name="reset_please_6">请输入6–16新位密码</string>
+    <string name="reset_login_phone">设置登录手机号</string>
+    <string name="reset_please_11">请输入11位手机号码</string>
     <string name="reset_please_code">请输入验证码</string>
     <string name="reset_confirm">确定</string>
     <string name="reset_edit_words">输入图片文字</string>

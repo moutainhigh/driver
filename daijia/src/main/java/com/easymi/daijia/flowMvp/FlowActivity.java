@@ -523,11 +523,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         routeOverLay = new RouteOverLay(aMap, path, this);
         routeOverLay.setStartPointBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.yellow_dot_small));
         routeOverLay.setEndPointBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.blue_dot_small));
-        try {
-            routeOverLay.setWidth(60f);
-        } catch (AMapNaviException e) {
-            e.printStackTrace();
-        }
         routeOverLay.setTrafficLine(true);
         routeOverLay.addToMap();
 
@@ -754,7 +749,16 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void doQuanlan() {
-                showMapBounds();
+                List<LatLng> latLngs = new ArrayList<>();
+                LatLng start = new LatLng(getStartAddr().lat, getStartAddr().lng);
+                latLngs.add(start);
+                if (null != getEndAddr()) {
+                    LatLng end = new LatLng(getEndAddr().lat, getEndAddr().lng);
+                    latLngs.add(end);
+                }
+                LatLngBounds bounds = MapUtil.getBounds(latLngs, lastLatlng);
+                aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(FlowActivity.this) / 2,
+                        DensityUtil.getDisplayWidth(FlowActivity.this) / 2, 120));
             }
 
             @Override
@@ -1007,6 +1011,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     @Override
     public void onTouch(MotionEvent motionEvent) {
         if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
+            Log.e("mapTouch", "-----map onTouched-----");
             if (djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
                 isMapTouched = true;
             }

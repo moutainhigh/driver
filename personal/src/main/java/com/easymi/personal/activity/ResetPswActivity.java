@@ -47,6 +47,10 @@ public class ResetPswActivity extends RxBaseActivity {
         return R.layout.activity_set_psw;
     }
 
+    LinearLayout accountCon;
+    EditText editAccount;
+    Button confirmAccount;
+
     LinearLayout pswCon;
     EditText editPsw;
     Button confirmPsw;
@@ -69,6 +73,10 @@ public class ResetPswActivity extends RxBaseActivity {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
+        accountCon = findViewById(R.id.set_account_con);
+        editAccount = findViewById(R.id.edit_account);
+        confirmAccount = findViewById(R.id.confirm_account);
+
         pswCon = findViewById(R.id.set_psw_con);
         editPsw = findViewById(R.id.edit_psw);
         confirmPsw = findViewById(R.id.confirm_psw);
@@ -82,6 +90,30 @@ public class ResetPswActivity extends RxBaseActivity {
         timerText = findViewById(R.id.timer_text);
         secInput = findViewById(R.id.sec_code_input);
         phoneNumber = findViewById(R.id.phone_number);
+
+        confirmAccount.setEnabled(false);
+        editAccount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (StringUtils.isBlank(s.toString()) || s.toString().length() < 11) {
+                    confirmAccount.setEnabled(false);
+                    confirmAccount.setBackgroundDrawable(getResources().getDrawable(R.drawable.corners_button_press_bg));
+                } else {
+                    confirmAccount.setEnabled(true);
+                    confirmAccount.setBackgroundDrawable(getResources().getDrawable(R.drawable.corners_button_bg));
+                }
+            }
+        });
 
         confirmPsw.setEnabled(false);
         editPsw.addTextChangedListener(new TextWatcher() {
@@ -108,6 +140,13 @@ public class ResetPswActivity extends RxBaseActivity {
         });
         editPsw.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
+        confirmAccount.setOnClickListener(v -> {
+            phone = editAccount.getText().toString();
+            PhoneUtil.hideKeyboard(ResetPswActivity.this);
+            accountCon.setVisibility(View.GONE);
+            pswCon.setVisibility(View.VISIBLE);
+        });
+
         confirmPsw.setOnClickListener(v -> {
             psw = editPsw.getText().toString();
             PhoneUtil.hideKeyboard(ResetPswActivity.this);
@@ -123,13 +162,13 @@ public class ResetPswActivity extends RxBaseActivity {
             authCode = CodeUtil.getInstance().getCode();
         });
         authInput.setOnCodeListener(code -> {
-            if(code.equals(authCode)){
+            if (code.toLowerCase().equals(authCode)) {
                 secCodeCon.setVisibility(View.VISIBLE);
                 authCodeCon.setVisibility(View.GONE);
 
                 initSecView();
             } else {
-                ToastUtil.showMessage(ResetPswActivity.this,getString(R.string.reset_error_auth));
+                ToastUtil.showMessage(ResetPswActivity.this, getString(R.string.reset_error_auth));
                 authInput = new VerifyCodeView(this);
             }
         });
@@ -145,10 +184,10 @@ public class ResetPswActivity extends RxBaseActivity {
 
     }
 
-    private void resetPsw(){
+    private void resetPsw() {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
         Observable<EmResult> observable = api
-                .changePsw(phone,psw, Config.APP_KEY)
+                .changePsw(phone, psw, Config.APP_KEY)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -156,7 +195,7 @@ public class ResetPswActivity extends RxBaseActivity {
         mRxManager.add(observable.subscribe(new MySubscriber<EmResult>(ResetPswActivity.this, true, true, new NoErrSubscriberListener<EmResult>() {
             @Override
             public void onNext(EmResult emResult) {
-                ToastUtil.showMessage(ResetPswActivity.this,getString(R.string.reset_change_suc));
+                ToastUtil.showMessage(ResetPswActivity.this, getString(R.string.reset_change_suc));
                 ResetPswActivity.this.finish();
             }
         })));
@@ -171,7 +210,7 @@ public class ResetPswActivity extends RxBaseActivity {
     private int time = 60;
 
     private void initSecView() {
-        phoneNumber.setText("18148140090");
+        phoneNumber.setText(phone);
         if (null != timer) {
             timer.cancel();
             timer = null;

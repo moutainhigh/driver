@@ -33,17 +33,17 @@ public class EmployStatus {
     /**
      * 到达预约地
      */
-    public static final int ARRIVE_START = 28;
+    public static final int ARRIVE_START = 30;
     /**
      * 前往目的地
      */
-    public static final int TO_END = 30;
+    public static final int TO_END = 35;
     /**
      * 中途等待
      */
-    public static final int MIDDLE_WAIT = 35;
+    public static final int MIDDLE_WAIT = 40;
     /**
      * 冻结
      */
-    public static final int FROZEN = 40;
+    public static final int FROZEN = 45;
 }

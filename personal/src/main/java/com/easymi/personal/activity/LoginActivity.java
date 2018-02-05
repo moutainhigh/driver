@@ -8,8 +8,10 @@ import android.text.InputType;
 import android.text.TextWatcher;
 
 import com.easymi.component.Config;
+import com.easymi.component.activity.WebActivity;
 import com.easymi.component.utils.Log;
 
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
@@ -84,15 +86,14 @@ public class LoginActivity extends RxBaseActivity implements LocObserver {
 
         registerText = findViewById(R.id.login_register);
         registerText.setOnClickListener(v -> {
-            ARouter.getInstance()
-                    .build("/component/WebActivity")
-                    .withString("url", Config.REGISTER_URL)
-                    .withString("title", getString(R.string.register_title))
-                    .navigation();
+            Intent intent = new Intent(LoginActivity.this, WebActivity.class);
+            intent.putExtra("url", Config.REGISTER_URL);
+            intent.putExtra("title", getString(R.string.register_title));
+            startActivity(intent);
         });
 
         resetPsw = findViewById(R.id.login_forget);
-        resetPsw.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, RegisterLocalActivity.class)));
+        resetPsw.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, ResetPswActivity.class)));
 
         eye = findViewById(R.id.eye);
 
@@ -110,11 +111,12 @@ public class LoginActivity extends RxBaseActivity implements LocObserver {
     }
 
     private void initBox() {
-        textAgreement.setOnClickListener(view -> ARouter.getInstance()
-                .build("/component/WebActivity")
-                .withString("url", Config.AGREEMENT_URL)
-                .withString("title", getString(R.string.login_agreement))
-                .navigation());
+        textAgreement.setOnClickListener(view -> {
+            Intent intent = new Intent(LoginActivity.this, WebActivity.class);
+            intent.putExtra("url", Config.AGREEMENT_URL);
+            intent.putExtra("title", getString(R.string.login_agreement));
+            startActivity(intent);
+        });
     }
 
     private boolean eyeOn = false;

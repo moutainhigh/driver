@@ -233,7 +233,7 @@
             android:background="@drawable/corners_white_gray_stroke_2"
             android:padding="7.5dp"
             android:src="@mipmap/ic_refresh_2"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/quanlan_con"

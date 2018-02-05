@@ -10,6 +10,7 @@ import android.widget.EditText;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
+import com.easymi.component.widget.CusToolbar;
 import com.easymi.daijia.R;
 
 /**
@@ -26,7 +27,15 @@ public class CancelActivity extends RxBaseActivity {
 
     EditText editReason;
 
+    CusToolbar cusToolbar;
+
     private int checkId = 1;
+
+    @Override
+    public void initToolBar() {
+        cusToolbar.setLeftBack(view -> finish());
+        cusToolbar.setTitle(R.string.cancel_order);
+    }
 
     @Override
     public int getLayoutId() {
@@ -40,6 +49,8 @@ public class CancelActivity extends RxBaseActivity {
         checkBox3 = findViewById(R.id.check_3);
         checkBox4 = findViewById(R.id.check_4);
         checkBox5 = findViewById(R.id.check_5);
+
+        cusToolbar = findViewById(R.id.cus_toolbar);
 
         editReason = findViewById(R.id.edit_reason);
 
