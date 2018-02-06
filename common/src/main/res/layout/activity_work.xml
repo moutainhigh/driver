@@ -61,7 +61,7 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
             android:layout_margin="10dp"
             android:background="@mipmap/corners_alpha_bg_big"
             android:orientation="horizontal">
@@ -79,15 +79,15 @@
                     android:layout_height="wrap_content"
                     android:text="0"
                     android:textColor="@color/yellow"
-                    android:textSize="30sp" />
+                    android:textSize="28sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="2dp"
                     android:text="@string/work_fin_order"
                     android:textColor="#aaffffff"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
@@ -95,7 +95,7 @@
                 android:layout_width="0.1dp"
                 android:layout_height="60dp"
                 android:layout_gravity="center_vertical"
-                android:background="#77dcdcdc" />
+                android:background="#55dcdcdc" />
 
             <LinearLayout
                 android:layout_width="0.0dp"
@@ -121,7 +121,7 @@
                         android:layout_toLeftOf="@+id/hour"
                         android:text="0"
                         android:textColor="@color/yellow"
-                        android:textSize="30sp" />
+                        android:textSize="28sp" />
 
                     <TextView
                         android:id="@+id/hour"
@@ -143,7 +143,7 @@
                         android:layout_toRightOf="@+id/base"
                         android:text="0"
                         android:textColor="@color/yellow"
-                        android:textSize="30sp" />
+                        android:textSize="28sp" />
 
                     <TextView
                         android:id="@+id/minute"
@@ -160,10 +160,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="2dp"
                     android:text="@string/work_online_time"
                     android:textColor="#aaffffff"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
@@ -171,7 +171,7 @@
                 android:layout_width="0.1dp"
                 android:layout_height="60dp"
                 android:layout_gravity="center_vertical"
-                android:background="#77dcdcdc" />
+                android:background="#55dcdcdc" />
 
             <LinearLayout
                 android:layout_width="0.0dp"
@@ -186,15 +186,15 @@
                     android:layout_height="wrap_content"
                     android:text="0"
                     android:textColor="@color/yellow"
-                    android:textSize="30sp" />
+                    android:textSize="28sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="2dp"
                     android:text="@string/work_today_income"
                     android:textColor="#aaffffff"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
@@ -232,51 +232,53 @@
         <RelativeLayout
             android:id="@+id/listen_order_con"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="60dp"
             android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/create_order"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:background="#3e4250"
                 android:gravity="center"
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:src="@mipmap/creat_icon" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="2dp"
                     android:text="@string/work_create"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/offline"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_alignParentRight="true"
                 android:background="#3e4250"
                 android:gravity="center"
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:src="@mipmap/offline_icon" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="2dp"
                     android:text="@string/work_offline"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 

@@ -18,6 +18,8 @@
     <!-- 流水str-->
     <string name="liushui_baoxiao">报销</string>
     <string name="liushui_title">业务流水</string>
+    <string name="liushui_baoxiao_sheheing">报销审核中</string>
+    <string name="liushui_baoxiao_done">已报销</string>
 
     <string name="create_daijia">代驾</string>
     <string name="create_zhuanche">专车</string>
@@ -85,5 +87,8 @@
 
     <string name="please_admin">您的账户已被冻结，请联系管理员</string>
     <string name="force_offline_please_admin">您已被强制下线，请联系管理员</string>
+
+    <string name="baoxiao_shenhe">当前订单报销申请已经提交，正在审核中</string>
+    <string name="baoxiao_done">当前订单已经报销过</string>
 
 </resources>

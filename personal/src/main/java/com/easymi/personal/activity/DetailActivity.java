@@ -82,7 +82,6 @@ public class DetailActivity extends RxBaseActivity {
             }
         });
 
-        getLiushui();
         recyclerView.setRefreshing(true);
     }
 

@@ -34,6 +34,11 @@ public class FlowPopWindow extends PopupWindow implements View.OnClickListener {
         mOnMenuClickListener = onMenuClickListener;
     }
 
+    TextView cancel;
+    TextView contract;
+    TextView same;
+    TextView consumer;
+
     public FlowPopWindow(Context context) {
         this.context = context;
 
@@ -59,16 +64,28 @@ public class FlowPopWindow extends PopupWindow implements View.OnClickListener {
         viewWidth = view.getMeasuredWidth();    //得到实际的宽度
 
         //设置监听
-        TextView cancel =  view.findViewById(R.id.pop_cancel_order);   //取消订单
-        TextView contract =  view.findViewById(R.id.pop_contract_service);    //转单
-        TextView same =  view.findViewById(R.id.pop_same_order);        //联系后台
-        TextView consumer =  view.findViewById(R.id.pop_consumer_msg);   //同单司机
+        cancel = view.findViewById(R.id.pop_cancel_order);   //取消订单
+        contract = view.findViewById(R.id.pop_contract_service);    //转单
+        same = view.findViewById(R.id.pop_same_order);        //联系后台
+        consumer = view.findViewById(R.id.pop_consumer_msg);   //同单司机
 
         cancel.setOnClickListener(this);
         contract.setOnClickListener(this);
         consumer.setOnClickListener(this);
         same.setOnClickListener(this);
 
+    }
+
+    public void hideCancel() {
+        if (null != cancel) {
+            cancel.setVisibility(View.GONE);
+        }
+    }
+
+    public void showCancel() {
+        if (null != cancel) {
+            cancel.setVisibility(View.VISIBLE);
+        }
     }
 
     //文本点击事件监听

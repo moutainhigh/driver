@@ -33,6 +33,7 @@ import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.AesUtil;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
+import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
@@ -76,6 +77,12 @@ public class LoginActivity extends RxBaseActivity implements LocObserver {
         loginBtn = findViewById(R.id.login_button);
         loginBtn.setOnClickListener(v -> {
 //            login("13518181189", "1234");
+
+            if (!checkboxAgreement.isChecked()) {
+                ToastUtil.showMessage(LoginActivity.this, getString(R.string.please_agree_agreement));
+                return;
+            }
+
             login(editAccount.getText().toString(), editPsw.getText().toString());
 
         });

@@ -46,4 +46,7 @@ public class BaseOrder implements Serializable {
     @SerializedName("total_fee")
     public double orderMoney;
 
+    @SerializedName("wipe_out_type")
+    public int baoxiaoStatus;//1未报销，2申请中，3已报销
+
 }

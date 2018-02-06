@@ -3,8 +3,10 @@ package com.easymi.personal.activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.R;
 import com.easymi.personal.adapter.RecommendAdapter;
 import com.easymi.personal.entity.Recommend;
@@ -21,6 +23,16 @@ public class RecommendActivity extends RxBaseActivity {
     RecyclerView recyclerView;
 
     RecommendAdapter adapter;
+
+    CusToolbar cusToolbar;
+
+    @Override
+    public void initToolBar() {
+        super.initToolBar();
+        cusToolbar = findViewById(R.id.cus_toolbar);
+        cusToolbar.setLeftBack(view -> finish());
+        cusToolbar.setTitle(R.string.recommend_person);
+    }
 
     @Override
     public int getLayoutId() {

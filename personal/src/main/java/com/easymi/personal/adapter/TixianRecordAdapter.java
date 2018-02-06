@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.easymi.component.utils.TimeUtil;
 import com.easymi.personal.R;
 import com.easymi.personal.entity.TixianRecord;
 
@@ -36,7 +37,7 @@ public class TixianRecordAdapter extends RecyclerView.Adapter<TixianRecordAdapte
 
     @Override
     public TixianRecordHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tixian_record_item, parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tixian_record_item, parent, false);
 
         return new TixianRecordHolder(view);
     }
@@ -44,8 +45,8 @@ public class TixianRecordAdapter extends RecyclerView.Adapter<TixianRecordAdapte
     @Override
     public void onBindViewHolder(TixianRecordHolder holder, int position) {
         TixianRecord tixianRecord = list.get(position);
-        holder.tixianRecordTime.setText(tixianRecord.time);
-        holder.tixianRecordStatus.setText(tixianRecord.status);
+        holder.tixianRecordTime.setText(TimeUtil.getTime("yyyy-MM-dd HH:mm", tixianRecord.time * 1000));
+        holder.tixianRecordStatus.setText(tixianRecord.getStatusStr(context));
         holder.tixianRecordMoney.setText("¥" + tixianRecord.money);
 
         holder.dian1.setVisibility(View.VISIBLE);

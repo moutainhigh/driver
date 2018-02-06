@@ -16,6 +16,7 @@ import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
 import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.utils.TimeUtil;
+import com.easymi.component.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,11 +62,25 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
         holder.orderTime.setText(TimeUtil.getTime("yyyy-MM-dd HH:mm", baseOrder.orderTime * 1000));
         holder.orderNumber.setText(baseOrder.orderNumber);
         holder.orderMoney.setText(String.valueOf(baseOrder.orderMoney));
-        holder.orderBaoxiao.setOnClickListener(view -> {
-            Intent intent = new Intent(context, BaoxiaoActivity.class);
-            intent.putExtra("orderId", baseOrder.orderId);
-            context.startActivity(intent);
-        });
+        if (baseOrder.baoxiaoStatus == 1) {
+            holder.orderBaoxiao.setClickable(true);
+            holder.orderBaoxiao.setTextSize(14);
+            holder.orderBaoxiao.setText(context.getString(R.string.liushui_baoxiao));
+            holder.orderBaoxiao.setOnClickListener(view -> {
+                Intent intent = new Intent(context, BaoxiaoActivity.class);
+                intent.putExtra("orderId", baseOrder.orderId);
+                context.startActivity(intent);
+            });
+        } else if (baseOrder.baoxiaoStatus == 2) {
+            holder.orderBaoxiao.setClickable(false);
+            holder.orderBaoxiao.setTextSize(10);
+            holder.orderBaoxiao.setText(context.getString(R.string.liushui_baoxiao_sheheing));
+        } else if (baseOrder.baoxiaoStatus == 3) {
+            holder.orderBaoxiao.setClickable(false);
+            holder.orderBaoxiao.setTextSize(14);
+            holder.orderBaoxiao.setText(context.getString(R.string.liushui_baoxiao_done));
+        }
+
         if (baseOrder.orderType.equals(Config.DAIJIA) &&
                 baseOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {
             holder.rootView.setOnClickListener(v -> {

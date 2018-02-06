@@ -78,6 +78,12 @@ public class LiushuiActivity extends RxBaseActivity {
         initRecycler();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        recyclerView.setRefreshing(true);
+    }
+
     private void initRecycler() {
         adapter = new LiuShuiAdapter(this);
         recyclerView.getRecyclerView().setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -96,7 +102,6 @@ public class LiushuiActivity extends RxBaseActivity {
                 queryOrders();
             }
         });
-        recyclerView.setRefreshing(true);
     }
 
     private void initTab() {
@@ -106,8 +111,6 @@ public class LiushuiActivity extends RxBaseActivity {
                 if (tab.getText().equals("代驾")) {
                     business = "daijia";
                     page = 1;
-                    queryOrders();
-                    recyclerView.setRefreshing(true);
                 }
             }
 

@@ -238,7 +238,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
     @Override
     public void showOrders(List<MultipleOrder> MultipleOrders) {
-        swipeRefreshLayout.setRefreshing(false);
         orders.clear();
         if (MultipleOrders == null) {
 //            MultipleOrder header1 = new MultipleOrder(MultipleOrder.ITEM_HEADER);
@@ -393,6 +392,11 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         listenOrderCon.setVisibility(View.GONE);
         rippleBackground.stopRippleAnimation();
         onLineBtn.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void stopRefresh() {
+        swipeRefreshLayout.setRefreshing(false);
     }
 
 

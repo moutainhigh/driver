@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -184,6 +185,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             if (popWindow.isShowing()) {
                 popWindow.dismiss();
             } else {
+                if (djOrder.orderStatus >= DJOrderStatus.GOTO_DESTINATION_ORDER) {
+                    popWindow.hideCancel();
+                } else {
+                    popWindow.showCancel();
+                }
                 popWindow.show(v);
             }
         });
@@ -574,8 +580,14 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         View view = LayoutInflater.from(this).inflate(R.layout.pay_type_dialog, null, false);
         CheckBox payBalance = view.findViewById(R.id.pay_balance);
         CheckBox payHelpPay = view.findViewById(R.id.pay_help_pay);
+        RelativeLayout balanceCon = view.findViewById(R.id.balance_con);
+        RelativeLayout helppayCon = view.findViewById(R.id.helppay_con);
         Button sure = view.findViewById(R.id.pay_button);
         ImageView close = view.findViewById(R.id.ic_close);
+
+        balanceCon.setOnClickListener(view13 -> payBalance.setChecked(true));
+
+        helppayCon.setOnClickListener(view14 -> payHelpPay.setChecked(true));
 
         payBalance.setOnCheckedChangeListener((compoundButton, b) -> {
             if (b) {
@@ -886,31 +898,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             }
         }
 
-
-//        if (null == myLocMarker) {
-//            MarkerOptions markerOption = new MarkerOptions();
-//            markerOption.position(latLng);
-//            markerOption.rotateAngle(location.bearing);
-//            markerOption.anchor(0.5f, 0.5f);
-//            markerOption.draggable(false);//设置Marker可拖动
-//            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-//                    .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
-//            // 将Marker设置为贴地显示，可以双指下拉地图查看效果
-//            markerOption.setFlat(true);//设置marker平贴地图效果
-//            myLocMarker = aMap.addMarker(markerOption);
-//        } else {
-//            myLocMarker.setPosition(latLng);
-//            myLocMarker.setRotateAngle(location.bearing);
-//            myLocMarker.setAnchor(0.5f, 0.5f);
-//        }
-//        if (onResumeIn) {
-//            if (djOrder == null) {
-//                aMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-//            } else {
-//                showMapBounds();
-//            }
-//            onResumeIn = false;
-//        }
         if (null != djOrder) {
             if (djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER
                     || djOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) {

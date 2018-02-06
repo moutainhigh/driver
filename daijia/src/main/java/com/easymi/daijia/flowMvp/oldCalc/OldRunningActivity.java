@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.amap.api.navi.model.AMapNaviPath;
@@ -304,6 +305,7 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
 
     @Override
     public void showPayType() {
+
         if (null != settleFragmentDialog) {
             settleFragmentDialog.dismiss();
         }
@@ -313,8 +315,14 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
         View view = LayoutInflater.from(this).inflate(R.layout.pay_type_dialog, null, false);
         CheckBox payBalance = view.findViewById(R.id.pay_balance);
         CheckBox payHelpPay = view.findViewById(R.id.pay_help_pay);
+        RelativeLayout balanceCon = view.findViewById(R.id.balance_con);
+        RelativeLayout helppayCon = view.findViewById(R.id.helppay_con);
         Button sure = view.findViewById(R.id.pay_button);
         ImageView close = view.findViewById(R.id.ic_close);
+
+        balanceCon.setOnClickListener(view13 -> payBalance.setChecked(true));
+
+        helppayCon.setOnClickListener(view14 -> payHelpPay.setChecked(true));
 
         payBalance.setOnCheckedChangeListener((compoundButton, b) -> {
             if (b) {

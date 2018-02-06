@@ -3,6 +3,8 @@ package com.easymi.personal.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +17,8 @@ import com.easymi.component.entity.Employ;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.network.NoErrSubscriberListener;
+import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
@@ -23,6 +27,8 @@ import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
 import com.easymi.personal.result.LoginResult;
+import com.easymi.personal.result.TixianResult;
+import com.easymi.personal.widget.AddSpaceTextWatcher;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -72,6 +78,42 @@ public class TixianActivity extends RxBaseActivity {
         tixianRule.setOnClickListener(view -> startActivity(new Intent(TixianActivity.this, TixianRuleActivity.class)));
         tixianRecord.setOnClickListener(view -> startActivity(new Intent(TixianActivity.this, TixianRecordActivity.class)));
         apply.setOnClickListener(view -> apply());
+
+        AddSpaceTextWatcher watcher = new AddSpaceTextWatcher(this, bankNo, 48);
+        watcher.setBinChangedListener(bName -> bankName.setText(bName));
+
+        editMoney.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String s = editable.toString();
+                if (StringUtils.isBlank(s)) {
+                    return;
+                }
+                double money = 0;
+                try {
+                    money = Double.parseDouble(s);
+                } catch (NumberFormatException ex) {
+                    money = 0;
+                } finally {
+                    Employ employ = EmUtil.getEmployInfo();
+                    if (money > employ.balance) {
+                        balanceText.setText(String.valueOf(employ.balance));
+                    }
+                }
+
+            }
+        });
+
     }
 
     private void apply() {
@@ -85,22 +127,38 @@ public class TixianActivity extends RxBaseActivity {
         String no = bankNo.getText().toString();
         String owner = bankOwner.getText().toString();
 
-        if(money == 0.0){
-            ToastUtil.showMessage(TixianActivity.this,getString(R.string.please_money));
+        if (money == 0.0) {
+            ToastUtil.showMessage(TixianActivity.this, getString(R.string.please_money));
             return;
         } //TODO 提现最小金额 提现金额 整数倍
-        if (StringUtils.isBlank(name)){
-            ToastUtil.showMessage(TixianActivity.this,getString(R.string.please_bank_name));
+        if (StringUtils.isBlank(name)) {
+            ToastUtil.showMessage(TixianActivity.this, getString(R.string.please_bank_name));
             return;
         }
-        if(StringUtils.isBlank(no)){
-            ToastUtil.showMessage(TixianActivity.this,getString(R.string.please_bank_number));
+        if (StringUtils.isBlank(no)) {
+            ToastUtil.showMessage(TixianActivity.this, getString(R.string.please_bank_number));
             return;
         }
-        if(StringUtils.isBlank(owner)){
-            ToastUtil.showMessage(TixianActivity.this,getString(R.string.please_bank_owner));
+        if (StringUtils.isBlank(owner)) {
+            ToastUtil.showMessage(TixianActivity.this, getString(R.string.please_bank_owner));
             return;
         }
+
+        Employ employ = EmUtil.getEmployInfo();
+        Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
+                .enchashment(employ.name, employ.user_name, employ.phone, money,
+                        employ.company_id, Config.APP_KEY, name, no, owner)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(TixianActivity.this, true,
+                true, emResult -> {
+            ToastUtil.showMessage(TixianActivity.this, getString(R.string.tixian_apply_suc));
+            Intent intent = new Intent(TixianActivity.this, TixianRecordActivity.class);
+            startActivity(intent);
+            finish();
+        })));
     }
 
     @Override
@@ -125,6 +183,17 @@ public class TixianActivity extends RxBaseActivity {
             editor.apply();
 
             balanceText.setText(String.valueOf(employ.balance));
+            maxTixian.setText(String.valueOf(employ.balance));
+
+            if (StringUtils.isNotBlank(employ.bank_name)) {
+                bankName.setText(employ.bank_name);
+            }
+            if (StringUtils.isNotBlank(employ.bank_card_no)) {
+                bankNo.setText(employ.bank_card_no);
+            }
+            if (StringUtils.isNotBlank(employ.cash_person_name)) {
+                bankOwner.setText(employ.cash_person_name);
+            }
         })));
     }
 }

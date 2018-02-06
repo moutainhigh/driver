@@ -1,346 +1,360 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="165dp"
-            android:background="@color/colorPrimary">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <RelativeLayout
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="160dp">
+                android:layout_height="165dp"
+                android:background="@color/colorPrimary">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/driver_photo"
-                        android:layout_width="62dp"
-                        android:layout_height="62dp"
-                        android:src="@mipmap/photo_default" />
-
-                    <TextView
-                        android:id="@+id/real_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:text=""
-                        android:textColor="@color/white"
-                        android:textSize="20sp" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
+                        android:layout_centerInParent="true"
                         android:gravity="center"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/driver_photo"
+                            android:layout_width="62dp"
+                            android:layout_height="62dp"
+                            android:src="@mipmap/photo_default" />
+
+                        <TextView
+                            android:id="@+id/real_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:text=""
+                            android:textColor="@color/white"
+                            android:textSize="20sp" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/corners_primary"
+                            android:layout_marginTop="5dp"
                             android:gravity="center"
-                            android:orientation="horizontal"
-                            android:paddingBottom="2dp"
-                            android:paddingLeft="4dp"
-                            android:paddingRight="4dp"
-                            android:paddingTop="2dp">
+                            android:orientation="horizontal">
 
-                            <ImageView
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@mipmap/ic_star" />
+                                android:background="@drawable/corners_primary"
+                                android:gravity="center"
+                                android:orientation="horizontal"
+                                android:paddingBottom="2dp"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="4dp"
+                                android:paddingTop="2dp">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:src="@mipmap/ic_star" />
+
+                                <TextView
+                                    android:id="@+id/driver_score"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="3dp"
+                                    android:text=""
+                                    android:textColor="@color/dark_gray" />
+
+                            </LinearLayout>
 
                             <TextView
-                                android:id="@+id/driver_score"
+                                android:id="@+id/user_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="3dp"
+                                android:layout_marginLeft="10dp"
                                 android:text=""
-                                android:textColor="@color/dark_gray" />
+                                android:textColor="@color/dark_gray"
+                                android:textSize="16sp" />
 
                         </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/user_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text=""
-                            android:textColor="@color/dark_gray"
-                            android:textSize="16sp" />
-
                     </LinearLayout>
 
-                </LinearLayout>
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/driver_tuiguang"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|bottom"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@mipmap/ic_qr_code" />
+            </FrameLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/dark_gray" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:onClick="toLiushui">
+
+                <ImageView
+                    android:id="@+id/ic_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:src="@mipmap/ic_order" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:layout_toRightOf="@+id/ic_1"
+                    android:text="@string/person_order"
+                    android:textColor="#232323"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:src="@mipmap/ic_row" />
 
             </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/driver_tuiguang"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right|bottom"
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="10dp"
-                android:src="@mipmap/ic_qr_code" />
-        </FrameLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/dark_gray" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/dark_gray"
-            android:layout_marginTop="20dp"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:onClick="toPocket">
 
-        <RelativeLayout
-            android:onClick="toLiushui"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/white">
+                <ImageView
+                    android:id="@+id/ic_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:src="@mipmap/ic_pocket" />
 
-            <ImageView
-                android:id="@+id/ic_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_order"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:layout_toRightOf="@+id/ic_2"
+                    android:text="@string/person_money"
+                    android:textColor="#232323"
+                    android:textSize="16sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/ic_1"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:textSize="16sp"
-                android:textColor="#232323"
-                android:text="@string/person_order"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:src="@mipmap/ic_row" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="15dp"
-                android:src="@mipmap/ic_row"/>
+            </RelativeLayout>
 
-        </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/dark_gray" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/dark_gray"/>
-        <RelativeLayout
-            android:onClick="toPocket"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/white">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:onClick="toRefer">
 
-            <ImageView
-                android:id="@+id/ic_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_pocket"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"/>
+                <ImageView
+                    android:id="@+id/ic_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:src="@mipmap/ic_share" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/ic_2"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:textSize="16sp"
-                android:textColor="#232323"
-                android:text="@string/person_money"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:layout_toRightOf="@+id/ic_3"
+                    android:text="@string/person_jiangli"
+                    android:textColor="#232323"
+                    android:textSize="16sp" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="15dp"
-                android:src="@mipmap/ic_row"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:src="@mipmap/ic_row" />
 
-        </RelativeLayout>
+            </RelativeLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/dark_gray"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/dark_gray" />
 
-        <RelativeLayout
-            android:onClick="toRefer"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/white">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/white"
+                android:onClick="toEva">
 
-            <ImageView
-                android:id="@+id/ic_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_share"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"/>
+                <ImageView
+                    android:id="@+id/ic_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:src="@mipmap/ic_pingjia" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/ic_3"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:textSize="16sp"
-                android:textColor="#232323"
-                android:text="@string/person_jiangli"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:layout_toRightOf="@+id/ic_4"
+                    android:text="@string/person_pingjia"
+                    android:textColor="#232323"
+                    android:textSize="16sp" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="15dp"
-                android:src="@mipmap/ic_row"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:src="@mipmap/ic_row" />
 
-        </RelativeLayout>
+            </RelativeLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/dark_gray"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/dark_gray" />
 
-        <RelativeLayout
-            android:onClick="toEva"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            android:background="@color/white">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:onClick="toMessage">
 
-            <ImageView
-                android:id="@+id/ic_4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_pingjia"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"/>
+                <ImageView
+                    android:id="@+id/ic_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:src="@mipmap/ic_msg" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/ic_4"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:textSize="16sp"
-                android:textColor="#232323"
-                android:text="@string/person_pingjia"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:layout_toRightOf="@+id/ic_5"
+                    android:text="@string/person_message"
+                    android:textColor="#232323"
+                    android:textSize="16sp" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="15dp"
-                android:src="@mipmap/ic_row"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:src="@mipmap/ic_row" />
 
-        </RelativeLayout>
+            </RelativeLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/dark_gray"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/dark_gray" />
 
-        <RelativeLayout
-            android:onClick="toMessage"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/white">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:onClick="toSet">
 
-            <ImageView
-                android:id="@+id/ic_5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_msg"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"/>
+                <ImageView
+                    android:id="@+id/ic_6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:src="@mipmap/ic_set" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/ic_5"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:textSize="16sp"
-                android:textColor="#232323"
-                android:text="@string/person_message"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:layout_toRightOf="@+id/ic_6"
+                    android:text="@string/person_set"
+                    android:textColor="#232323"
+                    android:textSize="16sp" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="15dp"
-                android:src="@mipmap/ic_row"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:src="@mipmap/ic_row" />
 
-        </RelativeLayout>
+            </RelativeLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/dark_gray"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/dark_gray" />
 
-        <RelativeLayout
-            android:onClick="toSet"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/white">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="60dp" />
+        </LinearLayout>
+    </ScrollView>
 
-            <ImageView
-                android:id="@+id/ic_6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_set"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"/>
+    <ImageView
+        android:id="@+id/left_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="7.5dp"
+        android:padding="3dp"
+        android:src="@drawable/ic_arrow_back" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/ic_6"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:textSize="16sp"
-                android:textColor="#232323"
-                android:text="@string/person_set"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="15dp"
-                android:src="@mipmap/ic_row"/>
-
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/dark_gray"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="60dp"/>
-    </LinearLayout>
-
-</ScrollView>
+</RelativeLayout>

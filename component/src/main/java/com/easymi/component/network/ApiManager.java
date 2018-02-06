@@ -56,7 +56,8 @@ public class ApiManager {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.readTimeout(16000, TimeUnit.MILLISECONDS)
                 .connectTimeout(16000, TimeUnit.MILLISECONDS)
-                .addInterceptor(new SignInterceptor())
+                .addInterceptor(new TimestampInterceptor())//时间戳拦截器
+                .addInterceptor(new SignInterceptor())//签名拦截器
                 .addInterceptor(logInterceptor) //添加日志拦截器,进行输出日志
                 .retryOnConnectionFailure(true)    //失败重连
                 .cache(cache);

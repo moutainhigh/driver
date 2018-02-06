@@ -51,6 +51,8 @@ public interface WorkContract {
 
         void showOffline();
 
+        void stopRefresh();
+
         RxManager getRxManager();
     }
 

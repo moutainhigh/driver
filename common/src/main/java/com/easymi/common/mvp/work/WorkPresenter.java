@@ -91,6 +91,7 @@ public class WorkPresenter implements WorkContract.Presenter {
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false, false, new HaveErrSubscriberListener<QueryOrdersResult>() {
             @Override
             public void onNext(QueryOrdersResult emResult) {
+                view.stopRefresh();
                 List<MultipleOrder> orders = emResult.orders;
                 List<MultipleOrder> nowOrders = new ArrayList<>();
                 List<MultipleOrder> yuyueOrders = new ArrayList<>();
@@ -161,6 +162,7 @@ public class WorkPresenter implements WorkContract.Presenter {
 
             @Override
             public void onError(int code) {
+                view.stopRefresh();
                 startLocService();//重启定位更改定位周期
                 view.showOrders(null);
             }

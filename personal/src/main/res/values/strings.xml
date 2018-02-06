@@ -131,6 +131,7 @@
     <string name="recommend_yi">已推荐人数</string>
     <string name="recommend_unit">(人)</string>
     <string name="recommend_money">奖励金额</string>
+    <string name="recommend_person">我推荐的人</string>
 
     <!-- 统计中心str -->
     <string name="stats_today">今日</string>
@@ -221,6 +222,7 @@
     <string name="please_bank_name">请输入银行名</string>
     <string name="please_bank_number">请输入银行卡号</string>
     <string name="please_bank_owner">请输入持卡人姓名</string>
+    <string name="tixian_apply_suc">提交成功，请等待审核</string>
 
     <string name="no_recommend">您还未有任何推荐奖励，快去多多分享吧</string>
 
@@ -245,5 +247,11 @@
 
     <string name="near_no_wc">附近暂无厕所</string>
     <string name="change_psw_suc">修改密码成功</string>
+
+    <string name="tixian_shenpi">待审批</string>
+    <string name="tixian_agree">同意</string>
+    <string name="tixian_refuse">拒绝</string>
+
+    <string name="please_agree_agreement">请同意服务协议</string>
 
 </resources>

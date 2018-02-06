@@ -17,6 +17,7 @@ import com.easymi.component.entity.Employ;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.GlideCircleTransform;
 import com.easymi.component.utils.StringUtils;
+import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.R;
 
 /**
@@ -32,9 +33,18 @@ public class PersonalActivity extends RxBaseActivity {
     ImageView driverPhoto;
     ImageView driverTuiguang;
 
+    ImageView back;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_personal;
+    }
+
+    @Override
+    public void initToolBar() {
+        super.initToolBar();
+        back = findViewById(R.id.left_icon);
+        back.setOnClickListener(view -> finish());
     }
 
     @Override

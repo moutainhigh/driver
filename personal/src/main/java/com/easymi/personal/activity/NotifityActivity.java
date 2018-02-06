@@ -79,7 +79,6 @@ public class NotifityActivity extends RxBaseActivity {
                 queryData();
             }
         });
-        queryData();
         recyclerView.setRefreshing(true);
     }
 

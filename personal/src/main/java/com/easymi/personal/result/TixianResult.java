@@ -3,6 +3,7 @@ package com.easymi.personal.result;
 import com.easymi.component.result.EmResult;
 import com.easymi.personal.entity.Detail;
 import com.easymi.personal.entity.TixianRecord;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
  */
 
 public class TixianResult extends EmResult {
+    @SerializedName("enchashments")
     public List<TixianRecord> tixianRecords;
     public int total;
 }

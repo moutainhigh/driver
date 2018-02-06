@@ -18,7 +18,7 @@ public class BaseEmploy {
     public String status;
     //0在线 1空闲 2派单 3接单 4前往预约地 5到达预约地 6前往目的地 7中途等待 8离线 9冻结
 
-    public String real_name;
+    public String real_name;//真实姓名
     public long company_id;
     public String phone;
     public String child_type;//服务子类型

@@ -246,6 +246,7 @@ public interface McService {
     Observable<TixianResult> enchashments(@Query("driver_id") Long driverId,
                                           @Query("page") Integer page,
                                           @Query("app_key") String appkey,
+                                          @Query("company_id") Long company_id,
                                           @Query("limit") int limit);
 
     /**

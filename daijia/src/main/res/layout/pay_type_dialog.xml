@@ -40,6 +40,7 @@
             android:background="@color/line_color" />
 
         <RelativeLayout
+            android:id="@+id/balance_con"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -73,6 +74,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/helppay_con"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"

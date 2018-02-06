@@ -93,11 +93,12 @@
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/edit_bank_name"
+                android:id="@+id/edit_bank_no"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
-                android:hint="@string/tixian_please_bank"
+                android:hint="@string/tixian_please_number"
+                android:inputType="number"
                 android:paddingBottom="3dp"
                 android:paddingLeft="15dp"
                 android:paddingRight="10dp"
@@ -111,12 +112,11 @@
                 android:background="@color/dark_gray" />
 
             <EditText
-                android:id="@+id/edit_bank_no"
+                android:id="@+id/edit_bank_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
-                android:inputType="textVisiblePassword"
-                android:hint="@string/tixian_please_number"
+                android:hint="@string/tixian_please_bank"
                 android:paddingBottom="3dp"
                 android:paddingLeft="15dp"
                 android:paddingRight="10dp"

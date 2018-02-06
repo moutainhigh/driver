@@ -60,7 +60,13 @@ public class TixianRecordActivity extends RxBaseActivity {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
+        recyclerView = findViewById(R.id.recyclerView);
+        errLayout = findViewById(R.id.cus_err_layout);
+
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+
+        adapter = new TixianRecordAdapter(this);
         recyclerView.setAdapter(adapter);
 
         recyclerView.setOnLoadListener(new SwipeRecyclerView.OnLoadListener() {
@@ -77,13 +83,12 @@ public class TixianRecordActivity extends RxBaseActivity {
             }
         });
 
-        queryData();
         recyclerView.setRefreshing(true);
     }
 
     private void queryData() {
         Observable<TixianResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .enchashments(EmUtil.getEmployId(), page, Config.APP_KEY, limit)
+                .enchashments(EmUtil.getEmployId(), page, Config.APP_KEY, EmUtil.getEmployInfo().company_id, limit)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

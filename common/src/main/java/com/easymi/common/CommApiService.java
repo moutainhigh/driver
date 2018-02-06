@@ -166,17 +166,16 @@ public interface CommApiService {
                                                 @Field("app_key") String appKey);
 
     /**
-     *
      * @param orderId
-     * @param baoxiaoMoney 报销金额
+     * @param baoxiaoMoney  报销金额
      * @param baoxiaoReason 报销理由
      * @param appKey
      * @return
      */
     @FormUrlEncoded
-    @POST("driver/api/v1/baoxiao")
+    @POST("/driver/api/v1/wipeOutApply")
     Observable<EmResult> baoxiao(@Field("order_id") Long orderId,
-                                                @Field("baoxiao_money") Double baoxiaoMoney,
-                                                @Field("baoxiao_reason") String baoxiaoReason,
-                                                @Field("app_key") String appKey);
+                                 @Field("money") Double baoxiaoMoney,
+                                 @Field("reason") String baoxiaoReason,
+                                 @Field("app_key") String appKey);
 }

@@ -17,9 +17,9 @@ import java.util.List;
 
 public class Employ extends BaseEmploy implements Parcelable {
 
-    public String user_name;
+    public String user_name;//工号
     public String password;
-    public String name;
+    public String name;//昵称
 
     public String sex;
 

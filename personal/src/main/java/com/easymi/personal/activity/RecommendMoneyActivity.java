@@ -1,5 +1,6 @@
 package com.easymi.personal.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -58,6 +59,7 @@ public class RecommendMoneyActivity extends RxBaseActivity {
         cusToolbar = findViewById(R.id.cus_toolbar);
         cusToolbar.setLeftBack(view -> finish());
         cusToolbar.setTitle(R.string.recommend_title);
+        cusToolbar.setRightText(R.string.recommend_person, view -> startActivity(new Intent(RecommendMoneyActivity.this, RecommendActivity.class)));
     }
 
     /**

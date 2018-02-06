@@ -35,7 +35,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.Reco
 
     @Override
     public RecommendHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recommend_item, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recommend_item, parent, false);
 
         return new RecommendHolder(view);
     }
