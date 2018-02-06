@@ -54,6 +54,7 @@ import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MapUtil;
+import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.EmployStatus;
 import com.easymi.component.widget.LoadingButton;
@@ -406,11 +407,14 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         mapView.onResume();
         presenter.loadDataOnResume();
         Employ employ = EmUtil.getEmployInfo();
-        if (employ.status.equals(EmployStatus.ONLINE)) {
-            showOffline();//非听单状态
-        } else {
-            showOnline();//听单状态
+        if (StringUtils.isNotBlank(employ.status)) {
+            if (employ.status.equals(EmployStatus.ONLINE)) {
+                showOffline();//非听单状态
+            } else {
+                showOnline();//听单状态
+            }
         }
+
     }
 
     @Override
