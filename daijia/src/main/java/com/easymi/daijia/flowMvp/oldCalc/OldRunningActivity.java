@@ -7,9 +7,14 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -27,6 +32,7 @@ import com.easymi.component.entity.DymOrder;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.ToastUtil;
+import com.easymi.component.widget.CusBottomSheetDialog;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.R;
 import com.easymi.daijia.entity.DJOrder;
@@ -59,7 +65,7 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
 
     private ActFraCommBridge bridge;
 
-    SettleFragmentDialog settleDialog;
+    SettleFragmentDialog settleFragmentDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {//复写onCreate 因为设置虚拟按键必须在setContentView之前
@@ -111,7 +117,7 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
 
         showView();
 
-        presenter.findOne(orderId,false);
+        presenter.findOne(orderId, false);
 
         back.setOnClickListener(view -> onBackPressed());
     }
@@ -248,8 +254,8 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
         this.djOrder = djOrder;
         meter_wait_btn.setOnClickListener(view -> presenter.startWait(orderId, meter_wait_btn));
         meter_settle_btn.setOnClickListener(view -> {
-            settleDialog = new SettleFragmentDialog(OldRunningActivity.this, djOrder, bridge);
-            settleDialog.show();
+            settleFragmentDialog = new SettleFragmentDialog(OldRunningActivity.this, djOrder, bridge);
+            settleFragmentDialog.show();
         });
         if (djOrder.orderStatus == DJOrderStatus.START_WAIT_ORDER) {
             Intent intent = new Intent(OldRunningActivity.this, OldWaitActivity.class);
@@ -257,11 +263,11 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
             startActivity(intent);
             finish();
         } else if (djOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {
-            if (settleDialog != null && settleDialog.isShowing()) {
-                settleDialog.setDjOrder(djOrder);
+            if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
+                settleFragmentDialog.setDjOrder(djOrder);
             } else {
-                settleDialog = new SettleFragmentDialog(this, djOrder, bridge);
-                settleDialog.show();
+                settleFragmentDialog = new SettleFragmentDialog(this, djOrder, bridge);
+                settleFragmentDialog.show();
             }
         }
     }
@@ -298,45 +304,53 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
 
     @Override
     public void showPayType() {
-        RadioGroup group = new RadioGroup(this);
-        RadioButton helpPayBtn;
-        RadioButton balanceBtn;
-        RadioButton qiandanBtn;
+        if (null != settleFragmentDialog) {
+            settleFragmentDialog.dismiss();
+        }
 
-        helpPayBtn = new RadioButton(this);
-        helpPayBtn.setText(getString(R.string.help_pay));
+        CusBottomSheetDialog bottomSheetDialog = new CusBottomSheetDialog(this);
 
-        balanceBtn = new RadioButton(this);
-        balanceBtn.setText(getString(R.string.cus_balance));
+        View view = LayoutInflater.from(this).inflate(R.layout.pay_type_dialog, null, false);
+        CheckBox payBalance = view.findViewById(R.id.pay_balance);
+        CheckBox payHelpPay = view.findViewById(R.id.pay_help_pay);
+        Button sure = view.findViewById(R.id.pay_button);
+        ImageView close = view.findViewById(R.id.ic_close);
 
-        qiandanBtn = new RadioButton(this);
-        qiandanBtn.setText(getString(R.string.qiandan));
+        payBalance.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b) {
+                payHelpPay.setChecked(false);
+            }
+        });
 
-        RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(DensityUtil.dp2px(this, 20), DensityUtil.dp2px(this, 10),
-                DensityUtil.dp2px(this, 20), DensityUtil.dp2px(this, 10));
+        payHelpPay.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b) {
+                payBalance.setChecked(false);
+            }
+        });
 
-        group.addView(helpPayBtn, params);
-        group.addView(balanceBtn, params);
+        sure.setOnClickListener(view12 -> {
+            if (payBalance.isChecked() || payHelpPay.isChecked()) {
+                if (payHelpPay.isChecked()) {
+                    presenter.payOrder(orderId, "helppay");
+                } else if (payBalance.isChecked()) {
+                    presenter.payOrder(orderId, "balance");
+                }
+                bottomSheetDialog.dismiss();
+            } else {
+                ToastUtil.showMessage(OldRunningActivity.this, getString(R.string.please_pay_title));
+            }
+        });
 
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.pay_title))
-                .setView(group)
-                .setPositiveButton(R.string.ok, (dialog1, which) -> {
-                    if (helpPayBtn.isChecked() || balanceBtn.isChecked() || qiandanBtn.isChecked()) {
-                        if (helpPayBtn.isChecked()) {
-                            presenter.payOrder(orderId, "helppay");
-                        } else if (balanceBtn.isChecked()) {
-                            presenter.payOrder(orderId, "balance");
-                        }
-                        dialog1.dismiss();
-                    } else {
-                        ToastUtil.showMessage(this, getString(R.string.please_pay_title));
-                    }
-                })
-                .create();
-        dialog.show();
+        close.setOnClickListener(view1 -> bottomSheetDialog.dismiss());
+
+        bottomSheetDialog.setContentView(view);
+        bottomSheetDialog.setCancelable(false);
+        bottomSheetDialog.setOnDismissListener(dialogInterface -> {
+            if (null != settleFragmentDialog) {
+                settleFragmentDialog.show();
+            }
+        });
+        bottomSheetDialog.show();
     }
 
     @Override

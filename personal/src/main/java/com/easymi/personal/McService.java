@@ -9,6 +9,7 @@ import com.easymi.personal.result.LiushuiResult;
 import com.easymi.personal.result.LoginResult;
 import com.easymi.personal.result.NotifityResult;
 import com.easymi.personal.result.RechargeResult;
+import com.easymi.personal.result.TixianResult;
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -218,6 +219,7 @@ public interface McService {
 
     /**
      * 登录后修改密码
+     *
      * @param driver_id
      * @param old_password
      * @param new_password
@@ -230,4 +232,44 @@ public interface McService {
                                    @Field("old_password") String old_password,
                                    @Field("new_password") String new_password,
                                    @Field("app_key") String app_key);
+
+    /**
+     * 分页查询提现申请
+     *
+     * @param driverId
+     * @param page
+     * @param appkey
+     * @param limit
+     * @return
+     */
+    @GET("/driver/api/v1/enchashments")
+    Observable<TixianResult> enchashments(@Query("driver_id") Long driverId,
+                                          @Query("page") Integer page,
+                                          @Query("app_key") String appkey,
+                                          @Query("limit") int limit);
+
+    /**
+     * 申请提现
+     * @param driverName
+     * @param jobNo
+     * @param phone
+     * @param cost
+     * @param companyId
+     * @param appKey
+     * @param bank
+     * @param account
+     * @param name
+     * @return
+     */
+    @POST("/driver/api/v1/enchashment")
+    @FormUrlEncoded
+    Observable<EmResult> enchashment(@Field("driver_name") String driverName,
+                                     @Field("job_no") String jobNo,
+                                     @Field("driver_tel") String phone,
+                                     @Field("cost") Double cost,
+                                     @Field("company_id") Long companyId,
+                                     @Field("app_key") String appKey,
+                                     @Field("bank") String bank,
+                                     @Field("account") String account,
+                                     @Field("payee") String name);
 }

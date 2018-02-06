@@ -2,19 +2,30 @@ package com.easymi.personal.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HaveErrSubscriberListener;
+import com.easymi.component.network.HttpResultFunc;
+import com.easymi.component.network.MySubscriber;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.widget.CusErrLayout;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.SwipeRecyclerView;
+import com.easymi.personal.McService;
 import com.easymi.personal.R;
 import com.easymi.personal.adapter.TixianRecordAdapter;
 import com.easymi.personal.entity.TixianRecord;
+import com.easymi.personal.result.TixianResult;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by developerLzh on 2017/11/11 0011.
@@ -30,8 +41,10 @@ public class TixianRecordActivity extends RxBaseActivity {
 
     CusToolbar toolbar;
 
-    private int page = 0;
+    private int page = 1;
     private int limit = 10;
+
+    private List<TixianRecord> recordList = new ArrayList<>();
 
     @Override
     public void initToolBar() {
@@ -47,28 +60,61 @@ public class TixianRecordActivity extends RxBaseActivity {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
-        recyclerView = findViewById(R.id.recyclerView);
-        errLayout = findViewById(R.id.cus_err_layout);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-
-        adapter = new TixianRecordAdapter(this);
         recyclerView.setAdapter(adapter);
 
-        List<TixianRecord> recordList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            TixianRecord record = new TixianRecord();
-            record.money = 20.0;
-            record.status = "已通过";
-            record.time = "2017-11-11 16:06";
-            recordList.add(record);
-        }
+        recyclerView.setOnLoadListener(new SwipeRecyclerView.OnLoadListener() {
+            @Override
+            public void onRefresh() {
+                page = 1;
+                queryData();
+            }
 
-        adapter.setList(recordList);
+            @Override
+            public void onLoadMore() {
+                page++;
+                queryData();
+            }
+        });
 
+        queryData();
+        recyclerView.setRefreshing(true);
     }
 
     private void queryData() {
+        Observable<TixianResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
+                .enchashments(EmUtil.getEmployId(), page, Config.APP_KEY, limit)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
 
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, new HaveErrSubscriberListener<TixianResult>() {
+            @Override
+            public void onNext(TixianResult tixianResult) {
+                recyclerView.complete();
+                if (page == 1) {
+                    recordList.clear();
+                }
+                recordList.addAll(tixianResult.tixianRecords);
+                if (tixianResult.total > page * 10) {
+                    recyclerView.setLoadMoreEnable(true);
+                } else {
+                    recyclerView.setLoadMoreEnable(false);
+                }
+                adapter.setList(recordList);
+                if (recordList.size() == 0) {
+                    showErr(0);
+                } else {
+                    hideErr();
+                }
+            }
+
+            @Override
+            public void onError(int code) {
+                recyclerView.complete();
+                showErr(code);
+            }
+        })));
     }
 
     /**
