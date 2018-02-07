@@ -9,6 +9,7 @@ import com.easymi.personal.result.LiushuiResult;
 import com.easymi.personal.result.LoginResult;
 import com.easymi.personal.result.NotifityResult;
 import com.easymi.personal.result.RechargeResult;
+import com.easymi.personal.result.ShareResult;
 import com.easymi.personal.result.TixianResult;
 
 import retrofit2.http.Field;
@@ -251,6 +252,7 @@ public interface McService {
 
     /**
      * 申请提现
+     *
      * @param driverName
      * @param jobNo
      * @param phone
@@ -273,4 +275,10 @@ public interface McService {
                                      @Field("bank") String bank,
                                      @Field("account") String account,
                                      @Field("payee") String name);
+
+    @GET("/api/v1/shareLink")
+    Observable<ShareResult> shareLink(@Query("id") Long driverId,
+                                      @Query("company_id") Long companyId,
+                                      @Query("app_key") String appKey,
+                                      @Query("type")Integer type);
 }

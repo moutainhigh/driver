@@ -10,6 +10,7 @@ import android.content.ServiceConnection;
 import android.graphics.BitmapFactory;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 
@@ -54,13 +55,13 @@ public class NotiService extends Service {
     }
 
 
-    private final String mHelperServiceName = LocationHelperService.ACTIVATE;
+    private final String mHelperServiceName = LocationHelperService.class.getName();
 
     /**
      * 触发利用notification增加进程优先级
      */
     protected void applyNotiKeepMech() {
-        showNotify(this, R.mipmap.ic_launcher);
+        startForeground(NOTI_ID, Utils.buildNotification(getBaseContext()));
         startBindHelperService();
     }
 
@@ -75,7 +76,7 @@ public class NotiService extends Service {
         }
     }
 
-    private ILocationHelperServiceAIDL mHelperAIDL;
+//    private ILocationHelperServiceAIDL mHelperAIDL;
 
     private void startBindHelperService() {
         try {
@@ -88,12 +89,12 @@ public class NotiService extends Service {
                 @Override
                 public void onServiceConnected(ComponentName name, IBinder service) {
                     ILocationHelperServiceAIDL l = ILocationHelperServiceAIDL.Stub.asInterface(service);
-                    mHelperAIDL = l;
-//                try {
-//                    l.onFinishBind(NOTI_ID);
-//                } catch (RemoteException e) {
-//                    e.printStackTrace();
-//                }
+//                    mHelperAIDL = l;
+                    try {
+                        l.onFinishBind(NOTI_ID);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                 }
             };
             Intent intent = new Intent();
@@ -117,42 +118,6 @@ public class NotiService extends Service {
             mBinder = new LocationServiceBinder();
         }
         return mBinder;
-    }
-
-    private void showNotify(Context context, int largeIcon) {
-
-        Intent intent = new Intent();
-        boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
-        if (isLogin) {
-            intent.setClassName(context, "com.easymi.common.mvp.work.WorkActivity");
-        } else {
-            intent.setClassName(context, "com.easymi.personal.activity.LoginActivity");
-        }
-        intent.setAction(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
-                intent, 0);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(
-                context);
-
-        builder.setSmallIcon(R.mipmap.role_driver);
-        builder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), largeIcon));
-        builder.setColor(getResources().getColor(R.color.colorPrimary));
-        builder.setContentTitle(getResources().getString(R.string.app_name));
-        builder.setContentText(getResources().getString(R.string.app_name)
-                + context.getResources().getString(R.string.houtai));
-        builder.setWhen(System.currentTimeMillis());
-        builder.setContentIntent(pendingIntent);
-        builder.setOngoing(true);
-//        builder.setTicker(getResources().getString(R.string.app_name)
-//                + "正在后台运行");
-
-        Notification notification = builder.build();
-        notification.flags = Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
-
-        startForeground(NOTI_ID, notification);
-
     }
 
     protected void stopService() {

@@ -254,4 +254,13 @@
 
     <string name="please_agree_agreement">请同意服务协议</string>
 
+    <string name="web_site">网站</string>
+    <string name="business">商务合作</string>
+
+    <string name="share_succeed">分享成功</string>
+    <string name="share_error">分享失败</string>
+    <string name="cancel_share">取消分享</string>
+
+    <string name="loading_qr_code">二维码加载中,请稍候</string>
+
 </resources>

@@ -1,4 +1,4 @@
-package com.easymi.v5driver;
+package com.rvakva.o2o.driver;
 
 import org.junit.Test;
 

@@ -58,9 +58,9 @@ public class PersonalActivity extends RxBaseActivity {
         driverTuiguang = findViewById(R.id.driver_tuiguang);
 
         driverTuiguang.setOnClickListener(v -> {
-            Intent intent = new Intent(PersonalActivity.this, ArticleActivity.class);
-            intent.putExtra("tag", "DriverPromotion");
-            intent.putExtra("title", getString(R.string.person_tuiguang));
+            Intent intent = new Intent(PersonalActivity.this, ShareActivity.class);
+//            intent.putExtra("tag", "DriverPromotion");
+//            intent.putExtra("title", getString(R.string.person_tuiguang));
             startActivity(intent);
         });
 

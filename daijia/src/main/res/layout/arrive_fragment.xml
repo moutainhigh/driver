@@ -33,17 +33,17 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:src="@mipmap/time_icon"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/start_wait"
-                android:textSize="12sp"
                 android:layout_marginTop="2dp"
-                android:textColor="@color/white"/>
+                android:text="@string/start_wait"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
         </LinearLayout>
 
 

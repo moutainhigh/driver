@@ -17,8 +17,6 @@ import com.easymi.component.ILocationServiceAIDL;
 
 public class LocationHelperService extends Service {
 
-    public static final String ACTIVATE = "com.easymi.component.loc.ACTIVATE";
-
     private Utils.CloseServiceReceiver mCloseReceiver;
 
     @Override
@@ -28,7 +26,6 @@ public class LocationHelperService extends Service {
         mCloseReceiver = new Utils.CloseServiceReceiver(this);
         registerReceiver(mCloseReceiver, Utils.getCloseServiceFilter());
     }
-
 
 
     @Override
@@ -47,8 +44,9 @@ public class LocationHelperService extends Service {
     }
 
     private ServiceConnection mInnerConnection;
+
     private void startBind() {
-        final String locationServiceName = LocService.START_LOC;
+        final String locationServiceName = LocService.class.getName();
         mInnerConnection = new ServiceConnection() {
 
             @Override
@@ -75,10 +73,9 @@ public class LocationHelperService extends Service {
     }
 
 
-
     private HelperBinder mBinder;
 
-    private class HelperBinder extends ILocationHelperServiceAIDL.Stub{
+    private class HelperBinder extends ILocationHelperServiceAIDL.Stub {
         @Override
         public void onFinishBind(int notiId) throws RemoteException {
             startForeground(notiId, Utils.buildNotification(LocationHelperService.this.getApplicationContext()));

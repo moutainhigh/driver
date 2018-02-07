@@ -309,7 +309,7 @@ public class XApp extends MultiDexApplication {
                 if (pid == processInfo.pid) {
                     String currentProcessName = processInfo.processName;
                     if (StringUtils.isNotBlank(currentProcessName)
-                            && currentProcessName.equals(Config.APP_PACKGE_NAME)) {
+                            && currentProcessName.equals(getPackageName())) {
                         return true;
                     }
                 }

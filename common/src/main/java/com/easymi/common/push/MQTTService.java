@@ -4,14 +4,18 @@ package com.easymi.common.push;
  * Created by developerLzh on 2017/12/13 0013.
  */
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 
 import com.easymi.common.trace.TraceInterface;
 import com.easymi.common.trace.TraceReceiver;
@@ -41,6 +45,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 public class MQTTService extends Service implements LocObserver, TraceInterface {
 
     public static final String TAG = MQTTService.class.getSimpleName();
+    private static final int NOTI_ID = 1011;
 
     private static MqttAndroidClient client;
     private MqttConnectOptions conOpt;
@@ -65,6 +70,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        showNotify(this);
         synchronized (this) {
             initConn();
         }
@@ -295,5 +301,41 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
             intent.setPackage(XApp.getInstance().getPackageName());
             XApp.getInstance().startService(intent);//重启推送
         }
+    }
+
+    private void showNotify(Context context) {
+
+        Intent intent = new Intent();
+        boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
+        if (isLogin) {
+            intent.setClassName(context, "com.easymi.common.mvp.work.WorkActivity");
+        } else {
+            intent.setClassName(context, "com.easymi.personal.activity.LoginActivity");
+        }
+        intent.setAction(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+                intent, 0);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                context, "1011");
+
+        builder.setSmallIcon(com.easymi.component.R.mipmap.role_driver);
+        builder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), com.easymi.component.R.mipmap.ic_launcher));
+        builder.setColor(getResources().getColor(com.easymi.component.R.color.colorPrimary));
+        builder.setContentTitle(getResources().getString(com.easymi.component.R.string.app_name));
+        builder.setContentText(getResources().getString(com.easymi.component.R.string.app_name)
+                + context.getResources().getString(com.easymi.component.R.string.houtai));
+        builder.setWhen(System.currentTimeMillis());
+        builder.setContentIntent(pendingIntent);
+        builder.setOngoing(true);
+//        builder.setTicker(getResources().getString(R.string.app_name)
+//                + "正在后台运行");
+
+        Notification notification = builder.build();
+        notification.flags = Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
+
+        startForeground(NOTI_ID, notification);
+
     }
 }

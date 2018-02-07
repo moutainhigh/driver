@@ -68,8 +68,6 @@ public class Config {
     public static final String SP_LOGIN_ACCOUNT = "login_account";//账号
     public static final String SP_LOGIN_PSW = "login_psw";//密码
 
-    public static final String APP_PACKGE_NAME = "com.easymi.v5driver";
-
     public static final String DAIJIA = "daijia";
 
     public static final String BROAD_CANCEL_ORDER = "com.easymi.v5driver.BROAD_CANCEL_ORDER";
@@ -78,7 +76,13 @@ public class Config {
     public static final String BROAD_ANN = "com.easymi.v5driver.BROAD_ANN";
 
     public static final int FREE_LOC_TIME = 8000;//闲时定位时间 毫秒
-    public static final int BUSY_LOC_TIME = 4000;//闲时定位时间 毫秒
+    public static final int BUSY_LOC_TIME = 4000;//忙时定位时间 毫秒
+
+
+    //--------------------------QQ,QQ空间分享部分------------------------------
+    public static final String QQ_APP_ID = "1106099902";
+
+    public static final String WX_APP_ID = "wxd96357cacd5174a1"; //微信app id
 
 
 }

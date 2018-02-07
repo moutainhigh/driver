@@ -35,6 +35,7 @@ public class Employ extends BaseEmploy implements Parcelable {
     public String cash_person_name;
 
     public double score;
+    public String company_phone;
 
     /**
      * 保存数据
@@ -64,6 +65,7 @@ public class Employ extends BaseEmploy implements Parcelable {
 
         values.put("portrait_path", portrait_path);
         values.put("score", score);
+        values.put("company_phone", company_phone);
 
         /*
          * values.put("age", age); values.put("jialing", jialing);
@@ -102,7 +104,7 @@ public class Employ extends BaseEmploy implements Parcelable {
                         "user_name", "password", "name", "real_name", "sex",
                         "company_id", "company_name", "phone", "balance", "service_type",
                         "child_type", "bank_name", "bank_card_no", "cash_person_name",
-                        "portrait_path", "score", "status"},
+                        "portrait_path", "score", "status","company_phone"},
                 "id = ?", new String[]{String.valueOf(driverID)},
                 null, null, null);
         Employ driverInfo = null;
@@ -146,6 +148,8 @@ public class Employ extends BaseEmploy implements Parcelable {
                         .getColumnIndex("score"));
                 driverInfo.status = cursor.getString(cursor
                         .getColumnIndex("status"));
+                driverInfo.company_phone = cursor.getString(cursor
+                        .getColumnIndex("company_phone"));
 
 				/*
                  * driverInfo.age =
@@ -251,6 +255,8 @@ public class Employ extends BaseEmploy implements Parcelable {
                 .getColumnIndex("score"));
         driverInfo.status = cursor.getString(cursor
                 .getColumnIndex("status"));
+        driverInfo.company_phone = cursor.getString(cursor
+                .getColumnIndex("company_phone"));
         return driverInfo;
     }
 
@@ -281,6 +287,7 @@ public class Employ extends BaseEmploy implements Parcelable {
         values.put("cash_person_name", cash_person_name);
         values.put("score", score);
         values.put("status", status);
+        values.put("company_phone", company_phone);
         /*
          * values.put("age", age); values.put("jialing", jialing);
 		 */
@@ -317,6 +324,7 @@ public class Employ extends BaseEmploy implements Parcelable {
         portrait_path = in.readString();
         score = in.readDouble();
         status = in.readString();
+        company_phone = in.readString();
     }
 
     public static final Creator<Employ> CREATOR = new Creator<Employ>() {
@@ -350,6 +358,7 @@ public class Employ extends BaseEmploy implements Parcelable {
                 ", portrait_path='" + portrait_path + '\'' +
                 ", score='" + score + '\'' +
                 ", status='" + status + '\'' +
+                ", company_phone='" + company_phone + '\'' +
                 '}';
     }
 
@@ -376,5 +385,6 @@ public class Employ extends BaseEmploy implements Parcelable {
         dest.writeString(portrait_path);
         dest.writeDouble(score);
         dest.writeString(status);
+        dest.writeString(company_phone);
     }
 }

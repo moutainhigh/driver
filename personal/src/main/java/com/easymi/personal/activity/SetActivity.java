@@ -21,6 +21,7 @@ import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.switchButton.SwitchButton;
 import com.easymi.personal.McService;
@@ -125,16 +126,17 @@ public class SetActivity extends RxBaseActivity {
     }
 
     public void contractUs(View view) {
-        Intent intent = new Intent(SetActivity.this, ArticleActivity.class);
-        intent.putExtra("tag", "ContactUs");
-        intent.putExtra("title", getString(R.string.set_contract_us));
-        startActivity(intent);
+//        Intent intent = new Intent(SetActivity.this, ArticleActivity.class);
+//        intent.putExtra("tag", "ContactUs");
+//        intent.putExtra("title", getString(R.string.set_contract_us));
+//        startActivity(intent);
+        PhoneUtil.call(SetActivity.this, EmUtil.getEmployInfo().company_phone);
     }
 
     public void aboutUs(View view) {
-        Intent intent = new Intent(SetActivity.this, ArticleActivity.class);
-        intent.putExtra("tag", "AboutUs");
-        intent.putExtra("title", getString(R.string.set_about_us));
+        Intent intent = new Intent(SetActivity.this, AboutUsActivity.class);
+//        intent.putExtra("tag", "AboutUs");
+//        intent.putExtra("title", getString(R.string.set_about_us));
         startActivity(intent);
     }
 

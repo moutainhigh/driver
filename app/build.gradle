@@ -6,7 +6,7 @@ def libs = rootProject.ext.dependencies
 android {
     compileSdkVersion cfg.compileSdkVersion
     defaultConfig {
-        applicationId "com.easymi.v5driver"
+        applicationId "com.rvakva.o2o.driver"
         minSdkVersion cfg.minSdkVersion
         targetSdkVersion cfg.targetSdkVersion
         versionCode 2
@@ -19,10 +19,25 @@ android {
             abiFilters "armeabi", "armeabi-v7a", "armeabi-v8a"
         }
     }
+    signingConfigs {
+        release {
+            keyAlias '软咖司机端'
+            keyPassword 'easymin'
+            storeFile file('emdriver.keystore')
+            storePassword 'easymin'
+        }
+    }
+
     buildTypes {
         release {
+            //混淆
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            signingConfig signingConfigs.release
         }
     }
 
