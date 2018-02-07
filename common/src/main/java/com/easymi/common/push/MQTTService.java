@@ -17,6 +17,9 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.easymi.common.activity.SplashActivity;
+import com.easymi.common.mvp.work.WorkActivity;
 import com.easymi.common.trace.TraceInterface;
 import com.easymi.common.trace.TraceReceiver;
 import com.easymi.common.util.BuildPushUtil;
@@ -305,15 +308,19 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 
     private void showNotify(Context context) {
 
-        Intent intent = new Intent();
+
         boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
+        Intent intent = new Intent();
+
         if (isLogin) {
-            intent.setClassName(context, "com.easymi.common.mvp.work.WorkActivity");
+            intent.setClass(context, WorkActivity.class);
+
         } else {
-            intent.setClassName(context, "com.easymi.personal.activity.LoginActivity");
+            intent.setClass(context, SplashActivity.class);
         }
         intent.setAction(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
+
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
                 intent, 0);
 

@@ -20,6 +20,7 @@ android {
         defaultPublishConfig "debug"
         multiDexEnabled true
 
+
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [moduleName: project.getName()]

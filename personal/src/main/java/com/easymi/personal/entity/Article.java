@@ -13,4 +13,13 @@ public class Article {
     public long companyId;
 
     public String contents;
+
+    @SerializedName("company_phone")
+    public String phone;
+
+    @SerializedName("company_web_address")
+    public String url;
+
+    @SerializedName("company_logo")
+    public String logo;
 }

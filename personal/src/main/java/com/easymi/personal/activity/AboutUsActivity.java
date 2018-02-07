@@ -19,6 +19,7 @@ import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.CusToolbar;
@@ -62,7 +63,7 @@ public class AboutUsActivity extends RxBaseActivity {
         phoneText = findViewById(R.id.phone);
         webView = findViewById(R.id.web_view);
         versionText = findViewById(R.id.version);
-
+        getArticle();
         try {
             versionText.setText(getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
         } catch (PackageManager.NameNotFoundException e) {
@@ -149,7 +150,7 @@ public class AboutUsActivity extends RxBaseActivity {
     @Override
     public void onPause() {
         super.onPause();
-        webView.loadData("about:blank", "text/html", "UTF-8");
+//        webView.loadData("about:blank", "text/html", "UTF-8");
         webView.onPause();
     }
 
@@ -163,5 +164,23 @@ public class AboutUsActivity extends RxBaseActivity {
         webView.clearCache(true);
         webView.destroy();
         super.onDestroy();
+    }
+
+    private void getArticle() {
+        McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
+
+        Observable<ArticleResult> observable = api
+                .getArticle(Config.APP_KEY, "AboutUs")
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
+                true, articleResult -> {
+            webView.loadData(articleResult.article.contents, "text/html;charset=UTF-8", null);
+            phoneText.setText(articleResult.article.phone);
+            webSiteText.setText(articleResult.article.url);
+        }
+        )));
     }
 }

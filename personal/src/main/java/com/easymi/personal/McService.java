@@ -1,6 +1,7 @@
 package com.easymi.personal;
 
 import com.easymi.component.result.EmResult;
+import com.easymi.personal.result.AboutUsResult;
 import com.easymi.personal.result.AnnouncementResult;
 import com.easymi.personal.result.ArticleResult;
 import com.easymi.personal.result.BusinessResult;
@@ -276,6 +277,14 @@ public interface McService {
                                      @Field("account") String account,
                                      @Field("payee") String name);
 
+    /**
+     * 分享地址
+     * @param driverId
+     * @param companyId
+     * @param appKey
+     * @param type
+     * @return
+     */
     @GET("/api/v1/shareLink")
     Observable<ShareResult> shareLink(@Query("id") Long driverId,
                                       @Query("company_id") Long companyId,
