@@ -9,8 +9,8 @@ android {
         applicationId "com.rvakva.o2o.driver"
         minSdkVersion cfg.minSdkVersion
         targetSdkVersion cfg.targetSdkVersion
-        versionCode 2
-        versionName "1.0.1"
+        versionCode 3
+        versionName "1.0.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
