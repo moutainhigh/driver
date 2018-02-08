@@ -78,6 +78,10 @@ public interface WorkContract {
 
         void loadDataOnResume();
 
+        void startLineTimer(WorkStatistics workStatistics);
+
+        void onPause();
+
 //        void startOnlineTimer();
         //...
     }

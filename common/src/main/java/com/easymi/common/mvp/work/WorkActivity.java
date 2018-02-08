@@ -378,6 +378,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         onLineHour.setText(String.valueOf(hour));
         onLineMonute.setText(String.valueOf(minute));
         todayIncome.setText(String.valueOf(statistics.income));
+
     }
 
     @Override
@@ -430,6 +431,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     @Override
     protected void onPause() {
         super.onPause();
+        presenter.onPause();
         mapView.onPause();
     }
 

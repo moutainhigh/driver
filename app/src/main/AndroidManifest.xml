@@ -53,10 +53,10 @@
         <!-- 阿里云推送开始 -->
         <meta-data
             android:name="com.alibaba.app.appkey"
-            android:value="24797547" /> <!-- 请填写你自己的- appKey -->
+            android:value="24798905" /> <!-- 请填写你自己的- appKey -->
         <meta-data
             android:name="com.alibaba.app.appsecret"
-            android:value="ecb233049e00d5f4ddd625bcf878b935" /> <!-- 请填写你自己的appSecret -->
+            android:value="ec390447007c3c129b36bf98329d1bcb" /> <!-- 请填写你自己的appSecret -->
 
         <service
             android:name="com.alibaba.sdk.android.push.MsgService"

@@ -2,11 +2,14 @@ package com.easymi.personal.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 
+import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.easymi.component.Config;
 import com.easymi.component.activity.WebActivity;
 import com.easymi.component.utils.Log;
@@ -236,9 +239,22 @@ public class LoginActivity extends RxBaseActivity implements LocObserver {
         String udid = PhoneUtil.getUDID(this);
 
         Log.e("LoginActivity", "udid-->" + udid);
+        String version = "";
+        try {
+            version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
         Observable<LoginResult> observable = api
-                .login(AesUtil.aesEncrypt(name, AesUtil.AAAAA), AesUtil.aesEncrypt(psw, AesUtil.AAAAA), udid, Config.APP_KEY)
+                .login(AesUtil.aesEncrypt(name, AesUtil.AAAAA),
+                        AesUtil.aesEncrypt(psw, AesUtil.AAAAA),
+                        udid,
+                        Config.APP_KEY,
+                        "android",
+                        Build.MODEL,
+                        version,
+                        PushServiceFactory.getCloudPushService().getDeviceId())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

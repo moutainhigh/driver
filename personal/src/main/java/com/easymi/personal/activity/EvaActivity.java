@@ -28,11 +28,11 @@ public class EvaActivity extends RxBaseActivity {
     @Override
     public void initViews(Bundle savedInstanceState) {
         ratingBar = findViewById(R.id.rating_bar);
-        tagContainerLayout = findViewById(R.id.tag_container);
+        tagContainerLayout = findViewById(R.id.eva_tag_container);
 
         ratingBar.setStarMark(4.4f);
-        tagContainerLayout.setTagBackgroundColor(R.color.b_f0f0f0);
-        tagContainerLayout.setTheme(ColorFactory.NONE);
+
+        tagContainerLayout.removeAllTags();
         tagContainerLayout.addTag("长得帅");
         tagContainerLayout.addTag("说话平和");
         tagContainerLayout.addTag("很长的tag很长的tag很长的tag很长的tag");

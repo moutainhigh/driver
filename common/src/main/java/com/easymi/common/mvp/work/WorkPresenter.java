@@ -6,29 +6,38 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 
 import com.easymi.common.daemon.DaemonService;
 import com.easymi.common.daemon.JobKeepLiveService;
 import com.easymi.common.entity.MultipleOrder;
+import com.easymi.common.entity.WorkStatistics;
 import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.Config;
+import com.easymi.component.EmployStatus;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
+import com.easymi.component.entity.Employ;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
+import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.widget.LoadingButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import rx.Observable;
 
@@ -42,6 +51,20 @@ public class WorkPresenter implements WorkContract.Presenter {
 
     private WorkContract.View view;
     private WorkContract.Model model;
+
+    Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message message) {
+            switch (message.what) {
+                case 0:
+                    Bundle bundle = message.getData();
+                    WorkStatistics statistics = (WorkStatistics) bundle.getSerializable("statis");
+                    view.showStatis(statistics);
+                    break;
+            }
+            return true;
+        }
+    });
 
     public WorkPresenter(Context context, WorkContract.View view) {
         this.context = context;
@@ -222,7 +245,13 @@ public class WorkPresenter implements WorkContract.Presenter {
         String nowDate = TimeUtil.getTime("yyyy-MM-dd", System.currentTimeMillis());
         Observable<WorkStatisticsResult> observable = model.getDriverStatistics(driverId, nowDate);
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
-                true, result -> view.showStatis(result.workStatistics))));
+                true, new NoErrSubscriberListener<WorkStatisticsResult>() {
+            @Override
+            public void onNext(WorkStatisticsResult result) {
+                view.showStatis(result.workStatistics);
+                startLineTimer(result.workStatistics);
+            }
+        })));
     }
 
     private boolean isFirst = true;
@@ -231,12 +260,57 @@ public class WorkPresenter implements WorkContract.Presenter {
     public void loadDataOnResume() {
         indexOrders();//查询订单
         if (isFirst) {
-            Handler handler = new Handler();
             handler.postDelayed(this::queryStatis, 2000);
             isFirst = false;
         } else {
             queryStatis();
         }
 
+    }
+
+    private Timer timer;
+    private TimerTask timerTask;
+
+    @Override
+    public void startLineTimer(WorkStatistics workStatistics) {
+        if (timer != null) {
+            timer.cancel();
+        }
+        if (timerTask != null) {
+            timerTask.cancel();
+        }
+        timer = new Timer();
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                Employ employ = EmUtil.getEmployInfo();
+                if (StringUtils.isNotBlank(employ.status)) {
+                    if (employ.status.equals(EmployStatus.ONLINE)) {
+//                        showOffline();//非听单状态
+                    } else {
+                        workStatistics.minute++;
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("statis", workStatistics);
+                        Message message = new Message();
+                        message.what = 0;
+                        message.setData(bundle);
+                        handler.sendMessage(message);//听单状态
+                    }
+                }
+
+            }
+        };
+        timer.schedule(timerTask, 60 * 1000, 60 * 1000);
+
+    }
+
+    @Override
+    public void onPause() {
+        if (null != timer) {
+            timer.cancel();
+        }
+        if (null != timerTask) {
+            timerTask.cancel();
+        }
     }
 }

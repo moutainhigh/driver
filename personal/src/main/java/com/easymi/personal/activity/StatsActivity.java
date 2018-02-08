@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.widget.CusToolbar;
+import com.easymi.component.widget.RatingBar;
 import com.easymi.personal.R;
 
 /**
@@ -12,6 +13,9 @@ import com.easymi.personal.R;
  */
 
 public class StatsActivity extends RxBaseActivity {
+
+    RatingBar ratingBar;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_stats;
@@ -19,7 +23,9 @@ public class StatsActivity extends RxBaseActivity {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
+        ratingBar = findViewById(R.id.rating_bar);
 
+        ratingBar.setStarMark(5f);
     }
 
     @Override

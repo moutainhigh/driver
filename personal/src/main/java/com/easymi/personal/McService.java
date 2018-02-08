@@ -32,8 +32,13 @@ public interface McService {
     @POST("driver/api/v1/employLogin")
     Observable<LoginResult> login(@Field("username") String userName,
                                   @Field("password") String psw,
-                                  @Field("udid") String udid,
-                                  @Field("app_key") String appKey);
+                                  @Field("udId") String udid,
+                                  @Field("app_key") String appKey,
+                                  @Field("deviceType") String deviceType,
+                                  @Field("deviceInfo") String deviceInfo,
+                                  @Field("appversion") String appversion,
+                                  @Field("userId") String userId
+    );
 
     @FormUrlEncoded
     @PUT("driver/api/v1/modifyPassword")
