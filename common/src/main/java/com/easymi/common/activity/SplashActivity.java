@@ -70,16 +70,42 @@ public class SplashActivity extends RxBaseActivity {
     }
 
     private void delayIn() {
-        if (null != gifFromAssets) {
-            gifFromAssets.start();
-            gifFromAssets.addAnimationListener(loopNumber -> jump());
+        if (needShowAnimate()) {
+            XApp.getPreferencesEditor().putLong(Config.SP_LAST_SPLASH_TIME, System.currentTimeMillis()).apply();
+            if (null != gifFromAssets) {
+                gifFromAssets.start();
+                gifFromAssets.addAnimationListener(loopNumber -> jump());
+            } else {
+                Handler handler = new Handler();
+                handler.postDelayed(this::jump, 2000);
+            }
         } else {
-            Handler handler = new Handler();
-            handler.postDelayed(this::jump, 2000);
+            jump();
         }
-
     }
 
+    /**
+     * 是否显示首页动画
+     *
+     * @return
+     */
+    private boolean needShowAnimate() {
+        long lastShowAnimaTime = XApp.getMyPreferences().getLong(Config.SP_LAST_SPLASH_TIME, 0);
+        if (lastShowAnimaTime == 0) {
+            return true;
+        } else {
+            if (System.currentTimeMillis() - lastShowAnimaTime > 24 * 60 * 60 * 1000) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    /**
+     *
+     * @param view
+     */
     public void jumpOver(View view) {
         jump();
     }

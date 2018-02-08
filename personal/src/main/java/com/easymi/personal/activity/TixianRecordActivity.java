@@ -93,25 +93,27 @@ public class TixianRecordActivity extends RxBaseActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, new HaveErrSubscriberListener<TixianResult>() {
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, true, new HaveErrSubscriberListener<TixianResult>() {
             @Override
             public void onNext(TixianResult tixianResult) {
                 recyclerView.complete();
                 if (page == 1) {
                     recordList.clear();
                 }
-                recordList.addAll(tixianResult.tixianRecords);
-                if (tixianResult.total > page * 10) {
-                    recyclerView.setLoadMoreEnable(true);
-                } else {
-                    recyclerView.setLoadMoreEnable(false);
-                }
-                adapter.setList(recordList);
-                if (recordList.size() == 0) {
+
+                if (tixianResult.tixianRecords == null) {
                     showErr(0);
                 } else {
                     hideErr();
+                    recordList.addAll(tixianResult.tixianRecords);
+                    if (tixianResult.total > page * 10) {
+                        recyclerView.setLoadMoreEnable(true);
+                    } else {
+                        recyclerView.setLoadMoreEnable(false);
+                    }
                 }
+                adapter.setList(recordList);
+
             }
 
             @Override

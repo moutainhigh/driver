@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 
+import com.amap.api.navi.model.RouteOverlayOptions;
 import com.easymi.component.Config;
 import com.easymi.component.utils.Log;
 
@@ -530,18 +531,17 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         routeOverLay.setStartPointBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.yellow_dot_small));
         routeOverLay.setEndPointBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.blue_dot_small));
         routeOverLay.setTrafficLine(true);
-        routeOverLay.addToMap();
 
-//        if (!isRecalc) { //重新算路后就不缩放地图
-//            List<LatLng> latLngs = new ArrayList<>();
-//            latLngs.add(new LatLng(path.getStartPoint().getLatitude(), path.getStartPoint().getLongitude()));
-//            latLngs.add(new LatLng(path.getEndPoint().getLatitude(), path.getEndPoint().getLongitude()));
-//            EmLoc lastLoc = EmUtil.getLastLoc();
-//            latLngs.add(new LatLng(lastLoc.latitude, lastLoc.longitude));
-//            LatLngBounds bounds = MapUtil.getBounds(latLngs);
-//            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this) / 2, DensityUtil.getDisplayWidth(this) / 2, 80));
-//        }
-//        isRecalc = false;
+        RouteOverlayOptions options = new RouteOverlayOptions();
+        options.setSmoothTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_green));
+        options.setUnknownTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_no));
+        options.setSlowTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_slow));
+        options.setJamTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_bad));
+        options.setVeryJamTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_grayred));
+
+        routeOverLay.setRouteOverlayOptions(options);
+
+        routeOverLay.addToMap();
     }
 
     private DrivingRouteOverlay drivingRouteOverlay;

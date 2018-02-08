@@ -77,6 +77,8 @@ public interface WorkContract {
         void queryStatis();
 
         void loadDataOnResume();
+
+//        void startOnlineTimer();
         //...
     }
 

@@ -267,7 +267,8 @@ public interface McService {
      */
     @POST("/driver/api/v1/enchashment")
     @FormUrlEncoded
-    Observable<EmResult> enchashment(@Field("driver_name") String driverName,
+    Observable<EmResult> enchashment(@Field("driver_id") Long driverId,
+                                     @Field("driver_name") String driverName,
                                      @Field("job_no") String jobNo,
                                      @Field("driver_tel") String phone,
                                      @Field("cost") Double cost,
@@ -279,6 +280,7 @@ public interface McService {
 
     /**
      * 分享地址
+     *
      * @param driverId
      * @param companyId
      * @param appKey
@@ -289,5 +291,5 @@ public interface McService {
     Observable<ShareResult> shareLink(@Query("id") Long driverId,
                                       @Query("company_id") Long companyId,
                                       @Query("app_key") String appKey,
-                                      @Query("type")Integer type);
+                                      @Query("type") Integer type);
 }

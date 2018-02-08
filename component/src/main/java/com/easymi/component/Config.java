@@ -11,8 +11,8 @@ public class Config {
     /**
      * 主机地址
      */
-//    public static final String HOST = "http://192.168.0.72:8082/";
-    public static final String HOST = "https://api.xiaokayun.cn/";
+    public static final String HOST = "http://192.168.0.72:8082/";
+//    public static final String HOST = "https://api.xiaokayun.cn/";
     /**
      * 图片服务器地址
      */
@@ -67,6 +67,8 @@ public class Config {
 
     public static final String SP_LOGIN_ACCOUNT = "login_account";//账号
     public static final String SP_LOGIN_PSW = "login_psw";//密码
+
+    public static final String SP_LAST_SPLASH_TIME = "last_splash_animate";//上次显示动画的时间
 
     public static final String DAIJIA = "daijia";
 

@@ -1,8 +1,13 @@
 package com.easymi.component.loc;
 
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -10,6 +15,7 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.trace.LBSTraceClient;
 import com.easymi.component.Config;
+import com.easymi.component.app.XApp;
 import com.easymi.component.db.SqliteHelper;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
@@ -34,6 +40,8 @@ public class LocService extends NotiService implements AMapLocationListener {
 
     private int scanTime = Config.FREE_LOC_TIME;
 
+    private static final int NOTI_ID = 1011;
+
     /**
      * 处理息屏关掉wifi的delegate类
      */
@@ -57,6 +65,7 @@ public class LocService extends NotiService implements AMapLocationListener {
                 mIsWifiCloseable = true;
                 mWifiAutoCloseDelegate.initOnServiceStarted(getApplicationContext());
             }
+            showNotify(this);
             startLoc();
             return START_STICKY;
         } else {
@@ -205,5 +214,43 @@ public class LocService extends NotiService implements AMapLocationListener {
 //            }
 //        }
         return needTrace;
+    }
+
+    private void showNotify(Context context) {
+
+
+        boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
+        Intent intent = new Intent();
+
+        if (isLogin) {
+            intent.setClassName(context, "com.easymi.common.mvp.work.WorkActivity");
+
+        } else {
+            intent.setClassName(context, "com.easymi.common.activity.SplashActivity");
+        }
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+                intent, 0);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                context, "1011");
+
+        builder.setSmallIcon(com.easymi.component.R.mipmap.role_driver);
+        builder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), com.easymi.component.R.mipmap.ic_launcher));
+        builder.setColor(getResources().getColor(com.easymi.component.R.color.colorPrimary));
+        builder.setContentTitle(getResources().getString(com.easymi.component.R.string.app_name));
+        builder.setContentText(getResources().getString(com.easymi.component.R.string.app_name)
+                + context.getResources().getString(com.easymi.component.R.string.houtai));
+        builder.setWhen(System.currentTimeMillis());
+        builder.setContentIntent(pendingIntent);
+        builder.setOngoing(true);
+//        builder.setTicker(getResources().getString(R.string.app_name)
+//                + "正在后台运行");
+
+        Notification notification = builder.build();
+        notification.flags = Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
+
+        startForeground(NOTI_ID, notification);
+
     }
 }

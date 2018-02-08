@@ -138,7 +138,6 @@ public class ResetPswActivity extends RxBaseActivity {
                 }
             }
         });
-        editPsw.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
         confirmAccount.setOnClickListener(v -> {
             phone = editAccount.getText().toString();
