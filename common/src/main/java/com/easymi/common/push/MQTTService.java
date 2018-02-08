@@ -4,22 +4,15 @@ package com.easymi.common.push;
  * Created by developerLzh on 2017/12/13 0013.
  */
 
-import android.app.Notification;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
 
-import com.alibaba.android.arouter.launcher.ARouter;
-import com.easymi.common.activity.SplashActivity;
-import com.easymi.common.mvp.work.WorkActivity;
 import com.easymi.common.trace.TraceInterface;
 import com.easymi.common.trace.TraceReceiver;
 import com.easymi.common.util.BuildPushUtil;
