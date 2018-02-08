@@ -116,7 +116,7 @@ public class MySubscriber<T> extends Subscriber<T> implements ProgressDismissLis
         } else if (e instanceof JsonParseException || e instanceof JSONException || e instanceof ParseException) {
             ToastUtil.showMessage(context, context.getString(R.string.parse_error));//解析错误
         } else if (e instanceof ApiException) {
-            ToastUtil.showMessage(context, "server error:" + ((ApiException) e).getErrCode() + "    " + e.getMessage());//服务器定义的错误
+            ToastUtil.showMessage(context, e.getMessage());//服务器定义的错误
             if (null != haveErrSubscriberListener) {
                 haveErrSubscriberListener.onError(((ApiException) e).getErrCode());
             }

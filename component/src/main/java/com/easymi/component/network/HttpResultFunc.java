@@ -22,7 +22,14 @@ public class HttpResultFunc<T extends EmResult> implements Func1<T, Boolean> {
     @Override
     public Boolean call(T t) {
         if (t.getCode() != 1) {
-            throw new ApiException(t.getCode(), t.getMessage());
+            String msg = t.getMessage();
+            for (ErrCode errCode : ErrCode.values()) {
+                if (t.getCode() == errCode.getCode()) {
+                    msg = errCode.getShowMsg();
+                    break;
+                }
+            }
+            throw new ApiException(t.getCode(), msg);
         } else {
             return true;
         }
