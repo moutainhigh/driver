@@ -346,7 +346,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     public void payOrder(Long orderId, String payType) {
         Observable<EmResult> observable = model.payOrder(orderId, payType);
 
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, emResult -> {
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, emResult -> {
             DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
             if (null != dymOrder) {
                 dymOrder.delete();
