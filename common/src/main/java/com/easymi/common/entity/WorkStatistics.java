@@ -14,7 +14,7 @@ public class WorkStatistics implements Serializable{
     public int finishCount;
 
     @SerializedName("total_amount")
-    public int totalAmount;
+    public double totalAmount;
 
     public double income;
 

@@ -6,11 +6,13 @@ import com.easymi.personal.result.AnnouncementResult;
 import com.easymi.personal.result.ArticleResult;
 import com.easymi.personal.result.BusinessResult;
 import com.easymi.personal.result.CompanyResult;
+import com.easymi.personal.result.EvaResult;
 import com.easymi.personal.result.LiushuiResult;
 import com.easymi.personal.result.LoginResult;
 import com.easymi.personal.result.NotifityResult;
 import com.easymi.personal.result.RechargeResult;
 import com.easymi.personal.result.ShareResult;
+import com.easymi.personal.result.StatisResult;
 import com.easymi.personal.result.TixianResult;
 
 import retrofit2.http.Field;
@@ -297,4 +299,30 @@ public interface McService {
                                       @Query("company_id") Long companyId,
                                       @Query("app_key") String appKey,
                                       @Query("type") Integer type);
+
+
+    /**
+     * 客户的评价接口
+     *
+     * @param driverId
+     * @param appKey
+     * @return
+     */
+    @GET("/driver/api/v1/driverRate")
+    Observable<EvaResult> driverRate(@Query("driver_id") Long driverId,
+                                     @Query("app_key") String appKey);
+
+    /**
+     * 统计中心
+     * @param driverId
+     * @param appKey
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    @GET("/driver/api/v1/driverSend")
+    Observable<StatisResult> driverSend(@Query("driver_id") Long driverId,
+                                        @Query("app_key") String appKey,
+                                        @Query("start_time") String startTime,
+                                        @Query("end_time") String endTime);
 }

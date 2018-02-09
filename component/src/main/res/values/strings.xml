@@ -58,5 +58,6 @@
 
     <string name="succeed">成功</string>
     <string name="empty_hint">这里空空如也</string>
+
     <string name="empty_string"> </string>
 </resources>

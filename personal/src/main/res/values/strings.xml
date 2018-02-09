@@ -137,7 +137,7 @@
     <string name="stats_today">今日</string>
     <string name="stats_yesterday">昨日</string>
     <string name="stats_week">本周</string>
-    <string name="stats_month">本月</string>
+    <string name="stats_month">全部</string>
     <string name="stats_order">订单</string>
     <string name="stats_accept_order_no">接单数</string>
     <string name="stats_complete_order_no">完成订单数</string>
@@ -262,5 +262,11 @@
     <string name="cancel_share">取消分享</string>
 
     <string name="loading_qr_code">二维码加载中,请稍候</string>
+
+    <string name="number">单</string>
+
+    <string name="all_order_number">累计接单</string>
+
+    <string name="zero_time">0次</string>
 
 </resources>

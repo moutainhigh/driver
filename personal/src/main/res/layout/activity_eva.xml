@@ -45,17 +45,12 @@
                     RatingBar:stepSize="4.5" />
 
                 <TextView
+                    android:id="@+id/rate_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="5.0"
+                    android:text=""
                     android:textSize="25sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="近100单得分" />
 
                 <View
                     android:layout_width="match_parent"
@@ -63,59 +58,35 @@
                     android:layout_marginTop="10dp"
                     android:background="@color/dark_gray" />
 
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="10dp">
 
-                    <LinearLayout
-                        android:layout_width="0.0dp"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="10dp">
+                        android:text="@string/all_order_number"
+                        android:textSize="14sp" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="5.0"
-                            android:textSize="25sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="@string/total_score" />
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="0.1dp"
-                        android:layout_height="40dp"
-                        android:background="@color/dark_gray" />
-
-                    <LinearLayout
-                        android:layout_width="0.0dp"
+                    <TextView
+                        android:id="@+id/total_number"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="10dp">
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="5dp"
+                        android:text=""
+                        android:textColor="@color/text_color_black"
+                        android:textSize="25sp" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="5.0"
-                            android:textSize="25sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/number" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="@string/total_score" />
-                    </LinearLayout>
                 </LinearLayout>
 
                 <View
@@ -158,34 +129,37 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
+                        android:gravity="left"
                         android:text="@string/star_5"
                         android:textSize="16sp" />
 
                     <ProgressBar
+                        android:id="@+id/five_star_progress"
                         style="@android:style/Widget.ProgressBar.Horizontal"
                         android:layout_width="0.0dp"
                         android:layout_height="10dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
-                        android:max="10"
-                        android:progress="1"
+                        android:max="100"
                         android:progressBackgroundTint="#f0f0f0"
                         android:progressTint="@color/yellow" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/star_five_number"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
-                        android:text="4单"
+                        android:gravity="right"
+                        android:text=""
                         android:textSize="16sp" />
 
                 </LinearLayout>
@@ -193,34 +167,37 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
+                        android:gravity="left"
                         android:text="@string/star_4"
                         android:textSize="16sp" />
 
                     <ProgressBar
+                        android:id="@+id/four_star_progress"
                         style="@android:style/Widget.ProgressBar.Horizontal"
                         android:layout_width="0.0dp"
                         android:layout_height="10dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
-                        android:max="10"
-                        android:progress="1"
+                        android:max="100"
                         android:progressBackgroundTint="#f0f0f0"
                         android:progressTint="@color/yellow" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/star_four_number"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
-                        android:text="4单"
+                        android:gravity="right"
+                        android:text=""
                         android:textSize="16sp" />
 
                 </LinearLayout>
@@ -228,34 +205,37 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
+                        android:gravity="left"
                         android:text="@string/star_3"
                         android:textSize="16sp" />
 
                     <ProgressBar
+                        android:id="@+id/three_star_progress"
                         style="@android:style/Widget.ProgressBar.Horizontal"
                         android:layout_width="0.0dp"
                         android:layout_height="10dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
-                        android:max="10"
-                        android:progress="1"
+                        android:max="100"
                         android:progressBackgroundTint="#f0f0f0"
                         android:progressTint="@color/yellow" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/star_three_number"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
-                        android:text="4单"
+                        android:gravity="right"
+                        android:text=""
                         android:textSize="16sp" />
 
                 </LinearLayout>
@@ -263,34 +243,37 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
+                        android:gravity="left"
                         android:text="@string/star_2"
                         android:textSize="16sp" />
 
                     <ProgressBar
+                        android:id="@+id/two_star_progress"
                         style="@android:style/Widget.ProgressBar.Horizontal"
                         android:layout_width="0.0dp"
                         android:layout_height="10dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
-                        android:max="10"
-                        android:progress="1"
+                        android:max="100"
                         android:progressBackgroundTint="#f0f0f0"
                         android:progressTint="@color/yellow" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/star_two_number"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
-                        android:text="4单"
+                        android:gravity="right"
+                        android:text=""
                         android:textSize="16sp" />
 
                 </LinearLayout>
@@ -299,34 +282,37 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
+                        android:gravity="left"
                         android:text="@string/star_1"
                         android:textSize="16sp" />
 
                     <ProgressBar
+                        android:id="@+id/one_star_progress"
                         style="@android:style/Widget.ProgressBar.Horizontal"
                         android:layout_width="0.0dp"
                         android:layout_height="10dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
-                        android:max="10"
-                        android:progress="1"
+                        android:max="100"
                         android:progressBackgroundTint="#f0f0f0"
                         android:progressTint="@color/yellow" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/star_one_number"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
-                        android:text="4单"
+                        android:gravity="right"
+                        android:text=""
                         android:textSize="16sp" />
 
                 </LinearLayout>

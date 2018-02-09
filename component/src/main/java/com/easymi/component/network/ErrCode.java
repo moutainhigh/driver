@@ -613,7 +613,15 @@ public enum ErrCode {
     /**
      * 无效赠送金额
      */
-    INVALID_LARGESS_CODE(30048, "无效赠送金额");
+    INVALID_LARGESS_CODE(30048, "无效赠送金额"),
+    /**
+     * 该服务人员已绑定其他设备
+     */
+    EMPLOY_DEVICE_ERROR(30049, "该服务人员已绑定其他设备"),
+    /**
+     * 该服务人员已存在需执行的预约订单，当前不能再次派单
+     */
+    DRIVER_GOTO_PRE_ORDER_CODE(30050, "该服务人员已存在需执行的预约订单，当前不能再次派单");
 
     private int code;
     private String showMsg;

@@ -121,7 +121,9 @@ public class NotiService extends Service {
     }
 
     protected void stopService() {
-        unbind();
+        if (null != connection) {
+            unbind();
+        }
         unApplyNotiKeepMech();
         if (mCloseReceiver != null) {
             unregisterReceiver(mCloseReceiver);
