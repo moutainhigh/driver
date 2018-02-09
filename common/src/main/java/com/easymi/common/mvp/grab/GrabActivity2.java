@@ -366,6 +366,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
         DrivingRouteOverlay overlay = new DrivingRouteOverlay(this, aMap,
                 result.getPaths().get(0), result.getStartPos()
                 , result.getTargetPos(), null);
+
         overlay.setRouteWidth(50);
         overlay.setIsColorfulline(false);
         overlay.setNodeIconVisibility(false);//隐藏转弯的节点

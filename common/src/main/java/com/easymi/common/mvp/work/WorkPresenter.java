@@ -5,6 +5,7 @@ import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +16,7 @@ import com.easymi.common.daemon.JobKeepLiveService;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.WorkStatistics;
 import com.easymi.common.result.AnnouncementResult;
+import com.easymi.common.result.LoginResult;
 import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.QueryOrdersResult;
@@ -245,12 +247,9 @@ public class WorkPresenter implements WorkContract.Presenter {
         String nowDate = TimeUtil.getTime("yyyy-MM-dd", System.currentTimeMillis());
         Observable<WorkStatisticsResult> observable = model.getDriverStatistics(driverId, nowDate);
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
-                true, new NoErrSubscriberListener<WorkStatisticsResult>() {
-            @Override
-            public void onNext(WorkStatisticsResult result) {
-                view.showStatis(result.workStatistics);
-                startLineTimer(result.workStatistics);
-            }
+                true, result -> {
+            view.showStatis(result.workStatistics);
+            startLineTimer(result.workStatistics);
         })));
     }
 
@@ -259,6 +258,7 @@ public class WorkPresenter implements WorkContract.Presenter {
     @Override
     public void loadDataOnResume() {
         indexOrders();//查询订单
+        loadEmploy(EmUtil.getEmployId());
         if (isFirst) {
             handler.postDelayed(this::queryStatis, 2000);
             isFirst = false;
@@ -312,5 +312,20 @@ public class WorkPresenter implements WorkContract.Presenter {
         if (null != timerTask) {
             timerTask.cancel();
         }
+    }
+
+    @Override
+    public void loadEmploy(long id) {
+
+        Observable<LoginResult> observable = model.getEmploy(id, Config.APP_KEY);
+        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
+                true, result -> {
+            Employ employ = result.getEmployInfo();
+            employ.saveOrUpdate();
+            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+            editor.putLong(Config.SP_DRIVERID, employ.id);
+            editor.apply();
+            view.showDriverStatus();
+        })));
     }
 }

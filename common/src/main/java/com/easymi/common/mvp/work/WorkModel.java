@@ -2,6 +2,7 @@ package com.easymi.common.mvp.work;
 
 import com.easymi.common.CommApiService;
 import com.easymi.common.result.AnnouncementResult;
+import com.easymi.common.result.LoginResult;
 import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.QueryOrdersResult;
@@ -69,7 +70,7 @@ public class WorkModel implements WorkContract.Model {
     @Override
     public Observable<WorkStatisticsResult> getDriverStatistics(Long id, String nowDate) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .workStatistics(id, nowDate,Config.APP_KEY)
+                .workStatistics(id, nowDate, Config.APP_KEY)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -79,6 +80,15 @@ public class WorkModel implements WorkContract.Model {
     public Observable<NearDriverResult> queryNearDriver(Long driverId, Double lat, Double lng, Double distance) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .getNearDrivers(driverId, lat, lng, distance, Config.APP_KEY)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<LoginResult> getEmploy(Long driverId, String appKey) {
+        return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .getDriverInfo(driverId, Config.APP_KEY)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

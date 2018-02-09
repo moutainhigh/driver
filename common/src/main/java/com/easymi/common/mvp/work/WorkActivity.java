@@ -400,6 +400,18 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         swipeRefreshLayout.setRefreshing(false);
     }
 
+    @Override
+    public void showDriverStatus() {
+        Employ employ = EmUtil.getEmployInfo();
+        if (StringUtils.isNotBlank(employ.status)) {
+            if (employ.status.equals(EmployStatus.ONLINE)) {
+                showOffline();//非听单状态
+            } else {
+                showOnline();//听单状态
+            }
+        }
+    }
+
 
     @Override
     public RxManager getRxManager() {
@@ -411,15 +423,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         super.onResume();
         mapView.onResume();
         presenter.loadDataOnResume();
-        Employ employ = EmUtil.getEmployInfo();
-        if (StringUtils.isNotBlank(employ.status)) {
-            if (employ.status.equals(EmployStatus.ONLINE)) {
-                showOffline();//非听单状态
-            } else {
-                showOnline();//听单状态
-            }
-        }
-
     }
 
     @Override

@@ -133,7 +133,7 @@ public class DrivingRouteOverlay extends RouteOverlay {
 
         mPolylineOptions = new PolylineOptions();
 //        mPolylineOptions.color(getDriveColor()).width(getRouteWidth());
-        mPolylineOptions.setCustomTexture(BitmapDescriptorFactory.fromResource(R.mipmap.custtexture_green)).width(getRouteWidth());
+        mPolylineOptions.setCustomTexture(BitmapDescriptorFactory.fromResource(R.mipmap.custtexture_green_row)).width(getRouteWidth());
     }
 
     private void showPolyline() {

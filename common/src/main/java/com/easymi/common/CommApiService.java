@@ -1,6 +1,7 @@
 package com.easymi.common;
 
 import com.easymi.common.result.AnnouncementResult;
+import com.easymi.common.result.LoginResult;
 import com.easymi.common.result.MultipleOrderResult;
 import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
@@ -178,4 +179,15 @@ public interface CommApiService {
                                  @Field("money") Double baoxiaoMoney,
                                  @Field("reason") String baoxiaoReason,
                                  @Field("app_key") String appKey);
+
+    /**
+     * 获取司机信息
+     *
+     * @param driverId
+     * @param appKey
+     * @return
+     */
+    @GET("driver/api/v1/getEmployById")
+    Observable<LoginResult> getDriverInfo(@Query("id") Long driverId,
+                                          @Query("app_key") String appKey);
 }

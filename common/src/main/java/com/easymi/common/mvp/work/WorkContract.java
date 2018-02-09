@@ -6,6 +6,7 @@ import com.easymi.common.entity.NearDriver;
 import com.easymi.common.entity.Notifity;
 import com.easymi.common.entity.WorkStatistics;
 import com.easymi.common.result.AnnouncementResult;
+import com.easymi.common.result.LoginResult;
 import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.QueryOrdersResult;
@@ -53,6 +54,8 @@ public interface WorkContract {
 
         void stopRefresh();
 
+        void showDriverStatus();
+
         RxManager getRxManager();
     }
 
@@ -82,6 +85,8 @@ public interface WorkContract {
 
         void onPause();
 
+        void loadEmploy(long id);
+
 //        void startOnlineTimer();
         //...
     }
@@ -100,6 +105,8 @@ public interface WorkContract {
         Observable<WorkStatisticsResult> getDriverStatistics(Long id, String nowDate);
 
         Observable<NearDriverResult> queryNearDriver(Long driverId, Double lat, Double lng, Double distance);
+
+        Observable<LoginResult> getEmploy(Long driverId,String appKey);
     }
 
 }
