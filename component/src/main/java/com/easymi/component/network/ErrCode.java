@@ -619,9 +619,13 @@ public enum ErrCode {
      */
     EMPLOY_DEVICE_ERROR(30049, "该服务人员已绑定其他设备"),
     /**
-     * 该服务人员已存在需执行的预约订单，当前不能再次派单
+     * 该服务人员已存在执行中的订单，不能再次接单
      */
-    DRIVER_GOTO_PRE_ORDER_CODE(30050, "该服务人员已存在需执行的预约订单，当前不能再次派单");
+    DRIVER_GOTO_PRE_ORDER_CODE(30050, "该服务人员已存在执行中的订单，不能再次接单"),
+    /**
+     * 差一点就抢到了
+     */
+    GRAB_ORDER_ERROR(30051, "差一点就抢到了");
 
     private int code;
     private String showMsg;
