@@ -6,10 +6,12 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -24,7 +26,10 @@ import com.easymi.component.permission.RxPermissions;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import pl.droidsonroids.gif.AnimationListener;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
@@ -44,8 +49,49 @@ public class SplashActivity extends RxBaseActivity {
 
     GifDrawable gifFromAssets;
 
+    TextView jumpOver;
+
+    private int leftTime;
+
+    Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message message) {
+            switch (message.what) {
+                case 0:
+                    if (leftTime > 0) {
+                        leftTime--;
+                        jumpOver.setText(getString(R.string.jump_gif) + "(" + leftTime + getString(R.string.sec) + ")");
+                        handler.sendEmptyMessageDelayed(0, 1000);
+                    }
+                    break;
+            }
+            return true;
+        }
+    });
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (animateStarted) {
+            handler.removeMessages(0);
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if (animateStarted) {
+            handler.sendEmptyMessageDelayed(0, 1000);
+        }
+    }
+
+
+    private boolean animateStarted = false;
+
     @Override
     public void initViews(Bundle savedInstanceState) {
+
+        jumpOver = findViewById(R.id.jump_over);
 
         rxPermissions = new RxPermissions(this);
 
@@ -73,10 +119,13 @@ public class SplashActivity extends RxBaseActivity {
         if (needShowAnimate()) {
             XApp.getPreferencesEditor().putLong(Config.SP_LAST_SPLASH_TIME, System.currentTimeMillis()).apply();
             if (null != gifFromAssets) {
+                leftTime = gifFromAssets.getDuration() / 1000;
+                jumpOver.setText(getString(R.string.jump_gif) + "(" + leftTime + getString(R.string.sec) + ")");
                 gifFromAssets.start();
+                animateStarted = true;
                 gifFromAssets.addAnimationListener(loopNumber -> jump());
+                handler.sendEmptyMessageDelayed(0, 1000);
             } else {
-                Handler handler = new Handler();
                 handler.postDelayed(this::jump, 2000);
             }
         } else {
@@ -103,7 +152,6 @@ public class SplashActivity extends RxBaseActivity {
     }
 
     /**
-     *
      * @param view
      */
     public void jumpOver(View view) {
@@ -123,7 +171,6 @@ public class SplashActivity extends RxBaseActivity {
     }
 
     private void delayExit() {
-        Handler handler = new Handler();
         handler.postDelayed(() -> runOnUiThread(() -> {
             ActManager.getInstance().finishAllActivity();
         }), 1000);
