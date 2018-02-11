@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.personal.R;
@@ -95,7 +96,7 @@ public class GridAdapter extends BaseAdapter {
             });
         } else if (str.equals(context.getString(R.string.contract_service))) {
             holder.item_pic.setImageResource(R.mipmap.contract_service);
-            holder.item_root.setOnClickListener(v -> PhoneUtil.call(context, "15102875535"));
+            holder.item_root.setOnClickListener(v -> PhoneUtil.call(context, EmUtil.getEmployInfo().company_phone));
         }
         return convertView;
     }
