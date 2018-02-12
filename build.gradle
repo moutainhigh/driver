@@ -43,21 +43,21 @@ ext {
             targetSdkVersion : 25,
     ]
 
-    dependencies = ['appcompat-v7'     : "com.android.support:appcompat-v7:$supportLibraryVersion",
-                    'design'           : "com.android.support:design:$supportLibraryVersion",
-                    'junit'            : 'junit:junit:4.12',
-                    'multidex'         : 'com.android.support:multidex:1.0.1',
-                    'constraint-layout': 'com.android.support.constraint:constraint-layout:1.0.2',
+    dependencies = ['appcompat-v7'           : "com.android.support:appcompat-v7:$supportLibraryVersion",
+                    'design'                 : "com.android.support:design:$supportLibraryVersion",
+                    'junit'                  : 'junit:junit:4.12',
+                    'multidex'               : 'com.android.support:multidex:1.0.1',
+                    'constraint-layout'      : 'com.android.support.constraint:constraint-layout:1.0.2',
                     'pull-load-more-recycler': 'com.wuxiaolong.pullloadmorerecyclerview:library:1.1.2',
 
                     //伸缩layout
-                    'expandable-layout': 'net.cachapa.expandablelayout:expandablelayout:2.3',
+                    'expandable-layout'      : 'net.cachapa.expandablelayout:expandablelayout:2.3',
 
-                    'amap-loc': 'com.amap.api:location:latest.integration',
-                    'amap-navi': 'com.amap.api:navi-3dmap:latest.integration',
-                    'amap-search': 'com.amap.api:search:latest.integration',
+                    'amap-loc'               : 'com.amap.api:location:3.8.0',
+                    'amap-navi'              : 'com.amap.api:navi-3dmap:5.6.0_3dmap5.7.0',
+                    'amap-search'            : 'com.amap.api:search:5.7.0',
 
-                    'tag-view': 'co.lujun:androidtagview:1.1.4',
+                    'tag-view'               : 'co.lujun:androidtagview:1.1.4',
     ]
 }
 

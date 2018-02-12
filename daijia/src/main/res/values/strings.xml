@@ -151,5 +151,36 @@
 
     <string name="choice_pay_type">选择支付方式</string>
 
+    <string name="order_accepted">已接单</string>
+    <string name="order_running">执行中</string>
+    <string name="order_waiting">等待中</string>
+
+
+    <string name="consumer_name">客户姓名</string>
+    <string name="consumer_type">客户类型</string>
+    <string name="order_company">订单所属公司</string>
+    <string name="consumer_company">客户所属公司</string>
+    <string name="consumer_balance">余额</string>
+    <string name="can_sign">签单</string>
+
+    <string name="allow">允许</string>
+    <string name="not_allow">不允许</string>
+
+
+    <string name="please_refuse_reason">请选择拒单原因</string>
+
+    <string name="click_wrong">点错了</string>
+    <string name="too_far_way">距离太远</string>
+    <string name="body_wrong">身体不适</string>
+    <string name="car_wrong">车坏了</string>
+    <string name="please_other_reason">请输入其他原因</string>
+    <string name="refuse_apply">提交</string>
+
+    <string name="not_non_refuse">拒单理由不能为空</string>
+
+
+    <string name="personal_consumer">个人客户</string>
+    <string name="qiye_consumer">企业客户</string>
+
 
 </resources>

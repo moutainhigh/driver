@@ -2,15 +2,18 @@ package com.easymi.personal.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.widget.CusErrLayout;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.SwipeRecyclerView;
 import com.easymi.personal.McService;
@@ -42,6 +45,8 @@ public class NotifityActivity extends RxBaseActivity {
 
     private List<Notifity> notifities;
 
+    CusErrLayout errLayout;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_notifity;
@@ -51,6 +56,7 @@ public class NotifityActivity extends RxBaseActivity {
     public void initToolBar() {
         toolbar = findViewById(R.id.cus_toolbar);
         toolbar.setLeftBack(v -> finish());
+        toolbar.setTitle(R.string.msg_notify);
         toolbar.setRightText(R.string.all_read, v -> readAll());
     }
 
@@ -62,6 +68,8 @@ public class NotifityActivity extends RxBaseActivity {
         adapter.setListener(this::readOne);
 
         notifities = new ArrayList<>();
+
+        errLayout = findViewById(R.id.cus_err_layout);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
@@ -90,17 +98,33 @@ public class NotifityActivity extends RxBaseActivity {
                 .observeOn(AndroidSchedulers.mainThread());
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false,
-                false, notifityResult -> {
-            recyclerView.complete();
-            if (page == 1) {
-                notifities.clear();
+                false, new HaveErrSubscriberListener<NotifityResult>() {
+            @Override
+            public void onNext(NotifityResult notifityResult) {
+                recyclerView.complete();
+                if (page == 1) {
+                    notifities.clear();
+                }
+                if (notifityResult.employNoticeRecords != null) {
+                    notifities.addAll(notifityResult.employNoticeRecords);
+                }
+                adapter.setList(notifities);
+                if (notifityResult.total <= page * 10) {
+                    recyclerView.setLoadMoreEnable(false);
+                } else {
+                    recyclerView.setLoadMoreEnable(true);
+                }
+                if (notifities.size() == 0) {
+                    showErr(0);
+                } else {
+                    hideErr();
+                }
             }
-            notifities.addAll(notifityResult.employNoticeRecords);
-            adapter.setList(notifities);
-            if (notifityResult.total <= page * 10) {
-                recyclerView.setLoadMoreEnable(false);
-            } else {
-                recyclerView.setLoadMoreEnable(true);
+
+            @Override
+            public void onError(int code) {
+                recyclerView.complete();
+                showErr(code);
             }
         })));
     }
@@ -131,6 +155,25 @@ public class NotifityActivity extends RxBaseActivity {
             recyclerView.onRefresh();
             recyclerView.setRefreshing(true);
         })));
+    }
+
+    /**
+     * @param tag 0代表空数据  其他代表网络问题
+     */
+    private void showErr(int tag) {
+        if (tag != 0) {
+            errLayout.setErrText(tag);
+            errLayout.setErrImg();
+        }
+        errLayout.setVisibility(View.VISIBLE);
+        errLayout.setOnClickListener(v -> {
+            hideErr();
+            recyclerView.setRefreshing(true);
+        });
+    }
+
+    private void hideErr() {
+        errLayout.setVisibility(View.GONE);
     }
 
 }

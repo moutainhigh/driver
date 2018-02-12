@@ -561,4 +561,12 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     }
 
+    public void showLaneInfo(AMapLaneInfo info) {
+
+    }
+
+    public void updateIntervalCameraInfo(AMapNaviCameraInfo info1,AMapNaviCameraInfo info2,int i) {
+
+    }
+
 }

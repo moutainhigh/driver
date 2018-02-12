@@ -152,6 +152,13 @@ public class PhoneUtil {
         }
     }
 
+//    public static void hideKeyboard1(Activity paramActivity){
+//        InputMethodManager imm = (InputMethodManager) paramActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+//        if (imm != null) {
+//            imm.hideSoftInputFromWindow(paramActivity.getWindow().getDecorView().getWindowToken(), 0);
+//        }
+//    }
+
     public static void showKeyboard(View view) {
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);

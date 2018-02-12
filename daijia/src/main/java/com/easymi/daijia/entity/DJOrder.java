@@ -70,6 +70,9 @@ public class DJOrder implements Serializable {
     @SerializedName("order_money")
     public double orderMoney;//应付金额
 
+    @SerializedName("group_id")
+    public String groupId;
+
     public String carNo;//车牌号
 
     public List<Address> addresses;

@@ -59,6 +59,7 @@ import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MapUtil;
+import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusBottomSheetDialog;
@@ -67,6 +68,8 @@ import com.easymi.component.widget.LoadingButton;
 import com.easymi.component.widget.overlay.DrivingRouteOverlay;
 import com.easymi.daijia.R;
 import com.easymi.daijia.activity.CancelActivity;
+import com.easymi.daijia.activity.ConsumerInfoActivity;
+import com.easymi.daijia.activity.SameOrderActivity;
 import com.easymi.daijia.entity.Address;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.flowMvp.oldCalc.OldRunningActivity;
@@ -81,6 +84,7 @@ import com.easymi.daijia.fragment.WaitFragment;
 import com.easymi.daijia.receiver.CancelOrderReceiver;
 import com.easymi.daijia.widget.FlowPopWindow;
 import com.easymi.daijia.widget.InputRemarkDialog;
+import com.easymi.daijia.widget.RefuseOrderDialog;
 import com.google.gson.Gson;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
@@ -183,6 +187,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 } else {
                     popWindow.showCancel();
                 }
+                if (StringUtils.isBlank(djOrder.groupId)) {
+                    popWindow.hideSame();
+                } else {
+                    popWindow.showSame();
+                }
                 popWindow.show(v);
             }
         });
@@ -197,11 +206,16 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 Intent intent = new Intent(FlowActivity.this, CancelActivity.class);
                 startActivityForResult(intent, CANCEL_ORDER);
             } else if (i == R.id.pop_contract_service) {
-
+                String phone = EmUtil.getEmployInfo().company_phone;
+                PhoneUtil.call(FlowActivity.this, phone);
             } else if (i == R.id.pop_same_order) {
-
+                Intent intent = new Intent(FlowActivity.this, SameOrderActivity.class);
+                intent.putExtra("groupId", djOrder.groupId);
+                startActivity(intent);
             } else if (i == R.id.pop_consumer_msg) {
-
+                Intent intent = new Intent(FlowActivity.this, ConsumerInfoActivity.class);
+                intent.putExtra("orderId", orderId);
+                startActivity(intent);
             }
         });
     }
@@ -211,10 +225,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         orderNumberText.setText(djOrder.orderNumber);
         orderTypeText.setText(djOrder.orderDetailType);
         tagContainerLayout.removeAllTags();
-        tagContainerLayout.addTag("嘻嘻");
-        tagContainerLayout.addTag("哈哈");
-        tagContainerLayout.addTag("傻逼");
-        tagContainerLayout.addTag("智障");
+        tagContainerLayout.addTag("你好");
+        tagContainerLayout.addTag("我好");
+        tagContainerLayout.addTag("大家好");
+        tagContainerLayout.addTag("广州好迪");
         drawerFrame.setOnClickListener(view -> {
             if (expandableLayout.isExpanded()) {
                 expandableLayout.collapse();
@@ -704,14 +718,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void doRefuse() {
-                InputRemarkDialog.Builder inputBuilder = new InputRemarkDialog.Builder(FlowActivity.this);
-                inputBuilder.setPositiveButton(getString(R.string.ok), (dialog, which) -> {
-                    dialog.dismiss();
-                    presenter.refuseOrder(djOrder.orderId, inputBuilder.getEditStr());
-                });
-                InputRemarkDialog dialog = inputBuilder.create();
-                dialog.setCanceledOnTouchOutside(true);
-                dialog.show();
+                RefuseOrderDialog.Builder builder = new RefuseOrderDialog.Builder(FlowActivity.this);
+                builder.setApplyClick(reason -> presenter.refuseOrder(djOrder.orderId, reason));
+                RefuseOrderDialog dialog1 = builder.create();
+                dialog1.setCanceledOnTouchOutside(true);
+                dialog1.show();
             }
 
             @Override

@@ -2,9 +2,11 @@ package com.easymi.daijia;
 
 import com.easymi.component.result.EmResult;
 import com.easymi.daijia.result.BudgetResult;
+import com.easymi.daijia.result.ConsumerResult;
 import com.easymi.daijia.result.DJOrderResult;
 import com.easymi.daijia.result.DJTypeResult;
 import com.easymi.daijia.result.PassengerResult;
+import com.easymi.daijia.result.SameOrderResult;
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -281,4 +283,25 @@ public interface DJApiService {
                                           @Field("app_key") String appKey,
                                           @Field("remark") String remark);
 
+    /**
+     * 同单司机
+     *
+     * @param groupId
+     * @param appKey
+     * @return
+     */
+    @GET("driver/api/v1/groupDrivers")
+    Observable<SameOrderResult> getSameOrderDriver(@Query("group_id") String groupId,
+                                                   @Query("app_key") String appKey);
+
+    /**
+     * 客户信息
+     *
+     * @param orderId
+     * @param appKey
+     * @return
+     */
+    @GET("driver/api/v1/passengerInfo")
+    Observable<ConsumerResult> getConsumer(@Query("order_id") Long orderId,
+                                           @Query("app_key") String appKey);
 }

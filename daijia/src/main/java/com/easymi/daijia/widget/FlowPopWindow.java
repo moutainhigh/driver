@@ -65,9 +65,9 @@ public class FlowPopWindow extends PopupWindow implements View.OnClickListener {
 
         //设置监听
         cancel = view.findViewById(R.id.pop_cancel_order);   //取消订单
-        contract = view.findViewById(R.id.pop_contract_service);    //转单
-        same = view.findViewById(R.id.pop_same_order);        //联系后台
-        consumer = view.findViewById(R.id.pop_consumer_msg);   //同单司机
+        contract = view.findViewById(R.id.pop_contract_service);    //联系后台
+        same = view.findViewById(R.id.pop_same_order);        //同单司机
+        consumer = view.findViewById(R.id.pop_consumer_msg);   //客户信息
 
         cancel.setOnClickListener(this);
         contract.setOnClickListener(this);
@@ -85,6 +85,18 @@ public class FlowPopWindow extends PopupWindow implements View.OnClickListener {
     public void showCancel() {
         if (null != cancel) {
             cancel.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void hideSame() {
+        if (null != same) {
+            same.setVisibility(View.GONE);
+        }
+    }
+
+    public void showSame() {
+        if (null != same) {
+            same.setVisibility(View.VISIBLE);
         }
     }
 

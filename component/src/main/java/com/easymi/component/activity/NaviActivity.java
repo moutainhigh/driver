@@ -396,4 +396,12 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
     public void onNaviViewLoaded() {
 
     }
+
+    public void showLaneInfo(AMapLaneInfo info) {
+
+    }
+
+    public void updateIntervalCameraInfo(AMapNaviCameraInfo info1,AMapNaviCameraInfo info2,int i) {
+
+    }
 }
