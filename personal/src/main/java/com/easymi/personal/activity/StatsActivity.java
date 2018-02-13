@@ -78,10 +78,10 @@ public class StatsActivity extends RxBaseActivity {
                 timeType = "today";
             } else if (id == R.id.radio_yesterday) {
                 timeType = "yesterday";
-            } else if (id == R.id.radio_this_week) {
-                timeType = "thisWeek";
-            } else if (id == R.id.radio_all) {
-                timeType = "all";
+            } else if (id == R.id.radio_this_month) {
+                timeType = "thisMonth";
+            } else if (id == R.id.radio_this_year) {
+                timeType = "thisYear";
             }
             getStatis();
         });
@@ -141,6 +141,9 @@ public class StatsActivity extends RxBaseActivity {
         } else if (timeType.equals("thisMonth")) {
             startTime = TimeUtil.getTime("yyyy-MM-dd", TimeUtil.getBeginDayOfMonth().getTime());
             endTime = TimeUtil.getTime("yyyy-MM-dd", TimeUtil.getEndDayOfMonth().getTime());
+        } else if (timeType.equals("thisYear")) {
+            startTime = TimeUtil.getTime("yyyy-MM-dd", TimeUtil.getBeginDayOfYear().getTime());
+            endTime = TimeUtil.getTime("yyyy-MM-dd", TimeUtil.getEndDayOfYear().getTime());
         }
     }
 }

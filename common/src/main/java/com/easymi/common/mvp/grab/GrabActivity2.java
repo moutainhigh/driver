@@ -320,7 +320,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
     public void showGrabCountDown() {
         rotateImage.pauseRotate();
         shadeFrame.setVisibility(View.GONE);
-        grabCon.setOnClickListener(v -> presenter.grabOrder(showIngOrder.orderId));
+//        grabCon.setOnClickListener(v -> presenter.grabOrder(showIngOrder.orderId));
     }
 
     @Override

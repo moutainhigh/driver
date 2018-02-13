@@ -71,26 +71,7 @@
                     android:layout_weight="1" />
 
                 <RadioButton
-                    android:id="@+id/radio_this_week"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/radio_selector"
-                    android:button="@null"
-                    android:paddingBottom="3dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingTop="3dp"
-                    android:text="@string/stats_week"
-                    android:textColor="@color/stats_color"
-                    android:textSize="14sp" />
-
-                <Space
-                    android:layout_width="0.0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <RadioButton
-                    android:id="@+id/radio_all"
+                    android:id="@+id/radio_this_month"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/radio_selector"
@@ -100,6 +81,25 @@
                     android:paddingRight="8dp"
                     android:paddingTop="3dp"
                     android:text="@string/stats_month"
+                    android:textColor="@color/stats_color"
+                    android:textSize="14sp" />
+
+                <Space
+                    android:layout_width="0.0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <RadioButton
+                    android:id="@+id/radio_this_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/radio_selector"
+                    android:button="@null"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="3dp"
+                    android:text="@string/stats_year"
                     android:textColor="@color/stats_color"
                     android:textSize="14sp" />
 

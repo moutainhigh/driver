@@ -236,9 +236,8 @@
         
     <string name="stats_yesterday">yesterday</string>
         
-    <string name="stats_week">This Week</string>
-        
-    <string name="stats_month">all</string>
+    <string name="stats_month">month</string>
+    <string name="stats_year">year</string>
         
     <string name="stats_order">order</string>
         
