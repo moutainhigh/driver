@@ -265,7 +265,8 @@ public interface DJApiService {
     Observable<PassengerResult> queryPassenger(@Query("company_id") Long companyId,
                                                @Query("company_name") String companyName,
                                                @Query("phone") String phone,
-                                               @Query("app_key") String appKey
+                                               @Query("app_key") String appKey,
+                                               @Query("channel") String channel
     );
 
     /**

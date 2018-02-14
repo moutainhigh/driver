@@ -31,7 +31,7 @@ public class CreateDJMoldel implements CreateDJContract.Model {
     @Override
     public Observable<PassengerResult> queryPassenger(Long companyId, String companyName, String phone) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .queryPassenger(companyId, companyName, phone, Config.APP_KEY)
+                .queryPassenger(companyId, companyName, phone, Config.APP_KEY, "batch")
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -49,10 +49,10 @@ public class CreateDJMoldel implements CreateDJContract.Model {
     @Override
     public Observable<DJOrderResult> createOrder(Long passengerId, String passengerName, String passengerPhone, long orderTime, String bookAddress, Double bookAddressLat, Double bookAddressLng, String destination, Double destinationLat, Double destinationLng, Long companyId, String companyName, Double budgetFee, Long cid, String orderPerson, Long orderPersonId) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .createOrder(passengerId,passengerName,passengerPhone,orderTime,
-                        bookAddress,bookAddressLat,bookAddressLng,destination,
-                        destinationLat,destinationLng,companyId,companyName,
-                        budgetFee,Config.APP_KEY,cid,orderPerson,orderPersonId)
+                .createOrder(passengerId, passengerName, passengerPhone, orderTime,
+                        bookAddress, bookAddressLat, bookAddressLng, destination,
+                        destinationLat, destinationLng, companyId, companyName,
+                        budgetFee, Config.APP_KEY, cid, orderPerson, orderPersonId)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
