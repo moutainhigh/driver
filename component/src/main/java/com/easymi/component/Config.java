@@ -16,7 +16,8 @@ public class Config {
     /**
      * 图片服务器地址
      */
-    public static final String IMG_SERVER = "http://pic.xiaoka.me/v1/img?img=";
+    public static final String IMG_SERVER = "https://assets.xiaokayun.cn/";
+    public static final String IMG_PATH = "?imageView2/1/w/10/h/10/format/webp/q/75|imageslim";
     /**
      * APP_KEY
      */
@@ -30,7 +31,7 @@ public class Config {
     /**
      * 司机注册地址
      */
-    public static final String REGISTER_URL = "http://192.168.0.72:8082/";
+    public static final String REGISTER_URL = "http://v5.xiaoka.me:3000/employ/registerOne";
 
     /**
      * MQTT配置

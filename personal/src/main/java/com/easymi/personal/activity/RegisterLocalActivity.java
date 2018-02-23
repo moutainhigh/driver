@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+
+import com.easymi.component.Config;
 import com.easymi.component.utils.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -95,7 +97,7 @@ public class RegisterLocalActivity extends RxBaseActivity implements View.OnClic
     public void init() {
 
 //        url = "file:///android_asset/web.html";
-        url = "http://192.168.0.106";
+        url = Config.REGISTER_URL;
         String titleStr = getString(R.string.register_title);
         title = findViewById(R.id.title);
         title.setText(titleStr);
@@ -238,7 +240,7 @@ public class RegisterLocalActivity extends RxBaseActivity implements View.OnClic
 
     @JavascriptInterface
     public void finishActivity() {
-        runOnUiThread(() -> finish());
+        runOnUiThread(this::finish);
     }
 
     public void choosePic(int x, int y) {

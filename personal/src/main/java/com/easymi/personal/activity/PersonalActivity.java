@@ -76,7 +76,7 @@ public class PersonalActivity extends RxBaseActivity {
                         .placeholder(R.mipmap.photo_default)
                         .diskCacheStrategy(DiskCacheStrategy.ALL);
                 Glide.with(PersonalActivity.this)
-                        .load(Config.IMG_SERVER + employ.portrait_path)
+                        .load(Config.IMG_SERVER + employ.portrait_path + Config.IMG_PATH)
                         .apply(options)
                         .into(driverPhoto);
             }

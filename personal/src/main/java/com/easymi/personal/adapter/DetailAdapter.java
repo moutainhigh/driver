@@ -47,6 +47,11 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailHold
         holder.detailTime.setText(TimeUtil.getTime("yyyy-MM-dd HH:mm", detail.time * 1000));
         holder.detailPurpose.setText(detail.purpose);
         holder.detailMoney.setText("¥" + detail.money);
+        if(detail.money > 0){
+            holder.detailMoney.setTextColor(context.getResources().getColor(R.color.yellow));
+        } else {
+            holder.detailMoney.setTextColor(context.getResources().getColor(R.color.colorAccent));
+        }
     }
 
     @Override

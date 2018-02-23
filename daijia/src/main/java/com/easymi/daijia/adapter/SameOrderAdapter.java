@@ -66,7 +66,7 @@ public class SameOrderAdapter extends RecyclerView.Adapter<SameOrderAdapter.Hold
                     .placeholder(R.mipmap.photo_default_1)
                     .diskCacheStrategy(DiskCacheStrategy.ALL);
             Glide.with(context)
-                    .load(Config.IMG_SERVER + sameOrder.photoUrl)
+                    .load(Config.IMG_SERVER + sameOrder.photoUrl + Config.IMG_PATH)
                     .apply(options)
                     .into(holder.driver_photo);
         }

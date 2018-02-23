@@ -96,7 +96,7 @@ public class LoginActivity extends RxBaseActivity implements LocObserver {
 
         registerText = findViewById(R.id.login_register);
         registerText.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, WebActivity.class);
+            Intent intent = new Intent(LoginActivity.this, RegisterLocalActivity.class);
             intent.putExtra("url", Config.REGISTER_URL);
             intent.putExtra("title", getString(R.string.register_title));
             startActivity(intent);
