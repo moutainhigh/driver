@@ -21,6 +21,7 @@ import com.amap.api.services.poisearch.PoiSearch;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MapUtil;
 import com.easymi.component.widget.CusErrLayout;
 import com.easymi.component.widget.CusToolbar;
@@ -54,6 +55,8 @@ public class NearWcActivity extends RxBaseActivity implements AMap.OnMarkerClick
 
     private NearWcAdapter adapter;
 
+    LinearLayoutManager layoutManager;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_near_wc;
@@ -73,7 +76,9 @@ public class NearWcActivity extends RxBaseActivity implements AMap.OnMarkerClick
 
         adapter = new NearWcAdapter(this);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         recyclerView.setOnLoadListener(new SwipeRecyclerView.OnLoadListener() {
             @Override
@@ -100,6 +105,7 @@ public class NearWcActivity extends RxBaseActivity implements AMap.OnMarkerClick
         aMap.getUiSettings().setRotateGesturesEnabled(false);
         aMap.getUiSettings().setRotateGesturesEnabled(false);
         aMap.getUiSettings().setTiltGesturesEnabled(false);//倾斜手势
+        aMap.setOnMarkerClickListener(this);
 
         showCamera();
         searchNearBy();
@@ -140,11 +146,11 @@ public class NearWcActivity extends RxBaseActivity implements AMap.OnMarkerClick
         //第二个参数表示POI搜索类型，二者选填其一，选用POI搜索类型时建议填写类型代码，码表可以参考下方（而非文字）
         //cityCode表示POI搜索区域，可以是城市编码也可以是城市名称，也可以传空字符串，空字符串代表全国在全国范围内进行搜索
         query.setPageNum(page);
-        query.setPageSize(10);
+        query.setPageSize(30);
         search = new PoiSearch(this, query);
 
         search.setBound(new PoiSearch.SearchBound(new LatLonPoint(loc.latitude,
-                loc.longitude), 0));
+                loc.longitude), 2500));
 
         search.setOnPoiSearchListener(new PoiSearch.OnPoiSearchListener() {
             @Override
@@ -161,7 +167,8 @@ public class NearWcActivity extends RxBaseActivity implements AMap.OnMarkerClick
                         MarkerOptions options = new MarkerOptions().
                                 position(new LatLng(poiItem.getLatLonPoint().getLatitude(), poiItem.getLatLonPoint().getLongitude()))
                                 .icon(bitmapDescriptor)
-                                .draggable(false);
+                                .draggable(false)
+                                .zIndex(markers.size());
                         marker = aMap.addMarker(options);
                         marker.setClickable(true);
                         markers.add(marker);
@@ -249,8 +256,10 @@ public class NearWcActivity extends RxBaseActivity implements AMap.OnMarkerClick
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+        Log.e("tag", "" + (int) marker.getZIndex());
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 20);
         aMap.animateCamera(update);
+        SwipeRecyclerView.moveToPosition(layoutManager, recyclerView.getRecyclerView(), (int) marker.getZIndex());
         return true;
     }
 }

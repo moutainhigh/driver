@@ -268,5 +268,11 @@
     <string name="all_order_number">累计接单</string>
 
     <string name="zero_time">0次</string>
+    <string name="min_money">最小提现金额为</string>
+    <string name="max_money">最大提现金额为</string>
+    <string name="base_money">提现金额必须为</string>
+    <string name="de_beishu">的倍数</string>
+
+    <string name="day_ago">天前</string>
 
 </resources>

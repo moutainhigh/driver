@@ -58,8 +58,28 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
     public void onBindViewHolder(NotifityHolder holder, int position) {
         Announcement notifity = list.get(position);
         holder.notifityContent.setText(notifity.message);
-        holder.notifityTime.setText(TimeUtil.getTime("yyyy-MM-dd HH:mm", notifity.time * 1000));
-        holder.isNew.setVisibility(System.currentTimeMillis() - notifity.time <= (7 * 24 * 60 * 60 * 1000) ? View.VISIBLE : View.GONE);
+
+        long time = notifity.time * 1000;
+        long todayBegin = TimeUtil.parseTime("yyyy-MM-dd", TimeUtil.getTime("yyyy-MM-dd", System.currentTimeMillis()));
+        long timeleft = System.currentTimeMillis() - time;
+
+        long day = timeleft / (24 * 60 * 60 * 1000);
+        if (day == 0) {
+            if (time > todayBegin) {
+                holder.notifityTime.setText(context.getString(R.string.today));
+            } else {
+                holder.notifityTime.setText("1" + context.getString(R.string.day_ago));
+            }
+        } else {
+            if (day < 30) {
+                holder.notifityTime.setText(day + context.getString(R.string.day_ago));
+            } else {
+                holder.notifityTime.setText(TimeUtil.getTime("yyyy-MM-dd HH:mm", time));
+            }
+
+        }
+
+        holder.isNew.setVisibility(View.GONE);
 
         if (StringUtils.isNotBlank(notifity.url)) {
             holder.hasMore.setVisibility(View.VISIBLE);

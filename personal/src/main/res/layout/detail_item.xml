@@ -11,8 +11,8 @@
         android:gravity="center">
         <ImageView
             android:id="@+id/ic_time"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
             android:src="@drawable/circle_accent"
             android:layout_margin="10dp"/>
 
@@ -32,7 +32,7 @@
         android:text="费用报销"
         android:layout_marginTop="10dp"
         android:layout_below="@+id/top"
-        android:layout_marginLeft="35dp"
+        android:layout_marginLeft="30dp"
         android:layout_marginBottom="10dp"
         android:textColor="#999999"/>
 

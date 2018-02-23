@@ -14,6 +14,7 @@ import com.easymi.personal.result.RechargeResult;
 import com.easymi.personal.result.ShareResult;
 import com.easymi.personal.result.StatisResult;
 import com.easymi.personal.result.TixianResult;
+import com.easymi.personal.result.TixianRuleResult;
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -314,6 +315,7 @@ public interface McService {
 
     /**
      * 统计中心
+     *
      * @param driverId
      * @param appKey
      * @param startTime
@@ -327,4 +329,6 @@ public interface McService {
                                         @Query("end_time") String endTime);
 
 
+    @GET("/driver/api/v1/systemConfig")
+    Observable<TixianRuleResult> tixianRule(@Query("app_key") String appKey);
 }
