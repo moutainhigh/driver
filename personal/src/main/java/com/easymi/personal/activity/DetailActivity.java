@@ -63,7 +63,7 @@ public class DetailActivity extends RxBaseActivity {
         adapter = new DetailAdapter(this);
 
         Employ employ = EmUtil.getEmployInfo();
-        balanceText.setText(String.valueOf("¥" + employ.balance));
+        balanceText.setText(String.valueOf(employ.balance));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
@@ -114,7 +114,7 @@ public class DetailActivity extends RxBaseActivity {
                     recyclerView.setLoadMoreEnable(false);
                 }
                 adapter.setList(details);
-                if(details.size() == 0){
+                if (details.size() == 0) {
                     showErr(0);
                 } else {
                     hideErr();

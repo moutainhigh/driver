@@ -163,7 +163,7 @@
     <string name="tixian_rule">提现规则</string>
     <string name="tixian_record">提现记录</string>
     <string name="tixian_this_most">本次可提现</string>
-    <string name="tixian_my_balance">我的余额（元）</string>
+    <string name="tixian_my_balance">我的余额(元)</string>
 
     <!-- 提现规则str-->
     <string name="tixian_hint">温馨提示</string>

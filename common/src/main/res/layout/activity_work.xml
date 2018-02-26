@@ -201,19 +201,34 @@
         </LinearLayout>
 
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_layout"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0.0dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:layout_weight="1">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerView"
+            <TextView
+                android:id="@+id/no_order_text"
+                android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </android.support.v4.widget.SwipeRefreshLayout>
+                android:layout_height="match_parent"
+                android:textColor="@color/white"
+                android:text="@string/no_order"
+                android:gravity="center"
+                android:textSize="18sp"/>
+
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </android.support.v4.widget.SwipeRefreshLayout>
+        </FrameLayout>
 
 
         <com.easymi.component.widget.LoadingButton

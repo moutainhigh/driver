@@ -47,7 +47,7 @@ public class MsgActivity extends RxBaseActivity {
     @Override
     public void initViews(Bundle savedInstanceState) {
         noticeContent = findViewById(R.id.notice_content);
-        noticeTime = findViewById(R.id.notifity_time);
+        noticeTime = findViewById(R.id.notice_time);
         announcementContent = findViewById(R.id.announcement_content);
         announcementTime = findViewById(R.id.announcement_time);
 

@@ -72,9 +72,9 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
     }
 
     private void initConn() {
-        if (true) {
-            return;
-        }
+//        if (true) {
+//            return;
+//        }
         if (client != null && client.isConnected() || isConning) {
             return;
         }
