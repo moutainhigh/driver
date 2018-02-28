@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
+
 import com.easymi.component.utils.Log;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -206,6 +208,7 @@ public class CreateDJFragment extends RxLazyFragment implements CreateDJContract
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 selectedDJType = (DJType) tab.getTag();
+                getBudget();
             }
 
             @Override
@@ -339,6 +342,6 @@ public class CreateDJFragment extends RxLazyFragment implements CreateDJContract
         }
 
         presenter.queryBudget(passenger.id, distance, duration,
-                TimePickerView.getTime(day, hourStr, minStr)/1000, selectedDJType.id);
+                TimePickerView.getTime(day, hourStr, minStr) / 1000, selectedDJType.id);
     }
 }
