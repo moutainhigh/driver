@@ -182,5 +182,10 @@
     <string name="personal_consumer">个人客户</string>
     <string name="qiye_consumer">企业客户</string>
 
+    <string name="left">剩余</string>
+    <string name="meter">米</string>
+    <string name="about_">大约</string>
+    <string name="hour_">时</string>
+    <string name="minute_">分</string>
 
 </resources>

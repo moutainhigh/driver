@@ -11,6 +11,7 @@ import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.text.Html;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -645,20 +646,37 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         int km = dis / 1000;
         if (km > 1) {
             String disKm = new DecimalFormat("#0.0").format((double) dis / 1000);
-            disStr = "剩余" + disKm + "公里";
+            disStr = getString(R.string.left) +
+                    "<font color='black'><b><tt>" +
+                    disKm + "</tt></b></font>" + getString(R.string.km);
         } else {
-            disStr = "剩余" + dis + "米";
+            disStr = getString(R.string.left) +
+                    "<font color='black'><b><tt>" +
+                    dis + "</tt></b></font>"
+                    + getString(R.string.meter);
         }
 
         String timeStr;
         int hour = time / 60 / 60;
         int minute = time / 60;
         if (hour > 0) {
-            timeStr = "大约" + hour + "小时" + time / 60 % 60 + "分";
+            timeStr = getString(R.string.about_) +
+                    "<font color='black'><b><tt>" +
+                    hour +
+                    "</tt></b></font>"
+                    + getString(R.string.hour_) +
+                    "<font color='black'><b><tt>" +
+                    time / 60 % 60 +
+                    "</tt></b></font>" +
+                    getString(R.string.minute_);
         } else {
-            timeStr = "大约" + minute + "分";
+            timeStr = getString(R.string.about_) +
+                    "<font color='black'><b><tt>" +
+                    minute +
+                    "</tt></b></font>" +
+                    getString(R.string.minute_);
         }
-        leftTimeText.setText(disStr + timeStr);
+        leftTimeText.setText(Html.fromHtml(disStr + timeStr));
     }
 
 //    boolean isRecalc = false;
