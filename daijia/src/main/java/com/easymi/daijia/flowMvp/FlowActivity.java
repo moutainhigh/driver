@@ -413,6 +413,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         if (null != emLoc) {
             lastLatlng = new LatLng(emLoc.latitude, emLoc.longitude);
             receiveLoc(emLoc);//手动调用上次位置 减少从北京跳过来的时间
+            aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLatlng, 19));//移动镜头，首次镜头快速跳到指定位置
 
             MarkerOptions markerOption = new MarkerOptions();
             markerOption.position(new LatLng(emLoc.latitude, emLoc.longitude));
@@ -906,7 +907,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                     || djOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) {
                 if (!isMapTouched) {
                     aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 19),
-                            djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER ? Config.BUSY_LOC_TIME / 1000 : Config.FREE_LOC_TIME / 1000, null);
+                            djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER ? Config.BUSY_LOC_TIME : Config.FREE_LOC_TIME, null);
                 }
             }
         }

@@ -21,7 +21,9 @@ import com.easymi.daijia.R;
 import com.easymi.daijia.activity.FeeDetailActivity;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.flowMvp.ActFraCommBridge;
+import com.easymi.daijia.util.MathUtil;
 
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 /**
@@ -100,9 +102,9 @@ public class SettleFragmentDialog {
                         extraFeeEdit.setText("");
                     }
                 }
-                Log.e("SettleFragmentDialog","extraFeeEdit has focus");
+                Log.e("SettleFragmentDialog", "extraFeeEdit has focus");
             } else {
-                Log.e("SettleFragmentDialog","extraFeeEdit lose focus");
+                Log.e("SettleFragmentDialog", "extraFeeEdit lose focus");
             }
         });
         paymentEdit.setOnFocusChangeListener((v, hasFocus) -> {
@@ -115,9 +117,9 @@ public class SettleFragmentDialog {
                         paymentEdit.setText("");
                     }
                 }
-                Log.e("SettleFragmentDialog","paymentEdit has focus");
+                Log.e("SettleFragmentDialog", "paymentEdit has focus");
             } else {
-                Log.e("SettleFragmentDialog","paymentEdit lose focus");
+                Log.e("SettleFragmentDialog", "paymentEdit lose focus");
             }
         });
         remarkEdit.setOnFocusChangeListener((v, hasFocus) -> {
@@ -132,6 +134,8 @@ public class SettleFragmentDialog {
     }
 
     private void addEditWatcher() {
+        DecimalFormat decimalFormat = new DecimalFormat("#0.0");
+        decimalFormat.setRoundingMode(RoundingMode.DOWN);
         extraFeeEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -146,8 +150,25 @@ public class SettleFragmentDialog {
             @Override
             public void afterTextChanged(Editable s) {
                 if (null != s && StringUtils.isNotBlank(s.toString())) {
+                    String str = s.toString();
+                    if (str.startsWith("0")) {
+                        if (str.length() >= 2) {
+                            if (!String.valueOf(str.charAt(1)).equals(".")) {
+                                str = str.substring(1, str.length());
+                                extraFeeEdit.setText(str);
+                                extraFeeEdit.setSelection(str.length());
+                            }
+                        }
+                    }
                     extraFee = Double.parseDouble(s.toString());
+                    if (!MathUtil.isDoubleLegal(extraFee, 1)) {
+                        extraFeeEdit.setText(decimalFormat.format(extraFee));
+                        extraFeeEdit.setSelection(decimalFormat.format(extraFee).length());
+                    }
                     calcMoney();
+                } else {
+                    extraFeeEdit.setText("0");
+                    extraFeeEdit.setSelection(1);
                 }
             }
         });
@@ -165,8 +186,25 @@ public class SettleFragmentDialog {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s != null && StringUtils.isNotBlank(s.toString())) {
+                    String str = s.toString();
+                    if (str.startsWith("0")) {
+                        if (str.length() >= 2) {
+                            if (!String.valueOf(str.charAt(1)).equals(".")) {
+                                str = str.substring(1, str.length());
+                                paymentEdit.setText(str);
+                                paymentEdit.setSelection(str.length());
+                            }
+                        }
+                    }
                     paymentFee = Double.parseDouble(s.toString());
+                    if (!MathUtil.isDoubleLegal(paymentFee, 1)) {
+                        paymentEdit.setText(decimalFormat.format(paymentFee));
+                        paymentEdit.setSelection(decimalFormat.format(paymentFee).length());
+                    }
                     calcMoney();
+                } else {
+                    paymentEdit.setText("0");
+                    paymentEdit.setSelection(1);
                 }
             }
         });
@@ -185,6 +223,7 @@ public class SettleFragmentDialog {
             public void afterTextChanged(Editable s) {
                 if (null != s && StringUtils.isNotBlank(s.toString())) {
                     dymOrder.remark = s.toString();
+                    remarkEdit.setSelection(s.toString().length());
                 }
             }
         });
@@ -270,7 +309,8 @@ public class SettleFragmentDialog {
     }
 
     private void calcMoney() {
-        if(djOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER){//到达于目的地后就无需计算了
+        DecimalFormat df = new DecimalFormat("#0.0");
+        if (djOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {//到达于目的地后就无需计算了
             return;
         }
         dymOrder.extraFee = extraFee;
@@ -281,15 +321,14 @@ public class SettleFragmentDialog {
             dymOrder.couponFee = djOrder.couponFee;
         }
         if (djOrder.couponScale != 0) {
-            DecimalFormat df = new DecimalFormat("#0.0");
             dymOrder.couponFee = Double.parseDouble(df.format(dymOrder.totalFee * (100 - djOrder.couponScale) / 100));
         }
-        dymOrder.orderTotalFee = dymOrder.totalFee + dymOrder.extraFee + dymOrder.paymentFee;
+        dymOrder.orderTotalFee = Double.parseDouble(df.format(dymOrder.totalFee + dymOrder.extraFee + dymOrder.paymentFee));
 
         double prepay = dymOrder.prepay;
-        double otherFee = dymOrder.extraFee + dymOrder.paymentFee;
+        double otherFee = Double.parseDouble(df.format(dymOrder.extraFee + dymOrder.paymentFee));
 
-        double leftMoney = prepay - otherFee;
+        double leftMoney = Double.parseDouble(df.format(prepay - otherFee));
         if (leftMoney >= 0) {//预付的钱大于附加的钱 相当于预付的钱就是这么减剩的
             prepay = leftMoney;
             otherFee = 0;
@@ -298,7 +337,7 @@ public class SettleFragmentDialog {
             otherFee = -leftMoney;
         }
         //开始计算优惠券
-        double shouldPay = dymOrder.totalFee - dymOrder.couponFee;
+        double shouldPay = Double.parseDouble(df.format(dymOrder.totalFee - dymOrder.couponFee));
         if (shouldPay > 0) {
             shouldPay -= prepay;
         } else {
@@ -307,7 +346,7 @@ public class SettleFragmentDialog {
         }
         //最后加上其他费用
         shouldPay += otherFee;
-        dymOrder.orderShouldPay = shouldPay;
+        dymOrder.orderShouldPay = Double.parseDouble(df.format(shouldPay));
 
         prepayMoneyText.setText(String.valueOf(dymOrder.prepay));
         needPayText.setText(String.valueOf(dymOrder.orderShouldPay));
@@ -316,4 +355,6 @@ public class SettleFragmentDialog {
     public boolean isShowing() {
         return dialog.isShowing();
     }
+
+
 }

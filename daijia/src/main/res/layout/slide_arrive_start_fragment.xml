@@ -17,6 +17,7 @@
             android:id="@+id/slider"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:elevation="0.5dp"
             android:layout_gravity="center_horizontal|bottom"
             SlideToUnlockView:sliderTextSize="25"
             />
@@ -25,6 +26,7 @@
 
     <LinearLayout
         android:id="@+id/place_con"
+        android:elevation="0.5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/corners_white"

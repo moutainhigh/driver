@@ -18,6 +18,7 @@
             android:layout_height="@dimen/btn_height"
             android:layout_weight="8"
             android:gravity="center"
+            android:elevation="0.5dp"
             android:background="@drawable/corners_button_bg"
             android:text="@string/accept_order"
             android:textColor="@color/white" />
@@ -26,6 +27,7 @@
             android:id="@+id/refuse_con"
             android:layout_width="0.0dp"
             android:layout_height="@dimen/btn_height"
+            android:elevation="0.5dp"
             android:layout_marginLeft="10dp"
             android:layout_weight="2"
             android:background="@drawable/corners_404456"
@@ -50,6 +52,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:elevation="0.5dp"
         android:background="@drawable/corners_white"
         android:layout_above="@+id/control_con"
         android:layout_marginLeft="10dp"

@@ -6,6 +6,7 @@
 
     <LinearLayout
         android:id="@+id/cheating_con"
+        android:elevation="0.5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -172,6 +173,7 @@
                 android:layout_width="0.0dp"
                 android:layout_height="40dp"
                 android:gravity="center"
+                android:elevation="0.5dp"
                 android:layout_weight="1"
                 android:background="@drawable/corners_accent"
                 android:text="@string/change_confirm"
@@ -183,6 +185,7 @@
                 android:layout_width="0.0dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="40dp"
+                android:elevation="0.5dp"
                 android:layout_weight="0.7"
                 android:background="@drawable/corners_404456"
                 android:text="@string/cancel"
