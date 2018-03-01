@@ -111,7 +111,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     TextView onLineMonute;
     TextView todayIncome;
 
-    TextView noOrderText;
+    ImageView noOrderImg;
 
     private CancelOrderReceiver cancelOrderReceiver;
     private EmployStatusChangeReceiver employStatusChangeReceiver;
@@ -205,7 +205,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         onLineMonute = findViewById(R.id.online_time_minute);
         todayIncome = findViewById(R.id.today_income);
 
-        noOrderText = findViewById(R.id.no_order_text);
+        noOrderImg = findViewById(R.id.no_order_img);
 
         Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1));
         Log.e("employ", "" + employ);
@@ -235,7 +235,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            noOrderText.setVisibility(View.GONE);
+            noOrderImg.setVisibility(View.GONE);
             presenter.indexOrders();
         });
         swipeRefreshLayout.setRefreshing(true);
@@ -255,10 +255,10 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 //            MultipleOrder header2 = new MultipleOrder(MultipleOrder.ITEM_HEADER);
 //            header1.isBookOrder = 2;
 //            orders.add(header2);
-            noOrderText.setVisibility(View.VISIBLE);
+            noOrderImg.setVisibility(View.VISIBLE);
         } else {
             orders.addAll(MultipleOrders);
-            noOrderText.setVisibility(View.GONE);
+            noOrderImg.setVisibility(View.GONE);
         }
         if (null == adapter) {
             adapter = new OrderAdapter(orders, this);

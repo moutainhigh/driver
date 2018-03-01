@@ -43,7 +43,7 @@ public class TixianRuleActivity extends RxBaseActivity {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
-        tixianRule = findViewById(R.id.tixian_rule);
+        tixianRule = findViewById(R.id.titian_rule);
 
         getArticle("RuleOfCash");
     }

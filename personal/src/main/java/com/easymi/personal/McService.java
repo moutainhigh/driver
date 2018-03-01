@@ -7,6 +7,7 @@ import com.easymi.personal.result.ArticleResult;
 import com.easymi.personal.result.BusinessResult;
 import com.easymi.personal.result.CompanyResult;
 import com.easymi.personal.result.EvaResult;
+import com.easymi.personal.result.HelpMenuResult;
 import com.easymi.personal.result.LiushuiResult;
 import com.easymi.personal.result.LoginResult;
 import com.easymi.personal.result.NotifityResult;
@@ -331,4 +332,30 @@ public interface McService {
 
     @GET("/driver/api/v1/systemConfig")
     Observable<TixianRuleResult> tixianRule(@Query("app_key") String appKey);
+
+    /**
+     * 根据业务类型id查询子菜单
+     * @param appKey
+     * @param companyId
+     * @param page
+     * @param limit
+     * @param cateId 代驾：2
+     * @return
+     */
+    @GET("/driver/api/v1/articles")
+    Observable<HelpMenuResult> getHelpeSubMenu(@Query("app_key")String appKey,
+                                               @Query("company_id")Long companyId,
+                                               @Query("page")Integer page,
+                                               @Query("limit")Integer limit,
+                                               @Query("category_id")Long cateId);
+
+    /**
+     * 根据文章id查询文章
+     * @param appKey
+     * @param id
+     * @return
+     */
+    @GET("/driver/api/v1/article")
+    Observable<ArticleResult> getArticle(@Query("app_key") String appKey,
+                                         @Query("id") Long id);
 }

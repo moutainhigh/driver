@@ -177,7 +177,25 @@ public class AboutUsActivity extends RxBaseActivity {
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
                 true, articleResult -> {
-            webView.loadData(articleResult.article.contents, "text/html;charset=UTF-8", null);
+            String html = articleResult.article.contents;
+
+            String css = "<style type=\"text/css\"> img {" +
+                    "width:100%;" +//限定图片宽度填充屏幕
+                    "height:auto;" +//限定图片高度自动
+                    "}" +
+                    "body {" +
+                    "margin-right:15px;" +//限定网页中的文字右边距为15px(可根据实际需要进行行管屏幕适配操作)
+                    "margin-left:15px;" +//限定网页中的文字左边距为15px(可根据实际需要进行行管屏幕适配操作)
+                    "margin-top:15px;" +//限定网页中的文字上边距为15px(可根据实际需要进行行管屏幕适配操作)
+                    "font-size:40px;" +//限定网页中文字的大小为40px,请务必根据各种屏幕分辨率进行适配更改
+                    "word-wrap:break-word;" +//允许自动换行(汉字网页应该不需要这一属性,这个用来强制英文单词换行,类似于word/wps中的西文换行)
+                    "}" +
+                    "</style>";
+
+            html = "<html><header>" + css + "</header>" + html + "</html>";
+
+            webView.loadData(html, "text/html; charset=UTF-8", null);
+
             phoneText.setText(articleResult.article.phone);
             webSiteText.setText(articleResult.article.url);
         }

@@ -31,7 +31,7 @@
     <string name="set_language">选择语言</string>
     <string name="set_navi">导航偏好</string>
     <string name="set_statistics">统计中心</string>
-    <string name="set_help">帮助中心</string>
+    <string name="set_help">用户指南</string>
     <string name="set_feedback">意见反馈</string>
     <string name="set_contract_us">联系我们</string>
     <string name="set_about_us">关于我们</string>
@@ -274,5 +274,7 @@
     <string name="de_beishu">的倍数</string>
 
     <string name="day_ago">天前</string>
+
+    <string name="help_daijia">代驾</string>
 
 </resources>

@@ -1,9 +1,6 @@
 package com.easymi.personal.activity;
 
-import android.app.ActivityManager;
 import android.app.AlertDialog;
-import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,11 +8,8 @@ import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.easymi.component.Config;
-import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
-import com.easymi.component.loc.LocService;
-import com.easymi.component.loc.LocationHelperService;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
@@ -26,7 +20,6 @@ import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.switchButton.SwitchButton;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
-import com.easymi.personal.result.ArticleResult;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -109,9 +102,7 @@ public class SetActivity extends RxBaseActivity {
     }
 
     public void helpCenter(View view) {
-        Intent intent = new Intent(SetActivity.this, ArticleActivity.class);
-        intent.putExtra("tag", "ContactUs");
-        intent.putExtra("title", getString(R.string.set_help));
+        Intent intent = new Intent(SetActivity.this, HelpCenterActivity.class);
         startActivity(intent);
     }
 

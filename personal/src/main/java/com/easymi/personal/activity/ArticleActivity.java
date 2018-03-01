@@ -22,6 +22,7 @@ import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.personal.McService;
 import com.easymi.personal.result.ArticleResult;
 
@@ -88,6 +89,7 @@ public class ArticleActivity extends RxBaseActivity implements View.OnClickListe
     }
 
     private String tag;
+    private Long articleId;
 
     public void init() {
 
@@ -96,6 +98,8 @@ public class ArticleActivity extends RxBaseActivity implements View.OnClickListe
         tag = getIntent().getStringExtra("tag");
 
         String titleStr = localIntent.getStringExtra("title");
+
+        articleId = getIntent().getLongExtra("articleId", -1);
 
         title = findViewById(R.id.title);
         title.setText(titleStr);
@@ -106,7 +110,45 @@ public class ArticleActivity extends RxBaseActivity implements View.OnClickListe
 
         myProgressBar = findViewById(R.id.myProgressBar);
 
-        getArticle(tag);
+        if (articleId == -1) {
+            getArticle(tag);
+        } else {
+            getArticle(articleId);
+        }
+
+    }
+
+    private void getArticle(long articleId) {
+        McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
+
+        Observable<ArticleResult> observable = api
+                .getArticle(Config.APP_KEY, articleId)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
+                true, emResult -> {
+            String html = emResult.article.contents;
+
+            String css = "<style type=\"text/css\"> img {" +
+                    "width:100%;" +//限定图片宽度填充屏幕
+                    "height:auto;" +//限定图片高度自动
+                    "}" +
+                    "body {" +
+                    "margin-right:15px;" +//限定网页中的文字右边距为15px(可根据实际需要进行行管屏幕适配操作)
+                    "margin-left:15px;" +//限定网页中的文字左边距为15px(可根据实际需要进行行管屏幕适配操作)
+                    "margin-top:15px;" +//限定网页中的文字上边距为15px(可根据实际需要进行行管屏幕适配操作)
+                    "font-size:40px;" +//限定网页中文字的大小为40px,请务必根据各种屏幕分辨率进行适配更改
+                    "word-wrap:break-word;" +//允许自动换行(汉字网页应该不需要这一属性,这个用来强制英文单词换行,类似于word/wps中的西文换行)
+                    "}" +
+                    "</style>";
+
+            html = "<html><header>" + css + "</header>" + html + "</html>";
+
+
+            webView.loadData(html, "text/html; charset=UTF-8", null);
+        })));
     }
 
     private void getArticle(String alias) {
