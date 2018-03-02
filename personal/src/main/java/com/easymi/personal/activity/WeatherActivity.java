@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.amap.api.services.weather.LocalDayWeatherForecast;
@@ -17,6 +18,7 @@ import com.amap.api.services.weather.WeatherSearch;
 import com.amap.api.services.weather.WeatherSearchQuery;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.R;
@@ -38,6 +40,8 @@ public class WeatherActivity extends RxBaseActivity implements WeatherSearch.OnW
     private TextView todayType;
     private TextView reportTime;
 
+    private LinearLayout wetherBg;
+
     private RecyclerView weatherRecycler;
     private WeatherAdapter adapter;
 
@@ -53,6 +57,8 @@ public class WeatherActivity extends RxBaseActivity implements WeatherSearch.OnW
         weatherCity = findViewById(R.id.weather_city);
         todayType = findViewById(R.id.today_type);
         reportTime = findViewById(R.id.report_time);
+
+        wetherBg = findViewById(R.id.weather_bg);
 
         weatherRecycler = findViewById(R.id.forecast_recycler);
 
@@ -98,7 +104,7 @@ public class WeatherActivity extends RxBaseActivity implements WeatherSearch.OnW
             if (weatherLiveResult != null && weatherLiveResult.getLiveResult() != null) {
                 LocalWeatherLive weatherlive = weatherLiveResult.getLiveResult();
                 String fabuTime = weatherlive.getReportTime();
-                if(weatherlive.getReportTime().contains(" ")){
+                if (weatherlive.getReportTime().contains(" ")) {
                     fabuTime = fabuTime.split(" ")[1];
                 }
                 reportTime.setText(fabuTime + getString(R.string.fabu));
@@ -106,12 +112,26 @@ public class WeatherActivity extends RxBaseActivity implements WeatherSearch.OnW
                 todayTem.setText(weatherlive.getTemperature() + "°");
                 weatherCity.setText(EmUtil.getLastLoc().city);
                 if (weatherlive.getWeather() != null && !TextUtils.isEmpty(weatherlive.getWeather())) {
-                    if (weatherlive.getWeather().contains("雨")) {
-                        todayPic.setImageResource(R.mipmap.icon_rainy);
-                    } else if (weatherlive.getWeather().contains("晴")) {
-                        todayPic.setImageResource(R.mipmap.icon_sunshine);
+                    if (weatherlive.getWeather().contains("雷")) {
+                        todayPic.setImageResource(R.mipmap.therd_icon);
+                        wetherBg.setBackgroundResource(R.mipmap.thundery_sky);
+                    } else if (weatherlive.getWeather().contains("雪")) {
+                        todayPic.setImageResource(R.mipmap.snow_icon);
+                        wetherBg.setBackgroundResource(R.mipmap.snow_day);
+                    } else if (weatherlive.getWeather().contains("多云")) {
+                        todayPic.setImageResource(R.mipmap.cloudy_icon);
+                        wetherBg.setBackgroundResource(R.mipmap.cloudy_day);
+                    } else if (weatherlive.getWeather().contains("雨")) {
+                        todayPic.setImageResource(R.mipmap.rain_icon);
+                        wetherBg.setBackgroundResource(R.mipmap.rain_day);
                     } else {
-                        todayPic.setImageResource(R.mipmap.icon_cloudy);
+                        todayPic.setImageResource(R.mipmap.sun_day_icon);
+                        int hour = Integer.parseInt(TimeUtil.getTime("HH:mm", System.currentTimeMillis()).split(":")[0]);
+                        if(hour > 6 && hour < 18){
+                            wetherBg.setBackgroundResource(R.mipmap.sun_day);
+                        } else {
+                            wetherBg.setBackgroundResource(R.mipmap.night);
+                        }
                     }
                 }
             } else {

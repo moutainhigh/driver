@@ -12,32 +12,38 @@
 
     <!-- 正文内容-->
     <LinearLayout
+        android:id="@+id/weather_bg"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0.0dp"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/weather_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text=""
+            android:layout_marginTop="30dp"
+            android:textColor="@android:color/white"
+            android:textSize="26sp" />
 
-            <TextView
-                android:id="@+id/today_temperature"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text=""
-                android:textColor="@android:color/white"
-                android:textSize="64sp" />
+        <ImageView
+            android:id="@+id/today_pic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:scaleType="fitCenter"/>
 
-            <ImageView
-                android:id="@+id/today_pic"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_centerInParent="true"
-                android:scaleType="fitCenter" />
-
-        </RelativeLayout>
-
+        <TextView
+            android:id="@+id/today_temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text=""
+            android:textColor="@android:color/white"
+            android:textSize="64sp" />
 
         <TextView
             android:id="@+id/today_type"
@@ -45,30 +51,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="-16dp"
+            android:text="多云"
             android:textColor="@android:color/white"
-            android:textSize="22sp" />
+            android:textSize="22sp"
+            android:visibility="gone" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp">
 
-            <TextView
-                android:id="@+id/weather_city"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:textColor="@android:color/white"
-                android:textSize="26sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@id/weather_city"
-                android:src="@mipmap/icon_weather_position" />
-
-        </RelativeLayout>
 
         <TextView
             android:id="@+id/report_time"
@@ -76,6 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
+            android:text=""
             android:textColor="@android:color/white"
             android:textSize="22sp" />
 
@@ -84,6 +73,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/forecast_recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="200dp"
+        android:background="@color/white" />
 
 </LinearLayout>
