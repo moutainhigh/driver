@@ -71,7 +71,7 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.Holder> 
         String dayAndWeek = TimeUtil.getTime("MM/dd", timestamp) + "  " + TimeUtil.getTime("EEEE", timestamp);
         holder.weatherTime.setText(dayAndWeek);
 
-        holder.weatherTmp.setText(weatherForecast.getNightTemp() + "°  -  " + weatherForecast.getDayTemp() + "°");
+        holder.weatherTmp.setText(weatherForecast.getNightTemp() + "°  -  " + weatherForecast.getDayTemp() + "℃");
     }
 
     @Override

@@ -69,6 +69,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="20dp"
                 android:button="@drawable/checkbox_button_bg_selector"
+                android:checked="true"
                 android:gravity="center_vertical" />
 
         </RelativeLayout>

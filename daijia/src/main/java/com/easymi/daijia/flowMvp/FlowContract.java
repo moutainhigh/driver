@@ -52,7 +52,7 @@ public interface FlowContract {
 
         void showPath(DriveRouteResult result);
 
-        void showPayType();
+        void showPayType(double money);
 
         void paySuc();
 

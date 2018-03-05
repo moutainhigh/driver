@@ -625,7 +625,15 @@ public enum ErrCode {
     /**
      * 差一点就抢到了
      */
-    GRAB_ORDER_ERROR(30051, "差一点就抢到了");
+    GRAB_ORDER_ERROR(30051, "差一点就抢到了"),
+    /**
+     * 该服务人员已存在执行中的订单，不能再次补单
+     */
+    DRIVER_HAVE_ORDER_CODE(30052, "该服务人员已存在执行中的订单，不能再次补单"),
+    /**
+     * 服务人员不存在
+     */
+    EMPLOY_NOT_EXIST(31001, "服务人员不存在");
 
     private int code;
     private String showMsg;

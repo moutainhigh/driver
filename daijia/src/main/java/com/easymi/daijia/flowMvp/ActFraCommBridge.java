@@ -24,7 +24,7 @@ public interface ActFraCommBridge {
 
     void doConfirmMoney(LoadingButton btn, DymOrder dymOrder);
 
-    void doPay();
+    void doPay(double money);
 
     void showSettleDialog();
 

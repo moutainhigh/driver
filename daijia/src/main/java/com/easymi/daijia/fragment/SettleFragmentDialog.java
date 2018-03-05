@@ -6,7 +6,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,6 +13,7 @@ import android.widget.TextView;
 import com.easymi.component.DJOrderStatus;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.utils.Log;
+import com.easymi.component.utils.MathUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.CusBottomSheetDialog;
 import com.easymi.component.widget.LoadingButton;
@@ -21,7 +21,6 @@ import com.easymi.daijia.R;
 import com.easymi.daijia.activity.FeeDetailActivity;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.flowMvp.ActFraCommBridge;
-import com.easymi.daijia.util.MathUtil;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -165,6 +164,10 @@ public class SettleFragmentDialog {
                         extraFeeEdit.setText(decimalFormat.format(extraFee));
                         extraFeeEdit.setSelection(decimalFormat.format(extraFee).length());
                     }
+                    if(extraFee > 1000){
+                        extraFeeEdit.setText(""+1000);
+                        extraFeeEdit.setSelection(4);
+                    }
                     calcMoney();
                 } else {
                     extraFeeEdit.setText("0");
@@ -200,6 +203,10 @@ public class SettleFragmentDialog {
                     if (!MathUtil.isDoubleLegal(paymentFee, 1)) {
                         paymentEdit.setText(decimalFormat.format(paymentFee));
                         paymentEdit.setSelection(decimalFormat.format(paymentFee).length());
+                    }
+                    if(paymentFee > 1000){
+                        paymentEdit.setText(""+1000);
+                        paymentEdit.setSelection(4);
                     }
                     calcMoney();
                 } else {
@@ -272,7 +279,7 @@ public class SettleFragmentDialog {
         });
         payButton.setOnClickListener(v -> {
             if (null != bridge) {
-                bridge.doPay();
+                bridge.doPay(dymOrder.orderShouldPay);
             }
         });
         closeFragment.setOnClickListener(v -> {

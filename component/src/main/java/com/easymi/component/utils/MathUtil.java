@@ -1,4 +1,4 @@
-package com.easymi.daijia.util;
+package com.easymi.component.utils;
 
 /**
  * Created by liuzihao on 2018/2/28.

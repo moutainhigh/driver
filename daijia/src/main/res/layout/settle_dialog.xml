@@ -271,6 +271,7 @@
                 <EditText
                     android:id="@+id/remark"
                     android:layout_width="0.0dp"
+                    android:maxLength="100"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="1"

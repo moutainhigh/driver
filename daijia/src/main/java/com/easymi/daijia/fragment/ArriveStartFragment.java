@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.easymi.component.base.RxBaseFragment;
+import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.R;
@@ -31,6 +32,7 @@ public class ArriveStartFragment extends RxBaseFragment {
     LinearLayout startWait;
     TextView startPlaceText;
     TextView endPlaceText;
+    FrameLayout callPhoneCon;
 
     @Override
     public void setArguments(Bundle args) {
@@ -53,11 +55,13 @@ public class ArriveStartFragment extends RxBaseFragment {
         endPlaceText = getActivity().findViewById(R.id.end_place);
         startDrive = getActivity().findViewById(R.id.start_drive);
         startWait = getActivity().findViewById(R.id.start_wait);
+        callPhoneCon = getActivity().findViewById(R.id.call_phone_con);
 
         startPlaceText.setText(djOrder.startPlace);
         endPlaceText.setText(djOrder.endPlace);
         startDrive.setOnClickListener(view -> bridge.doStartDrive(startDrive));
         startWait.setOnClickListener(view -> bridge.doStartWait());
+        callPhoneCon.setOnClickListener(view -> PhoneUtil.call(getActivity(), djOrder.passengerPhone));
         getActivity().findViewById(R.id.change_end_con).setOnClickListener(view -> bridge.changeEnd());
     }
 }

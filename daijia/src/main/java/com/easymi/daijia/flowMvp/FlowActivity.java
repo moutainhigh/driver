@@ -84,7 +84,6 @@ import com.easymi.daijia.fragment.ToStartFragment;
 import com.easymi.daijia.fragment.WaitFragment;
 import com.easymi.daijia.receiver.CancelOrderReceiver;
 import com.easymi.daijia.widget.FlowPopWindow;
-import com.easymi.daijia.widget.InputRemarkDialog;
 import com.easymi.daijia.widget.RefuseOrderDialog;
 import com.google.gson.Gson;
 
@@ -376,8 +375,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 settleFragmentDialog = new SettleFragmentDialog(this, djOrder, bridge);
                 settleFragmentDialog.show();
             }
-
-            showPayType();//直接显示出结算支付方式dialog
         }
 
         boolean forceOre = XApp.getMyPreferences().getBoolean(Config.SP_ALWAYS_OREN, false);
@@ -577,7 +574,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     }
 
     @Override
-    public void showPayType() {
+    public void showPayType(double money) {
 
         if (null != settleFragmentDialog) {
             settleFragmentDialog.dismiss();
@@ -592,6 +589,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         RelativeLayout helppayCon = view.findViewById(R.id.helppay_con);
         Button sure = view.findViewById(R.id.pay_button);
         ImageView close = view.findViewById(R.id.ic_close);
+
+        sure.setText(getString(R.string.pay_money) + money + getString(R.string.yuan));
 
         balanceCon.setOnClickListener(view13 -> payBalance.setChecked(true));
 
@@ -627,9 +626,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         bottomSheetDialog.setContentView(view);
         bottomSheetDialog.setCancelable(false);
         bottomSheetDialog.setOnDismissListener(dialogInterface -> {
-            if (null != settleFragmentDialog) {
-                settleFragmentDialog.show();
-            }
+            finish();
         });
         bottomSheetDialog.show();
     }
@@ -808,8 +805,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             }
 
             @Override
-            public void doPay() {
-                showPayType();
+            public void doPay(double money) {
+                showPayType(money);
             }
 
             @Override

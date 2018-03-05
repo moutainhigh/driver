@@ -214,7 +214,10 @@ public class WorkPresenter implements WorkContract.Presenter {
 
         Observable<EmResult> observable = model.offline(driverId, Config.APP_KEY);
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, true,
-                true, emResult -> view.offlineSuc())));
+                true, emResult -> {
+            onPause();
+            view.offlineSuc();
+        })));
     }
 
     @Override

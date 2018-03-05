@@ -81,16 +81,12 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
 
         holder.isNew.setVisibility(View.GONE);
 
-        if (StringUtils.isNotBlank(notifity.url)) {
-            holder.hasMore.setVisibility(View.VISIBLE);
-            holder.rootView.setOnClickListener(v -> {
-                if (null != listener) {
-                    listener.onClick(notifity);
-                }
-            });
-        } else {
-            holder.hasMore.setVisibility(View.GONE);
-        }
+        holder.hasMore.setVisibility(View.VISIBLE);
+        holder.rootView.setOnClickListener(v -> {
+            if (null != listener) {
+                listener.onClick(notifity);
+            }
+        });
 
     }
 

@@ -16,10 +16,10 @@
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:background="@drawable/corners_dcdcdc_big"
-            android:paddingBottom="3dp"
+            android:paddingBottom="1dp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:paddingTop="3dp"
+            android:paddingTop="1dp"
             android:text="2天前" />
     </FrameLayout>
 
@@ -30,7 +30,7 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@drawable/corners_white_stroke"
+        android:background="@drawable/corners_white_stroke_small"
         android:minHeight="80dp">
 
         <ImageView

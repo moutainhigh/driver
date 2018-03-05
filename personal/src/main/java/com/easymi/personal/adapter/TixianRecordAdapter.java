@@ -47,7 +47,13 @@ public class TixianRecordAdapter extends RecyclerView.Adapter<TixianRecordAdapte
         TixianRecord tixianRecord = list.get(position);
         holder.tixianRecordTime.setText(TimeUtil.getTime("yyyy-MM-dd HH:mm", tixianRecord.time * 1000));
         holder.tixianRecordStatus.setText(tixianRecord.getStatusStr(context));
-        holder.tixianRecordMoney.setText("¥" + tixianRecord.money);
+        holder.tixianRecordMoney.setText(tixianRecord.money+context.getString(R.string.yuan));
+
+        if (tixianRecord.status == 2) {
+            holder.tixianRecordStatus.setTextColor(context.getResources().getColor(R.color.dark_gray));
+        } else {
+            holder.tixianRecordStatus.setTextColor(context.getResources().getColor(R.color.colorAccent));
+        }
 
         holder.dian1.setVisibility(View.VISIBLE);
         holder.dian2.setVisibility(View.VISIBLE);

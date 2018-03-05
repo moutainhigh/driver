@@ -67,9 +67,9 @@ public class AnnouncementActivity extends RxBaseActivity {
         adapter = new AnnouncementAdapter(this);
 
         adapter.setListener(announcement -> {
-            Intent intent = new Intent(AnnouncementActivity.this, WebActivity.class);
+            Intent intent = new Intent(AnnouncementActivity.this, ArticleActivity.class);
             intent.putExtra("title", announcement.message);
-            intent.putExtra("url", announcement.url);
+            intent.putExtra("annId", announcement.id);
             startActivity(intent);
         });
 

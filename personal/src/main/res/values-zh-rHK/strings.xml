@@ -39,7 +39,7 @@
         
     <string name="person_set">設置</string>
         
-    <string name="person_tuiguang">司機推廣</string>
+    <string name="person_tuiguang">推廣</string>
 
         <!-- 設置str -->
         
@@ -57,7 +57,7 @@
         
     <string name="set_statistics">統計中心</string>
         
-    <string name="set_help">用户指南</string>
+    <string name="set_help">帮助中心</string>
         
     <string name="set_feedback">意見反饋</string>
         

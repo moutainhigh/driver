@@ -106,6 +106,12 @@ public class WeatherActivity extends RxBaseActivity implements WeatherSearch.OnW
                 String fabuTime = weatherlive.getReportTime();
                 if (weatherlive.getReportTime().contains(" ")) {
                     fabuTime = fabuTime.split(" ")[1];
+                    if (fabuTime.contains(":")) {
+                        String[] hourMinSec = fabuTime.split(":");
+                        if (hourMinSec.length == 3) {
+                            fabuTime = hourMinSec[0] + ":" + hourMinSec[1];
+                        }
+                    }
                 }
                 reportTime.setText(fabuTime + getString(R.string.fabu));
                 todayType.setText(weatherlive.getWeather());
@@ -127,7 +133,7 @@ public class WeatherActivity extends RxBaseActivity implements WeatherSearch.OnW
                     } else {
                         todayPic.setImageResource(R.mipmap.sun_day_icon);
                         int hour = Integer.parseInt(TimeUtil.getTime("HH:mm", System.currentTimeMillis()).split(":")[0]);
-                        if(hour > 6 && hour < 18){
+                        if (hour > 6 && hour < 18) {
                             wetherBg.setBackgroundResource(R.mipmap.sun_day);
                         } else {
                             wetherBg.setBackgroundResource(R.mipmap.night);

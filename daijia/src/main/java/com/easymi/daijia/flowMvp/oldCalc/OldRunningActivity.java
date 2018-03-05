@@ -230,8 +230,8 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
             }
 
             @Override
-            public void doPay() {
-                showPayType();
+            public void doPay(double money) {
+                showPayType(money);
             }
 
             @Override
@@ -304,7 +304,7 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
     }
 
     @Override
-    public void showPayType() {
+    public void showPayType(double money) {
 
         if (null != settleFragmentDialog) {
             settleFragmentDialog.dismiss();
@@ -319,6 +319,8 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
         RelativeLayout helppayCon = view.findViewById(R.id.helppay_con);
         Button sure = view.findViewById(R.id.pay_button);
         ImageView close = view.findViewById(R.id.ic_close);
+
+        sure.setText(getString(R.string.pay_money) + money + getString(R.string.yuan));
 
         balanceCon.setOnClickListener(view13 -> payBalance.setChecked(true));
 
@@ -354,9 +356,7 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
         bottomSheetDialog.setContentView(view);
         bottomSheetDialog.setCancelable(false);
         bottomSheetDialog.setOnDismissListener(dialogInterface -> {
-            if (null != settleFragmentDialog) {
-                settleFragmentDialog.show();
-            }
+            finish();
         });
         bottomSheetDialog.show();
     }

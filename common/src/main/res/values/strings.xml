@@ -91,6 +91,6 @@
     <string name="baoxiao_shenhe">当前订单报销申请已经提交，正在审核中</string>
     <string name="baoxiao_done">当前订单已经报销过</string>
 
-    <string name="no_order">当前暂无工单╮(╯_╰)╭</string>
+    <string name="no_order">暂无订单，赶快去接单吧</string>
 
 </resources>

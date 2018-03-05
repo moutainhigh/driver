@@ -16,4 +16,7 @@ public class Announcement {
     public String message;
 
     public String url;
+
+    @SerializedName("Affiche_content")
+    public String content;
 }

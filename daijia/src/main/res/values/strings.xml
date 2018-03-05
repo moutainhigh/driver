@@ -188,4 +188,6 @@
     <string name="hour_">时</string>
     <string name="minute_">分</string>
 
+    <string name="pay_money">支付</string>
+
 </resources>

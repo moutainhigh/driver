@@ -140,7 +140,7 @@ public class OldWaitActivity extends RxBaseActivity implements FlowContract.View
     }
 
     @Override
-    public void showPayType() {
+    public void showPayType(double money) {
 
     }
 

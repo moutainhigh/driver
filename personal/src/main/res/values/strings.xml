@@ -21,7 +21,7 @@
     <string name="person_pingjia">乘客评价</string>
     <string name="person_message">消息中心</string>
     <string name="person_set">设置</string>
-    <string name="person_tuiguang">司机推广</string>
+    <string name="person_tuiguang">推广</string>
 
     <!-- 设置str -->
     <string name="set_change_psw">修改密码</string>
@@ -31,7 +31,7 @@
     <string name="set_language">选择语言</string>
     <string name="set_navi">导航偏好</string>
     <string name="set_statistics">统计中心</string>
-    <string name="set_help">用户指南</string>
+    <string name="set_help">帮助中心</string>
     <string name="set_feedback">意见反馈</string>
     <string name="set_contract_us">联系我们</string>
     <string name="set_about_us">关于我们</string>
@@ -248,9 +248,9 @@
     <string name="near_no_wc">附近暂无厕所</string>
     <string name="change_psw_suc">修改密码成功</string>
 
-    <string name="tixian_shenpi">待审批</string>
-    <string name="tixian_agree">同意</string>
-    <string name="tixian_refuse">拒绝</string>
+    <string name="tixian_shenpi">审批中</string>
+    <string name="tixian_agree">已通过</string>
+    <string name="tixian_refuse">已驳回</string>
 
     <string name="please_agree_agreement">请同意服务协议</string>
 

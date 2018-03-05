@@ -13,10 +13,14 @@ import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
+import com.easymi.component.utils.MathUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.LoadingButton;
+
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -78,6 +82,8 @@ public class BaoxiaoActivity extends RxBaseActivity {
             }
         });
 
+        DecimalFormat decimalFormat = new DecimalFormat("#0.0");
+        decimalFormat.setRoundingMode(RoundingMode.DOWN);
         editMoney.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -93,6 +99,16 @@ public class BaoxiaoActivity extends RxBaseActivity {
             public void afterTextChanged(Editable editable) {
                 if (StringUtils.isNotBlank(editable.toString())) {
                     baoxiaoMoney = Double.parseDouble(editable.toString());
+
+                    if (!MathUtil.isDoubleLegal(baoxiaoMoney, 1)) {
+                        editMoney.setText(decimalFormat.format(baoxiaoMoney));
+                        editMoney.setSelection(decimalFormat.format(baoxiaoMoney).length());
+                    }
+                    if(baoxiaoMoney > 1000){
+                        editMoney.setText(""+1000);
+                        editMoney.setSelection(4);
+                    }
+
                     if (null != baoxiaoReason && baoxiaoMoney != 0) {
                         setApplyBtnClickable(true);
                     } else {

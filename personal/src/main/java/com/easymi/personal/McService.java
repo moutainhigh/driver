@@ -2,6 +2,7 @@ package com.easymi.personal;
 
 import com.easymi.component.result.EmResult;
 import com.easymi.personal.result.AboutUsResult;
+import com.easymi.personal.result.AnnResult;
 import com.easymi.personal.result.AnnouncementResult;
 import com.easymi.personal.result.ArticleResult;
 import com.easymi.personal.result.BusinessResult;
@@ -358,4 +359,14 @@ public interface McService {
     @GET("/driver/api/v1/article")
     Observable<ArticleResult> getArticle(@Query("app_key") String appKey,
                                          @Query("id") Long id);
+
+    /**
+     * 查询单个公告
+     *
+     * @param noticeId
+     * @return
+     */
+    @GET("driver/api/v1/employAfficheById")
+    Observable<AnnResult> employAfficheById(@Query("id") Long noticeId,
+                                            @Query("app_key") String appKey);
 }
