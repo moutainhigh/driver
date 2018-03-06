@@ -43,9 +43,8 @@
             android:id="@+id/notifity_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_margin="20dp"
-            android:text="您的余额提现已经通过审核了您的余额提现已经通过审核了您的余额提现已经通过审核了您的余额提现已经通过审核了您的余额提现已经通过审核了您的余额提现已经通过审核了您的余额提现已经通过审核了您的余额提现已经通过审核了您的余额提现已经通过审核了您的余额提现已经通过审核了您的余额提现已经通过审核了" />
+            android:padding="20dp"
+            android:text="" />
 
         <LinearLayout
             android:id="@+id/show_has_more"
@@ -53,7 +52,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/notifity_content"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:visibility="visible">
 
             <View
                 android:id="@+id/ho_line"
