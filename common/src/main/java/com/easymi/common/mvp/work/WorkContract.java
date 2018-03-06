@@ -10,6 +10,7 @@ import com.easymi.common.result.LoginResult;
 import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.QueryOrdersResult;
+import com.easymi.common.result.SettingResult;
 import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.rxmvp.RxManager;
@@ -87,6 +88,8 @@ public interface WorkContract {
 
         void loadEmploy(long id);
 
+        void getAppSetting();
+
 //        void startOnlineTimer();
         //...
     }
@@ -102,11 +105,13 @@ public interface WorkContract {
 
         Observable<AnnouncementResult> loadAnn(Long id);
 
-        Observable<WorkStatisticsResult> getDriverStatistics(Long id, String nowDate);
+        Observable<WorkStatisticsResult> getDriverStatistics(Long id, String nowDate,int isOnline);
 
         Observable<NearDriverResult> queryNearDriver(Long driverId, Double lat, Double lng, Double distance);
 
         Observable<LoginResult> getEmploy(Long driverId,String appKey);
+
+        Observable<SettingResult> getAppSetting();
     }
 
 }

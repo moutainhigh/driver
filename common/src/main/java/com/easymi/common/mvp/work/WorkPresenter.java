@@ -20,8 +20,10 @@ import com.easymi.common.result.LoginResult;
 import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.QueryOrdersResult;
+import com.easymi.common.result.SettingResult;
 import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.Config;
+import com.easymi.component.DJOrderStatus;
 import com.easymi.component.EmployStatus;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
@@ -247,8 +249,12 @@ public class WorkPresenter implements WorkContract.Presenter {
     @Override
     public void queryStatis() {
         long driverId = EmUtil.getEmployId();
+        int driverStatus = 2;
+        if (EmUtil.getEmployInfo().status.equals(EmployStatus.ONLINE)) {
+            driverStatus = 1;
+        }
         String nowDate = TimeUtil.getTime("yyyy-MM-dd", System.currentTimeMillis());
-        Observable<WorkStatisticsResult> observable = model.getDriverStatistics(driverId, nowDate);
+        Observable<WorkStatisticsResult> observable = model.getDriverStatistics(driverId, nowDate, driverStatus);
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
                 true, result -> {
             view.showStatis(result.workStatistics);
@@ -262,6 +268,7 @@ public class WorkPresenter implements WorkContract.Presenter {
     public void loadDataOnResume() {
         indexOrders();//查询订单
         loadEmploy(EmUtil.getEmployId());
+        getAppSetting();//获取配置信息
         if (isFirst) {
             handler.postDelayed(this::queryStatis, 2000);
             isFirst = false;
@@ -327,6 +334,20 @@ public class WorkPresenter implements WorkContract.Presenter {
             employ.saveOrUpdate();
             SharedPreferences.Editor editor = XApp.getPreferencesEditor();
             editor.putLong(Config.SP_DRIVERID, employ.id);
+            editor.apply();
+            view.showDriverStatus();
+        })));
+    }
+
+    @Override
+    public void getAppSetting() {
+        Observable<SettingResult> observable = model.getAppSetting();
+        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
+                true, result -> {
+
+            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+            editor.putBoolean(Config.SP_DAIFU, result.setting.isPaid == 1);
+            editor.putBoolean(Config.SP_BAOXIAO, result.setting.isExpenses == 1);
             editor.apply();
             view.showDriverStatus();
         })));

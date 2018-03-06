@@ -6,6 +6,7 @@ import com.easymi.common.result.MultipleOrderResult;
 import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.QueryOrdersResult;
+import com.easymi.common.result.SettingResult;
 import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.result.EmResult;
 
@@ -125,7 +126,8 @@ public interface CommApiService {
     @GET("driver/api/v1/driverInfo")
     Observable<WorkStatisticsResult> workStatistics(@Query("driver_id") Long driverId,
                                                     @Query("now_date") String nowDate,
-                                                    @Query("app_key") String appKey);
+                                                    @Query("app_key") String appKey,
+                                                    @Query("is_online")Integer isOnline);
 
     /**
      * 代驾 --> 查询单个订单
@@ -190,4 +192,12 @@ public interface CommApiService {
     @GET("driver/api/v1/getEmployById")
     Observable<LoginResult> getDriverInfo(@Query("id") Long driverId,
                                           @Query("app_key") String appKey);
+
+    /**
+     * 获取APP配置
+     * @param appKey
+     * @return
+     */
+    @GET("api/v1/daijiaApp")
+    Observable<SettingResult> getAppSetting(@Query("app_key") String appKey);
 }

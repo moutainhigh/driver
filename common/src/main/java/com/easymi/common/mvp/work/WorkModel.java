@@ -6,6 +6,7 @@ import com.easymi.common.result.LoginResult;
 import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.QueryOrdersResult;
+import com.easymi.common.result.SettingResult;
 import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.Config;
 import com.easymi.component.network.ApiManager;
@@ -68,9 +69,9 @@ public class WorkModel implements WorkContract.Model {
     }
 
     @Override
-    public Observable<WorkStatisticsResult> getDriverStatistics(Long id, String nowDate) {
+    public Observable<WorkStatisticsResult> getDriverStatistics(Long id, String nowDate,int isOnline) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .workStatistics(id, nowDate, Config.APP_KEY)
+                .workStatistics(id, nowDate, Config.APP_KEY,isOnline)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -89,6 +90,15 @@ public class WorkModel implements WorkContract.Model {
     public Observable<LoginResult> getEmploy(Long driverId, String appKey) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .getDriverInfo(driverId, Config.APP_KEY)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<SettingResult> getAppSetting() {
+        return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .getAppSetting(Config.APP_KEY)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

@@ -94,7 +94,11 @@ public class ChangeActivity extends RxBaseActivity {
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, btn, emResult -> {
             ToastUtil.showMessage(ChangeActivity.this, getString(R.string.change_psw_suc));
-            XApp.getPreferencesEditor().putString(Config.SP_LOGIN_PSW, AesUtil.aesEncrypt(editNew.getText().toString(), AesUtil.AAAAA)).apply();
+            boolean canRemember = XApp.getMyPreferences().getBoolean(Config.SP_REMEMBER_PSW, true);
+            if (canRemember) {
+                XApp.getPreferencesEditor().putString(Config.SP_LOGIN_PSW,
+                        AesUtil.aesEncrypt(editNew.getText().toString(), AesUtil.AAAAA)).apply();
+            }
             finish();
         })));
     }

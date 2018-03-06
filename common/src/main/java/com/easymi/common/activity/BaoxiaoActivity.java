@@ -104,9 +104,9 @@ public class BaoxiaoActivity extends RxBaseActivity {
                         editMoney.setText(decimalFormat.format(baoxiaoMoney));
                         editMoney.setSelection(decimalFormat.format(baoxiaoMoney).length());
                     }
-                    if(baoxiaoMoney > 1000){
-                        editMoney.setText(""+1000);
-                        editMoney.setSelection(4);
+                    if(baoxiaoMoney > 100000){
+                        editMoney.setText(""+100000);
+                        editMoney.setSelection(6);
                     }
 
                     if (null != baoxiaoReason && baoxiaoMoney != 0) {

@@ -190,4 +190,6 @@
 
     <string name="pay_money">支付</string>
 
+    <string name="finished_order">该订单已完成支付</string>
+
 </resources>

@@ -122,8 +122,8 @@ public class LoginActivity extends RxBaseActivity implements LocObserver {
 
     private void initBox() {
         textAgreement.setOnClickListener(view -> {
-            Intent intent = new Intent(LoginActivity.this, WebActivity.class);
-            intent.putExtra("url", Config.AGREEMENT_URL);
+            Intent intent = new Intent(LoginActivity.this, ArticleActivity.class);
+            intent.putExtra("tag", "ServiceAgreement");
             intent.putExtra("title", getString(R.string.login_agreement));
             startActivity(intent);
         });
@@ -267,6 +267,10 @@ public class LoginActivity extends RxBaseActivity implements LocObserver {
             editor.putBoolean(Config.SP_ISLOGIN, true);
             editor.putLong(Config.SP_DRIVERID, employ.id);
             editor.putString(Config.SP_LOGIN_ACCOUNT, AesUtil.aesEncrypt(name, AesUtil.AAAAA));
+            editor.putBoolean(Config.SP_REMEMBER_PSW,checkboxRemember.isChecked());
+            if(checkboxRemember.isChecked()){
+
+            }
             editor.putString(Config.SP_LOGIN_PSW, AesUtil.aesEncrypt(psw, AesUtil.AAAAA));
             editor.apply();
             ARouter.getInstance()

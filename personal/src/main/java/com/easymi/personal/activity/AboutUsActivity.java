@@ -170,7 +170,7 @@ public class AboutUsActivity extends RxBaseActivity {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
         Observable<ArticleResult> observable = api
-                .getArticle(Config.APP_KEY, "AboutUs")
+                .getArticle(Config.APP_KEY, "DriverAboutUs")
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

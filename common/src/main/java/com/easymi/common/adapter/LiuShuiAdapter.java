@@ -14,6 +14,7 @@ import com.easymi.common.activity.BaoxiaoActivity;
 import com.easymi.common.util.DJStatus2Str;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
+import com.easymi.component.app.XApp;
 import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
@@ -62,6 +63,7 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
         holder.orderTime.setText(TimeUtil.getTime("yyyy-MM-dd HH:mm", baseOrder.orderTime * 1000));
         holder.orderNumber.setText(baseOrder.orderNumber);
         holder.orderMoney.setText(String.valueOf(baseOrder.orderMoney));
+
         if (baseOrder.baoxiaoStatus == 1) {
             holder.orderBaoxiao.setClickable(true);
             holder.orderBaoxiao.setTextSize(14);
@@ -90,7 +92,12 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
             });
             holder.orderBaoxiao.setVisibility(View.GONE);
         } else {
-            holder.orderBaoxiao.setVisibility(View.VISIBLE);
+            boolean canBaoxiao = XApp.getMyPreferences().getBoolean(Config.SP_BAOXIAO, true);
+            if (canBaoxiao) {
+                holder.orderBaoxiao.setVisibility(View.VISIBLE);
+            } else {
+                holder.orderBaoxiao.setVisibility(View.GONE);
+            }
         }
     }
 

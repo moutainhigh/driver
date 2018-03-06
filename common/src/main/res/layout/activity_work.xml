@@ -209,6 +209,7 @@
             <TextView
                 android:id="@+id/no_order_img"
                 android:visibility="gone"
+                android:drawablePadding="12dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"

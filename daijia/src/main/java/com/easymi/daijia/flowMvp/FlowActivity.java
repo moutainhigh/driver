@@ -83,6 +83,7 @@ import com.easymi.daijia.fragment.SlideArriveStartFragment;
 import com.easymi.daijia.fragment.ToStartFragment;
 import com.easymi.daijia.fragment.WaitFragment;
 import com.easymi.daijia.receiver.CancelOrderReceiver;
+import com.easymi.daijia.receiver.OrderFinishReceiver;
 import com.easymi.daijia.widget.FlowPopWindow;
 import com.easymi.daijia.widget.RefuseOrderDialog;
 import com.google.gson.Gson;
@@ -104,7 +105,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         LocObserver,
         TraceInterface,
         FeeChangeObserver,
-        CancelOrderReceiver.OnCancelListener, AMap.OnMapTouchListener {
+        CancelOrderReceiver.OnCancelListener, AMap.OnMapTouchListener, OrderFinishReceiver.OnFinishListener {
     public static final int CANCEL_ORDER = 0X01;
     public static final int CHANGE_END = 0X02;
 
@@ -131,6 +132,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     private TraceReceiver traceReceiver;
     private CancelOrderReceiver cancelOrderReceiver;
+    private OrderFinishReceiver orderFinishReceiver;
 
     private AMap aMap;
 
@@ -371,6 +373,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
                 settleFragmentDialog.setDjOrder(djOrder);
+
+                DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);//确认费用后直接弹出支付页面
+                if (null != dymOrder) {
+                    bridge.doPay(dymOrder.orderShouldPay);
+                }
             } else {
                 settleFragmentDialog = new SettleFragmentDialog(this, djOrder, bridge);
                 settleFragmentDialog.show();
@@ -608,6 +615,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             }
         });
 
+        boolean canDaifu = XApp.getMyPreferences().getBoolean(Config.SP_DAIFU, true);
+        if (!canDaifu) {
+            helppayCon.setVisibility(View.GONE);
+            payHelpPay.setChecked(false);
+        }
+
         sure.setOnClickListener(view12 -> {
             if (payBalance.isChecked() || payHelpPay.isChecked()) {
                 if (payHelpPay.isChecked()) {
@@ -830,6 +843,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         cancelOrderReceiver = new CancelOrderReceiver(this);
         registerReceiver(cancelOrderReceiver, new IntentFilter(Config.BROAD_CANCEL_ORDER));
+
+        orderFinishReceiver = new OrderFinishReceiver(this);
+        registerReceiver(orderFinishReceiver, new IntentFilter(Config.BROAD_FINISH_ORDER));
     }
 
     @Override
@@ -873,6 +889,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         unregisterReceiver(traceReceiver);
         unregisterReceiver(cancelOrderReceiver);
+        unregisterReceiver(orderFinishReceiver);
     }
 
     SmoothMoveMarker smoothMoveMarker;
@@ -1058,5 +1075,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             startActivity(intent);
             finish();
         }
+    }
+
+    @Override
+    public void onFinishOrder(long orderId, String orderType) {
+        ToastUtil.showMessage(this, getString(R.string.finished_order));
+        finish();
     }
 }

@@ -68,8 +68,12 @@ public class Config {
 
     public static final String SP_LOGIN_ACCOUNT = "login_account";//账号
     public static final String SP_LOGIN_PSW = "login_psw";//密码
+    public static final String SP_REMEMBER_PSW = "remember_psw";//密码
 
     public static final String SP_LAST_SPLASH_TIME = "last_splash_animate";//上次显示动画的时间
+
+    public static final String SP_DAIFU = "can_daifu";//代付
+    public static final String SP_BAOXIAO = "can_baoxiao";//报销
 
     public static final String DAIJIA = "daijia";
 
@@ -77,6 +81,7 @@ public class Config {
     public static final String BROAD_EMPLOY_STATUS_CHANGE = "com.easymi.v5driver.EMPLOY_STATUS_CHANGE";
     public static final String BROAD_NOTICE = "com.easymi.v5driver.BROAD_NOTICE";
     public static final String BROAD_ANN = "com.easymi.v5driver.BROAD_ANN";
+    public static final String BROAD_FINISH_ORDER = "com.easymi.v5driver.BROAD_FINISH_ORDER";
 
     public static final int FREE_LOC_TIME = 8000;//闲时定位时间 毫秒
     public static final int BUSY_LOC_TIME = 4000;//忙时定位时间 毫秒

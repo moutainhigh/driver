@@ -143,7 +143,7 @@ public class TixianActivity extends RxBaseActivity {
                 ToastUtil.showMessage(TixianActivity.this, getString(R.string.max_money) + tixianRule.withdrawals_max + getString(R.string.yuan));
                 return;
             }
-            if (money % tixianRule.withdrawals_base != 0) {
+            if (tixianRule.withdrawals_base != 0 && money % tixianRule.withdrawals_base != 0) {
                 ToastUtil.showMessage(TixianActivity.this, getString(R.string.base_money) + tixianRule.withdrawals_base + getString(R.string.de_beishu));
                 return;
             }
