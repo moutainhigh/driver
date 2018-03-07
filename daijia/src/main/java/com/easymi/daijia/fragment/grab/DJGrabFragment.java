@@ -70,8 +70,8 @@ public class DJGrabFragment extends Fragment {
         start_place.setText(djOrder.startPlace);
         end_place.setText(djOrder.endPlace);
         order_time_text.setText(djOrder.isBookOrder == 1 ? getString(R.string.appoint) : getString(R.string.jishi));
-        tag_container.addTag("不要抽烟");
-        tag_container.addTag("带手套开车");
+//        tag_container.addTag("不要抽烟");
+//        tag_container.addTag("带手套开车");
 
         order_type.setText(djOrder.orderDetailType);
 

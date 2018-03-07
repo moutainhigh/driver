@@ -33,6 +33,7 @@ import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.EmployStatus;
 
@@ -75,19 +76,21 @@ public class HandlePush implements FeeChangeSubject {
         try {
             JSONObject jb = new JSONObject(jsonStr);
             String msg = jb.optString("msg");
-            if (msg.equals("grabOrder")) { //派单
+
+            if (msg.equals("grabOrder")) { //抢单
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("id");
                 order.orderType = jb.optJSONObject("data").optString("business");
                 loadOrder(order);
 //                XApp.getInstance().syntheticVoice();
-            } else if (msg.equals("sendOrder")) {//抢单
+            } else if (msg.equals("sendOrder")) {//派单
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("id");
                 order.orderType = jb.optJSONObject("data").optString("business");
                 loadOrder(order);
                 newShowNotify(XApp.getInstance(), "", XApp.getInstance().getString(R.string.send_order), XApp.getInstance().getString(R.string.send_order_content));
-            } else if (msg.equals("cancelOrder")) {
+            } else if (msg.equals("cancelOrder")) {//取消订单
+                shake();
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("id");
                 order.orderType = jb.optJSONObject("data").optString("business");
@@ -98,7 +101,7 @@ public class HandlePush implements FeeChangeSubject {
                 bundle.putSerializable("order", order);
                 message.setData(bundle);
                 handler.sendMessage(message);
-            } else if (msg.equals("costInfo")) {
+            } else if (msg.equals("costInfo")) {//费用信息
                 long orderId = jb.optJSONObject("data").optLong("OrderId");
                 String orderType = jb.optJSONObject("data").optString("OrderType");
                 DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
@@ -116,7 +119,7 @@ public class HandlePush implements FeeChangeSubject {
                     dymOrder.updateFee();
                     notifyObserver(orderId, orderType);
                 }
-            } else if (msg.equals("driver_status")) {
+            } else if (msg.equals("driver_status")) {//司机状态
                 String status = jb.optJSONObject("data").optString("status");
 
                 Message message = new Message();
@@ -126,20 +129,25 @@ public class HandlePush implements FeeChangeSubject {
                 message.setData(bundle);
                 handler.sendMessage(message);
             } else if (msg.equals("notice")) {//通知
+                shake();
                 long id = jb.optJSONObject("data").optLong("id");
 
                 loadNotice(id);
             } else if (msg.equals("announcement")) {//公告
+                shake();
                 long id = jb.optJSONObject("data").optLong("id");
 
                 loadAnn(id);
             } else if (msg.equals("freezed")) {//冻结
+                shake();
                 XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.freezed));
                 EmUtil.employLogout(XApp.getInstance());
             } else if (msg.equals("offline")) {//强制下线
+                shake();
                 XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.force_offline));
                 EmUtil.employLogout(XApp.getInstance());
             } else if (msg.equals("unbunding")) {//解绑
+                shake();
                 XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.unbunding));
                 EmUtil.employLogout(XApp.getInstance());
             } else if (msg.equals("paysuccess")) {//支付成功
@@ -147,9 +155,28 @@ public class HandlePush implements FeeChangeSubject {
                 order.orderId = jb.optJSONObject("data").optLong("id");
                 order.orderType = jb.optJSONObject("data").optString("business");
                 loadOrder(order);
+            } else if (msg.equals("back_order")) {//订单回收
+                shake();
+                MultipleOrder order = new MultipleOrder();
+                order.orderId = jb.optJSONObject("data").optLong("id");
+                order.orderType = jb.optJSONObject("data").optString("business");
+
+                Message message = new Message();
+                message.what = 3;
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("order", order);
+                message.setData(bundle);
+                handler.sendMessage(message);
             }
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void shake() {
+        boolean shakeAble = XApp.getMyPreferences().getBoolean(Config.SP_SHAKE_ABLE, true);
+        if (shakeAble) {//震动
+            PhoneUtil.vibrate(XApp.getInstance(), false);
         }
     }
 
@@ -233,7 +260,7 @@ public class HandlePush implements FeeChangeSubject {
             public void onNext(AnnouncementResult announcementResult) {
                 XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.new_ann) + announcementResult.employAfficheRequest.message, true);
                 Intent intent = new Intent();
-                intent.setAction(Config.BROAD_NOTICE);
+                intent.setAction(Config.BROAD_ANN);
                 intent.putExtra("ann", announcementResult.employAfficheRequest.message);
                 XApp.getInstance().sendBroadcast(intent);
             }
@@ -280,6 +307,7 @@ public class HandlePush implements FeeChangeSubject {
             MultipleOrder order = multipleOrderResult.order;
             if (order != null) {
                 if (order.orderStatus == DJOrderStatus.FINISH_ORDER) {//已完成订单
+                    shake();
                     String weihao = order.passengerPhone;
                     if (weihao.length() > 4) {
                         weihao = weihao.substring(weihao.length() - 4, weihao.length());
@@ -299,6 +327,7 @@ public class HandlePush implements FeeChangeSubject {
                 if (order.orderStatus != DJOrderStatus.NEW_ORDER && order.orderStatus != DJOrderStatus.PAIDAN_ORDER) {
                     return;
                 }
+                shake();
                 order.addresses = multipleOrderResult.address;
                 String voiceStr = "";
                 if (order.orderStatus == DJOrderStatus.NEW_ORDER) {
@@ -407,6 +436,21 @@ public class HandlePush implements FeeChangeSubject {
                         }
                     }
                 }
+                break;
+            case 3:
+                Bundle bundle3 = msg.getData();
+                MultipleOrder order3 = (MultipleOrder) bundle3.getSerializable("order");
+                if (order3 != null) {
+                    Intent intent3 = new Intent();
+                    intent3.setAction(Config.BROAD_BACK_ORDER);
+                    intent3.putExtra("orderId", order3.orderId);
+                    intent3.putExtra("orderType", order3.orderType);
+                    XApp.getInstance().sendBroadcast(intent3);
+                }
+                XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.you_have_order_back));
+                newShowNotify(XApp.getInstance(), "", XApp.getInstance().getString(R.string.back_order)
+                        , XApp.getInstance().getString(R.string.you_have_order_back));
+
                 break;
         }
         return true;

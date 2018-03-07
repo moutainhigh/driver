@@ -37,6 +37,7 @@
     <string name="liushui_yesterday">昨天</string>
     <string name="liushui_this_week">本周</string>
     <string name="liushui_this_month">本月</string>
+    <string name="liushui_this_year">本年</string>
     <string name="liushui_all">全部</string>
 
     <string name="new_ann">新公告：</string>
@@ -54,6 +55,9 @@
 
     <string name="cancel_order">消单</string>
     <string name="you_have_order_cancel">您有订单被取消，请注意查看</string>
+
+    <string name="back_order">订单回收</string>
+    <string name="you_have_order_back">您有订单被回收，请注意查看</string>
 
     <string name="force_offline">您已被管理员强制下线</string>
 
@@ -94,7 +98,7 @@
     <string name="no_order">暂无订单，赶快去接单吧</string>
 
     <string name="freezed">您的账户已被冻结，请联系管理员</string>
-    <string name="unbunding">您的账户已被管理员解绑</string>
+    <string name="unbunding">您的账户已被管理员姐绑</string>
 
     <string name="pay_suc_1">手机尾号为</string>
     <string name="pay_suc_2">的客户已完成支付</string>

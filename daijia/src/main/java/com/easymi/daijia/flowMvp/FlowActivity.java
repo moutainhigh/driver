@@ -105,7 +105,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         LocObserver,
         TraceInterface,
         FeeChangeObserver,
-        CancelOrderReceiver.OnCancelListener, AMap.OnMapTouchListener, OrderFinishReceiver.OnFinishListener {
+        CancelOrderReceiver.OnCancelListener,
+        AMap.OnMapTouchListener,
+        OrderFinishReceiver.OnFinishListener {
     public static final int CANCEL_ORDER = 0X01;
     public static final int CHANGE_END = 0X02;
 
@@ -184,7 +186,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             if (popWindow.isShowing()) {
                 popWindow.dismiss();
             } else {
-                if (djOrder.orderStatus >= DJOrderStatus.GOTO_DESTINATION_ORDER) {
+                if (djOrder.orderStatus == DJOrderStatus.PAIDAN_ORDER || djOrder.orderStatus >= DJOrderStatus.GOTO_DESTINATION_ORDER) {
                     popWindow.hideCancel();
                 } else {
                     popWindow.showCancel();
@@ -227,10 +229,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         orderNumberText.setText(djOrder.orderNumber);
         orderTypeText.setText(djOrder.orderDetailType);
         tagContainerLayout.removeAllTags();
-        tagContainerLayout.addTag("你好");
-        tagContainerLayout.addTag("我好");
-        tagContainerLayout.addTag("大家好");
-        tagContainerLayout.addTag("广州好迪");
+//        tagContainerLayout.addTag("你好");
+//        tagContainerLayout.addTag("我好");
+//        tagContainerLayout.addTag("大家好");
+//        tagContainerLayout.addTag("广州好迪");
         drawerFrame.setOnClickListener(view -> {
             if (expandableLayout.isExpanded()) {
                 expandableLayout.collapse();
@@ -580,6 +582,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this) / 2, DensityUtil.getDisplayWidth(this) / 2, 80));
     }
 
+    private CusBottomSheetDialog bottomSheetDialog;//支付弹窗
+
     @Override
     public void showPayType(double money) {
 
@@ -587,7 +591,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             settleFragmentDialog.dismiss();
         }
 
-        CusBottomSheetDialog bottomSheetDialog = new CusBottomSheetDialog(this);
+        bottomSheetDialog = new CusBottomSheetDialog(this);
 
         View view = LayoutInflater.from(this).inflate(R.layout.pay_type_dialog, null, false);
         CheckBox payBalance = view.findViewById(R.id.pay_balance);
@@ -628,7 +632,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 } else if (payBalance.isChecked()) {
                     presenter.payOrder(orderId, "balance");
                 }
-                bottomSheetDialog.dismiss();
             } else {
                 ToastUtil.showMessage(FlowActivity.this, getString(R.string.please_pay_title));
             }
@@ -646,6 +649,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void paySuc() {
+        if (bottomSheetDialog != null && bottomSheetDialog.isShowing()) {
+            bottomSheetDialog.dismiss();
+        }
         ToastUtil.showMessage(this, getString(R.string.pay_suc));
         finish();
     }
@@ -842,7 +848,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         registerReceiver(traceReceiver, filter2);
 
         cancelOrderReceiver = new CancelOrderReceiver(this);
-        registerReceiver(cancelOrderReceiver, new IntentFilter(Config.BROAD_CANCEL_ORDER));
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Config.BROAD_CANCEL_ORDER);
+        filter.addAction(Config.BROAD_BACK_ORDER);
+        registerReceiver(cancelOrderReceiver, filter);
 
         orderFinishReceiver = new OrderFinishReceiver(this);
         registerReceiver(orderFinishReceiver, new IntentFilter(Config.BROAD_FINISH_ORDER));

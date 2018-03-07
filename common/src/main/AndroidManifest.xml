@@ -86,7 +86,7 @@
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <!--消息接收监听器-->
-        <service android:name="com.easymi.common.push.AliDetailService">
+        <receiver android:name="com.easymi.common.receiver.AliPushReceiver">
             <intent-filter>
                 <action android:name="com.alibaba.push2.action.NOTIFICATION_OPENED" />
             </intent-filter>
@@ -115,7 +115,7 @@
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
                 <data android:scheme="package" />
             </intent-filter>
-        </service>
+        </receiver>
 
         <service android:name="com.easymi.common.push.MQTTService" />
 

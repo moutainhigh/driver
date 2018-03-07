@@ -63,10 +63,10 @@ public class MsgActivity extends RxBaseActivity {
     }
 
     public void tuijian(View view) {
-        Intent intent = new Intent(MsgActivity.this, ArticleActivity.class);
-        intent.putExtra("tag", "DriverPromotion");
-        intent.putExtra("title", getString(R.string.person_tuiguang));
-        startActivity(intent);
+//        Intent intent = new Intent(MsgActivity.this, ArticleActivity.class);
+//        intent.putExtra("tag", "DriverPromotion");
+//        intent.putExtra("title", getString(R.string.person_tuiguang));
+//        startActivity(intent);
     }
 
     public void toNotice(View view) {

@@ -98,9 +98,8 @@ public class FeeDetailActivity extends RxBaseActivity {
         paymentFee.setText(dymOrder.paymentFee + getString(R.string.yuan));
 
         if (djOrder.couponFee == 0 && djOrder.couponScale == 0) {
-            couponFeeCon.setVisibility(View.GONE);
+
         } else {
-            couponFeeCon.setVisibility(View.VISIBLE);
             if (djOrder.couponFee != 0) {
                 couponType.setText("（" + djOrder.couponFee + "元现金优惠券）");
             } else {

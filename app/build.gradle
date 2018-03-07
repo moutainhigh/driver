@@ -6,7 +6,7 @@ def libs = rootProject.ext.dependencies
 android {
     compileSdkVersion cfg.compileSdkVersion
     defaultConfig {
-        applicationId "com.rvakva.o2o.driver"
+        applicationId "me.xiaoka.travel.driver"
         minSdkVersion cfg.minSdkVersion
         targetSdkVersion cfg.targetSdkVersion
         versionCode 4
@@ -21,9 +21,9 @@ android {
     }
     signingConfigs {
         release {
-            keyAlias '软咖司机端'
+            keyAlias 'v5司机端'
             keyPassword 'easymin'
-            storeFile file('emdriver.keystore')
+            storeFile file('v5签名信息')
             storePassword 'easymin'
         }
     }

@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
@@ -23,7 +24,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.easymi.component.Config;
 import com.easymi.component.R;
+import com.easymi.component.app.XApp;
 import com.easymi.component.permission.RxPermissions;
 
 import java.io.UnsupportedEncodingException;
@@ -239,6 +242,23 @@ public class PhoneUtil {
             return true;
         }
     }
+
+    private static Vibrator vib;
+    private static final long[] VIBRATOR_PATTERN = {150L, 400L, 150L, 400L};
+
+    public static void vibrate(Context paramContext, boolean isRepeat) {
+
+        if (XApp.getMyPreferences().getBoolean(Config.SP_SHAKE_ABLE, true)) {
+            if (vib == null) {
+                vib = (Vibrator) paramContext
+                        .getSystemService(Context.VIBRATOR_SERVICE);
+            }
+            if (vib != null) {
+                vib.vibrate(VIBRATOR_PATTERN, isRepeat ? 0x0 : -0x1);
+            }
+        }
+    }
+
 
     public static String getUDID(Context context) {
         String udid = "";

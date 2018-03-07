@@ -206,6 +206,10 @@ public class XApp extends MultiDexApplication {
     }
 
     public void syntheticVoice(String msg) {
+        boolean voiceAble = getMyPreferences().getBoolean(Config.SP_VOICE_ABLE, true);
+        if (!voiceAble) {
+            return;
+        }
         if (requestFocus() && null != iflytekSpe) {
             int code = iflytekSpe.startSpeaking(msg, new SynthesizerListener() {
                 @Override

@@ -239,6 +239,7 @@ public class LoginActivity extends RxBaseActivity implements LocObserver {
         String udid = PhoneUtil.getUDID(this);
 
         Log.e("LoginActivity", "udid-->" + udid);
+        Log.e("LoginActivity", "deviceId-->" + PushServiceFactory.getCloudPushService().getDeviceId());
         String version = "";
         try {
             version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;

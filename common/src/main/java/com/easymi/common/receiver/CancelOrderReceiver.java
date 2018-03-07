@@ -22,7 +22,7 @@ public class CancelOrderReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (null != intent && null != intent.getAction()) {
             String action = intent.getAction();
-            if (action.equals(Config.BROAD_CANCEL_ORDER)) {
+            if (action.equals(Config.BROAD_CANCEL_ORDER) || action.equals(Config.BROAD_BACK_ORDER)) {
                 if (null != cancelListener) {
                     Long orderId = intent.getLongExtra("orderId", -1);
                     String orderType = intent.getStringExtra("orderType");

@@ -74,8 +74,8 @@ public class GrabAdapter extends PagerAdapter {
         holder.orderTimeText.setText(multipleOrder.isBookOrder == 1 ? "预约" : "即时");
         holder.tagContainer.setTheme(ColorFactory.NONE);
         holder.tagContainer.removeAllTags();
-        holder.tagContainer.addTag("不要抽烟");
-        holder.tagContainer.addTag("带手套开车");
+//        holder.tagContainer.addTag("不要抽烟");
+//        holder.tagContainer.addTag("带手套开车");
 
         //添加到ViewPager中，并显示
         container.addView(view);

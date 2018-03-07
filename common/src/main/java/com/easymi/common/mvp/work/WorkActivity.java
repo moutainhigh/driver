@@ -460,7 +460,10 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         refreshImg.callOnClick();
 
         cancelOrderReceiver = new CancelOrderReceiver(this);
-        registerReceiver(cancelOrderReceiver, new IntentFilter(Config.BROAD_CANCEL_ORDER));
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Config.BROAD_CANCEL_ORDER);
+        filter.addAction(Config.BROAD_BACK_ORDER);
+        registerReceiver(cancelOrderReceiver, filter);
 
         employStatusChangeReceiver = new EmployStatusChangeReceiver(this);
         registerReceiver(employStatusChangeReceiver, new IntentFilter(Config.BROAD_EMPLOY_STATUS_CHANGE));

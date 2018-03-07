@@ -153,12 +153,14 @@ public class LiushuiActivity extends RxBaseActivity {
                         getString(R.string.liushui_today),
                         getString(R.string.liushui_yesterday),
                         getString(R.string.liushui_this_week),
-                        getString(R.string.liushui_this_month)
+                        getString(R.string.liushui_this_month),
+                        getString(R.string.liushui_this_year)
                 };
                 picker.setDisplayedValues(ls);
                 picker.setMaxValue(ls.length - 1);
                 picker.setMinValue(0);
                 picker.setValue(0);
+                picker.setWrapSelectorWheel(false);
                 TextView cancel = view.findViewById(R.id.cancel);
                 TextView confirm = view.findViewById(R.id.confirm);
                 cancel.setOnClickListener(v12 -> dialog.dismiss());
@@ -180,6 +182,9 @@ public class LiushuiActivity extends RxBaseActivity {
                     } else if (time.equals(getString(R.string.liushui_this_month))) {
                         startTime = TimeUtil.getBeginDayOfMonth().getTime();
                         endTime = TimeUtil.getEndDayOfMonth().getTime();
+                    } else if (time.equals(getString(R.string.liushui_this_year))) {
+                        startTime = TimeUtil.getBeginDayOfYear().getTime();
+                        endTime = TimeUtil.getEndDayOfYear().getTime();
                     }
                     page = 1;
                     queryOrders();

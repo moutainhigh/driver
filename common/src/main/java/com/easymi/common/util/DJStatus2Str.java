@@ -29,11 +29,11 @@ public class DJStatus2Str {
                 case DJOrderStatus.ARRIVAL_DESTINATION_ORDER:
                     return "未支付 >";
                 case DJOrderStatus.FINISH_ORDER:
-                    return "已支付 >";
+                    return "已完成 >";
                 case DJOrderStatus.CANCEL_ORDER:
                     return "已销单 >";
                 case DJOrderStatus.RATED_ORDER:
-                    return "已评价 >";
+                    return "已完成 >";
             }
         }
         return "";
