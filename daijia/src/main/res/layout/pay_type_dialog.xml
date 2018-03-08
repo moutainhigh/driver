@@ -39,12 +39,15 @@
             android:layout_height="0.1dp"
             android:background="@color/line_color" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"/>
+
         <RelativeLayout
             android:id="@+id/balance_con"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp">
+            android:layout_marginLeft="20dp">
 
             <ImageView
                 android:id="@+id/img_1"
@@ -70,17 +73,20 @@
                 android:layout_marginRight="20dp"
                 android:button="@drawable/checkbox_button_bg_selector"
                 android:checked="true"
+                android:clickable="false"
                 android:gravity="center_vertical" />
 
         </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"/>
 
         <RelativeLayout
             android:id="@+id/helppay_con"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp">
+            android:layout_marginLeft="20dp">
 
             <ImageView
                 android:id="@+id/img_2"
@@ -106,10 +112,15 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="20dp"
+                android:clickable="false"
                 android:button="@drawable/checkbox_button_bg_selector"
                 android:gravity="center_vertical" />
 
         </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"/>
 
         <Button
             android:id="@+id/pay_button"

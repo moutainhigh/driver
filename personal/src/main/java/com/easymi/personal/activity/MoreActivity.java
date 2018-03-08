@@ -32,11 +32,11 @@ public class MoreActivity extends RxBaseActivity {
         gridView = findViewById(R.id.grid_view);
         List<String> stringList = new ArrayList<>();
         stringList.add(getString(R.string.near_wc));
-        stringList.add(getString(R.string.reli_pic));
+//        stringList.add(getString(R.string.reli_pic));
         stringList.add(getString(R.string.weather_forecast));
         stringList.add(getString(R.string.contract_service));
-        stringList.add("");
-        stringList.add("");
+//        stringList.add("");
+//        stringList.add("");
 
         GridAdapter gridAdapter = new GridAdapter(this);
         gridAdapter.setStringList(stringList);
