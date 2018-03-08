@@ -111,6 +111,7 @@
     <string name="status_confirm">确认费用</string>
 
     <string name="canceled_order">当前订单已被取消:)</string>
+    <string name="backed_order">当前订单已被收回:)</string>
 
     <string name="please_cancel_reason">请输入取消理由</string>
 
@@ -186,7 +187,7 @@
     <string name="meter">米</string>
     <string name="about_">大约</string>
     <string name="hour_">时</string>
-    <string name="minute_">分</string>
+    <string name="minute_">分钟</string>
 
     <string name="pay_money">支付</string>
 

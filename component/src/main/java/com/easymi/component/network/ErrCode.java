@@ -633,7 +633,11 @@ public enum ErrCode {
     /**
      * 服务人员不存在
      */
-    EMPLOY_NOT_EXIST(31001, "服务人员不存在");
+    EMPLOY_NOT_EXIST(31001, "服务人员不存在"),
+    /**
+     * 服务人员还有订单未完成
+     */
+    EMPLOY_HAS_ORDERS_TODO(31004, "服务人员还有订单未完成");
 
     private int code;
     private String showMsg;

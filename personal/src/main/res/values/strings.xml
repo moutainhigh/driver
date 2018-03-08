@@ -118,7 +118,7 @@
 
     <!-- 钱包str-->
     <string name="pocket_title">我的钱包</string>
-    <string name="pocket_balance">账户余额(元)</string>
+    <string name="pocket_balance">账户余额（元）</string>
     <string name="pocket_recharge">充值</string>
     <string name="pocket_detail">账户明细</string>
 

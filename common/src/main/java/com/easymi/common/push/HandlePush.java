@@ -119,7 +119,7 @@ public class HandlePush implements FeeChangeSubject {
                     dymOrder.updateFee();
                     notifyObserver(orderId, orderType);
                 }
-            } else if (msg.equals("driver_status")) {//司机状态
+            } else if (msg.equals("driver_status")) { //司机状态
                 String status = jb.optJSONObject("data").optString("status");
 
                 Message message = new Message();

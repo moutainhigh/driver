@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.easymi.component.Config;
+import com.easymi.daijia.R;
 
 /**
  * Created by developerLzh on 2017/12/19 0019.
@@ -26,13 +27,18 @@ public class CancelOrderReceiver extends BroadcastReceiver {
                 if (null != cancelListener) {
                     Long orderId = intent.getLongExtra("orderId", -1);
                     String orderType = intent.getStringExtra("orderType");
-                    cancelListener.onCancelOrder(orderId, orderType);
+                    if(action.equals(Config.BROAD_CANCEL_ORDER)){
+                        cancelListener.onCancelOrder(orderId, orderType,context.getString(R.string.canceled_order));
+                    } else {
+                        cancelListener.onCancelOrder(orderId, orderType,context.getString(R.string.backed_order));
+                    }
+
                 }
             }
         }
     }
 
     public interface OnCancelListener {
-        void onCancelOrder(long orderId, String orderType);
+        void onCancelOrder(long orderId, String orderType,String msg);
     }
 }

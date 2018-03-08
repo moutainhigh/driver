@@ -881,6 +881,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     protected void onPause() {
         super.onPause();
         mapView.onPause();
+        if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
+            settleFragmentDialog.dismiss();
+            settleFragmentDialog = null;
+        }
     }
 
     @Override
@@ -1005,14 +1009,14 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     }
 
     @Override
-    public void onCancelOrder(long orderId, String orderType) {
+    public void onCancelOrder(long orderId, String orderType, String msg) {
         if (djOrder == null) {
             return;
         }
         if (orderId == djOrder.orderId
                 && orderType.equals(djOrder.orderType)) {
             AlertDialog dialog = new AlertDialog.Builder(this)
-                    .setMessage(getString(R.string.canceled_order))
+                    .setMessage(msg)
                     .setPositiveButton(R.string.ok, (dialog1, which) -> {
                         dialog1.dismiss();
                         finish();

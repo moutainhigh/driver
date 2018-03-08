@@ -56,8 +56,8 @@
     <string name="cancel_order">消单</string>
     <string name="you_have_order_cancel">您有订单被取消，请注意查看</string>
 
-    <string name="back_order">订单回收</string>
-    <string name="you_have_order_back">您有订单被回收，请注意查看</string>
+    <string name="back_order">订单收回</string>
+    <string name="you_have_order_back">您有订单被收回，请注意查看</string>
 
     <string name="force_offline">您已被管理员强制下线</string>
 
