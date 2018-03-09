@@ -23,8 +23,8 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
         super.onCreate(savedInstanceState);
 
         // 通过WXAPIFactory工厂，获取IWXAPI的实例
-        api = WXAPIFactory.createWXAPI(this, Config.WX_APPID, false);
-        api.registerApp(Config.WX_APPID);
+        api = WXAPIFactory.createWXAPI(this, Config.WX_APP_ID, false);
+        api.registerApp(Config.WX_APP_ID);
 
         api.handleIntent(getIntent(), this);
     }

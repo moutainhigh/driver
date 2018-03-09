@@ -39,10 +39,10 @@
                     RatingBar:isIndicator="true"
                     RatingBar:starCount="5"
                     RatingBar:starDistance="2dp"
-                    RatingBar:starEmpty="@mipmap/star_full"
-                    RatingBar:starFill="@mipmap/empty_star"
+                    RatingBar:starEmpty="@mipmap/empty_star"
+                    RatingBar:starFill="@mipmap/star_full"
                     RatingBar:starSize="20dp"
-                    RatingBar:stepSize="4.5" />
+                    RatingBar:stepSize="0.5"/>
 
                 <TextView
                     android:id="@+id/rate_text"
@@ -151,7 +151,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
                         android:max="100"
-                        android:progressBackgroundTint="#f0f0f0"
+                        android:progressBackgroundTint="#f7f7f7"
                         android:progressTint="@color/yellow" />
 
                     <TextView
@@ -189,7 +189,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
                         android:max="100"
-                        android:progressBackgroundTint="#f0f0f0"
+                        android:progressBackgroundTint="#f7f7f7"
                         android:progressTint="@color/yellow" />
 
                     <TextView
@@ -227,7 +227,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
                         android:max="100"
-                        android:progressBackgroundTint="#f0f0f0"
+                        android:progressBackgroundTint="#f7f7f7"
                         android:progressTint="@color/yellow" />
 
                     <TextView
@@ -265,7 +265,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
                         android:max="100"
-                        android:progressBackgroundTint="#f0f0f0"
+                        android:progressBackgroundTint="#f7f7f7"
                         android:progressTint="@color/yellow" />
 
                     <TextView
@@ -304,7 +304,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
                         android:max="100"
-                        android:progressBackgroundTint="#f0f0f0"
+                        android:progressBackgroundTint="#f7f7f7"
                         android:progressTint="@color/yellow" />
 
                     <TextView

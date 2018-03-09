@@ -21,18 +21,20 @@ public class Config {
     /**
      * APP_KEY
      */
-    public static final String APP_KEY = "1f462eb305a2417c9564f2dfaf89da9c";
-    public static final String WX_APPID = "";
-
-    /**
-     * 服务协议地址
-     */
-    public static final String AGREEMENT_URL = "http://192.168.0.72:8082/";
+    public static final String APP_KEY = "1f462eb305a2417c9564f2dfaf89da9c";//线上
+//    public static final String APP_KEY = "b619b9a416f047ce9ab563b3104317d3";//唐磊
     /**
      * 司机注册地址
      */
     public static final String REGISTER_URL = "http://register.xiaokayun.cn/employ/registerOne/";
-
+    /**
+     * QQ分享id
+     */
+    public static final String QQ_APP_ID = "1106099902";
+    /**
+     * 微信分享id
+     */
+    public static final String WX_APP_ID = "wxd96357cacd5174a1"; //微信app id
     /**
      * MQTT配置
      */
@@ -86,12 +88,5 @@ public class Config {
 
     public static final int FREE_LOC_TIME = 8000;//闲时定位时间 毫秒
     public static final int BUSY_LOC_TIME = 4000;//忙时定位时间 毫秒
-
-
-    //--------------------------QQ,QQ空间分享部分------------------------------
-    public static final String QQ_APP_ID = "1106099902";
-
-    public static final String WX_APP_ID = "wxd96357cacd5174a1"; //微信app id
-
 
 }

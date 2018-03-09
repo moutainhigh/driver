@@ -47,4 +47,29 @@ public class MultipleOrder extends BaseOrder implements Serializable, MultiItemE
     public int getItemType() {
         return viewType;
     }
+
+    @Override
+    public String toString() {
+        return "MultipleOrder{" +
+                "orderId=" + orderId +
+                ", orderDetailType='" + orderDetailType + '\'' +
+                ", orderType='" + orderType + '\'' +
+                ", orderTime=" + orderTime +
+                ", isBookOrder=" + isBookOrder +
+                ", orderStatus=" + orderStatus +
+                ", companyId=" + companyId +
+                ", startPlace='" + startPlace + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", countTime=" + countTime +
+                ", endPlace='" + endPlace + '\'' +
+                ", orderNumber='" + orderNumber + '\'' +
+                ", addresses=" + addresses +
+                ", passengerId=" + passengerId +
+                ", passengerName='" + passengerName + '\'' +
+                ", viewType=" + viewType +
+                ", passengerPhone='" + passengerPhone + '\'' +
+                ", orderMoney=" + orderMoney +
+                ", baoxiaoStatus=" + baoxiaoStatus +
+                '}';
+    }
 }

@@ -129,7 +129,7 @@ public enum ErrCode {
     /**
      * 数据不匹配
      */
-    NOT_MATCH(20032, "数据不匹配"),
+    NOT_MATCH(20032, "数据已更新"),
     /**
      * 用户id无效
      */
@@ -390,7 +390,7 @@ public enum ErrCode {
     /**
      * 未知错误
      */
-    UNKNOW_ERROR(-1, "未知错误"),
+    UNKNOW_ERROR(-1, "您的网络出小差了"),
 
     /**
      * 缓存添加失败

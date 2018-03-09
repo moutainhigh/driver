@@ -77,7 +77,7 @@ public class EvaActivity extends RxBaseActivity {
         star_five_number = findViewById(R.id.star_five_number);
 
         getEva();
-//        ratingBar.setStarMark(4.4f);
+//        ratingBar.setStarMark(0f);
 //
 //        tagContainerLayout.removeAllTags();
 //        tagContainerLayout.addTag("长得帅");

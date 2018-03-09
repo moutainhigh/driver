@@ -23,6 +23,7 @@ import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.personal.McService;
 import com.easymi.personal.result.AnnResult;
 import com.easymi.personal.result.ArticleResult;
@@ -163,7 +164,7 @@ public class ArticleActivity extends RxBaseActivity implements View.OnClickListe
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
         Observable<ArticleResult> observable = api
-                .getArticle(Config.APP_KEY, articleId)
+                .getArticleById(Config.APP_KEY, articleId)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -196,7 +197,8 @@ public class ArticleActivity extends RxBaseActivity implements View.OnClickListe
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
         Observable<ArticleResult> observable = api
-                .getArticle(Config.APP_KEY, alias)
+                .getArticle(Config.APP_KEY, alias,
+                        EmUtil.getEmployInfo() == null ? null : EmUtil.getEmployInfo().company_id)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

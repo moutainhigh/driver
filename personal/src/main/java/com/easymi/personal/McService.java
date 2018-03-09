@@ -89,7 +89,8 @@ public interface McService {
      */
     @GET("driver/api/v1/articlebyalias")
     Observable<ArticleResult> getArticle(@Query("app_key") String appKey,
-                                         @Query("alias") String alias);
+                                         @Query("alias") String alias,
+                                         @Query("companyId") Long companyId);
 
     /**
      * 反馈
@@ -336,28 +337,30 @@ public interface McService {
 
     /**
      * 根据业务类型id查询子菜单
+     *
      * @param appKey
      * @param companyId
      * @param page
      * @param limit
-     * @param cateId 代驾：2
+     * @param cateId    代驾：2
      * @return
      */
     @GET("/driver/api/v1/articles")
-    Observable<HelpMenuResult> getHelpeSubMenu(@Query("app_key")String appKey,
-                                               @Query("company_id")Long companyId,
-                                               @Query("page")Integer page,
-                                               @Query("limit")Integer limit,
-                                               @Query("category_id")Long cateId);
+    Observable<HelpMenuResult> getHelpeSubMenu(@Query("app_key") String appKey,
+                                               @Query("company_id") Long companyId,
+                                               @Query("page") Integer page,
+                                               @Query("limit") Integer limit,
+                                               @Query("category_id") Long cateId);
 
     /**
      * 根据文章id查询文章
+     *
      * @param appKey
      * @param id
      * @return
      */
     @GET("/driver/api/v1/article")
-    Observable<ArticleResult> getArticle(@Query("app_key") String appKey,
+    Observable<ArticleResult> getArticleById(@Query("app_key") String appKey,
                                          @Query("id") Long id);
 
     /**

@@ -10,6 +10,7 @@ import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
@@ -52,7 +53,8 @@ public class TixianRuleActivity extends RxBaseActivity {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
         Observable<ArticleResult> observable = api
-                .getArticle(Config.APP_KEY, alias)
+                .getArticle(Config.APP_KEY, alias,
+                        EmUtil.getEmployInfo() == null ? null : EmUtil.getEmployInfo().company_id)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

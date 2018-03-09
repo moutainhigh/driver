@@ -163,7 +163,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
         super.onNewIntent(intent);
         MultipleOrder multipleOrder = (MultipleOrder) intent.getSerializableExtra("order");
         multipleOrders.add(multipleOrder);
-        buildFragments(showIngOrder, false);//添加一个fragment
+        buildFragments(multipleOrder, false);//添加一个fragment
         adapter.setData(fragments);
         initIndicator();
     }
@@ -454,6 +454,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
     private void buildFragments(MultipleOrder order, boolean showing) {
         try {
             if (order.orderType.equals(Config.DAIJIA)) {
+                order.orderTime = order.orderTime * 1000;
                 Class clazz = Class.forName("com.easymi.daijia.fragment.grab.DJGrabFragment");
                 Fragment fragment = (Fragment) clazz.newInstance();
                 Bundle bundle = new Bundle();

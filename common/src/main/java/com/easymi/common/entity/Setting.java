@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class Setting {
-    @SerializedName("is_paid_balance")
+    @SerializedName("is_paid")
     public int isPaid;//代付（1开启，2关闭)
 
     @SerializedName("is_expenses")

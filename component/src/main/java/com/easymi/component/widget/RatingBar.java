@@ -19,6 +19,8 @@ import com.easymi.component.R;
  */
 public class RatingBar extends View {
 
+    private float MIN_MARK = 0;
+
     private int starDistance = 0; //星星间距
     private int starCount = 5;  //星星个数
     private int starSize;     //星星高度大小，星星一般正方形，宽度等于高度
@@ -69,6 +71,10 @@ public class RatingBar extends View {
         this.integerMark = integerMark;
     }
 
+    public void setMinMark(float minMark) {
+        this.MIN_MARK = minMark;
+    }
+
     /**
      * 设置显示的星星的分数
      *
@@ -88,10 +94,10 @@ public class RatingBar extends View {
             starMark = Math.round(mark * 10) * 1.0f / 10;
         }
 
-        if (this.onStarChangeListener != null) {
-            this.onStarChangeListener.onStarChange(starMark);  //调用监听接口
-        }
-
+//        if (this.onStarChangeListener != null) {
+//            this.onStarChangeListener.onStarChange(starMark);  //调用监听接口
+//        }
+        starMark = starMark < MIN_MARK ? MIN_MARK : starMark;
         invalidate();
     }
 
@@ -182,6 +188,9 @@ public class RatingBar extends View {
                 break;
             }
             case MotionEvent.ACTION_UP: {
+                if (this.onStarChangeListener != null) {
+                    this.onStarChangeListener.onStarChange(starMark);  //调用监听接口
+                }
                 break;
             }
         }

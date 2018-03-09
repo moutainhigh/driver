@@ -31,7 +31,7 @@ public class CreateDJMoldel implements CreateDJContract.Model {
     @Override
     public Observable<PassengerResult> queryPassenger(Long companyId, String companyName, String phone) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .queryPassenger(companyId, companyName, phone, Config.APP_KEY, "batch")
+                .queryPassenger(companyId, companyName, phone, Config.APP_KEY, "supplement")
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

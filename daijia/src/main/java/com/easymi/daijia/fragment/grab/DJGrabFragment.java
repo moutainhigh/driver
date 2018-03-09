@@ -19,6 +19,7 @@ import com.amap.api.services.route.WalkRouteResult;
 import com.easymi.common.entity.Address;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.Log;
 import com.easymi.component.utils.TimeUtil;
 import com.easymi.daijia.R;
 
@@ -33,17 +34,17 @@ import co.lujun.androidtagview.TagContainerLayout;
 
 public class DJGrabFragment extends Fragment {
 
-    TextView start_place;
-    TextView end_place;
-    TextView order_time_text;//即时
-    TagContainerLayout tag_container;
+    private TextView start_place;
+    private TextView end_place;
+    private TextView order_time_text;//即时
+    private TagContainerLayout tag_container;
 
-    TextView order_type;
-    TextView order_time_day;//预约时间 填
-    TextView order_time;//预约时间 分秒
-    TextView order_dis;
+    private TextView order_type;
+    private TextView order_time_day;//预约时间 填
+    private TextView order_time;//预约时间 分秒
+    private TextView order_dis;
 
-    MultipleOrder djOrder;
+    private MultipleOrder djOrder;
 
     @Nullable
     @Override
@@ -60,13 +61,13 @@ public class DJGrabFragment extends Fragment {
         order_dis = view.findViewById(R.id.order_dis);
 
         if (djOrder != null) {
+            Log.e(DJGrabFragment.class.getName(), "showBase");
             showBase();
         }
         return view;
     }
 
     private void showBase() {
-        djOrder.orderTime = djOrder.orderTime * 1000;
         start_place.setText(djOrder.startPlace);
         end_place.setText(djOrder.endPlace);
         order_time_text.setText(djOrder.isBookOrder == 1 ? getString(R.string.appoint) : getString(R.string.jishi));
@@ -110,7 +111,9 @@ public class DJGrabFragment extends Fragment {
 
     @Override
     public void setArguments(Bundle args) {
+//        djOrder = (MultipleOrder) args.getSerializable("order");
         djOrder = (MultipleOrder) args.getSerializable("order");
+        Log.e(DJGrabFragment.class.getName(), djOrder.toString());
     }
 
     RouteSearch routeSearch;
