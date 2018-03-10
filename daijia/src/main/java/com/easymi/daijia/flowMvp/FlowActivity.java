@@ -464,6 +464,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 presenter.routePlanByNavi(getStartAddr().lat, getStartAddr().lng);
             } else {
                 naviCon.setOnClickListener(v -> ToastUtil.showMessage(FlowActivity.this, getString(R.string.illegality_place)));
+                presenter.stopNavi();
+                leftTimeText.setText("");
             }
             LatLngBounds bounds = MapUtil.getBounds(latLngs, lastLatlng);
             aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this) / 2, DensityUtil.getDisplayWidth(this) / 2, 120));
@@ -891,7 +893,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     protected void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
-        presenter.onDestory();
+        presenter.stopNavi();
     }
 
     @Override

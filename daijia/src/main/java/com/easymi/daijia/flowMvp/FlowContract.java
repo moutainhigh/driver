@@ -98,7 +98,7 @@ public interface FlowContract {
 
         void payOrder(Long orderId, String payType);
 
-        void onDestory();
+        void stopNavi();
         //...
     }
 

@@ -109,7 +109,7 @@ public class EvaActivity extends RxBaseActivity {
                 false, result -> {
             if (null != result.driverRate) {
                 rate_text.setText(String.valueOf(result.driverRate.rate));
-                ratingBar.setStarMark(result.driverRate.rate);
+                ratingBar.setStarMark(result.driverRate.rate == 0 ? 5 : result.driverRate.rate);
                 total_number.setText(String.valueOf(result.driverRate.total_finish_count));
 
                 star_one_number.setText(String.valueOf(result.driverRate.star_one) + getString(R.string.number));

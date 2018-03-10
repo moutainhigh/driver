@@ -356,7 +356,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     }
 
     @Override
-    public void onDestory() {
+    public void stopNavi() {
         //since 1.6.0 不再在naviview destroy的时候自动执行AMapNavi.stopNavi();请自行执行
         if (null != mAMapNavi) {
             mAMapNavi.stopNavi();
