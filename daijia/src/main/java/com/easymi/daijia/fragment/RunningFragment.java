@@ -30,6 +30,7 @@ public class RunningFragment extends RxBaseFragment {
         this.bridge = bridge;
     }
 
+    LinearLayout feeCon;
 
     TextView serviceMoneyText;
     TextView distanceText;
@@ -79,6 +80,8 @@ public class RunningFragment extends RxBaseFragment {
 
         refreshImg = getActivity().findViewById(R.id.ic_refresh);
 
+        feeCon = getActivity().findViewById(R.id.fee_con);
+
         serviceMoneyText.setText(djOrder.totalFee + "");
         distanceText.setText(djOrder.distance + "");
         driveTimeText.setText(djOrder.travelTime + "");
@@ -109,11 +112,11 @@ public class RunningFragment extends RxBaseFragment {
             }
         });
 
-        getSupportActivity().findViewById(R.id.change_end_con).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                bridge.changeEnd();
-            }
+        getSupportActivity().findViewById(R.id.change_end_con).setOnClickListener(view -> bridge.changeEnd());
+
+        feeCon.setOnLongClickListener(view -> {
+            bridge.showCheating();
+            return true;
         });
     }
 

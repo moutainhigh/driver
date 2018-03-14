@@ -43,6 +43,9 @@ public class DJOrder implements Serializable {
     @SerializedName("passenger_phone")
     public String passengerPhone;
 
+    @SerializedName("user_phone")
+    public String userPhone;
+
     @SerializedName("company_id")
     public long companyId;
 
@@ -72,6 +75,9 @@ public class DJOrder implements Serializable {
 
     @SerializedName("group_id")
     public String groupId;
+
+    @SerializedName("passenger_tags")
+    public String passengerTags;
 
     public String carNo;//车牌号
 

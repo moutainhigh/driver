@@ -2,6 +2,7 @@ package com.easymi.common.entity;
 
 /**
  * Created by liuzihao on 2017/12/18.
+ *
  * MQTT推送实体类
  */
 

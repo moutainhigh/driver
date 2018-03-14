@@ -1,10 +1,12 @@
 package com.easymi.personal.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -12,6 +14,7 @@ import android.text.TextWatcher;
 import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.easymi.component.Config;
 import com.easymi.component.activity.WebActivity;
+import com.easymi.component.entity.NetWorkUtil;
 import com.easymi.component.utils.Log;
 
 import android.view.View;
@@ -34,6 +37,7 @@ import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.AesUtil;
+import com.easymi.component.utils.PhoneFunc;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
@@ -247,6 +251,28 @@ public class LoginActivity extends RxBaseActivity implements LocObserver {
             e.printStackTrace();
         }
 
+        /**
+         * 系统版本
+         */
+        String systemVersion = android.os.Build.VERSION.RELEASE;
+
+        String model = Build.MODEL;
+
+        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+
+        String operatorName = "未知";
+        String operator = tm.getSimOperator();
+        if (operator != null) {
+            if (operator.equals("46000") || operator.equals("46002")) {
+                operatorName = "中国移动";
+            } else if (operator.equals("46001")) {
+                operatorName = "中国联通";
+            } else if (operator.equals("46003")) {
+                operatorName = "中国电信";
+            }
+        }
+        String netType = NetWorkUtil.getNetWorkTypeName(this);
+
         Observable<LoginResult> observable = api
                 .login(AesUtil.aesEncrypt(name, AesUtil.AAAAA),
                         AesUtil.aesEncrypt(psw, AesUtil.AAAAA),
@@ -255,7 +281,12 @@ public class LoginActivity extends RxBaseActivity implements LocObserver {
                         "android",
                         Build.MODEL,
                         version,
-                        PushServiceFactory.getCloudPushService().getDeviceId())
+                        PushServiceFactory.getCloudPushService().getDeviceId(),
+                        systemVersion, //系统版本号
+                        operatorName, //运营商
+                        netType, //网络类型 3G 4G等
+                        model    //手机品牌
+                )
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -268,8 +299,8 @@ public class LoginActivity extends RxBaseActivity implements LocObserver {
             editor.putBoolean(Config.SP_ISLOGIN, true);
             editor.putLong(Config.SP_DRIVERID, employ.id);
             editor.putString(Config.SP_LOGIN_ACCOUNT, AesUtil.aesEncrypt(name, AesUtil.AAAAA));
-            editor.putBoolean(Config.SP_REMEMBER_PSW,checkboxRemember.isChecked());
-            if(checkboxRemember.isChecked()){
+            editor.putBoolean(Config.SP_REMEMBER_PSW, checkboxRemember.isChecked());
+            if (checkboxRemember.isChecked()) {
 
             }
             editor.putString(Config.SP_LOGIN_PSW, AesUtil.aesEncrypt(psw, AesUtil.AAAAA));

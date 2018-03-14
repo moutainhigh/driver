@@ -14,6 +14,7 @@ import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.R;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.flowMvp.ActFraCommBridge;
+import com.easymi.daijia.widget.CallPhoneDialog;
 
 /**
  * Created by developerLzh on 2017/11/13 0013.
@@ -61,7 +62,7 @@ public class ArriveStartFragment extends RxBaseFragment {
         endPlaceText.setText(djOrder.endPlace);
         startDrive.setOnClickListener(view -> bridge.doStartDrive(startDrive));
         startWait.setOnClickListener(view -> bridge.doStartWait());
-        callPhoneCon.setOnClickListener(view -> PhoneUtil.call(getActivity(), djOrder.passengerPhone));
+        callPhoneCon.setOnClickListener(view -> CallPhoneDialog.callDialog(getActivity(),djOrder));
         getActivity().findViewById(R.id.change_end_con).setOnClickListener(view -> bridge.changeEnd());
     }
 }

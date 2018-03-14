@@ -20,6 +20,7 @@ import com.easymi.common.entity.Address;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
+import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.TimeUtil;
 import com.easymi.daijia.R;
 
@@ -71,8 +72,17 @@ public class DJGrabFragment extends Fragment {
         start_place.setText(djOrder.startPlace);
         end_place.setText(djOrder.endPlace);
         order_time_text.setText(djOrder.isBookOrder == 1 ? getString(R.string.appoint) : getString(R.string.jishi));
-//        tag_container.addTag("不要抽烟");
-//        tag_container.addTag("带手套开车");
+        tag_container.removeAllTags();
+        if(StringUtils.isNotBlank(djOrder.passengerTags)){
+            if(djOrder.passengerTags.contains(",")){
+                String[] tags = djOrder.passengerTags.split(",");
+                for (String tag : tags) {
+                    tag_container.addTag(tag);
+                }
+            } else {
+                tag_container.addTag(djOrder.passengerTags);
+            }
+        }
 
         order_type.setText(djOrder.orderDetailType);
 

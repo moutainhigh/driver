@@ -6,6 +6,8 @@ import java.util.List;
 
 /**
  * Created by developerLzh on 2017/12/21 0021.
+ *
+ * 上行数据的位置信息和订单列表
  */
 
 public class PushDataLoc {

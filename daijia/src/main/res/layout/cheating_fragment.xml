@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <LinearLayout
         android:id="@+id/cheating_con"
@@ -12,6 +14,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/corners_white"
         android:gravity="center_horizontal"
         android:orientation="vertical"
@@ -32,12 +35,21 @@
                 android:textColor="#b5b5b5"
                 android:textSize="16sp" />
 
+            <TextView
+                android:id="@+id/current_mileage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="38.0"
+                android:textSize="16sp"
+                android:textColor="#b5b5b5"/>
+
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -50,7 +62,7 @@
 
             <FrameLayout
                 android:layout_width="200dp"
-                android:layout_height="50dp"
+                android:layout_height="45dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp">
 
@@ -60,23 +72,23 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/gray_ret"
                     android:gravity="center"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:text="0"
                     android:textColor="#aa000000" />
 
-                <View
-                    android:id="@+id/mileage_top"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clickable="true" />
+                <!--<View-->
+                    <!--android:id="@+id/mileage_top"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:clickable="true" />-->
 
-                <TextView
-                    android:id="@+id/current_mileage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textColor="#b5b5b5"
-                    android:textSize="16sp" />
+                <!--<TextView-->
+                    <!--android:id="@+id/current_mileage"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text=""-->
+                    <!--android:textColor="#b5b5b5"-->
+                    <!--android:textSize="16sp" />-->
 
             </FrameLayout>
 
@@ -107,7 +119,7 @@
                 android:id="@+id/current_fee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
+                android:text="78"
                 android:textColor="#b5b5b5"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -128,7 +140,7 @@
 
             <FrameLayout
                 android:layout_width="200dp"
-                android:layout_height="50dp"
+                android:layout_height="45dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp">
 
@@ -138,15 +150,15 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/gray_ret"
                     android:gravity="center"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:text="0"
                     android:textColor="#aa000000" />
 
-                <View
-                    android:id="@+id/fee_top"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clickable="true" />
+                <!--<View-->
+                    <!--android:id="@+id/fee_top"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:clickable="true" />-->
 
             </FrameLayout>
 
@@ -196,25 +208,25 @@
 
     <LinearLayout
         android:id="@+id/change_end_con"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_above="@+id/cheating_con"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:background="@drawable/corners_white_gray_stroke_2"
         android:gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_above="@+id/cheating_con"
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:src="@mipmap/change_end" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
             android:text="@string/change_end"
             android:textSize="8sp" />
     </LinearLayout>

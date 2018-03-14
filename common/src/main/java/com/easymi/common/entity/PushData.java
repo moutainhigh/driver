@@ -5,7 +5,7 @@ import com.easymi.component.entity.BaseEmploy;
 /**
  * Created by liuzihao on 2017/12/18.
  * <p>
- * 司机推送的位置信息
+ * 上行数据最外层
  */
 
 public class PushData {

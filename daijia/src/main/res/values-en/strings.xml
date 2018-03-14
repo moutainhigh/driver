@@ -47,9 +47,9 @@
     <string name="km">km</string>
 
         
-    <string name="current_mileage">current kilometers</string>
+    <string name="current_mileage">current kilometers：</string>
         
-    <string name="current_fee">current cost</string>
+    <string name="current_fee">current cost：</string>
         
     <string name="change_confirm">OK</string>
         

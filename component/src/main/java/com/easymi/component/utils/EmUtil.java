@@ -58,7 +58,8 @@ public class EmUtil {
     private static void stopAllService(Context context) {
 
         Intent locIntent = new Intent(context, LocService.class);
-        context.stopService(locIntent);
+        locIntent.setAction(LocService.STOP_LOC);
+        context.startService(locIntent);
 
         Intent locHelpIntent = new Intent(context, LocationHelperService.class);
         context.stopService(locHelpIntent);

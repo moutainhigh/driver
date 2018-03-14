@@ -42,7 +42,11 @@ public interface McService {
                                   @Field("deviceType") String deviceType,
                                   @Field("deviceInfo") String deviceInfo,
                                   @Field("appversion") String appversion,
-                                  @Field("userId") String userId
+                                  @Field("userId") String userId,
+                                  @Field("device_version") String deviceVersion,
+                                  @Field("device_net") String deviceNet,
+                                  @Field("device_net_type") String deviceNetType,
+                                  @Field("mobile_brand") String mobileBrand
     );
 
     @FormUrlEncoded
@@ -107,7 +111,8 @@ public interface McService {
                                   @Field("user_name") String userName,
                                   @Field("company_id") Long companyId,
                                   @Field("app_key") String appKey,
-                                  @Field("content") String content
+                                  @Field("content") String content,
+                                  @Field("user_type")Integer type
     );
 
     /**
@@ -361,7 +366,7 @@ public interface McService {
      */
     @GET("/driver/api/v1/article")
     Observable<ArticleResult> getArticleById(@Query("app_key") String appKey,
-                                         @Query("id") Long id);
+                                             @Query("id") Long id);
 
     /**
      * 查询单个公告

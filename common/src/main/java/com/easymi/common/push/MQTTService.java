@@ -13,6 +13,7 @@ import android.net.NetworkInfo;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
+import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.trace.TraceInterface;
 import com.easymi.common.trace.TraceReceiver;
 import com.easymi.common.util.BuildPushUtil;
@@ -257,17 +258,17 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 //            }
 //        }
         Log.e("MQTTService", "receiveLoc~~");
-        pushLoc(loc);
+        pushLoc(new BuildPushData(loc));
 //        lastUploadTime = System.currentTimeMillis();
     }
 
-    public static void pushLoc(EmLoc emLoc) {
-        if (emLoc == null) {
+    public static void pushLoc(BuildPushData data) {
+        if (data == null) {
             return;
         }
 
         if (!LocService.needTrace()) {
-            String pushStr = BuildPushUtil.buildPush(emLoc);
+            String pushStr = BuildPushUtil.buildPush(data);
 
             if (client != null && client.isConnected()) {
                 publish(pushStr);
@@ -288,7 +289,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 
         Log.e(TAG, "trace receive");
 
-        String pushStr = BuildPushUtil.buildPush(emLoc);
+        String pushStr = BuildPushUtil.buildPush(new BuildPushData(emLoc));
 
         if (client != null && client.isConnected()) {
             publish(pushStr);

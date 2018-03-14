@@ -1,5 +1,6 @@
 package com.easymi.common.util;
 
+import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.entity.PushBean;
 import com.easymi.common.entity.PushData;
 import com.easymi.common.entity.PushDataLoc;
@@ -24,9 +25,10 @@ import java.util.List;
 
 public class BuildPushUtil {
 
-    public static String buildPush(EmLoc emLoc) {
-
+    public static String buildPush(BuildPushData buildPushData) {
         PushData pushData = new PushData();
+
+        EmLoc emLoc = buildPushData.emLoc;
         pushData.employ = new BaseEmploy().employ2This();
         pushData.calc = new PushDataLoc();
         pushData.calc.lat = emLoc.latitude;
@@ -34,8 +36,8 @@ public class BuildPushUtil {
         pushData.calc.speed = emLoc.speed;
         pushData.calc.locationType = emLoc.locationType;
         pushData.calc.appKey = Config.APP_KEY;
-        pushData.calc.darkCost = 0;
-        pushData.calc.darkMileage = 0;
+        pushData.calc.darkCost = buildPushData.darkCost;
+        pushData.calc.darkMileage = buildPushData.darkMileage;
         pushData.calc.positionTime = System.currentTimeMillis() / 1000;
         pushData.calc.accuracy = (float) emLoc.accuracy;
 
@@ -81,60 +83,5 @@ public class BuildPushUtil {
         Log.e("MQTTService", "push loc data--->" + pushStr);
         return pushStr;
     }
-
-//    public static String buildPush(LatLng emLoc) {
-//
-//        PushData pushData = new PushData();
-//        pushData.employ = new BaseEmploy().employ2This();
-//        pushData.calc = new PushDataLoc();
-//        pushData.calc.lat = emLoc.latitude;
-//        pushData.calc.lng = emLoc.longitude;
-//        pushData.calc.locationType = 1;
-//        pushData.calc.appKey = Config.APP_KEY;
-//        pushData.calc.darkCost = 0;
-//        pushData.calc.darkMileage = 0;
-//        pushData.calc.positionTime = System.currentTimeMillis() / 1000;
-//        pushData.calc.accuracy = 0;
-//
-//        List<PushDataOrder> orderList = new ArrayList<>();
-//        for (DymOrder dymOrder : DymOrder.findAll()) {
-//            PushDataOrder dataOrder = new PushDataOrder();
-//            dataOrder.orderId = dymOrder.orderId;
-//            dataOrder.orderType = dymOrder.orderType;
-//            dataOrder.status = 0;
-//            if (dymOrder.orderType.equals("daijia")) {
-//                if (dymOrder.orderStatus < DJOrderStatus.GOTO_DESTINATION_ORDER) {//出发前
-//                    dataOrder.status = 1;
-//                } else if (dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {//行驶中
-//                    dataOrder.status = 2;
-//                } else if (dymOrder.orderStatus == DJOrderStatus.START_WAIT_ORDER) {//中途等待
-//                    dataOrder.status = 3;
-//                }
-//            }
-//            if (dataOrder.status != 0) {
-//                orderList.add(dataOrder);
-//            }
-//        }
-//        pushData.calc.orderInfo = orderList;
-//
-//        List<PushData> dataList;
-//        //历史未上传的点
-//        String pushCacheStr = FileUtil.readPushCache();
-//        if (StringUtils.isBlank(pushCacheStr)) {
-//            dataList = new ArrayList<>();
-//        } else {
-//            dataList = new Gson().fromJson(pushCacheStr,
-//                    new TypeToken<List<PushData>>() {
-//                    }.getType());
-//        }
-//
-//        dataList.add(pushData);
-//
-//        PushBean<List<PushData>> pushBean = new PushBean<>("gps", dataList);
-//
-//        String pushStr = new Gson().toJson(pushBean);
-//        Log.e("MQTTService", "push trace data--->" + pushStr);
-//        return pushStr;
-//    }
 
 }

@@ -87,6 +87,12 @@ public class DymOrder implements Serializable {
     @SerializedName("pre_pay")
     public double prepay;
 
+    //作弊增加的里程
+    public double addedKm;
+
+    //作弊增加的费用
+    public double addedFee;
+
     public DymOrder(long orderId, String orderType, long passengerId, int orderStatus) {
         this.orderId = orderId;
         this.orderType = orderType;
@@ -124,6 +130,8 @@ public class DymOrder implements Serializable {
         values.put("orderTotalFee", orderTotalFee);
         values.put("orderShouldPay", orderShouldPay);
         values.put("prepay", prepay);
+        values.put("addedKm", addedKm);
+        values.put("addedFee", addedFee);
         /*
          * values.put("age", age); values.put("jialing", jialing);
 		 */
@@ -237,6 +245,8 @@ public class DymOrder implements Serializable {
         orderInfo.orderTotalFee = cursor.getDouble(cursor.getColumnIndex("orderTotalFee"));
         orderInfo.orderShouldPay = cursor.getDouble(cursor.getColumnIndex("orderShouldPay"));
         orderInfo.prepay = cursor.getDouble(cursor.getColumnIndex("prepay"));
+        orderInfo.addedKm = cursor.getDouble(cursor.getColumnIndex("addedKm"));
+        orderInfo.addedFee = cursor.getDouble(cursor.getColumnIndex("addedFee"));
 
         return orderInfo;
     }
@@ -276,6 +286,8 @@ public class DymOrder implements Serializable {
         values.put("orderTotalFee", orderTotalFee);
         values.put("orderShouldPay", orderShouldPay);
         values.put("prepay", prepay);
+        values.put("addedKm", addedKm);
+        values.put("addedFee", addedFee);
         /*
          * values.put("age", age); values.put("jialing", jialing);
 		 */
@@ -296,6 +308,8 @@ public class DymOrder implements Serializable {
         values.put("totalFee", totalFee);
         values.put("distance", distance);
         values.put("disFee", disFee);
+        values.put("addedKm", addedKm);
+        values.put("addedFee", addedFee);
         /*
          * values.put("age", age); values.put("jialing", jialing);
 		 */

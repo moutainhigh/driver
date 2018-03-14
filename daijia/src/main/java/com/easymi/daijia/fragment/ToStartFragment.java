@@ -14,6 +14,7 @@ import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.R;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.flowMvp.ActFraCommBridge;
+import com.easymi.daijia.widget.CallPhoneDialog;
 
 /**
  * Created by developerLzh on 2017/11/13 0013.
@@ -65,7 +66,7 @@ public class ToStartFragment extends RxBaseFragment {
         });
         callPhoneCon.setOnClickListener(view -> {
             Log.e("tag", "onClick");
-            PhoneUtil.call(getActivity(), djOrder.passengerPhone);
+            CallPhoneDialog.callDialog(getActivity(),djOrder);
         });
         changEndCon.setOnClickListener(v -> bridge.changeEnd());
     }

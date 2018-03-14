@@ -225,6 +225,21 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
             }
 
             @Override
+            public void doUploadOrder(double darkCost, int mileage) {
+
+            }
+
+            @Override
+            public void showDrive() {
+
+            }
+
+            @Override
+            public void showCheating() {
+
+            }
+
+            @Override
             public void doConfirmMoney(LoadingButton btn, DymOrder dymOrder) {
                 presenter.arriveDes(btn, dymOrder);
             }
@@ -374,6 +389,11 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
 
     @Override
     public void showReCal() {
+
+    }
+
+    @Override
+    public void showToEndFragment() {
 
     }
 

@@ -41,8 +41,10 @@ import com.amap.api.navi.model.RouteOverlayOptions;
 import com.amap.api.navi.view.RouteOverLay;
 import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.route.DriveRouteResult;
+import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.push.FeeChangeObserver;
 import com.easymi.common.push.HandlePush;
+import com.easymi.common.push.MQTTService;
 import com.easymi.common.trace.TraceInterface;
 import com.easymi.common.trace.TraceReceiver;
 import com.easymi.component.Config;
@@ -77,6 +79,7 @@ import com.easymi.daijia.flowMvp.oldCalc.OldRunningActivity;
 import com.easymi.daijia.flowMvp.oldCalc.OldWaitActivity;
 import com.easymi.daijia.fragment.AcceptFragment;
 import com.easymi.daijia.fragment.ArriveStartFragment;
+import com.easymi.daijia.fragment.CheatingFragment;
 import com.easymi.daijia.fragment.RunningFragment;
 import com.easymi.daijia.fragment.SettleFragmentDialog;
 import com.easymi.daijia.fragment.SlideArriveStartFragment;
@@ -229,10 +232,16 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         orderNumberText.setText(djOrder.orderNumber);
         orderTypeText.setText(djOrder.orderDetailType);
         tagContainerLayout.removeAllTags();
-//        tagContainerLayout.addTag("你好");
-//        tagContainerLayout.addTag("我好");
-//        tagContainerLayout.addTag("大家好");
-//        tagContainerLayout.addTag("广州好迪");
+        if(StringUtils.isNotBlank(djOrder.passengerTags)){
+            if(djOrder.passengerTags.contains(",")){
+                String[] tags = djOrder.passengerTags.split(",");
+                for (String tag : tags) {
+                    tagContainerLayout.addTag(tag);
+                }
+            } else {
+                tagContainerLayout.addTag(djOrder.passengerTags);
+            }
+        }
         drawerFrame.setOnClickListener(view -> {
             if (expandableLayout.isExpanded()) {
                 expandableLayout.collapse();
@@ -346,19 +355,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.replace(R.id.flow_frame, waitFragment);
             transaction.commit();
         } else if (djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);//动态设置为遵循传感器
-            toolbar.setTitle(R.string.status_to_end);
-            runningFragment = new RunningFragment();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("djOrder", DymOrder.findByIDType(orderId, Config.DAIJIA));
-            runningFragment.setArguments(bundle);
-            runningFragment.setBridge(bridge);
-
-            FragmentManager manager = getSupportFragmentManager();
-            FragmentTransaction transaction = manager.beginTransaction();
-            transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
-            transaction.replace(R.id.flow_frame, runningFragment);
-            transaction.commit();
+            showToEndFragment();
         } else if (djOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {
             toolbar.setTitle(R.string.settle);
             runningFragment = new RunningFragment();
@@ -821,6 +818,37 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             }
 
             @Override
+            public void doUploadOrder(double darkCost, int mileage) {
+                BuildPushData pushData = new BuildPushData(EmUtil.getLastLoc());
+                pushData.darkCost = darkCost;
+                pushData.darkMileage = mileage;
+                MQTTService.pushLoc(pushData);
+                showDrive();
+            }
+
+            @Override
+            public void showDrive() {
+                showToEndFragment();
+            }
+
+            @Override
+            public void showCheating() {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//动态设置为竖屏
+                toolbar.setTitle(R.string.status_cheating);
+                CheatingFragment cheatingFragment = new CheatingFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("djOrder", DymOrder.findByIDType(orderId, Config.DAIJIA));
+                cheatingFragment.setArguments(bundle);
+                cheatingFragment.setBridge(bridge);
+
+                FragmentManager manager = getSupportFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
+                transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+                transaction.replace(R.id.flow_frame, cheatingFragment);
+                transaction.commit();
+            }
+
+            @Override
             public void doConfirmMoney(LoadingButton btn, DymOrder dymOrder) {
                 presenter.arriveDes(btn, dymOrder);
             }
@@ -836,6 +864,23 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 settleFragmentDialog.show();
             }
         };
+    }
+
+    @Override
+    public void showToEndFragment() {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);//动态设置为遵循传感器
+        toolbar.setTitle(R.string.status_to_end);
+        runningFragment = new RunningFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("djOrder", DymOrder.findByIDType(orderId, Config.DAIJIA));
+        runningFragment.setArguments(bundle);
+        runningFragment.setBridge(bridge);
+
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+        transaction.replace(R.id.flow_frame, runningFragment);
+        transaction.commit();
     }
 
     @Override

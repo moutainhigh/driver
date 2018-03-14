@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by developerLzh on 2017/12/21 0021.
+ *
+ * 上行数据的订单信息
  */
 
 public class PushDataOrder {

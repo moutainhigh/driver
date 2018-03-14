@@ -49,4 +49,7 @@ public class BaseOrder implements Serializable {
     @SerializedName("wipe_out_type")
     public int baoxiaoStatus;//1未报销，2申请中，3已报销
 
+    @SerializedName("passenger_tags")
+    public String passengerTags;
+
 }

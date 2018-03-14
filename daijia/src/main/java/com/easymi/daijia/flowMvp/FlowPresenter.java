@@ -3,6 +3,7 @@ package com.easymi.daijia.flowMvp;
 import android.content.Context;
 import android.content.Intent;
 
+import com.easymi.common.entity.BuildPushData;
 import com.easymi.component.Config;
 import com.easymi.component.utils.Log;
 
@@ -198,7 +199,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     }
 
     @Override
-    public void findOne(Long orderId,boolean needShowProgress) {
+    public void findOne(Long orderId, boolean needShowProgress) {
         Observable<DJOrderResult> observable = model.findOne(orderId);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, needShowProgress, false, new HaveErrSubscriberListener<DJOrderResult>() {
@@ -339,7 +340,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             dymOrder.orderStatus = djOrder.orderStatus;
             dymOrder.updateStatus();
         }
-        MQTTService.pushLoc(EmUtil.getLastLoc());
+        MQTTService.pushLoc(new BuildPushData(EmUtil.getLastLoc()));
     }
 
     @Override
@@ -565,7 +566,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     }
 
-    public void updateIntervalCameraInfo(AMapNaviCameraInfo info1,AMapNaviCameraInfo info2,int i) {
+    public void updateIntervalCameraInfo(AMapNaviCameraInfo info1, AMapNaviCameraInfo info2, int i) {
 
     }
 

@@ -84,7 +84,8 @@ public class FeedbackActivity extends RxBaseActivity {
                         EmUtil.getEmployInfo().user_name,
                         EmUtil.getEmployInfo().company_id,
                         Config.APP_KEY,
-                        editText.getText().toString())
+                        editText.getText().toString(),
+                        2)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

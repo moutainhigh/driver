@@ -60,6 +60,8 @@ public interface FlowContract {
 
         void showReCal();//重新规划路径开始
 
+        void showToEndFragment();
+
         RxManager getManager();
     }
 

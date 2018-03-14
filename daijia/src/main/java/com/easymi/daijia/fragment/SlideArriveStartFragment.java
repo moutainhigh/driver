@@ -11,6 +11,7 @@ import com.easymi.component.widget.CustomSlideToUnlockView;
 import com.easymi.daijia.R;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.flowMvp.ActFraCommBridge;
+import com.easymi.daijia.widget.CallPhoneDialog;
 
 /**
  * Created by developerLzh on 2017/11/13 0013.
@@ -67,7 +68,7 @@ public class SlideArriveStartFragment extends RxBaseFragment {
                 bridge.doArriveStart();
             }
         });
-        callPhoneCon.setOnClickListener(view -> PhoneUtil.call(getActivity(),djOrder.passengerPhone));
+        callPhoneCon.setOnClickListener(view -> CallPhoneDialog.callDialog(getActivity(),djOrder));
         changeEndCon.setOnClickListener(view -> bridge.changeEnd());
     }
 }

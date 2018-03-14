@@ -160,6 +160,11 @@ public class OldWaitActivity extends RxBaseActivity implements FlowContract.View
     }
 
     @Override
+    public void showToEndFragment() {
+
+    }
+
+    @Override
     public RxManager getManager() {
         return mRxManager;
     }

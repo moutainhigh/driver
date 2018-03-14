@@ -60,4 +60,6 @@
     <string name="empty_hint">这里空空如也</string>
 
     <string name="empty_string"> </string>
+
+    <string name="get_wifi_fail">获取wifi环境下ip地址失败\n</string>
 </resources>
