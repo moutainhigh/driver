@@ -48,7 +48,7 @@ public class LocReceiver extends BroadcastReceiver implements LocSubject {
 
             EmLoc emLoc = new Gson().fromJson(loc, EmLoc.class);
 
-            Log.e("locReceiver", "bearing>>>>" + emLoc.bearing);
+            Log.e("locReceiver", "locReceiver>>>>" + emLoc.toString());
             notifyObserver(emLoc);
         }
 
