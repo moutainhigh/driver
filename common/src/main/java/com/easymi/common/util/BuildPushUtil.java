@@ -63,21 +63,22 @@ public class BuildPushUtil {
         pushData.calc.orderInfo = orderList;
 
         List<PushData> dataList;
-        //历史未上传的点
-        String pushCacheStr = FileUtil.readPushCache();
-        //读取完后删除文件
-        FileUtil.delete("v5driver", "pushCache.json");
-        if (StringUtils.isBlank(pushCacheStr)) {
+        /**
+         * 历史未上传的位置信息
+         */
+        String cacheStr = FileUtil.readPushCache();
+        if (StringUtils.isBlank(cacheStr)) {
             dataList = new ArrayList<>();
         } else {
-            dataList = new Gson().fromJson(pushCacheStr,
+            dataList = new Gson().fromJson(cacheStr,
                     new TypeToken<List<PushData>>() {
                     }.getType());
         }
 
+        //本次的位置信息
         dataList.add(pushData);
 
-        PushBean<List<PushData>> pushBean = new PushBean<>("gps", dataList);
+        PushBean pushBean = new PushBean("gps", dataList);
 
         String pushStr = new Gson().toJson(pushBean);
         Log.e("MQTTService", "push loc data--->" + pushStr);

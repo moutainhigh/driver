@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import com.easymi.common.entity.BuildPushData;
 import com.easymi.component.Config;
+import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.utils.Log;
 
 import com.amap.api.maps.model.LatLng;
@@ -42,6 +43,7 @@ import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.entity.DJOrder;
+import com.easymi.daijia.result.ConsumerResult;
 import com.easymi.daijia.result.DJOrderResult;
 
 import java.util.ArrayList;
@@ -363,6 +365,12 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             mAMapNavi.stopNavi();
             mAMapNavi.destroy();
         }
+    }
+
+    @Override
+    public void getConsumerInfo(Long orderId) {
+        view.getManager().add(model.consumerInfo(orderId).subscribe(new MySubscriber<>(context, true,
+                false, consumerResult -> view.showConsumer(consumerResult.consumerInfo))));
     }
 
     @Override

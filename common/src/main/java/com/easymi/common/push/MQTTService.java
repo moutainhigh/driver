@@ -14,6 +14,8 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 import com.easymi.common.entity.BuildPushData;
+import com.easymi.common.entity.PushBean;
+import com.easymi.common.entity.PushData;
 import com.easymi.common.trace.TraceInterface;
 import com.easymi.common.trace.TraceReceiver;
 import com.easymi.common.util.BuildPushUtil;
@@ -26,6 +28,8 @@ import com.easymi.component.loc.LocService;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.FileUtil;
 import com.easymi.component.utils.Log;
+import com.easymi.component.utils.TimeUtil;
+import com.google.gson.Gson;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
@@ -35,6 +39,9 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * MQTT长连接服务
@@ -73,12 +80,11 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
     }
 
     private void initConn() {
-//        if (true) {
-//            return;
-//        }
         if (client != null && client.isConnected() || isConning) {
             return;
         }
+        // 订阅myTopic话题
+        LocReceiver.getInstance().addObserver(MQTTService.this);
         // 服务器地址（协议+地址+端口号）
         String uri = host;
         client = new MqttAndroidClient(this, uri, clientId);
@@ -140,6 +146,8 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
     public void onDestroy() {
         Log.e(TAG, "onDestroy:");
         try {
+            // 订阅myTopic话题
+            LocReceiver.getInstance().deleteObserver(MQTTService.this);
             unregisterReceiver(traceReceiver);
             if (null != client) {
                 client.disconnect();
@@ -164,6 +172,8 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
                     client.connect(conOpt, null, iMqttActionListener);
                 } catch (MqttException e) {
                     e.printStackTrace();
+                } catch (Exception e){
+                    e.printStackTrace();
                 }
             }
         }
@@ -178,13 +188,13 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
             Log.e(TAG, "连接成功 ");
             isConning = false;
             try {
-                // 订阅myTopic话题
-                LocReceiver.getInstance().addObserver(MQTTService.this);
                 client.subscribe(pullTopic, 1);
             } catch (MqttException e) {
                 e.printStackTrace();
             } catch (NullPointerException e) { //在长时间失去网络连接后再连上mqtt，client有可能因为长时间限制而被回收，所以这里加上catch
                 initConn();
+            } catch (Exception e){
+                e.printStackTrace();
             }
         }
 
@@ -217,7 +227,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 
         @Override
         public void connectionLost(Throwable arg0) {
-            LocReceiver.getInstance().deleteObserver(MQTTService.this);
+//            LocReceiver.getInstance().deleteObserver(MQTTService.this);
             // 失去连接，重连
             doClientConnection();
         }
@@ -268,12 +278,36 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
         }
 
         if (!LocService.needTrace()) {
-            String pushStr = BuildPushUtil.buildPush(data);
-
             if (client != null && client.isConnected()) {
+                String pushStr = BuildPushUtil.buildPush(data);
                 publish(pushStr);
+
+                //上传后删除本地的缓存
+                FileUtil.delete("v5driver", "pushCache.txt");
+
+//                FileUtil.saveLog(XApp.getInstance(),
+//                        TimeUtil.getTime("HH:mm:ss", System.currentTimeMillis()) + ":"
+//                                + "client is enable and start push data : " + pushStr + "\n\n");
             } else {
-                FileUtil.savePushCache(XApp.getInstance(), pushStr);
+
+                String pushStr = BuildPushUtil.buildPush(data);
+
+                PushBean pushBean = new Gson().fromJson(pushStr, PushBean.class);
+                List<PushData> beanList = new ArrayList<>();
+                for (PushData datum : pushBean.data) {
+                    if (datum.calc.orderInfo != null
+                            || datum.calc.orderInfo.size() != 0) {//有订单时才需要保存
+                        beanList.add(datum);
+                    }
+                }
+                if (beanList.size() != 0) {
+                    FileUtil.savePushCache(XApp.getInstance(), new Gson().toJson(beanList));//只保存位置的list
+                }
+
+//                FileUtil.saveLog(XApp.getInstance(),
+//                        TimeUtil.getTime("HH:mm:ss", System.currentTimeMillis()) + ":"
+//                                + "client is disable and start save data : " + new Gson().toJson(pushBean) + "\n\n");
+
                 Intent intent = new Intent(XApp.getInstance(), MQTTService.class);
                 intent.setPackage(XApp.getInstance().getPackageName());
                 XApp.getInstance().startService(intent);//重启推送

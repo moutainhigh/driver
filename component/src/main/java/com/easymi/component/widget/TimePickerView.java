@@ -67,8 +67,10 @@ public class TimePickerView extends LinearLayout {
             posText.setOnClickListener(v -> {
                 dayStr = dayPicker.getDisplayedValues()[dayPicker.getValue()];
                 hourStr = hourPicker.getDisplayedValues()[hourPicker.getValue()];
-                if (minutePicker.getDisplayedValues() != null) {
+                if (minutePicker.getVisibility() == View.VISIBLE && minutePicker.getDisplayedValues() != null) {
                     minStr = minutePicker.getDisplayedValues()[minutePicker.getValue()];
+                } else {
+                    minStr = "";
                 }
                 positiveButtonClickListener.onClick(posText);
             });

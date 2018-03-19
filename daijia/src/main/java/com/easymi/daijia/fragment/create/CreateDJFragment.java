@@ -47,7 +47,7 @@ import static android.app.Activity.RESULT_OK;
 public class CreateDJFragment extends RxLazyFragment implements CreateDJContract.View {
 
     TextView timeText;
-    TextView nameText;
+    EditText nameText;
     EditText phoneText;
     TextView startPlace;
     TextView endPlace;

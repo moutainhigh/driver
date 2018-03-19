@@ -19,10 +19,12 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.db.SqliteHelper;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
+import com.easymi.component.utils.FileUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
 import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -172,11 +174,12 @@ public class LocService extends NotiService implements AMapLocationListener {
     public void onLocationChanged(AMapLocation amapLocation) {
         if (amapLocation != null) {
             if (amapLocation.getErrorCode() == AMapLocation.LOCATION_SUCCESS) {
+
+//                FileUtil.saveLog(this, "loc suc \n\n");
+
                 EmLoc locationInfo = EmLoc.ALocToLoc(amapLocation);
 
-                if(StringUtils.isBlank(locationInfo.poiName)){//只有经纬度信息 没有地理位置信息的就不广播出来，作废
-                    return;
-                }
+                Log.e("locPos", "emLoc>>>>" + locationInfo.toString());
 
                 if (needTrace()) {
                     startTrace();
@@ -184,7 +187,6 @@ public class LocService extends NotiService implements AMapLocationListener {
                     stopTrace();
                 }
 
-                Log.e("locPos", "bearing>>>>" + locationInfo.bearing);
                 Intent intent = new Intent(LocService.this, LocReceiver.class);
                 intent.setAction(LOC_CHANGED);
                 intent.putExtra("locPos", new Gson().toJson(locationInfo));
@@ -195,6 +197,8 @@ public class LocService extends NotiService implements AMapLocationListener {
                 Log.e("AmapError", "location Error, ErrCode:"
                         + amapLocation.getErrorCode() + ", errInfo:"
                         + amapLocation.getErrorInfo());
+
+//                FileUtil.saveLog(this, "loc failed \n\n");
             }
             if (!mIsWifiCloseable) {
                 return;

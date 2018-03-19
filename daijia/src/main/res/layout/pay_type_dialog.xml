@@ -41,86 +41,166 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="20dp"/>
+            android:layout_height="20dp" />
 
-        <RelativeLayout
-            android:id="@+id/balance_con"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp">
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/img_1"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/pay_type_balance" />
+                android:orientation="vertical">
 
-            <TextView
+                <ImageView
+                    android:id="@+id/pay_1_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:src="@mipmap/ic_pay_self" />
+
+                <ImageView
+                    android:id="@+id/pay_2_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:src="@mipmap/pay_type_balance" />
+
+                <ImageView
+                    android:id="@+id/pay_3_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:src="@mipmap/ic_qiandan" />
+
+                <ImageView
+                    android:id="@+id/pay_4_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:src="@mipmap/ic_help_pay" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="18dp"
-                android:layout_toRightOf="@+id/img_1"
-                android:gravity="center_vertical"
-                android:text="@string/cus_balance"
-                android:textColor="@color/text_color_black"
-                android:textSize="18sp" />
+                android:orientation="vertical">
 
-            <CheckBox
-                android:id="@+id/pay_balance"
+                <TextView
+                    android:id="@+id/pay_1_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_toRightOf="@+id/img_1"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="18dp"
+                    android:text="@string/cus_pay"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/pay_2_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_toRightOf="@+id/img_1"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="18dp"
+                    android:text="@string/cus_balance"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/pay_3_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_toRightOf="@+id/img_1"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="18dp"
+                    android:text="@string/qiandan"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/pay_4_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_toRightOf="@+id/img_1"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="18dp"
+                    android:text="@string/help_pay"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0.0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <View
+                    android:id="@+id/pay_1_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp" />
+
+                <View
+                    android:id="@+id/pay_2_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp" />
+
+                <View
+                    android:id="@+id/pay_3_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp" />
+
+                <View
+                    android:id="@+id/pay_4_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp" />
+            </LinearLayout>
+
+            <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="20dp"
-                android:button="@drawable/checkbox_button_bg_selector"
-                android:checked="true"
-                android:clickable="false"
-                android:gravity="center_vertical" />
+                android:orientation="vertical">
 
-        </RelativeLayout>
+                <RadioButton
+                    android:id="@+id/pay_1_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:button="@drawable/checkbox_button_bg_selector"
+                    android:checked="false"
+                    android:gravity="center_vertical" />
+
+                <RadioButton
+                    android:id="@+id/pay_2_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:button="@drawable/checkbox_button_bg_selector"
+                    android:checked="false"
+                    android:gravity="center_vertical" />
+
+                <RadioButton
+                    android:id="@+id/pay_3_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:button="@drawable/checkbox_button_bg_selector"
+                    android:checked="false"
+                    android:gravity="center_vertical" />
+
+                <RadioButton
+                    android:id="@+id/pay_4_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:button="@drawable/checkbox_button_bg_selector"
+                    android:checked="false"
+                    android:gravity="center_vertical" />
+
+            </RadioGroup>
+
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="20dp"/>
-
-        <RelativeLayout
-            android:id="@+id/helppay_con"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp">
-
-            <ImageView
-                android:id="@+id/img_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@mipmap/pay_type_helppay"
-                android:padding="6dp"
-                android:src="@mipmap/ic_dai_text" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="18dp"
-                android:layout_toRightOf="@+id/img_2"
-                android:gravity="center_vertical"
-                android:text="@string/help_pay"
-                android:textColor="@color/text_color_black"
-                android:textSize="18sp" />
-
-            <CheckBox
-                android:id="@+id/pay_help_pay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="20dp"
-                android:clickable="false"
-                android:button="@drawable/checkbox_button_bg_selector"
-                android:gravity="center_vertical" />
-
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="20dp"/>
+            android:layout_height="20dp" />
 
         <Button
             android:id="@+id/pay_button"

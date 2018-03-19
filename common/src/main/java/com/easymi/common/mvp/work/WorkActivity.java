@@ -34,10 +34,12 @@ import com.easymi.common.R;
 import com.easymi.common.activity.CreateActivity;
 import com.easymi.common.adapter.OrderAdapter;
 import com.easymi.common.entity.Announcement;
+import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.entity.Notifity;
 import com.easymi.common.entity.WorkStatistics;
+import com.easymi.common.push.MQTTService;
 import com.easymi.common.receiver.AnnReceiver;
 import com.easymi.common.receiver.CancelOrderReceiver;
 import com.easymi.common.receiver.EmployStatusChangeReceiver;
@@ -309,6 +311,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         listenOrderCon.setVisibility(View.VISIBLE);
         rippleBackground.startRippleAnimation();
         onLineBtn.setVisibility(View.GONE);
+        MQTTService.pushLoc(new BuildPushData(EmUtil.getLastLoc()));
     }
 
     @Override

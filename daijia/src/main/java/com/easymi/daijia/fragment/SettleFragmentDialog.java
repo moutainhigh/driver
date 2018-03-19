@@ -290,6 +290,7 @@ public class SettleFragmentDialog {
         });
 
         feeDetail.setOnClickListener(v -> {
+            bridge.toFeeDetail();
             Intent intent = new Intent(context, FeeDetailActivity.class);
             intent.putExtra("dymOrder", dymOrder);
             intent.putExtra("djOrder", djOrder);

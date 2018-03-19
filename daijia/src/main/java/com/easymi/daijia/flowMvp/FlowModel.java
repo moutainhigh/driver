@@ -7,6 +7,7 @@ import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.daijia.DJApiService;
+import com.easymi.daijia.result.ConsumerResult;
 import com.easymi.daijia.result.DJOrderResult;
 
 import rx.Observable;
@@ -108,6 +109,15 @@ public class FlowModel implements FlowContract.Model {
     public Observable<DJOrderResult> cancelOrder(Long orderId, String remark) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
                 .cancelOrder(orderId, EmUtil.getEmployId(), Config.APP_KEY, remark)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<ConsumerResult> consumerInfo(Long orderId) {
+        return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
+                .getConsumer(orderId, Config.APP_KEY)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

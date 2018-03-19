@@ -4,6 +4,14 @@
     android:layout_height="match_parent"
     android:background="@mipmap/meter_background">
 
+    <ImageView
+        android:onClick="toNavi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/navi_icon_old"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"/>
+
 
     <LinearLayout
         android:layout_width="wrap_content"

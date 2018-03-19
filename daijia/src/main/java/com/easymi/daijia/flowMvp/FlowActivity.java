@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -74,6 +75,7 @@ import com.easymi.daijia.activity.CancelActivity;
 import com.easymi.daijia.activity.ConsumerInfoActivity;
 import com.easymi.daijia.activity.SameOrderActivity;
 import com.easymi.daijia.entity.Address;
+import com.easymi.daijia.entity.ConsumerInfo;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.flowMvp.oldCalc.OldRunningActivity;
 import com.easymi.daijia.flowMvp.oldCalc.OldWaitActivity;
@@ -145,6 +147,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     private boolean fromOld = false;
 
+    private double payMoney;
+
+    private boolean isPauseHideSettle = true;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_flow;
@@ -199,6 +205,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 } else {
                     popWindow.showSame();
                 }
+                if (djOrder.orderStatus == DJOrderStatus.PAIDAN_ORDER) {
+                    popWindow.hideConsumer();
+                } else {
+                    popWindow.showConsumer();
+                }
+
                 popWindow.show(v);
             }
         });
@@ -232,8 +244,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         orderNumberText.setText(djOrder.orderNumber);
         orderTypeText.setText(djOrder.orderDetailType);
         tagContainerLayout.removeAllTags();
-        if(StringUtils.isNotBlank(djOrder.passengerTags)){
-            if(djOrder.passengerTags.contains(",")){
+        if (StringUtils.isNotBlank(djOrder.passengerTags)) {
+            if (djOrder.passengerTags.contains(",")) {
                 String[] tags = djOrder.passengerTags.split(",");
                 for (String tag : tags) {
                     tagContainerLayout.addTag(tag);
@@ -453,7 +465,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 latLngs.add(new LatLng(getEndAddr().lat, getEndAddr().lng));
             }
             LatLngBounds bounds = MapUtil.getBounds(latLngs, lastLatlng);
-            aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this) / 2, DensityUtil.getDisplayWidth(this) / 2, 120));
+            aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(this) / 1.5), (int) (DensityUtil.getDisplayWidth(this) / 1.5), 0));
         } else if (djOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) {
             if (null != getStartAddr()) {
                 latLngs.add(new LatLng(getStartAddr().lat, getStartAddr().lng));
@@ -465,7 +477,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 leftTimeText.setText("");
             }
             LatLngBounds bounds = MapUtil.getBounds(latLngs, lastLatlng);
-            aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this) / 2, DensityUtil.getDisplayWidth(this) / 2, 120));
+            aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(this) / 1.5), (int) (DensityUtil.getDisplayWidth(this) / 1.5), 0));
         } else if (djOrder.orderStatus == DJOrderStatus.ARRIVAL_BOOKPLACE_ORDER
                 || djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER
                 || djOrder.orderStatus == DJOrderStatus.START_WAIT_ORDER
@@ -482,7 +494,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLatlng, 19));
             } else {
                 LatLngBounds bounds = MapUtil.getBounds(latLngs, lastLatlng);
-                aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this) / 2, DensityUtil.getDisplayWidth(this) / 2, 120));
+                aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(this) / 1.5), (int) (DensityUtil.getDisplayWidth(this) / 1.5), 0));
             }
         }
         if (null != getStartAddr()) {
@@ -539,7 +551,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         if (null != routeOverLay) {
             routeOverLay.removeFromMap();
         }
-        aMap.moveCamera(CameraUpdateFactory.changeTilt(0));
+//        aMap.moveCamera(CameraUpdateFactory.changeTilt(0));
         routeOverLay = new RouteOverLay(aMap, path, this);
         routeOverLay.setStartPointBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.yellow_dot_small));
         routeOverLay.setEndPointBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.blue_dot_small));
@@ -567,7 +579,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         drivingRouteOverlay = new DrivingRouteOverlay(this, aMap,
                 result.getPaths().get(0), result.getStartPos()
                 , result.getTargetPos(), null);
-        drivingRouteOverlay.setRouteWidth(50);
+        drivingRouteOverlay.setRouteWidth(0);
         drivingRouteOverlay.setIsColorfulline(false);
         drivingRouteOverlay.setNodeIconVisibility(false);//隐藏转弯的节点
         drivingRouteOverlay.addToMap();
@@ -578,13 +590,13 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         EmLoc lastLoc = EmUtil.getLastLoc();
         latLngs.add(new LatLng(lastLoc.latitude, lastLoc.longitude));
         LatLngBounds bounds = MapUtil.getBounds(latLngs);
-        aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(this) / 2, DensityUtil.getDisplayWidth(this) / 2, 80));
+        aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(this) / 1.5), (int) (DensityUtil.getDisplayWidth(this) / 1.5), 0));
     }
 
     private CusBottomSheetDialog bottomSheetDialog;//支付弹窗
 
     @Override
-    public void showPayType(double money) {
+    public void showPayType(double money, ConsumerInfo consumerInfo) {
 
         if (null != settleFragmentDialog) {
             settleFragmentDialog.dismiss();
@@ -593,42 +605,76 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         bottomSheetDialog = new CusBottomSheetDialog(this);
 
         View view = LayoutInflater.from(this).inflate(R.layout.pay_type_dialog, null, false);
-        CheckBox payBalance = view.findViewById(R.id.pay_balance);
-        CheckBox payHelpPay = view.findViewById(R.id.pay_help_pay);
-        RelativeLayout balanceCon = view.findViewById(R.id.balance_con);
-        RelativeLayout helppayCon = view.findViewById(R.id.helppay_con);
+
+        ImageView pay1Img = view.findViewById(R.id.pay_1_img);
+        ImageView pay2Img = view.findViewById(R.id.pay_2_img);
+        ImageView pay3Img = view.findViewById(R.id.pay_3_img);
+        ImageView pay4Img = view.findViewById(R.id.pay_4_img);
+
+        TextView pay1Text = view.findViewById(R.id.pay_1_text);
+        TextView pay2Text = view.findViewById(R.id.pay_2_text);
+        TextView pay3Text = view.findViewById(R.id.pay_3_text);
+        TextView pay4Text = view.findViewById(R.id.pay_4_text);
+
+        View pay1Empty = view.findViewById(R.id.pay_1_empty);
+        View pay2Empty = view.findViewById(R.id.pay_2_empty);
+        View pay3Empty = view.findViewById(R.id.pay_3_empty);
+        View pay4Empty = view.findViewById(R.id.pay_4_empty);
+
+        RadioButton pay1Btn = view.findViewById(R.id.pay_1_btn);
+        RadioButton pay2Btn = view.findViewById(R.id.pay_2_btn);
+        RadioButton pay3Btn = view.findViewById(R.id.pay_3_btn);
+        RadioButton pay4Btn = view.findViewById(R.id.pay_4_btn);
+
+        if (consumerInfo.consumerBalance < money) {
+            pay2Text.setVisibility(View.GONE);
+            pay2Empty.setVisibility(View.GONE);
+            pay2Btn.setVisibility(View.GONE);
+            pay2Img.setVisibility(View.GONE);
+        }
+        if (consumerInfo.canSign == 0) {
+            pay3Text.setVisibility(View.GONE);
+            pay3Empty.setVisibility(View.GONE);
+            pay3Btn.setVisibility(View.GONE);
+            pay3Img.setVisibility(View.GONE);
+        }
+        boolean canDaifu = XApp.getMyPreferences().getBoolean(Config.SP_DAIFU, true);
+        if (!canDaifu) {
+            pay4Text.setVisibility(View.GONE);
+            pay4Empty.setVisibility(View.GONE);
+            pay4Btn.setVisibility(View.GONE);
+            pay4Img.setVisibility(View.GONE);
+        }
+
+        pay1Btn.setOnClickListener(view13 -> bottomSheetDialog.dismiss());
+        pay1Text.setOnClickListener(view13 -> bottomSheetDialog.dismiss());
+        pay1Empty.setOnClickListener(view13 -> bottomSheetDialog.dismiss());
+        pay1Img.setOnClickListener(view13 -> bottomSheetDialog.dismiss());
+
+        pay2Empty.setOnClickListener(view14 -> pay2Btn.setChecked(true));
+        pay2Text.setOnClickListener(view14 -> pay2Btn.setChecked(true));
+        pay2Img.setOnClickListener(view14 -> pay2Btn.setChecked(true));
+
+        pay3Empty.setOnClickListener(view14 -> pay3Btn.setChecked(true));
+        pay3Text.setOnClickListener(view14 -> pay3Btn.setChecked(true));
+        pay3Img.setOnClickListener(view14 -> pay3Btn.setChecked(true));
+
+        pay4Empty.setOnClickListener(view14 -> pay4Btn.setChecked(true));
+        pay4Text.setOnClickListener(view14 -> pay4Btn.setChecked(true));
+        pay4Img.setOnClickListener(view14 -> pay4Btn.setChecked(true));
+
         Button sure = view.findViewById(R.id.pay_button);
         ImageView close = view.findViewById(R.id.ic_close);
 
         sure.setText(getString(R.string.pay_money) + money + getString(R.string.yuan));
 
-        balanceCon.setOnClickListener(view13 -> payBalance.setChecked(true));
-
-        helppayCon.setOnClickListener(view14 -> payHelpPay.setChecked(true));
-
-        payBalance.setOnCheckedChangeListener((compoundButton, b) -> {
-            if (b) {
-                payHelpPay.setChecked(false);
-            }
-        });
-
-        payHelpPay.setOnCheckedChangeListener((compoundButton, b) -> {
-            if (b) {
-                payBalance.setChecked(false);
-            }
-        });
-
-        boolean canDaifu = XApp.getMyPreferences().getBoolean(Config.SP_DAIFU, true);
-        if (!canDaifu) {
-            helppayCon.setVisibility(View.GONE);
-            payHelpPay.setChecked(false);
-        }
-
         sure.setOnClickListener(view12 -> {
-            if (payBalance.isChecked() || payHelpPay.isChecked()) {
-                if (payHelpPay.isChecked()) {
+            if (pay2Btn.isChecked() || pay3Btn.isChecked() || pay4Btn.isChecked()) {
+                if (pay4Btn.isChecked()) {
                     presenter.payOrder(orderId, "helppay");
-                } else if (payBalance.isChecked()) {
+                } else if (pay3Btn.isChecked()) {
+                    presenter.payOrder(orderId, "sign");
+                } else if (pay2Btn.isChecked()) {
                     presenter.payOrder(orderId, "balance");
                 }
             } else {
@@ -807,8 +853,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 }
                 latLngs.add(lastLatlng);
                 LatLngBounds bounds = MapUtil.getBounds(latLngs);
-                aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.getDisplayWidth(FlowActivity.this) / 2,
-                        DensityUtil.getDisplayWidth(FlowActivity.this) / 2, 120));
+                aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(FlowActivity.this) / 1.5),
+                        (int) (DensityUtil.getDisplayWidth(FlowActivity.this) / 1.5), 0));
             }
 
             @Override
@@ -849,13 +895,19 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             }
 
             @Override
+            public void toFeeDetail() {
+                isPauseHideSettle = false;//跳转到费用详情界面 onPause时就不隐藏settleDialog
+            }
+
+            @Override
             public void doConfirmMoney(LoadingButton btn, DymOrder dymOrder) {
                 presenter.arriveDes(btn, dymOrder);
             }
 
             @Override
             public void doPay(double money) {
-                showPayType(money);
+                payMoney = money;
+                presenter.getConsumerInfo(orderId);
             }
 
             @Override
@@ -881,6 +933,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
         transaction.replace(R.id.flow_frame, runningFragment);
         transaction.commit();
+    }
+
+    @Override
+    public void showConsumer(ConsumerInfo consumerInfo) {
+        showPayType(payMoney, consumerInfo);
     }
 
     @Override
@@ -928,9 +985,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     protected void onPause() {
         super.onPause();
         mapView.onPause();
-        if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
+        if (settleFragmentDialog != null && settleFragmentDialog.isShowing() && isPauseHideSettle) {
             settleFragmentDialog.dismiss();
             settleFragmentDialog = null;
+        } else {
+            isPauseHideSettle = true;
         }
     }
 

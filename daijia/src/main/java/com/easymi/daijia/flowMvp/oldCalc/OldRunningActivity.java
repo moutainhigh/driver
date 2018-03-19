@@ -21,6 +21,7 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.amap.api.maps.model.LatLng;
 import com.amap.api.navi.model.AMapNaviPath;
 import com.amap.api.services.route.DriveRouteResult;
 import com.easymi.common.push.FeeChangeObserver;
@@ -36,6 +37,8 @@ import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusBottomSheetDialog;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.R;
+import com.easymi.daijia.entity.Address;
+import com.easymi.daijia.entity.ConsumerInfo;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.flowMvp.ActFraCommBridge;
 import com.easymi.daijia.flowMvp.FlowActivity;
@@ -67,13 +70,21 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
     private ActFraCommBridge bridge;
 
     SettleFragmentDialog settleFragmentDialog;
+    CusBottomSheetDialog bottomSheetDialog;
+
+    private double payMoney;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {//复写onCreate 因为设置虚拟按键必须在setContentView之前
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        PhoneUtil.setHideVirtualKey(getWindow());//隐藏虚拟按键
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        PhoneUtil.setHideVirtualKey(getWindow());//隐藏虚拟按键
     }
 
     @Override
@@ -240,13 +251,19 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
             }
 
             @Override
+            public void toFeeDetail() {
+
+            }
+
+            @Override
             public void doConfirmMoney(LoadingButton btn, DymOrder dymOrder) {
                 presenter.arriveDes(btn, dymOrder);
             }
 
             @Override
             public void doPay(double money) {
-                showPayType(money);
+                payMoney = money;
+                presenter.getConsumerInfo(orderId);
             }
 
             @Override
@@ -319,48 +336,75 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
     }
 
     @Override
-    public void showPayType(double money) {
+    public void showPayType(double money, ConsumerInfo consumerInfo) {
 
         if (null != settleFragmentDialog) {
             settleFragmentDialog.dismiss();
         }
 
-        CusBottomSheetDialog bottomSheetDialog = new CusBottomSheetDialog(this);
+        bottomSheetDialog = new CusBottomSheetDialog(this);
 
         View view = LayoutInflater.from(this).inflate(R.layout.pay_type_dialog, null, false);
-        CheckBox payBalance = view.findViewById(R.id.pay_balance);
-        CheckBox payHelpPay = view.findViewById(R.id.pay_help_pay);
-        RelativeLayout balanceCon = view.findViewById(R.id.balance_con);
-        RelativeLayout helppayCon = view.findViewById(R.id.helppay_con);
+
+        TextView pay1Text = view.findViewById(R.id.pay_1_text);
+        TextView pay2Text = view.findViewById(R.id.pay_2_text);
+        TextView pay3Text = view.findViewById(R.id.pay_3_text);
+        TextView pay4Text = view.findViewById(R.id.pay_4_text);
+
+        View pay1Empty = view.findViewById(R.id.pay_1_empty);
+        View pay2Empty = view.findViewById(R.id.pay_2_empty);
+        View pay3Empty = view.findViewById(R.id.pay_3_empty);
+        View pay4Empty = view.findViewById(R.id.pay_4_empty);
+
+        RadioButton pay1Btn = view.findViewById(R.id.pay_1_btn);
+        RadioButton pay2Btn = view.findViewById(R.id.pay_2_btn);
+        RadioButton pay3Btn = view.findViewById(R.id.pay_3_btn);
+        RadioButton pay4Btn = view.findViewById(R.id.pay_4_btn);
+
+        if (consumerInfo.consumerBalance < money) {
+            pay2Text.setVisibility(View.GONE);
+            pay2Empty.setVisibility(View.GONE);
+            pay2Btn.setVisibility(View.GONE);
+        }
+        if (consumerInfo.canSign == 0) {
+            pay3Text.setVisibility(View.GONE);
+            pay3Empty.setVisibility(View.GONE);
+            pay3Btn.setVisibility(View.GONE);
+        }
+        boolean canDaifu = XApp.getMyPreferences().getBoolean(Config.SP_DAIFU, true);
+        if (!canDaifu) {
+            pay4Text.setVisibility(View.GONE);
+            pay4Empty.setVisibility(View.GONE);
+            pay4Btn.setVisibility(View.GONE);
+        }
+
+        pay1Btn.setOnClickListener(view13 -> bottomSheetDialog.dismiss());
+        pay1Text.setOnClickListener(view13 -> bottomSheetDialog.dismiss());
+        pay1Empty.setOnClickListener(view13 -> bottomSheetDialog.dismiss());
+
+        pay2Empty.setOnClickListener(view14 -> pay2Btn.setChecked(true));
+        pay2Text.setOnClickListener(view14 -> pay2Btn.setChecked(true));
+
+        pay3Empty.setOnClickListener(view14 -> pay3Btn.setChecked(true));
+        pay3Text.setOnClickListener(view14 -> pay3Btn.setChecked(true));
+
+        pay4Empty.setOnClickListener(view14 -> pay4Btn.setChecked(true));
+        pay4Text.setOnClickListener(view14 -> pay4Btn.setChecked(true));
+
         Button sure = view.findViewById(R.id.pay_button);
         ImageView close = view.findViewById(R.id.ic_close);
 
         sure.setText(getString(R.string.pay_money) + money + getString(R.string.yuan));
 
-        balanceCon.setOnClickListener(view13 -> payBalance.setChecked(true));
-
-        helppayCon.setOnClickListener(view14 -> payHelpPay.setChecked(true));
-
-        payBalance.setOnCheckedChangeListener((compoundButton, b) -> {
-            if (b) {
-                payHelpPay.setChecked(false);
-            }
-        });
-
-        payHelpPay.setOnCheckedChangeListener((compoundButton, b) -> {
-            if (b) {
-                payBalance.setChecked(false);
-            }
-        });
-
         sure.setOnClickListener(view12 -> {
-            if (payBalance.isChecked() || payHelpPay.isChecked()) {
-                if (payHelpPay.isChecked()) {
+            if (pay2Btn.isChecked() || pay3Btn.isChecked() || pay4Btn.isChecked()) {
+                if (pay4Btn.isChecked()) {
                     presenter.payOrder(orderId, "helppay");
-                } else if (payBalance.isChecked()) {
+                } else if (pay3Btn.isChecked()) {
+                    presenter.payOrder(orderId, "sign");
+                } else if (pay2Btn.isChecked()) {
                     presenter.payOrder(orderId, "balance");
                 }
-                bottomSheetDialog.dismiss();
             } else {
                 ToastUtil.showMessage(OldRunningActivity.this, getString(R.string.please_pay_title));
             }
@@ -378,6 +422,9 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
 
     @Override
     public void paySuc() {
+        if (bottomSheetDialog != null && bottomSheetDialog.isShowing()) {
+            bottomSheetDialog.dismiss();
+        }
         ToastUtil.showMessage(this, getString(R.string.pay_suc));
         finish();
     }
@@ -395,6 +442,11 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
     @Override
     public void showToEndFragment() {
 
+    }
+
+    @Override
+    public void showConsumer(ConsumerInfo consumerInfo) {
+        showPayType(payMoney, consumerInfo);
     }
 
     @Override
@@ -426,5 +478,26 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
         } else {//竖屏
             onBackPressed();
         }
+    }
+
+    /**
+     * 导航
+     * @param view
+     */
+    public void toNavi(View view) {
+        presenter.navi(new LatLng(getEndAddr().lat, getEndAddr().lng), getEndAddr().poi, orderId);
+    }
+
+    private Address getEndAddr() {
+        Address endAddr = null;
+        if (djOrder.addresses != null && djOrder.addresses.size() != 0) {
+            for (Address address : djOrder.addresses) {
+                if (address.addrType == 3) {
+                    endAddr = address;
+                    break;
+                }
+            }
+        }
+        return endAddr;
     }
 }

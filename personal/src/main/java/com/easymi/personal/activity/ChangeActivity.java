@@ -9,6 +9,7 @@ import android.widget.EditText;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.entity.DymOrder;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
@@ -64,6 +65,10 @@ public class ChangeActivity extends RxBaseActivity {
 
             String oldPswSave = AesUtil.aesDecrypt(XApp.getMyPreferences().getString(Config.SP_LOGIN_PSW, ""), AesUtil.AAAAA);
 
+            if (DymOrder.findAll().size() != 0) {
+                ToastUtil.showMessage(ChangeActivity.this, getString(R.string.be_busy));
+                return;
+            }
             if (!oldPsw.equals(oldPswSave)) {
                 ToastUtil.showMessage(ChangeActivity.this, getString(R.string.not_same_old));
                 return;
@@ -94,12 +99,13 @@ public class ChangeActivity extends RxBaseActivity {
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, btn, emResult -> {
             ToastUtil.showMessage(ChangeActivity.this, getString(R.string.change_psw_suc));
-            boolean canRemember = XApp.getMyPreferences().getBoolean(Config.SP_REMEMBER_PSW, true);
-            if (canRemember) {
-                XApp.getPreferencesEditor().putString(Config.SP_LOGIN_PSW,
-                        AesUtil.aesEncrypt(editNew.getText().toString(), AesUtil.AAAAA)).apply();
-            }
-            finish();
+//            boolean canRemember = XApp.getMyPreferences().getBoolean(Config.SP_REMEMBER_PSW, true);
+//            if (canRemember) {
+//                XApp.getPreferencesEditor().putString(Config.SP_LOGIN_PSW,
+//                        AesUtil.aesEncrypt(editNew.getText().toString(), AesUtil.AAAAA)).apply();
+//            }
+//            finish();
+            EmUtil.employLogout(ChangeActivity.this);
         })));
     }
 

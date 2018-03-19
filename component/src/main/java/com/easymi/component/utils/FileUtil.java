@@ -344,7 +344,7 @@ public class FileUtil {
         return new String(luaByte, "UTF-8");
     }
 
-    public static void write(Context context, String DirectoryName, String fileName, String content) throws IOException {
+    public static void write(Context context, String DirectoryName, String fileName, String content, boolean append) throws IOException {
         if (!ExistSDCard()) {
             return;
         }
@@ -370,7 +370,7 @@ public class FileUtil {
 
         Log.e("dirName", file.getAbsolutePath());
 
-        FileWriter fileWriter = new FileWriter(file, false);//覆盖以前的
+        FileWriter fileWriter = new FileWriter(file, append);//覆盖以前的
         fileWriter.write(content);
         fileWriter.close();
 
@@ -401,7 +401,17 @@ public class FileUtil {
 
     public static boolean savePushCache(Context context, String content) {
         try {
-            FileUtil.write(context, "v5driver", "pushCache.json", content);
+            FileUtil.write(context, "v5driver", "pushCache.txt", content, false);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean saveLog(Context context, String content) {
+        try {
+            FileUtil.write(context, "v5driver", "Log.txt", content, true);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -411,9 +421,16 @@ public class FileUtil {
 
     public static String readPushCache() {
         try {
-            return readFile(new File(Environment.getExternalStorageState() + "/v5driver" + "/pushCache.json"));
+            File rootDire = Environment.getExternalStorageDirectory();
+            File directory = new File(rootDire, "v5driver");
+            if (directory.exists()) {
+                File file = new File(directory, "pushCache.txt");
+                return readFile(file);
+            }
+            return "";
 
         } catch (IOException e) {
+            Log.e("exception", e.getMessage());
             e.printStackTrace();
             return "";
         }

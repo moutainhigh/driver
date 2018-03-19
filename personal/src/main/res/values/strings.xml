@@ -198,7 +198,7 @@
     <string name="consumer_eva">乘客评价</string>
 
 
-    <string name="all_read">全部已读</string>
+    <string name="all_read">标记为已读</string>
     <string name="click_read">点击查看详情 ></string>
     <string name="announcement">公告</string>
 
@@ -276,6 +276,7 @@
     <string name="day_ago">天前</string>
 
     <string name="help_daijia">代驾</string>
+    <string name="be_busy">您正处于忙碌状态，无法修改密码</string>
 
 
 

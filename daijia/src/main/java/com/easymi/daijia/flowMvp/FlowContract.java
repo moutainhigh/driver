@@ -10,7 +10,9 @@ import com.easymi.component.entity.DymOrder;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.widget.LoadingButton;
+import com.easymi.daijia.entity.ConsumerInfo;
 import com.easymi.daijia.entity.DJOrder;
+import com.easymi.daijia.result.ConsumerResult;
 import com.easymi.daijia.result.DJOrderResult;
 
 import java.util.List;
@@ -52,7 +54,7 @@ public interface FlowContract {
 
         void showPath(DriveRouteResult result);
 
-        void showPayType(double money);
+        void showPayType(double money,ConsumerInfo consumerInfo);
 
         void paySuc();
 
@@ -61,6 +63,8 @@ public interface FlowContract {
         void showReCal();//重新规划路径开始
 
         void showToEndFragment();
+
+        void showConsumer(ConsumerInfo consumerInfo);
 
         RxManager getManager();
     }
@@ -101,6 +105,8 @@ public interface FlowContract {
         void payOrder(Long orderId, String payType);
 
         void stopNavi();
+
+        void getConsumerInfo(Long orderId);
         //...
     }
 
@@ -124,6 +130,8 @@ public interface FlowContract {
         Observable<DJOrderResult> changeEnd(Long orderId, Double lat, Double lng, String address);
 
         Observable<DJOrderResult> cancelOrder(Long orderId, String remark);
+
+        Observable<ConsumerResult> consumerInfo(Long orderId);
 
         Observable<EmResult> payOrder(Long orderId, String payType);
     }

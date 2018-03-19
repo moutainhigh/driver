@@ -121,7 +121,7 @@
                 android:layout_marginLeft="20dp"
                 android:src="@mipmap/ic_create_person" />
 
-            <TextView
+            <EditText
                 android:id="@+id/name_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

@@ -1,16 +1,18 @@
 package com.easymi.common.entity;
 
+import java.util.List;
+
 /**
  * Created by liuzihao on 2017/12/18.
  *
  * MQTT推送实体类
  */
 
-public class PushBean<T> {
+public class PushBean {
     public String msg;
-    public T data;
+    public List<PushData> data;
 
-    public PushBean(String msg, T data) {
+    public PushBean(String msg, List<PushData> data) {
         this.msg = msg;
         this.data = data;
     }

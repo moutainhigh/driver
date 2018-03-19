@@ -121,7 +121,8 @@
     <string name="k_k_meter">公里</string>
     <string name="yuan_coupon">元优惠券</string>
 
-    <string name="help_pay">司机代付</string>
+    <string name="cus_pay">客户在线支付</string>
+    <string name="help_pay">收取现金</string>
     <string name="cus_balance">余额支付</string>
     <string name="qiandan">签单支付</string>
 
@@ -164,6 +165,8 @@
     <string name="consumer_company">客户所属公司</string>
     <string name="consumer_balance">余额</string>
     <string name="can_sign">签单</string>
+
+    <string name="can_sign_consumer">签单客户</string>
 
     <string name="allow">允许</string>
     <string name="not_allow">不允许</string>

@@ -43,13 +43,36 @@ public class LocReceiver extends BroadcastReceiver implements LocSubject {
         if (null != intent && StringUtils.isNotBlank(intent.getAction())
                 && intent.getAction().equals(LocService.LOC_CHANGED)) {
             String loc = intent.getStringExtra("locPos");
-            SharedPreferences.Editor editor = XApp.getPreferencesEditor().putString(Config.SP_LAST_LOC, loc);
-            editor.apply();//保存上次的位置信息 json格式字符创
 
             EmLoc emLoc = new Gson().fromJson(loc, EmLoc.class);
 
-            Log.e("locReceiver", "locReceiver>>>>" + emLoc.toString());
-            notifyObserver(emLoc);
+            //上次的定位信息
+            String lastLocJson = XApp.getMyPreferences().getString(Config.SP_LAST_LOC, "");
+
+            if (StringUtils.isNotBlank(lastLocJson)) { //相当于在没有poi时只保存了位置的经纬度，poi检索没变
+                EmLoc lastLoc = new Gson().fromJson(lastLocJson, EmLoc.class);
+                if (StringUtils.isBlank(emLoc.poiName)) {//此次定位的poi为空时 只更新一些基础位置信息
+                    lastLoc.latitude = emLoc.latitude;
+                    lastLoc.longitude = emLoc.longitude;
+                    lastLoc.accuracy = emLoc.accuracy;
+                    lastLoc.locTime = emLoc.locTime;
+                    lastLoc.altitude = emLoc.altitude;
+                    lastLoc.speed = emLoc.speed;
+                    lastLoc.bearing = emLoc.bearing;
+                    SharedPreferences.Editor editor = XApp.getPreferencesEditor().putString(Config.SP_LAST_LOC, new Gson().toJson(lastLoc));
+                    editor.apply();//保存上次的位置信息 json格式字符创
+                    notifyObserver(lastLoc);
+                } else {
+                    SharedPreferences.Editor editor = XApp.getPreferencesEditor().putString(Config.SP_LAST_LOC, loc);
+                    editor.apply();//保存上次的位置信息 json格式字符创
+                    notifyObserver(emLoc);
+                }
+            } else {
+                SharedPreferences.Editor editor = XApp.getPreferencesEditor().putString(Config.SP_LAST_LOC, loc);
+                editor.apply();//保存上次的位置信息 json格式字符创
+                notifyObserver(emLoc);
+            }
+
         }
 
     }

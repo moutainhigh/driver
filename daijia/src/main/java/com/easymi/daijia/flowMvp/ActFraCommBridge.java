@@ -42,4 +42,6 @@ public interface ActFraCommBridge {
 
     void showCheating();
 
+    void toFeeDetail();
+
 }

@@ -100,6 +100,18 @@ public class FlowPopWindow extends PopupWindow implements View.OnClickListener {
         }
     }
 
+    public void showConsumer(){
+        if (null != consumer) {
+            consumer.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void hideConsumer(){
+        if (null != consumer) {
+            consumer.setVisibility(View.GONE);
+        }
+    }
+
     //文本点击事件监听
     @Override
     public void onClick(View v) {

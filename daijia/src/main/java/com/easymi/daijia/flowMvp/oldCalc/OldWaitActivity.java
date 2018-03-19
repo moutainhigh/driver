@@ -23,6 +23,7 @@ import com.easymi.component.entity.DymOrder;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.R;
+import com.easymi.daijia.entity.ConsumerInfo;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.flowMvp.FlowActivity;
 import com.easymi.daijia.flowMvp.FlowContract;
@@ -140,9 +141,10 @@ public class OldWaitActivity extends RxBaseActivity implements FlowContract.View
     }
 
     @Override
-    public void showPayType(double money) {
+    public void showPayType(double money, ConsumerInfo consumerInfo) {
 
     }
+
 
     @Override
     public void paySuc() {
@@ -161,6 +163,11 @@ public class OldWaitActivity extends RxBaseActivity implements FlowContract.View
 
     @Override
     public void showToEndFragment() {
+
+    }
+
+    @Override
+    public void showConsumer(ConsumerInfo consumerInfo) {
 
     }
 

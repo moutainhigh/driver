@@ -67,7 +67,7 @@ public class ConsumerInfoActivity extends RxBaseActivity {
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, false, consumerResult -> {
             if (consumerResult.consumerInfo != null) {
                 consumer_name.setText(consumerResult.consumerInfo.consumerName);
-                consumer_type.setText(consumerResult.consumerInfo.consumerType == 1 ? getString(R.string.personal_consumer) : getString(R.string.can_sign));
+                consumer_type.setText(consumerResult.consumerInfo.consumerType == 1 ? getString(R.string.personal_consumer) : getString(R.string.can_sign_consumer));
                 order_company.setText(consumerResult.consumerInfo.orderCompany);
                 consumer_company.setText(consumerResult.consumerInfo.consumerCompany);
                 consumer_balance.setText(consumerResult.consumerInfo.consumerBalance + getString(R.string.yuan));
