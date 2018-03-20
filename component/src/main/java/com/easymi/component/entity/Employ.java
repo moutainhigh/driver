@@ -104,10 +104,10 @@ public class Employ extends BaseEmploy implements Parcelable {
                         "user_name", "password", "name", "real_name", "sex",
                         "company_id", "company_name", "phone", "balance", "service_type",
                         "child_type", "bank_name", "bank_card_no", "cash_person_name",
-                        "portrait_path", "score", "status","company_phone"},
+                        "portrait_path", "score", "status", "company_phone"},
                 "id = ?", new String[]{String.valueOf(driverID)},
                 null, null, null);
-        Employ driverInfo = null;
+        Employ driverInfo = new Employ();
         try {
             if (cursor.moveToFirst()) {
                 driverInfo = new Employ();

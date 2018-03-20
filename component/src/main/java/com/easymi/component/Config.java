@@ -17,11 +17,12 @@ public class Config {
      * 图片服务器地址
      */
     public static final String IMG_SERVER = "https://assets.xiaokayun.cn/";
-    public static final String IMG_PATH = "?imageView2/1/w/10/h/10/format/webp/q/75|imageslim";
+    //    public static final String IMG_PATH = "?imageView2/1/w/10/h/10/format/webp/q/75|imageslim";
+    public static final String IMG_PATH = "";
     /**
      * APP_KEY
      */
-    public static final String APP_KEY = "1f462eb305a2417c9564f2dfaf89da9c";//线上
+    public static final String APP_KEY = "4aea5f7368b0461395eeda353337a24c";//线上
 //    public static final String APP_KEY = "b619b9a416f047ce9ab563b3104317d3";//唐磊
     /**
      * 司机注册地址

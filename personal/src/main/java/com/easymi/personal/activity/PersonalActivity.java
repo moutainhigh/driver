@@ -68,7 +68,7 @@ public class PersonalActivity extends RxBaseActivity {
         if (employ != null) {
             driverName.setText(employ.real_name);
             userName.setText(employ.user_name);
-            driverScore.setText(String.valueOf(employ.score));
+            driverScore.setText(String.valueOf(employ.score == 0 ? 5.0 : employ.score));
             if (StringUtils.isNotBlank(employ.portrait_path)) {
                 RequestOptions options = new RequestOptions()
                         .centerCrop()
