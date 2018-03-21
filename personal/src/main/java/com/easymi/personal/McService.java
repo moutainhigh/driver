@@ -112,7 +112,8 @@ public interface McService {
                                   @Field("company_id") Long companyId,
                                   @Field("app_key") String appKey,
                                   @Field("content") String content,
-                                  @Field("user_type")Integer type
+                                  @Field("user_type")Integer type,
+                                  @Field("phone")String phone
     );
 
     /**
