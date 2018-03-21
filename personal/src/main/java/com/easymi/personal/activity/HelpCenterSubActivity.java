@@ -75,7 +75,7 @@ public class HelpCenterSubActivity extends RxBaseActivity {
                 .observeOn(AndroidSchedulers.mainThread());
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, false, helpMenuResult -> {
-            if (null != helpMenuResult) {
+            if (null != helpMenuResult && helpMenuResult.menus != null) {
                 helpMenuList = helpMenuResult.menus;
                 adapter.setMenus(helpMenuList);
             }

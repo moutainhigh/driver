@@ -52,10 +52,7 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
     @Override
     public void onBindViewHolder(Holder holder, int position) {
         BaseOrder baseOrder = baseOrders.get(position);
-        String typeStr = "";
-        if (baseOrder.orderType.equals(Config.DAIJIA)) {
-            typeStr = context.getString(R.string.create_daijia);
-        }
+        String typeStr = baseOrder.orderDetailType;
         holder.orderType.setText(typeStr);
         holder.orderEndPlace.setText(baseOrder.endPlace);
         holder.orderStartPlace.setText(baseOrder.startPlace);
