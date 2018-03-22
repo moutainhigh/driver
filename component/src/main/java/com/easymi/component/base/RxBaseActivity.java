@@ -14,6 +14,7 @@ import com.easymi.component.app.ActManager;
 import com.easymi.component.receiver.GpsReceiver;
 import com.easymi.component.receiver.NetWorkChangeReceiver;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.swipeback.BGASwipeBackHelper;
 import com.easymi.component.utils.NetUtil;
 import com.easymi.component.utils.PhoneFunc;
 import com.easymi.component.utils.ToastUtil;
@@ -28,16 +29,23 @@ import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
  * <p/>
  * Activity基类
  */
-public abstract class RxBaseActivity extends RxAppCompatActivity implements GpsReceiver.OnGpsStatusChangeListener, NetWorkChangeReceiver.OnNetChange {
+public abstract class RxBaseActivity extends RxAppCompatActivity implements
+        GpsReceiver.OnGpsStatusChangeListener,
+        NetWorkChangeReceiver.OnNetChange{
 
     protected RxManager mRxManager;
     private GpsReceiver gpsReceiver;
 
     private NetWorkChangeReceiver netChangeReceiver;
 
+//    protected BGASwipeBackHelper mSwipeBackHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // 「必须在 Application 的 onCreate 方法中执行 BGASwipeBackHelper.init 来初始化滑动返回」
+        // 在 super.onCreate(savedInstanceState) 之前调用该方法
+//        initSwipeBackFinish();
         super.onCreate(savedInstanceState);
         mRxManager = new RxManager();
         ActManager.getInstance().addActivity(this);

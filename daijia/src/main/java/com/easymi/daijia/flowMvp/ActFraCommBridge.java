@@ -36,7 +36,7 @@ public interface ActFraCommBridge {
 
     void doRefresh();
 
-    void doUploadOrder(double darkCost,int mileage);
+    void doUploadOrder();
 
     void showDrive();
 

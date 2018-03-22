@@ -250,7 +250,7 @@ public class WorkPresenter implements WorkContract.Presenter {
     public void queryStatis() {
         long driverId = EmUtil.getEmployId();
         int driverStatus = 2;
-        if (EmUtil.getEmployInfo().status.equals(EmployStatus.ONLINE)) {
+        if (EmUtil.getEmployInfo() != null && EmUtil.getEmployInfo().status.equals(EmployStatus.ONLINE)) {
             driverStatus = 1;
         }
         String nowDate = TimeUtil.getTime("yyyy-MM-dd", System.currentTimeMillis());

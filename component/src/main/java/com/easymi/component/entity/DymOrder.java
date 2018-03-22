@@ -88,10 +88,10 @@ public class DymOrder implements Serializable {
     public double prepay;
 
     //作弊增加的里程
-    public double addedKm;
+    public int addedKm; //数据源来自于本地调价 不会来自后端
 
     //作弊增加的费用
-    public double addedFee;
+    public double addedFee;//数据源来自于本地调价 不会来自后端
 
     public DymOrder(long orderId, String orderType, long passengerId, int orderStatus) {
         this.orderId = orderId;
@@ -105,6 +105,8 @@ public class DymOrder implements Serializable {
 
     /**
      * 保存数据
+     *
+     * 这里不保存作弊的公里数和费用
      */
     public boolean save() {
         SqliteHelper helper = SqliteHelper.getInstance();
@@ -130,12 +132,28 @@ public class DymOrder implements Serializable {
         values.put("orderTotalFee", orderTotalFee);
         values.put("orderShouldPay", orderShouldPay);
         values.put("prepay", prepay);
-        values.put("addedKm", addedKm);
-        values.put("addedFee", addedFee);
+//        values.put("addedKm", addedKm);
+//        values.put("addedFee", addedFee);
         /*
          * values.put("age", age); values.put("jialing", jialing);
 		 */
         boolean flag = db.insert("t_dyminfo", null, values) != -1;
+        return flag;
+    }
+
+    /**
+     * 更新调价费用
+     * @return
+     */
+    public boolean updateCheating(){
+        SqliteHelper helper = SqliteHelper.getInstance();
+        SQLiteDatabase db = helper.openSqliteDatabase();
+        ContentValues values = new ContentValues();
+        values.put("addedKm", addedKm);
+        values.put("addedFee", addedFee);
+
+        boolean flag = db.update("t_dyminfo", values, " id = ? ",
+                new String[]{String.valueOf(id)}) == 1;
         return flag;
     }
 
@@ -245,7 +263,7 @@ public class DymOrder implements Serializable {
         orderInfo.orderTotalFee = cursor.getDouble(cursor.getColumnIndex("orderTotalFee"));
         orderInfo.orderShouldPay = cursor.getDouble(cursor.getColumnIndex("orderShouldPay"));
         orderInfo.prepay = cursor.getDouble(cursor.getColumnIndex("prepay"));
-        orderInfo.addedKm = cursor.getDouble(cursor.getColumnIndex("addedKm"));
+        orderInfo.addedKm = cursor.getInt(cursor.getColumnIndex("addedKm"));
         orderInfo.addedFee = cursor.getDouble(cursor.getColumnIndex("addedFee"));
 
         return orderInfo;
@@ -286,8 +304,8 @@ public class DymOrder implements Serializable {
         values.put("orderTotalFee", orderTotalFee);
         values.put("orderShouldPay", orderShouldPay);
         values.put("prepay", prepay);
-        values.put("addedKm", addedKm);
-        values.put("addedFee", addedFee);
+//        values.put("addedKm", addedKm);
+//        values.put("addedFee", addedFee);
         /*
          * values.put("age", age); values.put("jialing", jialing);
 		 */
@@ -308,8 +326,8 @@ public class DymOrder implements Serializable {
         values.put("totalFee", totalFee);
         values.put("distance", distance);
         values.put("disFee", disFee);
-        values.put("addedKm", addedKm);
-        values.put("addedFee", addedFee);
+//        values.put("addedKm", addedKm);
+//        values.put("addedFee", addedFee);
         /*
          * values.put("age", age); values.put("jialing", jialing);
 		 */

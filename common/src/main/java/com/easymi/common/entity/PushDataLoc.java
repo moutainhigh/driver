@@ -17,11 +17,11 @@ public class PushDataLoc {
     @SerializedName("app_key")
     public String appKey;
 
-    @SerializedName("dark_cost")
-    public double darkCost;
-
-    @SerializedName("dark_mileage")
-    public int darkMileage;
+//    @SerializedName("dark_cost")
+//    public double darkCost;
+//
+//    @SerializedName("dark_mileage")
+//    public int darkMileage;
 
     @SerializedName("position_time")
     public long positionTime;

@@ -15,6 +15,4 @@ public class BuildPushData {
     }
 
     public EmLoc emLoc;
-    public double darkCost;//暗加价
-    public int darkMileage;//暗加里程
 }

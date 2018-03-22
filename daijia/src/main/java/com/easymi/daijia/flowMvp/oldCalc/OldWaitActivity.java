@@ -205,6 +205,8 @@ public class OldWaitActivity extends RxBaseActivity implements FlowContract.View
         // 屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+//        mSwipeBackHelper.setSwipeBackEnable(false);//横屏界面不允许侧滑返回
+
         orderId = getIntent().getLongExtra("orderId", -1);
 
         forceOre = XApp.getMyPreferences().getBoolean(Config.SP_ALWAYS_OREN, false);

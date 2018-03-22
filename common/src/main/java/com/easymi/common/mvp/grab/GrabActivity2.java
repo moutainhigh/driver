@@ -112,6 +112,8 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
             return;
         }
 
+//        mSwipeBackHelper.setSwipeBackEnable(false);//抢单界面不允许侧滑返回
+
         fragments = new ArrayList<>();
 
         presenter = new GrabPresenter(this, this);

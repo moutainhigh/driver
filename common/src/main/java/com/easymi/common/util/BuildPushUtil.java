@@ -36,8 +36,8 @@ public class BuildPushUtil {
         pushData.calc.speed = emLoc.speed;
         pushData.calc.locationType = emLoc.locationType;
         pushData.calc.appKey = Config.APP_KEY;
-        pushData.calc.darkCost = buildPushData.darkCost;
-        pushData.calc.darkMileage = buildPushData.darkMileage;
+//        pushData.calc.darkCost = buildPushData.darkCost;
+//        pushData.calc.darkMileage = buildPushData.darkMileage;
         pushData.calc.positionTime = System.currentTimeMillis() / 1000;
         pushData.calc.accuracy = (float) emLoc.accuracy;
 
@@ -47,6 +47,8 @@ public class BuildPushUtil {
             dataOrder.orderId = dymOrder.orderId;
             dataOrder.orderType = dymOrder.orderType;
             dataOrder.status = 0;
+            dataOrder.addedKm = dymOrder.addedKm;
+            dataOrder.addedFee = dymOrder.addedFee;
             if (dymOrder.orderType.equals("daijia")) {
                 if (dymOrder.orderStatus < DJOrderStatus.GOTO_DESTINATION_ORDER) {//出发前
                     dataOrder.status = 1;

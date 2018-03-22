@@ -15,6 +15,14 @@ public class PushDataOrder {
     @SerializedName("order_type")
     public String orderType;
 
+    //作弊增加的里程
+    @SerializedName("dark_mileage")
+    public int addedKm; //数据源来自于本地调价 不会来自后端
+
+    //作弊增加的费用
+    @SerializedName("dark_cost")
+    public double addedFee;//数据源来自于本地调价 不会来自后端
+
 
     public int status;//订单状态(出发前1，行驶中2，等待中3)
 }

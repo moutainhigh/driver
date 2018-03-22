@@ -20,7 +20,10 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.view.KeyCharacterMap;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
@@ -294,6 +297,24 @@ public class PhoneUtil {
             }
         }
         return udid;
+    }
+
+    /**
+     *
+     * @param activity
+     * @return
+     */
+    public static boolean checkDeviceHasNavigationBar(Context activity) {
+        //通过判断设备是否有返回键、菜单键(不是虚拟键,是手机屏幕外的按键)来确定是否有navigation bar
+        boolean hasMenuKey = ViewConfiguration.get(activity)
+                .hasPermanentMenuKey();
+        boolean hasBackKey = KeyCharacterMap
+                .deviceHasKey(KeyEvent.KEYCODE_BACK);
+        if (!hasMenuKey && !hasBackKey) {
+            // 做任何自己需要做的,这个设备有一个导航栏
+            return true;
+        }
+        return false;
     }
 
     /**

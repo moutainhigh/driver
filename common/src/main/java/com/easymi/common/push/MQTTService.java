@@ -152,6 +152,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
             if (null != client) {
                 client.disconnect();
             }
+            client = null;
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -164,20 +165,18 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
      * 连接MQTT服务器
      */
     private void doClientConnection() {
-        if (null != client) {
-            if (!client.isConnected() && isConnectIsNomarl()) {
-                try {
-                    Log.e(TAG, "doClient Conn");
+        try {
+            if (null != client) {
+                if (!client.isConnected() && isConnectIsNomarl()) {
                     isConning = true;
                     client.connect(conOpt, null, iMqttActionListener);
-                } catch (MqttException e) {
-                    e.printStackTrace();
-                } catch (Exception e){
-                    e.printStackTrace();
                 }
             }
+        } catch (MqttException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
     }
 
     // MQTT是否连接成功
@@ -193,7 +192,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
                 e.printStackTrace();
             } catch (NullPointerException e) { //在长时间失去网络连接后再连上mqtt，client有可能因为长时间限制而被回收，所以这里加上catch
                 initConn();
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

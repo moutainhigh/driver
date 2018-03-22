@@ -101,7 +101,7 @@ public class HandlePush implements FeeChangeSubject {
                 bundle.putSerializable("order", order);
                 message.setData(bundle);
                 handler.sendMessage(message);
-            } else if (msg.equals("costInfo")) {//费用信息
+            } else if (msg.equals("costInfo")) { //费用信息
                 long orderId = jb.optJSONObject("data").optLong("OrderId");
                 String orderType = jb.optJSONObject("data").optString("OrderType");
                 DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
@@ -150,7 +150,7 @@ public class HandlePush implements FeeChangeSubject {
                 shake();
                 XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.unbunding));
                 EmUtil.employLogout(XApp.getInstance());
-            } else if (msg.equals("paysuccess")) {//支付成功
+            } else if (msg.equals("finishOrder")) { //支付成功
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("id");
                 order.orderType = jb.optJSONObject("data").optString("business");

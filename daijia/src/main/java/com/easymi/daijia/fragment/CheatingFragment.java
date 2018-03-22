@@ -45,7 +45,7 @@ public class CheatingFragment extends RxBaseFragment {
     private EditText feeEdit;
     private LinearLayout changeEndCon;
 
-    private double addedMileage;
+    private int addedKm;
     private double addedFee;
 
     DecimalFormat decimalFormat = new DecimalFormat("#0.0");
@@ -88,28 +88,39 @@ public class CheatingFragment extends RxBaseFragment {
         changeEndCon = getActivity().findViewById(R.id.change_end_con);
         getActivity().findViewById(R.id.change_end_con).setOnClickListener(view -> bridge.changeEnd());
 
-        currentMileageTxt.setText("" + djOrder.distance);
-        currentFeeTxt.setText("" + djOrder.totalFee);
+        DecimalFormat df1 = new DecimalFormat("#0.0");
+        DecimalFormat df2 = new DecimalFormat("#0.00");
+        currentMileageTxt.setText(df2.format(djOrder.distance - djOrder.addedKm));
+        currentFeeTxt.setText(df1.format(djOrder.totalFee - djOrder.addedFee));
         feeEdit.setText("" + djOrder.addedFee);
         feeEdit.setSelection(feeEdit.getText().toString().length());
         mileageEdit.setText("" + djOrder.addedKm);
         mileageEdit.setSelection(mileageEdit.getText().toString().length());
 
-        getAddedMileage();
+        getaddedKm();
         getAddedFee();
 
         initMileage();
         initFee();
 
-        sureChangeBtn.setOnClickListener(view -> bridge.doUploadOrder(addedFee, (int) addedMileage));
-        cancelChangeBtn.setOnClickListener(view -> bridge.showDrive());
+        sureChangeBtn.setOnClickListener(view -> {
+            djOrder.addedKm = addedKm;
+            djOrder.addedFee = addedFee;
+            djOrder.updateCheating();
+            PhoneUtil.hideKeyboard(getActivity());
+            bridge.doUploadOrder();
+        });
+        cancelChangeBtn.setOnClickListener(view -> {
+            PhoneUtil.hideKeyboard(getActivity());
+            bridge.showDrive();
+        });
 
         changeEndCon.setOnClickListener(view -> bridge.changeEnd());
     }
 
     private void initFee() {
         feeSubBtn.setOnClickListener(view -> {
-            getAddedMileage();
+            getaddedKm();
             if (addedFee >= 1) {
                 addedFee--;
                 feeEdit.setText("" + addedFee);
@@ -117,7 +128,7 @@ public class CheatingFragment extends RxBaseFragment {
             }
         });
         feeAddBtn.setOnClickListener(view -> {
-            getAddedMileage();
+            getaddedKm();
             if (addedFee <= 999) {
                 addedFee++;
                 feeEdit.setText("" + addedFee);
@@ -158,6 +169,8 @@ public class CheatingFragment extends RxBaseFragment {
                         feeEdit.setText("" + 1000);
                         feeEdit.setSelection(4);
                     }
+                } else {
+                    addedFee = 0;
                 }
             }
         });
@@ -165,18 +178,18 @@ public class CheatingFragment extends RxBaseFragment {
 
     private void initMileage() {
         mileageSubBtn.setOnClickListener(view -> {
-            getAddedMileage();
-            if (addedMileage >= 1) {
-                addedMileage--;
-                mileageEdit.setText("" + addedMileage);
+            getaddedKm();
+            if (addedKm >= 1) {
+                addedKm--;
+                mileageEdit.setText("" + addedKm);
                 mileageEdit.setSelection(mileageEdit.getText().toString().length());
             }
         });
         mileageAddBtn.setOnClickListener(view -> {
-            getAddedMileage();
-            if (addedMileage <= 999) {
-                addedMileage++;
-                mileageEdit.setText("" + addedMileage);
+            getaddedKm();
+            if (addedKm <= 999) {
+                addedKm++;
+                mileageEdit.setText("" + addedKm);
                 mileageEdit.setSelection(mileageEdit.getText().toString().length());
             }
         });
@@ -204,16 +217,18 @@ public class CheatingFragment extends RxBaseFragment {
                             }
                         }
                     }
-                    getAddedMileage();
+                    getaddedKm();
 
-                    if (!MathUtil.isDoubleLegal(addedMileage, 1)) {
-                        mileageEdit.setText(decimalFormat.format(addedMileage));
-                        mileageEdit.setSelection(decimalFormat.format(addedMileage).length());
+                    if (!MathUtil.isDoubleLegal(addedKm, 1)) {
+                        mileageEdit.setText(decimalFormat.format(addedKm));
+                        mileageEdit.setSelection(decimalFormat.format(addedKm).length());
                     }
-                    if (addedMileage > 1000) {
+                    if (addedKm > 1000) {
                         mileageEdit.setText("" + 1000);
                         mileageEdit.setSelection(4);
                     }
+                } else {
+                    addedKm = 0;
                 }
             }
         });
@@ -222,16 +237,16 @@ public class CheatingFragment extends RxBaseFragment {
     /**
      * 加的公里数
      */
-    private void getAddedMileage() {
+    private void getaddedKm() {
         String s = mileageEdit.getText().toString();
         try {
-            addedMileage = Double.parseDouble(s);
+            addedKm = Integer.parseInt(s);
         } catch (Exception e) {
-            addedMileage = 0;
+            addedKm = 0;
         } finally {
-            if (addedMileage <= 0) {
+            if (addedKm <= 0) {
                 mileageSubBtn.setEnabled(false);
-            } else if (addedMileage >= 1000) {
+            } else if (addedKm >= 1000) {
                 mileageAddBtn.setEnabled(false);
             } else {
                 mileageSubBtn.setEnabled(true);

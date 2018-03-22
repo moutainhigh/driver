@@ -109,6 +109,8 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
         // 屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+//        mSwipeBackHelper.setSwipeBackEnable(false);//横屏界面不允许侧滑返回
+
         orderId = getIntent().getLongExtra("orderId", -1);
 
         forceOre = XApp.getMyPreferences().getBoolean(Config.SP_ALWAYS_OREN, false);
@@ -236,7 +238,7 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
             }
 
             @Override
-            public void doUploadOrder(double darkCost, int mileage) {
+            public void doUploadOrder() {
 
             }
 

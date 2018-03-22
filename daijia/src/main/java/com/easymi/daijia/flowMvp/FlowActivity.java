@@ -864,10 +864,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             }
 
             @Override
-            public void doUploadOrder(double darkCost, int mileage) {
+            public void doUploadOrder() {
                 BuildPushData pushData = new BuildPushData(EmUtil.getLastLoc());
-                pushData.darkCost = darkCost;
-                pushData.darkMileage = mileage;
                 MQTTService.pushLoc(pushData);
                 showDrive();
             }
