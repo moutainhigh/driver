@@ -23,7 +23,7 @@ public class Config {
      * APP_KEY
      */
     public static final String APP_KEY = "4aea5f7368b0461395eeda353337a24c";//线上
-//    public static final String APP_KEY = "b619b9a416f047ce9ab563b3104317d3";//唐磊
+//    public static final String APP_KEY = "1f462eb305a2417c9564f2dfaf89da9c";//本地
     /**
      * 司机注册地址
      */

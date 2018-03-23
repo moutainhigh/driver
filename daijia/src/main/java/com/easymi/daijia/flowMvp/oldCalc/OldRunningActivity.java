@@ -369,7 +369,7 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
             pay2Empty.setVisibility(View.GONE);
             pay2Btn.setVisibility(View.GONE);
         }
-        if (consumerInfo.canSign == 0) {
+        if (!consumerInfo.canSign) {
             pay3Text.setVisibility(View.GONE);
             pay3Empty.setVisibility(View.GONE);
             pay3Btn.setVisibility(View.GONE);

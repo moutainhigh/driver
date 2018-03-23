@@ -71,7 +71,7 @@ public class ConsumerInfoActivity extends RxBaseActivity {
                 order_company.setText(consumerResult.consumerInfo.orderCompany);
                 consumer_company.setText(consumerResult.consumerInfo.consumerCompany);
                 consumer_balance.setText(consumerResult.consumerInfo.consumerBalance + getString(R.string.yuan));
-                can_sign.setText(consumerResult.consumerInfo.canSign == 1 ? getString(R.string.allow) : getString(R.string.not_allow));
+                can_sign.setText(consumerResult.consumerInfo.canSign ? getString(R.string.allow) : getString(R.string.not_allow));
             }
         })));
     }

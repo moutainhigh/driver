@@ -23,5 +23,5 @@ public class ConsumerInfo {
     public double consumerBalance;
 
     @SerializedName("if_sign")
-    public int canSign;// 0 是不允许 1是允许
+    public boolean canSign;// 0 是不允许 1是允许
 }

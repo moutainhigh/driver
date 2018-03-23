@@ -633,7 +633,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             pay2Btn.setVisibility(View.GONE);
             pay2Img.setVisibility(View.GONE);
         }
-        if (consumerInfo.canSign == 0) {
+        if (!consumerInfo.canSign) {
             pay3Text.setVisibility(View.GONE);
             pay3Empty.setVisibility(View.GONE);
             pay3Btn.setVisibility(View.GONE);

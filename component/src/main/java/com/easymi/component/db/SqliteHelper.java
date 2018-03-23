@@ -67,6 +67,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         createDriverInfoTable(db);
         createDymTable(db);
+        createSettingTable(db);
     }
 
     @Override
