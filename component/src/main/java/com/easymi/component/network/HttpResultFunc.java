@@ -1,6 +1,7 @@
 package com.easymi.component.network;
 
 import com.easymi.component.result.EmResult;
+import com.easymi.component.utils.StringUtils;
 
 import rx.functions.Func1;
 

@@ -17,11 +17,13 @@ import com.easymi.common.CommApiService;
 import com.easymi.common.R;
 import com.easymi.common.entity.Address;
 import com.easymi.common.entity.MultipleOrder;
+import com.easymi.common.entity.Setting;
 import com.easymi.common.mvp.grab.GrabActivity2;
 import com.easymi.common.mvp.work.WorkActivity;
 import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.MultipleOrderResult;
 import com.easymi.common.result.NotitfyResult;
+import com.easymi.common.result.SettingResult;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
 import com.easymi.component.app.XApp;
@@ -167,6 +169,8 @@ public class HandlePush implements FeeChangeSubject {
                 bundle.putSerializable("order", order);
                 message.setData(bundle);
                 handler.sendMessage(message);
+            } else if (msg.equals("setting_change")) {
+                loadSetting();
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -186,6 +190,33 @@ public class HandlePush implements FeeChangeSubject {
                 loadDJOrder(MultipleOrder.orderId, Config.DAIJIA);
             }
         }
+    }
+
+    /**
+     * 查询设置
+     *
+     */
+    private void loadSetting() {
+        Observable<SettingResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .getAppSetting(Config.APP_KEY)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+        ;
+
+        rxManager.add(observable.subscribe(new MySubscriber<>(XApp.getInstance(), false,
+                false, new HaveErrSubscriberListener<SettingResult>() {
+            @Override
+            public void onNext(SettingResult result) {
+                Setting.deleteAll();
+                result.setting.save();
+            }
+
+            @Override
+            public void onError(int code) {
+                rxManager.clear();
+            }
+        })));
     }
 
     private void loadDJOrder(long orderId, String orderType) {

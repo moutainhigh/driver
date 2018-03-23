@@ -43,6 +43,7 @@ import com.amap.api.navi.view.RouteOverLay;
 import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.route.DriveRouteResult;
 import com.easymi.common.entity.BuildPushData;
+import com.easymi.common.entity.Setting;
 import com.easymi.common.push.FeeChangeObserver;
 import com.easymi.common.push.HandlePush;
 import com.easymi.common.push.MQTTService;
@@ -638,7 +639,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             pay3Btn.setVisibility(View.GONE);
             pay3Img.setVisibility(View.GONE);
         }
-        boolean canDaifu = XApp.getMyPreferences().getBoolean(Config.SP_DAIFU, true);
+        boolean canDaifu = Setting.findOne().isPaid == 1;
         if (!canDaifu) {
             pay4Text.setVisibility(View.GONE);
             pay4Empty.setVisibility(View.GONE);

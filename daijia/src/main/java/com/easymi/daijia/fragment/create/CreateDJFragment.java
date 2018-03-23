@@ -24,6 +24,7 @@ import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusBottomSheetDialog;
+import com.easymi.component.widget.TimeDialog;
 import com.easymi.component.widget.TimePickerView;
 import com.easymi.daijia.R;
 import com.easymi.daijia.entity.Budget;
@@ -163,8 +164,6 @@ public class CreateDJFragment extends RxLazyFragment implements CreateDJContract
 
     @Override
     public void init() {
-        day = getString(R.string.today);
-        hourStr = getString(R.string.now);
         timeText.setOnClickListener(view -> showTimePickDialog(timeText));
         initPhoneEdit();
         initPlace();
@@ -186,7 +185,7 @@ public class CreateDJFragment extends RxLazyFragment implements CreateDJContract
 //                return;
 //            }
             presenter.createOrder(passenger.id, passenger.name, passenger.phone,
-                    TimePickerView.getTime(day, hourStr, minStr) / 1000, startPoi.getTitle(),
+                    orderTime == null ? System.currentTimeMillis() / 1000 : orderTime / 1000, startPoi.getTitle(),
                     startPoi.getLatLonPoint().getLatitude(), startPoi.getLatLonPoint().getLongitude(),
                     endPoi == null ? "" : endPoi.getTitle(),
                     endPoi == null ? null : endPoi.getLatLonPoint().getLatitude(),
@@ -269,29 +268,23 @@ public class CreateDJFragment extends RxLazyFragment implements CreateDJContract
         esMoneyCon.setVisibility(View.GONE);
     }
 
-    private String day;
-    private String hourStr;
-    private String minStr;
+    private Long orderTime = null;
 
     @Override
     public void showTimePickDialog(TextView tv) {
-        CusBottomSheetDialog bottomSheetDialog;
-        bottomSheetDialog = new CusBottomSheetDialog(getActivity());
-        TimePickerView timePickerView = new TimePickerView(getActivity());
 
-        timePickerView.setPositiveButton(getString(R.string.confirm), (View v) -> {
-            day = timePickerView.getDayStr();
-            hourStr = timePickerView.getHourStr();
-            minStr = timePickerView.getMinStr();
-            tv.setText(day + hourStr + minStr);
-            bottomSheetDialog.dismiss();
+        TimeDialog dialog = new TimeDialog(getActivity());
+        dialog.setOnTimeSelectListener((time, timeStr) -> {
+            if (timeStr.contains("现在")) {
+                orderTime = null;
+            } else {
+                orderTime = time;
+            }
+            tv.setText(timeStr);
+            dialog.dismiss();
             getBudget();
-        }).setNegativeButton(getString(R.string.cancel), v -> {
-            bottomSheetDialog.dismiss();
         });
-
-        bottomSheetDialog.setContentView(timePickerView);
-        bottomSheetDialog.show();
+        dialog.show();
     }
 
     @Override
@@ -342,6 +335,6 @@ public class CreateDJFragment extends RxLazyFragment implements CreateDJContract
         }
 
         presenter.queryBudget(passenger.id, distance, duration,
-                TimePickerView.getTime(day, hourStr, minStr) / 1000, selectedDJType.id);
+                orderTime == null ? System.currentTimeMillis() / 1000 : orderTime / 1000, selectedDJType.id);
     }
 }

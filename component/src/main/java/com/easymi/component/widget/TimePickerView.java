@@ -150,9 +150,9 @@ public class TimePickerView extends LinearLayout {
 //                minutePicker.setVisibility(View.INVISIBLE);
                 minutePicker.setDisplayedValues(null);
                 String[] m = new String[]{"00", "10", "20", "30", "40", "50"};
+                minutePicker.setDisplayedValues(m);
                 minutePicker.setMaxValue(m.length - 1);
                 minutePicker.setWrapSelectorWheel(false);
-                minutePicker.setDisplayedValues(m);
                 minutePicker.setMinValue(0);
                 return;
             }
@@ -167,8 +167,6 @@ public class TimePickerView extends LinearLayout {
             } else {
                 minutePicker.setValue(0);
             }
-
-
         } else {
             minutePicker.setVisibility(View.VISIBLE);
             minutePicker.setDisplayedValues(minute);
@@ -177,6 +175,7 @@ public class TimePickerView extends LinearLayout {
             minutePicker.setMinValue(0);
             minutePicker.setValue(lastValue + (testMinute + 10) / 10);
         }
+        minutePicker.scrollBy(0, 0);
     }
 
     private void initHour(boolean isFrist) {

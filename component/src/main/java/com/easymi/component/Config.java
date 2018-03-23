@@ -75,8 +75,6 @@ public class Config {
 
     public static final String SP_LAST_SPLASH_TIME = "last_splash_animate";//上次显示动画的时间
 
-    public static final String SP_DAIFU = "can_daifu";//代付
-    public static final String SP_BAOXIAO = "can_baoxiao";//报销
 
     public static final String DAIJIA = "daijia";
 

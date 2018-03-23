@@ -5,6 +5,7 @@ import android.net.ParseException;
 
 import com.easymi.component.R;
 import com.easymi.component.utils.Log;
+import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.LoadingButton;
 import com.google.gson.JsonParseException;
@@ -116,7 +117,12 @@ public class MySubscriber<T> extends Subscriber<T> implements ProgressDismissLis
         } else if (e instanceof JsonParseException || e instanceof JSONException || e instanceof ParseException) {
             ToastUtil.showMessage(context, context.getString(R.string.parse_error));//解析错误
         } else if (e instanceof ApiException) {
-            ToastUtil.showMessage(context, e.getMessage());//服务器定义的错误
+            if (StringUtils.isNotBlank(e.getMessage())) {
+                ToastUtil.showMessage(context, e.getMessage());//服务器定义的错误
+            } else {
+                ToastUtil.showMessage(context, context.getString(R.string.unknown_error));//服务器定义的错误
+            }
+
             if (null != haveErrSubscriberListener) {
                 haveErrSubscriberListener.onError(((ApiException) e).getErrCode());
             }

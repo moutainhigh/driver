@@ -10,6 +10,7 @@ import com.amap.api.navi.AMapNavi;
 import com.amap.api.navi.AMapNaviListener;
 import com.amap.api.navi.AMapNaviView;
 import com.amap.api.navi.AMapNaviViewListener;
+import com.amap.api.navi.enums.AMapNaviRingType;
 import com.amap.api.navi.enums.NaviType;
 import com.amap.api.navi.model.AMapLaneInfo;
 import com.amap.api.navi.model.AMapModelCross;
@@ -349,7 +350,16 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     @Override
     public void onPlayRing(int i) {
-        XApp.getInstance().syntheticVoice("叮咚", false);
+//        XApp.getInstance().syntheticVoice("叮咚", false);
+        if(i == AMapNaviRingType.RING_CAMERA){//（导航状态）高速上通过测速电子眼的提示音
+
+        } else if(i == AMapNaviRingType.RING_EDOG){ // 巡航状态下通过电子狗的提示音
+
+        } else if(i == AMapNaviRingType.RING_REROUTE){//偏航重算的提示音L
+
+        } else if(i == AMapNaviRingType.RING_TURN){ // 马上到达转向路口的提示音
+
+        }
     }
 
     @Override

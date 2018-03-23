@@ -52,7 +52,7 @@
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_height="20dp"
                                 android:background="@drawable/corners_primary"
                                 android:gravity="center"
                                 android:orientation="horizontal"
@@ -72,17 +72,18 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="3dp"
                                     android:text=""
-                                    android:textColor="@color/dark_gray" />
+                                    android:textColor="#77ffffff" />
 
                             </LinearLayout>
 
                             <TextView
                                 android:id="@+id/user_name"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_height="20dp"
                                 android:layout_marginLeft="10dp"
+                                android:gravity="center"
                                 android:text=""
-                                android:textColor="@color/dark_gray"
+                                android:textColor="#77ffffff"
                                 android:textSize="16sp" />
 
                         </LinearLayout>
@@ -96,7 +97,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_gravity="right|bottom"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="19dp"
                     android:layout_marginRight="10dp"
                     android:src="@mipmap/ic_qr_code" />
             </FrameLayout>
@@ -188,9 +189,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:visibility="gone"
                 android:background="@color/white"
-                android:onClick="toRefer">
+                android:onClick="toRefer"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/ic_3"
@@ -223,8 +224,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
-                android:visibility="gone"
-                android:background="@color/dark_gray" />
+                android:background="@color/dark_gray"
+                android:visibility="gone" />
 
             <View
                 android:layout_width="match_parent"

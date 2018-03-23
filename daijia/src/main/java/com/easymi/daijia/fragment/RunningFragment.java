@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.easymi.common.entity.Setting;
 import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.utils.PhoneUtil;
@@ -107,7 +108,7 @@ public class RunningFragment extends RxBaseFragment {
                 FlowActivity.isMapTouched = true;
                 refreshImg.setVisibility(View.VISIBLE);
                 quanlanImg.setImageResource(R.drawable.ic_quan_lan_pressed);
-                quanlanText.setTextColor(getResources().getColor(R.color.colorAccent));
+                quanlanText.setTextColor(getResources().getColor(R.color.color_50b8da));
                 bridge.doQuanlan();
             }
         });
@@ -115,7 +116,10 @@ public class RunningFragment extends RxBaseFragment {
         getSupportActivity().findViewById(R.id.change_end_con).setOnClickListener(view -> bridge.changeEnd());
 
         feeCon.setOnLongClickListener(view -> {
-            bridge.showCheating();
+            boolean canAddPrice = Setting.findOne().isAddPrice == 1;
+            if (canAddPrice) {
+                bridge.showCheating();
+            }
             return true;
         });
     }

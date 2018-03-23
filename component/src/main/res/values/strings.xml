@@ -62,4 +62,6 @@
     <string name="empty_string"> </string>
 
     <string name="get_wifi_fail">获取wifi环境下ip地址失败\n</string>
+
+    <string name="unknown_error">网络出小差了</string>
 </resources>

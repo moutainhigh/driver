@@ -14,6 +14,7 @@ import android.os.Message;
 import com.easymi.common.daemon.DaemonService;
 import com.easymi.common.daemon.JobKeepLiveService;
 import com.easymi.common.entity.MultipleOrder;
+import com.easymi.common.entity.Setting;
 import com.easymi.common.entity.WorkStatistics;
 import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.LoginResult;
@@ -344,12 +345,8 @@ public class WorkPresenter implements WorkContract.Presenter {
         Observable<SettingResult> observable = model.getAppSetting();
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
                 true, result -> {
-
-            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
-            editor.putBoolean(Config.SP_DAIFU, result.setting.isPaid == 1);
-            editor.putBoolean(Config.SP_BAOXIAO, result.setting.isExpenses == 1);
-            editor.apply();
-            view.showDriverStatus();
+            Setting.deleteAll();
+            result.setting.save();
         })));
     }
 }

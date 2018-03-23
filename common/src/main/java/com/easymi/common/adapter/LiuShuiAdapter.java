@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.easymi.common.R;
 import com.easymi.common.activity.BaoxiaoActivity;
+import com.easymi.common.entity.Setting;
 import com.easymi.common.util.DJStatus2Str;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
@@ -89,7 +90,7 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
             });
             holder.orderBaoxiao.setVisibility(View.GONE);
         } else {
-            boolean canBaoxiao = XApp.getMyPreferences().getBoolean(Config.SP_BAOXIAO, true);
+            boolean canBaoxiao = Setting.findOne().isAddPrice == 1;
             if (canBaoxiao) {
                 holder.orderBaoxiao.setVisibility(View.VISIBLE);
             } else {

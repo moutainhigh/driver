@@ -14,15 +14,9 @@ import java.util.List;
 
 public class SqliteHelper extends SQLiteOpenHelper {
 
-    public static final String BLANK = " ";
-
-    public static final String COMMA = ",";
-
-    public static final String DB_DIR = "databases";
-
     public static final String DB_NAME = "data.db";
 
-    private static final int VERSION = 44;
+    private static final int VERSION = 45;
 
     private StringBuffer sqlBuf;
 
@@ -92,6 +86,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
         }
         createDriverInfoTable(db);
         createDymTable(db);
+        createSettingTable(db);
     }
 
     private void createDriverInfoTable(SQLiteDatabase db) {
@@ -148,6 +143,19 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("addedKm").append(" ").append("INTEGER").append(",")
 
                 .append("orderStatus").append(" ").append("INTEGER")
+                .append(");");
+        execCreateTableSQL(db);
+    }
+
+    private void createSettingTable(SQLiteDatabase db) {
+        sqlBuf.append("CREATE TABLE ").append("t_settinginfo").append(" (")
+                .append("id").append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
+                .append("isPaid").append(" ").append("INTEGER").append(",")
+                .append("isExpenses").append(" ").append("INTEGER").append(",")
+                .append("isAddPrice").append(" ").append("INTEGER").append(",")
+                .append("isWorkCar").append(" ").append("INTEGER").append(",")
+
+                .append("workCarChangeOrder").append(" ").append("INTEGER")
                 .append(");");
         execCreateTableSQL(db);
     }

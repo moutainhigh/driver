@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.navi.model.AMapNaviPath;
 import com.amap.api.services.route.DriveRouteResult;
+import com.easymi.common.entity.Setting;
 import com.easymi.common.push.FeeChangeObserver;
 import com.easymi.common.push.HandlePush;
 import com.easymi.component.Config;
@@ -373,7 +374,7 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
             pay3Empty.setVisibility(View.GONE);
             pay3Btn.setVisibility(View.GONE);
         }
-        boolean canDaifu = XApp.getMyPreferences().getBoolean(Config.SP_DAIFU, true);
+        boolean canDaifu = Setting.findOne().isPaid == 1;
         if (!canDaifu) {
             pay4Text.setVisibility(View.GONE);
             pay4Empty.setVisibility(View.GONE);
@@ -484,6 +485,7 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
 
     /**
      * 导航
+     *
      * @param view
      */
     public void toNavi(View view) {

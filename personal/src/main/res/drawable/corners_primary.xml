@@ -7,7 +7,7 @@
     <!-- 绘制弧度-->
     <corners android:radius="3dp" />
 
-    <stroke android:color="#ffffff"
+    <stroke android:color="#77ffffff"
         android:width="0.5dp"/>
 
 </shape>

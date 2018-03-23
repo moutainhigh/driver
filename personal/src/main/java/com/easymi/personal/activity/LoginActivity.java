@@ -54,7 +54,7 @@ import rx.schedulers.Schedulers;
  * Created by developerLzh on 2017/11/3 0003.
  */
 @Route(path = "/personal/LoginActivity")
-public class LoginActivity extends RxBaseActivity implements LocObserver {
+public class LoginActivity extends RxBaseActivity {
 
     LoadingButton loginBtn;
 
@@ -120,8 +120,6 @@ public class LoginActivity extends RxBaseActivity implements LocObserver {
         initEye();
 
         initBox();
-
-        XApp.getInstance().startLocService();
     }
 
     private void initBox() {
@@ -134,18 +132,6 @@ public class LoginActivity extends RxBaseActivity implements LocObserver {
     }
 
     private boolean eyeOn = false;
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        LocReceiver.getInstance().addObserver(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        LocReceiver.getInstance().deleteObserver(this);
-    }
 
     private void initEye() {
         eye.setOnClickListener(view -> {
@@ -312,8 +298,4 @@ public class LoginActivity extends RxBaseActivity implements LocObserver {
         })));
     }
 
-    @Override
-    public void receiveLoc(EmLoc loc) {
-        XApp.getInstance().stopLocService();
-    }
 }
