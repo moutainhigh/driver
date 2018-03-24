@@ -18,7 +18,10 @@ import com.easymi.component.app.ActManager;
 import com.easymi.component.receiver.GpsReceiver;
 import com.easymi.component.receiver.NetWorkChangeReceiver;
 import com.easymi.component.rxmvp.RxManager;
-import com.easymi.component.widget.swipeback.SwipeBackLayout;
+import com.easymi.component.widget.swipeback.ikew.SwipeBackActivityBase;
+import com.easymi.component.widget.swipeback.ikew.SwipeBackActivityHelper;
+import com.easymi.component.widget.swipeback.ikew.Utils;
+import com.easymi.component.widget.swipeback.other.SwipeBackLayout;
 import com.easymi.component.utils.NetUtil;
 import com.easymi.component.utils.PhoneFunc;
 import com.easymi.component.utils.ToastUtil;
@@ -35,17 +38,19 @@ import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
  */
 public abstract class RxBaseActivity extends RxAppCompatActivity implements
         GpsReceiver.OnGpsStatusChangeListener,
-        NetWorkChangeReceiver.OnNetChange, SwipeBackLayout.SwipeBackListener {
+        NetWorkChangeReceiver.OnNetChange, SwipeBackActivityBase {
 
     protected RxManager mRxManager;
     private GpsReceiver gpsReceiver;
 
     private NetWorkChangeReceiver netChangeReceiver;
 
-    private static final SwipeBackLayout.DragEdge DEFAULT_DRAG_EDGE = SwipeBackLayout.DragEdge.LEFT;
+//    private static final SwipeBackLayout.DragEdge DEFAULT_DRAG_EDGE = SwipeBackLayout.DragEdge.LEFT;
+//
+//    protected SwipeBackLayout swipeBackLayout;
+//    private ImageView ivShadow;
 
-    protected SwipeBackLayout swipeBackLayout;
-    private ImageView ivShadow;
+    private SwipeBackActivityHelper mHelper;
 
 
     @Override
@@ -55,14 +60,21 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
         mRxManager = new RxManager();
         ActManager.getInstance().addActivity(this);
         //设置布局内容
-        if (isEnableSwipe()) {
-            setContentView(getContainer());
+//        if (isEnableSwipe()) {
+//            setContentView(getContainer());
+//
+//            View view = LayoutInflater.from(this).inflate(getLayoutId(), null);
+//            swipeBackLayout.addView(view);
+//        } else {
+//            setContentView(getLayoutId());
+//        }
 
-            View view = LayoutInflater.from(this).inflate(getLayoutId(), null);
-            swipeBackLayout.addView(view);
-        } else {
-            setContentView(getLayoutId());
+        if (isEnableSwipe()) {
+            mHelper = new SwipeBackActivityHelper(this);
+            mHelper.onActivityCreate();
         }
+
+        setContentView(getLayoutId());
 
 
         //初始化控件
@@ -72,37 +84,69 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
 
     }
 
-    private View getContainer() {
-        RelativeLayout container = new RelativeLayout(this);
-        swipeBackLayout = new SwipeBackLayout(this);
-        swipeBackLayout.setDragEdge(DEFAULT_DRAG_EDGE);
-        swipeBackLayout.setOnSwipeBackListener(this);
-        ivShadow = new ImageView(this);
-        ivShadow.setBackgroundColor(getResources().getColor(R.color.black_p50));
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-        container.addView(ivShadow, params);
-        container.addView(swipeBackLayout);
-        return container;
-    }
-
-    public abstract boolean isEnableSwipe();
-
-    public void setDragEdge(SwipeBackLayout.DragEdge dragEdge) {
-        swipeBackLayout.setDragEdge(dragEdge);
-    }
-
-    public void setDragDirectMode(SwipeBackLayout.DragDirectMode dragDirectMode) {
-        swipeBackLayout.setDragDirectMode(dragDirectMode);
-    }
-
-    public SwipeBackLayout getSwipeBackLayout() {
-        return swipeBackLayout;
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if (null != mHelper) {
+            mHelper.onPostCreate();
+        }
     }
 
     @Override
-    public void onViewPositionChanged(float fractionAnchor, float fractionScreen) {
-        ivShadow.setAlpha(1 - fractionScreen);
+    public <T extends View> T findViewById(int id) {
+        T v = super.findViewById(id);
+        if (v == null && mHelper != null)
+            return mHelper.findViewById(id);
+        return v;
     }
+
+    @Override
+    public com.easymi.component.widget.swipeback.ikew.SwipeBackLayout getSwipeBackLayout() {
+        return mHelper.getSwipeBackLayout();
+    }
+
+    @Override
+    public void setSwipeBackEnable(boolean enable) {
+        getSwipeBackLayout().setEnableGesture(enable);
+    }
+
+    @Override
+    public void scrollToFinishActivity() {
+        Utils.convertActivityToTranslucent(this);
+        getSwipeBackLayout().scrollToFinishActivity();
+    }
+
+    //    private View getContainer() {
+//        RelativeLayout container = new RelativeLayout(this);
+//        swipeBackLayout = new SwipeBackLayout(this);
+//        swipeBackLayout.setDragEdge(DEFAULT_DRAG_EDGE);
+//        swipeBackLayout.setOnSwipeBackListener(this);
+//        ivShadow = new ImageView(this);
+//        ivShadow.setBackgroundColor(getResources().getColor(R.color.black_p50));
+//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+//        container.addView(ivShadow, params);
+//        container.addView(swipeBackLayout);
+//        return container;
+//    }
+//
+    public abstract boolean isEnableSwipe();
+//
+//    public void setDragEdge(SwipeBackLayout.DragEdge dragEdge) {
+//        swipeBackLayout.setDragEdge(dragEdge);
+//    }
+//
+//    public void setDragDirectMode(SwipeBackLayout.DragDirectMode dragDirectMode) {
+//        swipeBackLayout.setDragDirectMode(dragDirectMode);
+//    }
+//
+//    public SwipeBackLayout getSwipeBackLayout() {
+//        return swipeBackLayout;
+//    }
+//
+//    @Override
+//    public void onViewPositionChanged(float fractionAnchor, float fractionScreen) {
+//        ivShadow.setAlpha(1 - fractionScreen);
+//    }
 
     @Override
     protected void onStart() {

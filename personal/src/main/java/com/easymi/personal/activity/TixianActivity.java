@@ -21,6 +21,7 @@ import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
+import com.easymi.component.utils.MathUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
@@ -31,6 +32,9 @@ import com.easymi.personal.result.LoginResult;
 import com.easymi.personal.result.TixianResult;
 import com.easymi.personal.result.TixianRuleResult;
 import com.easymi.personal.widget.AddSpaceTextWatcher;
+
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -84,6 +88,9 @@ public class TixianActivity extends RxBaseActivity {
         AddSpaceTextWatcher watcher = new AddSpaceTextWatcher(this, bankNo, 48);
         watcher.setBinChangedListener(bName -> bankName.setText(bName));
 
+        DecimalFormat decimalFormat = new DecimalFormat("#0.0");
+        decimalFormat.setRoundingMode(RoundingMode.DOWN);
+
         editMoney.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -97,19 +104,42 @@ public class TixianActivity extends RxBaseActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                String s = editable.toString();
-                if (StringUtils.isBlank(s)) {
-                    return;
-                }
-                double money = 0;
-                try {
-                    money = Double.parseDouble(s);
-                } catch (NumberFormatException ex) {
-                    money = 0;
-                } finally {
-                    Employ employ = EmUtil.getEmployInfo();
-                    if (money > employ.balance) {
-                        balanceText.setText(String.valueOf(employ.balance));
+                String str = editable.toString();
+                if (StringUtils.isNotBlank(str)) {
+                    if (str.startsWith("0")) {
+                        if (str.length() >= 2) {
+                            if (!String.valueOf(str.charAt(1)).equals(".")) {
+                                str = str.substring(1, str.length());
+                                editMoney.setText(str);
+                                editMoney.setSelection(str.length());
+                            }
+                        }
+                    }
+                    String s = editMoney.getText().toString();
+                    double money = 0;
+                    try {
+                        money = Double.parseDouble(s);
+                    } catch (Exception e) {
+                        money = 0;
+                    }
+                    if (!MathUtil.isDoubleLegal(money, 1)) {
+                        editMoney.setText(decimalFormat.format(money));
+                        editMoney.setSelection(decimalFormat.format(money).length());
+                    }
+                    if (!moneyLegal(money)) {
+                        maxTixian.setText("提现规则，最小" + tixianRule.withdrawals_min + "元，最大" + tixianRule.withdrawals_max + "元,"
+                                + "提现基数" + tixianRule.withdrawals_base + "元");
+                        maxTixian.setTextColor(getResources().getColor(R.color.red));
+                    } else {
+                        if (null != tixianRule) {
+                            maxTixian.setText(tixianRule.withdrawals_memo);
+                            maxTixian.setTextColor(getResources().getColor(R.color.text_default));
+                        }
+                    }
+                } else {
+                    if (null != tixianRule) {
+                        maxTixian.setText(tixianRule.withdrawals_memo);
+                        maxTixian.setTextColor(getResources().getColor(R.color.text_default));
                     }
                 }
 
@@ -117,6 +147,23 @@ public class TixianActivity extends RxBaseActivity {
         });
 
         getTixianConfig();//获取提现的规则
+    }
+
+    private boolean moneyLegal(double money) {
+        if (null != tixianRule) {
+            if (money < tixianRule.withdrawals_min) {
+                return false;
+            }
+            if (money > tixianRule.withdrawals_max) {
+                return false;
+            }
+            if (tixianRule.withdrawals_base != 0 && money % tixianRule.withdrawals_base != 0) {
+                return false;
+            }
+            return true;
+        } else {
+            return true;
+        }
     }
 
     private void apply() {

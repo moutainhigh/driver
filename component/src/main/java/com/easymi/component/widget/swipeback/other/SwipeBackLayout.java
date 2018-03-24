@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.easymi.component.widget.swipeback;
+package com.easymi.component.widget.swipeback.other;
 
 import android.app.Activity;
 import android.content.Context;

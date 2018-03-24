@@ -154,8 +154,8 @@ public class ShareActivity extends RxBaseActivity {
                 false, shareResult -> {
             shareInfo = new ShareInfo();
             shareInfo.shareUrl = shareResult.url;
-            shareInfo.shareTitle = "这是内置于APP内的一段标题";
-            shareInfo.shareContent = "这是内置于APP内的一段内容";
+            shareInfo.shareTitle = "分享得好礼";
+            shareInfo.shareContent = "推荐好友，获取奖励";
             initQrImg();
         })));
     }

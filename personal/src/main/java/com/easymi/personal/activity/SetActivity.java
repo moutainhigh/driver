@@ -52,7 +52,6 @@ public class SetActivity extends RxBaseActivity {
         defaultNavi = findViewById(R.id.default_navi);
 
         scrollView = findViewById(R.id.scroll_view);
-        swipeBackLayout.setScrollChild(scrollView);
 
         voiceAble.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_VOICE_ABLE, true));
         shakeAble.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_SHAKE_ABLE, true));
