@@ -100,6 +100,11 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
     }
 
     @Override
+    public boolean isEnableSwipe() {
+        return false;
+    }
+
+    @Override
     public int getLayoutId() {
         return R.layout.activity_grab;
     }

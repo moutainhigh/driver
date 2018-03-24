@@ -262,4 +262,9 @@ public class NearWcActivity extends RxBaseActivity implements AMap.OnMarkerClick
         SwipeRecyclerView.moveToPosition(layoutManager, recyclerView.getRecyclerView(), (int) marker.getZIndex());
         return true;
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
 }

@@ -17,17 +17,20 @@
         <activity
             android:name=".activity.WebActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSwipeBack"/>
 
         <activity
             android:name="com.amap.api.navi.AmapRouteActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".activity.PlaceActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/ThemeSwipeBack"/>
         <activity
             android:name=".activity.CityActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/ThemeSwipeBack"/>
         <activity
             android:name=".activity.NaviActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />

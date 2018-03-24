@@ -87,4 +87,9 @@ public class PocketActivity extends RxBaseActivity {
             balanceText.setText(String.valueOf(employ.balance));
         })));
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
 }

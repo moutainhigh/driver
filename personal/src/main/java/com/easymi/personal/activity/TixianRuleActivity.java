@@ -62,4 +62,9 @@ public class TixianRuleActivity extends RxBaseActivity {
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
                 true, articleResult -> tixianRule.setText(Html.fromHtml(articleResult.article.contents)))));
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
 }

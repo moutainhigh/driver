@@ -140,4 +140,9 @@ public class EvaActivity extends RxBaseActivity {
             }
         })));
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
 }

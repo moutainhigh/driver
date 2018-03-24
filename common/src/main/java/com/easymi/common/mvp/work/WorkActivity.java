@@ -130,7 +130,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
     @Override
     public void initViews(Bundle savedInstanceState) {
-
         // 屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -454,6 +453,11 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     protected void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
+    }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return false;
     }
 
     @Override

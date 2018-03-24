@@ -38,6 +38,11 @@ public class CancelActivity extends RxBaseActivity {
     }
 
     @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
+
+    @Override
     public int getLayoutId() {
         return R.layout.activity_cancel_order;
     }

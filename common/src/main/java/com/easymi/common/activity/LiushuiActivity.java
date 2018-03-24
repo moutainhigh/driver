@@ -61,6 +61,11 @@ public class LiushuiActivity extends RxBaseActivity {
     private List<BaseOrder> orders;
 
     @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
+
+    @Override
     public int getLayoutId() {
         return R.layout.activity_liushui;
     }

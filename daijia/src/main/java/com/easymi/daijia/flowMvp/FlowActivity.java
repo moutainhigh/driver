@@ -1200,4 +1200,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         ToastUtil.showMessage(this, getString(R.string.finished_order));
         finish();
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return false;
+    }
 }

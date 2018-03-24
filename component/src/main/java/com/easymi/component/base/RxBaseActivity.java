@@ -8,13 +8,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.easymi.component.R;
 import com.easymi.component.app.ActManager;
 import com.easymi.component.receiver.GpsReceiver;
 import com.easymi.component.receiver.NetWorkChangeReceiver;
 import com.easymi.component.rxmvp.RxManager;
-import com.easymi.component.swipeback.BGASwipeBackHelper;
+import com.easymi.component.widget.swipeback.SwipeBackLayout;
 import com.easymi.component.utils.NetUtil;
 import com.easymi.component.utils.PhoneFunc;
 import com.easymi.component.utils.ToastUtil;
@@ -31,30 +35,73 @@ import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
  */
 public abstract class RxBaseActivity extends RxAppCompatActivity implements
         GpsReceiver.OnGpsStatusChangeListener,
-        NetWorkChangeReceiver.OnNetChange{
+        NetWorkChangeReceiver.OnNetChange, SwipeBackLayout.SwipeBackListener {
 
     protected RxManager mRxManager;
     private GpsReceiver gpsReceiver;
 
     private NetWorkChangeReceiver netChangeReceiver;
 
-//    protected BGASwipeBackHelper mSwipeBackHelper;
+    private static final SwipeBackLayout.DragEdge DEFAULT_DRAG_EDGE = SwipeBackLayout.DragEdge.LEFT;
+
+    protected SwipeBackLayout swipeBackLayout;
+    private ImageView ivShadow;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // 「必须在 Application 的 onCreate 方法中执行 BGASwipeBackHelper.init 来初始化滑动返回」
-        // 在 super.onCreate(savedInstanceState) 之前调用该方法
-//        initSwipeBackFinish();
         super.onCreate(savedInstanceState);
+
         mRxManager = new RxManager();
         ActManager.getInstance().addActivity(this);
         //设置布局内容
-        setContentView(getLayoutId());
+        if (isEnableSwipe()) {
+            setContentView(getContainer());
+
+            View view = LayoutInflater.from(this).inflate(getLayoutId(), null);
+            swipeBackLayout.addView(view);
+        } else {
+            setContentView(getLayoutId());
+        }
+
+
         //初始化控件
         initViews(savedInstanceState);
         //初始化ToolBar
         initToolBar();
+
+    }
+
+    private View getContainer() {
+        RelativeLayout container = new RelativeLayout(this);
+        swipeBackLayout = new SwipeBackLayout(this);
+        swipeBackLayout.setDragEdge(DEFAULT_DRAG_EDGE);
+        swipeBackLayout.setOnSwipeBackListener(this);
+        ivShadow = new ImageView(this);
+        ivShadow.setBackgroundColor(getResources().getColor(R.color.black_p50));
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        container.addView(ivShadow, params);
+        container.addView(swipeBackLayout);
+        return container;
+    }
+
+    public abstract boolean isEnableSwipe();
+
+    public void setDragEdge(SwipeBackLayout.DragEdge dragEdge) {
+        swipeBackLayout.setDragEdge(dragEdge);
+    }
+
+    public void setDragDirectMode(SwipeBackLayout.DragDirectMode dragDirectMode) {
+        swipeBackLayout.setDragDirectMode(dragDirectMode);
+    }
+
+    public SwipeBackLayout getSwipeBackLayout() {
+        return swipeBackLayout;
+    }
+
+    @Override
+    public void onViewPositionChanged(float fractionAnchor, float fractionScreen) {
+        ivShadow.setAlpha(1 - fractionScreen);
     }
 
     @Override
@@ -198,13 +245,13 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
     @Override
     public void onNetChange(int status) {
         if (status == NetUtil.NETWORK_NONE) {
-            if(netDialog == null){
+            if (netDialog == null) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage(getResources().getString(R.string.lost_net_work));
                 builder.setPositiveButton(getResources().getString(R.string.ok), (dialogInterface, i) -> dialogInterface.dismiss());
                 netDialog = builder.create();
             } else {
-                if(netDialog.isShowing()){
+                if (netDialog.isShowing()) {
                     return;
                 }
             }

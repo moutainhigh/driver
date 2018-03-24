@@ -133,4 +133,9 @@ public class SameOrderActivity extends RxBaseActivity {
     private void hideErr() {
         errLayout.setVisibility(View.GONE);
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
 }

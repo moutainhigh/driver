@@ -15,7 +15,6 @@ import com.easymi.component.BuildConfig;
 import com.easymi.component.Config;
 import com.easymi.component.db.SqliteHelper;
 import com.easymi.component.loc.LocService;
-import com.easymi.component.swipeback.BGASwipeBackHelper;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
 import com.iflytek.cloud.ErrorCode;

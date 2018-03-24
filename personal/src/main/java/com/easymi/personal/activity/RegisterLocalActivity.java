@@ -296,4 +296,9 @@ public class RegisterLocalActivity extends RxBaseActivity implements View.OnClic
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return false;
+    }
 }

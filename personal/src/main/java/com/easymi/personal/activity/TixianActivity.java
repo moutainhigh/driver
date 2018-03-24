@@ -233,4 +233,9 @@ public class TixianActivity extends RxBaseActivity {
             }
         })));
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
 }

@@ -45,6 +45,11 @@ public class PlaceActivity extends RxBaseActivity {
     private String city = "";
 
     @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
+
+    @Override
     public int getLayoutId() {
         return R.layout.activity_place;
     }

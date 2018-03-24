@@ -44,6 +44,11 @@ public class BaoxiaoActivity extends RxBaseActivity {
     private Long orderId;
 
     @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
+
+    @Override
     public int getLayoutId() {
         return R.layout.activity_baoxiao;
     }
@@ -140,7 +145,7 @@ public class BaoxiaoActivity extends RxBaseActivity {
     }
 
     private void setApplyBtnClickable(boolean clickable) {
-        applyBtn.setClickable(clickable);
+        applyBtn.setEnabled(clickable);
         if (clickable) {
             applyBtn.setBackgroundResource(R.drawable.corners_button_bg);
         } else {

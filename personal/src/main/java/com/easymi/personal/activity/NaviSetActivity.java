@@ -54,4 +54,9 @@ public class NaviSetActivity extends RxBaseActivity {
         cusToolbar.setOnClickListener(view -> finish());
         cusToolbar.setTitle(R.string.set_navi);
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
 }

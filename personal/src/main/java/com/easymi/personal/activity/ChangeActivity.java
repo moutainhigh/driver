@@ -141,4 +141,9 @@ public class ChangeActivity extends RxBaseActivity {
             }
         }
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
 }

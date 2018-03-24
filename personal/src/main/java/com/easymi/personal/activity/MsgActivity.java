@@ -112,4 +112,9 @@ public class MsgActivity extends RxBaseActivity {
             }
         })));
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
 }

@@ -302,4 +302,9 @@ public class ArticleActivity extends RxBaseActivity implements View.OnClickListe
         }
         return false;
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
 }

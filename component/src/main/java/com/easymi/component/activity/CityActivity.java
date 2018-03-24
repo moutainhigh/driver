@@ -70,6 +70,11 @@ public class CityActivity extends RxBaseActivity {
     public static final int TITLE = 1;
 
     @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
+
+    @Override
     public int getLayoutId() {
         return R.layout.activity_city;
     }

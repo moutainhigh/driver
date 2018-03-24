@@ -240,4 +240,9 @@ public class ResetPswActivity extends RxBaseActivity {
         };
         timer.schedule(timerTask, 0, 1000);
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
 }

@@ -81,4 +81,9 @@ public class HelpCenterSubActivity extends RxBaseActivity {
             }
         })));
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
 }

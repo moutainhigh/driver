@@ -266,4 +266,9 @@ public class OldWaitActivity extends RxBaseActivity implements FlowContract.View
             onBackPressed();
         }
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return false;
+    }
 }

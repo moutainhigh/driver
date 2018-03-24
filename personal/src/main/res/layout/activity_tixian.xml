@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
+    android:background="#f7f7f7"
     android:focusableInTouchMode="true"
     android:orientation="vertical">
 

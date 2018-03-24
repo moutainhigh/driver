@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
+    android:background="#f7f7f7"
     android:orientation="vertical">
 
     <com.easymi.component.widget.CusToolbar

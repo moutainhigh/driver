@@ -274,4 +274,9 @@ public class ShareActivity extends RxBaseActivity {
             Toast.makeText(ShareActivity.this, getString(R.string.cancel_share), Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
 }

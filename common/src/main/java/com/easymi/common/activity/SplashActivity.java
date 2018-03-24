@@ -39,8 +39,13 @@ import pl.droidsonroids.gif.GifImageView;
 @Route(path = "/common/SplashActivity")
 public class SplashActivity extends RxBaseActivity {
     @Override
+    public boolean isEnableSwipe() {
+        return false;
+    }
+
+    @Override
     public int getLayoutId() {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         return R.layout.activity_splash;
     }

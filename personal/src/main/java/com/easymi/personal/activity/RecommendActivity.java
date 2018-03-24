@@ -57,4 +57,9 @@ public class RecommendActivity extends RxBaseActivity {
         }
         adapter.setList(recommends);
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
 }

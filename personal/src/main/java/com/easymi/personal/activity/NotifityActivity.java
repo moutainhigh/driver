@@ -176,4 +176,9 @@ public class NotifityActivity extends RxBaseActivity {
         errLayout.setVisibility(View.GONE);
     }
 
+    @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
+
 }

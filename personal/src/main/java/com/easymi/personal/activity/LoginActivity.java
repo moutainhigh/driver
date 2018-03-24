@@ -297,5 +297,8 @@ public class LoginActivity extends RxBaseActivity {
             finish();
         })));
     }
-
+    @Override
+    public boolean isEnableSwipe() {
+        return false;
+    }
 }

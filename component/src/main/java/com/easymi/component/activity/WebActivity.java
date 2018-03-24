@@ -55,6 +55,11 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
     }
 
     @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         if (webView.canGoBack()) {

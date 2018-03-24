@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f7f7f7"
     android:orientation="vertical">
 
     <com.easymi.component.widget.CusToolbar
@@ -175,7 +176,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="@string/no_coupon"/>
+            android:text="@string/no_coupon" />
 
     </RelativeLayout>
 
@@ -197,7 +198,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="0元"/>
+            android:text="0元" />
 
     </RelativeLayout>
 
@@ -227,7 +228,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="25dp"
         android:layout_marginTop="5dp"
-        android:textSize="12sp"
-        android:text="@string/fee_hint"/>
+        android:text="@string/fee_hint"
+        android:textSize="12sp" />
 
 </LinearLayout>

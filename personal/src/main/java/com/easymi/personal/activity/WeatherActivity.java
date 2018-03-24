@@ -170,4 +170,9 @@ public class WeatherActivity extends RxBaseActivity implements WeatherSearch.OnW
             ToastUtil.showMessage(WeatherActivity.this, getString(R.string.query_forecast_failed));
         }
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
 }

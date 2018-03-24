@@ -103,4 +103,9 @@ public class LanguageActivity extends RxBaseActivity implements View.OnClickList
         ARouter.getInstance().build("/common/SplashActivity")
                 .withFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK).navigation();//重启应用
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
 }

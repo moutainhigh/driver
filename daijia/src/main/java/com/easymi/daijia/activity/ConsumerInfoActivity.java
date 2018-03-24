@@ -75,4 +75,9 @@ public class ConsumerInfoActivity extends RxBaseActivity {
             }
         })));
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
 }

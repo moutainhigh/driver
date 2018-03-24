@@ -349,6 +349,11 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
 
         View view = LayoutInflater.from(this).inflate(R.layout.pay_type_dialog, null, false);
 
+        ImageView pay1Img = view.findViewById(R.id.pay_1_img);
+        ImageView pay2Img = view.findViewById(R.id.pay_2_img);
+        ImageView pay3Img = view.findViewById(R.id.pay_3_img);
+        ImageView pay4Img = view.findViewById(R.id.pay_4_img);
+
         TextView pay1Text = view.findViewById(R.id.pay_1_text);
         TextView pay2Text = view.findViewById(R.id.pay_2_text);
         TextView pay3Text = view.findViewById(R.id.pay_3_text);
@@ -368,31 +373,38 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
             pay2Text.setVisibility(View.GONE);
             pay2Empty.setVisibility(View.GONE);
             pay2Btn.setVisibility(View.GONE);
+            pay2Img.setVisibility(View.GONE);
         }
         if (!consumerInfo.canSign) {
             pay3Text.setVisibility(View.GONE);
             pay3Empty.setVisibility(View.GONE);
             pay3Btn.setVisibility(View.GONE);
+            pay3Img.setVisibility(View.GONE);
         }
         boolean canDaifu = Setting.findOne().isPaid == 1;
         if (!canDaifu) {
             pay4Text.setVisibility(View.GONE);
             pay4Empty.setVisibility(View.GONE);
             pay4Btn.setVisibility(View.GONE);
+            pay4Img.setVisibility(View.GONE);
         }
 
         pay1Btn.setOnClickListener(view13 -> bottomSheetDialog.dismiss());
         pay1Text.setOnClickListener(view13 -> bottomSheetDialog.dismiss());
         pay1Empty.setOnClickListener(view13 -> bottomSheetDialog.dismiss());
+        pay1Img.setOnClickListener(view13 -> bottomSheetDialog.dismiss());
 
         pay2Empty.setOnClickListener(view14 -> pay2Btn.setChecked(true));
         pay2Text.setOnClickListener(view14 -> pay2Btn.setChecked(true));
+        pay2Img.setOnClickListener(view14 -> pay2Btn.setChecked(true));
 
         pay3Empty.setOnClickListener(view14 -> pay3Btn.setChecked(true));
         pay3Text.setOnClickListener(view14 -> pay3Btn.setChecked(true));
+        pay3Img.setOnClickListener(view14 -> pay3Btn.setChecked(true));
 
         pay4Empty.setOnClickListener(view14 -> pay4Btn.setChecked(true));
         pay4Text.setOnClickListener(view14 -> pay4Btn.setChecked(true));
+        pay4Img.setOnClickListener(view14 -> pay4Btn.setChecked(true));
 
         Button sure = view.findViewById(R.id.pay_button);
         ImageView close = view.findViewById(R.id.ic_close);
@@ -503,5 +515,10 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
             }
         }
         return endAddr;
+    }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return false;
     }
 }

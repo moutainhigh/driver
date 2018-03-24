@@ -10,24 +10,29 @@
         <activity
             android:name=".activity.CancelActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSwipeBack"/>
         <activity
             android:name=".activity.ConsumerInfoActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSwipeBack"/>
         <activity
             android:name=".activity.SameOrderActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSwipeBack"/>
         <activity
             android:name=".activity.FeeDetailActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSwipeBack"/>
         <activity
             android:name=".flowMvp.oldCalc.OldRunningActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="sensor"
-            android:theme="@style/FullscreenTheme" />
+            android:theme="@style/FullscreenTheme"
+            />
         <activity
             android:name=".flowMvp.oldCalc.OldWaitActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"

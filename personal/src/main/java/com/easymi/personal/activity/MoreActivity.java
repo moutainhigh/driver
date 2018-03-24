@@ -49,4 +49,9 @@ public class MoreActivity extends RxBaseActivity {
         cusToolbar.setTitle(R.string.more);
         cusToolbar.setLeftBack(v -> finish());
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
 }

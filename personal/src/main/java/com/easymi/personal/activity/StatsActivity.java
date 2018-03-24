@@ -146,4 +146,9 @@ public class StatsActivity extends RxBaseActivity {
             endTime = TimeUtil.getTime("yyyy-MM-dd", TimeUtil.getEndDayOfYear().getTime());
         }
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
 }

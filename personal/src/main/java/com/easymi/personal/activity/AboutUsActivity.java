@@ -142,6 +142,11 @@ public class AboutUsActivity extends RxBaseActivity {
     }
 
     @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         if (webView.canGoBack()) {

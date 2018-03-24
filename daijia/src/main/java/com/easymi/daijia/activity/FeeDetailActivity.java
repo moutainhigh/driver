@@ -113,4 +113,9 @@ public class FeeDetailActivity extends RxBaseActivity {
         totalFee.setText(getString(R.string.money_sign) + dymOrder.orderShouldPay);
 
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
 }

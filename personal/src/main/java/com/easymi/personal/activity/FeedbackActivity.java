@@ -96,4 +96,9 @@ public class FeedbackActivity extends RxBaseActivity {
             finish();
         })));
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
 }

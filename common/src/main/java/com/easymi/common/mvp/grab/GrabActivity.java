@@ -334,4 +334,9 @@ public class GrabActivity extends RxBaseActivity implements GrabContract.View {
     public void closeGrab(View view){
         finishActivity();
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return false;
+    }
 }

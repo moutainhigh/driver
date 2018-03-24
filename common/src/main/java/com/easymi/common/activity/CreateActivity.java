@@ -28,6 +28,11 @@ public class CreateActivity extends RxBaseActivity {
     private VpAdapter adapter;
 
     @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
+
+    @Override
     public int getLayoutId() {
         return R.layout.activity_create_order;
     }

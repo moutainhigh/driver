@@ -36,4 +36,9 @@ public class HelpCenterActivity extends RxBaseActivity {
         Intent intent = new Intent(HelpCenterActivity.this, HelpCenterSubActivity.class);
         startActivity(intent);
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
 }

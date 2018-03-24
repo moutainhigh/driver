@@ -365,4 +365,9 @@ public class RechargeActivity extends RxBaseActivity {
             ToastUtil.showMessage(RechargeActivity.this, "你已取消了本次订单的支付！");
         }
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ScrollView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.easymi.component.Config;
@@ -36,6 +37,8 @@ public class SetActivity extends RxBaseActivity {
     SwitchButton alwaysOren;
     SwitchButton defaultNavi;
 
+    private ScrollView scrollView;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_set;
@@ -48,12 +51,16 @@ public class SetActivity extends RxBaseActivity {
         alwaysOren = findViewById(R.id.oren_btn);
         defaultNavi = findViewById(R.id.default_navi);
 
+        scrollView = findViewById(R.id.scroll_view);
+        swipeBackLayout.setScrollChild(scrollView);
+
         voiceAble.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_VOICE_ABLE, true));
         shakeAble.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_SHAKE_ABLE, true));
         alwaysOren.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_ALWAYS_OREN, false));
         defaultNavi.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_DEFAULT_NAVI, true));
 
         initSwitch();
+
     }
 
     private void initSwitch() {
@@ -155,5 +162,10 @@ public class SetActivity extends RxBaseActivity {
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
                 true, emResult -> EmUtil.employLogout(SetActivity.this))));
+    }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return true;
     }
 }

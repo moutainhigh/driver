@@ -81,4 +81,9 @@ public class RegisterActivity extends RxBaseActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return false;
+    }
 }
