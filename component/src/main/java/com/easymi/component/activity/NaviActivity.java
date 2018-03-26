@@ -92,6 +92,7 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
         mAMapNavi = AMapNavi.getInstance(getApplicationContext());
         mAMapNavi.addAMapNaviListener(this);
+        mAMapNavi.setUseInnerVoice(true);
 
     }
 
@@ -170,7 +171,7 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
         //since 1.6.0 不再在naviview destroy的时候自动执行AMapNavi.stopNavi();请自行执行
         mAMapNavi.stopNavi();
         mAMapNavi.destroy();
-        XApp.getInstance().stopVoice();
+//        XApp.getInstance().stopVoice();
     }
 
     @Override
@@ -229,7 +230,7 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     @Override
     public void onGetNavigationText(String s) {
-        XApp.getInstance().syntheticVoice(s, true);
+//        XApp.getInstance().syntheticVoice(s, true); //设置使用高德内置语音时将不再回调此方法
     }
 
     @Override
@@ -244,17 +245,17 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     @Override
     public void onCalculateRouteFailure(int i) {
-        Toast.makeText(this, "路线规划失败", Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "路线规划失败", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onReCalculateRouteForYaw() {
-        XApp.getInstance().syntheticVoice("您已偏航，正在重新规划路径");
+//        XApp.getInstance().syntheticVoice("您已偏航，正在重新规划路径");
     }
 
     @Override
     public void onReCalculateRouteForTrafficJam() {
-        XApp.getInstance().syntheticVoice("为躲避拥堵，正在重新规划路径");
+//        XApp.getInstance().syntheticVoice("为躲避拥堵，正在重新规划路径");
     }
 
     @Override
