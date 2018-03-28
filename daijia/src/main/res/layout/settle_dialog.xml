@@ -266,18 +266,30 @@
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     android:paddingTop="3dp"
-                    android:text="" />
+                    android:text=""
+                    android:visibility="gone"/>
 
                 <EditText
                     android:id="@+id/remark"
                     android:layout_width="0.0dp"
                     android:maxLength="100"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
                     android:layout_weight="1"
+                    android:background="@null"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="5dp"
                     android:hint="@string/please_remark" />
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/text_default"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"/>
 
             <com.easymi.component.widget.LoadingButton
                 android:id="@+id/confirm_button"

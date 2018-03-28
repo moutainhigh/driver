@@ -43,7 +43,7 @@
         <string name="start_lis_order">開始聽單啦！ </string>
         <string name="stop_lis_order">停止聽單啦！ </string>
 
-        <string name="current_place">當前地址：</string>
+        <string name="current_place">當前地址:</string>
 
         <string name="grab_order_content">搶單</string>
         <string name="send_order">派單</string>
@@ -76,7 +76,7 @@
 
 
         <string name="baoxiao_hint_1">請輸入報銷金額</string>
-        <string name="baoxiao_hint_2">請輸入報銷原因</string>
+        <string name="baoxiao_hint_2">请输入报销原因(不能超过100个字符)</string>
 
         <string name="baoxiao_apply">提交</string>
         <string name="baoxiao_suc">您的報銷請求已提交，等待審核</string>

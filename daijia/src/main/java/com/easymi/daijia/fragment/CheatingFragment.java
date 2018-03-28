@@ -89,8 +89,7 @@ public class CheatingFragment extends RxBaseFragment {
         getActivity().findViewById(R.id.change_end_con).setOnClickListener(view -> bridge.changeEnd());
 
         DecimalFormat df1 = new DecimalFormat("#0.0");
-        DecimalFormat df2 = new DecimalFormat("#0.00");
-        currentMileageTxt.setText(df2.format(djOrder.distance - djOrder.addedKm));
+        currentMileageTxt.setText("" + (djOrder.distance - djOrder.addedKm));
         currentFeeTxt.setText(df1.format(djOrder.totalFee - djOrder.addedFee));
         feeEdit.setText("" + djOrder.addedFee);
         feeEdit.setSelection(feeEdit.getText().toString().length());

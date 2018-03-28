@@ -120,7 +120,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
             }
         }
 
-        if (doConnect) {
+        if (doConnect && !isConning) {
             doClientConnection();
         }
     }

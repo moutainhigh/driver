@@ -337,7 +337,7 @@ public class HandlePush implements FeeChangeSubject {
         public void callback(MultipleOrderResult multipleOrderResult, String orderType) {
             MultipleOrder order = multipleOrderResult.order;
             if (order != null) {
-                if (order.orderStatus == DJOrderStatus.FINISH_ORDER) {//已完成订单
+                if (order.orderStatus == DJOrderStatus.FINISH_ORDER) { //已完成订单
                     shake();
                     String weihao = order.passengerPhone;
                     if (weihao.length() > 4) {
@@ -358,7 +358,6 @@ public class HandlePush implements FeeChangeSubject {
                 if (order.orderStatus != DJOrderStatus.NEW_ORDER && order.orderStatus != DJOrderStatus.PAIDAN_ORDER) {
                     return;
                 }
-                shake();
                 order.addresses = multipleOrderResult.address;
                 String voiceStr = "";
                 if (order.orderStatus == DJOrderStatus.NEW_ORDER) {
@@ -403,11 +402,11 @@ public class HandlePush implements FeeChangeSubject {
                 if (StringUtils.isNotBlank(order.endPlace)) {
                     voiceStr += XApp.getInstance().getString(R.string.to) + order.endPlace;//到xxx
                 }
-                XApp.getInstance().syntheticVoice(voiceStr);
                 Message message = new Message();
                 message.what = 0;
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("order", order);
+                bundle.putString("voiceStr", voiceStr);
                 message.setData(bundle);
                 handler.sendMessage(message);
             }
@@ -419,8 +418,10 @@ public class HandlePush implements FeeChangeSubject {
             case 0:
                 Bundle bundle = msg.getData();
                 MultipleOrder order = (MultipleOrder) bundle.getSerializable("order");
+                String voiceStr = bundle.getString("voiceStr");
                 Intent intent = new Intent(XApp.getInstance(), GrabActivity2.class);
                 intent.putExtra("order", order);
+                intent.putExtra("voiceStr", voiceStr);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 XApp.getInstance().startActivity(intent);
                 break;

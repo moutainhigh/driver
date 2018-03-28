@@ -16,9 +16,9 @@
             android:id="@+id/start_drive"
             android:layout_width="0.0dp"
             android:layout_height="@dimen/btn_height"
-            android:elevation="0.5dp"
             android:layout_weight="8"
             android:background="@drawable/corners_button_bg"
+            android:elevation="0.5dp"
             android:gravity="center"
             android:text="@string/click_start"
             android:textColor="@color/white" />
@@ -27,13 +27,14 @@
 
     <LinearLayout
         android:id="@+id/wait_msg_con"
-        android:elevation="0.5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/control_con"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:background="@drawable/corners_white"
+        android:clickable="true"
+        android:elevation="0.5dp"
         android:gravity="center_vertical"
         android:orientation="vertical"
         android:paddingBottom="15dp"
@@ -54,6 +55,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/text_color_black"
                     android:text="@string/wait_time"
                     android:textSize="16sp" />
 
@@ -85,7 +87,8 @@
                 android:layout_width="0.1dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center_vertical"
-                android:background="@color/text_default"/>
+                android:background="#aa767676" />
+
             <LinearLayout
                 android:layout_width="0.0dp"
                 android:layout_height="wrap_content"
@@ -96,6 +99,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/text_color_black"
                     android:text="@string/wait_fee"
                     android:textSize="16sp" />
 
@@ -132,11 +136,11 @@
         android:id="@+id/change_end_con"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_marginTop="2dp"
-        android:layout_alignParentRight="true"
         android:layout_above="@+id/wait_msg_con"
-        android:layout_marginRight="10dp"
+        android:layout_alignParentRight="true"
         android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="2dp"
         android:background="@drawable/corners_white_gray_stroke_2"
         android:gravity="center"
         android:orientation="vertical">

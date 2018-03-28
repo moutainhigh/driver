@@ -33,6 +33,7 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.widget.HLoadView;
 import com.easymi.component.widget.RotateImageView;
 import com.easymi.component.widget.overlay.DrivingRouteOverlay;
@@ -117,6 +118,11 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
             return;
         }
 
+        shake();
+
+        String voiceStr = getIntent().getStringExtra("voiceStr");
+        XApp.getInstance().syntheticVoice(voiceStr);
+
 //        mSwipeBackHelper.setSwipeBackEnable(false);//抢单界面不允许侧滑返回
 
         fragments = new ArrayList<>();
@@ -168,9 +174,27 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        MultipleOrder multipleOrder = (MultipleOrder) intent.getSerializableExtra("order");
-        multipleOrders.add(multipleOrder);
-        buildFragments(multipleOrder, false);//添加一个fragment
+        MultipleOrder newOrder = (MultipleOrder) intent.getSerializableExtra("order");
+
+        boolean haveSame = false;
+        for (MultipleOrder order : multipleOrders) {
+            if (newOrder.orderId == order.orderId &&
+                    newOrder.orderStatus == DJOrderStatus.NEW_ORDER) {
+                order.countTime = GRAB_TOTAL_TIME;//重置时间
+                haveSame = true;
+            }
+        }
+        if (haveSame) { //推送任务中有相同订单时就不再新增进去
+//            adapter.notifyDataSetChanged();
+            return;
+        }
+
+        shake();
+        String voiceStr = getIntent().getStringExtra("voiceStr");
+        XApp.getInstance().syntheticVoice(voiceStr);
+
+        multipleOrders.add(newOrder);
+        buildFragments(newOrder, false);//添加一个fragment
         adapter.setData(fragments);
         initIndicator();
     }
@@ -484,6 +508,13 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
 
     public void closeGrab(View view) {
         finishActivity();
+    }
+
+    private void shake() {
+        boolean shakeAble = XApp.getMyPreferences().getBoolean(Config.SP_SHAKE_ABLE, true);
+        if (shakeAble) {//震动
+            PhoneUtil.vibrate(XApp.getInstance(), false);
+        }
     }
 
 }

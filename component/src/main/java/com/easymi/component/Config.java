@@ -35,7 +35,7 @@ public class Config {
     /**
      * 微信分享id
      */
-    public static final String WX_APP_ID = "wxd96357cacd5174a1"; //微信app id
+    public static final String WX_APP_ID = "wx228f2bdb16568b58"; //微信app id
     /**
      * MQTT配置
      */

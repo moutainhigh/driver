@@ -165,7 +165,8 @@ public class ShareActivity extends RxBaseActivity {
      */
     private void reg2Wx() {
         iwxapi = WXAPIFactory.createWXAPI(this, Config.WX_APP_ID, true);
-        iwxapi.registerApp(Config.WX_APP_ID);  //将应用app注册到微信
+        boolean register = iwxapi.registerApp(Config.WX_APP_ID);  //将应用app注册到微信
+        Log.e("shareActivity", "" + register);
     }
 
     /**

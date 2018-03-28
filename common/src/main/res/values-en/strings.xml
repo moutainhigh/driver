@@ -74,7 +74,7 @@
 
 
         <string name = "baoxiao_hint_1">Please enter the reimbursement amount</string>
-        <string name = "baoxiao_hint_2">Please enter reimbursement reason</string>
+        <string name = "baoxiao_hint_2">Please enter reimbursement reason(max 100 words)</string>
 
         <string name = "baoxiao_apply">Submit</string>
         <string name = "baoxiao_suc">Your reimbursement request has been submitted for review.</string>

@@ -26,6 +26,7 @@
 
     <LinearLayout
         android:id="@+id/place_con"
+        android:clickable="true"
         android:elevation="0.5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

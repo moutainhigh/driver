@@ -29,6 +29,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
@@ -270,8 +271,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         } else {
             if (StringUtils.isNotBlank(djOrder.endPlace)) {
                 nextPlace.setText(djOrder.endPlace);
+                leftTimeText.setVisibility(View.VISIBLE);
             } else {
                 nextPlace.setText(getString(R.string.des_place));
+                leftTimeText.setVisibility(View.GONE);
             }
         }
         tagContainerLayout.setOnTagClickListener(new TagView.OnTagClickListener() {
@@ -422,6 +425,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         aMap.getUiSettings().setRotateGesturesEnabled(false);
         aMap.getUiSettings().setRotateGesturesEnabled(false);
         aMap.getUiSettings().setTiltGesturesEnabled(false);//倾斜手势
+        aMap.getUiSettings().setLogoBottomMargin(-50);//隐藏logo
 
         aMap.setOnMapTouchListener(this);
 
@@ -879,7 +883,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             @Override
             public void showCheating() {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//动态设置为竖屏
-                toolbar.setTitle(R.string.status_cheating);
+                toolbar.setTitle(R.string.status_to_end);
                 CheatingFragment cheatingFragment = new CheatingFragment();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("djOrder", DymOrder.findByIDType(orderId, Config.DAIJIA));
