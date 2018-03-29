@@ -453,6 +453,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     protected void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
+        getRxManager().clear();
     }
 
     @Override

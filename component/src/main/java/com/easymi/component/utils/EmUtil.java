@@ -41,7 +41,6 @@ public class EmUtil {
         editor.apply();
 
         stopAllService(context);
-        ActManager.getInstance().finishAllActivity();
 
         Intent i = context.getPackageManager()
                 .getLaunchIntentForPackage(context.getPackageName());

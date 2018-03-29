@@ -14,6 +14,7 @@ import android.text.TextWatcher;
 import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.easymi.component.Config;
 import com.easymi.component.activity.WebActivity;
+import com.easymi.component.app.ActManager;
 import com.easymi.component.entity.NetWorkUtil;
 import com.easymi.component.utils.Log;
 
@@ -120,6 +121,10 @@ public class LoginActivity extends RxBaseActivity {
         initEye();
 
         initBox();
+
+        ActManager.getInstance().removeActivity(this);//该activity不加入Activity栈
+
+        ActManager.getInstance().finishAllActivity();
     }
 
     private void initBox() {
@@ -297,6 +302,7 @@ public class LoginActivity extends RxBaseActivity {
             finish();
         })));
     }
+
     @Override
     public boolean isEnableSwipe() {
         return false;

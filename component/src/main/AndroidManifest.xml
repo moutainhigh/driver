@@ -2,7 +2,7 @@
     package="com.easymi.component">
 
     <permission
-        android:name="com.example.broadcast.permission"
+        android:name="com.easymi.component.permission"
         android:protectionLevel="normal" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
