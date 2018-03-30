@@ -120,7 +120,7 @@ public class PlaceActivity extends RxBaseActivity {
             }
         });
 
-        searchNearBy("", city);
+//        searchNearBy("", city);
     }
 
     private List<PoiItem> items = new ArrayList<>();

@@ -230,6 +230,10 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
                     LatLonPoint end = null;
                     boolean hasEnd = false;
                     removeAllOrderMarker();//移除订单的位置信息marker
+
+                    LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                    builder.include(new LatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude));
+
                     for (Address address : showIngOrder.addresses) {
                         if (address.addrType == 1) {
                             LatLonPoint point = new LatLonPoint(address.lat, address.lng);
@@ -243,6 +247,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
                             hasEnd = true;
                             showEndMarker(end);
                         }
+                        builder.include(new LatLng(address.lat, address.lng));
                     }
                     if (!hasEnd) {//没有终点时，起点就是路径规划的终点
                         end = pass.get(0);
@@ -252,6 +257,8 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
                     }
                     pass.remove(0);//这是起点的位置
                     showPassMarker(pass);
+
+                    aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 50));
                 }
             }
         });

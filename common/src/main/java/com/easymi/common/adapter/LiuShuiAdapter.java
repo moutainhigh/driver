@@ -90,7 +90,7 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
             });
             holder.orderBaoxiao.setVisibility(View.GONE);
         } else {
-            boolean canBaoxiao = Setting.findOne().isAddPrice == 1;
+            boolean canBaoxiao = Setting.findOne().isExpenses == 1;
             if (canBaoxiao) {
                 holder.orderBaoxiao.setVisibility(View.VISIBLE);
             } else {

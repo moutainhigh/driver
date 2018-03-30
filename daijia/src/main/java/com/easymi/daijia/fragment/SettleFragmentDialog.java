@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.easymi.common.entity.Setting;
 import com.easymi.component.DJOrderStatus;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.utils.Log;
@@ -91,6 +92,12 @@ public class SettleFragmentDialog {
     }
 
     private void initEdit() {
+        boolean canChangeFee = Setting.findOne().employChangePrice == 1;
+        if (!canChangeFee) {
+            extraFeeEdit.setEnabled(false);
+            paymentEdit.setEnabled(false);
+            return;
+        }
         extraFeeEdit.setOnFocusChangeListener((view, hasFocus) -> {
             if (hasFocus) {
                 String s = extraFeeEdit.getText().toString();
@@ -164,8 +171,8 @@ public class SettleFragmentDialog {
                         extraFeeEdit.setText(decimalFormat.format(extraFee));
                         extraFeeEdit.setSelection(decimalFormat.format(extraFee).length());
                     }
-                    if(extraFee > 1000){
-                        extraFeeEdit.setText(""+1000);
+                    if (extraFee > 1000) {
+                        extraFeeEdit.setText("" + 1000);
                         extraFeeEdit.setSelection(4);
                     }
                     calcMoney();
@@ -204,8 +211,8 @@ public class SettleFragmentDialog {
                         paymentEdit.setText(decimalFormat.format(paymentFee));
                         paymentEdit.setSelection(decimalFormat.format(paymentFee).length());
                     }
-                    if(paymentFee > 1000){
-                        paymentEdit.setText(""+1000);
+                    if (paymentFee > 1000) {
+                        paymentEdit.setText("" + 1000);
                         paymentEdit.setSelection(4);
                     }
                     calcMoney();

@@ -22,13 +22,16 @@ public class Setting {
     public int isExpenses;//报销（1开启，2关闭）
 
     @SerializedName("is_add_price")
-    public int isAddPrice;//是否允许调价
+    public int isAddPrice;//是否允许调价（1开启，2关闭)
 
     @SerializedName("is_work_car")
-    public int isWorkCar;//是否是工作车
+    public int isWorkCar;//是否是工作车（1开启，2关闭)
 
     @SerializedName("work_car_change_order")
-    public int workCarChangeOrder;
+    public int workCarChangeOrder;//（1开启，2关闭)
+
+    @SerializedName("employ_change_price")
+    public int employChangePrice;//确认费用时是否能加垫付费之类的
 
     public void save() {
         SqliteHelper helper = SqliteHelper.getInstance();
@@ -41,6 +44,7 @@ public class Setting {
         values.put("isAddPrice", isAddPrice);
         values.put("isWorkCar", isWorkCar);
         values.put("workCarChangeOrder", workCarChangeOrder);
+        values.put("employChangePrice", employChangePrice);
         db.insert("t_settinginfo", null, values);
     }
 
@@ -56,6 +60,7 @@ public class Setting {
                 settingInfo.isAddPrice = cursor.getInt(cursor.getColumnIndex("isAddPrice"));
                 settingInfo.isWorkCar = cursor.getInt(cursor.getColumnIndex("isWorkCar"));
                 settingInfo.workCarChangeOrder = cursor.getInt(cursor.getColumnIndex("workCarChangeOrder"));
+                settingInfo.employChangePrice = cursor.getInt(cursor.getColumnIndex("employChangePrice"));
             }
         } finally {
             cursor.close();
