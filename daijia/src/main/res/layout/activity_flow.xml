@@ -57,7 +57,7 @@
                     <TextView
                         android:id="@+id/next_place"
                         android:layout_width="wrap_content"
-                        android:layout_height="28dp"
+                        android:layout_height="25dp"
                         android:layout_marginTop="15dp"
                         android:gravity="center"
                         android:marqueeRepeatLimit="marquee_forever"

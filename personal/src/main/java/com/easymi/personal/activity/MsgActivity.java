@@ -59,7 +59,7 @@ public class MsgActivity extends RxBaseActivity {
     public void initToolBar() {
         toolbar = findViewById(R.id.cus_toolbar);
         toolbar.setLeftIcon(R.drawable.ic_arrow_back, view -> onBackPressed());
-        toolbar.setTitle(R.string.person_message);
+        toolbar.setTitle(R.string.my_message);
     }
 
     public void tuijian(View view) {

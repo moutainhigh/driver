@@ -105,6 +105,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
                 android:layout_toRightOf="@+id/detail_icon"
+                android:textColor="@color/text_color_black"
                 android:gravity="center"
                 android:text="@string/pocket_detail"
                 android:textSize="14sp" />
