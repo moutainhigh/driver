@@ -27,7 +27,6 @@ public class UpdateChecker implements IUpdateChecker {
     public UpdateChecker() {
         mPostData = null;
     }
-
     public UpdateChecker(byte[] data) {
         mPostData = data;
     }

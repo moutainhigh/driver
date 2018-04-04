@@ -42,6 +42,7 @@ import com.easymi.component.EmployStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -115,8 +116,15 @@ public class HandlePush implements FeeChangeSubject {
                     dymOrder.travelFee = jb.optJSONObject("data").optDouble("DriveTimeCost");
                     dymOrder.totalFee = jb.optJSONObject("data").optDouble("TotalAmount");
 
+                    dymOrder.minestMoney = jb.optJSONObject("data").optDouble("MinCost");
+
                     dymOrder.disFee = jb.optJSONObject("data").optDouble("MileageCost");
                     dymOrder.distance = jb.optJSONObject("data").optDouble("Mileges");
+
+                    DecimalFormat decimalFormat = new DecimalFormat("#0.0");
+                    decimalFormat.setRoundingMode(RoundingMode.DOWN);
+                    dymOrder.distance = Double.parseDouble(decimalFormat.format(dymOrder.distance));
+                    //公里数保留一位小数。。
 
                     dymOrder.updateFee();
                     notifyObserver(orderId, orderType);
@@ -194,7 +202,6 @@ public class HandlePush implements FeeChangeSubject {
 
     /**
      * 查询设置
-     *
      */
     private void loadSetting() {
         Observable<SettingResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)

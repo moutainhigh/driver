@@ -103,19 +103,19 @@ class UpdateDownloader extends AsyncTask<Void, Integer, Long> {
     @Override
     protected void onProgressUpdate(Integer... progress) {
         switch (progress[0]) {
-            case EVENT_START:
-                mAgent.onStart();
+        case EVENT_START:
+            mAgent.onStart();
+            break;
+        case EVENT_PROGRESS:
+            long now = System.currentTimeMillis();
+            if (now - mTimeLast < 900) {
                 break;
-            case EVENT_PROGRESS:
-                long now = System.currentTimeMillis();
-                if (now - mTimeLast < 900) {
-                    break;
-                }
-                mTimeLast = now;
-                mTimeUsed = now - mTimeBegin;
-                mSpeed = mBytesLoaded * 1000 / mTimeUsed;
-                mAgent.onProgress((int) (this.getBytesLoaded() * 100 / mBytesTotal));
-                break;
+            }
+            mTimeLast = now;
+            mTimeUsed = now - mTimeBegin;
+            mSpeed = mBytesLoaded * 1000 / mTimeUsed;
+            mAgent.onProgress((int) (this.getBytesLoaded() * 100 / mBytesTotal));
+            break;
         }
     }
 

@@ -1,9 +1,10 @@
 package com.easymi.component.update;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 
+import com.easymi.component.Config;
 import com.easymi.component.utils.Log;
+import com.easymi.component.utils.SysUtil;
 import com.google.gson.Gson;
 
 /**
@@ -13,21 +14,19 @@ import com.google.gson.Gson;
 public class UpdateHelper {
 
     private Context context;
-    private OnNextListener listener;
-    private String mCheckUrl;
 
-    public UpdateHelper(Context context, @NonNull String checkUrl, OnNextListener listener) {
+    private OnNextListener listener;
+
+    public UpdateHelper(Context context, OnNextListener listener) {
         this.context = context;
         this.listener = listener;
-        this.mCheckUrl = checkUrl;
         if (null != context && null != listener) {
             check(530);
         }
     }
 
     private void check(final int notifyId) {
-
-        UpdateManager.create(context).setUrl(mCheckUrl).setManual(true).setNotifyId(notifyId).setParser(new IUpdateParser() {
+        UpdateManager.create(context).setUrl(checkUrl()).setManual(true).setNotifyId(notifyId).setParser(new IUpdateParser() {
             @Override
             public UpdateInfo parse(String source) throws Exception {
                 Log.e("update", "source" + source);
@@ -58,6 +57,11 @@ public class UpdateHelper {
                 listener.onNoVersion();
             }
         }).setWifiOnly(false).check();
+    }
+
+    public String checkUrl() {
+        return "http://vs.xiaoka.me:8080/api/v1/checkForUpdates?channel=OFFICIAL&platform=ANDROID&type=1&shortVersion=" + SysUtil.getVersionCode(context)
+                + "&appkey=" + Config.APP_KEY;
     }
 
     public interface OnNextListener {

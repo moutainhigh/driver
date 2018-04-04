@@ -87,6 +87,9 @@ public class DymOrder implements Serializable {
     @SerializedName("pre_pay")
     public double prepay;
 
+    @SerializedName("min_cost")
+    public double minestMoney;//最低消费金额
+
     //作弊增加的里程
     public int addedKm; //数据源来自于本地调价 不会来自后端
 
@@ -123,6 +126,7 @@ public class DymOrder implements Serializable {
         values.put("totalFee", totalFee);
         values.put("distance", distance);
         values.put("disFee", disFee);
+        values.put("minestMoney", minestMoney);
         values.put("orderStatus", orderStatus);
 
         values.put("paymentFee", paymentFee);
@@ -132,6 +136,7 @@ public class DymOrder implements Serializable {
         values.put("orderTotalFee", orderTotalFee);
         values.put("orderShouldPay", orderShouldPay);
         values.put("prepay", prepay);
+
 //        values.put("addedKm", addedKm);
 //        values.put("addedFee", addedFee);
         /*
@@ -253,6 +258,7 @@ public class DymOrder implements Serializable {
         orderInfo.totalFee = cursor.getDouble(cursor.getColumnIndex("totalFee"));
         orderInfo.distance = cursor.getDouble(cursor.getColumnIndex("distance"));
         orderInfo.disFee = cursor.getDouble(cursor.getColumnIndex("disFee"));
+        orderInfo.minestMoney = cursor.getDouble(cursor.getColumnIndex("minestMoney"));
 
         orderInfo.orderStatus = cursor.getInt(cursor.getColumnIndex("orderStatus"));
 
@@ -265,6 +271,7 @@ public class DymOrder implements Serializable {
         orderInfo.prepay = cursor.getDouble(cursor.getColumnIndex("prepay"));
         orderInfo.addedKm = cursor.getInt(cursor.getColumnIndex("addedKm"));
         orderInfo.addedFee = cursor.getDouble(cursor.getColumnIndex("addedFee"));
+
 
         return orderInfo;
     }
@@ -294,6 +301,7 @@ public class DymOrder implements Serializable {
         values.put("totalFee", totalFee);
         values.put("distance", distance);
         values.put("disFee", disFee);
+        values.put("minestMoney", minestMoney);
 
         values.put("orderStatus", orderStatus);
 
@@ -326,6 +334,7 @@ public class DymOrder implements Serializable {
         values.put("totalFee", totalFee);
         values.put("distance", distance);
         values.put("disFee", disFee);
+        values.put("minestMoney", minestMoney);
 //        values.put("addedKm", addedKm);
 //        values.put("addedFee", addedFee);
         /*

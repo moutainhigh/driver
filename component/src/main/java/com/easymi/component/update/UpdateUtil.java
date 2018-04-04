@@ -90,15 +90,16 @@ public class UpdateUtil {
     }
 
     public static void ensureExternalCacheDir(Context context) {
-        File file = context.getExternalCacheDir();
-        if (file == null) {
-            File parentFile = context.getExternalFilesDir("");
-            if (parentFile != null) {
-                file = new File(parentFile.getParentFile(), "cache");
+        try {
+            File file = context.getExternalCacheDir();
+            if (file == null) {
+                file = new File(context.getExternalFilesDir("").getParentFile(), "cache");
             }
-        }
-        if (file != null) {
-            file.mkdirs();
+            if (file != null) {
+                file.mkdirs();
+            }
+        } catch (NullPointerException e) {
+
         }
     }
 
@@ -120,10 +121,10 @@ public class UpdateUtil {
 
     public static void install(Context context, File file, boolean force) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT < 24) {
             intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
         } else {
-            Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".fileProvider", file);
+            Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);
             intent.setDataAndType(uri, "application/vnd.android.package-archive");
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }

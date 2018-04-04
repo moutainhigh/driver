@@ -22,16 +22,13 @@ import android.util.SparseArray;
 public class UpdateError extends Throwable {
 
     public final int code;
-
     public UpdateError(int code) {
         this(code, null);
     }
-
     public UpdateError(int code, String message) {
         super(make(code, message));
         this.code = code;
     }
-
     public boolean isError() {
         return code >= 2000;
     }
@@ -79,7 +76,6 @@ public class UpdateError extends Throwable {
     public static final int DOWNLOAD_VERIFY = 3010;
 
     public static final SparseArray<String> messages = new SparseArray<>();
-
     static {
 
         messages.append(UPDATE_IGNORED, "该版本已经忽略");

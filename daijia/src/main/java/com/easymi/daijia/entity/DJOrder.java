@@ -61,12 +61,6 @@ public class DJOrder implements Serializable {
     @SerializedName("budget_fee")
     public double budgetFee;//预算费用 定价时取这字段当钱
 
-    @SerializedName("coupon_fee")
-    public double couponFee;//现金优惠券金额 例：20.0
-
-    @SerializedName("coupon_type")
-    public double couponScale;//折扣比例 例：70（代表7折）
-
     @SerializedName("pre_pay")
     public double prepay;//预付金额
 
@@ -84,5 +78,7 @@ public class DJOrder implements Serializable {
     public List<Address> addresses;
 
     public DymOrder orderFee;
+
+    public Coupon coupon;
 
 }

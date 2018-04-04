@@ -1,5 +1,6 @@
 package com.easymi.common.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,7 @@ import com.easymi.common.R;
 import com.easymi.common.adapter.LiuShuiAdapter;
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.component.Config;
+import com.easymi.component.DJOrderStatus;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.network.ApiManager;
@@ -60,6 +62,8 @@ public class LiushuiActivity extends RxBaseActivity {
 
     private List<BaseOrder> orders;
 
+    public static int CLICK_POS = 0x00;
+
     @Override
     public boolean isEnableSwipe() {
         return true;
@@ -81,12 +85,12 @@ public class LiushuiActivity extends RxBaseActivity {
         initToolBar();
         initTab();
         initRecycler();
+        recyclerView.setRefreshing(true);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        recyclerView.setRefreshing(true);
     }
 
     private void initRecycler() {
@@ -258,5 +262,27 @@ public class LiushuiActivity extends RxBaseActivity {
 
     private void hideErr() {
         errLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            int pos = CLICK_POS - 1;
+            BaseOrder order = orders.get(pos);
+            if (order.orderType.equals(Config.DAIJIA)) {
+                if (order.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {
+                    order.orderStatus = DJOrderStatus.FINISH_ORDER;
+                    order.baoxiaoStatus = 1;
+                    adapter.notifyItemChanged(pos);
+                    return;
+                } else if (order.orderStatus == DJOrderStatus.FINISH_ORDER && order.baoxiaoStatus == 1) {
+                    order.baoxiaoStatus = 2;
+                    adapter.notifyItemChanged(pos);
+                    return;
+                }
+            }
+            recyclerView.setRefreshing(true);
+        }
     }
 }

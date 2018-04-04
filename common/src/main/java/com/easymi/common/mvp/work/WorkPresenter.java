@@ -295,7 +295,7 @@ public class WorkPresenter implements WorkContract.Presenter {
             @Override
             public void run() {
                 Employ employ = EmUtil.getEmployInfo();
-                if (StringUtils.isNotBlank(employ.status)) {
+                if (employ != null && StringUtils.isNotBlank(employ.status)){
                     if (employ.status.equals(EmployStatus.ONLINE)) {
 //                        showOffline();//非听单状态
                     } else {

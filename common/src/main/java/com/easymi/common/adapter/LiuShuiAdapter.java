@@ -1,5 +1,6 @@
 package com.easymi.common.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.easymi.common.R;
 import com.easymi.common.activity.BaoxiaoActivity;
+import com.easymi.common.activity.LiushuiActivity;
 import com.easymi.common.entity.Setting;
 import com.easymi.common.util.DJStatus2Str;
 import com.easymi.component.Config;
@@ -67,9 +69,10 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
             holder.orderBaoxiao.setTextSize(14);
             holder.orderBaoxiao.setText(context.getString(R.string.liushui_baoxiao));
             holder.orderBaoxiao.setOnClickListener(view -> {
+                LiushuiActivity.CLICK_POS = position + 1;
                 Intent intent = new Intent(context, BaoxiaoActivity.class);
                 intent.putExtra("orderId", baseOrder.orderId);
-                context.startActivity(intent);
+                ((Activity) context).startActivityForResult(intent, LiushuiActivity.CLICK_POS);
             });
         } else if (baseOrder.baoxiaoStatus == 2) {
             holder.orderBaoxiao.setClickable(false);
@@ -83,13 +86,16 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
 
         if (baseOrder.orderType.equals(Config.DAIJIA) &&
                 baseOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {
+            holder.rootView.setClickable(true);
             holder.rootView.setOnClickListener(v -> {
+                LiushuiActivity.CLICK_POS = position + 1;
                 ARouter.getInstance().build("/daijia/FlowActivity")
                         .withLong("orderId", baseOrder.orderId)
-                        .navigation();
+                        .navigation((Activity) context, LiushuiActivity.CLICK_POS);
             });
             holder.orderBaoxiao.setVisibility(View.GONE);
         } else {
+            holder.rootView.setClickable(false);
             boolean canBaoxiao = Setting.findOne().isExpenses == 1;
             if (canBaoxiao) {
                 holder.orderBaoxiao.setVisibility(View.VISIBLE);

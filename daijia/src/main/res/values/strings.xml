@@ -44,6 +44,10 @@
     <string name="hint_edit">点击价格文字可以直接输入</string>
     <string name="please_remark">请输入备注信息</string>
 
+    <string name="minest_fee">最低消费金额</string>
+    <string name="xianjin_coupon">元现金优惠券</string>
+    <string name="zhekou_coupon">折折扣优惠券</string>
+
     <string name="fee_detail">费用详情</string>
 
     <string name="please_consumer_phone">请输入客户电话号码</string>

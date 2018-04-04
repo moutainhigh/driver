@@ -703,6 +703,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             bottomSheetDialog.dismiss();
         }
         ToastUtil.showMessage(this, getString(R.string.pay_suc));
+        setResult(RESULT_OK);
         finish();
     }
 

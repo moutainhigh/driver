@@ -95,7 +95,7 @@ public class FlowModel implements FlowContract.Model {
                         dymOrder.travelFee, dymOrder.waitTime,
                         dymOrder.waitTimeFee, 0.0, 0.0, dymOrder.couponFee,
                         dymOrder.orderTotalFee, dymOrder.orderShouldPay, dymOrder.startFee,
-                        loc.street + "  " + loc.poiName, loc.latitude, loc.longitude)
+                        loc.street + "  " + loc.poiName, loc.latitude, loc.longitude, dymOrder.minestMoney)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

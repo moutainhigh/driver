@@ -37,6 +37,9 @@ public class FeeDetailActivity extends RxBaseActivity {
     TextView prepayFee;
     RelativeLayout couponFeeCon;
 
+    RelativeLayout minestFeeCon;
+    TextView minestFeeText;
+
     TextView extraFee;
     TextView paymentFee;
 
@@ -77,6 +80,8 @@ public class FeeDetailActivity extends RxBaseActivity {
         extraFee = findViewById(R.id.extra_fee);
         paymentFee = findViewById(R.id.help_pay_fee);
 
+        minestFeeCon = findViewById(R.id.minest_fee_con);
+        minestFeeText = findViewById(R.id.minest_fee);
 
         dymOrder = (DymOrder) getIntent().getSerializableExtra("dymOrder");
         djOrder = (DJOrder) getIntent().getSerializableExtra("djOrder");
@@ -97,17 +102,19 @@ public class FeeDetailActivity extends RxBaseActivity {
         extraFee.setText(dymOrder.extraFee + getString(R.string.yuan));
         paymentFee.setText(dymOrder.paymentFee + getString(R.string.yuan));
 
-        if (djOrder.couponFee == 0 && djOrder.couponScale == 0) {
-
-        } else {
-            if (djOrder.couponFee != 0) {
-                couponType.setText("（" + djOrder.couponFee + "元现金优惠券）");
+        if (djOrder.coupon != null && (djOrder.coupon.couponType == 1 || djOrder.coupon.couponType == 2)) {
+            if (djOrder.coupon.couponType == 2) {
+                couponType.setText("（" + djOrder.coupon.deductible + getString(R.string.xianjin_coupon) + "）");
             } else {
                 DecimalFormat df = new DecimalFormat("#0.0");
-                couponType.setText("（" + df.format(djOrder.couponScale / 10) + "折折扣优惠券）");
+                couponType.setText("（" + df.format(djOrder.coupon.discount / 10) + getString(R.string.zhekou_coupon) + "）");
             }
-
             couponFee.setText(dymOrder.couponFee + getString(R.string.yuan));
+        }
+
+        if (dymOrder.minestMoney != 0) {
+            minestFeeCon.setVisibility(View.VISIBLE);
+            minestFeeText.setText(String.valueOf(dymOrder.minestMoney) + getString(R.string.yuan));
         }
 
         totalFee.setText(getString(R.string.money_sign) + dymOrder.orderShouldPay);

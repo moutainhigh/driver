@@ -40,6 +40,7 @@ public class SettleFragmentDialog {
     TextView carNoText;
     EditText remarkEdit;
     TextView dialogTitle;
+    TextView addedHint;
 
     LoadingButton confirmBtn;
     LoadingButton payButton;
@@ -81,6 +82,7 @@ public class SettleFragmentDialog {
         payButton = view.findViewById(R.id.pay_button);
         feeDetail = view.findViewById(R.id.fee_detail);
         dialogTitle = view.findViewById(R.id.dialog_title);
+        addedHint = view.findViewById(R.id.added_hint);
 
         extraFeeEdit.setSelection(extraFeeEdit.getText().toString().length());
         paymentEdit.setSelection(paymentEdit.getText().toString().length());
@@ -96,6 +98,7 @@ public class SettleFragmentDialog {
         if (!canChangeFee) {
             extraFeeEdit.setEnabled(false);
             paymentEdit.setEnabled(false);
+            addedHint.setVisibility(View.GONE);
             return;
         }
         extraFeeEdit.setOnFocusChangeListener((view, hasFocus) -> {
@@ -332,11 +335,13 @@ public class SettleFragmentDialog {
         dymOrder.paymentFee = paymentFee;
         dymOrder.remark = remark;
         dymOrder.prepay = djOrder.prepay;
-        if (djOrder.couponFee != 0) {
-            dymOrder.couponFee = djOrder.couponFee;
-        }
-        if (djOrder.couponScale != 0) {
-            dymOrder.couponFee = Double.parseDouble(df.format(dymOrder.totalFee * (100 - djOrder.couponScale) / 100));
+        if (djOrder.coupon != null) {
+            if (djOrder.coupon.couponType == 2) {
+                dymOrder.couponFee = djOrder.coupon.deductible;
+            } else if (djOrder.coupon.couponType == 1) {
+                dymOrder.couponFee = Double.parseDouble(df.format(dymOrder.totalFee * (100 - djOrder.coupon.discount) / 100));
+            }
+
         }
         dymOrder.orderTotalFee = Double.parseDouble(df.format(dymOrder.totalFee + dymOrder.extraFee + dymOrder.paymentFee));
 
@@ -362,6 +367,10 @@ public class SettleFragmentDialog {
         //最后加上其他费用
         shouldPay += otherFee;
         dymOrder.orderShouldPay = Double.parseDouble(df.format(shouldPay));
+
+        if (dymOrder.orderShouldPay < dymOrder.minestMoney) {//低于最低消费金额时
+            dymOrder.orderShouldPay = dymOrder.minestMoney;
+        }
 
         prepayMoneyText.setText(String.valueOf(dymOrder.prepay));
         needPayText.setText(String.valueOf(dymOrder.orderShouldPay));

@@ -140,6 +140,7 @@ public class BaoxiaoActivity extends RxBaseActivity {
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, applyBtn, emResult -> {
             ToastUtil.showMessage(BaoxiaoActivity.this, getString(R.string.baoxiao_suc));
+            setResult(RESULT_OK);
             finish();
         })));
     }

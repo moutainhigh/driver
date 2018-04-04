@@ -23,6 +23,7 @@ import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.permission.RxPermissions;
+import com.easymi.component.update.UpdateHelper;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -116,7 +117,7 @@ public class SplashActivity extends RxBaseActivity {
                 || !rxPermissions.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             showDialog();
         } else {
-            delayIn();
+            checkForUpdate();
         }
     }
 
@@ -163,6 +164,23 @@ public class SplashActivity extends RxBaseActivity {
         jump();
     }
 
+    /**
+     * 检查更新
+     */
+    private void checkForUpdate() {
+        new UpdateHelper(this, new UpdateHelper.OnNextListener() {
+            @Override
+            public void onNext() {
+                runOnUiThread(() -> delayIn());
+            }
+
+            @Override
+            public void onNoVersion() {
+                runOnUiThread(() -> delayIn());
+            }
+        });
+    }
+
     private void jump() {
         boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
         if (isLogin) {
@@ -198,7 +216,7 @@ public class SplashActivity extends RxBaseActivity {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .subscribe(granted -> {
                     if (granted) {
-                        delayIn();
+                        checkForUpdate();
                     } else {
                         Toast.makeText(SplashActivity.this, getString(R.string.exit), Toast.LENGTH_SHORT).show();
                         delayExit();

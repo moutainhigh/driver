@@ -167,7 +167,8 @@ public interface DJApiService {
                                                  @Field("start_price") Double start_price,
                                                  @Field("real_destination") String realAddress,
                                                  @Field("real_destination_lat") Double realLat,
-                                                 @Field("real_destination_lng") Double realLng
+                                                 @Field("real_destination_lng") Double realLng,
+                                                 @Field("min_cost") Double minCost
     );
 
     /**
