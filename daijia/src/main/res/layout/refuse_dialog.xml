@@ -53,7 +53,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="15dp"
             android:orientation="horizontal">
 
             <CheckBox
@@ -90,9 +90,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:orientation="horizontal">
 
             <CheckBox
@@ -130,22 +130,24 @@
             android:id="@+id/edit_reason"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:background="@drawable/corners_f5f5f5"
             android:gravity="center_vertical"
             android:hint="@string/please_other_reason"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:textSize="16sp" />
+            android:textSize="14sp"
+            android:textColorHint="#999999"
+            android:textColor="#999999"/>
 
         <Button
             android:id="@+id/refuse_apply"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginBottom="20dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:layout_marginTop="15dp"
             android:background="@drawable/corners_accent"
             android:text="@string/refuse_apply"

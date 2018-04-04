@@ -130,7 +130,7 @@ public class LoginActivity extends RxBaseActivity {
     private void initBox() {
         textAgreement.setOnClickListener(view -> {
             Intent intent = new Intent(LoginActivity.this, ArticleActivity.class);
-            intent.putExtra("tag", "ServiceAgreement");
+            intent.putExtra("tag", "DriverServiceAgreement");
             intent.putExtra("title", getString(R.string.login_agreement));
             startActivity(intent);
         });

@@ -110,7 +110,10 @@ public interface DJApiService {
     @FormUrlEncoded
     @POST("driver/api/v1/arrivalBookAddress")
     Observable<DJOrderResult> arrivalBookAddress(@Field("order_id") Long orderId,
-                                                 @Field("app_key") String appKey);
+                                                 @Field("app_key") String appKey,
+                                                 @Field("real_book_address") String realBookAddress,
+                                                 @Field("real_book_address_lat") Double realBookLat,
+                                                 @Field("real_book_address_lng") Double realBookLng);
 
     /**
      * 前往目的地
@@ -161,7 +164,10 @@ public interface DJApiService {
                                                  @Field("coupon_fee") Double coupon_fee,//优惠券
                                                  @Field("total_fee") Double total_fee,//跑出来的钱 + 垫付 + 附加费用 (不算优惠券的钱)
                                                  @Field("real_pay") Double real_pay,//total_fee - 优惠金额 - 预付费
-                                                 @Field("start_price") Double start_price
+                                                 @Field("start_price") Double start_price,
+                                                 @Field("real_destination") String realAddress,
+                                                 @Field("real_destination_lat") Double realLat,
+                                                 @Field("real_destination_lng") Double realLng
     );
 
     /**
