@@ -64,4 +64,6 @@
     <string name="get_wifi_fail">获取wifi环境下ip地址失败\n</string>
 
     <string name="unknown_error">网络出小差了</string>
+    <string name="update_failed">更新应用失败，即将退出</string>
+    <string name="down_loading">下载中...</string>
 </resources>

@@ -3,8 +3,11 @@ package com.easymi.component.update;
 import android.content.Context;
 
 import com.easymi.component.Config;
+import com.easymi.component.R;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.SysUtil;
+import com.easymi.component.utils.ToastUtil;
 import com.google.gson.Gson;
 
 /**
@@ -15,15 +18,17 @@ public class UpdateHelper {
 
     private Context context;
 
-    private OnNextListener listener;
+    private OnNextListener onNextListener;
 
-    public UpdateHelper(Context context, OnNextListener listener) {
+    public UpdateHelper(Context context, OnNextListener onNextListener) {
         this.context = context;
-        this.listener = listener;
-        if (null != context && null != listener) {
-            check(530);
+        this.onNextListener = onNextListener;
+        if (null != context && null != onNextListener) {
+            check(520);
         }
     }
+
+    private UpdateInfo updateInfo;
 
     private void check(final int notifyId) {
         UpdateManager.create(context).setUrl(checkUrl()).setManual(true).setNotifyId(notifyId).setParser(new IUpdateParser() {
@@ -33,28 +38,25 @@ public class UpdateHelper {
                 Gson gson = new Gson();
                 CheckUpdateResult result = gson.fromJson(source, CheckUpdateResult.class);
 
-                UpdateInfo info = new UpdateInfo();
-                info.hasUpdate = result.hasNew;
-                info.updateContent = result.updateInfo;
-                info.versionCode = result.code;
-                info.versionName = result.version;
-                info.url = result.downloadUrl;
-                info.md5 = context.getPackageName() + "_" + result.version;//md5值本该是文件的MD5值  但是后台没有返回文件MD5，这里就采用包名+版本名校验是否存在
-                info.size = result.size * 1024;
-                info.isForce = result.force;
-                info.isIgnorable = false;
-                info.isSilent = false;
-                return info;
+                updateInfo = new UpdateInfo();
+                updateInfo.hasUpdate = result.hasNew;
+                updateInfo.updateContent = result.updateInfo;
+                updateInfo.versionCode = result.code;
+                updateInfo.versionName = result.version;
+                updateInfo.url = result.downloadUrl;
+                updateInfo.md5 = context.getPackageName() + "_" + result.version;//md5值本该是文件的MD5值  但是后台没有返回文件MD5，这里就采用包名+版本名校验是否存在
+                updateInfo.size = result.size * 1024;
+                updateInfo.isForce = result.force;
+                updateInfo.isIgnorable = false;
+                updateInfo.isSilent = false;
+                return updateInfo;
             }
-        }).setOnNext(new IUpdateNext() {
-            @Override
-            public void next() {
-                listener.onNext();
-            }
-        }).setOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(UpdateError error) {
-                listener.onNoVersion();
+        }).setOnNext(() -> onNextListener.onNext()).setOnFailureListener(error -> {
+            if (null != updateInfo && updateInfo.isForce) {
+                ToastUtil.showMessage(context, context.getString(R.string.update_failed));
+                EmUtil.employLogout(context);
+            }else {
+                onNextListener.onNext();
             }
         }).setWifiOnly(false).check();
     }

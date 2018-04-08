@@ -18,7 +18,7 @@ package com.easymi.component.update;
 
 public interface OnDownloadListener {
 
-    void onStart();
+    void onStart(int max);
 
     void onProgress(int progress);
 

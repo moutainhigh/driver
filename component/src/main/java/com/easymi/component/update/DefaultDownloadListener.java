@@ -18,7 +18,7 @@ package com.easymi.component.update;
 
 public class DefaultDownloadListener implements OnDownloadListener {
     @Override
-    public void onStart() {
+    public void onStart(int max) {
 
     }
 

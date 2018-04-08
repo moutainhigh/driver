@@ -30,6 +30,8 @@ import android.text.method.ScrollingMovementMethod;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easymi.component.widget.UpdateProgressDialog;
+
 import java.io.File;
 
 public class UpdateAgent implements ICheckAgent, IUpdateAgent, IDownloadAgent {
@@ -151,11 +153,11 @@ public class UpdateAgent implements ICheckAgent, IUpdateAgent, IDownloadAgent {
     }
 
     @Override
-    public void onStart() {
+    public void onStart(int max) {
         if (mInfo.isSilent) {
-            mOnNotificationDownloadListener.onStart();
+            mOnNotificationDownloadListener.onStart(max);
         } else {
-            mOnDownloadListener.onStart();
+            mOnDownloadListener.onStart(max);
         }
     }
 
@@ -362,20 +364,20 @@ public class UpdateAgent implements ICheckAgent, IUpdateAgent, IDownloadAgent {
 
     private static class DefaultDialogDownloadListener implements OnDownloadListener {
         private Context mContext;
-        private ProgressDialog mDialog;
+        private UpdateProgressDialog mDialog;
 
         public DefaultDialogDownloadListener(Context context) {
             mContext = context;
         }
 
         @Override
-        public void onStart() {
+        public void onStart(int max) {
             if (mContext instanceof Activity && !((Activity) mContext).isFinishing()) {
-                ProgressDialog dialog = new ProgressDialog(mContext);
+                UpdateProgressDialog dialog = new UpdateProgressDialog(mContext);
                 dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                dialog.setMessage("下载中...");
                 dialog.setIndeterminate(false);
                 dialog.setCancelable(false);
+                dialog.setMax(max);
                 dialog.show();
                 mDialog = dialog;
             }
@@ -407,8 +409,10 @@ public class UpdateAgent implements ICheckAgent, IUpdateAgent, IDownloadAgent {
             mNotifyId = notifyId;
         }
 
+        private int max;
+
         @Override
-        public void onStart() {
+        public void onStart(int max) {
             if (mBuilder == null) {
                 String title = "下载中 - " + mContext.getString(mContext.getApplicationInfo().labelRes);
                 mBuilder = new NotificationCompat.Builder(mContext);
@@ -420,6 +424,7 @@ public class UpdateAgent implements ICheckAgent, IUpdateAgent, IDownloadAgent {
                         .setTicker(title)
                         .setContentTitle(title);
             }
+            this.max = max;
             onProgress(0);
         }
 
@@ -430,7 +435,7 @@ public class UpdateAgent implements ICheckAgent, IUpdateAgent, IDownloadAgent {
                     mBuilder.setPriority(Notification.PRIORITY_DEFAULT);
                     mBuilder.setDefaults(0);
                 }
-                mBuilder.setProgress(100, progress, false);
+                mBuilder.setProgress(max, progress, false);
 
                 NotificationManager nm = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
                 nm.notify(mNotifyId, mBuilder.build());

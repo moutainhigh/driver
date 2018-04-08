@@ -23,6 +23,8 @@ import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.permission.RxPermissions;
+import com.easymi.component.update.OnFailureListener;
+import com.easymi.component.update.UpdateError;
 import com.easymi.component.update.UpdateHelper;
 
 import java.io.IOException;
