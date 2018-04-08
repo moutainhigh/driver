@@ -357,7 +357,7 @@ public class SettleFragmentDialog {
             otherFee = -leftMoney;
         }
         //开始计算优惠券
-        double shouldPay = Double.parseDouble(df.format(dymOrder.totalFee - dymOrder.couponFee));
+        double shouldPay = Double.parseDouble(df.format(dymOrder.totalFee + dymOrder.extraFee - dymOrder.couponFee));//附加费参与优惠券抵扣
         if (shouldPay > 0) {
             shouldPay -= prepay;
         } else {

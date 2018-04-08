@@ -157,7 +157,7 @@ public class PlaceActivity extends RxBaseActivity {
                         items.addAll(poiResult.getPois());
                     }
                     adapter.setPoiList(items);
-                    if (poiResult.getPageCount() > page) {
+                    if (poiResult.getPageCount() - 1 > page) {
                         recyclerView.setLoadMoreEnable(true);
                     } else {
                         recyclerView.setLoadMoreEnable(false);
