@@ -74,7 +74,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         Observable<DJOrderResult> observable = model.doAccept(orderId);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, djOrderResult -> {
-            djOrderResult.order.addresses = djOrderResult.address;
+            djOrderResult = orderResult2DJOrder(djOrderResult);
             updateDymOrder(djOrderResult.order);
             view.showOrder(djOrderResult.order);
 
@@ -87,6 +87,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         Observable<DJOrderResult> observable = model.refuseOrder(orderId, remark);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, djOrderResult -> {
+            djOrderResult = orderResult2DJOrder(djOrderResult);
             DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
             if (null != dymOrder) {
                 dymOrder.delete();
@@ -100,7 +101,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         Observable<DJOrderResult> observable = model.toStart(orderId);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, djOrderResult -> {
-            djOrderResult.order.addresses = djOrderResult.address;
+            djOrderResult = orderResult2DJOrder(djOrderResult);
             updateDymOrder(djOrderResult.order);
             view.showOrder(djOrderResult.order);
 
@@ -112,7 +113,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         Observable<DJOrderResult> observable = model.arriveStart(orderId);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, djOrderResult -> {
-            djOrderResult.order.addresses = djOrderResult.address;
+            djOrderResult = orderResult2DJOrder(djOrderResult);
             updateDymOrder(djOrderResult.order);
             view.showOrder(djOrderResult.order);
 
@@ -124,7 +125,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         Observable<DJOrderResult> observable = model.startWait(orderId);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, djOrderResult -> {
-            djOrderResult.order.addresses = djOrderResult.address;
+            djOrderResult = orderResult2DJOrder(djOrderResult);
             updateDymOrder(djOrderResult.order);
             view.showOrder(djOrderResult.order);
 
@@ -136,7 +137,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         Observable<DJOrderResult> observable = model.startWait(orderId);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, djOrderResult -> {
-            djOrderResult.order.addresses = djOrderResult.address;
+            djOrderResult = orderResult2DJOrder(djOrderResult);
             updateDymOrder(djOrderResult.order);
             view.showOrder(djOrderResult.order);
 
@@ -147,7 +148,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     public void startDrive(Long orderId, LoadingButton btn) {
         Observable<DJOrderResult> observable = model.startDrive(orderId);
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, djOrderResult -> {
-            djOrderResult.order.addresses = djOrderResult.address;
+            djOrderResult = orderResult2DJOrder(djOrderResult);
             updateDymOrder(djOrderResult.order);
             view.showOrder(djOrderResult.order);
 
@@ -161,7 +162,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, djOrderResult -> {
             dymOrder.updateConfirm();
-            djOrderResult.order.addresses = djOrderResult.address;
+            djOrderResult = orderResult2DJOrder(djOrderResult);
             updateDymOrder(djOrderResult.order);
             view.showOrder(djOrderResult.order);
 
@@ -187,8 +188,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<DJOrderResult>() {
             @Override
             public void onNext(DJOrderResult djOrderResult) {
-                djOrderResult.order.addresses = djOrderResult.address;
-                djOrderResult.order.orderFee = djOrderResult.orderFee;
+                djOrderResult = orderResult2DJOrder(djOrderResult);
                 updateDymOrder(djOrderResult.order);
                 view.showOrder(djOrderResult.order);
             }
@@ -207,8 +207,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, needShowProgress, false, new HaveErrSubscriberListener<DJOrderResult>() {
             @Override
             public void onNext(DJOrderResult djOrderResult) {
-                djOrderResult.order.addresses = djOrderResult.address;
-                djOrderResult.order.orderFee = djOrderResult.orderFee;
+                djOrderResult = orderResult2DJOrder(djOrderResult);
                 updateDymOrder(djOrderResult.order);
                 view.showOrder(djOrderResult.order);
             }
@@ -225,7 +224,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         Observable<DJOrderResult> observable = model.changeEnd(orderId, lat, lng, address);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, djOrderResult -> {
-            djOrderResult.order.addresses = djOrderResult.address;
+            djOrderResult = orderResult2DJOrder(djOrderResult);
             updateDymOrder(djOrderResult.order);
             view.showOrder(djOrderResult.order);
 
@@ -237,6 +236,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         Observable<DJOrderResult> observable = model.cancelOrder(orderId, remark);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, djOrderResult -> {
+            djOrderResult = orderResult2DJOrder(djOrderResult);
             DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
             if (null != dymOrder) {
                 dymOrder.delete();
@@ -371,6 +371,14 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     public void getConsumerInfo(Long orderId) {
         view.getManager().add(model.consumerInfo(orderId).subscribe(new MySubscriber<>(context, true,
                 false, consumerResult -> view.showConsumer(consumerResult.consumerInfo))));
+    }
+
+    @Override
+    public DJOrderResult orderResult2DJOrder(DJOrderResult djOrderResult) {
+        djOrderResult.order.addresses = djOrderResult.address;
+        djOrderResult.order.orderFee = djOrderResult.orderFee;
+        djOrderResult.order.coupon = djOrderResult.coupon;
+        return djOrderResult;
     }
 
     @Override

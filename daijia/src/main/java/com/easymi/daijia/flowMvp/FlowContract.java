@@ -54,11 +54,11 @@ public interface FlowContract {
 
         void showPath(DriveRouteResult result);
 
-        void showPayType(double money,ConsumerInfo consumerInfo);
+        void showPayType(double money, ConsumerInfo consumerInfo);
 
         void paySuc();
 
-        void showLeft(int dis,int time);
+        void showLeft(int dis, int time);
 
         void showReCal();//重新规划路径开始
 
@@ -86,11 +86,11 @@ public interface FlowContract {
 
         void arriveDes(LoadingButton btn, DymOrder dymOrder);
 
-        void navi(LatLng latLng, String poi,Long orderId);
+        void navi(LatLng latLng, String poi, Long orderId);
 
         void findOne(Long orderId);
 
-        void findOne(Long orderId,boolean needShowProgress);
+        void findOne(Long orderId, boolean needShowProgress);
 
         void changeEnd(Long orderId, Double lat, Double lng, String address);
 
@@ -107,6 +107,8 @@ public interface FlowContract {
         void stopNavi();
 
         void getConsumerInfo(Long orderId);
+
+        DJOrderResult orderResult2DJOrder(DJOrderResult result);
         //...
     }
 

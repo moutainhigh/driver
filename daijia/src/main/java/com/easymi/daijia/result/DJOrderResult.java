@@ -3,6 +3,7 @@ package com.easymi.daijia.result;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.result.EmResult;
 import com.easymi.daijia.entity.Address;
+import com.easymi.daijia.entity.Coupon;
 import com.easymi.daijia.entity.DJOrder;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public class DJOrderResult extends EmResult {
     public List<Address> address;
 
     public DymOrder orderFee;
+
+    public Coupon coupon;
 }

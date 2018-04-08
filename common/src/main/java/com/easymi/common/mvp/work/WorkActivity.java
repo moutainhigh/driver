@@ -306,7 +306,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
     @Override
     public void onlineSuc() {
-        XApp.getInstance().syntheticVoice(getString(R.string.start_lis_order));
+        XApp.getInstance().syntheticVoice("",XApp.ON_LINE);
         listenOrderCon.setVisibility(View.VISIBLE);
         rippleBackground.startRippleAnimation();
         onLineBtn.setVisibility(View.GONE);
@@ -315,7 +315,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
     @Override
     public void offlineSuc() {
-        XApp.getInstance().syntheticVoice(getString(R.string.stop_lis_order));
+        XApp.getInstance().syntheticVoice("",XApp.OFF_LINE);
         listenOrderCon.setVisibility(View.GONE);
         rippleBackground.stopRippleAnimation();
         onLineBtn.setVisibility(View.VISIBLE);

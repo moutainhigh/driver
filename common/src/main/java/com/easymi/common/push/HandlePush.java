@@ -264,8 +264,7 @@ public class HandlePush implements FeeChangeSubject {
                 false, new HaveErrSubscriberListener<NotitfyResult>() {
             @Override
             public void onNext(NotitfyResult multipleOrderResult) {
-                XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.new_notify)
-                        + multipleOrderResult.employNoticeRecord.message, true);
+                XApp.getInstance().syntheticVoice( multipleOrderResult.employNoticeRecord.message, XApp.NEW_MSG);
                 Intent intent = new Intent();
                 intent.setAction(Config.BROAD_NOTICE);
                 intent.putExtra("notice", multipleOrderResult.employNoticeRecord.message);
@@ -296,7 +295,7 @@ public class HandlePush implements FeeChangeSubject {
                 false, new HaveErrSubscriberListener<AnnouncementResult>() {
             @Override
             public void onNext(AnnouncementResult announcementResult) {
-                XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.new_ann) + announcementResult.employAfficheRequest.message, true);
+                XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.new_ann) + announcementResult.employAfficheRequest.message, XApp.NEW_ANN);
                 Intent intent = new Intent();
                 intent.setAction(Config.BROAD_ANN);
                 intent.putExtra("ann", announcementResult.employAfficheRequest.message);
@@ -442,7 +441,7 @@ public class HandlePush implements FeeChangeSubject {
                     intent1.putExtra("orderType", order1.orderType);
                     XApp.getInstance().sendBroadcast(intent1);
                 }
-                XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.you_have_order_cancel));
+                XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.you_have_order_cancel), XApp.CANCEL);
                 newShowNotify(XApp.getInstance(), "", XApp.getInstance().getString(R.string.cancel_order)
                         , XApp.getInstance().getString(R.string.you_have_order_cancel));
 
@@ -486,7 +485,7 @@ public class HandlePush implements FeeChangeSubject {
                     intent3.putExtra("orderType", order3.orderType);
                     XApp.getInstance().sendBroadcast(intent3);
                 }
-                XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.you_have_order_back));
+                XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.you_have_order_back), XApp.CANCEL);
                 newShowNotify(XApp.getInstance(), "", XApp.getInstance().getString(R.string.back_order)
                         , XApp.getInstance().getString(R.string.you_have_order_back));
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.multidex.MultiDexApplication;
@@ -13,6 +14,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.amap.api.navi.AMapNavi;
 import com.easymi.component.BuildConfig;
 import com.easymi.component.Config;
+import com.easymi.component.R;
 import com.easymi.component.db.SqliteHelper;
 import com.easymi.component.loc.LocService;
 import com.easymi.component.utils.Log;
@@ -36,6 +38,19 @@ import java.util.List;
 
 public class XApp extends MultiDexApplication {
 
+    /**
+     * 提示音标志位--start
+     */
+    public static int ON_LINE = 1;
+    public static int OFF_LINE = 2;
+    public static int GRAB = 3;
+    public static int CANCEL = 4;
+    public static int NEW_MSG = 5;
+    public static int NEW_ANN = 6;
+    /**
+     * 提示音标志位--end
+     */
+
     private static final String SHARED_PREFERENCES_NAME = "em"; //SharedPreferences 文件名
 
     private static XApp instance;    //实例化对象
@@ -43,6 +58,8 @@ public class XApp extends MultiDexApplication {
     public static SpeechSynthesizer iflytekSpe;
 
     AudioManager audioManager;
+
+    private static MediaPlayer player;
 
     private AudioManager.OnAudioFocusChangeListener mFocusChangeListener;
 
@@ -146,6 +163,11 @@ public class XApp extends MultiDexApplication {
         };
     }
 
+    /**
+     * 请求语音播放焦点
+     *
+     * @return
+     */
     public boolean requestFocus() {
         if (mFocusChangeListener != null) {
             return AudioManager.AUDIOFOCUS_REQUEST_GRANTED ==
@@ -157,6 +179,11 @@ public class XApp extends MultiDexApplication {
         return false;
     }
 
+    /**
+     * 放弃语音播放焦点
+     *
+     * @return
+     */
     public boolean abandonFocus() {
         if (mFocusChangeListener != null) {
             return AudioManager.AUDIOFOCUS_REQUEST_GRANTED ==
@@ -187,6 +214,43 @@ public class XApp extends MultiDexApplication {
     }
 
     private LinkedList<String> voiceList;
+
+    /**
+     * @param text
+     * @param flag 语音播放前的提示音
+     */
+    public void syntheticVoice(String text, int flag) {
+        int resId = 0;
+        if (flag == ON_LINE) {
+            resId = R.raw.online_sound;
+        } else if (flag == OFF_LINE) {
+            resId = R.raw.offline_sound;
+        } else if (flag == GRAB) {
+            resId = R.raw.grab;
+        } else if (flag == NEW_MSG) {
+            resId = R.raw.new_msg;
+        } else if (flag == CANCEL) {
+            resId = R.raw.cancel_order;
+        } else if(flag == NEW_ANN){
+            resId = R.raw.new_ann;
+        }
+        if (resId == 0) {
+            return;
+        }
+        if (player != null && player.isPlaying()) {
+            player.stop();
+        }
+        player = MediaPlayer.create(this, resId);
+        player.setOnCompletionListener(mediaPlayer -> {
+            if (StringUtils.isNotBlank(text)) {
+                syntheticVoice(text);
+            } else {
+                abandonFocus();
+            }
+        });
+        requestFocus();
+        player.start();
+    }
 
     /**
      * @param text    要播报的内容
