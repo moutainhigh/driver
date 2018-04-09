@@ -326,6 +326,9 @@ public class SettleFragmentDialog {
         calcMoney();
     }
 
+    /**
+     * 附加费相当于就是totalFee的一部分 在不影响之前逻辑的情况下 他没有被加到totalFee里面去
+     */
     private void calcMoney() {
         DecimalFormat df = new DecimalFormat("#0.0");
         if (djOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {//到达于目的地后就无需计算了
@@ -339,14 +342,14 @@ public class SettleFragmentDialog {
             if (djOrder.coupon.couponType == 2) {
                 dymOrder.couponFee = djOrder.coupon.deductible;
             } else if (djOrder.coupon.couponType == 1) {
-                dymOrder.couponFee = Double.parseDouble(df.format(dymOrder.totalFee * (100 - djOrder.coupon.discount) / 100));
+                dymOrder.couponFee = Double.parseDouble(df.format((dymOrder.totalFee + dymOrder.extraFee) * (100 - djOrder.coupon.discount) / 100));//附加费参与优惠券打折
             }
 
         }
         dymOrder.orderTotalFee = Double.parseDouble(df.format(dymOrder.totalFee + dymOrder.extraFee + dymOrder.paymentFee));
 
         double prepay = dymOrder.prepay;
-        double otherFee = Double.parseDouble(df.format(dymOrder.extraFee + dymOrder.paymentFee));
+        double otherFee = Double.parseDouble(df.format(dymOrder.paymentFee));//附加费因为要参与优惠券打折，所以这里就不需要加附加费了
 
         double leftMoney = Double.parseDouble(df.format(prepay - otherFee));
         if (leftMoney >= 0) {//预付的钱大于附加的钱 相当于预付的钱就是这么减剩的
@@ -361,7 +364,7 @@ public class SettleFragmentDialog {
         if (shouldPay > 0) {
             shouldPay -= prepay;
         } else {
-            dymOrder.couponFee = dymOrder.totalFee;
+            dymOrder.couponFee = dymOrder.totalFee + dymOrder.extraFee;
             shouldPay = -prepay;
         }
         //最后加上其他费用

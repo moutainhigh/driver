@@ -1,5 +1,6 @@
 package com.easymi.common.mvp.grab;
 
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -27,6 +28,7 @@ import com.easymi.common.R;
 import com.easymi.common.adapter.GrabFragmentAdapter;
 import com.easymi.common.entity.Address;
 import com.easymi.common.entity.MultipleOrder;
+import com.easymi.common.push.HandlePush;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
 import com.easymi.component.app.XApp;
@@ -121,7 +123,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
         shake();
 
         String voiceStr = getIntent().getStringExtra("voiceStr");
-        XApp.getInstance().syntheticVoice(voiceStr,XApp.GRAB);
+        XApp.getInstance().syntheticVoice(voiceStr, XApp.GRAB);
 
 //        mSwipeBackHelper.setSwipeBackEnable(false);//抢单界面不允许侧滑返回
 
@@ -281,6 +283,9 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
         super.onDestroy();
         mapView.onDestroy();
         XApp.getInstance().stopVoice();
+        NotificationManager mNotificationManager = (NotificationManager) XApp
+                .getInstance().getSystemService(NOTIFICATION_SERVICE);
+        mNotificationManager.cancel(HandlePush.NOTIFY_ID);
     }
 
     @Override

@@ -59,6 +59,8 @@ public class HandlePush implements FeeChangeSubject {
 
     private RxManager rxManager;
 
+    public static int NOTIFY_ID = 1993;
+
     private static List<FeeChangeObserver> observers;
     private static HandlePush instance;
 
@@ -335,7 +337,7 @@ public class HandlePush implements FeeChangeSubject {
         Notification notification = builder.build();
 
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
-        mNotificationManager.notify(1, notification);
+        mNotificationManager.notify(NOTIFY_ID, notification);
     }
 
     private OnLoadOrderCallback loadOrderCallback = new OnLoadOrderCallback() {
