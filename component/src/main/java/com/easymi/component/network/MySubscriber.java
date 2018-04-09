@@ -101,6 +101,10 @@ public class MySubscriber<T> extends Subscriber<T> implements ProgressDismissLis
             this.onProgressDismiss();
         }
 
+        if (!this.isUnsubscribed()) {
+            this.unsubscribe();
+        }
+
     }
 
     /**
@@ -136,6 +140,9 @@ public class MySubscriber<T> extends Subscriber<T> implements ProgressDismissLis
             this.onProgressDismiss();
         }
 
+        if (!this.isUnsubscribed()) {
+            this.unsubscribe();
+        }
     }
 
     @Override
@@ -167,8 +174,6 @@ public class MySubscriber<T> extends Subscriber<T> implements ProgressDismissLis
      */
     @Override
     public void onProgressDismiss() {
-        if (!this.isUnsubscribed()) {
-            this.unsubscribe();
-        }
+
     }
 }
