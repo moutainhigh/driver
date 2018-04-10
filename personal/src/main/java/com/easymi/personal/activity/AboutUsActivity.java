@@ -188,7 +188,7 @@ public class AboutUsActivity extends RxBaseActivity {
             String html = articleResult.article.contents;
 
             String css = "<style type=\"text/css\"> img {" +
-                    "width:100%;" +//限定图片宽度填充屏幕
+                    "width:auto;" +//限定图片宽度填充屏幕
                     "height:auto;" +//限定图片高度自动
                     "}" +
                     "body {" +

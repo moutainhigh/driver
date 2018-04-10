@@ -170,23 +170,9 @@ public class PhoneUtil {
         imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
     }
 
-    public static void call(final Activity context, final String phoneNumber) {
-        try {
-            RxPermissions rxPermissions = new RxPermissions(context);
-            rxPermissions.request(Manifest.permission.CALL_PHONE)
-                    .subscribe(granted -> {
-                        if (granted) {
-                            Intent intent = new Intent();
-                            intent.setAction(Intent.ACTION_CALL);
-                            intent.setData(Uri.parse("tel:" + phoneNumber));
-                            context.startActivity(intent);
-                        } else {
-
-                        }
-                    });
-        } catch (Exception e) {
-            Log.e("exception", e.getMessage());
-        }
+    public static void call(final Activity context, String phoneNumber) {
+        Intent dialIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phoneNumber));//跳转到拨号界面，同时传递电话号码
+        context.startActivity(dialIntent);
     }
 
     /**
@@ -300,7 +286,6 @@ public class PhoneUtil {
     }
 
     /**
-     *
      * @param activity
      * @return
      */

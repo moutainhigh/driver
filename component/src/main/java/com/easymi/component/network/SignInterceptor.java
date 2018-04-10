@@ -27,22 +27,21 @@ import okhttp3.Response;
 /**
  * Created by Administrator on 2017/11/15 0015.
  * 拦截请求添加sign.
+ * <p>
+ * 为避免线程同步造成数据紊乱的问题，这里都只使用局部变量，不使用全局变量
  */
 
 public class SignInterceptor implements Interceptor {
 
     private static final String LOG_TAG = SignInterceptor.class.getSimpleName();
 
-    //保存请求参数
-    private final Map<String, String> paramsMap = new HashMap<>();
-    private String mPath;   //请求路径
     private final static String secret = "123456";  // TODO: 2017/11/16 设置一个秘钥
 
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {
 
-        paramsMap.clear();
-        mPath = null;
+        Map<String, String> paramsMap = new HashMap<>();
+        String mPath = "";
 
         Request request = chain.request();
         String url = "" + request.url();
@@ -52,9 +51,24 @@ public class SignInterceptor implements Interceptor {
         RequestBody body = request.body();
 
         if (body == null) {
-            cutOutUrl(url);
+            if (!TextUtils.isEmpty(url)) {
+                String[] result = url.split("[?]");
+                if (result.length > 1) {
+                    mPath = result[0].replaceAll(Config.HOST, "");  //获取path
+                    String[] params = result[1].split("&");
+                    for (String p : params) {
+                        String[] ps = p.split("=");
+                        paramsMap.put(ps[0], ps[1]);
+                    }
+                }
+            }
         } else if (body instanceof FormBody) {
-            cutOutForm((FormBody) body, url);
+            if (!TextUtils.isEmpty(url)) {
+                for (int i = 0; i < ((FormBody) body).size(); i++) {
+                    paramsMap.put(((FormBody) body).encodedName(i), ((FormBody) body).encodedValue(i));
+                }
+                mPath = url.replaceAll(Config.HOST, "");
+            }
         }
 
         if (TextUtils.isEmpty(mPath) || paramsMap.isEmpty()) {
@@ -64,50 +78,15 @@ public class SignInterceptor implements Interceptor {
         }
 
         return chain.proceed(request.newBuilder()
-                .addHeader("sign", sign())
+                .addHeader("sign", sign(paramsMap, mPath))
                 .build());
     }
 
-    /**
-     * 截取url参数列表.
-     *
-     * @param requestUrl requestUrl
-     */
-    private void cutOutUrl(String requestUrl) {
-        if (TextUtils.isEmpty(requestUrl)) {
-            return;
-        }
-        String[] result = requestUrl.split("[?]");
-        if (result.length <= 1) {
-            return;
-        }
-        mPath = result[0].replaceAll(Config.HOST, "");  //获取path
-        String[] params = result[1].split("&");
-        for (String p : params) {
-            String[] ps = p.split("=");
-            paramsMap.put(ps[0], ps[1]);
-        }
-        Log.e(LOG_TAG, "mPath" + mPath + ", paramsMap -->" + paramsMap.toString());
-
-    }
-
-    /**
-     * 截取fromBody请求参数.
-     */
-    private void cutOutForm(FormBody body, String requestUrl) {
-        if (TextUtils.isEmpty(requestUrl)) {
-            return;
-        }
-        for (int i = 0; i < body.size(); i++) {
-            paramsMap.put(body.encodedName(i), body.encodedValue(i));
-        }
-        mPath = requestUrl.replaceAll(Config.HOST, "");
-    }
 
     /**
      * 获取排序后的url.
      */
-    private String sortUrl() {
+    private String sortUrl(Map<String, String> paramsMap, String mPath) {
         List<String> sortList = new LinkedList<>();
         sortList.addAll(paramsMap.keySet());
         int size = sortList.size();
@@ -125,9 +104,8 @@ public class SignInterceptor implements Interceptor {
         return sb.toString();
     }
 
-    private String sign() {
-        Log.d(LOG_TAG, sortUrl());
-        return hamcsha1(sortUrl().getBytes(), secret.getBytes());
+    private String sign(Map<String, String> paramsMap, String mPath) {
+        return hamcsha1(sortUrl(paramsMap, mPath).getBytes(), secret.getBytes());
     }
 
     /**

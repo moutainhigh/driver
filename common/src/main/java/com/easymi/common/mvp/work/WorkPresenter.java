@@ -263,19 +263,13 @@ public class WorkPresenter implements WorkContract.Presenter {
         })));
     }
 
-    private boolean isFirst = true;
-
     @Override
     public void loadDataOnResume() {
         indexOrders();//查询订单
         loadEmploy(EmUtil.getEmployId());
         getAppSetting();//获取配置信息
-        if (isFirst) {
-            handler.postDelayed(this::queryStatis, 2000);
-            isFirst = false;
-        } else {
-            queryStatis();
-        }
+        queryStatis();
+
 
     }
 
@@ -295,7 +289,7 @@ public class WorkPresenter implements WorkContract.Presenter {
             @Override
             public void run() {
                 Employ employ = EmUtil.getEmployInfo();
-                if (employ != null && StringUtils.isNotBlank(employ.status)){
+                if (employ != null && StringUtils.isNotBlank(employ.status)) {
                     if (employ.status.equals(EmployStatus.ONLINE)) {
 //                        showOffline();//非听单状态
                     } else {

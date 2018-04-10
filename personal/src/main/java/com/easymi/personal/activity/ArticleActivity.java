@@ -140,7 +140,7 @@ public class ArticleActivity extends RxBaseActivity implements View.OnClickListe
             public void onNext(AnnResult annResult) {
                 String html = annResult.ann.content;
                 String css = "<style type=\"text/css\"> img {" +
-                        "width:100%;" +//限定图片宽度填充屏幕
+                        "width:auto;" +//限定图片宽度填充屏幕
                         "height:auto;" +//限定图片高度自动
                         "}" +
                         "body {" +
@@ -174,7 +174,7 @@ public class ArticleActivity extends RxBaseActivity implements View.OnClickListe
             String html = emResult.article.contents;
 
             String css = "<style type=\"text/css\"> img {" +
-                    "width:100%;" +//限定图片宽度填充屏幕
+                    "width:auto" +//限定图片宽度填充屏幕
                     "height:auto;" +//限定图片高度自动
                     "}" +
                     "body {" +
@@ -207,7 +207,7 @@ public class ArticleActivity extends RxBaseActivity implements View.OnClickListe
                 true, articleResult -> {
             String html = articleResult.article.contents;
             String css = "<style type=\"text/css\"> img {" +
-                    "width:100%;" +//限定图片宽度填充屏幕
+                    "width:auto" +//限定图片宽度填充屏幕
                     "height:auto;" +//限定图片高度自动
                     "}" +
                     "body {" +
