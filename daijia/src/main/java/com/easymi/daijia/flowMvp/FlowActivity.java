@@ -147,11 +147,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     private long orderId;
 
-    private boolean fromOld = false;
+    private boolean fromOld = false;//是否从横屏那边过来
 
     private double payMoney;
 
-    private boolean isPauseHideSettle = true;
+    private boolean isToFeeDetail = true;//是否是前往过费用详情界面
 
     @Override
     public int getLayoutId() {
@@ -165,6 +165,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         orderId = getIntent().getLongExtra("orderId", -1);
         fromOld = getIntent().getBooleanExtra("fromOld", false);//是否是从计价器过来的
+        isToFeeDetail = getIntent().getBooleanExtra("showSettle", false);//是否是从计价器过来的
         if (orderId == -1) {
             finish();
             return;
@@ -372,6 +373,16 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.commit();
         } else if (djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
             showToEndFragment();
+            if (isToFeeDetail) {
+                if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
+                    settleFragmentDialog.setDjOrder(djOrder);
+                } else {
+                    settleFragmentDialog = new SettleFragmentDialog(FlowActivity.this, djOrder, bridge);
+                    settleFragmentDialog.show();
+                }
+                isToFeeDetail = false;
+            }
+
         } else if (djOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {
             toolbar.setTitle(R.string.settle);
             runningFragment = new RunningFragment();
@@ -386,7 +397,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.replace(R.id.flow_frame, runningFragment);
             transaction.commit();
 
-            if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
+            if (settleFragmentDialog != null && settleFragmentDialog.isShowing() && !isToFeeDetail) {
                 settleFragmentDialog.setDjOrder(djOrder);
 
                 DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);//确认费用后直接弹出支付页面
@@ -394,8 +405,13 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                     bridge.doPay(dymOrder.orderShouldPay);
                 }
             } else {
-                settleFragmentDialog = new SettleFragmentDialog(this, djOrder, bridge);
-                settleFragmentDialog.show();
+                if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
+                    settleFragmentDialog.setDjOrder(djOrder);
+                } else {
+                    settleFragmentDialog = new SettleFragmentDialog(FlowActivity.this, djOrder, bridge);
+                    settleFragmentDialog.show();
+                }
+                isToFeeDetail = false;
             }
         }
 
@@ -900,7 +916,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void toFeeDetail() {
-                isPauseHideSettle = false;//跳转到费用详情界面 onPause时就不隐藏settleDialog
+                isToFeeDetail = true;
             }
 
             @Override
@@ -989,12 +1005,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     protected void onPause() {
         super.onPause();
         mapView.onPause();
-        if (settleFragmentDialog != null && settleFragmentDialog.isShowing() && isPauseHideSettle) {
-            settleFragmentDialog.dismiss();
-            settleFragmentDialog = null;
-        } else {
-            isPauseHideSettle = true;
-        }
     }
 
     @Override

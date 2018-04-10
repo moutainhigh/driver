@@ -70,9 +70,6 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
 
     private ActFraCommBridge bridge;
 
-    SettleFragmentDialog settleFragmentDialog;
-    CusBottomSheetDialog bottomSheetDialog;
-
     private double payMoney;
 
     @Override
@@ -290,21 +287,18 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
         this.djOrder = djOrder;
         meter_wait_btn.setOnClickListener(view -> presenter.startWait(orderId, meter_wait_btn));
         meter_settle_btn.setOnClickListener(view -> {
-            settleFragmentDialog = new SettleFragmentDialog(OldRunningActivity.this, djOrder, bridge);
-            settleFragmentDialog.show();
+            Intent intent = new Intent(OldRunningActivity.this, FlowActivity.class);
+            intent.putExtra("orderId", orderId);
+            intent.putExtra("fromOld", true);
+            intent.putExtra("showSettle", true);
+            startActivity(intent);
+            finish();
         });
         if (djOrder.orderStatus == DJOrderStatus.START_WAIT_ORDER) {
             Intent intent = new Intent(OldRunningActivity.this, OldWaitActivity.class);
             intent.putExtra("orderId", orderId);
             startActivity(intent);
             finish();
-        } else if (djOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {
-            if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
-                settleFragmentDialog.setDjOrder(djOrder);
-            } else {
-                settleFragmentDialog = new SettleFragmentDialog(this, djOrder, bridge);
-                settleFragmentDialog.show();
-            }
         }
     }
 
@@ -341,107 +335,11 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
     @Override
     public void showPayType(double money, ConsumerInfo consumerInfo) {
 
-        if (null != settleFragmentDialog) {
-            settleFragmentDialog.dismiss();
-        }
-
-        bottomSheetDialog = new CusBottomSheetDialog(this);
-
-        View view = LayoutInflater.from(this).inflate(R.layout.pay_type_dialog, null, false);
-
-        ImageView pay1Img = view.findViewById(R.id.pay_1_img);
-        ImageView pay2Img = view.findViewById(R.id.pay_2_img);
-        ImageView pay3Img = view.findViewById(R.id.pay_3_img);
-        ImageView pay4Img = view.findViewById(R.id.pay_4_img);
-
-        TextView pay1Text = view.findViewById(R.id.pay_1_text);
-        TextView pay2Text = view.findViewById(R.id.pay_2_text);
-        TextView pay3Text = view.findViewById(R.id.pay_3_text);
-        TextView pay4Text = view.findViewById(R.id.pay_4_text);
-
-        View pay1Empty = view.findViewById(R.id.pay_1_empty);
-        View pay2Empty = view.findViewById(R.id.pay_2_empty);
-        View pay3Empty = view.findViewById(R.id.pay_3_empty);
-        View pay4Empty = view.findViewById(R.id.pay_4_empty);
-
-        RadioButton pay1Btn = view.findViewById(R.id.pay_1_btn);
-        RadioButton pay2Btn = view.findViewById(R.id.pay_2_btn);
-        RadioButton pay3Btn = view.findViewById(R.id.pay_3_btn);
-        RadioButton pay4Btn = view.findViewById(R.id.pay_4_btn);
-
-        if (consumerInfo.consumerBalance < money) {
-            pay2Text.setVisibility(View.GONE);
-            pay2Empty.setVisibility(View.GONE);
-            pay2Btn.setVisibility(View.GONE);
-            pay2Img.setVisibility(View.GONE);
-        }
-        if (!consumerInfo.canSign) {
-            pay3Text.setVisibility(View.GONE);
-            pay3Empty.setVisibility(View.GONE);
-            pay3Btn.setVisibility(View.GONE);
-            pay3Img.setVisibility(View.GONE);
-        }
-        boolean canDaifu = Setting.findOne().isPaid == 1;
-        if (!canDaifu) {
-            pay4Text.setVisibility(View.GONE);
-            pay4Empty.setVisibility(View.GONE);
-            pay4Btn.setVisibility(View.GONE);
-            pay4Img.setVisibility(View.GONE);
-        }
-
-        pay1Btn.setOnClickListener(view13 -> bottomSheetDialog.dismiss());
-        pay1Text.setOnClickListener(view13 -> bottomSheetDialog.dismiss());
-        pay1Empty.setOnClickListener(view13 -> bottomSheetDialog.dismiss());
-        pay1Img.setOnClickListener(view13 -> bottomSheetDialog.dismiss());
-
-        pay2Empty.setOnClickListener(view14 -> pay2Btn.setChecked(true));
-        pay2Text.setOnClickListener(view14 -> pay2Btn.setChecked(true));
-        pay2Img.setOnClickListener(view14 -> pay2Btn.setChecked(true));
-
-        pay3Empty.setOnClickListener(view14 -> pay3Btn.setChecked(true));
-        pay3Text.setOnClickListener(view14 -> pay3Btn.setChecked(true));
-        pay3Img.setOnClickListener(view14 -> pay3Btn.setChecked(true));
-
-        pay4Empty.setOnClickListener(view14 -> pay4Btn.setChecked(true));
-        pay4Text.setOnClickListener(view14 -> pay4Btn.setChecked(true));
-        pay4Img.setOnClickListener(view14 -> pay4Btn.setChecked(true));
-
-        Button sure = view.findViewById(R.id.pay_button);
-        ImageView close = view.findViewById(R.id.ic_close);
-
-        sure.setText(getString(R.string.pay_money) + money + getString(R.string.yuan));
-
-        sure.setOnClickListener(view12 -> {
-            if (pay2Btn.isChecked() || pay3Btn.isChecked() || pay4Btn.isChecked()) {
-                if (pay4Btn.isChecked()) {
-                    presenter.payOrder(orderId, "helppay");
-                } else if (pay3Btn.isChecked()) {
-                    presenter.payOrder(orderId, "sign");
-                } else if (pay2Btn.isChecked()) {
-                    presenter.payOrder(orderId, "balance");
-                }
-            } else {
-                ToastUtil.showMessage(OldRunningActivity.this, getString(R.string.please_pay_title));
-            }
-        });
-
-        close.setOnClickListener(view1 -> bottomSheetDialog.dismiss());
-
-        bottomSheetDialog.setContentView(view);
-        bottomSheetDialog.setCancelable(false);
-        bottomSheetDialog.setOnDismissListener(dialogInterface -> {
-            finish();
-        });
-        bottomSheetDialog.show();
     }
 
     @Override
     public void paySuc() {
-        if (bottomSheetDialog != null && bottomSheetDialog.isShowing()) {
-            bottomSheetDialog.dismiss();
-        }
-        ToastUtil.showMessage(this, getString(R.string.pay_suc));
-        finish();
+
     }
 
     @Override

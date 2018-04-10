@@ -286,7 +286,7 @@ public interface DJApiService {
      */
     @FormUrlEncoded
     @PUT("driver/api/v1/cancelOrder")
-    Observable<DJOrderResult> cancelOrder(@Field("order_id") Long orderId,
+    Observable<EmResult> cancelOrder(@Field("order_id") Long orderId,
                                           @Field("driver_id") Long driverId,
                                           @Field("app_key") String appKey,
                                           @Field("remark") String remark);

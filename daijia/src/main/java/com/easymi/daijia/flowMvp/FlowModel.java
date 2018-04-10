@@ -111,7 +111,7 @@ public class FlowModel implements FlowContract.Model {
     }
 
     @Override
-    public Observable<DJOrderResult> cancelOrder(Long orderId, String remark) {
+    public Observable<EmResult> cancelOrder(Long orderId, String remark) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
                 .cancelOrder(orderId, EmUtil.getEmployId(), Config.APP_KEY, remark)
                 .filter(new HttpResultFunc<>())

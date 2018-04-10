@@ -131,7 +131,7 @@ public interface FlowContract {
 
         Observable<DJOrderResult> changeEnd(Long orderId, Double lat, Double lng, String address);
 
-        Observable<DJOrderResult> cancelOrder(Long orderId, String remark);
+        Observable<EmResult> cancelOrder(Long orderId, String remark);
 
         Observable<ConsumerResult> consumerInfo(Long orderId);
 
