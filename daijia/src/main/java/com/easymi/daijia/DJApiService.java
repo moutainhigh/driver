@@ -71,7 +71,7 @@ public interface DJApiService {
      */
     @FormUrlEncoded
     @PUT("driver/api/v1/refuseOrder")
-    Observable<DJOrderResult> refuseOrder(@Field("order_id") Long orderId,
+    Observable<EmResult> refuseOrder(@Field("order_id") Long orderId,
                                           @Field("driver_id") Long driverId,
                                           @Field("app_key") String appKey,
                                           @Field("remark") String remark);

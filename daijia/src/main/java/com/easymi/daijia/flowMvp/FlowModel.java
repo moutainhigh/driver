@@ -40,7 +40,7 @@ public class FlowModel implements FlowContract.Model {
     }
 
     @Override
-    public Observable<DJOrderResult> refuseOrder(Long orderId, String remark) {
+    public Observable<EmResult> refuseOrder(Long orderId, String remark) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
                 .refuseOrder(orderId, EmUtil.getEmployId(), Config.APP_KEY, remark)
                 .filter(new HttpResultFunc<>())

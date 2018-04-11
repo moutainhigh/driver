@@ -92,6 +92,7 @@ public interface CommApiService {
                                                              @Query("start_time") Long startTime,
                                                              @Query("end_time") Long endTime,
                                                              @Query("app_key") String appKey,
+                                                             @Query("driver_name")String driverName,
                                                              @Query("page") int page,
                                                              @Query("limit") int limit);
 

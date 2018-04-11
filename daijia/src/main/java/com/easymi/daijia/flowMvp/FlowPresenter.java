@@ -84,10 +84,9 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void refuseOrder(Long orderId, String remark) {
-        Observable<DJOrderResult> observable = model.refuseOrder(orderId, remark);
+        Observable<EmResult> observable = model.refuseOrder(orderId, remark);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, djOrderResult -> {
-            djOrderResult = orderResult2DJOrder(djOrderResult);
             DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
             if (null != dymOrder) {
                 dymOrder.delete();

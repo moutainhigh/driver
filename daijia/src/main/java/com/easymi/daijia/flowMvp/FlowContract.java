@@ -117,7 +117,7 @@ public interface FlowContract {
 
         Observable<DJOrderResult> findOne(Long orderId);
 
-        Observable<DJOrderResult> refuseOrder(Long orderId, String remark);
+        Observable<EmResult> refuseOrder(Long orderId, String remark);
 
         Observable<DJOrderResult> toStart(Long orderId);
 
