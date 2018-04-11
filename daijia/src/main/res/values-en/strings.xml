@@ -210,7 +210,7 @@
     <string name="please_pay_title">Please select payment type</string>
 
         
-    <string name="fee_hint">Note: Additional service charges and advance payments do not participate in coupon calculation</string>
+    <string name="fee_hint">Note: advance payments do not participate in coupon calculation</string>
 
         
     <string name="quan_lan">overview</string>

@@ -214,7 +214,7 @@
     <string name="please_pay_title">請選擇支付類型</string>
 
         
-    <string name="fee_hint">注:附加服務費與墊付費用不參與優惠券計算</string>
+    <string name="fee_hint">注:墊付費用不參與優惠券計算</string>
 
         
     <string name="quan_lan">全覽</string>

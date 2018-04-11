@@ -133,7 +133,7 @@
     <string name="pay_title">选择支付类型</string>
     <string name="please_pay_title">请选择支付类型</string>
 
-    <string name="fee_hint">注:附加服务费与垫付费用不参与优惠券计算</string>
+    <string name="fee_hint">注:垫付费用不参与优惠券计算</string>
 
     <string name="quan_lan">全览</string>
 
