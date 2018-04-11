@@ -90,7 +90,7 @@ public class LoginActivity extends RxBaseActivity {
                 ToastUtil.showMessage(LoginActivity.this, getString(R.string.please_agree_agreement));
                 return;
             }
-
+            PhoneUtil.hideKeyboard(this);
             login(editAccount.getText().toString(), editPsw.getText().toString());
 
         });
