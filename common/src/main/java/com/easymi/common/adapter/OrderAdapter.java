@@ -9,6 +9,7 @@ import com.easymi.common.R;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.util.DJStatus2Str;
 import com.easymi.component.Config;
+import com.easymi.component.rxmvp.BaseView;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.TimeUtil;
 
@@ -18,7 +19,7 @@ import java.util.List;
  * Created by hiwhitley on 2016/10/17.
  */
 
-public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder> {
+public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseViewHolder> {
     private Context context;
 
     public OrderAdapter(List<MultipleOrder> data, Context context) {

@@ -65,7 +65,7 @@ dependencies {
     api 'com.nineoldandroids:library:2.4.0'
     api 'com.github.florent37:viewanimator:1.0.0@aar'
 
-    api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.1.6'
+    api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.34'
 
     api 'com.jaredrummler:android-processes:1.1.1'//获取进程信息
 
