@@ -66,7 +66,7 @@ public class HelpCenterSubActivity extends RxBaseActivity {
 
         Observable<HelpMenuResult> observable = api
                 .getHelpeSubMenu(Config.APP_KEY,
-                        EmUtil.getEmployInfo().company_id,
+                        (long) 0,
                         1,
                         100,
                         (long) 2)
