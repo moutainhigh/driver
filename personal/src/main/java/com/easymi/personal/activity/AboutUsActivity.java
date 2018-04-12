@@ -12,8 +12,12 @@ import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.ApiManager;
@@ -21,6 +25,7 @@ import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.GlideCircleTransform;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.CusToolbar;
@@ -45,6 +50,8 @@ public class AboutUsActivity extends RxBaseActivity {
 
     private CusToolbar cusToolbar;
 
+    private ImageView logo;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_about_us;
@@ -64,6 +71,8 @@ public class AboutUsActivity extends RxBaseActivity {
         phoneText = findViewById(R.id.phone);
         webView = findViewById(R.id.web_view);
         versionText = findViewById(R.id.version);
+
+        logo = findViewById(R.id.image_view_logo);
         getArticle();
         try {
             versionText.setText(getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
@@ -206,6 +215,18 @@ public class AboutUsActivity extends RxBaseActivity {
 
             phoneText.setText(articleResult.article.phone);
             webSiteText.setText(articleResult.article.url);
+
+            if (StringUtils.isNotBlank(articleResult.article.logo)) {
+                if (StringUtils.isNotBlank(articleResult.article.logo)) {
+                    RequestOptions options = new RequestOptions()
+                            .placeholder(R.mipmap.ic_launcher)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL);
+                    Glide.with(AboutUsActivity.this)
+                            .load(Config.IMG_SERVER + articleResult.article.logo + Config.IMG_PATH)
+                            .apply(options)
+                            .into(logo);
+                }
+            }
         }
         )));
     }
