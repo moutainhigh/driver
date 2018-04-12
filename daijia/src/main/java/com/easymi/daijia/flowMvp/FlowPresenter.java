@@ -41,6 +41,7 @@ import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.result.ConsumerResult;
@@ -145,6 +146,9 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void startDrive(Long orderId, LoadingButton btn) {
+        if (!PhoneUtil.checkGps(context)) {
+            return;
+        }
         Observable<DJOrderResult> observable = model.startDrive(orderId);
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, djOrderResult -> {
             djOrderResult = orderResult2DJOrder(djOrderResult);

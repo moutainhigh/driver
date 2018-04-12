@@ -26,6 +26,7 @@ import com.easymi.component.permission.RxPermissions;
 import com.easymi.component.update.OnFailureListener;
 import com.easymi.component.update.UpdateError;
 import com.easymi.component.update.UpdateHelper;
+import com.easymi.component.utils.StringUtils;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -231,6 +232,7 @@ public class SplashActivity extends RxBaseActivity {
      */
     private void loadLanguage() {
         SharedPreferences preferences = XApp.getMyPreferences();
+
         Configuration config = getResources().getConfiguration();   //获取默认配置
         int language = preferences.getInt(Config.SP_USER_LANGUAGE, Config.SP_LANGUAGE_AUTO);
         switch (language) {
@@ -239,11 +241,24 @@ public class SplashActivity extends RxBaseActivity {
                 break;
 
             case Config.SP_TRADITIONAL_CHINESE:
-                config.locale = Locale.TAIWAN;  //加载台湾繁体
+                config.locale = Locale.TRADITIONAL_CHINESE;  //加载台湾繁体
                 break;
 
             case Config.SP_LANGUAGE_AUTO:
-                config.locale = Locale.getDefault();    //获取默认区域
+                String sysLan = preferences.getString(Config.SP_SYS_LANGUAGE, "");
+                if (StringUtils.isBlank(sysLan)) {
+                    preferences.edit().putString(Config.SP_SYS_LANGUAGE,
+                            Locale.getDefault().toString()).apply();
+                } else {
+                    if (sysLan.contains(Locale.TAIWAN.toString())
+                            || sysLan.contains(Locale.TRADITIONAL_CHINESE.toString())) {
+                        config.locale = Locale.TRADITIONAL_CHINESE;
+                    } else if (sysLan.contains("en")) {
+                        config.locale = Locale.ENGLISH;
+                    } else {
+                        config.locale = Locale.SIMPLIFIED_CHINESE;
+                    }
+                }
                 break;
 
             case Config.SP_ENGLISH:

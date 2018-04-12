@@ -35,6 +35,7 @@ import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
+import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.widget.LoadingButton;
@@ -270,7 +271,7 @@ public class WorkPresenter implements WorkContract.Presenter {
         getAppSetting();//获取配置信息
         queryStatis();
 
-
+        PhoneUtil.checkGps(context);
     }
 
     private Timer timer;

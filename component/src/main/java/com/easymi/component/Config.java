@@ -62,6 +62,8 @@ public class Config {
     public static final int SP_TRADITIONAL_CHINESE = 0x03; //繁体中文
     public static final int SP_ENGLISH = 0x04; //英文
 
+    public static final String SP_SYS_LANGUAGE = "sys_language"; //英文
+
 
     public static final String SP_VOICE_ABLE = "voice_able";//能否语音播报
     public static final String SP_SHAKE_ABLE = "shake_able";//能否震动
