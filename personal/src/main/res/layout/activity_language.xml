@@ -121,7 +121,7 @@
 
         <RelativeLayout
             android:id="@+id/english"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="60dp">
 

@@ -1,83 +1,121 @@
 <resources>
-    <string name="app_name">rvakva driver v5</string>
-    <!-- Workbench interface str -->
-        <string name = "work_fin_order">Complete Order</string>
-        <string name = "work_hour">when</string>
-        <string name = "work_minute">minutes</string>
-        <string name = "work_today_income">Revenue Today</string>
-        <string name = "work_driver">driver</string>
-        <string name = "work_order">order</string>
-        <string name = "work_online">Start Listening</string>
-        <string name = "work_create">Create Order</string>
-        <string name = "work_offline">stop listening</string>
-        <string name = "work_listen_order">Listen to a single ...</string>
-        <string name = "work_title">workbench</string>
+        <string name="app_name">v5driver</string>
 
-        <!-- Flow str -->
-        <string name = "liushui_baoxiao">reimbursement</string>
-        <string name = "liushui_title">business flow</string>
+        <!-- Workbench interface str-->
+        <string name="work_fin_order">Complete orders</string>
+        <string name="work_hour"> hour</string>
+        <string name="work_minute"> minute </string>
+        <string name="work_online_time"> listening time length</string>
+        <string name="work_today_income">today\'s revenue</string>
+        <string name="work_driver">driver</string>
+        <string name="work_order">Order</string>
+        <string name="work_online"> start listening list </string>
+        <string name="work_create">Create Order</string>
+        <string name="work_offline"> stop listening list </string>
+        <string name="work_listen_order"> listening list ... </string>
+        <string name="work_title">Workbench</string>
 
-        <string name = "create_daijia">generation driver</string>
-        <string name = "create_zhuanche">car</string>
-        <string name = "create_paotui">run errands</string>
-        <string name = "create_huoyun">Shipping</string>
-        <string name = "create_zhuanxian">Intercity green line</string>
+        <!-- running water str-->
+        <string name="liushui_baoxiao"> reimbursement </string>
+        <string name="liushui_title"> business flow </string>
+        <string name="liushui_baoxiao_sheheing"> reimbursement audit </string>
+        <string name="liushui_baoxiao_done"> reimbursed </string>
 
-        <string name = "hint">hint</string>
-        <string name = "sure">OK</string>
-        <string name = "message">Dear driver master, we need to obtain the following permissions to ensure the application is running, please grant</string>
+        <string name="create_daijia"> drive </string>
+        <string name="create_zhuanche"> special car </string>
+        <string name="create_paotui">Running Legs</string>
+        <string name="create_huoyun">Cargo</string>
+        <string name="create_zhuanxian"> Intercity Line </string>
 
-        <string name = "exit">was unable to obtain the necessary application permissions, is about to exit</string>
+        <string name="hint">Prompt</string>
+        <string name="sure"> OK </string>
+        <string name="message"> dear driver master, we need to obtain the following permissions to ensure that the application is running normally, please grant </string>
 
-        <string name = "liushui_today">today</string>
-        <string name = "liushui_yesterday">Yesterday</string>
-        <string name = "liushui_this_week">This Week</string>
-        <string name = "liushui_this_month">this month</string>
-        <string name = "liushui_all">all</string>
+        <string name="exit"> Failed to get necessary app permissions, exit soon</string>
 
-        <string name = "new_ann">new announcement:</string>
-        <string name = "new_notify">new notification:</string>
+        <string name="liushui_today">today</string>
+        <string name="liushui_yesterday">yesterday</string>
+        <string name="liushui_this_week">this week</string>
+        <string name="liushui_this_month">this month</string>
+        <string name="liushui_this_year">this year</string>
+        <string name="liushui_all"> all </string>
 
-        <string name = "start_lis_order">Start listening to it!</string>
-        <string name = "stop_lis_order">stop listening to it!</string>
+        <string name="new_ann">new announcement:</string>
+        <string name="new_notify"> new notification:</string>
 
-        <string name = "current_place">current address:</string>
+        <string name="start_lis_order"> Start listening! </string>
+        <string name="stop_lis_order"> Stop listening! </string>
 
-        <string name = "grab_order_content">Grab single</string>
-        <string name = "send_order">dispatch</string>
-        <string name = "accept_order">order</string>
-        <string name = "send_order_content">You have a new order, go to the order quickly</string>
+        <string name="current_place"> current address: </string>
 
-        <string name = "cancel_order">Cancel order</string>
-        <string name = "you_have_order_cancel">You have canceled the order, please note that the view</string>
+        <string name="grab_order_content"> grab single </string>
+        <string name="send_order"> send a single </string>
+        <string name="accept_order">Order </string>
+        <string name="send_order_content">You have a new order, go to order it</string>
 
-        <string name = "force_offline">You have been forced offline by administrator</string>
+        <string name="cancel_order"> consumer </string>
+        <string name="you_have_order_cancel"> You have an order cancelled, please check it out</string>
 
-        <!-- Grab a single interface str -->
-        <string name = "grab_dis">Your appointment</string>
-        <string name = "grab_map">map</string>
-        <string name = "grab_order">Grab single</string>
-        <string name = "sec">seconds</string>
+        <string name="back_order">Order Recall</string>
+        <string name="you_have_order_back"> You have orders retracted, please check </string>
 
-        <string name = "from">from</string>
-        <string name = "out">Departure</string>
-        <string name = "to">to</string>
-        <string name = "order">order</string>
-        <string name = "to_you">away from you</string>
+        <string name="force_offline"> You have been forced offline by the administrator </string>
 
-        <string name = "meter">meter</string>
-        <string name = "k_meter">km</string>
+        <!-- grab single interface str -->
+        <string name="grab_dis"> away from you about </string>
+        <string name="grab_map">map</string>
+        <string name="grab_order"> grab a single </string>
+        <string name="sec"> second </string>
 
-        <string name = "jishi_order">instant order</string>
-        <string name = "yuyue_order">reservation order</string>
-        <string name = "time_format">MM dd day HH: mm</string>
+        <string name="from"> from </string>
+        <string name="out"> start </string>
+        <string name="to"> to </string>
+        <string name="order">Order</string>
+        <string name="to_you"> away from you</string>
+
+        <string name="meter">m</string>
+        <string name="k_meter"> Kilometers </string>
+
+        <string name="jishi_order"> instant order </string>
+        <string name="yuyue_order"> appointment order </string>
+        <string name="time_format">MM on dd HH:mm</string>
 
 
-        <string name = "baoxiao_hint_1">Please enter the reimbursement amount</string>
-        <string name = "baoxiao_hint_2">Please enter reimbursement reason(max 100 words)</string>
+        <string name="baoxiao_hint_1">Please enter the reimbursement amount</string>
+        <string name="baoxiao_hint_2"> Please enter reimbursement reason (cannot exceed 100 characters)</string>
 
-        <string name = "baoxiao_apply">Submit</string>
-        <string name = "baoxiao_suc">Your reimbursement request has been submitted for review.</string>
+        <string name="baoxiao_apply">submit</string>
+        <string name="baoxiao_suc"> Your reimbursement request has been submitted for review</string>
 
-    <string name="jump_gif">jump over</string>
+        <string name="jump_gif">skip </string>
+
+        <string name="please_admin"> Your account has been frozen, please contact the administrator </string>
+        <string name="force_offline_please_admin"> You have been forced offline, please contact the administrator </string>
+
+        <string name="baoxiao_shenhe"> current order reimbursement application has been submitted, is under review </string>
+        <string name="baoxiao_done"> current order has been reimbursed </string>
+
+        <string name="no_order">No order, please go to order!</string>
+
+        <string name="freezed"> Your account has been frozen, please contact the administrator </string>
+        <string name="unbunding"> Your account has been tied by the administrator sister </string>
+
+        <string name="pay_suc_1"> phone number is </string>
+        <string name="pay_suc_2"> have completed payment </string>
+
+    <string name="yuyue"> reservation </string>
+    <string name="jishi"> timely </string>
+
+    <string name="new_order"> new single> </string>
+    <string name="pai_order"> dispatched> </string>
+    <string name="jie_order"> Ordered> </string>
+    <string name="to_start_order"> go to the reservation ></string>
+    <string name="arrive_start_order"> arrives at the reservation ></string>
+    <string name="to_end_order"> Go to the destination ></string>
+    <string name="wait_order"> Waiting ></string>
+    <string name="not_pay_order">Unpaid ></string>
+    <string name="finish_order"> completed> </string>
+    <string name="des_order"> issued orders ></string>
+    <string name="rate_order"> completed> </string>
+
 </resources>

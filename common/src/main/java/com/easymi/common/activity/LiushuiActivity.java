@@ -117,7 +117,7 @@ public class LiushuiActivity extends RxBaseActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getText().equals("代驾")) {
+                if (tab.getText().equals(getString(R.string.create_daijia))) {
                     business = "daijia";
                     page = 1;
                 }

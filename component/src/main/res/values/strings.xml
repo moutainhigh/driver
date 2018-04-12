@@ -66,4 +66,17 @@
     <string name="unknown_error">网络出小差了</string>
     <string name="update_failed">更新应用失败，即将退出</string>
     <string name="down_loading">下载中...</string>
+
+
+    <string name="money_unit">元</string>
+    <string name="order_dis">订单里程：</string>
+    <string name="order_fee">订单费用：</string>
+    <string name="key_word">汽车站|火车站|机场</string>
+    <string name="down_loading_2">下载中 - </string>
+    <string name="new_version">最新版本：%1$s\n新版本大小：%2$s\n\n更新内容\n%3$s</string>
+    <string name="app_update">应用更新</string>
+    <string name="need_update">您需要更新应用才能继续使用\n\n</string>
+    <string name="update_now">立即更新</string>
+    <string name="be_later">以后再说</string>
+    <string name="ingore_this">忽略该版</string>
 </resources>

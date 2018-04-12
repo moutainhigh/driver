@@ -107,8 +107,8 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
         if (dymOrder != null && dymOrder.orderType.equals(Config.DAIJIA)) {
             if (dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
                 simpleFeeCon.setVisibility(View.VISIBLE);
-                lcTxt.setText("订单里程：" + dymOrder.distance + "Km");
-                feeTxt.setText("订单费用：" + dymOrder.totalFee + "元");
+                lcTxt.setText(getString(R.string.order_dis) + dymOrder.distance + getString(R.string.money_unit));
+                feeTxt.setText(getString(R.string.order_fee) + dymOrder.totalFee + getString(R.string.money_unit));
 
                 timer = new Timer();
                 timerTask = new TimerTask() {
@@ -116,8 +116,8 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
                     public void run() {
                         runOnUiThread(() -> {
                             DymOrder dymOrder1 = DymOrder.findByIDType(orderId, orderType);
-                            lcTxt.setText("订单里程：" + dymOrder1.distance + "Km");
-                            feeTxt.setText("订单费用：" + dymOrder1.totalFee + "元");
+                            lcTxt.setText(getString(R.string.order_dis) + dymOrder1.distance + getString(R.string.money_unit));
+                            feeTxt.setText(getString(R.string.order_fee) + dymOrder1.totalFee + getString(R.string.money_unit));
                         });
                     }
                 };

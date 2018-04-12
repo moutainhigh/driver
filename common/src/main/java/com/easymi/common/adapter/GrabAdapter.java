@@ -71,7 +71,7 @@ public class GrabAdapter extends PagerAdapter {
         MultipleOrder multipleOrder = baseOrderList.get(position);
         holder.startPlace.setText(multipleOrder.startPlace);
         holder.endPlace.setText(multipleOrder.endPlace);
-        holder.orderTimeText.setText(multipleOrder.isBookOrder == 1 ? "预约" : "即时");
+        holder.orderTimeText.setText(multipleOrder.isBookOrder == 1 ? context.getString(R.string.yuyue) : context.getString(R.string.jishi));
         holder.tagContainer.setTheme(ColorFactory.NONE);
         holder.tagContainer.removeAllTags();
 //        holder.tagContainer.addTag("不要抽烟");

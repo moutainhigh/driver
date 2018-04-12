@@ -1,423 +1,288 @@
 <resources>
     <string name="app_name">base</string>
 
-    <!-- login interface str -->
-        
-    <string name="login_title">server login</string>
-        
-    <string name="login_pl_phone">Please enter phone number</string>
-        
+    <!-- login interface str-->
+    <string name="login_title"> server login </string>
+    <string name="login_pl_phone"> Please enter the phone number </string>
     <string name="login_pl_psw">Please enter the password</string>
-        
-    <string name="login_agg">Agree "Service Personnel Cooperation Agreement"</string>
-        
-    <string name="login_rem_psw">remember password</string>
-        
-    <string name="login">login</string>
-        
-    <string name="login_new">new user?</string>
-        
-    <string name="login_reg">register</string>
-        
-    <string name="login_forget">Forgot your password?</string>
-        
-    <string name="login_reset">reset</string>
-        
-    <string name="login_agreement">server agreement</string>
+    <string name="login_agg"> agree "service personnel cooperation agreement" </string>
+    <string name="login_rem_psw"> remember password </string>
+    <string name="login">Login</string>
+    <string name="login_new"> new user? </string>
+    <string name="login_reg">Registration</string>
+    <string name="login_forget">Forgot your password? </string>
+    <string name="login_reset">Reset</string>
+    <string name="login_agreement"> service personnel agreement </string>
 
-        <!-- Personal Center str -->
-        
-    <string name="person_order">my order</string>
-        
-    <string name="person_money">my wallet</string>
-        
-    <string name="person_jiangli">Recommended Reward</string>
-        
-    <string name="person_pingjia">passenger rating</string>
-        
-    <string name="person_message">message center</string>
-        
-    <string name="person_set">Settings</string>
-        
-    <string name="person_tuiguang">Driver Promotion</string>
+    <!-- Personal Center str -->
+    <string name="person_order">My Order</string>
+    <string name="person_money">My Wallet</string>
+    <string name="person_jiangli"> Recommended Reward </string>
+    <string name="person_pingjia">passenger evaluation</string>
+    <string name="person_message">Message Center</string>
+    <string name="my_message">My Message</string>
+    <string name="person_set">settings</string>
+    <string name="person_tuiguang"> promotion </string>
 
-        <!-- Set str -->
-        
-    <string name="set_change_psw">change password</string>
-        
-    <string name="set_voice_play">Voice broadcast</string>
-        
-    <string name="set_shake">vibration</string>
-        
-    <string name="set_orientation">The meter is always displayed horizontally</string>
-        
-    <string name="set_language">select language</string>
-        
-    <string name="set_navi">navigation preferences</string>
-        
-    <string name="set_statistics">Statistics Center</string>
-        
+    <!-- Set str -->
+    <string name="set_change_psw"> modify the password </string>
+    <string name="set_voice_play">Voice announcement</string>
+    <string name="set_shake">shock </string>
+    <string name="set_orientation"> always shows the meter across the screen </string>
+    <string name="set_language">Select language</string>
+    <string name="set_navi">Navigation Preferences</string>
+    <string name="set_statistics">statistical center</string>
     <string name="set_help">Help Center</string>
-        
-    <string name="set_feedback">Feedback</string>
-        
-    <string name="set_contract_us">contact us</string>
-        
-    <string name="set_about_us">about us</string>
-        
-    <string name="set_logout">Log out</string>
-        
-    <string name="set_hint">hint</string>
-        
-    <string name="set_sure_exit">Are you sure you want to leave your current account?</string>
-        
-    <string name="set_sure">OK</string>
-        
-    <string name="set_cancel">Cancel</string>
+    <string name="set_feedback"> feedback </string>
+    <string name="set_contract_us">Contact Us</string>
+    <string name="set_about_us">About Us</string>
+    <string name="set_logout"> logout </string>
+    <string name="set_hint">Prompt</string>
+    <string name="set_sure_exit"> Are you sure to quit the current account? </string>
+    <string name="set_sure"> OK </string>
+    <string name="set_cancel"> cancel </string>
+    <string name="set_defult_navi"> default start navigation </string>
 
-        <!-- Registration String -->
-        
+    <!-- Registration String -->
     <string name="register_base_msg">basic information</string>
-        
     <string name="register_please_photo">Please upload your own photo</string>
-        
     <string name="register_name">driver name</string>
-        
-    <string name="register_phone">phone number</string>
-        
-    <string name="register_ic_card">ID number</string>
-        
-    <string name="register_contract">emergency contacts</string>
+    <string name="register_phone">mobile phone number</string>
+    <string name="register_ic_card"> ID number </string>
+    <string name="register_contract">Emergency Contact </string>
 
-        
     <string name="register_please_name">Please enter your name</string>
-        
-    <string name="register_please_phone">Please enter phone number</string>
-        
-    <string name="register_please_id_card">Please enter the ID number</string>
-        
-    <string name="register_please_contract">emergency contact (name + phone + relationship)</string>
+    <string name="register_please_phone"> Please enter the phone number </string>
+    <string name="register_please_id_card"> Please enter the ID number </string>
+    <string name="register_please_contract">Emergency Contact (name + phone + relationship)</string>
 
-        
-    <string name="register_business">Business</string>
+    <string name="register_business"> carry out business </string>
 
-        
-    <string name="register_daijia">on behalf of driving</string>
-        
-    <string name="register_zhuanche">car</string>
-        
-    <string name="register_errand">run errands</string>
-        
-    <string name="register_freight">Shipping</string>
-        
-    <string name="register_zhuanxian">green</string>
+    <string name="register_daijia"> on behalf of the driver </string>
+    <string name="register_zhuanche"> special car </string>
+    <string name="register_errand">Running Legs</string>
+    <string name="register_freight">Cargo</string>
+    <string name="register_zhuanxian"> dedicated line </string>
 
-        
-    <string name="register_refer">recommended labor number</string>
-        
-    <string name="register_refer_no">Enter the recommended labor number</string>
-        
-    <string name="register_agree">Agree with "Service Personnel Service Agreement"</string>
-        
-    <string name="register_next_step">Next</string>
+    <string name="register_refer">Recommended manual number</string>
+    <string name="register_refer_no">Enter the recommended manual number</string>
+    <string name="register_agree"> agrees to "service personnel service agreement" </string>
+    <string name="register_next_step">Next </string>
 
-        
     <string name="register_upload_card">Upload ID</string>
-        
-    <string name="register_upload_driving">Upload drivers license</string>
-        
-    <string name="register_front">front</string>
-        
-    <string name="register_back">reverse</string>
+    <string name="register_upload_driving">Upload driver license</string>
+    <string name="register_front"> front </string>
+    <string name="register_back">reverse </string>
 
-        
-    <string name="register_hint_driving">Make sure drivers license is valid</string>
-        
-    <string name="register_hint_id_card">must be my ID card \ n The ID card information must be valid and legible</string>
-        
-    <string name="register_hint_photo">Please upload your half-height </string>
+    <string name="register_hint_driving">Ensure that the driver\'s license is truly valid</string>
+    <string name="register_hint_id_card"> must be my identity card\nThe information on the ID card must be true and valid and clearly visible</string>
+    <string name="register_hint_photo">Please upload your half-length photos</string>
 
-        
-    <string name="register_known">knows</string>
-        
-    <string name="register_apply">submit data</string>
+    <string name="register_known"> know </string>
+    <string name="register_apply"> submit data </string>
 
-        
-    <string name="register_title">Service Personnel Registration</string>
-        
-    <string name="register_no_loc">No positioning information</string>
-        
-    <string name="register_re_company">Failed to load company info, retry</string>
-        
-    <string name="register_re_business">Failed to load business type, retry</string>
+    <string name="register_title">service staff registration</string>
+    <string name="register_no_loc"> did not get the positioning information </string>
+    <string name="register_re_company"> failed to load company information, retrying </string>
+    <string name="register_re_business"> failed to load the business type, retrying </string>
 
-        
-    <string name="register_finish">Failed to get company info, try again later</string>
+    <string name="register_finish"> Failed to get company information. Please try again later</string>
 
 
-        <!-- Set the password str -->
-        
-    <string name="reset_login_psw">Set login password</string>
-        
-    <string name="reset_please_6">Please enter 6–16 new password</string>
-        
+    <!-- Set password str-->
+    <string name="reset_login_psw"> set the login password </string>
+    <string name="reset_please_6">Please enter 6–16 new password </string>
+    <string name="reset_login_phone"> set the login phone number </string>
+    <string name="reset_please_11">Please enter 11 digit phone number</string>
     <string name="reset_please_code">Please enter the verification code</string>
-        
-    <string name="reset_confirm">OK</string>
-        
-    <string name="reset_edit_words">enter picture</string>
-        
-    <string name="reset_refresh">click refresh</string>
-        
-    <string name="reset_edit_code">enter the verification code</string>
-        
-    <string name="reset_code_to_where">The verification code is sent to</string>
-        
-    <string name="reset_sec_resend">resend in seconds</string>
-        
+    <string name="reset_confirm"> OK </string>
+    <string name="reset_edit_words"> input picture text </string>
+    <string name="reset_refresh">Click Refresh</string>
+    <string name="reset_edit_code">Enter the verification code</string>
+    <string name="reset_code_to_where"> verification code sent to </string>
+    <string name="reset_sec_resend"> seconds to reissue </string>
     <string name="reset_resend_code">reacquire></string>
-        
-    <string name="reset_error_auth">Graphic verification code error</string>
-        
-    <string name="reset_change_suc">change password success</string>
+    <string name="reset_error_auth">Graph verification code error</string>
+    <string name="reset_change_suc"> modify the password is successful </string>
 
-        <!-- Recharge str -->
-        
-    <string name="recharge_title">Recharge</string>
-        
-    <string name="recharge_balance">My Balance ($)</string>
-        
+    <!-- recharge str -->
+    <string name="recharge_title"> balance charge </string>
+    <string name="recharge_balance">My balance (meta)</string>
     <string name="recharge_please_money">Please enter recharge amount</string>
-        
-    <string name="recharge_50">$ 50</string>
-        
-    <string name="recharge_100">¥ 100</string>
-        
-    <string name="recharge_200">¥ 200</string>
-        
-    <string name="recharge_pay_wechat">WeChat payment</string>
-        
-    <string name="recharge_pay_zfb">Alipay payment</string>
-        
-    <string name="recharge_pay_union">UnionPay payment</string>
-        
-    <string name="recharge_0_money">Please select or enter recharge amount</string>
+    <string name="recharge_50">¥50</string>
+    <string name="recharge_100">¥100</string>
+    <string name="recharge_200">¥200</string>
+    <string name="recharge_pay_wechat"> WeChat payment </string>
+    <string name="recharge_pay_zfb"> Alipay payment </string>
+    <string name="recharge_pay_union"> UnionPay payment </string>
+    <string name="recharge_0_money">Please select or enter the amount of recharge </string>
 
-        <!-- Wallets str -->
-        
-    <string name="pocket_title">my wallet</string>
-        
-    <string name="pocket_balance">account balance ($)</string>
-        
-    <string name="pocket_recharge">top up</string>
-        
-    <string name="pocket_detail">account details</string>
+    <!-- Wallet str-->
+    <string name="pocket_title">My Wallet</string>
+    <string name="pocket_balance">account balance (meta)</string>
+    <string name="pocket_recharge"> recharge </string>
+    <string name="pocket_detail">Account Details</string>
 
-
-    <!-- my message str -->
-        
+    <!--My message str-->
     <string name="msg_notify">Notification</string>
-        
-    <string name="msg_notice">bulletin</string>
+    <string name="msg_notice">Notification</string>
 
-        <!-- Recommended by str -->
-        
-    <string name="recommend_title">Recommended Reward</string>
-        
-    <string name="recommend_yi">Recommended number</string>
-        
+    <!-- Recommender str-->
+    <string name="recommend_title">Recommended reward</string>
+    <string name="recommend_yi"> number of recommended </string>
     <string name="recommend_unit">(person)</string>
-        
-    <string name="recommend_money">Reward Amount</string>
+    <string name="recommend_money">Reward Amount </string>
+    <string name="recommend_person">I recommend </string>
 
-        <!-- Statistics Center str -->
-        
+    <!-- Statistics Center str -->
     <string name="stats_today">today</string>
-        
-    <string name="stats_yesterday">yesterday</string>
-        
-    <string name="stats_month">month</string>
-    <string name="stats_year">year</string>
-        
-    <string name="stats_order">order</string>
-        
-    <string name="stats_accept_order_no">order number</string>
-        
-    <string name="stats_complete_order_no">Number of completed orders</string>
-        
+    <string name="stats_yesterday"> yesterday </string>
+    <string name="stats_month">this month</string>
+    <string name="stats_year">this year</string>
+    <string name="stats_order">Order</string>
+    <string name="stats_accept_order_no"> number of orders </string>
+    <string name="stats_complete_order_no"> number of completed orders </string>
     <string name="stats_accept_percent">order rate</string>
-        
-    <string name="stats_refuse_percent">rejection rate</string>
-        
-    <string name="stats_income">Revenue</string>
-        
-    <string name="stats_order_statement">Order Flow</string>
-        
-    <string name="stats_income_statement">Revenue Flow</string>
-        
-    <string name="stats_service">service</string>
-        
-    <string name="stats_star">Passenger rating score</string>
-        
-    <string name="stats_complain">number of complaints</string>
+    <string name="stats_refuse_percent"> Rejection Rate </string>
+    <string name="stats_income">income</string>
+    <string name="stats_order_statement"> order flow </string>
+    <string name="stats_income_statement"> revenue stream </string>
+    <string name="stats_service">Service</string>
+    <string name="stats_star">passenger evaluation score</string>
+    <string name="stats_complain"> number of complaints </string>
 
-        <!-- account details str -->
-        
-    <string name="detail_balance">my balance</string>
+    <!-- account details str-->
+    <string name="detail_balance">My Balance</string>
 
-        <!-- Now mention str -->
-        
-    <string name="tixian_please_money">Please enter the withdrawal amount</string>
-        
-    <string name="tixian_title">Balance withdrawals</string>
-        
+    <!--Improve str-->
+    <string name="tixian_please_money">Please enter the withdrawal amount </string>
+    <string name="tixian_title"> balance withdrawals </string>
     <string name="tixian_please_bank">Please enter bank</string>
-        
-    <string name="tixian_please_number">Please enter your bank card number</string>
-        
-    <string name="tixian_please_name">Please enter the cardholder name</string>
-        
-    <string name="tixian_confirm">confirm withdrawal</string>
-        
-    <string name="tixian_rule">pick-up rules</string>
-        
-    <string name="tixian_record">cash withdrawal record</string>
-        
-    <string name="tixian_this_most">This time available</string>
-        
-    <string name="tixian_my_balance">My Balance ($)</string>
+    <string name="tixian_please_number"> Please enter my bank card number </string>
+    <string name="tixian_please_name">Please enter cardholder name</string>
+    <string name="tixian_confirm"> Confirm Withdrawal</string>
+    <string name="tixian_rule">Acquisition Rules</string>
+    <string name="tixian_record"> withdrawal record </string>
+    <string name="tixian_this_most"> this time can be withdrawal </string>
+    <string name="tixian_my_balance">My balance (meta)</string>
 
-        <!-- Withdrawal rules str -->
-        
-    <string name="tixian_hint">Tips</string>
+    <!-- Withdrawal rule str-->
+    <string name="tixian_hint"> Tips</string>
 
-        <!-- change password str -->
-        
+    <!-- Change password str-->
     <string name="change_psw_old">Please enter the old password</string>
-        
     <string name="change_psw_new">Please enter a new password</string>
-        
-    <string name="change_psw_confirm">Confirm new password</string>
-        
-    <string name="change_confirm">OK</string>
+    <string name="change_psw_confirm">Please confirm the new password</string>
+    <string name="change_confirm"> OK </string>
 
-        <!-- language setting str -->
-        
+    <!-- language setting str-->
     <string name="language_flow_sys">Follow system</string>
-        
     <string name="language_sin_cn">Simplified Chinese</string>
-        
     <string name="language_fan_cn">Traditional Chinese</string>
-        
     <string name="language_english">English</string>
 
-        <!-- Feedback str -->
-        
-    <string name="feedback_please">Please leave your comments</string>
-        
-    <string name="feedback_apply">Submit</string>
-        
+    <!--Feedback str-->
+    <string name="feedback_please">Please leave your valuable comments</string>
+    <string name="feedback_apply">submit</string>
     <string name="feedback_please_msg">Please fill in your comments</string>
-        
     <string name="feedback_suc">We have received your valuable comments</string>
 
-        <!-- Evaluation str -->
-        
+    <!-- evaluation str-->
     <string name="total_score">Cumulative Score</string>
-        
-    <string name="total_order">Cumulative order</string>
-        
-    <string name="total_score_dis">Cumulative star rating</string>
-        
+    <string name="total_order"> cumulative orders </string>
+    <string name="total_score_dis"> cumulative star distribution</string>
     <string name="star_5">5 stars</string>
-        
     <string name="star_4">4 stars</string>
-        
     <string name="star_3">3 stars</string>
-        
     <string name="star_2">2 stars</string>
-        
     <string name="star_1">1 star</string>
-        
-    <string name="consumer_eva">passenger rating</string>
+    <string name="consumer_eva">passenger evaluation</string>
 
 
-        
-    <string name="all_read">all read</string>
-        
-    <string name="click_read">click to see details></string>
-        
-    <string name="announcement">bulletin</string>
+    <string name="all_read"> marked as read </string>
+    <string name="click_read">Click to view details></string>
+    <string name="announcement">Notification</string>
 
-        
-    <string name="ti_xian">withdrawals</string>
+    <string name="ti_xian"> withdrawals </string>
 
-        
-    <string name="yuan">element</string>
-        
-    <string name="more">more</string>
+    <string name="yuan"> yuan </string>
+    <string name="more">more </string>
 
-        
-    <string name="near_wc">near the toilet</string>
-        
-    <string name="reli_pic">thermogram</string>
-        
-    <string name="weather_forecast">weather forecast</string>
-        
-    <string name="contract_service">contact customer service</string>
+    <string name="near_wc"> near the toilet </string>
+    <string name="reli_pic">heat map </string>
+    <string name="weather_forecast">Weather Forecast</string>
+    <string name="contract_service"> Contact customer service </string>
 
-        
-    <string name="congestion">avoid congestion</string>
-        
-    <string name="avoidhightspeed">do not go high</string>
-        
-    <string name="cost">Avoid charging</string>
-        
-    <string name="hightspeed">high speed priority</string>
+    <string name="congestion"> evade congestion </string>
+    <string name="avoidhightspeed"> not go high </string>
+    <string name="cost">Avoid charges</string>
+    <string name="hightspeed"> high speed first </string>
 
 
-        
-    <string name="please_money">Please enter legal withdrawal amount</string>
-        
-    <string name="please_bank_name">Please enter the bank name</string>
-        
-    <string name="please_bank_number">Please enter the bank card number</string>
-        
+    <string name="please_money">Please enter a valid withdrawal amount</string>
+    <string name="please_bank_name">Please enter bank name</string>
+    <string name="please_bank_number"> Please enter the bank card number </string>
     <string name="please_bank_owner">Please enter cardholder name</string>
+    <string name="tixian_apply_suc">Successfully submitted, please wait for review</string>
 
-        
-    <string name="no_recommend">You do not have any recommended rewards, so go and share!</string>
+    <string name="no_recommend">You don\'t have any recommended rewards yet, go and share a lot!</string>
 
-        
-    <string name="meter">meter</string>
-        
-    <string name="k_meter">km</string>
-        
-    <string name="query_live_failed">Query live weather failed</string>
-        
-    <string name="query_forecast_failed">Query weather forecast failed</string>
-        
-    <string name="fabu">publish</string>
-        
-    <string name="different_new_confirm">Inconsistent new password and confirm password</string>
-        
-    <string name="same_old_new">The new password is the same as the old one</string>
+    <string name="meter">m</string>
+    <string name="k_meter"> Kilometers </string>
+    <string name="query_live_failed">Query Live Weather Failed</string>
+    <string name="query_forecast_failed">Query Weather Forecast Failed</string>
+    <string name="fabu">Publish</string>
+    <string name="different_new_confirm">The new password does not match the confirmation password</string>
+    <string name="same_old_new">new password is the same as old password</string>
+    <string name="not_same_old"> The old password you entered doesn\'t match the password of the logged in account </string>
 
-        
-    <string name="wx_pay_success">WeChat Recharge Success</string>
-        
-    <string name="wx_pay_fail">WeChat TopUp Failed</string>
-        
-    <string name="wx_share_suc">WeChat Sharing Success</string>
-        
-    <string name="wx_share_failed">WeChat share failed</string>
+    <string name="wx_pay_success"> WeChat recharge success </string>
+    <string name="wx_pay_fail">WeChat failed to reload</string>
+    <string name="wx_share_suc"> WeChat share success </string>
+    <string name="wx_share_failed"> WeChat sharing failed </string>
 
-        
-    <string name="wx_pay_failed">WeChat payment data error:</string>
+    <string name="wx_pay_failed"> WeChat payment data error: </string>
 
-        
-    <string name="alipay_success">Alipay recharge success</string>
-        
-    <string name="alipay_failed">failed to recharge Alipay</string>
+    <string name="alipay_success"> Alipay recharge success </string>
+    <string name="alipay_failed">Pay Ali failed to recharge</string>
+
+    <string name="near_no_wc"> near the toilet </string>
+    <string name="change_psw_suc"> modify the password is successful </string>
+
+    <string name="tixian_shenpi"> approval </string>
+    <string name="tixian_agree"> has passed </string>
+    <string name="tixian_refuse"> rejected </string>
+
+    <string name="please_agree_agreement">Please agree to the service agreement</string>
+
+    <string name="web_site">site </string>
+    <string name="business">business cooperation</string>
+
+    <string name="share_succeed">Share success</string>
+    <string name="share_error">Share failed</string>
+    <string name="cancel_share"> cancel sharing </string>
+
+    <string name="loading_qr_code"> QR code loading, please wait </string>
+
+    <string name="number"> single </string>
+
+    <string name="all_order_number"> cumulative orders </string>
+
+    <string name="zero_time">0 times</string>
+    <string name="min_money"> The minimum withdrawal amount is </string>
+    <string name="max_money"> The maximum withdrawal amount is </string>
+    <string name="base_money"> withdrawal amount must be </string>
+    Multiples of <string name="de_beishu"></string>
+
+    <string name="day_ago"> days ago </string>
+
+    <string name="help_daijia">Driving</string>
+    <string name="be_busy">You are busy, unable to change password</string>
+
+    <string name="tixian_1"> withdrawal rules, minimum </string>
+         <string name="tixian_2"> yuan, maximum </string>
+         <string name="tixian_3"> yuan, </string>
+         <string name="tixian_4"> withdrawals cardinal </string>
+         <string name="tixian_5">meta</string>
 
 </resources>

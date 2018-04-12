@@ -140,7 +140,7 @@ public class PlaceActivity extends RxBaseActivity {
             search.setBound(new PoiSearch.SearchBound(new LatLonPoint(loc.latitude,
                     loc.longitude), 0));
         } else if (!city.equals(loc.city) && StringUtils.isBlank(keyWord)) {
-            keyWord = "汽车站|火车站|机场";
+            keyWord = getString(R.string.key_word);
             query = new PoiSearch.Query(keyWord, "", city);
             search.setQuery(query);
         }

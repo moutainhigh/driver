@@ -127,8 +127,8 @@ public class TixianActivity extends RxBaseActivity {
                         editMoney.setSelection(decimalFormat.format(money).length());
                     }
                     if (!moneyLegal(money)) {
-                        maxTixian.setText("提现规则，最小" + tixianRule.withdrawals_min + "元，最大" + tixianRule.withdrawals_max + "元,"
-                                + "提现基数" + tixianRule.withdrawals_base + "元");
+                        maxTixian.setText(getString(R.string.tixian_1) + tixianRule.withdrawals_min + getString(R.string.tixian_2) + tixianRule.withdrawals_max + getString(R.string.tixian_3)
+                                + getString(R.string.tixian_4) + tixianRule.withdrawals_base + getString(R.string.tixian_5));
                         maxTixian.setTextColor(getResources().getColor(R.color.red));
                     } else {
                         if (null != tixianRule) {

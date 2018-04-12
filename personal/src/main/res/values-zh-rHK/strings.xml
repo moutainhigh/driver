@@ -2,420 +2,287 @@
     <string name="app_name">base</string>
 
     <!-- 登錄界面str-->
-        
     <string name="login_title">服務端登錄</string>
-        
     <string name="login_pl_phone">請輸入手機號碼</string>
-        
     <string name="login_pl_psw">請輸入密碼</string>
-        
     <string name="login_agg">同意《服務人員合作協議》</string>
-        
     <string name="login_rem_psw">記住密碼</string>
-        
     <string name="login">登錄</string>
-        
-    <string name="login_new">新用戶？ </string>
-        
+    <string name="login_new">新用戶？</string>
     <string name="login_reg">註冊</string>
-        
-    <string name="login_forget">忘記密碼？ </string>
-        
+    <string name="login_forget">忘記密碼？</string>
     <string name="login_reset">重置</string>
-        
     <string name="login_agreement">服務人員協議</string>
 
-        <!-- 個人中心str -->
-        
+    <!-- 個人中心str -->
     <string name="person_order">我的訂單</string>
-        
     <string name="person_money">我的錢包</string>
-        
     <string name="person_jiangli">推薦獎勵</string>
-        
     <string name="person_pingjia">乘客評價</string>
-        
     <string name="person_message">消息中心</string>
-        
+    <string name="my_message">我的消息</string>
     <string name="person_set">設置</string>
-        
     <string name="person_tuiguang">推廣</string>
 
-        <!-- 設置str -->
-        
+    <!-- 設置str -->
     <string name="set_change_psw">修改密碼</string>
-        
     <string name="set_voice_play">語音播報</string>
-        
     <string name="set_shake">震動</string>
-        
     <string name="set_orientation">始終橫屏顯示計價器</string>
-        
     <string name="set_language">選擇語言</string>
-        
     <string name="set_navi">導航偏好</string>
-        
     <string name="set_statistics">統計中心</string>
-        
-    <string name="set_help">帮助中心</string>
-        
+    <string name="set_help">幫助中心</string>
     <string name="set_feedback">意見反饋</string>
-        
     <string name="set_contract_us">聯繫我們</string>
-        
     <string name="set_about_us">關於我們</string>
-        
     <string name="set_logout">註銷</string>
-        
     <string name="set_hint">提示</string>
-        
-    <string name="set_sure_exit">您確定退出當前賬號嗎？ </string>
-        
+    <string name="set_sure_exit">您確定退出當前賬號嗎？</string>
     <string name="set_sure">確定</string>
-        
     <string name="set_cancel">取消</string>
+    <string name="set_defult_navi">默認啟動導航</string>
 
-        <!-- 註冊字符串 -->
-        
+    <!-- 註冊字符串 -->
     <string name="register_base_msg">基本信息</string>
-        
     <string name="register_please_photo">請上傳自己的照片</string>
-        
     <string name="register_name">司機姓名</string>
-        
     <string name="register_phone">手機號碼</string>
-        
     <string name="register_ic_card">身份證號</string>
-        
     <string name="register_contract">緊急聯繫人</string>
 
-        
     <string name="register_please_name">請輸入您的姓名</string>
-        
     <string name="register_please_phone">請輸入手機號碼</string>
-        
     <string name="register_please_id_card">請輸入身份證號</string>
-        
     <string name="register_please_contract">緊急聯繫人（姓名+電話+關係）</string>
 
-        
     <string name="register_business">開展業務</string>
 
-        
     <string name="register_daijia">代駕</string>
-        
     <string name="register_zhuanche">專車</string>
-        
     <string name="register_errand">跑腿</string>
-        
     <string name="register_freight">貨運</string>
-        
     <string name="register_zhuanxian">專線</string>
 
-        
     <string name="register_refer">推薦人工號</string>
-        
     <string name="register_refer_no">輸入推薦人工號</string>
-        
     <string name="register_agree">同意《服務人員服務協議》</string>
-        
     <string name="register_next_step">下一步</string>
 
-        
     <string name="register_upload_card">上傳身份證</string>
-        
     <string name="register_upload_driving">上傳駕駛證</string>
-        
     <string name="register_front">正面</string>
-        
     <string name="register_back">反面</string>
 
-        
     <string name="register_hint_driving">確保駕駛證真實有效</string>
-        
     <string name="register_hint_id_card">必須為本人身份證\n身份證上的信息必須真實有效且清晰可見</string>
-        
     <string name="register_hint_photo">請上傳您的半身照</string>
 
-        
     <string name="register_known">知道了</string>
-        
     <string name="register_apply">提交資料</string>
 
-        
     <string name="register_title">服務人員註冊</string>
-        
     <string name="register_no_loc">未獲取到定位信息</string>
-        
     <string name="register_re_company">加載公司信息失敗，正在重試</string>
-        
     <string name="register_re_business">加載業務類型失敗，正在重試</string>
 
-        
     <string name="register_finish">獲取公司信息失敗,請稍候再試</string>
 
 
-        <!-- 設置密碼str-->
-        
+    <!-- 設置密碼str-->
     <string name="reset_login_psw">設置登錄密碼</string>
-        
     <string name="reset_please_6">請輸入6–16新位密碼</string>
-        
+    <string name="reset_login_phone">設置登錄手機號</string>
+    <string name="reset_please_11">請輸入11位手機號碼</string>
     <string name="reset_please_code">請輸入驗證碼</string>
-        
     <string name="reset_confirm">確定</string>
-        
     <string name="reset_edit_words">輸入圖片文字</string>
-        
     <string name="reset_refresh">點擊刷新</string>
-        
     <string name="reset_edit_code">輸入驗證碼</string>
-        
     <string name="reset_code_to_where">驗證碼發送至</string>
-        
     <string name="reset_sec_resend">秒後重發</string>
-        
     <string name="reset_resend_code">重新獲取></string>
-        
     <string name="reset_error_auth">圖形驗證碼錯誤</string>
-        
     <string name="reset_change_suc">修改密碼成功</string>
 
-        <!--充值str -->
-        
+    <!--充值str -->
     <string name="recharge_title">餘額充值</string>
-        
     <string name="recharge_balance">我的餘額(元)</string>
-        
     <string name="recharge_please_money">請輸入充值金額</string>
-        
     <string name="recharge_50">¥50</string>
-        
     <string name="recharge_100">¥100</string>
-        
     <string name="recharge_200">¥200</string>
-        
     <string name="recharge_pay_wechat">微信支付</string>
-        
     <string name="recharge_pay_zfb">支付寶支付</string>
-        
     <string name="recharge_pay_union">銀聯支付</string>
-        
     <string name="recharge_0_money">請選擇或輸入充值金額</string>
 
-        <!-- 錢包str-->
-        
+    <!-- 錢包str-->
     <string name="pocket_title">我的錢包</string>
-        
     <string name="pocket_balance">賬戶餘額（元）</string>
-        
     <string name="pocket_recharge">充值</string>
-        
     <string name="pocket_detail">賬戶明細</string>
 
     <!--我的消息str-->
-        
     <string name="msg_notify">通知</string>
-        
     <string name="msg_notice">公告</string>
 
-        <!-- 推薦人str-->
-        
+    <!-- 推薦人str-->
     <string name="recommend_title">推薦獎勵</string>
-        
     <string name="recommend_yi">已推薦人數</string>
-        
     <string name="recommend_unit">(人)</string>
-        
     <string name="recommend_money">獎勵金額</string>
+    <string name="recommend_person">我推薦的人</string>
 
-        <!-- 統計中心str -->
-        
+    <!-- 統計中心str -->
     <string name="stats_today">今日</string>
-        
     <string name="stats_yesterday">昨日</string>
-        
     <string name="stats_month">本月</string>
     <string name="stats_year">今年</string>
-        
     <string name="stats_order">訂單</string>
-        
     <string name="stats_accept_order_no">接單數</string>
-        
     <string name="stats_complete_order_no">完成訂單數</string>
-        
     <string name="stats_accept_percent">接單率</string>
-        
     <string name="stats_refuse_percent">拒單率</string>
-        
     <string name="stats_income">收入</string>
-        
     <string name="stats_order_statement">訂單流水</string>
-        
     <string name="stats_income_statement">收入流水</string>
-        
     <string name="stats_service">服務</string>
-        
     <string name="stats_star">乘客評價得分</string>
-        
     <string name="stats_complain">被投訴的次數</string>
 
-        <!-- 賬戶明細str-->
-        
+    <!-- 賬戶明細str-->
     <string name="detail_balance">我的餘額</string>
 
-        <!--提現str-->
-        
+    <!--提現str-->
     <string name="tixian_please_money">請輸入提現金額</string>
-        
     <string name="tixian_title">餘額提現</string>
-        
     <string name="tixian_please_bank">請輸入銀行</string>
-        
     <string name="tixian_please_number">請輸入本人銀行卡號</string>
-        
     <string name="tixian_please_name">請輸入持卡人姓名</string>
-        
     <string name="tixian_confirm">確認提現</string>
-        
     <string name="tixian_rule">提現規則</string>
-        
     <string name="tixian_record">提現記錄</string>
-        
     <string name="tixian_this_most">本次可提現</string>
-        
-    <string name="tixian_my_balance">我的餘額（元）</string>
+    <string name="tixian_my_balance">我的餘額(元)</string>
 
-        <!-- 提現規則str-->
-        
+    <!-- 提現規則str-->
     <string name="tixian_hint">溫馨提示</string>
 
-        <!-- 修改密碼str-->
-        
+    <!-- 修改密碼str-->
     <string name="change_psw_old">請輸入舊密碼</string>
-        
     <string name="change_psw_new">請輸入新密碼</string>
-        
     <string name="change_psw_confirm">請確認新密碼</string>
-        
     <string name="change_confirm">確定</string>
 
-        <!-- 語言設置str-->
-        
+    <!-- 語言設置str-->
     <string name="language_flow_sys">跟隨系統</string>
-        
     <string name="language_sin_cn">簡體中文</string>
-        
     <string name="language_fan_cn">繁體中文</string>
-        
     <string name="language_english">英語</string>
 
-        <!--意見反饋str-->
-        
+    <!--意見反饋str-->
     <string name="feedback_please">請留下您的寶貴意見</string>
-        
     <string name="feedback_apply">提交</string>
-        
     <string name="feedback_please_msg">請填寫您的意見</string>
-        
     <string name="feedback_suc">我們已收到您的寶貴意見</string>
 
-        <!--評價str-->
-        
+    <!--評價str-->
     <string name="total_score">累計得分</string>
-        
     <string name="total_order">累計接單</string>
-        
     <string name="total_score_dis">累計星級分佈</string>
-        
     <string name="star_5">5星</string>
-        
     <string name="star_4">4星</string>
-        
     <string name="star_3">3星</string>
-        
     <string name="star_2">2星</string>
-        
     <string name="star_1">1星</string>
-        
     <string name="consumer_eva">乘客評價</string>
 
 
-        
-    <string name="all_read">标记为已讀</string>
-        
+    <string name="all_read">標記為已讀</string>
     <string name="click_read">點擊查看詳情 ></string>
-        
     <string name="announcement">公告</string>
 
-        
     <string name="ti_xian">提現</string>
 
-        
     <string name="yuan">元</string>
-        
     <string name="more">更多</string>
 
-        
     <string name="near_wc">附近廁所</string>
-        
     <string name="reli_pic">熱力圖</string>
-        
     <string name="weather_forecast">天氣預報</string>
-        
     <string name="contract_service">聯繫客服</string>
 
-        
     <string name="congestion">躲避擁堵</string>
-        
     <string name="avoidhightspeed">不走高速</string>
-        
     <string name="cost">避免收費</string>
-        
     <string name="hightspeed">高速優先</string>
 
 
-        
     <string name="please_money">請輸入合法的提現金額</string>
-        
     <string name="please_bank_name">請輸入銀行名</string>
-        
     <string name="please_bank_number">請輸入銀行卡號</string>
-        
     <string name="please_bank_owner">請輸入持卡人姓名</string>
+    <string name="tixian_apply_suc">提交成功，請等待審核</string>
 
-        
     <string name="no_recommend">您還未有任何推薦獎勵，快去多多分享吧</string>
 
-        
     <string name="meter">米</string>
-        
     <string name="k_meter">千米</string>
-        
     <string name="query_live_failed">查詢實況天氣失敗</string>
-        
     <string name="query_forecast_failed">查詢天氣預報失敗</string>
-        
-    <string name="fabu">發布</string>
-        
+    <string name="fabu">發佈</string>
     <string name="different_new_confirm">新密碼與確認密碼不一致</string>
-        
     <string name="same_old_new">新密碼與舊密碼相同</string>
+    <string name="not_same_old">您輸入的舊密碼與所登錄的賬戶密碼不匹配</string>
 
-        
     <string name="wx_pay_success">微信充值成功</string>
-        
     <string name="wx_pay_fail">微信充值失敗</string>
-        
     <string name="wx_share_suc">微信分享成功</string>
-        
     <string name="wx_share_failed">微信分享失敗</string>
 
-        
     <string name="wx_pay_failed">微信支付數據錯誤:</string>
 
-        
     <string name="alipay_success">支付寶充值成功</string>
-        
     <string name="alipay_failed">支付寶充值失敗</string>
+
+    <string name="near_no_wc">附近暫無廁所</string>
+    <string name="change_psw_suc">修改密碼成功</string>
+
+    <string name="tixian_shenpi">審批中</string>
+    <string name="tixian_agree">已通過</string>
+    <string name="tixian_refuse">已駁回</string>
+
+    <string name="please_agree_agreement">請同意服務協議</string>
+
+    <string name="web_site">網站</string>
+    <string name="business">商務合作</string>
+
+    <string name="share_succeed">分享成功</string>
+    <string name="share_error">分享失敗</string>
+    <string name="cancel_share">取消分享</string>
+
+    <string name="loading_qr_code">二維碼加載中,請稍候</string>
+
+    <string name="number">單</string>
+
+    <string name="all_order_number">累計接單</string>
+
+    <string name="zero_time">0次</string>
+    <string name="min_money">提現金額最小為</string>
+    <string name="max_money">提現金額最大為</string>
+    <string name="base_money">提現金額必須為</string>
+    <string name="de_beishu">的倍數</string>
+
+    <string name="day_ago">天前</string>
+
+    <string name="help_daijia">代駕</string>
+    <string name="be_busy">您正處於忙碌狀態，無法修改密碼</string>
+
+    <string name="tixian_1">提現規則，最小</string>
+    <string name="tixian_2">元，最大</string>
+    <string name="tixian_3">元,</string>
+    <string name="tixian_4">提現基數</string>
+    <string name="tixian_5">元</string>
+
 </resources>

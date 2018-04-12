@@ -1,227 +1,207 @@
 <resources>
-    <string name="app_name">軟咖司機端V5</string>
+    <string name="app_name">daijia</string>
+
     <string name="go">去</string>
-        
     <string name="navigation">導航</string>
-        
     <string name="order_number">訂單編號</string>
-        
     <string name="accept_order">接單</string>
-        
     <string name="refuse_order">拒單</string>
-        
     <string name="to_start">前往預約地</string>
-        
     <string name="change_end">修改終點</string>
 
-        
     <string name="start_drive">點擊出發</string>
-        
     <string name="start_wait">等待</string>
 
-        
     <string name="huadongdaoda">滑動到達預約地</string>
 
 
-        
     <string name="click_wait">點擊等待</string>
-        
     <string name="click_start">點擊出發</string>
-        
     <string name="settle">結算</string>
-        
     <string name="service_fee">服務費用</string>
-        
     <string name="drive_distance">行駛里程</string>
-        
     <string name="drive_time">行駛時間</string>
-        
     <string name="wait_time">等待時間</string>
-        
     <string name="minutes">分鐘</string>
 
-        
     <string name="wait_fee">等待費用</string>
 
-        
     <string name="km">公里</string>
 
-        
     <string name="current_mileage">當前公里數：</string>
-        
     <string name="current_fee">當前費用：</string>
-        
     <string name="change_confirm">確定</string>
-        
     <string name="cancel">取消</string>
 
-        
     <string name="confirm_money">確認費用</string>
-        
     <string name="consumer_prepay">客戶預付</string>
-        
     <string name="more_pay">還需支付</string>
-        
     <string name="dai_fu">代付</string>
 
-        
     <string name="watch_detail">查看費用詳情 ></string>
-        
     <string name="extra_fee">附加服務費</string>
-        
     <string name="help_pay_fee">墊付費用</string>
-        
     <string name="hint_edit">點擊價格文字可以直接輸入</string>
-        
     <string name="please_remark">請輸入備註信息</string>
 
-        
+    <string name="minest_fee">最低消費金額</string>
+    <string name="xianjin_coupon">元現金優惠券</string>
+    <string name="zhekou_coupon">折折扣優惠券</string>
+
+    <string name="fee_detail">費用詳情</string>
+
     <string name="please_consumer_phone">請輸入客戶電話號碼</string>
-        
     <string name="please_consumer_name">請輸入客戶姓名</string>
-        
     <string name="create_order">創建訂單</string>
 
-        
     <string name="cancel_suc">取消訂單成功</string>
-        
     <string name="refuse_suc">拒單成功</string>
 
-        
     <string name="illegality_place">無效的目的地,無法導航</string>
 
-        
     <string name="cancel_reason">請選擇消單原因</string>
-        
     <string name="cancel_reason_1">與客戶協商一致取消訂單</string>
-        
     <string name="cancel_reason_2">客戶呼叫多人，只用先到司機</string>
-        
     <string name="cancel_reason_3">客戶拒接電話</string>
-        
     <string name="cancel_reason_4">客戶單方面取消</string>
-        
     <string name="cancel_reason_5">其他原因</string>
 
-        
     <string name="cancel_cancel">暫不取消</string>
-        
     <string name="cancel_order">取消訂單</string>
 
-        
     <string name="order_not_exist">訂單不存在</string>
 
-        
     <string name="where_start">請選擇出發地</string>
-        
     <string name="where_end">請選擇目的地</string>
 
-        
     <string name="yuan_qi">元起</string>
-        
     <string name="yuan">元</string>
-        
     <string name="about">約</string>
-        
     <string name="create_suc">創建訂單成功</string>
 
-        
     <string name="no_type">未選擇代駕類型,無法繼續</string>
-        
     <string name="no_passenger">未查詢到客戶信息,無法繼續</string>
-        
     <string name="no_start">未選擇起點,無法繼續</string>
-        
     <string name="no_budget">預估價格失敗,無法繼續</string>
 
-        
     <string name="please_start">請選擇預約地</string>
-        
     <string name="please_end">請選擇目的地</string>
 
-        
     <string name="contract_service">聯繫客服</string>
-        
     <string name="same_order_driver">同單司機</string>
-        
     <string name="consumer_msg">客戶信息</string>
 
-        
     <string name="refuse_reason">請輸入拒單理由</string>
-        
     <string name="ok">確定</string>
 
-        
     <string name="qb_fee">起步費用</string>
-        
     <string name="lc_fee">里程費用</string>
-        
     <string name="time_fee">時間費用</string>
-        
     <string name="dh_fee">等候費用</string>
-        
     <string name="coupon_text">優惠券</string>
-        
     <string name="prepay_text">預付金額</string>
-        
     <string name="no_coupon">暫無優惠券</string>
 
-        
     <string name="route_failed">路徑規劃失敗</string>
 
-        
     <string name="loc_failed">定位失敗,無法繼續操作</string>
 
-        
     <string name="status_pai">已派單</string>
-        
     <string name="status_jie">已接單</string>
-        
     <string name="status_to_start">前往預約地</string>
-        
     <string name="status_arrive_start">已到達預約地</string>
-        
     <string name="status_wait">等待中</string>
-        
     <string name="status_to_end">前往目的地</string>
-        
+    <string name="status_cheating">作弊器</string>
     <string name="status_confirm">確認費用</string>
 
-        
     <string name="canceled_order">當前訂單已被取消:)</string>
+    <string name="backed_order">當前訂單已被收回:)</string>
 
-        
     <string name="please_cancel_reason">請輸入取消理由</string>
 
-        
     <string name="pay_suc">結算完成</string>
 
-        
     <string name="k_k_meter">公里</string>
-        
     <string name="yuan_coupon">元優惠券</string>
 
-        
-    <string name="help_pay">收取现金</string>
-        
-    <string name="cus_balance">客戶餘額</string>
-        
+    <string name="cus_pay">客戶在線支付</string>
+    <string name="help_pay">收取現金</string>
+    <string name="cus_balance">餘額支付</string>
     <string name="qiandan">簽單支付</string>
 
-        
     <string name="pay_title">選擇支付類型</string>
-        
     <string name="please_pay_title">請選擇支付類型</string>
 
-        
     <string name="fee_hint">注:墊付費用不參與優惠券計算</string>
 
-        
     <string name="quan_lan">全覽</string>
 
-        
     <string name="jishi">即時</string>
-        
     <string name="appoint">預約</string>
-    <string name="fee_detail">費用詳情</string>
+
+
+    <string name="taxi_meter">計價器</string>
+    <string name="back">返回</string>
+    <string name="waited">已等候</string>
+    <string name="lc_km">里程(公里)</string>
+    <string name="total_fee_yuan">總金額(元)</string>
+
+
+    <string name="yi_xingshi">已行駛</string>
+    <string name="you_waited">您已經等待</string>
+    <string name="kuohao_minutes">(分鐘)</string>
+
+
+    <string name="middle_start_drive">出發</string>
+
+
+    <string name="choice_pay_type">選擇支付方式</string>
+
+    <string name="order_accepted">已接單</string>
+    <string name="order_running">執行中</string>
+    <string name="order_waiting">等待中</string>
+
+
+    <string name="consumer_name">客戶姓名</string>
+    <string name="consumer_type">客戶類型</string>
+    <string name="order_company">訂單所屬公司</string>
+    <string name="consumer_company">客戶所屬公司</string>
+    <string name="consumer_balance">餘額</string>
+    <string name="can_sign">簽單</string>
+
+    <string name="can_sign_consumer">簽單客戶</string>
+
+    <string name="allow">允許</string>
+    <string name="not_allow">不允許</string>
+
+
+    <string name="please_refuse_reason">請選擇拒單原因</string>
+
+    <string name="click_wrong">點錯了</string>
+    <string name="too_far_way">距離太遠</string>
+    <string name="body_wrong">身體不適</string>
+    <string name="car_wrong">車壞了</string>
+    <string name="please_other_reason">請輸入其他原因</string>
+    <string name="refuse_apply">提交</string>
+
+    <string name="not_non_refuse">拒單理由不能為空</string>
+
+
+    <string name="personal_consumer">個人客戶</string>
+    <string name="qiye_consumer">企業客戶</string>
+
+    <string name="left">剩餘</string>
+    <string name="meter">米</string>
+    <string name="about_">大約</string>
+    <string name="hour_">時</string>
+    <string name="minute_">分鐘</string>
+
+    <string name="pay_money">支付</string>
+
+    <string name="finished_order">該訂單已完成支付</string>
+
+    <string name="user_phone">使用人</string>
+    <string name="passenger_phone">下單人</string>
+
 </resources>

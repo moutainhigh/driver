@@ -43,7 +43,7 @@
                     RatingBar:starEmpty="@mipmap/empty_star"
                     RatingBar:starFill="@mipmap/star_full"
                     RatingBar:starSize="20dp"
-                    RatingBar:stepSize="0.5"/>
+                    RatingBar:stepSize="0.1"/>
 
                 <TextView
                     android:id="@+id/rate_text"

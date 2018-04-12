@@ -103,4 +103,19 @@
     <string name="pay_suc_1">手机尾号为</string>
     <string name="pay_suc_2">的客户已完成支付</string>
 
+    <string name="yuyue">预约</string>
+    <string name="jishi">及时</string>
+
+    <string name="new_order">新单 ></string>
+    <string name="pai_order">已派单 ></string>
+    <string name="jie_order">已接单 ></string>
+    <string name="to_start_order">前往预约地 ></string>
+    <string name="arrive_start_order">到达预约地 ></string>
+    <string name="to_end_order">前往目的地 ></string>
+    <string name="wait_order">等待中 ></string>
+    <string name="not_pay_order">未支付 ></string>
+    <string name="finish_order">已完成 ></string>
+    <string name="des_order">已销单 ></string>
+    <string name="rate_order">已完成 ></string>
+
 </resources>

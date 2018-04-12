@@ -30,6 +30,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easymi.component.R;
 import com.easymi.component.widget.UpdateProgressDialog;
 
 import java.io.File;
@@ -311,11 +312,11 @@ public class UpdateAgent implements ICheckAgent, IUpdateAgent, IDownloadAgent {
             }
             final UpdateInfo info = agent.getInfo();
             String size = Formatter.formatShortFileSize(mContext, info.size);
-            String content = String.format("最新版本：%1$s\n新版本大小：%2$s\n\n更新内容\n%3$s", info.versionName, size, info.updateContent);
+            String content = String.format(mContext.getString(R.string.new_version), info.versionName, size, info.updateContent);
 
             final AlertDialog dialog = new AlertDialog.Builder(mContext).create();
 
-            dialog.setTitle("应用更新");
+            dialog.setTitle(mContext.getString(R.string.app_update));
             dialog.setCancelable(false);
             dialog.setCanceledOnTouchOutside(false);
 
@@ -333,14 +334,14 @@ public class UpdateAgent implements ICheckAgent, IUpdateAgent, IDownloadAgent {
             DialogInterface.OnClickListener listener = new DefaultPromptClickListener(agent, true);
 
             if (info.isForce) {
-                tv.setText("您需要更新应用才能继续使用\n\n" + content);
-                dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", listener);
+                tv.setText(mContext.getString(R.string.need_update) + content);
+                dialog.setButton(DialogInterface.BUTTON_POSITIVE, mContext.getString(R.string.confirm), listener);
             } else {
                 tv.setText(content);
-                dialog.setButton(DialogInterface.BUTTON_POSITIVE, "立即更新", listener);
-                dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "以后再说", listener);
+                dialog.setButton(DialogInterface.BUTTON_POSITIVE, mContext.getString(R.string.update_now), listener);
+                dialog.setButton(DialogInterface.BUTTON_NEGATIVE, mContext.getString(R.string.be_later), listener);
                 if (info.isIgnorable) {
-                    dialog.setButton(DialogInterface.BUTTON_NEUTRAL, "忽略该版", listener);
+                    dialog.setButton(DialogInterface.BUTTON_NEUTRAL, mContext.getString(R.string.ingore_this), listener);
                 }
             }
             dialog.show();
@@ -414,7 +415,7 @@ public class UpdateAgent implements ICheckAgent, IUpdateAgent, IDownloadAgent {
         @Override
         public void onStart(int max) {
             if (mBuilder == null) {
-                String title = "下载中 - " + mContext.getString(mContext.getApplicationInfo().labelRes);
+                String title = mContext.getString(R.string.down_loading_2) + mContext.getString(mContext.getApplicationInfo().labelRes);
                 mBuilder = new NotificationCompat.Builder(mContext);
                 mBuilder.setOngoing(true)
                         .setAutoCancel(false)

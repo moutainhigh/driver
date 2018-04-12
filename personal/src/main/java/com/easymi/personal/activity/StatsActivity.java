@@ -119,8 +119,8 @@ public class StatsActivity extends RxBaseActivity {
                 accept_percent.setText(String.valueOf(result.driverSendInfo.accept) + "%");
                 income_cost.setText("¥" + String.valueOf(result.driverSendInfo.income_cost));
                 total_cost.setText("¥" + String.valueOf(result.driverSendInfo.order_cost));
-                star_text.setText(String.valueOf(result.driverSendInfo.rate));
-                ratingBar.setStarMark(result.driverSendInfo.rate);
+                star_text.setText(String.valueOf(result.driverSendInfo.rate == 0 ? 5 : result.driverSendInfo.rate));
+                ratingBar.setStarMark(result.driverSendInfo.rate == 0 ? 5 : result.driverSendInfo.rate);
             }
         })));
     }

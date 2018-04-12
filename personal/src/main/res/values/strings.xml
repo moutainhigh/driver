@@ -279,6 +279,10 @@
     <string name="help_daijia">代驾</string>
     <string name="be_busy">您正处于忙碌状态，无法修改密码</string>
 
-
+    <string name="tixian_1">提现规则，最小</string>
+    <string name="tixian_2">元，最大</string>
+    <string name="tixian_3">元,</string>
+    <string name="tixian_4">提现基数</string>
+    <string name="tixian_5">元</string>
 
 </resources>

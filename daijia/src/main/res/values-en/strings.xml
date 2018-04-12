@@ -1,223 +1,240 @@
 <resources>
-    <string name="app_name">rvakva driver v5</string>
-    <string name="go">go</string>
-        
-    <string name="navigation">navigation</string>
-        
+    <string name="app_name">daijia</string>
+
+    <string name="go">Go</string>
+    <string name="navigation">Navigation</string>
     <string name="order_number">order number</string>
-        
-    <string name="accept_order">order</string>
-        
-    <string name="refuse_order">Refund</string>
-        
-    <string name="to_start">go to reservation</string>
-        
-    <string name="change_end">modify end point</string>
+    <string name="accept_order">Order </string>
+    <string name="refuse_order">rejected </string>
+    <string name="to_start"> go to the reservation </string>
+    <string name="change_end"> modify the end </string>
 
-        
-    <string name="start_drive">Click Departure</string>
-        
-    <string name="start_wait">wait</string>
+    <string name="start_drive"> click to leave </string>
+    <string name="start_wait">waiting</string>
 
-        
-    <string name="huadongdaoda">Swipe to appointment</string>
+    <string name="huadongdaoda"> slide to reach the reservation </string>
 
 
-        
-    <string name="click_wait">click wait</string>
-        
-    <string name="click_start">click on</string>
-        
-    <string name="settle">Billing</string>
-        
-    <string name="service_fee">service fee</string>
-        
-    <string name="drive_distance">Mileage</string>
-        
-    <string name="drive_time">travel time</string>
-        
+    <string name="click_wait"> click wait </string>
+    <string name="click_start">Click to leave </string>
+    <string name="settle">clear </string>
+    <string name="service_fee"> service cost </string>
+    <string name="drive_distance">mileage</string>
+    <string name="drive_time"> travel time </string>
     <string name="wait_time">wait time</string>
-        
     <string name="minutes">minutes</string>
 
-        
-    <string name="wait_fee">wait for a fee</string>
+    <string name="wait_fee"> wait for the cost </string>
 
-        
-    <string name="km">km</string>
+    <string name="km">kilometer</string>
 
-        
-    <string name="current_mileage">current kilometers：</string>
-        
-    <string name="current_fee">current cost：</string>
-        
-    <string name="change_confirm">OK</string>
-        
-    <string name="cancel">cancel</string>
+    <string name="current_mileage"> current kilometers: </string>
+    <string name="current_fee"> current cost: </string>
+    <string name="change_confirm"> OK </string>
+    <string name="cancel"> cancel </string>
 
-        
-    <string name="confirm_money">confirmation fee</string>
-        
-    <string name="consumer_prepay">Customer Prepaid</string>
-        
-    <string name="more_pay">also pay</string>
-        
-    <string name="dai_fu">Payments</string>
+    <string name="confirm_money"> confirm the cost </string>
+    <string name="consumer_prepay"> customer prepaid </string>
+    <string name="more_pay"> also need to pay </string>
+    <string name="dai_fu"> payment </string>
 
-        
-    <string name="watch_detail">see cost details</string>
-        
-    <string name="extra_fee">additional service fee</string>
-        
-    <string name="help_pay_fee">Advance payment</string>
-        <string name="hint_edit">Click the price text to type</string>directly
-        
-    <string name="please_remark">Please enter note information</string>
+    <string name="watch_detail">View Charge Details ></string>
+    <string name="extra_fee"> additional service charge</string>
+    <string name="help_pay_fee"> pad payment </string>
+    <string name="hint_edit"> click on the price text can be directly entered </string>
+    <string name="please_remark">Please enter the comment information</string>
 
-        
-    <string name="please_consumer_phone">Please enter customer phone number</string>
-        
-    <string name="please_consumer_name">Please enter the customer`s name</string>
-        
-    <string name="create_order">create order</string>
+    <string name="minest_fee">minimum amount spent</string>
+    <string name="xianjin_coupon"> yuan cash coupons </string>
+    <string name="zhekou_coupon"> discount discount coupons </string>
 
-        
-    <string name="cancel_suc">Cancel Order Success</string>
-        
-    <string name="refuse_suc">reject rejected</string>
+    <string name="fee_detail">Expense Details</string>
 
-        
-    <string name="illegality_place">Invalid destination, unable to navigate</string>
+    <string name="please_consumer_phone"> Please enter the customer\'s phone number </string>
+    <string name="please_consumer_name">Please enter the customer name</string>
+    <string name="create_order">Create Order</string>
 
-        
-    <string name="cancel_reason">Please select the reason for the cancellation</string>
-        <string name="cancel_reason_1">Cancel the order</string>in agreement with the customer
-        
-    <string name="cancel_reason_2">Clients call multiple people, first-come, only driver</string>
-        
-    <string name="cancel_reason_3">Customer rejects call</string>
-        
-    <string name="cancel_reason_4">Customer unilaterally cancel</string>
-        
-    <string name="cancel_reason_5">Other reasons</string>
+    <string name="cancel_suc"> cancel the order is successful </string>
+    <string name="refuse_suc"> Rejection success </string>
 
-        
-    <string name="cancel_cancel">not to cancel</string>
-        
-    <string name="cancel_order">cancel order</string>
+    <string name="illegality_place"> invalid destination, unable to navigate </string>
 
-        
+    <string name="cancel_reason">Please select the reason for the cancellation </string>
+    <string name="cancel_reason_1"> negotiate with the customer to cancel the order </string>
+    <string name="cancel_reason_2"> customer calls multiple people, only with the first driver </string>
+    <string name="cancel_reason_3">Customer refused to call </string>
+    <string name="cancel_reason_4"> customer unilaterally canceled </string>
+    <string name="cancel_reason_5">other reasons</string>
+
+    <string name="cancel_cancel"> does not cancel temporarily </string>
+    <string name="cancel_order"> cancel orders </string>
+
     <string name="order_not_exist">Order does not exist</string>
 
-        
-    <string name="where_start">Please select origin</string>
-        
-    <string name="where_end">Please select destination</string>
+    <string name="where_start">Please select the departure </string>
+    <string name="where_end"> Please select the destination </string>
 
-        
-    <string name="yuan_qi">Yuan Qi</string>
-        
-    <string name="yuan">element</string>
-        
-    <string name="about">about</string>
-        
-    <string name="create_suc">Create Order Success</string>
+    <string name="yuan_qi"> yuan </string>
+    <string name="yuan"> yuan </string>
+    <string name="about"> about </string>
+    <string name="create_suc">Create order successfully </string>
 
-        
-    <string name="no_type">Driver type not selected, unable to continue</string>
-        
-    <string name="no_passenger">Customer information is not queried, can not continue</string>
-        <string name="no_start">No starting point selected,</string>can not be continued
-        
-    <string name="no_budget">Estimated price failed to continue</string>
+    <string name="no_type"> did not select driver type, can not continue </string>
+    <string name="no_passenger"> did not query customer information, can not continue </string>
+    <string name="no_start"> did not select starting point, can not continue </string>
+    <string name="no_budget"> Estimated price failed, can not continue </string>
 
-        
-    <string name="please_start">Please select an appointment</string>
-        
-    <string name="please_end">Please select destination</string>
+    <string name="please_start"> Please select a reservation </string>
+    <string name="please_end"> Please select the destination </string>
 
-        
-    <string name="contract_service">contact customer service</string>
-        
-    <string name="same_order_driver">same driver</string>
-        
+    <string name="contract_service"> Contact customer service </string>
+    <string name="same_order_driver"> same single driver </string>
     <string name="consumer_msg">Customer Information</string>
 
-        
-    <string name="refuse_reason">Please enter refusal reason</string>
-        
-    <string name="ok">OK</string>
+    <string name="refuse_reason">Please enter the reason for the refusal</string>
+    <string name="ok"> OK </string>
 
-        
-    <string name="qb_fee">start fee</string>
-        
-    <string name="lc_fee">mileage fee</string>
-        
-    <string name="time_fee">time cost</string>
-        
-    <string name="dh_fee">waiting fee</string>
-        
-    <string name="coupon_text">coupon</string>
-        
-    <string name="prepay_text">Prepaid Amount</string>
-        
-    <string name="no_coupon">no coupon</string>
+    <string name="qb_fee">Startup costs</string>
+    <string name="lc_fee">mileage cost</string>
+    <string name="time_fee"> time cost </string>
+    <string name="dh_fee"> waiting for the cost </string>
+    <string name="coupon_text">Coupons</string>
+    <string name="prepay_text"> prepaid amount </string>
+    <string name="no_coupon">No Coupon </string>
 
-        
-    <string name="route_failed">Path planning failed</string>
+    <string name="route_failed"> path planning failed </string>
 
-        
-    <string name="loc_failed">Positioning failed, can not continue</string>
+    <string name="loc_failed"> positioning failed, unable to continue </string>
 
-        
-    <string name="status_pai">sent single</string>
-        
-    <string name="status_jie">orders received</string>
-        
-    <string name="status_to_start">to reserve place</string>
-        <string name="status_arrive_start">Reserved place</string>has been reached
-        
-    <string name="status_wait">wait ..</string>
-        
-    <string name="status_to_end">go to destination</string>
-        
-    <string name="status_confirm">confirmation fee</string>
+    <string name="status_pai"> dispatched single</string>
+    <string name="status_jie"> Ordered </string>
+    <string name="status_to_start"> go to the reservation </string>
+    <string name="status_arrive_start"> has reached the reservation </string>
+    <string name="status_wait">waiting </string>
+    <string name="status_to_end"> goes to destination </string>
+    <string name="status_cheating">hook </string>
+    <string name="status_confirm"> confirm the cost </string>
 
-        
-    <string name="canceled_order">The current order has been canceled:)</string>
+    <string name="canceled_order"> The current order has been cancelled :)</string>
+    <string name="backed_order"> The current order has been reclaimed :)</string>
 
-        
     <string name="please_cancel_reason">Please enter cancellation reason</string>
 
-        
-    <string name="pay_suc">Billing completed</string>
+    <string name="pay_suc"> settlement is completed </string>
 
-        
-    <string name="k_k_meter">km</string>
-        
-    <string name="yuan_coupon">Yuan Coupon</string>
+    <string name="k_k_meter">kilometer</string>
+    <string name="yuan_coupon"> meta coupons </string>
 
-        
-    <string name="help_pay">driver payment</string>
-        
-    <string name="cus_balance">client balance</string>
-        
-    <string name="qiandan">sign up payment</string>
+    <string name="cus_pay">Customer Online Payment</string>
+    <string name="help_pay">receive cash</string>
+    <string name="cus_balance">balance payment</string>
+    <string name="qiandan"> sign payment </string>
 
-        
-    <string name="pay_title">Choose payment type</string>
-        
+    <string name="pay_title">Select Payment Type</string>
     <string name="please_pay_title">Please select payment type</string>
 
+    <string name="fee_hint"> Note: pad payment does not participate in coupon calculation </string>
+
+    <string name="quan_lan"> overview </string>
+
+    <string name="jishi">Immediate</string>
+    <string name="appoint">Appointment</string>
+
+
+    <string name="taxi_meter"> meter </string>
+    <string name="back"> returns </string>
+    <string name="waited">waited</string>
+    <string name="lc_km">mileage (km)</string>
+    <string name="total_fee_yuan"> total amount (yuan)</string>
+    <string name="yi_xingshi"> has been driven </string>
         
-    <string name="fee_hint">Note: advance payments do not participate in coupon calculation</string>
+    <string name="you_waited">You have already waited for </string>
+        
+    <string name="kuohao_minutes">(minutes)</string>
+
 
         
-    <string name="quan_lan">overview</string>
+    <string name="middle_start_drive"> departure </string>
+
 
         
-    <string name="jishi">instant</string>
+    <string name="choice_pay_type">Select payment method</string>
+
         
-    <string name="appoint">appointment</string>
-    <string name="fee_detail">fee detail</string>
+    <string name="order_accepted"> Ordered </string>
+        
+    <string name="order_running"> in execution </string>
+        
+    <string name="order_waiting">waiting </string>
+
+
+        
+    <string name="consumer_name">customer name</string>
+        
+    <string name="consumer_type">customer type</string>
+        
+    <string name="order_company">order company </string>
+        
+    <string name="consumer_company"> customer company </string>
+        
+    <string name="consumer_balance">balance </string>
+        
+    <string name="can_sign"> sign </string>
+
+        
+    <string name="can_sign_consumer"> sign client </string>
+
+        
+    <string name="allow">allow</string>
+        
+    <string name="not_allow">Not allowed</string>
+
+
+        
+    <string name="please_refuse_reason">Please select Reject Reason</string>
+
+        
+    <string name="click_wrong"> is wrong </string>
+        
+    <string name="too_far_way">Distance too far</string>
+        
+    <string name="body_wrong"> physical discomfort </string>
+        
+    <string name="car_wrong"> broken car </string>
+        
+    <string name="please_other_reason">Please enter other reasons</string>
+        
+    <string name="refuse_apply">submit</string>
+
+        
+    <string name="not_non_refuse"> refusal reason can not be empty </string>
+
+
+        
+    <string name="personal_consumer">personal client</string>
+        
+    <string name="qiye_consumer"> enterprise customers </string>
+
+        
+    <string name="left"> remaining </string>
+        
+    <string name="meter">m</string>
+        
+    <string name="about_">About</string>
+        
+    <string name="hour_"> when </string>
+        
+    <string name="minute_">minutes</string>
+
+        
+    <string name="pay_money">Pay</string>
+
+        
+    <string name="finished_order">This order has completed payment</string>
+
+        
+    <string name="user_phone"> user </string>
+        
+    <string name="passenger_phone"> orders </string>
+
 </resources>

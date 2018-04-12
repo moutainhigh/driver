@@ -1,7 +1,9 @@
 package com.easymi.common.util;
 
+import com.easymi.common.R;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
+import com.easymi.component.app.XApp;
 
 /**
  * Created by developerLzh on 2017/11/20 0020.
@@ -13,27 +15,27 @@ public class DJStatus2Str {
         if (business.equals(Config.DAIJIA)) {
             switch (status) {
                 case DJOrderStatus.NEW_ORDER:
-                    return "新单 >";
+                    return XApp.getInstance().getString(R.string.new_order);
                 case DJOrderStatus.PAIDAN_ORDER:
-                    return "已派单 >";
+                    return XApp.getInstance().getString(R.string.pai_order);
                 case DJOrderStatus.TAKE_ORDER:
-                    return "已接单 >";
+                    return XApp.getInstance().getString(R.string.jie_order);
                 case DJOrderStatus.GOTO_BOOKPALCE_ORDER:
-                    return "前往预约地 >";
+                    return XApp.getInstance().getString(R.string.to_start_order);
                 case DJOrderStatus.ARRIVAL_BOOKPLACE_ORDER:
-                    return "到达预约地 >";
+                    return XApp.getInstance().getString(R.string.arrive_start_order);
                 case DJOrderStatus.GOTO_DESTINATION_ORDER:
-                    return "前往目的地 >";
+                    return XApp.getInstance().getString(R.string.to_end_order);
                 case DJOrderStatus.START_WAIT_ORDER:
-                    return "等待中 >";
+                    return XApp.getInstance().getString(R.string.wait_order);
                 case DJOrderStatus.ARRIVAL_DESTINATION_ORDER:
-                    return "未支付 >";
+                    return XApp.getInstance().getString(R.string.not_pay_order);
                 case DJOrderStatus.FINISH_ORDER:
-                    return "已完成 >";
+                    return XApp.getInstance().getString(R.string.finish_order);
                 case DJOrderStatus.CANCEL_ORDER:
-                    return "已销单 >";
+                    return XApp.getInstance().getString(R.string.des_order);
                 case DJOrderStatus.RATED_ORDER:
-                    return "已完成 >";
+                    return XApp.getInstance().getString(R.string.rate_order);
             }
         }
         return "";
