@@ -329,6 +329,7 @@ public class XApp extends MultiDexApplication {
                 iflytekSpe.stopSpeaking();
             }
         }
+        abandonFocus();
     }
 
     public void clearVoiceList() {
