@@ -345,7 +345,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
                 });
             }
         };
-        timer.schedule(timerTask, 0, 1000);
+        timer.schedule(timerTask, 1000, 1000);
     }
 
     private void cancelTimer() {
