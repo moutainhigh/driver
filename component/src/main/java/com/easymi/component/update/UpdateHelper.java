@@ -52,10 +52,10 @@ public class UpdateHelper {
                 return updateInfo;
             }
         }).setOnNext(() -> onNextListener.onNext()).setOnFailureListener(error -> {
-            if (null != updateInfo && updateInfo.isForce) {
+            if (null != updateInfo && updateInfo.hasUpdate && updateInfo.isForce) {
                 ToastUtil.showMessage(context, context.getString(R.string.update_failed));
                 EmUtil.employLogout(context);
-            }else {
+            } else {
                 onNextListener.onNext();
             }
         }).setWifiOnly(false).check();
