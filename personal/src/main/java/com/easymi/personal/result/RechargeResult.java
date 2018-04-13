@@ -1,6 +1,7 @@
 package com.easymi.personal.result;
 
 import com.easymi.component.result.EmResult;
+import com.easymi.personal.entity.AliPay;
 import com.easymi.personal.entity.Article;
 import com.google.gson.JsonElement;
 
@@ -11,6 +12,6 @@ import com.google.gson.JsonElement;
 public class RechargeResult extends EmResult {
 //    public Article article;
     public JsonElement weixinResult;
-    public JsonElement aliPayResult;
+    public AliPay aliPayResult;
     public UnionResult unionResult;
 }

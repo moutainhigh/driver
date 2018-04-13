@@ -254,7 +254,7 @@ public class RechargeActivity extends RxBaseActivity {
             if (payType.equals("weixin")) {
                 launchWeixin(rechargeResult.weixinResult);
             } else if (payType.equals("alipay")) {
-                launchZfb(rechargeResult.aliPayResult);
+                launchZfb(rechargeResult.aliPayResult.payUrl);
             } else if (payType.equals("unionpay")) {
                 launchYiPay(rechargeResult.unionResult.data);
             }
@@ -285,13 +285,13 @@ public class RechargeActivity extends RxBaseActivity {
         }
     }
 
-    private void launchZfb(JsonElement data) {
+    private void launchZfb(String  data) {
         new Thread() {
             public void run() {
 
                 PayTask alipay = new PayTask(RechargeActivity.this);
                 String result = alipay
-                        .pay(data.toString(), true);
+                        .pay(data, true);
 
                 Message msg = new Message();
                 msg.what = 0;

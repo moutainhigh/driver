@@ -237,4 +237,6 @@
         
     <string name="passenger_phone"> orders </string>
 
+    <string name="leagel_phone">please input legal phone</string>
+
 </resources>

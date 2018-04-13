@@ -168,6 +168,11 @@ public class CreateDJFragment extends RxLazyFragment implements CreateDJContract
         initPhoneEdit();
         initPlace();
         createOrder.setOnClickListener(view -> {
+            String phone = phoneText.getText().toString();
+            if (StringUtils.isBlank(phone) || phone.length() != 11) {
+                ToastUtil.showMessage(getActivity(), getString(R.string.leagel_phone));
+                return;
+            }
             if (selectedDJType == null) {
                 ToastUtil.showMessage(getActivity(), getString(R.string.no_type));
                 return;

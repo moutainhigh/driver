@@ -83,6 +83,7 @@
     <string name="no_passenger">未查询到客户信息,无法继续</string>
     <string name="no_start">未选择起点,无法继续</string>
     <string name="no_budget">预估价格失败,无法继续</string>
+    <string name="leagel_phone">请输入合法的手机号码</string>
 
     <string name="please_start">请选择预约地</string>
     <string name="please_end">请选择目的地</string>
