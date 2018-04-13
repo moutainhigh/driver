@@ -480,6 +480,13 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
     }
 
     @Override
+    public void removerOrderById(long orderId) {
+        if(showIngOrder != null && showIngOrder.orderId == orderId){
+            showIngOrder.countTime = 1;//采用将时间置位1的方式移除订单
+        }
+    }
+
+    @Override
     public RxManager getManager() {
         return mRxManager;
     }

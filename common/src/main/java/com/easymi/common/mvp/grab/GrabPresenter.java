@@ -12,6 +12,7 @@ import com.amap.api.services.route.WalkRouteResult;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.result.MultipleOrderResult;
 import com.easymi.component.Config;
+import com.easymi.component.network.ErrCode;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.EmUtil;
@@ -64,7 +65,7 @@ public class GrabPresenter implements GrabContract.Presenter {
             public void onNext(MultipleOrderResult multipleOrderResult) {
                 MultipleOrder order = multipleOrderResult.order;
                 if (order != null) {
-                    if(order.orderType.equals(Config.DAIJIA)){
+                    if (order.orderType.equals(Config.DAIJIA)) {
                         ARouter.getInstance()
                                 .build("/daijia/FlowActivity")
                                 .withLong("orderId", order.orderId).navigation();
@@ -76,6 +77,11 @@ public class GrabPresenter implements GrabContract.Presenter {
             @Override
             public void onError(int code) {
                 view.showBase(null);
+                if (code == ErrCode.NOT_MATCH.getCode()
+                        || code == ErrCode.GRAB_ORDER_ERROR.getCode()
+                        || code == ErrCode.DRIVER_GOTO_PRE_ORDER_CODE.getCode()) {
+                    view.removerOrderById(orderId);
+                }
             }
         })));
     }
@@ -89,7 +95,7 @@ public class GrabPresenter implements GrabContract.Presenter {
             public void onNext(MultipleOrderResult multipleOrderResult) {
                 MultipleOrder order = multipleOrderResult.order;
                 if (order != null) {
-                    if(order.orderType.equals(Config.DAIJIA)){
+                    if (order.orderType.equals(Config.DAIJIA)) {
                         ARouter.getInstance()
                                 .build("/daijia/FlowActivity")
                                 .withLong("orderId", order.orderId).navigation();
@@ -101,6 +107,11 @@ public class GrabPresenter implements GrabContract.Presenter {
             @Override
             public void onError(int code) {
                 view.showBase(null);
+                if (code == ErrCode.NOT_MATCH.getCode()
+                        || code == ErrCode.GRAB_ORDER_ERROR.getCode()
+                        || code == ErrCode.DRIVER_GOTO_PRE_ORDER_CODE.getCode()) {
+                    view.removerOrderById(orderId);
+                }
             }
         })));
     }

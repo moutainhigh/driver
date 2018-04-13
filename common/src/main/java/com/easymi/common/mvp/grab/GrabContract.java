@@ -37,6 +37,8 @@ public interface GrabContract {
 
         void removeAllOrderMarker();
 
+        void removerOrderById(long orderId);
+
         RxManager getManager();
     }
 
