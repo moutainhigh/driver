@@ -1,13 +1,18 @@
 package com.easymi.component.loc;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -15,6 +20,7 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.trace.LBSTraceClient;
 import com.easymi.component.Config;
+import com.easymi.component.R;
 import com.easymi.component.app.XApp;
 import com.easymi.component.db.SqliteHelper;
 import com.easymi.component.entity.DymOrder;
@@ -54,6 +60,10 @@ public class LocService extends NotiService implements AMapLocationListener {
      */
     private boolean mIsWifiCloseable = false;
 
+    private static final String NOTIFICATION_CHANNEL_NAME = "BackgroundLocation";
+    private NotificationManager notificationManager = null;
+    boolean isCreateChannel = false;
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -68,7 +78,6 @@ public class LocService extends NotiService implements AMapLocationListener {
                 mIsWifiCloseable = true;
                 mWifiAutoCloseDelegate.initOnServiceStarted(getApplicationContext());
             }
-            showNotify(this);
             startLoc();
             return START_STICKY;
         } else {
@@ -86,6 +95,9 @@ public class LocService extends NotiService implements AMapLocationListener {
             locClient = new AMapLocationClient(this);
             locClient.setLocationListener(this);
         } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                locClient.disableBackgroundLocation(true);
+            }
             locClient.stopLocation();
         }
 
@@ -105,6 +117,11 @@ public class LocService extends NotiService implements AMapLocationListener {
                 .setMockEnable(false)
                 .setSensorEnable(true);
         locClient.setLocationOption(mLocationOption);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            locClient.enableBackgroundLocation(NOTI_ID, buildNotification());
+        } else {
+            startForeground(NOTI_ID, buildNotification());
+        }
 
         locClient.startLocation();
     }
@@ -133,6 +150,9 @@ public class LocService extends NotiService implements AMapLocationListener {
     protected void stopService() {
         super.stopService();
         if (null != locClient) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                locClient.disableBackgroundLocation(true);
+            }
             locClient.stopLocation();
             locClient.onDestroy();
             locClient = null;
@@ -225,41 +245,55 @@ public class LocService extends NotiService implements AMapLocationListener {
         return needTrace;
     }
 
-    private void showNotify(Context context) {
-
-
+    private Notification buildNotification() {
         boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
         Intent intent = new Intent();
 
         if (isLogin) {
-            intent.setClassName(context, "com.easymi.common.mvp.work.WorkActivity");
+            intent.setClassName(this, "com.easymi.common.mvp.work.WorkActivity");
 
         } else {
-            intent.setClassName(context, "com.easymi.common.activity.SplashActivity");
+            intent.setClassName(this, "com.easymi.common.activity.SplashActivity");
         }
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
                 intent, 0);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(
-                context, "1011");
+        Notification.Builder builder = null;
+        Notification notification = null;
+        if (Build.VERSION.SDK_INT >= 26) {
+            //Android O上对Notification进行了修改，如果设置的targetSDKVersion>=26建议使用此种方式创建通知栏
+            if (null == notificationManager) {
+                notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            }
+            String channelId = getPackageName();
+            if (!isCreateChannel) {
+                NotificationChannel notificationChannel = new NotificationChannel(channelId,
+                        NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+                notificationChannel.enableLights(true);//是否在桌面icon右上角展示小圆点
+                notificationChannel.setLightColor(Color.BLUE); //小圆点颜色
+                notificationChannel.setShowBadge(true); //是否在久按桌面图标时显示此渠道的通知
+                notificationManager.createNotificationChannel(notificationChannel);
+                isCreateChannel = true;
+            }
+            builder = new Notification.Builder(getApplicationContext(), channelId);
+        } else {
+            builder = new Notification.Builder(getApplicationContext());
+        }
 
-        builder.setSmallIcon(com.easymi.component.R.mipmap.role_driver);
-        builder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), com.easymi.component.R.mipmap.ic_launcher));
-        builder.setColor(getResources().getColor(com.easymi.component.R.color.colorPrimary));
-        builder.setContentTitle(getResources().getString(com.easymi.component.R.string.app_name));
-        builder.setContentText(getResources().getString(com.easymi.component.R.string.app_name)
-                + context.getResources().getString(com.easymi.component.R.string.houtai));
+        builder.setSmallIcon(R.mipmap.role_driver);
+        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder.setColor(getResources().getColor(R.color.colorPrimary));
+        }
+        builder.setContentTitle(getResources().getString(R.string.app_name));
+        builder.setContentText(getResources().getString(R.string.app_name)
+                + getResources().getString(R.string.houtai));
         builder.setWhen(System.currentTimeMillis());
         builder.setContentIntent(pendingIntent);
         builder.setOngoing(true);
-//        builder.setTicker(getResources().getString(R.string.app_name)
-//                + "正在后台运行");
 
-        Notification notification = builder.build();
-        notification.flags = Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
+        notification = builder.build();
 
-        startForeground(NOTI_ID, notification);
-
+        return notification;
     }
 }

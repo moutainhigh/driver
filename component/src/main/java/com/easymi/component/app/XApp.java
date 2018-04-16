@@ -1,5 +1,6 @@
 package com.easymi.component.app;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
