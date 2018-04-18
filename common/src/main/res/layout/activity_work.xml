@@ -104,21 +104,17 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="bottom|center_horizontal">
 
-                    <View
-                        android:id="@+id/base"
-                        android:layout_width="1dp"
-                        android:layout_height="1dp"
-                        android:layout_centerInParent="true" />
 
                     <TextView
                         android:id="@+id/online_time_hour"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toLeftOf="@+id/hour"
                         android:text="0"
                         android:textColor="@color/yellow"
                         android:textSize="28sp" />
@@ -127,10 +123,8 @@
                         android:id="@+id/hour"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/online_time_hour"
                         android:layout_marginLeft="2dp"
                         android:layout_marginRight="2dp"
-                        android:layout_toLeftOf="@+id/base"
                         android:paddingBottom="5dp"
                         android:text="@string/work_hour"
                         android:textColor="@color/yellow" />
@@ -140,7 +134,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="2dp"
-                        android:layout_toRightOf="@+id/base"
                         android:text="0"
                         android:textColor="@color/yellow"
                         android:textSize="28sp" />
@@ -149,13 +142,11 @@
                         android:id="@+id/minute"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/online_time_minute"
-                        android:layout_toRightOf="@+id/online_time_minute"
                         android:paddingBottom="5dp"
                         android:text="@string/work_minute"
                         android:textColor="@color/yellow" />
 
-                </RelativeLayout>
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"

@@ -28,6 +28,7 @@ import com.iflytek.cloud.SpeechSynthesizer;
 import com.iflytek.cloud.SpeechUtility;
 import com.iflytek.cloud.SynthesizerListener;
 import com.jaredrummler.android.processes.AndroidProcesses;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -86,6 +87,8 @@ public class XApp extends MultiDexApplication {
         initIflytekTTS();
 
         initDataBase();
+
+        CrashReport.initCrashReport(getApplicationContext(), "3816555448", false);
     }
 
     private void initDataBase() {
