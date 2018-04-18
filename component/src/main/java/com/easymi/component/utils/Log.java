@@ -9,26 +9,26 @@ import com.easymi.component.BuildConfig;
 public class Log {
 
     public static void d(String tag, String msg) {
-        if (BuildConfig.DEBUG) {
+        if (true) {
             android.util.Log.d(tag, msg);
         }
 
     }
 
     public static void e(String tag, String msg) {
-        if (BuildConfig.DEBUG) {
+        if (true) {
             android.util.Log.e(tag, msg);
         }
     }
 
     public static void i(String tag, String msg) {
-        if (BuildConfig.DEBUG) {
+        if (true) {
             android.util.Log.i(tag, msg);
         }
     }
 
     public static void e(String tag, String msg,Throwable e) {
-        if (BuildConfig.DEBUG) {
+        if (true) {
             android.util.Log.e(tag, msg,e);
         }
     }
