@@ -18,6 +18,8 @@ import com.easymi.personal.activity.HelpCenterActivity;
 import com.easymi.personal.activity.NearWcActivity;
 import com.easymi.personal.activity.ReliActivity;
 import com.easymi.personal.activity.SetActivity;
+import com.easymi.personal.activity.SysCheck2Activity;
+import com.easymi.personal.activity.SysCheckActivity;
 import com.easymi.personal.activity.WeatherActivity;
 
 import java.util.ArrayList;
@@ -108,7 +110,7 @@ public class GridAdapter extends BaseAdapter {
         }else if (str.equals(context.getString(R.string.sys_check))) {
             holder.item_pic.setImageResource(R.mipmap.contract_service);
             holder.item_root.setOnClickListener(view -> {
-                Intent intent = new Intent(context, HelpCenterActivity.class);
+                Intent intent = new Intent(context, SysCheck2Activity.class);
                 context.startActivity(intent);
             });
         }

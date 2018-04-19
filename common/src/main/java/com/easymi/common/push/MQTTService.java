@@ -188,6 +188,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
             isConning = false;
             try {
                 client.subscribe(pullTopic, 1);
+                XApp.getInstance().setMqttConnect(true);
             } catch (MqttException e) {
                 e.printStackTrace();
             } catch (NullPointerException e) { //在长时间失去网络连接后再连上mqtt，client有可能因为长时间限制而被回收，所以这里加上catch
@@ -199,6 +200,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 
         @Override
         public void onFailure(IMqttToken arg0, Throwable arg1) {
+            XApp.getInstance().setMqttConnect(false);
             isConning = false;
             arg1.printStackTrace();
             // 连接失败，重连
@@ -211,7 +213,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 
         @Override
         public void messageArrived(String topic, MqttMessage message) {
-
+            XApp.getInstance().setMqttConnect(true);
             String str1 = new String(message.getPayload());
 
             Log.e(TAG, "MqttReceivePull:" + str1);
@@ -226,6 +228,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 
         @Override
         public void connectionLost(Throwable arg0) {
+            XApp.getInstance().setMqttConnect(false);
 //            LocReceiver.getInstance().deleteObserver(MQTTService.this);
             // 失去连接，重连
             doClientConnection();

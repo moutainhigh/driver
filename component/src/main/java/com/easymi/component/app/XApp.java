@@ -65,6 +65,16 @@ public class XApp extends MultiDexApplication {
 
     private AudioManager.OnAudioFocusChangeListener mFocusChangeListener;
 
+    private boolean isMqttConnect = false;
+
+    public void setMqttConnect(boolean mqttConnect) {
+        isMqttConnect = mqttConnect;
+    }
+
+    public boolean isMqttConnect() {
+        return isMqttConnect;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();

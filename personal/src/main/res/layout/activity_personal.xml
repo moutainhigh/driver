@@ -192,7 +192,7 @@
                 android:layout_height="50dp"
                 android:background="@color/white"
                 android:onClick="toRefer"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/ic_3"
@@ -232,6 +232,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
                 android:layout_marginTop="20dp"
+                android:visibility="gone"
                 android:background="@color/dark_gray" />
 
             <RelativeLayout
@@ -294,6 +295,45 @@
                     android:layout_marginLeft="15dp"
                     android:layout_toRightOf="@+id/ic_5"
                     android:text="@string/person_message"
+                    android:textColor="#232323"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:src="@mipmap/ic_row" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/dark_gray" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:onClick="toStats">
+
+                <ImageView
+                    android:id="@+id/ic_7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:src="@mipmap/ic_msg" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:layout_toRightOf="@+id/ic_7"
+                    android:text="@string/set_statistics"
                     android:textColor="#232323"
                     android:textSize="16sp" />
 

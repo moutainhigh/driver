@@ -149,6 +149,16 @@
             android:screenOrientation="portrait"
             android:theme="@style/ThemeSwipeBack"/>
         <activity
+            android:name=".activity.SysCheckActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSwipeBack"/>
+        <activity
+            android:name=".activity.SysCheck2Activity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSwipeBack"/>
+        <activity
             android:name=".activity.FeedbackActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"

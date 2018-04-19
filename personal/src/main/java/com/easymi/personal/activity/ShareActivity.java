@@ -1,5 +1,6 @@
 package com.easymi.personal.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -74,6 +75,7 @@ public class ShareActivity extends RxBaseActivity {
         cusToolbar = findViewById(R.id.cus_toolbar);
         cusToolbar.setLeftBack(view -> finish());
         cusToolbar.setTitle(R.string.person_tuiguang);
+        cusToolbar.setRightText(R.string.recommend_title, view -> startActivity(new Intent(ShareActivity.this, RecommendActivity.class)));
     }
 
     @Override

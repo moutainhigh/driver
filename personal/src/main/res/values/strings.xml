@@ -286,5 +286,29 @@
     <string name="tixian_3">元,</string>
     <string name="tixian_4">提现基数</string>
     <string name="tixian_5">元</string>
+    <string name="xiang">项</string>
+
+    <string name="check_no_error">软件设置无异常</string>
+    <string name="check_have_error">请按照建议配置您的手机</string>
+    <string name="check_net_work">网络连接</string>
+    <string name="check_loc">定位</string>
+    <string name="check_notice">通知</string>
+    <string name="check_no_1">无异常</string>
+    <string name="re_check">重新检测</string>
+
+    <string name="check_net_ing">网络连接</string>
+    <string name="checking">检测中..</string>
+
+
+    <string name="net_ok">网络正常</string>
+    <string name="net_err">网络异常</string>
+    <string name="please_gps_open">请开启GPS </string>
+    <string name="please_kaikuo">请行驶到开阔地带 </string>
+    <string name="please_wifi">请打开WIFI有助于精准定位 </string>
+    <string name="loc_ok">定位状态良好</string>
+    <string name="loc_err">定位失败</string>
+
+    <string name="notice_ok">通知消息正常</string>
+    <string name="notice_err">通知消息异常，请退出重新登录</string>
 
 </resources>
