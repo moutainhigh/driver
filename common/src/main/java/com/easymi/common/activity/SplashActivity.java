@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,17 +22,12 @@ import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.permission.RxPermissions;
-import com.easymi.component.update.OnFailureListener;
-import com.easymi.component.update.UpdateError;
 import com.easymi.component.update.UpdateHelper;
 import com.easymi.component.utils.StringUtils;
 
 import java.io.IOException;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 
-import pl.droidsonroids.gif.AnimationListener;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 

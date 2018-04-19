@@ -212,6 +212,8 @@
     <string name="reli_pic">热力图</string>
     <string name="weather_forecast">天气预报</string>
     <string name="contract_service">联系客服</string>
+    <string name="help_center">帮助中心</string>
+    <string name="sys_check">系统检测</string>
 
     <string name="congestion">躲避拥堵</string>
     <string name="avoidhightspeed">不走高速</string>

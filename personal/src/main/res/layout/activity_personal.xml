@@ -192,7 +192,7 @@
                 android:layout_height="50dp"
                 android:background="@color/white"
                 android:onClick="toRefer"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <ImageView
                     android:id="@+id/ic_3"

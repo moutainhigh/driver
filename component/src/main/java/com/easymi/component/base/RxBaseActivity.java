@@ -45,11 +45,6 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
 
     private NetWorkChangeReceiver netChangeReceiver;
 
-//    private static final SwipeBackLayout.DragEdge DEFAULT_DRAG_EDGE = SwipeBackLayout.DragEdge.LEFT;
-//
-//    protected SwipeBackLayout swipeBackLayout;
-//    private ImageView ivShadow;
-
     private SwipeBackActivityHelper mHelper;
 
 
@@ -59,15 +54,6 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
 
         mRxManager = new RxManager();
         ActManager.getInstance().addActivity(this);
-        //设置布局内容
-//        if (isEnableSwipe()) {
-//            setContentView(getContainer());
-//
-//            View view = LayoutInflater.from(this).inflate(getLayoutId(), null);
-//            swipeBackLayout.addView(view);
-//        } else {
-//            setContentView(getLayoutId());
-//        }
 
         if (isEnableSwipe()) {
             mHelper = new SwipeBackActivityHelper(this);
@@ -116,37 +102,11 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
         getSwipeBackLayout().scrollToFinishActivity();
     }
 
-    //    private View getContainer() {
-//        RelativeLayout container = new RelativeLayout(this);
-//        swipeBackLayout = new SwipeBackLayout(this);
-//        swipeBackLayout.setDragEdge(DEFAULT_DRAG_EDGE);
-//        swipeBackLayout.setOnSwipeBackListener(this);
-//        ivShadow = new ImageView(this);
-//        ivShadow.setBackgroundColor(getResources().getColor(R.color.black_p50));
-//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-//        container.addView(ivShadow, params);
-//        container.addView(swipeBackLayout);
-//        return container;
-//    }
-//
+    /**
+     * 是否能侧滑返回
+     * @return
+     */
     public abstract boolean isEnableSwipe();
-//
-//    public void setDragEdge(SwipeBackLayout.DragEdge dragEdge) {
-//        swipeBackLayout.setDragEdge(dragEdge);
-//    }
-//
-//    public void setDragDirectMode(SwipeBackLayout.DragDirectMode dragDirectMode) {
-//        swipeBackLayout.setDragDirectMode(dragDirectMode);
-//    }
-//
-//    public SwipeBackLayout getSwipeBackLayout() {
-//        return swipeBackLayout;
-//    }
-//
-//    @Override
-//    public void onViewPositionChanged(float fractionAnchor, float fractionScreen) {
-//        ivShadow.setAlpha(1 - fractionScreen);
-//    }
 
     @Override
     protected void onStart() {
