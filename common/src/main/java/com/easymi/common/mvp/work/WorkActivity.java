@@ -354,6 +354,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
             Marker marker = aMap.addMarker(options);
             marker.setInfoWindowEnable(true);
             marker.setSnippet(driver.employ_name);
+            marker.setTitle(driver.employ_phone);
             markers.add(marker);
         }
         List<LatLng> latLngs = new ArrayList<>();

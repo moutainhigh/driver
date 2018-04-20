@@ -110,7 +110,7 @@ public class GridAdapter extends BaseAdapter {
         }else if (str.equals(context.getString(R.string.sys_check))) {
             holder.item_pic.setImageResource(R.mipmap.contract_service);
             holder.item_root.setOnClickListener(view -> {
-                Intent intent = new Intent(context, SysCheck2Activity.class);
+                Intent intent = new Intent(context, SysCheckActivity.class);
                 context.startActivity(intent);
             });
         }

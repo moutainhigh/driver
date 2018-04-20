@@ -299,6 +299,8 @@
     <string name="check_net_ing">网络连接</string>
     <string name="checking">检测中..</string>
 
+    <string name="check_waiting">等待中..</string>
+
 
     <string name="net_ok">网络正常</string>
     <string name="net_err">网络异常</string>
@@ -310,5 +312,7 @@
 
     <string name="notice_ok">通知消息正常</string>
     <string name="notice_err">通知消息异常，请退出重新登录</string>
+
+    <string name="get_set_failed">获取配置信息失败，请稍后再试</string>
 
 </resources>

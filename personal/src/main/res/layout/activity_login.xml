@@ -220,7 +220,7 @@
             android:layout_height="40dp"
             android:layout_marginTop="20dp"
             android:gravity="center"
-            android:visibility="invisible">
+            android:visibility="visible">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -228,6 +228,7 @@
                 android:layout_marginLeft="15dp"
                 android:paddingBottom="8dp"
                 android:paddingTop="8dp"
+                android:visibility="gone"
                 android:text="@string/login_new"
                 android:textSize="@dimen/login_little_text_size" />
 
@@ -237,6 +238,7 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="8dp"
                 android:paddingTop="8dp"
+                android:visibility="gone"
                 android:text="@string/login_reg"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/login_little_text_size" />
@@ -254,7 +256,7 @@
                 android:paddingTop="8dp"
                 android:text="@string/login_forget"
                 android:textSize="@dimen/login_little_text_size"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <TextView
                 android:id="@+id/login_forget"
@@ -266,7 +268,7 @@
                 android:text="@string/login_reset"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/login_little_text_size"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
         </LinearLayout>
     </LinearLayout>

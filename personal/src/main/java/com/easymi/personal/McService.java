@@ -13,6 +13,7 @@ import com.easymi.personal.result.LiushuiResult;
 import com.easymi.personal.result.LoginResult;
 import com.easymi.personal.result.NotifityResult;
 import com.easymi.personal.result.RechargeResult;
+import com.easymi.personal.result.SettingResult;
 import com.easymi.personal.result.ShareResult;
 import com.easymi.personal.result.StatisResult;
 import com.easymi.personal.result.TixianResult;
@@ -378,4 +379,12 @@ public interface McService {
     @GET("driver/api/v1/employAfficheById")
     Observable<AnnResult> employAfficheById(@Query("id") Long noticeId,
                                             @Query("app_key") String appKey);
+
+    /**
+     * 获取APP配置
+     * @param appKey
+     * @return
+     */
+    @GET("api/v1/daijiaApp")
+    Observable<SettingResult> getAppSetting(@Query("app_key") String appKey);
 }

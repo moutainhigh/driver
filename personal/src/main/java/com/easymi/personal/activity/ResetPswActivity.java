@@ -91,6 +91,18 @@ public class ResetPswActivity extends RxBaseActivity {
         secInput = findViewById(R.id.sec_code_input);
         phoneNumber = findViewById(R.id.phone_number);
 
+        String flag = getIntent().getStringExtra("flag");
+        if(StringUtils.isNotBlank(flag) && flag.equals("doubleCheck")){
+            accountCon.setVisibility(View.GONE);
+            authCodeCon.setVisibility(View.VISIBLE);
+
+            phone = getIntent().getStringExtra("phone");
+            psw = getIntent().getStringExtra("psw");
+
+            authImg.setImageBitmap(CodeUtil.getInstance().createBitmap());
+            authCode = CodeUtil.getInstance().getCode();
+        }
+
         confirmAccount.setEnabled(false);
         editAccount.addTextChangedListener(new TextWatcher() {
             @Override

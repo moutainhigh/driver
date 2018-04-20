@@ -1,4 +1,4 @@
-package com.easymi.common.entity;
+package com.easymi.component.entity;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -33,6 +33,10 @@ public class Setting {
     @SerializedName("employ_change_price")
     public int employChangePrice;//确认费用时是否能加垫付费之类的
 
+    public int doubleCheck;//双因子验证
+
+    public int canCallDriver;//能否拨打附近司机电话
+
     public void save() {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
@@ -45,6 +49,8 @@ public class Setting {
         values.put("isWorkCar", isWorkCar);
         values.put("workCarChangeOrder", workCarChangeOrder);
         values.put("employChangePrice", employChangePrice);
+        values.put("doubleCheck", doubleCheck);
+        values.put("canCallDriver", canCallDriver);
         db.insert("t_settinginfo", null, values);
     }
 
@@ -61,6 +67,8 @@ public class Setting {
                 settingInfo.isWorkCar = cursor.getInt(cursor.getColumnIndex("isWorkCar"));
                 settingInfo.workCarChangeOrder = cursor.getInt(cursor.getColumnIndex("workCarChangeOrder"));
                 settingInfo.employChangePrice = cursor.getInt(cursor.getColumnIndex("employChangePrice"));
+                settingInfo.doubleCheck = cursor.getInt(cursor.getColumnIndex("doubleCheck"));
+                settingInfo.canCallDriver = cursor.getInt(cursor.getColumnIndex("canCallDriver"));
             }
         } finally {
             cursor.close();

@@ -3,6 +3,10 @@ package com.easymi.personal.activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
@@ -14,11 +18,10 @@ import com.amap.api.location.AMapLocationQualityReport;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.NetWorkUtil;
-import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.CusToolbar;
+import com.easymi.component.widget.RotateImageView;
 import com.easymi.personal.R;
-import com.kongqw.radarscanviewlibrary.RadarScanView;
 
 /**
  * Created by liuzihao on 2018/4/19.
@@ -26,21 +29,30 @@ import com.kongqw.radarscanviewlibrary.RadarScanView;
 
 public class SysCheckActivity extends RxBaseActivity implements AMapLocationListener {
 
-    RadarScanView scanView;
+    RotateImageView rotateImageView;
     TextView netText;
     TextView locText;
     TextView noticeText;
+
+    RotateImageView netImg;
+    RotateImageView locImg;
+    RotateImageView noticeImg;
     Button reCheck;
+
+    TextView errCountText;
+    TextView totalHint;
+
+    TextView checkingText;
+    LinearLayout resultLayout;
+
+    FrameLayout back;
+
+    ImageView leftBack;
+    RelativeLayout toolbar;
 
     private AMapLocationClient locClient;
 
-    @Override
-    public void initToolBar() {
-        super.initToolBar();
-        CusToolbar toolbar = findViewById(R.id.cus_toolbar);
-        toolbar.setLeftBack(view -> finish());
-        toolbar.setTitle(R.string.sys_check);
-    }
+    private int errCount = 0;
 
     @Override
     public boolean isEnableSwipe() {
@@ -54,11 +66,28 @@ public class SysCheckActivity extends RxBaseActivity implements AMapLocationList
 
     @Override
     public void initViews(Bundle savedInstanceState) {
-        scanView = findViewById(R.id.radarScanView);
+        rotateImageView = findViewById(R.id.rotate_img);
         netText = findViewById(R.id.net_work_state);
         locText = findViewById(R.id.loc_state);
         noticeText = findViewById(R.id.notice_state);
         reCheck = findViewById(R.id.re_check);
+
+        netImg = findViewById(R.id.net_img);
+        locImg = findViewById(R.id.loc_img);
+        noticeImg = findViewById(R.id.notice_img);
+
+        errCountText = findViewById(R.id.err_count);
+        totalHint = findViewById(R.id.total_hint);
+
+        resultLayout = findViewById(R.id.result_frame);
+        checkingText = findViewById(R.id.checking_text);
+
+        back = findViewById(R.id.back);
+
+        toolbar = findViewById(R.id.cus_toolbar);
+        leftBack = findViewById(R.id.left_icon);
+
+        leftBack.setOnClickListener(view -> finish());
 
         startScan();
 
@@ -66,25 +95,48 @@ public class SysCheckActivity extends RxBaseActivity implements AMapLocationList
     }
 
     private void startScan() {
-        scanView.startScan();
-        netText.setText("等待中..");
-        locText.setText("等待中..");
-        noticeText.setText("等待中..");
+        reCheck.setVisibility(View.GONE);
+        back.setBackgroundColor(getResources().getColor(R.color.green));
+        toolbar.setBackgroundColor(getResources().getColor(R.color.green));
+        resultLayout.setVisibility(View.GONE);
+        checkingText.setVisibility(View.VISIBLE);
+
+        errCount = 0;
+
+        rotateImageView.startRotate();
+
+        netImg.setImageResource(R.mipmap.ic_check_loading);
+        locImg.setImageResource(R.mipmap.ic_check_loading);
+        noticeImg.setImageResource(R.mipmap.ic_check_loading);
+
+        netImg.startRotate();
+        locImg.startRotate();
+        noticeImg.startRotate();
+
+        netText.setText(getString(R.string.check_waiting));
+        locText.setText(getString(R.string.check_waiting));
+        noticeText.setText(getString(R.string.check_waiting));
 
         netText.setTextColor(getResources().getColor(R.color.text_default));
         locText.setTextColor(getResources().getColor(R.color.text_default));
         noticeText.setTextColor(getResources().getColor(R.color.text_default));
 
-        netText.setText("检测中..");
+        netText.setText(getString(R.string.checking));
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
                 runOnUiThread(() -> {
                     boolean netEnable = NetWorkUtil.checkEnable(SysCheckActivity.this);
-                    netText.setText(netEnable ? "网络正常" : "网络异常");
+                    netText.setText(netEnable ? getString(R.string.net_ok) : getString(R.string.net_ok));
                     netText.setTextColor(netEnable ? getResources().getColor(R.color.green) : getResources().getColor(R.color.red));
 
-                    locText.setText("检测中..");
+                    netImg.pauseRotate();
+                    netImg.reset();
+                    netImg.setImageResource(netEnable ? R.mipmap.ic_check_ok : R.mipmap.ic_check_err);
+
+                    errCount = errCount + (netEnable ? 0 : 1);
+
+                    locText.setText(getString(R.string.checking));
 
                     locClient = new AMapLocationClient(this);
                     locClient.setLocationListener(this);
@@ -115,44 +167,77 @@ public class SysCheckActivity extends RxBaseActivity implements AMapLocationList
                 AMapLocationQualityReport report = amapLocation.getLocationQualityReport();
                 StringBuilder advice = new StringBuilder();
                 if (report.getGPSStatus() != AMapLocationQualityReport.GPS_STATUS_OK) {
-                    advice.append("请开启GPS ");
-                } else {
-                    if (report.getGPSSatellites() == 0) {
-                        advice.append("请行驶到开阔地带 ");
-                    }
-                    if (!NetWorkUtil.isWifiConnected(this)) {
-                        advice.append("请打开WIFI有助于精准定位 ");
-                    }
+                    advice.append(getString(R.string.please_gps_open));
+                }
+                if (!NetWorkUtil.isWifiConnected(this)) {
+                    advice.append(getString(R.string.please_wifi));
                 }
 
-                locText.setText(StringUtils.isBlank(advice.toString()) ? "定位状态良好" : advice);
+                locText.setText(StringUtils.isBlank(advice.toString()) ? getString(R.string.loc_ok) : advice);
                 locText.setTextColor(StringUtils.isBlank(advice.toString()) ? getResources().getColor(R.color.green) : getResources().getColor(R.color.yellow));
+
+                errCount = errCount + (StringUtils.isBlank(advice.toString()) ? 0 : 1);
+
+                locImg.pauseRotate();
+                locImg.reset();
+                locImg.setImageResource(StringUtils.isBlank(advice.toString()) ? R.mipmap.ic_check_ok : R.mipmap.ic_check_err);
 
             } else {
                 //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
                 locText.setText(amapLocation.getErrorInfo());
                 locText.setTextColor(getResources().getColor(R.color.red));
+
+                errCount = errCount + 1;
+
+                locImg.pauseRotate();
+                locImg.reset();
+                locImg.setImageResource(R.mipmap.ic_check_err);
             }
         }
         desClient();
 
-        noticeText.setText("检测中..");
+        noticeText.setText(getString(R.string.checking));
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
                 runOnUiThread(() -> {
                     boolean connected = XApp.getInstance().isMqttConnect();
-                    noticeText.setText(connected ? "通知消息正常" : "通知消息异常，请退出重新登录");
+                    noticeText.setText(connected ? getString(R.string.notice_ok) : getString(R.string.notice_err));
                     noticeText.setTextColor(connected ? getResources().getColor(R.color.green) : getResources().getColor(R.color.red));
 
-                    scanView.stopScan();
+                    noticeImg.pauseRotate();
+                    noticeImg.reset();
+                    noticeImg.setImageResource(connected ? R.mipmap.ic_check_ok : R.mipmap.ic_check_err);
+
+                    rotateImageView.pauseRotate();
+                    rotateImageView.reset();
                     reCheck.setVisibility(View.VISIBLE);
+
+                    showResult();
                 });
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }).start();
+    }
 
+    private void showResult() {
+        errCountText.setText(errCount + "");
+
+        resultLayout.setVisibility(View.VISIBLE);
+        checkingText.setVisibility(View.GONE);
+
+        if (errCount == 0) {
+            back.setBackgroundColor(getResources().getColor(R.color.green));
+            toolbar.setBackgroundColor(getResources().getColor(R.color.green));
+            totalHint.setText(getResources().getString(R.string.check_no_error));
+        } else {
+            back.setBackgroundColor(getResources().getColor(R.color.red));
+            toolbar.setBackgroundColor(getResources().getColor(R.color.red));
+            totalHint.setText(getResources().getString(R.string.check_have_error));
+        }
+
+        reCheck.setVisibility(View.VISIBLE);
     }
 
     private void desClient() {

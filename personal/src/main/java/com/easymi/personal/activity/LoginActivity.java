@@ -16,6 +16,8 @@ import com.easymi.component.Config;
 import com.easymi.component.activity.WebActivity;
 import com.easymi.component.app.ActManager;
 import com.easymi.component.entity.NetWorkUtil;
+import com.easymi.component.entity.Setting;
+import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.utils.Log;
 
 import android.view.View;
@@ -46,6 +48,7 @@ import com.easymi.component.widget.LoadingButton;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
 import com.easymi.personal.result.LoginResult;
+import com.easymi.personal.result.SettingResult;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -91,8 +94,20 @@ public class LoginActivity extends RxBaseActivity {
                 return;
             }
             PhoneUtil.hideKeyboard(this);
-            login(editAccount.getText().toString(), editPsw.getText().toString());
-
+            if (setting == null) {
+                getSetting();
+                ToastUtil.showMessage(LoginActivity.this, getString(R.string.get_set_failed));
+            } else {
+                if (setting.doubleCheck == 1) {
+                    Intent intent = new Intent(LoginActivity.this,ResetPswActivity.class);
+                    intent.putExtra("flag","doubleCheck");
+                    intent.putExtra("phone",editAccount.getText().toString());
+                    intent.putExtra("psw",editPsw.getText().toString());
+                    startActivity(intent);
+                } else {
+                    login(editAccount.getText().toString(), editPsw.getText().toString());
+                }
+            }
         });
         editAccount = findViewById(R.id.login_et_account);
         editPsw = findViewById(R.id.login_et_password);
@@ -125,6 +140,8 @@ public class LoginActivity extends RxBaseActivity {
         ActManager.getInstance().removeActivity(this);//该activity不加入Activity栈
 
         ActManager.getInstance().finishAllActivity();
+
+        getSetting();//获取配置信息
     }
 
     private void initBox() {
@@ -306,5 +323,29 @@ public class LoginActivity extends RxBaseActivity {
     @Override
     public boolean isEnableSwipe() {
         return false;
+    }
+
+    private Setting setting;
+
+    private void getSetting() {
+        Observable<SettingResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
+                .getAppSetting(Config.APP_KEY)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        observable.subscribe(new MySubscriber<>(this, false, false, settingResult -> {
+            setting = settingResult.setting;
+            if (null != setting) {
+                Setting.deleteAll();
+                setting.save();
+
+                if (setting.doubleCheck == 1) {//开启
+                    loginBtn.setText(getString(R.string.register_next_step));
+                } else {
+                    loginBtn.setText(getString(R.string.login));
+                }
+            }
+        }));
     }
 }

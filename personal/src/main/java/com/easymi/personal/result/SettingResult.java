@@ -1,4 +1,4 @@
-package com.easymi.common.result;
+package com.easymi.personal.result;
 
 import com.easymi.component.entity.Setting;
 import com.easymi.component.result.EmResult;
