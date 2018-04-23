@@ -134,7 +134,7 @@ public class AboutUsActivity extends RxBaseActivity {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
         Observable<ArticleResult> observable = api
-                .getArticle(Config.APP_KEY, alias,
+                .getArticle(EmUtil.getAppKey(), alias,
                         EmUtil.getEmployInfo() == null ? null : EmUtil.getEmployInfo().company_id)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
@@ -186,7 +186,7 @@ public class AboutUsActivity extends RxBaseActivity {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
         Observable<ArticleResult> observable = api
-                .getArticle(Config.APP_KEY, "DriverAboutUs",
+                .getArticle(EmUtil.getAppKey(), "DriverAboutUs",
                         EmUtil.getEmployInfo() == null ? null : EmUtil.getEmployInfo().company_id)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())

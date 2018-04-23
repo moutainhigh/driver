@@ -54,7 +54,7 @@ public class WorkModel implements WorkContract.Model {
     @Override
     public Observable<NotitfyResult> loadNotice(long driverId) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .loadNotice(driverId, Config.APP_KEY, 1, 1000)
+                .loadNotice(driverId, EmUtil.getAppKey(), 1, 1000)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -63,7 +63,7 @@ public class WorkModel implements WorkContract.Model {
     @Override
     public Observable<AnnouncementResult> loadAnn(long companyId) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .loadAnn(companyId, Config.APP_KEY, 1, 1000)
+                .loadAnn(companyId, EmUtil.getAppKey(), 1, 1000)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -72,7 +72,7 @@ public class WorkModel implements WorkContract.Model {
     @Override
     public Observable<WorkStatisticsResult> getDriverStatistics(Long id, String nowDate, int isOnline) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .workStatistics(id, nowDate, Config.APP_KEY, isOnline)
+                .workStatistics(id, nowDate, EmUtil.getAppKey(), isOnline)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -81,7 +81,7 @@ public class WorkModel implements WorkContract.Model {
     @Override
     public Observable<NearDriverResult> queryNearDriver(Long driverId, Double lat, Double lng, Double distance) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .getNearDrivers(driverId, lat, lng, distance, Config.APP_KEY)
+                .getNearDrivers(driverId, lat, lng, distance, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -90,7 +90,7 @@ public class WorkModel implements WorkContract.Model {
     @Override
     public Observable<LoginResult> getEmploy(Long driverId, String appKey) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .getDriverInfo(driverId, Config.APP_KEY)
+                .getDriverInfo(driverId, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -99,7 +99,7 @@ public class WorkModel implements WorkContract.Model {
     @Override
     public Observable<SettingResult> getAppSetting() {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .getAppSetting(Config.APP_KEY)
+                .getAppSetting(EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

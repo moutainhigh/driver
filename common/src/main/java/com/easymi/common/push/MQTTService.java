@@ -107,7 +107,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
         boolean doConnect = true;
         String message = "{\"terminal_uid\":\"" + clientId + "\"}";
         Log.e("Mqtt", message);
-        pullTopic = "/driver" + "/" + Config.APP_KEY + "/" + EmUtil.getEmployId();
+        pullTopic = "/driver" + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
         Integer qos = 0;
         Boolean retained = false;
         if ((!message.equals("")) || (!pullTopic.equals(""))) {

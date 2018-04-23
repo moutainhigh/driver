@@ -34,6 +34,7 @@ import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.AesUtil;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
@@ -96,20 +97,11 @@ public class LoginActivity extends RxBaseActivity {
                 return;
             }
             PhoneUtil.hideKeyboard(this);
-            if (setting == null) {
-                getSetting();
-                ToastUtil.showMessage(LoginActivity.this, getString(R.string.get_set_failed));
-            } else {
-                if (setting.doubleCheck == 1) {
-                    Intent intent = new Intent(LoginActivity.this, ResetPswActivity.class);
-                    intent.putExtra("flag", "doubleCheck");
-                    intent.putExtra("phone", editAccount.getText().toString());
-                    intent.putExtra("psw", editPsw.getText().toString());
-                    startActivity(intent);
-                } else {
-                    login(editAccount.getText().toString(), editPsw.getText().toString(), editQiye.getText().toString());
-                }
-            }
+
+
+            login(editAccount.getText().toString(), editPsw.getText().toString(), editQiye.getText().toString());
+
+
         });
         editAccount = findViewById(R.id.login_et_account);
         editPsw = findViewById(R.id.login_et_password);
@@ -147,8 +139,6 @@ public class LoginActivity extends RxBaseActivity {
         ActManager.getInstance().removeActivity(this);//该activity不加入Activity栈
 
         ActManager.getInstance().finishAllActivity();
-
-        getSetting();//获取配置信息
     }
 
     private void initQiye() {
@@ -330,7 +320,7 @@ public class LoginActivity extends RxBaseActivity {
                 .loginByQiye(AesUtil.aesEncrypt(name, AesUtil.AAAAA),
                         AesUtil.aesEncrypt(psw, AesUtil.AAAAA),
                         udid,
-                        Config.APP_KEY,
+                        EmUtil.getAppKey(),
                         "android",
                         Build.MODEL,
                         version,
@@ -354,6 +344,9 @@ public class LoginActivity extends RxBaseActivity {
             editor.putLong(Config.SP_DRIVERID, employ.id);
             editor.putString(Config.SP_LOGIN_ACCOUNT, AesUtil.aesEncrypt(name, AesUtil.AAAAA));
             editor.putBoolean(Config.SP_REMEMBER_PSW, checkboxRemember.isChecked());
+            editor.putString(Config.SP_APP_KEY, employ.app_key);
+            editor.putString(Config.SP_LOGIN_PSW, AesUtil.aesEncrypt(psw, AesUtil.AAAAA));
+            editor.apply();
 
             String saveStr = XApp.getMyPreferences().getString(Config.SP_QIYE_CODE, "");
             if (StringUtils.isNotBlank(saveStr)) {
@@ -378,12 +371,9 @@ public class LoginActivity extends RxBaseActivity {
                 XApp.getMyPreferences().edit().putString(Config.SP_QIYE_CODE, qiyeCode).apply();
             }
 
-            editor.putString(Config.SP_LOGIN_PSW, AesUtil.aesEncrypt(psw, AesUtil.AAAAA));
-            editor.apply();
-            ARouter.getInstance()
-                    .build("/common/WorkActivity")
-                    .navigation();
-            finish();
+            getSetting();
+
+
         })));
     }
 
@@ -392,25 +382,30 @@ public class LoginActivity extends RxBaseActivity {
         return false;
     }
 
-    private Setting setting;
-
     private void getSetting() {
         Observable<SettingResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .getAppSetting(Config.APP_KEY)
+                .getAppSetting(EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
         observable.subscribe(new MySubscriber<>(this, false, false, settingResult -> {
-            setting = settingResult.setting;
+            Setting setting = settingResult.setting;
             if (null != setting) {
                 Setting.deleteAll();
                 setting.save();
 
                 if (setting.doubleCheck == 1) {//开启
-                    loginBtn.setText(getString(R.string.register_next_step));
+                        Intent intent = new Intent(LoginActivity.this, ResetPswActivity.class);
+                        intent.putExtra("flag", "doubleCheck");
+                        intent.putExtra("phone", editAccount.getText().toString());
+                        intent.putExtra("psw", editPsw.getText().toString());
+                        startActivity(intent);
                 } else {
-                    loginBtn.setText(getString(R.string.login));
+                    ARouter.getInstance()
+                            .build("/common/WorkActivity")
+                            .navigation();
+                    finish();
                 }
             }
         }));

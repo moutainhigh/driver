@@ -21,6 +21,7 @@ import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.CodeUtil;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
@@ -198,7 +199,7 @@ public class ResetPswActivity extends RxBaseActivity {
     private void resetPsw() {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
         Observable<EmResult> observable = api
-                .changePsw(phone, psw, Config.APP_KEY)
+                .changePsw(phone, psw, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

@@ -147,7 +147,7 @@ public class ShareActivity extends RxBaseActivity {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
         Observable<ShareResult> observable = api
-                .shareLink(employ.id, employ.company_id, Config.APP_KEY, 1)
+                .shareLink(employ.id, employ.company_id, EmUtil.getAppKey(), 1)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

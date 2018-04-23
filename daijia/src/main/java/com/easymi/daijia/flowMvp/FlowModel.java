@@ -24,7 +24,7 @@ public class FlowModel implements FlowContract.Model {
     @Override
     public Observable<DJOrderResult> doAccept(Long orderId) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .takeOrder(orderId, EmUtil.getEmployId(), Config.APP_KEY)
+                .takeOrder(orderId, EmUtil.getEmployId(), EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -33,7 +33,7 @@ public class FlowModel implements FlowContract.Model {
     @Override
     public Observable<DJOrderResult> findOne(Long orderId) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .indexOrders(orderId, Config.APP_KEY)
+                .indexOrders(orderId, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -42,7 +42,7 @@ public class FlowModel implements FlowContract.Model {
     @Override
     public Observable<EmResult> refuseOrder(Long orderId, String remark) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .refuseOrder(orderId, EmUtil.getEmployId(), Config.APP_KEY, remark)
+                .refuseOrder(orderId, EmUtil.getEmployId(), EmUtil.getAppKey(), remark)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -51,7 +51,7 @@ public class FlowModel implements FlowContract.Model {
     @Override
     public Observable<DJOrderResult> toStart(Long orderId) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .goToBookAddress(orderId, Config.APP_KEY)
+                .goToBookAddress(orderId, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -61,7 +61,7 @@ public class FlowModel implements FlowContract.Model {
     public Observable<DJOrderResult> arriveStart(Long orderId) {
         EmLoc loc = EmUtil.getLastLoc();
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .arrivalBookAddress(orderId, Config.APP_KEY,
+                .arrivalBookAddress(orderId, EmUtil.getAppKey(),
                         loc.street + "  " + loc.poiName, loc.latitude, loc.longitude)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
@@ -71,7 +71,7 @@ public class FlowModel implements FlowContract.Model {
     @Override
     public Observable<DJOrderResult> startWait(Long orderId) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .waitOrder(orderId, Config.APP_KEY)
+                .waitOrder(orderId, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -80,7 +80,7 @@ public class FlowModel implements FlowContract.Model {
     @Override
     public Observable<DJOrderResult> startDrive(Long orderId) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .goToDistination(orderId, Config.APP_KEY)
+                .goToDistination(orderId, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -90,7 +90,7 @@ public class FlowModel implements FlowContract.Model {
     public Observable<DJOrderResult> arriveDes(DymOrder dymOrder) {
         EmLoc loc = EmUtil.getLastLoc();
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .arrivalDistination(dymOrder.orderId, Config.APP_KEY, dymOrder.paymentFee, dymOrder.extraFee,
+                .arrivalDistination(dymOrder.orderId, EmUtil.getAppKey(), dymOrder.paymentFee, dymOrder.extraFee,
                         dymOrder.remark, dymOrder.distance, dymOrder.disFee, dymOrder.travelTime,
                         dymOrder.travelFee, dymOrder.waitTime,
                         dymOrder.waitTimeFee, 0.0, 0.0, dymOrder.couponFee,
@@ -104,7 +104,7 @@ public class FlowModel implements FlowContract.Model {
     @Override
     public Observable<DJOrderResult> changeEnd(Long orderId, Double lat, Double lng, String address) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .changeEnd(orderId, lat, lng, address, Config.APP_KEY)
+                .changeEnd(orderId, lat, lng, address, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -113,7 +113,7 @@ public class FlowModel implements FlowContract.Model {
     @Override
     public Observable<EmResult> cancelOrder(Long orderId, String remark) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .cancelOrder(orderId, EmUtil.getEmployId(), Config.APP_KEY, remark)
+                .cancelOrder(orderId, EmUtil.getEmployId(), EmUtil.getAppKey(), remark)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -122,7 +122,7 @@ public class FlowModel implements FlowContract.Model {
     @Override
     public Observable<ConsumerResult> consumerInfo(Long orderId) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .getConsumer(orderId, Config.APP_KEY)
+                .getConsumer(orderId, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -131,7 +131,7 @@ public class FlowModel implements FlowContract.Model {
     @Override
     public Observable<EmResult> payOrder(Long orderId, String payType) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .payOrder(orderId, Config.APP_KEY, payType)
+                .payOrder(orderId, EmUtil.getAppKey(), payType)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

@@ -79,7 +79,7 @@ public class SameOrderActivity extends RxBaseActivity {
     private void getData(String groupId) {
 
         Observable<SameOrderResult> observable = ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .getSameOrderDriver(groupId, Config.APP_KEY)
+                .getSameOrderDriver(groupId, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

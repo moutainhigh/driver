@@ -10,6 +10,7 @@ import com.easymi.component.DJOrderStatus;
 import com.easymi.component.entity.BaseEmploy;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.FileUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
@@ -35,7 +36,7 @@ public class BuildPushUtil {
         pushData.calc.lng = emLoc.longitude;
         pushData.calc.speed = emLoc.speed;
         pushData.calc.locationType = emLoc.locationType;
-        pushData.calc.appKey = Config.APP_KEY;
+        pushData.calc.appKey = EmUtil.getAppKey();
 //        pushData.calc.darkCost = buildPushData.darkCost;
 //        pushData.calc.darkMileage = buildPushData.darkMileage;
         pushData.calc.positionTime = System.currentTimeMillis() / 1000;

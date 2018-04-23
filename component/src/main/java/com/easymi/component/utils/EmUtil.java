@@ -26,6 +26,10 @@ public class EmUtil {
         return XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1);
     }
 
+    public static String getAppKey() {
+        return XApp.getMyPreferences().getString(Config.SP_APP_KEY, "");
+    }
+
     public static Employ getEmployInfo() {
         return Employ.findByID(getEmployId());
     }

@@ -92,7 +92,7 @@ public class ChangeActivity extends RxBaseActivity {
                 .updatePsw(EmUtil.getEmployId(),
                         AesUtil.aesEncrypt(editOld.getText().toString(), AesUtil.AAAAA),
                         AesUtil.aesEncrypt(editNew.getText().toString(), AesUtil.AAAAA),
-                        Config.APP_KEY)
+                        EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

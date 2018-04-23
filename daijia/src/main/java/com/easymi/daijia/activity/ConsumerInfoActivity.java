@@ -8,6 +8,7 @@ import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.daijia.DJApiService;
 import com.easymi.daijia.R;
@@ -59,7 +60,7 @@ public class ConsumerInfoActivity extends RxBaseActivity {
 
     private void getConsumerInfo() {
         Observable<ConsumerResult> observable = ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .getConsumer(orderId, Config.APP_KEY)
+                .getConsumer(orderId, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

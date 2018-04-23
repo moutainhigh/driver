@@ -19,10 +19,6 @@ public class Config {
     public static final String IMG_SERVER = "https://assets.xiaokayun.cn/";
     //    public static final String IMG_PATH = "?imageView2/1/w/10/h/10/format/webp/q/75|imageslim";
     public static final String IMG_PATH = "";
-    /**
-     * APP_KEY
-     */
-    public static final String APP_KEY = "4aea5f7368b0461395eeda353337a24c";//线上
 //    public static final String APP_KEY = "1f462eb305a2417c9564f2dfaf89da9c";//本地
     /**
      * 司机注册地址
@@ -64,7 +60,8 @@ public class Config {
 
     public static final String SP_SYS_LANGUAGE = "sys_language"; //英文
 
-    public static final String SP_QIYE_CODE = "qiye_code"; //英文
+    public static final String SP_QIYE_CODE = "qiye_code"; //企业编码
+    public static final String SP_APP_KEY = "app_key"; //app_key
 
     public static final String SP_VOICE_ABLE = "voice_able";//能否语音播报
     public static final String SP_SHAKE_ABLE = "shake_able";//能否震动

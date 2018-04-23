@@ -3,6 +3,7 @@ package com.easymi.daijia.fragment.create;
 import com.easymi.component.Config;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.daijia.DJApiService;
 import com.easymi.daijia.result.BudgetResult;
 import com.easymi.daijia.result.DJOrderResult;
@@ -22,7 +23,7 @@ public class CreateDJMoldel implements CreateDJContract.Model {
     @Override
     public Observable<DJTypeResult> queryDJType(Long companyId) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .getBusiness(companyId, Config.DAIJIA, Config.APP_KEY)
+                .getBusiness(companyId, Config.DAIJIA, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -31,7 +32,7 @@ public class CreateDJMoldel implements CreateDJContract.Model {
     @Override
     public Observable<PassengerResult> queryPassenger(Long companyId, String companyName, String phone) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .queryPassenger(companyId, companyName, phone, Config.APP_KEY, "supplement")
+                .queryPassenger(companyId, companyName, phone, EmUtil.getAppKey(), "supplement")
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -40,7 +41,7 @@ public class CreateDJMoldel implements CreateDJContract.Model {
     @Override
     public Observable<BudgetResult> getBudgetPrice(Long passengerId, Long companyId, Double distance, Integer time, Long orderTime, Long typeId) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .getBudgetPrice(passengerId, companyId, distance, time, orderTime, "batch", typeId, Config.APP_KEY)
+                .getBudgetPrice(passengerId, companyId, distance, time, orderTime, "batch", typeId, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -52,7 +53,7 @@ public class CreateDJMoldel implements CreateDJContract.Model {
                 .createOrder(passengerId, passengerName, passengerPhone, orderTime,
                         bookAddress, bookAddressLat, bookAddressLng, destination,
                         destinationLat, destinationLng, companyId, companyName,
-                        budgetFee, Config.APP_KEY, cid, orderPerson, orderPersonId)
+                        budgetFee, EmUtil.getAppKey(), cid, orderPerson, orderPersonId)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
