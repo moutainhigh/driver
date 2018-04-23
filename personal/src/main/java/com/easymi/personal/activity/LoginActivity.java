@@ -339,39 +339,8 @@ public class LoginActivity extends RxBaseActivity {
             Employ employ = loginResult.getEmployInfo();
             Log.e("okhttp", employ.toString());
             employ.saveOrUpdate();
-            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
-            editor.putBoolean(Config.SP_ISLOGIN, true);
-            editor.putLong(Config.SP_DRIVERID, employ.id);
-            editor.putString(Config.SP_LOGIN_ACCOUNT, AesUtil.aesEncrypt(name, AesUtil.AAAAA));
-            editor.putBoolean(Config.SP_REMEMBER_PSW, checkboxRemember.isChecked());
-            editor.putString(Config.SP_APP_KEY, employ.app_key);
-            editor.putString(Config.SP_LOGIN_PSW, AesUtil.aesEncrypt(psw, AesUtil.AAAAA));
-            editor.apply();
 
-            String saveStr = XApp.getMyPreferences().getString(Config.SP_QIYE_CODE, "");
-            if (StringUtils.isNotBlank(saveStr)) {
-                List<String> stringList = new ArrayList<>();
-                if (saveStr.contains(",")) {
-                    stringList = Arrays.asList(saveStr.split(","));
-                } else {
-                    stringList.add(saveStr);
-                }
-                boolean haveStr = false;
-                for (String s : stringList) {
-                    if (s.equals(qiyeCode)) {
-                        haveStr = true;
-                        break;
-                    }
-                }
-                if (!haveStr) {
-                    saveStr += "," + qiyeCode;
-                    XApp.getMyPreferences().edit().putString(Config.SP_QIYE_CODE, saveStr).apply();
-                }
-            } else {
-                XApp.getMyPreferences().edit().putString(Config.SP_QIYE_CODE, qiyeCode).apply();
-            }
-
-            getSetting();
+            getSetting(employ);
 
 
         })));
@@ -382,7 +351,7 @@ public class LoginActivity extends RxBaseActivity {
         return false;
     }
 
-    private void getSetting() {
+    private void getSetting(Employ employ) {
         Observable<SettingResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .getAppSetting(EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
@@ -392,6 +361,39 @@ public class LoginActivity extends RxBaseActivity {
         observable.subscribe(new MySubscriber<>(this, false, false, settingResult -> {
             Setting setting = settingResult.setting;
             if (null != setting) {
+
+                SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+                editor.putBoolean(Config.SP_ISLOGIN, true);
+                editor.putLong(Config.SP_DRIVERID, employ.id);
+                editor.putString(Config.SP_LOGIN_ACCOUNT, AesUtil.aesEncrypt(employ.phone, AesUtil.AAAAA));
+                editor.putBoolean(Config.SP_REMEMBER_PSW, checkboxRemember.isChecked());
+                editor.putString(Config.SP_APP_KEY, employ.app_key);
+                editor.putString(Config.SP_LOGIN_PSW, employ.password);
+                editor.apply();
+
+                String saveStr = XApp.getMyPreferences().getString(Config.SP_QIYE_CODE, "");
+                if (StringUtils.isNotBlank(saveStr)) {
+                    List<String> stringList = new ArrayList<>();
+                    if (saveStr.contains(",")) {
+                        stringList = Arrays.asList(saveStr.split(","));
+                    } else {
+                        stringList.add(saveStr);
+                    }
+                    boolean haveStr = false;
+                    for (String s : stringList) {
+                        if (s.equals(editQiye.getText().toString())) {
+                            haveStr = true;
+                            break;
+                        }
+                    }
+                    if (!haveStr) {
+                        saveStr += "," + editQiye.getText().toString();
+                        XApp.getMyPreferences().edit().putString(Config.SP_QIYE_CODE, saveStr).apply();
+                    }
+                } else {
+                    XApp.getMyPreferences().edit().putString(Config.SP_QIYE_CODE, editQiye.getText().toString()).apply();
+                }
+
                 Setting.deleteAll();
                 setting.save();
 
@@ -439,10 +441,10 @@ public class LoginActivity extends RxBaseActivity {
 
         // 对话框的宽高
         listPopupWindow.setWidth(500);
-        listPopupWindow.setAnchorView(editQiye);
+        listPopupWindow.setAnchorView(xiala);
 
-        listPopupWindow.setHorizontalOffset(50);
-        listPopupWindow.setVerticalOffset(-editQiye.getMeasuredHeight());
+        listPopupWindow.setHorizontalOffset(0);
+        listPopupWindow.setVerticalOffset(0);
 
         listPopupWindow.setModal(false);
 

@@ -11,7 +11,7 @@ public class Config {
     /**
      * 主机地址
      */
-    public static final String HOST = "http://192.168.0.72:8082/";
+    public static final String HOST = "http://192.168.0.79:8082/";
 //    public static final String HOST = "https://api.xiaokayun.cn/";
     /**
      * 图片服务器地址

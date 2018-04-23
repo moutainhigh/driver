@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by liuzihao on 2018/3/6.
- *
+ * <p>
  * 1为true 2为false
  */
 
@@ -33,6 +33,7 @@ public class Setting {
     @SerializedName("employ_change_price")
     public int employChangePrice;//确认费用时是否能加垫付费之类的
 
+    @SerializedName("employ_factor")
     public int doubleCheck;//双因子验证
 
     public int canCallDriver;//能否拨打附近司机电话
