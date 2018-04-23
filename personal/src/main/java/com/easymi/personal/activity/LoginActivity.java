@@ -6,23 +6,15 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.ListPopupWindow;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-
-import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
-import com.easymi.component.Config;
-import com.easymi.component.activity.WebActivity;
-import com.easymi.component.app.ActManager;
-import com.easymi.component.entity.NetWorkUtil;
-import com.easymi.component.entity.Setting;
-import com.easymi.component.network.NoErrSubscriberListener;
-import com.easymi.component.utils.Log;
-
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -30,25 +22,32 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
+import com.easymi.component.Config;
+import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
-import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
-import com.easymi.component.loc.LocObserver;
-import com.easymi.component.loc.LocReceiver;
+import com.easymi.component.entity.NetWorkUtil;
+import com.easymi.component.entity.Setting;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.AesUtil;
-import com.easymi.component.utils.PhoneFunc;
+import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
+import com.easymi.personal.adapter.PopListAdapter;
 import com.easymi.personal.result.LoginResult;
 import com.easymi.personal.result.SettingResult;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -68,6 +67,9 @@ public class LoginActivity extends RxBaseActivity {
 
     EditText editAccount;
     EditText editPsw;
+    EditText editQiye;
+
+    ImageView xiala;
 
     ImageView eye;
 
@@ -99,13 +101,13 @@ public class LoginActivity extends RxBaseActivity {
                 ToastUtil.showMessage(LoginActivity.this, getString(R.string.get_set_failed));
             } else {
                 if (setting.doubleCheck == 1) {
-                    Intent intent = new Intent(LoginActivity.this,ResetPswActivity.class);
-                    intent.putExtra("flag","doubleCheck");
-                    intent.putExtra("phone",editAccount.getText().toString());
-                    intent.putExtra("psw",editPsw.getText().toString());
+                    Intent intent = new Intent(LoginActivity.this, ResetPswActivity.class);
+                    intent.putExtra("flag", "doubleCheck");
+                    intent.putExtra("phone", editAccount.getText().toString());
+                    intent.putExtra("psw", editPsw.getText().toString());
                     startActivity(intent);
                 } else {
-                    login(editAccount.getText().toString(), editPsw.getText().toString());
+                    login(editAccount.getText().toString(), editPsw.getText().toString(), editQiye.getText().toString());
                 }
             }
         });
@@ -131,17 +133,32 @@ public class LoginActivity extends RxBaseActivity {
         checkboxRemember = findViewById(R.id.checkbox_remember);
         textAgreement = findViewById(R.id.text_agreement);
 
+        editQiye = findViewById(R.id.edit_qiye);
+        xiala = findViewById(R.id.xiala);
+
         initEdit();
 
         initEye();
 
         initBox();
 
+        initQiye();
+
         ActManager.getInstance().removeActivity(this);//该activity不加入Activity栈
 
         ActManager.getInstance().finishAllActivity();
 
         getSetting();//获取配置信息
+    }
+
+    private void initQiye() {
+        String saveStr = XApp.getMyPreferences().getString(Config.SP_QIYE_CODE, "");
+        if (StringUtils.isBlank(saveStr)) {
+            xiala.setVisibility(View.GONE);
+        } else {
+            xiala.setVisibility(View.VISIBLE);
+        }
+        xiala.setOnClickListener(view -> selectedQiye());
     }
 
     private void initBox() {
@@ -190,7 +207,8 @@ public class LoginActivity extends RxBaseActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (null != editable && StringUtils.isNotBlank(editable.toString())) {
-                    if (StringUtils.isNotBlank(editPsw.getText().toString())) {
+                    if (StringUtils.isNotBlank(editPsw.getText().toString())
+                            && StringUtils.isNotBlank(editQiye.getText().toString())) {
                         setLoginBtnEnable(true);
                     } else {
                         setLoginBtnEnable(false);
@@ -215,7 +233,34 @@ public class LoginActivity extends RxBaseActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (null != editable && StringUtils.isNotBlank(editable.toString())) {
-                    if (StringUtils.isNotBlank(editAccount.getText().toString())) {
+                    if (StringUtils.isNotBlank(editAccount.getText().toString())
+                            && StringUtils.isNotBlank(editQiye.getText().toString())) {
+                        setLoginBtnEnable(true);
+                    } else {
+                        setLoginBtnEnable(false);
+                    }
+                } else {
+                    setLoginBtnEnable(false);
+                }
+            }
+        });
+
+        editQiye.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (null != editable && StringUtils.isNotBlank(editable.toString())) {
+                    if (StringUtils.isNotBlank(editAccount.getText().toString())
+                            && StringUtils.isNotBlank(editPsw.getText().toString())) {
                         setLoginBtnEnable(true);
                     } else {
                         setLoginBtnEnable(false);
@@ -245,7 +290,7 @@ public class LoginActivity extends RxBaseActivity {
         }
     }
 
-    private void login(String name, String psw) {
+    private void login(String name, String psw, String qiyeCode) {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
         String udid = PhoneUtil.getUDID(this);
@@ -282,7 +327,7 @@ public class LoginActivity extends RxBaseActivity {
         String netType = NetWorkUtil.getNetWorkTypeName(this);
 
         Observable<LoginResult> observable = api
-                .login(AesUtil.aesEncrypt(name, AesUtil.AAAAA),
+                .loginByQiye(AesUtil.aesEncrypt(name, AesUtil.AAAAA),
                         AesUtil.aesEncrypt(psw, AesUtil.AAAAA),
                         udid,
                         Config.APP_KEY,
@@ -293,7 +338,8 @@ public class LoginActivity extends RxBaseActivity {
                         systemVersion, //系统版本号
                         operatorName, //运营商
                         netType, //网络类型 3G 4G等
-                        model    //手机品牌
+                        model,    //手机品牌
+                        qiyeCode//企业码
                 )
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
@@ -308,9 +354,30 @@ public class LoginActivity extends RxBaseActivity {
             editor.putLong(Config.SP_DRIVERID, employ.id);
             editor.putString(Config.SP_LOGIN_ACCOUNT, AesUtil.aesEncrypt(name, AesUtil.AAAAA));
             editor.putBoolean(Config.SP_REMEMBER_PSW, checkboxRemember.isChecked());
-            if (checkboxRemember.isChecked()) {
 
+            String saveStr = XApp.getMyPreferences().getString(Config.SP_QIYE_CODE, "");
+            if (StringUtils.isNotBlank(saveStr)) {
+                List<String> stringList = new ArrayList<>();
+                if (saveStr.contains(",")) {
+                    stringList = Arrays.asList(saveStr.split(","));
+                } else {
+                    stringList.add(saveStr);
+                }
+                boolean haveStr = false;
+                for (String s : stringList) {
+                    if (s.equals(qiyeCode)) {
+                        haveStr = true;
+                        break;
+                    }
+                }
+                if (!haveStr) {
+                    saveStr += "," + qiyeCode;
+                    XApp.getMyPreferences().edit().putString(Config.SP_QIYE_CODE, saveStr).apply();
+                }
+            } else {
+                XApp.getMyPreferences().edit().putString(Config.SP_QIYE_CODE, qiyeCode).apply();
             }
+
             editor.putString(Config.SP_LOGIN_PSW, AesUtil.aesEncrypt(psw, AesUtil.AAAAA));
             editor.apply();
             ARouter.getInstance()
@@ -347,5 +414,43 @@ public class LoginActivity extends RxBaseActivity {
                 }
             }
         }));
+    }
+
+    List<String> strList = new ArrayList<>();
+
+    private void selectedQiye() {
+
+        strList.clear();
+
+        final ListPopupWindow listPopupWindow = new ListPopupWindow(this);
+        PopListAdapter adapter = new PopListAdapter(this);
+
+        String saveStr = XApp.getMyPreferences().getString(Config.SP_QIYE_CODE, "");
+        if (saveStr.contains(",")) {
+            strList = Arrays.asList(saveStr.split(","));
+        } else {
+            strList.add(saveStr);
+        }
+        adapter.setStrList(strList);
+
+        // ListView适配器
+        listPopupWindow.setAdapter(
+                new ArrayAdapter<>(getApplicationContext(), R.layout.simple_list_item_1, strList));
+
+        listPopupWindow.setOnItemClickListener((parent, view, position, id) -> {
+            editQiye.setText(strList.get(position));
+            listPopupWindow.dismiss();
+        });
+
+        // 对话框的宽高
+        listPopupWindow.setWidth(500);
+        listPopupWindow.setAnchorView(editQiye);
+
+        listPopupWindow.setHorizontalOffset(50);
+        listPopupWindow.setVerticalOffset(-editQiye.getMeasuredHeight());
+
+        listPopupWindow.setModal(false);
+
+        listPopupWindow.show();
     }
 }

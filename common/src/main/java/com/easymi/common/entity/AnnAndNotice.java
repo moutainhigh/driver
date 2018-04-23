@@ -1,6 +1,7 @@
 package com.easymi.common.entity;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
@@ -8,10 +9,22 @@ import java.io.Serializable;
  * Created by liuzihao on 2018/4/20.
  */
 
-public class AnnAndNotice implements MultiItemEntity,Serializable{
+public class AnnAndNotice implements MultiItemEntity, Serializable {
+
     public long id;
+
     public int type;//0公告 1通知
-    public String message;
+
+    @SerializedName("Affiche_title")
+    public String annMessage;//公告的标题
+
+    @SerializedName("notice_title")
+    public String noticeTitle;//通知的标题
+
+    @SerializedName("notice_content")
+    public String noticeContent;//通知的内容
+
+    @SerializedName("created")
     public long time;
 
     public static final int ITEM_HEADER = 1;

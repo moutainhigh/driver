@@ -51,6 +51,23 @@ public interface McService {
     );
 
     @FormUrlEncoded
+    @POST("driver/api/v1/allEmployLogin")
+    Observable<LoginResult> loginByQiye(@Field("username") String userName,
+                                        @Field("password") String psw,
+                                        @Field("udId") String udid,
+                                        @Field("app_key") String appKey,
+                                        @Field("deviceType") String deviceType,
+                                        @Field("deviceInfo") String deviceInfo,
+                                        @Field("appversion") String appversion,
+                                        @Field("userId") String userId,
+                                        @Field("device_version") String deviceVersion,
+                                        @Field("device_net") String deviceNet,
+                                        @Field("device_net_type") String deviceNetType,
+                                        @Field("mobile_brand") String mobileBrand,
+                                        @Field("system_code") String sysCode
+    );
+
+    @FormUrlEncoded
     @PUT("driver/api/v1/modifyPassword")
     Observable<EmResult> changePsw(@Field("phone") String phone,
                                    @Field("password") String password,
@@ -113,8 +130,8 @@ public interface McService {
                                   @Field("company_id") Long companyId,
                                   @Field("app_key") String appKey,
                                   @Field("content") String content,
-                                  @Field("user_type")Integer type,
-                                  @Field("phone")String phone
+                                  @Field("user_type") Integer type,
+                                  @Field("phone") String phone
     );
 
     /**
@@ -382,6 +399,7 @@ public interface McService {
 
     /**
      * 获取APP配置
+     *
      * @param appKey
      * @return
      */

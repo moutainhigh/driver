@@ -1,9 +1,8 @@
 package com.easymi.common.mvp.work;
 
-import com.easymi.common.entity.Announcement;
+import com.easymi.common.entity.AnnAndNotice;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
-import com.easymi.common.entity.Notifity;
 import com.easymi.common.entity.WorkStatistics;
 import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.LoginResult;
@@ -41,11 +40,11 @@ public interface WorkContract {
 
         void offlineSuc();
 
-        void showNotify(Notifity notifity);
+        void showNotify(AnnAndNotice notifity);
 
         void showDrivers(List<NearDriver> drivers);
 
-        void showAnn(Announcement announcement);
+        void showAnn(AnnAndNotice announcement);
 
         void showStatis(WorkStatistics statistics);
 
@@ -56,6 +55,12 @@ public interface WorkContract {
         void stopRefresh();
 
         void showDriverStatus();
+
+        void showHomeAnnAndNotice(List<AnnAndNotice> annAndNoticeList);
+
+        void hideEmpty();
+
+        void showEmpty(int type);
 
         RxManager getRxManager();
     }
@@ -72,10 +77,6 @@ public interface WorkContract {
 
         void offline();
 
-        void loadNotice(long id);
-
-        void loadAnn(long id);
-
         void queryNearDriver(Double lat, Double lng);
 
         void queryStatis();
@@ -90,6 +91,8 @@ public interface WorkContract {
 
         void getAppSetting();
 
+        void loadNoticeAndAnn();
+
 //        void startOnlineTimer();
         //...
     }
@@ -101,9 +104,9 @@ public interface WorkContract {
 
         Observable<EmResult> offline(Long driverId, String appKey);
 
-        Observable<NotitfyResult> loadNotice(Long id);
+        Observable<NotitfyResult> loadNotice(long driverId);
 
-        Observable<AnnouncementResult> loadAnn(Long id);
+        Observable<AnnouncementResult> loadAnn(long companyId);
 
         Observable<WorkStatisticsResult> getDriverStatistics(Long id, String nowDate,int isOnline);
 

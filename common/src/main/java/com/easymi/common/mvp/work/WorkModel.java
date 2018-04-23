@@ -12,6 +12,7 @@ import com.easymi.component.Config;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.result.EmResult;
+import com.easymi.component.utils.EmUtil;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -51,27 +52,27 @@ public class WorkModel implements WorkContract.Model {
     }
 
     @Override
-    public Observable<NotitfyResult> loadNotice(Long id) {
+    public Observable<NotitfyResult> loadNotice(long driverId) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .loadNotice(id, Config.APP_KEY)
+                .loadNotice(driverId, Config.APP_KEY, 1, 1000)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
-    public Observable<AnnouncementResult> loadAnn(Long id) {
+    public Observable<AnnouncementResult> loadAnn(long companyId) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .employAfficheById(id, Config.APP_KEY)
+                .loadAnn(companyId, Config.APP_KEY, 1, 1000)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
-    public Observable<WorkStatisticsResult> getDriverStatistics(Long id, String nowDate,int isOnline) {
+    public Observable<WorkStatisticsResult> getDriverStatistics(Long id, String nowDate, int isOnline) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .workStatistics(id, nowDate, Config.APP_KEY,isOnline)
+                .workStatistics(id, nowDate, Config.APP_KEY, isOnline)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

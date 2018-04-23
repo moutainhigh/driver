@@ -13,6 +13,7 @@ import android.os.Message;
 
 import com.easymi.common.daemon.DaemonService;
 import com.easymi.common.daemon.JobKeepLiveService;
+import com.easymi.common.entity.AnnAndNotice;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.component.entity.Setting;
 import com.easymi.common.entity.WorkStatistics;
@@ -44,6 +45,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import rx.Observable;
+import rx.functions.Func2;
 
 /**
  * Created by developerLzh on 2017/11/17 0017.
@@ -223,20 +225,6 @@ public class WorkPresenter implements WorkContract.Presenter {
     }
 
     @Override
-    public void loadNotice(long id) {
-        Observable<NotitfyResult> observable = model.loadNotice(id);
-        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
-                false, notitfyResult -> view.showNotify(notitfyResult.employNoticeRecord))));
-    }
-
-    @Override
-    public void loadAnn(long id) {
-        Observable<AnnouncementResult> observable = model.loadAnn(id);
-        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
-                false, notitfyResult -> view.showAnn(notitfyResult.employAfficheRequest))));
-    }
-
-    @Override
     public void queryNearDriver(Double lat, Double lng) {
         long driverId = EmUtil.getEmployId();
         double dis = 20;
@@ -264,7 +252,6 @@ public class WorkPresenter implements WorkContract.Presenter {
 
     @Override
     public void loadDataOnResume() {
-        indexOrders();//查询订单
         loadEmploy(EmUtil.getEmployId());
         getAppSetting();//获取配置信息
         queryStatis();
@@ -341,5 +328,57 @@ public class WorkPresenter implements WorkContract.Presenter {
             Setting.deleteAll();
             result.setting.save();
         })));
+    }
+
+    @Override
+    public void loadNoticeAndAnn() {
+        Employ employ = EmUtil.getEmployInfo();
+        if (null == employ) {
+            return;
+        }
+        Observable<AnnouncementResult> annObservable = model.loadAnn(employ.company_id);
+        Observable<NotitfyResult> notObservable = model.loadNotice(employ.id);
+
+        Observable.zip(annObservable, notObservable, (announcementResult, notitfyResult) -> {
+            List<AnnAndNotice> list = new ArrayList<>();
+
+            if (null != announcementResult && announcementResult.employAffiches != null
+                    && announcementResult.employAffiches.size() != 0) {
+                AnnAndNotice annHeader = new AnnAndNotice();
+                annHeader.type = 0;
+                annHeader.viewType = AnnAndNotice.ITEM_HEADER;
+                list.add(annHeader);
+                for (AnnAndNotice employAffich : announcementResult.employAffiches) {
+                    employAffich.type = 0;
+                    employAffich.viewType = MultipleOrder.ITEM_POSTER;
+                    list.add(employAffich);
+                }
+            }
+
+            if (null != notitfyResult && notitfyResult.employNoticeRecords != null
+                    && notitfyResult.employNoticeRecords.size() != 0) {
+                AnnAndNotice noticeHeader = new AnnAndNotice();
+                noticeHeader.type = 1;
+                noticeHeader.viewType = AnnAndNotice.ITEM_HEADER;
+                list.add(noticeHeader);
+                for (AnnAndNotice record : notitfyResult.employNoticeRecords) {
+                    record.type = 1;
+                    record.viewType = MultipleOrder.ITEM_POSTER;
+                    list.add(record);
+                }
+            }
+            return list;
+        })
+                .subscribe(new MySubscriber<>(context, false, false, new HaveErrSubscriberListener<List<AnnAndNotice>>() {
+                    @Override
+                    public void onNext(List<AnnAndNotice> annAndNotices) {
+                        view.showHomeAnnAndNotice(annAndNotices);
+                    }
+
+                    @Override
+                    public void onError(int code) {
+                        view.showHomeAnnAndNotice(null);
+                    }
+                }));
     }
 }

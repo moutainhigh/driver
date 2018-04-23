@@ -97,24 +97,37 @@ public interface CommApiService {
                                                              @Query("limit") int limit);
 
     /**
-     * 查询通知
+     * 查询所有通知
      *
-     * @param noticeId
+     * @param driverId
+     * @param appKey
+     * @param page
+     * @param limit
      * @return
      */
-    @GET("driver/api/v1/notice")
-    Observable<NotitfyResult> loadNotice(@Query("id") Long noticeId,
-                                         @Query("app_key") String appKey);
+    @GET("/driver/api/v1/notices")
+    Observable<NotitfyResult> loadNotice(@Query("driver_id") Long driverId,
+                                       @Query("app_key") String appKey,
+                                       @Query("page") Integer page,
+                                       @Query("limit") Integer limit
+    );
+
 
     /**
-     * 查询通知
+     * 查询所有公告
      *
-     * @param noticeId
+     * @param companyId
+     * @param appKey
+     * @param page
+     * @param limit
      * @return
      */
-    @GET("driver/api/v1/employAfficheById")
-    Observable<AnnouncementResult> employAfficheById(@Query("id") Long noticeId,
-                                                     @Query("app_key") String appKey);
+    @GET("/driver/api/v1/employAffiches")
+    Observable<AnnouncementResult> loadAnn(@Query("company_id") Long companyId,
+                                                  @Query("app_key") String appKey,
+                                                  @Query("page") Integer page,
+                                                  @Query("limit") Integer limit
+    );
 
     /**
      * 首页统计
@@ -201,4 +214,25 @@ public interface CommApiService {
      */
     @GET("api/v1/daijiaApp")
     Observable<SettingResult> getAppSetting(@Query("app_key") String appKey);
+
+    /**
+     * 查询通知
+     *
+     * @param noticeId
+     * @return
+     */
+    @GET("driver/api/v1/notice")
+    Observable<NotitfyResult> loadNotice(@Query("id") Long noticeId,
+                                         @Query("app_key") String appKey);
+
+    /**
+     * 查询通知
+     *
+     * @param noticeId
+     * @return
+     */
+    @GET("driver/api/v1/employAfficheById")
+    Observable<AnnouncementResult> employAfficheById(@Query("id") Long noticeId,
+                                                     @Query("app_key") String appKey);
+
 }

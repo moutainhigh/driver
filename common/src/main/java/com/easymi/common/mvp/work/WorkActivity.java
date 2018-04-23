@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -32,12 +33,12 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.easymi.common.R;
 import com.easymi.common.activity.CreateActivity;
+import com.easymi.common.adapter.NoticeAdapter;
 import com.easymi.common.adapter.OrderAdapter;
-import com.easymi.common.entity.Announcement;
+import com.easymi.common.entity.AnnAndNotice;
 import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
-import com.easymi.common.entity.Notifity;
 import com.easymi.common.entity.WorkStatistics;
 import com.easymi.common.push.MQTTService;
 import com.easymi.common.receiver.AnnReceiver;
@@ -46,6 +47,7 @@ import com.easymi.common.receiver.EmployStatusChangeReceiver;
 import com.easymi.common.receiver.NoticeReceiver;
 import com.easymi.common.widget.NearInfoWindowAdapter;
 import com.easymi.component.Config;
+import com.easymi.component.EmployStatus;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
@@ -58,7 +60,6 @@ import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MapUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.CusToolbar;
-import com.easymi.component.EmployStatus;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.component.widget.pinned.PinnedHeaderDecoration;
 import com.skyfishjy.library.RippleBackground;
@@ -175,6 +176,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
     private OrderAdapter adapter;
 
+    private NoticeAdapter noticeAdapter;
+
     @Override
     public void findById() {
         bottomBar = findViewById(R.id.bottom_bar);
@@ -237,7 +240,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
             noOrderText.setVisibility(View.GONE);
-            presenter.indexOrders();
+            presenter.loadEmploy(EmUtil.getEmployId());
         });
         swipeRefreshLayout.setRefreshing(true);
     }
@@ -256,23 +259,21 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 //            MultipleOrder header2 = new MultipleOrder(MultipleOrder.ITEM_HEADER);
 //            header1.isBookOrder = 2;
 //            orders.add(header2);
-            noOrderText.setVisibility(View.VISIBLE);
+            showEmpty(0);
         } else {
             orders.addAll(MultipleOrders);
-            noOrderText.setVisibility(View.GONE);
+            hideEmpty();
         }
-        if (null == adapter) {
-            adapter = new OrderAdapter(orders, this);
-            recyclerView.setAdapter(adapter);
-            PinnedHeaderDecoration pinnedHeaderDecoration = new PinnedHeaderDecoration();
-            //设置只有RecyclerItem.ITEM_HEADER的item显示标签
-            pinnedHeaderDecoration.setPinnedTypeHeader(MultipleOrder.ITEM_HEADER);
-            pinnedHeaderDecoration.registerTypePinnedHeader(MultipleOrder.ITEM_HEADER, (parent, adapterPosition) -> true);
-            pinnedHeaderDecoration.registerTypePinnedHeader(MultipleOrder.ITEM_DESC, (parent, adapterPosition) -> true);
-            recyclerView.addItemDecoration(pinnedHeaderDecoration);
-        } else {
-            adapter.setNewData(orders);
-        }
+
+        adapter = new OrderAdapter(orders, this);
+        recyclerView.setAdapter(adapter);
+        PinnedHeaderDecoration pinnedHeaderDecoration = new PinnedHeaderDecoration();
+        //设置只有RecyclerItem.ITEM_HEADER的item显示标签
+        pinnedHeaderDecoration.setPinnedTypeHeader(MultipleOrder.ITEM_HEADER);
+        pinnedHeaderDecoration.registerTypePinnedHeader(MultipleOrder.ITEM_HEADER, (parent, adapterPosition) -> true);
+        pinnedHeaderDecoration.registerTypePinnedHeader(MultipleOrder.ITEM_DESC, (parent, adapterPosition) -> true);
+        recyclerView.addItemDecoration(pinnedHeaderDecoration);
+
     }
 
     private AMap aMap;
@@ -306,31 +307,33 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
     @Override
     public void onlineSuc() {
-        XApp.getInstance().syntheticVoice("",XApp.ON_LINE);
+        XApp.getInstance().syntheticVoice("", XApp.ON_LINE);
         listenOrderCon.setVisibility(View.VISIBLE);
         rippleBackground.startRippleAnimation();
         onLineBtn.setVisibility(View.GONE);
         MQTTService.pushLoc(new BuildPushData(EmUtil.getLastLoc()));
+        presenter.indexOrders();
     }
 
     @Override
     public void offlineSuc() {
-        XApp.getInstance().syntheticVoice("",XApp.OFF_LINE);
+        XApp.getInstance().syntheticVoice("", XApp.OFF_LINE);
         listenOrderCon.setVisibility(View.GONE);
         rippleBackground.stopRippleAnimation();
         onLineBtn.setVisibility(View.VISIBLE);
+        presenter.loadNoticeAndAnn();
     }
 
     @Override
-    public void showNotify(Notifity notifity) {
-        notifityCon.setVisibility(View.VISIBLE);
-        notifityContent.setText(getString(R.string.new_notify) + notifity.message);
-//        XApp.getInstance().syntheticVoice(getString(R.string.new_notify) + notifity.message, true);
-        notifityCon.setOnClickListener(v -> {
-            notifityCon.setVisibility(View.GONE);
-            ARouter.getInstance().build("/personal/NotifityActivity")
-                    .navigation();
-        });
+    public void showNotify(AnnAndNotice notifity) {
+//        notifityCon.setVisibility(View.VISIBLE);
+//        notifityContent.setText(getString(R.string.new_notify) + notifity.noticeContent);
+//        XApp.getInstance().syntheticVoice(getString(R.string.new_notify) + notifity.noticeContent, true);
+//        notifityCon.setOnClickListener(v -> {
+//            notifityCon.setVisibility(View.GONE);
+//            ARouter.getInstance().build("/personal/NotifityActivity")
+//                    .navigation();
+//        });
     }
 
     List<Marker> markers = new ArrayList<>();
@@ -369,15 +372,15 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     }
 
     @Override
-    public void showAnn(Announcement announcement) {
-        notifityCon.setVisibility(View.VISIBLE);
-        notifityContent.setText(getString(R.string.new_ann) + announcement.message);
-//        XApp.getInstance().syntheticVoice(getString(R.string.new_ann) + announcement.message, true);
-        notifityCon.setOnClickListener(v -> {
-            notifityCon.setVisibility(View.GONE);
-            ARouter.getInstance().build("/personal/AnnouncementActivity")
-                    .navigation();
-        });
+    public void showAnn(AnnAndNotice announcement) {
+//        notifityCon.setVisibility(View.VISIBLE);
+//        notifityContent.setText(getString(R.string.new_ann) + announcement.annMessage);
+////        XApp.getInstance().syntheticVoice(getString(R.string.new_ann) + announcement.message, true);
+//        notifityCon.setOnClickListener(v -> {
+//            notifityCon.setVisibility(View.GONE);
+//            ARouter.getInstance().build("/personal/AnnouncementActivity")
+//                    .navigation();
+//        });
     }
 
     @Override
@@ -418,10 +421,56 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         if (StringUtils.isNotBlank(employ.status)) {
             if (employ.status.equals(EmployStatus.ONLINE)) {
                 showOffline();//非听单状态
+                presenter.loadNoticeAndAnn();
             } else {
                 showOnline();//听单状态
+                presenter.indexOrders();
             }
         }
+    }
+
+    @Override
+    public void showHomeAnnAndNotice(List<AnnAndNotice> annAndNoticeList) {
+        stopRefresh();
+        if (null != annAndNoticeList && annAndNoticeList.size() != 0) {
+            hideEmpty();
+            noticeAdapter = new NoticeAdapter(annAndNoticeList);
+            recyclerView.setAdapter(noticeAdapter);
+            PinnedHeaderDecoration pinnedHeaderDecoration = new PinnedHeaderDecoration();
+            //设置只有RecyclerItem.ITEM_HEADER的item显示标签
+            pinnedHeaderDecoration.setPinnedTypeHeader(AnnAndNotice.ITEM_HEADER);
+            pinnedHeaderDecoration.registerTypePinnedHeader(AnnAndNotice.ITEM_HEADER, (parent, adapterPosition) -> true);
+            pinnedHeaderDecoration.registerTypePinnedHeader(AnnAndNotice.ITEM_DESC, (parent, adapterPosition) -> true);
+            recyclerView.addItemDecoration(pinnedHeaderDecoration);
+        } else {
+            showEmpty(1);
+        }
+
+    }
+
+    @Override
+    public void hideEmpty() {
+        noOrderText.setVisibility(View.GONE);
+    }
+
+
+    /**
+     * @param type 0订单  1通知公告
+     */
+    @Override
+    public void showEmpty(int type) {
+        if (type == 0) {
+            noOrderText.setText(R.string.no_order);
+            Drawable drawable = getResources().getDrawable(R.mipmap.ic_no_order);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            noOrderText.setCompoundDrawables(null, drawable, null, null);
+        } else {
+            noOrderText.setText(R.string.no_ann_and_notice);
+            Drawable drawable = getResources().getDrawable(R.mipmap.ic_no_order);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            noOrderText.setCompoundDrawables(null, drawable, null, null);
+        }
+        noOrderText.setVisibility(View.VISIBLE);
     }
 
 
@@ -604,15 +653,15 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
     @Override
     public void onReceiveNotice(String message) {
-        Notifity notifity = new Notifity();
-        notifity.message = message;
+        AnnAndNotice notifity = new AnnAndNotice();
+        notifity.noticeContent = message;
         showNotify(notifity);
     }
 
     @Override
     public void onReceiveAnn(String message) {
-        Announcement announcement = new Announcement();
-        announcement.message = message;
+        AnnAndNotice announcement = new AnnAndNotice();
+        announcement.annMessage = message;
         showAnn(announcement);
     }
 }

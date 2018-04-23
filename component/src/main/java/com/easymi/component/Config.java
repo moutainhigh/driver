@@ -11,8 +11,8 @@ public class Config {
     /**
      * 主机地址
      */
-//    public static final String HOST = "http://192.168.0.72:8082/";
-    public static final String HOST = "https://api.xiaokayun.cn/";
+    public static final String HOST = "http://192.168.0.72:8082/";
+//    public static final String HOST = "https://api.xiaokayun.cn/";
     /**
      * 图片服务器地址
      */
@@ -64,6 +64,7 @@ public class Config {
 
     public static final String SP_SYS_LANGUAGE = "sys_language"; //英文
 
+    public static final String SP_QIYE_CODE = "qiye_code"; //英文
 
     public static final String SP_VOICE_ABLE = "voice_able";//能否语音播报
     public static final String SP_SHAKE_ABLE = "shake_able";//能否震动
