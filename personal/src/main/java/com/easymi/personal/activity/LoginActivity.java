@@ -142,6 +142,11 @@ public class LoginActivity extends RxBaseActivity {
     }
 
     private void initQiye() {
+
+        if (!Config.COMM_USE) {
+            findViewById(R.id.qiye_con).setVisibility(View.GONE);
+        }
+
         String saveStr = XApp.getMyPreferences().getString(Config.SP_QIYE_CODE, "");
         if (StringUtils.isBlank(saveStr)) {
             xiala.setVisibility(View.GONE);
@@ -197,9 +202,16 @@ public class LoginActivity extends RxBaseActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (null != editable && StringUtils.isNotBlank(editable.toString())) {
-                    if (StringUtils.isNotBlank(editPsw.getText().toString())
-                            && StringUtils.isNotBlank(editQiye.getText().toString())) {
-                        setLoginBtnEnable(true);
+                    if (StringUtils.isNotBlank(editPsw.getText().toString())) {
+                        if (Config.COMM_USE) {
+                            if (StringUtils.isNotBlank(editQiye.getText().toString())) {
+                                setLoginBtnEnable(true);
+                            } else {
+                                setLoginBtnEnable(false);
+                            }
+                        } else {
+                            setLoginBtnEnable(true);
+                        }
                     } else {
                         setLoginBtnEnable(false);
                     }
@@ -223,9 +235,16 @@ public class LoginActivity extends RxBaseActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (null != editable && StringUtils.isNotBlank(editable.toString())) {
-                    if (StringUtils.isNotBlank(editAccount.getText().toString())
-                            && StringUtils.isNotBlank(editQiye.getText().toString())) {
-                        setLoginBtnEnable(true);
+                    if (StringUtils.isNotBlank(editAccount.getText().toString())) {
+                        if (Config.COMM_USE) {
+                            if (StringUtils.isNotBlank(editQiye.getText().toString())) {
+                                setLoginBtnEnable(true);
+                            } else {
+                                setLoginBtnEnable(false);
+                            }
+                        } else {
+                            setLoginBtnEnable(true);
+                        }
                     } else {
                         setLoginBtnEnable(false);
                     }
