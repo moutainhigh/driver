@@ -283,6 +283,6 @@ public class ResetPswActivity extends RxBaseActivity {
     }
 
     private void checkCode(String code,String type){
-        
+
     }
 }
