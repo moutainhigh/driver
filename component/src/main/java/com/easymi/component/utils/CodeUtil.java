@@ -63,14 +63,14 @@ public class CodeUtil {
     }
 
     //生成验证码图片  返回类型为bitmap 直接用imageview.setbitmap()即可
-    public Bitmap createBitmap() {
+    public Bitmap createBitmap(String inCode) {
         mPaddingLeft = 0; //每次生成验证码图片时初始化
         mPaddingTop = 0;
 
         Bitmap bitmap = Bitmap.createBitmap(DEFAULT_WIDTH, DEFAULT_HEIGHT, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
 
-        code = createCode();
+        this.code = createCode(inCode);
 
         canvas.drawColor(Color.rgb(DEFAULT_COLOR, DEFAULT_COLOR, DEFAULT_COLOR));
         Paint paint = new Paint();
@@ -102,14 +102,18 @@ public class CodeUtil {
     }
 
     //生成验证码
-    public String createCode() {
-        mBuilder.delete(0, mBuilder.length()); //使用之前首先清空内容
+    public String createCode(String code) {
+        if (StringUtils.isNotBlank(code)) {
+            return code;
+        } else {
+            mBuilder.delete(0, mBuilder.length()); //使用之前首先清空内容
 
-        for (int i = 0; i < DEFAULT_CODE_LENGTH; i++) {
-            mBuilder.append(CHARS[mRandom.nextInt(CHARS.length)]);
+            for (int i = 0; i < DEFAULT_CODE_LENGTH; i++) {
+                mBuilder.append(CHARS[mRandom.nextInt(CHARS.length)]);
+            }
+
+            return mBuilder.toString();
         }
-
-        return mBuilder.toString();
     }
 
     //生成干扰线

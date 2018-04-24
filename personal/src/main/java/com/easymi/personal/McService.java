@@ -12,6 +12,7 @@ import com.easymi.personal.result.HelpMenuResult;
 import com.easymi.personal.result.LiushuiResult;
 import com.easymi.personal.result.LoginResult;
 import com.easymi.personal.result.NotifityResult;
+import com.easymi.personal.result.PicCodeResult;
 import com.easymi.personal.result.RechargeResult;
 import com.easymi.personal.result.SettingResult;
 import com.easymi.personal.result.ShareResult;
@@ -405,4 +406,35 @@ public interface McService {
      */
     @GET("api/v1/daijiaApp")
     Observable<SettingResult> getAppSetting(@Query("app_key") String appKey);
+
+    /**
+     * 获取图形验证码
+     *
+     * @return
+     */
+    @GET("driver/api/v1/picCode")
+    Observable<PicCodeResult> picCode(@Query("phone") String phone,
+                                      @Query("app_key") String appKey);
+
+    /**
+     * 获取短信验证码
+     *
+     * @param phone
+     * @param appKey
+     * @param country
+     * @param companyId
+     * @return
+     */
+    @GET("/driver/api/v1/smsCode")
+    Observable<EmResult> smsCode(@Query("phone") String phone,
+                                 @Query("app_key") String appKey,
+                                 @Query("country") String country,
+                                 @Query("company_id") Long companyId);
+
+    @FormUrlEncoded
+    @POST("driver/api/v1/checkCode")
+    Observable<EmResult> checkCode(@Field("phone") String phone,
+                                   @Field("code") String code,
+                                   @Field("code_type") String codeType,
+                                   @Field("app_key") String appKey);
 }

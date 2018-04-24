@@ -79,6 +79,8 @@ public class LoginActivity extends RxBaseActivity {
 
     TextView textAgreement;
 
+    private static final int DOUBLE_CHECK = 0x111;
+
     @Override
     public int getLayoutId() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -280,6 +282,12 @@ public class LoginActivity extends RxBaseActivity {
         }
     }
 
+    /**
+     * 登录
+     * @param name
+     * @param psw
+     * @param qiyeCode
+     */
     private void login(String name, String psw, String qiyeCode) {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
@@ -336,22 +344,27 @@ public class LoginActivity extends RxBaseActivity {
                 .observeOn(AndroidSchedulers.mainThread());
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, loginBtn, loginResult -> {
-            Employ employ = loginResult.getEmployInfo();
+            employ = loginResult.getEmployInfo();
             Log.e("okhttp", employ.toString());
             employ.saveOrUpdate();
 
-            getSetting(employ);
+            getSetting();
 
 
         })));
     }
+
+    private Employ employ;
 
     @Override
     public boolean isEnableSwipe() {
         return false;
     }
 
-    private void getSetting(Employ employ) {
+    /**
+     * 获取配置
+     */
+    private void getSetting() {
         Observable<SettingResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .getAppSetting(EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
@@ -362,48 +375,18 @@ public class LoginActivity extends RxBaseActivity {
             Setting setting = settingResult.setting;
             if (null != setting) {
 
-                SharedPreferences.Editor editor = XApp.getPreferencesEditor();
-                editor.putBoolean(Config.SP_ISLOGIN, true);
-                editor.putLong(Config.SP_DRIVERID, employ.id);
-                editor.putString(Config.SP_LOGIN_ACCOUNT, AesUtil.aesEncrypt(employ.phone, AesUtil.AAAAA));
-                editor.putBoolean(Config.SP_REMEMBER_PSW, checkboxRemember.isChecked());
-                editor.putString(Config.SP_APP_KEY, employ.app_key);
-                editor.putString(Config.SP_LOGIN_PSW, employ.password);
-                editor.apply();
-
-                String saveStr = XApp.getMyPreferences().getString(Config.SP_QIYE_CODE, "");
-                if (StringUtils.isNotBlank(saveStr)) {
-                    List<String> stringList = new ArrayList<>();
-                    if (saveStr.contains(",")) {
-                        stringList = Arrays.asList(saveStr.split(","));
-                    } else {
-                        stringList.add(saveStr);
-                    }
-                    boolean haveStr = false;
-                    for (String s : stringList) {
-                        if (s.equals(editQiye.getText().toString())) {
-                            haveStr = true;
-                            break;
-                        }
-                    }
-                    if (!haveStr) {
-                        saveStr += "," + editQiye.getText().toString();
-                        XApp.getMyPreferences().edit().putString(Config.SP_QIYE_CODE, saveStr).apply();
-                    }
-                } else {
-                    XApp.getMyPreferences().edit().putString(Config.SP_QIYE_CODE, editQiye.getText().toString()).apply();
-                }
 
                 Setting.deleteAll();
                 setting.save();
 
                 if (setting.doubleCheck == 1) {//开启
-                        Intent intent = new Intent(LoginActivity.this, ResetPswActivity.class);
-                        intent.putExtra("flag", "doubleCheck");
-                        intent.putExtra("phone", editAccount.getText().toString());
-                        intent.putExtra("psw", editPsw.getText().toString());
-                        startActivity(intent);
+                    Intent intent = new Intent(LoginActivity.this, ResetPswActivity.class);
+                    intent.putExtra("flag", "doubleCheck");
+                    intent.putExtra("phone", editAccount.getText().toString());
+                    intent.putExtra("psw", editPsw.getText().toString());
+                    startActivityForResult(intent, DOUBLE_CHECK);
                 } else {
+                    saveData(employ);
                     ARouter.getInstance()
                             .build("/common/WorkActivity")
                             .navigation();
@@ -414,6 +397,47 @@ public class LoginActivity extends RxBaseActivity {
     }
 
     List<String> strList = new ArrayList<>();
+
+    /**
+     * 保存数据
+     * @param employ
+     */
+    private void saveData(Employ employ) {
+        if (employ == null) {
+            return;
+        }
+        SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+        editor.putBoolean(Config.SP_ISLOGIN, true);
+        editor.putLong(Config.SP_DRIVERID, employ.id);
+        editor.putString(Config.SP_LOGIN_ACCOUNT, AesUtil.aesEncrypt(employ.phone, AesUtil.AAAAA));
+        editor.putBoolean(Config.SP_REMEMBER_PSW, checkboxRemember.isChecked());
+        editor.putString(Config.SP_APP_KEY, employ.app_key);
+        editor.putString(Config.SP_LOGIN_PSW, employ.password);
+        editor.apply();
+
+        String saveStr = XApp.getMyPreferences().getString(Config.SP_QIYE_CODE, "");
+        if (StringUtils.isNotBlank(saveStr)) {
+            List<String> stringList = new ArrayList<>();
+            if (saveStr.contains(",")) {
+                stringList = Arrays.asList(saveStr.split(","));
+            } else {
+                stringList.add(saveStr);
+            }
+            boolean haveStr = false;
+            for (String s : stringList) {
+                if (s.equals(editQiye.getText().toString())) {
+                    haveStr = true;
+                    break;
+                }
+            }
+            if (!haveStr) {
+                saveStr += "," + editQiye.getText().toString();
+                XApp.getMyPreferences().edit().putString(Config.SP_QIYE_CODE, saveStr).apply();
+            }
+        } else {
+            XApp.getMyPreferences().edit().putString(Config.SP_QIYE_CODE, editQiye.getText().toString()).apply();
+        }
+    }
 
     private void selectedQiye() {
 
@@ -449,5 +473,25 @@ public class LoginActivity extends RxBaseActivity {
         listPopupWindow.setModal(false);
 
         listPopupWindow.show();
+    }
+
+    /**
+     * 双因子验证后回调
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == DOUBLE_CHECK) {
+                saveData(employ);
+                ARouter.getInstance()
+                        .build("/common/WorkActivity")
+                        .navigation();
+                finish();
+            }
+        }
     }
 }

@@ -28,6 +28,8 @@ import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.VerifyCodeView;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
+import com.easymi.personal.result.PicCodeResult;
+import com.easymi.personal.result.SettingResult;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -93,15 +95,14 @@ public class ResetPswActivity extends RxBaseActivity {
         phoneNumber = findViewById(R.id.phone_number);
 
         String flag = getIntent().getStringExtra("flag");
-        if(StringUtils.isNotBlank(flag) && flag.equals("doubleCheck")){
+        if (StringUtils.isNotBlank(flag) && flag.equals("doubleCheck")) {
             accountCon.setVisibility(View.GONE);
             authCodeCon.setVisibility(View.VISIBLE);
 
             phone = getIntent().getStringExtra("phone");
             psw = getIntent().getStringExtra("psw");
 
-            authImg.setImageBitmap(CodeUtil.getInstance().createBitmap());
-            authCode = CodeUtil.getInstance().getCode();
+            getPicCode();
         }
 
         confirmAccount.setEnabled(false);
@@ -165,13 +166,11 @@ public class ResetPswActivity extends RxBaseActivity {
             pswCon.setVisibility(View.GONE);
             authCodeCon.setVisibility(View.VISIBLE);
 
-            authImg.setImageBitmap(CodeUtil.getInstance().createBitmap());
-            authCode = CodeUtil.getInstance().getCode();
+            getPicCode();
         });
 
         clickRefresh.setOnClickListener(v -> {
-            authImg.setImageBitmap(CodeUtil.getInstance().createBitmap());
-            authCode = CodeUtil.getInstance().getCode();
+            getPicCode();
         });
         authInput.setOnCodeListener(code -> {
             if (code.toLowerCase().equals(authCode)) {
@@ -257,5 +256,33 @@ public class ResetPswActivity extends RxBaseActivity {
     @Override
     public boolean isEnableSwipe() {
         return true;
+    }
+
+    /**
+     * 双因子获取图形验证码
+     */
+    private void getPicCode() {
+        Observable<PicCodeResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
+                .picCode(phone, EmUtil.getAppKey())
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<PicCodeResult>(this,
+                false,
+                false,
+                new NoErrSubscriberListener<PicCodeResult>() {
+                    @Override
+                    public void onNext(PicCodeResult picCodeResult) {
+                        String picCode = picCodeResult.picCode;
+
+                        authImg.setImageBitmap(CodeUtil.getInstance().createBitmap(picCode));
+                        authCode = CodeUtil.getInstance().getCode();
+                    }
+                })));
+    }
+
+    private void checkCode(String code,String type){
+        
     }
 }
