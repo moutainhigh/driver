@@ -145,6 +145,7 @@ public class LoginActivity extends RxBaseActivity {
 
         if (!Config.COMM_USE) {
             findViewById(R.id.qiye_con).setVisibility(View.GONE);
+            findViewById(R.id.qiye_line).setVisibility(View.GONE);
         }
 
         String saveStr = XApp.getMyPreferences().getString(Config.SP_QIYE_CODE, "");
