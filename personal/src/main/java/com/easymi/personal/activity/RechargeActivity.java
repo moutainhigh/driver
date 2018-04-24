@@ -226,7 +226,7 @@ public class RechargeActivity extends RxBaseActivity {
 
     private void getDriverInfo(Long driverId) {
         Observable<LoginResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .getDriverInfo(driverId, Config.APP_KEY)
+                .getDriverInfo(driverId, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -245,7 +245,7 @@ public class RechargeActivity extends RxBaseActivity {
 
     private void recharge(Long driverId, String payType, Double money) {
         Observable<RechargeResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .recharge(driverId, Config.APP_KEY, payType, money, 2)
+                .recharge(driverId, EmUtil.getAppKey(), payType, money, 2)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

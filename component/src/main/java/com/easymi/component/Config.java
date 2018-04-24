@@ -39,7 +39,7 @@ public class Config {
     /**
      * MQTT配置
      */
-    public static final String MQTT_HOST = "tcp://39.107.190.141:1883";
+    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn:1883";
     public static final String MQTT_USER_NAME = "xiaoka";
     public static final String MQTT_PSW = "&mv7dHapB5J!95BJ";
     public static final String MQTT_PUSH_TOPIC = "/driver";
@@ -50,6 +50,10 @@ public class Config {
     public static final String SP_DRIVERID = "driverId";
     public static final String SP_ISLOGIN = "isLogin";
     public static final String SP_LAST_LOC = "lastLoc";
+
+    public static final String SP_QIYE_CODE = "qiye_code"; //企业编码
+    public static final String SP_APP_KEY = "app_key"; //app_key
+
 
     public static final String SP_CONGESTION = "congestion";//躲避拥堵
     public static final String SP_AVOID_HIGH_SPEED = "avoidhightspeed";//不走高速
@@ -90,4 +94,5 @@ public class Config {
     public static final int FREE_LOC_TIME = 8000;//闲时定位时间 毫秒
     public static final int BUSY_LOC_TIME = 4000;//忙时定位时间 毫秒
 
+    public static final boolean COMM_USE = true;//是否是通用司机端
 }

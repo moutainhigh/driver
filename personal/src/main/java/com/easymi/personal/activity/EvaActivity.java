@@ -100,7 +100,7 @@ public class EvaActivity extends RxBaseActivity {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
         Observable<EvaResult> observable = api
-                .driverRate(employ.id, Config.APP_KEY)
+                .driverRate(employ.id, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

@@ -13,6 +13,7 @@ import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.MathUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
@@ -133,7 +134,7 @@ public class BaoxiaoActivity extends RxBaseActivity {
 
     private void baoxiaoMoney() {
         Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .baoxiao(orderId, baoxiaoMoney, baoxiaoReason, Config.APP_KEY)
+                .baoxiao(orderId, baoxiaoMoney, baoxiaoReason, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

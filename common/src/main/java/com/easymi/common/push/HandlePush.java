@@ -17,7 +17,6 @@ import com.easymi.common.CommApiService;
 import com.easymi.common.R;
 import com.easymi.common.entity.Address;
 import com.easymi.common.entity.MultipleOrder;
-import com.easymi.common.entity.Setting;
 import com.easymi.common.mvp.grab.GrabActivity2;
 import com.easymi.common.mvp.work.WorkActivity;
 import com.easymi.common.result.AnnouncementResult;
@@ -29,6 +28,7 @@ import com.easymi.component.DJOrderStatus;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.Employ;
+import com.easymi.component.entity.Setting;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
@@ -207,7 +207,7 @@ public class HandlePush implements FeeChangeSubject {
      */
     private void loadSetting() {
         Observable<SettingResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .getAppSetting(Config.APP_KEY)
+                .getAppSetting(EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -230,7 +230,7 @@ public class HandlePush implements FeeChangeSubject {
 
     private void loadDJOrder(long orderId, String orderType) {
         Observable<MultipleOrderResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .queryDJOrder(orderId, Config.APP_KEY)
+                .queryDJOrder(orderId, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -256,7 +256,7 @@ public class HandlePush implements FeeChangeSubject {
      */
     private void loadNotice(long id) {
         Observable<NotitfyResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .loadNotice(id, Config.APP_KEY)
+                .loadNotice(id, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -287,7 +287,7 @@ public class HandlePush implements FeeChangeSubject {
      */
     private void loadAnn(long id) {
         Observable<AnnouncementResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .employAfficheById(id, Config.APP_KEY)
+                .employAfficheById(id, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

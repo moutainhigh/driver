@@ -13,6 +13,7 @@ import com.easymi.personal.result.LiushuiResult;
 import com.easymi.personal.result.LoginResult;
 import com.easymi.personal.result.NotifityResult;
 import com.easymi.personal.result.RechargeResult;
+import com.easymi.personal.result.SettingResult;
 import com.easymi.personal.result.ShareResult;
 import com.easymi.personal.result.StatisResult;
 import com.easymi.personal.result.TixianResult;
@@ -48,6 +49,23 @@ public interface McService {
                                   @Field("device_net_type") String deviceNetType,
                                   @Field("mobile_brand") String mobileBrand
     );
+
+    @FormUrlEncoded
+    @POST("driver/api/v1/allEmployLogin")
+    Observable<LoginResult> loginByQiye(@Field("username") String userName,
+                                        @Field("password") String psw,
+                                        @Field("udId") String udid,
+                                        @Field("deviceType") String deviceType,
+                                        @Field("deviceInfo") String deviceInfo,
+                                        @Field("appversion") String appversion,
+                                        @Field("userId") String userId,
+                                        @Field("device_version") String deviceVersion,
+                                        @Field("device_net") String deviceNet,
+                                        @Field("device_net_type") String deviceNetType,
+                                        @Field("mobile_brand") String mobileBrand,
+                                        @Field("system_code") String sysCode
+    );
+
 
     @FormUrlEncoded
     @PUT("driver/api/v1/modifyPassword")
@@ -378,4 +396,14 @@ public interface McService {
     @GET("driver/api/v1/employAfficheById")
     Observable<AnnResult> employAfficheById(@Query("id") Long noticeId,
                                             @Query("app_key") String appKey);
+
+    /**
+     * 获取APP配置
+     *
+     * @param appKey
+     * @return
+     */
+    @GET("api/v1/daijiaApp")
+    Observable<SettingResult> getAppSetting(@Query("app_key") String appKey);
+
 }

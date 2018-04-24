@@ -212,7 +212,7 @@ public class TixianActivity extends RxBaseActivity {
         Employ employ = EmUtil.getEmployInfo();
         Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .enchashment(employ.id, employ.name, employ.user_name, employ.phone, money,
-                        employ.company_id, Config.APP_KEY, name, no, owner)
+                        employ.company_id, EmUtil.getAppKey(), name, no, owner)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -235,7 +235,7 @@ public class TixianActivity extends RxBaseActivity {
 
     private void getDriverInfo(Long driverId) {
         Observable<LoginResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .getDriverInfo(driverId, Config.APP_KEY)
+                .getDriverInfo(driverId, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -265,7 +265,7 @@ public class TixianActivity extends RxBaseActivity {
 
     private void getTixianConfig() {
         Observable<TixianRuleResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .tixianRule(Config.APP_KEY)
+                .tixianRule(EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

@@ -16,7 +16,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "data.db";
 
-    private static final int VERSION = 47;
+    private static final int VERSION = 49;
 
     private StringBuffer sqlBuf;
 
@@ -158,6 +158,8 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("isAddPrice").append(" ").append("INTEGER").append(",")
                 .append("isWorkCar").append(" ").append("INTEGER").append(",")
                 .append("employChangePrice").append(" ").append("INTEGER").append(",")
+                .append("doubleCheck").append(" ").append("INTEGER").append(",")
+                .append("canCallDriver").append(" ").append("INTEGER").append(",")
 
                 .append("workCarChangeOrder").append(" ").append("INTEGER")
                 .append(");");

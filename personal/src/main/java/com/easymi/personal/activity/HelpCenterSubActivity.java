@@ -65,7 +65,7 @@ public class HelpCenterSubActivity extends RxBaseActivity {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
         Observable<HelpMenuResult> observable = api
-                .getHelpeSubMenu(Config.APP_KEY,
+                .getHelpeSubMenu(EmUtil.getAppKey(),
                         (long) 0,
                         1,
                         100,

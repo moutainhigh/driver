@@ -95,7 +95,7 @@ public class DetailActivity extends RxBaseActivity {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
         Observable<LiushuiResult> observable = api
-                .getLiushui(page, 10, null, null, Config.APP_KEY, EmUtil.getEmployInfo().company_id, EmUtil.getEmployId())
+                .getLiushui(page, 10, null, null, EmUtil.getAppKey(), EmUtil.getEmployInfo().company_id, EmUtil.getEmployId())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

@@ -88,7 +88,7 @@ public class TixianRecordActivity extends RxBaseActivity {
 
     private void queryData() {
         Observable<TixianResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .enchashments(EmUtil.getEmployId(), page, Config.APP_KEY, EmUtil.getEmployInfo().company_id, limit)
+                .enchashments(EmUtil.getEmployId(), page, EmUtil.getAppKey(), EmUtil.getEmployInfo().company_id, limit)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

@@ -19,7 +19,7 @@ public class GrabModel implements GrabContract.Model {
     @Override
     public Observable<MultipleOrderResult> queryOrder(Long orderId) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .queryDJOrder(orderId, Config.APP_KEY)
+                .queryDJOrder(orderId, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -28,7 +28,7 @@ public class GrabModel implements GrabContract.Model {
     @Override
     public Observable<MultipleOrderResult> grabOrder(Long orderId) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .grabDJOrder(orderId, EmUtil.getEmployId(), Config.APP_KEY)
+                .grabDJOrder(orderId, EmUtil.getEmployId(), EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -37,7 +37,7 @@ public class GrabModel implements GrabContract.Model {
     @Override
     public Observable<MultipleOrderResult> takeOrder(Long orderId) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .takeDJOrder(orderId, EmUtil.getEmployId(), Config.APP_KEY)
+                .takeDJOrder(orderId, EmUtil.getEmployId(), EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

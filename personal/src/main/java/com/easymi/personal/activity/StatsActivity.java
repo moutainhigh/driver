@@ -105,7 +105,7 @@ public class StatsActivity extends RxBaseActivity {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
         Observable<StatisResult> observable = api
-                .driverSend(employ.id, Config.APP_KEY, startTime, endTime)
+                .driverSend(employ.id, EmUtil.getAppKey(), startTime, endTime)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

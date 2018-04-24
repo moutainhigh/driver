@@ -71,7 +71,7 @@ public class PocketActivity extends RxBaseActivity {
 
     private void getDriverInfo(Long driverId) {
         Observable<LoginResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .getDriverInfo(driverId, Config.APP_KEY)
+                .getDriverInfo(driverId, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

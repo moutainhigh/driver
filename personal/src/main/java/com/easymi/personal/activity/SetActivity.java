@@ -154,7 +154,7 @@ public class SetActivity extends RxBaseActivity {
         McService mcService = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
         Observable<EmResult> observable = mcService
-                .employLoginOut(EmUtil.getEmployId(), Config.APP_KEY)
+                .employLoginOut(EmUtil.getEmployId(), EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

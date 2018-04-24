@@ -130,7 +130,7 @@ public class ArticleActivity extends RxBaseActivity implements View.OnClickListe
 
     private void getAnn(long annId) {
         Observable<AnnResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .employAfficheById(annId, Config.APP_KEY)
+                .employAfficheById(annId, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -164,7 +164,7 @@ public class ArticleActivity extends RxBaseActivity implements View.OnClickListe
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
         Observable<ArticleResult> observable = api
-                .getArticleById(Config.APP_KEY, articleId)
+                .getArticleById(EmUtil.getAppKey(), articleId)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -197,7 +197,7 @@ public class ArticleActivity extends RxBaseActivity implements View.OnClickListe
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
         Observable<ArticleResult> observable = api
-                .getArticle(Config.APP_KEY, alias,
+                .getArticle(EmUtil.getAppKey(), alias,
                         EmUtil.getEmployInfo() == null ? null : EmUtil.getEmployInfo().company_id)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())

@@ -14,7 +14,6 @@ import android.os.Message;
 import com.easymi.common.daemon.DaemonService;
 import com.easymi.common.daemon.JobKeepLiveService;
 import com.easymi.common.entity.MultipleOrder;
-import com.easymi.common.entity.Setting;
 import com.easymi.common.entity.WorkStatistics;
 import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.LoginResult;
@@ -24,14 +23,13 @@ import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.common.result.SettingResult;
 import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.Config;
-import com.easymi.component.DJOrderStatus;
 import com.easymi.component.EmployStatus;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.Employ;
+import com.easymi.component.entity.Setting;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
-import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
@@ -116,7 +114,7 @@ public class WorkPresenter implements WorkContract.Presenter {
 
         long driverId = EmUtil.getEmployId();
 
-        Observable<QueryOrdersResult> observable = model.indexOrders(driverId, Config.APP_KEY);
+        Observable<QueryOrdersResult> observable = model.indexOrders(driverId, EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false, false, new HaveErrSubscriberListener<QueryOrdersResult>() {
             @Override
             public void onNext(QueryOrdersResult emResult) {
@@ -208,7 +206,7 @@ public class WorkPresenter implements WorkContract.Presenter {
     public void online(LoadingButton btn) {
         long driverId = EmUtil.getEmployId();
 
-        Observable<EmResult> observable = model.online(driverId, Config.APP_KEY);
+        Observable<EmResult> observable = model.online(driverId, EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, btn, emResult -> view.onlineSuc())));
     }
 
@@ -216,7 +214,7 @@ public class WorkPresenter implements WorkContract.Presenter {
     public void offline() {
         long driverId = EmUtil.getEmployId();
 
-        Observable<EmResult> observable = model.offline(driverId, Config.APP_KEY);
+        Observable<EmResult> observable = model.offline(driverId, EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, true,
                 true, emResult -> {
             onPause();
@@ -323,7 +321,7 @@ public class WorkPresenter implements WorkContract.Presenter {
     @Override
     public void loadEmploy(long id) {
 
-        Observable<LoginResult> observable = model.getEmploy(id, Config.APP_KEY);
+        Observable<LoginResult> observable = model.getEmploy(id, EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
                 true, result -> {
             Employ employ = result.getEmployInfo();

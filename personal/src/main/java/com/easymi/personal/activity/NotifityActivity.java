@@ -92,7 +92,7 @@ public class NotifityActivity extends RxBaseActivity {
 
     private void queryData() {
         Observable<NotifityResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .notices(EmUtil.getEmployId(), Config.APP_KEY, page, 10)
+                .notices(EmUtil.getEmployId(), EmUtil.getAppKey(), page, 10)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -131,7 +131,7 @@ public class NotifityActivity extends RxBaseActivity {
 
     private void readOne(long id, int position) {
         Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .readNotice(id, Config.APP_KEY)
+                .readNotice(id, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -145,7 +145,7 @@ public class NotifityActivity extends RxBaseActivity {
 
     private void readAll() {
         Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .readAll(EmUtil.getEmployId(), Config.APP_KEY)
+                .readAll(EmUtil.getEmployId(), EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

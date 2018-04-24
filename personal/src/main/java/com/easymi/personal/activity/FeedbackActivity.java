@@ -83,7 +83,7 @@ public class FeedbackActivity extends RxBaseActivity {
                 .feedback(EmUtil.getEmployId(),
                         EmUtil.getEmployInfo().user_name,
                         EmUtil.getEmployInfo().company_id,
-                        Config.APP_KEY,
+                        EmUtil.getAppKey(),
                         editText.getText().toString(),
                         2,
                         EmUtil.getEmployInfo().phone)
