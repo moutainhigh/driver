@@ -494,10 +494,10 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
     private void showBottomByStatus() {
         if (showIngOrder.orderStatus == DJOrderStatus.NEW_ORDER) {
             bottomText.setText(R.string.grab_order);
-            grabCon.setOnClickListener(v -> presenter.grabOrder(showIngOrder.orderId));
+            grabCon.setOnClickListener(v -> presenter.grabOrder(showIngOrder));
         } else if (showIngOrder.orderStatus == DJOrderStatus.PAIDAN_ORDER) {
             bottomText.setText(R.string.accept_order);
-            grabCon.setOnClickListener(v -> presenter.takeOrder(showIngOrder.orderId));
+            grabCon.setOnClickListener(v -> presenter.takeOrder(showIngOrder));
         }
     }
 

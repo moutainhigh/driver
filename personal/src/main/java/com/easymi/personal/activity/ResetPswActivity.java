@@ -1,5 +1,6 @@
 package com.easymi.personal.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
@@ -173,24 +175,14 @@ public class ResetPswActivity extends RxBaseActivity {
             getPicCode();
         });
         authInput.setOnCodeListener(code -> {
-            if (code.toLowerCase().equals(authCode)) {
-                secCodeCon.setVisibility(View.VISIBLE);
-                authCodeCon.setVisibility(View.GONE);
-
-                initSecView();
-            } else {
-                ToastUtil.showMessage(ResetPswActivity.this, getString(R.string.reset_error_auth));
-                authInput = new VerifyCodeView(this);
-            }
+            checkCode(code.toLowerCase(),"pic");
         });
 
         timerText.setOnClickListener(v -> {
-            ToastUtil.showMessage(ResetPswActivity.this, "开始重新获取验证码");
-            initSecView();
+            getSmsCode();
         });
         secInput.setOnCodeListener(code -> {
-            ToastUtil.showMessage(ResetPswActivity.this, "完成重置密码");
-            finish();
+            checkCode(code.toLowerCase(),"sms");
         });
 
     }
@@ -268,21 +260,69 @@ public class ResetPswActivity extends RxBaseActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        mRxManager.add(observable.subscribe(new MySubscriber<PicCodeResult>(this,
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this,
                 false,
                 false,
-                new NoErrSubscriberListener<PicCodeResult>() {
-                    @Override
-                    public void onNext(PicCodeResult picCodeResult) {
-                        String picCode = picCodeResult.picCode;
+                picCodeResult -> {
+                    String picCode = picCodeResult.picCode;
 
-                        authImg.setImageBitmap(CodeUtil.getInstance().createBitmap(picCode));
-                        authCode = CodeUtil.getInstance().getCode();
-                    }
+                    authImg.setImageBitmap(CodeUtil.getInstance().createBitmap(picCode));
+                    authCode = CodeUtil.getInstance().getCode();
                 })));
     }
 
-    private void checkCode(String code,String type){
+    /**
+     * 检查code
+     *
+     * @param code
+     * @param type code类型
+     */
+    private void checkCode(String code, String type) {
+        Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
+                .checkCode(phone, code, type, EmUtil.getAppKey())
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
 
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, new HaveErrSubscriberListener<EmResult>() {
+            @Override
+            public void onNext(EmResult result) {
+                if (type.equals("pic")) {//图形验证码输入后
+                    secCodeCon.setVisibility(View.VISIBLE);
+                    authCodeCon.setVisibility(View.GONE);
+
+                    getSmsCode();
+                } else {
+                    Intent intent = new Intent(ResetPswActivity.this, LoginActivity.class);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onError(int code) {
+                authInput = new VerifyCodeView(ResetPswActivity.this);
+                secInput = new VerifyCodeView(ResetPswActivity.this);
+            }
+        })));
+    }
+
+    /**
+     * 获取短信验证码
+     */
+    private void getSmsCode() {
+        Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
+                .smsCode(phone, EmUtil.getAppKey(), "中国", EmUtil.getEmployInfo().company_id)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this,
+                false,
+                false,
+                result -> {
+                    initSecView();
+                    ToastUtil.showMessage(ResetPswActivity.this, getString(R.string.get_sms_suc));
+                })));
     }
 }

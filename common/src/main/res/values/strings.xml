@@ -123,4 +123,7 @@
 
     <string name="home_gonggao">公告</string>
     <string name="home_notice">通知</string>
+    <string name="listen_order_set">模式设置</string>
+    <string name="listen_order_set_2">听单设置</string>
+    <string name="listen_order_more_one">至少选择一种听单业务</string>
 </resources>

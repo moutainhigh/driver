@@ -47,12 +47,16 @@ public class TixianRecordAdapter extends RecyclerView.Adapter<TixianRecordAdapte
         TixianRecord tixianRecord = list.get(position);
         holder.tixianRecordTime.setText(TimeUtil.getTime("yyyy-MM-dd HH:mm", tixianRecord.time * 1000));
         holder.tixianRecordStatus.setText(tixianRecord.getStatusStr(context));
-        holder.tixianRecordMoney.setText(tixianRecord.money+context.getString(R.string.yuan));
+        holder.tixianRecordMoney.setText(tixianRecord.money + context.getString(R.string.yuan));
 
         if (tixianRecord.status == 2) {
             holder.tixianRecordStatus.setTextColor(context.getResources().getColor(R.color.dark_gray));
         } else {
             holder.tixianRecordStatus.setTextColor(context.getResources().getColor(R.color.colorAccent));
+            if (tixianRecord.status == 3) {
+                holder.tixianRecordRefuse.setVisibility(View.VISIBLE);
+                holder.tixianRecordRefuse.setText(tixianRecord.refuseReason);
+            }
         }
 
         holder.dian1.setVisibility(View.VISIBLE);
@@ -79,6 +83,7 @@ public class TixianRecordAdapter extends RecyclerView.Adapter<TixianRecordAdapte
         TextView tixianRecordTime;
         TextView tixianRecordStatus;
         TextView tixianRecordMoney;
+        TextView tixianRecordRefuse;
 
         ImageView dian1;
         ImageView dian2;
@@ -90,6 +95,7 @@ public class TixianRecordAdapter extends RecyclerView.Adapter<TixianRecordAdapte
             tixianRecordTime = itemView.findViewById(R.id.tixian_time);
             tixianRecordStatus = itemView.findViewById(R.id.tixian_status);
             tixianRecordMoney = itemView.findViewById(R.id.tixian_money);
+            tixianRecordRefuse = itemView.findViewById(R.id.tixian_refuse_reason);
 
             dian1 = itemView.findViewById(R.id.ic_dian_1);
             dian2 = itemView.findViewById(R.id.ic_dian_2);

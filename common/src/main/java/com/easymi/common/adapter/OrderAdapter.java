@@ -54,6 +54,14 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
                                     .build("/daijia/FlowActivity")
                                     .withLong("orderId", baseOrder.orderId).navigation();
                         }
+                    } else if (baseOrder.orderType.equals(Config.ZHUANCHE)) {
+                        if (baseOrder.orderStatus == 1) {
+//                            ARouter.getInstance().build("/daijia/GrabActivity").withLong("orderId", baseOrder.orderId).navigation();
+                        } else {
+                            ARouter.getInstance()
+                                    .build("/zhuanche/FlowActivity")
+                                    .withLong("orderId", baseOrder.orderId).navigation();
+                        }
                     }
                 }
             });

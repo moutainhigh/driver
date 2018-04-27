@@ -11,14 +11,18 @@ public class Config {
     /**
      * 主机地址
      */
-    public static final String HOST = "http://192.168.0.79:8082/";
-//    public static final String HOST = "https://api.xiaokayun.cn/";
+//    public static final String HOST = "http://192.168.0.72:8082/";
+    public static final String HOST = "https://api.xiaokayun.cn/";
     /**
      * 图片服务器地址
      */
     public static final String IMG_SERVER = "https://assets.xiaokayun.cn/";
     //    public static final String IMG_PATH = "?imageView2/1/w/10/h/10/format/webp/q/75|imageslim";
     public static final String IMG_PATH = "";
+    /**
+     *
+     */
+    public static final String APP_KEY = "4aea5f7368b0461395eeda353337a24c";//本地
 //    public static final String APP_KEY = "1f462eb305a2417c9564f2dfaf89da9c";//本地
     /**
      * 司机注册地址
@@ -75,8 +79,12 @@ public class Config {
 
     public static final String SP_LAST_SPLASH_TIME = "last_splash_animate";//上次显示动画的时间
 
+    public static final String SP_DAIJIA_LISTEN_ORDER = "daijia_listen_order";//代驾是否听单
+    public static final String SP_ZHUANCHE_LISTEN_ORDER = "zhuanche_listen_order";//代驾是否听单
+
 
     public static final String DAIJIA = "daijia";
+    public static final String ZHUANCHE = "zhuanche";
 
     public static final String BROAD_CANCEL_ORDER = "com.easymi.v5driver.BROAD_CANCEL_ORDER";
     public static final String BROAD_BACK_ORDER = "com.easymi.v5driver.BROAD_BACK_ORDER";
@@ -87,5 +95,7 @@ public class Config {
 
     public static final int FREE_LOC_TIME = 8000;//闲时定位时间 毫秒
     public static final int BUSY_LOC_TIME = 4000;//忙时定位时间 毫秒
+
+    public static final boolean COMMON_USE = false;
 
 }

@@ -194,10 +194,12 @@ public class HandlePush implements FeeChangeSubject {
         }
     }
 
-    private void loadOrder(MultipleOrder MultipleOrder) {
-        if (StringUtils.isNotBlank(MultipleOrder.orderType)) {
-            if (MultipleOrder.orderType.equals(Config.DAIJIA)) {
-                loadDJOrder(MultipleOrder.orderId, Config.DAIJIA);
+    private void loadOrder(MultipleOrder multipleOrder) {
+        if (StringUtils.isNotBlank(multipleOrder.orderType)) {
+            if (multipleOrder.orderType.equals(Config.DAIJIA)) {
+                loadDJOrder(multipleOrder.orderId, Config.DAIJIA);
+            } else if(multipleOrder.orderType.equals(Config.ZHUANCHE)){
+                loadZCOrder(multipleOrder.orderId, Config.ZHUANCHE);
             }
         }
     }
@@ -231,6 +233,27 @@ public class HandlePush implements FeeChangeSubject {
     private void loadDJOrder(long orderId, String orderType) {
         Observable<MultipleOrderResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .queryDJOrder(orderId, EmUtil.getAppKey())
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        rxManager.add(observable.subscribe(new MySubscriber<>(XApp.getInstance(), false,
+                false, new HaveErrSubscriberListener<MultipleOrderResult>() {
+            @Override
+            public void onNext(MultipleOrderResult multipleOrderResult) {
+                loadOrderCallback.callback(multipleOrderResult, orderType);
+            }
+
+            @Override
+            public void onError(int code) {
+                rxManager.clear();
+            }
+        })));
+    }
+
+    private void loadZCOrder(long orderId, String orderType) {
+        Observable<MultipleOrderResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .queryZCOrder(orderId, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -376,6 +399,9 @@ public class HandlePush implements FeeChangeSubject {
                 if (orderType.equals(Config.DAIJIA)) {
                     voiceStr += XApp.getInstance().getString(R.string.create_daijia)
                             + XApp.getInstance().getString(R.string.order) + ",";//代驾订单
+                } else if (orderType.equals(Config.DAIJIA)) {
+                    voiceStr += XApp.getInstance().getString(R.string.create_zhuanche)
+                            + XApp.getInstance().getString(R.string.order) + ",";//专车订单
                 }
                 String dis = 0 + XApp.getInstance().getString(R.string.meter);
                 if (EmUtil.getLastLoc() != null && order.addresses != null && order.addresses.size() != 0) {

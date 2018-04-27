@@ -16,6 +16,8 @@ public class TixianRecord {
 
     public int status;//1.待审批 2.同意 3.驳回
 
+    @SerializedName("refuse_reason")
+    public String refuseReason;
 
     @SerializedName("cost")
     public double money;

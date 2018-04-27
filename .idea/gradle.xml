@@ -14,6 +14,7 @@
             <option value="$PROJECT_DIR$/daemon" />
             <option value="$PROJECT_DIR$/daijia" />
             <option value="$PROJECT_DIR$/personal" />
+            <option value="$PROJECT_DIR$/zhuanche" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

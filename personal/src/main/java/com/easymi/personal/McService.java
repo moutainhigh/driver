@@ -56,7 +56,6 @@ public interface McService {
     Observable<LoginResult> loginByQiye(@Field("username") String userName,
                                         @Field("password") String psw,
                                         @Field("udId") String udid,
-                                        @Field("app_key") String appKey,
                                         @Field("deviceType") String deviceType,
                                         @Field("deviceInfo") String deviceInfo,
                                         @Field("appversion") String appversion,

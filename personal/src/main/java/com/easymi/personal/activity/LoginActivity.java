@@ -144,6 +144,10 @@ public class LoginActivity extends RxBaseActivity {
     }
 
     private void initQiye() {
+        if (!Config.COMMON_USE) {
+            findViewById(R.id.qiye_con).setVisibility(View.GONE);
+            findViewById(R.id.qiye_line).setVisibility(View.GONE);
+        }
         String saveStr = XApp.getMyPreferences().getString(Config.SP_QIYE_CODE, "");
         if (StringUtils.isBlank(saveStr)) {
             xiala.setVisibility(View.GONE);
@@ -199,9 +203,16 @@ public class LoginActivity extends RxBaseActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (null != editable && StringUtils.isNotBlank(editable.toString())) {
-                    if (StringUtils.isNotBlank(editPsw.getText().toString())
-                            && StringUtils.isNotBlank(editQiye.getText().toString())) {
-                        setLoginBtnEnable(true);
+                    if (StringUtils.isNotBlank(editPsw.getText().toString())) {
+                        if(Config.COMMON_USE){
+                            if(StringUtils.isNotBlank(editQiye.getText().toString())){
+                                setLoginBtnEnable(true);
+                            } else {
+                                setLoginBtnEnable(false);
+                            }
+                        } else {
+                            setLoginBtnEnable(true);
+                        }
                     } else {
                         setLoginBtnEnable(false);
                     }
@@ -225,9 +236,16 @@ public class LoginActivity extends RxBaseActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (null != editable && StringUtils.isNotBlank(editable.toString())) {
-                    if (StringUtils.isNotBlank(editAccount.getText().toString())
-                            && StringUtils.isNotBlank(editQiye.getText().toString())) {
-                        setLoginBtnEnable(true);
+                    if (StringUtils.isNotBlank(editAccount.getText().toString())) {
+                        if(Config.COMMON_USE){
+                            if(StringUtils.isNotBlank(editQiye.getText().toString())){
+                                setLoginBtnEnable(true);
+                            } else {
+                                setLoginBtnEnable(false);
+                            }
+                        } else {
+                            setLoginBtnEnable(true);
+                        }
                     } else {
                         setLoginBtnEnable(false);
                     }
@@ -284,6 +302,7 @@ public class LoginActivity extends RxBaseActivity {
 
     /**
      * 登录
+     *
      * @param name
      * @param psw
      * @param qiyeCode
@@ -324,34 +343,63 @@ public class LoginActivity extends RxBaseActivity {
         }
         String netType = NetWorkUtil.getNetWorkTypeName(this);
 
-        Observable<LoginResult> observable = api
-                .loginByQiye(AesUtil.aesEncrypt(name, AesUtil.AAAAA),
-                        AesUtil.aesEncrypt(psw, AesUtil.AAAAA),
-                        udid,
-                        EmUtil.getAppKey(),
-                        "android",
-                        Build.MODEL,
-                        version,
-                        PushServiceFactory.getCloudPushService().getDeviceId(),
-                        systemVersion, //系统版本号
-                        operatorName, //运营商
-                        netType, //网络类型 3G 4G等
-                        model,    //手机品牌
-                        qiyeCode//企业码
-                )
-                .filter(new HttpResultFunc<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        if (Config.COMMON_USE) {
+            Observable<LoginResult> observable = api
+                    .loginByQiye(AesUtil.aesEncrypt(name, AesUtil.AAAAA),
+                            AesUtil.aesEncrypt(psw, AesUtil.AAAAA),
+                            udid,
+                            "android",
+                            Build.MODEL,
+                            version,
+                            PushServiceFactory.getCloudPushService().getDeviceId(),
+                            systemVersion, //系统版本号
+                            operatorName, //运营商
+                            netType, //网络类型 3G 4G等
+                            model,    //手机品牌
+                            qiyeCode//企业码
+                    )
+                    .filter(new HttpResultFunc<>())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
 
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, loginBtn, loginResult -> {
-            employ = loginResult.getEmployInfo();
-            Log.e("okhttp", employ.toString());
-            employ.saveOrUpdate();
+            mRxManager.add(observable.subscribe(new MySubscriber<>(this, loginBtn, loginResult -> {
+                employ = loginResult.getEmployInfo();
+                Log.e("okhttp", employ.toString());
+                employ.saveOrUpdate();
 
-            getSetting();
+                getSetting();
 
 
-        })));
+            })));
+        } else {
+            Observable<LoginResult> observable = api
+                    .login(AesUtil.aesEncrypt(name, AesUtil.AAAAA),
+                            AesUtil.aesEncrypt(psw, AesUtil.AAAAA),
+                            udid,
+                            Config.APP_KEY,
+                            "android",
+                            Build.MODEL,
+                            version,
+                            PushServiceFactory.getCloudPushService().getDeviceId(),
+                            systemVersion, //系统版本号
+                            operatorName, //运营商
+                            netType, //网络类型 3G 4G等
+                            model    //手机品牌
+                    )
+                    .filter(new HttpResultFunc<>())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+
+            mRxManager.add(observable.subscribe(new MySubscriber<>(this, loginBtn, loginResult -> {
+                employ = loginResult.getEmployInfo();
+                Log.e("okhttp", employ.toString());
+                employ.saveOrUpdate();
+
+                getSetting();
+
+
+            })));
+        }
     }
 
     private Employ employ;
@@ -366,7 +414,7 @@ public class LoginActivity extends RxBaseActivity {
      */
     private void getSetting() {
         Observable<SettingResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .getAppSetting(EmUtil.getAppKey())
+                .getAppSetting(employ.app_key)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -400,6 +448,7 @@ public class LoginActivity extends RxBaseActivity {
 
     /**
      * 保存数据
+     *
      * @param employ
      */
     private void saveData(Employ employ) {
@@ -477,6 +526,7 @@ public class LoginActivity extends RxBaseActivity {
 
     /**
      * 双因子验证后回调
+     *
      * @param requestCode
      * @param resultCode
      * @param data

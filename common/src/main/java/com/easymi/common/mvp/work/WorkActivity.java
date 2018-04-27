@@ -33,6 +33,7 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.easymi.common.R;
 import com.easymi.common.activity.CreateActivity;
+import com.easymi.common.activity.ModelSetActivity;
 import com.easymi.common.adapter.NoticeAdapter;
 import com.easymi.common.adapter.OrderAdapter;
 import com.easymi.common.entity.AnnAndNotice;
@@ -115,6 +116,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     TextView todayIncome;
 
     TextView noOrderText;
+
+    LinearLayout bottomBtnCon;
 
     private CancelOrderReceiver cancelOrderReceiver;
     private EmployStatusChangeReceiver employStatusChangeReceiver;
@@ -210,6 +213,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         todayIncome = findViewById(R.id.today_income);
 
         noOrderText = findViewById(R.id.no_order_img);
+
+        bottomBtnCon = findViewById(R.id.bottom_btn_con);
 
         Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1));
         Log.e("employ", "" + employ);
@@ -310,7 +315,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         XApp.getInstance().syntheticVoice("", XApp.ON_LINE);
         listenOrderCon.setVisibility(View.VISIBLE);
         rippleBackground.startRippleAnimation();
-        onLineBtn.setVisibility(View.GONE);
+        bottomBtnCon.setVisibility(View.GONE);
         MQTTService.pushLoc(new BuildPushData(EmUtil.getLastLoc()));
         presenter.indexOrders();
     }
@@ -320,7 +325,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         XApp.getInstance().syntheticVoice("", XApp.OFF_LINE);
         listenOrderCon.setVisibility(View.GONE);
         rippleBackground.stopRippleAnimation();
-        onLineBtn.setVisibility(View.VISIBLE);
+        bottomBtnCon.setVisibility(View.VISIBLE);
         presenter.loadNoticeAndAnn();
     }
 
@@ -400,14 +405,14 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     public void showOnline() {
         listenOrderCon.setVisibility(View.VISIBLE);
         rippleBackground.startRippleAnimation();
-        onLineBtn.setVisibility(View.GONE);
+        bottomBtnCon.setVisibility(View.GONE);
     }
 
     @Override
     public void showOffline() {
         listenOrderCon.setVisibility(View.GONE);
         rippleBackground.stopRippleAnimation();
-        onLineBtn.setVisibility(View.VISIBLE);
+        bottomBtnCon.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -663,5 +668,10 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         AnnAndNotice announcement = new AnnAndNotice();
         announcement.annMessage = message;
         showAnn(announcement);
+    }
+
+    public void modelSet(View view) {
+        Intent intent = new Intent(WorkActivity.this, ModelSetActivity.class);
+        startActivity(intent);
     }
 }

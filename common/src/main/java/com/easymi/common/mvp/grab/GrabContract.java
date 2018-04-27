@@ -43,21 +43,27 @@ public interface GrabContract {
     }
 
     interface Presenter {
-        void queryOrder(Long orderId);
+        void queryOrder(MultipleOrder order);
 
-        void grabOrder(Long orderId);
+        void grabOrder(MultipleOrder order);
 
-        void takeOrder(Long orderId);
+        void takeOrder(MultipleOrder order);
 
         void routePlanByRouteSearch(LatLonPoint endPoint, List<LatLonPoint> pass);
     }
 
     interface Model {
-        Observable<MultipleOrderResult> queryOrder(Long orderId);
+        Observable<MultipleOrderResult> queryDJOrder(Long orderId);
 
-        Observable<MultipleOrderResult> grabOrder(Long orderId);
+        Observable<MultipleOrderResult> grabDJOrder(Long orderId);
 
-        Observable<MultipleOrderResult> takeOrder(Long orderId);
+        Observable<MultipleOrderResult> takeDJOrder(Long orderId);
+
+        Observable<MultipleOrderResult> queryZCOrder(Long orderId);
+
+        Observable<MultipleOrderResult> grabZCOrder(Long orderId);
+
+        Observable<MultipleOrderResult> takeZCOrder(Long orderId);
     }
 
 }

@@ -235,4 +235,43 @@ public interface CommApiService {
     Observable<AnnouncementResult> employAfficheById(@Query("id") Long noticeId,
                                                      @Query("app_key") String appKey);
 
+    /**
+     * 专车 --> 查询单个订单
+     *
+     * @param orderId
+     * @param appKey
+     * @return
+     */
+    @GET("driver/api/v1/orderFindOne")
+    Observable<MultipleOrderResult> queryZCOrder(@Query("order_id") Long orderId,
+                                                 @Query("app_key") String appKey);
+
+    /**
+     * 专车 --> 抢单
+     *
+     * @param orderId
+     * @param driverId
+     * @param appKey
+     * @return
+     */
+    @FormUrlEncoded
+    @PUT("driver/api/v1/grabOrder")
+    Observable<MultipleOrderResult> grabZCOrder(@Field("order_id") Long orderId,
+                                                @Field("driver_id") Long driverId,
+                                                @Field("app_key") String appKey);
+
+    /**
+     * 专车 -->接单
+     *
+     * @param orderId
+     * @param driverId
+     * @param appKey
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("driver/api/v1/takeOrder")
+    Observable<MultipleOrderResult> takeZCOrder(@Field("order_id") Long orderId,
+                                                @Field("driver_id") Long driverId,
+                                                @Field("app_key") String appKey);
+
 }

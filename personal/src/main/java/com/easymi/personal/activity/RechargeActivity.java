@@ -8,7 +8,9 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.easymi.component.Config;
+import com.easymi.component.entity.Setting;
 import com.easymi.component.utils.Log;
+
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -161,6 +163,11 @@ public class RechargeActivity extends RxBaseActivity {
         cusToolbar = findViewById(R.id.cus_toolbar);
 
         balanceText = findViewById(R.id.balance_text);
+
+        Setting setting = Setting.findOne();
+        pay50.setText(getString(R.string.money_sign) + setting.payMoney1);
+        pay100.setText(getString(R.string.money_sign) + setting.payMoney2);
+        pay200.setText(getString(R.string.money_sign) + setting.payMoney3);
     }
 
     class MyCheckChangeLis implements CompoundButton.OnCheckedChangeListener {
@@ -203,14 +210,15 @@ public class RechargeActivity extends RxBaseActivity {
 
     private double getMoney() {
         double money = 0.0;
+        Setting setting = Setting.findOne();
         if (pay50.isChecked()) {
-            money = 50;
+            money = setting.payMoney1;
         }
         if (pay100.isChecked()) {
-            money = 100;
+            money = setting.payMoney2;
         }
         if (pay200.isChecked()) {
-            money = 200;
+            money = setting.payMoney3;
         }
         if (!pay50.isChecked() && !pay100.isChecked() && !pay200.isChecked()) {
             if (StringUtils.isNotBlank(payCus.getText().toString())) {
@@ -285,7 +293,7 @@ public class RechargeActivity extends RxBaseActivity {
         }
     }
 
-    private void launchZfb(String  data) {
+    private void launchZfb(String data) {
         new Thread() {
             public void run() {
 
@@ -319,7 +327,7 @@ public class RechargeActivity extends RxBaseActivity {
                             Toast.LENGTH_SHORT).show();
                 }
                 break;
-                /**翼支付回调**/
+            /**翼支付回调**/
             case Constants.RESULT_VALIDATE_FAILURE:
                 // 合法性验证失败
                 BaseResponse resp = (BaseResponse) msg.obj;
