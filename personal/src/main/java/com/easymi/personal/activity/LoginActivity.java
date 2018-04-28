@@ -398,7 +398,7 @@ public class LoginActivity extends RxBaseActivity {
 
     private void getSetting(Employ employ) {
         Observable<SettingResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .getAppSetting(EmUtil.getAppKey())
+                .getAppSetting(employ.app_key)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
