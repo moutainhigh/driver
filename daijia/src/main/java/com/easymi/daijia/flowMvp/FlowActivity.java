@@ -312,7 +312,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
-            transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             transaction.replace(R.id.flow_frame, acceptFragment);
             transaction.commit();
         } else if (djOrder.orderStatus == DJOrderStatus.TAKE_ORDER) {
@@ -325,7 +325,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
-            transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             transaction.replace(R.id.flow_frame, toStartFragment);
             transaction.commit();
         } else if (djOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) {
@@ -338,7 +338,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
-            transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             transaction.replace(R.id.flow_frame, fragment);
             transaction.commit();
         } else if (djOrder.orderStatus == DJOrderStatus.ARRIVAL_BOOKPLACE_ORDER) {
@@ -351,7 +351,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
-            transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             transaction.replace(R.id.flow_frame, fragment);
             transaction.commit();
         } else if (djOrder.orderStatus == DJOrderStatus.START_WAIT_ORDER) {
@@ -365,7 +365,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
-            transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             transaction.replace(R.id.flow_frame, waitFragment);
             transaction.commit();
         } else if (djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
@@ -390,7 +390,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
-            transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             transaction.replace(R.id.flow_frame, runningFragment);
             transaction.commit();
 

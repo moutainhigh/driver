@@ -349,6 +349,11 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
     }
 
     @Override
+    public void hideTops() {
+
+    }
+
+    @Override
     public RxManager getManager() {
         return mRxManager;
     }
