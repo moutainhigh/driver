@@ -19,6 +19,7 @@ import com.easymi.component.R;
 import com.easymi.component.db.SqliteHelper;
 import com.easymi.component.loc.LocService;
 import com.easymi.component.utils.Log;
+import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
@@ -357,6 +358,13 @@ public class XApp extends MultiDexApplication {
         super.onTerminate();
         if (null != iflytekSpe) {
             iflytekSpe.destroy();
+        }
+    }
+
+    public void shake() {
+        boolean shakeAble = XApp.getMyPreferences().getBoolean(Config.SP_SHAKE_ABLE, true);
+        if (shakeAble) {//震动
+            PhoneUtil.vibrate(XApp.getInstance(), false);
         }
     }
 

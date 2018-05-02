@@ -18,12 +18,12 @@ import rx.schedulers.Schedulers;
  * Created by developerLzh on 2017/11/27 0027.
  */
 
-public class CreateZCMoldel implements CreateZCContract.Model {
+public class CreateZCModel implements CreateZCContract.Model {
 
     @Override
     public Observable<ZCTypeResult> queryZCType(Long companyId) {
         return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
-                .getBusiness(companyId, Config.DAIJIA, EmUtil.getAppKey())
+                .getZCBusiness(companyId, Config.DAIJIA, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

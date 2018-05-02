@@ -263,7 +263,7 @@ public interface ZCApiService {
      * @return
      */
     @GET("driver/api/v1/getBusiness")
-    Observable<ZCTypeResult> getBusiness(@Query("company_id") Long companyId,
+    Observable<ZCTypeResult> getZCBusiness(@Query("company_id") Long companyId,
                                          @Query("business") String business,
                                          @Query("app_key") String appKey
     );

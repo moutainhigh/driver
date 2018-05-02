@@ -102,17 +102,17 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
 
     @Override
     public void findById() {
-        timeText = getActivity().findViewById(R.id.time_text);
-        nameText = getActivity().findViewById(R.id.name_text);
-        phoneText = getActivity().findViewById(R.id.phone_text);
-        startPlace = getActivity().findViewById(R.id.start_place);
-        endPlace = getActivity().findViewById(R.id.end_place);
-        esMoney = getActivity().findViewById(R.id.es_money_text);
-        createOrder = getActivity().findViewById(R.id.create_order);
-        tabLayout = getActivity().findViewById(R.id.sub_tab_layout);
-        esMoneyCon = getActivity().findViewById(R.id.es_money_con);
-        about = getActivity().findViewById(R.id.about);
-        unit = getActivity().findViewById(R.id.unit);
+        timeText = getActivity().findViewById(R.id.zc_time_text);
+        nameText = getActivity().findViewById(R.id.zc_name_text);
+        phoneText = getActivity().findViewById(R.id.zc_phone_text);
+        startPlace = getActivity().findViewById(R.id.zc_start_place);
+        endPlace = getActivity().findViewById(R.id.zc_end_place);
+        esMoney = getActivity().findViewById(R.id.zc_es_money_text);
+        createOrder = getActivity().findViewById(R.id.zc_create_order);
+        tabLayout = getActivity().findViewById(R.id.zc_sub_tab_layout);
+        esMoneyCon = getActivity().findViewById(R.id.zc_es_money_con);
+        about = getActivity().findViewById(R.id.zc_about);
+        unit = getActivity().findViewById(R.id.zc_unit);
     }
 
     @Override

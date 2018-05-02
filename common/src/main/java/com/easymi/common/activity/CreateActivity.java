@@ -58,10 +58,12 @@ public class CreateActivity extends RxBaseActivity {
         fragments = new ArrayList<>();
         try {
             Class daijia = Class.forName("com.easymi.daijia.fragment.create.CreateDJFragment");
-            fragments.add((Fragment) daijia.newInstance());
-
             Class zhuanche = Class.forName("com.easymi.zhuanche.fragment.create.CreateZCFragment");
+            fragments.add((Fragment) daijia.newInstance());
             fragments.add((Fragment) zhuanche.newInstance());
+
+//            Class zhuanche = Class.forName("com.easymi.zhuanche.fragment.create.CreateZCFragment");
+//            fragments.add((Fragment) zhuanche.newInstance());
 //            fragments.add((Fragment) clazz.newInstance());
 //            fragments.add((Fragment) clazz.newInstance());
 //            fragments.add((Fragment) clazz.newInstance());
@@ -74,8 +76,6 @@ public class CreateActivity extends RxBaseActivity {
             e.printStackTrace();
         }
 
-        adapter = new VpAdapter(getSupportFragmentManager(), fragments);
-
         viewPager.setOffscreenPageLimit(5);
         adapter = new VpAdapter(getSupportFragmentManager(), fragments);
         viewPager.setAdapter(adapter);
@@ -83,10 +83,9 @@ public class CreateActivity extends RxBaseActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         tabLayout.getTabAt(0).setText(getString(R.string.create_daijia));
-//        tabLayout.getTabAt(1).setText(getString(R.string.create_zhuanche));
+        tabLayout.getTabAt(1).setText(getString(R.string.create_zhuanche));
 //        tabLayout.getTabAt(2).setText(getString(R.string.create_paotui));
 //        tabLayout.getTabAt(3).setText(getString(R.string.create_huoyun));
 //        tabLayout.getTabAt(4).setText(getString(R.string.create_zhuanxian));
-
     }
 }

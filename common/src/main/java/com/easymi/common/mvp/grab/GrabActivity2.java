@@ -194,6 +194,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
         shake();
         String voiceStr = getIntent().getStringExtra("voiceStr");
         XApp.getInstance().syntheticVoice(voiceStr);
+        XApp.getInstance().shake();
 
         multipleOrders.add(newOrder);
         buildFragments(newOrder, false);//添加一个fragment

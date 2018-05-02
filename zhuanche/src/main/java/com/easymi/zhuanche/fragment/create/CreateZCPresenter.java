@@ -34,7 +34,7 @@ public class CreateZCPresenter implements CreateZCContract.Presenter {
     public CreateZCPresenter(CreateZCContract.View view, Context context) {
         this.view = view;
         this.context = context;
-        this.model = new CreateZCMoldel();
+        this.model = new CreateZCModel();
     }
 
     @Override
