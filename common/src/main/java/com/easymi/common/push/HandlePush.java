@@ -95,7 +95,6 @@ public class HandlePush implements FeeChangeSubject {
                 loadOrder(order);
                 newShowNotify(XApp.getInstance(), "", XApp.getInstance().getString(R.string.send_order), XApp.getInstance().getString(R.string.send_order_content));
             } else if (msg.equals("cancelOrder")) {//取消订单
-                shake();
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("id");
                 order.orderType = jb.optJSONObject("data").optString("business");
@@ -141,25 +140,23 @@ public class HandlePush implements FeeChangeSubject {
                 message.setData(bundle);
                 handler.sendMessage(message);
             } else if (msg.equals("notice")) {//通知
-                shake();
                 long id = jb.optJSONObject("data").optLong("id");
 
                 loadNotice(id);
             } else if (msg.equals("announcement")) {//公告
-                shake();
                 long id = jb.optJSONObject("data").optLong("id");
 
                 loadAnn(id);
             } else if (msg.equals("freezed")) {//冻结
-                shake();
+                XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.freezed));
                 EmUtil.employLogout(XApp.getInstance());
             } else if (msg.equals("offline")) {//强制下线
-                shake();
+                XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.force_offline));
                 EmUtil.employLogout(XApp.getInstance());
             } else if (msg.equals("unbunding")) {//解绑
-                shake();
+                XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.unbunding));
                 EmUtil.employLogout(XApp.getInstance());
             } else if (msg.equals("finishOrder")) { //支付成功
@@ -168,7 +165,6 @@ public class HandlePush implements FeeChangeSubject {
                 order.orderType = jb.optJSONObject("data").optString("business");
                 loadOrder(order);
             } else if (msg.equals("back_order")) {//订单回收
-                shake();
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("id");
                 order.orderType = jb.optJSONObject("data").optString("business");
@@ -184,13 +180,6 @@ public class HandlePush implements FeeChangeSubject {
             }
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-    }
-
-    private void shake() {
-        boolean shakeAble = XApp.getMyPreferences().getBoolean(Config.SP_SHAKE_ABLE, true);
-        if (shakeAble) {//震动
-            PhoneUtil.vibrate(XApp.getInstance(), false);
         }
     }
 
@@ -266,6 +255,7 @@ public class HandlePush implements FeeChangeSubject {
                 false, new HaveErrSubscriberListener<NotitfyResult>() {
             @Override
             public void onNext(NotitfyResult multipleOrderResult) {
+                XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice( multipleOrderResult.employNoticeRecord.message, XApp.NEW_MSG);
                 Intent intent = new Intent();
                 intent.setAction(Config.BROAD_NOTICE);
@@ -297,6 +287,7 @@ public class HandlePush implements FeeChangeSubject {
                 false, new HaveErrSubscriberListener<AnnouncementResult>() {
             @Override
             public void onNext(AnnouncementResult announcementResult) {
+                XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.new_ann) + announcementResult.employAfficheRequest.message, XApp.NEW_ANN);
                 Intent intent = new Intent();
                 intent.setAction(Config.BROAD_ANN);
@@ -346,11 +337,11 @@ public class HandlePush implements FeeChangeSubject {
             MultipleOrder order = multipleOrderResult.order;
             if (order != null) {
                 if (order.orderStatus == DJOrderStatus.FINISH_ORDER) { //已完成订单
-                    shake();
                     String weihao = order.passengerPhone;
                     if (weihao.length() > 4) {
                         weihao = weihao.substring(weihao.length() - 4, weihao.length());
                     }
+                    XApp.getInstance().shake();
                     XApp.getInstance().syntheticVoice(
                             XApp.getMyString(R.string.pay_suc_1) +
                                     weihao +
@@ -443,6 +434,7 @@ public class HandlePush implements FeeChangeSubject {
                     intent1.putExtra("orderType", order1.orderType);
                     XApp.getInstance().sendBroadcast(intent1);
                 }
+                XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.you_have_order_cancel), XApp.CANCEL);
                 newShowNotify(XApp.getInstance(), "", XApp.getInstance().getString(R.string.cancel_order)
                         , XApp.getInstance().getString(R.string.you_have_order_cancel));
@@ -463,9 +455,11 @@ public class HandlePush implements FeeChangeSubject {
 
                     if (status != null) {
                         if (status.equals(EmployStatus.FROZEN)) {
+                            XApp.getInstance().shake();
                             XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.please_admin));
                             EmUtil.employLogout(XApp.getInstance());
                         } else if (status.equals(EmployStatus.OFFLINE)) {
+                            XApp.getInstance().shake();
                             XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.force_offline));
                             EmUtil.employLogout(XApp.getInstance());
                         } else {
@@ -487,6 +481,7 @@ public class HandlePush implements FeeChangeSubject {
                     intent3.putExtra("orderType", order3.orderType);
                     XApp.getInstance().sendBroadcast(intent3);
                 }
+                XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.you_have_order_back), XApp.CANCEL);
                 newShowNotify(XApp.getInstance(), "", XApp.getInstance().getString(R.string.back_order)
                         , XApp.getInstance().getString(R.string.you_have_order_back));

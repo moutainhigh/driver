@@ -123,6 +123,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
         shake();
 
         String voiceStr = getIntent().getStringExtra("voiceStr");
+        XApp.getInstance().shake();
         XApp.getInstance().syntheticVoice(voiceStr, XApp.GRAB);
 
 //        mSwipeBackHelper.setSwipeBackEnable(false);//抢单界面不允许侧滑返回
