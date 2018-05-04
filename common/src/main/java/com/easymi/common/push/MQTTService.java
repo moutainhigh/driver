@@ -51,7 +51,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
     public static final String TAG = MQTTService.class.getSimpleName();
 
     private static MqttAndroidClient client;
-    private MqttConnectOptions conOpt;
+    public MqttConnectOptions conOpt;
 
     //    private String host = "tcp://10.0.2.2:61613";
     private String host = Config.MQTT_HOST;
@@ -62,6 +62,18 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
     private String clientId = "driver-" + EmUtil.getEmployId();//身份唯一码
 
     private TraceReceiver traceReceiver;
+
+    private static MQTTService instance;
+
+    public static MQTTService getInstance() {
+        if (instance == null) {
+            Intent intent = new Intent(XApp.getInstance(), MQTTService.class);
+            intent.setPackage(XApp.getInstance().getPackageName());
+            XApp.getInstance().startService(intent);//重启推送
+            return null;
+        }
+        return instance;
+    }
 
     @Override
     public void onCreate() {
@@ -80,7 +92,8 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
     }
 
     private void initConn() {
-        if (client != null && client.isConnected() || isConning) {
+        instance = this;
+        if (client != null || isConning) {
             return;
         }
         // 订阅myTopic话题
@@ -93,7 +106,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 
         conOpt = new MqttConnectOptions();
         // 清除缓存
-        conOpt.setCleanSession(false);
+        conOpt.setCleanSession(true);
         // 设置超时时间，单位：秒
         conOpt.setConnectionTimeout(10);
         // 心跳包发送间隔，单位：秒
@@ -107,7 +120,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
         boolean doConnect = true;
         String message = "{\"terminal_uid\":\"" + clientId + "\"}";
         Log.e("Mqtt", message);
-        pullTopic = "/driver" + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
+        pullTopic = "/driver" + "/" + Config.APP_KEY + "/" + EmUtil.getEmployId();
         Integer qos = 0;
         Boolean retained = false;
         if ((!message.equals("")) || (!pullTopic.equals(""))) {
@@ -159,7 +172,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
         super.onDestroy();
     }
 
-    private boolean isConning = false;//是否正在连接中
+    private static boolean isConning = false;//是否正在连接中
 
     /**
      * 连接MQTT服务器
@@ -179,15 +192,25 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
         }
     }
 
+    private long lastSucTime = 0;
+
     // MQTT是否连接成功
-    private IMqttActionListener iMqttActionListener = new IMqttActionListener() {
+    public IMqttActionListener iMqttActionListener = new IMqttActionListener() {
 
         @Override
         public void onSuccess(IMqttToken arg0) {
             Log.e(TAG, "连接成功 ");
             isConning = false;
             try {
-                client.subscribe(pullTopic, 1);
+                if (lastSucTime == 0) {
+                    client.subscribe(pullTopic, 1);
+                } else {
+                    if (System.currentTimeMillis() - lastSucTime < 2000) {//小于2秒的回调
+                    } else {
+                        client.subscribe(pullTopic, 1);
+                    }
+                }
+                lastSucTime = System.currentTimeMillis();
             } catch (MqttException e) {
                 e.printStackTrace();
             } catch (NullPointerException e) { //在长时间失去网络连接后再连上mqtt，client有可能因为长时间限制而被回收，所以这里加上catch
@@ -201,8 +224,9 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
         public void onFailure(IMqttToken arg0, Throwable arg1) {
             isConning = false;
             arg1.printStackTrace();
+            Log.e(TAG, "连接失败");
             // 连接失败，重连
-            doClientConnection();
+//            doClientConnection();
         }
     };
 
@@ -226,17 +250,26 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 
         @Override
         public void connectionLost(Throwable arg0) {
+            Log.e(TAG, "失去连接");
+            if (null != client) {
+                try {
+                    client.unsubscribe(pullTopic);
+                    Log.e(TAG, "取消订阅的topic");
+                } catch (MqttException e) {
+                    e.printStackTrace();
+                }
+            }
 //            LocReceiver.getInstance().deleteObserver(MQTTService.this);
             // 失去连接，重连
-            doClientConnection();
+//            doClientConnection();
         }
     };
 
     /**
      * 判断网络是否连接
      */
-    private boolean isConnectIsNomarl() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) this.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+    private static boolean isConnectIsNomarl() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) XApp.getInstance().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = null;
         if (connectivityManager != null) {
             info = connectivityManager.getActiveNetworkInfo();
@@ -256,8 +289,6 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
     public IBinder onBind(Intent intent) {
         return null;
     }
-
-    private long lastUploadTime = 0;
 
     @Override
     public void receiveLoc(EmLoc loc) {
@@ -306,10 +337,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 //                FileUtil.saveLog(XApp.getInstance(),
 //                        TimeUtil.getTime("HH:mm:ss", System.currentTimeMillis()) + ":"
 //                                + "client is disable and start save data : " + new Gson().toJson(pushBean) + "\n\n");
-
-                Intent intent = new Intent(XApp.getInstance(), MQTTService.class);
-                intent.setPackage(XApp.getInstance().getPackageName());
-                XApp.getInstance().startService(intent);//重启推送
+                doConnected();
             }
         }
     }
@@ -331,6 +359,33 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
             Intent intent = new Intent(XApp.getInstance(), MQTTService.class);
             intent.setPackage(XApp.getInstance().getPackageName());
             XApp.getInstance().startService(intent);//重启推送
+        }
+    }
+
+    /**
+     * 外部启用重连
+     */
+    private static void doConnected() {
+        Log.e(TAG, "开始启用外部连接");
+        if (client == null) {
+            Log.e(TAG, "client == null 重启服务");
+            Intent intent = new Intent(XApp.getInstance(), MQTTService.class);
+            intent.setPackage(XApp.getInstance().getPackageName());
+            XApp.getInstance().startService(intent);//重启推送
+        } else {
+            try {
+                if (!client.isConnected() && isConnectIsNomarl() && !isConning) {
+                    if (null != MQTTService.getInstance()) {
+                        Log.e(TAG, "client != null 重新连接");
+                        isConning = true;
+                        client.connect(MQTTService.getInstance().conOpt, null, MQTTService.getInstance().iMqttActionListener);
+                    }
+                }
+            } catch (MqttException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
