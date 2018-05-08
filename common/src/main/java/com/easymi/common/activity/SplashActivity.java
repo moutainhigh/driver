@@ -1,12 +1,15 @@
 package com.easymi.common.activity;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.Window;
@@ -26,6 +29,7 @@ import com.easymi.component.permission.RxPermissions;
 import com.easymi.component.update.OnFailureListener;
 import com.easymi.component.update.UpdateError;
 import com.easymi.component.update.UpdateHelper;
+import com.easymi.component.utils.NetUtil;
 import com.easymi.component.utils.StringUtils;
 
 import java.io.IOException;
@@ -171,6 +175,27 @@ public class SplashActivity extends RxBaseActivity {
      * 检查更新
      */
     private void checkForUpdate() {
+
+        if (NetUtil.getNetWorkState(this) != NetUtil.NETWORK_NONE) { //判定用户是否单独关闭了该应用的网络
+            if (!NetUtil.ping()) {//通过ping baidu的方式来判断网络是否可用
+                AlertDialog dialog = new AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.hint))
+                        .setMessage(getString(R.string.reject_net))
+                        .setCancelable(false)
+                        .setPositiveButton(getString(R.string.ok), (dialog1, which) -> {
+                            Intent intent = new Intent();
+                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri uri = Uri.fromParts("package", getPackageName(), null);
+                            intent.setData(uri);
+                            startActivity(intent);
+                            jumpOver.setEnabled(false);
+                        })
+                        .create();
+                dialog.show();
+                return;
+            }
+        }
+
         new UpdateHelper(this, new UpdateHelper.OnNextListener() {
             @Override
             public void onNext() {

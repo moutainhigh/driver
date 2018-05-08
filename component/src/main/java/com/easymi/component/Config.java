@@ -22,8 +22,8 @@ public class Config {
     /**
      * APP_KEY
      */
-    public static final String APP_KEY = "4aea5f7368b0461395eeda353337a24c";//线上
-//    public static final String APP_KEY = "1f462eb305a2417c9564f2dfaf89da9c";//本地
+//    public static final String APP_KEY = "4aea5f7368b0461395eeda353337a24c";//线上
+    public static final String APP_KEY = "1f462eb305a2417c9564f2dfaf89da9c";//本地
     /**
      * 司机注册地址
      */
@@ -39,7 +39,7 @@ public class Config {
     /**
      * MQTT配置
      */
-    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn:1883";
+    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";
     public static final String MQTT_USER_NAME = "xiaoka";
     public static final String MQTT_PSW = "&mv7dHapB5J!95BJ";
     public static final String MQTT_PUSH_TOPIC = "/driver";
@@ -94,5 +94,5 @@ public class Config {
     public static final int FREE_LOC_TIME = 8000;//闲时定位时间 毫秒
     public static final int BUSY_LOC_TIME = 4000;//忙时定位时间 毫秒
 
-    public static final boolean COMM_USE = false;//是否是通用司机端
+    public static final boolean COMM_USE = true;//是否是通用司机端
 }
