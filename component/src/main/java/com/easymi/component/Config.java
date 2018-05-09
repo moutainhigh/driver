@@ -12,7 +12,7 @@ public class Config {
      * 主机地址
      */
 //    public static final String HOST = "http://192.168.0.72:8082/";
-    public static final String HOST = "https://api.xiaokayun.cn/";
+    public static final String HOST = "https://api.xiaokakj.cn/";
     /**
      * 图片服务器地址
      */
@@ -22,7 +22,7 @@ public class Config {
     /**
      * APP_KEY
      */
-    public static final String APP_KEY = "4aea5f7368b0461395eeda353337a24c";//线上
+    public static final String APP_KEY = "ead0368a2c2945cdbed0f85334120a4a";//线上
 //    public static final String APP_KEY = "1f462eb305a2417c9564f2dfaf89da9c";//本地
     /**
      * 司机注册地址
