@@ -12,7 +12,7 @@ public class Config {
      * 主机地址
      */
 //    public static final String HOST = "http://192.168.0.72:8082/";
-    public static final String HOST = "https://api.xiaokakj.cn/";
+    public static final String HOST = "http://api.xiaokakj.cn/";
     /**
      * 图片服务器地址
      */
