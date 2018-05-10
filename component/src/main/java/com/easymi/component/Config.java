@@ -94,5 +94,5 @@ public class Config {
     public static final int FREE_LOC_TIME = 8000;//闲时定位时间 毫秒
     public static final int BUSY_LOC_TIME = 4000;//忙时定位时间 毫秒
 
-    public static final boolean COMM_USE = true;//是否是通用司机端
+    public static final boolean COMM_USE = false;//是否是通用司机端
 }
