@@ -62,7 +62,7 @@ public class UpdateHelper {
     }
 
     public String checkUrl() {
-        return "http://apps.xiaokayun.com/api/v1/checkForUpdates?channel=OFFICIAL&platform=ANDROID&type=1&shortVersion=" + SysUtil.getVersionCode(context)
+        return "http://apps.xiaokayun.cn/api/v1/checkForUpdates?channel=OFFICIAL&platform=ANDROID&type=1&shortVersion=" + SysUtil.getVersionCode(context)
                 + "&appkey=" + EmUtil.getAppKey();
     }
 
