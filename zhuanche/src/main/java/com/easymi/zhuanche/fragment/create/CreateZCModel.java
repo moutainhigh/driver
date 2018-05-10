@@ -23,7 +23,7 @@ public class CreateZCModel implements CreateZCContract.Model {
     @Override
     public Observable<ZCTypeResult> queryZCType(Long companyId) {
         return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
-                .getZCBusiness(companyId, Config.DAIJIA, EmUtil.getAppKey())
+                .getZCBusiness(EmUtil.getAppKey(),1,100,companyId)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

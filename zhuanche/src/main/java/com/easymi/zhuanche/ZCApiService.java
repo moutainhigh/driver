@@ -255,17 +255,16 @@ public interface ZCApiService {
     );
 
     /**
-     * 获取代驾子类型
+     * 获取专车子类型
      *
-     * @param companyId
-     * @param business
      * @param appKey
      * @return
      */
-    @GET("driver/api/v1/getBusiness")
-    Observable<ZCTypeResult> getZCBusiness(@Query("company_id") Long companyId,
-                                         @Query("business") String business,
-                                         @Query("app_key") String appKey
+    @GET("/api/v1/specialcar/vehicleCharges")
+    Observable<ZCTypeResult> getZCBusiness(@Query("app_key") String appKey,
+                                           @Query("page")Integer page,
+                                           @Query("limit")Integer limit,
+                                           @Query("company_id")Long companyId
     );
 
     @GET("api/v1/passengerMustBe")
