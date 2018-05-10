@@ -306,7 +306,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
     @Override
     public void onlineSuc() {
-        XApp.getInstance().syntheticVoice("",XApp.ON_LINE);
+        XApp.getInstance().syntheticVoice("", XApp.ON_LINE);
         listenOrderCon.setVisibility(View.VISIBLE);
         rippleBackground.startRippleAnimation();
         onLineBtn.setVisibility(View.GONE);
@@ -315,7 +315,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
     @Override
     public void offlineSuc() {
-        XApp.getInstance().syntheticVoice("",XApp.OFF_LINE);
+        XApp.getInstance().syntheticVoice("", XApp.OFF_LINE);
         listenOrderCon.setVisibility(View.GONE);
         rippleBackground.stopRippleAnimation();
         onLineBtn.setVisibility(View.VISIBLE);
@@ -414,12 +414,13 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     @Override
     public void showDriverStatus() {
         Employ employ = EmUtil.getEmployInfo();
-        if (StringUtils.isNotBlank(employ.status)) {
-            if (employ.status.equals(EmployStatus.ONLINE)) {
-                showOffline();//非听单状态
-            } else {
-                showOnline();//听单状态
-            }
+
+        if (employ.status.equals(EmployStatus.OFFLINE) || employ.status.equals(EmployStatus.FROZEN)) {
+            EmUtil.employLogout(this);
+        } else if (employ.status.equals(EmployStatus.ONLINE)) {
+            showOffline();//非听单状态
+        } else {
+            showOnline();//听单状态
         }
     }
 
