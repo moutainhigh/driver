@@ -424,13 +424,17 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     public void showDriverStatus() {
         Employ employ = EmUtil.getEmployInfo();
         if (StringUtils.isNotBlank(employ.status)) {
-            if (employ.status.equals(EmployStatus.ONLINE)) {
+
+            if (employ.status.equals(EmployStatus.OFFLINE) || employ.status.equals(EmployStatus.FROZEN)) {
+                EmUtil.employLogout(this);
+            } else if (employ.status.equals(EmployStatus.ONLINE)) {
                 showOffline();//非听单状态
                 presenter.loadNoticeAndAnn();
             } else {
                 showOnline();//听单状态
                 presenter.indexOrders();
             }
+
         }
     }
 
