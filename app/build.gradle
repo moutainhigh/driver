@@ -9,7 +9,7 @@ android {
         applicationId "me.xiaoka.travel.driver"
         minSdkVersion cfg.minSdkVersion
         targetSdkVersion cfg.targetSdkVersion
-        versionCode 204
+        versionCode 205
         versionName "V5.0.0.002"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true

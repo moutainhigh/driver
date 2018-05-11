@@ -44,7 +44,7 @@ public class UpdateHelper {
                 updateInfo.versionCode = result.code;
                 updateInfo.versionName = result.version;
                 updateInfo.url = result.downloadUrl;
-                updateInfo.md5 = context.getPackageName() + "_" + result.version;//md5值本该是文件的MD5值  但是后台没有返回文件MD5，这里就采用包名+版本名校验是否存在
+                updateInfo.md5 = context.getPackageName() + "_" + result.code;//md5值本该是文件的MD5值  但是后台没有返回文件MD5，这里就采用包名+版本号校验是否存在
                 updateInfo.size = result.size * 1024;
                 updateInfo.isForce = result.force;
                 updateInfo.isIgnorable = false;
