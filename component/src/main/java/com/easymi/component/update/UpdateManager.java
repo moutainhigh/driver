@@ -154,14 +154,14 @@ public class UpdateManager {
             return this;
         }
 
-        private static long sLastTime;
+//        private static long sLastTime;
 
         public void check() {
-            long now = System.currentTimeMillis();
-            if (now - sLastTime < 3000) {
-                return;
-            }
-            sLastTime = now;
+//            long now = System.currentTimeMillis();
+//            if (now - sLastTime < 3000) {
+//                return;
+//            }
+//            sLastTime = now;
 
             if (TextUtils.isEmpty(mUrl)) {
                 mUrl = sUrl + sChannel;
