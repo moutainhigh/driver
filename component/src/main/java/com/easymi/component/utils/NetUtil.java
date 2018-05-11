@@ -4,6 +4,11 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 /**
  * Created by liuzihao on 2018/1/11.
  */
@@ -43,5 +48,37 @@ public class NetUtil {
             return NETWORK_NONE;
         }
         return NETWORK_NONE;
+    }
+
+    public static boolean ping() {
+        String result = null;
+        try {
+            String ip = "www.baidu.com";// 除非百度挂了，否则用这个应该没问题~
+            Process p = Runtime.getRuntime().exec("ping -c 1 -w 100 " + ip);// ping1次
+            // 读取ping的内容，可不加。
+            InputStream input = p.getInputStream();
+            BufferedReader in = new BufferedReader(new InputStreamReader(input));
+            StringBuffer stringBuffer = new StringBuffer();
+            String content = "";
+            while ((content = in.readLine()) != null) {
+                stringBuffer.append(content);
+            }
+            Log.i("TTT", "result content : " + stringBuffer.toString());
+            // PING的状态
+            int status = p.waitFor();
+            if (status == 0) {
+                result = "successful~";
+                return true;
+            } else {
+                result = "failed~ cannot reach the IP address";
+            }
+        } catch (IOException e) {
+            result = "failed~ IOException";
+        } catch (InterruptedException e) {
+            result = "failed~ InterruptedException";
+        } finally {
+            Log.i("TTT", "result = " + result);
+        }
+        return false;
     }
 }
