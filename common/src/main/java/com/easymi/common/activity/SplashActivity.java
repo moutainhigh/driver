@@ -78,7 +78,7 @@ public class SplashActivity extends RxBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e(TAG,"onResume");
+        Log.e(TAG, "onResume");
     }
 
     @Override
@@ -102,7 +102,7 @@ public class SplashActivity extends RxBaseActivity {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
-
+        Log.e(TAG, "initViews");
         jumpOver = findViewById(R.id.jump_over);
 
         rxPermissions = new RxPermissions(this);
@@ -111,6 +111,7 @@ public class SplashActivity extends RxBaseActivity {
 
         GifImageView view = findViewById(R.id.splash);
         try {
+            Log.e(TAG, "try");
             gifFromAssets = new GifDrawable(getAssets(), "splash_gif.gif");
             view.setBackground(gifFromAssets);
             gifFromAssets.pause();
@@ -120,8 +121,10 @@ public class SplashActivity extends RxBaseActivity {
             if (!rxPermissions.isGranted(Manifest.permission.ACCESS_COARSE_LOCATION)
                     || !rxPermissions.isGranted(Manifest.permission.READ_PHONE_STATE)
                     || !rxPermissions.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                Log.e(TAG, "showDialog");
                 showDialog();
             } else {
+                Log.e(TAG, "checkForUpdate");
                 checkForUpdate();
             }
         }
@@ -131,6 +134,7 @@ public class SplashActivity extends RxBaseActivity {
         if (needShowAnimate()) {
             XApp.getPreferencesEditor().putLong(Config.SP_LAST_SPLASH_TIME, System.currentTimeMillis()).apply();
             if (null != gifFromAssets) {
+                Log.e(TAG, "null != gifFromAssets");
                 leftTime = gifFromAssets.getDuration() / 1000;
                 jumpOver.setText(getString(R.string.jump_gif) + "(" + leftTime + getString(R.string.sec) + ")");
                 gifFromAssets.start();
@@ -138,9 +142,11 @@ public class SplashActivity extends RxBaseActivity {
                 gifFromAssets.addAnimationListener(loopNumber -> jump());
                 handler.sendEmptyMessageDelayed(0, 1000);
             } else {
+                Log.e(TAG, "null == gifFromAssets");
                 handler.postDelayed(this::jump, 2000);
             }
         } else {
+            Log.e(TAG, "! needShowAnimate");
             jump();
         }
     }
@@ -177,11 +183,13 @@ public class SplashActivity extends RxBaseActivity {
         new UpdateHelper(this, new UpdateHelper.OnNextListener() {
             @Override
             public void onNext() {
+                Log.e(TAG, "onNext");
                 runOnUiThread(() -> delayIn());
             }
 
             @Override
             public void onNoVersion() {
+                Log.e(TAG, "onNoVersion");
                 runOnUiThread(() -> delayIn());
             }
         });
@@ -234,6 +242,7 @@ public class SplashActivity extends RxBaseActivity {
      * 加载本地设置的语言
      */
     private void loadLanguage() {
+        Log.e(TAG, "loadLanguage");
         SharedPreferences preferences = XApp.getMyPreferences();
 
         Configuration config = getResources().getConfiguration();   //获取默认配置
