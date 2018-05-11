@@ -157,6 +157,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 
     @Override
     public void onDestroy() {
+        isConning = false;
         Log.e(TAG, "onDestroy:");
         try {
             // 订阅myTopic话题
