@@ -117,14 +117,14 @@ public class SplashActivity extends RxBaseActivity {
             gifFromAssets.pause();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-
-        if (!rxPermissions.isGranted(Manifest.permission.ACCESS_COARSE_LOCATION)
-                || !rxPermissions.isGranted(Manifest.permission.READ_PHONE_STATE)
-                || !rxPermissions.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            showDialog();
-        } else {
-            checkForUpdate();
+        } finally {
+            if (!rxPermissions.isGranted(Manifest.permission.ACCESS_COARSE_LOCATION)
+                    || !rxPermissions.isGranted(Manifest.permission.READ_PHONE_STATE)
+                    || !rxPermissions.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                showDialog();
+            } else {
+                checkForUpdate();
+            }
         }
     }
 
