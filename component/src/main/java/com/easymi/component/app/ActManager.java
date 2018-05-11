@@ -119,7 +119,7 @@ public class ActManager {
      *
      * @param activity activity
      */
-    private void finishActivity(Activity activity) {
+    public void finishActivity(Activity activity) {
         if (activity != null && activityStack != null) {
             activityStack.remove(activity);
             activity.finish();

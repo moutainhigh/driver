@@ -32,6 +32,7 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.easymi.common.R;
 import com.easymi.common.activity.CreateActivity;
+import com.easymi.common.activity.SplashActivity;
 import com.easymi.common.adapter.OrderAdapter;
 import com.easymi.common.entity.Announcement;
 import com.easymi.common.entity.BuildPushData;
@@ -46,6 +47,7 @@ import com.easymi.common.receiver.EmployStatusChangeReceiver;
 import com.easymi.common.receiver.NoticeReceiver;
 import com.easymi.common.widget.NearInfoWindowAdapter;
 import com.easymi.component.Config;
+import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
@@ -416,10 +418,15 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         Employ employ = EmUtil.getEmployInfo();
 
         if (employ.status.equals(EmployStatus.OFFLINE) || employ.status.equals(EmployStatus.FROZEN)) {
+//            ActManager.getInstance().finishAllActivity();
+//            Intent intent = new Intent(this, SplashActivity.class);
+//            startActivity(intent);
             EmUtil.employLogout(this);
         } else if (employ.status.equals(EmployStatus.ONLINE)) {
+            presenter.initDaemon();
             showOffline();//非听单状态
         } else {
+            presenter.initDaemon();
             showOnline();//听单状态
         }
     }
