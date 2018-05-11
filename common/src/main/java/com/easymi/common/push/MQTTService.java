@@ -150,7 +150,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
             if (null != client && client.isConnected()) {
                 client.publish(pushTopic, msg.getBytes(), qos, retained);
             }
-        } catch (MqttException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -166,7 +166,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
                 client.disconnect();
             }
             client = null;
-        } catch (MqttException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         super.onDestroy();
@@ -181,14 +181,16 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
         try {
             if (null != client) {
                 if (!client.isConnected() && isConnectIsNomarl()) {
-                    isConning = true;
                     client.connect(conOpt, null, iMqttActionListener);
+                    isConning = true;
                 }
             }
         } catch (MqttException e) {
             e.printStackTrace();
+            isConning = false;
         } catch (Exception e) {
             e.printStackTrace();
+            isConning = false;
         }
     }
 
@@ -255,7 +257,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
                 try {
                     client.unsubscribe(pullTopic);
                     Log.e(TAG, "取消订阅的topic");
-                } catch (MqttException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -377,13 +379,15 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
                 if (!client.isConnected() && isConnectIsNomarl() && !isConning) {
                     if (null != MQTTService.getInstance()) {
                         Log.e(TAG, "client != null 重新连接");
-                        isConning = true;
                         client.connect(MQTTService.getInstance().conOpt, null, MQTTService.getInstance().iMqttActionListener);
+                        isConning = true;
                     }
                 }
             } catch (MqttException e) {
+                isConning = false;
                 e.printStackTrace();
             } catch (Exception e) {
+                isConning = false;
                 e.printStackTrace();
             }
         }
