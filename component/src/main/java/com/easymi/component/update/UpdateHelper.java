@@ -41,10 +41,10 @@ public class UpdateHelper {
                 updateInfo = new UpdateInfo();
                 updateInfo.hasUpdate = result.hasNew;
                 updateInfo.updateContent = result.updateInfo;
-                updateInfo.versionCode = result.code;
+                updateInfo.versionCode = result.versionCode;
                 updateInfo.versionName = result.version;
                 updateInfo.url = result.downloadUrl;
-                updateInfo.md5 = context.getPackageName() + "_" + result.version;//md5值本该是文件的MD5值  但是后台没有返回文件MD5，这里就采用包名+版本名校验是否存在
+                updateInfo.md5 = context.getPackageName() + "_" + result.versionCode;//md5值本该是文件的MD5值  但是后台没有返回文件MD5，这里就采用包名+版本号校验是否存在
                 updateInfo.size = result.size * 1024;
                 updateInfo.isForce = result.force;
                 updateInfo.isIgnorable = false;
@@ -62,7 +62,7 @@ public class UpdateHelper {
     }
 
     public String checkUrl() {
-        return "http://vs.xiaoka.me:8080/api/v1/checkForUpdates?channel=OFFICIAL&platform=ANDROID&type=1&shortVersion=" + SysUtil.getVersionCode(context)
+        return "http://apps.xiaokayun.cn/api/v1/checkForUpdates?channel=OFFICIAL&platform=ANDROID&type=1&shortVersion=" + SysUtil.getVersionCode(context)
                 + "&appkey=" + EmUtil.getAppKey();
     }
 
