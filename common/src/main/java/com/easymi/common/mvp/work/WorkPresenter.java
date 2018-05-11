@@ -77,7 +77,6 @@ public class WorkPresenter implements WorkContract.Presenter {
         this.view = view;
         model = new WorkModel();
 
-        initDaemon();
     }
 
     /**

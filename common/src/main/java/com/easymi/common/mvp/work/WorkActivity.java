@@ -49,6 +49,7 @@ import com.easymi.common.receiver.NoticeReceiver;
 import com.easymi.common.widget.NearInfoWindowAdapter;
 import com.easymi.component.Config;
 import com.easymi.component.EmployStatus;
+import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
@@ -426,13 +427,16 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         if (StringUtils.isNotBlank(employ.status)) {
 
             if (employ.status.equals(EmployStatus.OFFLINE) || employ.status.equals(EmployStatus.FROZEN)) {
+                ActManager.getInstance().finishActivity(this);
                 EmUtil.employLogout(this);
             } else if (employ.status.equals(EmployStatus.ONLINE)) {
                 showOffline();//非听单状态
                 presenter.loadNoticeAndAnn();
+                presenter.initDaemon();
             } else {
                 showOnline();//听单状态
                 presenter.indexOrders();
+                presenter.initDaemon();
             }
 
         }
