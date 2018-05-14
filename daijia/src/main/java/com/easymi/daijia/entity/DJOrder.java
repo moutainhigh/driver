@@ -73,6 +73,8 @@ public class DJOrder implements Serializable {
     @SerializedName("passenger_tags")
     public String passengerTags;
 
+    public String orderSource;//订单来源
+
     public String carNo;//车牌号
 
     public List<Address> addresses;

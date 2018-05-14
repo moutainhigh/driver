@@ -287,4 +287,6 @@
     <string name="tixian_4">提现基数</string>
     <string name="tixian_5">元</string>
 
+    <string name="balance_personal">余额(元)</string>
+
 </resources>

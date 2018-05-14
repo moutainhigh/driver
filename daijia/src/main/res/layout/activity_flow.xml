@@ -108,87 +108,152 @@
                 android:id="@+id/expandable_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:el_expanded="false">
+                app:el_expanded="true">
 
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:orientation="vertical">
+                    android:background="@color/white">
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.1dp"
-                        android:background="@color/line_color" />
+                    <TextView
+                        android:id="@+id/order_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/corners_f2f2f2_stroke"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingTop="5dp"
+                        android:text=""
+                        android:layout_alignParentRight="true"/>
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="5dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:layout_toLeftOf="@+id/order_type"
+                        android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/order_number"
-                            android:textColor="#232323"
-                            android:textSize="16sp" />
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.1dp"
+                            android:background="@color/line_color" />
 
-                        <TextView
-                            android:id="@+id/order_number_text"
-                            android:layout_width="0.0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_weight="1"
-                            android:text=""
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/order_type"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:background="@drawable/corners_f2f2f2_stroke"
-                            android:paddingBottom="3dp"
-                            android:paddingLeft="5dp"
-                            android:paddingRight="5dp"
-                            android:paddingTop="3dp"
-                            android:text="" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <co.lujun.androidtagview.TagContainerLayout
-                            android:id="@+id/tag_container"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="10dp"
-                            android:paddingBottom="5dp"
-                            android:paddingLeft="10dp"
-                            android:paddingRight="10dp"
-                            android:paddingTop="5dp"
-                            app:container_background_color="#00ffffff"
-                            app:container_border_color="#00ffffff"
-                            app:container_border_radius="5dp"
-                            app:container_enable_drag="false"
-                            app:horizontal_interval="10dp"
-                            app:tag_background_color="@color/white"
-                            app:tag_border_color="@color/colorAccent"
-                            app:tag_clickable="true"
-                            app:tag_corner_radius="5dp"
-                            app:tag_text_color="@color/colorAccent"
-                            app:tag_theme="none"
-                            app:tag_vertical_padding="5dp"
-                            app:vertical_interval="10dp" />
+                            android:layout_marginLeft="10dp"
+                            android:paddingTop="8dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/order_number"
+                                android:textColor="#232323"
+                                android:textSize="16sp" />
+
+                            <com.easymi.component.widget.ForcedTextView
+                                android:id="@+id/order_number_text"
+                                android:layout_width="0.0dp"
+                                android:singleLine="true"
+                                android:ellipsize="marquee"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:layout_weight="1"
+                                android:text=""
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:paddingTop="8dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/order_create_type"
+                                android:textColor="#232323"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/order_create_type"
+                                android:layout_width="0.0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:layout_weight="1"
+                                android:text=""
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:paddingTop="8dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/order_dj_company"
+                                android:textColor="#232323"
+                                android:textSize="16sp" />
+
+                            <com.easymi.component.widget.ForcedTextView
+                                android:id="@+id/order_dj_company"
+                                android:layout_width="0.0dp"
+                                android:layout_height="wrap_content"
+                                android:singleLine="true"
+                                android:ellipsize="marquee"
+                                android:layout_marginLeft="5dp"
+                                android:layout_weight="1"
+                                android:text=""
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <co.lujun.androidtagview.TagContainerLayout
+                                android:id="@+id/tag_container"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="10dp"
+                                android:paddingBottom="5dp"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:paddingTop="5dp"
+                                app:container_background_color="#00ffffff"
+                                app:container_border_color="#00ffffff"
+                                app:container_border_radius="5dp"
+                                app:container_enable_drag="false"
+                                app:horizontal_interval="10dp"
+                                app:tag_background_color="@color/white"
+                                app:tag_border_color="@color/colorAccent"
+                                app:tag_clickable="true"
+                                app:tag_corner_radius="5dp"
+                                app:tag_text_color="@color/colorAccent"
+                                app:tag_theme="none"
+                                app:tag_vertical_padding="5dp"
+                                app:vertical_interval="10dp" />
+                        </LinearLayout>
+
                     </LinearLayout>
 
-                </LinearLayout>
+
+                </RelativeLayout>
+
             </net.cachapa.expandablelayout.ExpandableLayout>
 
             <LinearLayout

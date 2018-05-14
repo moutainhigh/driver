@@ -120,6 +120,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     TextView leftTimeText;
     TextView orderNumberText;
     TextView orderTypeText;
+    TextView orderCompanyText;
+    TextView orderCreateTypeText;
     TagContainerLayout tagContainerLayout;
     LinearLayout drawerFrame;
     private MapView mapView;
@@ -179,6 +181,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         drawerFrame = findViewById(R.id.drawer_frame);
         naviCon = findViewById(R.id.navi_con);
         expandableLayout = findViewById(R.id.expandable_layout);
+
+        orderCompanyText = findViewById(R.id.order_dj_company);
+        orderCreateTypeText = findViewById(R.id.order_create_type);
 
         mapView = findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
@@ -243,6 +248,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     public void showTopView() {
         orderNumberText.setText(djOrder.orderNumber);
         orderTypeText.setText(djOrder.orderDetailType);
+        orderCompanyText.setText(djOrder.companyName);
+        orderCreateTypeText.setText(djOrder.orderSource);//订单来源
         tagContainerLayout.removeAllTags();
         if (StringUtils.isNotBlank(djOrder.passengerTags)) {
             if (djOrder.passengerTags.contains(",")) {

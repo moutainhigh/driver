@@ -8,6 +8,8 @@
     <string name="refuse_order">拒单</string>
     <string name="to_start">前往预约地</string>
     <string name="change_end">修改终点</string>
+    <string name="order_create_type">下单方式</string>
+    <string name="order_dj_company">所属公司</string>
 
     <string name="start_drive">点击出发</string>
     <string name="start_wait">等待</string>

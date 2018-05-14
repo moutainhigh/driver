@@ -30,6 +30,7 @@ public class ConsumerInfoActivity extends RxBaseActivity {
     TextView consumer_company;
     TextView consumer_balance;
     TextView can_sign;
+    TextView consumer_grade;
 
     private Long orderId;
 
@@ -53,6 +54,7 @@ public class ConsumerInfoActivity extends RxBaseActivity {
         order_company = findViewById(R.id.order_company);
         consumer_company = findViewById(R.id.consumer_company);
         consumer_balance = findViewById(R.id.consumer_balance);
+        consumer_grade = findViewById(R.id.consumer_grade);
         can_sign = findViewById(R.id.can_sign);
 
         getConsumerInfo();
@@ -71,6 +73,7 @@ public class ConsumerInfoActivity extends RxBaseActivity {
                 consumer_type.setText(consumerResult.consumerInfo.consumerType == 1 ? getString(R.string.personal_consumer) : getString(R.string.can_sign_consumer));
                 order_company.setText(consumerResult.consumerInfo.orderCompany);
                 consumer_company.setText(consumerResult.consumerInfo.consumerCompany);
+                consumer_grade.setText(consumerResult.consumerInfo.consumerType);
                 consumer_balance.setText(consumerResult.consumerInfo.consumerBalance + getString(R.string.yuan));
                 can_sign.setText(consumerResult.consumerInfo.canSign ? getString(R.string.allow) : getString(R.string.not_allow));
             }
