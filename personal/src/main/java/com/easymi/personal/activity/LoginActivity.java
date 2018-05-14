@@ -79,8 +79,6 @@ public class LoginActivity extends RxBaseActivity {
 
     TextView textAgreement;
 
-    private static final int DOUBLE_CHECK = 0x111;
-
     @Override
     public int getLayoutId() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -144,17 +142,55 @@ public class LoginActivity extends RxBaseActivity {
     }
 
     private void initQiye() {
-        if (!Config.COMMON_USE) {
+
+        if (!Config.COMM_USE) {
             findViewById(R.id.qiye_con).setVisibility(View.GONE);
             findViewById(R.id.qiye_line).setVisibility(View.GONE);
         }
+
         String saveStr = XApp.getMyPreferences().getString(Config.SP_QIYE_CODE, "");
         if (StringUtils.isBlank(saveStr)) {
             xiala.setVisibility(View.GONE);
         } else {
             xiala.setVisibility(View.VISIBLE);
+            if (saveStr.contains(",")) {
+                String[] strs = saveStr.split(",");
+                editQiye.setText(strs[strs.length - 1]);
+            } else {
+                editQiye.setText(saveStr);
+            }
         }
         xiala.setOnClickListener(view -> selectedQiye());
+
+        strList.clear();
+
+        listPopupWindow = new ListPopupWindow(this);
+        adapter = new PopListAdapter(this);
+
+        if (saveStr.contains(",")) {
+            strList = Arrays.asList(saveStr.split(","));
+        } else {
+            strList.add(saveStr);
+        }
+        adapter.setStrList(strList);
+
+        // ListView适配器
+        listPopupWindow.setAdapter(
+                new ArrayAdapter<>(getApplicationContext(), R.layout.simple_list_item_1, strList));
+
+        listPopupWindow.setOnItemClickListener((parent, view, position, id) -> {
+            editQiye.setText(strList.get(position));
+            listPopupWindow.dismiss();
+        });
+
+        // 对话框的宽高
+        listPopupWindow.setWidth(500);
+        listPopupWindow.setAnchorView(xiala);
+
+        listPopupWindow.setHorizontalOffset(0);
+        listPopupWindow.setVerticalOffset(0);
+
+        listPopupWindow.setModal(false);
     }
 
     private void initBox() {
@@ -204,8 +240,8 @@ public class LoginActivity extends RxBaseActivity {
             public void afterTextChanged(Editable editable) {
                 if (null != editable && StringUtils.isNotBlank(editable.toString())) {
                     if (StringUtils.isNotBlank(editPsw.getText().toString())) {
-                        if(Config.COMMON_USE){
-                            if(StringUtils.isNotBlank(editQiye.getText().toString())){
+                        if (Config.COMM_USE) {
+                            if (StringUtils.isNotBlank(editQiye.getText().toString())) {
                                 setLoginBtnEnable(true);
                             } else {
                                 setLoginBtnEnable(false);
@@ -237,8 +273,8 @@ public class LoginActivity extends RxBaseActivity {
             public void afterTextChanged(Editable editable) {
                 if (null != editable && StringUtils.isNotBlank(editable.toString())) {
                     if (StringUtils.isNotBlank(editAccount.getText().toString())) {
-                        if(Config.COMMON_USE){
-                            if(StringUtils.isNotBlank(editQiye.getText().toString())){
+                        if (Config.COMM_USE) {
+                            if (StringUtils.isNotBlank(editQiye.getText().toString())) {
                                 setLoginBtnEnable(true);
                             } else {
                                 setLoginBtnEnable(false);
@@ -300,13 +336,6 @@ public class LoginActivity extends RxBaseActivity {
         }
     }
 
-    /**
-     * 登录
-     *
-     * @param name
-     * @param psw
-     * @param qiyeCode
-     */
     private void login(String name, String psw, String qiyeCode) {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
@@ -343,7 +372,7 @@ public class LoginActivity extends RxBaseActivity {
         }
         String netType = NetWorkUtil.getNetWorkTypeName(this);
 
-        if (Config.COMMON_USE) {
+        if (Config.COMM_USE) {
             Observable<LoginResult> observable = api
                     .loginByQiye(AesUtil.aesEncrypt(name, AesUtil.AAAAA),
                             AesUtil.aesEncrypt(psw, AesUtil.AAAAA),
@@ -363,13 +392,11 @@ public class LoginActivity extends RxBaseActivity {
                     .observeOn(AndroidSchedulers.mainThread());
 
             mRxManager.add(observable.subscribe(new MySubscriber<>(this, loginBtn, loginResult -> {
-                employ = loginResult.getEmployInfo();
+                Employ employ = loginResult.getEmployInfo();
                 Log.e("okhttp", employ.toString());
                 employ.saveOrUpdate();
 
-                getSetting();
-
-
+                getSetting(employ);
             })));
         } else {
             Observable<LoginResult> observable = api
@@ -391,28 +418,21 @@ public class LoginActivity extends RxBaseActivity {
                     .observeOn(AndroidSchedulers.mainThread());
 
             mRxManager.add(observable.subscribe(new MySubscriber<>(this, loginBtn, loginResult -> {
-                employ = loginResult.getEmployInfo();
+                Employ employ = loginResult.getEmployInfo();
                 Log.e("okhttp", employ.toString());
                 employ.saveOrUpdate();
 
-                getSetting();
-
-
+                getSetting(employ);
             })));
         }
     }
-
-    private Employ employ;
 
     @Override
     public boolean isEnableSwipe() {
         return false;
     }
 
-    /**
-     * 获取配置
-     */
-    private void getSetting() {
+    private void getSetting(Employ employ) {
         Observable<SettingResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .getAppSetting(employ.app_key)
                 .filter(new HttpResultFunc<>())
@@ -423,6 +443,37 @@ public class LoginActivity extends RxBaseActivity {
             Setting setting = settingResult.setting;
             if (null != setting) {
 
+                SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+                editor.putBoolean(Config.SP_ISLOGIN, true);
+                editor.putLong(Config.SP_DRIVERID, employ.id);
+                editor.putString(Config.SP_LOGIN_ACCOUNT, AesUtil.aesEncrypt(employ.phone, AesUtil.AAAAA));
+                editor.putBoolean(Config.SP_REMEMBER_PSW, checkboxRemember.isChecked());
+                editor.putString(Config.SP_APP_KEY, employ.app_key);
+                editor.putString(Config.SP_LOGIN_PSW, employ.password);
+                editor.apply();
+
+                String saveStr = XApp.getMyPreferences().getString(Config.SP_QIYE_CODE, "");
+                if (StringUtils.isNotBlank(saveStr)) {
+                    List<String> stringList = new ArrayList<>();
+                    if (saveStr.contains(",")) {
+                        stringList = Arrays.asList(saveStr.split(","));
+                    } else {
+                        stringList.add(saveStr);
+                    }
+                    boolean haveStr = false;
+                    for (String s : stringList) {
+                        if (s.equals(editQiye.getText().toString())) {
+                            haveStr = true;
+                            break;
+                        }
+                    }
+                    if (!haveStr) {
+                        saveStr += "," + editQiye.getText().toString();
+                        XApp.getMyPreferences().edit().putString(Config.SP_QIYE_CODE, saveStr).apply();
+                    }
+                } else {
+                    XApp.getMyPreferences().edit().putString(Config.SP_QIYE_CODE, editQiye.getText().toString()).apply();
+                }
 
                 Setting.deleteAll();
                 setting.save();
@@ -432,9 +483,8 @@ public class LoginActivity extends RxBaseActivity {
                     intent.putExtra("flag", "doubleCheck");
                     intent.putExtra("phone", editAccount.getText().toString());
                     intent.putExtra("psw", editPsw.getText().toString());
-                    startActivityForResult(intent, DOUBLE_CHECK);
+                    startActivity(intent);
                 } else {
-                    saveData(employ);
                     ARouter.getInstance()
                             .build("/common/WorkActivity")
                             .navigation();
@@ -446,102 +496,10 @@ public class LoginActivity extends RxBaseActivity {
 
     List<String> strList = new ArrayList<>();
 
-    /**
-     * 保存数据
-     *
-     * @param employ
-     */
-    private void saveData(Employ employ) {
-        if (employ == null) {
-            return;
-        }
-        SharedPreferences.Editor editor = XApp.getPreferencesEditor();
-        editor.putBoolean(Config.SP_ISLOGIN, true);
-        editor.putLong(Config.SP_DRIVERID, employ.id);
-        editor.putString(Config.SP_LOGIN_ACCOUNT, AesUtil.aesEncrypt(employ.phone, AesUtil.AAAAA));
-        editor.putBoolean(Config.SP_REMEMBER_PSW, checkboxRemember.isChecked());
-        editor.putString(Config.SP_APP_KEY, employ.app_key);
-        editor.putString(Config.SP_LOGIN_PSW, employ.password);
-        editor.apply();
-
-        String saveStr = XApp.getMyPreferences().getString(Config.SP_QIYE_CODE, "");
-        if (StringUtils.isNotBlank(saveStr)) {
-            List<String> stringList = new ArrayList<>();
-            if (saveStr.contains(",")) {
-                stringList = Arrays.asList(saveStr.split(","));
-            } else {
-                stringList.add(saveStr);
-            }
-            boolean haveStr = false;
-            for (String s : stringList) {
-                if (s.equals(editQiye.getText().toString())) {
-                    haveStr = true;
-                    break;
-                }
-            }
-            if (!haveStr) {
-                saveStr += "," + editQiye.getText().toString();
-                XApp.getMyPreferences().edit().putString(Config.SP_QIYE_CODE, saveStr).apply();
-            }
-        } else {
-            XApp.getMyPreferences().edit().putString(Config.SP_QIYE_CODE, editQiye.getText().toString()).apply();
-        }
-    }
+    private ListPopupWindow listPopupWindow;
+    PopListAdapter adapter;
 
     private void selectedQiye() {
-
-        strList.clear();
-
-        final ListPopupWindow listPopupWindow = new ListPopupWindow(this);
-        PopListAdapter adapter = new PopListAdapter(this);
-
-        String saveStr = XApp.getMyPreferences().getString(Config.SP_QIYE_CODE, "");
-        if (saveStr.contains(",")) {
-            strList = Arrays.asList(saveStr.split(","));
-        } else {
-            strList.add(saveStr);
-        }
-        adapter.setStrList(strList);
-
-        // ListView适配器
-        listPopupWindow.setAdapter(
-                new ArrayAdapter<>(getApplicationContext(), R.layout.simple_list_item_1, strList));
-
-        listPopupWindow.setOnItemClickListener((parent, view, position, id) -> {
-            editQiye.setText(strList.get(position));
-            listPopupWindow.dismiss();
-        });
-
-        // 对话框的宽高
-        listPopupWindow.setWidth(500);
-        listPopupWindow.setAnchorView(xiala);
-
-        listPopupWindow.setHorizontalOffset(0);
-        listPopupWindow.setVerticalOffset(0);
-
-        listPopupWindow.setModal(false);
-
         listPopupWindow.show();
-    }
-
-    /**
-     * 双因子验证后回调
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == DOUBLE_CHECK) {
-                saveData(employ);
-                ARouter.getInstance()
-                        .build("/common/WorkActivity")
-                        .navigation();
-                finish();
-            }
-        }
     }
 }
