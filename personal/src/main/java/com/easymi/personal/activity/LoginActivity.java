@@ -153,8 +153,44 @@ public class LoginActivity extends RxBaseActivity {
             xiala.setVisibility(View.GONE);
         } else {
             xiala.setVisibility(View.VISIBLE);
+            if (saveStr.contains(",")) {
+                String[] strs = saveStr.split(",");
+                editQiye.setText(strs[strs.length - 1]);
+            } else {
+                editQiye.setText(saveStr);
+            }
         }
         xiala.setOnClickListener(view -> selectedQiye());
+
+        strList.clear();
+
+        listPopupWindow = new ListPopupWindow(this);
+        adapter = new PopListAdapter(this);
+
+        if (saveStr.contains(",")) {
+            strList = Arrays.asList(saveStr.split(","));
+        } else {
+            strList.add(saveStr);
+        }
+        adapter.setStrList(strList);
+
+        // ListView适配器
+        listPopupWindow.setAdapter(
+                new ArrayAdapter<>(getApplicationContext(), R.layout.simple_list_item_1, strList));
+
+        listPopupWindow.setOnItemClickListener((parent, view, position, id) -> {
+            editQiye.setText(strList.get(position));
+            listPopupWindow.dismiss();
+        });
+
+        // 对话框的宽高
+        listPopupWindow.setWidth(500);
+        listPopupWindow.setAnchorView(xiala);
+
+        listPopupWindow.setHorizontalOffset(0);
+        listPopupWindow.setVerticalOffset(0);
+
+        listPopupWindow.setModal(false);
     }
 
     private void initBox() {
@@ -460,39 +496,10 @@ public class LoginActivity extends RxBaseActivity {
 
     List<String> strList = new ArrayList<>();
 
+    private ListPopupWindow listPopupWindow;
+    PopListAdapter adapter;
+
     private void selectedQiye() {
-
-        strList.clear();
-
-        final ListPopupWindow listPopupWindow = new ListPopupWindow(this);
-        PopListAdapter adapter = new PopListAdapter(this);
-
-        String saveStr = XApp.getMyPreferences().getString(Config.SP_QIYE_CODE, "");
-        if (saveStr.contains(",")) {
-            strList = Arrays.asList(saveStr.split(","));
-        } else {
-            strList.add(saveStr);
-        }
-        adapter.setStrList(strList);
-
-        // ListView适配器
-        listPopupWindow.setAdapter(
-                new ArrayAdapter<>(getApplicationContext(), R.layout.simple_list_item_1, strList));
-
-        listPopupWindow.setOnItemClickListener((parent, view, position, id) -> {
-            editQiye.setText(strList.get(position));
-            listPopupWindow.dismiss();
-        });
-
-        // 对话框的宽高
-        listPopupWindow.setWidth(500);
-        listPopupWindow.setAnchorView(xiala);
-
-        listPopupWindow.setHorizontalOffset(0);
-        listPopupWindow.setVerticalOffset(0);
-
-        listPopupWindow.setModal(false);
-
         listPopupWindow.show();
     }
 }
