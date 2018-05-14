@@ -12,5 +12,5 @@ public class NearDriver {
     public double distance;
     public double lat;
     public double lng;
-    public int status;
+    public String status;
 }
