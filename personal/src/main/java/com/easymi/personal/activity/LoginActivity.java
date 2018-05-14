@@ -143,7 +143,7 @@ public class LoginActivity extends RxBaseActivity {
 
     private void initQiye() {
 
-        if (!Config.COMM_USE) {
+        if (!Config.COMMON_USE) {
             findViewById(R.id.qiye_con).setVisibility(View.GONE);
             findViewById(R.id.qiye_line).setVisibility(View.GONE);
         }
@@ -153,12 +153,6 @@ public class LoginActivity extends RxBaseActivity {
             xiala.setVisibility(View.GONE);
         } else {
             xiala.setVisibility(View.VISIBLE);
-            if (saveStr.contains(",")) {
-                String[] strs = saveStr.split(",");
-                editQiye.setText(strs[strs.length - 1]);
-            } else {
-                editQiye.setText(saveStr);
-            }
         }
         xiala.setOnClickListener(view -> selectedQiye());
 
@@ -240,7 +234,7 @@ public class LoginActivity extends RxBaseActivity {
             public void afterTextChanged(Editable editable) {
                 if (null != editable && StringUtils.isNotBlank(editable.toString())) {
                     if (StringUtils.isNotBlank(editPsw.getText().toString())) {
-                        if (Config.COMM_USE) {
+                        if (Config.COMMON_USE) {
                             if (StringUtils.isNotBlank(editQiye.getText().toString())) {
                                 setLoginBtnEnable(true);
                             } else {
@@ -273,7 +267,7 @@ public class LoginActivity extends RxBaseActivity {
             public void afterTextChanged(Editable editable) {
                 if (null != editable && StringUtils.isNotBlank(editable.toString())) {
                     if (StringUtils.isNotBlank(editAccount.getText().toString())) {
-                        if (Config.COMM_USE) {
+                        if (Config.COMMON_USE) {
                             if (StringUtils.isNotBlank(editQiye.getText().toString())) {
                                 setLoginBtnEnable(true);
                             } else {
@@ -325,6 +319,7 @@ public class LoginActivity extends RxBaseActivity {
             editAccount.setText(acc);
             editPsw.setText(psw);
         }
+        editQiye.setText(XApp.getMyPreferences().getString(Config.SP_LAT_QIYE_CODE, ""));
     }
 
     private void setLoginBtnEnable(boolean enable) {
@@ -372,7 +367,7 @@ public class LoginActivity extends RxBaseActivity {
         }
         String netType = NetWorkUtil.getNetWorkTypeName(this);
 
-        if (Config.COMM_USE) {
+        if (Config.COMMON_USE) {
             Observable<LoginResult> observable = api
                     .loginByQiye(AesUtil.aesEncrypt(name, AesUtil.AAAAA),
                             AesUtil.aesEncrypt(psw, AesUtil.AAAAA),
@@ -450,6 +445,7 @@ public class LoginActivity extends RxBaseActivity {
                 editor.putBoolean(Config.SP_REMEMBER_PSW, checkboxRemember.isChecked());
                 editor.putString(Config.SP_APP_KEY, employ.app_key);
                 editor.putString(Config.SP_LOGIN_PSW, employ.password);
+                editor.putString(Config.SP_LAT_QIYE_CODE, editQiye.getText().toString());
                 editor.apply();
 
                 String saveStr = XApp.getMyPreferences().getString(Config.SP_QIYE_CODE, "");
