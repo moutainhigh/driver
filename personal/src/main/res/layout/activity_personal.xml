@@ -35,9 +35,10 @@
                             android:src="@mipmap/photo_default" />
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
+                            android:gravity="center"
                             android:orientation="horizontal">
 
                             <TextView
@@ -59,6 +60,7 @@
                                     android:layout_height="20dp"
                                     android:background="@drawable/corners_primary"
                                     android:gravity="center"
+                                    android:layout_marginLeft="10dp"
                                     android:orientation="horizontal"
                                     android:paddingBottom="2dp"
                                     android:paddingLeft="4dp"
@@ -83,7 +85,7 @@
                                 <TextView
                                     android:id="@+id/user_name"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="20dp"
+                                    android:layout_height="wrap_content"
                                     android:layout_marginLeft="10dp"
                                     android:gravity="center"
                                     android:text=""
@@ -122,6 +124,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/balance_personal"
+                        android:layout_marginLeft="10dp"
                         android:layout_centerVertical="true"
                         android:textColor="@color/white"
                         android:textSize="15sp"/>
@@ -132,7 +135,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@+id/balance_text"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="2dp"
+                        android:layout_marginLeft="5dp"
                         android:textColor="@color/yellow"
                         android:textSize="15sp"/>
                 </RelativeLayout>

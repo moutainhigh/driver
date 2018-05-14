@@ -13,6 +13,7 @@ public class ConsumerInfo {
     @SerializedName("passenger_type")
     public int consumerType;// 1个人客户  2企业客户
 
+    @SerializedName("passenger_level")
     public String consumerGrade;//客户等级
 
     @SerializedName("order_company")

@@ -73,7 +73,7 @@ public class ConsumerInfoActivity extends RxBaseActivity {
                 consumer_type.setText(consumerResult.consumerInfo.consumerType == 1 ? getString(R.string.personal_consumer) : getString(R.string.can_sign_consumer));
                 order_company.setText(consumerResult.consumerInfo.orderCompany);
                 consumer_company.setText(consumerResult.consumerInfo.consumerCompany);
-                consumer_grade.setText(consumerResult.consumerInfo.consumerType);
+                consumer_grade.setText(consumerResult.consumerInfo.consumerGrade);
                 consumer_balance.setText(consumerResult.consumerInfo.consumerBalance + getString(R.string.yuan));
                 can_sign.setText(consumerResult.consumerInfo.canSign ? getString(R.string.allow) : getString(R.string.not_allow));
             }
