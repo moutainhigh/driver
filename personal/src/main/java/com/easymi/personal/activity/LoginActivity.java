@@ -6,12 +6,16 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.ListPopupWindow;
+import android.support.v7.widget.RecyclerView;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
@@ -39,9 +43,11 @@ import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
+import com.easymi.component.widget.CustomPopWindow;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
+import com.easymi.personal.adapter.PopAdapter;
 import com.easymi.personal.adapter.PopListAdapter;
 import com.easymi.personal.result.LoginResult;
 import com.easymi.personal.result.SettingResult;
@@ -143,7 +149,7 @@ public class LoginActivity extends RxBaseActivity {
 
     private void initQiye() {
 
-        if (!Config.COMMON_USE) {
+        if (!Config.COMM_USE) {
             findViewById(R.id.qiye_con).setVisibility(View.GONE);
             findViewById(R.id.qiye_line).setVisibility(View.GONE);
         }
@@ -158,33 +164,64 @@ public class LoginActivity extends RxBaseActivity {
 
         strList.clear();
 
-        listPopupWindow = new ListPopupWindow(this);
-        adapter = new PopListAdapter(this);
-
         if (saveStr.contains(",")) {
-            strList = Arrays.asList(saveStr.split(","));
+            strList = new ArrayList<>(Arrays.asList(saveStr.split(",")));
         } else {
             strList.add(saveStr);
         }
-        adapter.setStrList(strList);
 
-        // ListView适配器
-        listPopupWindow.setAdapter(
-                new ArrayAdapter<>(getApplicationContext(), R.layout.simple_list_item_1, strList));
+    }
 
-        listPopupWindow.setOnItemClickListener((parent, view, position, id) -> {
-            editQiye.setText(strList.get(position));
-            listPopupWindow.dismiss();
+    CustomPopWindow mListPopWindow;
+
+    private void initPop() {
+        View contentView = LayoutInflater.from(this).inflate(R.layout.pop_list, null);
+        //处理popWindow 显示内容
+        handleListView(contentView);
+        //创建并显示popWindow
+        mListPopWindow = new CustomPopWindow.PopupWindowBuilder(this)
+                .setView(contentView)
+                .size(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)//显示大小
+                .create()
+                .showAsDropDown(editQiye, 0, 20);
+    }
+
+    private void handleListView(View contentView) {
+        RecyclerView recyclerView = contentView.findViewById(R.id.recyclerView);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        manager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(manager);
+        PopAdapter adapter = new PopAdapter();
+        adapter.setData(strList, editQiye.getText().toString());
+        adapter.setOnItemClick(new PopAdapter.OnItemClick() {
+            @Override
+            public void onItemClick(String qiye) {
+                editQiye.setText(qiye);
+                editQiye.setSelection(qiye.length());
+                mListPopWindow.dissmiss();
+            }
+
+            @Override
+            public void onDataDelete(String qiye, int position) {
+                strList.remove(position);
+                adapter.setData(strList, editQiye.getText().toString());
+                if (strList.size() > 0) {
+                    StringBuilder sp = new StringBuilder();
+                    for (int i = 0; i < strList.size(); i++) {
+                        sp.append(strList.get(i));
+                        if (i != strList.size() - 1) {
+                            sp.append(",");
+                        }
+                    }
+                    XApp.getPreferencesEditor().putString(Config.SP_QIYE_CODE, sp.toString()).apply();
+                } else {
+                    XApp.getPreferencesEditor().putString(Config.SP_QIYE_CODE, "").apply();
+                    xiala.setVisibility(View.GONE);
+                }
+            }
         });
-
-        // 对话框的宽高
-        listPopupWindow.setWidth(500);
-        listPopupWindow.setAnchorView(xiala);
-
-        listPopupWindow.setHorizontalOffset(0);
-        listPopupWindow.setVerticalOffset(0);
-
-        listPopupWindow.setModal(false);
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     private void initBox() {
@@ -234,7 +271,7 @@ public class LoginActivity extends RxBaseActivity {
             public void afterTextChanged(Editable editable) {
                 if (null != editable && StringUtils.isNotBlank(editable.toString())) {
                     if (StringUtils.isNotBlank(editPsw.getText().toString())) {
-                        if (Config.COMMON_USE) {
+                        if (Config.COMM_USE) {
                             if (StringUtils.isNotBlank(editQiye.getText().toString())) {
                                 setLoginBtnEnable(true);
                             } else {
@@ -267,7 +304,7 @@ public class LoginActivity extends RxBaseActivity {
             public void afterTextChanged(Editable editable) {
                 if (null != editable && StringUtils.isNotBlank(editable.toString())) {
                     if (StringUtils.isNotBlank(editAccount.getText().toString())) {
-                        if (Config.COMMON_USE) {
+                        if (Config.COMM_USE) {
                             if (StringUtils.isNotBlank(editQiye.getText().toString())) {
                                 setLoginBtnEnable(true);
                             } else {
@@ -348,7 +385,7 @@ public class LoginActivity extends RxBaseActivity {
         /**
          * 系统版本
          */
-        String systemVersion = android.os.Build.VERSION.RELEASE;
+        String systemVersion = Build.VERSION.RELEASE;
 
         String model = Build.MODEL;
 
@@ -367,7 +404,7 @@ public class LoginActivity extends RxBaseActivity {
         }
         String netType = NetWorkUtil.getNetWorkTypeName(this);
 
-        if (Config.COMMON_USE) {
+        if (Config.COMM_USE) {
             Observable<LoginResult> observable = api
                     .loginByQiye(AesUtil.aesEncrypt(name, AesUtil.AAAAA),
                             AesUtil.aesEncrypt(psw, AesUtil.AAAAA),
@@ -492,10 +529,10 @@ public class LoginActivity extends RxBaseActivity {
 
     List<String> strList = new ArrayList<>();
 
-    private ListPopupWindow listPopupWindow;
-    PopListAdapter adapter;
+//    private ListPopupWindow listPopupWindow;
+//    PopListAdapter adapter;
 
     private void selectedQiye() {
-        listPopupWindow.show();
+        initPop();
     }
 }
