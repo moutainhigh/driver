@@ -1,41 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
     <LinearLayout
         android:id="@+id/pop_back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center">
+
+        <View
+            android:layout_width="0.1dp"
+            android:layout_height="match_parent"
+            android:background="@color/line_color" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_qiye_navi"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="10dp"
+            android:src="@mipmap/ic_qiye_navi" />
+
         <TextView
             android:id="@+id/text_content"
             android:layout_width="0.0dp"
-            android:layout_weight="1"
             android:layout_height="45dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
-            android:layout_marginLeft="10dp"
             android:singleLine="true"
-            android:text="1234567890"
-            />
+            android:text="1234567890" />
 
         <ImageView
             android:id="@+id/ic_pop_close"
             android:layout_width="18dp"
             android:layout_height="18dp"
-            android:src="@mipmap/ic_qiye_close"
-            android:layout_marginRight="10dp"/>
+            android:layout_marginRight="10dp"
+            android:src="@mipmap/ic_qiye_close" />
+
+        <View
+            android:layout_width="0.1dp"
+            android:layout_height="match_parent"
+            android:background="@color/line_color" />
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
-        android:background="@color/line_color"/>
+        android:background="@color/line_color" />
 
 </LinearLayout>
