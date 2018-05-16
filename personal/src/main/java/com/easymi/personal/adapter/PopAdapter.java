@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.easymi.component.app.XApp;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.personal.R;
 
@@ -44,10 +45,12 @@ public class PopAdapter extends RecyclerView.Adapter {
 
         viewHolder.mTextView.setText(mData.get(position));
         if (StringUtils.isNotBlank(showingStr) && showingStr.equals(mData.get(position))) {
+            viewHolder.mTextView.setTextColor(XApp.getInstance().getResources().getColor(R.color.white));
             viewHolder.linearLayout.setBackgroundResource(R.color.colorAccent);
             viewHolder.imageView.setImageResource(R.drawable.ic_check_white_24dp);
             viewHolder.imageView.setOnClickListener(null);
         } else {
+            viewHolder.mTextView.setTextColor(XApp.getInstance().getResources().getColor(R.color.text_default));
             viewHolder.linearLayout.setBackgroundResource(R.color.white);
             viewHolder.imageView.setImageResource(R.mipmap.ic_qiye_close);
             viewHolder.imageView.setOnClickListener(v -> {

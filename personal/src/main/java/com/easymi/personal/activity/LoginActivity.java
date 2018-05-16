@@ -22,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -183,7 +184,11 @@ public class LoginActivity extends RxBaseActivity {
                 .setView(contentView)
                 .size(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)//显示大小
                 .create()
-                .showAsDropDown(editQiye, 0, 20);
+                .showAsDropDown(editQiye, 0, 0);
+
+        findViewById(R.id.hide_able_con).setVisibility(View.INVISIBLE);
+
+        mListPopWindow.getPopupWindow().setOnDismissListener(() -> findViewById(R.id.hide_able_con).setVisibility(View.VISIBLE));
     }
 
     private void handleListView(View contentView) {
