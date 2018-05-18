@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="me.xiaoka.travel.driver">
+    package="com.rvakva.travel.publicdriver">
 
     <permission
-        android:name="me.xiaoka.travel.driver.permission"
+        android:name="com.rvakva.travel.publicdriver.permission"
         android:protectionLevel="normal" />
 
     <!--用于访问网络，网络定位需要上网-->
@@ -58,7 +58,7 @@
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="fa28713223d44eb02d98f7b0105813e1" />
+            android:value="fbad82c817823ff0030e8f0741de7d08" />
 
         <service android:name="com.amap.api.location.APSService" />
 
