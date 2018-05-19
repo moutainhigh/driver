@@ -25,6 +25,7 @@ import com.easymi.component.entity.EmLoc;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.loc.LocService;
+import com.easymi.component.trace.TraceUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.FileUtil;
 import com.easymi.component.utils.Log;
@@ -300,8 +301,11 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 //                return;
 //            }
 //        }
-        Log.e("MQTTService", "receiveLoc~~");
-        pushLoc(new BuildPushData(loc));
+        if (!LocService.needTrace()) {
+            Log.e("MQTTService", "receiveLoc~~");
+            pushLoc(new BuildPushData(loc));
+        }
+
 //        lastUploadTime = System.currentTimeMillis();
     }
 
@@ -310,59 +314,43 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
             return;
         }
 
-        if (!LocService.needTrace()) {
-            if (client != null && client.isConnected()) {
-                String pushStr = BuildPushUtil.buildPush(data);
-                publish(pushStr);
+        if (client != null && client.isConnected()) {
+            String pushStr = BuildPushUtil.buildPush(data);
+            publish(pushStr);
 
-                //上传后删除本地的缓存
-                FileUtil.delete("v5driver", "pushCache.txt");
+            //上传后删除本地的缓存
+            FileUtil.delete("v5driver", "pushCache.txt");
 
 //                FileUtil.saveLog(XApp.getInstance(),
 //                        TimeUtil.getTime("HH:mm:ss", System.currentTimeMillis()) + ":"
 //                                + "client is enable and start push data : " + pushStr + "\n\n");
-            } else {
+        } else {
 
-                String pushStr = BuildPushUtil.buildPush(data);
+            String pushStr = BuildPushUtil.buildPush(data);
 
-                PushBean pushBean = new Gson().fromJson(pushStr, PushBean.class);
-                List<PushData> beanList = new ArrayList<>();
-                for (PushData datum : pushBean.data) {
-                    if (datum.calc.orderInfo != null
-                            || datum.calc.orderInfo.size() != 0) {//有订单时才需要保存
-                        beanList.add(datum);
-                    }
+            PushBean pushBean = new Gson().fromJson(pushStr, PushBean.class);
+            List<PushData> beanList = new ArrayList<>();
+            for (PushData datum : pushBean.data) {
+                if (datum.calc.orderInfo != null
+                        || datum.calc.orderInfo.size() != 0) {//有订单时才需要保存
+                    beanList.add(datum);
                 }
-                if (beanList.size() != 0) {
-                    FileUtil.savePushCache(XApp.getInstance(), new Gson().toJson(beanList));//只保存位置的list
-                }
+            }
+            if (beanList.size() != 0) {
+                FileUtil.savePushCache(XApp.getInstance(), new Gson().toJson(beanList));//只保存位置的list
+            }
 
 //                FileUtil.saveLog(XApp.getInstance(),
 //                        TimeUtil.getTime("HH:mm:ss", System.currentTimeMillis()) + ":"
 //                                + "client is disable and start save data : " + new Gson().toJson(pushBean) + "\n\n");
-                doConnected();
-            }
+            doConnected();
         }
     }
 
     @Override
     public void showTraceAfter(EmLoc emLoc) {
-        if (emLoc == null) {
-            return;
-        }
-
-        Log.e(TAG, "trace receive");
-
-        String pushStr = BuildPushUtil.buildPush(new BuildPushData(emLoc));
-
-        if (client != null && client.isConnected()) {
-            publish(pushStr);
-        } else {
-            FileUtil.savePushCache(this, pushStr);
-            Intent intent = new Intent(XApp.getInstance(), MQTTService.class);
-            intent.setPackage(XApp.getInstance().getPackageName());
-            XApp.getInstance().startService(intent);//重启推送
-        }
+        Log.e("MQTTService", "traceLoc~~");
+        pushLoc(new BuildPushData(emLoc));
     }
 
     /**

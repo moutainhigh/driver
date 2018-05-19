@@ -36,6 +36,7 @@ public class SetActivity extends RxBaseActivity {
     SwitchButton shakeAble;
     SwitchButton alwaysOren;
     SwitchButton defaultNavi;
+    SwitchButton backRun;
 
     private ScrollView scrollView;
 
@@ -50,6 +51,7 @@ public class SetActivity extends RxBaseActivity {
         shakeAble = findViewById(R.id.shake_btn);
         alwaysOren = findViewById(R.id.oren_btn);
         defaultNavi = findViewById(R.id.default_navi);
+        backRun = findViewById(R.id.back_run);
 
         scrollView = findViewById(R.id.scroll_view);
 
@@ -57,6 +59,7 @@ public class SetActivity extends RxBaseActivity {
         shakeAble.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_SHAKE_ABLE, true));
         alwaysOren.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_ALWAYS_OREN, false));
         defaultNavi.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_DEFAULT_NAVI, true));
+        backRun.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_PLAY_CLIENT_MUSIC, true));
 
         initSwitch();
 
@@ -81,6 +84,11 @@ public class SetActivity extends RxBaseActivity {
         defaultNavi.setOnCheckedChangeListener((buttonView, isChecked) -> {
             SharedPreferences.Editor editor = XApp.getPreferencesEditor();
             editor.putBoolean(Config.SP_DEFAULT_NAVI, isChecked);
+            editor.apply();
+        });
+        backRun.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+            editor.putBoolean(Config.SP_PLAY_CLIENT_MUSIC, isChecked);
             editor.apply();
         });
     }

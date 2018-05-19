@@ -42,6 +42,7 @@
     <string name="set_sure"> OK </string>
     <string name="set_cancel"> cancel </string>
     <string name="set_defult_navi"> default start navigation </string>
+    <string name="set_back_run">run in back</string>
 
     <!-- Registration String -->
     <string name="register_base_msg">basic information</string>

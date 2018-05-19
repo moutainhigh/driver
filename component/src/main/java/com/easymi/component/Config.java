@@ -11,8 +11,8 @@ public class Config {
     /**
      * 主机地址
      */
-//    public static final String HOST = "http://192.168.0.72:8082/";
-    public static final String HOST = "https://api.xiaokayun.cn/";
+    public static final String HOST = "http://192.168.0.72:8082/";
+//    public static final String HOST = "https://api.xiaokayun.cn/";
     /**
      * 图片服务器地址
      */
@@ -22,8 +22,9 @@ public class Config {
     /**
      * APP_KEY
      */
-    public static final String APP_KEY = "4aea5f7368b0461395eeda353337a24c";//线上
-//    public static final String APP_KEY = "1f462eb305a2417c9564f2dfaf89da9c";//本地
+//    public static final String APP_KEY = "4aea5f7368b0461395eeda353337a24c";//v5test
+//    public static final String APP_KEY = "488441998952435da895286632e82f40";//快些哥
+    public static final String APP_KEY = "1f462eb305a2417c9564f2dfaf89da9c";//本地
     /**
      * 司机注册地址
      */
@@ -82,6 +83,8 @@ public class Config {
 
     public static final String SP_LAST_SPLASH_TIME = "last_splash_animate";//上次显示动画的时间
 
+    public static final String SP_PLAY_CLIENT_MUSIC = "play_slient_music";//是否播放静音音乐音乐
+
 
     public static final String DAIJIA = "daijia";
 
@@ -94,6 +97,12 @@ public class Config {
 
     public static final int FREE_LOC_TIME = 8000;//闲时定位时间 毫秒
     public static final int BUSY_LOC_TIME = 4000;//忙时定位时间 毫秒
+    public static final int NORMAL_LOC_TIME = 5000;//固定定位时间 毫秒
 
     public static final boolean COMM_USE = false;//是否是通用司机端
+
+    public static final boolean NEED_TRACE = false;//是否纠偏
+
+    public static final String MI_APPID = "2882303761517793325";
+    public static final String MI_APPKEY = "5891779394325";
 }

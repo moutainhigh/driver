@@ -11,8 +11,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -20,17 +18,17 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.trace.LBSTraceClient;
 import com.easymi.component.Config;
+import com.easymi.component.DJOrderStatus;
 import com.easymi.component.R;
 import com.easymi.component.app.XApp;
 import com.easymi.component.db.SqliteHelper;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
-import com.easymi.component.utils.FileUtil;
+import com.easymi.component.trace.TraceUtil;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
-import com.easymi.component.utils.StringUtils;
 import com.google.gson.Gson;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -47,7 +45,7 @@ public class LocService extends NotiService implements AMapLocationListener {
     public static final String LOC_CHANGED = "com.easymi.eomponent.LOC_CHANGED";
     public static final String BROAD_TRACE_SUC = "com.easymi.eomponent.BROAD_TRACE_SUC";
 
-    private int scanTime = Config.FREE_LOC_TIME;
+    private int scanTime = Config.NORMAL_LOC_TIME;
 
     private static final int NOTI_ID = 1011;
 
@@ -101,11 +99,11 @@ public class LocService extends NotiService implements AMapLocationListener {
             locClient.stopLocation();
         }
 
-        if (isDriverBusy()) {//通过是否有订单在执行设置周期
-            scanTime = Config.BUSY_LOC_TIME;
-        } else {
-            scanTime = Config.FREE_LOC_TIME;
-        }
+//        if (isDriverBusy()) {//通过是否有订单在执行设置周期
+//            scanTime = Config.BUSY_LOC_TIME;
+//        } else {
+//            scanTime = Config.FREE_LOC_TIME;
+//        }
         AMapLocationClientOption mLocationOption = new AMapLocationClientOption()
                 .setInterval(scanTime)
                 .setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.Transport)
@@ -164,12 +162,13 @@ public class LocService extends NotiService implements AMapLocationListener {
 
     private void startTrace() {
 
+        Log.e("trace","开始纠偏");
         if (null == lbsTraceClient) {
             lbsTraceClient = LBSTraceClient.getInstance(this);
             lbsTraceClient.startTrace((list, list1, s) -> {
                 if (list1 != null && list1.size() != 0
                         && list != null && list.size() != 0) {
-                    EmLoc emLoc = new EmLoc();
+                    EmLoc emLoc = EmUtil.getLastLoc();
                     emLoc.speed = list.get(list1.size() - 1).getSpeed();
                     emLoc.accuracy = list.get(list1.size() - 1).getBearing();
                     emLoc.latitude = list1.get(list1.size() - 1).latitude;
@@ -178,13 +177,16 @@ public class LocService extends NotiService implements AMapLocationListener {
                     intent.setAction(BROAD_TRACE_SUC);
                     intent.putExtra("traceLoc", new Gson().toJson(emLoc));
                     sendBroadcast(intent);
+                    Log.e("TraceLoc", "纠偏后的最后一个点" + emLoc.toString());
                 }
             });
         }
     }
 
     private void stopTrace() {
+        Log.e("trace","停止纠偏");
         if (null != lbsTraceClient) {
+            Log.e("trace","停止纠偏zz");
             lbsTraceClient.stopTrace();
             lbsTraceClient = null;
         }
@@ -201,16 +203,16 @@ public class LocService extends NotiService implements AMapLocationListener {
 
                 Log.e("locPos", "emLoc>>>>" + locationInfo.toString());
 
+                Intent intent = new Intent(LocService.this, LocReceiver.class);
+                intent.setAction(LOC_CHANGED);
+                intent.putExtra("locPos", new Gson().toJson(locationInfo));
+                sendBroadcast(intent);//发送位置变化广播
+
                 if (needTrace()) {
                     startTrace();
                 } else {
                     stopTrace();
                 }
-
-                Intent intent = new Intent(LocService.this, LocReceiver.class);
-                intent.setAction(LOC_CHANGED);
-                intent.putExtra("locPos", new Gson().toJson(locationInfo));
-                sendBroadcast(intent);//发送位置变化广播
 
             } else {
                 //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
@@ -230,19 +232,6 @@ public class LocService extends NotiService implements AMapLocationListener {
                 mWifiAutoCloseDelegate.onLocateFail(getApplicationContext(), amapLocation.getErrorCode(), PowerManagerUtil.getInstance().isScreenOn(getApplicationContext()), NetUtil.getInstance().isWifiCon(getApplicationContext()));
             }
         }
-    }
-
-    public static boolean needTrace() {
-//        List<DymOrder> dymOrders = DymOrder.findAll();
-        boolean needTrace = false;
-//        for (DymOrder dymOrder : dymOrders) {
-//            if (dymOrder.orderType.equals(Config.DAIJIA)) {
-//                if (dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
-//                    needTrace = true;
-//                }
-//            }
-//        }
-        return needTrace;
     }
 
     private Notification buildNotification() {
@@ -272,6 +261,7 @@ public class LocService extends NotiService implements AMapLocationListener {
                 notificationChannel.enableLights(true);//是否在桌面icon右上角展示小圆点
                 notificationChannel.setLightColor(Color.BLUE); //小圆点颜色
                 notificationChannel.setShowBadge(true); //是否在久按桌面图标时显示此渠道的通知
+                notificationChannel.setSound(null,null);
                 notificationManager.createNotificationChannel(notificationChannel);
                 isCreateChannel = true;
             }
@@ -281,6 +271,7 @@ public class LocService extends NotiService implements AMapLocationListener {
         }
 
         builder.setSmallIcon(R.mipmap.role_driver);
+        builder.setSound(null);
         builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder.setColor(getResources().getColor(R.color.colorPrimary));
@@ -291,9 +282,26 @@ public class LocService extends NotiService implements AMapLocationListener {
         builder.setWhen(System.currentTimeMillis());
         builder.setContentIntent(pendingIntent);
         builder.setOngoing(true);
+        builder.setSound(null);
 
         notification = builder.build();
 
         return notification;
+    }
+
+    public static boolean needTrace() {
+        if (!Config.NEED_TRACE) {
+            return Config.NEED_TRACE;
+        }
+        List<DymOrder> dymOrders = DymOrder.findAll();
+        boolean needTrace = false;
+        for (DymOrder dymOrder : dymOrders) {
+            if (dymOrder.orderType.equals(Config.DAIJIA)) {
+                if (dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
+                    needTrace = true;
+                }
+            }
+        }
+        return needTrace;
     }
 }

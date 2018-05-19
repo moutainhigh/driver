@@ -45,6 +45,10 @@ public class EmUtil {
         editor.putLong(Config.SP_DRIVERID, -1);
         editor.apply();
 
+        if(null != XApp.getInstance().player){
+            XApp.getInstance().player.stop();
+        }
+
         stopAllService(context);
 
         Intent i = context.getPackageManager()
@@ -56,6 +60,7 @@ public class EmUtil {
         if (activityMgr != null) {
             activityMgr.killBackgroundProcesses(context.getPackageName());
         }
+
 //        System.exit(0);
     }
 

@@ -21,7 +21,7 @@ android {
     }
     signingConfigs {
         release {
-            keyAlias 'v5司机端'
+            keyAlias 'v5通用司机端'
             keyPassword 'easymin'
             storeFile file('v5签名信息.keystore')
             storePassword 'easymin'

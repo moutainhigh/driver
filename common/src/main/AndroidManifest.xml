@@ -40,22 +40,28 @@
             android:name=".activity.LiushuiActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.BaoxiaoActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.CreateActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".mvp.grab.GrabActivity2"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".push.PopupPushActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.SplashActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"

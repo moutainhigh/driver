@@ -1185,8 +1185,13 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        android.util.Log.e("lifecycle", "onConfigurationChanged()");
+        android.util.Log.e("lifecycle", "flow onConfigurationChanged()");
         super.onConfigurationChanged(newConfig);
+        if (System.currentTimeMillis() - lastChangeTime > 1000) {
+            lastChangeTime = System.currentTimeMillis();
+        } else {//有的胎神手机这个方法要回调两次
+            return;
+        }
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;

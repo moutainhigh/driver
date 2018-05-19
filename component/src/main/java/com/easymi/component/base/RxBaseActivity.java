@@ -15,9 +15,11 @@ import android.widget.RelativeLayout;
 
 import com.easymi.component.R;
 import com.easymi.component.app.ActManager;
+import com.easymi.component.app.XApp;
 import com.easymi.component.receiver.GpsReceiver;
 import com.easymi.component.receiver.NetWorkChangeReceiver;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.SysUtil;
 import com.easymi.component.widget.swipeback.ikew.SwipeBackActivityBase;
 import com.easymi.component.widget.swipeback.ikew.SwipeBackActivityHelper;
 import com.easymi.component.widget.swipeback.ikew.Utils;
@@ -45,13 +47,9 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
 
     private NetWorkChangeReceiver netChangeReceiver;
 
-//    private static final SwipeBackLayout.DragEdge DEFAULT_DRAG_EDGE = SwipeBackLayout.DragEdge.LEFT;
-//
-//    protected SwipeBackLayout swipeBackLayout;
-//    private ImageView ivShadow;
-
     private SwipeBackActivityHelper mHelper;
 
+    protected long lastChangeTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,15 +57,6 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
 
         mRxManager = new RxManager();
         ActManager.getInstance().addActivity(this);
-        //设置布局内容
-//        if (isEnableSwipe()) {
-//            setContentView(getContainer());
-//
-//            View view = LayoutInflater.from(this).inflate(getLayoutId(), null);
-//            swipeBackLayout.addView(view);
-//        } else {
-//            setContentView(getLayoutId());
-//        }
 
         if (isEnableSwipe()) {
             mHelper = new SwipeBackActivityHelper(this);
@@ -116,37 +105,7 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
         getSwipeBackLayout().scrollToFinishActivity();
     }
 
-    //    private View getContainer() {
-//        RelativeLayout container = new RelativeLayout(this);
-//        swipeBackLayout = new SwipeBackLayout(this);
-//        swipeBackLayout.setDragEdge(DEFAULT_DRAG_EDGE);
-//        swipeBackLayout.setOnSwipeBackListener(this);
-//        ivShadow = new ImageView(this);
-//        ivShadow.setBackgroundColor(getResources().getColor(R.color.black_p50));
-//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-//        container.addView(ivShadow, params);
-//        container.addView(swipeBackLayout);
-//        return container;
-//    }
-//
     public abstract boolean isEnableSwipe();
-//
-//    public void setDragEdge(SwipeBackLayout.DragEdge dragEdge) {
-//        swipeBackLayout.setDragEdge(dragEdge);
-//    }
-//
-//    public void setDragDirectMode(SwipeBackLayout.DragDirectMode dragDirectMode) {
-//        swipeBackLayout.setDragDirectMode(dragDirectMode);
-//    }
-//
-//    public SwipeBackLayout getSwipeBackLayout() {
-//        return swipeBackLayout;
-//    }
-//
-//    @Override
-//    public void onViewPositionChanged(float fractionAnchor, float fractionScreen) {
-//        ivShadow.setAlpha(1 - fractionScreen);
-//    }
 
     @Override
     protected void onStart() {
@@ -162,6 +121,21 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
         IntentFilter netFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(netChangeReceiver, netFilter);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //回到前台时停止播放静音音频
+        XApp.getInstance().stopPlaySlientMusic();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (SysUtil.isRunningInBackground(this)) {//后台运行时 静音播放音频保活
+            XApp.getInstance().playSlientMusic();
+        }
     }
 
     @Override
