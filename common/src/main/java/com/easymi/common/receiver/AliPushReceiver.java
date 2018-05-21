@@ -16,6 +16,7 @@ import java.util.Map;
  */
 
 public class AliPushReceiver extends MessageReceiver {
+    private static final String TAG = "AliPushReceiver";
     @Override
     protected void onNotification(Context context, String s, String s1, Map<String, String> map) {
         Log.d(TAG, "onNotification -> ");

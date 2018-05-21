@@ -9,7 +9,9 @@ import android.support.annotation.RequiresApi;
 import com.easymi.common.push.MQTTService;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
+import com.easymi.component.loc.LocService;
 import com.easymi.component.utils.Log;
+import com.easymi.component.utils.PhoneUtil;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -53,16 +55,16 @@ public class JobKeepLiveService extends JobService {
                 boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
                 Log.e("JobKeepLiveService", "isLogin-->" + isLogin);
                 if (isLogin) {
-//                    if (!PhoneUtil.isServiceRunning(MQTTService.class.getName(), JobKeepLiveService.this)) {
-                    Log.e("JobKeepLiveService", "!isServiceRunning MQTTService");
-                    Intent mqtt = new Intent(JobKeepLiveService.this, MQTTService.class);
-                    mqtt.setPackage(JobKeepLiveService.this.getPackageName());
-                    startService(mqtt);
-//                    }
-//                    if (!PhoneUtil.isServiceRunning(LocService.class.getName(), JobKeepLiveService.this)) {
-                    Log.e("JobKeepLiveService", "!isServiceRunning LocService");
-                    XApp.getInstance().startLocService();
-//                    }
+                    if (!PhoneUtil.isServiceRunning(MQTTService.class.getName(), JobKeepLiveService.this)) {
+                        Log.e("JobKeepLiveService", "!isServiceRunning MQTTService");
+                        Intent mqtt = new Intent(JobKeepLiveService.this, MQTTService.class);
+                        mqtt.setPackage(JobKeepLiveService.this.getPackageName());
+                        startService(mqtt);
+                    }
+                    if (!PhoneUtil.isServiceRunning(LocService.class.getName(), JobKeepLiveService.this)) {
+                        Log.e("JobKeepLiveService", "!isServiceRunning LocService");
+                        XApp.getInstance().startLocService();
+                    }
                 }
             }
         };

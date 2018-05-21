@@ -279,7 +279,7 @@ public class HandlePush implements FeeChangeSubject {
             @Override
             public void onNext(NotitfyResult multipleOrderResult) {
                 XApp.getInstance().shake();
-                XApp.getInstance().syntheticVoice( multipleOrderResult.employNoticeRecord.noticeContent, XApp.NEW_MSG);
+                XApp.getInstance().syntheticVoice( multipleOrderResult.employNoticeRecord.message, XApp.NEW_MSG);
                 Intent intent = new Intent();
                 intent.setAction(Config.BROAD_NOTICE);
                 intent.putExtra("notice", multipleOrderResult.employNoticeRecord.noticeContent);
@@ -310,7 +310,8 @@ public class HandlePush implements FeeChangeSubject {
                 false, new HaveErrSubscriberListener<AnnouncementResult>() {
             @Override
             public void onNext(AnnouncementResult announcementResult) {
-                XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.new_ann) + announcementResult.employAfficheRequest.annMessage, XApp.NEW_ANN);
+                XApp.getInstance().shake();
+                XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.new_ann) + announcementResult.employAfficheRequest.message, XApp.NEW_ANN);
                 Intent intent = new Intent();
                 intent.setAction(Config.BROAD_ANN);
                 intent.putExtra("ann", announcementResult.employAfficheRequest.annMessage);
@@ -389,7 +390,7 @@ public class HandlePush implements FeeChangeSubject {
                 if (orderType.equals(Config.DAIJIA)) {
                     voiceStr += XApp.getInstance().getString(R.string.create_daijia)
                             + XApp.getInstance().getString(R.string.order) + ",";//代驾订单
-                } else if (orderType.equals(Config.DAIJIA)) {
+                } else if (orderType.equals(Config.ZHUANCHE)) {
                     voiceStr += XApp.getInstance().getString(R.string.create_zhuanche)
                             + XApp.getInstance().getString(R.string.order) + ",";//专车订单
                 }

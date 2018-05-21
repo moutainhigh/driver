@@ -353,6 +353,8 @@ public class LoginActivity extends RxBaseActivity {
             }
         });
 
+        editQiye.setText(XApp.getMyPreferences().getString(Config.SP_LAT_QIYE_CODE, ""));
+
         String enAcc = XApp.getMyPreferences().getString(Config.SP_LOGIN_ACCOUNT, "");
         String enPsw = XApp.getMyPreferences().getString(Config.SP_LOGIN_PSW, "");
         if (StringUtils.isNotBlank(enAcc) && StringUtils.isNotBlank(enPsw)) {
@@ -408,6 +410,8 @@ public class LoginActivity extends RxBaseActivity {
             }
         }
         String netType = NetWorkUtil.getNetWorkTypeName(this);
+
+        Log.e("LoginAc", "deviceId-->" + PushServiceFactory.getCloudPushService().getDeviceId());
 
         if (Config.COMM_USE) {
             Observable<LoginResult> observable = api

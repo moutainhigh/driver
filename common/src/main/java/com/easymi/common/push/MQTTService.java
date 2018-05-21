@@ -20,11 +20,14 @@ import com.easymi.common.trace.TraceInterface;
 import com.easymi.common.trace.TraceReceiver;
 import com.easymi.common.util.BuildPushUtil;
 import com.easymi.component.Config;
+import com.easymi.component.DJOrderStatus;
 import com.easymi.component.app.XApp;
+import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.loc.LocService;
+import com.easymi.component.trace.TraceUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.FileUtil;
 import com.easymi.component.utils.Log;
@@ -40,6 +43,7 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -295,14 +299,27 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 
     @Override
     public void receiveLoc(EmLoc loc) {
-//        if (lastUploadTime != 0) {
-//            if (System.currentTimeMillis() - lastUploadTime < 5 * 1000) {
-//                return;
-//            }
-//        }
-        Log.e("MQTTService", "receiveLoc~~");
-        pushLoc(new BuildPushData(loc));
-//        lastUploadTime = System.currentTimeMillis();
+
+        if (Config.SAVE_LOGO) {
+            if (DymOrder.findAll().size() != 0) {
+                List<DymOrder> dymOrders = DymOrder.findAll();
+                for (DymOrder dymOrder : dymOrders) {
+                    if (dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
+                        try {
+                            FileUtil.write(this, "xiaoka", "order-" + dymOrder.orderId+".txt",
+                                    new Gson().toJson(loc) + ",", true);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!LocService.needTrace()) {
+            Log.e("MQTTService", "receiveLoc~~");
+            pushLoc(new BuildPushData(loc));
+        }
     }
 
     public static void pushLoc(BuildPushData data) {
@@ -310,59 +327,35 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
             return;
         }
 
-        if (!LocService.needTrace()) {
-            if (client != null && client.isConnected()) {
-                String pushStr = BuildPushUtil.buildPush(data);
-                publish(pushStr);
+        if (client != null && client.isConnected()) {
+            String pushStr = BuildPushUtil.buildPush(data);
+            publish(pushStr);
 
-                //上传后删除本地的缓存
-                FileUtil.delete("v5driver", "pushCache.txt");
+            //上传后删除本地的缓存
+            FileUtil.delete("v5driver", "pushCache.txt");
+        } else {
 
-//                FileUtil.saveLog(XApp.getInstance(),
-//                        TimeUtil.getTime("HH:mm:ss", System.currentTimeMillis()) + ":"
-//                                + "client is enable and start push data : " + pushStr + "\n\n");
-            } else {
+            String pushStr = BuildPushUtil.buildPush(data);
 
-                String pushStr = BuildPushUtil.buildPush(data);
-
-                PushBean pushBean = new Gson().fromJson(pushStr, PushBean.class);
-                List<PushData> beanList = new ArrayList<>();
-                for (PushData datum : pushBean.data) {
-                    if (datum.calc.orderInfo != null
-                            || datum.calc.orderInfo.size() != 0) {//有订单时才需要保存
-                        beanList.add(datum);
-                    }
+            PushBean pushBean = new Gson().fromJson(pushStr, PushBean.class);
+            List<PushData> beanList = new ArrayList<>();
+            for (PushData datum : pushBean.data) {
+                if (datum.calc.orderInfo != null
+                        || datum.calc.orderInfo.size() != 0) {//有订单时才需要保存
+                    beanList.add(datum);
                 }
-                if (beanList.size() != 0) {
-                    FileUtil.savePushCache(XApp.getInstance(), new Gson().toJson(beanList));//只保存位置的list
-                }
-
-//                FileUtil.saveLog(XApp.getInstance(),
-//                        TimeUtil.getTime("HH:mm:ss", System.currentTimeMillis()) + ":"
-//                                + "client is disable and start save data : " + new Gson().toJson(pushBean) + "\n\n");
-                doConnected();
             }
+            if (beanList.size() != 0) {
+                FileUtil.savePushCache(XApp.getInstance(), new Gson().toJson(beanList));//只保存位置的list
+            }
+            doConnected();
         }
     }
 
     @Override
     public void showTraceAfter(EmLoc emLoc) {
-        if (emLoc == null) {
-            return;
-        }
-
-        Log.e(TAG, "trace receive");
-
-        String pushStr = BuildPushUtil.buildPush(new BuildPushData(emLoc));
-
-        if (client != null && client.isConnected()) {
-            publish(pushStr);
-        } else {
-            FileUtil.savePushCache(this, pushStr);
-            Intent intent = new Intent(XApp.getInstance(), MQTTService.class);
-            intent.setPackage(XApp.getInstance().getPackageName());
-            XApp.getInstance().startService(intent);//重启推送
-        }
+        Log.e("MQTTService", "traceLoc~~");
+        pushLoc(new BuildPushData(emLoc));
     }
 
     /**

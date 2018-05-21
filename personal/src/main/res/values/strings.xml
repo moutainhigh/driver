@@ -44,6 +44,7 @@
     <string name="set_sure">确定</string>
     <string name="set_cancel">取消</string>
     <string name="set_defult_navi">默认启动导航</string>
+    <string name="set_back_run">后台常驻</string>
 
     <!-- 注册字符串 -->
     <string name="register_base_msg">基本信息</string>
@@ -317,5 +318,7 @@
 
     <string name="get_set_failed">获取配置信息失败，请稍后再试</string>
     <string name="get_sms_suc">获取验证码成功</string>
+
+    <string name="balance_personal">余额(元)</string>
 
 </resources>

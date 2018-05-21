@@ -41,7 +41,6 @@ import com.amap.api.navi.view.RouteOverLay;
 import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.route.DriveRouteResult;
 import com.easymi.common.entity.BuildPushData;
-import com.easymi.component.entity.Setting;
 import com.easymi.common.push.FeeChangeObserver;
 import com.easymi.common.push.HandlePush;
 import com.easymi.common.push.MQTTService;
@@ -54,6 +53,7 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
+import com.easymi.component.entity.Setting;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.loc.LocService;
@@ -120,6 +120,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     TextView leftTimeText;
     TextView orderNumberText;
     TextView orderTypeText;
+    TextView orderCompanyText;
+    TextView orderCreateTypeText;
     TagContainerLayout tagContainerLayout;
     LinearLayout drawerFrame;
     private MapView mapView;
@@ -179,6 +181,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         drawerFrame = findViewById(R.id.drawer_frame);
         naviCon = findViewById(R.id.navi_con);
         expandableLayout = findViewById(R.id.expandable_layout);
+
+        orderCompanyText = findViewById(R.id.order_dj_company);
+        orderCreateTypeText = findViewById(R.id.order_create_type);
 
         mapView = findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
@@ -243,6 +248,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     public void showTopView() {
         orderNumberText.setText(djOrder.orderNumber);
         orderTypeText.setText(djOrder.orderDetailType);
+        orderCompanyText.setText(djOrder.companyName);
+        orderCreateTypeText.setText(djOrder.orderSource);//订单来源
         tagContainerLayout.removeAllTags();
         if (StringUtils.isNotBlank(djOrder.passengerTags)) {
             if (djOrder.passengerTags.contains(",")) {
@@ -990,6 +997,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         mapView.onResume();
         lastLatlng = new LatLng(location.latitude, location.longitude);
         presenter.findOne(orderId);
+        MQTTService.pushLoc(new BuildPushData(EmUtil.getLastLoc()));//减少迟滞
     }
 
     @Override
@@ -1050,10 +1058,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             smoothMoveMarker.setPosition(lastLatlng);
             smoothMoveMarker.setPoints(latLngs);
             if (djOrder != null) {
-                smoothMoveMarker.setTotalDuration(djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER ?
-                        Config.BUSY_LOC_TIME / 1000 : Config.FREE_LOC_TIME / 1000);
+                smoothMoveMarker.setTotalDuration(Config.NORMAL_LOC_TIME / 1000);
             } else {
-                smoothMoveMarker.setTotalDuration(Config.FREE_LOC_TIME / 1000);
+                smoothMoveMarker.setTotalDuration(Config.NORMAL_LOC_TIME / 1000);
             }
             smoothMoveMarker.setRotate(location.bearing);
             smoothMoveMarker.startSmoothMove();
@@ -1068,8 +1075,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             if (djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER
                     || djOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) {
                 if (!isMapTouched) {
-                    aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 19),
-                            djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER ? Config.BUSY_LOC_TIME : Config.FREE_LOC_TIME, null);
+                    aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 19), Config.NORMAL_LOC_TIME, null);
                 }
             }
         }
@@ -1177,8 +1183,13 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        android.util.Log.e("lifecycle", "onConfigurationChanged()");
+        android.util.Log.e("lifecycle", "flow onConfigurationChanged()");
         super.onConfigurationChanged(newConfig);
+        if (System.currentTimeMillis() - lastChangeTime > 1000) {
+            lastChangeTime = System.currentTimeMillis();
+        } else {//有的胎神手机这个方法要回调两次
+            return;
+        }
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;

@@ -119,6 +119,8 @@
     <string name="des_order">已销单 ></string>
     <string name="rate_order">已完成 ></string>
 
+    <string name="reject_net">网络连接不可用，可能是由于您主动设置了禁用网络，请前往应用管理中打开。设置完毕后请重新启动程序</string>
+
     <string name="date_unit">MM月dd日 HH:mm</string>
 
     <string name="home_gonggao">公告</string>
@@ -127,5 +129,4 @@
     <string name="listen_order_set_2">听单设置</string>
     <string name="listen_order_more_one">至少选择一种听单业务</string>
 
-    <string name="reject_net">网络连接不可用，可能是由于您主动设置了禁用网络，请前往应用管理中打开。设置完毕后请重新启动程序</string>
 </resources>

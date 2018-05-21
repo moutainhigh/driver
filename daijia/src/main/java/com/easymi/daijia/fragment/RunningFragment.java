@@ -6,9 +6,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.easymi.component.entity.Setting;
 import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.entity.DymOrder;
+import com.easymi.component.entity.Setting;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.R;
 import com.easymi.daijia.flowMvp.ActFraCommBridge;

@@ -35,9 +35,27 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:resizeableActivity="true"
-        android:supportsRtl="true"
         android:supportsPictureInPicture="true"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".IndexActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".PopupPushActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSwipeBack" />
 
         <!-- 兼容全面屏-->
         <meta-data
@@ -58,17 +76,17 @@
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="fa28713223d44eb02d98f7b0105813e1" />
+            android:value="fbad82c817823ff0030e8f0741de7d08" />
 
         <service android:name="com.amap.api.location.APSService" />
 
         <!-- 阿里云推送开始 -->
         <meta-data
             android:name="com.alibaba.app.appkey"
-            android:value="24687864" /> <!-- 请填写你自己的- appKey -->
+            android:value="24898075" /> <!-- 请填写你自己的- appKey -->
         <meta-data
             android:name="com.alibaba.app.appsecret"
-            android:value="7aeb3ebac3f34a3ef2d57b4f902f3ba7" /> <!-- 请填写你自己的appSecret -->
+            android:value="94af5f3fb5eb79a86ad0d51ec3041f90" /> <!-- 请填写你自己的appSecret -->
 
         <service
             android:name="com.alibaba.sdk.android.push.MsgService"

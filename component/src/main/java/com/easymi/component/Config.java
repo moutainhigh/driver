@@ -22,7 +22,8 @@ public class Config {
     /**
      *
      */
-    public static final String APP_KEY = "4aea5f7368b0461395eeda353337a24c";//本地
+//    public static final String APP_KEY = "4aea5f7368b0461395eeda353337a24c";//v5test
+    public static final String APP_KEY = "488441998952435da895286632e82f40";//快些哥
 //    public static final String APP_KEY = "1f462eb305a2417c9564f2dfaf89da9c";//本地
     /**
      * 司机注册地址
@@ -39,7 +40,7 @@ public class Config {
     /**
      * MQTT配置
      */
-    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn:1883";
+    public static final String MQTT_HOST = "tcp://39.107.190.141:1883";
     public static final String MQTT_USER_NAME = "xiaoka";
     public static final String MQTT_PSW = "&mv7dHapB5J!95BJ";
     public static final String MQTT_PUSH_TOPIC = "/driver";
@@ -50,6 +51,11 @@ public class Config {
     public static final String SP_DRIVERID = "driverId";
     public static final String SP_ISLOGIN = "isLogin";
     public static final String SP_LAST_LOC = "lastLoc";
+
+    public static final String SP_QIYE_CODE = "qiye_code"; //企业编码
+    public static final String SP_APP_KEY = "app_key"; //app_key
+    public static final String SP_LAT_QIYE_CODE = "last_qiye_code"; //上次的企业编码
+
 
     public static final String SP_CONGESTION = "congestion";//躲避拥堵
     public static final String SP_AVOID_HIGH_SPEED = "avoidhightspeed";//不走高速
@@ -64,9 +70,6 @@ public class Config {
 
     public static final String SP_SYS_LANGUAGE = "sys_language"; //英文
 
-    public static final String SP_QIYE_CODE = "qiye_code"; //企业编码
-    public static final String SP_APP_KEY = "app_key"; //app_key
-    public static final String SP_LAT_QIYE_CODE = "last_qiye_code"; //上次的企业编码
 
     public static final String SP_VOICE_ABLE = "voice_able";//能否语音播报
     public static final String SP_SHAKE_ABLE = "shake_able";//能否震动
@@ -83,6 +86,8 @@ public class Config {
     public static final String SP_DAIJIA_LISTEN_ORDER = "daijia_listen_order";//代驾是否听单
     public static final String SP_ZHUANCHE_LISTEN_ORDER = "zhuanche_listen_order";//代驾是否听单
 
+    public static final String SP_PLAY_CLIENT_MUSIC = "play_slient_music";//是否播放静音音乐音乐
+
 
     public static final String DAIJIA = "daijia";
     public static final String ZHUANCHE = "zhuanche";
@@ -94,9 +99,16 @@ public class Config {
     public static final String BROAD_ANN = "com.easymi.v5driver.BROAD_ANN";
     public static final String BROAD_FINISH_ORDER = "com.easymi.v5driver.BROAD_FINISH_ORDER";
 
-    public static final int FREE_LOC_TIME = 8000;//闲时定位时间 毫秒
-    public static final int BUSY_LOC_TIME = 4000;//忙时定位时间 毫秒
+//    public static final int FREE_LOC_TIME = 5000;//闲时定位时间 毫秒
+//    public static final int BUSY_LOC_TIME = 5000;//忙时定位时间 毫秒
+    public static final int NORMAL_LOC_TIME = 5000;//固定定位时间 毫秒
 
-    public static final boolean COMMON_USE = false;
+    public static final boolean COMM_USE = true;//是否是通用司机端
 
+    public static final boolean NEED_TRACE = false;//是否纠偏
+
+    public static final boolean SAVE_LOGO = false;//是否保存位置信息
+
+    public static final String MI_APPID = "2882303761517793325";
+    public static final String MI_APPKEY = "5891779394325";
 }

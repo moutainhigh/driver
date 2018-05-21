@@ -30,6 +30,7 @@ public class EmUtil {
         return XApp.getMyPreferences().getString(Config.SP_APP_KEY, "");
     }
 
+
     public static Employ getEmployInfo() {
         return Employ.findByID(getEmployId());
     }
@@ -44,6 +45,10 @@ public class EmUtil {
         editor.putLong(Config.SP_DRIVERID, -1);
         editor.apply();
 
+        if(null != XApp.getInstance().player){
+            XApp.getInstance().player.stop();
+        }
+
         stopAllService(context);
 
         Intent i = context.getPackageManager()
@@ -55,6 +60,7 @@ public class EmUtil {
         if (activityMgr != null) {
             activityMgr.killBackgroundProcesses(context.getPackageName());
         }
+
 //        System.exit(0);
     }
 

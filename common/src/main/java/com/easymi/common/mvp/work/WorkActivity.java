@@ -354,12 +354,23 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         this.drivers = drivers;
         MarkerOptions options = new MarkerOptions();
         options.draggable(false);//设置Marker可拖动
-        options.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                .decodeResource(getResources(), R.mipmap.ic_driver)));
         // 将Marker设置为贴地显示，可以双指下拉地图查看效果
         options.setFlat(true);//设置marker平贴地图效果
         for (NearDriver driver : drivers) {
+            if(driver.employ_id == EmUtil.getEmployId()){
+                return;//自己就不显示marker
+            }
             options.position(new LatLng(driver.lat, driver.lng));
+            if (driver.status.equals(EmployStatus.ONLINE) || driver.status.equals(EmployStatus.FREE)) {
+                options.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                        .decodeResource(getResources(), R.mipmap.ic_driver_free)));
+            } else if (driver.status.equals(EmployStatus.OFFLINE) || driver.status.equals(EmployStatus.FROZEN)) {
+                options.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                        .decodeResource(getResources(), R.mipmap.ic_driver)));
+            } else {
+                options.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                        .decodeResource(getResources(), R.mipmap.ic_driver_busy)));
+            }
             Marker marker = aMap.addMarker(options);
             marker.setInfoWindowEnable(true);
             marker.setSnippet(driver.employ_name);
@@ -424,21 +435,20 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     @Override
     public void showDriverStatus() {
         Employ employ = EmUtil.getEmployInfo();
-        if (StringUtils.isNotBlank(employ.status)) {
 
-            if (employ.status.equals(EmployStatus.OFFLINE) || employ.status.equals(EmployStatus.FROZEN)) {
-                ActManager.getInstance().finishActivity(this);
-                EmUtil.employLogout(this);
-            } else if (employ.status.equals(EmployStatus.ONLINE)) {
-                showOffline();//非听单状态
-                presenter.loadNoticeAndAnn();
-                presenter.initDaemon();
-            } else {
-                showOnline();//听单状态
-                presenter.indexOrders();
-                presenter.initDaemon();
-            }
-
+        if (employ.status.equals(EmployStatus.OFFLINE) || employ.status.equals(EmployStatus.FROZEN)) {
+//            ActManager.getInstance().finishAllActivity();
+//            Intent intent = new Intent(this, SplashActivity.class);
+//            startActivity(intent);
+            EmUtil.employLogout(this);
+        } else if (employ.status.equals(EmployStatus.ONLINE)) {
+            showOffline();//非听单状态
+            presenter.loadNoticeAndAnn();
+            presenter.initDaemon();
+        } else {
+            showOnline();//听单状态
+            presenter.indexOrders();
+            presenter.initDaemon();
         }
     }
 

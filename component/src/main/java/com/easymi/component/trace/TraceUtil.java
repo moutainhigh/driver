@@ -2,6 +2,9 @@ package com.easymi.component.trace;
 
 import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.model.LatLng;
+import com.easymi.component.Config;
+import com.easymi.component.DJOrderStatus;
+import com.easymi.component.entity.DymOrder;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;

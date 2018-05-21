@@ -15,9 +15,11 @@ import android.widget.RelativeLayout;
 
 import com.easymi.component.R;
 import com.easymi.component.app.ActManager;
+import com.easymi.component.app.XApp;
 import com.easymi.component.receiver.GpsReceiver;
 import com.easymi.component.receiver.NetWorkChangeReceiver;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.SysUtil;
 import com.easymi.component.widget.swipeback.ikew.SwipeBackActivityBase;
 import com.easymi.component.widget.swipeback.ikew.SwipeBackActivityHelper;
 import com.easymi.component.widget.swipeback.ikew.Utils;
@@ -47,6 +49,7 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
 
     private SwipeBackActivityHelper mHelper;
 
+    protected long lastChangeTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,10 +105,6 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
         getSwipeBackLayout().scrollToFinishActivity();
     }
 
-    /**
-     * 是否能侧滑返回
-     * @return
-     */
     public abstract boolean isEnableSwipe();
 
     @Override
@@ -122,6 +121,21 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
         IntentFilter netFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(netChangeReceiver, netFilter);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //回到前台时停止播放静音音频
+        XApp.getInstance().stopPlaySlientMusic();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (SysUtil.isRunningInBackground(this)) {//后台运行时 静音播放音频保活
+            XApp.getInstance().playSlientMusic();
+        }
     }
 
     @Override

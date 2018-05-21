@@ -21,6 +21,7 @@ import com.easymi.component.loc.LocService;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
+import com.easymi.component.utils.SysUtil;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
 import com.iflytek.cloud.SpeechConstant;
@@ -62,19 +63,11 @@ public class XApp extends MultiDexApplication {
 
     AudioManager audioManager;
 
-    private static MediaPlayer player;
+    public MediaPlayer player;
 
     private AudioManager.OnAudioFocusChangeListener mFocusChangeListener;
 
-    private boolean isMqttConnect = false;
-
-    public void setMqttConnect(boolean mqttConnect) {
-        isMqttConnect = mqttConnect;
-    }
-
-    public boolean isMqttConnect() {
-        return isMqttConnect;
-    }
+    private boolean haveFoucs = false;//是否拥有焦点 通过此变量来判断player是否在正常播放
 
     @Override
     public void onCreate() {
@@ -184,6 +177,7 @@ public class XApp extends MultiDexApplication {
      * @return
      */
     public boolean requestFocus() {
+        haveFoucs = true;
         if (mFocusChangeListener != null) {
             return AudioManager.AUDIOFOCUS_REQUEST_GRANTED ==
                     audioManager.requestAudioFocus(mFocusChangeListener,
@@ -200,6 +194,7 @@ public class XApp extends MultiDexApplication {
      * @return
      */
     public boolean abandonFocus() {
+        haveFoucs = false;
         if (mFocusChangeListener != null) {
             return AudioManager.AUDIOFOCUS_REQUEST_GRANTED ==
                     audioManager.abandonAudioFocus(mFocusChangeListener);
@@ -246,7 +241,7 @@ public class XApp extends MultiDexApplication {
             resId = R.raw.new_msg;
         } else if (flag == CANCEL) {
             resId = R.raw.cancel_order;
-        } else if(flag == NEW_ANN){
+        } else if (flag == NEW_ANN) {
             resId = R.raw.new_ann;
         }
         if (resId == 0) {
@@ -265,6 +260,48 @@ public class XApp extends MultiDexApplication {
         });
         requestFocus();
         player.start();
+    }
+
+    /**
+     * 循环播放静音音频大道保活
+     */
+    public void playSlientMusic() {
+//        if (!getMyPreferences().getBoolean(Config.SP_PLAY_CLIENT_MUSIC, true)) {
+//            return;
+//        }
+
+        if (haveFoucs) {//有焦点时说明在正常播放音频
+            return;
+        }
+
+        if (!getMyPreferences().getBoolean(Config.SP_ISLOGIN, false)) {
+            return;
+        }
+
+        if (player != null && player.isPlaying()) {
+            player.stop();
+        }
+        player = MediaPlayer.create(this, R.raw.silent);
+        player.setOnCompletionListener(mediaPlayer -> {
+            Log.e("AudioFocus", "播放静音音频完成，循环播放中..");
+            playSlientMusic();
+        });
+        player.start();
+        Log.e("AudioFocus", "开始播放静音音频");
+    }
+
+    /**
+     * 停止播放静音音频
+     */
+    public void stopPlaySlientMusic() {
+        if (haveFoucs) {
+            return;
+        }
+
+        if (player != null && player.isPlaying()) {
+            player.stop();
+            Log.e("AudioFocus", "停止播放静音音频");
+        }
     }
 
     /**
@@ -353,6 +390,14 @@ public class XApp extends MultiDexApplication {
         }
     }
 
+    public void shake() {
+        boolean shakeAble = XApp.getMyPreferences().getBoolean(Config.SP_SHAKE_ABLE, true);
+        if (shakeAble) {//震动
+            PhoneUtil.vibrate(XApp.getInstance(), false);
+        }
+    }
+
+
     @Override
     public void onTerminate() {
         super.onTerminate();
@@ -361,17 +406,13 @@ public class XApp extends MultiDexApplication {
         }
     }
 
-    public void shake() {
-        boolean shakeAble = XApp.getMyPreferences().getBoolean(Config.SP_SHAKE_ABLE, true);
-        if (shakeAble) {//震动
-            PhoneUtil.vibrate(XApp.getInstance(), false);
-        }
-    }
-
     /**
      * 开启定位服务
      */
     public void startLocService() {
+        if (SysUtil.isServiceWork(this, "com.easymi.component.loc.LocService")) {
+            return;
+        }
         Intent intent = new Intent(this, LocService.class);
         intent.setAction(LocService.START_LOC);
         intent.setPackage(this.getPackageName());

@@ -38,6 +38,8 @@ public class Employ extends BaseEmploy implements Parcelable {
     public String company_phone;
     public String app_key;
 
+    public String app_key;
+
     /**
      * 保存数据
      */

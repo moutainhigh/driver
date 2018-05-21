@@ -1,6 +1,10 @@
 package com.rvakva.travel.publicdriver;
 
 import android.content.Context;
+
+import com.alibaba.sdk.android.push.register.HuaWeiRegister;
+import com.alibaba.sdk.android.push.register.MiPushRegister;
+import com.easymi.component.Config;
 import com.easymi.component.utils.Log;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -66,6 +70,10 @@ public class DriverApp extends XApp {
                 Log.d("DriverApp", "init cloudchannel failed -- errorcode:" + errorCode + " -- errorMessage:" + errorMessage);
             }
         });
+
+        // 注册方法会自动判断是否支持小米系统推送，如不支持会跳过注册。
+        MiPushRegister.register(this, Config.MI_APPID, Config.MI_APPKEY);
+        HuaWeiRegister.register(this);
     }
 
     protected DaemonConfigurations getDaemonConfigurations() {

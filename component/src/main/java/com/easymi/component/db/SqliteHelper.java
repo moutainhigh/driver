@@ -112,10 +112,6 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("status").append(" ").append("TEXT").append(",")
                 .append("company_phone").append(" ").append("TEXT").append(",")
 
-                .append("payMoney1").append(" ").append("DOUBLE").append(",")
-                .append("payMoney2").append(" ").append("DOUBLE").append(",")
-                .append("payMoney3").append(" ").append("DOUBLE").append(",")
-
                 .append("company_id").append(" ").append("LONG")
                 .append(");");
         execCreateTableSQL(db);
@@ -164,6 +160,9 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("employChangePrice").append(" ").append("INTEGER").append(",")
                 .append("doubleCheck").append(" ").append("INTEGER").append(",")
                 .append("canCallDriver").append(" ").append("INTEGER").append(",")
+                .append("payMoney1").append(" ").append("DOUBLE").append(",")
+                .append("payMoney2").append(" ").append("DOUBLE").append(",")
+                .append("payMoney3").append(" ").append("DOUBLE").append(",")
 
                 .append("workCarChangeOrder").append(" ").append("INTEGER")
                 .append(");");
