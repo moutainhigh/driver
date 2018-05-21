@@ -12,7 +12,9 @@ import android.support.annotation.Nullable;
 import com.easymi.common.push.MQTTService;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
+import com.easymi.component.loc.LocService;
 import com.easymi.component.utils.Log;
+import com.easymi.component.utils.PhoneUtil;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -65,16 +67,16 @@ public class DaemonService extends Service {
                 boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
                 Log.e("DaemonService", "isLogin-->" + isLogin);
                 if (isLogin) {
-//                    if (!PhoneUtil.isServiceRunning(MQTTService.class.getName(), DaemonService.this)) {
+                    if (!PhoneUtil.isServiceRunning(MQTTService.class.getName(), DaemonService.this)) {
                         Log.e("DaemonService", "!isServiceRunning MQTTService");
                         Intent mqtt = new Intent(DaemonService.this, MQTTService.class);
                         mqtt.setPackage(DaemonService.this.getPackageName());
                         startService(mqtt);
-//                    }
-//                    if (!PhoneUtil.isServiceRunning(LocService.class.getName(), DaemonService.this)) {
+                    }
+                    if (!PhoneUtil.isServiceRunning(LocService.class.getName(), DaemonService.this)) {
                         Log.e("DaemonService", "!isServiceRunning LocService");
                         XApp.getInstance().startLocService();
-//                    }
+                    }
                 }
             }
         };

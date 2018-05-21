@@ -208,11 +208,11 @@ public class LocService extends NotiService implements AMapLocationListener {
                 intent.putExtra("locPos", new Gson().toJson(locationInfo));
                 sendBroadcast(intent);//发送位置变化广播
 
-                if (needTrace()) {
-                    startTrace();
-                } else {
-                    stopTrace();
-                }
+//                if (needTrace()) {
+//                    startTrace();
+//                } else {
+//                    stopTrace();
+//                }
 
             } else {
                 //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。

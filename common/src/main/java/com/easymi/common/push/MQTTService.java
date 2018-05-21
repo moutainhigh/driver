@@ -20,7 +20,9 @@ import com.easymi.common.trace.TraceInterface;
 import com.easymi.common.trace.TraceReceiver;
 import com.easymi.common.util.BuildPushUtil;
 import com.easymi.component.Config;
+import com.easymi.component.DJOrderStatus;
 import com.easymi.component.app.XApp;
+import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
@@ -41,6 +43,7 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -296,17 +299,27 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 
     @Override
     public void receiveLoc(EmLoc loc) {
-//        if (lastUploadTime != 0) {
-//            if (System.currentTimeMillis() - lastUploadTime < 5 * 1000) {
-//                return;
-//            }
-//        }
+
+        if (Config.SAVE_LOGO) {
+            if (DymOrder.findAll().size() != 0) {
+                List<DymOrder> dymOrders = DymOrder.findAll();
+                for (DymOrder dymOrder : dymOrders) {
+                    if (dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
+                        try {
+                            FileUtil.write(this, "xiaoka", "order-" + dymOrder.orderId+".txt",
+                                    new Gson().toJson(loc) + ",", true);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+
         if (!LocService.needTrace()) {
             Log.e("MQTTService", "receiveLoc~~");
             pushLoc(new BuildPushData(loc));
         }
-
-//        lastUploadTime = System.currentTimeMillis();
     }
 
     public static void pushLoc(BuildPushData data) {
@@ -320,10 +333,6 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 
             //上传后删除本地的缓存
             FileUtil.delete("v5driver", "pushCache.txt");
-
-//                FileUtil.saveLog(XApp.getInstance(),
-//                        TimeUtil.getTime("HH:mm:ss", System.currentTimeMillis()) + ":"
-//                                + "client is enable and start push data : " + pushStr + "\n\n");
         } else {
 
             String pushStr = BuildPushUtil.buildPush(data);
@@ -339,10 +348,6 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
             if (beanList.size() != 0) {
                 FileUtil.savePushCache(XApp.getInstance(), new Gson().toJson(beanList));//只保存位置的list
             }
-
-//                FileUtil.saveLog(XApp.getInstance(),
-//                        TimeUtil.getTime("HH:mm:ss", System.currentTimeMillis()) + ":"
-//                                + "client is disable and start save data : " + new Gson().toJson(pushBean) + "\n\n");
             doConnected();
         }
     }

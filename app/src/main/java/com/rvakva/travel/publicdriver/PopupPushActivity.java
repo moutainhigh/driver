@@ -1,4 +1,4 @@
-package com.easymi.common.push;
+package com.rvakva.travel.publicdriver;
 
 import android.content.Intent;
 import android.os.Bundle;

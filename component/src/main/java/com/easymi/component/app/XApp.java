@@ -283,6 +283,7 @@ public class XApp extends MultiDexApplication {
         }
         player = MediaPlayer.create(this, R.raw.silent);
         player.setOnCompletionListener(mediaPlayer -> {
+            Log.e("AudioFocus", "播放静音音频完成，循环播放中..");
             playSlientMusic();
         });
         player.start();

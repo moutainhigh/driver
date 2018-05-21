@@ -1,6 +1,7 @@
 package com.easymi.daijia.activity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.easymi.component.Config;
@@ -9,6 +10,7 @@ import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.daijia.DJApiService;
 import com.easymi.daijia.R;
@@ -76,6 +78,9 @@ public class ConsumerInfoActivity extends RxBaseActivity {
                 consumer_grade.setText(consumerResult.consumerInfo.consumerGrade);
                 consumer_balance.setText(consumerResult.consumerInfo.consumerBalance + getString(R.string.yuan));
                 can_sign.setText(consumerResult.consumerInfo.canSign ? getString(R.string.allow) : getString(R.string.not_allow));
+                if (StringUtils.isNotBlank(consumerResult.consumerInfo.consumerGrade)) {
+                    consumer_grade.setVisibility(View.VISIBLE);
+                }
             }
         })));
     }

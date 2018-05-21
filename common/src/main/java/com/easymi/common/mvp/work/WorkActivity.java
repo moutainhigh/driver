@@ -350,6 +350,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         // 将Marker设置为贴地显示，可以双指下拉地图查看效果
         options.setFlat(true);//设置marker平贴地图效果
         for (NearDriver driver : drivers) {
+            if(driver.employ_id == EmUtil.getEmployId()){
+                return;//自己就不显示marker
+            }
             options.position(new LatLng(driver.lat, driver.lng));
             if (driver.status.equals(EmployStatus.ONLINE) || driver.status.equals(EmployStatus.FREE)) {
                 options.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
