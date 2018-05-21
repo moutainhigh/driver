@@ -26,6 +26,7 @@ import com.amap.api.maps.AMap;
 import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.model.BitmapDescriptor;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
@@ -345,6 +346,10 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     List<Marker> markers = new ArrayList<>();
     List<NearDriver> drivers = new ArrayList<>();
 
+    private BitmapDescriptor freeBitmap;
+    private BitmapDescriptor offlineBitmap;
+    private BitmapDescriptor busyBitmap;
+
     @Override
     public void showDrivers(List<NearDriver> drivers) {
         for (Marker marker : markers) {
@@ -356,29 +361,35 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         options.draggable(false);//设置Marker可拖动
         // 将Marker设置为贴地显示，可以双指下拉地图查看效果
         options.setFlat(true);//设置marker平贴地图效果
+        List<LatLng> latLngs = new ArrayList<>();
+
+        if (null == freeBitmap || null == offlineBitmap || busyBitmap == null) {
+            freeBitmap = BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                    .decodeResource(getResources(), R.mipmap.ic_driver_free));
+            offlineBitmap = BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                    .decodeResource(getResources(), R.mipmap.ic_driver));
+            busyBitmap = BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                    .decodeResource(getResources(), R.mipmap.ic_driver_busy));
+        }
+
         for (NearDriver driver : drivers) {
-            if(driver.employ_id == EmUtil.getEmployId()){
-                return;//自己就不显示marker
+            if (driver.employ_id == EmUtil.getEmployId()) {
+                continue;//自己就不显示marker
             }
             options.position(new LatLng(driver.lat, driver.lng));
             if (driver.status.equals(EmployStatus.ONLINE) || driver.status.equals(EmployStatus.FREE)) {
-                options.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                        .decodeResource(getResources(), R.mipmap.ic_driver_free)));
+                options.icon(freeBitmap);
             } else if (driver.status.equals(EmployStatus.OFFLINE) || driver.status.equals(EmployStatus.FROZEN)) {
-                options.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                        .decodeResource(getResources(), R.mipmap.ic_driver)));
+                options.icon(offlineBitmap);
             } else {
-                options.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                        .decodeResource(getResources(), R.mipmap.ic_driver_busy)));
+                options.icon(busyBitmap);
             }
             Marker marker = aMap.addMarker(options);
             marker.setInfoWindowEnable(true);
             marker.setSnippet(driver.employ_name);
             marker.setTitle(driver.employ_phone);
             markers.add(marker);
-        }
-        List<LatLng> latLngs = new ArrayList<>();
-        for (NearDriver driver : drivers) {
+
             LatLng latLng = new LatLng(driver.lat, driver.lng);
             latLngs.add(latLng);
         }
@@ -525,6 +536,15 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(null != offlineBitmap){
+            offlineBitmap.recycle();
+        }
+        if(null != busyBitmap){
+            busyBitmap.recycle();
+        }
+        if(null != freeBitmap){
+            freeBitmap.recycle();
+        }
         mapView.onDestroy();
         getRxManager().clear();
     }

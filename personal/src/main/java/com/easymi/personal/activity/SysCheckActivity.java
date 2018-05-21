@@ -15,6 +15,7 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.AMapLocationQualityReport;
+import com.easymi.common.push.MQTTService;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.NetWorkUtil;
@@ -201,7 +202,7 @@ public class SysCheckActivity extends RxBaseActivity implements AMapLocationList
             try {
                 Thread.sleep(1000);
                 runOnUiThread(() -> {
-                    boolean connected = XApp.getInstance().isMqttConnect();
+                    boolean connected = MQTTService.client != null && MQTTService.client.isConnected();
                     noticeText.setText(connected ? getString(R.string.notice_ok) : getString(R.string.notice_err));
                     noticeText.setTextColor(connected ? getResources().getColor(R.color.green) : getResources().getColor(R.color.red));
 

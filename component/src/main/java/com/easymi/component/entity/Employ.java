@@ -36,7 +36,6 @@ public class Employ extends BaseEmploy implements Parcelable {
 
     public double score;
     public String company_phone;
-    public String app_key;
 
     public String app_key;
 

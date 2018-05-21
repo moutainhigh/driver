@@ -1171,12 +1171,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             latLngs.add(latLng);
             smoothMoveMarker.setPosition(lastLatlng);
             smoothMoveMarker.setPoints(latLngs);
-            if (zcOrder != null) {
-                smoothMoveMarker.setTotalDuration(zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER ?
-                        Config.BUSY_LOC_TIME / 1000 : Config.FREE_LOC_TIME / 1000);
-            } else {
-                smoothMoveMarker.setTotalDuration(Config.FREE_LOC_TIME / 1000);
-            }
+
+                smoothMoveMarker.setTotalDuration(Config.NORMAL_LOC_TIME / 1000);
+
             smoothMoveMarker.setRotate(location.bearing);
             smoothMoveMarker.startSmoothMove();
             Marker marker = smoothMoveMarker.getMarker();
@@ -1190,8 +1187,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER
                     || zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
                 if (!isMapTouched) {
-                    aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 19),
-                            zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER ? Config.BUSY_LOC_TIME : Config.FREE_LOC_TIME, null);
+                    aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 19), Config.NORMAL_LOC_TIME, null);
                 }
             }
         }
