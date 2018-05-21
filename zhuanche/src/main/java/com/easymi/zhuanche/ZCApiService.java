@@ -42,7 +42,7 @@ public interface ZCApiService {
      * @return
      */
     @FormUrlEncoded
-    @PUT("driver/api/v1/grabOrder")
+    @PUT("driver/api/v1/grabSpecialOrder")
     Observable<ZCOrderResult> grabOrder(@Field("order_id") Long orderId,
                                         @Field("driver_id") Long driverId,
                                         @Field("app_key") String appKey);
@@ -56,7 +56,7 @@ public interface ZCApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("driver/api/v1/takeOrder")
+    @POST("/driver/api/v1/takeSpecialOrder")
     Observable<ZCOrderResult> takeOrder(@Field("order_id") Long orderId,
                                         @Field("driver_id") Long driverId,
                                         @Field("app_key") String appKey);
@@ -70,7 +70,7 @@ public interface ZCApiService {
      * @return
      */
     @FormUrlEncoded
-    @PUT("driver/api/v1/refuseOrder")
+    @PUT("driver/api/v1/refuseSpecialOrder")
     Observable<EmResult> refuseOrder(@Field("order_id") Long orderId,
                                      @Field("driver_id") Long driverId,
                                      @Field("app_key") String appKey,
@@ -96,7 +96,7 @@ public interface ZCApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("driver/api/v1/goToBookAddress")
+    @POST("/driver/api/v1/goToSpecialBookAddress")
     Observable<ZCOrderResult> goToBookAddress(@Field("order_id") Long orderId,
                                               @Field("app_key") String appKey);
 
@@ -108,7 +108,7 @@ public interface ZCApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("driver/api/v1/arrivalBookAddress")
+    @POST("driver/api/v1/arrivalSpecialBookAddress")
     Observable<ZCOrderResult> arrivalBookAddress(@Field("order_id") Long orderId,
                                                  @Field("app_key") String appKey,
                                                  @Field("real_book_address") String realBookAddress,
@@ -123,7 +123,7 @@ public interface ZCApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("driver/api/v1/goToDistination")
+    @POST("driver/api/v1/goToSpecialDistination")
     Observable<ZCOrderResult> goToDistination(@Field("order_id") Long orderId,
                                               @Field("app_key") String appKey);
 
@@ -135,7 +135,7 @@ public interface ZCApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("driver/api/v1/waitOrder")
+    @POST("driver/api/v1/waitSpecialOrder")
     Observable<ZCOrderResult> waitOrder(@Field("order_id") Long orderId,
                                         @Field("app_key") String appKey);
 
@@ -147,7 +147,7 @@ public interface ZCApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("driver/api/v1/arrivalDistination")
+    @POST("driver/api/v1/arrivalSpecialDistination")
     Observable<ZCOrderResult> arrivalDistination(@Field("order_id") Long orderId,
                                                  @Field("app_key") String appKey,
                                                  @Field("advance_price") Double advance_price,//垫付
@@ -182,7 +182,7 @@ public interface ZCApiService {
      * @return
      */
     @FormUrlEncoded
-    @PUT("/api/v1/finishOrder")
+    @PUT("/api/v1/finishSpecialOrder")
     Observable<EmResult> payOrder(@Field("id") Long orderId,
                                   @Field("app_key") String appKey,
                                   @Field("pay_type") String payType);
@@ -210,7 +210,7 @@ public interface ZCApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("/driver/api/v1/createOrder")
+    @POST("/driver/api/v1/createSpecialOrder")
     Observable<ZCOrderResult> createOrder(@Field("passenger_id") Long passengerId,
                                           @Field("passenger_name") String passengerName,
                                           @Field("passenger_phone") String passengerPhone,
@@ -243,7 +243,7 @@ public interface ZCApiService {
      * @param appKey
      * @return
      */
-    @GET("driver/api/v1/getBudgetPrice")
+    @GET("driver/api/v1/getSpecialBudgetPrice")
     Observable<BudgetResult> getBudgetPrice(@Query("passenger_id") Long passengerId,
                                             @Query("company_id") Long companyId,
                                             @Query("distance") Double distance,
@@ -260,7 +260,7 @@ public interface ZCApiService {
      * @param appKey
      * @return
      */
-    @GET("/api/v1/specialcar/vehicleCharges")
+    @GET("/api/v1/specialcar/bustree")
     Observable<ZCTypeResult> getZCBusiness(@Query("app_key") String appKey,
                                            @Query("page")Integer page,
                                            @Query("limit")Integer limit,
@@ -284,7 +284,7 @@ public interface ZCApiService {
      * @return
      */
     @FormUrlEncoded
-    @PUT("driver/api/v1/cancelOrder")
+    @PUT("driver/api/v1/cancelSpecialOrder")
     Observable<EmResult> cancelOrder(@Field("order_id") Long orderId,
                                      @Field("driver_id") Long driverId,
                                      @Field("app_key") String appKey,
