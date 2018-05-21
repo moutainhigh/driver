@@ -6,7 +6,7 @@ def libs = rootProject.ext.dependencies
 android {
     compileSdkVersion cfg.compileSdkVersion
     defaultConfig {
-        applicationId "me.xiaoka.travel.driver"
+        applicationId "com.rvakva.travel.publicdriver"
         minSdkVersion cfg.minSdkVersion
         targetSdkVersion cfg.targetSdkVersion
         versionCode 230

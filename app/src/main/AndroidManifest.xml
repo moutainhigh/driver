@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="me.xiaoka.travel.driver">
+    package="com.rvakva.travel.publicdriver">
 
     <permission
-        android:name="me.xiaoka.travel.driver.permission"
+        android:name="com.rvakva.travel.publicdriver.permission"
         android:protectionLevel="normal" />
 
     <!--用于访问网络，网络定位需要上网-->
