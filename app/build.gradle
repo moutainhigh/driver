@@ -20,8 +20,14 @@ android {
         }
     }
     signingConfigs {
-        release {
+        debug {
             keyAlias 'v5通用司机端'
+            keyPassword 'easymin'
+            storeFile file('v5签名信息.keystore')
+            storePassword 'easymin'
+        }
+        release {
+            keyAlias 'v5司机端'
             keyPassword 'easymin'
             storeFile file('v5签名信息.keystore')
             storePassword 'easymin'
@@ -37,7 +43,7 @@ android {
         }
 
         debug {
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
         }
     }
 
