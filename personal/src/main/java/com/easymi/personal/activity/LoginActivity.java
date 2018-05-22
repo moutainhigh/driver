@@ -363,7 +363,6 @@ public class LoginActivity extends RxBaseActivity {
             editAccount.setText(acc);
             editPsw.setText(psw);
         }
-        editQiye.setText(XApp.getMyPreferences().getString(Config.SP_LAT_QIYE_CODE, ""));
     }
 
     private void setLoginBtnEnable(boolean enable) {
