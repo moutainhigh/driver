@@ -107,7 +107,7 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
         if (dymOrder != null && dymOrder.orderType.equals(Config.DAIJIA)) {
             if (dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
                 simpleFeeCon.setVisibility(View.VISIBLE);
-                lcTxt.setText(getString(R.string.order_dis) + dymOrder.distance + getString(R.string.money_unit));
+                lcTxt.setText(getString(R.string.order_dis) + dymOrder.distance + getString(R.string.dis_unit));
                 feeTxt.setText(getString(R.string.order_fee) + dymOrder.totalFee + getString(R.string.money_unit));
 
                 timer = new Timer();
@@ -116,7 +116,7 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
                     public void run() {
                         runOnUiThread(() -> {
                             DymOrder dymOrder1 = DymOrder.findByIDType(orderId, orderType);
-                            lcTxt.setText(getString(R.string.order_dis) + dymOrder1.distance + getString(R.string.money_unit));
+                            lcTxt.setText(getString(R.string.order_dis) + dymOrder1.distance + getString(R.string.dis_unit));
                             feeTxt.setText(getString(R.string.order_fee) + dymOrder1.totalFee + getString(R.string.money_unit));
                         });
                     }

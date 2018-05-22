@@ -69,6 +69,7 @@
 
 
     <string name="money_unit">元</string>
+    <string name="dis_unit">里程</string>
     <string name="order_dis">订单里程：</string>
     <string name="order_fee">订单费用：</string>
     <string name="key_word">汽车站|火车站|机场</string>
