@@ -88,6 +88,7 @@
             android:name="com.alibaba.app.appsecret"
             android:value="94af5f3fb5eb79a86ad0d51ec3041f90" /> <!-- 请填写你自己的appSecret -->
 
+
         <service
             android:name="com.alibaba.sdk.android.push.MsgService"
             android:exported="false">

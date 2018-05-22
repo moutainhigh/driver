@@ -68,6 +68,7 @@
     <string name="down_loading">下載中...</string>
 
     <string name="money_unit">元</string>
+    <string name="dis_unit">公里</string>
     <string name="order_dis">訂單里程：</string>
     <string name="order_fee">訂單費用：</string>
     <string name="key_word">汽車站|火車站|機場</string>

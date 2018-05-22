@@ -77,7 +77,7 @@ public class LiushuiActivity extends RxBaseActivity {
     @Override
     public void initViews(Bundle savedInstanceState) {
         recyclerView = findViewById(R.id.recyclerView);
-        tabLayout = findViewById(R.id.tab_layout);
+        tabLayout = findViewById(R.id.liushui_tab_layout);
         errLayout = findViewById(R.id.cus_err_layout);
 
         orders = new ArrayList<>();

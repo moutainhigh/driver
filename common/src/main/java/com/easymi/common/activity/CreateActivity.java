@@ -39,8 +39,8 @@ public class CreateActivity extends RxBaseActivity {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
-        tabLayout = findViewById(R.id.tab_layout);
-        viewPager = findViewById(R.id.view_pager);
+        tabLayout = findViewById(R.id.create_tab_layout);
+        viewPager = findViewById(R.id.create_view_pager);
 
         initTabLayout();
     }

@@ -115,7 +115,8 @@
         
     <string name="down_loading">downloading...</string>
 
-    <string name="money_unit">element </string>
+    <string name="money_unit">Yuan</string>
+    <string name="dis_unit">Km</string>
     <string name="order_dis">Order Miles:</string>
     <string name="order_fee">Order Fee:</string>
     <string name="key_word"> bus station | train station | airport </string>
