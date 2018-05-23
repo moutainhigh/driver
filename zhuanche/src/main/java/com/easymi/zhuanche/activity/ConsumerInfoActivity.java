@@ -42,7 +42,7 @@ public class ConsumerInfoActivity extends RxBaseActivity {
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_consumer_info;
+        return R.layout.zc_activity_consumer_info;
     }
 
     @Override

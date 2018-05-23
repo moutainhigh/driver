@@ -60,7 +60,7 @@ public class CheatingFragment extends RxBaseFragment {
 
     @Override
     public int getLayoutResId() {
-        return R.layout.cheating_fragment;
+        return R.layout.zc_cheating_fragment;
     }
 
     @Override

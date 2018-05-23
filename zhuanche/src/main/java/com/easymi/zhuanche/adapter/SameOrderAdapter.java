@@ -45,7 +45,7 @@ public class SameOrderAdapter extends RecyclerView.Adapter<SameOrderAdapter.Hold
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.same_order_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.zc_same_order_item, parent, false);
         return new Holder(view);
     }
 

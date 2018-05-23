@@ -68,7 +68,7 @@ public class CallPhoneDialog extends Dialog {
 
         public CallPhoneDialog create() {
             dialog = new CallPhoneDialog(context, R.style.Dialog);
-            View view = LayoutInflater.from(context).inflate(R.layout.call_phone_dialog, null, true);
+            View view = LayoutInflater.from(context).inflate(R.layout.zc_call_phone_dialog, null, true);
             callUser = view.findViewById(R.id.call_user);
             callPassenger = view.findViewById(R.id.call_passenger);
             cancel = view.findViewById(R.id.cancel);

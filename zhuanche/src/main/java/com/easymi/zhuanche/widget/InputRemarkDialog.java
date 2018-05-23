@@ -118,7 +118,7 @@ public class InputRemarkDialog extends Dialog {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             // instantiate the dialog with the custom Theme
             final InputRemarkDialog dialog = new InputRemarkDialog(context, R.style.Dialog);
-            View layout = inflater.inflate(R.layout.dialog_remark_layout, null);
+            View layout = inflater.inflate(R.layout.zc_dialog_remark_layout, null);
             editText = (EditText) layout.findViewById(R.id.edit_money);
             dialog.addContentView(layout, new LayoutParams(
                     LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));

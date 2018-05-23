@@ -73,7 +73,7 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_old_running;
+        return R.layout.zc_activity_old_running;
     }
 
     @Override

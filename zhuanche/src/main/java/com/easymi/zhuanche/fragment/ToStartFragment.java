@@ -40,7 +40,7 @@ public class ToStartFragment extends RxBaseFragment {
 
     @Override
     public int getLayoutResId() {
-        return R.layout.to_start_fragment;
+        return R.layout.zc_to_start_fragment;
     }
 
     @Override

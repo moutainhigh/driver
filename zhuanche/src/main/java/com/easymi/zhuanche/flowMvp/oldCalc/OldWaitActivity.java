@@ -191,7 +191,7 @@ public class OldWaitActivity extends RxBaseActivity implements FlowContract.View
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_old_wait;
+        return R.layout.zc_activity_old_wait;
     }
 
     private LinearLayout back;

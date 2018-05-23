@@ -49,7 +49,7 @@ public class FeeDetailActivity extends RxBaseActivity {
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_fee_detail;
+        return R.layout.zc_activity_fee_detail;
     }
 
     @Override

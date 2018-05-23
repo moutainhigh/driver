@@ -184,7 +184,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_flow;
+        return R.layout.zc_activity_flow;
     }
 
     @Override
@@ -698,7 +698,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         bottomSheetDialog = new CusBottomSheetDialog(this);
 
-        View view = LayoutInflater.from(this).inflate(R.layout.pay_type_dialog, null, false);
+        View view = LayoutInflater.from(this).inflate(R.layout.zc_pay_type_dialog, null, false);
 
         ImageView pay1Img = view.findViewById(R.id.pay_1_img);
         ImageView pay2Img = view.findViewById(R.id.pay_2_img);

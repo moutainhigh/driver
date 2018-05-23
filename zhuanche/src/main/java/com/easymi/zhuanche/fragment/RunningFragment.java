@@ -52,7 +52,7 @@ public class RunningFragment extends RxBaseFragment {
 
     @Override
     public int getLayoutResId() {
-        return R.layout.running_fragment;
+        return R.layout.zc_running_fragment;
     }
 
     @Override
