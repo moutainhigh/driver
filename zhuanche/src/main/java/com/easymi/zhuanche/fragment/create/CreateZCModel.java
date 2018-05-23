@@ -48,12 +48,28 @@ public class CreateZCModel implements CreateZCContract.Model {
     }
 
     @Override
-    public Observable<ZCOrderResult> createOrder(Long passengerId, String passengerName, String passengerPhone, long orderTime, String bookAddress, Double bookAddressLat, Double bookAddressLng, String destination, Double destinationLat, Double destinationLng, Long companyId, String companyName, Double budgetFee, Long cid, String orderPerson, Long orderPersonId) {
+    public Observable<ZCOrderResult> createOrder(Long passengerId,
+                                                 String passengerName,
+                                                 String passengerPhone,
+                                                 long orderTime,
+                                                 String bookAddress,
+                                                 Double bookAddressLat,
+                                                 Double bookAddressLng,
+                                                 String destination,
+                                                 Double destinationLat,
+                                                 Double destinationLng,
+                                                 Long companyId,
+                                                 String companyName,
+                                                 Double budgetFee,
+                                                 Long cid,
+                                                 String orderPerson,
+                                                 Long orderPersonId) {
         return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
                 .createOrder(passengerId, passengerName, passengerPhone, orderTime,
                         bookAddress, bookAddressLat, bookAddressLng, destination,
                         destinationLat, destinationLng, companyId, companyName,
-                        budgetFee, EmUtil.getAppKey(), cid, orderPerson, orderPersonId)
+                        budgetFee, EmUtil.getAppKey(), cid, orderPerson, orderPersonId,
+                        (long) EmUtil.getEmployInfo().vehicle.serviceType)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

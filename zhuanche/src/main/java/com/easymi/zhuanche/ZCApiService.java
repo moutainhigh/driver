@@ -227,7 +227,8 @@ public interface ZCApiService {
                                           @Field("app_key") String appKey,
                                           @Field("cid") Long cid,
                                           @Field("order_person") String orderPerson,
-                                          @Field("order_person_id") Long orderPersonId
+                                          @Field("order_person_id") Long orderPersonId,
+                                          @Field("car_type") Long carType
     );
 
     /**
@@ -263,10 +264,10 @@ public interface ZCApiService {
      */
     @GET("/api/v1/specialcar/bustree")
     Observable<ZCTypeResult> getZCBusiness(@Query("app_key") String appKey,
-                                           @Query("page")Integer page,
-                                           @Query("limit")Integer limit,
-                                           @Query("company_id")Long companyId,
-                                           @Query("service_type")Integer serviceType
+                                           @Query("page") Integer page,
+                                           @Query("limit") Integer limit,
+                                           @Query("company_id") Long companyId,
+                                           @Query("service_type") Integer serviceType
     );
 
     @GET("api/v1/passengerMustBe")
