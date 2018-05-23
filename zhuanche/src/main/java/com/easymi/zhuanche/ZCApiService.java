@@ -168,7 +168,12 @@ public interface ZCApiService {
                                                  @Field("real_destination") String realAddress,
                                                  @Field("real_destination_lat") Double realLat,
                                                  @Field("real_destination_lng") Double realLng,
-                                                 @Field("min_cost") Double minCost
+                                                 @Field("min_cost") Double minCost,
+                                                 @Field("peak_cost") double peakCost,
+                                                 @Field("night_price") double nightPrice,
+                                                 @Field("low_speed_cost") double lowSpeedCost,
+                                                 @Field("low_speed_time") double lowSpeedTime
+
     );
 
     /**

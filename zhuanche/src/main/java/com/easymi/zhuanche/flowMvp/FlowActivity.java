@@ -12,6 +12,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.text.Html;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -335,12 +339,17 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             to_appoint_layout.setVisibility(View.VISIBLE);
             to_appoint_navi_con.setOnClickListener(view -> presenter.navi(new LatLng(getStartAddr().lat,
                     getStartAddr().lng), getStartAddr().poi, orderId));
+
             String time = getString(R.string.please_start_at) +
-                    "<font color='blue'><b><tt>" +
                     TimeUtil.getTime("MM:dd", zcOrder.bookTime * 1000) +
-                    "</tt></b></font>" +
                     getString(R.string.arrive_start);
-            to_appoint_time.setText(time);
+
+            SpannableString ss = new SpannableString(time);
+            ForegroundColorSpan colorSpan = new ForegroundColorSpan(Color.parseColor("#3c98e3"));
+            int startIndex = 2;
+            int endIndex = ss.length() - 7;
+            ss.setSpan(colorSpan, startIndex, endIndex, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            to_appoint_time.setText(ss);
         } else if (zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER) {
             hideTops();
             arrive_start_wait_layout.setVisibility(View.VISIBLE);
@@ -1267,7 +1276,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         if (zcOrder == null) {
             return;
         }
-        if (orderId == zcOrder.orderId && orderType.equals(Config.DAIJIA)) {
+        if (orderId == zcOrder.orderId && orderType.equals(Config.ZHUANCHE)) {
             if (null != waitFragment && waitFragment.isVisible()) {
                 waitFragment.showFee(DymOrder.findByIDType(orderId, orderType));
             } else if (null != runningFragment && runningFragment.isVisible()) {

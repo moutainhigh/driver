@@ -149,6 +149,12 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
                 .append("minestMoney").append(" ").append("DOUBLE").append(",")
 
+                //添加专车收费
+                .append("peakCost").append(" ").append("DOUBLE").append(",")
+                .append("nightPrice").append(" ").append("DOUBLE").append(",")
+                .append("lowSpeedCost").append(" ").append("DOUBLE").append(",")
+                .append("lowSpeedTime").append(" ").append("DOUBLE").append(",")
+
                 .append("orderStatus").append(" ").append("INTEGER")
                 .append(");");
         execCreateTableSQL(db);
