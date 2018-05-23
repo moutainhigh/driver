@@ -21,9 +21,9 @@ import rx.schedulers.Schedulers;
 public class CreateZCModel implements CreateZCContract.Model {
 
     @Override
-    public Observable<ZCTypeResult> queryZCType(Long companyId) {
+    public Observable<ZCTypeResult> queryZCType(Long companyId, Integer serviceType) {
         return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
-                .getZCBusiness(EmUtil.getAppKey(),1,100,companyId)
+                .getZCBusiness(EmUtil.getAppKey(), 1, 100, companyId, serviceType)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -39,9 +39,9 @@ public class CreateZCModel implements CreateZCContract.Model {
     }
 
     @Override
-    public Observable<BudgetResult> getBudgetPrice(Long passengerId, Long companyId, Double distance, Integer time, Long orderTime, Long typeId) {
+    public Observable<BudgetResult> getBudgetPrice(Long passengerId, Long companyId, Double distance, Integer time, Long orderTime, Long typeId, Long modelId) {
         return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
-                .getBudgetPrice(passengerId, companyId, distance, time, orderTime, "batch", typeId, EmUtil.getAppKey())
+                .getBudgetPrice(passengerId, companyId, distance, time, orderTime, "batch", typeId, modelId, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

@@ -40,7 +40,7 @@ public class CreateZCPresenter implements CreateZCContract.Presenter {
     @Override
     public void queryZCType() {
         Employ employ = EmUtil.getEmployInfo();
-        view.getManager().add(model.queryZCType(employ.company_id).subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<ZCTypeResult>() {
+        view.getManager().add(model.queryZCType(employ.company_id, employ.vehicle.serviceType).subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<ZCTypeResult>() {
             @Override
             public void onNext(ZCTypeResult zcTypeResult) {
                 view.showTypeTab(zcTypeResult);
@@ -70,10 +70,10 @@ public class CreateZCPresenter implements CreateZCContract.Presenter {
     }
 
     @Override
-    public void queryBudget(Long passengerId, Double distance, Integer time, Long orderTime, Long typeId) {
+    public void queryBudget(Long passengerId, Double distance, Integer time, Long orderTime, Long typeId,Long modelId) {
         Employ employ = EmUtil.getEmployInfo();
         view.getManager().add(model.getBudgetPrice(passengerId, employ.company_id,
-                distance == null ? 0.0 : distance, time == null ? 0 : time, orderTime, typeId)
+                distance == null ? 0.0 : distance, time == null ? 0 : time, orderTime, typeId,modelId)
                 .subscribe(new MySubscriber<BudgetResult>(context, false,
                         false, new HaveErrSubscriberListener<BudgetResult>() {
                     @Override

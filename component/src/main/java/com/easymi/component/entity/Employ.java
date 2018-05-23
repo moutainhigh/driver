@@ -39,6 +39,8 @@ public class Employ extends BaseEmploy implements Parcelable {
 
     public String app_key;
 
+    public Vehicle vehicle;//车辆信息
+
     /**
      * 保存数据
      */
@@ -102,13 +104,7 @@ public class Employ extends BaseEmploy implements Parcelable {
     public static Employ findByID(Long driverID) {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
-        Cursor cursor = db.query("t_driverinfo", new String[]{"id",
-                        "user_name", "password", "name", "real_name", "sex",
-                        "company_id", "company_name", "phone", "balance", "service_type",
-                        "child_type", "bank_name", "bank_card_no", "cash_person_name",
-                        "portrait_path", "score", "status", "company_phone"},
-                "id = ?", new String[]{String.valueOf(driverID)},
-                null, null, null);
+        Cursor cursor = db.rawQuery("select * from t_driverinfo where id = ?", new String[]{String.valueOf(driverID)});
         Employ driverInfo = null;
         try {
             if (cursor.moveToFirst()) {
@@ -152,8 +148,8 @@ public class Employ extends BaseEmploy implements Parcelable {
                         .getColumnIndex("status"));
                 driverInfo.company_phone = cursor.getString(cursor
                         .getColumnIndex("company_phone"));
-
-				/*
+                driverInfo.vehicle = Vehicle.findByEmployId(driverID);
+                /*
                  * driverInfo.age =
 				 * cursor.getString(cursor.getColumnIndex("age"));
 				 * driverInfo.jialing =
@@ -299,6 +295,9 @@ public class Employ extends BaseEmploy implements Parcelable {
     }
 
     public boolean saveOrUpdate() {
+        if (null != vehicle) { //保存或更新车辆信息
+            vehicle.saveOrUpdate(id);
+        }
         if (exists(this.id)) {
             return this.updateAll();
         } else {

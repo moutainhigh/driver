@@ -94,6 +94,11 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
         isPrepared = false;
         findById();
 
+        if(null == EmUtil.getEmployInfo().vehicle){
+            ToastUtil.showMessage(getActivity(),getString(R.string.no_car));
+            return;
+        }
+
         init();
 
         presenter.queryZCType();//查询代驾子类型
@@ -203,7 +208,7 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
     @Override
     public void showTypeTab(ZCTypeResult result) {
         tabLayout.removeAllTabs();
-        List<ZCType> zcTypes = result.categories;
+        List<ZCType> zcTypes = result.types;
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -336,6 +341,6 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
         }
 
         presenter.queryBudget(passenger.id, distance, duration,
-                orderTime == null ? System.currentTimeMillis() / 1000 : orderTime / 1000, selectedZCType.id);
+                orderTime == null ? System.currentTimeMillis() / 1000 : orderTime / 1000, selectedZCType.id, (long) EmUtil.getEmployInfo().vehicle.serviceType);
     }
 }

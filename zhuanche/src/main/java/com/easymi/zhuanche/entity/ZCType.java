@@ -7,7 +7,4 @@ package com.easymi.zhuanche.entity;
 public class ZCType {
     public long id;
     public String name;
-    public int seq;
-    public String appkey;
-    public long pid;
 }

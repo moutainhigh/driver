@@ -16,7 +16,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "data.db";
 
-    private static final int VERSION = 50;
+    private static final int VERSION = 51;
 
     private StringBuffer sqlBuf;
 
@@ -68,26 +68,30 @@ public class SqliteHelper extends SQLiteOpenHelper {
         createDriverInfoTable(db);
         createDymTable(db);
         createSettingTable(db);
+        createVehicleInfoTable(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         //一有数据库的更新就将sp里的东西归为默认值
-        SharedPreferences.Editor editor = XApp.getPreferencesEditor();
-        editor.clear().apply();
-
-        List<String> tableNames = findAllTableName(db);
-        for (String s : tableNames) {
-            if (s.equals("android_metadata") || s.equals("sqlite_sequence")) {
-
-            } else {
-                db.execSQL("DROP TABLE IF EXISTS " + s);
-            }
+//        SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+//        editor.clear().apply();
+//
+//        List<String> tableNames = findAllTableName(db);
+//        for (String s : tableNames) {
+//            if (s.equals("android_metadata") || s.equals("sqlite_sequence")) {
+//
+//            } else {
+//                db.execSQL("DROP TABLE IF EXISTS " + s);
+//            }
+//        }
+//        createDriverInfoTable(db);
+//        createDymTable(db);
+//        createSettingTable(db);
+        if (oldVersion <= 50) {
+            createVehicleInfoTable(db);
         }
-        createDriverInfoTable(db);
-        createDymTable(db);
-        createSettingTable(db);
     }
 
     private void createDriverInfoTable(SQLiteDatabase db) {
@@ -165,6 +169,23 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("payMoney3").append(" ").append("DOUBLE").append(",")
 
                 .append("workCarChangeOrder").append(" ").append("INTEGER")
+                .append(");");
+        execCreateTableSQL(db);
+    }
+
+    private void createVehicleInfoTable(SQLiteDatabase db) {
+        sqlBuf.append("CREATE TABLE ").append("t_Vehicle").append(" (")
+                .append("employId").append(" INTEGER PRIMARY KEY, ")
+                .append("vehicleId").append(" ").append("LONG").append(",")
+                .append("companyId").append(" ").append("LONG").append(",")
+                .append("vehicleBrand").append(" ").append("TEXT").append(",")
+                .append("vehicleModel").append(" ").append("TEXT").append(",")
+                .append("plateColor").append(" ").append("TEXT").append(",")
+                .append("vehicleNo").append(" ").append("TEXT").append(",")
+                .append("vehicleType").append(" ").append("TEXT").append(",")
+                .append("commercialType").append(" ").append("INTEGER").append(",")
+
+                .append("serviceType").append(" ").append("INTEGER")
                 .append(");");
         execCreateTableSQL(db);
     }

@@ -243,7 +243,7 @@ public interface ZCApiService {
      * @param appKey
      * @return
      */
-    @GET("driver/api/v1/getSpecialBudgetPrice")
+    @GET("api/v1/getSpecialBudgetPrice")
     Observable<BudgetResult> getBudgetPrice(@Query("passenger_id") Long passengerId,
                                             @Query("company_id") Long companyId,
                                             @Query("distance") Double distance,
@@ -251,6 +251,7 @@ public interface ZCApiService {
                                             @Query("order_time") Long orderTime,
                                             @Query("channel") String channel,
                                             @Query("typeId") Long typeId,
+                                            @Query("model_id") Long modelId,
                                             @Query("app_key") String appKey
     );
 
@@ -264,7 +265,8 @@ public interface ZCApiService {
     Observable<ZCTypeResult> getZCBusiness(@Query("app_key") String appKey,
                                            @Query("page")Integer page,
                                            @Query("limit")Integer limit,
-                                           @Query("company_id")Long companyId
+                                           @Query("company_id")Long companyId,
+                                           @Query("service_type")Integer serviceType
     );
 
     @GET("api/v1/passengerMustBe")

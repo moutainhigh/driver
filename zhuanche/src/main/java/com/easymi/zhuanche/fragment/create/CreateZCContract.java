@@ -53,7 +53,7 @@ public interface CreateZCContract {
 
         void queryPassenger(String phone);
 
-        void queryBudget(Long passengerId, Double distance, Integer time, Long orderTime, Long typeId);
+        void queryBudget(Long passengerId, Double distance, Integer time, Long orderTime, Long typeId,Long modelId);
 
         void routePlan(LatLonPoint start, LatLonPoint end);
 
@@ -66,11 +66,11 @@ public interface CreateZCContract {
     }
 
     interface Model {
-        Observable<ZCTypeResult> queryZCType(Long companyId);
+        Observable<ZCTypeResult> queryZCType(Long companyId,Integer serviceType);
 
         Observable<PassengerResult> queryPassenger(Long companyId, String companyName, String phone);
 
-        Observable<BudgetResult> getBudgetPrice(Long passengerId, Long companyId, Double distance, Integer time, Long orderTime, Long typeId);
+        Observable<BudgetResult> getBudgetPrice(Long passengerId, Long companyId, Double distance, Integer time, Long orderTime, Long typeId,Long modelId);
 
         Observable<ZCOrderResult> createOrder(Long passengerId, String passengerName,
                                               String passengerPhone, long orderTime,

@@ -8,7 +8,9 @@ import android.support.v4.view.ViewPager;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.easymi.common.R;
 import com.easymi.common.adapter.VpAdapter;
+import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.widget.CusToolbar;
 
 import java.util.ArrayList;
@@ -59,15 +61,13 @@ public class CreateActivity extends RxBaseActivity {
         try {
             Class daijia = Class.forName("com.easymi.daijia.fragment.create.CreateDJFragment");
             Class zhuanche = Class.forName("com.easymi.zhuanche.fragment.create.CreateZCFragment");
-            fragments.add((Fragment) daijia.newInstance());
-            fragments.add((Fragment) zhuanche.newInstance());
+            if (EmUtil.getEmployInfo().service_type.contains(Config.DAIJIA)) {
+                fragments.add((Fragment) daijia.newInstance());
+            }
+            if (EmUtil.getEmployInfo().service_type.contains(Config.ZHUANCHE)) {
+                fragments.add((Fragment) zhuanche.newInstance());
+            }
 
-//            Class zhuanche = Class.forName("com.easymi.zhuanche.fragment.create.CreateZCFragment");
-//            fragments.add((Fragment) zhuanche.newInstance());
-//            fragments.add((Fragment) clazz.newInstance());
-//            fragments.add((Fragment) clazz.newInstance());
-//            fragments.add((Fragment) clazz.newInstance());
-//            fragments.add((Fragment) clazz.newInstance());
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -82,10 +82,20 @@ public class CreateActivity extends RxBaseActivity {
 
         tabLayout.setupWithViewPager(viewPager);
 
-        tabLayout.getTabAt(0).setText(getString(R.string.create_daijia));
-        tabLayout.getTabAt(1).setText(getString(R.string.create_zhuanche));
-//        tabLayout.getTabAt(2).setText(getString(R.string.create_paotui));
-//        tabLayout.getTabAt(3).setText(getString(R.string.create_huoyun));
-//        tabLayout.getTabAt(4).setText(getString(R.string.create_zhuanxian));
+        if (fragments.size() != 0) {
+            String[] types = EmUtil.getEmployInfo().service_type.split(",");
+            for (int i = 0; i < fragments.size(); i++) {
+                tabLayout.getTabAt(i).setText(pin2Hanzi(types[i]));
+            }
+        }
+    }
+
+    private String pin2Hanzi(String type) {
+        if (type.equals(Config.DAIJIA)) {
+            return getString(R.string.create_daijia);
+        } else if (type.equals(Config.ZHUANCHE)) {
+            return getString(R.string.create_zhuanche);
+        }
+        return "";
     }
 }
