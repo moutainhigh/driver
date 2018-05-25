@@ -88,7 +88,7 @@ public class XApp extends MultiDexApplication {
 //        BGASwipeBackHelper.init(instance, null);
 
         SpeechUtility.createUtility(XApp.this, "appid=" + "57c91477");
-        initIflytekTTS();
+        initIflytekTTS(false,"");
 
         initDataBase();
 
@@ -143,16 +143,16 @@ public class XApp extends MultiDexApplication {
     /**
      * 初始化讯飞语音
      */
-    private void initIflytekTTS() {
-        iflytekSpe = SpeechSynthesizer.createSynthesizer(this, new InitListener() {
-            @Override
-            public void onInit(int code) {
-                Log.d("TAG", "InitListener init() code = " + code);
-                if (code != ErrorCode.SUCCESS) {
-                    Log.e("initIflytekTTS", "初始化失败,错误码：" + code);
-                } else {
-                    setTtsParam();
+    private void initIflytekTTS(boolean speakNow, String msg) {
+        iflytekSpe = SpeechSynthesizer.createSynthesizer(this, code -> {
+            Log.d("TAG", "InitListener init() code = " + code);
+            if (code != ErrorCode.SUCCESS) {
+                if (speakNow) {
+                    syntheticVoice(msg);
                 }
+                Log.e("initIflytekTTS", "初始化失败,错误码：" + code);
+            } else {
+                setTtsParam();
             }
         });
 
@@ -251,15 +251,17 @@ public class XApp extends MultiDexApplication {
             player.stop();
         }
         player = MediaPlayer.create(this, resId);
-        player.setOnCompletionListener(mediaPlayer -> {
-            if (StringUtils.isNotBlank(text)) {
-                syntheticVoice(text);
-            } else {
-                abandonFocus();
-            }
-        });
-        requestFocus();
-        player.start();
+        if (null != player) {
+            player.setOnCompletionListener(mediaPlayer -> {
+                if (StringUtils.isNotBlank(text)) {
+                    syntheticVoice(text);
+                } else {
+                    abandonFocus();
+                }
+            });
+            requestFocus();
+            player.start();
+        }
     }
 
     /**
@@ -282,12 +284,14 @@ public class XApp extends MultiDexApplication {
             player.stop();
         }
         player = MediaPlayer.create(this, R.raw.silent);
-        player.setOnCompletionListener(mediaPlayer -> {
-            Log.e("AudioFocus", "播放静音音频完成，循环播放中..");
-            playSlientMusic();
-        });
-        player.start();
-        Log.e("AudioFocus", "开始播放静音音频");
+        if (null != player) {
+            player.setOnCompletionListener(mediaPlayer -> {
+                Log.e("AudioFocus", "播放静音音频完成，循环播放中..");
+                playSlientMusic();
+            });
+            player.start();
+            Log.e("AudioFocus", "开始播放静音音频");
+        }
     }
 
     /**
@@ -326,6 +330,10 @@ public class XApp extends MultiDexApplication {
     public void syntheticVoice(String msg) {
         boolean voiceAble = getMyPreferences().getBoolean(Config.SP_VOICE_ABLE, true);
         if (!voiceAble) {
+            return;
+        }
+        if (iflytekSpe == null) {
+            initIflytekTTS(true,msg);
             return;
         }
         if (requestFocus() && null != iflytekSpe) {
@@ -370,8 +378,6 @@ public class XApp extends MultiDexApplication {
                 }
             });
             Log.e("speechCode", code + "");
-        } else {
-            initIflytekTTS();
         }
     }
 

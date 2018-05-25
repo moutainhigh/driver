@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -95,6 +96,12 @@ public class LoginActivity extends RxBaseActivity {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
+
+        Intent intent222 = new Intent(Intent.ACTION_VIEW, Uri.parse("customscheme://com.rvakva.travel.publicdriver/local_push?title=华为测试"));
+        intent222.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        String intentUri = intent222.toUri(Intent.URI_INTENT_SCHEME);
+        Log.e("intentUri",intentUri);
+
         loginBtn = findViewById(R.id.login_button);
         loginBtn.setOnClickListener(v -> {
 //            login("13518181189", "1234");

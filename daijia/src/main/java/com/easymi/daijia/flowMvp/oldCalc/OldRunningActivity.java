@@ -23,6 +23,7 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.R;
 import com.easymi.daijia.entity.Address;
@@ -392,7 +393,12 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
      * @param view
      */
     public void toNavi(View view) {
-        presenter.navi(new LatLng(getEndAddr().lat, getEndAddr().lng), getEndAddr().poi, orderId);
+        if (null != getEndAddr()) {
+            presenter.navi(new LatLng(getEndAddr().lat, getEndAddr().lng), getEndAddr().poi, orderId);
+        } else {
+            ToastUtil.showMessage(OldRunningActivity.this, getString(R.string.illegality_place));
+        }
+
     }
 
     private Address getEndAddr() {
