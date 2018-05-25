@@ -234,6 +234,7 @@
                 android:onClick="modelSet"
                 android:layout_width="0.0dp"
                 android:layout_height="@dimen/btn_height"
+                android:visibility="gone"
                 android:layout_marginRight="10dp"
                 android:layout_weight="3"
                 android:background="@drawable/corners_button_bg_2"
