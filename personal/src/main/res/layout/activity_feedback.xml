@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/btn_height"
         android:gravity="center"
-        android:background="@drawable/corners_button_able_selector"
+        android:background="@drawable/p_corners_btn_selector"
         android:enabled="false"
         android:text="@string/feedback_apply"
         android:textColor="@color/white"

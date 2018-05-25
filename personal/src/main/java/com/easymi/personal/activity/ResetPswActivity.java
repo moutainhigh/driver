@@ -3,7 +3,6 @@ package com.easymi.personal.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
@@ -31,7 +30,6 @@ import com.easymi.component.widget.VerifyCodeView;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
 import com.easymi.personal.result.PicCodeResult;
-import com.easymi.personal.result.SettingResult;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -126,7 +124,7 @@ public class ResetPswActivity extends RxBaseActivity {
                     confirmAccount.setBackgroundDrawable(getResources().getDrawable(R.drawable.corners_button_press_bg));
                 } else {
                     confirmAccount.setEnabled(true);
-                    confirmAccount.setBackgroundDrawable(getResources().getDrawable(R.drawable.corners_button_bg));
+                    confirmAccount.setBackgroundDrawable(getResources().getDrawable(R.drawable.p_corners_button_bg));
                 }
             }
         });
@@ -150,7 +148,7 @@ public class ResetPswActivity extends RxBaseActivity {
                     confirmPsw.setBackgroundDrawable(getResources().getDrawable(R.drawable.corners_button_press_bg));
                 } else {
                     confirmPsw.setEnabled(true);
-                    confirmPsw.setBackgroundDrawable(getResources().getDrawable(R.drawable.corners_button_bg));
+                    confirmPsw.setBackgroundDrawable(getResources().getDrawable(R.drawable.p_corners_button_bg));
                 }
             }
         });

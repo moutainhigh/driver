@@ -34,6 +34,13 @@ public class HelpCenterActivity extends RxBaseActivity {
 
     public void toDaijiaHelp(View view) {
         Intent intent = new Intent(HelpCenterActivity.this, HelpCenterSubActivity.class);
+        intent.putExtra("cateId", 2L);
+        startActivity(intent);
+    }
+
+    public void toZhuanCheHelp(View view) {
+        Intent intent = new Intent(HelpCenterActivity.this, HelpCenterSubActivity.class);
+        intent.putExtra("cateId", 4L);
         startActivity(intent);
     }
 

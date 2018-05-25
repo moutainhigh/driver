@@ -36,6 +36,7 @@ public class HelpCenterSubActivity extends RxBaseActivity {
     private HelpSubAdapter adapter;
 
     private List<HelpMenu> helpMenuList;
+    private Long cateId;
 
     @Override
     public int getLayoutId() {
@@ -58,6 +59,8 @@ public class HelpCenterSubActivity extends RxBaseActivity {
 
         helpMenuList = new ArrayList<>();
 
+        cateId = getIntent().getLongExtra("cateId", 2);
+
         getMenuData();
     }
 
@@ -69,7 +72,7 @@ public class HelpCenterSubActivity extends RxBaseActivity {
                         (long) 0,
                         1,
                         100,
-                        (long) 2)
+                        cateId)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

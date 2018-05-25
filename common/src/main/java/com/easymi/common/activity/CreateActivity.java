@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.easymi.common.R;
@@ -59,15 +60,22 @@ public class CreateActivity extends RxBaseActivity {
     private void initTabLayout() {
         fragments = new ArrayList<>();
         try {
-            Class daijia = Class.forName("com.easymi.daijia.fragment.create.CreateDJFragment");
-            Class zhuanche = Class.forName("com.easymi.zhuanche.fragment.create.CreateZCFragment");
-            if (EmUtil.getEmployInfo().service_type.contains(Config.DAIJIA)) {
-                fragments.add((Fragment) daijia.newInstance());
+            String[] types = null;
+            if (!TextUtils.isEmpty(EmUtil.getEmployInfo().service_type)) {
+                types = EmUtil.getEmployInfo().service_type.split(",");
             }
-            if (EmUtil.getEmployInfo().service_type.contains(Config.ZHUANCHE)) {
-                fragments.add((Fragment) zhuanche.newInstance());
+            //按顺序加载
+            if (types != null && types.length > 0) {
+                for (String type : types) {
+                    if (Config.DAIJIA.equals(type)) {
+                        Class daijia = Class.forName("com.easymi.daijia.fragment.create.CreateDJFragment");
+                        fragments.add((Fragment) daijia.newInstance());
+                    } else if (Config.ZHUANCHE.equals(type)) {
+                        Class zhuanche = Class.forName("com.easymi.zhuanche.fragment.create.CreateZCFragment");
+                        fragments.add((Fragment) zhuanche.newInstance());
+                    }
+                }
             }
-
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

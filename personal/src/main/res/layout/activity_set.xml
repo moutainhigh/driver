@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#f7f7f7">
+    android:background="#f7f7f7"
+    android:orientation="vertical">
 
     <com.easymi.component.widget.CusToolbar
         android:id="@+id/cus_toolbar"
@@ -28,10 +29,10 @@
                 android:background="@color/dark_gray" />
 
             <RelativeLayout
-                android:onClick="changePsw"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:onClick="changePsw">
 
 
                 <TextView
@@ -86,7 +87,12 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
-                    android:src="@mipmap/ic_row" />
+                    app:kswBackDrawable="@drawable/ios_back_drawable"
+                    app:kswThumbDrawable="@drawable/ios_thumb_selector"
+                    app:kswThumbMarginBottom="-4dp"
+                    app:kswThumbMarginLeft="-4dp"
+                    app:kswThumbMarginRight="-4dp"
+                    app:kswThumbMarginTop="-2dp" />
 
             </RelativeLayout>
 
@@ -117,7 +123,12 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
-                    android:src="@mipmap/ic_row" />
+                    app:kswBackDrawable="@drawable/ios_back_drawable"
+                    app:kswThumbDrawable="@drawable/ios_thumb_selector"
+                    app:kswThumbMarginBottom="-4dp"
+                    app:kswThumbMarginLeft="-4dp"
+                    app:kswThumbMarginRight="-4dp"
+                    app:kswThumbMarginTop="-2dp" />
 
             </RelativeLayout>
 
@@ -148,7 +159,12 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
-                    android:src="@mipmap/ic_row" />
+                    app:kswBackDrawable="@drawable/ios_back_drawable"
+                    app:kswThumbDrawable="@drawable/ios_thumb_selector"
+                    app:kswThumbMarginBottom="-4dp"
+                    app:kswThumbMarginLeft="-4dp"
+                    app:kswThumbMarginRight="-4dp"
+                    app:kswThumbMarginTop="-2dp"  />
 
             </RelativeLayout>
 
@@ -179,21 +195,26 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
-                    android:src="@mipmap/ic_row" />
+                    app:kswBackDrawable="@drawable/ios_back_drawable"
+                    app:kswThumbDrawable="@drawable/ios_thumb_selector"
+                    app:kswThumbMarginBottom="-4dp"
+                    app:kswThumbMarginLeft="-4dp"
+                    app:kswThumbMarginRight="-4dp"
+                    app:kswThumbMarginTop="-2dp"  />
 
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
-                android:visibility="gone"
-                android:background="@color/dark_gray" />
+                android:background="@color/dark_gray"
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:visibility="gone"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:visibility="gone">
 
 
                 <TextView
@@ -222,10 +243,10 @@
                 android:background="@color/dark_gray" />
 
             <RelativeLayout
-                android:onClick="choiceLanguage"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:onClick="choiceLanguage">
 
 
                 <TextView
@@ -259,10 +280,10 @@
                 android:background="@color/dark_gray" />
 
             <RelativeLayout
-                android:onClick="naviPrefence"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:onClick="naviPrefence">
 
 
                 <TextView
@@ -290,20 +311,19 @@
                 android:background="@color/dark_gray" />
 
 
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
                 android:layout_marginTop="20dp"
-                android:visibility="gone"
-                android:background="@color/dark_gray" />
+                android:background="@color/dark_gray"
+                android:visibility="gone" />
 
             <RelativeLayout
-                android:onClick="toStats"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:visibility="gone"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:onClick="toStats"
+                android:visibility="gone">
 
 
                 <TextView
@@ -328,15 +348,15 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
-                android:visibility="gone"
-                android:background="@color/dark_gray" />
+                android:background="@color/dark_gray"
+                android:visibility="gone" />
 
             <RelativeLayout
-                android:onClick="helpCenter"
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:onClick="helpCenter"
+                android:visibility="gone">
 
 
                 <TextView
@@ -361,8 +381,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
-                android:visibility="visible"
-                android:background="@color/dark_gray" />
+                android:background="@color/dark_gray"
+                android:visibility="visible" />
 
             <View
                 android:layout_width="match_parent"
@@ -371,10 +391,10 @@
                 android:background="@color/dark_gray" />
 
             <RelativeLayout
-                android:onClick="feedBack"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:onClick="feedBack">
 
 
                 <TextView
@@ -402,10 +422,10 @@
                 android:background="@color/dark_gray" />
 
             <RelativeLayout
-                android:onClick="contractUs"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:onClick="contractUs">
 
 
                 <TextView
@@ -433,10 +453,10 @@
                 android:background="@color/dark_gray" />
 
             <RelativeLayout
-                android:onClick="aboutUs"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:onClick="aboutUs">
 
 
                 <TextView
@@ -468,14 +488,15 @@
                 android:layout_height="0.1dp"
                 android:layout_marginTop="20dp"
                 android:background="@color/dark_gray" />
+
             <Button
-                android:onClick="logOut"
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:textColor="@color/colorAccent"
-                style="?android:attr/borderlessButtonStyle"
+                android:background="@color/white"
+                android:onClick="logOut"
                 android:text="@string/set_logout"
-                android:background="@color/white"/>
+                android:textColor="@color/colorAccent" />
 
             <View
                 android:layout_width="match_parent"
@@ -484,7 +505,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="60dp"/>
+                android:layout_height="60dp" />
 
         </LinearLayout>
     </ScrollView>

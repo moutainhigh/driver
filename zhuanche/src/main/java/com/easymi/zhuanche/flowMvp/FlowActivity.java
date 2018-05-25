@@ -261,7 +261,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             if (popWindow.isShowing()) {
                 popWindow.dismiss();
             } else {
-                if (zcOrder.orderStatus == ZCOrderStatus.PAIDAN_ORDER || zcOrder.orderStatus >= ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+                if (zcOrder.orderStatus == ZCOrderStatus.NEW_ORDER || zcOrder.orderStatus == ZCOrderStatus.PAIDAN_ORDER || zcOrder.orderStatus >= ZCOrderStatus.GOTO_DESTINATION_ORDER) {
                     popWindow.hideCancel();
                 } else {
                     popWindow.showCancel();
@@ -271,7 +271,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 } else {
                     popWindow.showSame();
                 }
-                if (zcOrder.orderStatus == ZCOrderStatus.PAIDAN_ORDER) {
+                if (zcOrder.orderStatus == ZCOrderStatus.NEW_ORDER || zcOrder.orderStatus == ZCOrderStatus.PAIDAN_ORDER) {
                     popWindow.hideConsumer();
                 } else {
                     popWindow.showConsumer();
@@ -1181,7 +1181,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             smoothMoveMarker.setPosition(lastLatlng);
             smoothMoveMarker.setPoints(latLngs);
 
-                smoothMoveMarker.setTotalDuration(Config.NORMAL_LOC_TIME / 1000);
+            smoothMoveMarker.setTotalDuration(Config.NORMAL_LOC_TIME / 1000);
 
             smoothMoveMarker.setRotate(location.bearing);
             smoothMoveMarker.startSmoothMove();

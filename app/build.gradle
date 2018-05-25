@@ -25,12 +25,16 @@ android {
             keyPassword 'easymin'
             storeFile file('v5签名信息.keystore')
             storePassword 'easymin'
+            v1SigningEnabled true
+            v2SigningEnabled true
         }
         release {
             keyAlias 'v5司机端'
             keyPassword 'easymin'
             storeFile file('v5签名信息.keystore')
             storePassword 'easymin'
+            v1SigningEnabled true
+            v2SigningEnabled true
         }
     }
 

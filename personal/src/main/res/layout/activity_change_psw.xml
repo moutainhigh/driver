@@ -72,7 +72,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/btn_height"
         android:layout_margin="20dp"
-        android:background="@drawable/corners_button_able_selector"
+        android:background="@drawable/p_corners_btn_selector"
         android:enabled="false"
         android:gravity="center"
         android:text="@string/change_confirm"

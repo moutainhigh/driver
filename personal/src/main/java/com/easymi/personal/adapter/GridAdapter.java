@@ -102,13 +102,13 @@ public class GridAdapter extends BaseAdapter {
             holder.item_pic.setImageResource(R.mipmap.contract_service);
             holder.item_root.setOnClickListener(v -> PhoneUtil.call(context, EmUtil.getEmployInfo().company_phone));
         }else if (str.equals(context.getString(R.string.help_center))) {
-            holder.item_pic.setImageResource(R.mipmap.contract_service);
+            holder.item_pic.setImageResource(R.mipmap.p_help);
             holder.item_root.setOnClickListener(view -> {
                 Intent intent = new Intent(context, HelpCenterActivity.class);
                 context.startActivity(intent);
             });
         }else if (str.equals(context.getString(R.string.sys_check))) {
-            holder.item_pic.setImageResource(R.mipmap.contract_service);
+            holder.item_pic.setImageResource(R.mipmap.p_sys_check);
             holder.item_root.setOnClickListener(view -> {
                 Intent intent = new Intent(context, SysCheckActivity.class);
                 context.startActivity(intent);

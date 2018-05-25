@@ -282,6 +282,7 @@
     <string name="day_ago">天前</string>
 
     <string name="help_daijia">代驾</string>
+    <string name="help_zhuanche">专车</string>
     <string name="be_busy">您正处于忙碌状态，无法修改密码</string>
 
     <string name="tixian_1">提现规则，最小</string>
@@ -291,7 +292,7 @@
     <string name="tixian_5">元</string>
     <string name="xiang">项</string>
 
-    <string name="check_no_error">软件设置无异常</string>
+    <string name="check_no_error">无异常</string>
     <string name="check_have_error">请按照建议配置您的手机</string>
     <string name="check_net_work">网络连接</string>
     <string name="check_loc">定位</string>

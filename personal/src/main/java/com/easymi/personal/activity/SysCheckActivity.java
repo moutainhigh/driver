@@ -129,7 +129,7 @@ public class SysCheckActivity extends RxBaseActivity implements AMapLocationList
                 runOnUiThread(() -> {
                     boolean netEnable = NetWorkUtil.checkEnable(SysCheckActivity.this);
                     netText.setText(netEnable ? getString(R.string.net_ok) : getString(R.string.net_ok));
-                    netText.setTextColor(netEnable ? getResources().getColor(R.color.green) : getResources().getColor(R.color.red));
+                    netText.setTextColor(netEnable ? getResources().getColor(R.color.text_default) : getResources().getColor(R.color.red));
 
                     netImg.pauseRotate();
                     netImg.reset();
@@ -175,7 +175,7 @@ public class SysCheckActivity extends RxBaseActivity implements AMapLocationList
                 }
 
                 locText.setText(StringUtils.isBlank(advice.toString()) ? getString(R.string.loc_ok) : advice);
-                locText.setTextColor(StringUtils.isBlank(advice.toString()) ? getResources().getColor(R.color.green) : getResources().getColor(R.color.yellow));
+                locText.setTextColor(StringUtils.isBlank(advice.toString()) ? getResources().getColor(R.color.text_default) : getResources().getColor(R.color.yellow));
 
                 errCount = errCount + (StringUtils.isBlank(advice.toString()) ? 0 : 1);
 
@@ -185,7 +185,8 @@ public class SysCheckActivity extends RxBaseActivity implements AMapLocationList
 
             } else {
                 //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
-                locText.setText(amapLocation.getErrorInfo());
+//                locText.setText(amapLocation.getErrorInfo());
+                locText.setText("定位失败,错误码:" + amapLocation.getErrorCode());
                 locText.setTextColor(getResources().getColor(R.color.red));
 
                 errCount = errCount + 1;
@@ -204,7 +205,7 @@ public class SysCheckActivity extends RxBaseActivity implements AMapLocationList
                 runOnUiThread(() -> {
                     boolean connected = MQTTService.client != null && MQTTService.client.isConnected();
                     noticeText.setText(connected ? getString(R.string.notice_ok) : getString(R.string.notice_err));
-                    noticeText.setTextColor(connected ? getResources().getColor(R.color.green) : getResources().getColor(R.color.red));
+                    noticeText.setTextColor(connected ? getResources().getColor(R.color.text_default) : getResources().getColor(R.color.red));
 
                     noticeImg.pauseRotate();
                     noticeImg.reset();
