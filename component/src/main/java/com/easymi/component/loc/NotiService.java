@@ -62,6 +62,9 @@ public class NotiService extends Service {
      */
     protected void applyNotiKeepMech() {
 //        startForeground(NOTI_ID, Utils.buildNotification(getBaseContext()));
+        if (null != connection) {
+            unbind();
+        }
         startBindHelperService();
     }
 

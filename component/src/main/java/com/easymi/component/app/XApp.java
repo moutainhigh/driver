@@ -88,7 +88,7 @@ public class XApp extends MultiDexApplication {
 //        BGASwipeBackHelper.init(instance, null);
 
         SpeechUtility.createUtility(XApp.this, "appid=" + "57c91477");
-        initIflytekTTS(false,"");
+        initIflytekTTS(false, "");
 
         initDataBase();
 
@@ -249,9 +249,11 @@ public class XApp extends MultiDexApplication {
         }
         if (player != null && player.isPlaying()) {
             player.stop();
+            player.release();
         }
         player = MediaPlayer.create(this, resId);
         if (null != player) {
+            Log.e("MediaPlayer", "MediaPlayer 创建成功");
             player.setOnCompletionListener(mediaPlayer -> {
                 if (StringUtils.isNotBlank(text)) {
                     syntheticVoice(text);
@@ -261,6 +263,8 @@ public class XApp extends MultiDexApplication {
             });
             requestFocus();
             player.start();
+        } else {
+            Log.e("MediaPlayer", "MediaPlayer 创建失败");
         }
     }
 
@@ -282,6 +286,7 @@ public class XApp extends MultiDexApplication {
 
         if (player != null && player.isPlaying()) {
             player.stop();
+            player.release();
         }
         player = MediaPlayer.create(this, R.raw.silent);
         if (null != player) {
@@ -304,6 +309,7 @@ public class XApp extends MultiDexApplication {
 
         if (player != null && player.isPlaying()) {
             player.stop();
+            player.release();
             Log.e("AudioFocus", "停止播放静音音频");
         }
     }
@@ -328,14 +334,14 @@ public class XApp extends MultiDexApplication {
     }
 
     public void syntheticVoice(String msg) {
-        Log.e("syntheticVoice",msg);
+        Log.e("syntheticVoice", msg);
         boolean voiceAble = getMyPreferences().getBoolean(Config.SP_VOICE_ABLE, true);
         if (!voiceAble) {
             return;
         }
         if (iflytekSpe == null) {
-            Log.e("syntheticVoice","iflytekSpe == null");
-            initIflytekTTS(true,msg);
+            Log.e("syntheticVoice", "iflytekSpe == null");
+            initIflytekTTS(true, msg);
             return;
         }
         if (requestFocus() && null != iflytekSpe) {
