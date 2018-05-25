@@ -12,6 +12,7 @@ public class Config {
      * 主机地址
      */
 //    public static final String HOST = "http://192.168.0.72:8082/";
+//    public static final String HOST = "https://api.xiaokakj.cn/";
     public static final String HOST = "https://api.xiaokayun.cn/";
     /**
      * 图片服务器地址
@@ -95,7 +96,7 @@ public class Config {
     public static final String BROAD_ANN = "com.easymi.v5driver.BROAD_ANN";
     public static final String BROAD_FINISH_ORDER = "com.easymi.v5driver.BROAD_FINISH_ORDER";
 
-//    public static final int FREE_LOC_TIME = 5000;//闲时定位时间 毫秒
+    //    public static final int FREE_LOC_TIME = 5000;//闲时定位时间 毫秒
 //    public static final int BUSY_LOC_TIME = 5000;//忙时定位时间 毫秒
     public static final int NORMAL_LOC_TIME = 5000;//固定定位时间 毫秒
 
