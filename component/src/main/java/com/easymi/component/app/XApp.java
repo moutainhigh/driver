@@ -147,12 +147,12 @@ public class XApp extends MultiDexApplication {
         iflytekSpe = SpeechSynthesizer.createSynthesizer(this, code -> {
             Log.d("TAG", "InitListener init() code = " + code);
             if (code != ErrorCode.SUCCESS) {
-                if (speakNow) {
-                    syntheticVoice(msg);
-                }
                 Log.e("initIflytekTTS", "初始化失败,错误码：" + code);
             } else {
                 setTtsParam();
+                if (speakNow) {
+                    syntheticVoice(msg);
+                }
             }
         });
 
@@ -328,11 +328,13 @@ public class XApp extends MultiDexApplication {
     }
 
     public void syntheticVoice(String msg) {
+        Log.e("syntheticVoice",msg);
         boolean voiceAble = getMyPreferences().getBoolean(Config.SP_VOICE_ABLE, true);
         if (!voiceAble) {
             return;
         }
         if (iflytekSpe == null) {
+            Log.e("syntheticVoice","iflytekSpe == null");
             initIflytekTTS(true,msg);
             return;
         }
