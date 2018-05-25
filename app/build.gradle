@@ -9,10 +9,11 @@ android {
         applicationId "com.rvakva.travel.publicdriver"
         minSdkVersion cfg.minSdkVersion
         targetSdkVersion cfg.targetSdkVersion
-        versionCode 240
-        versionName "V5.0.0.004"
+        versionCode 250
+        versionName "V5.0.0.005"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+
 
         ndk {
             //只兼容下面的型号
@@ -35,6 +36,12 @@ android {
             storePassword 'easymin'
             v1SigningEnabled true
             v2SigningEnabled true
+        }
+        release {
+            keyAlias 'v5司机端'
+            keyPassword 'easymin'
+            storeFile file('v5签名信息.keystore')
+            storePassword 'easymin'
         }
     }
 

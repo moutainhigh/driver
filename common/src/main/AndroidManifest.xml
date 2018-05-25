@@ -60,7 +60,8 @@
             android:name=".mvp.grab.GrabActivity2"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/transparent_activity" />
 
         <activity
             android:name=".activity.SplashActivity"

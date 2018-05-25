@@ -57,6 +57,21 @@
             android:screenOrientation="portrait"
             android:theme="@style/ThemeSwipeBack" />
 
+        <activity
+            android:name=".PushActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSwipeBack">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <data
+                    android:host="${applicationId}"
+                    android:path="/local_push"
+                    android:scheme="customscheme" />
+            </intent-filter>
+        </activity>
+
         <!-- 兼容全面屏-->
         <meta-data
             android:name="android.max_aspect"

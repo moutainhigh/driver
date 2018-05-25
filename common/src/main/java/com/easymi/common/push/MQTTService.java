@@ -157,7 +157,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
                 client.publish(pushTopic, msg.getBytes(), qos, retained);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 
@@ -174,7 +174,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
             }
             client = null;
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
         super.onDestroy();
     }
@@ -193,10 +193,10 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
                 }
             }
         } catch (MqttException e) {
-            e.printStackTrace();
+
             isConning = false;
         } catch (Exception e) {
-            e.printStackTrace();
+
             isConning = false;
         }
     }
@@ -221,11 +221,11 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
                 }
                 lastSucTime = System.currentTimeMillis();
             } catch (MqttException e) {
-                e.printStackTrace();
+
             } catch (NullPointerException e) { //在长时间失去网络连接后再连上mqtt，client有可能因为长时间限制而被回收，所以这里加上catch
                 initConn();
             } catch (Exception e) {
-                e.printStackTrace();
+
             }
         }
 
@@ -265,7 +265,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
                     client.unsubscribe(pullTopic);
                     Log.e(TAG, "取消订阅的topic");
                 } catch (Exception e) {
-                    e.printStackTrace();
+
                 }
             }
 //            LocReceiver.getInstance().deleteObserver(MQTTService.this);
@@ -308,10 +308,10 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
                 for (DymOrder dymOrder : dymOrders) {
                     if (dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
                         try {
-                            FileUtil.write(this, "xiaoka", "order-" + dymOrder.orderId+".txt",
+                            FileUtil.write(this, "xiaoka", "order-" + dymOrder.orderId + ".txt",
                                     new Gson().toJson(loc) + ",", true);
                         } catch (IOException e) {
-                            e.printStackTrace();
+
                         }
                     }
                 }
@@ -381,10 +381,10 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
                 }
             } catch (MqttException e) {
                 isConning = false;
-                e.printStackTrace();
+
             } catch (Exception e) {
                 isConning = false;
-                e.printStackTrace();
+
             }
         }
     }

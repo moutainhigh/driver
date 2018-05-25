@@ -100,6 +100,8 @@ public class EmLoc {
 
     public int satellites;//卫星颗数
 
+    public long sysTime;
+
     public static EmLoc ALocToLoc(AMapLocation aLoc) {
         if (null == aLoc) {
             return null;
@@ -130,6 +132,7 @@ public class EmLoc {
         locationInfo.isOffset = aLoc.isOffset();
         locationInfo.isFixLastLocation = aLoc.isFixLastLocation();
         locationInfo.satellites = aLoc.getSatellites();
+        locationInfo.sysTime = System.currentTimeMillis();
         return locationInfo;
     }
 

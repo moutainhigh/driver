@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -114,6 +115,9 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
+        getWindow().addFlags(
+                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                        | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
         showIngOrder = (MultipleOrder) getIntent().getSerializableExtra("order");
         if (showIngOrder == null) {
             finish();
