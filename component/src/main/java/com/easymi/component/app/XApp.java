@@ -248,13 +248,15 @@ public class XApp extends MultiDexApplication {
         if (player != null && player.isPlaying()) {
             player.stop();
             player.release();
+            player = null;//release时必须将其置位null，不然isPlaying（）会抛异常
         }
         player = MediaPlayer.create(this, resId);
         if (null != player) {
             Log.e("MediaPlayer", "MediaPlayer 创建成功");
             player.setOnCompletionListener(mediaPlayer -> {
-                if(null != player){
+                if (null != player) {
                     player.release();
+                    player = null;//release时必须将其置位null，不然isPlaying（）会抛异常
                 }
                 if (StringUtils.isNotBlank(text)) {
                     syntheticVoice(text);
@@ -288,12 +290,14 @@ public class XApp extends MultiDexApplication {
         if (player != null && player.isPlaying()) {
             player.stop();
             player.release();
+            player = null;//release时必须将其置位null，不然isPlaying（）会抛异常
         }
         player = MediaPlayer.create(this, R.raw.silent);
         if (null != player) {
             player.setOnCompletionListener(mediaPlayer -> {
-                if(null != player){
+                if (null != player) {
                     player.release();
+                    player = null;//release时必须将其置位null，不然isPlaying（）会抛异常
                 }
                 Log.e("AudioFocus", "播放静音音频完成，循环播放中..");
                 playSlientMusic();
@@ -314,6 +318,7 @@ public class XApp extends MultiDexApplication {
         if (player != null && player.isPlaying()) {
             player.stop();
             player.release();
+            player = null;//release时必须将其置位null，不然isPlaying（）会抛异常
             Log.e("AudioFocus", "停止播放静音音频");
         }
     }
