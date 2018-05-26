@@ -3,14 +3,16 @@ package com.easymi.component;
 /**
  * Created by developerLzh on 2017/11/3 0003.
  *
- * 通用版需要将名字换位Rvakva服务端
- * 非通用版名字为心归服务
+ * 配置文件
+ *
  */
 
 public class Config {
 
     //TODO 通用版需要将app名字换位Rvakva服务端,非通用版名字为心归服务
     //TODO 换HOST(线上有Https) 换MQTT 换AppKey 换COMM_USE
+    //TODO 通用版需要将名字换位Rvakva服务端
+    //TODO 非通用版名字为心归服务
      /**
      * 主机地址
      */
