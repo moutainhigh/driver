@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
+import com.easymi.common.R;
 import com.easymi.common.daemon.DaemonService;
 import com.easymi.common.daemon.JobKeepLiveService;
 import com.easymi.common.entity.AnnAndNotice;
@@ -37,6 +38,7 @@ import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.TimeUtil;
+import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.LoadingButton;
 
 import java.util.ArrayList;
@@ -311,6 +313,15 @@ public class WorkPresenter implements WorkContract.Presenter {
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
                 true, result -> {
             Employ employ = result.getEmployInfo();
+            String udid = XApp.getMyPreferences().getString(Config.SP_UDID, "");
+            if (StringUtils.isNotBlank(employ.device_no)
+                    && StringUtils.isNotBlank(udid)) {
+                if (!employ.device_no.equals(udid)) {
+                    ToastUtil.showMessage(context, context.getString(R.string.unbunding));
+                    EmUtil.employLogout(context);
+                    return;
+                }
+            }
             employ.saveOrUpdate();
             SharedPreferences.Editor editor = XApp.getPreferencesEditor();
             editor.putLong(Config.SP_DRIVERID, employ.id);

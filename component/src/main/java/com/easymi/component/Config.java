@@ -11,20 +11,20 @@ public class Config {
     /**
      * 主机地址
      */
-    public static final String HOST = "http://192.168.0.72:8082/";
-//    public static final String HOST = "https://api.xiaokayun.cn/";
+//    public static final String HOST = "http://192.168.0.72:8082/";
+    public static final String HOST = "https://api.xiaokayun.cn/";//线上地址
+//    public static final String HOST = "http://api.xiaokakj.cn/";//测试服地址
     /**
-     * 图片服务器地址
+     * MQTT配置
      */
-    public static final String IMG_SERVER = "https://assets.xiaokayun.cn/";
-    //    public static final String IMG_PATH = "?imageView2/1/w/10/h/10/format/webp/q/75|imageslim";
-    public static final String IMG_PATH = "";
+    public static final String MQTT_HOST = "tcp://39.107.190.141:1883";//线上地址
+//    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//测试地址
     /**
-     *
+     * APP_KEY
      */
-//    public static final String APP_KEY = "4aea5f7368b0461395eeda353337a24c";//v5test
-//    public static final String APP_KEY = "488441998952435da895286632e82f40";//快些哥
-    public static final String APP_KEY = "1f462eb305a2417c9564f2dfaf89da9c";//本地
+//    public static final String APP_KEY = "455b01b9de5a4a7e9ca4df901a2f488d";//测试
+    public static final String APP_KEY = "488441998952435da895286632e82f40";//快些哥
+//    public static final String APP_KEY = "1f462eb305a2417c9564f2dfaf89da9c";//本地
     /**
      * 司机注册地址
      */
@@ -37,10 +37,17 @@ public class Config {
      * 微信分享id
      */
     public static final String WX_APP_ID = "wx228f2bdb16568b58"; //微信app id
+
     /**
-     * MQTT配置
+     * 图片服务器地址
      */
-    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";
+    public static final String IMG_SERVER = "https://assets.xiaokayun.cn/";
+    //    public static final String IMG_PATH = "?imageView2/1/w/10/h/10/format/webp/q/75|imageslim";
+    public static final String IMG_PATH = "";
+
+    /**
+     * MQTT
+     */
     public static final String MQTT_USER_NAME = "xiaoka";
     public static final String MQTT_PSW = "&mv7dHapB5J!95BJ";
     public static final String MQTT_PUSH_TOPIC = "/driver";
@@ -80,6 +87,8 @@ public class Config {
     public static final String SP_LOGIN_ACCOUNT = "login_account";//账号
     public static final String SP_LOGIN_PSW = "login_psw";//密码
     public static final String SP_REMEMBER_PSW = "remember_psw";//密码
+
+    public static final String SP_UDID= "udid";//密码
 
     public static final String SP_LAST_SPLASH_TIME = "last_splash_animate";//上次显示动画的时间
 

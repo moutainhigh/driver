@@ -41,6 +41,8 @@ public class Employ extends BaseEmploy implements Parcelable {
 
     public Vehicle vehicle;//车辆信息
 
+    public String device_no;
+
     /**
      * 保存数据
      */
