@@ -39,6 +39,8 @@ public class Employ extends BaseEmploy implements Parcelable {
 
     public String app_key;
 
+    public String device_no;
+
     /**
      * 保存数据
      */

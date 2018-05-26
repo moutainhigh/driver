@@ -98,7 +98,7 @@
     <string name="no_order">暂无订单，赶快去接单吧</string>
 
     <string name="freezed">您的账户已被冻结，请联系管理员</string>
-    <string name="unbunding">您的账户已被管理员姐绑</string>
+    <string name="unbunding">您的账户已被管理员解绑</string>
 
     <string name="pay_suc_1">手机尾号为</string>
     <string name="pay_suc_2">的客户已完成支付</string>

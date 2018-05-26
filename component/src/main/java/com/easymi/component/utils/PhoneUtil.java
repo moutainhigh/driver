@@ -282,6 +282,7 @@ public class PhoneUtil {
                 throw new RuntimeException(e);
             }
         }
+        XApp.getPreferencesEditor().putString(Config.SP_UDID, udid).apply();
         return udid;
     }
 
