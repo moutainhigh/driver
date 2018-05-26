@@ -255,6 +255,9 @@ public class XApp extends MultiDexApplication {
         if (null != player) {
             Log.e("MediaPlayer", "MediaPlayer 创建成功");
             player.setOnCompletionListener(mediaPlayer -> {
+                if (null != player) {
+                    player.release();
+                }
                 if (StringUtils.isNotBlank(text)) {
                     syntheticVoice(text);
                 } else {
@@ -291,6 +294,9 @@ public class XApp extends MultiDexApplication {
         player = MediaPlayer.create(this, R.raw.silent);
         if (null != player) {
             player.setOnCompletionListener(mediaPlayer -> {
+                if (null != player) {
+                    player.release();
+                }
                 Log.e("AudioFocus", "播放静音音频完成，循环播放中..");
                 playSlientMusic();
             });
