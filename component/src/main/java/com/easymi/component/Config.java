@@ -112,7 +112,7 @@ public class Config {
 
     public static final boolean NEED_TRACE = false;//是否纠偏
 
-    public static final boolean SAVE_LOGO = true;//是否保存位置信息
+    public static final boolean SAVE_LOGO = false;//是否保存位置信息
 
     public static final String MI_APPID = "2882303761517793325";
     public static final String MI_APPKEY = "5891779394325";
