@@ -112,9 +112,11 @@ public class SplashActivity extends RxBaseActivity {
         GifImageView view = findViewById(R.id.splash);
         try {
             Log.e(TAG, "try");
-            gifFromAssets = new GifDrawable(getAssets(), "splash_gif.gif");
-            view.setBackground(gifFromAssets);
-            gifFromAssets.pause();
+            if(!Config.COMM_USE){
+                gifFromAssets = new GifDrawable(getAssets(), "splash_gif.gif");
+                view.setBackground(gifFromAssets);
+                gifFromAssets.pause();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

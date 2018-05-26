@@ -114,7 +114,7 @@
     <string name="to_end_order">前往目的地 ></string>
     <string name="wait_order">等待中 ></string>
     <string name="not_pay_order">未支付 ></string>
-    <string name="finish_order">已完成 ></string>
+    <string name="finish_order">已完成</string>
     <string name="des_order">已銷單 ></string>
-    <string name="rate_order">已完成 ></string>
+    <string name="rate_order">已完成</string>
 </resources>

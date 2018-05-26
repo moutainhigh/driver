@@ -114,8 +114,8 @@
     <string name="to_end_order"> Go to the destination ></string>
     <string name="wait_order"> Waiting ></string>
     <string name="not_pay_order">Unpaid ></string>
-    <string name="finish_order"> completed> </string>
+    <string name="finish_order"> completed</string>
     <string name="des_order"> issued orders ></string>
-    <string name="rate_order"> completed> </string>
+    <string name="rate_order"> completed</string>
 
 </resources>

@@ -2,13 +2,16 @@ package com.easymi.component;
 
 /**
  * Created by developerLzh on 2017/11/3 0003.
- * <p>
- * 系统地址
+ *
+ * 通用版需要将名字换位Rvakva服务端
+ * 非通用版名字为心归服务
  */
 
 public class Config {
 
-    /**
+    //TODO 通用版需要将app名字换位Rvakva服务端,非通用版名字为心归服务
+    //TODO 换HOST(线上有Https) 换MQTT 换AppKey 换COMM_USE
+     /**
      * 主机地址
      */
 //    public static final String HOST = "http://192.168.0.72:8082/";
@@ -25,6 +28,9 @@ public class Config {
 //    public static final String APP_KEY = "455b01b9de5a4a7e9ca4df901a2f488d";//测试
     public static final String APP_KEY = "488441998952435da895286632e82f40";//快些哥
 //    public static final String APP_KEY = "1f462eb305a2417c9564f2dfaf89da9c";//本地
+
+    public static final boolean COMM_USE = false;//是否是通用司机端
+
     /**
      * 司机注册地址
      */
@@ -107,8 +113,6 @@ public class Config {
     //    public static final int FREE_LOC_TIME = 5000;//闲时定位时间 毫秒
 //    public static final int BUSY_LOC_TIME = 5000;//忙时定位时间 毫秒
     public static final int NORMAL_LOC_TIME = 5000;//固定定位时间 毫秒
-
-    public static final boolean COMM_USE = false;//是否是通用司机端
 
     public static final boolean NEED_TRACE = false;//是否纠偏
 

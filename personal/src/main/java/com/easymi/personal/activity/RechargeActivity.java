@@ -9,6 +9,8 @@ import android.os.Message;
 
 import com.easymi.component.Config;
 import com.easymi.component.utils.Log;
+
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -79,6 +81,11 @@ public class RechargeActivity extends RxBaseActivity {
         initCheck();
 
         initEdit();
+
+        if (Config.COMM_USE) {
+            payWx.setVisibility(View.GONE);
+            payUnion.setVisibility(View.GONE);
+        }
 
         payWx.setOnClickListener(view -> {
             double money = getMoney();
@@ -285,7 +292,7 @@ public class RechargeActivity extends RxBaseActivity {
         }
     }
 
-    private void launchZfb(String  data) {
+    private void launchZfb(String data) {
         new Thread() {
             public void run() {
 
@@ -319,7 +326,7 @@ public class RechargeActivity extends RxBaseActivity {
                             Toast.LENGTH_SHORT).show();
                 }
                 break;
-                /**翼支付回调**/
+            /**翼支付回调**/
             case Constants.RESULT_VALIDATE_FAILURE:
                 // 合法性验证失败
                 BaseResponse resp = (BaseResponse) msg.obj;

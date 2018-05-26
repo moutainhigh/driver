@@ -267,7 +267,7 @@
 
     <string name="number">單</string>
 
-    <string name="all_order_number">累計接單</string>
+    <string name="all_order_number">累计评价</string>
 
     <string name="zero_time">0次</string>
     <string name="min_money">提現金額最小為</string>

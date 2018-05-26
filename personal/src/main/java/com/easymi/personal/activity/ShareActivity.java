@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Space;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -59,6 +60,9 @@ public class ShareActivity extends RxBaseActivity {
     private ImageView shareQQ;
     private ImageView shareQzone;
 
+    private Space space0;
+    private Space space1;
+
     private IWXAPI iwxapi;
     private Tencent mTencent;
 
@@ -83,8 +87,11 @@ public class ShareActivity extends RxBaseActivity {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
-        qrCodeImg = findViewById(R.id.qr_code_img);
 
+        space0 = findViewById(R.id.space_0);
+        space1 = findViewById(R.id.space_1);
+
+        qrCodeImg = findViewById(R.id.qr_code_img);
 
         shareWechat = findViewById(R.id.ic_wechat_share);
         shareWechat.setOnClickListener(view -> share2Wx());
@@ -97,6 +104,15 @@ public class ShareActivity extends RxBaseActivity {
 
         shareQzone = findViewById(R.id.ic_qzone);
         shareQzone.setOnClickListener(view -> share2Qzone());
+
+        if (Config.COMM_USE) {
+
+            space0.setVisibility(View.GONE);
+            space1.setVisibility(View.GONE);
+
+            shareWechat.setVisibility(View.GONE);
+            shareCircle.setVisibility(View.GONE);
+        }
 
         listener = new BaseUiListener();
 
