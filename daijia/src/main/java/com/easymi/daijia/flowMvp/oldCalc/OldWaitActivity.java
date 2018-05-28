@@ -255,6 +255,7 @@ public class OldWaitActivity extends RxBaseActivity implements FlowContract.View
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         Log.e("lifecycle", "oldwait onConfigurationChanged()");
+        super.onConfigurationChanged(newConfig);
         if (System.currentTimeMillis() - lastChangeTime > 1000) {
             lastChangeTime = System.currentTimeMillis();
         } else {//有的胎神手机这个方法要回调两次

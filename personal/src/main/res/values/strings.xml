@@ -33,6 +33,7 @@
     <string name="set_orientation">始终横屏显示计价器</string>
     <string name="set_language">选择语言</string>
     <string name="set_navi">导航偏好</string>
+    <string name="set_notify_help">通知设置</string>
     <string name="set_statistics">统计中心</string>
     <string name="set_help">帮助中心</string>
     <string name="set_feedback">意见反馈</string>
@@ -271,7 +272,7 @@
 
     <string name="number">单</string>
 
-    <string name="all_order_number">累计接单</string>
+    <string name="all_order_number">累计评价</string>
 
     <string name="zero_time">0次</string>
     <string name="min_money">提现金额最小为</string>

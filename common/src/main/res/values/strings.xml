@@ -115,9 +115,9 @@
     <string name="to_end_order">前往目的地 ></string>
     <string name="wait_order">等待中 ></string>
     <string name="not_pay_order">未支付 ></string>
-    <string name="finish_order">已完成 ></string>
+    <string name="finish_order">已完成</string>
     <string name="des_order">已销单 ></string>
-    <string name="rate_order">已完成 ></string>
+    <string name="rate_order">已完成</string>
 
     <string name="reject_net">网络连接不可用，可能是由于您主动设置了禁用网络，请前往应用管理中打开。设置完毕后请重新启动程序</string>
 
@@ -128,5 +128,6 @@
     <string name="listen_order_set">模式设置</string>
     <string name="listen_order_set_2">听单设置</string>
     <string name="listen_order_more_one">至少选择一种听单业务</string>
+
 
 </resources>

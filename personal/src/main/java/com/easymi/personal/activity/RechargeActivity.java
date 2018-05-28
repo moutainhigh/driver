@@ -11,6 +11,8 @@ import com.easymi.component.Config;
 import com.easymi.component.entity.Setting;
 import com.easymi.component.utils.Log;
 
+
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -81,6 +83,11 @@ public class RechargeActivity extends RxBaseActivity {
         initCheck();
 
         initEdit();
+
+        if (Config.COMM_USE) {
+            payWx.setVisibility(View.GONE);
+            payUnion.setVisibility(View.GONE);
+        }
 
         payWx.setOnClickListener(view -> {
             double money = getMoney();
