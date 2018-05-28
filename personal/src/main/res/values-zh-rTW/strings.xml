@@ -31,6 +31,7 @@
     <string name="set_orientation">始終橫屏顯示計價器</string>
     <string name="set_language">選擇語言</string>
     <string name="set_navi">導航偏好</string>
+    <string name="set_notify_help">通知设置</string>
     <string name="set_statistics">統計中心</string>
     <string name="set_help">幫助中心</string>
     <string name="set_feedback">意見反饋</string>

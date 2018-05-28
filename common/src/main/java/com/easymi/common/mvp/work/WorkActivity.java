@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -118,6 +119,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
     TextView noOrderText;
 
+    LinearLayout guideFrame;
+    ImageView gotoSet;
+
     private CancelOrderReceiver cancelOrderReceiver;
     private EmployStatusChangeReceiver employStatusChangeReceiver;
 
@@ -140,6 +144,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
         findById();
 
+        initGuide();
         initMap();
         initNotifity();
 
@@ -162,6 +167,25 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         EmLoc emLoc = EmUtil.getLastLoc();
         if (emLoc != null) {
             receiveLoc(emLoc);
+        }
+    }
+
+    private void initGuide() {
+        boolean showGuide = XApp.getMyPreferences().getBoolean(Config.SP_SHOW_GUIDE,true);
+        if(showGuide){
+            guideFrame.setVisibility(View.VISIBLE);
+            gotoSet.setOnClickListener(v -> {
+                Intent intent = new Intent();
+                intent.setAction("android.intent.action.VIEW");
+                Uri content_url = Uri.parse("http://help.xiaokayun.cn");
+                intent.setData(content_url);
+                startActivity(intent);
+
+                guideFrame.setVisibility(View.GONE);
+                XApp.getPreferencesEditor().putBoolean(Config.SP_SHOW_GUIDE,false).apply();
+            });
+        } else {
+            guideFrame.setVisibility(View.GONE);
         }
     }
 
@@ -210,6 +234,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         todayIncome = findViewById(R.id.today_income);
 
         noOrderText = findViewById(R.id.no_order_img);
+
+        guideFrame = findViewById(R.id.guide_frame);
+        gotoSet = findViewById(R.id.guide_go_to_set);
 
         Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1));
         Log.e("employ", "" + employ);

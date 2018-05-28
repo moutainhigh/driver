@@ -369,4 +369,36 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/guide_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone"
+        android:clickable="true"
+        android:background="#cc000000">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_notify_set_icon"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:src="@mipmap/ic_text"/>
+
+
+        <ImageView
+            android:id="@+id/guide_go_to_set"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:src="@mipmap/go_to_set"/>
+
+    </LinearLayout>
+
 </FrameLayout>

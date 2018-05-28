@@ -3,12 +3,14 @@ package com.easymi.personal.activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ScrollView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.easymi.component.Config;
+import com.easymi.component.activity.WebActivity;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.ApiManager;
@@ -127,6 +129,14 @@ public class SetActivity extends RxBaseActivity {
 
     public void naviPrefence(View view) {
         Intent intent = new Intent(this, NaviSetActivity.class);
+        startActivity(intent);
+    }
+
+    public void notifyHelp(View view) {
+        Intent intent = new Intent();
+        intent.setAction("android.intent.action.VIEW");
+        Uri content_url = Uri.parse("http://help.xiaokayun.cn");
+        intent.setData(content_url);
         startActivity(intent);
     }
 

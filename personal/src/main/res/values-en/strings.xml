@@ -31,6 +31,7 @@
     <string name="set_orientation"> always shows the meter across the screen </string>
     <string name="set_language">Select language</string>
     <string name="set_navi">Navigation Preferences</string>
+    <string name="set_notify_help">set_notify_help</string>
     <string name="set_statistics">statistical center</string>
     <string name="set_help">Help Center</string>
     <string name="set_feedback"> feedback </string>
