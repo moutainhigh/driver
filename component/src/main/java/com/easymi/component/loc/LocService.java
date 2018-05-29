@@ -108,7 +108,7 @@ public class LocService extends NotiService implements AMapLocationListener {
                 .setInterval(scanTime)
                 .setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.Transport)
                 .setGpsFirst(true)
-                .setWifiScan(false)
+                .setWifiScan(true)
                 .setLocationCacheEnable(false)
                 .setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy)
                 .setNeedAddress(true)
