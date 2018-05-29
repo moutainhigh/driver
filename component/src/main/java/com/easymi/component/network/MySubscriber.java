@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ParseException;
 
 import com.easymi.component.R;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
@@ -123,6 +124,10 @@ public class MySubscriber<T> extends Subscriber<T> implements ProgressDismissLis
         } else if (e instanceof ApiException) {
             if (StringUtils.isNotBlank(e.getMessage())) {
                 ToastUtil.showMessage(context, e.getMessage());//服务器定义的错误
+                if (((ApiException) e).getErrCode() == ErrCode.EMPLOY_NOT_EXIST.getCode()) {
+                    //服务人员不存在时，退出到登录界面
+                    EmUtil.employLogout(context);
+                }
             } else {
                 ToastUtil.showMessage(context, context.getString(R.string.unknown_error));//服务器定义的错误
             }
