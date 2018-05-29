@@ -36,7 +36,12 @@ public class EmUtil {
     }
 
     public static EmLoc getLastLoc() {
-        return new Gson().fromJson(XApp.getMyPreferences().getString(Config.SP_LAST_LOC, ""), EmLoc.class);
+        EmLoc emLoc = new Gson().fromJson(XApp.getMyPreferences().getString(Config.SP_LAST_LOC, ""), EmLoc.class);
+        if (null == emLoc) {
+            emLoc = new EmLoc();
+            emLoc.poiName = "未知";
+        }
+        return emLoc;
     }
 
     public static void employLogout(Context context) {
@@ -45,7 +50,7 @@ public class EmUtil {
         editor.putLong(Config.SP_DRIVERID, -1);
         editor.apply();
 
-        if(null != XApp.getInstance().player){
+        if (null != XApp.getInstance().player) {
             XApp.getInstance().player.stop();
         }
 
