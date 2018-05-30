@@ -307,7 +307,12 @@ public class CreateDJFragment extends RxLazyFragment implements CreateDJContract
 
     @Override
     public void createSuc(DJOrderResult djOrderResult) {
-        ToastUtil.showMessage(getActivity(), getString(R.string.create_suc));
+        if (null == djOrderResult.order) {
+            ToastUtil.showMessage(getActivity(), "代叫订单创建成功");
+            getActivity().finish();
+            return;
+        }
+
         Intent intent = new Intent(getActivity(), FlowActivity.class);
         intent.putExtra("orderId", djOrderResult.order.orderId);
         startActivity(intent);

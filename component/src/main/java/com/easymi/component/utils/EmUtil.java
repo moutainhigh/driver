@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.easymi.component.Config;
-import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;

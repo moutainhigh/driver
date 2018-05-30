@@ -30,6 +30,8 @@ import com.easymi.component.EmployStatus;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.Employ;
+import com.easymi.component.entity.Setting;
+import com.easymi.component.network.ErrCode;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
@@ -311,22 +313,32 @@ public class WorkPresenter implements WorkContract.Presenter {
 
         Observable<LoginResult> observable = model.getEmploy(id, EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
-                true, result -> {
-            Employ employ = result.getEmployInfo();
-            String udid = XApp.getMyPreferences().getString(Config.SP_UDID, "");
-            if (StringUtils.isNotBlank(employ.device_no)
-                    && StringUtils.isNotBlank(udid)) {
-                if (!employ.device_no.equals(udid)) {
-                    ToastUtil.showMessage(context, context.getString(R.string.unbunding));
+                true, new HaveErrSubscriberListener<LoginResult>() {
+            @Override
+            public void onNext(LoginResult result) {
+                Employ employ = result.getEmployInfo();
+                String udid = XApp.getMyPreferences().getString(Config.SP_UDID, "");
+                if (StringUtils.isNotBlank(employ.device_no)
+                        && StringUtils.isNotBlank(udid)) {
+                    if (!employ.device_no.equals(udid)) {
+                        ToastUtil.showMessage(context, context.getString(R.string.unbunding));
+                        EmUtil.employLogout(context);
+                        return;
+                    }
+                }
+                employ.saveOrUpdate();
+                SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+                editor.putLong(Config.SP_DRIVERID, employ.id);
+                editor.apply();
+                view.showDriverStatus();
+            }
+
+            @Override
+            public void onError(int code) {
+                if (code == ErrCode.QUERY_ERROR.getCode()) {
                     EmUtil.employLogout(context);
-                    return;
                 }
             }
-            employ.saveOrUpdate();
-            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
-            editor.putLong(Config.SP_DRIVERID, employ.id);
-            editor.apply();
-            view.showDriverStatus();
         })));
     }
 

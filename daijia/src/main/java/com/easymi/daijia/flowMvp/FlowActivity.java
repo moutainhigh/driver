@@ -322,6 +322,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             transaction.replace(R.id.flow_frame, acceptFragment);
             transaction.commit();
+
         } else if (djOrder.orderStatus == DJOrderStatus.TAKE_ORDER) {
             toolbar.setTitle(R.string.status_jie);
             ToStartFragment toStartFragment = new ToStartFragment();
@@ -913,7 +914,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
                 FragmentManager manager = getSupportFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();
-                transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 transaction.replace(R.id.flow_frame, cheatingFragment);
                 transaction.commit();
             }
@@ -954,7 +955,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         transaction.replace(R.id.flow_frame, runningFragment);
         transaction.commit();
     }

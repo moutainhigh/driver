@@ -174,8 +174,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     }
 
     private void initGuide() {
-        boolean showGuide = XApp.getMyPreferences().getBoolean(Config.SP_SHOW_GUIDE,true);
-        if(showGuide){
+        boolean showGuide = XApp.getMyPreferences().getBoolean(Config.SP_SHOW_GUIDE, true);
+        if (showGuide) {
             guideFrame.setVisibility(View.VISIBLE);
             gotoSet.setOnClickListener(v -> {
                 Intent intent = new Intent();
@@ -185,7 +185,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
                 startActivity(intent);
 
                 guideFrame.setVisibility(View.GONE);
-                XApp.getPreferencesEditor().putBoolean(Config.SP_SHOW_GUIDE,false).apply();
+                XApp.getPreferencesEditor().putBoolean(Config.SP_SHOW_GUIDE, false).apply();
             });
         } else {
             guideFrame.setVisibility(View.GONE);
@@ -738,5 +738,10 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     public void modelSet(View view) {
         Intent intent = new Intent(WorkActivity.this, ModelSetActivity.class);
         startActivity(intent);
+    }
+
+    public void tongji(View view) {
+        ARouter.getInstance().build("/personal/StatsActivity")
+                .navigation();
     }
 }

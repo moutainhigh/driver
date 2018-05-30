@@ -6,6 +6,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.Employ;
@@ -31,6 +32,7 @@ import rx.schedulers.Schedulers;
  * Created by developerLzh on 2017/11/10 0010.
  */
 
+@Route(path = "/personal/StatsActivity")
 public class StatsActivity extends RxBaseActivity {
 
     RatingBar ratingBar;
