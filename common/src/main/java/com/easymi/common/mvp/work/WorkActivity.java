@@ -60,6 +60,7 @@ import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MapUtil;
+import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.EmployStatus;
@@ -365,9 +366,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
     List<Marker> markers = new ArrayList<>();
     List<NearDriver> drivers = new ArrayList<>();
-    private BitmapDescriptor freeBitmap;
-    private BitmapDescriptor offlineBitmap;
-    private BitmapDescriptor busyBitmap;
 
     @Override
     public void showDrivers(List<NearDriver> drivers) {
@@ -382,27 +380,13 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         options.setFlat(true);//设置marker平贴地图效果
         List<LatLng> latLngs = new ArrayList<>();
 
-        if (null == freeBitmap || null == offlineBitmap || busyBitmap == null) {
-            freeBitmap = BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                    .decodeResource(getResources(), R.mipmap.ic_driver_free));
-            offlineBitmap = BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                    .decodeResource(getResources(), R.mipmap.ic_driver));
-            busyBitmap = BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                    .decodeResource(getResources(), R.mipmap.ic_driver_busy));
-        }
 
         for (NearDriver driver : drivers) {
             if (driver.employ_id == EmUtil.getEmployId()) {
                 continue;//自己就不显示marker
             }
             options.position(new LatLng(driver.lat, driver.lng));
-            if (driver.status.equals(EmployStatus.ONLINE) || driver.status.equals(EmployStatus.FREE)) {
-                options.icon(freeBitmap);
-            } else if (driver.status.equals(EmployStatus.OFFLINE) || driver.status.equals(EmployStatus.FROZEN)) {
-                options.icon(offlineBitmap);
-            } else {
-                options.icon(busyBitmap);
-            }
+            options.icon(BitmapDescriptorFactory.fromView(getMarkerView(driver)));
             Marker marker = aMap.addMarker(options);
             marker.setInfoWindowEnable(true);
             marker.setSnippet(driver.employ_name);
@@ -509,15 +493,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (null != offlineBitmap) {
-            offlineBitmap.recycle();
-        }
-        if (null != busyBitmap) {
-            busyBitmap.recycle();
-        }
-        if (null != freeBitmap) {
-            freeBitmap.recycle();
-        }
         mapView.onDestroy();
         getRxManager().clear();
     }
@@ -656,7 +631,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        marker.showInfoWindow();
+        if (StringUtils.isNotBlank(marker.getTitle())) {
+            PhoneUtil.call(this, marker.getTitle());
+        }
         return true;
     }
 
@@ -684,5 +661,20 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     public void tongji(View view) {
         ARouter.getInstance().build("/personal/StatsActivity")
                 .navigation();
+    }
+
+    private View getMarkerView(NearDriver driver) {
+        View v = getLayoutInflater().inflate(R.layout.map_overly, null);
+        RelativeLayout overly_bg = v.findViewById(R.id.overly_bg);
+
+        if (driver.status.equals(EmployStatus.FREE)) {
+            overly_bg.setBackgroundResource(R.mipmap.map__free_maker_bg);
+        } else {
+            overly_bg.setBackgroundResource(R.mipmap.map__busy_maker_bg);
+        }
+        TextView driverName = v.findViewById(R.id.overly_driver_name);
+        driverName.setText(driver.employ_name);
+
+        return v;
     }
 }
