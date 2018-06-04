@@ -388,6 +388,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         options.setFlat(true);//设置marker平贴地图效果
         List<LatLng> latLngs = new ArrayList<>();
 
+
         for (NearDriver driver : drivers) {
             if (driver.employ_id == EmUtil.getEmployId()) {
                 continue;//自己就不显示marker
@@ -684,7 +685,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        PhoneUtil.call(this, marker.getTitle());
+        if (StringUtils.isNotBlank(marker.getTitle())) {
+            PhoneUtil.call(this, marker.getTitle());
+        }
         return true;
     }
 

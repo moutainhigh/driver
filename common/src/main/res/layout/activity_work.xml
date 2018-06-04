@@ -60,11 +60,11 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:onClick="tongji"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_margin="10dp"
             android:background="@mipmap/corners_alpha_bg_big"
+            android:onClick="tongji"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -392,23 +392,22 @@
         android:id="@+id/guide_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:visibility="gone"
+        android:background="#cc000000"
         android:clickable="true"
-        android:background="#cc000000">
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_notify_set_icon"
-            />
+            android:src="@mipmap/ic_notify_set_icon" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:src="@mipmap/ic_text"/>
+            android:src="@mipmap/ic_text" />
 
 
         <ImageView
@@ -416,7 +415,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:src="@mipmap/go_to_set"/>
+            android:src="@mipmap/go_to_set" />
 
     </LinearLayout>
 

@@ -5,6 +5,7 @@ import com.easymi.daijia.result.BudgetResult;
 import com.easymi.daijia.result.ConsumerResult;
 import com.easymi.daijia.result.DJOrderResult;
 import com.easymi.daijia.result.DJTypeResult;
+import com.easymi.daijia.result.OrderFeeResult;
 import com.easymi.daijia.result.PassengerResult;
 import com.easymi.daijia.result.SameOrderResult;
 
@@ -312,4 +313,17 @@ public interface DJApiService {
     @GET("driver/api/v1/passengerInfo")
     Observable<ConsumerResult> getConsumer(@Query("order_id") Long orderId,
                                            @Query("app_key") String appKey);
+
+    /**
+     * 获取订单计费信息
+     * @param orderId
+     * @param driverId
+     * @param orderType
+     * @return
+     */
+    @GET("driver/api/v1/arrivalCost")
+    Observable<OrderFeeResult> getOrderFee(@Query("order_id")Long orderId,
+                                           @Query("driver_id")Long driverId,
+                                           @Query("order_type")String orderType,
+                                           @Query("app_key")String appKey);
 }

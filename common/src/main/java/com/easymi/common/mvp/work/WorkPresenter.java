@@ -17,6 +17,7 @@ import com.easymi.common.daemon.JobKeepLiveService;
 import com.easymi.common.entity.AnnAndNotice;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.component.entity.Setting;
+import com.easymi.common.entity.NearDriver;
 import com.easymi.common.entity.WorkStatistics;
 import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.LoginResult;
@@ -34,6 +35,7 @@ import com.easymi.component.entity.Setting;
 import com.easymi.component.network.ErrCode;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
@@ -234,7 +236,21 @@ public class WorkPresenter implements WorkContract.Presenter {
 
         Observable<NearDriverResult> observable = model.queryNearDriver(driverId, lat, lng, dis);
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
-                true, nearDriverResult -> view.showDrivers(nearDriverResult.emploies))));
+                true, nearDriverResult -> {
+            if (null != nearDriverResult.emploies && nearDriverResult.emploies.size() != 0) {
+                List<NearDriver> nearDrivers = new ArrayList<>();
+                for (NearDriver employ : nearDriverResult.emploies) {
+                    if (!employ.status.equals(EmployStatus.ONLINE)
+                            && !employ.status.equals(EmployStatus.OFFLINE)
+                            && !employ.status.equals(EmployStatus.FROZEN)) {
+                        nearDrivers.add(employ);
+                    }
+                }
+                view.showDrivers(nearDrivers);
+            } else {
+                view.showDrivers(nearDriverResult.emploies);
+            }
+        })));
     }
 
     @Override

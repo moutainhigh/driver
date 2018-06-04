@@ -10,6 +10,7 @@ import com.easymi.component.utils.EmUtil;
 import com.easymi.daijia.DJApiService;
 import com.easymi.daijia.result.ConsumerResult;
 import com.easymi.daijia.result.DJOrderResult;
+import com.easymi.daijia.result.OrderFeeResult;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -132,6 +133,15 @@ public class FlowModel implements FlowContract.Model {
     public Observable<EmResult> payOrder(Long orderId, String payType) {
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
                 .payOrder(orderId, EmUtil.getAppKey(), payType)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<OrderFeeResult> getOrderFee(Long orderId, Long driverId, String orderType) {
+        return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
+                .getOrderFee(orderId, driverId, orderType, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

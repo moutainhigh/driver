@@ -2,6 +2,7 @@ package com.easymi.component.base;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.os.Build;
@@ -54,6 +55,8 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 
         mRxManager = new RxManager();
         ActManager.getInstance().addActivity(this);
