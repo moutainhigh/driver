@@ -999,6 +999,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         lastLatlng = new LatLng(location.latitude, location.longitude);
         presenter.findOne(orderId);
         MQTTService.pushLoc(new BuildPushData(EmUtil.getLastLoc()));//减少迟滞
+
+//        presenter.getOrderFee(orderId);
     }
 
     @Override

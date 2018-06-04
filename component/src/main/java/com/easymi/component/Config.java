@@ -2,9 +2,8 @@ package com.easymi.component;
 
 /**
  * Created by developerLzh on 2017/11/3 0003.
- *
+ * <p>
  * 配置文件
- *
  */
 
 public class Config {
@@ -13,7 +12,7 @@ public class Config {
     //TODO 换HOST(线上有Https) 换MQTT 换AppKey 换COMM_USE
     //TODO 通用版需要将名字换位Rvakva服务端
     //TODO 非通用版名字为心归服务
-     /**
+    /**
      * 主机地址
      */
 //    public static final String HOST = "http://192.168.0.72:8082/";
@@ -96,7 +95,7 @@ public class Config {
     public static final String SP_LOGIN_PSW = "login_psw";//密码
     public static final String SP_REMEMBER_PSW = "remember_psw";//密码
 
-    public static final String SP_UDID= "udid";//密码
+    public static final String SP_UDID = "udid";//密码
 
     public static final String SP_LAST_SPLASH_TIME = "last_splash_animate";//上次显示动画的时间
 

@@ -46,6 +46,7 @@ import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.result.ConsumerResult;
 import com.easymi.daijia.result.DJOrderResult;
+import com.easymi.daijia.result.OrderFeeResult;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -373,6 +374,16 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     public void getConsumerInfo(Long orderId) {
         view.getManager().add(model.consumerInfo(orderId).subscribe(new MySubscriber<>(context, true,
                 false, consumerResult -> view.showConsumer(consumerResult.consumerInfo))));
+    }
+
+    @Override
+    public void getOrderFee(Long orderId) {
+        view.getManager().add(model.getOrderFee(orderId,EmUtil.getEmployId(),Config.DAIJIA).subscribe(new MySubscriber<>(context, false, false, new NoErrSubscriberListener<OrderFeeResult>() {
+            @Override
+            public void onNext(OrderFeeResult orderFeeResult) {
+
+            }
+        })));
     }
 
     @Override

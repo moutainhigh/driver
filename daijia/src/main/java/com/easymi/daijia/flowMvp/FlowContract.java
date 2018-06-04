@@ -14,6 +14,7 @@ import com.easymi.daijia.entity.ConsumerInfo;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.result.ConsumerResult;
 import com.easymi.daijia.result.DJOrderResult;
+import com.easymi.daijia.result.OrderFeeResult;
 
 import java.util.List;
 
@@ -108,6 +109,8 @@ public interface FlowContract {
 
         void getConsumerInfo(Long orderId);
 
+        void getOrderFee(Long orderId);
+
         DJOrderResult orderResult2DJOrder(DJOrderResult result);
         //...
     }
@@ -136,5 +139,7 @@ public interface FlowContract {
         Observable<ConsumerResult> consumerInfo(Long orderId);
 
         Observable<EmResult> payOrder(Long orderId, String payType);
+
+        Observable<OrderFeeResult> getOrderFee(Long orderId, Long driverId, String orderType);
     }
 }
