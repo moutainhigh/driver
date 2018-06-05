@@ -1,5 +1,6 @@
 package com.easymi.common.mvp.work;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
@@ -473,6 +474,11 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     @Override
     protected void onResume() {
         super.onResume();
+        boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
+        if (!isLogin) {
+            ARouter.getInstance().build("/personal/LoginActivity").withFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).navigation();
+            finish();
+        }
         mapView.onResume();
         presenter.loadDataOnResume();
     }

@@ -26,7 +26,11 @@ public class EmUtil {
     }
 
     public static String getAppKey() {
-        return XApp.getMyPreferences().getString(Config.SP_APP_KEY, "");
+        if (!Config.COMM_USE) {
+            return Config.APP_KEY;
+        } else {
+            return XApp.getMyPreferences().getString(Config.SP_APP_KEY, "");
+        }
     }
 
 
@@ -36,7 +40,7 @@ public class EmUtil {
 
     public static EmLoc getLastLoc() {
         EmLoc emLoc = new Gson().fromJson(XApp.getMyPreferences().getString(Config.SP_LAST_LOC, ""), EmLoc.class);
-        if(null == emLoc){
+        if (null == emLoc) {
             emLoc = new EmLoc();
             emLoc.poiName = "未知";
         }
@@ -46,6 +50,7 @@ public class EmUtil {
     public static void employLogout(Context context) {
         SharedPreferences.Editor editor = XApp.getPreferencesEditor();
         editor.putBoolean(Config.SP_ISLOGIN, false);
+        editor.putString(Config.APP_KEY, "");//重置APPKEY
         editor.putLong(Config.SP_DRIVERID, -1);
         editor.apply();
 
