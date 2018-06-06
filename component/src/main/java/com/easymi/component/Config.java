@@ -29,6 +29,7 @@ public class Config {
 //    public static final String APP_KEY = "455b01b9de5a4a7e9ca4df901a2f488d";//测试
     public static final String APP_KEY = "488441998952435da895286632e82f40";//快些哥
 //    public static final String APP_KEY = "1f462eb305a2417c9564f2dfaf89da9c";//本地
+//    public static final String APP_KEY = "4aea5f7368b0461395eeda353337a24c";//v5test
 
     public static final boolean COMM_USE = false;//是否是通用司机端
 
