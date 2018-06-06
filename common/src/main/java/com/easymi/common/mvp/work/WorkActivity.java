@@ -95,6 +95,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     LinearLayout createOrder;
 
     ImageView pullIcon;
+    LinearLayout peek_con;
 
     ImageView refreshImg;
     FrameLayout loadingFrame;
@@ -213,6 +214,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         createOrder = findViewById(R.id.create_order);
         swipeRefreshLayout = findViewById(R.id.swipe_layout);
         pullIcon = findViewById(R.id.pull_icon);
+        peek_con = findViewById(R.id.peek_con);
 
         listenOrderCon = findViewById(R.id.listen_order_con);
         onLineBtn = findViewById(R.id.online_btn);
