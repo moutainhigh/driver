@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:padding="4dp">
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:background="@null"
+            android:text="@string/no"
+            android:textColor="#999999"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:textColor="#999999"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:background="@null"
+            android:text="@string/yes"
+            android:textColor="#303f9f"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.xiaoka.client.lib.widget.wheelView.wheel.WheelView
+            android:id="@+id/day"
+            android:layout_width="0dp"
+            android:layout_height="160dp"
+            android:layout_weight="1" />
+
+        <com.xiaoka.client.lib.widget.wheelView.wheel.WheelView
+            android:id="@+id/hour"
+            android:layout_width="0dp"
+            android:layout_height="160dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

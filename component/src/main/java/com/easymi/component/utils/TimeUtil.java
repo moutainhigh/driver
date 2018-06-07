@@ -497,6 +497,45 @@ public class TimeUtil {
         }
         return list;
     }
+
+    /**
+     * 获取一个时间戳是星期几.
+     *
+     * @param calendar calendar
+     * @return 该时间为星期几
+     */
+    @SuppressLint("SwitchIntDef")
+    public static String getWeekDay(Calendar calendar) {
+        String dayStr = null;
+        int wd = calendar.get(Calendar.DAY_OF_WEEK);
+        switch (wd) {
+            case Calendar.MONDAY:
+                dayStr = "周一";
+                break;
+            case Calendar.TUESDAY:
+                dayStr = "周二";
+                break;
+            case Calendar.WEDNESDAY:
+                dayStr = "周三";
+                break;
+            case Calendar.THURSDAY:
+                dayStr = "周四";
+                break;
+            case Calendar.FRIDAY:
+                dayStr = "周五";
+                break;
+            case Calendar.SATURDAY:
+                dayStr = "周六";
+                break;
+            case Calendar.SUNDAY:
+                dayStr = "周日";
+                break;
+            default:
+                break;
+        }
+        return dayStr;
+    }
+
     //获取某年某月按天切片日期集合（某个月间隔多少天的日期集合）
     public static List getTimeList(int beginYear, int beginMonth, int k) {
         List list = new ArrayList();
