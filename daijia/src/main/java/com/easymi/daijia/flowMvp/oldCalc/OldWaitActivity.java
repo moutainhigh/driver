@@ -172,6 +172,11 @@ public class OldWaitActivity extends RxBaseActivity implements FlowContract.View
     }
 
     @Override
+    public void showFeeChanged(DymOrder dymOrder) {
+        showView();
+    }
+
+    @Override
     public RxManager getManager() {
         return mRxManager;
     }

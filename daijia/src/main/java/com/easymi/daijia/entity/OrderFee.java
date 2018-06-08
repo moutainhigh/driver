@@ -9,5 +9,8 @@ package com.easymi.daijia.entity;
  * @since 5.0.0.000
  */
 public class OrderFee {
-    public double money;
+    public double last_lat;
+    public double last_lng;
+    public long driver_id;
+    public long customer_id;
 }

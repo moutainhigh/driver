@@ -41,6 +41,7 @@ import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.NetUtil;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.entity.DJOrder;
@@ -48,9 +49,13 @@ import com.easymi.daijia.result.ConsumerResult;
 import com.easymi.daijia.result.DJOrderResult;
 import com.easymi.daijia.result.OrderFeeResult;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import rx.Observable;
 
@@ -64,6 +69,9 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     private FlowContract.View view;
     private FlowContract.Model model;
+
+    private Timer timer;
+    private TimerTask timerTask;
 
     public FlowPresenter(Context context, FlowContract.View view) {
         this.context = context;
@@ -155,21 +163,52 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             djOrderResult = orderResult2DJOrder(djOrderResult);
             updateDymOrder(djOrderResult.order);
             view.showOrder(djOrderResult.order);
-
         })));
     }
 
     @Override
     public void arriveDes(LoadingButton btn, DymOrder dymOrder) {
 
-        Observable<DJOrderResult> observable = model.arriveDes(dymOrder);
+        view.getManager().add(model.getOrderFee(dymOrder.orderId, EmUtil.getEmployId(), Config.DAIJIA).subscribe(new MySubscriber<>(context, false, false, new NoErrSubscriberListener<OrderFeeResult>() {
+            @Override
+            public void onNext(OrderFeeResult result) {
+                if (timer != null) {
+                    timer.cancel();
+                }
+                if (timerTask != null) {
+                    timerTask.cancel();
+                }
 
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, djOrderResult -> {
-            dymOrder.updateConfirm();
-            djOrderResult = orderResult2DJOrder(djOrderResult);
-            updateDymOrder(djOrderResult.order);
-            view.showOrder(djOrderResult.order);
+                if (null != result.cost) {
+                    if (dymOrder.distance <= result.cost.mileges) {
+                        dymOrder.startFee = result.cost.start_price;
+                        dymOrder.waitTime = result.cost.wait_time / 60;
+                        dymOrder.waitTimeFee = result.cost.wait_time_fee;
+                        dymOrder.travelTime = result.cost.driver_time / 60;
+                        dymOrder.travelFee = result.cost.drive_time_cost;
+                        dymOrder.totalFee = result.cost.total_amount;
 
+                        dymOrder.minestMoney = result.cost.min_cost;
+
+                        dymOrder.disFee = result.cost.mileage_cost;
+                        dymOrder.distance = result.cost.mileges;
+
+                        DecimalFormat decimalFormat = new DecimalFormat("#0.0");
+                        decimalFormat.setRoundingMode(RoundingMode.DOWN);
+                        dymOrder.distance = Double.parseDouble(decimalFormat.format(dymOrder.distance));
+                        //公里数保留一位小数。。
+
+                        dymOrder.updateFee();
+                    }
+                    Observable<DJOrderResult> observable = model.arriveDes(dymOrder);
+                    view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, djOrderResult -> {
+                        dymOrder.updateConfirm();
+                        djOrderResult = orderResult2DJOrder(djOrderResult);
+                        updateDymOrder(djOrderResult.order);
+                        view.showOrder(djOrderResult.order);
+                    })));
+                }
+            }
         })));
     }
 
@@ -231,7 +270,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             djOrderResult = orderResult2DJOrder(djOrderResult);
             updateDymOrder(djOrderResult.order);
             view.showOrder(djOrderResult.order);
-
         })));
     }
 
@@ -378,12 +416,65 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void getOrderFee(Long orderId) {
-        view.getManager().add(model.getOrderFee(orderId,EmUtil.getEmployId(),Config.DAIJIA).subscribe(new MySubscriber<>(context, false, false, new NoErrSubscriberListener<OrderFeeResult>() {
+        view.getManager().add(model.getOrderFee(orderId, EmUtil.getEmployId(), Config.DAIJIA).subscribe(new MySubscriber<>(context, false, false, new NoErrSubscriberListener<OrderFeeResult>() {
             @Override
-            public void onNext(OrderFeeResult orderFeeResult) {
+            public void onNext(OrderFeeResult result) {
+                DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
+                if (null != result.cost) {
+                    if (dymOrder != null) {
+                        if (dymOrder.distance <= result.cost.mileges) {
+                            dymOrder.startFee = result.cost.start_price;
+                            dymOrder.waitTime = result.cost.wait_time / 60;
+                            dymOrder.waitTimeFee = result.cost.wait_time_fee;
+                            dymOrder.travelTime = result.cost.driver_time / 60;
+                            dymOrder.travelFee = result.cost.drive_time_cost;
+                            dymOrder.totalFee = result.cost.total_amount;
 
+                            dymOrder.minestMoney = result.cost.min_cost;
+
+                            dymOrder.disFee = result.cost.mileage_cost;
+                            dymOrder.distance = result.cost.mileges;
+
+                            DecimalFormat decimalFormat = new DecimalFormat("#0.0");
+                            decimalFormat.setRoundingMode(RoundingMode.DOWN);
+                            dymOrder.distance = Double.parseDouble(decimalFormat.format(dymOrder.distance));
+                            //公里数保留一位小数。。
+
+                            dymOrder.updateFee();
+                            view.showFeeChanged(dymOrder);
+                        }
+                    }
+                }
             }
         })));
+    }
+
+    @Override
+    public void startTimer(Long orderId) {
+        cancelTimer();
+        timer = new Timer();
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                long lastFeeTime = XApp.getMyPreferences().getLong(Config.SP_LAST_GET_FEE_TIME, 0);
+                if (System.currentTimeMillis() - lastFeeTime > 10) {
+                    if (NetUtil.getNetWorkState(context) != NetUtil.NETWORK_NONE) {
+                        getOrderFee(orderId);
+                    }
+                }
+            }
+        };
+        timer.schedule(timerTask, 40 * 1000, 40 * 1000);
+    }
+
+    @Override
+    public void cancelTimer() {
+        if (timer != null) {
+            timer.cancel();
+        }
+        if (timerTask != null) {
+            timerTask.cancel();
+        }
     }
 
     @Override

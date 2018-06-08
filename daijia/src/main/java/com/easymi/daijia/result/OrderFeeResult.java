@@ -13,6 +13,17 @@ import com.easymi.daijia.entity.OrderFee;
  */
 public class OrderFeeResult extends EmResult {
 
-    public OrderFee orderFee;
+    public Cost cost;
 
+    public class Cost{
+        public double start_price;
+        public int wait_time;
+        public double wait_time_fee;
+        public int driver_time;
+        public double drive_time_cost;
+        public double total_amount;
+        public double min_cost;
+        public double mileage_cost;
+        public double mileges;
+    }
 }

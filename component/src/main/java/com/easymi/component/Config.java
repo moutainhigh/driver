@@ -104,6 +104,8 @@ public class Config {
 
     public static final String SP_SHOW_GUIDE = "show_guide";//是否播放静音音乐音乐
 
+    public static final String SP_LAST_GET_FEE_TIME = "sp_last_get_fee_time";//是否播放静音音乐音乐
+
 
     public static final String DAIJIA = "daijia";
 

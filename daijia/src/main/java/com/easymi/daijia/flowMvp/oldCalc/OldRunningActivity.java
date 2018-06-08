@@ -350,6 +350,11 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
     }
 
     @Override
+    public void showFeeChanged(DymOrder dymOrder) {
+        showView();
+    }
+
+    @Override
     public RxManager getManager() {
         return mRxManager;
     }
