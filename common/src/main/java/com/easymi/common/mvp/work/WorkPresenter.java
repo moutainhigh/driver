@@ -23,6 +23,7 @@ import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.common.result.SettingResult;
+import com.easymi.common.result.SystemResult;
 import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.Config;
 import com.easymi.component.EmployStatus;
@@ -30,6 +31,7 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.entity.Setting;
+import com.easymi.component.entity.SystemConfig;
 import com.easymi.component.network.ErrCode;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
@@ -376,6 +378,16 @@ public class WorkPresenter implements WorkContract.Presenter {
                 true, result -> {
             Setting.deleteAll();
             result.setting.save();
+        })));
+
+
+        Observable<SystemResult> observable2 = model.getSysConfig();
+        view.getRxManager().add(observable2.subscribe(new MySubscriber<>(context, false,
+                true, result -> {
+            SystemConfig.deleteAll();
+            SystemConfig systemConfig = result.system;
+            systemConfig.payType = result.driverPayType;
+            systemConfig.save();
         })));
     }
 }

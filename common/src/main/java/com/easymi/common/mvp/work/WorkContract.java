@@ -11,7 +11,9 @@ import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.common.result.SettingResult;
+import com.easymi.common.result.SystemResult;
 import com.easymi.common.result.WorkStatisticsResult;
+import com.easymi.component.entity.SystemConfig;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.widget.LoadingButton;
@@ -105,13 +107,15 @@ public interface WorkContract {
 
         Observable<AnnouncementResult> loadAnn(Long id);
 
-        Observable<WorkStatisticsResult> getDriverStatistics(Long id, String nowDate,int isOnline);
+        Observable<WorkStatisticsResult> getDriverStatistics(Long id, String nowDate, int isOnline);
 
         Observable<NearDriverResult> queryNearDriver(Long driverId, Double lat, Double lng, Double distance);
 
-        Observable<LoginResult> getEmploy(Long driverId,String appKey);
+        Observable<LoginResult> getEmploy(Long driverId, String appKey);
 
         Observable<SettingResult> getAppSetting();
+
+        Observable<SystemResult> getSysConfig();
     }
 
 }

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
+import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.R;
 import com.easymi.daijia.entity.DJOrder;
@@ -59,7 +60,7 @@ public class ArriveStartFragment extends RxBaseFragment {
         callPhoneCon = getActivity().findViewById(R.id.call_phone_con);
 
         startPlaceText.setText(djOrder.startPlace);
-        endPlaceText.setText(djOrder.endPlace);
+        endPlaceText.setText(StringUtils.isNotBlank(djOrder.endPlace) ? djOrder.endPlace:getString(R.string.des_place));
         startDrive.setOnClickListener(view -> bridge.doStartDrive(startDrive));
         startWait.setOnClickListener(view -> bridge.doStartWait());
         callPhoneCon.setOnClickListener(view -> CallPhoneDialog.callDialog(getActivity(),djOrder));

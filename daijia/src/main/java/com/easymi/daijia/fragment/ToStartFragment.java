@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.utils.PhoneUtil;
+import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.R;
 import com.easymi.daijia.entity.DJOrder;
@@ -59,7 +60,7 @@ public class ToStartFragment extends RxBaseFragment {
         changEndCon = getActivity().findViewById(R.id.change_end_con);
 
         startPlaceText.setText(djOrder.startPlace);
-        endPlaceText.setText(djOrder.endPlace);
+        endPlaceText.setText(StringUtils.isNotBlank(djOrder.endPlace) ? djOrder.endPlace:getString(R.string.des_place));
         controlCon.setOnClickListener(view -> {
             Log.e("tag", "onClick");
             bridge.doToStart(controlCon);

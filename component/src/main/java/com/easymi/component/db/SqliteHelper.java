@@ -16,7 +16,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "data.db";
 
-    private static final int VERSION = 49;
+    private static final int VERSION = 50;
 
     private StringBuffer sqlBuf;
 
@@ -68,6 +68,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
         createDriverInfoTable(db);
         createDymTable(db);
         createSettingTable(db);
+        createSystemTable(db);
     }
 
     @Override
@@ -88,6 +89,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
         createDriverInfoTable(db);
         createDymTable(db);
         createSettingTable(db);
+        createSystemTable(db);
     }
 
     private void createDriverInfoTable(SQLiteDatabase db) {
@@ -162,6 +164,23 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("canCallDriver").append(" ").append("INTEGER").append(",")
 
                 .append("workCarChangeOrder").append(" ").append("INTEGER")
+                .append(");");
+        execCreateTableSQL(db);
+    }
+
+    private void createSystemTable(SQLiteDatabase db) {
+        sqlBuf.append("CREATE TABLE ").append("t_systemconfig").append(" (")
+                .append("id").append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
+                .append("tixianBase").append(" ").append("INTEGER").append(",")
+                .append("tixianMin").append(" ").append("INTEGER").append(",")
+                .append("tixianMax").append(" ").append("INTEGER").append(",")
+                .append("tixianMemo").append(" ").append("INTEGER").append(",")
+                .append("payMoney1").append(" ").append("INTEGER").append(",")
+                .append("payMoney2").append(" ").append("INTEGER").append(",")
+                .append("payMoney3").append(" ").append("INTEGER").append(",")
+                .append("payType").append(" ").append("TEXT").append(",")
+
+                .append("canCallDriver").append(" ").append("INTEGER")
                 .append(");");
         execCreateTableSQL(db);
     }

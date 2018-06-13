@@ -73,9 +73,9 @@ public interface DJApiService {
     @FormUrlEncoded
     @PUT("driver/api/v1/refuseOrder")
     Observable<EmResult> refuseOrder(@Field("order_id") Long orderId,
-                                          @Field("driver_id") Long driverId,
-                                          @Field("app_key") String appKey,
-                                          @Field("remark") String remark);
+                                     @Field("driver_id") Long driverId,
+                                     @Field("app_key") String appKey,
+                                     @Field("remark") String remark);
 
     /**
      * 司机修改终点
@@ -288,9 +288,9 @@ public interface DJApiService {
     @FormUrlEncoded
     @PUT("driver/api/v1/cancelOrder")
     Observable<EmResult> cancelOrder(@Field("order_id") Long orderId,
-                                          @Field("driver_id") Long driverId,
-                                          @Field("app_key") String appKey,
-                                          @Field("remark") String remark);
+                                     @Field("driver_id") Long driverId,
+                                     @Field("app_key") String appKey,
+                                     @Field("remark") String remark);
 
     /**
      * 同单司机
@@ -316,14 +316,18 @@ public interface DJApiService {
 
     /**
      * 获取订单计费信息
+     *
      * @param orderId
      * @param driverId
      * @param orderType
      * @return
      */
     @GET("driver/api/v1/arrivalCost")
-    Observable<OrderFeeResult> getOrderFee(@Query("order_id")Long orderId,
-                                           @Query("driver_id")Long driverId,
-                                           @Query("order_type")String orderType,
-                                           @Query("app_key")String appKey);
+    Observable<OrderFeeResult> getOrderFee(@Query("order_id") Long orderId,
+                                           @Query("driver_id") Long driverId,
+                                           @Query("order_type") String orderType,
+                                           @Query("app_key") String appKey,
+                                           @Query("lat") Double lat,
+                                           @Query("lng") Double lng,
+                                           @Query("is_arrive")Integer isArrive);
 }

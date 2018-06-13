@@ -473,9 +473,12 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         return mRxManager;
     }
 
+    private boolean isFront = false;
+
     @Override
     protected void onResume() {
         super.onResume();
+        isFront = true;
         boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
         if (!isLogin) {
             ARouter.getInstance().build("/personal/LoginActivity").withFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).navigation();
@@ -494,6 +497,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     @Override
     protected void onPause() {
         super.onPause();
+        isFront = false;
         presenter.onPause();
         mapView.onPause();
     }
@@ -600,7 +604,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
                 LatLng current = new LatLng(location.latitude, location.longitude);
                 double dis = AMapUtils.calculateLineDistance(last, current);
                 if (dis > 30) {//大于30米重新加载司机
-                    presenter.queryNearDriver(location.latitude, location.longitude);
+                    if(isFront){//activity可见时才调用该接口
+                        presenter.queryNearDriver(location.latitude, location.longitude);
+                    }
                 }
             }
         }

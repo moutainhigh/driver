@@ -387,7 +387,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 }
                 isToFeeDetail = false;
             }
-            presenter.getOrderFee(orderId);
+            presenter.getOrderFee(orderId,1);
         } else if (djOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {
             toolbar.setTitle(R.string.settle);
             runningFragment = new RunningFragment();

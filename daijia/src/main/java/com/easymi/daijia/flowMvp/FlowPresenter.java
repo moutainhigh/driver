@@ -169,7 +169,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     @Override
     public void arriveDes(LoadingButton btn, DymOrder dymOrder) {
 
-        view.getManager().add(model.getOrderFee(dymOrder.orderId, EmUtil.getEmployId(), Config.DAIJIA).subscribe(new MySubscriber<>(context, false, false, new NoErrSubscriberListener<OrderFeeResult>() {
+        view.getManager().add(model.getOrderFee(dymOrder.orderId, EmUtil.getEmployId(), Config.DAIJIA, 2).subscribe(new MySubscriber<>(context, false, false, new NoErrSubscriberListener<OrderFeeResult>() {
             @Override
             public void onNext(OrderFeeResult result) {
                 if (timer != null) {
@@ -415,8 +415,8 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     }
 
     @Override
-    public void getOrderFee(Long orderId) {
-        view.getManager().add(model.getOrderFee(orderId, EmUtil.getEmployId(), Config.DAIJIA).subscribe(new MySubscriber<>(context, false, false, new NoErrSubscriberListener<OrderFeeResult>() {
+    public void getOrderFee(Long orderId, Integer isArrive) {
+        view.getManager().add(model.getOrderFee(orderId, EmUtil.getEmployId(), Config.DAIJIA, isArrive).subscribe(new MySubscriber<>(context, false, false, new NoErrSubscriberListener<OrderFeeResult>() {
             @Override
             public void onNext(OrderFeeResult result) {
                 DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
@@ -457,9 +457,9 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             @Override
             public void run() {
                 long lastFeeTime = XApp.getMyPreferences().getLong(Config.SP_LAST_GET_FEE_TIME, 0);
-                if (System.currentTimeMillis() - lastFeeTime > 10) {
+                if (System.currentTimeMillis() - lastFeeTime > 40 * 1000) {
                     if (NetUtil.getNetWorkState(context) != NetUtil.NETWORK_NONE) {
-                        getOrderFee(orderId);
+                        getOrderFee(orderId, 1);
                     }
                 }
             }

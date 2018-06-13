@@ -82,7 +82,7 @@
     <string name="canceled"> canceled </string>
 
         
-    <string name="des_place">[destination]</string>
+    <string name="des_place">[unknown destination]</string>
 
         
     <string name="no_gps">The device did not find GPS positioning chip, can not be accurately positioned </string>

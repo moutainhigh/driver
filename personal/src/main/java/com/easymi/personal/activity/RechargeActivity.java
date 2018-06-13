@@ -8,6 +8,8 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.easymi.component.Config;
+import com.easymi.component.entity.SystemConfig;
+import com.easymi.component.pay.PayType;
 import com.easymi.component.utils.Log;
 
 import android.view.View;
@@ -82,6 +84,8 @@ public class RechargeActivity extends RxBaseActivity {
 
         initEdit();
 
+        showWhatByConfig();
+
         if (Config.COMM_USE) {
             payWx.setVisibility(View.GONE);
             payUnion.setVisibility(View.GONE);
@@ -111,6 +115,27 @@ public class RechargeActivity extends RxBaseActivity {
                 payUnion(money);
             }
         });
+    }
+
+    SystemConfig config;
+
+    private void showWhatByConfig() {
+        config = SystemConfig.findOne();
+        if (null != config) {
+            if (!config.payType.contains(PayType.CHANNEL_APP_WECHAT.getPayType())) {
+                payWx.setVisibility(View.GONE);
+            }
+            if (!config.payType.contains(PayType.CHANNEL_APP_ALI.getPayType())) {
+                payZfb.setVisibility(View.GONE);
+            }
+            if (!config.payType.contains(PayType.CHANNEL_APP_UNION.getPayType())) {
+                payUnion.setVisibility(View.GONE);
+            }
+
+            pay50.setText(getString(R.string.renminbi) + config.payMoney1);
+            pay100.setText(getString(R.string.renminbi) + config.payMoney2);
+            pay200.setText(getString(R.string.renminbi) + config.payMoney3);
+        }
     }
 
     @Override
@@ -211,13 +236,25 @@ public class RechargeActivity extends RxBaseActivity {
     private double getMoney() {
         double money = 0.0;
         if (pay50.isChecked()) {
-            money = 50;
+            if (config != null) {
+                money = config.payMoney1;
+            } else {
+                money = 50;
+            }
         }
         if (pay100.isChecked()) {
-            money = 100;
+            if (config != null) {
+                money = config.payMoney2;
+            } else {
+                money = 100;
+            }
         }
         if (pay200.isChecked()) {
-            money = 200;
+            if (config != null) {
+                money = config.payMoney3;
+            } else {
+                money = 200;
+            }
         }
         if (!pay50.isChecked() && !pay100.isChecked() && !pay200.isChecked()) {
             if (StringUtils.isNotBlank(payCus.getText().toString())) {

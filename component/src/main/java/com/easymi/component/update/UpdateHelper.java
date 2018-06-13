@@ -62,8 +62,13 @@ public class UpdateHelper {
     }
 
     public String checkUrl() {
-        return "http://apps.xiaokayun.cn/api/v1/checkForUpdates?channel=OFFICIAL&platform=ANDROID&type=1&shortVersion=" + SysUtil.getVersionCode(context)
-                + "&appkey=" + EmUtil.getAppKey();
+        if (!Config.COMM_USE) {
+            return "http://apps.xiaokayun.cn/api/v1/checkForUpdates?channel=OFFICIAL&platform=ANDROID&type=1&shortVersion=" + SysUtil.getVersionCode(context)
+                    + "&appkey=" + EmUtil.getAppKey();
+        } else {
+            return "http://apps.xiaokayun.cn/api/v1/checkForUpdates?channel=OFFICIAL&platform=ANDROID&type=1&shortVersion=" + SysUtil.getVersionCode(context)
+                    + "&appkey=publicdriver";
+        }
     }
 
     public interface OnNextListener {

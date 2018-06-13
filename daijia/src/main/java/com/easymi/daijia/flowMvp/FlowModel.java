@@ -139,9 +139,13 @@ public class FlowModel implements FlowContract.Model {
     }
 
     @Override
-    public Observable<OrderFeeResult> getOrderFee(Long orderId, Long driverId, String orderType) {
+    public Observable<OrderFeeResult> getOrderFee(Long orderId, Long driverId, String orderType, Integer isArrive) {
+
+        EmLoc emLoc = EmUtil.getLastLoc();
+
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .getOrderFee(orderId, driverId, orderType, EmUtil.getAppKey())
+//                .getOrderFee(orderId, driverId, orderType, EmUtil.getAppKey(), 30.631711154513887, 103.73517252604167, isArrive)
+                .getOrderFee(orderId, driverId, orderType, EmUtil.getAppKey(), emLoc.latitude, emLoc.longitude, isArrive)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

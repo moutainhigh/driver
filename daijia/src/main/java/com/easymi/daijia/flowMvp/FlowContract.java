@@ -111,9 +111,10 @@ public interface FlowContract {
 
         void getConsumerInfo(Long orderId);
 
-        void getOrderFee(Long orderId);
+        void getOrderFee(Long orderId, Integer isArrive);
 
         void startTimer(Long orderId);
+
         void cancelTimer();
 
         DJOrderResult orderResult2DJOrder(DJOrderResult result);
@@ -145,6 +146,6 @@ public interface FlowContract {
 
         Observable<EmResult> payOrder(Long orderId, String payType);
 
-        Observable<OrderFeeResult> getOrderFee(Long orderId, Long driverId, String orderType);
+        Observable<OrderFeeResult> getOrderFee(Long orderId, Long driverId, String orderType, Integer isArrive);
     }
 }

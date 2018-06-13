@@ -28,24 +28,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="10dp"
-        android:text="将APP分享给您朋友，当TA首次使用时"
-        android:textColor="@color/text_color_black"
-        android:textSize="16sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="您将获得更多奖励哦"
+        android:text="推荐好友 获得奖励"
         android:textColor="@color/text_color_black"
         android:textSize="25sp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:background="@color/line_color" />
 
     <LinearLayout

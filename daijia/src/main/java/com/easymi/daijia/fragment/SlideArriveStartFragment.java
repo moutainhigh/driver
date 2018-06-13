@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.utils.PhoneUtil;
+import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.CustomSlideToUnlockView;
 import com.easymi.daijia.R;
 import com.easymi.daijia.entity.DJOrder;
@@ -56,7 +57,7 @@ public class SlideArriveStartFragment extends RxBaseFragment {
         callPhoneCon = getActivity().findViewById(R.id.call_phone_con);
 
         startPlaceText.setText(djOrder.startPlace);
-        endPlaceText.setText(djOrder.endPlace);
+        endPlaceText.setText(StringUtils.isNotBlank(djOrder.endPlace) ? djOrder.endPlace:getString(R.string.des_place));
         slideView.setmCallBack(new CustomSlideToUnlockView.CallBack() {
             @Override
             public void onSlide(int distance) {
