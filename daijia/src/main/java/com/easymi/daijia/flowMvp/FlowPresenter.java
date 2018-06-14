@@ -167,7 +167,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     }
 
     @Override
-    public void arriveDes(LoadingButton btn, DymOrder dymOrder) {
+    public void arriveDes(LoadingButton btn, DymOrder dymOrder, DJOrder djOrder) {
 
         view.getManager().add(model.getOrderFee(dymOrder.orderId, EmUtil.getEmployId(), Config.DAIJIA, 2).subscribe(new MySubscriber<>(context, false, false, new NoErrSubscriberListener<OrderFeeResult>() {
             @Override
@@ -198,7 +198,26 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
                         dymOrder.distance = Double.parseDouble(decimalFormat.format(dymOrder.distance));
                         //公里数保留一位小数。。
 
-                        dymOrder.updateFee();
+                        //重新开始计算一次钱
+                        DecimalFormat df = new DecimalFormat("#0.0");
+                        dymOrder.orderTotalFee = Double.parseDouble(df.format(dymOrder.totalFee + dymOrder.extraFee + dymOrder.paymentFee));
+
+                        double canCouponMoney = dymOrder.totalFee + dymOrder.extraFee;//可以参与优惠券抵扣的钱
+                        if (canCouponMoney < dymOrder.minestMoney) {
+                            canCouponMoney = dymOrder.minestMoney;
+                        }
+                        if (djOrder.coupon != null) {
+                            if (djOrder.coupon.couponType == 2) {
+                                dymOrder.couponFee = djOrder.coupon.deductible;
+                            } else if (djOrder.coupon.couponType == 1) {
+                                dymOrder.couponFee = Double.parseDouble(df.format(canCouponMoney * (100 - djOrder.coupon.discount) / 100));
+                            }
+                        }
+                        double exls = Double.parseDouble(df.format(canCouponMoney - dymOrder.couponFee));//打折抵扣后应付的钱
+                        if (exls < 0) {
+                            exls = 0;//优惠券不退钱
+                        }
+                        dymOrder.orderShouldPay = Double.parseDouble(df.format(exls + dymOrder.paymentFee - dymOrder.prepay));
                     }
                     Observable<DJOrderResult> observable = model.arriveDes(dymOrder);
                     view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, djOrderResult -> {

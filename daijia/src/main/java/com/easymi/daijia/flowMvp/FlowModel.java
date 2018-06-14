@@ -144,7 +144,7 @@ public class FlowModel implements FlowContract.Model {
         EmLoc emLoc = EmUtil.getLastLoc();
 
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-//                .getOrderFee(orderId, driverId, orderType, EmUtil.getAppKey(), 30.631711154513887, 103.73517252604167, isArrive)
+//                .getOrderFee(orderId, driverId, orderType, EmUtil.getAppKey(), 30.7736989546,104.1627502441, isArrive)
                 .getOrderFee(orderId, driverId, orderType, EmUtil.getAppKey(), emLoc.latitude, emLoc.longitude, isArrive)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())

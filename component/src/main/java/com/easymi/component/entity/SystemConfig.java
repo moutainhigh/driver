@@ -26,7 +26,7 @@ public class SystemConfig {
     public int tixianMax;//提现最大值
 
     @SerializedName("withdrawals_memo")
-    public int tixianMemo;//提现备注
+    public String tixianMemo;//提现备注
 
     @SerializedName("employ_money_1")
     public int payMoney1;//充值金额1
@@ -71,7 +71,7 @@ public class SystemConfig {
                 systemConfig.tixianBase = cursor.getInt(cursor.getColumnIndex("tixianBase"));
                 systemConfig.tixianMin = cursor.getInt(cursor.getColumnIndex("tixianMin"));
                 systemConfig.tixianMax = cursor.getInt(cursor.getColumnIndex("tixianMax"));
-                systemConfig.tixianMemo = cursor.getInt(cursor.getColumnIndex("tixianMemo"));
+                systemConfig.tixianMemo = cursor.getString(cursor.getColumnIndex("tixianMemo"));
                 systemConfig.payMoney1 = cursor.getInt(cursor.getColumnIndex("payMoney1"));
                 systemConfig.payMoney2 = cursor.getInt(cursor.getColumnIndex("payMoney2"));
                 systemConfig.payMoney3 = cursor.getInt(cursor.getColumnIndex("payMoney3"));

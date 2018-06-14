@@ -16,7 +16,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "data.db";
 
-    private static final int VERSION = 50;
+    private static final int VERSION = 51;
 
     private StringBuffer sqlBuf;
 
@@ -174,7 +174,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("tixianBase").append(" ").append("INTEGER").append(",")
                 .append("tixianMin").append(" ").append("INTEGER").append(",")
                 .append("tixianMax").append(" ").append("INTEGER").append(",")
-                .append("tixianMemo").append(" ").append("INTEGER").append(",")
+                .append("tixianMemo").append(" ").append("TEXT").append(",")
                 .append("payMoney1").append(" ").append("INTEGER").append(",")
                 .append("payMoney2").append(" ").append("INTEGER").append(",")
                 .append("payMoney3").append(" ").append("INTEGER").append(",")

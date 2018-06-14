@@ -210,6 +210,6 @@ public interface CommApiService {
      * @param appKey
      * @return
      */
-    @GET("api/v1/systemConfig")
+    @GET("driver/api/v1/systemConfig")
     Observable<SystemResult> getSysCofig(@Query("app_key") String appKey);
 }

@@ -932,7 +932,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void doConfirmMoney(LoadingButton btn, DymOrder dymOrder) {
-                presenter.arriveDes(btn, dymOrder);
+                presenter.arriveDes(btn, dymOrder,djOrder);
             }
 
             @Override

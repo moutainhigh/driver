@@ -87,7 +87,7 @@ public interface FlowContract {
 
         void startDrive(Long orderId, LoadingButton btn);
 
-        void arriveDes(LoadingButton btn, DymOrder dymOrder);
+        void arriveDes(LoadingButton btn, DymOrder dymOrder,DJOrder djOrder);
 
         void navi(LatLng latLng, String poi, Long orderId);
 

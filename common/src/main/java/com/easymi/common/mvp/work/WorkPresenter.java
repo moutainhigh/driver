@@ -387,6 +387,11 @@ public class WorkPresenter implements WorkContract.Presenter {
             SystemConfig.deleteAll();
             SystemConfig systemConfig = result.system;
             systemConfig.payType = result.driverPayType;
+            if (systemConfig.payMoney1 == 0 || systemConfig.payMoney2 == 0 || systemConfig.payMoney3 == 0) {
+                systemConfig.payMoney1 = 50;
+                systemConfig.payMoney2 = 100;
+                systemConfig.payMoney3 = 200;
+            }
             systemConfig.save();
         })));
     }
