@@ -227,7 +227,7 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
     @Override
     public void showGpsState(boolean isOpen) {
         if (!isOpen) {
-            if (null == netDialog) {
+            if (null == gpsDialog) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage(getResources().getString(R.string.please_open_gps));
                 builder.setNegativeButton(getResources().getString(R.string.ok),

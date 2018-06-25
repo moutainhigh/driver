@@ -122,14 +122,20 @@ public class RechargeActivity extends RxBaseActivity {
     private void showWhatByConfig() {
         config = SystemConfig.findOne();
         if (null != config) {
-            if (!config.payType.contains(PayType.CHANNEL_APP_WECHAT.getPayType())) {
+            if (StringUtils.isBlank(config.payType)) {
                 payWx.setVisibility(View.GONE);
-            }
-            if (!config.payType.contains(PayType.CHANNEL_APP_ALI.getPayType())) {
                 payZfb.setVisibility(View.GONE);
-            }
-            if (!config.payType.contains(PayType.CHANNEL_APP_UNION.getPayType())) {
                 payUnion.setVisibility(View.GONE);
+            } else {
+                if (!config.payType.contains(PayType.CHANNEL_APP_WECHAT.getPayType())) {
+                    payWx.setVisibility(View.GONE);
+                }
+                if (!config.payType.contains(PayType.CHANNEL_APP_ALI.getPayType())) {
+                    payZfb.setVisibility(View.GONE);
+                }
+                if (!config.payType.contains(PayType.CHANNEL_APP_UNION.getPayType())) {
+                    payUnion.setVisibility(View.GONE);
+                }
             }
 
             pay50.setText(getString(R.string.renminbi) + config.payMoney1);

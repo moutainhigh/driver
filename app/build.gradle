@@ -9,8 +9,8 @@ android {
         applicationId "com.rvakva.travel.publicdriver"
         minSdkVersion cfg.minSdkVersion
         targetSdkVersion cfg.targetSdkVersion
-        versionCode 270
-        versionName "V5.0.0.007"
+        versionCode 280
+        versionName "V5.0.0.008"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
