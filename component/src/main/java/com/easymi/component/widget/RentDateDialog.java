@@ -152,16 +152,16 @@ public class RentDateDialog implements OnWheelChangedListener, View.OnClickListe
             dayList.add("\r\r\r\r\r\r\r\r今天\r" + TimeUtil.getWeekDay(calendar));
         } else {  //不是今天
             String week = TimeUtil.getWeekDay(calendar);
-            dayList.add(TimeUtil.getTime( "MM月dd日 ",calendar.getTimeInMillis()) + week);
+            dayList.add(TimeUtil.getTime("MM月dd日 ", calendar.getTimeInMillis()) + week);
         }
-        SaveDays.add(TimeUtil.getTime("yyyy-MM-dd",calendar.getTimeInMillis())); //增加保存时间队列
+        SaveDays.add(TimeUtil.getTime( "yyyy-MM-dd",calendar.getTimeInMillis())); //增加保存时间队列
 
         //获取后面天
         for (int i = 1; i < PASS_DAY; i++) {
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth + 1);
             String week = TimeUtil.getWeekDay(calendar);
-            dayList.add(TimeUtil.getTime( "MM月dd日 ",calendar.getTimeInMillis()) + week);
-            SaveDays.add(TimeUtil.getTime("yyyy-MM-dd", calendar.getTimeInMillis()));
+            dayList.add(TimeUtil.getTime("MM月dd日 ",calendar.getTimeInMillis()) + week);
+            SaveDays.add(TimeUtil.getTime( "yyyy-MM-dd",calendar.getTimeInMillis()));
             dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);   //重新获取当前日期
         }
 
@@ -274,7 +274,7 @@ public class RentDateDialog implements OnWheelChangedListener, View.OnClickListe
 
         long t = mTime;
 
-        String str = TimeUtil.getTime("HH:mm", t);
+        String str = TimeUtil.getTime("HH:mm",t);
         String[] strs = str.split(":");
         int startH = Integer.parseInt(strs[0]);
         int startM = Integer.parseInt(strs[1]);

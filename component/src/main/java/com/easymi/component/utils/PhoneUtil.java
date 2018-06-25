@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.os.DeadSystemException;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.provider.ContactsContract;
@@ -184,12 +185,20 @@ public class PhoneUtil {
      */
     public static boolean isServiceRunning(String servicename, Context context) {
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningServiceInfo> infos = am.getRunningServices(100);
-        for (ActivityManager.RunningServiceInfo info : infos) {
-            if (servicename.equals(info.service.getClassName())) {
-                return true;
+        List<ActivityManager.RunningServiceInfo> infos = null;
+        if (am != null) {
+            try {
+                infos = am.getRunningServices(100);
+                for (ActivityManager.RunningServiceInfo info : infos) {
+                    if (servicename.equals(info.service.getClassName())) {
+                        return true;
+                    }
+                }
+            } catch (Exception e) {
+                return false;
             }
         }
+
         return false;
     }
 

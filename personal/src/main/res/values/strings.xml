@@ -323,4 +323,6 @@
 
     <string name="balance_personal">余额(元)</string>
 
+    <string name="renminbi">¥</string>
+
 </resources>

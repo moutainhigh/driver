@@ -67,6 +67,8 @@ public interface FlowContract {
 
         void showConsumer(ConsumerInfo consumerInfo);
 
+        void showFeeChanged(DymOrder dymOrder);
+
         RxManager getManager();
     }
 
@@ -85,7 +87,7 @@ public interface FlowContract {
 
         void startDrive(Long orderId, LoadingButton btn);
 
-        void arriveDes(LoadingButton btn, DymOrder dymOrder);
+        void arriveDes(LoadingButton btn, DymOrder dymOrder,DJOrder djOrder);
 
         void navi(LatLng latLng, String poi, Long orderId);
 
@@ -109,7 +111,11 @@ public interface FlowContract {
 
         void getConsumerInfo(Long orderId);
 
-        void getOrderFee(Long orderId);
+        void getOrderFee(Long orderId, Integer isArrive);
+
+        void startTimer(Long orderId);
+
+        void cancelTimer();
 
         DJOrderResult orderResult2DJOrder(DJOrderResult result);
         //...
@@ -140,6 +146,6 @@ public interface FlowContract {
 
         Observable<EmResult> payOrder(Long orderId, String payType);
 
-        Observable<OrderFeeResult> getOrderFee(Long orderId, Long driverId, String orderType);
+        Observable<OrderFeeResult> getOrderFee(Long orderId, Long driverId, String orderType, Integer isArrive);
     }
 }

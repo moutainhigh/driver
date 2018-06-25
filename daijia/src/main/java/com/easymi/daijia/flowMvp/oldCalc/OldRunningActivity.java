@@ -244,7 +244,7 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
 
             @Override
             public void doConfirmMoney(LoadingButton btn, DymOrder dymOrder) {
-                presenter.arriveDes(btn, dymOrder);
+                presenter.arriveDes(btn, dymOrder,djOrder);
             }
 
             @Override
@@ -347,6 +347,11 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
     @Override
     public void showConsumer(ConsumerInfo consumerInfo) {
         showPayType(payMoney, consumerInfo);
+    }
+
+    @Override
+    public void showFeeChanged(DymOrder dymOrder) {
+        showView();
     }
 
     @Override

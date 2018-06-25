@@ -69,6 +69,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
         createDymTable(db);
         createSettingTable(db);
         createVehicleInfoTable(db);
+        createSystemTable(db);
     }
 
     @Override
@@ -192,6 +193,23 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("commercialType").append(" ").append("INTEGER").append(",")
 
                 .append("serviceType").append(" ").append("INTEGER")
+                .append(");");
+        execCreateTableSQL(db);
+    }
+
+    private void createSystemTable(SQLiteDatabase db) {
+        sqlBuf.append("CREATE TABLE ").append("t_systemconfig").append(" (")
+                .append("id").append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
+                .append("tixianBase").append(" ").append("INTEGER").append(",")
+                .append("tixianMin").append(" ").append("INTEGER").append(",")
+                .append("tixianMax").append(" ").append("INTEGER").append(",")
+                .append("tixianMemo").append(" ").append("TEXT").append(",")
+                .append("payMoney1").append(" ").append("INTEGER").append(",")
+                .append("payMoney2").append(" ").append("INTEGER").append(",")
+                .append("payMoney3").append(" ").append("INTEGER").append(",")
+                .append("payType").append(" ").append("TEXT").append(",")
+
+                .append("canCallDriver").append(" ").append("INTEGER")
                 .append(");");
         execCreateTableSQL(db);
     }

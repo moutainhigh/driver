@@ -7,8 +7,10 @@ import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.common.result.SettingResult;
+import com.easymi.common.result.SystemResult;
 import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.Config;
+import com.easymi.component.entity.SystemConfig;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.result.EmResult;
@@ -100,6 +102,15 @@ public class WorkModel implements WorkContract.Model {
     public Observable<SettingResult> getAppSetting() {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .getAppSetting(EmUtil.getAppKey())
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<SystemResult> getSysConfig() {
+        return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .getSysCofig(EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

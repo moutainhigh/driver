@@ -46,7 +46,7 @@
     <string name="exculated">已評價</string>
     <string name="canceled">已消單</string>
 
-    <string name="des_place">[目的地]</string>
+    <string name="des_place">[未知目的地]</string>
 
     <string name="no_gps">該設備未發現GPS定位芯片，無法準確定位</string>
     <string name="closed_wifi">請打開你的WiFi，有助於精確定位</string>

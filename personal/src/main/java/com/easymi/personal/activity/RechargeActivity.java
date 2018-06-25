@@ -8,9 +8,9 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.easymi.component.Config;
-import com.easymi.component.entity.Setting;
+import com.easymi.component.entity.SystemConfig;
+import com.easymi.component.pay.PayType;
 import com.easymi.component.utils.Log;
-
 
 import android.view.View;
 import android.widget.CheckBox;
@@ -84,6 +84,8 @@ public class RechargeActivity extends RxBaseActivity {
 
         initEdit();
 
+        showWhatByConfig();
+
         if (Config.COMM_USE) {
             payWx.setVisibility(View.GONE);
             payUnion.setVisibility(View.GONE);
@@ -113,6 +115,33 @@ public class RechargeActivity extends RxBaseActivity {
                 payUnion(money);
             }
         });
+    }
+
+    SystemConfig config;
+
+    private void showWhatByConfig() {
+        config = SystemConfig.findOne();
+        if (null != config) {
+            if (StringUtils.isBlank(config.payType)) {
+                payWx.setVisibility(View.GONE);
+                payZfb.setVisibility(View.GONE);
+                payUnion.setVisibility(View.GONE);
+            } else {
+                if (!config.payType.contains(PayType.CHANNEL_APP_WECHAT.getPayType())) {
+                    payWx.setVisibility(View.GONE);
+                }
+                if (!config.payType.contains(PayType.CHANNEL_APP_ALI.getPayType())) {
+                    payZfb.setVisibility(View.GONE);
+                }
+                if (!config.payType.contains(PayType.CHANNEL_APP_UNION.getPayType())) {
+                    payUnion.setVisibility(View.GONE);
+                }
+            }
+
+            pay50.setText(getString(R.string.renminbi) + config.payMoney1);
+            pay100.setText(getString(R.string.renminbi) + config.payMoney2);
+            pay200.setText(getString(R.string.renminbi) + config.payMoney3);
+        }
     }
 
     @Override
@@ -170,11 +199,6 @@ public class RechargeActivity extends RxBaseActivity {
         cusToolbar = findViewById(R.id.cus_toolbar);
 
         balanceText = findViewById(R.id.balance_text);
-
-        Setting setting = Setting.findOne();
-        pay50.setText(getString(R.string.money_sign) + setting.payMoney1);
-        pay100.setText(getString(R.string.money_sign) + setting.payMoney2);
-        pay200.setText(getString(R.string.money_sign) + setting.payMoney3);
     }
 
     class MyCheckChangeLis implements CompoundButton.OnCheckedChangeListener {
@@ -217,15 +241,26 @@ public class RechargeActivity extends RxBaseActivity {
 
     private double getMoney() {
         double money = 0.0;
-        Setting setting = Setting.findOne();
         if (pay50.isChecked()) {
-            money = setting.payMoney1;
+            if (config != null) {
+                money = config.payMoney1;
+            } else {
+                money = 50;
+            }
         }
         if (pay100.isChecked()) {
-            money = setting.payMoney2;
+            if (config != null) {
+                money = config.payMoney2;
+            } else {
+                money = 100;
+            }
         }
         if (pay200.isChecked()) {
-            money = setting.payMoney3;
+            if (config != null) {
+                money = config.payMoney3;
+            } else {
+                money = 200;
+            }
         }
         if (!pay50.isChecked() && !pay100.isChecked() && !pay200.isChecked()) {
             if (StringUtils.isNotBlank(payCus.getText().toString())) {

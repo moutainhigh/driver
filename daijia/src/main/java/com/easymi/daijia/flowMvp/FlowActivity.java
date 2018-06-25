@@ -387,7 +387,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 }
                 isToFeeDetail = false;
             }
-
+            presenter.getOrderFee(orderId,1);
         } else if (djOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {
             toolbar.setTitle(R.string.settle);
             runningFragment = new RunningFragment();
@@ -436,6 +436,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             initBridge();
             showBottomFragment(djOrder);
             showMapBounds();
+            if (djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER
+                    || djOrder.orderStatus == DJOrderStatus.START_WAIT_ORDER) {
+                presenter.startTimer(djOrder.orderId);
+            } else {
+                presenter.cancelTimer();
+            }
         }
     }
 
@@ -926,7 +932,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void doConfirmMoney(LoadingButton btn, DymOrder dymOrder) {
-                presenter.arriveDes(btn, dymOrder);
+                presenter.arriveDes(btn, dymOrder,djOrder);
             }
 
             @Override
@@ -966,6 +972,20 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     }
 
     @Override
+    public void showFeeChanged(DymOrder dymOrder) {
+        if (djOrder == null) {
+            return;
+        }
+        if (null != waitFragment && waitFragment.isVisible()) {
+            waitFragment.showFee(dymOrder);
+        } else if (null != runningFragment && runningFragment.isVisible()) {
+            runningFragment.showFee(dymOrder);
+        } else if (null != settleFragmentDialog && settleFragmentDialog.isShowing()) {
+            settleFragmentDialog.setDymOrder(dymOrder);
+        }
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         LocReceiver.getInstance().addObserver(this);//添加位置订阅
@@ -999,8 +1019,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         lastLatlng = new LatLng(location.latitude, location.longitude);
         presenter.findOne(orderId);
         MQTTService.pushLoc(new BuildPushData(EmUtil.getLastLoc()));//减少迟滞
-
-//        presenter.getOrderFee(orderId);
     }
 
     @Override
@@ -1013,6 +1031,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     protected void onPause() {
         super.onPause();
         mapView.onPause();
+        presenter.cancelTimer();
     }
 
     @Override
