@@ -73,22 +73,16 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-        //一有数据库的更新就将sp里的东西归为默认值
-        SharedPreferences.Editor editor = XApp.getPreferencesEditor();
-        editor.clear().apply();
-
-        List<String> tableNames = findAllTableName(db);
-        for (String s : tableNames) {
-            if (s.equals("android_metadata") || s.equals("sqlite_sequence")) {
-
-            } else {
-                db.execSQL("DROP TABLE IF EXISTS " + s);
-            }
-        }
+        db.execSQL("DROP TABLE IF EXISTS " + "t_driverinfo");
         createDriverInfoTable(db);
+
+        db.execSQL("DROP TABLE IF EXISTS " + "t_dyminfo");
         createDymTable(db);
+
+        db.execSQL("DROP TABLE IF EXISTS " + "t_settinginfo");
         createSettingTable(db);
+
+        db.execSQL("DROP TABLE IF EXISTS " + "t_systemconfig");
         createSystemTable(db);
     }
 
