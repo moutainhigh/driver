@@ -36,6 +36,10 @@ public class Setting {
     @SerializedName("employ_factor")
     public int doubleCheck;//双因子验证
 
+    //附近司机推荐距离
+    @SerializedName("emploies_km")
+    public double emploiesKm;
+
     public int canCallDriver;//能否拨打附近司机电话
 
     public void save() {

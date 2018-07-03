@@ -244,7 +244,7 @@ public class WorkPresenter implements WorkContract.Presenter {
     @Override
     public void queryNearDriver(Double lat, Double lng) {
         long driverId = EmUtil.getEmployId();
-        double dis = 20;
+        double dis = driverKm <= 0 ? 20 : driverKm;
 
         Observable<NearDriverResult> observable = model.queryNearDriver(driverId, lat, lng, dis);
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
@@ -371,6 +371,9 @@ public class WorkPresenter implements WorkContract.Presenter {
         })));
     }
 
+    //查询附近司机的距离
+    private double driverKm = 20;
+
     @Override
     public void getAppSetting() {
         Observable<SettingResult> observable = model.getAppSetting();
@@ -378,6 +381,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                 true, result -> {
             Setting.deleteAll();
             result.setting.save();
+            driverKm = result.setting.emploiesKm;
         })));
 
 
