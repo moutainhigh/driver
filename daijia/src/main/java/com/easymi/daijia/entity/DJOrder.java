@@ -76,6 +76,10 @@ public class DJOrder implements Serializable {
     @SerializedName("channel_name")
     public String orderSource;//订单来源
 
+    //同单司机,队长电话,如果自己是队长则为空
+    @SerializedName("captain_phone")
+    public String captainPhone;
+
     public String carNo;//车牌号
 
     public List<Address> addresses;

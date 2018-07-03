@@ -236,6 +236,8 @@
     <string name="user_phone"> user </string>
         
     <string name="passenger_phone"> orders </string>
+    <string name="the_same_order">contact the captain</string>
+
 
     <string name="leagel_phone">please input legal phone</string>
 

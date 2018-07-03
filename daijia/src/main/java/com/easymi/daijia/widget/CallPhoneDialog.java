@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -74,6 +75,7 @@ public class CallPhoneDialog extends Dialog {
             View view = LayoutInflater.from(context).inflate(R.layout.call_phone_dialog, null, true);
             callUser = view.findViewById(R.id.call_user);
             callPassenger = view.findViewById(R.id.call_passenger);
+            View callSame = view.findViewById(R.id.call_same);
             cancel = view.findViewById(R.id.cancel);
 
             callUser.setOnClickListener(view1 -> {
@@ -84,7 +86,24 @@ public class CallPhoneDialog extends Dialog {
                 dialog.dismiss();
                 PhoneUtil.call((Activity) context, djOrder.passengerPhone);
             });
+
+            callSame.setOnClickListener(v -> {
+                dialog.dismiss();
+                PhoneUtil.call((Activity) context, djOrder.captainPhone);
+            });
+
             cancel.setOnClickListener(view13 -> dialog.dismiss());
+
+            //设置推荐标签显示
+            View tipsUser = view.findViewById(R.id.imv_user);
+            View tipsSame = view.findViewById(R.id.imv_same);
+            if (!TextUtils.isEmpty(djOrder.captainPhone)) {
+                tipsSame.setVisibility(View.VISIBLE);
+                tipsUser.setVisibility(View.INVISIBLE);
+            } else {
+                tipsSame.setVisibility(View.INVISIBLE);
+                tipsUser.setVisibility(View.VISIBLE);
+            }
 
             dialog.setContentView(view);
 

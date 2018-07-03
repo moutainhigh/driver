@@ -206,5 +206,6 @@
 
     <string name="user_phone">使用人</string>
     <string name="passenger_phone">下单人</string>
+    <string name="the_same_order">联系队长</string>
 
 </resources>

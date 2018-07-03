@@ -10,7 +10,7 @@ android {
         minSdkVersion cfg.minSdkVersion
         targetSdkVersion cfg.targetSdkVersion
         versionCode 280
-        versionName "V5.0.0.008"
+        versionName "V5.0.0.009"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
