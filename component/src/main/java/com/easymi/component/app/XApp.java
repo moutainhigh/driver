@@ -85,14 +85,22 @@ public class XApp extends MultiDexApplication {
         ARouter.init(this);
         SqliteHelper.init(this);
 
-//        BGASwipeBackHelper.init(instance, null);
-
         SpeechUtility.createUtility(XApp.this, "appid=" + "57c91477");
         initIflytekTTS(false, "");
 
         initDataBase();
 
         CrashReport.initCrashReport(getApplicationContext(), "3816555448", false);
+
+        int lastVersion = XApp.getMyPreferences().getInt(Config.SP_LAST_VERSION, 0);
+        int current = SysUtil.getVersionCode(this);
+        if (current > lastVersion) {
+            SharedPreferences.Editor editor = getPreferencesEditor();
+            editor.putInt(Config.SP_DRIVERID, 0);
+            editor.putBoolean(Config.SP_ISLOGIN, false);
+            editor.putInt(Config.SP_LAST_VERSION, current);
+            editor.apply();
+        }
     }
 
     private void initDataBase() {
