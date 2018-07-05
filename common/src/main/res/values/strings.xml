@@ -96,6 +96,7 @@
     <string name="baoxiao_done">当前订单已经报销过</string>
 
     <string name="no_order">暂无订单，赶快去接单吧</string>
+    <string name="no_ann_and_notice">暂无通知和公告</string>
 
     <string name="freezed">您的账户已被冻结，请联系管理员</string>
     <string name="unbunding">您的账户已被管理员解绑</string>
@@ -119,6 +120,14 @@
     <string name="rate_order">已完成</string>
 
     <string name="reject_net">网络连接不可用，可能是由于您主动设置了禁用网络，请前往应用管理中打开。设置完毕后请重新启动程序</string>
+
+    <string name="date_unit">MM月dd日 HH:mm</string>
+
+    <string name="home_gonggao">公告</string>
+    <string name="home_notice">通知</string>
+    <string name="listen_order_set">模式设置</string>
+    <string name="listen_order_set_2">听单设置</string>
+    <string name="listen_order_more_one">至少选择一种听单业务</string>
 
 
 </resources>

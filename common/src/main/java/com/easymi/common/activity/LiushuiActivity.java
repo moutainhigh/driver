@@ -3,6 +3,7 @@ package com.easymi.common.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,7 +78,7 @@ public class LiushuiActivity extends RxBaseActivity {
     @Override
     public void initViews(Bundle savedInstanceState) {
         recyclerView = findViewById(R.id.recyclerView);
-        tabLayout = findViewById(R.id.tab_layout);
+        tabLayout = findViewById(R.id.liushui_tab_layout);
         errLayout = findViewById(R.id.cus_err_layout);
 
         orders = new ArrayList<>();
@@ -118,9 +119,13 @@ public class LiushuiActivity extends RxBaseActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getText().equals(getString(R.string.create_daijia))) {
-                    business = "daijia";
+                    business = Config.DAIJIA;
+                    page = 1;
+                } else if(tab.getText().equals(getString(R.string.create_zhuanche))){
+                    business = Config.ZHUANCHE;
                     page = 1;
                 }
+                queryOrders();
             }
 
             @Override
@@ -133,10 +138,19 @@ public class LiushuiActivity extends RxBaseActivity {
 
             }
         });
-        TabLayout.Tab daijiaTab = tabLayout.newTab();
-        daijiaTab.setText(getString(R.string.create_daijia));
-        daijiaTab.select();
-        tabLayout.addTab(daijiaTab);
+        if (EmUtil.getEmployInfo().service_type.contains(Config.DAIJIA)) {
+            TabLayout.Tab daijiaTab = tabLayout.newTab();
+            daijiaTab.setText(getString(R.string.create_daijia));
+            tabLayout.addTab(daijiaTab);
+        } else if (EmUtil.getEmployInfo().service_type.contains(Config.ZHUANCHE)) {
+            TabLayout.Tab zhuancheTab = tabLayout.newTab();
+            zhuancheTab.setText(getString(R.string.create_zhuanche));
+            tabLayout.addTab(zhuancheTab);
+        }
+        TabLayout.Tab tab = tabLayout.getTabAt(0);
+        if(null != tab){
+            tab.select();
+        }
 //        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.create_zhuanche)));
 //        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.create_paotui)));
 //        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.create_huoyun)));

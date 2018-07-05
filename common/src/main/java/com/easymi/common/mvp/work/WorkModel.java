@@ -54,27 +54,27 @@ public class WorkModel implements WorkContract.Model {
     }
 
     @Override
-    public Observable<NotitfyResult> loadNotice(Long id) {
+    public Observable<NotitfyResult> loadNotice(long driverId) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .loadNotice(id, EmUtil.getAppKey())
+                .loadNotice(driverId, EmUtil.getAppKey(), 1, 1000)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
-    public Observable<AnnouncementResult> loadAnn(Long id) {
+    public Observable<AnnouncementResult> loadAnn(long companyId) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .employAfficheById(id, EmUtil.getAppKey())
+                .loadAnn(companyId, EmUtil.getAppKey(), 1, 1000)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
-    public Observable<WorkStatisticsResult> getDriverStatistics(Long id, String nowDate,int isOnline) {
+    public Observable<WorkStatisticsResult> getDriverStatistics(Long id, String nowDate, int isOnline) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .workStatistics(id, nowDate, EmUtil.getAppKey(),isOnline)
+                .workStatistics(id, nowDate, EmUtil.getAppKey(), isOnline)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

@@ -41,6 +41,15 @@ public class NearInfoWindowAdapter implements AMap.InfoWindowAdapter {
         TextView tv = view.findViewById(R.id.driver_name);
         ImageView callPhone = view.findViewById(R.id.call_phone);
         tv.setText(driverName);
+        if (null != setting) {
+            if (setting.canCallDriver == 2) {
+                callPhone.setVisibility(View.GONE);
+            } else {
+                callPhone.setVisibility(View.VISIBLE);
+            }
+        } else {
+            callPhone.setVisibility(View.VISIBLE);
+        }
         callPhone.setOnClickListener(view1 -> PhoneUtil.call((Activity) context, driverPhone));
         return view;
     }

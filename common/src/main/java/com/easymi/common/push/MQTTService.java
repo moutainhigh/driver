@@ -4,6 +4,7 @@ package com.easymi.common.push;
  * Created by developerLzh on 2017/12/13 0013.
  */
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -54,7 +55,8 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 
     public static final String TAG = MQTTService.class.getSimpleName();
 
-    private static MqttAndroidClient client;
+    @SuppressLint("StaticFieldLeak")
+    public static MqttAndroidClient client;
     public MqttConnectOptions conOpt;
 
     //    private String host = "tcp://10.0.2.2:61613";

@@ -15,8 +15,8 @@ public class Config {
     /**
      * 主机地址
      */
-//    public static final String HOST = "http://192.168.0.72:8082/";
-    public static final String HOST = "https://api.xiaokayun.cn/";//线上地址
+    public static final String HOST = "http://192.168.0.72:8082/";
+//    public static final String HOST = "https://api.xiaokayun.cn/";//线上地址
 //    public static final String HOST = "http://api.xiaokakj.cn/";//测试服地址
     /**
      * MQTT配置
@@ -100,6 +100,9 @@ public class Config {
 
     public static final String SP_LAST_SPLASH_TIME = "last_splash_animate";//上次显示动画的时间
 
+    public static final String SP_DAIJIA_LISTEN_ORDER = "daijia_listen_order";//代驾是否听单
+    public static final String SP_ZHUANCHE_LISTEN_ORDER = "zhuanche_listen_order";//专车是否听单
+
     public static final String SP_PLAY_CLIENT_MUSIC = "play_slient_music";//是否播放静音音乐音乐
 
     public static final String SP_SHOW_GUIDE = "show_guide";//是否播放静音音乐音乐
@@ -110,6 +113,7 @@ public class Config {
 
 
     public static final String DAIJIA = "daijia";
+    public static final String ZHUANCHE = "zhuanche";
 
     public static final String BROAD_CANCEL_ORDER = "com.easymi.v5driver.BROAD_CANCEL_ORDER";
     public static final String BROAD_BACK_ORDER = "com.easymi.v5driver.BROAD_BACK_ORDER";

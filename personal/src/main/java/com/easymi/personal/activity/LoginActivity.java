@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
@@ -19,11 +18,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -40,7 +37,6 @@ import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.AesUtil;
-import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
@@ -50,7 +46,6 @@ import com.easymi.component.widget.LoadingButton;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
 import com.easymi.personal.adapter.PopAdapter;
-import com.easymi.personal.adapter.PopListAdapter;
 import com.easymi.personal.result.LoginResult;
 import com.easymi.personal.result.SettingResult;
 
@@ -375,7 +370,7 @@ public class LoginActivity extends RxBaseActivity {
     private void setLoginBtnEnable(boolean enable) {
         loginBtn.setEnabled(enable);
         if (enable) {
-            loginBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.corners_button_bg));
+            loginBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.p_corners_button_bg));
         } else {
             loginBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.corners_button_press_bg));
         }

@@ -13,11 +13,11 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.easymi.common.R;
 import com.easymi.common.activity.BaoxiaoActivity;
 import com.easymi.common.activity.LiushuiActivity;
+import com.easymi.component.entity.Setting;
 import com.easymi.common.util.DJStatus2Str;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
 import com.easymi.component.entity.BaseOrder;
-import com.easymi.component.entity.Setting;
 import com.easymi.component.utils.TimeUtil;
 
 import java.util.ArrayList;

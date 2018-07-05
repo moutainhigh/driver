@@ -40,8 +40,17 @@ public class GrabPresenter implements GrabContract.Presenter {
     }
 
     @Override
-    public void queryOrder(Long orderId) {
-        Observable<MultipleOrderResult> observable = model.queryOrder(orderId);
+    public void queryOrder(MultipleOrder order) {
+        Observable<MultipleOrderResult> observable = null;
+        if(order.orderType.equals(Config.DAIJIA)){
+            observable = model.queryDJOrder(order.orderId);
+        } else if(order.orderType.equals(Config.ZHUANCHE)){
+            observable = model.queryZCOrder(order.orderId);
+        }
+
+        if(observable == null){
+            return;
+        }
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<MultipleOrderResult>() {
             @Override
@@ -58,8 +67,17 @@ public class GrabPresenter implements GrabContract.Presenter {
     }
 
     @Override
-    public void grabOrder(Long orderId) {
-        Observable<MultipleOrderResult> observable = model.grabOrder(orderId);
+    public void grabOrder(MultipleOrder order) {
+        Observable<MultipleOrderResult> observable = null;
+        if(order.orderType.equals(Config.DAIJIA)){
+            observable = model.grabDJOrder(order.orderId);
+        } else if(order.orderType.equals(Config.ZHUANCHE)){
+            observable = model.grabZCOrder(order.orderId);
+        }
+
+        if(observable == null){
+            return;
+        }
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<MultipleOrderResult>() {
             @Override
@@ -70,6 +88,10 @@ public class GrabPresenter implements GrabContract.Presenter {
                         ARouter.getInstance()
                                 .build("/daijia/FlowActivity")
                                 .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                .withLong("orderId", order.orderId).navigation();
+                    } else if(order.orderType.equals(Config.ZHUANCHE)){
+                        ARouter.getInstance()
+                                .build("/zhuanche/FlowActivity")
                                 .withLong("orderId", order.orderId).navigation();
                     }
                 }
@@ -82,15 +104,24 @@ public class GrabPresenter implements GrabContract.Presenter {
                 if (code == ErrCode.NOT_MATCH.getCode()
                         || code == ErrCode.GRAB_ORDER_ERROR.getCode()
                         || code == ErrCode.DRIVER_GOTO_PRE_ORDER_CODE.getCode()) {
-                    view.removerOrderById(orderId);
+                    view.removerOrderById(order.orderId);
                 }
             }
         })));
     }
 
     @Override
-    public void takeOrder(Long orderId) {
-        Observable<MultipleOrderResult> observable = model.takeOrder(orderId);
+    public void takeOrder(MultipleOrder order) {
+        Observable<MultipleOrderResult> observable = null;
+        if(order.orderType.equals(Config.DAIJIA)){
+            observable = model.takeDJOrder(order.orderId);
+        } else if(order.orderType.equals(Config.ZHUANCHE)){
+            observable = model.takeZCOrder(order.orderId);
+        }
+
+        if(observable == null){
+            return;
+        }
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<MultipleOrderResult>() {
             @Override
@@ -101,6 +132,10 @@ public class GrabPresenter implements GrabContract.Presenter {
                         ARouter.getInstance()
                                 .build("/daijia/FlowActivity")
                                 .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                .withLong("orderId", order.orderId).navigation();
+                    } else if (order.orderType.equals(Config.ZHUANCHE)) {
+                        ARouter.getInstance()
+                                .build("/zhuanche/FlowActivity")
                                 .withLong("orderId", order.orderId).navigation();
                     }
                 }
@@ -113,7 +148,7 @@ public class GrabPresenter implements GrabContract.Presenter {
                 if (code == ErrCode.NOT_MATCH.getCode()
                         || code == ErrCode.GRAB_ORDER_ERROR.getCode()
                         || code == ErrCode.DRIVER_GOTO_PRE_ORDER_CODE.getCode()) {
-                    view.removerOrderById(orderId);
+                    view.removerOrderById(order.orderId);
                 }
             }
         })));

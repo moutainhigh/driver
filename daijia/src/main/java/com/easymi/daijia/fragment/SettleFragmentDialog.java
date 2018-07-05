@@ -10,9 +10,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.easymi.component.entity.Setting;
 import com.easymi.component.DJOrderStatus;
 import com.easymi.component.entity.DymOrder;
-import com.easymi.component.entity.Setting;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MathUtil;
 import com.easymi.component.utils.StringUtils;

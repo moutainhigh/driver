@@ -224,19 +224,37 @@
             </android.support.v4.widget.SwipeRefreshLayout>
         </FrameLayout>
 
-
-        <com.easymi.component.widget.LoadingButton
-            android:id="@+id/online_btn"
+        <LinearLayout
+            android:id="@+id/bottom_btn_con"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/btn_height"
-            android:layout_margin="10dp"
-            android:background="@drawable/corners_button_bg"
-            android:gravity="center"
-            android:text="@string/work_online"
-            android:textColor="@color/white"
-            android:visibility="visible"
-            app:lb_duration="1000"
-            app:lb_radius="10dp" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <Button
+                android:onClick="modelSet"
+                android:layout_width="0.0dp"
+                android:layout_height="@dimen/btn_height"
+                android:visibility="gone"
+                android:layout_marginRight="10dp"
+                android:layout_weight="3"
+                android:background="@drawable/corners_button_bg_2"
+                android:text="@string/listen_order_set"
+                android:textColor="@color/white" />
+
+            <com.easymi.component.widget.LoadingButton
+                android:id="@+id/online_btn"
+                android:layout_width="0.0dp"
+                android:layout_height="@dimen/btn_height"
+                android:layout_weight="7"
+                android:background="@drawable/corners_button_bg"
+                android:gravity="center"
+                android:text="@string/work_online"
+                android:textColor="@color/white"
+                android:visibility="visible"
+                app:lb_duration="1000"
+                app:lb_radius="10dp" />
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/listen_order_con"

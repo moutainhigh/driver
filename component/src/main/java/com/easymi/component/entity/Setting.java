@@ -40,6 +40,10 @@ public class Setting {
     @SerializedName("emploies_km")
     public double emploiesKm;
 
+    public double payMoney1;
+    public double payMoney2;
+    public double payMoney3;
+
     public int canCallDriver;//能否拨打附近司机电话
 
     public void save() {
@@ -56,6 +60,9 @@ public class Setting {
         values.put("employChangePrice", employChangePrice);
         values.put("doubleCheck", doubleCheck);
         values.put("canCallDriver", canCallDriver);
+        values.put("payMoney1", payMoney1);
+        values.put("payMoney2", payMoney2);
+        values.put("payMoney3", payMoney3);
         db.insert("t_settinginfo", null, values);
     }
 
@@ -74,6 +81,10 @@ public class Setting {
                 settingInfo.employChangePrice = cursor.getInt(cursor.getColumnIndex("employChangePrice"));
                 settingInfo.doubleCheck = cursor.getInt(cursor.getColumnIndex("doubleCheck"));
                 settingInfo.canCallDriver = cursor.getInt(cursor.getColumnIndex("canCallDriver"));
+
+                settingInfo.payMoney1 = cursor.getDouble(cursor.getColumnIndex("payMoney1"));
+                settingInfo.payMoney2 = cursor.getDouble(cursor.getColumnIndex("payMoney2"));
+                settingInfo.payMoney3 = cursor.getDouble(cursor.getColumnIndex("payMoney3"));
             }
         } finally {
             cursor.close();

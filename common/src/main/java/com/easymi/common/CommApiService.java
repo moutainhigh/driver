@@ -98,24 +98,37 @@ public interface CommApiService {
                                                              @Query("limit") int limit);
 
     /**
-     * 查询通知
+     * 查询所有通知
      *
-     * @param noticeId
+     * @param driverId
+     * @param appKey
+     * @param page
+     * @param limit
      * @return
      */
-    @GET("driver/api/v1/notice")
-    Observable<NotitfyResult> loadNotice(@Query("id") Long noticeId,
-                                         @Query("app_key") String appKey);
+    @GET("/driver/api/v1/notices")
+    Observable<NotitfyResult> loadNotice(@Query("driver_id") Long driverId,
+                                       @Query("app_key") String appKey,
+                                       @Query("page") Integer page,
+                                       @Query("limit") Integer limit
+    );
+
 
     /**
-     * 查询通知
+     * 查询所有公告
      *
-     * @param noticeId
+     * @param companyId
+     * @param appKey
+     * @param page
+     * @param limit
      * @return
      */
-    @GET("driver/api/v1/employAfficheById")
-    Observable<AnnouncementResult> employAfficheById(@Query("id") Long noticeId,
-                                                     @Query("app_key") String appKey);
+    @GET("/driver/api/v1/employAffiches")
+    Observable<AnnouncementResult> loadAnn(@Query("company_id") Long companyId,
+                                                  @Query("app_key") String appKey,
+                                                  @Query("page") Integer page,
+                                                  @Query("limit") Integer limit
+    );
 
     /**
      * 首页统计
@@ -203,6 +216,66 @@ public interface CommApiService {
      */
     @GET("api/v1/daijiaApp")
     Observable<SettingResult> getAppSetting(@Query("app_key") String appKey);
+
+    /**
+     * 查询通知
+     *
+     * @param noticeId
+     * @return
+     */
+    @GET("driver/api/v1/notice")
+    Observable<NotitfyResult> loadNotice(@Query("id") Long noticeId,
+                                         @Query("app_key") String appKey);
+
+    /**
+     * 查询通知
+     *
+     * @param noticeId
+     * @return
+     */
+    @GET("driver/api/v1/employAfficheById")
+    Observable<AnnouncementResult> employAfficheById(@Query("id") Long noticeId,
+                                                     @Query("app_key") String appKey);
+
+    /**
+     * 专车 --> 查询单个订单
+     *
+     * @param orderId
+     * @param appKey
+     * @return
+     */
+    @GET("driver/api/v1/orderFindOne")
+    Observable<MultipleOrderResult> queryZCOrder(@Query("order_id") Long orderId,
+                                                 @Query("app_key") String appKey);
+
+    /**
+     * 专车 --> 抢单
+     *
+     * @param orderId
+     * @param driverId
+     * @param appKey
+     * @return
+     */
+    @FormUrlEncoded
+    @PUT("driver/api/v1/grabOrder")
+    Observable<MultipleOrderResult> grabZCOrder(@Field("order_id") Long orderId,
+                                                @Field("driver_id") Long driverId,
+                                                @Field("app_key") String appKey);
+
+    /**
+     * 专车 -->接单
+     *
+     * @param orderId
+     * @param driverId
+     * @param appKey
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("driver/api/v1/takeOrder")
+    Observable<MultipleOrderResult> takeZCOrder(@Field("order_id") Long orderId,
+                                                @Field("driver_id") Long driverId,
+                                                @Field("app_key") String appKey);
+
 
     /**
      * 获取系统配置

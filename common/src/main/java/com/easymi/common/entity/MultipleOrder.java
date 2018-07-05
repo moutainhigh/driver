@@ -30,9 +30,9 @@ public class MultipleOrder extends BaseOrder implements Serializable, MultiItemE
 
     public List<Address> addresses;
 
-    public static final int ITEM_HEADER = 1;
-    public static final int ITEM_POSTER = 2;
-    public static final int ITEM_DESC = 3;
+    public static final int ITEM_HEADER = 1;//头
+    public static final int ITEM_POSTER = 2;//内容
+    public static final int ITEM_DESC = 3;//底
 
     public int viewType;
 

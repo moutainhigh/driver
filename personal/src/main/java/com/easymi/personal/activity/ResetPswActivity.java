@@ -1,8 +1,8 @@
 package com.easymi.personal.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
@@ -28,6 +29,7 @@ import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.VerifyCodeView;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
+import com.easymi.personal.result.PicCodeResult;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -92,6 +94,17 @@ public class ResetPswActivity extends RxBaseActivity {
         secInput = findViewById(R.id.sec_code_input);
         phoneNumber = findViewById(R.id.phone_number);
 
+        String flag = getIntent().getStringExtra("flag");
+        if (StringUtils.isNotBlank(flag) && flag.equals("doubleCheck")) {
+            accountCon.setVisibility(View.GONE);
+            authCodeCon.setVisibility(View.VISIBLE);
+
+            phone = getIntent().getStringExtra("phone");
+            psw = getIntent().getStringExtra("psw");
+
+            getPicCode();
+        }
+
         confirmAccount.setEnabled(false);
         editAccount.addTextChangedListener(new TextWatcher() {
             @Override
@@ -111,7 +124,7 @@ public class ResetPswActivity extends RxBaseActivity {
                     confirmAccount.setBackgroundDrawable(getResources().getDrawable(R.drawable.corners_button_press_bg));
                 } else {
                     confirmAccount.setEnabled(true);
-                    confirmAccount.setBackgroundDrawable(getResources().getDrawable(R.drawable.corners_button_bg));
+                    confirmAccount.setBackgroundDrawable(getResources().getDrawable(R.drawable.p_corners_button_bg));
                 }
             }
         });
@@ -135,7 +148,7 @@ public class ResetPswActivity extends RxBaseActivity {
                     confirmPsw.setBackgroundDrawable(getResources().getDrawable(R.drawable.corners_button_press_bg));
                 } else {
                     confirmPsw.setEnabled(true);
-                    confirmPsw.setBackgroundDrawable(getResources().getDrawable(R.drawable.corners_button_bg));
+                    confirmPsw.setBackgroundDrawable(getResources().getDrawable(R.drawable.p_corners_button_bg));
                 }
             }
         });
@@ -153,33 +166,21 @@ public class ResetPswActivity extends RxBaseActivity {
             pswCon.setVisibility(View.GONE);
             authCodeCon.setVisibility(View.VISIBLE);
 
-            authImg.setImageBitmap(CodeUtil.getInstance().createBitmap());
-            authCode = CodeUtil.getInstance().getCode();
+            getPicCode();
         });
 
         clickRefresh.setOnClickListener(v -> {
-            authImg.setImageBitmap(CodeUtil.getInstance().createBitmap());
-            authCode = CodeUtil.getInstance().getCode();
+            getPicCode();
         });
         authInput.setOnCodeListener(code -> {
-            if (code.toLowerCase().equals(authCode)) {
-                secCodeCon.setVisibility(View.VISIBLE);
-                authCodeCon.setVisibility(View.GONE);
-
-                initSecView();
-            } else {
-                ToastUtil.showMessage(ResetPswActivity.this, getString(R.string.reset_error_auth));
-                authInput = new VerifyCodeView(this);
-            }
+            checkCode(code.toLowerCase(),"pic");
         });
 
         timerText.setOnClickListener(v -> {
-            ToastUtil.showMessage(ResetPswActivity.this, "开始重新获取验证码");
-            initSecView();
+            getSmsCode();
         });
         secInput.setOnCodeListener(code -> {
-            ToastUtil.showMessage(ResetPswActivity.this, "完成重置密码");
-            finish();
+            checkCode(code.toLowerCase(),"sms");
         });
 
     }
@@ -245,5 +246,81 @@ public class ResetPswActivity extends RxBaseActivity {
     @Override
     public boolean isEnableSwipe() {
         return true;
+    }
+
+    /**
+     * 双因子获取图形验证码
+     */
+    private void getPicCode() {
+        Observable<PicCodeResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
+                .picCode(phone, EmUtil.getAppKey())
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this,
+                false,
+                false,
+                picCodeResult -> {
+                    String picCode = picCodeResult.picCode;
+
+                    authImg.setImageBitmap(CodeUtil.getInstance().createBitmap(picCode));
+                    authCode = CodeUtil.getInstance().getCode();
+                })));
+    }
+
+    /**
+     * 检查code
+     *
+     * @param code
+     * @param type code类型
+     */
+    private void checkCode(String code, String type) {
+        Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
+                .checkCode(phone, code, type, EmUtil.getAppKey())
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, new HaveErrSubscriberListener<EmResult>() {
+            @Override
+            public void onNext(EmResult result) {
+                if (type.equals("pic")) {//图形验证码输入后
+                    secCodeCon.setVisibility(View.VISIBLE);
+                    authCodeCon.setVisibility(View.GONE);
+
+                    getSmsCode();
+                } else {
+                    Intent intent = new Intent(ResetPswActivity.this, LoginActivity.class);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onError(int code) {
+                authInput = new VerifyCodeView(ResetPswActivity.this);
+                secInput = new VerifyCodeView(ResetPswActivity.this);
+            }
+        })));
+    }
+
+    /**
+     * 获取短信验证码
+     */
+    private void getSmsCode() {
+        Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
+                .smsCode(phone, EmUtil.getAppKey(), "中国", EmUtil.getEmployInfo().company_id)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this,
+                false,
+                false,
+                result -> {
+                    initSecView();
+                    ToastUtil.showMessage(ResetPswActivity.this, getString(R.string.get_sms_suc));
+                })));
     }
 }

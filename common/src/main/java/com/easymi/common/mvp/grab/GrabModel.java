@@ -17,7 +17,7 @@ import rx.schedulers.Schedulers;
 
 public class GrabModel implements GrabContract.Model {
     @Override
-    public Observable<MultipleOrderResult> queryOrder(Long orderId) {
+    public Observable<MultipleOrderResult> queryDJOrder(Long orderId) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .queryDJOrder(orderId, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
@@ -26,7 +26,7 @@ public class GrabModel implements GrabContract.Model {
     }
 
     @Override
-    public Observable<MultipleOrderResult> grabOrder(Long orderId) {
+    public Observable<MultipleOrderResult> grabDJOrder(Long orderId) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .grabDJOrder(orderId, EmUtil.getEmployId(), EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
@@ -35,9 +35,36 @@ public class GrabModel implements GrabContract.Model {
     }
 
     @Override
-    public Observable<MultipleOrderResult> takeOrder(Long orderId) {
+    public Observable<MultipleOrderResult> takeDJOrder(Long orderId) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .takeDJOrder(orderId, EmUtil.getEmployId(), EmUtil.getAppKey())
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<MultipleOrderResult> queryZCOrder(Long orderId) {
+        return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .queryZCOrder(orderId, EmUtil.getAppKey())
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<MultipleOrderResult> grabZCOrder(Long orderId) {
+        return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .grabZCOrder(orderId, EmUtil.getEmployId(), EmUtil.getAppKey())
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<MultipleOrderResult> takeZCOrder(Long orderId) {
+        return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .takeZCOrder(orderId, EmUtil.getEmployId(), EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

@@ -68,6 +68,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
         createDriverInfoTable(db);
         createDymTable(db);
         createSettingTable(db);
+        createVehicleInfoTable(db);
         createSystemTable(db);
     }
 
@@ -141,6 +142,12 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
                 .append("minestMoney").append(" ").append("DOUBLE").append(",")
 
+                //添加专车收费
+                .append("peakCost").append(" ").append("DOUBLE").append(",")
+                .append("nightPrice").append(" ").append("DOUBLE").append(",")
+                .append("lowSpeedCost").append(" ").append("DOUBLE").append(",")
+                .append("lowSpeedTime").append(" ").append("DOUBLE").append(",")
+
                 .append("orderStatus").append(" ").append("INTEGER")
                 .append(");");
         execCreateTableSQL(db);
@@ -156,8 +163,28 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("employChangePrice").append(" ").append("INTEGER").append(",")
                 .append("doubleCheck").append(" ").append("INTEGER").append(",")
                 .append("canCallDriver").append(" ").append("INTEGER").append(",")
+                .append("payMoney1").append(" ").append("DOUBLE").append(",")
+                .append("payMoney2").append(" ").append("DOUBLE").append(",")
+                .append("payMoney3").append(" ").append("DOUBLE").append(",")
 
                 .append("workCarChangeOrder").append(" ").append("INTEGER")
+                .append(");");
+        execCreateTableSQL(db);
+    }
+
+    private void createVehicleInfoTable(SQLiteDatabase db) {
+        sqlBuf.append("CREATE TABLE ").append("t_Vehicle").append(" (")
+                .append("employId").append(" INTEGER PRIMARY KEY, ")
+                .append("vehicleId").append(" ").append("LONG").append(",")
+                .append("companyId").append(" ").append("LONG").append(",")
+                .append("vehicleBrand").append(" ").append("TEXT").append(",")
+                .append("vehicleModel").append(" ").append("TEXT").append(",")
+                .append("plateColor").append(" ").append("TEXT").append(",")
+                .append("vehicleNo").append(" ").append("TEXT").append(",")
+                .append("vehicleType").append(" ").append("TEXT").append(",")
+                .append("commercialType").append(" ").append("INTEGER").append(",")
+
+                .append("serviceType").append(" ").append("INTEGER")
                 .append(");");
         execCreateTableSQL(db);
     }

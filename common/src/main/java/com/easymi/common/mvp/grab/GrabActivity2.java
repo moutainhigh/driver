@@ -201,6 +201,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
         shake();
         String voiceStr = getIntent().getStringExtra("voiceStr");
         XApp.getInstance().syntheticVoice(voiceStr);
+        XApp.getInstance().shake();
 
         multipleOrders.add(newOrder);
         buildFragments(newOrder, false);//添加一个fragment
@@ -501,10 +502,10 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
     private void showBottomByStatus() {
         if (showIngOrder.orderStatus == DJOrderStatus.NEW_ORDER) {
             bottomText.setText(R.string.grab_order);
-            grabCon.setOnClickListener(v -> presenter.grabOrder(showIngOrder.orderId));
+            grabCon.setOnClickListener(v -> presenter.grabOrder(showIngOrder));
         } else if (showIngOrder.orderStatus == DJOrderStatus.PAIDAN_ORDER) {
             bottomText.setText(R.string.accept_order);
-            grabCon.setOnClickListener(v -> presenter.takeOrder(showIngOrder.orderId));
+            grabCon.setOnClickListener(v -> presenter.takeOrder(showIngOrder));
         }
     }
 

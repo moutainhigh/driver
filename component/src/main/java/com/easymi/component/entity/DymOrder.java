@@ -90,6 +90,22 @@ public class DymOrder implements Serializable {
     @SerializedName("min_cost")
     public double minestMoney;//最低消费金额
 
+    //运营高峰费
+    @SerializedName("peak_cost")
+    public double peakCost;
+
+    //夜间费
+    @SerializedName("night_price")
+    public double nightPrice;
+
+    //低速费
+    @SerializedName("low_speed_cost")
+    public double lowSpeedCost;
+
+    //时间费
+    @SerializedName("low_speed_time")
+    public double lowSpeedTime;
+
     //作弊增加的里程
     public int addedKm; //数据源来自于本地调价 不会来自后端
 
@@ -108,7 +124,7 @@ public class DymOrder implements Serializable {
 
     /**
      * 保存数据
-     *
+     * <p>
      * 这里不保存作弊的公里数和费用
      */
     public boolean save() {
@@ -137,20 +153,27 @@ public class DymOrder implements Serializable {
         values.put("orderShouldPay", orderShouldPay);
         values.put("prepay", prepay);
 
+        //添加专车
+        values.put("peakCost", peakCost);
+        values.put("nightPrice", nightPrice);
+        values.put("lowSpeedCost", lowSpeedCost);
+        values.put("lowSpeedTime", lowSpeedTime);
+
 //        values.put("addedKm", addedKm);
 //        values.put("addedFee", addedFee);
         /*
          * values.put("age", age); values.put("jialing", jialing);
-		 */
+         */
         boolean flag = db.insert("t_dyminfo", null, values) != -1;
         return flag;
     }
 
     /**
      * 更新调价费用
+     *
      * @return
      */
-    public boolean updateCheating(){
+    public boolean updateCheating() {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
         ContentValues values = new ContentValues();
@@ -272,6 +295,10 @@ public class DymOrder implements Serializable {
         orderInfo.addedKm = cursor.getInt(cursor.getColumnIndex("addedKm"));
         orderInfo.addedFee = cursor.getDouble(cursor.getColumnIndex("addedFee"));
 
+        orderInfo.peakCost = cursor.getDouble(cursor.getColumnIndex("peakCost"));
+        orderInfo.nightPrice = cursor.getDouble(cursor.getColumnIndex("nightPrice"));
+        orderInfo.lowSpeedCost = cursor.getDouble(cursor.getColumnIndex("lowSpeedCost"));
+        orderInfo.lowSpeedTime = cursor.getDouble(cursor.getColumnIndex("lowSpeedTime"));
 
         return orderInfo;
     }
@@ -312,11 +339,17 @@ public class DymOrder implements Serializable {
         values.put("orderTotalFee", orderTotalFee);
         values.put("orderShouldPay", orderShouldPay);
         values.put("prepay", prepay);
+
+        values.put("peakCost", peakCost);
+        values.put("nightPrice", nightPrice);
+        values.put("lowSpeedCost", lowSpeedCost);
+        values.put("lowSpeedTime", lowSpeedTime);
+
 //        values.put("addedKm", addedKm);
 //        values.put("addedFee", addedFee);
         /*
          * values.put("age", age); values.put("jialing", jialing);
-		 */
+         */
         boolean flag = db.update("t_dyminfo", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
         return flag;
@@ -335,11 +368,18 @@ public class DymOrder implements Serializable {
         values.put("distance", distance);
         values.put("disFee", disFee);
         values.put("minestMoney", minestMoney);
+
+        //专车
+        values.put("peakCost", peakCost);
+        values.put("nightPrice", nightPrice);
+        values.put("lowSpeedCost", lowSpeedCost);
+        values.put("lowSpeedTime", lowSpeedTime);
+
 //        values.put("addedKm", addedKm);
 //        values.put("addedFee", addedFee);
         /*
          * values.put("age", age); values.put("jialing", jialing);
-		 */
+         */
         boolean flag = db.update("t_dyminfo", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
         return flag;
@@ -358,7 +398,7 @@ public class DymOrder implements Serializable {
         values.put("prepay", prepay);
         /*
          * values.put("age", age); values.put("jialing", jialing);
-		 */
+         */
         boolean flag = db.update("t_dyminfo", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
         return flag;

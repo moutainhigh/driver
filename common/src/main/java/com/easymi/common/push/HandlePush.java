@@ -17,6 +17,7 @@ import com.easymi.common.CommApiService;
 import com.easymi.common.R;
 import com.easymi.common.entity.Address;
 import com.easymi.common.entity.MultipleOrder;
+import com.easymi.component.entity.Setting;
 import com.easymi.common.mvp.grab.GrabActivity2;
 import com.easymi.common.mvp.work.WorkActivity;
 import com.easymi.common.result.AnnouncementResult;
@@ -28,7 +29,6 @@ import com.easymi.component.DJOrderStatus;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.Employ;
-import com.easymi.component.entity.Setting;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
@@ -185,10 +185,12 @@ public class HandlePush implements FeeChangeSubject {
         }
     }
 
-    private void loadOrder(MultipleOrder MultipleOrder) {
-        if (StringUtils.isNotBlank(MultipleOrder.orderType)) {
-            if (MultipleOrder.orderType.equals(Config.DAIJIA)) {
-                loadDJOrder(MultipleOrder.orderId, Config.DAIJIA);
+    private void loadOrder(MultipleOrder multipleOrder) {
+        if (StringUtils.isNotBlank(multipleOrder.orderType)) {
+            if (multipleOrder.orderType.equals(Config.DAIJIA)) {
+                loadDJOrder(multipleOrder.orderId, Config.DAIJIA);
+            } else if(multipleOrder.orderType.equals(Config.ZHUANCHE)){
+                loadZCOrder(multipleOrder.orderId, Config.ZHUANCHE);
             }
         }
     }
@@ -240,6 +242,27 @@ public class HandlePush implements FeeChangeSubject {
         })));
     }
 
+    private void loadZCOrder(long orderId, String orderType) {
+        Observable<MultipleOrderResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .queryZCOrder(orderId, EmUtil.getAppKey())
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        rxManager.add(observable.subscribe(new MySubscriber<>(XApp.getInstance(), false,
+                false, new HaveErrSubscriberListener<MultipleOrderResult>() {
+            @Override
+            public void onNext(MultipleOrderResult multipleOrderResult) {
+                loadOrderCallback.callback(multipleOrderResult, orderType);
+            }
+
+            @Override
+            public void onError(int code) {
+                rxManager.clear();
+            }
+        })));
+    }
+
     /**
      * 加载通知
      *
@@ -258,10 +281,10 @@ public class HandlePush implements FeeChangeSubject {
             @Override
             public void onNext(NotitfyResult multipleOrderResult) {
                 XApp.getInstance().shake();
-                XApp.getInstance().syntheticVoice(multipleOrderResult.employNoticeRecord.message, XApp.NEW_MSG);
+                XApp.getInstance().syntheticVoice(multipleOrderResult.employNoticeRecord.noticeContent, XApp.NEW_MSG);
                 Intent intent = new Intent();
                 intent.setAction(Config.BROAD_NOTICE);
-                intent.putExtra("notice", multipleOrderResult.employNoticeRecord.message);
+                intent.putExtra("notice", multipleOrderResult.employNoticeRecord.noticeContent);
                 XApp.getInstance().sendBroadcast(intent);
             }
 
@@ -290,10 +313,10 @@ public class HandlePush implements FeeChangeSubject {
             @Override
             public void onNext(AnnouncementResult announcementResult) {
                 XApp.getInstance().shake();
-                XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.new_ann) + announcementResult.employAfficheRequest.message, XApp.NEW_ANN);
+                XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.new_ann) + announcementResult.employAfficheRequest.annMessage, XApp.NEW_ANN);
                 Intent intent = new Intent();
                 intent.setAction(Config.BROAD_ANN);
-                intent.putExtra("ann", announcementResult.employAfficheRequest.message);
+                intent.putExtra("ann", announcementResult.employAfficheRequest.annMessage);
                 XApp.getInstance().sendBroadcast(intent);
             }
 
@@ -369,6 +392,9 @@ public class HandlePush implements FeeChangeSubject {
                 if (orderType.equals(Config.DAIJIA)) {
                     voiceStr += XApp.getInstance().getString(R.string.create_daijia)
                             + XApp.getInstance().getString(R.string.order) + ",";//代驾订单
+                } else if (orderType.equals(Config.ZHUANCHE)) {
+                    voiceStr += XApp.getInstance().getString(R.string.create_zhuanche)
+                            + XApp.getInstance().getString(R.string.order) + ",";//专车订单
                 }
                 String dis = 0 + XApp.getInstance().getString(R.string.meter);
                 if (EmUtil.getLastLoc() != null && order.addresses != null && order.addresses.size() != 0) {

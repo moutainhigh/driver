@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="#f7f7f7">
 
@@ -48,7 +49,12 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
-                    android:src="@mipmap/ic_row" />
+                    app:kswBackDrawable="@drawable/ios_back_drawable"
+                    app:kswThumbDrawable="@drawable/ios_thumb_selector"
+                    app:kswThumbMarginBottom="-4dp"
+                    app:kswThumbMarginLeft="-4dp"
+                    app:kswThumbMarginRight="-4dp"
+                    app:kswThumbMarginTop="-2dp"  />
 
             </RelativeLayout>
 
@@ -79,7 +85,12 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
-                    android:src="@mipmap/ic_row" />
+                    app:kswBackDrawable="@drawable/ios_back_drawable"
+                    app:kswThumbDrawable="@drawable/ios_thumb_selector"
+                    app:kswThumbMarginBottom="-4dp"
+                    app:kswThumbMarginLeft="-4dp"
+                    app:kswThumbMarginRight="-4dp"
+                    app:kswThumbMarginTop="-2dp" />
 
             </RelativeLayout>
 
@@ -110,7 +121,12 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
-                    android:src="@mipmap/ic_row" />
+                    app:kswBackDrawable="@drawable/ios_back_drawable"
+                    app:kswThumbDrawable="@drawable/ios_thumb_selector"
+                    app:kswThumbMarginBottom="-4dp"
+                    app:kswThumbMarginLeft="-4dp"
+                    app:kswThumbMarginRight="-4dp"
+                    app:kswThumbMarginTop="-2dp"  />
 
             </RelativeLayout>
 
@@ -141,7 +157,12 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
-                    android:src="@mipmap/ic_row" />
+                    app:kswBackDrawable="@drawable/ios_back_drawable"
+                    app:kswThumbDrawable="@drawable/ios_thumb_selector"
+                    app:kswThumbMarginBottom="-4dp"
+                    app:kswThumbMarginLeft="-4dp"
+                    app:kswThumbMarginRight="-4dp"
+                    app:kswThumbMarginTop="-2dp"  />
 
             </RelativeLayout>
 
