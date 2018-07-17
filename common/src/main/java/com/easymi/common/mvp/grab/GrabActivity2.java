@@ -511,18 +511,28 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
 
     private void buildFragments(MultipleOrder order, boolean showing) {
         try {
-            if (order.orderType.equals(Config.DAIJIA)) {
-                order.orderTime = order.orderTime * 1000;
-                Class clazz = Class.forName("com.easymi.daijia.fragment.grab.DJGrabFragment");
-                Fragment fragment = (Fragment) clazz.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("order", order);
-                fragment.setArguments(bundle);
-                fragments.add(fragment);
-                if (showing) {
-                    showIngFragment = fragment;
-                }
+            Class clazz;
+            switch (order.orderType) {
+                case Config.DAIJIA:
+                    //乘以1000
+                    clazz = Class.forName("com.easymi.daijia.fragment.grab.DJGrabFragment");
+                    break;
+                case Config.ZHUANCHE:
+                    clazz = Class.forName("com.easymi.zhuanche.fragment.grab.ZCGrabFragment");
+                    break;
+                default:
+                    return;
             }
+            order.orderTime = order.orderTime * 1000;
+            Fragment fragment = (Fragment) clazz.newInstance();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("order", order);
+            fragment.setArguments(bundle);
+            fragments.add(fragment);
+            if (showing) {
+                showIngFragment = fragment;
+            }
+
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
