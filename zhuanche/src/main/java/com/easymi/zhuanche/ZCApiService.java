@@ -85,8 +85,7 @@ public interface ZCApiService {
                                         @Field("lat") Double lat,
                                         @Field("lng") Double lng,
                                         @Field("destination") String destination,
-                                        @Field("app_key") String appKey
-    );
+                                        @Field("app_key") String appKey);
 
     /**
      * 前往预约地
@@ -172,9 +171,7 @@ public interface ZCApiService {
                                                  @Field("peak_cost") double peakCost,
                                                  @Field("night_price") double nightPrice,
                                                  @Field("low_speed_cost") double lowSpeedCost,
-                                                 @Field("low_speed_time") double lowSpeedTime
-
-    );
+                                                 @Field("low_speed_time") double lowSpeedTime);
 
     /**
      * 结算订单  /api/v1/finishOrder  PUT  id  int  是  订单id
@@ -233,8 +230,7 @@ public interface ZCApiService {
                                           @Field("cid") Long cid,
                                           @Field("order_person") String orderPerson,
                                           @Field("order_person_id") Long orderPersonId,
-                                          @Field("car_type") Long carType
-    );
+                                          @Field("car_type") Long carType);
 
     /**
      * 预估价格
@@ -258,8 +254,7 @@ public interface ZCApiService {
                                             @Query("channel") String channel,
                                             @Query("typeId") Long typeId,
                                             @Query("model_id") Long modelId,
-                                            @Query("app_key") String appKey
-    );
+                                            @Query("app_key") String appKey);
 
     /**
      * 获取专车子类型
@@ -272,16 +267,14 @@ public interface ZCApiService {
                                            @Query("page") Integer page,
                                            @Query("limit") Integer limit,
                                            @Query("company_id") Long companyId,
-                                           @Query("service_type") Integer serviceType
-    );
+                                           @Query("service_type") Integer serviceType);
 
     @GET("api/v1/passengerMustBe")
     Observable<PassengerResult> queryPassenger(@Query("company_id") Long companyId,
                                                @Query("company_name") String companyName,
                                                @Query("phone") String phone,
                                                @Query("app_key") String appKey,
-                                               @Query("channel") String channel
-    );
+                                               @Query("channel") String channel);
 
     /**
      * 销单

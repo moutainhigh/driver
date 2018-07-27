@@ -110,8 +110,7 @@ public interface CommApiService {
     Observable<NotitfyResult> loadNotice(@Query("driver_id") Long driverId,
                                        @Query("app_key") String appKey,
                                        @Query("page") Integer page,
-                                       @Query("limit") Integer limit
-    );
+                                       @Query("limit") Integer limit);
 
 
     /**

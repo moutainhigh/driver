@@ -48,17 +48,17 @@ public class ArriveStartFragment extends RxBaseFragment {
     }
 
     private void initView() {
-        startPlaceText = getActivity().findViewById(R.id.start_place);
-        endPlaceText = getActivity().findViewById(R.id.end_place);
-        startDrive = getActivity().findViewById(R.id.start_drive);
-        startWait = getActivity().findViewById(R.id.start_wait);
-        callPhoneCon = getActivity().findViewById(R.id.call_phone_con);
+        startPlaceText = $(R.id.start_place);
+        endPlaceText = $(R.id.end_place);
+        startDrive = $(R.id.start_drive);
+        startWait = $(R.id.start_wait);
+        callPhoneCon = $(R.id.call_phone_con);
 
         startPlaceText.setText(zcOrder.startPlace);
         endPlaceText.setText(zcOrder.endPlace);
         startDrive.setOnClickListener(view -> bridge.doStartDrive(startDrive));
         startWait.setOnClickListener(view -> bridge.doStartWait());
         callPhoneCon.setOnClickListener(view -> CallPhoneDialog.callDialog(getActivity(),zcOrder));
-        getActivity().findViewById(R.id.change_end_con).setOnClickListener(view -> bridge.changeEnd());
+        $(R.id.change_end_con).setOnClickListener(view -> bridge.changeEnd());
     }
 }

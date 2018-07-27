@@ -113,6 +113,7 @@ public class MySubscriber<T> extends Subscriber<T> implements ProgressDismissLis
      */
     @Override
     public void onError(Throwable e) {
+        e.printStackTrace();
         if (e instanceof HttpException) {
             ToastUtil.showMessage(context, context.getString(R.string.response_error) + ((HttpException) e).code());//400、500、404之类的响应码错误
         } else if (e instanceof SocketTimeoutException || e instanceof SocketException) {

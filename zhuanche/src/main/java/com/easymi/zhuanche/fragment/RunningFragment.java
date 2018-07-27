@@ -64,20 +64,20 @@ public class RunningFragment extends RxBaseFragment {
         if (zcOrder == null) {
             zcOrder = new DymOrder();
         }
-        serviceMoneyText = getActivity().findViewById(R.id.service_money);
-        distanceText = getActivity().findViewById(R.id.distance);
-        driveTimeText = getActivity().findViewById(R.id.drive_time);
-        waitTimeText = getActivity().findViewById(R.id.wait_time);
-        startWaitBtn = getActivity().findViewById(R.id.start_wait);
-        settleBtn = getActivity().findViewById(R.id.settle);
+        serviceMoneyText = $(R.id.service_money);
+        distanceText = $(R.id.distance);
+        driveTimeText = $(R.id.drive_time);
+        waitTimeText = $(R.id.wait_time);
+        startWaitBtn = $(R.id.start_wait);
+        settleBtn = $(R.id.settle);
 
-        quanlanCon = getActivity().findViewById(R.id.quanlan_con);
-        quanlanImg = getActivity().findViewById(R.id.quanlan_img);
-        quanlanText = getActivity().findViewById(R.id.quanlan_text);
+        quanlanCon = $(R.id.quanlan_con);
+        quanlanImg = $(R.id.quanlan_img);
+        quanlanText = $(R.id.quanlan_text);
 
-        refreshImg = getActivity().findViewById(R.id.ic_refresh);
+        refreshImg = $(R.id.ic_refresh);
 
-        feeCon = getActivity().findViewById(R.id.fee_con);
+        feeCon = $(R.id.fee_con);
 
         serviceMoneyText.setText(zcOrder.totalFee + "");
         distanceText.setText(zcOrder.distance + "");

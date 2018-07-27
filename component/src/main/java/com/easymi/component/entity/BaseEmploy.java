@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.db.SqliteHelper;
+import com.easymi.component.utils.LogUtil;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -35,6 +36,7 @@ public class BaseEmploy {
         values.put("phone", phone);
         values.put("child_type", child_type);
         values.put("status", status);
+
         /*
          * values.put("age", age); values.put("jialing", jialing);
 		 */
@@ -44,17 +46,18 @@ public class BaseEmploy {
     }
 
     public BaseEmploy employ2This() {
-        Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1));
-        if (employ == null) {
-            return null;
-        } else {
-            id = employ.id;
-            status = employ.status;
-            real_name = employ.real_name;
-            company_id = employ.company_id;
-            phone = employ.phone;
-            child_type = employ.child_type;
-            return this;
-        }
+        return Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1));
+//        if (employ == null) {
+//            LogUtil.e("TAG", "查询为null");
+//            return null;
+//        } else {
+//            id = employ.id;
+//            status = employ.status;
+//            real_name = employ.real_name;
+//            company_id = employ.company_id;
+//            phone = employ.phone;
+//            child_type = employ.child_type;
+//            return employ;
+//        }
     }
 }

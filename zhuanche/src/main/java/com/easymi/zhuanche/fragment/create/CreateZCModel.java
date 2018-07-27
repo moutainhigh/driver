@@ -41,7 +41,7 @@ public class CreateZCModel implements CreateZCContract.Model {
     @Override
     public Observable<BudgetResult> getBudgetPrice(Long passengerId, Long companyId, Double distance, Integer time, Long orderTime, Long typeId, Long modelId) {
         return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
-                .getBudgetPrice(passengerId, companyId, distance, time, orderTime, "batch", typeId, modelId, EmUtil.getAppKey())
+                .getBudgetPrice(passengerId, companyId, distance, time, orderTime, "supplement", typeId, modelId, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

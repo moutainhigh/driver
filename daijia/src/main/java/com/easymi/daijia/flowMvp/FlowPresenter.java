@@ -169,66 +169,75 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     @Override
     public void arriveDes(LoadingButton btn, DymOrder dymOrder, DJOrder djOrder) {
 
-        view.getManager().add(model.getOrderFee(dymOrder.orderId, EmUtil.getEmployId(), Config.DAIJIA, 2).subscribe(new MySubscriber<>(context, false, false, new NoErrSubscriberListener<OrderFeeResult>() {
-            @Override
-            public void onNext(OrderFeeResult result) {
-                if (timer != null) {
-                    timer.cancel();
-                }
-                if (timerTask != null) {
-                    timerTask.cancel();
-                }
+//        view.getManager().add(model.getOrderFee(dymOrder.orderId, EmUtil.getEmployId(), Config.DAIJIA, 2).subscribe(new MySubscriber<>(context, false, false, new NoErrSubscriberListener<OrderFeeResult>() {
+//            @Override
+//            public void onNext(OrderFeeResult result) {
+//                if (timer != null) {
+//                    timer.cancel();
+//                }
+//                if (timerTask != null) {
+//                    timerTask.cancel();
+//                }
+//
+//                if (null != result.cost) {
+//                    if (dymOrder.distance <= result.cost.mileges) {
+//                        dymOrder.startFee = result.cost.start_price;
+//                        dymOrder.waitTime = result.cost.wait_time / 60;
+//                        dymOrder.waitTimeFee = result.cost.wait_time_fee;
+//                        dymOrder.travelTime = result.cost.driver_time / 60;
+//                        dymOrder.travelFee = result.cost.drive_time_cost;
+//                        dymOrder.totalFee = result.cost.total_amount;
+//
+//                        dymOrder.minestMoney = result.cost.min_cost;
+//
+//                        dymOrder.disFee = result.cost.mileage_cost;
+//                        dymOrder.distance = result.cost.mileges;
+//
+//                        DecimalFormat decimalFormat = new DecimalFormat("#0.0");
+//                        decimalFormat.setRoundingMode(RoundingMode.DOWN);
+//                        dymOrder.distance = Double.parseDouble(decimalFormat.format(dymOrder.distance));
+//                        //公里数保留一位小数。。
+//
+//                        //重新开始计算一次钱
+//                        DecimalFormat df = new DecimalFormat("#0.0");
+//                        dymOrder.orderTotalFee = Double.parseDouble(df.format(dymOrder.totalFee + dymOrder.extraFee + dymOrder.paymentFee));
+//
+//                        double canCouponMoney = dymOrder.totalFee + dymOrder.extraFee;//可以参与优惠券抵扣的钱
+//                        if (canCouponMoney < dymOrder.minestMoney) {
+//                            canCouponMoney = dymOrder.minestMoney;
+//                        }
+//                        if (djOrder.coupon != null) {
+//                            if (djOrder.coupon.couponType == 2) {
+//                                dymOrder.couponFee = djOrder.coupon.deductible;
+//                            } else if (djOrder.coupon.couponType == 1) {
+//                                dymOrder.couponFee = Double.parseDouble(df.format(canCouponMoney * (100 - djOrder.coupon.discount) / 100));
+//                            }
+//                        }
+//                        double exls = Double.parseDouble(df.format(canCouponMoney - dymOrder.couponFee));//打折抵扣后应付的钱
+//                        if (exls < 0) {
+//                            exls = 0;//优惠券不退钱
+//                        }
+//                        dymOrder.orderShouldPay = Double.parseDouble(df.format(exls + dymOrder.paymentFee - dymOrder.prepay));
+//                    }
+//                    Observable<DJOrderResult> observable = model.arriveDes(dymOrder);
+//                    view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, djOrderResult -> {
+//                        dymOrder.updateConfirm();
+//                        djOrderResult = orderResult2DJOrder(djOrderResult);
+//                        updateDymOrder(djOrderResult.order);
+//                        view.showOrder(djOrderResult.order);
+//                    })));
+//                }
+//            }
+//        })));
 
-                if (null != result.cost) {
-                    if (dymOrder.distance <= result.cost.mileges) {
-                        dymOrder.startFee = result.cost.start_price;
-                        dymOrder.waitTime = result.cost.wait_time / 60;
-                        dymOrder.waitTimeFee = result.cost.wait_time_fee;
-                        dymOrder.travelTime = result.cost.driver_time / 60;
-                        dymOrder.travelFee = result.cost.drive_time_cost;
-                        dymOrder.totalFee = result.cost.total_amount;
-
-                        dymOrder.minestMoney = result.cost.min_cost;
-
-                        dymOrder.disFee = result.cost.mileage_cost;
-                        dymOrder.distance = result.cost.mileges;
-
-                        DecimalFormat decimalFormat = new DecimalFormat("#0.0");
-                        decimalFormat.setRoundingMode(RoundingMode.DOWN);
-                        dymOrder.distance = Double.parseDouble(decimalFormat.format(dymOrder.distance));
-                        //公里数保留一位小数。。
-
-                        //重新开始计算一次钱
-                        DecimalFormat df = new DecimalFormat("#0.0");
-                        dymOrder.orderTotalFee = Double.parseDouble(df.format(dymOrder.totalFee + dymOrder.extraFee + dymOrder.paymentFee));
-
-                        double canCouponMoney = dymOrder.totalFee + dymOrder.extraFee;//可以参与优惠券抵扣的钱
-                        if (canCouponMoney < dymOrder.minestMoney) {
-                            canCouponMoney = dymOrder.minestMoney;
-                        }
-                        if (djOrder.coupon != null) {
-                            if (djOrder.coupon.couponType == 2) {
-                                dymOrder.couponFee = djOrder.coupon.deductible;
-                            } else if (djOrder.coupon.couponType == 1) {
-                                dymOrder.couponFee = Double.parseDouble(df.format(canCouponMoney * (100 - djOrder.coupon.discount) / 100));
-                            }
-                        }
-                        double exls = Double.parseDouble(df.format(canCouponMoney - dymOrder.couponFee));//打折抵扣后应付的钱
-                        if (exls < 0) {
-                            exls = 0;//优惠券不退钱
-                        }
-                        dymOrder.orderShouldPay = Double.parseDouble(df.format(exls + dymOrder.paymentFee - dymOrder.prepay));
-                    }
-                    Observable<DJOrderResult> observable = model.arriveDes(dymOrder);
-                    view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, djOrderResult -> {
-                        dymOrder.updateConfirm();
-                        djOrderResult = orderResult2DJOrder(djOrderResult);
-                        updateDymOrder(djOrderResult.order);
-                        view.showOrder(djOrderResult.order);
-                    })));
-                }
-            }
+        Observable<DJOrderResult> observable = model.arriveDes(dymOrder);
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, djOrderResult -> {
+            dymOrder.updateConfirm();
+            djOrderResult = orderResult2DJOrder(djOrderResult);
+            updateDymOrder(djOrderResult.order);
+            view.showOrder(djOrderResult.order);
         })));
+
     }
 
     @Override
@@ -435,37 +444,41 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void getOrderFee(Long orderId, Integer isArrive) {
-        view.getManager().add(model.getOrderFee(orderId, EmUtil.getEmployId(), Config.DAIJIA, isArrive).subscribe(new MySubscriber<>(context, false, false, new NoErrSubscriberListener<OrderFeeResult>() {
-            @Override
-            public void onNext(OrderFeeResult result) {
-                DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
-                if (null != result.cost) {
-                    if (dymOrder != null) {
-                        if (dymOrder.distance <= result.cost.mileges) {
-                            dymOrder.startFee = result.cost.start_price;
-                            dymOrder.waitTime = result.cost.wait_time / 60;
-                            dymOrder.waitTimeFee = result.cost.wait_time_fee;
-                            dymOrder.travelTime = result.cost.driver_time / 60;
-                            dymOrder.travelFee = result.cost.drive_time_cost;
-                            dymOrder.totalFee = result.cost.total_amount;
+//        view.getManager().add(model.getOrderFee(orderId, EmUtil.getEmployId(), Config.DAIJIA, isArrive).subscribe(new MySubscriber<>(context, false, false, new NoErrSubscriberListener<OrderFeeResult>() {
+//            @Override
+//            public void onNext(OrderFeeResult result) {
+//                DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
+//                if (null != result.cost) {
+//                    if (dymOrder != null) {
+//                        if (dymOrder.distance <= result.cost.mileges) {
+//                            dymOrder.startFee = result.cost.start_price;
+//                            dymOrder.waitTime = result.cost.wait_time / 60;
+//                            dymOrder.waitTimeFee = result.cost.wait_time_fee;
+//                            dymOrder.travelTime = result.cost.driver_time / 60;
+//                            dymOrder.travelFee = result.cost.drive_time_cost;
+//                            dymOrder.totalFee = result.cost.total_amount;
+//
+//                            dymOrder.minestMoney = result.cost.min_cost;
+//
+//                            dymOrder.disFee = result.cost.mileage_cost;
+//                            dymOrder.distance = result.cost.mileges;
+//
+//                            DecimalFormat decimalFormat = new DecimalFormat("#0.0");
+//                            decimalFormat.setRoundingMode(RoundingMode.DOWN);
+//                            dymOrder.distance = Double.parseDouble(decimalFormat.format(dymOrder.distance));
+//                            //公里数保留一位小数。。
+//
+//                            dymOrder.updateFee();
+//                            view.showFeeChanged(dymOrder);
+//                        }
+//                    }
+//                }
+//            }
+//        })));
 
-                            dymOrder.minestMoney = result.cost.min_cost;
+        DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
+        view.showFeeChanged(dymOrder);
 
-                            dymOrder.disFee = result.cost.mileage_cost;
-                            dymOrder.distance = result.cost.mileges;
-
-                            DecimalFormat decimalFormat = new DecimalFormat("#0.0");
-                            decimalFormat.setRoundingMode(RoundingMode.DOWN);
-                            dymOrder.distance = Double.parseDouble(decimalFormat.format(dymOrder.distance));
-                            //公里数保留一位小数。。
-
-                            dymOrder.updateFee();
-                            view.showFeeChanged(dymOrder);
-                        }
-                    }
-                }
-            }
-        })));
     }
 
     @Override

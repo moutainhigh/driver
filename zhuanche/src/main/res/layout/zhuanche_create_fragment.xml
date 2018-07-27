@@ -47,9 +47,11 @@
             android:background="@color/dark_gray" />
 
         <LinearLayout
+            android:id="@+id/llTime"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:gravity="center_vertical"
+            android:visibility="visible"
             android:orientation="horizontal">
 
             <ImageView
@@ -64,14 +66,17 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"
-                android:text="现在"
+                android:hint="选择用车时间"
+                android:textColorHint="#232323"
                 android:textColor="#232323"
                 android:textSize="18sp" />
 
         </LinearLayout>
 
         <View
+            android:id="@+id/llTimeLine"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="0.1dp"
             android:layout_marginLeft="45dp"
             android:background="@color/dark_gray" />
@@ -128,7 +133,7 @@
                 android:layout_marginLeft="10dp"
                 android:background="@null"
                 android:gravity="center_vertical"
-                android:hint="@string/please_consumer_phone"
+                android:hint="@string/please_consumer_name"
                 android:text="先生/女士"
                 android:textColor="#232323"
                 android:textSize="18sp" />

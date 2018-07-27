@@ -49,11 +49,11 @@ public class ToStartFragment extends RxBaseFragment {
     }
 
     private void initView() {
-        startPlaceText = getActivity().findViewById(R.id.start_place);
-        endPlaceText = getActivity().findViewById(R.id.end_place);
-        controlCon = getActivity().findViewById(R.id.to_start_btn);
-        callPhoneCon = getActivity().findViewById(R.id.call_phone_con);
-        changEndCon = getActivity().findViewById(R.id.change_end_con);
+        startPlaceText = $(R.id.start_place);
+        endPlaceText = $(R.id.end_place);
+        controlCon = $(R.id.to_start_btn);
+        callPhoneCon = $(R.id.call_phone_con);
+        changEndCon = $(R.id.change_end_con);
 
         startPlaceText.setText(zcOrder.startPlace);
         endPlaceText.setText(zcOrder.endPlace);

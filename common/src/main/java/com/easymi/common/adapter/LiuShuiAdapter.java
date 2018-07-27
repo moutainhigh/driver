@@ -82,14 +82,19 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
             holder.orderBaoxiao.setText(context.getString(R.string.liushui_baoxiao_done));
         }
 
-        if (baseOrder.orderType.equals(Config.DAIJIA) &&
-                baseOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {
+        if (baseOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {
             holder.rootView.setClickable(true);
             holder.rootView.setOnClickListener(v -> {
                 LiushuiActivity.CLICK_POS = position + 1;
-                ARouter.getInstance().build("/daijia/FlowActivity")
-                        .withLong("orderId", baseOrder.orderId)
-                        .navigation((Activity) context, LiushuiActivity.CLICK_POS);
+                if (baseOrder.orderType.equals(Config.DAIJIA)) {
+                    ARouter.getInstance().build("/daijia/FlowActivity")
+                            .withLong("orderId", baseOrder.orderId)
+                            .navigation((Activity) context, LiushuiActivity.CLICK_POS);
+                } else if (baseOrder.orderType.equals(Config.ZHUANCHE)) {
+                    ARouter.getInstance().build("/zhuanche/FlowActivity")
+                            .withLong("orderId", baseOrder.orderId)
+                            .navigation((Activity) context, LiushuiActivity.CLICK_POS);
+                }
             });
             holder.orderBaoxiao.setVisibility(View.GONE);
         } else {

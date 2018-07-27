@@ -16,7 +16,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "data.db";
 
-    private static final int VERSION = 51;
+    private static final int VERSION = 53;
 
     private StringBuffer sqlBuf;
 
@@ -82,6 +82,9 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
         db.execSQL("DROP TABLE IF EXISTS " + "t_settinginfo");
         createSettingTable(db);
+
+        db.execSQL("DROP TABLE IF EXISTS " + "t_Vehicle");
+        createVehicleInfoTable(db);
 
         db.execSQL("DROP TABLE IF EXISTS " + "t_systemconfig");
         createSystemTable(db);
@@ -192,13 +195,13 @@ public class SqliteHelper extends SQLiteOpenHelper {
     private void createSystemTable(SQLiteDatabase db) {
         sqlBuf.append("CREATE TABLE ").append("t_systemconfig").append(" (")
                 .append("id").append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
-                .append("tixianBase").append(" ").append("INTEGER").append(",")
-                .append("tixianMin").append(" ").append("INTEGER").append(",")
-                .append("tixianMax").append(" ").append("INTEGER").append(",")
+                .append("tixianBase").append(" ").append("DOUBLE").append(",")
+                .append("tixianMin").append(" ").append("DOUBLE").append(",")
+                .append("tixianMax").append(" ").append("DOUBLE").append(",")
                 .append("tixianMemo").append(" ").append("TEXT").append(",")
-                .append("payMoney1").append(" ").append("INTEGER").append(",")
-                .append("payMoney2").append(" ").append("INTEGER").append(",")
-                .append("payMoney3").append(" ").append("INTEGER").append(",")
+                .append("payMoney1").append(" ").append("DOUBLE").append(",")
+                .append("payMoney2").append(" ").append("DOUBLE").append(",")
+                .append("payMoney3").append(" ").append("DOUBLE").append(",")
                 .append("payType").append(" ").append("TEXT").append(",")
 
                 .append("canCallDriver").append(" ").append("INTEGER")

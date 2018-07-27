@@ -15,7 +15,7 @@
     <string name="huadongdaoda">滑动到达预约地</string>
 
 
-    <string name="click_wait">点击等待</string>
+    <string name="zc_click_wait">中途等待</string>
     <string name="click_start">点击出发</string>
     <string name="settle">结算</string>
     <string name="service_fee">服务费用</string>
@@ -79,7 +79,7 @@
     <string name="about">约</string>
     <string name="create_suc">创建订单成功</string>
 
-    <string name="no_type">未选择代驾类型,无法继续</string>
+    <string name="no_type">未选择业务类型,无法继续</string>
     <string name="no_passenger">未查询到客户信息,无法继续</string>
     <string name="no_start">未选择起点,无法继续</string>
     <string name="no_budget">预估价格失败,无法继续</string>
@@ -112,7 +112,7 @@
     <string name="status_to_start">前往预约地</string>
     <string name="status_arrive_start">已到达预约地</string>
     <string name="status_wait">等待中</string>
-    <string name="status_to_end">前往目的地</string>
+    <string name="zc_status_to_end">执行中</string>
     <string name="status_cheating">作弊器</string>
     <string name="status_confirm">确认费用</string>
 
@@ -214,4 +214,7 @@
     <string name="arrive_start">点前到达预约地</string>
 
     <string name="no_car">暂无车辆，不能创建专车订单，请联系管理员</string>
+
+    <string name="wait_consumer">等待乘客</string>
+
 </resources>

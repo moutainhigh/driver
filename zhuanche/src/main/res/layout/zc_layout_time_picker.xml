@@ -16,9 +16,18 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:background="@null"
-            android:text="取消"
+            android:text="@string/cancel"
             android:textColor="#999999"
-            android:textSize="16sp" />
+            android:textSize="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="用车时间"
+            android:textColor="#191919"
+            android:textSize="16dp" />
 
         <Button
             android:id="@+id/btn_confirm"
@@ -26,9 +35,9 @@
             android:layout_height="30dp"
             android:layout_alignParentRight="true"
             android:background="@null"
-            android:text="确定"
+            android:text="@string/ok"
             android:textColor="#007ccb"
-            android:textSize="16sp" />
+            android:textSize="16dp" />
 
     </RelativeLayout>
 

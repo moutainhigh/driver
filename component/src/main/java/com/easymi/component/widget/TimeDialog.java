@@ -8,11 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.easymi.component.R;
-import com.easymi.component.widget.wheelView.adapters.AbstractWheelAdapter;
-import com.easymi.component.widget.wheelView.adapters.AbstractWheelTextAdapter;
-import com.easymi.component.widget.wheelView.adapters.WheelViewAdapter;
-import com.easymi.component.widget.wheelView.wheel.OnWheelChangedListener;
-import com.easymi.component.widget.wheelView.wheel.WheelView;
+import com.easymi.component.widget.wheelview.OnWheelChangedListener;
+import com.easymi.component.widget.wheelview.WheelView;
+import com.easymi.component.widget.wheelview.adapter.AbstractWheelAdapter;
+import com.easymi.component.widget.wheelview.adapter.AbstractWheelTextAdapter;
+import com.easymi.component.widget.wheelview.adapter.WheelViewAdapter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

@@ -17,25 +17,25 @@ import com.google.gson.annotations.SerializedName;
  */
 public class SystemConfig {
     @SerializedName("withdrawals_base")
-    public int tixianBase;//提现基数
+    public double tixianBase;//提现基数
 
     @SerializedName("withdrawals_min")
-    public int tixianMin;//提现最小值
+    public double tixianMin;//提现最小值
 
     @SerializedName("withdrawals_max")
-    public int tixianMax;//提现最大值
+    public double tixianMax;//提现最大值
 
     @SerializedName("withdrawals_memo")
     public String tixianMemo;//提现备注
 
     @SerializedName("employ_money_1")
-    public int payMoney1;//充值金额1
+    public double payMoney1;//充值金额1
 
     @SerializedName("employ_money_2")
-    public int payMoney2;//充值金额2
+    public double payMoney2;//充值金额2
 
     @SerializedName("employ_money_3")
-    public int payMoney3;//充值金额3
+    public double payMoney3;//充值金额3
 
     @SerializedName("allow_employ_phone")
     public int canCallDriver;//能否拨打附近司机电话
@@ -68,13 +68,13 @@ public class SystemConfig {
         try {
             if (cursor.moveToFirst()) {
                 systemConfig = new SystemConfig();
-                systemConfig.tixianBase = cursor.getInt(cursor.getColumnIndex("tixianBase"));
-                systemConfig.tixianMin = cursor.getInt(cursor.getColumnIndex("tixianMin"));
-                systemConfig.tixianMax = cursor.getInt(cursor.getColumnIndex("tixianMax"));
+                systemConfig.tixianBase = cursor.getDouble(cursor.getColumnIndex("tixianBase"));
+                systemConfig.tixianMin = cursor.getDouble(cursor.getColumnIndex("tixianMin"));
+                systemConfig.tixianMax = cursor.getDouble(cursor.getColumnIndex("tixianMax"));
                 systemConfig.tixianMemo = cursor.getString(cursor.getColumnIndex("tixianMemo"));
-                systemConfig.payMoney1 = cursor.getInt(cursor.getColumnIndex("payMoney1"));
-                systemConfig.payMoney2 = cursor.getInt(cursor.getColumnIndex("payMoney2"));
-                systemConfig.payMoney3 = cursor.getInt(cursor.getColumnIndex("payMoney3"));
+                systemConfig.payMoney1 = cursor.getDouble(cursor.getColumnIndex("payMoney1"));
+                systemConfig.payMoney2 = cursor.getDouble(cursor.getColumnIndex("payMoney2"));
+                systemConfig.payMoney3 = cursor.getDouble(cursor.getColumnIndex("payMoney3"));
                 systemConfig.canCallDriver = cursor.getInt(cursor.getColumnIndex("canCallDriver"));
                 systemConfig.payType = cursor.getString(cursor.getColumnIndex("payType"));
             }

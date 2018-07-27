@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -658,24 +659,43 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         RadioButton pay3Btn = view.findViewById(R.id.pay_3_btn);
         RadioButton pay4Btn = view.findViewById(R.id.pay_4_btn);
 
-        if (consumerInfo.consumerBalance < money) {
+        if (djOrder != null && TextUtils.equals(djOrder.orderSource, "客户经理")) {
+            //客户经理订单,只能代付
+            pay1Text.setVisibility(View.GONE);
+            pay1Empty.setVisibility(View.GONE);
+            pay1Btn.setVisibility(View.GONE);
+            pay1Img.setVisibility(View.GONE);
+
             pay2Text.setVisibility(View.GONE);
             pay2Empty.setVisibility(View.GONE);
             pay2Btn.setVisibility(View.GONE);
             pay2Img.setVisibility(View.GONE);
-        }
-        if (!consumerInfo.canSign) {
+
             pay3Text.setVisibility(View.GONE);
             pay3Empty.setVisibility(View.GONE);
             pay3Btn.setVisibility(View.GONE);
             pay3Img.setVisibility(View.GONE);
-        }
-        boolean canDaifu = Setting.findOne().isPaid == 1;
-        if (!canDaifu) {
-            pay4Text.setVisibility(View.GONE);
-            pay4Empty.setVisibility(View.GONE);
-            pay4Btn.setVisibility(View.GONE);
-            pay4Img.setVisibility(View.GONE);
+
+        } else {
+            if (consumerInfo.consumerBalance < money) {
+                pay2Text.setVisibility(View.GONE);
+                pay2Empty.setVisibility(View.GONE);
+                pay2Btn.setVisibility(View.GONE);
+                pay2Img.setVisibility(View.GONE);
+            }
+            if (!consumerInfo.canSign) {
+                pay3Text.setVisibility(View.GONE);
+                pay3Empty.setVisibility(View.GONE);
+                pay3Btn.setVisibility(View.GONE);
+                pay3Img.setVisibility(View.GONE);
+            }
+            boolean canDaifu = Setting.findOne().isPaid == 1;
+            if (!canDaifu) {
+                pay4Text.setVisibility(View.GONE);
+                pay4Empty.setVisibility(View.GONE);
+                pay4Btn.setVisibility(View.GONE);
+                pay4Img.setVisibility(View.GONE);
+            }
         }
 
         pay1Btn.setOnClickListener(view13 -> bottomSheetDialog.dismiss());
@@ -1090,6 +1110,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             if (null != marker) {
                 marker.setDraggable(false);
                 marker.setClickable(false);
+                marker.setAnchor(0.5f, 0.5f);
             }
         }
 

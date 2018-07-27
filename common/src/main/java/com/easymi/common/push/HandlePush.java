@@ -159,7 +159,8 @@ public class HandlePush implements FeeChangeSubject {
                 EmUtil.employLogout(XApp.getInstance());
             } else if (msg.equals("unbunding")) {//解绑
                 XApp.getInstance().shake();
-                XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.unbunding));
+                XApp.getInstance().syntheticVoice("您的账户已被管理员姐绑");
+//                XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.unbunding));
                 EmUtil.employLogout(XApp.getInstance());
             } else if (msg.equals("finishOrder")) { //支付成功
                 MultipleOrder order = new MultipleOrder();
@@ -204,7 +205,6 @@ public class HandlePush implements FeeChangeSubject {
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-        ;
 
         rxManager.add(observable.subscribe(new MySubscriber<>(XApp.getInstance(), false,
                 false, new HaveErrSubscriberListener<SettingResult>() {

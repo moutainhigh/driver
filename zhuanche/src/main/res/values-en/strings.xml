@@ -15,7 +15,7 @@
     <string name="huadongdaoda"> slide to reach the reservation </string>
 
 
-    <string name="click_wait"> click wait </string>
+    <string name="zc_click_wait"> click wait </string>
     <string name="click_start">Click to leave </string>
     <string name="settle">clear </string>
     <string name="service_fee"> service cost </string>
@@ -111,7 +111,7 @@
     <string name="status_to_start"> go to the reservation </string>
     <string name="status_arrive_start"> has reached the reservation </string>
     <string name="status_wait">waiting </string>
-    <string name="status_to_end"> goes to destination </string>
+    <string name="zc_status_to_end"> goes to destination </string>
     <string name="status_cheating">hook </string>
     <string name="status_confirm"> confirm the cost </string>
 

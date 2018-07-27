@@ -128,7 +128,7 @@
                 android:layout_marginLeft="10dp"
                 android:background="@null"
                 android:gravity="center_vertical"
-                android:hint="@string/please_consumer_phone"
+                android:hint="@string/please_consumer_name"
                 android:text="先生/女士"
                 android:textColor="#232323"
                 android:textSize="18sp" />

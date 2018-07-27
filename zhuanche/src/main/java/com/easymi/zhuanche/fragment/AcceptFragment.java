@@ -49,10 +49,10 @@ public class AcceptFragment extends RxBaseFragment {
     }
 
     private void initView() {
-        acceptBtn = getActivity().findViewById(R.id.accept_btn);
-        refuseCon = getActivity().findViewById(R.id.refuse_con);
-        startPlaceText = getActivity().findViewById(R.id.start_place);
-        endPlaceText = getActivity().findViewById(R.id.end_place);
+        acceptBtn = $(R.id.accept_btn);
+        refuseCon = $(R.id.refuse_con);
+        startPlaceText = $(R.id.start_place);
+        endPlaceText = $(R.id.end_place);
 
         startPlaceText.setText(zcOrder.startPlace);
         endPlaceText.setText(zcOrder.endPlace);

@@ -637,7 +637,12 @@ public enum ErrCodeTran {
     /**
      * 服務人員還有訂單未完成
      */
-    EMPLOY_HAS_ORDERS_TODO(31004, "服務人員還有訂單未完成");
+    EMPLOY_HAS_ORDERS_TODO(31004, "服務人員還有訂單未完成"),
+
+    /**
+     * 车辆正在使用.
+     */
+    VEHICLE_IS_BUSY(31054, "车辆正在使用");
 
     private int code;
     private String showMsg;

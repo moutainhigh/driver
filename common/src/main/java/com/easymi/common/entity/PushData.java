@@ -1,6 +1,6 @@
 package com.easymi.common.entity;
 
-import com.easymi.component.entity.BaseEmploy;
+import com.easymi.component.entity.PushEmploy;
 
 /**
  * Created by liuzihao on 2017/12/18.
@@ -9,6 +9,8 @@ import com.easymi.component.entity.BaseEmploy;
  */
 
 public class PushData {
-    public BaseEmploy employ;
+//    public BaseEmploy employ;
     public PushDataLoc calc;
+    public PushEmploy employ;
+
 }

@@ -1,25 +1,13 @@
 apply plugin: 'com.android.library'
 
-def cfg = rootProject.ext.android
-def libs = rootProject.ext.dependencies
 
 android {
-    compileSdkVersion cfg.compileSdkVersion
-
+    compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        minSdkVersion cfg.minSdkVersion
-        targetSdkVersion cfg.targetSdkVersion
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-        //解决在module中 buildconfig.debug总为false
-        //调试时如果该值为false,没有调用 ARouter.openDebug();
-        //不能正常跳转
-        defaultPublishConfig "debug"
-        multiDexEnabled true
-
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -41,22 +29,12 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    api libs['appcompat-v7']
-    api libs['junit']
-    api libs['multidex']
-    api libs['design']
-    api libs['pull-load-more-recycler']
-
-
-    api 'co.lujun:androidtagview:1.1.4'
-
-    api 'com.github.LuckSiege.PictureSelector:picture_library:v2.1.1'
-
-
-    annotationProcessor 'com.alibaba:arouter-compiler:1.1.3'
-
-    compile project(path: ':common')
+    implementation project(path: ':common')
+    api rootProject.ext.appcompat
+    api rootProject.ext.multidex
+    api rootProject.ext.design
+    api rootProject.ext.pullLoadMoreRecycler
+    api rootProject.ext.tagView
+    api rootProject.ext.pictureSelector
+    annotationProcessor rootProject.ext.aroutercompiler
 }

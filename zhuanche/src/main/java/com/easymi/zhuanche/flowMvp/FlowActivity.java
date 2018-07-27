@@ -340,9 +340,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             to_appoint_navi_con.setOnClickListener(view -> presenter.navi(new LatLng(getStartAddr().lat,
                     getStartAddr().lng), getStartAddr().poi, orderId));
 
-            String time = getString(R.string.please_start_at) +
-                    TimeUtil.getTime("MM:dd", zcOrder.bookTime * 1000) +
-                    getString(R.string.arrive_start);
+            String time = getString(R.string.please_start_at)
+                    + TimeUtil.getTime("HH:mm", zcOrder.bookTime * 1000)
+                    + getString(R.string.arrive_start);
 
             SpannableString ss = new SpannableString(time);
             ForegroundColorSpan colorSpan = new ForegroundColorSpan(Color.parseColor("#3c98e3"));
@@ -384,6 +384,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             }
         });
+
+        if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+            nextPlace.setText(zcOrder.endPlace);
+        }
+
     }
 
     WaitFragment waitFragment;
@@ -449,10 +454,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.commit();
         } else if (zcOrder.orderStatus == ZCOrderStatus.START_WAIT_ORDER) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);//动态设置为遵循传感器
-            toolbar.setTitle(R.string.status_wait);
+            toolbar.setTitle(R.string.wait_consumer);
             waitFragment = new WaitFragment();
             Bundle bundle = new Bundle();
-            bundle.putSerializable("zcOrder", DymOrder.findByIDType(orderId, Config.DAIJIA));
+            bundle.putSerializable("zcOrder", DymOrder.findByIDType(orderId, Config.ZHUANCHE));
             waitFragment.setArguments(bundle);
             waitFragment.setBridge(bridge);
 
@@ -472,12 +477,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 }
                 isToFeeDetail = false;
             }
-
         } else if (zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_DESTINATION_ORDER) {
             toolbar.setTitle(R.string.settle);
             runningFragment = new RunningFragment();
             Bundle bundle = new Bundle();
-            bundle.putSerializable("zcOrder", DymOrder.findByIDType(orderId, Config.DAIJIA));
+            bundle.putSerializable("zcOrder", DymOrder.findByIDType(orderId, Config.ZHUANCHE));
             runningFragment.setArguments(bundle);
             runningFragment.setBridge(bridge);
 
@@ -490,7 +494,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             if (settleFragmentDialog != null && settleFragmentDialog.isShowing() && !isToFeeDetail) {
                 settleFragmentDialog.setDjOrder(zcOrder);
 
-                DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);//确认费用后直接弹出支付页面
+                DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.ZHUANCHE);//确认费用后直接弹出支付页面
                 if (null != dymOrder) {
                     bridge.doPay(dymOrder.orderShouldPay);
                 }
@@ -789,9 +793,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         bottomSheetDialog.setContentView(view);
         bottomSheetDialog.setCancelable(false);
-        bottomSheetDialog.setOnDismissListener(dialogInterface -> {
-            finish();
-        });
+        bottomSheetDialog.setOnDismissListener(dialogInterface -> finish());
         bottomSheetDialog.show();
     }
 
@@ -1019,10 +1021,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             @Override
             public void showCheating() {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//动态设置为竖屏
-                toolbar.setTitle(R.string.status_to_end);
+                toolbar.setTitle(R.string.zc_status_to_end);
                 CheatingFragment cheatingFragment = new CheatingFragment();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("zcOrder", DymOrder.findByIDType(orderId, Config.DAIJIA));
+                bundle.putSerializable("zcOrder", DymOrder.findByIDType(orderId, Config.ZHUANCHE));
                 cheatingFragment.setArguments(bundle);
                 cheatingFragment.setBridge(bridge);
 
@@ -1059,11 +1061,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void showToEndFragment() {
+        DymOrder order = DymOrder.findByIDType(orderId, Config.ZHUANCHE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);//动态设置为遵循传感器
-        toolbar.setTitle(R.string.status_to_end);
+        toolbar.setTitle(R.string.zc_status_to_end);
         runningFragment = new RunningFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("zcOrder", DymOrder.findByIDType(orderId, Config.DAIJIA));
+        bundle.putSerializable("zcOrder",order );
         runningFragment.setArguments(bundle);
         runningFragment.setBridge(bridge);
 
@@ -1189,6 +1192,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             if (null != marker) {
                 marker.setDraggable(false);
                 marker.setClickable(false);
+                marker.setAnchor(0.5f, 0.5f);
             }
         }
 

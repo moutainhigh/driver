@@ -1,24 +1,13 @@
 apply plugin: 'com.android.library'
 
-def cfg = rootProject.ext.android
-def libs = rootProject.ext.dependencies
-
 android {
-    compileSdkVersion cfg.compileSdkVersion
+    compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        minSdkVersion cfg.minSdkVersion
-        targetSdkVersion cfg.targetSdkVersion
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-        //解决在module中 buildconfig.debug总为false
-        //调试时如果该值为false,没有调用 ARouter.openDebug();
-        //不能正常跳转
-        defaultPublishConfig "debug"
-        multiDexEnabled true
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -41,32 +30,18 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-
-    api libs['appcompat-v7']
-    api libs['junit']
-    api libs['multidex']
-    api libs['design']
-    api libs['expandable-layout']
-
-    api libs['amap-search']
-    api libs['amap-navi']
-    api libs['amap-loc']
-
-    api libs['tag-view']
-
-    api 'com.skyfishjy.ripplebackground:library:1.0.1'
-
-    api 'com.github.ronaldsmartin:Material-ViewPagerIndicator:1.0.2'
-
-    api 'com.github.hackware1993:MagicIndicator:1.5.0'
-
-    api 'pl.droidsonroids.gif:android-gif-drawable:1.2.10'
-
-
-    annotationProcessor 'com.alibaba:arouter-compiler:1.1.3'
-    //annotationProcessor 'com.alibaba:arouter-compiler:1.1.3'  //在需要注册的module中引用
-    compile project(path: ':component')
+    api project(path: ':component')
+    api rootProject.ext.appcompat
+    api rootProject.ext.multidex
+    api rootProject.ext.design
+    api rootProject.ext.expandableLayout
+    api rootProject.ext.amapLoc
+    api rootProject.ext.amapSearch
+    api rootProject.ext.amapNavi
+    api rootProject.ext.tagView
+    api rootProject.ext.ripplebackground
+    api rootProject.ext.viewPagerIndicator
+    api rootProject.ext.magicIndicator
+    api rootProject.ext.gifDrawable
+    annotationProcessor rootProject.ext.aroutercompiler
 }

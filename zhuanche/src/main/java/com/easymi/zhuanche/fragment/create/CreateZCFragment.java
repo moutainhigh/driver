@@ -21,7 +21,6 @@ import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
-import com.easymi.component.widget.TimeDialog;
 import com.easymi.zhuanche.R;
 import com.easymi.zhuanche.entity.Budget;
 import com.easymi.zhuanche.entity.ZCType;
@@ -31,6 +30,7 @@ import com.easymi.zhuanche.result.BudgetResult;
 import com.easymi.zhuanche.result.ZCOrderResult;
 import com.easymi.zhuanche.result.ZCTypeResult;
 import com.easymi.zhuanche.result.PassengerResult;
+import com.easymi.zhuanche.widget.TimePicker2;
 
 import java.util.List;
 
@@ -51,6 +51,9 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
     TextView esMoney;
     TextView about;
     TextView unit;
+
+    private View llTime;
+    private View llTimeLine;
 
     Button createOrder;
     TabLayout tabLayout;
@@ -94,8 +97,8 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
         isPrepared = false;
         findById();
 
-        if(null == EmUtil.getEmployInfo().vehicle){
-            ToastUtil.showMessage(getActivity(),getString(R.string.no_car));
+        if (null == EmUtil.getEmployInfo().vehicle) {
+            ToastUtil.showMessage(getActivity(), getString(R.string.no_car));
             return;
         }
 
@@ -107,17 +110,19 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
 
     @Override
     public void findById() {
-        timeText = getActivity().findViewById(R.id.zc_time_text);
-        nameText = getActivity().findViewById(R.id.zc_name_text);
-        phoneText = getActivity().findViewById(R.id.zc_phone_text);
-        startPlace = getActivity().findViewById(R.id.zc_start_place);
-        endPlace = getActivity().findViewById(R.id.zc_end_place);
-        esMoney = getActivity().findViewById(R.id.zc_es_money_text);
-        createOrder = getActivity().findViewById(R.id.zc_create_order);
-        tabLayout = getActivity().findViewById(R.id.zc_sub_tab_layout);
-        esMoneyCon = getActivity().findViewById(R.id.zc_es_money_con);
-        about = getActivity().findViewById(R.id.zc_about);
-        unit = getActivity().findViewById(R.id.zc_unit);
+        timeText = $(R.id.zc_time_text);
+        nameText = $(R.id.zc_name_text);
+        phoneText = $(R.id.zc_phone_text);
+        startPlace = $(R.id.zc_start_place);
+        endPlace = $(R.id.zc_end_place);
+        esMoney = $(R.id.zc_es_money_text);
+        createOrder = $(R.id.zc_create_order);
+        tabLayout = $(R.id.zc_sub_tab_layout);
+        esMoneyCon = $(R.id.zc_es_money_con);
+        about = $(R.id.zc_about);
+        unit = $(R.id.zc_unit);
+        llTime = $(R.id.llTime);
+        llTimeLine = $(R.id.llTimeLine);
     }
 
     @Override
@@ -190,6 +195,26 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
 //                ToastUtil.showMessage(getActivity(), getString(R.string.no_budget));
 //                return;
 //            }
+
+            if (endPoi == null) {
+                ToastUtil.showMessage(getActivity(), getString(R.string.please_end));
+                return;
+            }
+
+            if (selectedZCType.isBook == 1) {
+                if (orderTime == null) {
+                    ToastUtil.showMessage(getActivity(), "选中时间无效,请重新选择时间");
+                    return;
+                }
+                //判断预约时间是否正确
+                long t = System.currentTimeMillis();
+                long preTime = selectedZCType.minBookTime * 60 * 1000 ;
+                if ((orderTime - t) < preTime) {
+                    ToastUtil.showMessage(getActivity(), "选中时间无效,请重新选择时间");
+                    return;
+                }
+            }
+
             presenter.createOrder(passenger.id, passenger.name, passenger.phone,
                     orderTime == null ? System.currentTimeMillis() / 1000 : orderTime / 1000, startPoi.getTitle(),
                     startPoi.getLatLonPoint().getLatitude(), startPoi.getLatLonPoint().getLongitude(),
@@ -205,6 +230,8 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
         return mRxManager;
     }
 
+    int preMin = 0;
+
     @Override
     public void showTypeTab(ZCTypeResult result) {
         tabLayout.removeAllTabs();
@@ -212,7 +239,19 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                timeText.setText(null);
+                orderTime = null;
                 selectedZCType = (ZCType) tab.getTag();
+                if (selectedZCType != null) {
+                    if (selectedZCType.isBook == 1) {
+                        preMin = selectedZCType.minBookTime;
+                        llTime.setVisibility(View.VISIBLE);
+                        llTimeLine.setVisibility(View.VISIBLE);
+                    } else {
+                        llTime.setVisibility(View.GONE);
+                        llTimeLine.setVisibility(View.GONE);
+                    }
+                }
                 getBudget();
             }
 
@@ -235,6 +274,20 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
             }
             tabLayout.addTab(tab);
         }
+
+        if (zcTypes.get(0) != null) {
+            ZCType type = zcTypes.get(0);
+            if (type.isBook == 1) {
+                preMin = type.minBookTime;
+                llTime.setVisibility(View.VISIBLE);
+                llTimeLine.setVisibility(View.VISIBLE);
+            } else {
+                orderTime = null;
+                llTime.setVisibility(View.GONE);
+                llTimeLine.setVisibility(View.GONE);
+            }
+        }
+
     }
 
     @Override
@@ -278,19 +331,11 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
 
     @Override
     public void showTimePickDialog(TextView tv) {
-
-        TimeDialog dialog = new TimeDialog(getActivity());
-        dialog.setOnTimeSelectListener((time, timeStr) -> {
-            if (timeStr.contains("现在")) {
-                orderTime = null;
-            } else {
-                orderTime = time;
-            }
+        new TimePicker2(getActivity(), preMin).setOnSelectListener((time, timeStr) -> {
+            orderTime = time;
             tv.setText(timeStr);
-            dialog.dismiss();
             getBudget();
-        });
-        dialog.show();
+        }).show();
     }
 
     @Override

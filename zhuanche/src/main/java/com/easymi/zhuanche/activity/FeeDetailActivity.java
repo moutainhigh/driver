@@ -82,6 +82,11 @@ public class FeeDetailActivity extends RxBaseActivity {
         minestFeeCon = findViewById(R.id.minest_fee_con);
         minestFeeText = findViewById(R.id.minest_fee);
 
+        TextView height_pay_fee = findViewById(R.id.height_pay_fee);
+        TextView low_pay_fee = findViewById(R.id.low_pay_fee);
+        TextView night_pay_fee = findViewById(R.id.night_pay_fee);
+
+
         dymOrder = (DymOrder) getIntent().getSerializableExtra("dymOrder");
         zcOrder = (ZCOrder) getIntent().getSerializableExtra("zcOrder");
         if (dymOrder == null || zcOrder == null) {
@@ -115,6 +120,12 @@ public class FeeDetailActivity extends RxBaseActivity {
             minestFeeCon.setVisibility(View.VISIBLE);
             minestFeeText.setText(String.valueOf(dymOrder.minestMoney) + getString(R.string.yuan));
         }
+
+
+        height_pay_fee.setText(dymOrder.peakCost + getString(R.string.yuan));
+        low_pay_fee.setText(dymOrder.lowSpeedCost + getString(R.string.yuan));
+        night_pay_fee.setText(dymOrder.nightPrice + getString(R.string.yuan));
+
 
         totalFee.setText(getString(R.string.money_sign) + dymOrder.orderShouldPay);
 

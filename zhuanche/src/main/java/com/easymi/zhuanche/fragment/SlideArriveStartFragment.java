@@ -48,11 +48,11 @@ public class SlideArriveStartFragment extends RxBaseFragment {
     }
 
     private void initView() {
-        startPlaceText = getActivity().findViewById(R.id.start_place);
-        endPlaceText = getActivity().findViewById(R.id.end_place);
-        slideView = getActivity().findViewById(R.id.slider);
-        changeEndCon = getActivity().findViewById(R.id.change_end_con);
-        callPhoneCon = getActivity().findViewById(R.id.call_phone_con);
+        startPlaceText = $(R.id.start_place);
+        endPlaceText = $(R.id.end_place);
+        slideView = $(R.id.slider);
+        changeEndCon = $(R.id.change_end_con);
+        callPhoneCon = $(R.id.call_phone_con);
 
         startPlaceText.setText(zcOrder.startPlace);
         endPlaceText.setText(zcOrder.endPlace);

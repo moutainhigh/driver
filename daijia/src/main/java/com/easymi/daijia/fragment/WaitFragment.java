@@ -53,16 +53,16 @@ public class WaitFragment extends RxBaseFragment {
         if (djOrder == null) {
             djOrder = new DymOrder();
         }
-        startDrive = getActivity().findViewById(R.id.start_drive);
-        waitTimeText = getActivity().findViewById(R.id.wait_time);
-        waitFeeText = getActivity().findViewById(R.id.wait_fee);
+        startDrive = $(R.id.start_drive);
+        waitTimeText = $(R.id.wait_time);
+        waitFeeText = $(R.id.wait_fee);
 
         waitFeeText.setText(djOrder.waitTimeFee + "");
         waitTimeText.setText(djOrder.waitTime + "");
 
         startDrive.setOnClickListener(view -> bridge.doStartDrive(startDrive));
 
-        getActivity().findViewById(R.id.change_end_con).setOnClickListener(view -> bridge.changeEnd());
+        $(R.id.change_end_con).setOnClickListener(view -> bridge.changeEnd());
     }
 
     public void showFee(DymOrder dymOrder) {

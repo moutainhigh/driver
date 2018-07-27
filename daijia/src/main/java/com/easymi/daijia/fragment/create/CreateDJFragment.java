@@ -23,9 +23,7 @@ import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
-import com.easymi.component.widget.CusBottomSheetDialog;
 import com.easymi.component.widget.TimeDialog;
-import com.easymi.component.widget.TimePickerView;
 import com.easymi.daijia.R;
 import com.easymi.daijia.entity.Budget;
 import com.easymi.daijia.entity.DJType;
@@ -106,17 +104,17 @@ public class CreateDJFragment extends RxLazyFragment implements CreateDJContract
 
     @Override
     public void findById() {
-        timeText = getActivity().findViewById(R.id.time_text);
-        nameText = getActivity().findViewById(R.id.name_text);
-        phoneText = getActivity().findViewById(R.id.phone_text);
-        startPlace = getActivity().findViewById(R.id.start_place);
-        endPlace = getActivity().findViewById(R.id.end_place);
-        esMoney = getActivity().findViewById(R.id.es_money_text);
-        createOrder = getActivity().findViewById(R.id.create_order);
-        tabLayout = getActivity().findViewById(R.id.sub_tab_layout);
-        esMoneyCon = getActivity().findViewById(R.id.es_money_con);
-        about = getActivity().findViewById(R.id.about);
-        unit = getActivity().findViewById(R.id.unit);
+        timeText = $(R.id.time_text);
+        nameText = $(R.id.name_text);
+        phoneText = $(R.id.phone_text);
+        startPlace = $(R.id.start_place);
+        endPlace = $(R.id.end_place);
+        esMoney = $(R.id.es_money_text);
+        createOrder = $(R.id.create_order);
+        tabLayout = $(R.id.sub_tab_layout);
+        esMoneyCon = $(R.id.es_money_con);
+        about = $(R.id.about);
+        unit = $(R.id.unit);
     }
 
     @Override

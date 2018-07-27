@@ -1,19 +1,14 @@
 apply plugin: 'com.android.application'
 
-def cfg = rootProject.ext.android
-def libs = rootProject.ext.dependencies
-
 android {
-    compileSdkVersion cfg.compileSdkVersion
+    compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.rvakva.travel.publicdriver"
-        minSdkVersion cfg.minSdkVersion
-        targetSdkVersion cfg.targetSdkVersion
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 280
         versionName "V5.0.0.009"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
-
 
         ndk {
             //只兼容下面的型号
@@ -30,24 +25,17 @@ android {
             v2SigningEnabled true
         }
         release {
-            keyAlias 'v5司机端'
+            keyAlias 'v5通用司机端'
             keyPassword 'easymin'
             storeFile file('v5签名信息.keystore')
             storePassword 'easymin'
             v1SigningEnabled true
             v2SigningEnabled true
         }
-        release {
-            keyAlias 'v5通用司机端'
-            keyPassword 'easymin'
-            storeFile file('v5签名信息.keystore')
-            storePassword 'easymin'
-        }
     }
 
     buildTypes {
         release {
-            //混淆
             minifyEnabled false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -56,10 +44,6 @@ android {
         debug {
             signingConfig signingConfigs.debug
         }
-    }
-
-    dexOptions {
-        javaMaxHeapSize "4g"
     }
 
     compileOptions {
@@ -71,12 +55,12 @@ android {
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
-
-    implementation libs["appcompat-v7"]
-    implementation libs["design"]
-
+    implementation rootProject.ext.appcompat
+    implementation rootProject.ext.design
     implementation project(path: ':personal')
     implementation project(path: ':daijia')
     implementation project(path: ':zhuanche')
     implementation project(path: ':daemon')
+    implementation project(path: ':component')
+    implementation project(path: ':common')
 }

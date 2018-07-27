@@ -5,14 +5,16 @@ import com.easymi.common.entity.PushBean;
 import com.easymi.common.entity.PushData;
 import com.easymi.common.entity.PushDataLoc;
 import com.easymi.common.entity.PushDataOrder;
-import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
 import com.easymi.component.entity.BaseEmploy;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
+import com.easymi.component.entity.Employ;
+import com.easymi.component.entity.PushEmploy;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.FileUtil;
 import com.easymi.component.utils.Log;
+import com.easymi.component.utils.LogUtil;
 import com.easymi.component.utils.StringUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -30,7 +32,27 @@ public class BuildPushUtil {
         PushData pushData = new PushData();
 
         EmLoc emLoc = buildPushData.emLoc;
-        pushData.employ = new BaseEmploy().employ2This();
+
+        //转换一下
+        BaseEmploy employ1 = new BaseEmploy().employ2This();
+        PushEmploy pe = null;
+        if (employ1 != null && employ1 instanceof Employ) {
+            Employ employ = (Employ) employ1;
+            pe = new PushEmploy();
+            pe.child_type = employ.child_type;
+            pe.id = employ.id;
+            pe.status = employ.status;
+            pe.real_name = employ.real_name;
+            pe.company_id = employ.company_id;
+            pe.phone = employ.phone;
+            pe.child_type = employ.child_type;
+            pe.business = employ.service_type;
+            if (employ.vehicle != null) {
+                pe.model_id = employ.vehicle.vehicleId;
+            }
+        }
+
+        pushData.employ = pe;
         pushData.calc = new PushDataLoc();
         pushData.calc.lat = emLoc.latitude;
         pushData.calc.lng = emLoc.longitude;
@@ -58,7 +80,7 @@ public class BuildPushUtil {
                 } else if (dymOrder.orderStatus == DJOrderStatus.START_WAIT_ORDER) {//中途等待
                     dataOrder.status = 3;
                 }
-            }else if(dymOrder.orderType.equals("zhuanche")){
+            } else if (dymOrder.orderType.equals("zhuanche")) {
                 // TODO: 2018/5/23 专车
                 if (dymOrder.orderStatus < DJOrderStatus.GOTO_DESTINATION_ORDER) {//出发前
                     dataOrder.status = 1;

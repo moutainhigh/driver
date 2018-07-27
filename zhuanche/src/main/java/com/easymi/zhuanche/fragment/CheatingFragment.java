@@ -72,18 +72,18 @@ public class CheatingFragment extends RxBaseFragment {
 
         decimalFormat.setRoundingMode(RoundingMode.DOWN);
 
-        currentMileageTxt = getActivity().findViewById(R.id.current_mileage);
-        currentFeeTxt = getActivity().findViewById(R.id.current_fee);
-        mileageSubBtn = getActivity().findViewById(R.id.mileage_sub);
-        mileageAddBtn = getActivity().findViewById(R.id.mileage_add);
-        feeSubBtn = getActivity().findViewById(R.id.fee_sub);
-        feeAddBtn = getActivity().findViewById(R.id.fee_add);
-        sureChangeBtn = getActivity().findViewById(R.id.sure_change);
-        cancelChangeBtn = getActivity().findViewById(R.id.cancel_change);
-        mileageEdit = getActivity().findViewById(R.id.mileage_edit);
-        feeEdit = getActivity().findViewById(R.id.fee_edit);
-        changeEndCon = getActivity().findViewById(R.id.change_end_con);
-        getActivity().findViewById(R.id.change_end_con).setOnClickListener(view -> bridge.changeEnd());
+        currentMileageTxt = $(R.id.current_mileage);
+        currentFeeTxt = $(R.id.current_fee);
+        mileageSubBtn = $(R.id.mileage_sub);
+        mileageAddBtn = $(R.id.mileage_add);
+        feeSubBtn = $(R.id.fee_sub);
+        feeAddBtn = $(R.id.fee_add);
+        sureChangeBtn = $(R.id.sure_change);
+        cancelChangeBtn = $(R.id.cancel_change);
+        mileageEdit = $(R.id.mileage_edit);
+        feeEdit = $(R.id.fee_edit);
+        changeEndCon = $(R.id.change_end_con);
+        $(R.id.change_end_con).setOnClickListener(view -> bridge.changeEnd());
 
         DecimalFormat df1 = new DecimalFormat("#0.0");
         currentMileageTxt.setText("" + (zcOrder.distance - zcOrder.addedKm));

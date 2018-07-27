@@ -66,7 +66,7 @@ public class Vehicle {
 
         /*
          * values.put("age", age); values.put("jialing", jialing);
-		 */
+         */
         boolean flag = db.insert("t_Vehicle", null, values) != -1;
         return flag;
     }
@@ -91,7 +91,7 @@ public class Vehicle {
 
         /*
          * values.put("age", age); values.put("jialing", jialing);
-		 */
+         */
         boolean flag = db.update("t_Vehicle", values, " employId = ? ",
                 new String[]{String.valueOf(employId)}) == 1;
         return flag;
@@ -139,16 +139,13 @@ public class Vehicle {
     public static boolean exists(Long employId) {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
-        Cursor cursor = db.rawQuery(
-                "select count(*) from t_Vehicle where employId = ? ",
-                new String[]{String.valueOf(employId)});
         boolean flag = false;
-        try {
+        try (Cursor cursor = db.rawQuery("select count(*) from t_Vehicle where employId = ? ", new String[]{String.valueOf(employId)})) {
             if (cursor.moveToNext()) {
                 flag = (cursor.getInt(0) == 1);
             }
-        } finally {
-            cursor.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return flag;
     }

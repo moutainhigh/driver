@@ -433,7 +433,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
 
         MarkerOptions options = new MarkerOptions();
         options.position(new LatLng(start.getLatitude(), start.getLongitude()));
-        options.anchor(0.5f, 0.5f);
+        options.anchor(0.5f, 1f);
         options.rotateAngle(EmUtil.getLastLoc().bearing);
         options.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                 .decodeResource(getResources(), R.mipmap.ic_start)));
@@ -447,7 +447,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
             for (LatLonPoint latLonPoint : pass) {
                 MarkerOptions options = new MarkerOptions();
                 options.position(new LatLng(latLonPoint.getLatitude(), latLonPoint.getLongitude()));
-                options.anchor(0.5f, 0.5f);
+                options.anchor(0.5f, 1f);
                 options.rotateAngle(EmUtil.getLastLoc().bearing);
                 options.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                         .decodeResource(getResources(), R.mipmap.ic_pass)));
@@ -465,7 +465,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
 
         MarkerOptions options = new MarkerOptions();
         options.position(new LatLng(end.getLatitude(), end.getLongitude()));
-        options.anchor(0.5f, 0.5f);
+        options.anchor(0.5f, 1f);
         options.rotateAngle(EmUtil.getLastLoc().bearing);
         options.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                 .decodeResource(getResources(), R.mipmap.ic_end)));

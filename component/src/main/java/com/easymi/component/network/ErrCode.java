@@ -617,11 +617,11 @@ public enum ErrCode {
     /**
      * 该服务人员已绑定其他设备
      */
-    EMPLOY_DEVICE_ERROR(30049, "该服务人员已绑定其他设备"),
+    EMPLOY_DEVICE_ERROR(30049, "您已绑定其他设备"),
     /**
      * 该服务人员已存在执行中的订单，不能再次接单
      */
-    DRIVER_GOTO_PRE_ORDER_CODE(30050, "该服务人员已存在执行中的订单，不能再次接单"),
+    DRIVER_GOTO_PRE_ORDER_CODE(30050, "您已存在执行中的订单，不能再次接单"),
     /**
      * 差一点就抢到了
      */
@@ -629,7 +629,7 @@ public enum ErrCode {
     /**
      * 该服务人员已存在执行中的订单，不能再次补单
      */
-    DRIVER_HAVE_ORDER_CODE(30052, "该服务人员已存在执行中的订单，不能再次补单"),
+    DRIVER_HAVE_ORDER_CODE(30052, "您已存在执行中的订单，不能再次补单"),
     /**
      * 服务人员不存在
      */
@@ -637,7 +637,12 @@ public enum ErrCode {
     /**
      * 服务人员还有订单未完成
      */
-    EMPLOY_HAS_ORDERS_TODO(31004, "服务人员还有订单未完成");
+    EMPLOY_HAS_ORDERS_TODO(31004, "您还有订单未完成"),
+
+    /**
+     * 车辆正在使用.
+     */
+    VEHICLE_IS_BUSY(31054, "车辆正在使用");
 
     private int code;
     private String showMsg;
