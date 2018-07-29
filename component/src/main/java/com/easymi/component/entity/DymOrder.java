@@ -102,9 +102,9 @@ public class DymOrder implements Serializable {
     @SerializedName("low_speed_cost")
     public double lowSpeedCost;
 
-    //时间费
+    //低速时间
     @SerializedName("low_speed_time")
-    public double lowSpeedTime;
+    public int lowSpeedTime;
 
     //作弊增加的里程
     public int addedKm; //数据源来自于本地调价 不会来自后端
@@ -298,7 +298,7 @@ public class DymOrder implements Serializable {
         orderInfo.peakCost = cursor.getDouble(cursor.getColumnIndex("peakCost"));
         orderInfo.nightPrice = cursor.getDouble(cursor.getColumnIndex("nightPrice"));
         orderInfo.lowSpeedCost = cursor.getDouble(cursor.getColumnIndex("lowSpeedCost"));
-        orderInfo.lowSpeedTime = cursor.getDouble(cursor.getColumnIndex("lowSpeedTime"));
+        orderInfo.lowSpeedTime = cursor.getInt(cursor.getColumnIndex("lowSpeedTime"));
 
         return orderInfo;
     }

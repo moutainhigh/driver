@@ -112,7 +112,7 @@ public interface WorkContract {
 
         Observable<WorkStatisticsResult> getDriverStatistics(Long id, String nowDate, int isOnline);
 
-        Observable<NearDriverResult> queryNearDriver(Long driverId, Double lat, Double lng, Double distance);
+        Observable<NearDriverResult> queryNearDriver(Long driverId, Double lat, Double lng, Double distance,String business);
 
         Observable<LoginResult> getEmploy(Long driverId, String appKey);
 

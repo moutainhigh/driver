@@ -236,7 +236,7 @@ public class WorkPresenter implements WorkContract.Presenter {
         long driverId = EmUtil.getEmployId();
         double dis = driverKm <= 0 ? 20 : driverKm;
 
-        Observable<NearDriverResult> observable = model.queryNearDriver(driverId, lat, lng, dis);
+        Observable<NearDriverResult> observable = model.queryNearDriver(driverId, lat, lng, dis, employType);
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
                 true, nearDriverResult -> {
             if (null != nearDriverResult.emploies && nearDriverResult.emploies.size() != 0) {
@@ -326,6 +326,9 @@ public class WorkPresenter implements WorkContract.Presenter {
         }
     }
 
+    //表示司机业务
+    private String employType;
+
     @Override
     public void loadEmploy(long id) {
 
@@ -335,6 +338,7 @@ public class WorkPresenter implements WorkContract.Presenter {
             @Override
             public void onNext(LoginResult result) {
                 Employ employ = result.getEmployInfo();
+                employType = employ.service_type;
                 String udid = XApp.getMyPreferences().getString(Config.SP_UDID, "");
                 if (StringUtils.isNotBlank(employ.device_no)
                         && StringUtils.isNotBlank(udid)) {
@@ -362,6 +366,8 @@ public class WorkPresenter implements WorkContract.Presenter {
 
     //查询附近司机的距离
     private double driverKm = 20;
+    //能拨打电话
+    boolean canCallPhone = true;
 
     @Override
     public void getAppSetting() {
@@ -385,6 +391,9 @@ public class WorkPresenter implements WorkContract.Presenter {
                 systemConfig.payMoney2 = 100;
                 systemConfig.payMoney3 = 200;
             }
+
+            canCallPhone = systemConfig.canCallDriver == 1;
+
             systemConfig.save();
         })));
     }

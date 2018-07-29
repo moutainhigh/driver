@@ -134,7 +134,7 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
         if (zcOrder == null) {
             return;
         }
-        if (orderId == zcOrder.orderId && orderType.equals(Config.DAIJIA)) {
+        if (orderId == zcOrder.orderId && orderType.equals(Config.ZHUANCHE)) {
             showView();
         }
     }
@@ -359,7 +359,7 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
     }
 
     private void showView() {
-        DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
+        DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.ZHUANCHE);
         if (dymOrder == null) {
             return;
         }

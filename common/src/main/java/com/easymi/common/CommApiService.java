@@ -67,13 +67,12 @@ public interface CommApiService {
      * @return
      */
     @GET("driver/api/v1/getNearDrivers")
-    Observable<NearDriverResult> getNearDrivers(
-            @Query("driver_id") Long driverId,
-            @Query("lat") Double lat,
-            @Query("lng") Double lng,
-            @Query("distance") Double distance,
-            @Query("app_key") String appKey
-    );
+    Observable<NearDriverResult> getNearDrivers(@Query("driver_id") Long driverId,
+                                                @Query("lat") Double lat,
+                                                @Query("lng") Double lng,
+                                                @Query("distance") Double distance,
+                                                @Query("business") String business,
+                                                @Query("app_key") String appKey);
 
     /**
      * 查询未支付和已完成订单
@@ -108,9 +107,9 @@ public interface CommApiService {
      */
     @GET("/driver/api/v1/notices")
     Observable<NotitfyResult> loadNotice(@Query("driver_id") Long driverId,
-                                       @Query("app_key") String appKey,
-                                       @Query("page") Integer page,
-                                       @Query("limit") Integer limit);
+                                         @Query("app_key") String appKey,
+                                         @Query("page") Integer page,
+                                         @Query("limit") Integer limit);
 
 
     /**
@@ -124,9 +123,9 @@ public interface CommApiService {
      */
     @GET("/driver/api/v1/employAffiches")
     Observable<AnnouncementResult> loadAnn(@Query("company_id") Long companyId,
-                                                  @Query("app_key") String appKey,
-                                                  @Query("page") Integer page,
-                                                  @Query("limit") Integer limit
+                                           @Query("app_key") String appKey,
+                                           @Query("page") Integer page,
+                                           @Query("limit") Integer limit
     );
 
     /**

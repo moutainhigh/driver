@@ -698,7 +698,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        if (StringUtils.isNotBlank(marker.getTitle())) {
+        if (StringUtils.isNotBlank(marker.getTitle()) && presenter.canCallPhone) {
             PhoneUtil.call(this, marker.getTitle());
         }
         return true;

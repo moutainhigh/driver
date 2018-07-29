@@ -81,9 +81,9 @@ public class WorkModel implements WorkContract.Model {
     }
 
     @Override
-    public Observable<NearDriverResult> queryNearDriver(Long driverId, Double lat, Double lng, Double distance) {
+    public Observable<NearDriverResult> queryNearDriver(Long driverId, Double lat, Double lng, Double distance, String business) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .getNearDrivers(driverId, lat, lng, distance, EmUtil.getAppKey())
+                .getNearDrivers(driverId, lat, lng, distance, business, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

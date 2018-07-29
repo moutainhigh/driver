@@ -149,7 +149,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("peakCost").append(" ").append("DOUBLE").append(",")
                 .append("nightPrice").append(" ").append("DOUBLE").append(",")
                 .append("lowSpeedCost").append(" ").append("DOUBLE").append(",")
-                .append("lowSpeedTime").append(" ").append("DOUBLE").append(",")
+                .append("lowSpeedTime").append(" ").append("INTEGER").append(",")
 
                 .append("orderStatus").append(" ").append("INTEGER")
                 .append(");");

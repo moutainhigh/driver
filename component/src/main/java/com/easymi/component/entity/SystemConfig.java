@@ -37,8 +37,9 @@ public class SystemConfig {
     @SerializedName("employ_money_3")
     public double payMoney3;//充值金额3
 
+    //能否拨打附近司机电话,1允许,2不允许
     @SerializedName("allow_employ_phone")
-    public int canCallDriver;//能否拨打附近司机电话
+    public int canCallDriver;
 
     public String payType;//可以支付的类型
 

@@ -54,6 +54,11 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
     public void onBindViewHolder(Holder holder, int position) {
         BaseOrder baseOrder = baseOrders.get(position);
         String typeStr = baseOrder.orderDetailType;
+        if (baseOrder.orderType.equals(Config.DAIJIA)) {
+            typeStr = "代驾-" + typeStr;
+        } else if (baseOrder.orderType.equals(Config.ZHUANCHE)) {
+            typeStr = "专车-" + typeStr;
+        }
         holder.orderType.setText(typeStr);
         holder.orderEndPlace.setText(baseOrder.endPlace);
         holder.orderStartPlace.setText(baseOrder.startPlace);

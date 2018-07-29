@@ -35,7 +35,6 @@ import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.EmployStatus;
 
@@ -110,6 +109,8 @@ public class HandlePush implements FeeChangeSubject {
                 String orderType = jb.optJSONObject("data").optString("OrderType");
                 DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
                 if (dymOrder != null) {
+
+
                     dymOrder.startFee = jb.optJSONObject("data").optDouble("StartPrice");
                     dymOrder.waitTime = jb.optJSONObject("data").optInt("WaitTime") / 60;
                     dymOrder.waitTimeFee = jb.optJSONObject("data").optDouble("WaitTimeFee");
@@ -121,6 +122,11 @@ public class HandlePush implements FeeChangeSubject {
 
                     dymOrder.disFee = jb.optJSONObject("data").optDouble("MileageCost");
                     dymOrder.distance = jb.optJSONObject("data").optDouble("Mileges");
+
+                    dymOrder.peakCost = jb.optJSONObject("data").optDouble("PeakCost");
+                    dymOrder.nightPrice = jb.optJSONObject("data").optDouble("NightPrice");
+                    dymOrder.lowSpeedCost = jb.optJSONObject("data").optDouble("LowSpeedCost");
+                    dymOrder.lowSpeedTime = jb.optJSONObject("data").getInt("LowSpeedTime")/60;
 
                     DecimalFormat decimalFormat = new DecimalFormat("#0.0");
                     decimalFormat.setRoundingMode(RoundingMode.DOWN);

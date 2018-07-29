@@ -48,7 +48,7 @@ public class BuildPushUtil {
             pe.child_type = employ.child_type;
             pe.business = employ.service_type;
             if (employ.vehicle != null) {
-                pe.model_id = employ.vehicle.vehicleId;
+                pe.model_id = employ.vehicle.serviceType;
             }
         }
 
