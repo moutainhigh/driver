@@ -106,6 +106,18 @@ public class DymOrder implements Serializable {
     @SerializedName("low_speed_time")
     public int lowSpeedTime;
 
+    //高峰里程
+    public double peakMile;
+
+    //夜间时间
+    public int nightTime;
+
+    //夜间里程
+    public double nightMile;
+
+    //夜间时间费用
+    public double nightTimePrice;
+
     //作弊增加的里程
     public int addedKm; //数据源来自于本地调价 不会来自后端
 
@@ -158,6 +170,10 @@ public class DymOrder implements Serializable {
         values.put("nightPrice", nightPrice);
         values.put("lowSpeedCost", lowSpeedCost);
         values.put("lowSpeedTime", lowSpeedTime);
+        values.put("peakMile", peakMile);
+        values.put("nightTime", nightTime);
+        values.put("nightMile", nightMile);
+        values.put("nightTimePrice", nightTimePrice);
 
 //        values.put("addedKm", addedKm);
 //        values.put("addedFee", addedFee);
@@ -300,6 +316,11 @@ public class DymOrder implements Serializable {
         orderInfo.lowSpeedCost = cursor.getDouble(cursor.getColumnIndex("lowSpeedCost"));
         orderInfo.lowSpeedTime = cursor.getInt(cursor.getColumnIndex("lowSpeedTime"));
 
+        orderInfo.peakMile = cursor.getDouble(cursor.getColumnIndex("peakMile"));
+        orderInfo.nightTime = cursor.getInt(cursor.getColumnIndex("nightTime"));
+        orderInfo.nightMile = cursor.getInt(cursor.getColumnIndex("nightMile"));
+        orderInfo.nightTimePrice = cursor.getDouble(cursor.getColumnIndex("nightTimePrice"));
+
         return orderInfo;
     }
 
@@ -345,6 +366,12 @@ public class DymOrder implements Serializable {
         values.put("lowSpeedCost", lowSpeedCost);
         values.put("lowSpeedTime", lowSpeedTime);
 
+        values.put("peakMile", peakMile);
+        values.put("nightTime", nightTime);
+        values.put("nightMile", nightMile);
+        values.put("nightTimePrice", nightTimePrice);
+
+
 //        values.put("addedKm", addedKm);
 //        values.put("addedFee", addedFee);
         /*
@@ -374,6 +401,11 @@ public class DymOrder implements Serializable {
         values.put("nightPrice", nightPrice);
         values.put("lowSpeedCost", lowSpeedCost);
         values.put("lowSpeedTime", lowSpeedTime);
+
+        values.put("peakMile", peakMile);
+        values.put("nightTime", nightTime);
+        values.put("nightMile", nightMile);
+        values.put("nightTimePrice", nightTimePrice);
 
 //        values.put("addedKm", addedKm);
 //        values.put("addedFee", addedFee);

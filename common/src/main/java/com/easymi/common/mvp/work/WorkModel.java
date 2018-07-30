@@ -13,6 +13,7 @@ import com.easymi.component.Config;
 import com.easymi.component.entity.SystemConfig;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
+import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
 
@@ -115,4 +116,15 @@ public class WorkModel implements WorkContract.Model {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    @Override
+    public Observable<EmResult> readOne(long id) {
+        return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .readNotice(id, EmUtil.getAppKey())
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+
 }

@@ -11,6 +11,8 @@ import java.util.List;
  */
 
 public class AnnouncementResult extends EmResult{
+
+    @SerializedName("employ_affiches")
     public List<AnnAndNotice> employAffiches;
     public int total;
 

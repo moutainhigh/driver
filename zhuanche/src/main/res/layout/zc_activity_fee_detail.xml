@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="#f7f7f7"
     android:orientation="vertical">
 
@@ -180,16 +181,17 @@
         android:padding="5dp">
 
         <TextView
+            android:id="@+id/height_fee_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="高峰费" />
+            tools:text="高峰费(0公里)" />
 
         <TextView
             android:id="@+id/height_pay_fee"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="0元" />
+            tools:text="0元" />
 
     </RelativeLayout>
 
@@ -201,16 +203,39 @@
         android:padding="5dp">
 
         <TextView
+            android:id="@+id/night_fee_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="夜间费" />
+            tools:text="夜间里程费(0公里)" />
 
         <TextView
             android:id="@+id/night_pay_fee"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="0元" />
+            tools:text="0元" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/night_time_fee_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="夜间时间费(0分钟)" />
+
+        <TextView
+            android:id="@+id/night_time_fee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            tools:text="0元" />
 
     </RelativeLayout>
 
@@ -223,16 +248,17 @@
         android:padding="5dp">
 
         <TextView
+            android:id="@+id/low_fee_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="低速费" />
+            tools:text="低速费(0分钟)" />
 
         <TextView
             android:id="@+id/low_pay_fee"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="0元" />
+            tools:text="0元" />
 
     </RelativeLayout>
 

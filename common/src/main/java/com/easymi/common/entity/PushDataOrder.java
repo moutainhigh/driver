@@ -25,4 +25,20 @@ public class PushDataOrder {
 
 
     public int status;//订单状态(出发前1，行驶中2，等待中3)
+
+    @SerializedName("peak_mile")
+    public double peakMile;
+
+    @SerializedName("night_time")
+    public int nightTime;
+
+    @SerializedName("night_mile")
+    public double nightMile;
+
+    @SerializedName("night_time_price")
+    public double nightTimePrice;
+
+
+
+
 }

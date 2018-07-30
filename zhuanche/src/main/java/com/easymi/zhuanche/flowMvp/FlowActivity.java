@@ -1020,19 +1020,19 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void showCheating() {
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//动态设置为竖屏
-                toolbar.setTitle(R.string.zc_status_to_end);
-                CheatingFragment cheatingFragment = new CheatingFragment();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("zcOrder", DymOrder.findByIDType(orderId, Config.ZHUANCHE));
-                cheatingFragment.setArguments(bundle);
-                cheatingFragment.setBridge(bridge);
-
-                FragmentManager manager = getSupportFragmentManager();
-                FragmentTransaction transaction = manager.beginTransaction();
-                transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
-                transaction.replace(R.id.flow_frame, cheatingFragment);
-                transaction.commit();
+//                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//动态设置为竖屏
+//                toolbar.setTitle(R.string.zc_status_to_end);
+//                CheatingFragment cheatingFragment = new CheatingFragment();
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("zcOrder", DymOrder.findByIDType(orderId, Config.ZHUANCHE));
+//                cheatingFragment.setArguments(bundle);
+//                cheatingFragment.setBridge(bridge);
+//
+//                FragmentManager manager = getSupportFragmentManager();
+//                FragmentTransaction transaction = manager.beginTransaction();
+//                transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+//                transaction.replace(R.id.flow_frame, cheatingFragment);
+//                transaction.commit();
             }
 
             @Override

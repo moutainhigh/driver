@@ -12,11 +12,11 @@ public class Announcement {
     @SerializedName("created")
     public long time;
 
-    @SerializedName("Affiche_title")
+    @SerializedName("affiche_title")
     public String message;
 
     public String url;
 
-    @SerializedName("Affiche_content")
+    @SerializedName("affiche_content")
     public String content;
 }

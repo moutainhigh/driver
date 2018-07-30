@@ -150,6 +150,10 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("nightPrice").append(" ").append("DOUBLE").append(",")
                 .append("lowSpeedCost").append(" ").append("DOUBLE").append(",")
                 .append("lowSpeedTime").append(" ").append("INTEGER").append(",")
+                .append("peakMile").append(" ").append("DOUBLE").append(",")
+                .append("nightTime").append(" ").append("INTEGER").append(",")
+                .append("nightMile").append(" ").append("DOUBLE").append(",")
+                .append("nightTimePrice").append(" ").append("DOUBLE").append(",")
 
                 .append("orderStatus").append(" ").append("INTEGER")
                 .append(");");

@@ -642,7 +642,9 @@ public enum ErrCode {
     /**
      * 车辆正在使用.
      */
-    VEHICLE_IS_BUSY(31054, "车辆正在使用");
+    VEHICLE_IS_BUSY(31054, "车辆正在使用"),
+
+    NO_VEHICLE_CANNOT_ONLINE(31041, "您还未绑定车辆，请联系管理员");
 
     private int code;
     private String showMsg;

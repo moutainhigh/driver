@@ -365,7 +365,7 @@ public class WorkPresenter implements WorkContract.Presenter {
     }
 
     //查询附近司机的距离
-    private double driverKm = 20;
+    private double driverKm = 0;
     //能拨打电话
     boolean canCallPhone = true;
 
@@ -429,12 +429,21 @@ public class WorkPresenter implements WorkContract.Presenter {
                 noticeHeader.type = 1;
                 noticeHeader.viewType = AnnAndNotice.ITEM_HEADER;
                 list.add(noticeHeader);
+                boolean have = false;
                 for (AnnAndNotice record : notitfyResult.employNoticeRecords) {
-                    record.type = 1;
-                    record.viewType = MultipleOrder.ITEM_POSTER;
-                    list.add(record);
+                    if (record.state == 1) {
+                        have = true;
+                        record.type = 1;
+                        record.viewType = MultipleOrder.ITEM_POSTER;
+                        list.add(record);
+                    }
+                }
+
+                if (!have) {
+                    list.remove(list.size() - 1);
                 }
             }
+
             return list;
         })
                 .subscribe(new MySubscriber<>(context, false, false, new HaveErrSubscriberListener<List<AnnAndNotice>>() {
@@ -449,4 +458,17 @@ public class WorkPresenter implements WorkContract.Presenter {
                     }
                 }));
     }
+
+
+    public void deleteNotice(long id) {
+        if (id == 0) {
+            return;
+        }
+        Observable<EmResult> observable = model.readOne(id);
+        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
+                true, result -> {
+                //do nothing
+        })));
+    }
+
 }

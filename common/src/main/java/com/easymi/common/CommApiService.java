@@ -283,4 +283,18 @@ public interface CommApiService {
      */
     @GET("driver/api/v1/systemConfig")
     Observable<SystemResult> getSysCofig(@Query("app_key") String appKey);
+
+
+    /**
+     * 读一个通知
+     *
+     * @param id
+     * @param appKey
+     * @return
+     */
+    @FormUrlEncoded
+    @PUT("/driver/api/v1/readNotice")
+    Observable<EmResult> readNotice(@Field("id") Long id,
+                                    @Field("app_key") String appKey);
+
 }

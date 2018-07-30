@@ -171,7 +171,11 @@ public interface ZCApiService {
                                                  @Field("peak_cost") double peakCost,
                                                  @Field("night_price") double nightPrice,
                                                  @Field("low_speed_cost") double lowSpeedCost,
-                                                 @Field("low_speed_time") double lowSpeedTime);
+                                                 @Field("low_speed_time") double lowSpeedTime,
+                                                 @Field("peak_mile") double peakMile,
+                                                 @Field("night_time") int nightTime,
+                                                 @Field("night_mile") double nightMile,
+                                                 @Field("night_time_price") double nightTimePrice);
 
     /**
      * 结算订单  /api/v1/finishOrder  PUT  id  int  是  订单id

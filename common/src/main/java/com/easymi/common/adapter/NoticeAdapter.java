@@ -10,9 +10,8 @@ import com.easymi.common.R;
 import com.easymi.common.entity.AnnAndNotice;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.component.app.XApp;
-import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.TimeUtil;
-import com.easymi.component.widget.SwipeLayout;
+import com.easymi.component.widget.SwipeMenuLayout;
 
 import java.util.List;
 
@@ -35,7 +34,6 @@ public class NoticeAdapter extends BaseMultiItemQuickAdapter<AnnAndNotice, BaseV
 
     @Override
     protected void convert(BaseViewHolder helper, AnnAndNotice item) {
-
         if (item.viewType == AnnAndNotice.ITEM_HEADER) {
             if (item.type == 0) {
                 helper.setText(R.id.pinned_text, XApp.getInstance().getString(R.string.home_gonggao));
@@ -45,17 +43,23 @@ public class NoticeAdapter extends BaseMultiItemQuickAdapter<AnnAndNotice, BaseV
         } else if (item.viewType == AnnAndNotice.ITEM_POSTER) {
             ViewHolder holder = new ViewHolder(helper.itemView);
             if (item.type == 0) {
+                holder.swipeLayout.setSwipeEnable(false);
                 holder.title.setVisibility(View.GONE);
                 holder.content.setText(item.annMessage);
             } else {
                 holder.title.setVisibility(View.VISIBLE);
                 holder.content.setText(item.noticeContent);
                 holder.title.setText(item.noticeTitle);
+                holder.swipeLayout.setSwipeEnable(true);
             }
 
             holder.time.setText(TimeUtil.getTime(XApp.getInstance().getString(R.string.date_unit), item.time * 1000));
 
             holder.deleteFrame.setOnClickListener(view -> {
+                holder.swipeLayout.quickClose();
+                if (onDeleteNoticeListener != null && item.type != 0) {
+                    onDeleteNoticeListener.ondeletenotice(item.id);
+                }
                 remove(helper.getAdapterPosition());
                 notifyDataSetChanged();
             });
@@ -63,7 +67,7 @@ public class NoticeAdapter extends BaseMultiItemQuickAdapter<AnnAndNotice, BaseV
     }
 
     class ViewHolder {
-        SwipeLayout swipeLayout;
+        SwipeMenuLayout swipeLayout;
         TextView title;
         TextView content;
         TextView time;
@@ -77,4 +81,16 @@ public class NoticeAdapter extends BaseMultiItemQuickAdapter<AnnAndNotice, BaseV
             deleteFrame = itemView.findViewById(R.id.delete_frame);
         }
     }
+
+    private OnDeleteNoticeListener onDeleteNoticeListener;
+
+    public void setOnDeleteNoticeListener(OnDeleteNoticeListener listener) {
+        this.onDeleteNoticeListener = listener;
+    }
+
+    public interface OnDeleteNoticeListener {
+        public void ondeletenotice(long id);
+    }
+
+
 }

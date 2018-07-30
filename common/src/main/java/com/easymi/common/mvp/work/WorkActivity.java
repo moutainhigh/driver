@@ -34,6 +34,7 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.easymi.common.R;
 import com.easymi.common.activity.CreateActivity;
 import com.easymi.common.activity.ModelSetActivity;
@@ -482,6 +483,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         if (null != annAndNoticeList && annAndNoticeList.size() != 0) {
             hideEmpty();
             noticeAdapter = new NoticeAdapter(annAndNoticeList);
+            noticeAdapter.setOnDeleteNoticeListener(id -> presenter.deleteNotice(id));
             recyclerView.setAdapter(noticeAdapter);
             PinnedHeaderDecoration pinnedHeaderDecoration = new PinnedHeaderDecoration();
             //设置只有RecyclerItem.ITEM_HEADER的item显示标签
@@ -657,7 +659,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
                 LatLng current = new LatLng(location.latitude, location.longitude);
                 double dis = AMapUtils.calculateLineDistance(last, current);
                 if (dis > 30) {//大于30米重新加载司机
-                    if(isFront){//activity可见时才调用该接口
+                    if (isFront) {//activity可见时才调用该接口
                         presenter.queryNearDriver(location.latitude, location.longitude);
                     }
                 }

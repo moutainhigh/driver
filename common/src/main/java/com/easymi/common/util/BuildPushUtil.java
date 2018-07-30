@@ -81,7 +81,6 @@ public class BuildPushUtil {
                     dataOrder.status = 3;
                 }
             } else if (dymOrder.orderType.equals("zhuanche")) {
-                // TODO: 2018/5/23 专车
                 if (dymOrder.orderStatus < DJOrderStatus.GOTO_DESTINATION_ORDER) {//出发前
                     dataOrder.status = 1;
                 } else if (dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {//行驶中
@@ -89,6 +88,10 @@ public class BuildPushUtil {
                 } else if (dymOrder.orderStatus == DJOrderStatus.START_WAIT_ORDER) {//中途等待
                     dataOrder.status = 3;
                 }
+                dataOrder.peakMile = dymOrder.peakMile;
+                dataOrder.nightTime = dymOrder.nightTime;
+                dataOrder.nightMile = dymOrder.nightMile;
+                dataOrder.nightTimePrice = dymOrder.nightTimePrice;
             }
             if (dataOrder.status != 0) {
                 orderList.add(dataOrder);

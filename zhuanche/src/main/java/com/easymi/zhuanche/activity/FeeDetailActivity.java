@@ -83,8 +83,17 @@ public class FeeDetailActivity extends RxBaseActivity {
         minestFeeText = findViewById(R.id.minest_fee);
 
         TextView height_pay_fee = findViewById(R.id.height_pay_fee);
-        TextView low_pay_fee = findViewById(R.id.low_pay_fee);
+        TextView height_fee_title = findViewById(R.id.height_fee_title);
+
+        TextView night_fee_title = findViewById(R.id.night_fee_title);
         TextView night_pay_fee = findViewById(R.id.night_pay_fee);
+
+        TextView night_time_fee_title = findViewById(R.id.night_time_fee_title);
+        TextView night_time_fee = findViewById(R.id.night_time_fee);
+
+
+        TextView low_fee_title = findViewById(R.id.low_fee_title);
+        TextView low_pay_fee = findViewById(R.id.low_pay_fee);
 
 
         dymOrder = (DymOrder) getIntent().getSerializableExtra("dymOrder");
@@ -122,10 +131,17 @@ public class FeeDetailActivity extends RxBaseActivity {
         }
 
 
+        height_fee_title.setText("高峰费(" + dymOrder.peakMile + "公里)");
         height_pay_fee.setText(dymOrder.peakCost + getString(R.string.yuan));
-        low_pay_fee.setText(dymOrder.lowSpeedCost + getString(R.string.yuan));
+
+        night_fee_title.setText("夜间里程费(" + dymOrder.nightMile + "公里)");
         night_pay_fee.setText(dymOrder.nightPrice + getString(R.string.yuan));
 
+        night_time_fee_title.setText("夜间时间费(" + dymOrder.nightTime + "分钟)");
+        night_time_fee.setText(dymOrder.nightTimePrice + "元");
+
+        low_fee_title.setText("低速费(" + dymOrder.lowSpeedTime + "分钟)");
+        low_pay_fee.setText(dymOrder.lowSpeedCost + getString(R.string.yuan));
 
         totalFee.setText(getString(R.string.money_sign) + dymOrder.orderShouldPay);
 

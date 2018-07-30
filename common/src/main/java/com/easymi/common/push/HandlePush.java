@@ -128,6 +128,11 @@ public class HandlePush implements FeeChangeSubject {
                     dymOrder.lowSpeedCost = jb.optJSONObject("data").optDouble("LowSpeedCost");
                     dymOrder.lowSpeedTime = jb.optJSONObject("data").getInt("LowSpeedTime")/60;
 
+                    dymOrder.peakMile = jb.optJSONObject("data").optDouble("PeakMile");
+                    dymOrder.nightTime = jb.optJSONObject("data").getInt("NightTime")/60;
+                    dymOrder.nightMile = jb.optJSONObject("data").optDouble("NightMile");
+                    dymOrder.nightTimePrice = jb.optJSONObject("data").optDouble("NightTimePrice");
+
                     DecimalFormat decimalFormat = new DecimalFormat("#0.0");
                     decimalFormat.setRoundingMode(RoundingMode.DOWN);
                     dymOrder.distance = Double.parseDouble(decimalFormat.format(dymOrder.distance));
