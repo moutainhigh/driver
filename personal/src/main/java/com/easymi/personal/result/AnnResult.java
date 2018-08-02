@@ -9,6 +9,6 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class AnnResult extends EmResult {
-    @SerializedName("EmployAfficheRequest")
+    @SerializedName("employ_affiche_request")
     public Announcement ann;
 }

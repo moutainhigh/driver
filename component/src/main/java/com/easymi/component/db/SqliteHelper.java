@@ -16,7 +16,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "data.db";
 
-    private static final int VERSION = 53;
+    private static final int VERSION = 56;
 
     private StringBuffer sqlBuf;
 
@@ -68,6 +68,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
         createDriverInfoTable(db);
         createDymTable(db);
         createSettingTable(db);
+        createZCSettingTable(db);
         createVehicleInfoTable(db);
         createSystemTable(db);
     }
@@ -82,6 +83,9 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
         db.execSQL("DROP TABLE IF EXISTS " + "t_settinginfo");
         createSettingTable(db);
+
+        db.execSQL("DROP TABLE IF EXISTS " + "t_zc_settinginfo");
+        createZCSettingTable(db);
 
         db.execSQL("DROP TABLE IF EXISTS " + "t_Vehicle");
         createVehicleInfoTable(db);
@@ -175,6 +179,18 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("payMoney3").append(" ").append("DOUBLE").append(",")
 
                 .append("workCarChangeOrder").append(" ").append("INTEGER")
+                .append(");");
+        execCreateTableSQL(db);
+    }
+
+    private void createZCSettingTable(SQLiteDatabase db) {
+        sqlBuf.append("CREATE TABLE ").append("t_zc_settinginfo").append(" (")
+                .append("id").append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
+                .append("isPaid").append(" ").append("INTEGER").append(",")
+                .append("isExpenses").append(" ").append("INTEGER").append(",")
+                .append("canCancelOrder").append(" ").append("INTEGER").append(",")
+                .append("isAddPrice").append(" ").append("INTEGER").append(",")
+                .append("employChangePrice").append(" ").append("INTEGER")
                 .append(");");
         execCreateTableSQL(db);
     }

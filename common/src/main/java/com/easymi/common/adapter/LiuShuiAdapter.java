@@ -18,6 +18,7 @@ import com.easymi.common.util.DJStatus2Str;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
 import com.easymi.component.entity.BaseOrder;
+import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.utils.TimeUtil;
 
 import java.util.ArrayList;
@@ -29,6 +30,8 @@ import java.util.List;
 
 public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> {
 
+    private final boolean canBaoxiaoDJ;
+    private final boolean canBaoxiaoZC;
     private Context context;
 
     private List<BaseOrder> baseOrders;
@@ -36,6 +39,8 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
     public LiuShuiAdapter(Context context) {
         this.context = context;
         baseOrders = new ArrayList<>();
+        canBaoxiaoDJ = Setting.findOne().isExpenses == 1;
+        canBaoxiaoZC = ZCSetting.findOne().isExpenses == 1;
     }
 
     public void setBaseOrders(List<BaseOrder> baseOrders) {
@@ -104,7 +109,9 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
             holder.orderBaoxiao.setVisibility(View.GONE);
         } else {
             holder.rootView.setClickable(false);
-            boolean canBaoxiao = Setting.findOne().isExpenses == 1;
+
+            boolean canBaoxiao = (Config.DAIJIA.equals(baseOrder.orderType) && canBaoxiaoDJ)
+                    || (Config.ZHUANCHE.equals(baseOrder.orderType) && canBaoxiaoZC);
             if (canBaoxiao) {
                 holder.orderBaoxiao.setVisibility(View.VISIBLE);
             } else {

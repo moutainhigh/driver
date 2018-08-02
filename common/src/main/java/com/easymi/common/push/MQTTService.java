@@ -65,6 +65,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
     private String passWord = Config.MQTT_PSW;
     private static String pushTopic = Config.MQTT_PUSH_TOPIC;
     private String pullTopic;
+    private String configTopic;
     private String clientId = "driver-" + EmUtil.getEmployId();//身份唯一码
 
     private TraceReceiver traceReceiver;
@@ -127,6 +128,8 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
         String message = "{\"terminal_uid\":\"" + clientId + "\"}";
         Log.e("Mqtt", message);
         pullTopic = "/driver" + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
+        configTopic = "/driver" + "/" + EmUtil.getAppKey() + "/config";
+
         Integer qos = 0;
         Boolean retained = false;
         if ((!message.equals("")) || (!pullTopic.equals(""))) {
@@ -213,10 +216,12 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
             try {
                 if (lastSucTime == 0) {
                     client.subscribe(pullTopic, 1);
+                    client.subscribe(configTopic, 1);
                 } else {
                     if (System.currentTimeMillis() - lastSucTime < 2000) {//小于2秒的回调
                     } else {
                         client.subscribe(pullTopic, 1);
+                        client.subscribe(configTopic, 1);
                     }
                 }
                 lastSucTime = System.currentTimeMillis();
@@ -263,6 +268,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
             if (null != client) {
                 try {
                     client.unsubscribe(pullTopic);
+                    client.unsubscribe(configTopic);
                     Log.e(TAG, "取消订阅的topic");
                 } catch (Exception e) {
 

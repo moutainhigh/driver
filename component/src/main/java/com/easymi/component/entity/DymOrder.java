@@ -107,15 +107,19 @@ public class DymOrder implements Serializable {
     public int lowSpeedTime;
 
     //高峰里程
+    @SerializedName("peak_mile")
     public double peakMile;
 
     //夜间时间
+    @SerializedName("night_time")
     public int nightTime;
 
     //夜间里程
+    @SerializedName("night_mile")
     public double nightMile;
 
     //夜间时间费用
+    @SerializedName("night_time_price")
     public double nightTimePrice;
 
     //作弊增加的里程
@@ -318,7 +322,7 @@ public class DymOrder implements Serializable {
 
         orderInfo.peakMile = cursor.getDouble(cursor.getColumnIndex("peakMile"));
         orderInfo.nightTime = cursor.getInt(cursor.getColumnIndex("nightTime"));
-        orderInfo.nightMile = cursor.getInt(cursor.getColumnIndex("nightMile"));
+        orderInfo.nightMile = cursor.getDouble(cursor.getColumnIndex("nightMile"));
         orderInfo.nightTimePrice = cursor.getDouble(cursor.getColumnIndex("nightTimePrice"));
 
         return orderInfo;

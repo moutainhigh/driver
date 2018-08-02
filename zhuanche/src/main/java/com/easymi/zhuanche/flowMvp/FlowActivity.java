@@ -1,11 +1,11 @@
 package com.easymi.zhuanche.flowMvp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
@@ -14,11 +14,10 @@ import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -58,7 +57,7 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
-import com.easymi.component.entity.Setting;
+import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.loc.LocService;
@@ -86,7 +85,6 @@ import com.easymi.zhuanche.flowMvp.oldCalc.OldRunningActivity;
 import com.easymi.zhuanche.flowMvp.oldCalc.OldWaitActivity;
 import com.easymi.zhuanche.fragment.AcceptFragment;
 import com.easymi.zhuanche.fragment.ArriveStartFragment;
-import com.easymi.zhuanche.fragment.CheatingFragment;
 import com.easymi.zhuanche.fragment.RunningFragment;
 import com.easymi.zhuanche.fragment.SettleFragmentDialog;
 import com.easymi.zhuanche.fragment.SlideArriveStartFragment;
@@ -186,6 +184,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     private boolean isToFeeDetail = true;//是否是前往过费用详情界面
 
+    private AlbumOrientationEventListener mAlbumOrientationEventListener;
+
     @Override
     public int getLayoutId() {
         return R.layout.zc_activity_flow;
@@ -195,6 +195,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     public void initViews(Bundle savedInstanceState) {
         // 屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        mAlbumOrientationEventListener = new AlbumOrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL);
+        if (mAlbumOrientationEventListener.canDetectOrientation()) {
+            mAlbumOrientationEventListener.enable();
+        }
+
 
         orderId = getIntent().getLongExtra("orderId", -1);
         fromOld = getIntent().getBooleanExtra("fromOld", false);//是否是从计价器过来的
@@ -261,7 +267,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             if (popWindow.isShowing()) {
                 popWindow.dismiss();
             } else {
-                if (zcOrder.orderStatus == ZCOrderStatus.NEW_ORDER || zcOrder.orderStatus == ZCOrderStatus.PAIDAN_ORDER || zcOrder.orderStatus >= ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+                boolean notCancel = ZCSetting.findOne().canCancelOrder != 1;
+                if (notCancel || zcOrder.orderStatus == ZCOrderStatus.NEW_ORDER || zcOrder.orderStatus == ZCOrderStatus.PAIDAN_ORDER || zcOrder.orderStatus >= ZCOrderStatus.GOTO_DESTINATION_ORDER) {
                     popWindow.hideCancel();
                 } else {
                     popWindow.showCancel();
@@ -398,7 +405,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     @Override
     public void showBottomFragment(ZCOrder zcOrder) {
 
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//动态设置为竖屏
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//动态设置为竖屏
 
         if (zcOrder.orderStatus == ZCOrderStatus.PAIDAN_ORDER || zcOrder.orderStatus == ZCOrderStatus.NEW_ORDER) {
             toolbar.setTitle(R.string.status_pai);
@@ -453,7 +460,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.replace(R.id.flow_frame, fragment);
             transaction.commit();
         } else if (zcOrder.orderStatus == ZCOrderStatus.START_WAIT_ORDER) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);//动态设置为遵循传感器
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);//动态设置为遵循传感器
             toolbar.setTitle(R.string.wait_consumer);
             waitFragment = new WaitFragment();
             Bundle bundle = new Bundle();
@@ -745,7 +752,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             pay3Btn.setVisibility(View.GONE);
             pay3Img.setVisibility(View.GONE);
         }
-        boolean canDaifu = Setting.findOne().isPaid == 1;
+        boolean canDaifu = ZCSetting.findOne().isPaid == 1;
         if (!canDaifu) {
             pay4Text.setVisibility(View.GONE);
             pay4Empty.setVisibility(View.GONE);
@@ -1062,11 +1069,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     @Override
     public void showToEndFragment() {
         DymOrder order = DymOrder.findByIDType(orderId, Config.ZHUANCHE);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);//动态设置为遵循传感器
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);//动态设置为遵循传感器
         toolbar.setTitle(R.string.zc_status_to_end);
         runningFragment = new RunningFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("zcOrder",order );
+        bundle.putSerializable("zcOrder", order);
         runningFragment.setArguments(bundle);
         runningFragment.setBridge(bridge);
 
@@ -1112,9 +1119,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         registerReceiver(orderFinishReceiver, new IntentFilter(Config.BROAD_FINISH_ORDER));
     }
 
+    boolean canGoOld = false;
+
     @Override
     protected void onResume() {
         super.onResume();
+        canGoOld = true;
         EmLoc location = EmUtil.getLastLoc();
         if (location == null) {
             ToastUtil.showMessage(this, getString(R.string.loc_failed));
@@ -1134,15 +1144,17 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     protected void onPause() {
+        canGoOld = false;
         super.onPause();
         mapView.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
+        mAlbumOrientationEventListener.disable();
         mapView.onDestroy();
         presenter.stopNavi();
+        super.onDestroy();
     }
 
     @Override
@@ -1306,36 +1318,38 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        android.util.Log.e("lifecycle", "onConfigurationChanged()");
-        super.onConfigurationChanged(newConfig);
-        if (System.currentTimeMillis() - lastChangeTime > 1000) {
-            lastChangeTime = System.currentTimeMillis();
-        } else {//有的胎神手机这个方法要回调两次
-            return;
-        }
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        int width = dm.widthPixels;
-        int height = dm.heightPixels;
-        if (width > height) {//横屏
-            toWhatOldByOrder(zcOrder);
-        } else {//竖屏
-
-        }
-    }
+//    @Override
+//    public void onConfigurationChanged(Configuration newConfig) {
+//        android.util.Log.e("lifecycle", "onConfigurationChanged()");
+//        super.onConfigurationChanged(newConfig);
+//        if (System.currentTimeMillis() - lastChangeTime > 1000) {
+//            lastChangeTime = System.currentTimeMillis();
+//        } else {//有的胎神手机这个方法要回调两次
+//            return;
+//        }
+//        DisplayMetrics dm = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(dm);
+//        int width = dm.widthPixels;
+//        int height = dm.heightPixels;
+//        if (width > height) {//横屏
+//            toWhatOldByOrder(zcOrder);
+//        } else {//竖屏
+//
+//        }
+//    }
 
     private void toWhatOldByOrder(ZCOrder zcOrder) {
-        if (zcOrder == null) {
+        if (zcOrder == null || !canGoOld) {
             return;
         }
         if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+            canGoOld = false;
             Intent intent = new Intent(FlowActivity.this, OldRunningActivity.class);
             intent.putExtra("orderId", zcOrder.orderId);
             startActivity(intent);
             finish();
         } else if (zcOrder.orderStatus == ZCOrderStatus.START_WAIT_ORDER) {
+            canGoOld = false;
             Intent intent = new Intent(FlowActivity.this, OldWaitActivity.class);
             intent.putExtra("orderId", zcOrder.orderId);
             startActivity(intent);
@@ -1353,4 +1367,26 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     public boolean isEnableSwipe() {
         return false;
     }
+
+
+    private class AlbumOrientationEventListener extends OrientationEventListener {
+        private int mOrientation;
+
+        public AlbumOrientationEventListener(Context context, int rate) {
+            super(context, rate);
+        }
+
+        @Override
+        public void onOrientationChanged(int orientation) {
+            if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN || !canGoOld) {
+                return;
+            }
+            android.util.Log.e("TAG", "orientation = " + orientation);
+            if ((orientation > 70 && orientation < 110) || (orientation > 250 && orientation < 290)) {
+                toWhatOldByOrder(zcOrder);
+            }
+        }
+
+    }
+
 }

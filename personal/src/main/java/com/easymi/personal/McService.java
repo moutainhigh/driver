@@ -404,8 +404,8 @@ public interface McService {
      * @param appKey
      * @return
      */
-    @GET("api/v1/daijiaApp")
-    Observable<SettingResult> getAppSetting(@Query("app_key") String appKey);
+    @GET("api/v1/appSetting")
+    Observable<com.easymi.common.result.SettingResult> getAppSetting(@Query("app_key") String appKey);
 
     /**
      * 获取图形验证码

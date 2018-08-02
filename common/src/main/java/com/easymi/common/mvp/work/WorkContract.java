@@ -91,7 +91,7 @@ public interface WorkContract {
 
         void loadEmploy(long id);
 
-        void getAppSetting();
+        void getAppSetting(long id);
 
         void loadNoticeAndAnn();
 
@@ -116,7 +116,7 @@ public interface WorkContract {
 
         Observable<LoginResult> getEmploy(Long driverId, String appKey);
 
-        Observable<SettingResult> getAppSetting();
+        Observable<SettingResult> getAppSetting(long driverId);
 
         Observable<SystemResult> getSysConfig();
 

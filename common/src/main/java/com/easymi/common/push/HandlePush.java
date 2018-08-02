@@ -29,7 +29,10 @@ import com.easymi.component.DJOrderStatus;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.Employ;
+import com.easymi.component.entity.SubSetting;
+import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.GsonUtil;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
@@ -123,15 +126,16 @@ public class HandlePush implements FeeChangeSubject {
                     dymOrder.disFee = jb.optJSONObject("data").optDouble("MileageCost");
                     dymOrder.distance = jb.optJSONObject("data").optDouble("Mileges");
 
-                    dymOrder.peakCost = jb.optJSONObject("data").optDouble("PeakCost");
-                    dymOrder.nightPrice = jb.optJSONObject("data").optDouble("NightPrice");
-                    dymOrder.lowSpeedCost = jb.optJSONObject("data").optDouble("LowSpeedCost");
-                    dymOrder.lowSpeedTime = jb.optJSONObject("data").getInt("LowSpeedTime")/60;
-
-                    dymOrder.peakMile = jb.optJSONObject("data").optDouble("PeakMile");
-                    dymOrder.nightTime = jb.optJSONObject("data").getInt("NightTime")/60;
-                    dymOrder.nightMile = jb.optJSONObject("data").optDouble("NightMile");
-                    dymOrder.nightTimePrice = jb.optJSONObject("data").optDouble("NightTimePrice");
+                    if ("zhuanche".equals(orderType)) {
+                        dymOrder.peakCost = jb.optJSONObject("data").optDouble("PeakCost");
+                        dymOrder.nightPrice = jb.optJSONObject("data").optDouble("NightPrice");
+                        dymOrder.lowSpeedCost = jb.optJSONObject("data").optDouble("LowSpeedCost");
+                        dymOrder.lowSpeedTime = jb.optJSONObject("data").getInt("LowSpeedTime")/60;
+                        dymOrder.peakMile = jb.optJSONObject("data").optDouble("PeakMile");
+                        dymOrder.nightTime = jb.optJSONObject("data").getInt("NightTime")/60;
+                        dymOrder.nightMile = jb.optJSONObject("data").optDouble("NightMile");
+                        dymOrder.nightTimePrice = jb.optJSONObject("data").optDouble("NightTimePrice");
+                    }
 
                     DecimalFormat decimalFormat = new DecimalFormat("#0.0");
                     decimalFormat.setRoundingMode(RoundingMode.DOWN);
@@ -221,8 +225,24 @@ public class HandlePush implements FeeChangeSubject {
                 false, new HaveErrSubscriberListener<SettingResult>() {
             @Override
             public void onNext(SettingResult result) {
-                Setting.deleteAll();
-                result.setting.save();
+                List<SubSetting> settingList = GsonUtil.parseToList(result.appSetting, SubSetting[].class);
+                if (settingList != null) {
+                    for (SubSetting sub : settingList) {
+                        if ("zhuanche".equals(sub.businessType)) {
+                            ZCSetting zcSetting = GsonUtil.parseJson(sub.subJson, ZCSetting.class);
+                            if (zcSetting != null) {
+                                ZCSetting.deleteAll();
+                                zcSetting.save();
+                            }
+                        } else if ("daijia".equals(sub.businessType)) {
+                            Setting djSetting = GsonUtil.parseJson(sub.subJson, Setting.class);
+                            if (djSetting != null) {
+                                Setting.deleteAll();
+                                djSetting.save();
+                            }
+                        }
+                    }
+                }
             }
 
             @Override

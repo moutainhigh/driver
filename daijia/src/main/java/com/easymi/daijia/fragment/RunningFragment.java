@@ -121,11 +121,15 @@ public class RunningFragment extends RxBaseFragment {
     }
 
     public void showFee(DymOrder dymOrder) {
-        this.djOrder = dymOrder;
-        serviceMoneyText.setText(djOrder.totalFee + "");
-        distanceText.setText(djOrder.distance + "");
-        driveTimeText.setText(djOrder.travelTime + "");
-        waitTimeText.setText(djOrder.waitTime + "");
+        getActivity().runOnUiThread(() -> {
+            RunningFragment.this.djOrder = dymOrder;
+            serviceMoneyText.setText(djOrder.totalFee + "");
+            distanceText.setText(djOrder.distance + "");
+            driveTimeText.setText(djOrder.travelTime + "");
+            waitTimeText.setText(djOrder.waitTime + "");
+        });
+
+
     }
 
     public void mapStatusChanged() {

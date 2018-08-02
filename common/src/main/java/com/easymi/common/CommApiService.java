@@ -212,7 +212,7 @@ public interface CommApiService {
      * @param appKey
      * @return
      */
-    @GET("api/v1/daijiaApp")
+    @GET("api/v1/appSetting")
     Observable<SettingResult> getAppSetting(@Query("app_key") String appKey);
 
     /**
@@ -269,7 +269,7 @@ public interface CommApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("driver/api/v1/takeOrder")
+    @POST("driver/api/v1/takeSpecialOrder")
     Observable<MultipleOrderResult> takeZCOrder(@Field("order_id") Long orderId,
                                                 @Field("driver_id") Long driverId,
                                                 @Field("app_key") String appKey);

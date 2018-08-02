@@ -7,7 +7,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 280
-        versionName "V5.0.0.009"
+        versionName "V5.0.2.000"
         multiDexEnabled true
 
         ndk {

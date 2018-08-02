@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.easymi.component.ZCOrderStatus;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.Setting;
+import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MathUtil;
 import com.easymi.component.utils.StringUtils;
@@ -94,7 +95,7 @@ public class SettleFragmentDialog {
     }
 
     private void initEdit() {
-        boolean canChangeFee = Setting.findOne().employChangePrice == 1;
+        boolean canChangeFee = ZCSetting.findOne().employChangePrice == 1;
         if (!canChangeFee) {
             extraFeeEdit.setEnabled(false);
             paymentEdit.setEnabled(false);

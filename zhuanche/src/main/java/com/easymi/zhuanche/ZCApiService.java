@@ -171,7 +171,7 @@ public interface ZCApiService {
                                                  @Field("peak_cost") double peakCost,
                                                  @Field("night_price") double nightPrice,
                                                  @Field("low_speed_cost") double lowSpeedCost,
-                                                 @Field("low_speed_time") double lowSpeedTime,
+                                                 @Field("low_speed_time") int lowSpeedTime,
                                                  @Field("peak_mile") double peakMile,
                                                  @Field("night_time") int nightTime,
                                                  @Field("night_mile") double nightMile,

@@ -100,7 +100,7 @@ public class WorkModel implements WorkContract.Model {
     }
 
     @Override
-    public Observable<SettingResult> getAppSetting() {
+    public Observable<SettingResult> getAppSetting(long id) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .getAppSetting(EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())

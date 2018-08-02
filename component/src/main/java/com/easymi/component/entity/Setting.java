@@ -11,6 +11,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by liuzihao on 2018/3/6.
  * <p>
  * 1为true 2为false
+ * 代驾配置.
  */
 
 public class Setting {
@@ -40,10 +41,10 @@ public class Setting {
     @SerializedName("emploies_km")
     public double emploiesKm;
 
+    //下面四个字段疑似废弃
     public double payMoney1;
     public double payMoney2;
     public double payMoney3;
-
     public int canCallDriver;//能否拨打附近司机电话
 
     public void save() {

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.Setting;
+import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.zhuanche.R;
 import com.easymi.zhuanche.flowMvp.ActFraCommBridge;
@@ -112,7 +113,7 @@ public class RunningFragment extends RxBaseFragment {
         getSupportActivity().findViewById(R.id.change_end_con).setOnClickListener(view -> bridge.changeEnd());
 
         feeCon.setOnLongClickListener(view -> {
-            boolean canAddPrice = Setting.findOne().isAddPrice == 1;
+            boolean canAddPrice = ZCSetting.findOne().isAddPrice == 1;
             if (canAddPrice) {
                 bridge.showCheating();
             }
@@ -121,11 +122,13 @@ public class RunningFragment extends RxBaseFragment {
     }
 
     public void showFee(DymOrder dymOrder) {
-        this.zcOrder = dymOrder;
-        serviceMoneyText.setText(zcOrder.totalFee + "");
-        distanceText.setText(zcOrder.distance + "");
-        driveTimeText.setText(zcOrder.travelTime + "");
-        waitTimeText.setText(zcOrder.waitTime + "");
+        getActivity().runOnUiThread(() -> {
+            RunningFragment.this.zcOrder = dymOrder;
+            serviceMoneyText.setText(zcOrder.totalFee + "");
+            distanceText.setText(zcOrder.distance + "");
+            driveTimeText.setText(zcOrder.travelTime + "");
+            waitTimeText.setText(zcOrder.waitTime + "");    });
+
     }
 
     public void mapStatusChanged() {

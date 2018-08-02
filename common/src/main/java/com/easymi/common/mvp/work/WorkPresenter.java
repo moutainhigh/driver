@@ -33,8 +33,11 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.entity.Setting;
+import com.easymi.component.entity.SubSetting;
 import com.easymi.component.entity.SystemConfig;
+import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.network.ErrCode;
+import com.easymi.component.network.GsonUtil;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
@@ -234,7 +237,12 @@ public class WorkPresenter implements WorkContract.Presenter {
     @Override
     public void queryNearDriver(Double lat, Double lng) {
         long driverId = EmUtil.getEmployId();
-        double dis = driverKm <= 0 ? 20 : driverKm;
+        double dis = 0;
+        if ("zhuanche".equals(employType)) {
+            dis = zcDriverKm;
+        } else if ("daijia".equals(employType)) {
+            dis = driverKm;
+        }
 
         Observable<NearDriverResult> observable = model.queryNearDriver(driverId, lat, lng, dis, employType);
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
@@ -273,8 +281,9 @@ public class WorkPresenter implements WorkContract.Presenter {
 
     @Override
     public void loadDataOnResume() {
-        loadEmploy(EmUtil.getEmployId());
-        getAppSetting();//获取配置信息
+        long driverId = EmUtil.getEmployId();
+        loadEmploy(driverId);
+        getAppSetting(driverId);//获取配置信息
         queryStatis();
 
         PhoneUtil.checkGps(context);
@@ -366,17 +375,40 @@ public class WorkPresenter implements WorkContract.Presenter {
 
     //查询附近司机的距离
     private double driverKm = 0;
+    private double zcDriverKm = 0;
+
     //能拨打电话
     boolean canCallPhone = true;
 
     @Override
-    public void getAppSetting() {
-        Observable<SettingResult> observable = model.getAppSetting();
+    public void getAppSetting(long driverId) {
+        Observable<SettingResult> observable = model.getAppSetting(driverId);
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
                 true, result -> {
-            Setting.deleteAll();
-            result.setting.save();
-            driverKm = result.setting.emploiesKm;
+
+            //解析业务配置
+            List<SubSetting> settingList = GsonUtil.parseToList(result.appSetting, SubSetting[].class);
+            if (settingList != null) {
+                for (SubSetting sub : settingList) {
+                    if ("zhuanche".equals(sub.businessType)) {
+                        ZCSetting zcSetting = GsonUtil.parseJson(sub.subJson, ZCSetting.class);
+                        if (zcSetting != null) {
+                            ZCSetting.deleteAll();
+                            zcSetting.save();
+                            zcDriverKm = zcSetting.emploiesKm;
+                        }
+                    } else if ("daijia".equals(sub.businessType)) {
+                        Setting djSetting = GsonUtil.parseJson(sub.subJson, Setting.class);
+                        if (djSetting != null) {
+                            Setting.deleteAll();
+                            djSetting.save();
+                            driverKm = djSetting.emploiesKm;
+                        }
+                    }
+                }
+            }
+
+
         })));
 
 
@@ -467,7 +499,7 @@ public class WorkPresenter implements WorkContract.Presenter {
         Observable<EmResult> observable = model.readOne(id);
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
                 true, result -> {
-                //do nothing
+            //do nothing
         })));
     }
 

@@ -207,9 +207,9 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
                     return;
                 }
                 //判断预约时间是否正确
-                long t = System.currentTimeMillis();
-                long preTime = selectedZCType.minBookTime * 60 * 1000 ;
-                if ((orderTime - t) < preTime) {
+                long t = System.currentTimeMillis()/60000;
+                long preTime = selectedZCType.minBookTime;
+                if ((orderTime/60000 - t) < preTime) {
                     ToastUtil.showMessage(getActivity(), "选中时间无效,请重新选择时间");
                     return;
                 }
