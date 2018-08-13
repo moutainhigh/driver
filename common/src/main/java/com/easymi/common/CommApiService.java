@@ -255,7 +255,7 @@ public interface CommApiService {
      * @return
      */
     @FormUrlEncoded
-    @PUT("driver/api/v1/grabOrder")
+    @PUT("driver/api/v1/grabSpecialOrder")
     Observable<MultipleOrderResult> grabZCOrder(@Field("order_id") Long orderId,
                                                 @Field("driver_id") Long driverId,
                                                 @Field("app_key") String appKey);

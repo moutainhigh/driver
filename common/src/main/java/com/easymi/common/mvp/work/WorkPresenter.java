@@ -244,6 +244,10 @@ public class WorkPresenter implements WorkContract.Presenter {
             dis = driverKm;
         }
 
+        if (dis < 0) {
+            dis = 10;
+        }
+
         Observable<NearDriverResult> observable = model.queryNearDriver(driverId, lat, lng, dis, employType);
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
                 true, nearDriverResult -> {

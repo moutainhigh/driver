@@ -644,7 +644,9 @@ public enum ErrCodeTran {
      */
     VEHICLE_IS_BUSY(31054, "车辆正在使用"),
 
-    NO_VEHICLE_CANNOT_ONLINE(31041, "您还未绑定车辆，请联系管理员");
+    NO_VEHICLE_CANNOT_ONLINE(31041, "您还未绑定车辆，请联系管理员"),
+
+    CANNOT_DOING_MORE_ORDERS(31042, "不能同时执行多个订单");
 
     private int code;
     private String showMsg;

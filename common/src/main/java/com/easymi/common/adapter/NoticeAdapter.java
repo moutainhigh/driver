@@ -1,9 +1,11 @@
 package com.easymi.common.adapter;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.easymi.common.R;
@@ -63,6 +65,22 @@ public class NoticeAdapter extends BaseMultiItemQuickAdapter<AnnAndNotice, BaseV
                 remove(helper.getAdapterPosition());
                 notifyDataSetChanged();
             });
+
+
+            holder.contentView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (item.type == 0) {
+                        ARouter.getInstance()
+                                .build("/personal/ArticleActivity")
+                                .withString("title", item.annMessage)
+                                .withLong("annId", item.id)
+                                .navigation();
+                    }
+
+                }
+            });
+
         }
     }
 
@@ -72,9 +90,11 @@ public class NoticeAdapter extends BaseMultiItemQuickAdapter<AnnAndNotice, BaseV
         TextView content;
         TextView time;
         FrameLayout deleteFrame;
+        View contentView;
 
         public ViewHolder(View itemView) {
             swipeLayout = itemView.findViewById(R.id.swipe_layout);
+            contentView = itemView.findViewById(R.id.contentView);
             title = itemView.findViewById(R.id.title);
             content = itemView.findViewById(R.id.content);
             time = itemView.findViewById(R.id.time);

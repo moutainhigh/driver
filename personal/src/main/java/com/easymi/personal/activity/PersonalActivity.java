@@ -3,6 +3,7 @@ package com.easymi.personal.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,6 +25,7 @@ import com.easymi.component.utils.GlideCircleTransform;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.CusToolbar;
+import com.easymi.component.widget.RatingBar;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
 import com.easymi.personal.result.LoginResult;
@@ -40,13 +42,16 @@ public class PersonalActivity extends RxBaseActivity {
 
     TextView driverName;
     TextView userName;
-    TextView driverScore;
     TextView driverBalance;
 
     ImageView driverPhoto;
     ImageView driverTuiguang;
 
+    private RatingBar ratingBar;
+
     ImageView back;
+
+    private View rlCarInfo;
 
     @Override
     public int getLayoutId() {
@@ -64,13 +69,16 @@ public class PersonalActivity extends RxBaseActivity {
     public void initViews(Bundle savedInstanceState) {
         driverName = findViewById(R.id.real_name);
         userName = findViewById(R.id.user_name);
-        driverScore = findViewById(R.id.driver_score);
+
+        ratingBar = findViewById(R.id.rating_bar);
 
         driverPhoto = findViewById(R.id.driver_photo);
 
         driverTuiguang = findViewById(R.id.driver_tuiguang);
 
         driverBalance = findViewById(R.id.driver_balance);
+
+        rlCarInfo = findViewById(R.id.rlCarInfo);
 
         driverTuiguang.setOnClickListener(v -> {
             Intent intent = new Intent(PersonalActivity.this, ShareActivity.class);
@@ -81,6 +89,13 @@ public class PersonalActivity extends RxBaseActivity {
 
         Employ employ = EmUtil.getEmployInfo();
         showBase(employ);
+
+        if (TextUtils.equals(employ.service_type, "zhuanche")) {
+            rlCarInfo.setVisibility(View.VISIBLE);
+        } else {
+            rlCarInfo.setVisibility(View.GONE);
+        }
+
     }
 
     @Override
@@ -111,8 +126,8 @@ public class PersonalActivity extends RxBaseActivity {
     private void showBase(Employ employ) {
         if (employ != null) {
             driverName.setText(employ.real_name);
-            userName.setText(employ.user_name);
-            driverScore.setText(String.valueOf(employ.score == 0 ? 5.0 : employ.score));
+            userName.setText("("+employ.user_name+")");
+            ratingBar.setStarMark((float) (employ.score == 0 ? 5.0 : employ.score));
             driverBalance.setText(String.valueOf(employ.balance));
             if (StringUtils.isNotBlank(employ.portrait_path)) {
                 RequestOptions options = new RequestOptions()
@@ -161,6 +176,11 @@ public class PersonalActivity extends RxBaseActivity {
 
     public void toStats(View view) {
         Intent intent = new Intent(this, StatsActivity.class);
+        startActivity(intent);
+    }
+
+    public void toCarInfo(View view) {
+        Intent intent = new Intent(this, CarInfoActivity.class);
         startActivity(intent);
     }
 

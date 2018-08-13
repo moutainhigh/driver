@@ -324,5 +324,6 @@
     <string name="balance_personal">余额(元)</string>
 
     <string name="renminbi">¥</string>
+    <string name="p_car_info">车辆信息</string>
 
 </resources>

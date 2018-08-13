@@ -71,6 +71,8 @@ public class RechargeActivity extends RxBaseActivity {
     RelativeLayout payZfb;
     RelativeLayout payUnion;
 
+    private double limitMoney = 50;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_recharge;
@@ -95,6 +97,8 @@ public class RechargeActivity extends RxBaseActivity {
             double money = getMoney();
             if (money == 0.0) {
                 ToastUtil.showMessage(RechargeActivity.this, getString(R.string.recharge_0_money));
+            } else if (money < limitMoney) {
+                ToastUtil.showMessage(RechargeActivity.this, "最低充值" + limitMoney);
             } else {
                 payWx(money);
             }
@@ -103,6 +107,8 @@ public class RechargeActivity extends RxBaseActivity {
             double money = getMoney();
             if (money == 0.0) {
                 ToastUtil.showMessage(RechargeActivity.this, getString(R.string.recharge_0_money));
+            } else if (money < limitMoney) {
+                ToastUtil.showMessage(RechargeActivity.this, "最低充值" + limitMoney);
             } else {
                 payZfb(money);
             }
@@ -111,6 +117,8 @@ public class RechargeActivity extends RxBaseActivity {
             double money = getMoney();
             if (money == 0.0) {
                 ToastUtil.showMessage(RechargeActivity.this, getString(R.string.recharge_0_money));
+            } else if (money < limitMoney) {
+                ToastUtil.showMessage(RechargeActivity.this, "最低充值" + limitMoney);
             } else {
                 payUnion(money);
             }
@@ -141,6 +149,9 @@ public class RechargeActivity extends RxBaseActivity {
             pay50.setText(getString(R.string.renminbi) + config.payMoney1);
             pay100.setText(getString(R.string.renminbi) + config.payMoney2);
             pay200.setText(getString(R.string.renminbi) + config.payMoney3);
+
+            limitMoney = config.payMoney1;
+
         }
     }
 

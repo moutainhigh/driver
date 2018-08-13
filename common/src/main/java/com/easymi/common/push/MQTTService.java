@@ -117,7 +117,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
         // 设置超时时间，单位：秒
         conOpt.setConnectionTimeout(10);
         // 心跳包发送间隔，单位：秒
-        conOpt.setKeepAliveInterval(20);
+        conOpt.setKeepAliveInterval(10);
         // 用户名
         conOpt.setUserName(userName);
         // 密码

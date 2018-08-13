@@ -1,6 +1,7 @@
 package com.easymi.daijia;
 
 import com.easymi.component.result.EmResult;
+import com.easymi.common.entity.PullFeeResult;
 import com.easymi.daijia.result.BudgetResult;
 import com.easymi.daijia.result.ConsumerResult;
 import com.easymi.daijia.result.DJOrderResult;
@@ -329,5 +330,15 @@ public interface DJApiService {
                                            @Query("app_key") String appKey,
                                            @Query("lat") Double lat,
                                            @Query("lng") Double lng,
-                                           @Query("is_arrive")Integer isArrive);
+                                           @Query("is_arrive") Integer isArrive);
+
+
+    /**
+     * 通过接口方式推送最后一个点到后台.
+     */
+    @FormUrlEncoded
+    @POST("api/v1/pullfee")
+    Observable<PullFeeResult> pullFee(@Field("gps") String json,
+                                      @Field("app_key") String appKey);
+
 }

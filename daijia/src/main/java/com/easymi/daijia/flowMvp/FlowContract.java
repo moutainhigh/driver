@@ -2,9 +2,6 @@ package com.easymi.daijia.flowMvp;
 
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.navi.model.AMapNaviPath;
-import com.amap.api.navi.model.NaviPath;
-import com.amap.api.services.core.LatLonPoint;
-import com.amap.api.services.route.DrivePath;
 import com.amap.api.services.route.DriveRouteResult;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.result.EmResult;
@@ -15,8 +12,6 @@ import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.result.ConsumerResult;
 import com.easymi.daijia.result.DJOrderResult;
 import com.easymi.daijia.result.OrderFeeResult;
-
-import java.util.List;
 
 import rx.Observable;
 
@@ -147,5 +142,6 @@ public interface FlowContract {
         Observable<EmResult> payOrder(Long orderId, String payType);
 
         Observable<OrderFeeResult> getOrderFee(Long orderId, Long driverId, String orderType, Integer isArrive);
+
     }
 }

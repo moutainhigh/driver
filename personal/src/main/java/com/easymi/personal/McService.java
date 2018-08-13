@@ -1,6 +1,7 @@
 package com.easymi.personal;
 
 import com.easymi.component.result.EmResult;
+import com.easymi.personal.entity.CarInfo;
 import com.easymi.personal.result.AboutUsResult;
 import com.easymi.personal.result.AnnResult;
 import com.easymi.personal.result.AnnouncementResult;
@@ -437,4 +438,11 @@ public interface McService {
                                    @Field("code") String code,
                                    @Field("code_type") String codeType,
                                    @Field("app_key") String appKey);
+
+
+    @GET("driver/api/v1/getVehicleInfoByEmployId")
+    Observable<CarInfo> getCarInfo(@Query("employ_id") long employId,
+                                   @Query("app_key") String appKey);
+
+
 }

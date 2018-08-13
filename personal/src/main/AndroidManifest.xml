@@ -7,7 +7,6 @@
         <activity
             android:name=".activity.LoginActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.RegisterActivity"
@@ -21,158 +20,157 @@
             android:name=".activity.ResetPswActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.NearWcActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.HelpCenterSubActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.TixianRecordActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.AboutUsActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.RegisterLocalActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.MoreActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.AnnouncementActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.RechargeActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.SetActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.PersonalActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.PocketActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.ArticleActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.HelpCenterActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.MsgActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.WeatherActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.RecommendActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.StatsActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.DetailActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.TixianActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.TixianRuleActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.ShareActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.RecommendMoneyActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.ChangeActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.NaviSetActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.LanguageActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.SysCheckActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.SysCheck2Activity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.FeedbackActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.NotifityActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.EvaActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
 
         <!-- 微信回调activity -->
         <activity
@@ -229,6 +227,12 @@
             android:exported="false"
             android:screenOrientation="behind"
             android:windowSoftInputMode="adjustResize|stateHidden" />
+
+        <activity
+            android:name=".activity.CarInfoActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSwipeBack" />
 
     </application>
 </manifest>

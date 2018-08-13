@@ -76,12 +76,8 @@ public class CreateActivity extends RxBaseActivity {
                     }
                 }
             }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (java.lang.InstantiationException e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
 
         viewPager.setOffscreenPageLimit(5);

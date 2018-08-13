@@ -1,5 +1,6 @@
 package com.easymi.zhuanche;
 
+import com.easymi.common.entity.PullFeeResult;
 import com.easymi.component.result.EmResult;
 import com.easymi.zhuanche.result.BudgetResult;
 import com.easymi.zhuanche.result.ConsumerResult;
@@ -316,4 +317,14 @@ public interface ZCApiService {
     @GET("driver/api/v1/passengerInfo")
     Observable<ConsumerResult> getConsumer(@Query("order_id") Long orderId,
                                            @Query("app_key") String appKey);
+
+
+    /**
+     * 通过接口方式推送最后一个点到后台.
+     */
+    @FormUrlEncoded
+    @POST("api/v1/pullfee")
+    Observable<PullFeeResult> pullFee(@Field("gps") String json,
+                                      @Field("app_key") String appKey);
+
 }

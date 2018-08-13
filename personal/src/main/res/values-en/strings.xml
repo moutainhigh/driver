@@ -288,4 +288,6 @@
          <string name="tixian_4"> withdrawals cardinal </string>
          <string name="tixian_5">meta</string>
 
+    <string name="p_car_info">car info</string>
+
 </resources>

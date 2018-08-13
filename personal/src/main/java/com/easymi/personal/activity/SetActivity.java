@@ -39,6 +39,7 @@ public class SetActivity extends RxBaseActivity {
     SwitchButton alwaysOren;
     SwitchButton defaultNavi;
     SwitchButton backRun;
+    SwitchButton gpsFilter;
 
     private ScrollView scrollView;
 
@@ -54,6 +55,7 @@ public class SetActivity extends RxBaseActivity {
         alwaysOren = findViewById(R.id.oren_btn);
         defaultNavi = findViewById(R.id.default_navi);
         backRun = findViewById(R.id.back_run);
+        gpsFilter = findViewById(R.id.gps_filter);
 
         scrollView = findViewById(R.id.scroll_view);
 
@@ -62,6 +64,7 @@ public class SetActivity extends RxBaseActivity {
         alwaysOren.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_ALWAYS_OREN, false));
         defaultNavi.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_DEFAULT_NAVI, true));
         backRun.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_PLAY_CLIENT_MUSIC, true));
+        gpsFilter.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_GPS_FILTER, false));
 
         initSwitch();
 
@@ -91,6 +94,11 @@ public class SetActivity extends RxBaseActivity {
         backRun.setOnCheckedChangeListener((buttonView, isChecked) -> {
             SharedPreferences.Editor editor = XApp.getPreferencesEditor();
             editor.putBoolean(Config.SP_PLAY_CLIENT_MUSIC, isChecked);
+            editor.apply();
+        });
+        gpsFilter.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+            editor.putBoolean(Config.SP_GPS_FILTER, isChecked);
             editor.apply();
         });
     }

@@ -16,6 +16,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.easymi.component.Config;
 import com.easymi.component.R;
 import com.easymi.component.base.RxBaseActivity;
@@ -35,6 +36,8 @@ import rx.schedulers.Schedulers;
 /**
  * Created by developerLzh on 2017/5/4.
  */
+
+@Route(path = "/personal/ArticleActivity")
 public class ArticleActivity extends RxBaseActivity implements View.OnClickListener {
     WebView webView;
 
