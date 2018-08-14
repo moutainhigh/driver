@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ScrollView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.easymi.common.util.GPSSetting;
 import com.easymi.component.Config;
 import com.easymi.component.activity.WebActivity;
 import com.easymi.component.app.XApp;
@@ -97,9 +98,8 @@ public class SetActivity extends RxBaseActivity {
             editor.apply();
         });
         gpsFilter.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
-            editor.putBoolean(Config.SP_GPS_FILTER, isChecked);
-            editor.apply();
+            //打开时过滤掉网络类型的定位点,(即只上传GPS类型的定位点)
+            GPSSetting.getInstance().setNetEnable(!isChecked);
         });
     }
 

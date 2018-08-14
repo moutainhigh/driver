@@ -1,5 +1,6 @@
 package com.easymi.common;
 
+import com.easymi.common.entity.PushAnnouncement;
 import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.LoginResult;
 import com.easymi.common.result.MultipleOrderResult;
@@ -232,8 +233,8 @@ public interface CommApiService {
      * @return
      */
     @GET("driver/api/v1/employAfficheById")
-    Observable<AnnouncementResult> employAfficheById(@Query("id") Long noticeId,
-                                                     @Query("app_key") String appKey);
+    Observable<PushAnnouncement> employAfficheById(@Query("id") Long noticeId,
+                                                   @Query("app_key") String appKey);
 
     /**
      * 专车 --> 查询单个订单

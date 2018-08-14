@@ -245,7 +245,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:background="@color/white">
 
                 <TextView
@@ -253,7 +253,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
-                    android:text="是否只上传GPS类型点"
+                    android:text="关闭网络定位"
                     android:textColor="#232323"
                     android:textSize="16sp" />
 

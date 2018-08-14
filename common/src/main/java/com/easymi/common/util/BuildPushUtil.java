@@ -30,9 +30,10 @@ import java.util.List;
 public class BuildPushUtil {
 
     public static String buildPush(BuildPushData buildPushData) {
-        PushData pushData = new PushData();
 
         EmLoc emLoc = buildPushData.emLoc;
+
+        PushData pushData = new PushData();
 
         //转换一下
         BaseEmploy employ1 = new BaseEmploy().employ2This();
@@ -116,7 +117,22 @@ public class BuildPushUtil {
         //本次的位置信息
         dataList.add(pushData);
 
-        PushBean pushBean = new PushBean("gps", dataList);
+        List<PushData> newestDataList = new ArrayList<>();
+
+
+        boolean canPushNetLoc = GPSSetting.getInstance().getNetEnable();
+        if (!canPushNetLoc) {
+            for (PushData pd : dataList) {
+                if (pd != null && pd.calc != null && pd.calc.locationType == 1) {
+                    //只上传GPS类型的定位
+                    newestDataList.add(pd);
+                }
+            }
+        } else {
+            newestDataList.addAll(dataList);
+        }
+
+        PushBean pushBean = new PushBean("gps", newestDataList);
 
         String pushStr = new Gson().toJson(pushBean);
         Log.e("MQTTService", "push loc data--->" + pushStr);

@@ -17,10 +17,10 @@ import com.easymi.common.CommApiService;
 import com.easymi.common.R;
 import com.easymi.common.entity.Address;
 import com.easymi.common.entity.MultipleOrder;
+import com.easymi.common.entity.PushAnnouncement;
 import com.easymi.component.entity.Setting;
 import com.easymi.common.mvp.grab.GrabActivity2;
 import com.easymi.common.mvp.work.WorkActivity;
-import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.MultipleOrderResult;
 import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.SettingResult;
@@ -305,7 +305,6 @@ public class HandlePush implements FeeChangeSubject {
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-        ;
 
         rxManager.add(observable.subscribe(new MySubscriber<>(XApp.getInstance(), false,
                 false, new HaveErrSubscriberListener<NotitfyResult>() {
@@ -316,6 +315,7 @@ public class HandlePush implements FeeChangeSubject {
                 Intent intent = new Intent();
                 intent.setAction(Config.BROAD_NOTICE);
                 intent.putExtra("notice", multipleOrderResult.employNoticeRecord.noticeContent);
+                intent.setPackage(XApp.getInstance().getPackageName());
                 XApp.getInstance().sendBroadcast(intent);
             }
 
@@ -332,23 +332,25 @@ public class HandlePush implements FeeChangeSubject {
      * @param id
      */
     private void loadAnn(long id) {
-        Observable<AnnouncementResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+        Observable<PushAnnouncement> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .employAfficheById(id, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-        ;
 
         rxManager.add(observable.subscribe(new MySubscriber<>(XApp.getInstance(), false,
-                false, new HaveErrSubscriberListener<AnnouncementResult>() {
+                false, new HaveErrSubscriberListener<PushAnnouncement>() {
             @Override
-            public void onNext(AnnouncementResult announcementResult) {
-                XApp.getInstance().shake();
-                XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.new_ann) + announcementResult.employAfficheRequest.annMessage, XApp.NEW_ANN);
-                Intent intent = new Intent();
-                intent.setAction(Config.BROAD_ANN);
-                intent.putExtra("ann", announcementResult.employAfficheRequest.annMessage);
-                XApp.getInstance().sendBroadcast(intent);
+            public void onNext(PushAnnouncement announcementResult) {
+                if (announcementResult.request != null) {
+                    XApp.getInstance().shake();
+                    XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.new_ann) + announcementResult.request.title, XApp.NEW_ANN);
+                    Intent intent = new Intent();
+                    intent.setAction(Config.BROAD_ANN);
+                    intent.putExtra("ann", announcementResult.request.title);
+                    intent.setPackage(XApp.getInstance().getPackageName());
+                    XApp.getInstance().sendBroadcast(intent);
+                }
             }
 
             @Override

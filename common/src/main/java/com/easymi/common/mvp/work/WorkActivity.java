@@ -373,6 +373,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 //            ARouter.getInstance().build("/personal/NotifityActivity")
 //                    .navigation();
 //        });
+        if (bottomBtnCon.getVisibility() == View.VISIBLE) {
+            presenter.loadNoticeAndAnn();
+        }
     }
 
     List<Marker> markers = new ArrayList<>();
@@ -415,6 +418,10 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
     @Override
     public void showAnn(AnnAndNotice announcement) {
+        if (bottomBtnCon.getVisibility() == View.VISIBLE) {
+            presenter.loadNoticeAndAnn();
+        }
+
 //        notifityCon.setVisibility(View.VISIBLE);
 //        notifityContent.setText(getString(R.string.new_ann) + announcement.annMessage);
 ////        XApp.getInstance().syntheticVoice(getString(R.string.new_ann) + announcement.message, true);
