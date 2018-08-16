@@ -61,7 +61,13 @@ public class WaitFragment extends RxBaseFragment {
 
     public void showFee(DymOrder dymOrder) {
         this.zcOrder = dymOrder;
-        waitFeeText.setText(zcOrder.waitTimeFee + "");
-        waitTimeText.setText(zcOrder.waitTime + "");
+        getActivity().runOnUiThread(new Runnable(){
+            @Override
+            public void run() {
+                waitFeeText.setText(zcOrder.waitTimeFee + "");
+                waitTimeText.setText(zcOrder.waitTime + "");
+            }
+        });
+
     }
 }

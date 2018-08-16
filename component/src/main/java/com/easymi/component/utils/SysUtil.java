@@ -195,20 +195,20 @@ public class SysUtil {
         return versionCode;
     }
 
-    /**
-     * 拨打电话.
-     *
-     * @param context  context
-     * @param phoneNum 需要拨打的电话号码
-     */
-    public static void callPhone(Context context, String phoneNum) {
-        try {
-            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNum));
-            context.startActivity(intent);
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        }
-    }
+//    /**
+//     * 拨打电话.
+//     *
+//     * @param context  context
+//     * @param phoneNum 需要拨打的电话号码
+//     */
+//    public static void callPhone(Context context, String phoneNum) {
+//        try {
+//            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNum));
+//            context.startActivity(intent);
+//        } catch (SecurityException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
 //    /**
@@ -460,18 +460,23 @@ public class SysUtil {
         ActivityManager myAM = (ActivityManager) mContext
                 .getSystemService(Context.ACTIVITY_SERVICE);
         if (null != myAM) {
-            List<ActivityManager.RunningServiceInfo> myList = myAM.getRunningServices(40);
-            if (myList.size() <= 0) {
-                return false;
-            }
-            for (int i = 0; i < myList.size(); i++) {
-                String mName = myList.get(i).service.getClassName();
-                if (mName.equals(serviceName)) {
-                    isWork = true;
-                    break;
+            try {
+                List<ActivityManager.RunningServiceInfo> myList = myAM.getRunningServices(40);
+                if (myList == null || myList.size() <= 0) {
+                    return false;
                 }
+                for (int i = 0; i < myList.size(); i++) {
+                    String mName = myList.get(i).service.getClassName();
+                    if (mName.equals(serviceName)) {
+                        isWork = true;
+                        break;
+                    }
+                }
+                return isWork;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return true;
             }
-            return isWork;
         } else {
             return true;
         }

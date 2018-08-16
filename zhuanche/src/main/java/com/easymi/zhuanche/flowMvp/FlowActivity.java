@@ -899,7 +899,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     private Address getStartAddr() {
         Address startAddress = null;
-        if (zcOrder.addresses != null && zcOrder.addresses.size() != 0) {
+        if (zcOrder != null && zcOrder.addresses != null && zcOrder.addresses.size() != 0) {
             for (Address address : zcOrder.addresses) {
                 if (address.addrType == 1) {
                     startAddress = address;
@@ -912,7 +912,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     private Address getEndAddr() {
         Address endAddr = null;
-        if (zcOrder.addresses != null && zcOrder.addresses.size() != 0) {
+        if (zcOrder != null && zcOrder.addresses != null && zcOrder.addresses.size() != 0) {
             for (Address address : zcOrder.addresses) {
                 if (address.addrType == 3) {
                     endAddr = address;
@@ -1049,7 +1049,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void doConfirmMoney(LoadingButton btn, DymOrder dymOrder) {
-                presenter.arriveDes(btn, dymOrder);
+                presenter.arriveDes(zcOrder, btn, dymOrder);
             }
 
             @Override
@@ -1292,13 +1292,16 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         if (zcOrder == null) {
             return;
         }
+
         if (orderId == zcOrder.orderId && orderType.equals(Config.ZHUANCHE)) {
+            DymOrder dyo = DymOrder.findByIDType(orderId, orderType);
             if (null != waitFragment && waitFragment.isVisible()) {
-                waitFragment.showFee(DymOrder.findByIDType(orderId, orderType));
+                waitFragment.showFee(dyo);
             } else if (null != runningFragment && runningFragment.isVisible()) {
-                runningFragment.showFee(DymOrder.findByIDType(orderId, orderType));
-            } else if (null != settleFragmentDialog && settleFragmentDialog.isShowing()) {
-                settleFragmentDialog.setDymOrder(DymOrder.findByIDType(orderId, orderType));
+                runningFragment.showFee(dyo);
+            }
+            if (null != settleFragmentDialog && settleFragmentDialog.isShowing()) {
+                settleFragmentDialog.setDymOrder(dyo);
             }
         }
     }
@@ -1378,6 +1381,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         @Override
         public void onOrientationChanged(int orientation) {
+            if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
+                //已经显示结算对话框不显示
+                return;
+            }
+
             if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN || !canGoOld) {
                 return;
             }

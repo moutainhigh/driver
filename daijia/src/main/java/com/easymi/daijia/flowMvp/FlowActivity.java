@@ -802,7 +802,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     private Address getStartAddr() {
         Address startAddress = null;
-        if (djOrder.addresses != null && djOrder.addresses.size() != 0) {
+        if (djOrder != null && djOrder.addresses != null && djOrder.addresses.size() != 0) {
             for (Address address : djOrder.addresses) {
                 if (address.addrType == 1) {
                     startAddress = address;
@@ -815,7 +815,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     private Address getEndAddr() {
         Address endAddr = null;
-        if (djOrder.addresses != null && djOrder.addresses.size() != 0) {
+        if (djOrder != null && djOrder.addresses != null && djOrder.addresses.size() != 0) {
             for (Address address : djOrder.addresses) {
                 if (address.addrType == 3) {
                     endAddr = address;
@@ -1199,12 +1199,14 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             return;
         }
         if (orderId == djOrder.orderId && orderType.equals(Config.DAIJIA)) {
+            DymOrder dyo = DymOrder.findByIDType(orderId, orderType);
             if (null != waitFragment && waitFragment.isVisible()) {
-                waitFragment.showFee(DymOrder.findByIDType(orderId, orderType));
+                waitFragment.showFee(dyo);
             } else if (null != runningFragment && runningFragment.isVisible()) {
-                runningFragment.showFee(DymOrder.findByIDType(orderId, orderType));
-            } else if (null != settleFragmentDialog && settleFragmentDialog.isShowing()) {
-                settleFragmentDialog.setDymOrder(DymOrder.findByIDType(orderId, orderType));
+                runningFragment.showFee(dyo);
+            }
+            if (null != settleFragmentDialog && settleFragmentDialog.isShowing()) {
+                settleFragmentDialog.setDymOrder(dyo);
             }
         }
     }

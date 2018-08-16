@@ -18,10 +18,12 @@ import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.daijia.DJApiService;
 import com.easymi.common.entity.PullFeeResult;
+import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.result.ConsumerResult;
 import com.easymi.daijia.result.DJOrderResult;
 import com.easymi.daijia.result.OrderFeeResult;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,7 +104,7 @@ public class FlowModel implements FlowContract.Model {
     }
 
     @Override
-    public Observable<DJOrderResult> arriveDes(DymOrder order) {
+    public Observable<DJOrderResult> arriveDes(DJOrder djOrder,DymOrder order) {
 
         PushFee pushData = new PushFee();
 
@@ -161,26 +163,76 @@ public class FlowModel implements FlowContract.Model {
         pushData.calc.orderInfo = orderList;
         String json = GsonUtil.toJson(pushData);
 
+
+
+
+
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
                 .pullFee(json,EmUtil.getAppKey())
                 .flatMap(new Func1<PullFeeResult, Observable<DJOrderResult>>() {
                     @Override
                     public Observable<DJOrderResult> call(PullFeeResult pullFeeResult) {
+                        DymOrder finalOrder = null;
                         if (pullFeeResult != null) {
                             try {
                                 HandlePush.getInstance().handPush(pullFeeResult.fee);
+                                finalOrder = DymOrder.findByIDType(order.orderId, order.orderType);
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
                         }
+
+                        if (finalOrder == null) {
+                            finalOrder = order;
+                        }
+
+                        //-----------------重新计算费用---------------------
+                        DecimalFormat df = new DecimalFormat("#0.0");
+
+                        //拷贝本地数据
+                        finalOrder.prepay = order.prepay;
+                        finalOrder.extraFee = order.extraFee;
+                        finalOrder.remark = order.remark;
+                        finalOrder.paymentFee = order.paymentFee;
+                        finalOrder.prepay = order.prepay;
+
+                        finalOrder.orderTotalFee = Double.parseDouble(df.format(finalOrder.totalFee + finalOrder.extraFee + finalOrder.paymentFee));
+
+                        double canCouponMoney = finalOrder.totalFee + finalOrder.extraFee;//可以参与优惠券抵扣的钱
+                        if (canCouponMoney < finalOrder.minestMoney) {
+                            canCouponMoney = finalOrder.minestMoney;
+                        }
+                        if (djOrder != null && djOrder.coupon != null) {
+                            if (djOrder.coupon.couponType == 2) {
+                                finalOrder.couponFee = djOrder.coupon.deductible;
+                            } else if (djOrder.coupon.couponType == 1) {
+                                finalOrder.couponFee = Double.parseDouble(df.format(canCouponMoney * (100 - djOrder.coupon.discount) / 100));
+                            }
+                        }
+                        double exls = Double.parseDouble(df.format(canCouponMoney - finalOrder.couponFee));//打折抵扣后应付的钱
+                        if (exls < 0) {
+                            exls = 0;//优惠券不退钱
+                        }
+                        finalOrder.orderShouldPay = Double.parseDouble(df.format(exls + finalOrder.paymentFee - finalOrder.prepay));
+
+                        //----------------------------------------
+
+                        DymOrder finalOrder1 = finalOrder;
                         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                                .arrivalDistination(order.orderId, EmUtil.getAppKey(), order.paymentFee, order.extraFee,
-                                        order.remark, order.distance, order.disFee, order.travelTime,
-                                        order.travelFee, order.waitTime,
-                                        order.waitTimeFee, 0.0, 0.0, order.couponFee,
-                                        order.orderTotalFee, order.orderShouldPay, order.startFee,
-                                        loc.street + "  " + loc.poiName, loc.latitude, loc.longitude, order.minestMoney)
-                                .filter(new HttpResultFunc<>());
+                                .arrivalDistination(finalOrder.orderId, EmUtil.getAppKey(), finalOrder.paymentFee, finalOrder.extraFee,
+                                        finalOrder.remark, finalOrder.distance, finalOrder.disFee, finalOrder.travelTime,
+                                        finalOrder.travelFee, finalOrder.waitTime,
+                                        finalOrder.waitTimeFee, 0.0, 0.0, finalOrder.couponFee,
+                                        finalOrder.orderTotalFee, finalOrder.orderShouldPay, finalOrder.startFee,
+                                        loc.street + "  " + loc.poiName, loc.latitude, loc.longitude, finalOrder.minestMoney)
+                                .filter(new HttpResultFunc<>())
+                                .map(new Func1<DJOrderResult, DJOrderResult>() {
+                                    @Override
+                                    public DJOrderResult call(DJOrderResult djOrderResult) {
+                                        finalOrder1.updateConfirm();
+                                        return djOrderResult;
+                                    }
+                                });
                     }
                 })
                 .subscribeOn(Schedulers.io())

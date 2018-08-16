@@ -1,5 +1,6 @@
 package com.easymi.daijia.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.text.Editable;
@@ -265,9 +266,11 @@ public class SettleFragmentDialog {
             confirmBtn.setVisibility(View.VISIBLE);
             payButton.setVisibility(View.GONE);
             dialogTitle.setText(context.getString(R.string.confirm_money));
+            addedHint.setVisibility(View.VISIBLE);
         } else {
             confirmBtn.setVisibility(View.GONE);
             payButton.setVisibility(View.VISIBLE);
+            addedHint.setVisibility(View.GONE);
             dialogTitle.setText(context.getString(R.string.settle));
             extraFeeEdit.setText(String.valueOf(dymOrder.extraFee));
             paymentEdit.setText(String.valueOf(dymOrder.paymentFee));
@@ -384,6 +387,11 @@ public class SettleFragmentDialog {
         if (djOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {//到达于目的地后就无需计算了
             return;
         }
+
+        if (dymOrder == null) {
+            return;
+        }
+
         dymOrder.extraFee = extraFee;
         dymOrder.paymentFee = paymentFee;
         dymOrder.remark = remark;
@@ -408,8 +416,15 @@ public class SettleFragmentDialog {
         }
         dymOrder.orderShouldPay = Double.parseDouble(df.format(exls + paymentFee - dymOrder.prepay));
 
-        prepayMoneyText.setText(String.valueOf(dymOrder.prepay));
-        needPayText.setText(String.valueOf(dymOrder.orderShouldPay));
+        if (context instanceof Activity) {
+            ((Activity)context).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    prepayMoneyText.setText(String.valueOf(dymOrder.prepay));
+                    needPayText.setText(String.valueOf(dymOrder.orderShouldPay));
+                }
+            });
+        }
     }
 
     public boolean isShowing() {

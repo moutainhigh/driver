@@ -187,25 +187,25 @@ public class SplashActivity extends RxBaseActivity {
      */
     private void checkForUpdate() {
 
-        if (NetUtil.getNetWorkState(this) != NetUtil.NETWORK_NONE) { //判定用户是否单独关闭了该应用的网络
-            if (!NetUtil.ping()) {//通过ping baidu的方式来判断网络是否可用
-                AlertDialog dialog = new AlertDialog.Builder(this)
-                        .setTitle(getString(R.string.hint))
-                        .setMessage(getString(R.string.reject_net))
-                        .setCancelable(false)
-                        .setPositiveButton(getString(R.string.ok), (dialog1, which) -> {
-                            Intent intent = new Intent();
-                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                            Uri uri = Uri.fromParts("package", getPackageName(), null);
-                            intent.setData(uri);
-                            startActivity(intent);
-                            jumpOver.setEnabled(false);
-                        })
-                        .create();
-                dialog.show();
-                return;
-            }
-        }
+//        if (NetUtil.getNetWorkState(this) != NetUtil.NETWORK_NONE) { //判定用户是否单独关闭了该应用的网络
+//            if (!NetUtil.ping()) {//通过ping baidu的方式来判断网络是否可用
+//                AlertDialog dialog = new AlertDialog.Builder(this)
+//                        .setTitle(getString(R.string.hint))
+//                        .setMessage(getString(R.string.reject_net))
+//                        .setCancelable(false)
+//                        .setPositiveButton(getString(R.string.ok), (dialog1, which) -> {
+//                            Intent intent = new Intent();
+//                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+//                            Uri uri = Uri.fromParts("package", getPackageName(), null);
+//                            intent.setData(uri);
+//                            startActivity(intent);
+//                            jumpOver.setEnabled(false);
+//                        })
+//                        .create();
+//                dialog.show();
+//                return;
+//            }
+//        }
 
         new UpdateHelper(this, new UpdateHelper.OnNextListener() {
             @Override

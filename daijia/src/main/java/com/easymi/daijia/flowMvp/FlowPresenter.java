@@ -230,9 +230,9 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 //            }
 //        })));
 
-        Observable<DJOrderResult> observable = model.arriveDes(dymOrder);
+        Observable<DJOrderResult> observable = model.arriveDes(djOrder,dymOrder);
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, djOrderResult -> {
-            dymOrder.updateConfirm();
+//            dymOrder.updateConfirm();
             djOrderResult = orderResult2DJOrder(djOrderResult);
             updateDymOrder(djOrderResult.order);
             view.showOrder(djOrderResult.order);

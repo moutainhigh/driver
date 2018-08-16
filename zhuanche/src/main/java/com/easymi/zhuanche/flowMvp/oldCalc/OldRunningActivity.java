@@ -243,7 +243,7 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
 
             @Override
             public void doConfirmMoney(LoadingButton btn, DymOrder dymOrder) {
-                presenter.arriveDes(btn, dymOrder);
+                presenter.arriveDes(zcOrder,btn, dymOrder);
             }
 
             @Override
@@ -400,7 +400,7 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
 
     private Address getEndAddr() {
         Address endAddr = null;
-        if (zcOrder.addresses != null && zcOrder.addresses.size() != 0) {
+        if (zcOrder != null && zcOrder.addresses != null && zcOrder.addresses.size() != 0) {
             for (Address address : zcOrder.addresses) {
                 if (address.addrType == 3) {
                     endAddr = address;

@@ -81,7 +81,7 @@ public interface FlowContract {
 
         void startDrive(Long orderId, LoadingButton btn);
 
-        void arriveDes(LoadingButton btn, DymOrder dymOrder);
+        void arriveDes(ZCOrder zcOrder, LoadingButton btn, DymOrder dymOrder);
 
         void navi(LatLng latLng, String poi, Long orderId);
 
@@ -124,7 +124,7 @@ public interface FlowContract {
 
         Observable<ZCOrderResult> startDrive(Long orderId);
 
-        Observable<ZCOrderResult> arriveDes(DymOrder dymOrder);
+        Observable<ZCOrderResult> arriveDes(ZCOrder zcOrder,DymOrder dymOrder);
 
         Observable<ZCOrderResult> changeEnd(Long orderId, Double lat, Double lng, String address);
 

@@ -109,6 +109,9 @@ public class PowerManagerUtil {
                 }
 
                 pmLock = pm.newWakeLock(levelAndFlags, "MyTag");
+                //解决WakeLock under-locked异常
+                pmLock.setReferenceCounted(false);
+
                 pmLock.acquire();
                 pmLock.release();
             }

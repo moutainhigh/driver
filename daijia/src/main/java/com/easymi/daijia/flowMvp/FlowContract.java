@@ -131,7 +131,7 @@ public interface FlowContract {
 
         Observable<DJOrderResult> startDrive(Long orderId);
 
-        Observable<DJOrderResult> arriveDes(DymOrder dymOrder);
+        Observable<DJOrderResult> arriveDes(DJOrder djOrder,DymOrder dymOrder);
 
         Observable<DJOrderResult> changeEnd(Long orderId, Double lat, Double lng, String address);
 

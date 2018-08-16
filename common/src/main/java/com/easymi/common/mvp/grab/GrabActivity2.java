@@ -288,12 +288,16 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-        mapView.onDestroy();
+        if (mapView != null) {
+            mapView.onDestroy();
+        }
         XApp.getInstance().stopVoice();
         NotificationManager mNotificationManager = (NotificationManager) XApp
                 .getInstance().getSystemService(NOTIFICATION_SERVICE);
-        mNotificationManager.cancel(HandlePush.NOTIFY_ID);
+        if (mNotificationManager != null) {
+            mNotificationManager.cancel(HandlePush.NOTIFY_ID);
+        }
+        super.onDestroy();
     }
 
     @Override

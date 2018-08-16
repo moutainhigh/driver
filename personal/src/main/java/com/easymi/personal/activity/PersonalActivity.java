@@ -90,7 +90,7 @@ public class PersonalActivity extends RxBaseActivity {
         Employ employ = EmUtil.getEmployInfo();
         showBase(employ);
 
-        if (TextUtils.equals(employ.service_type, "zhuanche")) {
+        if (employ != null && TextUtils.equals(employ.service_type, "zhuanche")) {
             rlCarInfo.setVisibility(View.VISIBLE);
         } else {
             rlCarInfo.setVisibility(View.GONE);

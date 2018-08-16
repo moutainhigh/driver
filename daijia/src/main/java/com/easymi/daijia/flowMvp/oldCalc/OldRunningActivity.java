@@ -408,7 +408,7 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
 
     private Address getEndAddr() {
         Address endAddr = null;
-        if (djOrder.addresses != null && djOrder.addresses.size() != 0) {
+        if (djOrder != null && djOrder.addresses != null && djOrder.addresses.size() != 0) {
             for (Address address : djOrder.addresses) {
                 if (address.addrType == 3) {
                     endAddr = address;

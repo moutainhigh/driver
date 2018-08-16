@@ -543,7 +543,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         isFront = true;
         boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
         if (!isLogin) {
-            ARouter.getInstance().build("/personal/LoginActivity").withFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).navigation();
+            ARouter.getInstance().build("/personal/LoginActivity")/*.withFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)*/.navigation();
             finish();
         }
         mapView.onResume();

@@ -12,6 +12,7 @@ import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.entity.PushEmploy;
+import com.easymi.component.network.GsonUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.FileUtil;
 import com.easymi.component.utils.Log;
@@ -101,24 +102,24 @@ public class BuildPushUtil {
         }
         pushData.calc.orderInfo = orderList;
 
-        List<PushData> dataList;
+
         /**
          * 历史未上传的位置信息
          */
         String cacheStr = FileUtil.readPushCache();
-        if (StringUtils.isBlank(cacheStr)) {
-            dataList = new ArrayList<>();
-        } else {
-            dataList = new Gson().fromJson(cacheStr,
-                    new TypeToken<List<PushData>>() {
-                    }.getType());
+        List<PushData> dataList = new ArrayList<>();
+        if (!StringUtils.isBlank(cacheStr)) {
+            List<PushData> list = GsonUtil.parseToList(cacheStr, PushData[].class);
+            if (list != null && !list.isEmpty()) {
+                Log.e("MQTTService", "缓存点");
+                dataList.addAll(list);
+            }
         }
 
         //本次的位置信息
         dataList.add(pushData);
 
         List<PushData> newestDataList = new ArrayList<>();
-
 
         boolean canPushNetLoc = GPSSetting.getInstance().getNetEnable();
         if (!canPushNetLoc) {

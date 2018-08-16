@@ -1,5 +1,6 @@
 package com.easymi.zhuanche.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.text.Editable;
@@ -266,7 +267,9 @@ public class SettleFragmentDialog {
             confirmBtn.setVisibility(View.VISIBLE);
             payButton.setVisibility(View.GONE);
             dialogTitle.setText(context.getString(R.string.confirm_money));
+            addedHint.setVisibility(View.VISIBLE);
         } else {
+            addedHint.setVisibility(View.GONE);
             confirmBtn.setVisibility(View.GONE);
             payButton.setVisibility(View.VISIBLE);
             dialogTitle.setText(context.getString(R.string.settle));
@@ -327,64 +330,16 @@ public class SettleFragmentDialog {
         calcMoney();
     }
 
-//    /**
-//     * 附加费相当于就是totalFee的一部分 在不影响之前逻辑的情况下 他没有被加到totalFee里面去
-//     */
-//    private void calcMoney() {
-//        DecimalFormat df = new DecimalFormat("#0.0");
-//        if (zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_DESTINATION_ORDER) {//到达于目的地后就无需计算了
-//            return;
-//        }
-//        dymOrder.extraFee = extraFee;
-//        dymOrder.paymentFee = paymentFee;
-//        dymOrder.remark = remark;
-//        dymOrder.prepay = zcOrder.prepay;
-//        if (zcOrder.coupon != null) {
-//            if (zcOrder.coupon.couponType == 2) {
-//                dymOrder.couponFee = zcOrder.coupon.deductible;
-//            } else if (zcOrder.coupon.couponType == 1) {
-//                dymOrder.couponFee = Double.parseDouble(df.format((dymOrder.totalFee + dymOrder.extraFee) * (100 - zcOrder.coupon.discount) / 100));//附加费参与优惠券打折
-//            }
-//
-//        }
-//        dymOrder.orderTotalFee = Double.parseDouble(df.format(dymOrder.totalFee + dymOrder.extraFee + dymOrder.paymentFee));
-//
-//        double prepay = dymOrder.prepay;
-//        double otherFee = Double.parseDouble(df.format(dymOrder.paymentFee));//附加费因为要参与优惠券打折，所以这里就不需要加附加费了
-//
-//        double leftMoney = Double.parseDouble(df.format(prepay - otherFee));
-//        if (leftMoney >= 0) {//预付的钱大于附加的钱 相当于预付的钱就是这么减剩的
-//            prepay = leftMoney;
-//            otherFee = 0;
-//        } else {//预付的钱小于附加的钱 相当于附加的钱就是减剩的
-//            prepay = 0;
-//            otherFee = -leftMoney;
-//        }
-//        //开始计算优惠券
-//        double shouldPay = Double.parseDouble(df.format(dymOrder.totalFee + dymOrder.extraFee - dymOrder.couponFee));//附加费参与优惠券抵扣
-//        if (shouldPay > 0) {
-//            shouldPay -= prepay;
-//        } else {
-//            dymOrder.couponFee = dymOrder.totalFee + dymOrder.extraFee;
-//            shouldPay = -prepay;
-//        }
-//        //最后加上其他费用
-//        shouldPay += otherFee;
-//        dymOrder.orderShouldPay = Double.parseDouble(df.format(shouldPay));
-//
-//        if (dymOrder.orderShouldPay < dymOrder.minestMoney) {//低于最低消费金额时
-//            dymOrder.orderShouldPay = dymOrder.minestMoney;
-//        }
-//
-//        prepayMoneyText.setText(String.valueOf(dymOrder.prepay));
-//        needPayText.setText(String.valueOf(dymOrder.orderShouldPay));
-//    }
-
     private void calcMoney() {
         DecimalFormat df = new DecimalFormat("#0.0");
         if (zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_DESTINATION_ORDER) {//到达于目的地后就无需计算了
             return;
         }
+
+        if (dymOrder == null) {
+            return;
+        }
+
         dymOrder.extraFee = extraFee;
         dymOrder.paymentFee = paymentFee;
         dymOrder.remark = remark;
@@ -409,8 +364,16 @@ public class SettleFragmentDialog {
         }
         dymOrder.orderShouldPay = Double.parseDouble(df.format(exls + paymentFee - dymOrder.prepay));
 
-        prepayMoneyText.setText(String.valueOf(dymOrder.prepay));
-        needPayText.setText(String.valueOf(dymOrder.orderShouldPay));
+        if (context instanceof Activity) {
+            ((Activity)context).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    prepayMoneyText.setText(String.valueOf(dymOrder.prepay));
+                    needPayText.setText(String.valueOf(dymOrder.orderShouldPay));
+                }
+            });
+        }
+
     }
 
     public boolean isShowing() {

@@ -1,5 +1,6 @@
 package com.easymi.component.network;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
@@ -31,12 +32,18 @@ public class ProgressHandler extends Handler {
     }
 
     private void initDialog() {
+
         progressHUD = new RxProgressHUD.Builder(context)
                 .setTitle("")
                 .setMessage(context.getString(R.string.wait))
                 .setCancelable(cancelable)
                 .setOnDismissListener(dialog -> progressDismissListener.onProgressDismiss()).create();
         if (!progressHUD.isShowing()) {
+            if (context != null && context instanceof Activity) {
+                if (((Activity) context).isFinishing()) {
+                    return;
+                }
+            }
             progressHUD.show();
         }
     }

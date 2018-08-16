@@ -150,20 +150,30 @@ public interface ZCApiService {
     @POST("driver/api/v1/arrivalSpecialDistination")
     Observable<ZCOrderResult> arrivalDistination(@Field("order_id") Long orderId,
                                                  @Field("app_key") String appKey,
+
+                                                 //用原始数据
                                                  @Field("advance_price") Double advance_price,//垫付
                                                  @Field("other_price") Double other_price,//附加费用
                                                  @Field("remark") String remark,//备注
+
+                                                 //最新的数据
                                                  @Field("distance") Double distance,
                                                  @Field("distance_fee") Double distance_fee,
                                                  @Field("time") Integer time,
                                                  @Field("time_fee") Double time_fee,
                                                  @Field("wait_time") Integer wait_time,
                                                  @Field("wait_fee") Double wait_fee,
+
+                                                 //用原始数据
                                                  @Field("add_distance") Double add_distance,
                                                  @Field("add_fee") Double add_fee,
+
+                                                 //重新计算
                                                  @Field("coupon_fee") Double coupon_fee,//优惠券
                                                  @Field("total_fee") Double total_fee,//跑出来的钱 + 垫付 + 附加费用 (不算优惠券的钱)
                                                  @Field("real_pay") Double real_pay,//total_fee - 优惠金额 - 预付费
+
+                                                 //最新的数据
                                                  @Field("start_price") Double start_price,
                                                  @Field("real_destination") String realAddress,
                                                  @Field("real_destination_lat") Double realLat,

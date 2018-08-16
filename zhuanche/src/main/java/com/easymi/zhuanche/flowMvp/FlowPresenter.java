@@ -156,12 +156,12 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     }
 
     @Override
-    public void arriveDes(LoadingButton btn, DymOrder dymOrder) {
+    public void arriveDes(ZCOrder zcOrder,LoadingButton btn, DymOrder dymOrder) {
 
-        Observable<ZCOrderResult> observable = model.arriveDes(dymOrder);
+        Observable<ZCOrderResult> observable = model.arriveDes(zcOrder,dymOrder);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, zcOrderResult -> {
-            dymOrder.updateConfirm();
+//            dymOrder.updateConfirm(); #该逻辑移动到arrivalDistination接口里面
             zcOrderResult = orderResult2ZCOrder(zcOrderResult);
             updateDymOrder(zcOrderResult.order);
             view.showOrder(zcOrderResult.order);
