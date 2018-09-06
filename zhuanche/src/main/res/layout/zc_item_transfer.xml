@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:RatingBar="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="100dp">
+
+    <ImageView
+        android:id="@+id/driver_photo"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dp"
+        android:src="@mipmap/photo_default_1" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/driver_photo"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/driver_photo"
+        android:textColor="#232323"
+        android:textSize="18dp"
+        tools:text="杨师傅" />
+
+    <TextView
+        android:id="@+id/dis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/name"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/name"
+        android:drawableLeft="@mipmap/tran_loc"
+        android:drawablePadding="10dp"
+        android:text="0公里"
+        android:textColor="#489ee5"
+        android:textSize="14dp" />
+
+    <TextView
+        android:id="@+id/transfer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/transfer_bg"
+        android:paddingBottom="4dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="4dp"
+        android:text="@string/order_transfer"
+        android:textColor="#fff"
+        android:textSize="18dp" />
+
+    <TextView
+        android:id="@+id/car_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/name"
+        android:layout_below="@id/name"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/tran_car_no_bg"
+        android:paddingBottom="2dp"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:paddingTop="2dp"
+        android:textColor="#b1b1b1"
+        tools:text="川A12345" />
+
+    <TextView
+        android:id="@+id/car_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/car_no"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/car_no"
+        tools:text="宝马X5" />
+
+    <com.easymi.component.widget.RatingBar
+        android:id="@+id/rating_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/name"
+        android:layout_below="@id/car_no"
+        android:layout_marginTop="4dp"
+        RatingBar:isIndicator="true"
+        RatingBar:starCount="5"
+        RatingBar:starDistance="2dp"
+        RatingBar:starEmpty="@mipmap/tran_empty_star"
+        RatingBar:starFill="@mipmap/tran_star_full"
+        RatingBar:starSize="12dp"
+        RatingBar:stepSize="0.1" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:background="#dcdcdc" />
+
+</RelativeLayout>

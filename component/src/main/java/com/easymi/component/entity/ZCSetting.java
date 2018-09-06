@@ -32,6 +32,9 @@ public class ZCSetting {
     @SerializedName("driver_cancel_order")
     public int canCancelOrder;
 
+    @SerializedName("employ_change_order")
+    public int employChangeOrder;//是否可以转单（1开启，2关闭)
+
 
     public static void deleteAll() {
         SqliteHelper helper = SqliteHelper.getInstance();
@@ -49,6 +52,7 @@ public class ZCSetting {
         values.put("canCancelOrder", canCancelOrder);
         values.put("isAddPrice", isAddPrice);
         values.put("employChangePrice", employChangePrice);
+        values.put("employChangeOrder", employChangeOrder);
         db.insert("t_zc_settinginfo", null, values);
     }
 
@@ -64,6 +68,7 @@ public class ZCSetting {
                 settingInfo.canCancelOrder = cursor.getInt(cursor.getColumnIndex("canCancelOrder"));
                 settingInfo.isAddPrice = cursor.getInt(cursor.getColumnIndex("isAddPrice"));
                 settingInfo.employChangePrice = cursor.getInt(cursor.getColumnIndex("employChangePrice"));
+                settingInfo.employChangeOrder = cursor.getInt(cursor.getColumnIndex("employChangeOrder"));
             }
         } finally {
             cursor.close();

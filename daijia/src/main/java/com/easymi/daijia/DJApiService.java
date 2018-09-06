@@ -2,6 +2,7 @@ package com.easymi.daijia;
 
 import com.easymi.component.result.EmResult;
 import com.easymi.common.entity.PullFeeResult;
+import com.easymi.daijia.entity.TransferList;
 import com.easymi.daijia.result.BudgetResult;
 import com.easymi.daijia.result.ConsumerResult;
 import com.easymi.daijia.result.DJOrderResult;
@@ -350,5 +351,24 @@ public interface DJApiService {
     @POST("api/v1/pullfee")
     Observable<PullFeeResult> pullFee(@Field("gps") String json,
                                       @Field("app_key") String appKey);
+
+
+    /**
+     * 查询可转单司机.
+     */
+    @GET("driver/api/v1/engineChangeEmploies")
+    Observable<TransferList> getTransferList(@Query("lat") double lat,
+                                             @Query("lng") double lng,
+                                             @Query("distance") float distance,
+                                             @Query("app_key") String appKey);
+
+
+    @FormUrlEncoded
+    @PUT("api/v1/daijiaChangeOrder")
+    Observable<EmResult> changeOrder(@Field("id") long orderId,
+                                     @Field("employ_id") long employId,
+                                     @Field("app_key") String appKey);
+
+
 
 }

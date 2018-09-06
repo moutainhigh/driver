@@ -34,12 +34,20 @@ public class Setting {
     @SerializedName("employ_change_price")
     public int employChangePrice;//确认费用时是否能加垫付费之类的
 
+    @SerializedName("employ_change_order")
+    public int employChangeOrder;//是否可以转单（1开启，2关闭)
+
+    //是否能消单
+    @SerializedName("is_cancel")
+    public int canCancelOrder;
+
     @SerializedName("employ_factor")
     public int doubleCheck;//双因子验证
 
     //附近司机推荐距离
     @SerializedName("emploies_km")
     public double emploiesKm;
+
 
     //下面四个字段疑似废弃
     public double payMoney1;
@@ -59,6 +67,8 @@ public class Setting {
         values.put("isWorkCar", isWorkCar);
         values.put("workCarChangeOrder", workCarChangeOrder);
         values.put("employChangePrice", employChangePrice);
+        values.put("employChangeOrder", employChangeOrder);
+        values.put("canCancelOrder", canCancelOrder);
         values.put("doubleCheck", doubleCheck);
         values.put("canCallDriver", canCallDriver);
         values.put("payMoney1", payMoney1);
@@ -80,6 +90,8 @@ public class Setting {
                 settingInfo.isWorkCar = cursor.getInt(cursor.getColumnIndex("isWorkCar"));
                 settingInfo.workCarChangeOrder = cursor.getInt(cursor.getColumnIndex("workCarChangeOrder"));
                 settingInfo.employChangePrice = cursor.getInt(cursor.getColumnIndex("employChangePrice"));
+                settingInfo.employChangeOrder = cursor.getInt(cursor.getColumnIndex("employChangeOrder"));
+                settingInfo.canCancelOrder = cursor.getInt(cursor.getColumnIndex("canCancelOrder"));
                 settingInfo.doubleCheck = cursor.getInt(cursor.getColumnIndex("doubleCheck"));
                 settingInfo.canCallDriver = cursor.getInt(cursor.getColumnIndex("canCallDriver"));
 

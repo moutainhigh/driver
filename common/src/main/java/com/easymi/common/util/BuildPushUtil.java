@@ -30,7 +30,11 @@ import java.util.List;
 
 public class BuildPushUtil {
 
-    public static String buildPush(BuildPushData buildPushData) {
+    /**
+     * @param buildPushData 需要推送的数据
+     * @param noLimit       不限制任何
+     */
+    public static String buildPush(BuildPushData buildPushData, boolean noLimit) {
 
         EmLoc emLoc = buildPushData.emLoc;
 
@@ -121,7 +125,8 @@ public class BuildPushUtil {
 
         List<PushData> newestDataList = new ArrayList<>();
 
-        boolean canPushNetLoc = GPSSetting.getInstance().getNetEnable();
+        //能上传网络定位或者不限制任何
+        boolean canPushNetLoc = GPSSetting.getInstance().getNetEnable() || noLimit;
         if (!canPushNetLoc) {
             for (PushData pd : dataList) {
                 if (pd != null && pd.calc != null && pd.calc.locationType == 1) {

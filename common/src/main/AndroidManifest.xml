@@ -68,6 +68,10 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".register.InfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSwipeBack" />
 
         <service
             android:name="com.easymi.common.daemon.DaemonService"

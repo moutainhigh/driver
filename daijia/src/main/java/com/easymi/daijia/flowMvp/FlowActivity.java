@@ -55,6 +55,7 @@ import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Setting;
+import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.loc.LocService;
@@ -74,6 +75,7 @@ import com.easymi.daijia.R;
 import com.easymi.daijia.activity.CancelActivity;
 import com.easymi.daijia.activity.ConsumerInfoActivity;
 import com.easymi.daijia.activity.SameOrderActivity;
+import com.easymi.daijia.activity.TransferActivity;
 import com.easymi.daijia.entity.Address;
 import com.easymi.daijia.entity.ConsumerInfo;
 import com.easymi.daijia.entity.DJOrder;
@@ -115,6 +117,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         OrderFinishReceiver.OnFinishListener {
     public static final int CANCEL_ORDER = 0X01;
     public static final int CHANGE_END = 0X02;
+    public static final int CHANGE_ORDER = 0X03;
 
     CusToolbar toolbar;
     TextView nextPlace;
@@ -201,7 +204,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             if (popWindow.isShowing()) {
                 popWindow.dismiss();
             } else {
-                if (djOrder.orderStatus == DJOrderStatus.PAIDAN_ORDER || djOrder.orderStatus >= DJOrderStatus.GOTO_DESTINATION_ORDER) {
+                Setting setting = Setting.findOne();
+                boolean notChangeOrder = setting.employChangeOrder != 1;
+                boolean notCancel = setting.canCancelOrder != 1;
+                if (notCancel || djOrder.orderStatus == DJOrderStatus.PAIDAN_ORDER || djOrder.orderStatus >= DJOrderStatus.GOTO_DESTINATION_ORDER) {
                     popWindow.hideCancel();
                 } else {
                     popWindow.showCancel();
@@ -215,6 +221,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                     popWindow.hideConsumer();
                 } else {
                     popWindow.showConsumer();
+                }
+                if ((djOrder.orderStatus == DJOrderStatus.TAKE_ORDER || djOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) && !notChangeOrder) {
+                    popWindow.showTransfer();
+                } else {
+                    popWindow.hideTransfer();
                 }
 
                 popWindow.show(v);
@@ -241,6 +252,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 Intent intent = new Intent(FlowActivity.this, ConsumerInfoActivity.class);
                 intent.putExtra("orderId", orderId);
                 startActivity(intent);
+            } else if (i == R.id.pop_order_transfer) {
+                Intent intent = new Intent(FlowActivity.this, TransferActivity.class);
+                intent.putExtra("order", djOrder);
+                startActivityForResult(intent,CHANGE_ORDER);
             }
         });
     }
@@ -1135,6 +1150,13 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             } else if (requestCode == CHANGE_END) {
                 PoiItem poiItem = data.getParcelableExtra("poiItem");
                 presenter.changeEnd(orderId, poiItem.getLatLonPoint().getLatitude(), poiItem.getLatLonPoint().getLongitude(), poiItem.getTitle());
+            } else if (requestCode == CHANGE_ORDER) {
+                DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
+                if (null != dymOrder) {
+                    dymOrder.delete();
+                }
+                ToastUtil.showMessage(this, "转单成功");
+                finish();
             }
         }
     }

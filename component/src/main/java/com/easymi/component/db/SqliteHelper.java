@@ -16,7 +16,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "data.db";
 
-    private static final int VERSION = 56;
+    private static final int VERSION = 58;
 
     private StringBuffer sqlBuf;
 
@@ -169,6 +169,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("id").append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
                 .append("isPaid").append(" ").append("INTEGER").append(",")
                 .append("isExpenses").append(" ").append("INTEGER").append(",")
+                .append("canCancelOrder").append(" ").append("INTEGER").append(",")
                 .append("isAddPrice").append(" ").append("INTEGER").append(",")
                 .append("isWorkCar").append(" ").append("INTEGER").append(",")
                 .append("employChangePrice").append(" ").append("INTEGER").append(",")
@@ -178,7 +179,8 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("payMoney2").append(" ").append("DOUBLE").append(",")
                 .append("payMoney3").append(" ").append("DOUBLE").append(",")
 
-                .append("workCarChangeOrder").append(" ").append("INTEGER")
+                .append("workCarChangeOrder").append(" ").append("INTEGER").append(",")
+                .append("employChangeOrder").append(" ").append("employChangeOrder")
                 .append(");");
         execCreateTableSQL(db);
     }
@@ -190,7 +192,8 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("isExpenses").append(" ").append("INTEGER").append(",")
                 .append("canCancelOrder").append(" ").append("INTEGER").append(",")
                 .append("isAddPrice").append(" ").append("INTEGER").append(",")
-                .append("employChangePrice").append(" ").append("INTEGER")
+                .append("employChangePrice").append(" ").append("INTEGER").append(",")
+                .append("employChangeOrder").append(" ").append("employChangeOrder")
                 .append(");");
         execCreateTableSQL(db);
     }

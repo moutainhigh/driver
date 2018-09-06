@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#fff"
+    android:orientation="vertical">
+
+    <com.easymi.component.widget.CusToolbar
+        android:id="@+id/cus_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:id="@+id/order_no"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:drawableLeft="@mipmap/tran_order_id"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:singleLine="true"
+        android:textColor="#232323"
+        android:textSize="15dp"
+        tools:text="1231412414141" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dcdcdc" />
+
+    <TextView
+        android:id="@+id/order_time"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:drawableLeft="@mipmap/tran_time"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:singleLine="true"
+        android:textColor="#232323"
+        android:textSize="15dp"
+        tools:text="2018-08-16  11:30" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dcdcdc" />
+
+    <TextView
+        android:id="@+id/order_start"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:drawableLeft="@mipmap/tran_start"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:singleLine="true"
+        android:textColor="#232323"
+        android:textSize="15dp"
+        tools:text="锦绣大道南段锦绣大道" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dcdcdc" />
+
+    <TextView
+        android:id="@+id/order_end"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:drawableLeft="@mipmap/tran_end"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:singleLine="true"
+        android:textColor="#232323"
+        android:textSize="15dp"
+        tools:text="南熏大道蓝润睿城" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#f7f7f7" />
+
+    <com.easymi.component.widget.MultiStateView
+        android:id="@+id/state"
+        android:layout_width="match_parent"
+        app:emptyView="@layout/no_driver_layout"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            tools:itemCount="4"
+            tools:layoutManager="LinearLayoutManager"
+            tools:listitem="@layout/dj_item_transfer"
+            tools:orientation="vertical" />
+
+    </com.easymi.component.widget.MultiStateView>
+
+
+</LinearLayout>

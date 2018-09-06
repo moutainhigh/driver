@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -183,6 +182,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        setIntent(intent);
         MultipleOrder newOrder = (MultipleOrder) intent.getSerializableExtra("order");
 
         boolean haveSame = false;

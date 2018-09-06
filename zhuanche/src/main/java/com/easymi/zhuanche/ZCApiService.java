@@ -2,6 +2,7 @@ package com.easymi.zhuanche;
 
 import com.easymi.common.entity.PullFeeResult;
 import com.easymi.component.result.EmResult;
+import com.easymi.zhuanche.entity.TransferList;
 import com.easymi.zhuanche.result.BudgetResult;
 import com.easymi.zhuanche.result.ConsumerResult;
 import com.easymi.zhuanche.result.ZCOrderResult;
@@ -336,5 +337,23 @@ public interface ZCApiService {
     @POST("api/v1/pullfee")
     Observable<PullFeeResult> pullFee(@Field("gps") String json,
                                       @Field("app_key") String appKey);
+
+
+    /**
+     * 查询可转单司机.
+     */
+    @GET("driver/api/v1/engineChangeSpecialEmploies")
+    Observable<TransferList> getTransferList(@Query("lat") double lat,
+                                             @Query("lng") double lng,
+                                             @Query("distance") float distance,
+                                             @Query("app_key") String appKey,
+                                             @Query("model_id") long modelId);
+
+
+    @FormUrlEncoded
+    @PUT("api/v1/specialChangeOrder")
+    Observable<EmResult> changeOrder(@Field("id") long orderId,
+                                     @Field("employ_id") long employId,
+                                     @Field("app_key") String appKey);
 
 }

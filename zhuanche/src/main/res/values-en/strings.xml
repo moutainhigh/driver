@@ -90,6 +90,7 @@
     <string name="contract_service"> Contact customer service </string>
     <string name="same_order_driver"> same single driver </string>
     <string name="consumer_msg">Customer Information</string>
+    <string name="order_transfer">Order Transfer</string>
 
     <string name="refuse_reason">Please enter the reason for the refusal</string>
     <string name="ok"> OK </string>

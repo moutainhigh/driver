@@ -118,4 +118,55 @@
     <string name="des_order"> issued orders ></string>
     <string name="rate_order"> completed</string>
 
+
+    <string name="com_perfect_info">亲爱的师傅您好：\n&#160;&#160;&#160;&#160;您的资料还未完善，请尽快完善提交资料，管理员审核通过之后您就可以开启接单旅程了。</string>
+    <string name="com_perfect">完善资料</string>
+    <string name="com_perfect2">信息完善</string>
+    <string name="com_head_img">头像</string>
+    <string name="com_name">*姓名</string>
+    <string name="com_input_name">请输入您的真实姓名</string>
+    <string name="com_phone">*手机号</string>
+    <string name="com_input_phone">请输入手机号</string>
+    <string name="com_card">*身份证号</string>
+    <string name="com_input_card">请输入身份证号</string>
+    <string name="com_contacts">*紧急联系人</string>
+    <string name="com_input_contacts">请输入紧急联系人姓名</string>
+    <string name="com_contacts_phone">*紧急联系人电话</string>
+    <string name="com_input_contacts_phone">请输入紧急联系人电话</string>
+    <string name="com_introducer">推荐服务人员电话</string>
+    <string name="com_input_introducer">请输入推荐服务人员电话</string>
+    <string name="com_company">注册公司</string>
+    <string name="com_type">注册业务</string>
+    <string name="com_daijia">代驾</string>
+    <string name="com_zhuanche">专车</string>
+    <string name="com_car">有车注册</string>
+    <string name="com_no_car">无车注册</string>
+    <string name="com_next">下一步</string>
+    <string name="com_car_photo">上传车辆信息照片</string>
+    <string name="com_car_no">*车牌号</string>
+    <string name="com_input_car_no">请输入您的车牌号</string>
+    <string name="com_car_name">*车辆厂牌</string>
+    <string name="com_car_model">*车辆型号</string>
+    <string name="com_car_license_color">*车牌颜色</string>
+    <string name="com_car_color">*车身颜色</string>
+    <string name="com_car_type">*车辆类型</string>
+    <string name="com_car_use">*车辆性质</string>
+    <string name="com_oil">*燃料类型</string>
+    <string name="com_seat">*核定载人数（人）</string>
+    <string name="com_input_seat">请输入核定载客人数</string>
+    <string name="com_km">*车辆已行驶公里（KM）</string>
+    <string name="com_input_km">请输入车辆已行驶公里数</string>
+    <string name="com_car_vin">*车辆识别VIN</string>
+    <string name="com_input_car_vin">请输入车辆识别VIN</string>
+    <string name="com_buy_date">*购车日期</string>
+    <string name="com_input_buy_date">请输入购车日期</string>
+    <string name="com_register_date">*车辆注册日期</string>
+    <string name="com_input_register_date">请输入车辆注册日期</string>
+    <string name="com_check_date">*车辆年检日期</string>
+    <string name="com_input_check_date">请输入车辆年检日期</string>
+    <string name="com_pic_info">图片信息</string>
+    <string name="com_car_license">行驶证（必填）</string>
+    <string name="com_transportation_license">运输证</string>
+    <string name="com_commit">提交审核</string>
+
 </resources>

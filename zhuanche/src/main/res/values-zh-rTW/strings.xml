@@ -90,6 +90,7 @@
     <string name="contract_service">聯繫客服</string>
     <string name="same_order_driver">同單司機</string>
     <string name="consumer_msg">客戶信息</string>
+    <string name="order_transfer">转单</string>
 
     <string name="refuse_reason">請輸入拒單理由</string>
     <string name="ok">確定</string>

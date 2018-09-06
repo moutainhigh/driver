@@ -50,7 +50,9 @@ import com.easymi.common.receiver.AnnReceiver;
 import com.easymi.common.receiver.CancelOrderReceiver;
 import com.easymi.common.receiver.EmployStatusChangeReceiver;
 import com.easymi.common.receiver.NoticeReceiver;
+import com.easymi.common.register.InfoActivity;
 import com.easymi.common.widget.NearInfoWindowAdapter;
+import com.easymi.common.widget.PerfectInfoDialog;
 import com.easymi.component.Config;
 import com.easymi.component.EmployStatus;
 import com.easymi.component.app.ActManager;
@@ -168,6 +170,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
             onLineBtn.setClickable(false);
             onLineBtn.setStatus(LoadingButton.STATUS_LOADING);
             presenter.online(onLineBtn);
+//            showPerfectInfoDialog();
         });
         offlineCon.setOnClickListener(v -> presenter.offline());
 
@@ -177,19 +180,33 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         }
     }
 
+    private void showPerfectInfoDialog() {
+        PerfectInfoDialog dialog = PerfectInfoDialog.newInstance().setOnPerfectInfoClickListener(new PerfectInfoDialog.OnPerfectInfoClickListener() {
+            @Override
+            public void OnPerfectInfoClick() {
+                Intent intent = new Intent(WorkActivity.this, InfoActivity.class);
+                startActivity(intent);
+            }
+        });
+        dialog.show(getSupportFragmentManager(),"PerfectInfoDialog");
+    }
+
     private void initGuide() {
         boolean showGuide = XApp.getMyPreferences().getBoolean(Config.SP_SHOW_GUIDE, true);
         if (showGuide) {
             guideFrame.setVisibility(View.VISIBLE);
             gotoSet.setOnClickListener(v -> {
-                Intent intent = new Intent();
-                intent.setAction("android.intent.action.VIEW");
-                Uri content_url = Uri.parse("http://help.xiaokayun.cn");
-                intent.setData(content_url);
-                startActivity(intent);
-
                 guideFrame.setVisibility(View.GONE);
                 XApp.getPreferencesEditor().putBoolean(Config.SP_SHOW_GUIDE, false).apply();
+                try {
+                    Intent intent = new Intent();
+                    intent.setAction("android.intent.action.VIEW");
+                    Uri content_url = Uri.parse("http://help.xiaokayun.cn");
+                    intent.setData(content_url);
+                    startActivity(intent);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             });
         } else {
             guideFrame.setVisibility(View.GONE);
@@ -350,7 +367,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         listenOrderCon.setVisibility(View.VISIBLE);
         rippleBackground.startRippleAnimation();
         bottomBtnCon.setVisibility(View.GONE);
-        MQTTService.pushLoc(new BuildPushData(EmUtil.getLastLoc()));
+        MQTTService.pushLocNoLimit(new BuildPushData(EmUtil.getLastLoc()));
         presenter.indexOrders();
     }
 

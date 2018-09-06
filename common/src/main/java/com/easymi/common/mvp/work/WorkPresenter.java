@@ -219,7 +219,10 @@ public class WorkPresenter implements WorkContract.Presenter {
         long driverId = EmUtil.getEmployId();
 
         Observable<EmResult> observable = model.online(driverId, EmUtil.getAppKey());
-        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, btn, emResult -> view.onlineSuc())));
+        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, btn, emResult ->{
+            view.onlineSuc();
+            queryStatis();
+        })));
     }
 
     @Override
@@ -244,8 +247,9 @@ public class WorkPresenter implements WorkContract.Presenter {
             dis = driverKm;
         }
 
-        if (dis < 0) {
-            dis = 10;
+        if (dis <= 0) {
+            //距离为0时不调用接口.
+            return;
         }
 
         Observable<NearDriverResult> observable = model.queryNearDriver(driverId, lat, lng, dis, employType);

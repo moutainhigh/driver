@@ -78,6 +78,7 @@ import com.easymi.zhuanche.R;
 import com.easymi.zhuanche.activity.CancelActivity;
 import com.easymi.zhuanche.activity.ConsumerInfoActivity;
 import com.easymi.zhuanche.activity.SameOrderActivity;
+import com.easymi.zhuanche.activity.TransferActivity;
 import com.easymi.zhuanche.entity.Address;
 import com.easymi.zhuanche.entity.ConsumerInfo;
 import com.easymi.zhuanche.entity.ZCOrder;
@@ -118,6 +119,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         OrderFinishReceiver.OnFinishListener {
     public static final int CANCEL_ORDER = 0X01;
     public static final int CHANGE_END = 0X02;
+    public static final int CHANGE_ORDER = 0X03;
 
     CusToolbar toolbar;
     TextView nextPlace;
@@ -267,7 +269,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             if (popWindow.isShowing()) {
                 popWindow.dismiss();
             } else {
-                boolean notCancel = ZCSetting.findOne().canCancelOrder != 1;
+                ZCSetting setting = ZCSetting.findOne();
+                boolean notCancel = setting.canCancelOrder != 1;
+                boolean notChangeOrder = setting.employChangeOrder != 1;
                 if (notCancel || zcOrder.orderStatus == ZCOrderStatus.NEW_ORDER || zcOrder.orderStatus == ZCOrderStatus.PAIDAN_ORDER || zcOrder.orderStatus >= ZCOrderStatus.GOTO_DESTINATION_ORDER) {
                     popWindow.hideCancel();
                 } else {
@@ -282,6 +286,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                     popWindow.hideConsumer();
                 } else {
                     popWindow.showConsumer();
+                }
+                if ((zcOrder.orderStatus == ZCOrderStatus.TAKE_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) && !notChangeOrder) {
+                    popWindow.showTransfer();
+                } else {
+                    popWindow.hideTransfer();
                 }
 
                 popWindow.show(v);
@@ -308,6 +317,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 Intent intent = new Intent(FlowActivity.this, ConsumerInfoActivity.class);
                 intent.putExtra("orderId", orderId);
                 startActivity(intent);
+            } else if (i == R.id.pop_order_transfer) {
+                Intent intent = new Intent(FlowActivity.this, TransferActivity.class);
+                intent.putExtra("order", zcOrder);
+                startActivityForResult(intent, CHANGE_ORDER);
             }
         });
     }
@@ -1229,6 +1242,13 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             } else if (requestCode == CHANGE_END) {
                 PoiItem poiItem = data.getParcelableExtra("poiItem");
                 presenter.changeEnd(orderId, poiItem.getLatLonPoint().getLatitude(), poiItem.getLatLonPoint().getLongitude(), poiItem.getTitle());
+            } else if (requestCode == CHANGE_ORDER) {
+                DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
+                if (null != dymOrder) {
+                    dymOrder.delete();
+                }
+                ToastUtil.showMessage(this, "转单成功");
+                finish();
             }
         }
     }

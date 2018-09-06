@@ -34,6 +34,7 @@ import com.easymi.component.utils.FileUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.TimeUtil;
 import com.google.gson.Gson;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
@@ -236,6 +237,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 
         @Override
         public void onFailure(IMqttToken arg0, Throwable arg1) {
+            CrashReport.postCatchedException(arg1);
             isConning = false;
             arg1.printStackTrace();
             Log.e(TAG, "连接失败");
@@ -264,6 +266,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 
         @Override
         public void connectionLost(Throwable arg0) {
+            CrashReport.postCatchedException(arg0);
             Log.e(TAG, "失去连接");
             if (null != client) {
                 try {
@@ -271,7 +274,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
                     client.unsubscribe(configTopic);
                     Log.e(TAG, "取消订阅的topic");
                 } catch (Exception e) {
-
+                    CrashReport.postCatchedException(e);
                 }
             }
 //            LocReceiver.getInstance().deleteObserver(MQTTService.this);
@@ -331,30 +334,36 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
     }
 
     public static void pushLoc(BuildPushData data) {
-        if (data == null) {
-            return;
-        }
+        pushInternalLoc(data,false);
+    }
 
+    public static void pushLocNoLimit(BuildPushData data) {
+        pushInternalLoc(data, true);
+    }
+
+    private static void pushInternalLoc(BuildPushData data,boolean noLimit) {
         if (client != null && client.isConnected()) {
-            String pushStr = BuildPushUtil.buildPush(data);
-            publish(pushStr);
-
-            //上传后删除本地的缓存
-            FileUtil.delete("v5driver", "pushCache.txt");
-        } else {
-
-            String pushStr = BuildPushUtil.buildPush(data);
-
-            PushBean pushBean = new Gson().fromJson(pushStr, PushBean.class);
-            List<PushData> beanList = new ArrayList<>();
-            for (PushData datum : pushBean.data) {
-                if (datum.calc.orderInfo != null
-                        || datum.calc.orderInfo.size() != 0) {//有订单时才需要保存
-                    beanList.add(datum);
-                }
+            if (data != null) {
+                String pushStr = BuildPushUtil.buildPush(data,noLimit);
+                publish(pushStr);
+                //上传后删除本地的缓存
+                FileUtil.delete("v5driver", "pushCache.txt");
             }
-            if (beanList.size() != 0) {
-                FileUtil.savePushCache(XApp.getInstance(), new Gson().toJson(beanList));//只保存位置的list
+        } else {
+            if (data != null) {
+                String pushStr = BuildPushUtil.buildPush(data,noLimit);
+
+                PushBean pushBean = new Gson().fromJson(pushStr, PushBean.class);
+                List<PushData> beanList = new ArrayList<>();
+                for (PushData datum : pushBean.data) {
+                    if (datum.calc.orderInfo != null
+                            || datum.calc.orderInfo.size() != 0) {//有订单时才需要保存
+                        beanList.add(datum);
+                    }
+                }
+                if (beanList.size() != 0) {
+                    FileUtil.savePushCache(XApp.getInstance(), new Gson().toJson(beanList));//只保存位置的list
+                }
             }
             doConnected();
         }
@@ -387,7 +396,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
                 }
             } catch (MqttException e) {
                 isConning = false;
-
+                CrashReport.postCatchedException(e);
             } catch (Exception e) {
                 isConning = false;
 

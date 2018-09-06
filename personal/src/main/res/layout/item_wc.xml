@@ -1,43 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:padding="10dp">
 
-    <TextView
-        android:id="@+id/wc_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="公厕"
-        android:textColor="@color/text_color_black"
-        android:textSize="18sp"/>
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="4dp"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/wc_address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="温江区锦绣大道南段"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/wc_name"/>
+        <TextView
+            android:id="@+id/wc_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="xxxxxxxxxxxxxxxxxxxxxxxxxxxxx公厕"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:layout_marginRight="70dp"
+            android:textColor="@color/text_color_black"
+            android:textSize="18sp"/>
 
-    <TextView
-        android:id="@+id/wc_dis"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="231米"
-        android:textColor="@color/yellow"
-        android:layout_toRightOf="@+id/wc_name"
-        android:layout_marginLeft="8dp"
-        android:background="@drawable/corners_stroke_yellow"
-        android:padding="3dp"/>
+        <View
+            android:id="@+id/line"
+            android:layout_width="1px"
+            android:layout_alignRight="@id/wc_name"
+            android:layout_height="1px"/>
+
+        <TextView
+            android:id="@+id/wc_dis"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="231米"
+            android:layout_alignLeft="@id/line"
+            android:maxLines="1"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/yellow"
+            android:background="@drawable/corners_stroke_yellow"
+            android:padding="3dp"/>
+
+        <TextView
+            android:id="@+id/wc_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="xxxxxxxxxxxxxxx温江区锦绣大道南段"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/wc_name"/>
+
+
+    </RelativeLayout>
+
+
 
     <ImageView
         android:id="@+id/navi_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
         android:src="@mipmap/p_navi_icon"/>
 
-</RelativeLayout>
+</LinearLayout>

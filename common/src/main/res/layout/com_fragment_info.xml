@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View style="@style/RegisterLine" />
+
+        <FrameLayout style="@style/Register">
+
+            <TextView
+                style="@style/RegisterStart"
+                android:text="@string/com_head_img" />
+
+            <TextView
+                style="@style/RegisterEnd"
+                android:hint="@string/com_head_img" />
+
+        </FrameLayout>
+
+        <View style="@style/RegisterLine" />
+
+        <FrameLayout style="@style/Register">
+
+            <TextView
+                style="@style/RegisterStart"
+                android:text="@string/com_name" />
+
+            <EditText
+                style="@style/RegisterEnd"
+                android:hint="@string/com_input_name"
+                android:inputType="text" />
+
+        </FrameLayout>
+
+
+        <View style="@style/RegisterLine" />
+
+        <FrameLayout style="@style/Register">
+
+            <TextView
+                style="@style/RegisterStart"
+                android:text="@string/com_phone" />
+
+            <EditText
+                style="@style/RegisterEnd"
+                android:hint="@string/com_input_phone"
+                android:inputType="phone" />
+
+        </FrameLayout>
+
+        <View style="@style/RegisterLine" />
+
+        <FrameLayout style="@style/Register">
+
+            <TextView
+                style="@style/RegisterStart"
+                android:text="@string/com_card" />
+
+            <EditText
+                style="@style/RegisterEnd"
+                android:digits="1234567890X"
+                android:hint="@string/com_input_card"
+                android:inputType="none" />
+
+        </FrameLayout>
+
+        <View style="@style/RegisterLine" />
+
+        <FrameLayout style="@style/Register">
+
+            <TextView
+                style="@style/RegisterStart"
+                android:text="@string/com_contacts" />
+
+            <EditText
+                style="@style/RegisterEnd"
+                android:hint="@string/com_input_contacts"
+                android:inputType="text" />
+
+        </FrameLayout>
+
+        <View style="@style/RegisterLine" />
+
+        <FrameLayout style="@style/Register">
+
+            <TextView
+                style="@style/RegisterStart"
+                android:text="@string/com_contacts_phone" />
+
+            <EditText
+                style="@style/RegisterEnd"
+                android:hint="@string/com_input_contacts_phone"
+                android:inputType="phone" />
+
+        </FrameLayout>
+
+        <View style="@style/RegisterLine" />
+
+        <FrameLayout style="@style/Register">
+
+            <TextView
+                style="@style/RegisterStart"
+                android:text="@string/com_introducer" />
+
+            <EditText
+                style="@style/RegisterEnd"
+                android:hint="@string/com_input_introducer"
+                android:inputType="phone" />
+
+        </FrameLayout>
+
+        <View style="@style/RegisterLine" />
+
+        <FrameLayout style="@style/Register">
+
+            <TextView
+                style="@style/RegisterStart"
+                android:text="@string/com_company" />
+
+            <TextView
+                style="@style/RegisterEnd"
+                android:drawableEnd="@mipmap/com_right_arrow"
+                android:drawablePadding="4dp"
+                tools:text="XX公司" />
+
+        </FrameLayout>
+
+
+        <View style="@style/RegisterLine" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="#f7f7f7"
+            android:gravity="center_vertical"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:text="@string/com_type"
+            android:textColor="#999999"
+            android:textSize="14dp" />
+
+        <View style="@style/RegisterLine" />
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp">
+
+            <RadioButton
+                android:id="@+id/daijia"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:button="@null"
+                android:drawableRight="@drawable/com_gou"
+                android:text="@string/com_daijia"
+                android:textSize="14dp" />
+
+            <View style="@style/RegisterLine" />
+
+            <RadioButton
+                android:id="@+id/zhuanche"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:button="@null"
+                android:drawableRight="@drawable/com_gou"
+                android:text="@string/com_zhuanche"
+                android:textSize="14dp" />
+
+            <View style="@style/RegisterLine" />
+
+        </RadioGroup>
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp">
+
+            <RadioButton
+                android:id="@+id/car"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@drawable/com_gou2"
+                android:button="@null"
+                android:gravity="center"
+                android:text="@string/com_car"
+                android:textColor="@color/blue_white"
+                android:textSize="14dp" />
+
+            <Space
+                android:layout_width="20dp"
+                android:layout_height="10dp" />
+
+            <RadioButton
+                android:id="@+id/noCar"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@drawable/com_gou2"
+                android:button="@null"
+                android:gravity="center"
+                android:text="@string/com_no_car"
+                android:textColor="@color/blue_white"
+                android:textSize="14dp" />
+
+        </RadioGroup>
+
+
+        <LinearLayout
+            android:id="@+id/llAgreement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp">
+
+            <CheckBox
+                android:id="@+id/cbAgreement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/com_agr_cb_bg"
+                android:checked="true" />
+
+            <TextView
+                android:id="@+id/tvAgreement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="同意《服务协议》"
+                android:textColor="#666666"
+                android:textSize="12dp" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/next"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/com_corners_blue"
+            android:text="@string/com_next"
+            android:textColor="#fff"
+            android:textSize="18dp" />
+
+    </LinearLayout>
+
+
+</ScrollView>

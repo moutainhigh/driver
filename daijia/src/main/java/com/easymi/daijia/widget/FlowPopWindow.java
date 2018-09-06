@@ -38,6 +38,7 @@ public class FlowPopWindow extends PopupWindow implements View.OnClickListener {
     TextView contract;
     TextView same;
     TextView consumer;
+    View transfer;
 
     public FlowPopWindow(Context context) {
         this.context = context;
@@ -68,11 +69,13 @@ public class FlowPopWindow extends PopupWindow implements View.OnClickListener {
         contract = view.findViewById(R.id.pop_contract_service);    //联系后台
         same = view.findViewById(R.id.pop_same_order);        //同单司机
         consumer = view.findViewById(R.id.pop_consumer_msg);   //客户信息
+        transfer = view.findViewById(R.id.pop_order_transfer);
 
         cancel.setOnClickListener(this);
         contract.setOnClickListener(this);
         consumer.setOnClickListener(this);
         same.setOnClickListener(this);
+        transfer.setOnClickListener(this);
 
     }
 
@@ -109,6 +112,18 @@ public class FlowPopWindow extends PopupWindow implements View.OnClickListener {
     public void hideConsumer(){
         if (null != consumer) {
             consumer.setVisibility(View.GONE);
+        }
+    }
+
+    public void showTransfer(){
+        if (null != transfer) {
+            transfer.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void hideTransfer(){
+        if (null != transfer) {
+            transfer.setVisibility(View.GONE);
         }
     }
 

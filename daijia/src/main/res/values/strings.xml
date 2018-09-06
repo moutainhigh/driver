@@ -93,6 +93,7 @@
     <string name="contract_service">联系客服</string>
     <string name="same_order_driver">同单司机</string>
     <string name="consumer_msg">客户信息</string>
+    <string name="order_transfer">转单</string>
 
     <string name="refuse_reason">请输入拒单理由</string>
     <string name="ok">确定</string>
