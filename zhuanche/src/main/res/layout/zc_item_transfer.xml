@@ -35,7 +35,7 @@
         android:drawablePadding="10dp"
         android:text="0公里"
         android:textColor="#489ee5"
-        android:textSize="14dp" />
+        android:textSize="13dp" />
 
     <TextView
         android:id="@+id/transfer"
@@ -64,6 +64,7 @@
         android:paddingBottom="2dp"
         android:paddingLeft="2dp"
         android:paddingRight="2dp"
+        android:textSize="13dp"
         android:paddingTop="2dp"
         android:textColor="#b1b1b1"
         tools:text="川A12345" />
@@ -75,6 +76,7 @@
         android:layout_alignBaseline="@id/car_no"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/car_no"
+        android:textSize="13dp"
         tools:text="宝马X5" />
 
     <com.easymi.component.widget.RatingBar
@@ -86,10 +88,10 @@
         android:layout_marginTop="4dp"
         RatingBar:isIndicator="true"
         RatingBar:starCount="5"
-        RatingBar:starDistance="2dp"
+        RatingBar:starDistance="4dp"
         RatingBar:starEmpty="@mipmap/tran_empty_star"
         RatingBar:starFill="@mipmap/tran_star_full"
-        RatingBar:starSize="12dp"
+        RatingBar:starSize="13dp"
         RatingBar:stepSize="0.1" />
 
 

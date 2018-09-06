@@ -61,10 +61,10 @@
         android:layout_alignLeft="@id/name"
         RatingBar:isIndicator="true"
         RatingBar:starCount="5"
-        RatingBar:starDistance="2dp"
+        RatingBar:starDistance="4dp"
         RatingBar:starEmpty="@mipmap/tran_empty_star"
         RatingBar:starFill="@mipmap/tran_star_full"
-        RatingBar:starSize="12dp"
+        RatingBar:starSize="13dp"
         RatingBar:stepSize="0.1" />
 
     <View
