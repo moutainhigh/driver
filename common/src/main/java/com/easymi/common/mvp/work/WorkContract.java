@@ -65,6 +65,17 @@ public interface WorkContract {
         void showEmpty(int type);
 
         RxManager getRxManager();
+
+//        void showPerfectInfoDialog();
+//        void hidePerfectInfoDialog();
+//
+//        void showCompleteDialog(String companyPhone);
+//        void hideCompleteDialog();
+
+        void showRegisterDialog(String companyPhone, int type, String reason);
+
+        void hideRegisterDialog();
+
     }
 
     interface Presenter {

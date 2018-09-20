@@ -32,7 +32,6 @@ import com.easymi.component.EmployStatus;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.Employ;
-import com.easymi.component.entity.Setting;
 import com.easymi.component.entity.SubSetting;
 import com.easymi.component.entity.SystemConfig;
 import com.easymi.component.entity.ZCSetting;
@@ -40,7 +39,6 @@ import com.easymi.component.network.ErrCode;
 import com.easymi.component.network.GsonUtil;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
-import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
@@ -56,7 +54,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import rx.Observable;
-import rx.functions.Func2;
 
 /**
  * Created by developerLzh on 2017/11/17 0017.
@@ -219,7 +216,7 @@ public class WorkPresenter implements WorkContract.Presenter {
         long driverId = EmUtil.getEmployId();
 
         Observable<EmResult> observable = model.online(driverId, EmUtil.getAppKey());
-        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, btn, emResult ->{
+        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, btn, emResult -> {
             view.onlineSuc();
             queryStatis();
         })));
@@ -355,6 +352,14 @@ public class WorkPresenter implements WorkContract.Presenter {
             @Override
             public void onNext(LoginResult result) {
                 Employ employ = result.getEmployInfo();
+                if (employ.auditType == 2 || employ.auditType == 3 || employ.auditType == 4) {
+                    view.stopRefresh();
+                    view.showRegisterDialog(employ.company_phone, employ.auditType,employ.reject);
+                    return;
+                }
+
+                view.hideRegisterDialog();
+
                 employType = employ.service_type;
                 String udid = XApp.getMyPreferences().getString(Config.SP_UDID, "");
                 if (StringUtils.isNotBlank(employ.device_no)

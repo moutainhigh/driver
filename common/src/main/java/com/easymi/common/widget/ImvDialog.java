@@ -3,6 +3,7 @@ package com.easymi.common.widget;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.view.Gravity;
@@ -11,20 +12,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import com.easymi.common.R;
 
-public class PerfectInfoDialog extends DialogFragment{
+public class ImvDialog extends DialogFragment{
 
-    public static PerfectInfoDialog newInstance() {
-        return new PerfectInfoDialog();
-    }
-
-    private OnPerfectInfoClickListener listener;
-
-    public PerfectInfoDialog setOnPerfectInfoClickListener(OnPerfectInfoClickListener listener) {
-        this.listener = listener;
-        return this;
+    public static ImvDialog newInstance(int imvId) {
+        ImvDialog dialog = new ImvDialog();
+        Bundle arguments = new Bundle();
+        arguments.putInt("imvId", imvId);
+        dialog.setArguments(arguments);
+        return dialog;
     }
 
     @Override
@@ -39,7 +38,6 @@ public class PerfectInfoDialog extends DialogFragment{
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        getDialog().setCancelable(false);
         Window ww = getDialog().getWindow();
         if (ww != null) {
             WindowManager.LayoutParams lp = ww.getAttributes();
@@ -51,23 +49,15 @@ public class PerfectInfoDialog extends DialogFragment{
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.com_dialog_perfect_info, container, false);
-        view.findViewById(R.id.ensure).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listener != null) {
-                    listener.OnPerfectInfoClick();
-                }
-            }
-        });
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.com_dialog_imv, container, false);
+        ImageView imageView = view.findViewById(R.id.imv);
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            imageView.setImageResource(arguments.getInt("imvId"));
+        }
         return view;
     }
-
-    public interface OnPerfectInfoClickListener {
-        void OnPerfectInfoClick();
-    }
-
 
 
 }

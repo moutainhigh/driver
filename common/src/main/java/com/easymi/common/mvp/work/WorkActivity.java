@@ -1,6 +1,5 @@
 package com.easymi.common.mvp.work;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
@@ -28,13 +27,11 @@ import com.amap.api.maps.AMap;
 import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
-import com.amap.api.maps.model.BitmapDescriptor;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.easymi.common.R;
 import com.easymi.common.activity.CreateActivity;
 import com.easymi.common.activity.ModelSetActivity;
@@ -52,10 +49,9 @@ import com.easymi.common.receiver.EmployStatusChangeReceiver;
 import com.easymi.common.receiver.NoticeReceiver;
 import com.easymi.common.register.InfoActivity;
 import com.easymi.common.widget.NearInfoWindowAdapter;
-import com.easymi.common.widget.PerfectInfoDialog;
+import com.easymi.common.widget.RegisterDialog;
 import com.easymi.component.Config;
 import com.easymi.component.EmployStatus;
-import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
@@ -170,7 +166,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
             onLineBtn.setClickable(false);
             onLineBtn.setStatus(LoadingButton.STATUS_LOADING);
             presenter.online(onLineBtn);
-//            showPerfectInfoDialog();
         });
         offlineCon.setOnClickListener(v -> presenter.offline());
 
@@ -180,15 +175,52 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         }
     }
 
-    private void showPerfectInfoDialog() {
-        PerfectInfoDialog dialog = PerfectInfoDialog.newInstance().setOnPerfectInfoClickListener(new PerfectInfoDialog.OnPerfectInfoClickListener() {
-            @Override
-            public void OnPerfectInfoClick() {
-                Intent intent = new Intent(WorkActivity.this, InfoActivity.class);
-                startActivity(intent);
+    private RegisterDialog registerDialog;
+    private int lastType = -1;
+
+    @Override
+    public void showRegisterDialog(String companyPhone, int type, String reason) {
+        if (registerDialog == null || lastType != type) {
+            if (registerDialog != null) {
+                registerDialog.dismiss();
             }
-        });
-        dialog.show(getSupportFragmentManager(),"PerfectInfoDialog");
+            if (type == 2) {
+                registerDialog = RegisterDialog.newInstance("亲爱的师傅您好：",
+                        "    您的资料已提交成功，管理人员正在审核，如有疑问请及时联后台管理人员，审核通过后您可开启接单旅程了。",
+                        "联系客服",
+                        true)
+                        .setOnClickListener(() ->
+                                PhoneUtil.call(WorkActivity.this, companyPhone));
+            } else if (type == 3) {
+                //没完善资料
+                registerDialog = RegisterDialog.newInstance("亲爱的师傅您好：",
+                        "    您的资料还未完善，请尽快完善提交资料，管理员审核通过之后您就可以开启接单旅程了。",
+                        "完善资料",
+                        false)
+                        .setOnClickListener(() ->
+                                startActivity(new Intent(WorkActivity.this, InfoActivity.class)));
+
+            } else if (type == 4) {
+                //驳回
+                registerDialog = RegisterDialog.newInstance("审核不通过原因：",
+                        "    " + reason,
+                        "重新完善",
+                        false)
+                        .setOnClickListener(() ->
+                                startActivity(new Intent(WorkActivity.this, InfoActivity.class)));
+            }
+            lastType = type;
+        }
+        if (registerDialog != null && !registerDialog.isShow()) {
+            registerDialog.show(getSupportFragmentManager(), "registerDialog");
+        }
+    }
+
+    @Override
+    public void hideRegisterDialog() {
+        if (registerDialog != null) {
+            registerDialog.dismiss();
+        }
     }
 
     private void initGuide() {

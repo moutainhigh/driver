@@ -60,8 +60,7 @@
             android:name=".mvp.grab.GrabActivity2"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/transparent_activity" />
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".activity.SplashActivity"
@@ -70,8 +69,14 @@
 
         <activity
             android:name=".register.InfoActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack" />
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".register.BrandActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".register.VehicleActivity"
+            android:screenOrientation="portrait" />
 
         <service
             android:name="com.easymi.common.daemon.DaemonService"

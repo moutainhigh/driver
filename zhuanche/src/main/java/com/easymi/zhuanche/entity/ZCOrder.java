@@ -81,4 +81,7 @@ public class ZCOrder implements Serializable {
 
     public Coupon coupon;
 
+    @SerializedName("order_remark")
+    public String remark;
+
 }

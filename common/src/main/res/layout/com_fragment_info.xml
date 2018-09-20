@@ -1,25 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
         android:orientation="vertical">
 
         <View style="@style/RegisterLine" />
 
-        <FrameLayout style="@style/Register">
+        <FrameLayout
+            style="@style/Register"
+            android:layout_height="60dp">
 
             <TextView
                 style="@style/RegisterStart"
                 android:text="@string/com_head_img" />
 
-            <TextView
+            <ImageView
+                android:id="@+id/head"
                 style="@style/RegisterEnd"
-                android:hint="@string/com_head_img" />
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_vertical|right"
+                android:src="@mipmap/com_head_up" />
 
         </FrameLayout>
 
@@ -28,13 +35,14 @@
         <FrameLayout style="@style/Register">
 
             <TextView
+                android:id="@+id/titleName"
                 style="@style/RegisterStart"
                 android:text="@string/com_name" />
 
-            <EditText
+            <TextView
+                android:id="@+id/tvName"
                 style="@style/RegisterEnd"
-                android:hint="@string/com_input_name"
-                android:inputType="text" />
+                tools:text="狗蛋" />
 
         </FrameLayout>
 
@@ -44,13 +52,14 @@
         <FrameLayout style="@style/Register">
 
             <TextView
+                android:id="@+id/titlePhone"
                 style="@style/RegisterStart"
                 android:text="@string/com_phone" />
 
-            <EditText
+            <TextView
+                android:id="@+id/tvPhone"
                 style="@style/RegisterEnd"
-                android:hint="@string/com_input_phone"
-                android:inputType="phone" />
+                tools:text="186xxxxxxxx" />
 
         </FrameLayout>
 
@@ -59,12 +68,15 @@
         <FrameLayout style="@style/Register">
 
             <TextView
+                android:id="@+id/titleIdCard"
                 style="@style/RegisterStart"
                 android:text="@string/com_card" />
 
             <EditText
+                android:id="@+id/idCard"
                 style="@style/RegisterEnd"
-                android:digits="1234567890X"
+                android:digits="1234567890Xx"
+                android:maxLength="18"
                 android:hint="@string/com_input_card"
                 android:inputType="none" />
 
@@ -75,11 +87,14 @@
         <FrameLayout style="@style/Register">
 
             <TextView
+                android:id="@+id/titleEmergency"
                 style="@style/RegisterStart"
                 android:text="@string/com_contacts" />
 
             <EditText
+                android:id="@+id/emergency"
                 style="@style/RegisterEnd"
+                android:maxLength="10"
                 android:hint="@string/com_input_contacts"
                 android:inputType="text" />
 
@@ -90,12 +105,15 @@
         <FrameLayout style="@style/Register">
 
             <TextView
+                android:id="@+id/titleEmergencyPhone"
                 style="@style/RegisterStart"
                 android:text="@string/com_contacts_phone" />
 
             <EditText
+                android:id="@+id/emergencyPhone"
                 style="@style/RegisterEnd"
                 android:hint="@string/com_input_contacts_phone"
+                android:maxLength="11"
                 android:inputType="phone" />
 
         </FrameLayout>
@@ -109,8 +127,10 @@
                 android:text="@string/com_introducer" />
 
             <EditText
+                android:id="@+id/introducer"
                 style="@style/RegisterEnd"
                 android:hint="@string/com_input_introducer"
+                android:maxLength="11"
                 android:inputType="phone" />
 
         </FrameLayout>
@@ -124,6 +144,7 @@
                 android:text="@string/com_company" />
 
             <TextView
+                android:id="@+id/tvCompany"
                 style="@style/RegisterEnd"
                 android:drawableEnd="@mipmap/com_right_arrow"
                 android:drawablePadding="4dp"
@@ -148,6 +169,7 @@
         <View style="@style/RegisterLine" />
 
         <RadioGroup
+            android:id="@+id/businessRG"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingEnd="10dp"
@@ -160,7 +182,9 @@
                 android:button="@null"
                 android:drawableRight="@drawable/com_gou"
                 android:text="@string/com_daijia"
-                android:textSize="14dp" />
+                android:textSize="14dp"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
             <View style="@style/RegisterLine" />
 
@@ -171,19 +195,24 @@
                 android:button="@null"
                 android:drawableRight="@drawable/com_gou"
                 android:text="@string/com_zhuanche"
-                android:textSize="14dp" />
+                android:textSize="14dp"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
             <View style="@style/RegisterLine" />
 
         </RadioGroup>
 
         <RadioGroup
+            android:id="@+id/zhuanceType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:orientation="horizontal"
             android:paddingEnd="10dp"
-            android:paddingStart="10dp">
+            android:paddingStart="10dp"
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <RadioButton
                 android:id="@+id/car"
@@ -241,6 +270,8 @@
                 android:layout_marginRight="10dp"
                 android:text="同意《服务协议》"
                 android:textColor="#666666"
+                android:textStyle="bold"
+                android:paddingStart="6dp"
                 android:textSize="12dp" />
 
         </LinearLayout>
@@ -259,6 +290,5 @@
             android:textSize="18dp" />
 
     </LinearLayout>
-
 
 </ScrollView>

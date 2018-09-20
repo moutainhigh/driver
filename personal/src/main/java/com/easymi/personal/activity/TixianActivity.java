@@ -211,7 +211,7 @@ public class TixianActivity extends RxBaseActivity {
 
         Employ employ = EmUtil.getEmployInfo();
         Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .enchashment(employ.id, employ.name, employ.user_name, employ.phone, money,
+                .enchashment(employ.id, employ.real_name, employ.user_name, employ.phone, money,
                         employ.company_id, EmUtil.getAppKey(), name, no, owner)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())

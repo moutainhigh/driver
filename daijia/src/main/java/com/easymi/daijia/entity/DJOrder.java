@@ -88,4 +88,7 @@ public class DJOrder implements Serializable {
 
     public Coupon coupon;
 
+    @SerializedName("order_remark")
+    public String remark;
+
 }

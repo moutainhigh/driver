@@ -141,7 +141,7 @@
     <string name="com_car">有車注册</string>
     <string name="com_no_car">無車注册</string>
     <string name="com_next">下一步</string>
-    <string name="com_car_photo">上傳車輛資訊照片</string>
+    <string name="com_car_photo">上传车辆45度角照片</string>
     <string name="com_car_no">*車牌號</string>
     <string name="com_input_car_no">請輸入您的車牌號</string>
     <string name="com_car_name">*車輛廠牌</string>
@@ -156,16 +156,22 @@
     <string name="com_km">*車輛已行駛公里（KM）</string>
     <string name="com_input_km">請輸入車輛已行駛公里數</string>
     <string name="com_car_vin">*車輛識別VIN</string>
-    <string name="com_input_car_vin">請輸入車輛識別VIN</string>
+    <string name="com_input_car_vin">请输入17位车辆识别VIN</string>
     <string name="com_buy_date">*購車日期</string>
-    <string name="com_input_buy_date">請輸入購車日期</string>
+    <string name="com_input_buy_date">請选择購車日期</string>
     <string name="com_register_date">*車輛注册日期</string>
-    <string name="com_input_register_date">請輸入車輛注册日期</string>
+    <string name="com_input_register_date">請选择車輛注册日期</string>
     <string name="com_check_date">*車輛年檢日期</string>
-    <string name="com_input_check_date">請輸入車輛年檢日期</string>
+    <string name="com_input_check_date">請选择車輛年檢日期</string>
     <string name="com_pic_info">圖片資訊</string>
     <string name="com_car_license">行駛證（必填）</string>
     <string name="com_transportation_license">運輸證</string>
     <string name="com_commit">提交稽核</string>
+    <string name="com_look_pic">查看示例图片</string>
+    <string name="com_card1">身份证正面（必填）</string>
+    <string name="com_card2">身份证反面（必填）</string>
+    <string name="com_license">驾驶证（必填）</string>
+    <string name="com_full">手持身份证照片</string>
+    <string name="com_complete_info">亲爱的师傅您好：\n&#160;&#160;&#160;&#160;您的资料已提交成功，管理人员正在审核，如有疑问请及时联后台管理人员，审核通过后您可开启接单旅程了。</string>
 
 </resources>

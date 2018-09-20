@@ -1,6 +1,13 @@
 package com.easymi.common;
 
+import com.easymi.common.entity.Brands;
+import com.easymi.common.entity.BusinessList;
+import com.easymi.common.entity.CompanyList;
+import com.easymi.common.entity.Pic;
 import com.easymi.common.entity.PushAnnouncement;
+import com.easymi.common.entity.QiNiuToken;
+import com.easymi.common.entity.RegisterRes;
+import com.easymi.common.entity.Vehicles;
 import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.LoginResult;
 import com.easymi.common.result.MultipleOrderResult;
@@ -12,12 +19,17 @@ import com.easymi.common.result.SystemResult;
 import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.result.EmResult;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 import rx.Observable;
 
 /**
@@ -294,8 +306,105 @@ public interface CommApiService {
      * @return
      */
     @FormUrlEncoded
-    @PUT("/driver/api/v1/readNotice")
+    @PUT("driver/api/v1/readNotice")
     Observable<EmResult> readNotice(@Field("id") Long id,
                                     @Field("app_key") String appKey);
+
+
+    @GET("manager/api/v1/companyByAppKey")
+    Observable<CompanyList> getCompanyList(@Query("app_key") String appKey);
+
+
+    @GET("driver/api/v1/getCompanyBusinesses")
+    Observable<BusinessList> getBusinessList(@Query("app_key") String appKey);
+
+
+    @GET("driver/api/v1/getToken")
+    Observable<QiNiuToken> getToken(@Query("app_key") String appKey,
+                                    @Query("id") long id);
+
+    @Multipart
+    @POST
+    Observable<Pic> uploadPic(@Url String url,
+                              @Part("token") RequestBody token,
+                              @Part MultipartBody.Part photo);
+
+
+    /**
+     * @param appKey
+     * @param driverId
+     * @param idCard              身份证号码
+     * @param emergency           紧急联系人（姓名+电话+关系
+     * @param emergencyPhone      紧急电话
+     * @param introducer          推荐人
+     * @param companyId
+     * @param serviceType         服务类型
+     * @param portraitPath        头像照片地址
+     * @param idCardPath          身份证照片地址
+     * @param idCardBackPath      身份证背面地址
+     * @param driveLicensePath    驾驶证照片地址
+     * @param fullBodyPath        全身照地址
+     * @param carPhoto            车辆照片地址
+     * @param brand               车辆厂牌
+     * @param model
+     * @param plateColor          车牌颜色
+     * @param vehicleNo           车牌号码
+     * @param vehicleType         车辆使用类型,
+     * @param seats               核定载客位
+     * @param mileage             已行驶里程
+     * @param useProperty         使用性质
+     * @param vin                 车辆识别VIN
+     * @param fuelType            燃料类型
+     * @param buyDate             购车日期
+     * @param certifyDate         车辆注册日期
+     * @param drivingLicensePhoto 行驶证照片
+     * @param nextFixDate         车辆下次年检日期
+     * @param transPhoto          车辆运输证照
+     * @param vehicleColor        车辆颜色
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("driver/api/v1/completeEmploy")
+    Observable<RegisterRes> register(@Field("app_key") String appKey,
+                                     @Field("driver_id") long driverId,
+                                     @Field("id_card") String idCard,
+                                     @Field("emergency") String emergency,
+                                     @Field("emergency_phone") String emergencyPhone,
+                                     @Field("introducer") String introducer,
+                                     @Field("companyId") long companyId,
+                                     @Field("service_type") String serviceType,
+                                     @Field("portrait_path") String portraitPath,
+                                     @Field("idcard_path") String idCardPath,
+                                     @Field("idcard_back_path") String idCardBackPath,
+                                     @Field("drive_license_path") String driveLicensePath,
+                                     @Field("full_body_path") String fullBodyPath,
+                                     //如果选择有车注册下面的参数
+                                     @Field("photo") String carPhoto,
+                                     @Field("brand") String brand,
+                                     @Field("model") String model,
+                                     @Field("plate_color") String plateColor,
+                                     @Field("vehicle_no") String vehicleNo,
+                                     @Field("vehicle_type") String vehicleType,
+                                     @Field("seats") Integer seats,
+                                     @Field("mileage") Float mileage,
+                                     @Field("use_property") String useProperty,
+                                     @Field("vin") String vin,
+                                     @Field("fuel_type") String fuelType,
+                                     @Field("buy_date") Long buyDate,
+                                     @Field("certify_date_a") Long certifyDate,
+                                     @Field("driving_license_photo") String drivingLicensePhoto,
+                                     @Field("next_fix_date") Long nextFixDate,
+                                     @Field("trans_photo") String transPhoto,
+                                     @Field("vehicle_color") String vehicleColor);
+
+
+    @GET("api/v1/brands")
+    Observable<Brands> getBrands();
+
+    @GET("api/v1/vehicles")
+    Observable<Vehicles> getVehicles(@Query("brand_id") long brandId,
+                                     @Query("page") int page,
+                                     @Query("limit") int limit);
+
 
 }
