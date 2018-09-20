@@ -7,6 +7,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.easymi.component.db.SqliteHelper;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -42,6 +43,15 @@ public class Employ extends BaseEmploy implements Parcelable {
     public Vehicle vehicle;//车辆信息
 
     public String device_no;
+
+
+    //1正常，2已完善，正在审核，3.没完善资料，4驳回原因
+    @SerializedName("audit_type")
+    public int auditType;
+
+    @SerializedName("reject")
+    public String reject;
+
 
     /**
      * 保存数据

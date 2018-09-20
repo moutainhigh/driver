@@ -14,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -129,6 +130,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     TagContainerLayout tagContainerLayout;
     LinearLayout drawerFrame;
     private MapView mapView;
+    private TextView tvMark;
 
     ExpandableLayout expandableLayout;
 
@@ -222,6 +224,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         tagContainerLayout = findViewById(R.id.tag_container);
         drawerFrame = findViewById(R.id.drawer_frame);
         expandableLayout = findViewById(R.id.expandable_layout);
+        tvMark = findViewById(R.id.tvMark);
 
         /**
          * 未接单top
@@ -287,7 +290,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 } else {
                     popWindow.showConsumer();
                 }
-                if ((zcOrder.orderStatus == ZCOrderStatus.TAKE_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) && !notChangeOrder) {
+                if ((zcOrder.orderStatus == ZCOrderStatus.TAKE_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER|| zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER) && !notChangeOrder) {
                     popWindow.showTransfer();
                 } else {
                     popWindow.hideTransfer();
@@ -327,6 +330,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void showTopView() {
+        if (TextUtils.isEmpty(zcOrder.remark)) {
+            tvMark.setText("无备注");
+        } else {
+            tvMark.setText(zcOrder.remark);
+        }
         orderNumberText.setText(zcOrder.orderNumber);
         orderTypeText.setText(zcOrder.orderDetailType);
         tagContainerLayout.removeAllTags();

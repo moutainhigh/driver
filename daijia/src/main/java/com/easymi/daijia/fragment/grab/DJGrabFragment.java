@@ -3,6 +3,7 @@ package com.easymi.daijia.fragment.grab;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ public class DJGrabFragment extends Fragment {
     private TextView order_time_day;//预约时间 填
     private TextView order_time;//预约时间 分秒
     private TextView order_dis;
+    private TextView tvMark;
 
     private MultipleOrder djOrder;
 
@@ -60,6 +62,7 @@ public class DJGrabFragment extends Fragment {
         order_time_day = view.findViewById(R.id.order_time_day);
         order_time = view.findViewById(R.id.order_time);
         order_dis = view.findViewById(R.id.order_dis);
+        tvMark = view.findViewById(R.id.tvMark);
 
         if (djOrder != null) {
             Log.e(DJGrabFragment.class.getName(), "showBase");
@@ -69,12 +72,17 @@ public class DJGrabFragment extends Fragment {
     }
 
     private void showBase() {
+        if (TextUtils.isEmpty(djOrder.remark)) {
+            tvMark.setText("无备注");
+        } else {
+            tvMark.setText(djOrder.remark);
+        }
         start_place.setText(djOrder.startPlace);
         end_place.setText(djOrder.endPlace);
         order_time_text.setText(djOrder.isBookOrder == 1 ? getString(R.string.appoint) : getString(R.string.jishi));
         tag_container.removeAllTags();
-        if(StringUtils.isNotBlank(djOrder.passengerTags)){
-            if(djOrder.passengerTags.contains(",")){
+        if (StringUtils.isNotBlank(djOrder.passengerTags)) {
+            if (djOrder.passengerTags.contains(",")) {
                 String[] tags = djOrder.passengerTags.split(",");
                 for (String tag : tags) {
                     tag_container.addTag(tag);

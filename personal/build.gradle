@@ -35,6 +35,6 @@ dependencies {
     api rootProject.ext.design
     api rootProject.ext.pullLoadMoreRecycler
     api rootProject.ext.tagView
-    api rootProject.ext.pictureSelector
+//    api rootProject.ext.pictureSelector
     annotationProcessor rootProject.ext.aroutercompiler
 }

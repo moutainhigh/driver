@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
@@ -16,14 +17,34 @@
         android:paddingStart="20dp"
         android:paddingTop="20dp">
 
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:paddingStart="30dp"
+            android:src="@mipmap/com_cha" />
+
         <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:lineSpacingExtra="2dp"
             android:lineSpacingMultiplier="1.2"
-            android:text="@string/com_perfect_info"
             android:textColor="#333333"
-            android:textSize="18dp" />
+            android:textSize="18dp"
+            tools:text="亲爱的师傅您好:" />
+
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:lineSpacingExtra="2dp"
+            android:lineSpacingMultiplier="1.2"
+            android:textColor="#333333"
+            android:textSize="18dp"
+            tools:text="&#160;&#160;&#160;&#160;您的资料已提交成功，管理人员正在审核，如有疑问请及时联后台管理人员，审核通过后您可开启接单旅程了。" />
 
         <Button
             android:id="@+id/ensure"
@@ -31,7 +52,7 @@
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/com_corners_blue"
-            android:text="@string/com_perfect"
+            android:text="联系客服"
             android:textColor="#fff"
             android:textSize="18dp" />
 

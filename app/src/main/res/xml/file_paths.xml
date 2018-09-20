@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!--path表示有权限的目录,""表示根路径下,name为一个标示与具体路径无关-->
+    <external-path
+        name="camera_photos"
+        path="" />
+</paths>

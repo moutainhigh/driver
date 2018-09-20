@@ -20,8 +20,12 @@
 
     <!--全屏加透明-->
     <style name="ThemeSwipeBack" parent="AppTheme">
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
+
+        <!--展示废弃该方案的侧滑返回-->
+        <!--<item name="android:windowIsTranslucent">true</item>-->
+        <!--<item name="android:windowBackground">@android:color/transparent</item>-->
+
+
         <!--<item name="android:windowAnimationStyle">@android:style/Animation</item>-->
     </style>
 
@@ -42,7 +46,7 @@
 
     <!-- 透明activity样式主题-->
     <style name="transparent_activity" parent="AppTheme">
-        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsTranslucent">true</item>
         <!--<item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>-->
         <!--<item name="android:windowAnimationStyle">@android:style/Animation.InputMethod</item>-->

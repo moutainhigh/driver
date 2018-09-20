@@ -2,7 +2,6 @@ package com.easymi.personal;
 
 import com.easymi.component.result.EmResult;
 import com.easymi.personal.entity.CarInfo;
-import com.easymi.personal.result.AboutUsResult;
 import com.easymi.personal.result.AnnResult;
 import com.easymi.personal.result.AnnouncementResult;
 import com.easymi.personal.result.ArticleResult;
@@ -15,7 +14,6 @@ import com.easymi.personal.result.LoginResult;
 import com.easymi.personal.result.NotifityResult;
 import com.easymi.personal.result.PicCodeResult;
 import com.easymi.personal.result.RechargeResult;
-import com.easymi.personal.result.SettingResult;
 import com.easymi.personal.result.ShareResult;
 import com.easymi.personal.result.StatisResult;
 import com.easymi.personal.result.TixianResult;

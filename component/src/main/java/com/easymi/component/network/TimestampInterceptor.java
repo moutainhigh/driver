@@ -11,6 +11,7 @@ import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -22,12 +23,12 @@ public class TimestampInterceptor implements Interceptor {
     public Response intercept(@NonNull Chain chain) throws IOException {
         Request oldRequest = chain.request();
 
-
+        RequestBody requestBody = oldRequest.body();
         String method = oldRequest.method();
 
         Request request;
-        if (method.equals("GET")) {
-
+        if (requestBody == null) {
+            //get
             Request.Builder newBuilder;
             HttpUrl oldUrl = oldRequest.url();
             HttpUrl.Builder urlBuilder = oldUrl.newBuilder();
@@ -39,7 +40,8 @@ public class TimestampInterceptor implements Interceptor {
             newBuilder = oldRequest.newBuilder()
                     .url(newUrl);
             request = newBuilder.build();
-        } else {
+
+        } else if (requestBody instanceof FormBody) {
             //创建一个新的FromBoby
             FormBody.Builder bobyBuilder = new FormBody.Builder();
             //获取原先的boby
@@ -61,8 +63,12 @@ public class TimestampInterceptor implements Interceptor {
             } else {
                 request = oldRequest.newBuilder().post(body).build();
             }
-
+        } else {
+            //不用处理
+            return chain.proceed(oldRequest);
         }
+
+
         return chain.proceed(request);
     }
 }

@@ -129,6 +129,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     TagContainerLayout tagContainerLayout;
     LinearLayout drawerFrame;
     private MapView mapView;
+    private TextView tvMark;
 
     LinearLayout naviCon;
 
@@ -185,6 +186,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         drawerFrame = findViewById(R.id.drawer_frame);
         naviCon = findViewById(R.id.navi_con);
         expandableLayout = findViewById(R.id.expandable_layout);
+        tvMark = findViewById(R.id.tvMark);
 
         orderCompanyText = findViewById(R.id.order_dj_company);
         orderCreateTypeText = findViewById(R.id.order_create_type);
@@ -222,7 +224,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 } else {
                     popWindow.showConsumer();
                 }
-                if ((djOrder.orderStatus == DJOrderStatus.TAKE_ORDER || djOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) && !notChangeOrder) {
+                if ((djOrder.orderStatus == DJOrderStatus.TAKE_ORDER || djOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER || djOrder.orderStatus == DJOrderStatus.ARRIVAL_BOOKPLACE_ORDER) && !notChangeOrder) {
                     popWindow.showTransfer();
                 } else {
                     popWindow.hideTransfer();
@@ -262,6 +264,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void showTopView() {
+        if (TextUtils.isEmpty(djOrder.remark)) {
+            tvMark.setText("无备注");
+        } else {
+            tvMark.setText(djOrder.remark);
+        }
         orderNumberText.setText(djOrder.orderNumber);
         orderTypeText.setText(djOrder.orderDetailType);
         orderCompanyText.setText(djOrder.companyName);

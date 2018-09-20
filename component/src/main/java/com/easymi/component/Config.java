@@ -15,23 +15,26 @@ public class Config {
     /**
      * 主机地址
      */
-//    public static final String HOST = "http://10.10.2.34:8082/";
-//    public static final String HOST = "https://api.xiaokayun.cn/";//线上地址
-    public static final String HOST = "http://api.xiaokakj.cn/";//测试服地址
+//    public static final String HOST = "http://10.10.2.35:8082/";
+    public static final String HOST = "https://api.xiaokayun.cn/";//线上地址
+//    public static final String HOST = "http://api.xiaokakj.cn/";//测试服地址
 
     /**
      * MQTT配置
      */
-//    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn";//线上地址
-    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//测试地址
+    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn";//线上地址
+//    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//测试地址
     /**
      * APP_KEY
      */
-//    public static final String APP_KEY = "455b01b9de5a4a7e9ca4df901a2f488d";//测试
-//    public static final String APP_KEY = "488441998952435da895286632e82f40";//快些哥
-//    public static final String APP_KEY = "815a46ca2a624cea04adb006785f76e1";//本地
-//    public static final String APP_KEY = "4aea5f7368b0461395eeda353337a24c";//v5test
-    public static final String APP_KEY = "ae0ef1b6155647d9ae572ba53c103b6f";
+//    public static final String APP_KEY = "ae0ef1b6155647d9ae572ba53c103b6f";//demo281
+    public static final String APP_KEY = "488441998952435da895286632e82f40";//快些哥
+//    public static final String APP_KEY = "815a46ca2a624cea04adb006785f76e1";//本地IP
+
+    /**
+     * 上传图片地址.
+     */
+    public static final String HOST_UP_PIC = "http://up-z2.qiniu.com";
 
     public static final boolean COMM_USE = false;//是否是通用司机端
 

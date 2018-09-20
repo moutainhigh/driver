@@ -52,4 +52,7 @@ public class BaseOrder implements Serializable {
     @SerializedName("passenger_tags")
     public String passengerTags;
 
+    @SerializedName("order_remark")
+    public String remark;
+
 }
