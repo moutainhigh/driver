@@ -64,6 +64,8 @@ public interface FlowContract {
 
         void showFeeChanged(DymOrder dymOrder);
 
+        DJOrder getOrder();
+
         RxManager getManager();
     }
 

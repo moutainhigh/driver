@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import com.easymi.common.entity.BuildPushData;
 import com.easymi.component.Config;
+import com.easymi.component.DJOrderStatus;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.utils.Log;
 
@@ -328,29 +329,36 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             mAMapNavi = AMapNavi.getInstance(context);
             mAMapNavi.addAMapNaviListener(this);
         }
-        /**
-         * congestion - 是否躲避拥堵
-         avoidspeed - 不走高速
-         cost - 避免收费
-         hightspeed - 高速优先
-         multipleRoute - 单路径or多路径
-         */
-        boolean congestion = true;
-        boolean avoidspeed = false;
-        boolean cost = false;
-        boolean hightspeed = true;
-        boolean multipleRoute = true;
-        int strateFlag = mAMapNavi.strategyConvert(congestion, cost, avoidspeed, hightspeed, multipleRoute);
 
         NaviLatLng start = new NaviLatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
         NaviLatLng end = new NaviLatLng(endLat, endLng);
 
-        List<NaviLatLng> startLs = new ArrayList<>();
-        List<NaviLatLng> endLs = new ArrayList<>();
+        DJOrder djOrder = view.getOrder();
+        if (djOrder != null &&(djOrder.orderStatus < DJOrderStatus.ARRIVAL_BOOKPLACE_ORDER)  ) {
+            //到达预约地之前，调用步行方案
+            mAMapNavi.calculateWalkRoute(start, end);
+        } else {
+            /**
+             * congestion - 是否躲避拥堵
+             avoidspeed - 不走高速
+             cost - 避免收费
+             hightspeed - 高速优先
+             multipleRoute - 单路径or多路径
+             */
+            boolean congestion = true;
+            boolean avoidspeed = false;
+            boolean cost = false;
+            boolean hightspeed = true;
+            boolean multipleRoute = true;
+            int strateFlag = mAMapNavi.strategyConvert(congestion, cost, avoidspeed, hightspeed, multipleRoute);
 
-        startLs.add(start);
-        endLs.add(end);
-        mAMapNavi.calculateDriveRoute(startLs, endLs, null, strateFlag);
+            List<NaviLatLng> startLs = new ArrayList<>();
+            List<NaviLatLng> endLs = new ArrayList<>();
+
+            startLs.add(start);
+            endLs.add(end);
+            mAMapNavi.calculateDriveRoute(startLs, endLs, null, strateFlag);
+        }
     }
 
     RouteSearch routeSearch;
@@ -374,7 +382,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
                 @Override
                 public void onWalkRouteSearched(WalkRouteResult walkRouteResult, int i) {
-
                 }
 
                 @Override
@@ -555,15 +562,18 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     @Override
     public void onCalculateRouteSuccess(int[] ints) {
         Log.e("FlowerPresenter", "onCalculateRouteSuccess()");
+        AMapNaviPath path;
         HashMap<Integer, AMapNaviPath> paths = mAMapNavi.getNaviPaths();
         if (null != paths && paths.size() != 0) {
-            AMapNaviPath path = paths.get(ints[0]);
-            if (path != null) {
-                view.showPath(ints, path);
-                if (XApp.getMyPreferences().getBoolean(Config.SP_DEFAULT_NAVI, true)) {
-                    mAMapNavi.startNavi(NaviType.GPS);
-                    view.showLeft(path.getAllLength(), path.getAllTime());
-                }
+            path = paths.get(ints[0]);
+        } else {
+            path = mAMapNavi.getNaviPath();
+        }
+        if (path != null) {
+            view.showPath(ints, path);
+            if (XApp.getMyPreferences().getBoolean(Config.SP_DEFAULT_NAVI, true)) {
+                mAMapNavi.startNavi(NaviType.GPS);
+                view.showLeft(path.getAllLength(), path.getAllTime());
             }
         }
     }

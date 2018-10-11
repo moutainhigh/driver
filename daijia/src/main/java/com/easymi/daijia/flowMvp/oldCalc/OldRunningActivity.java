@@ -355,6 +355,11 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
     }
 
     @Override
+    public DJOrder getOrder() {
+        return djOrder;
+    }
+
+    @Override
     public RxManager getManager() {
         return mRxManager;
     }

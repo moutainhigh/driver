@@ -1028,6 +1028,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     }
 
     @Override
+    public DJOrder getOrder() {
+        return djOrder;
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         LocReceiver.getInstance().addObserver(this);//添加位置订阅
