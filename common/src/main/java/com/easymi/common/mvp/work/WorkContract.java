@@ -4,6 +4,7 @@ import com.easymi.common.entity.AnnAndNotice;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.entity.WorkStatistics;
+import com.easymi.common.push.CountEvent;
 import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.LoginResult;
 import com.easymi.common.result.NearDriverResult;
@@ -48,7 +49,7 @@ public interface WorkContract {
 
         void showAnn(AnnAndNotice announcement);
 
-        void showStatis(WorkStatistics statistics);
+        void showStatis(CountEvent countEvent);
 
         void showOnline();
 
@@ -92,11 +93,7 @@ public interface WorkContract {
 
         void queryNearDriver(Double lat, Double lng);
 
-        void queryStatis();
-
         void loadDataOnResume();
-
-        void startLineTimer(WorkStatistics workStatistics);
 
         void onPause();
 
@@ -121,7 +118,7 @@ public interface WorkContract {
 
         Observable<AnnouncementResult> loadAnn(long companyId);
 
-        Observable<WorkStatisticsResult> getDriverStatistics(Long id, String nowDate, int isOnline);
+        Observable<WorkStatisticsResult> getDriverStatistics(Long id, String nowDate, int isOnline, int minute, String driverNo, long companyId);
 
         Observable<NearDriverResult> queryNearDriver(Long driverId, Double lat, Double lng, Double distance, String business);
 

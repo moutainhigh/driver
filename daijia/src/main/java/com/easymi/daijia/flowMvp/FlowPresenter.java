@@ -46,12 +46,8 @@ import com.easymi.component.utils.NetUtil;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.entity.DJOrder;
-import com.easymi.daijia.result.ConsumerResult;
 import com.easymi.daijia.result.DJOrderResult;
-import com.easymi.daijia.result.OrderFeeResult;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -250,6 +246,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         intent.putExtra("endLatlng", end);
         intent.putExtra("orderId", orderId);
         intent.putExtra("orderType", Config.DAIJIA);
+        intent.putExtra(Config.NAVI_MODE, Config.WALK_TYPE);
         context.startActivity(intent);
     }
 

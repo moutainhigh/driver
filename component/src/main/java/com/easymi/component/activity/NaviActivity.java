@@ -57,6 +57,7 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     private long orderId;
     private String orderType;
+    private int naviMode;
 
     LinearLayout simpleFeeCon;
     TextView lcTxt;
@@ -75,6 +76,7 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
         orderId = getIntent().getLongExtra("orderId", -1);
         orderType = getIntent().getStringExtra("orderType");
+        naviMode = getIntent().getIntExtra(Config.NAVI_MODE, Config.DRIVE_TYPE);
 
         wayPoints = getIntent().getParcelableArrayListExtra("wayPoints");
 
@@ -169,8 +171,9 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
         super.onDestroy();
         mAMapNaviView.onDestroy();
         //since 1.6.0 不再在naviview destroy的时候自动执行AMapNavi.stopNavi();请自行执行
-        mAMapNavi.stopNavi();
-        mAMapNavi.destroy();
+        //mAMapNavi是全局的，执行订单页面还需要用，所以这里不能销毁资源
+//        mAMapNavi.stopNavi();
+//        mAMapNavi.destroy();
 //        XApp.getInstance().stopVoice();
     }
 
@@ -181,31 +184,37 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     @Override
     public void onInitNaviSuccess() {
-        /**
-         * 方法: int strategy=mAMapNavi.strategyConvert(congestion, avoidhightspeed, cost, hightspeed, multipleroute); 参数:
-         *
-         * @congestion 躲避拥堵
-         * @avoidhightspeed 不走高速
-         * @cost 避免收费
-         * @hightspeed 高速优先
-         * @multipleroute 多路径
-         *
-         *  说明: 以上参数都是boolean类型，其中multipleroute参数表示是否多条路线，如果为true则此策略会算出多条路线。
-         *  注意: 不走高速与高速优先不能同时为true 高速优先与避免收费不能同时为true
-         */
-        int strategy = 0;
-        try {
-            //再次强调，最后一个参数为true时代表多路径，否则代表单路径
-            strategy = mAMapNavi.strategyConvert(
-                    XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, true),
-                    XApp.getMyPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
-                    XApp.getMyPreferences().getBoolean(Config.SP_COST, true),
-                    XApp.getMyPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
-                    false);
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        if (naviMode == Config.WALK_TYPE) {
+            mAMapNavi.calculateWalkRoute(mStartLatlng, mEndLatlng);
+        } else {
+            /**
+             * 方法: int strategy=mAMapNavi.strategyConvert(congestion, avoidhightspeed, cost, hightspeed, multipleroute); 参数:
+             *
+             * @congestion 躲避拥堵
+             * @avoidhightspeed 不走高速
+             * @cost 避免收费
+             * @hightspeed 高速优先
+             * @multipleroute 多路径
+             *
+             *  说明: 以上参数都是boolean类型，其中multipleroute参数表示是否多条路线，如果为true则此策略会算出多条路线。
+             *  注意: 不走高速与高速优先不能同时为true 高速优先与避免收费不能同时为true
+             */
+            int strategy = 0;
+            try {
+                //再次强调，最后一个参数为true时代表多路径，否则代表单路径
+                strategy = mAMapNavi.strategyConvert(
+                        XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, true),
+                        XApp.getMyPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
+                        XApp.getMyPreferences().getBoolean(Config.SP_COST, true),
+                        XApp.getMyPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
+                        false);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            mAMapNavi.calculateDriveRoute(sList, eList, wayPoints, strategy);
         }
-        mAMapNavi.calculateDriveRoute(sList, eList, wayPoints, strategy);
+
     }
 
     @Override

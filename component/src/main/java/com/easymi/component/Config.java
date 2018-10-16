@@ -15,7 +15,7 @@ public class Config {
     /**
      * 主机地址
      */
-//    public static final String HOST = "http://10.10.2.35:8082/";
+//    public static final String HOST = "http://10.10.2.34:8082/";
     public static final String HOST = "https://api.xiaokayun.cn/";//线上地址
 //    public static final String HOST = "http://api.xiaokakj.cn/";//测试服地址
 
@@ -119,9 +119,13 @@ public class Config {
     //是否只上传GPS类型点
     public static final String SP_GPS_FILTER = "sp_gps_filter";
 
-
     public static final String DAIJIA = "daijia";
     public static final String ZHUANCHE = "zhuanche";
+
+    //需要导航的模式
+    public static final String NAVI_MODE = "navi_mode";
+    public static final int DRIVE_TYPE = 1;
+    public static final int WALK_TYPE = 2;
 
     public static final String BROAD_CANCEL_ORDER = "com.easymi.v5driver.BROAD_CANCEL_ORDER";
     public static final String BROAD_BACK_ORDER = "com.easymi.v5driver.BROAD_BACK_ORDER";

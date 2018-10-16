@@ -42,6 +42,7 @@ import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.entity.WorkStatistics;
+import com.easymi.common.push.CountEvent;
 import com.easymi.common.push.MQTTService;
 import com.easymi.common.receiver.AnnReceiver;
 import com.easymi.common.receiver.CancelOrderReceiver;
@@ -70,6 +71,10 @@ import com.easymi.component.widget.pinned.PinnedHeaderDecoration;
 import com.skyfishjy.library.RippleBackground;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -142,6 +147,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
     @Override
     public void initViews(Bundle savedInstanceState) {
+        EventBus.getDefault().register(this);
+
         // 屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -482,16 +489,26 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     }
 
     @Override
-    public void showStatis(WorkStatistics statistics) {
-        int minutes = statistics.minute;
-        int hour = minutes / 60;
-        int minute = minutes % 60;
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void showStatis(CountEvent countEvent) {
+        if (countEvent == null) {
+            return;
+        }
 
-        finishNo.setText(String.valueOf(statistics.finishCount));
-        onLineHour.setText(String.valueOf(hour));
-        onLineMonute.setText(String.valueOf(minute));
-        todayIncome.setText(String.valueOf(statistics.income));
+        if (countEvent.minute >= 0) {
+            int minutes = countEvent.minute;
+            int hour = minutes / 60;
+            int minute = minutes % 60;
+            onLineHour.setText(String.valueOf(hour));
+            onLineMonute.setText(String.valueOf(minute));
+        }
 
+        if (countEvent.finishCount >= 0) {
+            finishNo.setText(String.valueOf(countEvent.finishCount));
+        }
+        if (countEvent.income >= 0) {
+            todayIncome.setText(String.valueOf(countEvent.income));
+        }
     }
 
     @Override
@@ -597,6 +614,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         }
         mapView.onResume();
         presenter.loadDataOnResume();
+        MQTTService.pushLocNoLimit(new BuildPushData(EmUtil.getLastLoc()));
     }
 
     @Override
@@ -615,9 +633,11 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-        mapView.onDestroy();
+        EventBus.getDefault().unregister(this);
         getRxManager().clear();
+        mapView.onDestroy();
+        super.onDestroy();
+
     }
 
     @Override

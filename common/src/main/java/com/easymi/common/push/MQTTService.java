@@ -73,6 +73,9 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 
     private static MQTTService instance;
 
+
+    private WorkTimeCounter workTimeCounter;
+
     public static MQTTService getInstance() {
         if (instance == null) {
             Intent intent = new Intent(XApp.getInstance(), MQTTService.class);
@@ -95,6 +98,9 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
     public int onStartCommand(Intent intent, int flags, int startId) {
         synchronized (this) {
             initConn();
+        }
+        if (workTimeCounter == null) {
+            workTimeCounter = new WorkTimeCounter(this);
         }
         return START_STICKY;
     }
@@ -167,6 +173,9 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 
     @Override
     public void onDestroy() {
+        if (workTimeCounter != null) {
+            workTimeCounter.forceUpload();
+        }
         isConning = false;
         Log.e(TAG, "onDestroy:");
         try {
@@ -180,6 +189,10 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
         } catch (Exception e) {
 
         }
+        if (workTimeCounter != null) {
+            workTimeCounter.destroy();
+        }
+        workTimeCounter = null;
         super.onDestroy();
     }
 

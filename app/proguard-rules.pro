@@ -25,3 +25,9 @@
 # 华为通道
 -keep class com.huawei.** {*;}
 -dontwarn com.huawei.**
+
+#eventBus
+-keepclassmembers class * {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }

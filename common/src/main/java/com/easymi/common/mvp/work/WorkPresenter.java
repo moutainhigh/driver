@@ -7,18 +7,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 
 import com.easymi.common.R;
 import com.easymi.common.daemon.DaemonService;
 import com.easymi.common.daemon.JobKeepLiveService;
 import com.easymi.common.entity.AnnAndNotice;
 import com.easymi.common.entity.MultipleOrder;
+import com.easymi.common.push.CountEvent;
+import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.entity.Setting;
 import com.easymi.common.entity.NearDriver;
-import com.easymi.common.entity.WorkStatistics;
 import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.LoginResult;
 import com.easymi.common.result.NearDriverResult;
@@ -26,7 +24,6 @@ import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.common.result.SettingResult;
 import com.easymi.common.result.SystemResult;
-import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.Config;
 import com.easymi.component.EmployStatus;
 import com.easymi.component.app.XApp;
@@ -66,25 +63,10 @@ public class WorkPresenter implements WorkContract.Presenter {
     private WorkContract.View view;
     private WorkContract.Model model;
 
-    Handler handler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(Message message) {
-            switch (message.what) {
-                case 0:
-                    Bundle bundle = message.getData();
-                    WorkStatistics statistics = (WorkStatistics) bundle.getSerializable("statis");
-                    view.showStatis(statistics);
-                    break;
-            }
-            return true;
-        }
-    });
-
     public WorkPresenter(Context context, WorkContract.View view) {
         this.context = context;
         this.view = view;
         model = new WorkModel();
-
     }
 
     /**
@@ -218,7 +200,7 @@ public class WorkPresenter implements WorkContract.Presenter {
         Observable<EmResult> observable = model.online(driverId, EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, btn, emResult -> {
             view.onlineSuc();
-            queryStatis();
+//            queryStatis(saveMinute);
         })));
     }
 
@@ -268,19 +250,30 @@ public class WorkPresenter implements WorkContract.Presenter {
         })));
     }
 
-    @Override
-    public void queryStatis() {
-        long driverId = EmUtil.getEmployId();
+    private void queryStatis() {
+        Employ employ = EmUtil.getEmployInfo();
+        if (employ == null) {
+            return;
+        }
+        long driverId = employ.id;
+        String driverNo = employ.user_name;
+        long companyId = employ.company_id;
         int driverStatus = 2;
         if (EmUtil.getEmployInfo() != null && EmUtil.getEmployInfo().status.equals(EmployStatus.ONLINE)) {
             driverStatus = 1;
         }
         String nowDate = TimeUtil.getTime("yyyy-MM-dd", System.currentTimeMillis());
-        Observable<WorkStatisticsResult> observable = model.getDriverStatistics(driverId, nowDate, driverStatus);
+
+        //这个地方只拉取收入信息，不操作在线时长（在线时长有WorkTimeCounter专职处理）
+        Observable<WorkStatisticsResult> observable = model.getDriverStatistics(driverId, nowDate, driverStatus, 0, driverNo, companyId);
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
                 true, result -> {
-            view.showStatis(result.workStatistics);
-            startLineTimer(result.workStatistics);
+            CountEvent event = new CountEvent();
+            event.finishCount = result.workStatistics.finishCount;
+            event.income = result.workStatistics.income;
+            //置为无效值
+            event.minute = -1;
+            view.showStatis(event);
         })));
     }
 
@@ -290,54 +283,11 @@ public class WorkPresenter implements WorkContract.Presenter {
         loadEmploy(driverId);
         getAppSetting(driverId);//获取配置信息
         queryStatis();
-
         PhoneUtil.checkGps(context);
-    }
-
-    private Timer timer;
-    private TimerTask timerTask;
-
-    @Override
-    public void startLineTimer(WorkStatistics workStatistics) {
-        if (timer != null) {
-            timer.cancel();
-        }
-        if (timerTask != null) {
-            timerTask.cancel();
-        }
-        timer = new Timer();
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                Employ employ = EmUtil.getEmployInfo();
-                if (employ != null && StringUtils.isNotBlank(employ.status)) {
-                    if (employ.status.equals(EmployStatus.ONLINE)) {
-//                        showOffline();//非听单状态
-                    } else {
-                        workStatistics.minute++;
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("statis", workStatistics);
-                        Message message = new Message();
-                        message.what = 0;
-                        message.setData(bundle);
-                        handler.sendMessage(message);//听单状态
-                    }
-                }
-
-            }
-        };
-        timer.schedule(timerTask, 60 * 1000, 60 * 1000);
-
     }
 
     @Override
     public void onPause() {
-        if (null != timer) {
-            timer.cancel();
-        }
-        if (null != timerTask) {
-            timerTask.cancel();
-        }
     }
 
     //表示司机业务
@@ -354,7 +304,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                 Employ employ = result.getEmployInfo();
                 if (employ.auditType == 2 || employ.auditType == 3 || employ.auditType == 4) {
                     view.stopRefresh();
-                    view.showRegisterDialog(employ.company_phone, employ.auditType,employ.reject);
+                    view.showRegisterDialog(employ.company_phone, employ.auditType, employ.reject);
                     return;
                 }
 

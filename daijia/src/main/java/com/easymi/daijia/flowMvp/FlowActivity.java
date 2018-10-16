@@ -257,7 +257,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             } else if (i == R.id.pop_order_transfer) {
                 Intent intent = new Intent(FlowActivity.this, TransferActivity.class);
                 intent.putExtra("order", djOrder);
-                startActivityForResult(intent,CHANGE_ORDER);
+                startActivityForResult(intent, CHANGE_ORDER);
             }
         });
     }
@@ -410,7 +410,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 }
                 isToFeeDetail = false;
             }
-            presenter.getOrderFee(orderId,1);
+            presenter.getOrderFee(orderId, 1);
         } else if (djOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {
             toolbar.setTitle(R.string.settle);
             runningFragment = new RunningFragment();
@@ -507,8 +507,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         List<LatLng> latLngs = new ArrayList<>();
         if (djOrder.orderStatus == DJOrderStatus.NEW_ORDER
                 || djOrder.orderStatus == DJOrderStatus.PAIDAN_ORDER
-                || djOrder.orderStatus == DJOrderStatus.TAKE_ORDER
-                ) {
+                || djOrder.orderStatus == DJOrderStatus.TAKE_ORDER) {
             if (null != getStartAddr()) {
                 latLngs.add(new LatLng(getStartAddr().lat, getStartAddr().lng));
                 naviCon.setOnClickListener(view -> presenter.navi(new LatLng(getStartAddr().lat, getStartAddr().lng), getStartAddr().poi, orderId));
@@ -536,8 +535,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         } else if (djOrder.orderStatus == DJOrderStatus.ARRIVAL_BOOKPLACE_ORDER
                 || djOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER
                 || djOrder.orderStatus == DJOrderStatus.START_WAIT_ORDER
-                || djOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER
-                ) {
+                || djOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {
             if (null != getEndAddr()) {
                 latLngs.add(new LatLng(getEndAddr().lat, getEndAddr().lng));
                 naviCon.setOnClickListener(view -> presenter.navi(new LatLng(getEndAddr().lat, getEndAddr().lng), getEndAddr().poi, orderId));
@@ -974,7 +972,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void doConfirmMoney(LoadingButton btn, DymOrder dymOrder) {
-                presenter.arriveDes(btn, dymOrder,djOrder);
+                presenter.arriveDes(btn, dymOrder, djOrder);
             }
 
             @Override

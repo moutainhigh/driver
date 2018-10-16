@@ -153,7 +153,10 @@ public interface CommApiService {
     Observable<WorkStatisticsResult> workStatistics(@Query("driver_id") Long driverId,
                                                     @Query("now_date") String nowDate,
                                                     @Query("app_key") String appKey,
-                                                    @Query("is_online") Integer isOnline);
+                                                    @Query("is_online") Integer isOnline,
+                                                    @Query("minute") int minute,
+                                                    @Query("driver_no") String driverNo,
+                                                    @Query("company_id") long company_id);
 
     /**
      * 代驾 --> 查询单个订单
