@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ScrollView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.easymi.common.push.MQTTService;
 import com.easymi.common.util.GPSSetting;
 import com.easymi.component.Config;
 import com.easymi.component.activity.WebActivity;
@@ -177,8 +178,11 @@ public class SetActivity extends RxBaseActivity {
     }
 
     private void doLogOut() {
+        MQTTService qtt = MQTTService.getInstance();
+        if (qtt != null) {
+            qtt.uploadTime();
+        }
         McService mcService = ApiManager.getInstance().createApi(Config.HOST, McService.class);
-
         Observable<EmResult> observable = mcService
                 .employLoginOut(EmUtil.getEmployId(), EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())

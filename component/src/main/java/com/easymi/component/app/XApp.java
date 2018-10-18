@@ -447,7 +447,11 @@ public class XApp extends MultiDexApplication {
         Intent intent = new Intent(this, LocService.class);
         intent.setAction(LocService.START_LOC);
         intent.setPackage(this.getPackageName());
-        startService(intent);
+        try {
+            startService(intent);
+        } catch (Exception ex) {
+            CrashReport.postCatchedException(ex);
+        }
     }
 
     /**

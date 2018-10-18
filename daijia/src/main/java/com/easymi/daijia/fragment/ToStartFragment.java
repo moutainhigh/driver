@@ -63,12 +63,18 @@ public class ToStartFragment extends RxBaseFragment {
         endPlaceText.setText(StringUtils.isNotBlank(djOrder.endPlace) ? djOrder.endPlace:getString(R.string.des_place));
         controlCon.setOnClickListener(view -> {
             Log.e("tag", "onClick");
-            bridge.doToStart(controlCon);
+            if (bridge != null) {
+                bridge.doToStart(controlCon);
+            }
         });
         callPhoneCon.setOnClickListener(view -> {
             Log.e("tag", "onClick");
             CallPhoneDialog.callDialog(getActivity(),djOrder);
         });
-        changEndCon.setOnClickListener(v -> bridge.changeEnd());
+        changEndCon.setOnClickListener(v ->{
+            if (bridge != null) {
+                bridge.changeEnd();
+            }
+        });
     }
 }

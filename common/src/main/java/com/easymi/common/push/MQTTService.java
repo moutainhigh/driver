@@ -171,11 +171,15 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
         }
     }
 
-    @Override
-    public void onDestroy() {
+    public void uploadTime() {
         if (workTimeCounter != null) {
             workTimeCounter.forceUpload();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        uploadTime();
         isConning = false;
         Log.e(TAG, "onDestroy:");
         try {

@@ -646,7 +646,9 @@ public enum ErrCode {
 
     NO_VEHICLE_CANNOT_ONLINE(31041, "您还未绑定车辆，请联系管理员"),
 
-    CANNOT_DOING_MORE_ORDERS(31042, "不能同时执行多个订单");
+    CANNOT_DOING_MORE_ORDERS(31042, "不能同时执行多个订单"),
+
+    PHONE_TIME_ERROR(50018, "手机时间与服务器时间相差过大,请调整手机时间");
 
     private int code;
     private String showMsg;

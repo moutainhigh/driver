@@ -59,7 +59,16 @@ public class JobKeepLiveService extends JobService {
                         Log.e("JobKeepLiveService", "!isServiceRunning MQTTService");
                         Intent mqtt = new Intent(JobKeepLiveService.this, MQTTService.class);
                         mqtt.setPackage(JobKeepLiveService.this.getPackageName());
-                        startService(mqtt);
+                        try {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                startForegroundService(mqtt);
+                            } else {
+                                // Pre-O behavior.
+                                startService(mqtt);
+                            }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                     }
                     if (!PhoneUtil.isServiceRunning(LocService.class.getName(), JobKeepLiveService.this)) {
                         Log.e("JobKeepLiveService", "!isServiceRunning LocService");
