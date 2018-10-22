@@ -14,6 +14,7 @@ import com.easymi.common.daemon.JobKeepLiveService;
 import com.easymi.common.entity.AnnAndNotice;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.push.CountEvent;
+import com.easymi.common.push.MQTTService;
 import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.entity.Setting;
 import com.easymi.common.entity.NearDriver;
@@ -200,19 +201,18 @@ public class WorkPresenter implements WorkContract.Presenter {
         Observable<EmResult> observable = model.online(driverId, EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, btn, emResult -> {
             view.onlineSuc();
-//            queryStatis(saveMinute);
+            uploadTime(2);
         })));
     }
 
     @Override
     public void offline() {
         long driverId = EmUtil.getEmployId();
-
         Observable<EmResult> observable = model.offline(driverId, EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, true,
                 true, emResult -> {
-            onPause();
             view.offlineSuc();
+            uploadTime(1);
         })));
     }
 
@@ -250,40 +250,23 @@ public class WorkPresenter implements WorkContract.Presenter {
         })));
     }
 
-    private void queryStatis() {
-        Employ employ = EmUtil.getEmployInfo();
-        if (employ == null) {
-            return;
-        }
-        long driverId = employ.id;
-        String driverNo = employ.user_name;
-        long companyId = employ.company_id;
-        int driverStatus = 2;
-        if (EmUtil.getEmployInfo() != null && EmUtil.getEmployInfo().status.equals(EmployStatus.ONLINE)) {
-            driverStatus = 1;
-        }
-        String nowDate = TimeUtil.getTime("yyyy-MM-dd", System.currentTimeMillis());
-
-        //这个地方只拉取收入信息，不操作在线时长（在线时长有WorkTimeCounter专职处理）
-        Observable<WorkStatisticsResult> observable = model.getDriverStatistics(driverId, nowDate, driverStatus, 0, driverNo, companyId);
-        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
-                true, result -> {
-            CountEvent event = new CountEvent();
-            event.finishCount = result.workStatistics.finishCount;
-            event.income = result.workStatistics.income;
-            //置为无效值
-            event.minute = -1;
-            view.showStatis(event);
-        })));
-    }
-
     @Override
     public void loadDataOnResume() {
         long driverId = EmUtil.getEmployId();
         loadEmploy(driverId);
         getAppSetting(driverId);//获取配置信息
-        queryStatis();
+        uploadTime(-1);
         PhoneUtil.checkGps(context);
+    }
+
+    /**
+     * 强制推送数据。
+     */
+    private void uploadTime(int statues) {
+        MQTTService qt = MQTTService.getInstance();
+        if (qt != null) {
+            qt.uploadTime(statues);
+        }
     }
 
     @Override

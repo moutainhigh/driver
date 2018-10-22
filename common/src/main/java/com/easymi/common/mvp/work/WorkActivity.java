@@ -755,7 +755,11 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
             rotateAnimation.setFillAfter(true); //旋转后停留在这个状态
             pullIcon.startAnimation(rotateAnimation);
         } else {
-            super.onBackPressed();
+            //模拟home键
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            startActivity(intent);
         }
     }
 

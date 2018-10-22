@@ -171,15 +171,19 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
         }
     }
 
-    public void uploadTime() {
+    /**
+     * 上传时间。
+     * @param statues 小于等于0时用默认状态，大于0时用给定的状态。
+     */
+    public void uploadTime(int statues) {
         if (workTimeCounter != null) {
-            workTimeCounter.forceUpload();
+            workTimeCounter.forceUpload(statues);
         }
     }
 
     @Override
     public void onDestroy() {
-        uploadTime();
+        uploadTime(-1);
         isConning = false;
         Log.e(TAG, "onDestroy:");
         try {
@@ -362,6 +366,11 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
         if (client != null && client.isConnected()) {
             if (data != null) {
                 String pushStr = BuildPushUtil.buildPush(data,noLimit);
+                if (pushStr == null) {
+                    Exception exception = new IllegalArgumentException("自定义异常：推送数据为空，可能是司机信息为空");
+                    CrashReport.postCatchedException(exception);
+                    return;
+                }
                 publish(pushStr);
                 //上传后删除本地的缓存
                 FileUtil.delete("v5driver", "pushCache.txt");
@@ -369,7 +378,11 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
         } else {
             if (data != null) {
                 String pushStr = BuildPushUtil.buildPush(data,noLimit);
-
+                if (pushStr == null) {
+                    Exception exception = new IllegalArgumentException("自定义异常：推送数据为空，可能是司机信息为空");
+                    CrashReport.postCatchedException(exception);
+                    return;
+                }
                 PushBean pushBean = new Gson().fromJson(pushStr, PushBean.class);
                 List<PushData> beanList = new ArrayList<>();
                 for (PushData datum : pushBean.data) {
@@ -412,6 +425,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
                     }
                 }
             } catch (MqttException e) {
+                e.printStackTrace();
                 isConning = false;
                 CrashReport.postCatchedException(e);
             } catch (Exception e) {

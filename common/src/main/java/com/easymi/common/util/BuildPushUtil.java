@@ -42,7 +42,7 @@ public class BuildPushUtil {
 
         //转换一下
         BaseEmploy employ1 = new BaseEmploy().employ2This();
-        PushEmploy pe = null;
+        PushEmploy pe;
         if (employ1 != null && employ1 instanceof Employ) {
             Employ employ = (Employ) employ1;
             pe = new PushEmploy();
@@ -57,6 +57,9 @@ public class BuildPushUtil {
             if (employ.vehicle != null) {
                 pe.model_id = employ.vehicle.serviceType;
             }
+        } else {
+            //司机信息异常不处理
+            return null;
         }
 
         pushData.employ = pe;
