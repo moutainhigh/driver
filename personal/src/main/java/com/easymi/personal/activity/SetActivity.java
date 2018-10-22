@@ -180,7 +180,7 @@ public class SetActivity extends RxBaseActivity {
     private void doLogOut() {
         MQTTService qtt = MQTTService.getInstance();
         if (qtt != null) {
-            qtt.uploadTime();
+            qtt.uploadTime(-1);
         }
         McService mcService = ApiManager.getInstance().createApi(Config.HOST, McService.class);
         Observable<EmResult> observable = mcService

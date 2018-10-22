@@ -76,6 +76,7 @@ public class CallPhoneDialog extends Dialog {
             callUser = view.findViewById(R.id.call_user);
             callPassenger = view.findViewById(R.id.call_passenger);
             View callSame = view.findViewById(R.id.call_same);
+            View sameRL = view.findViewById(R.id.sameRL);
             cancel = view.findViewById(R.id.cancel);
 
             callUser.setOnClickListener(view1 -> {
@@ -87,10 +88,14 @@ public class CallPhoneDialog extends Dialog {
                 PhoneUtil.call((Activity) context, djOrder.passengerPhone);
             });
 
-            callSame.setOnClickListener(v -> {
-                dialog.dismiss();
-                PhoneUtil.call((Activity) context, djOrder.captainPhone);
-            });
+            if (!TextUtils.isEmpty(djOrder.captainPhone)) {
+                callSame.setOnClickListener(v -> {
+                    dialog.dismiss();
+                    PhoneUtil.call((Activity) context, djOrder.captainPhone);
+                });
+            } else {
+                sameRL.setVisibility(View.GONE);
+            }
 
             cancel.setOnClickListener(view13 -> dialog.dismiss());
 
