@@ -83,7 +83,7 @@ public class XApp extends MultiDexApplication {
         ARouter.init(this);
         SqliteHelper.init(this);
 
-        SpeechUtility.createUtility(XApp.this, "appid=" + "57c91477");
+        SpeechUtility.createUtility(XApp.this, "appid=" + "5bceac22");
         initIflytekTTS(false, "");
 
         initDataBase();

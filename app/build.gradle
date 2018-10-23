@@ -6,8 +6,8 @@ android {
         applicationId "com.rvakva.travel.publicdriver"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 280
-        versionName "V5.0.2.006"
+        versionCode 282
+        versionName "V5.0.2.008"
         multiDexEnabled true
 
         ndk {
