@@ -73,8 +73,19 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 
     private static MQTTService instance;
 
-
     private WorkTimeCounter workTimeCounter;
+    private OrderPushDisTimer orderPushDisTimer;
+
+    public void startPushDisTimer(Context context,long orderId,String orderType){
+        orderPushDisTimer = new OrderPushDisTimer(context,orderId,orderType);
+        orderPushDisTimer.startTimer();
+    }
+
+    public void stopPushTimer(){
+        if(null != orderPushDisTimer){
+            orderPushDisTimer.cancelTimer();
+        }
+    }
 
     public static MQTTService getInstance() {
         if (instance == null) {

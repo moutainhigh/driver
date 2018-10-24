@@ -145,7 +145,7 @@ public class TrackHelper {
      *
      * @return
      */
-    public void queryDis(int trId, OnGetTrackDisListener onGetTrackDisListener) {
+    public void queryDis(long trId, OnGetTrackDisListener onGetTrackDisListener) {
         this.onGetTrackDisListener = onGetTrackDisListener;
         trackId = trId;
 
@@ -199,9 +199,10 @@ public class TrackHelper {
                         status == ErrorCode.TrackListen.START_TRACK_ALREADY_STARTED) {
                     // 服务启动成功，继续开启收集上报
                     aMapTrackClient.startGather(this);
-                    Log.e("TrackHelper", "轨迹上报成功" );
+                    Log.e("TrackHelper", "开启猎鹰服务成功" );
+
                 } else {
-                    Log.e("TrackHelper", "轨迹上报服务服务启动异常！" + s);
+                    Log.e("TrackHelper", "开启猎鹰服务失败！" + s);
                 }
             }
 

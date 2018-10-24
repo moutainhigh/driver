@@ -186,6 +186,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                             } else if (dymOrder.orderStatus == DJOrderStatus.START_WAIT_ORDER
                                     || dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
                                 TrackHelper.getInstance().startTrack(dymOrder.toEndTrackId);
+                                MQTTService.getInstance().startPushDisTimer(context, dymOrder.orderId, dymOrder.orderType);
                             }
                         }
 

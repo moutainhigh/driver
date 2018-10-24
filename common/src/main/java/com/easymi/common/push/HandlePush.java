@@ -104,6 +104,7 @@ public class HandlePush implements FeeChangeSubject {
 
                 TrackHelper trackHelper = TrackHelper.getInstance();
                 trackHelper.stopTrack();//停止猎鹰
+                MQTTService.getInstance().stopPushTimer();
 
                 Message message = new Message();
                 message.what = 1;
@@ -188,6 +189,7 @@ public class HandlePush implements FeeChangeSubject {
 
                 TrackHelper trackHelper = TrackHelper.getInstance();
                 trackHelper.stopTrack();//停止猎鹰
+                MQTTService.getInstance().stopPushTimer();
 
                 loadOrder(order);
             } else if (msg.equals("back_order")) {//订单回收
@@ -197,6 +199,7 @@ public class HandlePush implements FeeChangeSubject {
 
                 TrackHelper trackHelper = TrackHelper.getInstance();
                 trackHelper.stopTrack();//停止猎鹰
+                MQTTService.getInstance().stopPushTimer();
 
                 Message message = new Message();
                 message.what = 3;
@@ -206,6 +209,13 @@ public class HandlePush implements FeeChangeSubject {
                 handler.sendMessage(message);
             } else if (msg.equals("setting_change")) {
                 loadSetting();
+            } else if (msg.equals("pull_fee")) {
+                //从OrderPushDisTimer.java里来的数据
+                long orderId = jb.optLong("orderId");
+                String orderType = jb.optString("orderType");
+                notifyObserver(orderId, orderType);
+
+                XApp.getPreferencesEditor().putLong(Config.SP_LAST_GET_FEE_TIME, System.currentTimeMillis()).apply();
             }
         } catch (JSONException e) {
             e.printStackTrace();

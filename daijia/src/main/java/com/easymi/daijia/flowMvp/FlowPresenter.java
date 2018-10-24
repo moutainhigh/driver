@@ -6,6 +6,7 @@ import android.content.Intent;
 import com.easymi.common.entity.BuildPushData;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
+import com.easymi.component.loc.OnGetTrackDisListener;
 import com.easymi.component.loc.OnGetTrackIdListener;
 import com.easymi.component.loc.TrackHelper;
 import com.easymi.component.network.NoErrSubscriberListener;
@@ -49,7 +50,10 @@ import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.daijia.entity.DJOrder;
 import com.easymi.daijia.result.DJOrderResult;
+import com.easymi.daijia.result.OrderFeeResult;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -182,6 +186,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
                     dymOrder.updateEndTrack(); //保存前往预约地的trackId
                 }
             });
+            MQTTService.getInstance().startPushDisTimer(context,orderId,Config.DAIJIA);
 
         })));
     }
@@ -197,6 +202,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             view.showOrder(djOrderResult.order);
 
             TrackHelper.getInstance().stopTrack();
+            MQTTService.getInstance().stopPushTimer();
 
         })));
 
@@ -411,44 +417,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
                 false, consumerResult -> view.showConsumer(consumerResult.consumerInfo))));
     }
 
-    @Override
-    public void getOrderFee(Long orderId, Integer isArrive) {
-//        view.getManager().add(model.getOrderFee(orderId, EmUtil.getEmployId(), Config.DAIJIA, isArrive).subscribe(new MySubscriber<>(context, false, false, new NoErrSubscriberListener<OrderFeeResult>() {
-//            @Override
-//            public void onNext(OrderFeeResult result) {
-//                DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
-//                if (null != result.cost) {
-//                    if (dymOrder != null) {
-//                        if (dymOrder.distance <= result.cost.mileges) {
-//                            dymOrder.startFee = result.cost.start_price;
-//                            dymOrder.waitTime = result.cost.wait_time / 60;
-//                            dymOrder.waitTimeFee = result.cost.wait_time_fee;
-//                            dymOrder.travelTime = result.cost.driver_time / 60;
-//                            dymOrder.travelFee = result.cost.drive_time_cost;
-//                            dymOrder.totalFee = result.cost.total_amount;
-//
-//                            dymOrder.minestMoney = result.cost.min_cost;
-//
-//                            dymOrder.disFee = result.cost.mileage_cost;
-//                            dymOrder.distance = result.cost.mileges;
-//
-//                            DecimalFormat decimalFormat = new DecimalFormat("#0.0");
-//                            decimalFormat.setRoundingMode(RoundingMode.DOWN);
-//                            dymOrder.distance = Double.parseDouble(decimalFormat.format(dymOrder.distance));
-//                            //公里数保留一位小数。。
-//
-//                            dymOrder.updateFee();
-//                            view.showFeeChanged(dymOrder);
-//                        }
-//                    }
-//                }
-//            }
-//        })));
-
-        DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
-        view.showFeeChanged(dymOrder);
-
-    }
 
     @Override
     public void startTimer(Long orderId) {
@@ -468,6 +436,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         timer.schedule(timerTask, 40 * 1000, 40 * 1000);
     }
 
+
     @Override
     public void cancelTimer() {
         if (timer != null) {
@@ -477,6 +446,14 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             timerTask.cancel();
         }
     }
+
+
+    @Override
+    public void getOrderFee(Long orderId, Integer isArrive) {
+        DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
+        view.showFeeChanged(dymOrder);
+    }
+
 
     @Override
     public DJOrderResult orderResult2DJOrder(DJOrderResult djOrderResult) {

@@ -84,7 +84,7 @@ public interface FlowContract {
 
         void startDrive(Long orderId, LoadingButton btn);
 
-        void arriveDes(LoadingButton btn, DymOrder dymOrder,DJOrder djOrder);
+        void arriveDes(LoadingButton btn, DymOrder dymOrder, DJOrder djOrder);
 
         void navi(LatLng latLng, String poi, Long orderId);
 
@@ -133,7 +133,7 @@ public interface FlowContract {
 
         Observable<DJOrderResult> startDrive(Long orderId);
 
-        Observable<DJOrderResult> arriveDes(DJOrder djOrder,DymOrder dymOrder);
+        Observable<DJOrderResult> arriveDes(DJOrder djOrder, DymOrder dymOrder);
 
         Observable<DJOrderResult> changeEnd(Long orderId, Double lat, Double lng, String address);
 
@@ -143,7 +143,8 @@ public interface FlowContract {
 
         Observable<EmResult> payOrder(Long orderId, String payType);
 
-        Observable<OrderFeeResult> getOrderFee(Long orderId, Long driverId, String orderType, Integer isArrive);
+        Observable<OrderFeeResult> pushDistance(Long orderId, Double distance, Integer state,
+                                                Double dark_distance, Double dark_price);
 
     }
 }
