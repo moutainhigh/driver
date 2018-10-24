@@ -181,7 +181,12 @@ public interface DJApiService {
                                                  @Field("real_destination") String realAddress,
                                                  @Field("real_destination_lat") Double realLat,
                                                  @Field("real_destination_lng") Double realLng,
-                                                 @Field("min_cost") Double minCost
+                                                 @Field("min_cost") Double minCost,
+                                                 @Field("destination_trid")String destination_trid,
+                                                 @Field("book_trid")String book_trid,
+                                                 @Field("tid")String tid,
+                                                 @Field("sid")String sid,
+                                                 @Field("api_key")String api_key
     );
 
     /**

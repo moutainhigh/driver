@@ -31,6 +31,8 @@ public class Config {
     public static final String APP_KEY = "488441998952435da895286632e82f40";//快些哥
 //    public static final String APP_KEY = "815a46ca2a624cea04adb006785f76e1";//本地IP
 
+    public static final String AMAP_WEB_KEY = "8f709ec96d77a7aeb31979f52a8ce0f0";//猎鹰WEB_API的key
+
     /**
      * 上传图片地址.
      */
@@ -50,6 +52,10 @@ public class Config {
      * 微信分享id
      */
     public static final String WX_APP_ID = "wx228f2bdb16568b58"; //微信app id
+    /**
+     * 猎鹰纠偏服务
+     */
+    public static final long TRACK_SERVICE_ID = 7712; //微信app id
 
     /**
      * 图片服务器地址
@@ -144,4 +150,6 @@ public class Config {
 
     public static final String MI_APPID = "2882303761517793325";
     public static final String MI_APPKEY = "5891779394325";
+
+    public static final String TERMINAL_ID = "terminalId";
 }

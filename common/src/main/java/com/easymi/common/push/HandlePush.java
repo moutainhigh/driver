@@ -31,6 +31,7 @@ import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.entity.SubSetting;
 import com.easymi.component.entity.ZCSetting;
+import com.easymi.component.loc.TrackHelper;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.GsonUtil;
 import com.easymi.component.network.HaveErrSubscriberListener;
@@ -101,6 +102,9 @@ public class HandlePush implements FeeChangeSubject {
                 order.orderId = jb.optJSONObject("data").optLong("id");
                 order.orderType = jb.optJSONObject("data").optString("business");
 
+                TrackHelper trackHelper = TrackHelper.getInstance();
+                trackHelper.stopTrack();//停止猎鹰
+
                 Message message = new Message();
                 message.what = 1;
                 Bundle bundle = new Bundle();
@@ -130,9 +134,9 @@ public class HandlePush implements FeeChangeSubject {
                         dymOrder.peakCost = jb.optJSONObject("data").optDouble("PeakCost");
                         dymOrder.nightPrice = jb.optJSONObject("data").optDouble("NightPrice");
                         dymOrder.lowSpeedCost = jb.optJSONObject("data").optDouble("LowSpeedCost");
-                        dymOrder.lowSpeedTime = jb.optJSONObject("data").getInt("LowSpeedTime")/60;
+                        dymOrder.lowSpeedTime = jb.optJSONObject("data").getInt("LowSpeedTime") / 60;
                         dymOrder.peakMile = jb.optJSONObject("data").optDouble("PeakMile");
-                        dymOrder.nightTime = jb.optJSONObject("data").getInt("NightTime")/60;
+                        dymOrder.nightTime = jb.optJSONObject("data").getInt("NightTime") / 60;
                         dymOrder.nightMile = jb.optJSONObject("data").optDouble("NightMile");
                         dymOrder.nightTimePrice = jb.optJSONObject("data").optDouble("NightTimePrice");
                     }
@@ -181,11 +185,18 @@ public class HandlePush implements FeeChangeSubject {
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("id");
                 order.orderType = jb.optJSONObject("data").optString("business");
+
+                TrackHelper trackHelper = TrackHelper.getInstance();
+                trackHelper.stopTrack();//停止猎鹰
+
                 loadOrder(order);
             } else if (msg.equals("back_order")) {//订单回收
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("id");
                 order.orderType = jb.optJSONObject("data").optString("business");
+
+                TrackHelper trackHelper = TrackHelper.getInstance();
+                trackHelper.stopTrack();//停止猎鹰
 
                 Message message = new Message();
                 message.what = 3;
@@ -205,7 +216,7 @@ public class HandlePush implements FeeChangeSubject {
         if (StringUtils.isNotBlank(multipleOrder.orderType)) {
             if (multipleOrder.orderType.equals(Config.DAIJIA)) {
                 loadDJOrder(multipleOrder.orderId, Config.DAIJIA);
-            } else if(multipleOrder.orderType.equals(Config.ZHUANCHE)){
+            } else if (multipleOrder.orderType.equals(Config.ZHUANCHE)) {
                 loadZCOrder(multipleOrder.orderId, Config.ZHUANCHE);
             }
         }

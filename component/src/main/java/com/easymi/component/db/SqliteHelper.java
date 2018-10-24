@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.easymi.component.app.XApp;
+import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.ToastUtil;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -16,7 +18,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "data.db";
 
-    private static final int VERSION = 58;
+    private static final int VERSION = 61;
 
     private StringBuffer sqlBuf;
 
@@ -92,6 +94,8 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
         db.execSQL("DROP TABLE IF EXISTS " + "t_systemconfig");
         createSystemTable(db);
+
+        EmUtil.employLogout(context);
     }
 
     private void createDriverInfoTable(SQLiteDatabase db) {
@@ -158,6 +162,10 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("nightTime").append(" ").append("INTEGER").append(",")
                 .append("nightMile").append(" ").append("DOUBLE").append(",")
                 .append("nightTimePrice").append(" ").append("DOUBLE").append(",")
+
+                //起终点trackId
+                .append("toStartTrackId").append(" ").append("LONG").append(",")
+                .append("toEndTrackId").append(" ").append("LONG").append(",")
 
                 .append("orderStatus").append(" ").append("INTEGER")
                 .append(");");

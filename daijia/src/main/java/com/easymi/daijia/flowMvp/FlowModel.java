@@ -7,10 +7,12 @@ import com.easymi.common.entity.PushFeeOrder;
 import com.easymi.common.push.HandlePush;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
+import com.easymi.component.app.XApp;
 import com.easymi.component.entity.BaseEmploy;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
+import com.easymi.component.loc.TrackHelper;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.GsonUtil;
 import com.easymi.component.network.HttpResultFunc;
@@ -104,7 +106,7 @@ public class FlowModel implements FlowContract.Model {
     }
 
     @Override
-    public Observable<DJOrderResult> arriveDes(DJOrder djOrder,DymOrder order) {
+    public Observable<DJOrderResult> arriveDes(DJOrder djOrder, DymOrder order) {
 
         PushFee pushData = new PushFee();
 
@@ -164,11 +166,8 @@ public class FlowModel implements FlowContract.Model {
         String json = GsonUtil.toJson(pushData);
 
 
-
-
-
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .pullFee(json,EmUtil.getAppKey())
+                .pullFee(json, EmUtil.getAppKey())
                 .flatMap(new Func1<PullFeeResult, Observable<DJOrderResult>>() {
                     @Override
                     public Observable<DJOrderResult> call(PullFeeResult pullFeeResult) {
@@ -216,6 +215,7 @@ public class FlowModel implements FlowContract.Model {
                         finalOrder.orderShouldPay = Double.parseDouble(df.format(exls + finalOrder.paymentFee - finalOrder.prepay));
 
                         //----------------------------------------
+                        long terminalId = XApp.getMyPreferences().getLong(Config.TERMINAL_ID, 0);
 
                         DymOrder finalOrder1 = finalOrder;
                         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
@@ -224,7 +224,9 @@ public class FlowModel implements FlowContract.Model {
                                         finalOrder.travelFee, finalOrder.waitTime,
                                         finalOrder.waitTimeFee, 0.0, 0.0, finalOrder.couponFee,
                                         finalOrder.orderTotalFee, finalOrder.orderShouldPay, finalOrder.startFee,
-                                        loc.street + "  " + loc.poiName, loc.latitude, loc.longitude, finalOrder.minestMoney)
+                                        loc.street + "  " + loc.poiName, loc.latitude, loc.longitude, finalOrder.minestMoney,
+                                        String.valueOf(finalOrder.toEndTrackId), String.valueOf(finalOrder.toStartTrackId), String.valueOf(terminalId),
+                                        String.valueOf(Config.TRACK_SERVICE_ID), Config.AMAP_WEB_KEY)
                                 .filter(new HttpResultFunc<>())
                                 .map(new Func1<DJOrderResult, DJOrderResult>() {
                                     @Override

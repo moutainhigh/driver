@@ -173,6 +173,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 
     /**
      * 上传时间。
+     *
      * @param statues 小于等于0时用默认状态，大于0时用给定的状态。
      */
     public void uploadTime(int statues) {
@@ -192,6 +193,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
             unregisterReceiver(traceReceiver);
             if (null != client) {
                 client.disconnect();
+                closeClient();
             }
             client = null;
         } catch (Exception e) {
@@ -293,6 +295,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
                 try {
                     client.unsubscribe(pullTopic);
                     client.unsubscribe(configTopic);
+                    closeClient();
                     Log.e(TAG, "取消订阅的topic");
                 } catch (Exception e) {
                     CrashReport.postCatchedException(e);
@@ -303,6 +306,11 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
 //            doClientConnection();
         }
     };
+
+    private void closeClient() {
+        client.unregisterResources();
+        client.close();
+    }
 
     /**
      * 判断网络是否连接
@@ -355,17 +363,17 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
     }
 
     public static void pushLoc(BuildPushData data) {
-        pushInternalLoc(data,false);
+        pushInternalLoc(data, false);
     }
 
     public static void pushLocNoLimit(BuildPushData data) {
         pushInternalLoc(data, true);
     }
 
-    private static void pushInternalLoc(BuildPushData data,boolean noLimit) {
+    private static void pushInternalLoc(BuildPushData data, boolean noLimit) {
         if (client != null && client.isConnected()) {
             if (data != null) {
-                String pushStr = BuildPushUtil.buildPush(data,noLimit);
+                String pushStr = BuildPushUtil.buildPush(data, noLimit);
                 if (pushStr == null) {
                     Exception exception = new IllegalArgumentException("自定义异常：推送数据为空，可能是司机信息为空");
                     CrashReport.postCatchedException(exception);
@@ -377,7 +385,7 @@ public class MQTTService extends Service implements LocObserver, TraceInterface 
             }
         } else {
             if (data != null) {
-                String pushStr = BuildPushUtil.buildPush(data,noLimit);
+                String pushStr = BuildPushUtil.buildPush(data, noLimit);
                 if (pushStr == null) {
                     Exception exception = new IllegalArgumentException("自定义异常：推送数据为空，可能是司机信息为空");
                     CrashReport.postCatchedException(exception);

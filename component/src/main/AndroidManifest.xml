@@ -82,5 +82,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
+        <service android:name="com.amap.api.track.AMapTrackService"/>
+
     </application>
 </manifest>

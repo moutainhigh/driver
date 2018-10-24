@@ -16,6 +16,7 @@ import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.push.CountEvent;
 import com.easymi.common.push.MQTTService;
 import com.easymi.common.result.WorkStatisticsResult;
+import com.easymi.component.DJOrderStatus;
 import com.easymi.component.entity.Setting;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.result.AnnouncementResult;
@@ -33,6 +34,7 @@ import com.easymi.component.entity.Employ;
 import com.easymi.component.entity.SubSetting;
 import com.easymi.component.entity.SystemConfig;
 import com.easymi.component.entity.ZCSetting;
+import com.easymi.component.loc.TrackHelper;
 import com.easymi.component.network.ErrCode;
 import com.easymi.component.network.GsonUtil;
 import com.easymi.component.network.HaveErrSubscriberListener;
@@ -173,8 +175,22 @@ public class WorkPresenter implements WorkContract.Presenter {
                     orders = new ArrayList<>();
                 }
 
-
                 startLocService();//重启定位更改定位周期
+
+                List<DymOrder> dymOrders = DymOrder.findAll();
+                if (null != dymOrders && dymOrders.size() != 0) {
+                    for (DymOrder dymOrder : dymOrders) {
+                        if (dymOrder.orderType.equals(Config.DAIJIA)) {
+                            if (dymOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) {
+                                TrackHelper.getInstance().startTrack(dymOrder.toStartTrackId);
+                            } else if (dymOrder.orderStatus == DJOrderStatus.START_WAIT_ORDER
+                                    || dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
+                                TrackHelper.getInstance().startTrack(dymOrder.toEndTrackId);
+                            }
+                        }
+
+                    }
+                }
 
                 view.showOrders(orders);
             }

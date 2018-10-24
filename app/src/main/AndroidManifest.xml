@@ -24,6 +24,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <!--这个权限用于允许程序在手机屏幕关闭后后台进程仍然运行-->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
 
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
@@ -87,9 +88,11 @@
         </provider>
         <!-- 7.0文件权限结束 -->
 
+        <!-- 刘子豪申请的key fbad82c817823ff0030e8f0741de7d08 -->
+        <!-- shine xiao申请的key 9462f357c1970f765e77fc343c2aa6b3 -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="fbad82c817823ff0030e8f0741de7d08" />
+            android:value="9462f357c1970f765e77fc343c2aa6b3" />
 
         <service android:name="com.amap.api.location.APSService" />
 

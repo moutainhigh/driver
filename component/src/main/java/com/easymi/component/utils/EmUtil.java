@@ -12,6 +12,7 @@ import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.loc.LocService;
 import com.easymi.component.loc.LocationHelperService;
+import com.easymi.component.loc.TrackHelper;
 import com.google.gson.Gson;
 
 /**
@@ -57,6 +58,8 @@ public class EmUtil {
         if (null != XApp.getInstance().player) {
             XApp.getInstance().player.stop();
         }
+
+        TrackHelper.getInstance().destroy();//取消track
 
         stopAllService(context);
 

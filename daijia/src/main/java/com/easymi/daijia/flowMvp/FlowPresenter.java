@@ -6,6 +6,8 @@ import android.content.Intent;
 import com.easymi.common.entity.BuildPushData;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
+import com.easymi.component.loc.OnGetTrackIdListener;
+import com.easymi.component.loc.TrackHelper;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.utils.Log;
 
@@ -107,10 +109,19 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         Observable<DJOrderResult> observable = model.toStart(orderId);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, djOrderResult -> {
+
             djOrderResult = orderResult2DJOrder(djOrderResult);
             updateDymOrder(djOrderResult.order);
             view.showOrder(djOrderResult.order);
 
+            TrackHelper.getInstance().startTrack(0);
+            TrackHelper.getInstance().setOnGetTrackId(trackId -> {
+                DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
+                if (dymOrder != null) {
+                    dymOrder.toStartTrackId = trackId;
+                    dymOrder.updateStartTrack(); //保存前往预约地的trackId
+                }
+            });
         })));
     }
 
@@ -122,6 +133,8 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             djOrderResult = orderResult2DJOrder(djOrderResult);
             updateDymOrder(djOrderResult.order);
             view.showOrder(djOrderResult.order);
+
+            TrackHelper.getInstance().stopTrack();
 
         })));
     }
@@ -160,79 +173,31 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             djOrderResult = orderResult2DJOrder(djOrderResult);
             updateDymOrder(djOrderResult.order);
             view.showOrder(djOrderResult.order);
+
+            TrackHelper.getInstance().startTrack(0);
+            TrackHelper.getInstance().setOnGetTrackId(trackId -> {
+                DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
+                if (dymOrder != null) {
+                    dymOrder.toEndTrackId = trackId;
+                    dymOrder.updateEndTrack(); //保存前往预约地的trackId
+                }
+            });
+
         })));
     }
 
     @Override
     public void arriveDes(LoadingButton btn, DymOrder dymOrder, DJOrder djOrder) {
 
-//        view.getManager().add(model.getOrderFee(dymOrder.orderId, EmUtil.getEmployId(), Config.DAIJIA, 2).subscribe(new MySubscriber<>(context, false, false, new NoErrSubscriberListener<OrderFeeResult>() {
-//            @Override
-//            public void onNext(OrderFeeResult result) {
-//                if (timer != null) {
-//                    timer.cancel();
-//                }
-//                if (timerTask != null) {
-//                    timerTask.cancel();
-//                }
-//
-//                if (null != result.cost) {
-//                    if (dymOrder.distance <= result.cost.mileges) {
-//                        dymOrder.startFee = result.cost.start_price;
-//                        dymOrder.waitTime = result.cost.wait_time / 60;
-//                        dymOrder.waitTimeFee = result.cost.wait_time_fee;
-//                        dymOrder.travelTime = result.cost.driver_time / 60;
-//                        dymOrder.travelFee = result.cost.drive_time_cost;
-//                        dymOrder.totalFee = result.cost.total_amount;
-//
-//                        dymOrder.minestMoney = result.cost.min_cost;
-//
-//                        dymOrder.disFee = result.cost.mileage_cost;
-//                        dymOrder.distance = result.cost.mileges;
-//
-//                        DecimalFormat decimalFormat = new DecimalFormat("#0.0");
-//                        decimalFormat.setRoundingMode(RoundingMode.DOWN);
-//                        dymOrder.distance = Double.parseDouble(decimalFormat.format(dymOrder.distance));
-//                        //公里数保留一位小数。。
-//
-//                        //重新开始计算一次钱
-//                        DecimalFormat df = new DecimalFormat("#0.0");
-//                        dymOrder.orderTotalFee = Double.parseDouble(df.format(dymOrder.totalFee + dymOrder.extraFee + dymOrder.paymentFee));
-//
-//                        double canCouponMoney = dymOrder.totalFee + dymOrder.extraFee;//可以参与优惠券抵扣的钱
-//                        if (canCouponMoney < dymOrder.minestMoney) {
-//                            canCouponMoney = dymOrder.minestMoney;
-//                        }
-//                        if (djOrder.coupon != null) {
-//                            if (djOrder.coupon.couponType == 2) {
-//                                dymOrder.couponFee = djOrder.coupon.deductible;
-//                            } else if (djOrder.coupon.couponType == 1) {
-//                                dymOrder.couponFee = Double.parseDouble(df.format(canCouponMoney * (100 - djOrder.coupon.discount) / 100));
-//                            }
-//                        }
-//                        double exls = Double.parseDouble(df.format(canCouponMoney - dymOrder.couponFee));//打折抵扣后应付的钱
-//                        if (exls < 0) {
-//                            exls = 0;//优惠券不退钱
-//                        }
-//                        dymOrder.orderShouldPay = Double.parseDouble(df.format(exls + dymOrder.paymentFee - dymOrder.prepay));
-//                    }
-//                    Observable<DJOrderResult> observable = model.arriveDes(dymOrder);
-//                    view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, djOrderResult -> {
-//                        dymOrder.updateConfirm();
-//                        djOrderResult = orderResult2DJOrder(djOrderResult);
-//                        updateDymOrder(djOrderResult.order);
-//                        view.showOrder(djOrderResult.order);
-//                    })));
-//                }
-//            }
-//        })));
-
-        Observable<DJOrderResult> observable = model.arriveDes(djOrder,dymOrder);
+        Observable<DJOrderResult> observable = model.arriveDes(djOrder, dymOrder);
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, djOrderResult -> {
 //            dymOrder.updateConfirm();
             djOrderResult = orderResult2DJOrder(djOrderResult);
             updateDymOrder(djOrderResult.order);
             view.showOrder(djOrderResult.order);
+
+            TrackHelper.getInstance().stopTrack();
+
         })));
 
     }
@@ -331,7 +296,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         NaviLatLng end = new NaviLatLng(endLat, endLng);
 
         DJOrder djOrder = view.getOrder();
-        if (djOrder != null &&(djOrder.orderStatus < DJOrderStatus.ARRIVAL_BOOKPLACE_ORDER)  ) {
+        if (djOrder != null && (djOrder.orderStatus < DJOrderStatus.ARRIVAL_BOOKPLACE_ORDER)) {
             //到达预约地之前，调用步行方案
             mAMapNavi.calculateWalkRoute(start, end);
         } else {
