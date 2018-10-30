@@ -208,5 +208,6 @@
     <string name="user_phone">使用人</string>
     <string name="passenger_phone">下单人</string>
     <string name="the_same_order">联系队长</string>
+    <string name="mqtt_init_ing">计价服务初始化中，请稍后</string>
 
 </resources>

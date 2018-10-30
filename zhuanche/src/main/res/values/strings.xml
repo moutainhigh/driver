@@ -218,4 +218,6 @@
 
     <string name="wait_consumer">等待乘客</string>
 
+    <string name="mqtt_init_ing">计价服务初始化中，请稍后</string>
+
 </resources>

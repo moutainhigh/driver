@@ -61,7 +61,7 @@ public class JobKeepLiveService extends JobService {
                         mqtt.setPackage(JobKeepLiveService.this.getPackageName());
                         try {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                startForegroundService(mqtt);
+                                startService(mqtt);
                             } else {
                                 // Pre-O behavior.
                                 startService(mqtt);

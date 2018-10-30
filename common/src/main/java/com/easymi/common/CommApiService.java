@@ -412,6 +412,7 @@ public interface CommApiService {
 
     /**
      * 代驾订单上传距离
+     *
      * @param orderId
      * @param distance
      * @param appKey
@@ -432,4 +433,14 @@ public interface CommApiService {
                                             @Query("lat") Double lat,
                                             @Query("lng") Double lng);
 
+    /**
+     * http方式推送gps信息
+     * @param gpsContent
+     * @param appKey
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("driver/api/v1/gpsPush")
+    Observable<EmResult> gpsPush(@Field("gps_content") String gpsContent,
+                               @Field("app_key") String appKey);
 }

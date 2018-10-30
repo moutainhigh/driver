@@ -11,7 +11,6 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.loc.LocService;
-import com.easymi.component.loc.LocationHelperService;
 import com.easymi.component.loc.TrackHelper;
 import com.google.gson.Gson;
 
@@ -32,6 +31,11 @@ public class EmUtil {
         } else {
             return XApp.getMyPreferences().getString(Config.SP_APP_KEY, "");
         }
+    }
+
+
+    public static long getTrackServiceId() {
+        return XApp.getMyPreferences().getLong(Config.SP_AMAP_TRACK_SERVICE_ID, 0);
     }
 
 
@@ -59,8 +63,6 @@ public class EmUtil {
             XApp.getInstance().player.stop();
         }
 
-        TrackHelper.getInstance().destroy();//取消track
-
         stopAllService(context);
 
         Intent i = context.getPackageManager()
@@ -81,9 +83,6 @@ public class EmUtil {
         Intent locIntent = new Intent(context, LocService.class);
         locIntent.setAction(LocService.STOP_LOC);
         context.startService(locIntent);
-
-        Intent locHelpIntent = new Intent(context, LocationHelperService.class);
-        context.stopService(locHelpIntent);
         try {
             Service mQTTService = (Service) (Class.forName("com.easymi.common.push.MQTTService").newInstance());
             Service jobKeepLiveService = (Service) Class.forName("com.easymi.common.daemon.JobKeepLiveService").newInstance();

@@ -11,9 +11,11 @@ import com.amap.api.track.AMapTrackClient;
 import com.amap.api.track.ErrorCode;
 import com.amap.api.track.OnTrackLifecycleListener;
 import com.amap.api.track.TrackParam;
+import com.amap.api.track.query.entity.CorrectMode;
 import com.amap.api.track.query.entity.HistoryTrack;
 import com.amap.api.track.query.entity.LocationMode;
 import com.amap.api.track.query.entity.Point;
+import com.amap.api.track.query.entity.RecoupMode;
 import com.amap.api.track.query.entity.Track;
 import com.amap.api.track.query.model.AddTerminalRequest;
 import com.amap.api.track.query.model.AddTerminalResponse;
@@ -30,9 +32,11 @@ import com.amap.api.track.query.model.QueryTerminalRequest;
 import com.amap.api.track.query.model.QueryTerminalResponse;
 import com.amap.api.track.query.model.QueryTrackResponse;
 import com.easymi.component.Config;
+import com.easymi.component.DJOrderStatus;
 import com.easymi.component.R;
 import com.easymi.component.app.XApp;
-import com.easymi.component.entity.BaseOrder;
+import com.easymi.component.entity.DymOrder;
+import com.easymi.component.entity.SystemConfig;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 
@@ -56,13 +60,10 @@ public class TrackHelper {
 
     private static final String CHANNEL_ID_SERVICE_RUNNING = "CHANNEL_ID_SERVICE_RUNNING";
 
-    private OnGetTrackIdListener onGetTrackId;
     private OnGetTrackDisListener onGetTrackDisListener;
     private OnGetTrackLastPointListener onGetTrackLastPointListener;
 
-    public void setOnGetTrackId(OnGetTrackIdListener onGetTrackId) {
-        this.onGetTrackId = onGetTrackId;
-    }
+    private DymOrder dymOrder;
 
     public static TrackHelper getInstance() {
         if (null == trackHelper) {
@@ -85,7 +86,7 @@ public class TrackHelper {
         aMapTrackClient = new AMapTrackClient(XApp.getInstance());
         aMapTrackClient.setInterval(Config.NORMAL_LOC_TIME / 1000, 30);//5秒定位一次，30秒上传一次
         aMapTrackClient.setCacheSize(20);
-        aMapTrackClient.setLocationMode(LocationMode.HIGHT_ACCURACY);
+        aMapTrackClient.setLocationMode(LocationMode.DEVICE_SENSORS);
 
         terminalName = String.valueOf("driver-" + EmUtil.getEmployId());
 
@@ -96,7 +97,8 @@ public class TrackHelper {
      *
      * @param trId
      */
-    public void startTrack(long trId) {
+    public void startTrack(long trId, DymOrder dymOrder) {
+        this.dymOrder = dymOrder;
         trackId = trId;
         if (terminalId == 0) {
             chainStartTerminal();
@@ -109,16 +111,16 @@ public class TrackHelper {
      * 从查询终端开始到开启上报
      */
     private void chainStartTerminal() {
-        aMapTrackClient.queryTerminal(new QueryTerminalRequest(Config.TRACK_SERVICE_ID, terminalName),
-                getTrackListener(Config.TRACK_SERVICE_ID, terminalName));
+        aMapTrackClient.queryTerminal(new QueryTerminalRequest(SystemConfig.findOne().serviceId, terminalName),
+                getTrackListener(SystemConfig.findOne().serviceId, terminalName));
     }
 
     /**
      * 添加一条路线
      */
     public void addTrack() {
-        AddTrackRequest addTrackRequest = new AddTrackRequest(Config.TRACK_SERVICE_ID, terminalId);
-        aMapTrackClient.addTrack(addTrackRequest, getTrackListener(Config.TRACK_SERVICE_ID, terminalName));
+        AddTrackRequest addTrackRequest = new AddTrackRequest(SystemConfig.findOne().serviceId, terminalId);
+        aMapTrackClient.addTrack(addTrackRequest, getTrackListener(SystemConfig.findOne().serviceId, terminalName));
     }
 
     /**
@@ -134,8 +136,11 @@ public class TrackHelper {
         }
 
         //查询是否存在该track
-        TrackParam param = new TrackParam(Config.TRACK_SERVICE_ID, terminalId);
+        TrackParam param = new TrackParam(SystemConfig.findOne().serviceId, terminalId);
         param.setTrackId(trackId);
+//        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            param.setNotification(LocService.buildNotification(XApp.getInstance()));
+//        }
 
         aMapTrackClient.startTrack(param, getTrackLifecycleListener());
     }
@@ -151,9 +156,19 @@ public class TrackHelper {
 
         long curr = System.currentTimeMillis();
 
+
+        DistanceRequest request = new DistanceRequest(SystemConfig.findOne().serviceId,
+                terminalId,
+                curr - 23 * 60 * 60 * 1000,
+                curr,
+                trId,
+                CorrectMode.DRIVING,
+                RecoupMode.DRIVING,
+                2000);
+
         //查询是否存在该track
-        aMapTrackClient.queryDistance(new DistanceRequest(Config.TRACK_SERVICE_ID, terminalId, curr - 24 * 60 * 60 * 1000, curr, trackId),
-                getTrackListener(Config.TRACK_SERVICE_ID, terminalName));//结束时间不能大于当前时间，且距离开始时间不能超过24小时
+        aMapTrackClient.queryDistance(request,
+                getTrackListener(SystemConfig.findOne().serviceId, terminalName));//结束时间不能大于当前时间，且距离开始时间不能超过24小时
     }
 
     /**
@@ -166,13 +181,16 @@ public class TrackHelper {
         trackId = trId;
 
         //查询是否存在该track
-        aMapTrackClient.queryLatestPoint(new LatestPointRequest(Config.TRACK_SERVICE_ID, terminalId, trackId),
-                getTrackListener(Config.TRACK_SERVICE_ID, terminalName));
+        aMapTrackClient.queryLatestPoint(new LatestPointRequest(SystemConfig.findOne().serviceId, terminalId, trackId),
+                getTrackListener(SystemConfig.findOne().serviceId, terminalName));
     }
 
 
+    /**
+     * 这里用sp里的值是因为在退出时如果数据库有更新，数据库是锁住的，访问不到，所以用sp里的
+     */
     public void stopTrack() {
-        aMapTrackClient.stopTrack(new TrackParam(Config.TRACK_SERVICE_ID, terminalId), getTrackLifecycleListener());
+        aMapTrackClient.stopTrack(new TrackParam(EmUtil.getTrackServiceId(), terminalId), getTrackLifecycleListener());
     }
 
     private OnTrackLifecycleListener getTrackLifecycleListener() {
@@ -199,7 +217,7 @@ public class TrackHelper {
                         status == ErrorCode.TrackListen.START_TRACK_ALREADY_STARTED) {
                     // 服务启动成功，继续开启收集上报
                     aMapTrackClient.startGather(this);
-                    Log.e("TrackHelper", "开启猎鹰服务成功" );
+                    Log.e("TrackHelper", "开启猎鹰服务成功");
 
                 } else {
                     Log.e("TrackHelper", "开启猎鹰服务失败！" + s);
@@ -208,12 +226,12 @@ public class TrackHelper {
 
             @Override
             public void onStopGatherCallback(int i, String s) {
-                Log.e("TrackHelper", "onStopGatherCallback-->"+s);
+                Log.e("TrackHelper", "onStopGatherCallback-->" + s);
             }
 
             @Override
             public void onStopTrackCallback(int i, String s) {
-                Log.e("TrackHelper", "onStopTrackCallback-->"+s);
+                Log.e("TrackHelper", "onStopTrackCallback-->" + s);
             }
         };
     }
@@ -257,12 +275,12 @@ public class TrackHelper {
                 if (distanceResponse.isSuccess()) {
                     double meters = distanceResponse.getDistance();
                     // 行驶里程查询成功，行驶了meters米
-                    Log.e("TrackHelper", "行驶里程查询成功，行驶了-->" + meters);
+                    Log.e("TrackHelper", "猎鹰纠偏里程查询成功，行驶了-->" + meters);
                     if (null != onGetTrackDisListener) {
                         onGetTrackDisListener.getDis(meters);
                     }
                 } else {
-                    Log.e("TrackHelper", "行驶里程查询失败" );
+                    Log.e("TrackHelper", "猎鹰纠偏里程查询失败");
                     // 行驶里程查询失败
                 }
             }
@@ -272,13 +290,13 @@ public class TrackHelper {
                 if (latestPointResponse.isSuccess()) {
                     Point point = latestPointResponse.getLatestPoint().getPoint();
                     // 查询实时位置成功，point为实时位置信息
-                    Log.e("TrackHelper", "查询实时位置成功，lat:" + point.getLat()+"  lng:"+point.getLng());
+                    Log.e("TrackHelper", "查询实时位置成功，lat:" + point.getLat() + "  lng:" + point.getLng());
                     if (null != onGetTrackLastPointListener) {
                         onGetTrackLastPointListener.getPoint(point);
                     }
                 } else {
                     // 查询实时位置失败
-                    Log.e("TrackHelper", "查询实时位置失败" );
+                    Log.e("TrackHelper", "查询实时位置失败");
                 }
             }
 
@@ -306,10 +324,18 @@ public class TrackHelper {
             public void onAddTrackCallback(AddTrackResponse addTrackResponse) {
                 if (addTrackResponse.isSuccess()) {
                     trackId = addTrackResponse.getTrid();
-                    Log.e("TrackHelper", "添加track成功，trackId-->" +trackId);
-                    if (null != onGetTrackId) {
-                        onGetTrackId.getTrackId(trackId);
+                    Log.e("TrackHelper", "添加track成功，trackId-->" + trackId);
+                    if (null != dymOrder) {
+                        if (dymOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) {
+                            dymOrder.toStartTrackId = trackId;
+                            dymOrder.updateStartTrack();
+                        } else if (dymOrder.orderStatus == DJOrderStatus.START_WAIT_ORDER
+                                || dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
+                            dymOrder.toEndTrackId = trackId;
+                            dymOrder.updateEndTrack();
+                        }
                     }
+
                     startTrack();
                 } else {
                     Log.e("TrackHelper", "添加track失败，" + addTrackResponse.getErrorMsg());

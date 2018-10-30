@@ -182,10 +182,10 @@ public class WorkPresenter implements WorkContract.Presenter {
                     for (DymOrder dymOrder : dymOrders) {
                         if (dymOrder.orderType.equals(Config.DAIJIA)) {
                             if (dymOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) {
-                                TrackHelper.getInstance().startTrack(dymOrder.toStartTrackId);
+                                TrackHelper.getInstance().startTrack(dymOrder.toStartTrackId, dymOrder);
                             } else if (dymOrder.orderStatus == DJOrderStatus.START_WAIT_ORDER
                                     || dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
-                                TrackHelper.getInstance().startTrack(dymOrder.toEndTrackId);
+                                TrackHelper.getInstance().startTrack(dymOrder.toEndTrackId, dymOrder);
                                 MQTTService.getInstance().startPushDisTimer(context, dymOrder.orderId, dymOrder.orderType);
                             }
                         }
@@ -386,6 +386,8 @@ public class WorkPresenter implements WorkContract.Presenter {
                 systemConfig.payMoney2 = 100;
                 systemConfig.payMoney3 = 200;
             }
+
+            XApp.getPreferencesEditor().putLong(Config.SP_AMAP_TRACK_SERVICE_ID, systemConfig.serviceId).apply();
 
             canCallPhone = systemConfig.canCallDriver == 1;
 

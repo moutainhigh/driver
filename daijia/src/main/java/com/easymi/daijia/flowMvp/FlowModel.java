@@ -12,6 +12,7 @@ import com.easymi.component.entity.BaseEmploy;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
+import com.easymi.component.entity.SystemConfig;
 import com.easymi.component.loc.TrackHelper;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.GsonUtil;
@@ -108,148 +109,158 @@ public class FlowModel implements FlowContract.Model {
     @Override
     public Observable<DJOrderResult> arriveDes(DJOrder djOrder, DymOrder order) {
 
-        PushFee pushData = new PushFee();
-
-        //司机的信息
-        BaseEmploy employ1 = new BaseEmploy().employ2This();
-        PushFeeEmploy pe = null;
-        if (employ1 != null && employ1 instanceof Employ) {
-            Employ employ = (Employ) employ1;
-            pe = new PushFeeEmploy();
-            pe.childType = employ.child_type;
-            pe.id = employ.id;
-            pe.status = employ.status;
-            pe.realName = employ.real_name;
-            pe.companyId = employ.company_id;
-            pe.phone = employ.phone;
-            pe.childType = employ.child_type;
-            pe.business = employ.service_type;
-        }
-        pushData.employ = pe;
+//        PushFee pushData = new PushFee();
+//
+//        //司机的信息
+//        BaseEmploy employ1 = new BaseEmploy().employ2This();
+//        PushFeeEmploy pe = null;
+//        if (employ1 != null && employ1 instanceof Employ) {
+//            Employ employ = (Employ) employ1;
+//            pe = new PushFeeEmploy();
+//            pe.childType = employ.child_type;
+//            pe.id = employ.id;
+//            pe.status = employ.status;
+//            pe.realName = employ.real_name;
+//            pe.companyId = employ.company_id;
+//            pe.phone = employ.phone;
+//            pe.childType = employ.child_type;
+//            pe.business = employ.service_type;
+//        }
+//        pushData.employ = pe;
+//
+//        EmLoc loc = EmUtil.getLastLoc();
+//
+//        //位置信息
+//        pushData.calc = new PushFeeLoc();
+//        pushData.calc.lat = loc.latitude;
+//        pushData.calc.lng = loc.longitude;
+//        pushData.calc.speed = loc.speed;
+//        pushData.calc.locationType = loc.locationType;
+//        pushData.calc.appKey = EmUtil.getAppKey();
+//        pushData.calc.positionTime = System.currentTimeMillis() / 1000;
+//        pushData.calc.accuracy = (float) loc.accuracy;
+//
+//        //订单信息
+//        List<PushFeeOrder> orderList = new ArrayList<>();
+//        for (DymOrder dymOrder : DymOrder.findAll()) {
+//            PushFeeOrder dataOrder = new PushFeeOrder();
+//            if (dymOrder.orderId == order.orderId && dymOrder.orderType.equals("daijia")) {
+//                dataOrder.orderId = dymOrder.orderId;
+//                dataOrder.orderType = dymOrder.orderType;
+//                dataOrder.status = 0;
+//                dataOrder.addedKm = dymOrder.addedKm;
+//                dataOrder.addedFee = dymOrder.addedFee;
+//                if (dymOrder.orderStatus < DJOrderStatus.GOTO_DESTINATION_ORDER) {//出发前
+//                    dataOrder.status = 1;
+//                } else if (dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {//行驶中
+//                    dataOrder.status = 2;
+//                } else if (dymOrder.orderStatus == DJOrderStatus.START_WAIT_ORDER) {//中途等待
+//                    dataOrder.status = 3;
+//                }
+//                if (dataOrder.status != 0) {
+//                    orderList.add(dataOrder);
+//                }
+//                break;
+//            }
+//        }
+//        pushData.calc.orderInfo = orderList;
+//        String json = GsonUtil.toJson(pushData);
+//
+//
+//        return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
+//                .pullFee(json, EmUtil.getAppKey())
+//                .flatMap(new Func1<PullFeeResult, Observable<DJOrderResult>>() {
+//                    @Override
+//                    public Observable<DJOrderResult> call(PullFeeResult pullFeeResult) {
+//                        DymOrder finalOrder = null;
+//                        if (pullFeeResult != null) {
+//                            try {
+//                                HandlePush.getInstance().handPush(pullFeeResult.fee);
+//                                finalOrder = DymOrder.findByIDType(order.orderId, order.orderType);
+//                            } catch (Exception ex) {
+//                                ex.printStackTrace();
+//                            }
+//                        }
+//
+//                        if (finalOrder == null) {
+//                            finalOrder = order;
+//                        }
+//
+//                        //-----------------重新计算费用---------------------
+//                        DecimalFormat df = new DecimalFormat("#0.0");
+//
+//                        //拷贝本地数据
+//                        finalOrder.prepay = order.prepay;
+//                        finalOrder.extraFee = order.extraFee;
+//                        finalOrder.remark = order.remark;
+//                        finalOrder.paymentFee = order.paymentFee;
+//                        finalOrder.prepay = order.prepay;
+//
+//                        finalOrder.orderTotalFee = Double.parseDouble(df.format(finalOrder.totalFee + finalOrder.extraFee + finalOrder.paymentFee));
+//
+//                        double canCouponMoney = finalOrder.totalFee + finalOrder.extraFee;//可以参与优惠券抵扣的钱
+//                        if (canCouponMoney < finalOrder.minestMoney) {
+//                            canCouponMoney = finalOrder.minestMoney;
+//                        }
+//                        if (djOrder != null && djOrder.coupon != null) {
+//                            if (djOrder.coupon.couponType == 2) {
+//                                finalOrder.couponFee = djOrder.coupon.deductible;
+//                            } else if (djOrder.coupon.couponType == 1) {
+//                                finalOrder.couponFee = Double.parseDouble(df.format(canCouponMoney * (100 - djOrder.coupon.discount) / 100));
+//                            }
+//                        }
+//                        double exls = Double.parseDouble(df.format(canCouponMoney - finalOrder.couponFee));//打折抵扣后应付的钱
+//                        if (exls < 0) {
+//                            exls = 0;//优惠券不退钱
+//                        }
+//                        finalOrder.orderShouldPay = Double.parseDouble(df.format(exls + finalOrder.paymentFee - finalOrder.prepay));
+//
+//                        //----------------------------------------
+//                        long terminalId = XApp.getMyPreferences().getLong(Config.TERMINAL_ID, 0);
+//
+//                        DymOrder finalOrder1 = finalOrder;
+//                        return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
+//                                .arrivalDistination(finalOrder.orderId, EmUtil.getAppKey(), finalOrder.paymentFee, finalOrder.extraFee,
+//                                        finalOrder.remark, finalOrder.distance, finalOrder.disFee, finalOrder.travelTime,
+//                                        finalOrder.travelFee, finalOrder.waitTime,
+//                                        finalOrder.waitTimeFee, 0.0, 0.0, finalOrder.couponFee,
+//                                        finalOrder.orderTotalFee, finalOrder.orderShouldPay, finalOrder.startFee,
+//                                        loc.street + "  " + loc.poiName, loc.latitude, loc.longitude, finalOrder.minestMoney,
+//                                        String.valueOf(finalOrder.toEndTrackId), String.valueOf(finalOrder.toStartTrackId), String.valueOf(terminalId),
+//                                        String.valueOf(SystemConfig.findOne().serviceId), SystemConfig.findOne().apiKey)
+//                                .filter(new HttpResultFunc<>())
+//                                .map(new Func1<DJOrderResult, DJOrderResult>() {
+//                                    @Override
+//                                    public DJOrderResult call(DJOrderResult djOrderResult) {
+//                                        finalOrder1.updateConfirm();
+//                                        return djOrderResult;
+//                                    }
+//                                });
+//                    }
+//                })
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread());
 
         EmLoc loc = EmUtil.getLastLoc();
 
-        //位置信息
-        pushData.calc = new PushFeeLoc();
-        pushData.calc.lat = loc.latitude;
-        pushData.calc.lng = loc.longitude;
-        pushData.calc.speed = loc.speed;
-        pushData.calc.locationType = loc.locationType;
-        pushData.calc.appKey = EmUtil.getAppKey();
-        pushData.calc.positionTime = System.currentTimeMillis() / 1000;
-        pushData.calc.accuracy = (float) loc.accuracy;
-
-        //订单信息
-        List<PushFeeOrder> orderList = new ArrayList<>();
-        for (DymOrder dymOrder : DymOrder.findAll()) {
-            PushFeeOrder dataOrder = new PushFeeOrder();
-            if (dymOrder.orderId == order.orderId && dymOrder.orderType.equals("daijia")) {
-                dataOrder.orderId = dymOrder.orderId;
-                dataOrder.orderType = dymOrder.orderType;
-                dataOrder.status = 0;
-                dataOrder.addedKm = dymOrder.addedKm;
-                dataOrder.addedFee = dymOrder.addedFee;
-                if (dymOrder.orderStatus < DJOrderStatus.GOTO_DESTINATION_ORDER) {//出发前
-                    dataOrder.status = 1;
-                } else if (dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {//行驶中
-                    dataOrder.status = 2;
-                } else if (dymOrder.orderStatus == DJOrderStatus.START_WAIT_ORDER) {//中途等待
-                    dataOrder.status = 3;
-                }
-                if (dataOrder.status != 0) {
-                    orderList.add(dataOrder);
-                }
-                break;
-            }
-        }
-        pushData.calc.orderInfo = orderList;
-        String json = GsonUtil.toJson(pushData);
-
+        long terminalId = XApp.getMyPreferences().getLong(Config.TERMINAL_ID, 0);
 
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .pullFee(json, EmUtil.getAppKey())
-                .flatMap(new Func1<PullFeeResult, Observable<DJOrderResult>>() {
-                    @Override
-                    public Observable<DJOrderResult> call(PullFeeResult pullFeeResult) {
-                        DymOrder finalOrder = null;
-                        if (pullFeeResult != null) {
-                            try {
-                                HandlePush.getInstance().handPush(pullFeeResult.fee);
-                                finalOrder = DymOrder.findByIDType(order.orderId, order.orderType);
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                            }
-                        }
-
-                        if (finalOrder == null) {
-                            finalOrder = order;
-                        }
-
-                        //-----------------重新计算费用---------------------
-                        DecimalFormat df = new DecimalFormat("#0.0");
-
-                        //拷贝本地数据
-                        finalOrder.prepay = order.prepay;
-                        finalOrder.extraFee = order.extraFee;
-                        finalOrder.remark = order.remark;
-                        finalOrder.paymentFee = order.paymentFee;
-                        finalOrder.prepay = order.prepay;
-
-                        finalOrder.orderTotalFee = Double.parseDouble(df.format(finalOrder.totalFee + finalOrder.extraFee + finalOrder.paymentFee));
-
-                        double canCouponMoney = finalOrder.totalFee + finalOrder.extraFee;//可以参与优惠券抵扣的钱
-                        if (canCouponMoney < finalOrder.minestMoney) {
-                            canCouponMoney = finalOrder.minestMoney;
-                        }
-                        if (djOrder != null && djOrder.coupon != null) {
-                            if (djOrder.coupon.couponType == 2) {
-                                finalOrder.couponFee = djOrder.coupon.deductible;
-                            } else if (djOrder.coupon.couponType == 1) {
-                                finalOrder.couponFee = Double.parseDouble(df.format(canCouponMoney * (100 - djOrder.coupon.discount) / 100));
-                            }
-                        }
-                        double exls = Double.parseDouble(df.format(canCouponMoney - finalOrder.couponFee));//打折抵扣后应付的钱
-                        if (exls < 0) {
-                            exls = 0;//优惠券不退钱
-                        }
-                        finalOrder.orderShouldPay = Double.parseDouble(df.format(exls + finalOrder.paymentFee - finalOrder.prepay));
-
-                        //----------------------------------------
-                        long terminalId = XApp.getMyPreferences().getLong(Config.TERMINAL_ID, 0);
-
-                        DymOrder finalOrder1 = finalOrder;
-                        return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                                .arrivalDistination(finalOrder.orderId, EmUtil.getAppKey(), finalOrder.paymentFee, finalOrder.extraFee,
-                                        finalOrder.remark, finalOrder.distance, finalOrder.disFee, finalOrder.travelTime,
-                                        finalOrder.travelFee, finalOrder.waitTime,
-                                        finalOrder.waitTimeFee, 0.0, 0.0, finalOrder.couponFee,
-                                        finalOrder.orderTotalFee, finalOrder.orderShouldPay, finalOrder.startFee,
-                                        loc.street + "  " + loc.poiName, loc.latitude, loc.longitude, finalOrder.minestMoney,
-                                        String.valueOf(finalOrder.toEndTrackId), String.valueOf(finalOrder.toStartTrackId), String.valueOf(terminalId),
-                                        String.valueOf(Config.TRACK_SERVICE_ID), Config.AMAP_WEB_KEY)
-                                .filter(new HttpResultFunc<>())
-                                .map(new Func1<DJOrderResult, DJOrderResult>() {
-                                    @Override
-                                    public DJOrderResult call(DJOrderResult djOrderResult) {
-                                        finalOrder1.updateConfirm();
-                                        return djOrderResult;
-                                    }
-                                });
-                    }
+                .arrivalDistination(order.orderId, EmUtil.getAppKey(), order.paymentFee, order.extraFee,
+                        order.remark, order.distance, order.disFee, order.travelTime,
+                        order.travelFee, order.waitTime,
+                        order.waitTimeFee, (double) order.addedKm, order.addedFee, order.couponFee,
+                        order.orderTotalFee, order.orderShouldPay, order.startFee,
+                        loc.street + "  " + loc.poiName, loc.latitude, loc.longitude, order.minestMoney,
+                        String.valueOf(order.toEndTrackId), String.valueOf(order.toStartTrackId), String.valueOf(terminalId),
+                        String.valueOf(SystemConfig.findOne().serviceId), SystemConfig.findOne().apiKey)
+                .filter(new HttpResultFunc<>())
+                .map(djOrderResult -> {
+                    order.updateConfirm();
+                    return djOrderResult;
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-
-//        return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-//                .arrivalDistination(order.orderId, EmUtil.getAppKey(), order.paymentFee, order.extraFee,
-//                        order.remark, order.distance, order.disFee, order.travelTime,
-//                        order.travelFee, order.waitTime,
-//                        order.waitTimeFee, 0.0, 0.0, order.couponFee,
-//                        order.orderTotalFee, order.orderShouldPay, order.startFee,
-//                        loc.street + "  " + loc.poiName, loc.latitude, loc.longitude, order.minestMoney)
-//                .filter(new HttpResultFunc<>())
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
@@ -293,12 +304,11 @@ public class FlowModel implements FlowContract.Model {
         EmLoc emLoc = EmUtil.getLastLoc();
 
         return ApiManager.getInstance().createApi(Config.HOST, DJApiService.class)
-                .pushDistance(orderId,distance,Config.APP_KEY,state,dark_distance,dark_price,emLoc.latitude,emLoc.longitude)
+                .pushDistance(orderId, distance, Config.APP_KEY, state, dark_distance, dark_price, emLoc.latitude, emLoc.longitude)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-
 
 
 }

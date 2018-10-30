@@ -118,14 +118,9 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             updateDymOrder(djOrderResult.order);
             view.showOrder(djOrderResult.order);
 
-            TrackHelper.getInstance().startTrack(0);
-            TrackHelper.getInstance().setOnGetTrackId(trackId -> {
-                DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
-                if (dymOrder != null) {
-                    dymOrder.toStartTrackId = trackId;
-                    dymOrder.updateStartTrack(); //保存前往预约地的trackId
-                }
-            });
+            DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
+            TrackHelper.getInstance().startTrack(0, dymOrder);
+
         })));
     }
 
@@ -164,6 +159,13 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             updateDymOrder(djOrderResult.order);
             view.showOrder(djOrderResult.order);
 
+            //开始等待时也开启track
+            DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
+            if (dymOrder != null && dymOrder.toEndTrackId == 0) {
+                TrackHelper.getInstance().startTrack(0, dymOrder);
+                MQTTService.getInstance().startPushDisTimer(context, orderId, Config.DAIJIA);
+            }
+
         })));
     }
 
@@ -178,15 +180,12 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             updateDymOrder(djOrderResult.order);
             view.showOrder(djOrderResult.order);
 
-            TrackHelper.getInstance().startTrack(0);
-            TrackHelper.getInstance().setOnGetTrackId(trackId -> {
-                DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
-                if (dymOrder != null) {
-                    dymOrder.toEndTrackId = trackId;
-                    dymOrder.updateEndTrack(); //保存前往预约地的trackId
-                }
-            });
-            MQTTService.getInstance().startPushDisTimer(context,orderId,Config.DAIJIA);
+            DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
+            //开始出发时也开启track
+            if (dymOrder != null && dymOrder.toEndTrackId == 0) {
+                TrackHelper.getInstance().startTrack(0, dymOrder);
+                MQTTService.getInstance().startPushDisTimer(context, orderId, Config.DAIJIA);
+            }
 
         })));
     }

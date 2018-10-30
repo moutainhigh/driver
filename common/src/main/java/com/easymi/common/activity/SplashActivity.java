@@ -126,7 +126,8 @@ public class SplashActivity extends RxBaseActivity {
         } finally {
             if (!rxPermissions.isGranted(Manifest.permission.ACCESS_COARSE_LOCATION)
                     || !rxPermissions.isGranted(Manifest.permission.READ_PHONE_STATE)
-                    || !rxPermissions.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    || !rxPermissions.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    || !rxPermissions.isGranted(Manifest.permission.ACCESS_FINE_LOCATION)) {
                 Log.e(TAG, "showDialog");
                 showDialog();
             } else {
@@ -255,6 +256,7 @@ public class SplashActivity extends RxBaseActivity {
     private void requestPer() {
         rxPermissions.request(Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .subscribe(granted -> {
                     if (granted) {

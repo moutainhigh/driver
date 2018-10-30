@@ -312,6 +312,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
     public void showShade() {
         shadeFrame.setVisibility(View.VISIBLE);
         shadeFrame.setClickable(true);
+        grabCon.setClickable(false);
         rotateImage.startRotate();
     }
 
@@ -375,6 +376,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
     public void showGrabCountDown() {
         rotateImage.pauseRotate();
         shadeFrame.setVisibility(View.GONE);
+        grabCon.setClickable(true);
 //        grabCon.setOnClickListener(v -> presenter.grabOrder(showIngOrder.orderId));
     }
 
@@ -493,7 +495,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
 
     @Override
     public void removerOrderById(long orderId) {
-        if(showIngOrder != null && showIngOrder.orderId == orderId){
+        if (showIngOrder != null && showIngOrder.orderId == orderId) {
             showIngOrder.countTime = 1;//采用将时间置位1的方式移除订单
         }
     }

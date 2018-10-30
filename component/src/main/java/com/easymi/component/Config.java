@@ -31,8 +31,6 @@ public class Config {
     public static final String APP_KEY = "488441998952435da895286632e82f40";//快些哥
 //    public static final String APP_KEY = "815a46ca2a624cea04adb006785f76e1";//本地IP
 
-    public static final String AMAP_WEB_KEY = "8f709ec96d77a7aeb31979f52a8ce0f0";//猎鹰WEB_API的key
-
     /**
      * 上传图片地址.
      */
@@ -52,10 +50,6 @@ public class Config {
      * 微信分享id
      */
     public static final String WX_APP_ID = "wx228f2bdb16568b58"; //微信app id
-    /**
-     * 猎鹰纠偏服务
-     */
-    public static final long TRACK_SERVICE_ID = 7712; //微信app id
 
     /**
      * 图片服务器地址
@@ -80,6 +74,7 @@ public class Config {
 
     public static final String SP_QIYE_CODE = "qiye_code"; //企业编码
     public static final String SP_APP_KEY = "app_key"; //app_key
+    public static final String SP_AMAP_TRACK_SERVICE_ID = "amap_amap_service_id"; //猎鹰serviceId
     public static final String SP_LAT_QIYE_CODE = "last_qiye_code"; //上次的企业编码
 
 
@@ -121,6 +116,8 @@ public class Config {
     public static final String SP_LAST_GET_FEE_TIME = "sp_last_get_fee_time";//是否播放静音音乐音乐
 
     public static final String SP_LAST_VERSION = "sp_last_version";//是否播放静音音乐音乐
+
+    public static final String SP_LAST_HTTP_PUSH_TIME = "sp_last_http_push_time";//是否播放静音音乐音乐
 
     //是否只上传GPS类型点
     public static final String SP_GPS_FILTER = "sp_gps_filter";

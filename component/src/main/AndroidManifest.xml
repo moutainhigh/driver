@@ -54,21 +54,20 @@
             android:configChanges="orientation|keyboardHidden|screenSize" />
 
         <service
-            android:name=".loc.LocService"
-            android:process=":remote1">
+            android:name=".loc.LocService">
             <intent-filter>
                 <action android:name="com.easymi.eomponent.START_LOC" />
                 <action android:name="com.easymi.eomponent.STOP_LOC" />
             </intent-filter>
         </service>
 
-        <service
-            android:name=".loc.LocationHelperService"
-            android:process=":remote2">
-            <intent-filter>
-                <action android:name="com.easymi.component.loc.ACTIVATE" />
-            </intent-filter>
-        </service>
+        <!--<service-->
+            <!--android:name=".loc.LocationHelperService"-->
+            <!--android:process=":remote2">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.easymi.component.loc.ACTIVATE" />-->
+            <!--</intent-filter>-->
+        <!--</service>-->
 
         <receiver android:name=".loc.LocReceiver">
             <intent-filter>

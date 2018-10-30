@@ -11,11 +11,13 @@ import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.loc.TrackHelper;
 import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.Log;
 import com.easymi.component.utils.NetUtil;
 import com.google.gson.Gson;
 
@@ -64,7 +66,9 @@ public class OrderPushDisTimer {
                 if (NetUtil.getNetWorkState(context) != NetUtil.NETWORK_NONE) {
                     DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
                     if (null != dymOrder) {
-                        TrackHelper.getInstance().queryDis(dymOrder.toEndTrackId, meters -> startPushDis(meters / 1000));
+                        if (dymOrder.toEndTrackId != 0) {
+                            TrackHelper.getInstance().queryDis(dymOrder.toEndTrackId, meters -> startPushDis(meters / 1000));
+                        }
                     }
                 }
             }
@@ -106,10 +110,12 @@ public class OrderPushDisTimer {
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-        rxManager.add(observable.subscribe(new MySubscriber<>(context, false, false, new NoErrSubscriberListener<OrderFeeResult>() {
+        rxManager.add(observable.subscribe(new MySubscriber<>(context, false, false, new HaveErrSubscriberListener<OrderFeeResult>() {
             @Override
             public void onNext(OrderFeeResult result) {
+                Log.e("result", "---" + result.toString());
                 if (null != result.budgetFee) {
+                    Log.e("result", "null != result.budgetFee");
                     if (dymOrder != null) {
                         if (dymOrder.distance <= result.budgetFee.mileges) {
                             dymOrder.startFee = result.budgetFee.start_price;
@@ -131,6 +137,8 @@ public class OrderPushDisTimer {
 
                             dymOrder.updateFee();
 
+                            Log.e("result", dymOrder.toString());
+
                             PullFeeCon pullFeeCon = new PullFeeCon();
                             pullFeeCon.msg = "pull_fee";
                             pullFeeCon.orderId = dymOrder.orderId;
@@ -139,6 +147,11 @@ public class OrderPushDisTimer {
                         }
                     }
                 }
+            }
+
+            @Override
+            public void onError(int code) {
+                Log.e("result", "---errcode--" + code);
             }
         })));
     }

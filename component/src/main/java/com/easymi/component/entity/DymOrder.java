@@ -504,4 +504,43 @@ public class DymOrder implements Serializable {
         SQLiteDatabase db = helper.openSqliteDatabase();
         db.delete("t_dyminfo", "id = ?", new String[]{String.valueOf(id)});
     }
+
+    @Override
+    public String toString() {
+        return "DymOrder{" +
+                "id=" + id +
+                ", orderId=" + orderId +
+                ", orderType='" + orderType + '\'' +
+                ", passengerId=" + passengerId +
+                ", startFee=" + startFee +
+                ", waitTime=" + waitTime +
+                ", waitTimeFee=" + waitTimeFee +
+                ", travelTime=" + travelTime +
+                ", travelFee=" + travelFee +
+                ", distance=" + distance +
+                ", disFee=" + disFee +
+                ", totalFee=" + totalFee +
+                ", orderStatus=" + orderStatus +
+                ", paymentFee=" + paymentFee +
+                ", extraFee=" + extraFee +
+                ", remark='" + remark + '\'' +
+                ", couponFee=" + couponFee +
+                ", orderTotalFee=" + orderTotalFee +
+                ", orderShouldPay=" + orderShouldPay +
+                ", prepay=" + prepay +
+                ", minestMoney=" + minestMoney +
+                ", peakCost=" + peakCost +
+                ", nightPrice=" + nightPrice +
+                ", lowSpeedCost=" + lowSpeedCost +
+                ", lowSpeedTime=" + lowSpeedTime +
+                ", peakMile=" + peakMile +
+                ", nightTime=" + nightTime +
+                ", nightMile=" + nightMile +
+                ", nightTimePrice=" + nightTimePrice +
+                ", addedKm=" + addedKm +
+                ", addedFee=" + addedFee +
+                ", toStartTrackId=" + toStartTrackId +
+                ", toEndTrackId=" + toEndTrackId +
+                '}';
+    }
 }

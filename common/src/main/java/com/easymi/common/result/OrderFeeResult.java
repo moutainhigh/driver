@@ -25,4 +25,11 @@ public class OrderFeeResult extends EmResult {
         public double mileage_cost;
         public double mileges;
     }
+
+    @Override
+    public String toString() {
+        return "OrderFeeResult{" +
+                "budgetFee=" + budgetFee +
+                '}';
+    }
 }
