@@ -78,8 +78,8 @@ public class LocationHelperService extends Service {
     private class HelperBinder extends ILocationHelperServiceAIDL.Stub {
         @Override
         public void onFinishBind(int notiId) throws RemoteException {
-            startForeground(notiId, Utils.buildNotification(LocationHelperService.this.getApplicationContext()));
-            stopForeground(true);
+//            startForeground(notiId, Utils.buildNotification(LocationHelperService.this.getApplicationContext()));
+//            stopForeground(true);
         }
     }
 

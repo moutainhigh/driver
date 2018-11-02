@@ -15,7 +15,8 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.AMapLocationQualityReport;
-import com.easymi.common.push.MQTTService;
+//import com.easymi.common.push.MQTTService;
+import com.easymi.common.push.MqttManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.NetWorkUtil;
@@ -170,9 +171,9 @@ public class SysCheckActivity extends RxBaseActivity implements AMapLocationList
                 if (report.getGPSStatus() != AMapLocationQualityReport.GPS_STATUS_OK) {
                     advice.append(getString(R.string.please_gps_open));
                 }
-                if (!NetWorkUtil.isWifiConnected(this)) {
-                    advice.append(getString(R.string.please_wifi));
-                }
+//                if (!NetWorkUtil.isWifiConnected(this)) {
+//                    advice.append(getString(R.string.please_wifi));
+//                }
 
                 locText.setText(StringUtils.isBlank(advice.toString()) ? getString(R.string.loc_ok) : advice);
                 locText.setTextColor(StringUtils.isBlank(advice.toString()) ? getResources().getColor(R.color.text_default) : getResources().getColor(R.color.yellow));
@@ -203,7 +204,7 @@ public class SysCheckActivity extends RxBaseActivity implements AMapLocationList
             try {
                 Thread.sleep(1000);
                 runOnUiThread(() -> {
-                    boolean connected = MQTTService.client != null && MQTTService.client.isConnected();
+                    boolean connected = MqttManager.getInstance().isConnected();
                     noticeText.setText(connected ? getString(R.string.notice_ok) : getString(R.string.notice_err));
                     noticeText.setTextColor(connected ? getResources().getColor(R.color.text_default) : getResources().getColor(R.color.red));
 

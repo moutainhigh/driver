@@ -48,7 +48,8 @@ import com.amap.api.services.route.DriveRouteResult;
 import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.push.FeeChangeObserver;
 import com.easymi.common.push.HandlePush;
-import com.easymi.common.push.MQTTService;
+//import com.easymi.common.push.MQTTService;
+import com.easymi.common.push.MqttManager;
 import com.easymi.common.trace.TraceInterface;
 import com.easymi.common.trace.TraceReceiver;
 import com.easymi.component.Config;
@@ -1037,7 +1038,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             @Override
             public void doUploadOrder() {
                 BuildPushData pushData = new BuildPushData(EmUtil.getLastLoc());
-                MQTTService.pushLoc(pushData);
+                MqttManager.getInstance().pushLoc(pushData);
                 showDrive();
             }
 
@@ -1118,6 +1119,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         go_layout.setVisibility(View.GONE);
         middle_wait_layout.setVisibility(View.GONE);
     }
+
+//    @Override
+//    public ZCOrder getOrder() {
+//        return zcOrder;
+//    }
 
     @Override
     protected void onStart() {
@@ -1390,8 +1396,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void onFinishOrder(long orderId, String orderType) {
-        ToastUtil.showMessage(this, getString(R.string.finished_order));
-        finish();
+        if (orderId == this.orderId && orderType.equals(Config.ZHUANCHE)) {
+            ToastUtil.showMessage(this, getString(R.string.finished_order));
+            finish();
+        }
     }
 
     @Override

@@ -1,23 +1,14 @@
 package com.easymi.common.mvp.work;
 
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 
 import com.easymi.common.R;
-import com.easymi.common.daemon.DaemonService;
-import com.easymi.common.daemon.JobKeepLiveService;
 import com.easymi.common.entity.AnnAndNotice;
 import com.easymi.common.entity.MultipleOrder;
-import com.easymi.common.push.CountEvent;
-import com.easymi.common.push.MQTTService;
-import com.easymi.common.result.WorkStatisticsResult;
-import com.easymi.component.entity.Setting;
 import com.easymi.common.entity.NearDriver;
+import com.easymi.common.push.MqttManager;
+import com.easymi.common.push.WorkTimeCounter;
 import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.LoginResult;
 import com.easymi.common.result.NearDriverResult;
@@ -30,6 +21,7 @@ import com.easymi.component.EmployStatus;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.Employ;
+import com.easymi.component.entity.Setting;
 import com.easymi.component.entity.SubSetting;
 import com.easymi.component.entity.SystemConfig;
 import com.easymi.component.entity.ZCSetting;
@@ -39,17 +31,13 @@ import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
-import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.LoadingButton;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import rx.Observable;
 
@@ -64,6 +52,8 @@ public class WorkPresenter implements WorkContract.Presenter {
     private WorkContract.View view;
     private WorkContract.Model model;
 
+    public static WorkTimeCounter timeCounter;
+
     public WorkPresenter(Context context, WorkContract.View view) {
         this.context = context;
         this.view = view;
@@ -75,29 +65,28 @@ public class WorkPresenter implements WorkContract.Presenter {
      */
     @Override
     public void initDaemon() {
-        if (Build.VERSION.SDK_INT > 21) {//21版本以上使用JobScheduler
-            try {
-                ComponentName mServiceComponent = new ComponentName(context, JobKeepLiveService.class);
-                JobInfo.Builder builder = new JobInfo.Builder(0x139888, mServiceComponent);
-                builder.setPersisted(true);//持续的
-                builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);//任何网络情况下
-                builder.setRequiresDeviceIdle(false);//是否需要设备闲置
-                builder.setRequiresCharging(false);//是否需要充电状态下
-
-                JobScheduler tm = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
-                if (tm != null) {
-                    tm.schedule(builder.build());
-                }
-            } catch (Exception e) {
-                Log.e("DriverApp", "初始化失败JobScheduler失败");
-            }
-        } else {//21版本以下使用native保活
-            //开起保活service
-            Intent daemonIntent = new Intent(context, DaemonService.class);
-            daemonIntent.setPackage(context.getPackageName());
-            context.startService(daemonIntent);
-        }
-
+//        if (Build.VERSION.SDK_INT > 21) {//21版本以上使用JobScheduler
+//            try {
+//                ComponentName mServiceComponent = new ComponentName(context, JobKeepLiveService.class);
+//                JobInfo.Builder builder = new JobInfo.Builder(0x139888, mServiceComponent);
+//                builder.setPersisted(true);//持续的
+//                builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);//任何网络情况下
+//                builder.setRequiresDeviceIdle(false);//是否需要设备闲置
+//                builder.setRequiresCharging(false);//是否需要充电状态下
+//
+//                JobScheduler tm = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+//                if (tm != null) {
+//                    tm.schedule(builder.build());
+//                }
+//            } catch (Exception e) {
+//                Log.e("DriverApp", "初始化失败JobScheduler失败");
+//            }
+//        } else {//21版本以下使用native保活
+//            //开起保活service
+//            Intent daemonIntent = new Intent(context, DaemonService.class);
+//            daemonIntent.setPackage(context.getPackageName());
+//            context.startService(daemonIntent);
+//        }
     }
 
     @Override
@@ -263,10 +252,10 @@ public class WorkPresenter implements WorkContract.Presenter {
      * 强制推送数据。
      */
     private void uploadTime(int statues) {
-        MQTTService qt = MQTTService.getInstance();
-        if (qt != null) {
-            qt.uploadTime(statues);
+        if (null == timeCounter) {
+            timeCounter = new WorkTimeCounter(context);
         }
+        timeCounter.forceUpload(statues);
     }
 
     @Override
@@ -308,6 +297,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                 editor.putLong(Config.SP_DRIVERID, employ.id);
                 editor.apply();
                 view.showDriverStatus();
+                MqttManager.getInstance().creatConnect();//在查询完服务人员后初始化mqtt
             }
 
             @Override

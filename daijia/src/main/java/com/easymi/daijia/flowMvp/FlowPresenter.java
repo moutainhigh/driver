@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.easymi.common.entity.BuildPushData;
+import com.easymi.common.push.MqttManager;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
 import com.easymi.component.network.NoErrSubscriberListener;
@@ -34,7 +35,7 @@ import com.amap.api.services.route.RideRouteResult;
 import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
 import com.autonavi.tbt.TrafficFacilityInfo;
-import com.easymi.common.push.MQTTService;
+//import com.easymi.common.push.MQTTService;
 import com.easymi.component.activity.NaviActivity;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
@@ -227,7 +228,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 //            }
 //        })));
 
-        Observable<DJOrderResult> observable = model.arriveDes(djOrder,dymOrder);
+        Observable<DJOrderResult> observable = model.arriveDes(djOrder, dymOrder);
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, djOrderResult -> {
 //            dymOrder.updateConfirm();
             djOrderResult = orderResult2DJOrder(djOrderResult);
@@ -246,7 +247,13 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         intent.putExtra("endLatlng", end);
         intent.putExtra("orderId", orderId);
         intent.putExtra("orderType", Config.DAIJIA);
-        intent.putExtra(Config.NAVI_MODE, Config.WALK_TYPE);
+        DJOrder djOrder = view.getOrder();
+        if (djOrder != null && (djOrder.orderStatus < DJOrderStatus.ARRIVAL_BOOKPLACE_ORDER)) {
+            intent.putExtra(Config.NAVI_MODE, Config.WALK_TYPE);
+        } else {
+            intent.putExtra(Config.NAVI_MODE, Config.DRIVE_TYPE);
+        }
+        stopNavi();//停止当前页面的导航，在到导航页时重新初始化导航
         context.startActivity(intent);
     }
 
@@ -322,16 +329,16 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void routePlanByNavi(Double endLat, Double endLng) {
-        if (null == mAMapNavi) {
-            mAMapNavi = AMapNavi.getInstance(context);
-            mAMapNavi.addAMapNaviListener(this);
-        }
+        stopNavi();
+        //重新初始化导航
+        mAMapNavi = AMapNavi.getInstance(context);
+        mAMapNavi.addAMapNaviListener(this);
 
         NaviLatLng start = new NaviLatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
         NaviLatLng end = new NaviLatLng(endLat, endLng);
 
         DJOrder djOrder = view.getOrder();
-        if (djOrder != null &&(djOrder.orderStatus < DJOrderStatus.ARRIVAL_BOOKPLACE_ORDER)  ) {
+        if (djOrder != null && (djOrder.orderStatus < DJOrderStatus.ARRIVAL_BOOKPLACE_ORDER)) {
             //到达预约地之前，调用步行方案
             mAMapNavi.calculateWalkRoute(start, end);
         } else {
@@ -415,7 +422,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             dymOrder.orderStatus = djOrder.orderStatus;
             dymOrder.updateStatus();
         }
-        MQTTService.pushLoc(new BuildPushData(EmUtil.getLastLoc()));
+        MqttManager.getInstance().pushLoc(new BuildPushData(EmUtil.getLastLoc()));
     }
 
     @Override

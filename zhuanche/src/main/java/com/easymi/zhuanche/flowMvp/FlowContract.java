@@ -63,6 +63,8 @@ public interface FlowContract {
 
         void hideTops();
 
+//        ZCOrder getOrder();
+
         RxManager getManager();
     }
 

@@ -82,6 +82,7 @@ public class Employ extends BaseEmploy implements Parcelable {
         values.put("portrait_path", portrait_path);
         values.put("score", score);
         values.put("company_phone", company_phone);
+        values.put("auditType", auditType);
 
         /*
          * values.put("age", age); values.put("jialing", jialing);
@@ -160,6 +161,9 @@ public class Employ extends BaseEmploy implements Parcelable {
                         .getColumnIndex("status"));
                 driverInfo.company_phone = cursor.getString(cursor
                         .getColumnIndex("company_phone"));
+
+                driverInfo.auditType = cursor.getInt(cursor
+                        .getColumnIndex("auditType"));
                 driverInfo.vehicle = Vehicle.findByEmployId(driverID);
                 /*
                  * driverInfo.age =
@@ -267,6 +271,8 @@ public class Employ extends BaseEmploy implements Parcelable {
                 .getColumnIndex("status"));
         driverInfo.company_phone = cursor.getString(cursor
                 .getColumnIndex("company_phone"));
+        driverInfo.auditType = cursor.getInt(cursor
+                .getColumnIndex("auditType"));
         return driverInfo;
     }
 
@@ -298,6 +304,7 @@ public class Employ extends BaseEmploy implements Parcelable {
         values.put("score", score);
         values.put("status", status);
         values.put("company_phone", company_phone);
+        values.put("auditType", auditType);
         /*
          * values.put("age", age); values.put("jialing", jialing);
 		 */
@@ -338,6 +345,7 @@ public class Employ extends BaseEmploy implements Parcelable {
         score = in.readDouble();
         status = in.readString();
         company_phone = in.readString();
+        auditType = in.readInt();
     }
 
     public static final Creator<Employ> CREATOR = new Creator<Employ>() {
@@ -372,6 +380,7 @@ public class Employ extends BaseEmploy implements Parcelable {
                 ", score='" + score + '\'' +
                 ", status='" + status + '\'' +
                 ", company_phone='" + company_phone + '\'' +
+                ", auditType='" + auditType + '\'' +
                 '}';
     }
 
@@ -399,5 +408,6 @@ public class Employ extends BaseEmploy implements Parcelable {
         dest.writeDouble(score);
         dest.writeString(status);
         dest.writeString(company_phone);
+        dest.writeInt(auditType);
     }
 }

@@ -7,7 +7,6 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -41,14 +40,14 @@ import com.easymi.common.entity.AnnAndNotice;
 import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
-import com.easymi.common.entity.WorkStatistics;
 import com.easymi.common.push.CountEvent;
-import com.easymi.common.push.MQTTService;
+import com.easymi.common.push.MqttManager;
 import com.easymi.common.receiver.AnnReceiver;
 import com.easymi.common.receiver.CancelOrderReceiver;
 import com.easymi.common.receiver.EmployStatusChangeReceiver;
 import com.easymi.common.receiver.NoticeReceiver;
 import com.easymi.common.register.InfoActivity;
+import com.easymi.common.util.CommonUtil;
 import com.easymi.common.widget.NearInfoWindowAdapter;
 import com.easymi.common.widget.RegisterDialog;
 import com.easymi.component.Config;
@@ -406,7 +405,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         listenOrderCon.setVisibility(View.VISIBLE);
         rippleBackground.startRippleAnimation();
         bottomBtnCon.setVisibility(View.GONE);
-        MQTTService.pushLocNoLimit(new BuildPushData(EmUtil.getLastLoc()));
+        MqttManager.getInstance().pushLocNoLimit(new BuildPushData(EmUtil.getLastLoc()));
         presenter.indexOrders();
     }
 
@@ -614,7 +613,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         }
         mapView.onResume();
         presenter.loadDataOnResume();
-        MQTTService.pushLocNoLimit(new BuildPushData(EmUtil.getLastLoc()));
+        MqttManager.getInstance().pushLocNoLimit(new BuildPushData(EmUtil.getLastLoc()));
     }
 
     @Override

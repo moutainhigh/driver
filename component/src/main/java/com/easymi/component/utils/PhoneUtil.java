@@ -212,9 +212,9 @@ public class PhoneUtil {
         if (!PhoneFunc.hasGps(context)) {
             ToastUtil.showMessage(context, context.getResources().getString(R.string.no_gps), Toast.LENGTH_LONG);
         }
-        if (!PhoneFunc.checkWifi(context)) {
-            ToastUtil.showMessage(context, context.getResources().getString(R.string.closed_wifi), Toast.LENGTH_LONG);
-        }
+//        if (!PhoneFunc.checkWifi(context)) {
+//            ToastUtil.showMessage(context, context.getResources().getString(R.string.closed_wifi), Toast.LENGTH_LONG);
+//        }
         if (!PhoneFunc.isGPSEnable(context)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setMessage(context.getResources().getString(R.string.please_open_gps));

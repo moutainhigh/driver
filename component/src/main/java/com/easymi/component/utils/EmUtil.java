@@ -14,6 +14,9 @@ import com.easymi.component.loc.LocService;
 import com.easymi.component.loc.LocationHelperService;
 import com.google.gson.Gson;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 /**
  * Created by developerLzh on 2017/11/30 0030.
  * 封装的一些快捷获取对象方法
@@ -58,6 +61,20 @@ public class EmUtil {
             XApp.getInstance().player.stop();
         }
 
+        try {
+            Class<?> clazz = Class.forName("com.easymi.common.push.MqttManager");
+            Method method = clazz.getMethod("release");
+            method.invoke(null);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
         stopAllService(context);
 
         Intent i = context.getPackageManager()
@@ -81,33 +98,33 @@ public class EmUtil {
 
         Intent locHelpIntent = new Intent(context, LocationHelperService.class);
         context.stopService(locHelpIntent);
-        try {
-            Service mQTTService = (Service) (Class.forName("com.easymi.common.push.MQTTService").newInstance());
-            Service jobKeepLiveService = (Service) Class.forName("com.easymi.common.daemon.JobKeepLiveService").newInstance();
-            Service puppetService = (Service) Class.forName("com.easymi.common.daemon.PuppetService").newInstance();
-            Service daemonService = (Service) Class.forName("com.easymi.common.daemon.DaemonService").newInstance();
+//        try {
+//            Service mQTTService = (Service) (Class.forName("com.easymi.common.push.MQTTService").newInstance());
+//            Service jobKeepLiveService = (Service) Class.forName("com.easymi.common.daemon.JobKeepLiveService").newInstance();
+//            Service puppetService = (Service) Class.forName("com.easymi.common.daemon.PuppetService").newInstance();
+//            Service daemonService = (Service) Class.forName("com.easymi.common.daemon.DaemonService").newInstance();
 
-            Intent mqttIntent = new Intent(context, mQTTService.getClass());
-            mqttIntent.setPackage(context.getPackageName());
-            context.stopService(mqttIntent);
+//            Intent mqttIntent = new Intent(context, mQTTService.getClass());
+//            mqttIntent.setPackage(context.getPackageName());
+//            context.stopService(mqttIntent);
 
-            Intent daemonIntent = new Intent(context, daemonService.getClass());
-            daemonIntent.setPackage(context.getPackageName());
-            context.stopService(daemonIntent);
-
-            Intent jobkeepIntent = new Intent(context, jobKeepLiveService.getClass());
-            jobkeepIntent.setPackage(context.getPackageName());
-            context.stopService(jobkeepIntent);
-
-            Intent puppetIntent = new Intent(context, puppetService.getClass());
-            puppetIntent.setPackage(context.getPackageName());
-            context.stopService(puppetIntent);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        }
+//            Intent daemonIntent = new Intent(context, daemonService.getClass());
+//            daemonIntent.setPackage(context.getPackageName());
+//            context.stopService(daemonIntent);
+//
+//            Intent jobkeepIntent = new Intent(context, jobKeepLiveService.getClass());
+//            jobkeepIntent.setPackage(context.getPackageName());
+//            context.stopService(jobkeepIntent);
+//
+//            Intent puppetIntent = new Intent(context, puppetService.getClass());
+//            puppetIntent.setPackage(context.getPackageName());
+//            context.stopService(puppetIntent);
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        } catch (InstantiationException e) {
+//            e.printStackTrace();
+//        }
     }
 }

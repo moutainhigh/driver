@@ -488,4 +488,5 @@ public class XApp extends MultiDexApplication {
             return true;
         }
     }
+
 }

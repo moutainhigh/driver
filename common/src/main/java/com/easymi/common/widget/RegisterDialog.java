@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.easymi.common.R;
+import com.easymi.common.util.CommonUtil;
 import com.easymi.component.app.XApp;
 import com.easymi.component.utils.EmUtil;
 

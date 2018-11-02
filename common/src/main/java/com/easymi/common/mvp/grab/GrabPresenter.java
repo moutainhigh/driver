@@ -22,6 +22,8 @@ import java.util.List;
 
 import rx.Observable;
 
+import static com.easymi.common.mvp.grab.GrabActivity2.GRAB_VALID_TIME;
+
 /**
  * Created by developerLzh on 2017/11/22 0022.
  */
@@ -68,6 +70,9 @@ public class GrabPresenter implements GrabContract.Presenter {
 
     @Override
     public void grabOrder(MultipleOrder order) {
+        if(order.countTime > GRAB_VALID_TIME){
+            return;
+        }
         Observable<MultipleOrderResult> observable = null;
         if(order.orderType.equals(Config.DAIJIA)){
             observable = model.grabDJOrder(order.orderId);
@@ -112,6 +117,9 @@ public class GrabPresenter implements GrabContract.Presenter {
 
     @Override
     public void takeOrder(MultipleOrder order) {
+        if(order.countTime > GRAB_VALID_TIME){
+            return;
+        }
         Observable<MultipleOrderResult> observable = null;
         if(order.orderType.equals(Config.DAIJIA)){
             observable = model.takeDJOrder(order.orderId);

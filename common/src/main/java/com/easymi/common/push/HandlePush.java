@@ -18,6 +18,7 @@ import com.easymi.common.R;
 import com.easymi.common.entity.Address;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.PushAnnouncement;
+import com.easymi.common.util.CommonUtil;
 import com.easymi.component.entity.Setting;
 import com.easymi.common.mvp.grab.GrabActivity2;
 import com.easymi.common.mvp.work.WorkActivity;

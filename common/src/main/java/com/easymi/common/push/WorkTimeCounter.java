@@ -45,7 +45,7 @@ public class WorkTimeCounter {
 
     private Subscription mSubscription;
 
-    WorkTimeCounter(Context context) {
+    public WorkTimeCounter(Context context) {
         Log.d("WorkTimeCounter", "WorkTimeCounter create");
         this.context = context;
         timer = new Timer();
@@ -58,7 +58,7 @@ public class WorkTimeCounter {
         //一分钟计时一次，延迟60s执行
         timer.schedule(timerTask, 60 * 1000, 60 * 1000);
         //初始化从服务器拉一次。
-        uploadTime(-1,0);
+        uploadTime(-1, 0);
 
     }
 
@@ -75,7 +75,7 @@ public class WorkTimeCounter {
             long current = SystemClock.uptimeMillis();
             if (current - lastUpTime >= TIME_OFFSET) {
                 lastUpTime = SystemClock.uptimeMillis();
-                uploadTime(-1,totalMinute);
+                uploadTime(-1, totalMinute);
             } else {
                 CountEvent event = new CountEvent();
                 event.finishCount = -1;
@@ -86,15 +86,16 @@ public class WorkTimeCounter {
         }
     }
 
-    void forceUpload(int statues) {
-        uploadTime(statues,totalMinute);
+    public void forceUpload(int statues) {
+        uploadTime(statues, totalMinute);
     }
 
     /**
      * 向后台上传本地数据。
+     *
      * @param minute 当前在线分钟数，0表示无效，不影响统计
      */
-    private void uploadTime(int statues , int minute) {
+    private void uploadTime(int statues, int minute) {
 
         if (mSubscription != null && !mSubscription.isUnsubscribed()) {
             mSubscription.unsubscribe();
@@ -104,13 +105,17 @@ public class WorkTimeCounter {
         if (employ == null) {
             return;
         }
+        if (employ.auditType == 2 || employ.auditType == 3 || employ.auditType == 4) {
+
+            return;
+        }
         long driverId = employ.id;
         String driverNo = employ.user_name;
         long companyId = employ.company_id;
 
         int driverStatus;
         if (statues <= 0) {
-             driverStatus = 2;
+            driverStatus = 2;
             if (EmUtil.getEmployInfo() != null && EmUtil.getEmployInfo().status.equals(EmployStatus.ONLINE)) {
                 driverStatus = 1;
             }

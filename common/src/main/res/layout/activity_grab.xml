@@ -117,7 +117,6 @@
     </FrameLayout>
 
     <include
-        android:id="@+id/grab_bottom"
         layout="@layout/grab_bottom"
         android:layout_width="match_parent"
         android:layout_height="80dp"

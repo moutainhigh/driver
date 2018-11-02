@@ -31,6 +31,7 @@ import com.easymi.component.R;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.DymOrder;
+import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -92,7 +93,7 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
         mAMapNaviView.onCreate(savedInstanceState);
         mAMapNaviView.setAMapNaviViewListener(this);
 
-        mAMapNavi = AMapNavi.getInstance(getApplicationContext());
+        mAMapNavi = AMapNavi.getInstance(this);
         mAMapNavi.addAMapNaviListener(this);
         mAMapNavi.setUseInnerVoice(true);
 
@@ -179,7 +180,7 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     @Override
     public void onInitNaviFailure() {
-
+        Log.e("NaviActivity","初始化导航失败");
     }
 
     @Override
@@ -384,6 +385,7 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     @Override
     public void onNaviCancel() {
+        mAMapNavi.destroy();
         finish();
     }
 

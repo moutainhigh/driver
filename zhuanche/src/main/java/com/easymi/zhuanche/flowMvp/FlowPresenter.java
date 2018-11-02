@@ -29,8 +29,10 @@ import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
 import com.autonavi.tbt.TrafficFacilityInfo;
 import com.easymi.common.entity.BuildPushData;
-import com.easymi.common.push.MQTTService;
+//import com.easymi.common.push.MQTTService;
+import com.easymi.common.push.MqttManager;
 import com.easymi.component.Config;
+import com.easymi.component.DJOrderStatus;
 import com.easymi.component.activity.NaviActivity;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
@@ -156,9 +158,9 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     }
 
     @Override
-    public void arriveDes(ZCOrder zcOrder,LoadingButton btn, DymOrder dymOrder) {
+    public void arriveDes(ZCOrder zcOrder, LoadingButton btn, DymOrder dymOrder) {
 
-        Observable<ZCOrderResult> observable = model.arriveDes(zcOrder,dymOrder);
+        Observable<ZCOrderResult> observable = model.arriveDes(zcOrder, dymOrder);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, zcOrderResult -> {
 //            dymOrder.updateConfirm(); #该逻辑移动到arrivalDistination接口里面
@@ -177,7 +179,14 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         intent.putExtra("startLatlng", start);
         intent.putExtra("endLatlng", end);
         intent.putExtra("orderId", orderId);
-        intent.putExtra("orderType", Config.DAIJIA);
+        intent.putExtra("orderType", Config.ZHUANCHE);
+//        ZCOrder zcOrder = view.getOrder();
+//        if (zcOrder != null && (zcOrder.orderStatus < DJOrderStatus.ARRIVAL_BOOKPLACE_ORDER)) {
+//            intent.putExtra(Config.NAVI_MODE, Config.WALK_TYPE);
+//        } else {
+        intent.putExtra(Config.NAVI_MODE, Config.DRIVE_TYPE);
+//        }
+        stopNavi();//停止当前页面的导航，在到导航页时重新初始化导航
         context.startActivity(intent);
     }
 
@@ -341,7 +350,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             dymOrder.orderStatus = zcOrder.orderStatus;
             dymOrder.updateStatus();
         }
-        MQTTService.pushLoc(new BuildPushData(EmUtil.getLastLoc()));
+        MqttManager.getInstance().pushLoc(new BuildPushData(EmUtil.getLastLoc()));
     }
 
     @Override

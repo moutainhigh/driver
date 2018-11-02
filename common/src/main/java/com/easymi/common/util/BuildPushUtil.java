@@ -118,7 +118,7 @@ public class BuildPushUtil {
         if (!StringUtils.isBlank(cacheStr)) {
             List<PushData> list = GsonUtil.parseToList(cacheStr, PushData[].class);
             if (list != null && !list.isEmpty()) {
-                Log.e("MQTTService", "缓存点");
+                Log.e("MqttManager", "缓存点");
                 dataList.addAll(list);
             }
         }
@@ -144,7 +144,7 @@ public class BuildPushUtil {
         PushBean pushBean = new PushBean("gps", newestDataList);
 
         String pushStr = new Gson().toJson(pushBean);
-        Log.e("MQTTService", "push loc data--->" + pushStr);
+        Log.e("MqttManager", "push loc data--->" + pushStr);
         return pushStr;
     }
 

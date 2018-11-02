@@ -78,25 +78,25 @@
         <activity android:name=".register.VehicleActivity"
             android:screenOrientation="portrait" />
 
-        <service
-            android:name="com.easymi.common.daemon.DaemonService"
-            android:process=":process1" />
+        <!--<service-->
+            <!--android:name="com.easymi.common.daemon.DaemonService"-->
+            <!--android:process=":process1" />-->
 
-        <receiver
-            android:name="com.easymi.common.daemon.PuppetReceiver1"
-            android:process=":process1" />
+        <!--<receiver-->
+            <!--android:name="com.easymi.common.daemon.PuppetReceiver1"-->
+            <!--android:process=":process1" />-->
 
-        <service
-            android:name="com.easymi.common.daemon.PuppetService"
-            android:process=":process2" />
-        <receiver
-            android:name="com.easymi.common.daemon.PuppetReceiver2"
-            android:process=":process2" />
+        <!--<service-->
+            <!--android:name="com.easymi.common.daemon.PuppetService"-->
+            <!--android:process=":process2" />-->
+        <!--<receiver-->
+            <!--android:name="com.easymi.common.daemon.PuppetReceiver2"-->
+            <!--android:process=":process2" />-->
 
-        <service
-            android:name=".daemon.JobKeepLiveService"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <!--<service-->
+            <!--android:name=".daemon.JobKeepLiveService"-->
+            <!--android:exported="true"-->
+            <!--android:permission="android.permission.BIND_JOB_SERVICE" />-->
 
         <!--消息接收监听器-->
         <receiver android:name="com.easymi.common.receiver.AliPushReceiver">
@@ -130,7 +130,7 @@
             </intent-filter>
         </receiver>
 
-        <service android:name="com.easymi.common.push.MQTTService" />
+        <!--<service android:name="com.easymi.common.push.MQTTService" />-->
 
     </application>
 

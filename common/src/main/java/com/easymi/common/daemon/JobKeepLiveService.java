@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
-import com.easymi.common.push.MQTTService;
+//import com.easymi.common.push.MQTTService;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.loc.LocService;
@@ -55,21 +55,12 @@ public class JobKeepLiveService extends JobService {
                 boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
                 Log.e("JobKeepLiveService", "isLogin-->" + isLogin);
                 if (isLogin) {
-                    if (!PhoneUtil.isServiceRunning(MQTTService.class.getName(), JobKeepLiveService.this)) {
-                        Log.e("JobKeepLiveService", "!isServiceRunning MQTTService");
-                        Intent mqtt = new Intent(JobKeepLiveService.this, MQTTService.class);
-                        mqtt.setPackage(JobKeepLiveService.this.getPackageName());
-                        try {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                startForegroundService(mqtt);
-                            } else {
-                                // Pre-O behavior.
-                                startService(mqtt);
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    }
+//                    if (!PhoneUtil.isServiceRunning(MQTTService.class.getName(), JobKeepLiveService.this)) {
+//                        Log.e("JobKeepLiveService", "!isServiceRunning MQTTService");
+//                        Intent mqtt = new Intent(JobKeepLiveService.this, MQTTService.class);
+//                        mqtt.setPackage(JobKeepLiveService.this.getPackageName());
+//                        startService(mqtt);
+//                    }
                     if (!PhoneUtil.isServiceRunning(LocService.class.getName(), JobKeepLiveService.this)) {
                         Log.e("JobKeepLiveService", "!isServiceRunning LocService");
                         XApp.getInstance().startLocService();

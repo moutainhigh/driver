@@ -13,7 +13,8 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.AMapLocationQualityReport;
-import com.easymi.common.push.MQTTService;
+//import com.easymi.common.push.MQTTService;
+import com.easymi.common.push.MqttManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.NetWorkUtil;
@@ -99,7 +100,7 @@ public class SysCheck2Activity extends RxBaseActivity implements AMapLocationLis
         checkLayout.setVisibility(View.VISIBLE);
         resultLayout.setVisibility(View.GONE);
 
-        viewPager.setCurrentItem(0,true);
+        viewPager.setCurrentItem(0, true);
 
         new Thread(() -> {
             try {
@@ -109,7 +110,7 @@ public class SysCheck2Activity extends RxBaseActivity implements AMapLocationLis
                     netResult = netEnable ? getString(R.string.net_ok) : getString(R.string.net_err);
                     netColor = netEnable ? getResources().getColor(R.color.green) : getResources().getColor(R.color.red);
 
-                    viewPager.setCurrentItem(1,true);
+                    viewPager.setCurrentItem(1, true);
 
                     locClient = new AMapLocationClient(this);
                     locClient.setLocationListener(this);
@@ -160,12 +161,12 @@ public class SysCheck2Activity extends RxBaseActivity implements AMapLocationLis
         }
         desClient();
 
-        viewPager.setCurrentItem(2,true);
+        viewPager.setCurrentItem(2, true);
         new Thread(() -> {
             try {
                 Thread.sleep(2000);
                 runOnUiThread(() -> {
-                    boolean connected = MQTTService.client != null && MQTTService.client.isConnected();
+                    boolean connected = MqttManager.getInstance().isConnected();
                     noticeResult = connected ? getString(R.string.notice_ok) : getString(R.string.notice_err);
                     noticeColor = connected ? getResources().getColor(R.color.green) : getResources().getColor(R.color.red);
 
@@ -179,7 +180,7 @@ public class SysCheck2Activity extends RxBaseActivity implements AMapLocationLis
 
     private void showCheckResult() {
         rotateImg.destroyRotate();
-        viewPager.setCurrentItem(0,true);
+        viewPager.setCurrentItem(0, true);
 
         checkLayout.setVisibility(View.GONE);
         resultLayout.setVisibility(View.VISIBLE);
