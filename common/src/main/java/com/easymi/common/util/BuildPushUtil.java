@@ -5,6 +5,7 @@ import com.easymi.common.entity.PushBean;
 import com.easymi.common.entity.PushData;
 import com.easymi.common.entity.PushDataLoc;
 import com.easymi.common.entity.PushDataOrder;
+import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
 import com.easymi.component.ZCOrderStatus;
 import com.easymi.component.entity.BaseEmploy;
@@ -74,23 +75,17 @@ public class BuildPushUtil {
         pushData.calc.positionTime = System.currentTimeMillis() / 1000;
         pushData.calc.accuracy = (float) emLoc.accuracy;
 
+        //MQTT只push专车信息
         List<PushDataOrder> orderList = new ArrayList<>();
         for (DymOrder dymOrder : DymOrder.findAll()) {
-            PushDataOrder dataOrder = new PushDataOrder();
-            dataOrder.orderId = dymOrder.orderId;
-            dataOrder.orderType = dymOrder.orderType;
-            dataOrder.status = 0;
-            dataOrder.addedKm = dymOrder.addedKm;
-            dataOrder.addedFee = dymOrder.addedFee;
-            if (dymOrder.orderType.equals("daijia")) {
-                if (dymOrder.orderStatus < DJOrderStatus.GOTO_DESTINATION_ORDER) {//出发前
-                    dataOrder.status = 1;
-                } else if (dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {//行驶中
-                    dataOrder.status = 2;
-                } else if (dymOrder.orderStatus == DJOrderStatus.START_WAIT_ORDER) {//中途等待
-                    dataOrder.status = 3;
-                }
-            } else if (dymOrder.orderType.equals("zhuanche")) {
+            if (dymOrder.orderType.equals(Config.ZHUANCHE)) {
+                PushDataOrder dataOrder = new PushDataOrder();
+                dataOrder.orderId = dymOrder.orderId;
+                dataOrder.orderType = dymOrder.orderType;
+                dataOrder.status = 0;
+                dataOrder.addedKm = dymOrder.addedKm;
+                dataOrder.addedFee = dymOrder.addedFee;
+
                 if (dymOrder.orderStatus < ZCOrderStatus.GOTO_DESTINATION_ORDER) {//出发前
                     dataOrder.status = 1;
                 } else if (dymOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {//行驶中
@@ -102,19 +97,20 @@ public class BuildPushUtil {
                 dataOrder.nightTime = dymOrder.nightTime;
                 dataOrder.nightMile = dymOrder.nightMile;
                 dataOrder.nightTimePrice = dymOrder.nightTimePrice;
-            }
-            if (dataOrder.status != 0) {
-                orderList.add(dataOrder);
+
+                if (dataOrder.status != 0) {
+                    orderList.add(dataOrder);
+                }
             }
         }
         pushData.calc.orderInfo = orderList;
 
 
+        List<PushData> dataList = new ArrayList<>();
         /**
          * 历史未上传的位置信息
          */
         String cacheStr = FileUtil.readPushCache();
-        List<PushData> dataList = new ArrayList<>();
         if (!StringUtils.isBlank(cacheStr)) {
             List<PushData> list = GsonUtil.parseToList(cacheStr, PushData[].class);
             if (list != null && !list.isEmpty()) {

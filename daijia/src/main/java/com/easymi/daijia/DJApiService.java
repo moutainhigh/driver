@@ -181,7 +181,12 @@ public interface DJApiService {
                                                  @Field("real_destination") String realAddress,
                                                  @Field("real_destination_lat") Double realLat,
                                                  @Field("real_destination_lng") Double realLng,
-                                                 @Field("min_cost") Double minCost
+                                                 @Field("min_cost") Double minCost,
+                                                 @Field("destination_trid")String destination_trid,
+                                                 @Field("book_trid")String book_trid,
+                                                 @Field("tid")String tid,
+                                                 @Field("sid")String sid,
+                                                 @Field("api_key")String api_key
     );
 
     /**
@@ -327,21 +332,26 @@ public interface DJApiService {
                                            @Query("app_key") String appKey);
 
     /**
-     * 获取订单计费信息
-     *
+     * 上传距离
      * @param orderId
-     * @param driverId
-     * @param orderType
+     * @param distance
+     * @param appKey
+     * @param state
+     * @param dark_distance
+     * @param dark_price
+     * @param lat
+     * @param lng
      * @return
      */
-    @GET("driver/api/v1/arrivalCost")
-    Observable<OrderFeeResult> getOrderFee(@Query("order_id") Long orderId,
-                                           @Query("driver_id") Long driverId,
-                                           @Query("order_type") String orderType,
+    @GET("/driver/api/v1/pullFee")
+    Observable<OrderFeeResult> pushDistance(@Query("order_id") Long orderId,
+                                           @Query("distance") Double distance,
                                            @Query("app_key") String appKey,
+                                           @Query("state") Integer state,
+                                           @Query("dark_distance") Double dark_distance,
+                                           @Query("dark_price") Double dark_price,
                                            @Query("lat") Double lat,
-                                           @Query("lng") Double lng,
-                                           @Query("is_arrive") Integer isArrive);
+                                           @Query("lng") Double lng);
 
 
     /**

@@ -60,6 +60,7 @@ import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.loc.LocService;
+import com.easymi.component.loc.TrackHelper;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
@@ -373,6 +374,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             transaction.replace(R.id.flow_frame, fragment);
             transaction.commit();
+
+
         } else if (djOrder.orderStatus == DJOrderStatus.ARRIVAL_BOOKPLACE_ORDER) {
             toolbar.setTitle(R.string.status_arrive_start);
             ArriveStartFragment fragment = new ArriveStartFragment();

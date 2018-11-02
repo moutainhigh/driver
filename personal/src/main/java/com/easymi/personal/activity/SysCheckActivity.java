@@ -20,6 +20,7 @@ import com.easymi.common.push.MqttManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.NetWorkUtil;
+import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.RotateImageView;
@@ -169,6 +170,7 @@ public class SysCheckActivity extends RxBaseActivity implements AMapLocationList
                 AMapLocationQualityReport report = amapLocation.getLocationQualityReport();
                 StringBuilder advice = new StringBuilder();
                 if (report.getGPSStatus() != AMapLocationQualityReport.GPS_STATUS_OK) {
+                    Log.e("sysCheck", "AMapLocationQualityReport.Status-->" + report.getGPSStatus());
                     advice.append(getString(R.string.please_gps_open));
                 }
 //                if (!NetWorkUtil.isWifiConnected(this)) {

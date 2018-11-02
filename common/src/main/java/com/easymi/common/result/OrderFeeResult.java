@@ -1,7 +1,6 @@
-package com.easymi.daijia.result;
+package com.easymi.common.result;
 
 import com.easymi.component.result.EmResult;
-import com.easymi.daijia.entity.OrderFee;
 
 /**
  * Copyright (C) , 2012-2018 , 四川小咖科技有限公司
@@ -25,5 +24,12 @@ public class OrderFeeResult extends EmResult {
         public double min_cost;
         public double mileage_cost;
         public double mileges;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderFeeResult{" +
+                "budgetFee=" + budgetFee +
+                '}';
     }
 }

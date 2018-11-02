@@ -27,7 +27,7 @@ dependencies {
     api rootProject.ext.appcompat
     api rootProject.ext.multidex
     api rootProject.ext.design
-    api rootProject.ext.amapLoc
+//    api rootProject.ext.amapLoc
     api rootProject.ext.amapSearch
     api rootProject.ext.amapNavi
     api rootProject.ext.rxandroid
