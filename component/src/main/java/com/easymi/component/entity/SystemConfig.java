@@ -41,12 +41,6 @@ public class SystemConfig {
     @SerializedName("allow_employ_phone")
     public int canCallDriver;
 
-    @SerializedName("api_key")
-    public String apiKey;//高德web服务key
-
-    @SerializedName("service_id")
-    public long serviceId;//猎鹰服务id
-
     public String payType;//可以支付的类型
 
     public void save() {
@@ -64,8 +58,6 @@ public class SystemConfig {
         values.put("payMoney3", payMoney3);
         values.put("canCallDriver", canCallDriver);
         values.put("payType", payType);
-        values.put("apiKey", apiKey);
-        values.put("serviceId", serviceId);
         db.insert("t_systemconfig", null, values);
     }
 
@@ -73,9 +65,10 @@ public class SystemConfig {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
         Cursor cursor = db.rawQuery("select * from t_systemconfig", null);
-        SystemConfig systemConfig = new SystemConfig();
+        SystemConfig systemConfig = null;
         try {
             if (cursor.moveToFirst()) {
+                systemConfig = new SystemConfig();
                 systemConfig.tixianBase = cursor.getDouble(cursor.getColumnIndex("tixianBase"));
                 systemConfig.tixianMin = cursor.getDouble(cursor.getColumnIndex("tixianMin"));
                 systemConfig.tixianMax = cursor.getDouble(cursor.getColumnIndex("tixianMax"));
@@ -85,9 +78,6 @@ public class SystemConfig {
                 systemConfig.payMoney3 = cursor.getDouble(cursor.getColumnIndex("payMoney3"));
                 systemConfig.canCallDriver = cursor.getInt(cursor.getColumnIndex("canCallDriver"));
                 systemConfig.payType = cursor.getString(cursor.getColumnIndex("payType"));
-
-                systemConfig.apiKey = cursor.getString(cursor.getColumnIndex("apiKey"));
-                systemConfig.serviceId = cursor.getLong(cursor.getColumnIndex("serviceId"));
             }
         } finally {
             cursor.close();

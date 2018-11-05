@@ -32,7 +32,6 @@ import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.entity.SubSetting;
 import com.easymi.component.entity.ZCSetting;
-import com.easymi.component.loc.TrackHelper;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.GsonUtil;
 import com.easymi.component.network.HaveErrSubscriberListener;
@@ -40,6 +39,7 @@ import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.EmployStatus;
 
@@ -103,10 +103,6 @@ public class HandlePush implements FeeChangeSubject {
                 order.orderId = jb.optJSONObject("data").optLong("id");
                 order.orderType = jb.optJSONObject("data").optString("business");
 
-                TrackHelper trackHelper = TrackHelper.getInstance();
-                trackHelper.stopTrack();//停止猎鹰
-                MQTTService.getInstance().stopPushTimer();
-
                 Message message = new Message();
                 message.what = 1;
                 Bundle bundle = new Bundle();
@@ -118,8 +114,9 @@ public class HandlePush implements FeeChangeSubject {
                 String orderType = jb.optJSONObject("data").optString("OrderType");
                 DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
                 if (dymOrder != null) {
-
-
+                    if(dymOrder.distance > jb.optJSONObject("data").optDouble("Mileges")){
+                        return;
+                    }
                     dymOrder.startFee = jb.optJSONObject("data").optDouble("StartPrice");
                     dymOrder.waitTime = jb.optJSONObject("data").optInt("WaitTime") / 60;
                     dymOrder.waitTimeFee = jb.optJSONObject("data").optDouble("WaitTimeFee");
@@ -150,8 +147,6 @@ public class HandlePush implements FeeChangeSubject {
 
                     dymOrder.updateFee();
                     notifyObserver(orderId, orderType);
-
-                    XApp.getPreferencesEditor().putLong(Config.SP_LAST_GET_FEE_TIME, System.currentTimeMillis()).apply();
                 }
             } else if (msg.equals("driver_status")) { //司机状态
                 String status = jb.optJSONObject("data").optString("status");
@@ -187,20 +182,11 @@ public class HandlePush implements FeeChangeSubject {
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("id");
                 order.orderType = jb.optJSONObject("data").optString("business");
-
-                TrackHelper trackHelper = TrackHelper.getInstance();
-                trackHelper.stopTrack();//停止猎鹰
-                MQTTService.getInstance().stopPushTimer();
-
                 loadOrder(order);
             } else if (msg.equals("back_order")) {//订单回收
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("id");
                 order.orderType = jb.optJSONObject("data").optString("business");
-
-                TrackHelper trackHelper = TrackHelper.getInstance();
-                trackHelper.stopTrack();//停止猎鹰
-                MQTTService.getInstance().stopPushTimer();
 
                 Message message = new Message();
                 message.what = 3;
@@ -210,13 +196,47 @@ public class HandlePush implements FeeChangeSubject {
                 handler.sendMessage(message);
             } else if (msg.equals("setting_change")) {
                 loadSetting();
-            } else if (msg.equals("pull_fee")) {
-                //从OrderPushDisTimer.java里来的数据
-                long orderId = jb.optLong("orderId");
-                String orderType = jb.optString("orderType");
-                notifyObserver(orderId, orderType);
+            } else if (msg.equals("http_costInfo")) { //费用信息
+                String data = jb.optString("data");
+                JSONObject jbData = new JSONObject(data.replaceAll("\\\\\\\"","--"));
+                long orderId = jbData.optJSONObject("data").optLong("OrderId");
+                String orderType = jbData.optJSONObject("data").optString("OrderType");
+                DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
+                if (dymOrder != null) {
+                    if(dymOrder.distance > jbData.optJSONObject("data").optDouble("Mileges")){
+                        return;
+                    }
+                    dymOrder.startFee = jbData.optJSONObject("data").optDouble("StartPrice");
+                    dymOrder.waitTime = jbData.optJSONObject("data").optInt("WaitTime") / 60;
+                    dymOrder.waitTimeFee = jbData.optJSONObject("data").optDouble("WaitTimeFee");
+                    dymOrder.travelTime = jbData.optJSONObject("data").optInt("DriverTime") / 60;
+                    dymOrder.travelFee = jbData.optJSONObject("data").optDouble("DriveTimeCost");
+                    dymOrder.totalFee = jbData.optJSONObject("data").optDouble("TotalAmount");
 
-                XApp.getPreferencesEditor().putLong(Config.SP_LAST_GET_FEE_TIME, System.currentTimeMillis()).apply();
+                    dymOrder.minestMoney = jbData.optJSONObject("data").optDouble("MinCost");
+
+                    dymOrder.disFee = jbData.optJSONObject("data").optDouble("MileageCost");
+                    dymOrder.distance = jbData.optJSONObject("data").optDouble("Mileges");
+
+                    if ("zhuanche".equals(orderType)) {
+                        dymOrder.peakCost =jbData.optJSONObject("data").optDouble("PeakCost");
+                        dymOrder.nightPrice = jbData.optJSONObject("data").optDouble("NightPrice");
+                        dymOrder.lowSpeedCost = jbData.optJSONObject("data").optDouble("LowSpeedCost");
+                        dymOrder.lowSpeedTime = jbData.optJSONObject("data").getInt("LowSpeedTime") / 60;
+                        dymOrder.peakMile = jbData.optJSONObject("data").optDouble("PeakMile");
+                        dymOrder.nightTime = jbData.optJSONObject("data").getInt("NightTime") / 60;
+                        dymOrder.nightMile = jbData.optJSONObject("data").optDouble("NightMile");
+                        dymOrder.nightTimePrice = jbData.optJSONObject("data").optDouble("NightTimePrice");
+                    }
+
+                    DecimalFormat decimalFormat = new DecimalFormat("#0.0");
+                    decimalFormat.setRoundingMode(RoundingMode.DOWN);
+                    dymOrder.distance = Double.parseDouble(decimalFormat.format(dymOrder.distance));
+                    //公里数保留一位小数。。
+
+                    dymOrder.updateFee();
+                    notifyObserver(orderId, orderType);
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();

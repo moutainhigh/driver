@@ -2,18 +2,28 @@ package com.easymi.common.push;
 
 import android.os.Handler;
 
+import com.easymi.common.CommApiService;
 import com.easymi.common.entity.BuildPushData;
+import com.easymi.common.entity.PullFeeEntity;
 import com.easymi.common.entity.PushBean;
 import com.easymi.common.entity.PushData;
+import com.easymi.common.result.GetFeeResult;
 import com.easymi.common.util.BuildPushUtil;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
+import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
+import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HaveErrSubscriberListener;
+import com.easymi.component.network.HttpResultFunc;
+import com.easymi.component.network.MySubscriber;
+import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.FileUtil;
 import com.easymi.component.utils.Log;
+import com.easymi.component.utils.NetUtil;
 import com.easymi.component.utils.StringUtils;
 import com.google.gson.Gson;
 import com.tencent.bugly.crashreport.CrashReport;
@@ -27,8 +37,14 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * 管理mqtt的连接,发布,订阅,断开连接, 断开重连等操作
@@ -54,8 +70,11 @@ public class MqttManager implements LocObserver {
     String pullTopic;
     String configTopic;
 
+    private RxManager rxManager;
+
     private MqttManager() {
         handler = new Handler();
+        rxManager = new RxManager();
         LocReceiver.getInstance().addObserver(MqttManager.this);
     }
 
@@ -90,7 +109,7 @@ public class MqttManager implements LocObserver {
         pullTopic = "/driver" + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
         configTopic = "/driver" + "/" + EmUtil.getAppKey() + "/config";
 
-        if(!XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN,false)){//未登陆 不连接
+        if (!XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false)) {//未登陆 不连接
             return false;
         }
 
@@ -235,6 +254,7 @@ public class MqttManager implements LocObserver {
      * @throws MqttException
      */
     public void disConnect() throws MqttException {
+        rxManager.clear();
         if (client != null && client.isConnected()) {
             client.disconnect();
         }
@@ -334,9 +354,9 @@ public class MqttManager implements LocObserver {
     }
 
     private void pushInternalLoc(BuildPushData data, boolean noLimit) {
+        String pushStr = BuildPushUtil.buildPush(data, noLimit);
         if (client != null && client.isConnected()) {
             if (data != null) {
-                String pushStr = BuildPushUtil.buildPush(data, noLimit);
                 if (pushStr == null) {
                     Exception exception = new IllegalArgumentException("自定义异常：推送数据为空，可能是司机信息为空");
                     CrashReport.postCatchedException(exception);
@@ -348,7 +368,6 @@ public class MqttManager implements LocObserver {
             }
         } else {
             if (data != null) {
-                String pushStr = BuildPushUtil.buildPush(data, noLimit);
                 if (pushStr == null) {
                     Exception exception = new IllegalArgumentException("自定义异常：推送数据为空，可能是司机信息为空");
                     CrashReport.postCatchedException(exception);
@@ -367,6 +386,50 @@ public class MqttManager implements LocObserver {
                 }
             }
             creatConnect();
+        }
+        gpsPush(pushStr);
+    }
+
+    /**
+     * http 上传位置信息
+     */
+    private void gpsPush(String pushStr) {
+        if (NetUtil.getNetWorkState(XApp.getInstance()) == NetUtil.NETWORK_NONE) {
+            return; //没网
+        }
+        if (DymOrder.findAll().size() == 0) {
+            return;
+        }
+        long lastPushTime = XApp.getMyPreferences().getLong(Config.SP_LAST_GPS_PUSH_TIME, 0);
+        if (System.currentTimeMillis() - lastPushTime > 30 * 1000) {
+            XApp.getPreferencesEditor().putLong(Config.SP_LAST_GPS_PUSH_TIME, System.currentTimeMillis()).apply();
+
+            Observable<GetFeeResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                    .gpsPush(Config.APP_KEY,
+                            pushStr)
+                    .filter(new HttpResultFunc<>())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+
+            rxManager.add(observable.subscribe(new MySubscriber<>(XApp.getInstance(),
+                    false,
+                    false,
+                    new HaveErrSubscriberListener<GetFeeResult>() {
+                        @Override
+                        public void onNext(GetFeeResult getFeeResult) {
+
+                            PullFeeEntity entity = new PullFeeEntity();
+                            entity.msg = "http_costInfo";
+                            entity.data = getFeeResult.data;
+                            HandlePush.getInstance().handPush(new Gson().toJson(entity));
+                        }
+
+                        @Override
+                        public void onError(int code) {
+
+                        }
+                    })));
+            FileUtil.delete("v5driver", "pushCache.txt");
         }
     }
 }

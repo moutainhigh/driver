@@ -36,7 +36,7 @@ dependencies {
     api rootProject.ext.design
     api rootProject.ext.pullLoadMoreRecycler
     api rootProject.ext.expandableLayout
-//    api rootProject.ext.amapLoc
+    api rootProject.ext.amapLoc
     api rootProject.ext.amapNavi
     api rootProject.ext.amapSearch
     api rootProject.ext.tagView

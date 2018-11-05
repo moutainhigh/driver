@@ -128,9 +128,6 @@ public class DymOrder implements Serializable {
     //作弊增加的费用
     public double addedFee;//数据源来自于本地调价 不会来自后端
 
-    public long toStartTrackId;//前往预约地的trackId 不会来自后端
-    public long toEndTrackId;//前往终点的trackId 不会来自后端
-
     public DymOrder(long orderId, String orderType, long passengerId, int orderStatus) {
         this.orderId = orderId;
         this.orderType = orderType;
@@ -202,38 +199,6 @@ public class DymOrder implements Serializable {
         ContentValues values = new ContentValues();
         values.put("addedKm", addedKm);
         values.put("addedFee", addedFee);
-
-        boolean flag = db.update("t_dyminfo", values, " id = ? ",
-                new String[]{String.valueOf(id)}) == 1;
-        return flag;
-    }
-
-    /**
-     * 更新前往预约地的trackId
-     *
-     * @return
-     */
-    public boolean updateStartTrack() {
-        SqliteHelper helper = SqliteHelper.getInstance();
-        SQLiteDatabase db = helper.openSqliteDatabase();
-        ContentValues values = new ContentValues();
-        values.put("toStartTrackId", toStartTrackId);
-
-        boolean flag = db.update("t_dyminfo", values, " id = ? ",
-                new String[]{String.valueOf(id)}) == 1;
-        return flag;
-    }
-
-    /**
-     * 更新前往目的地的trackId
-     *
-     * @return
-     */
-    public boolean updateEndTrack() {
-        SqliteHelper helper = SqliteHelper.getInstance();
-        SQLiteDatabase db = helper.openSqliteDatabase();
-        ContentValues values = new ContentValues();
-        values.put("toEndTrackId", toEndTrackId);
 
         boolean flag = db.update("t_dyminfo", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
@@ -359,9 +324,6 @@ public class DymOrder implements Serializable {
         orderInfo.nightTime = cursor.getInt(cursor.getColumnIndex("nightTime"));
         orderInfo.nightMile = cursor.getDouble(cursor.getColumnIndex("nightMile"));
         orderInfo.nightTimePrice = cursor.getDouble(cursor.getColumnIndex("nightTimePrice"));
-
-        orderInfo.toStartTrackId = cursor.getLong(cursor.getColumnIndex("toStartTrackId"));
-        orderInfo.toEndTrackId = cursor.getLong(cursor.getColumnIndex("toEndTrackId"));
 
         return orderInfo;
     }
@@ -503,44 +465,5 @@ public class DymOrder implements Serializable {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
         db.delete("t_dyminfo", "id = ?", new String[]{String.valueOf(id)});
-    }
-
-    @Override
-    public String toString() {
-        return "DymOrder{" +
-                "id=" + id +
-                ", orderId=" + orderId +
-                ", orderType='" + orderType + '\'' +
-                ", passengerId=" + passengerId +
-                ", startFee=" + startFee +
-                ", waitTime=" + waitTime +
-                ", waitTimeFee=" + waitTimeFee +
-                ", travelTime=" + travelTime +
-                ", travelFee=" + travelFee +
-                ", distance=" + distance +
-                ", disFee=" + disFee +
-                ", totalFee=" + totalFee +
-                ", orderStatus=" + orderStatus +
-                ", paymentFee=" + paymentFee +
-                ", extraFee=" + extraFee +
-                ", remark='" + remark + '\'' +
-                ", couponFee=" + couponFee +
-                ", orderTotalFee=" + orderTotalFee +
-                ", orderShouldPay=" + orderShouldPay +
-                ", prepay=" + prepay +
-                ", minestMoney=" + minestMoney +
-                ", peakCost=" + peakCost +
-                ", nightPrice=" + nightPrice +
-                ", lowSpeedCost=" + lowSpeedCost +
-                ", lowSpeedTime=" + lowSpeedTime +
-                ", peakMile=" + peakMile +
-                ", nightTime=" + nightTime +
-                ", nightMile=" + nightMile +
-                ", nightTimePrice=" + nightTimePrice +
-                ", addedKm=" + addedKm +
-                ", addedFee=" + addedFee +
-                ", toStartTrackId=" + toStartTrackId +
-                ", toEndTrackId=" + toEndTrackId +
-                '}';
     }
 }

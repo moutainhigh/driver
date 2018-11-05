@@ -10,13 +10,10 @@ import com.amap.api.services.route.DriveStep;
 import com.amap.api.services.route.RideRouteResult;
 import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
-import com.easymi.common.push.MQTTService;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.ToastUtil;
-import com.easymi.daijia.R;
 import com.easymi.daijia.result.BudgetResult;
 import com.easymi.daijia.result.DJTypeResult;
 import com.easymi.daijia.result.PassengerResult;
@@ -138,10 +135,6 @@ public class CreateDJPresenter implements CreateDJContract.Presenter {
 
     @Override
     public void createOrder(Long passengerId, String passengerName, String passengerPhone, long orderTime, String bookAddress, Double bookAddressLat, Double bookAddressLng, String destination, Double destinationLat, Double destinationLng, Double budgetFee, Long cid) {
-        if (!MQTTService.getMqttStatus()) {
-            ToastUtil.showMessage(context, context.getString(R.string.mqtt_init_ing));
-            return;
-        }
         Employ employ = EmUtil.getEmployInfo();
         view.getManager().add(model.createOrder(passengerId, passengerName, passengerPhone, orderTime,
                 bookAddress, bookAddressLat, bookAddressLng, destination, destinationLat, destinationLng,

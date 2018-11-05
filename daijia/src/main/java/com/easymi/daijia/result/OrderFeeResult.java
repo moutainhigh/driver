@@ -13,7 +13,7 @@ import com.easymi.daijia.entity.OrderFee;
  */
 public class OrderFeeResult extends EmResult {
 
-    public Cost budgetFee;
+    public Cost cost;
 
     public class Cost{
         public double start_price;

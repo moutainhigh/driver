@@ -494,20 +494,20 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void startTimer(Long orderId) {
-        cancelTimer();
-        timer = new Timer();
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                long lastFeeTime = XApp.getMyPreferences().getLong(Config.SP_LAST_GET_FEE_TIME, 0);
-                if (System.currentTimeMillis() - lastFeeTime > 40 * 1000) {
-                    if (NetUtil.getNetWorkState(context) != NetUtil.NETWORK_NONE) {
-                        getOrderFee(orderId, 1);
-                    }
-                }
-            }
-        };
-        timer.schedule(timerTask, 40 * 1000, 40 * 1000);
+//        cancelTimer();
+//        timer = new Timer();
+//        timerTask = new TimerTask() {
+//            @Override
+//            public void run() {
+//                long lastFeeTime = XApp.getMyPreferences().getLong(Config.SP_LAST_GET_FEE_TIME, 0);
+//                if (System.currentTimeMillis() - lastFeeTime > 40 * 1000) {
+//                    if (NetUtil.getNetWorkState(context) != NetUtil.NETWORK_NONE) {
+//                        getOrderFee(orderId, 1);
+//                    }
+//                }
+//            }
+//        };
+//        timer.schedule(timerTask, 40 * 1000, 40 * 1000);
     }
 
     @Override

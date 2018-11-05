@@ -48,14 +48,9 @@ public class LocService extends Service implements AMapLocationListener {
 
     private static final int NOTI_ID = 1011;
 
-    /**
-     * 记录是否需要对息屏关掉wifi的情况进行处理
-     */
-    private boolean mIsWifiCloseable = false;
-
     private static final String NOTIFICATION_CHANNEL_NAME = "BackgroundLocation";
-//    private NotificationManager notificationManager = null;
-//    boolean isCreateChannel = false;
+    private NotificationManager notificationManager = null;
+    boolean isCreateChannel = false;
 
     @Nullable
     @Override
@@ -66,11 +61,6 @@ public class LocService extends Service implements AMapLocationListener {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (null != intent.getAction() && intent.getAction().equals(START_LOC)) {
-//            applyNotiKeepMech(); //开启利用notification提高进程优先级的机制
-//            if (mWifiAutoCloseDelegate.isUseful(getApplicationContext())) {
-//                mIsWifiCloseable = true;
-//                mWifiAutoCloseDelegate.initOnServiceStarted(getApplicationContext());
-//            }
             startLoc();
             return START_STICKY;
         } else {
@@ -111,10 +101,10 @@ public class LocService extends Service implements AMapLocationListener {
                 .setSensorEnable(true);
         locClient.setLocationOption(mLocationOption);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            locClient.enableBackgroundLocation(NOTI_ID, buildNotification(this));
+            locClient.enableBackgroundLocation(NOTI_ID, buildNotification());
+        } else {
+            startForeground(NOTI_ID, buildNotification());
         }
-        startForeground(NOTI_ID, buildNotification(this));
-
 
         locClient.startLocation();
     }
@@ -155,7 +145,7 @@ public class LocService extends Service implements AMapLocationListener {
 
     private void startTrace() {
 
-        Log.e("trace", "开始纠偏");
+        Log.e("trace","开始纠偏");
         if (null == lbsTraceClient) {
             lbsTraceClient = LBSTraceClient.getInstance(this);
             lbsTraceClient.startTrace((list, list1, s) -> {
@@ -177,9 +167,9 @@ public class LocService extends Service implements AMapLocationListener {
     }
 
     private void stopTrace() {
-        Log.e("trace", "停止纠偏");
+        Log.e("trace","停止纠偏");
         if (null != lbsTraceClient) {
-            Log.e("trace", "停止纠偏zz");
+            Log.e("trace","停止纠偏zz");
             lbsTraceClient.stopTrace();
             lbsTraceClient = null;
         }
@@ -215,58 +205,54 @@ public class LocService extends Service implements AMapLocationListener {
 
 //                FileUtil.saveLog(this, "loc failed \n\n");
             }
-            if (!mIsWifiCloseable) {
-                return;
-            }
-
         }
     }
 
-    public static Notification buildNotification(Context context) {
+    private Notification buildNotification() {
         boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
         Intent intent = new Intent();
 
         if (isLogin) {
-            intent.setClassName(context, "com.easymi.common.mvp.work.WorkActivity");
+            intent.setClassName(this, "com.easymi.common.mvp.work.WorkActivity");
 
         } else {
-            intent.setClassName(context, "com.easymi.common.activity.SplashActivity");
+            intent.setClassName(this, "com.easymi.common.activity.SplashActivity");
         }
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
                 intent, 0);
 
         Notification.Builder builder = null;
         Notification notification = null;
         if (Build.VERSION.SDK_INT >= 26) {
             //Android O上对Notification进行了修改，如果设置的targetSDKVersion>=26建议使用此种方式创建通知栏
-//            if (null == notificationManager) {
-                NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-//            }
-            String channelId = context.getPackageName();
-//            if (!isCreateChannel) {
+            if (null == notificationManager) {
+                notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            }
+            String channelId = getPackageName();
+            if (!isCreateChannel) {
                 NotificationChannel notificationChannel = new NotificationChannel(channelId,
                         NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
                 notificationChannel.enableLights(true);//是否在桌面icon右上角展示小圆点
                 notificationChannel.setLightColor(Color.BLUE); //小圆点颜色
                 notificationChannel.setShowBadge(true); //是否在久按桌面图标时显示此渠道的通知
-                notificationChannel.setSound(null, null);
+                notificationChannel.setSound(null,null);
                 notificationManager.createNotificationChannel(notificationChannel);
-//                isCreateChannel = true;
-//            }
-            builder = new Notification.Builder(context, channelId);
+                isCreateChannel = true;
+            }
+            builder = new Notification.Builder(getApplicationContext(), channelId);
         } else {
-            builder = new Notification.Builder(context);
+            builder = new Notification.Builder(getApplicationContext());
         }
 
         builder.setSmallIcon(R.mipmap.role_driver);
         builder.setSound(null);
-        builder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher));
+        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder.setColor(context.getResources().getColor(R.color.colorPrimary));
+            builder.setColor(getResources().getColor(R.color.colorPrimary));
         }
-        builder.setContentTitle(context.getResources().getString(R.string.app_name));
-        builder.setContentText(context.getResources().getString(R.string.app_name)
-                + context.getResources().getString(R.string.houtai));
+        builder.setContentTitle(getResources().getString(R.string.app_name));
+        builder.setContentText(getResources().getString(R.string.app_name)
+                + getResources().getString(R.string.houtai));
         builder.setWhen(System.currentTimeMillis());
         builder.setContentIntent(pendingIntent);
         builder.setOngoing(true);

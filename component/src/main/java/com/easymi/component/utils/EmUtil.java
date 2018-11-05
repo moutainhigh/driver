@@ -11,7 +11,6 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.loc.LocService;
-import com.easymi.component.loc.LocationHelperService;
 import com.google.gson.Gson;
 
 import java.lang.reflect.InvocationTargetException;
@@ -96,8 +95,8 @@ public class EmUtil {
         locIntent.setAction(LocService.STOP_LOC);
         context.startService(locIntent);
 
-        Intent locHelpIntent = new Intent(context, LocationHelperService.class);
-        context.stopService(locHelpIntent);
+//        Intent locHelpIntent = new Intent(context, LocationHelperService.class);
+//        context.stopService(locHelpIntent);
 //        try {
 //            Service mQTTService = (Service) (Class.forName("com.easymi.common.push.MQTTService").newInstance());
 //            Service jobKeepLiveService = (Service) Class.forName("com.easymi.common.daemon.JobKeepLiveService").newInstance();

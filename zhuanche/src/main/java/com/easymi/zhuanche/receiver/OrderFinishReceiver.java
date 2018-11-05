@@ -21,7 +21,7 @@ public class OrderFinishReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (null != intent && null != intent.getAction()) {
             String action = intent.getAction();
-            if (action.equals(Config.BROAD_FINISH_ORDER)) {
+            if (action.equals(Config.BROAD_CANCEL_ORDER)) {
                 if (null != finishListener) {
                     Long orderId = intent.getLongExtra("orderId", -1);
                     String orderType = intent.getStringExtra("orderType");

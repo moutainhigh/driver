@@ -7,8 +7,7 @@
     <RelativeLayout
         android:id="@+id/grab_con"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="false">
+        android:layout_height="match_parent">
 
         <com.easymi.component.widget.HLoadView
             android:id="@+id/load_view"

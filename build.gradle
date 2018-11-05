@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.1.1'
+    ext.kotlin_version = '1.2.51'
     repositories {
         google()
         jcenter()
@@ -45,7 +45,7 @@ ext {
     lifecycle = "android.arch.lifecycle:extensions:1.1.1"
 
     //阿里
-//    amapLoc = 'com.amap.api:location:3.8.0'
+    amapLoc = 'com.amap.api:location:3.8.0'
     amapNavi = 'com.amap.api:navi-3dmap:5.6.0_3dmap5.7.0'
     amapSearch = 'com.amap.api:search:5.7.0'
     aliPush =  'com.aliyun.ams:alicloud-android-push:3.0.12'

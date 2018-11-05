@@ -13,7 +13,7 @@ import com.easymi.common.result.LoginResult;
 import com.easymi.common.result.MultipleOrderResult;
 import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
-import com.easymi.common.result.OrderFeeResult;
+import com.easymi.common.result.GetFeeResult;
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.common.result.SettingResult;
 import com.easymi.common.result.SystemResult;
@@ -410,37 +410,25 @@ public interface CommApiService {
                                      @Query("page") int page,
                                      @Query("limit") int limit);
 
-    /**
-     * 代驾订单上传距离
-     *
-     * @param orderId
-     * @param distance
-     * @param appKey
-     * @param state
-     * @param dark_distance
-     * @param dark_price
-     * @param lat
-     * @param lng
-     * @return
-     */
     @GET("/driver/api/v1/pullFee")
-    Observable<OrderFeeResult> pushDistance(@Query("order_id") Long orderId,
-                                            @Query("distance") Double distance,
-                                            @Query("app_key") String appKey,
-                                            @Query("state") Integer state,
-                                            @Query("dark_distance") Double dark_distance,
-                                            @Query("dark_price") Double dark_price,
-                                            @Query("lat") Double lat,
-                                            @Query("lng") Double lng);
+    Observable<GetFeeResult> pullFee(@Query("order_id") long orderId,
+                                     @Query("distance") double distance,
+                                     @Query("app_key") String appKey,
+                                     @Query("state") int state,
+                                     @Query("dark_distance") double dark_distance,
+                                     @Query("dark_price") double dark_price,
+                                     @Query("lat") double lat,
+                                     @Query("lng") double lng);
 
     /**
-     * http方式推送gps信息
-     * @param gpsContent
+     * 通过http上传位置信息，30秒一次
      * @param appKey
+     * @param gpsContent
      * @return
      */
+    @POST("/driver/api/v1/gpsPush")
     @FormUrlEncoded
-    @POST("driver/api/v1/gpsPush")
-    Observable<EmResult> gpsPush(@Field("gps_content") String gpsContent,
-                               @Field("app_key") String appKey);
+    Observable<GetFeeResult> gpsPush(@Field("app_key") String appKey,
+                                     @Field("gps_content")String gpsContent);
+
 }

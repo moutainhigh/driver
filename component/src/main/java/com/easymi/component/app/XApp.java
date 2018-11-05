@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.multidex.MultiDexApplication;
@@ -449,11 +448,7 @@ public class XApp extends MultiDexApplication {
         intent.setAction(LocService.START_LOC);
         intent.setPackage(this.getPackageName());
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(intent);
-            } else {
-                startService(intent);
-            }
+            startService(intent);
         } catch (Exception ex) {
             CrashReport.postCatchedException(ex);
         }

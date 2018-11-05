@@ -348,9 +348,9 @@ public class SettleFragmentDialog {
         dymOrder.orderTotalFee = Double.parseDouble(df.format(dymOrder.totalFee + dymOrder.extraFee + dymOrder.paymentFee));
 
         double canCouponMoney = dymOrder.totalFee + dymOrder.extraFee;//可以参与优惠券抵扣的钱
-//        if (canCouponMoney < dymOrder.minestMoney) {//注释此段代码原因：优惠券计算后再参与与最低消费金额的比对
-//            canCouponMoney = dymOrder.minestMoney;
-//        }
+        if (canCouponMoney < dymOrder.minestMoney) {
+            canCouponMoney = dymOrder.minestMoney;
+        }
         if (zcOrder.coupon != null) {
             if (zcOrder.coupon.couponType == 2) {
                 dymOrder.couponFee = zcOrder.coupon.deductible;
@@ -362,13 +362,10 @@ public class SettleFragmentDialog {
         if (exls < 0) {
             exls = 0;//优惠券不退钱
         }
-        if (exls < dymOrder.minestMoney) {
-            exls = dymOrder.minestMoney;
-        }
         dymOrder.orderShouldPay = Double.parseDouble(df.format(exls + paymentFee - dymOrder.prepay));
 
         if (context instanceof Activity) {
-            ((Activity) context).runOnUiThread(new Runnable() {
+            ((Activity)context).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     prepayMoneyText.setText(String.valueOf(dymOrder.prepay));
