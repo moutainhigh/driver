@@ -397,14 +397,14 @@ public interface McService {
     Observable<AnnResult> employAfficheById(@Query("id") Long noticeId,
                                             @Query("app_key") String appKey);
 
-    /**
-     * 获取APP配置
-     *
-     * @param appKey
-     * @return
-     */
-    @GET("api/v1/appSetting")
-    Observable<com.easymi.common.result.SettingResult> getAppSetting(@Query("app_key") String appKey);
+//    /**
+//     * 获取APP配置
+//     *
+//     * @param appKey
+//     * @return
+//     */
+//    @GET("api/v1/appSetting")
+//    Observable<com.easymi.common.result.SettingResult> getAppSetting(@Query("app_key") String appKey);
 
     /**
      * 获取图形验证码
@@ -443,4 +443,27 @@ public interface McService {
                                    @Query("app_key") String appKey);
 
 
+    //add hufeng
+
+    /**
+     * 账号密码登录
+     *
+     * @param phone
+     * @param password
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/public/driver/login")
+    Observable<LoginResult> loginByPW(@Field("phone") String phone,
+                                   @Field("password") String password);
+
+
+
+
+    /**
+     * 获取APP配置
+     * @return
+     */
+    @GET("api/v1/taxi_online/config/app/get")
+    Observable<com.easymi.common.result.SettingResult> getAppSetting();
 }

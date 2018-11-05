@@ -52,24 +52,24 @@ public interface CommApiService {
                                                      @Query("page") int page,
                                                      @Query("limit") int limit);
 
+//
     /**
-     * 上线接口
-     *
-     * @param driverId
-     * @param appKey
-     * @return
-     */
-    @FormUrlEncoded
-    @PUT("driver/api/v1/online")
-    Observable<EmResult> online(@Field("driver_id") Long driverId,
-                                @Field("app_key") String appKey);
-
-
-    @FormUrlEncoded
-    @PUT("driver/api/v1/offline")
-    Observable<EmResult> offline(@Field("driver_id") Long driverId,
-                                 @Field("app_key") String appKey);
-
+     //     * 上线接口
+     //     *
+     //     * @param driverId
+     //     * @param appKey
+     //     * @return
+     //     */
+//    @FormUrlEncoded
+//    @PUT("driver/api/v1/online")
+//    Observable<EmResult> online(@Field("driver_id") Long driverId,
+//                                @Field("app_key") String appKey);
+//
+//
+//    @FormUrlEncoded
+//    @PUT("driver/api/v1/offline")
+//    Observable<EmResult> offline(@Field("driver_id") Long driverId,
+//                                 @Field("app_key") String appKey);
 
     /**
      * 查询附近司机
@@ -430,5 +430,22 @@ public interface CommApiService {
     @FormUrlEncoded
     Observable<GetFeeResult> gpsPush(@Field("app_key") String appKey,
                                      @Field("gps_content")String gpsContent);
+
+
+    //add hufeng
+    /**
+     * 上线接口
+     *
+     * @param id
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/public/driver/online")
+    Observable<EmResult> online(@Field("id") Long id);
+
+
+    @FormUrlEncoded
+    @POST("api/v1/public/driver/offline")
+    Observable<EmResult> offline(@Field("id") Long id);
 
 }

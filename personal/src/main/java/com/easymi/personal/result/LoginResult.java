@@ -9,11 +9,11 @@ import com.easymi.component.entity.Employ;
 
 public class LoginResult extends EmResult{
 
-
-    private Employ employInfo;
+    private Employ data;
+//    private Employ employInfo;
 
     public Employ getEmployInfo() {
-        return employInfo;
+        return data;
     }
 
 }

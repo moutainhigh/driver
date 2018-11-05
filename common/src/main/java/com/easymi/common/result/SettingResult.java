@@ -16,4 +16,5 @@ public class SettingResult extends EmResult {
     public String appSetting;
 
 
+
 }

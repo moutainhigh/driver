@@ -98,7 +98,7 @@ public class LoginActivity extends RxBaseActivity {
         Intent intent222 = new Intent(Intent.ACTION_VIEW, Uri.parse("customscheme://com.rvakva.travel.publicdriver/local_push?title=华为测试"));
         intent222.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         String intentUri = intent222.toUri(Intent.URI_INTENT_SCHEME);
-        Log.e("intentUri",intentUri);
+        Log.e("intentUri", intentUri);
 
         loginBtn = findViewById(R.id.login_button);
         loginBtn.setOnClickListener(v -> {
@@ -265,7 +265,6 @@ public class LoginActivity extends RxBaseActivity {
     }
 
     private void initEdit() {
-
         editAccount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -417,59 +416,71 @@ public class LoginActivity extends RxBaseActivity {
 
         Log.e("LoginAc", "deviceId-->" + PushServiceFactory.getCloudPushService().getDeviceId());
 
-        if (Config.COMM_USE) {
-            Observable<LoginResult> observable = api
-                    .loginByQiye(AesUtil.aesEncrypt(name, AesUtil.AAAAA),
-                            AesUtil.aesEncrypt(psw, AesUtil.AAAAA),
-                            udid,
-                            "android",
-                            Build.MODEL,
-                            version,
-                            PushServiceFactory.getCloudPushService().getDeviceId(),
-                            systemVersion, //系统版本号
-                            operatorName, //运营商
-                            netType, //网络类型 3G 4G等
-                            model,    //手机品牌
-                            qiyeCode//企业码
-                    )
-                    .filter(new HttpResultFunc<>())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread());
+//        if (Config.COMM_USE) {
+//            Observable<LoginResult> observable = api
+//                    .loginByQiye(AesUtil.aesEncrypt(name, AesUtil.AAAAA),
+//                            AesUtil.aesEncrypt(psw, AesUtil.AAAAA),
+//                            udid,
+//                            "android",
+//                            Build.MODEL,
+//                            version,
+//                            PushServiceFactory.getCloudPushService().getDeviceId(),
+//                            systemVersion, //系统版本号
+//                            operatorName, //运营商
+//                            netType, //网络类型 3G 4G等
+//                            model,    //手机品牌
+//                            qiyeCode//企业码
+//                    )
+//                    .filter(new HttpResultFunc<>())
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread());
+//
+//            mRxManager.add(observable.subscribe(new MySubscriber<>(this, loginBtn, loginResult -> {
+//                Employ employ = loginResult.getEmployInfo();
+//                Log.e("okhttp", employ.toString());
+//                employ.saveOrUpdate();
+//
+//                getSetting(employ);
+//            })));
+//        } else {
+//            Observable<LoginResult> observable = api
+//                    .login(AesUtil.aesEncrypt(name, AesUtil.AAAAA),
+//                            AesUtil.aesEncrypt(psw, AesUtil.AAAAA),
+//                            udid,
+//                            Config.APP_KEY,
+//                            "android",
+//                            Build.MODEL,
+//                            version,
+//                            PushServiceFactory.getCloudPushService().getDeviceId(),
+//                            systemVersion, //系统版本号
+//                            operatorName, //运营商
+//                            netType, //网络类型 3G 4G等
+//                            model    //手机品牌
+//                    )
+//                    .filter(new HttpResultFunc<>())
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread());
+//
+//            mRxManager.add(observable.subscribe(new MySubscriber<>(this, loginBtn, loginResult -> {
+//                Employ employ = loginResult.getEmployInfo();
+//                Log.e("okhttp", employ.toString());
+//                employ.saveOrUpdate();
+//
+//                getSetting(employ);
+//            })));
+//        }
 
-            mRxManager.add(observable.subscribe(new MySubscriber<>(this, loginBtn, loginResult -> {
-                Employ employ = loginResult.getEmployInfo();
-                Log.e("okhttp", employ.toString());
-                employ.saveOrUpdate();
+        Observable<LoginResult> observable = api
+                .loginByPW(name, psw)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
 
-                getSetting(employ);
-            })));
-        } else {
-            Observable<LoginResult> observable = api
-                    .login(AesUtil.aesEncrypt(name, AesUtil.AAAAA),
-                            AesUtil.aesEncrypt(psw, AesUtil.AAAAA),
-                            udid,
-                            Config.APP_KEY,
-                            "android",
-                            Build.MODEL,
-                            version,
-                            PushServiceFactory.getCloudPushService().getDeviceId(),
-                            systemVersion, //系统版本号
-                            operatorName, //运营商
-                            netType, //网络类型 3G 4G等
-                            model    //手机品牌
-                    )
-                    .filter(new HttpResultFunc<>())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread());
-
-            mRxManager.add(observable.subscribe(new MySubscriber<>(this, loginBtn, loginResult -> {
-                Employ employ = loginResult.getEmployInfo();
-                Log.e("okhttp", employ.toString());
-                employ.saveOrUpdate();
-
-                getSetting(employ);
-            })));
-        }
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, loginBtn, loginResult -> {
+            Employ employ = loginResult.getEmployInfo();
+            employ.saveOrUpdate();
+            getSetting(employ);
+        })));
     }
 
     @Override
@@ -479,7 +490,7 @@ public class LoginActivity extends RxBaseActivity {
 
     private void getSetting(Employ employ) {
         Observable<com.easymi.common.result.SettingResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .getAppSetting(employ.app_key)
+                .getAppSetting()
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -541,17 +552,16 @@ public class LoginActivity extends RxBaseActivity {
                     .build("/common/WorkActivity")
                     .navigation();
             finish();
-
-
         }));
     }
 
     List<String> strList = new ArrayList<>();
 
-//    private ListPopupWindow listPopupWindow;
-//    PopListAdapter adapter;
-
     private void selectedQiye() {
         initPop();
     }
+
+//add hf
+
+
 }

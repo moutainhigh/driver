@@ -396,7 +396,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
             spinner.start();
             presenter.startLocService();
         });
-
     }
 
     @Override
