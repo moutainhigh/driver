@@ -581,7 +581,7 @@ public class HandlePush implements FeeChangeSubject {
 //                            && status != employ.status) {
 //                        XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.force_offline));
 //                    }
-                    employ.status = status;
+                    employ.status = Integer.parseInt(status);
                     employ.updateBase();
 
                     if (status != null) {
@@ -596,7 +596,7 @@ public class HandlePush implements FeeChangeSubject {
                         } else {
                             Intent intent2 = new Intent();
                             intent2.setAction(Config.BROAD_EMPLOY_STATUS_CHANGE);
-                            intent2.putExtra("status", employ.status);
+                            intent2.putExtra("status", employ.status+"");
                             XApp.getInstance().sendBroadcast(intent2);
                         }
                     }

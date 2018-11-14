@@ -357,7 +357,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             }
         });
 
-        if (taxiOrder.status == ZCOrderStatus.NEW_ORDER) {
+        if (taxiOrder.status == ZCOrderStatus.NEW_ORDER || taxiOrder.status == ZCOrderStatus.PAIDAN_ORDER) {
             hideTops();
             not_accept_layout.setVisibility(View.VISIBLE);
             to_appoint_navi_con_1.setOnClickListener(view -> presenter.navi(new LatLng(getStartAddr().latitude,

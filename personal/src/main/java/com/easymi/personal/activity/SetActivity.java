@@ -172,7 +172,8 @@ public class SetActivity extends RxBaseActivity {
                 .setTitle(getString(R.string.set_hint))
                 .setMessage(getString(R.string.set_sure_exit))
                 .setPositiveButton(getString(R.string.set_sure), (dialogInterface, i) -> {
-                    doLogOut();
+//                    doLogOut();
+                    EmUtil.employLogout(SetActivity.this);
                 })
                 .setNegativeButton(getString(R.string.set_cancel), (dialogInterface, i) -> dialogInterface.dismiss())
                 .create();
@@ -192,7 +193,9 @@ public class SetActivity extends RxBaseActivity {
                 .observeOn(AndroidSchedulers.mainThread());
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
-                true, emResult -> EmUtil.employLogout(SetActivity.this))));
+                true, emResult ->
+                EmUtil.employLogout(SetActivity.this)))
+        );
     }
 
     @Override

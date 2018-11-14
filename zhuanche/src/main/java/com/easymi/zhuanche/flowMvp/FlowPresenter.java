@@ -69,6 +69,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         model = new FlowModel();
     }
 
+    //接单
     @Override
     public void acceptOrder(Long orderId, Long version,LoadingButton btn) {
         Observable<ZCOrderResult> observable = model.doAccept(orderId,version);
@@ -81,6 +82,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         })));
     }
 
+    //拒单
     @Override
     public void refuseOrder(Long orderId, String remark) {
         Observable<EmResult> observable = model.refuseOrder(orderId, remark);
@@ -93,10 +95,10 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             view.refuseSuc();
         })));
     }
-
+    //前往预约地
     @Override
-    public void toStart(Long orderId, LoadingButton btn) {
-        Observable<ZCOrderResult> observable = model.toStart(orderId);
+    public void toStart(Long orderId,Long version, LoadingButton btn) {
+        Observable<ZCOrderResult> observable = model.toStart(orderId,version);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, zcOrderResult -> {
 //            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
@@ -105,61 +107,54 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             findOne(orderId);
         })));
     }
-
+    //到达预约地
     @Override
-    public void arriveStart(Long orderId) {
-        Observable<ZCOrderResult> observable = model.arriveStart(orderId);
+    public void arriveStart(Long orderId,Long version) {
+        Observable<ZCOrderResult> observable = model.arriveStart(orderId,version);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, zcOrderResult -> {
-//            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
-//            updateDymOrder(zcOrderResult.data);
-//            view.showOrder(zcOrderResult.data);
             findOne(orderId);
         })));
     }
-
+    //到达预约地
     @Override
     public void startWait(Long orderId, LoadingButton btn) {
         Observable<ZCOrderResult> observable = model.startWait(orderId);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, zcOrderResult -> {
-//            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
-//            updateDymOrder(zcOrderResult.data);
-//            view.showOrder(zcOrderResult.data);
             findOne(orderId);
         })));
     }
 
+    //开始中途等待 达到预约地的
     @Override
     public void startWait(Long orderId) {
         Observable<ZCOrderResult> observable = model.startWait(orderId);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, zcOrderResult -> {
-//            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
-//            updateDymOrder(zcOrderResult.data);
-//            view.showOrder(zcOrderResult.data);
             findOne(orderId);
         })));
     }
 
+    //前往目的地
     @Override
-    public void startDrive(Long orderId, LoadingButton btn) {
+    public void startDrive(Long orderId,Long version, LoadingButton btn) {
         if (!PhoneUtil.checkGps(context)) {
             return;
         }
-        Observable<ZCOrderResult> observable = model.startDrive(orderId);
+        Observable<ZCOrderResult> observable = model.startDrive(orderId,version);
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, zcOrderResult -> {
-//            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
-//            updateDymOrder(zcOrderResult.data);
-//            view.showOrder(zcOrderResult.data);
-            findOne(orderId);
+            updateDymOrder(zcOrderResult.data);
+            view.showOrder(zcOrderResult.data);
         })));
     }
 
-    @Override
-    public void arriveDes(ZCOrder zcOrder, LoadingButton btn, DymOrder dymOrder) {
 
-        Observable<ZCOrderResult> observable = model.arriveDes(zcOrder, dymOrder);
+    //到达目的地
+    @Override
+    public void arriveDes(ZCOrder zcOrder,Long version, LoadingButton btn, DymOrder dymOrder) {
+
+        Observable<ZCOrderResult> observable = model.arriveDes(zcOrder, dymOrder,version);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, zcOrderResult -> {
 //            dymOrder.updateConfirm(); #该逻辑移动到arrivalDistination接口里面
@@ -196,7 +191,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<ZCOrderResult>() {
             @Override
             public void onNext(ZCOrderResult zcOrderResult) {
-                zcOrderResult = orderResult2ZCOrder(zcOrderResult);
+//                zcOrderResult = orderResult2ZCOrder(zcOrderResult);
                 updateDymOrder(zcOrderResult.data);
                 view.showOrder(zcOrderResult.data);
             }
@@ -215,7 +210,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, needShowProgress, false, new HaveErrSubscriberListener<ZCOrderResult>() {
             @Override
             public void onNext(ZCOrderResult zcOrderResult) {
-                zcOrderResult = orderResult2ZCOrder(zcOrderResult);
+//                zcOrderResult = orderResult2ZCOrder(zcOrderResult);
                 updateDymOrder(zcOrderResult.data);
                 view.showOrder(zcOrderResult.data);
             }
@@ -352,6 +347,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         MqttManager.getInstance().pushLoc(new BuildPushData(EmUtil.getLastLoc()));
     }
 
+    //选择支付类型后的结算接口
     @Override
     public void payOrder(Long orderId, String payType) {
         Observable<EmResult> observable = model.payOrder(orderId, payType);
@@ -383,7 +379,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     @Override
     public ZCOrderResult orderResult2ZCOrder(ZCOrderResult zcOrderResult) {
 //        zcOrderResult.order.addresses = zcOrderResult.address;
-//        zcOrderResult.order.orderFee = zcOrderResult.orderFee;
+//        zcOrderResult.data.orderFee = zcOrderResult.orderFee;
 //        zcOrderResult.order.coupon = zcOrderResult.coupon;
         return zcOrderResult;
     }

@@ -15,19 +15,26 @@
             android:layout_height="0.1dp"
             android:background="#55dcdcdc" />
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="15dp">
-
-            <ImageView
-                android:id="@+id/time_icon"
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                android:layout_centerVertical="true"
-                android:src="@mipmap/ic_time_black" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="10dp">
+            <TextView
+                android:id="@+id/order_type"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:paddingBottom="2dp"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:paddingTop="2dp"
+                android:layout_marginLeft="10dp"
+                android:text=""
+                android:textSize="16sp"
+                android:textColor="@color/white"/>
 
             <TextView
                 android:id="@+id/order_status"
@@ -36,7 +43,24 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:text="执行中 >"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:layout_marginRight="10dp"/>
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:id="@+id/time_icon"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/ic_time_black" />
 
             <TextView
                 android:id="@+id/order_time"
@@ -54,7 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -120,20 +144,6 @@
                     android:textSize="14sp" />
 
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/order_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="@drawable/corners_alpha_a"
-                android:paddingBottom="2dp"
-                android:paddingLeft="3dp"
-                android:paddingRight="3dp"
-                android:paddingTop="2dp"
-                android:text="日常代驾"
-                android:textColor="#aaffffff" />
-
 
         </LinearLayout>
 

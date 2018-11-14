@@ -34,10 +34,12 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.easymi.common.R;
 import com.easymi.common.activity.CreateActivity;
 import com.easymi.common.activity.ModelSetActivity;
+import com.easymi.common.adapter.CityLineAdapter;
 import com.easymi.common.adapter.NoticeAdapter;
 import com.easymi.common.adapter.OrderAdapter;
 import com.easymi.common.entity.AnnAndNotice;
 import com.easymi.common.entity.BuildPushData;
+import com.easymi.common.entity.CityLine;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.push.CountEvent;
@@ -155,7 +157,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
         findById();
 
-        initGuide();
+//        initGuide();
         initMap();
         initNotifity();
 
@@ -228,6 +230,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
             registerDialog.dismiss();
         }
     }
+
+
 
     private void initGuide() {
         boolean showGuide = XApp.getMyPreferences().getBoolean(Config.SP_SHOW_GUIDE, true);
@@ -339,20 +343,34 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         swipeRefreshLayout.setRefreshing(true);
     }
 
-    List<MultipleOrder> orders = new ArrayList<>();
+    //专线班次列表
+    List<CityLine> lines = new ArrayList<>();
+    @Override
+    public void showLineOrders(List<CityLine> cityLines) {
+        lines.clear();
+        if (cityLines == null || cityLines.size() == 0) {
+            showEmpty(0);
+        } else {
+            lines.addAll(cityLines);
+            hideEmpty();
+        }
 
+        CityLineAdapter adapter = new CityLineAdapter(lines, this);
+        recyclerView.setAdapter(adapter);
+        PinnedHeaderDecoration pinnedHeaderDecoration = new PinnedHeaderDecoration();
+        //设置只有RecyclerItem.ITEM_HEADER的item显示标签
+        pinnedHeaderDecoration.setPinnedTypeHeader(MultipleOrder.ITEM_HEADER);
+        pinnedHeaderDecoration.registerTypePinnedHeader(MultipleOrder.ITEM_HEADER, (parent, adapterPosition) -> true);
+        pinnedHeaderDecoration.registerTypePinnedHeader(MultipleOrder.ITEM_DESC, (parent, adapterPosition) -> true);
+        recyclerView.addItemDecoration(pinnedHeaderDecoration);
+    }
+
+    //专车出租车订单列表
+    List<MultipleOrder> orders = new ArrayList<>();
     @Override
     public void showOrders(List<MultipleOrder> MultipleOrders) {
         orders.clear();
         if (MultipleOrders == null || MultipleOrders.size() == 0) {
-//            MultipleOrder header1 = new MultipleOrder(MultipleOrder.ITEM_HEADER);
-//            header1.isBookOrder = 1;
-//            orders.add(header1);
-//
-//            //即时header
-//            MultipleOrder header2 = new MultipleOrder(MultipleOrder.ITEM_HEADER);
-//            header1.isBookOrder = 2;
-//            orders.add(header2);
             showEmpty(0);
         } else {
             orders.addAll(MultipleOrders);
@@ -532,12 +550,12 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     public void showDriverStatus() {
         Employ employ = EmUtil.getEmployInfo();
 
-        if (employ.status.equals(EmployStatus.FROZEN)) {
+        if (String.valueOf(employ.status).equals(EmployStatus.FROZEN)) {
 //            ActManager.getInstance().finishAllActivity();
 //            Intent intent = new Intent(this, SplashActivity.class);
 //            startActivity(intent);
             EmUtil.employLogout(this);
-        } else if (employ.status.equals(EmployStatus.OFFLINE)) {
+        } else if (String.valueOf(employ.status).equals(EmployStatus.OFFLINE)) {
             showOffline();//非听单状态
             presenter.loadNoticeAndAnn();
             presenter.initDaemon();
@@ -605,11 +623,11 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     protected void onResume() {
         super.onResume();
         isFront = true;
-//        boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
-//        if (!isLogin) {
-//            ARouter.getInstance().build("/personal/LoginActivity")/*.withFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)*/.navigation();
-//            finish();
-//        }
+        boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
+        if (!isLogin) {
+            ARouter.getInstance().build("/personal/LoginActivity")/*.withFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)*/.navigation();
+            finish();
+        }
         mapView.onResume();
         presenter.loadDataOnResume();
         MqttManager.getInstance().pushLocNoLimit(new BuildPushData(EmUtil.getLastLoc()));

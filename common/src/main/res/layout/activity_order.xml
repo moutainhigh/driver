@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f7f7f7"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:background="#20222c">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp">
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@mipmap/ic_back"
+                android:paddingLeft="13dp"
+                android:paddingRight="10dp"
+                />
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/com_my_order"
+                android:textColor="@color/white"
+                android:layout_centerInParent="true"
+                android:textSize="18sp"/>
+            <TextView
+                android:id="@+id/tv_right"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/com_make_order"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:layout_marginRight="10dp"/>
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -458,8 +458,6 @@ public interface McService {
                                    @Field("password") String password);
 
 
-
-
     /**
      * 获取APP配置
      * @return

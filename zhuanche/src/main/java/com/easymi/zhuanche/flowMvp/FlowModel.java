@@ -33,6 +33,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.http.Field;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
@@ -73,18 +74,18 @@ public class FlowModel implements FlowContract.Model {
     }
 
     @Override
-    public Observable<ZCOrderResult> toStart(Long orderId) {
+    public Observable<ZCOrderResult> toStart(Long orderId,Long version) {
         return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
-                .goToBookAddress(orderId, EmUtil.getAppKey())
+                .goToBookAddress(orderId, EmUtil.getAppKey(),version)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
-    public Observable<ZCOrderResult> arriveStart(Long orderId) {
+    public Observable<ZCOrderResult> arriveStart(Long orderId,Long version) {
         return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
-                .arrivalBookAddress(orderId, EmUtil.getAppKey())
+                .arrivalBookAddress(orderId, EmUtil.getAppKey(),version)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -100,16 +101,16 @@ public class FlowModel implements FlowContract.Model {
     }
 
     @Override
-    public Observable<ZCOrderResult> startDrive(Long orderId) {
+    public Observable<ZCOrderResult> startDrive(Long orderId,Long version) {
         return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
-                .goToDistination(orderId, EmUtil.getAppKey())
+                .goToDistination(orderId, EmUtil.getAppKey(),version)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
-    public Observable<ZCOrderResult> arriveDes(ZCOrder zcOrder, DymOrder order) {
+    public Observable<ZCOrderResult> arriveDes(ZCOrder zcOrder, DymOrder order,Long version) {
         PushFee pushData = new PushFee();
 
         //司机的信息
@@ -245,7 +246,8 @@ public class FlowModel implements FlowContract.Model {
                                 .arrivalDistination(
 //                                        finalOrder.orderId,
                                         zcOrder.orderId,
-                                        EmUtil.getAppKey()
+                                        EmUtil.getAppKey(),
+                                            version
 //                                        , finalOrder.paymentFee, finalOrder.extraFee,
 //                                        finalOrder.remark, finalOrder.distance, finalOrder.disFee, finalOrder.travelTime,
 //                                        finalOrder.travelFee, finalOrder.waitTime,

@@ -378,13 +378,23 @@ public interface TaxiApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("api/v1/taxi/normal/order/receipt")
+    @PUT("api/v1/taxi/normal/order/receipt")
     Observable<TaxiOrderResult> takeOrder(@Field("appKey") String appKey,
                                           @Field("companyId") Long companyId,
                                           @Field("driverId") Long driverId,
                                           @Field("orderId") Long orderId);
 
-
+    /**
+     *  修改订单状态
+     * @param companyId
+     * @param detailAddress
+     * @param driverId
+     * @param latitude
+     * @param longitude
+     * @param orderId
+     * @param status
+     * @return
+     */
     @FormUrlEncoded
     @PUT("api/v1/taxi/normal/order/status")
     Observable<EmResult> changeOrderStatus(@Field("companyId") Long companyId,

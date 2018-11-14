@@ -186,4 +186,8 @@
     <string name="com_full">手持身份证照片</string>
     <string name="com_complete_info">亲爱的师傅您好：\n&#160;&#160;&#160;&#160;您的资料已提交成功，管理人员正在审核，如有疑问请及时联后台管理人员，审核通过后您可开启接单旅程了。</string>
 
+
+    <!--hf 我的订单相关-->
+    <string name="com_my_order">我的订单</string>
+    <string name="com_make_order">司机补单</string>
 </resources>

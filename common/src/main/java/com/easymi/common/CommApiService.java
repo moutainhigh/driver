@@ -9,6 +9,7 @@ import com.easymi.common.entity.QiNiuToken;
 import com.easymi.common.entity.RegisterRes;
 import com.easymi.common.entity.Vehicles;
 import com.easymi.common.result.AnnouncementResult;
+import com.easymi.common.result.CityLineResult;
 import com.easymi.common.result.LoginResult;
 import com.easymi.common.result.MultipleOrderResult;
 import com.easymi.common.result.NearDriverResult;
@@ -476,13 +477,13 @@ public interface CommApiService {
                                      @Field("driverType") String driverType,
                                      @Field("type") int type);
 
-    /**
-     * 查询所有订单接口
-     *
-     * @return
-     */
-    @GET("api/v1/taxi_online/order/list")
-    Observable<QueryOrdersResult> queryRunningOrders();
+//    /**
+//     * 查询所有订单接口
+//     *
+//     * @return
+//     */
+//    @GET("api/v1/taxi_online/order/list")
+//    Observable<QueryOrdersResult> queryRunningOrders();
 
 
     /**
@@ -565,13 +566,25 @@ public interface CommApiService {
                                      @Field("json") String json);
 
     /**
-     * 获取出租车列表
+     * 获取工作台 出租车 列表
      */
     @GET("api/v1/taxi/normal/orders")
-    Observable<LoginResult> getTaxiOrders(@Query("driverPhone") String driverPhone,
-                                          @Query("page") int page,
-                                          @Query("size") int size,
-                                          @Query("status") int status);
+    Observable<QueryOrdersResult> getTaxiOrders(@Query("driverPhone") String driverPhone,
+                                                @Query("page") int page,
+                                                @Query("size") int size,
+                                                @Query("status") String status);
 
+    /**
+     * 获取工作台 城际专线 列表
+     */
+    @GET("api/v1/bus/city/schedule/queryDriverSchedule")
+    Observable<CityLineResult> getCityLineOrders(@Query("driverId") Long driverId,
+                                                 @Query("appKey") String appKey);
 
+    /**
+     * 获取工作台 专车 列表
+     */
+    @GET("api/v1/taxi_online/order/running_list")
+    Observable<QueryOrdersResult> getZCOrders(@Query("driverId") Long driverId,
+                                              @Query("appKey") String appKey);
 }

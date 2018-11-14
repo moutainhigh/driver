@@ -123,6 +123,7 @@ public class Config {
     public static final String DAIJIA = "daijia";
     public static final String ZHUANCHE = "special";
     public static final String TAXI = "taxi";
+    public static final String CITYLINE = "cityline";
 
     //需要导航的模式
     public static final String NAVI_MODE = "navi_mode";

@@ -16,7 +16,7 @@ import com.google.gson.annotations.SerializedName;
 public class BaseEmploy {
     public long id;
 
-    public String status;
+    public int status;
 
     public String real_name;//真实姓名
     public long company_id;

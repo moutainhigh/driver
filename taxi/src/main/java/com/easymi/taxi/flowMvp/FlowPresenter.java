@@ -194,7 +194,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<TaxiOrderResult>() {
             @Override
             public void onNext(TaxiOrderResult taxiOrderResult) {
-                taxiOrderResult = orderResult2ZCOrder(taxiOrderResult);
+//                taxiOrderResult = orderResult2ZCOrder(taxiOrderResult);
                 updateDymOrder(taxiOrderResult.data);
                 view.showOrder(taxiOrderResult.data);
             }

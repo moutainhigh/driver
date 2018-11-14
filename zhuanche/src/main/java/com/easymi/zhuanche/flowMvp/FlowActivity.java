@@ -982,12 +982,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void doToStart(LoadingButton btn) {
-                presenter.toStart(zcOrder.orderId, btn);
+                presenter.toStart(zcOrder.orderId,zcOrder.version, btn);
             }
 
             @Override
             public void doArriveStart() {
-                presenter.arriveStart(zcOrder.orderId);
+                presenter.arriveStart(zcOrder.orderId,zcOrder.version);
             }
 
             @Override
@@ -1002,7 +1002,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void doStartDrive(LoadingButton btn) {
-                presenter.startDrive(zcOrder.orderId, btn);
+                presenter.startDrive(zcOrder.orderId,zcOrder.version, btn);
             }
 
             @Override
@@ -1074,7 +1074,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void doConfirmMoney(LoadingButton btn, DymOrder dymOrder) {
-                presenter.arriveDes(zcOrder, btn, dymOrder);
+                presenter.arriveDes(zcOrder,zcOrder.version, btn, dymOrder);
             }
 
             @Override
