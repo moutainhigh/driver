@@ -9,8 +9,25 @@ import com.easymi.component.entity.PushEmploy;
  */
 
 public class PushData {
-//    public BaseEmploy employ;
-    public PushDataLoc calc;
-    public PushEmploy employ;
+
+//    public PushDataLoc calc;
+//    public PushEmploy employ;
+
+    /**
+     * 司机所开通的业务类型
+     */
+    public String serviceType;
+    /**
+     * 系统key
+     */
+    public String appKey;
+    /**
+     * 司机信息
+     */
+    public PushEmploy driver;
+    /**
+     * 数据集
+     */
+    public PushDataLoc location;
 
 }

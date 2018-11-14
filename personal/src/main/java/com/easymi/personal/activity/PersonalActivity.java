@@ -90,7 +90,7 @@ public class PersonalActivity extends RxBaseActivity {
         Employ employ = EmUtil.getEmployInfo();
         showBase(employ);
 
-        if (employ != null && TextUtils.equals(employ.service_type, "zhuanche")) {
+        if (employ != null && TextUtils.equals(employ.serviceType, Config.ZHUANCHE)) {
             rlCarInfo.setVisibility(View.VISIBLE);
         } else {
             rlCarInfo.setVisibility(View.GONE);
@@ -126,20 +126,22 @@ public class PersonalActivity extends RxBaseActivity {
     private void showBase(Employ employ) {
         if (employ != null) {
             driverName.setText(employ.real_name);
-            userName.setText("("+employ.user_name+")");
-            ratingBar.setStarMark((float) (employ.score == 0 ? 5.0 : employ.score));
-            driverBalance.setText(String.valueOf(employ.balance));
-            if (StringUtils.isNotBlank(employ.portrait_path)) {
-                RequestOptions options = new RequestOptions()
-                        .centerCrop()
-                        .transform(new GlideCircleTransform())
-                        .placeholder(R.mipmap.photo_default)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL);
-                Glide.with(PersonalActivity.this)
-                        .load(Config.IMG_SERVER + employ.portrait_path + Config.IMG_PATH)
-                        .apply(options)
-                        .into(driverPhoto);
-            }
+            userName.setText("("+employ.userName+")");
+//            ratingBar.setStarMark((float) (employ.score == 0 ? 5.0 : employ.score));
+            ratingBar.setStarMark(5);
+//            driverBalance.setText(String.valueOf(employ.balance));
+            driverBalance.setText("0");
+//            if (StringUtils.isNotBlank(employ.portrait_path)) {
+//                RequestOptions options = new RequestOptions()
+//                        .centerCrop()
+//                        .transform(new GlideCircleTransform())
+//                        .placeholder(R.mipmap.photo_default)
+//                        .diskCacheStrategy(DiskCacheStrategy.ALL);
+//                Glide.with(PersonalActivity.this)
+//                        .load(Config.IMG_SERVER + employ.portrait_path + Config.IMG_PATH)
+//                        .apply(options)
+//                        .into(driverPhoto);
+//            }
         }
     }
 

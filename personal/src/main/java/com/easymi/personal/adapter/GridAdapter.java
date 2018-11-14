@@ -100,7 +100,9 @@ public class GridAdapter extends BaseAdapter {
             });
         } else if (str.equals(context.getString(R.string.contract_service))) {
             holder.item_pic.setImageResource(R.mipmap.contract_service);
-            holder.item_root.setOnClickListener(v -> PhoneUtil.call(context, EmUtil.getEmployInfo().company_phone));
+            holder.item_root.setOnClickListener(v ->
+//                    PhoneUtil.call(context, EmUtil.getEmployInfo().company_phone));
+            PhoneUtil.call(context, "1111111"));
         }else if (str.equals(context.getString(R.string.help_center))) {
             holder.item_pic.setImageResource(R.mipmap.p_help);
             holder.item_root.setOnClickListener(view -> {

@@ -11,7 +11,7 @@ import java.util.List;
  */
 
 public class MultipleOrderResult extends EmResult {
-    public MultipleOrder order;
 
-    public List<Address> address;
+    public MultipleOrder data;
+
 }

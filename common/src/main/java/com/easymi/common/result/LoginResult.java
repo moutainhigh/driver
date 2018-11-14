@@ -8,10 +8,12 @@ import com.easymi.component.result.EmResult;
  */
 
 public class LoginResult extends EmResult{
-    private Employ employInfo;
+//    private Employ employInfo;
+
+    private Employ data;
 
     public Employ getEmployInfo() {
-        return employInfo;
+        return data;
     }
 
 }

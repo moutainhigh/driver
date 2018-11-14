@@ -40,7 +40,10 @@ public class CreateZCPresenter implements CreateZCContract.Presenter {
     @Override
     public void queryZCType() {
         Employ employ = EmUtil.getEmployInfo();
-        view.getManager().add(model.queryZCType(employ.company_id, employ.vehicle.serviceType).subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<ZCTypeResult>() {
+        view.getManager().add(model.queryZCType(employ.company_id,
+//                employ.vehicle.serviceType
+                1
+        ).subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<ZCTypeResult>() {
             @Override
             public void onNext(ZCTypeResult zcTypeResult) {
                 view.showTypeTab(zcTypeResult);
@@ -56,7 +59,10 @@ public class CreateZCPresenter implements CreateZCContract.Presenter {
     @Override
     public void queryPassenger(String phone) {
         Employ employ = EmUtil.getEmployInfo();
-        view.getManager().add(model.queryPassenger(employ.company_id, employ.company_name, phone).subscribe(new MySubscriber<>(context, true, true, new HaveErrSubscriberListener<PassengerResult>() {
+        view.getManager().add(model.queryPassenger(employ.company_id,
+//                employ.company_name,
+                "company_name",
+                phone).subscribe(new MySubscriber<>(context, true, true, new HaveErrSubscriberListener<PassengerResult>() {
             @Override
             public void onNext(PassengerResult result) {
                 view.showPassenger(result);
@@ -138,7 +144,10 @@ public class CreateZCPresenter implements CreateZCContract.Presenter {
         Employ employ = EmUtil.getEmployInfo();
         view.getManager().add(model.createOrder(passengerId, passengerName, passengerPhone, orderTime,
                 bookAddress, bookAddressLat, bookAddressLng, destination, destinationLat, destinationLng,
-                employ.company_id, employ.company_name, budgetFee, cid, employ.name, employ.id).subscribe(
+                employ.company_id,
+//                employ.company_name,
+                "company_name",
+                budgetFee, cid, employ.nickName, employ.id).subscribe(
                 new MySubscriber<>(context, true, false, zcOrderResult -> view.createSuc(zcOrderResult))
         ));
     }

@@ -72,13 +72,13 @@ public class DJGrabFragment extends Fragment {
     }
 
     private void showBase() {
-        if (TextUtils.isEmpty(djOrder.remark)) {
+        if (TextUtils.isEmpty(djOrder.orderRemark)) {
             tvMark.setText("无备注");
         } else {
-            tvMark.setText(djOrder.remark);
+            tvMark.setText(djOrder.orderRemark);
         }
-        start_place.setText(djOrder.startPlace);
-        end_place.setText(djOrder.endPlace);
+        start_place.setText(djOrder.bookAddress);
+        end_place.setText(djOrder.destination);
         order_time_text.setText(djOrder.isBookOrder == 1 ? getString(R.string.appoint) : getString(R.string.jishi));
         tag_container.removeAllTags();
         if (StringUtils.isNotBlank(djOrder.passengerTags)) {
@@ -95,7 +95,7 @@ public class DJGrabFragment extends Fragment {
         order_type.setText(djOrder.orderDetailType);
 
         long today = TimeUtil.parseTime("yyyy-MM-dd", TimeUtil.getTime("yyyy-MM-dd", System.currentTimeMillis()));
-        long orderDay = TimeUtil.parseTime("yyyy-MM-dd", TimeUtil.getTime("yyyy-MM-dd", djOrder.orderTime));
+        long orderDay = TimeUtil.parseTime("yyyy-MM-dd", TimeUtil.getTime("yyyy-MM-dd", djOrder.bookTime));
 
         String day;
         if (today == orderDay) {
@@ -107,18 +107,18 @@ public class DJGrabFragment extends Fragment {
         } else if (orderDay - today == 3 * 24 * 60 * 60 * 1000) {
             day = getString(R.string.waitian);
         } else {
-            day = TimeUtil.getTime("yyyy-MM-dd", djOrder.orderTime);
+            day = TimeUtil.getTime("yyyy-MM-dd", djOrder.bookTime);
         }
         order_time_day.setText(day);
 
-        String minSec = TimeUtil.getTime("HH:mm", djOrder.orderTime);
+        String minSec = TimeUtil.getTime("HH:mm", djOrder.bookTime);
         order_time.setText(minSec);
 
-        List<Address> addresses = djOrder.addresses;
+        List<Address> addresses = djOrder.orderAddressVos;
         LatLng start = null;
         for (Address address : addresses) {
-            if (address.addrType == 1) {
-                start = new LatLng(address.lat, address.lng);
+            if (address.type == 1) {
+                start = new LatLng(address.latitude, address.longitude);
                 break;
             }
         }

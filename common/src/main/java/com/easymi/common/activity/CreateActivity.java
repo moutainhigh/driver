@@ -61,8 +61,8 @@ public class CreateActivity extends RxBaseActivity {
         fragments = new ArrayList<>();
         try {
             String[] types = null;
-            if (!TextUtils.isEmpty(EmUtil.getEmployInfo().service_type)) {
-                types = EmUtil.getEmployInfo().service_type.split(",");
+            if (!TextUtils.isEmpty(EmUtil.getEmployInfo().serviceType)) {
+                types = EmUtil.getEmployInfo().serviceType.split(",");
             }
             //按顺序加载
             if (types != null && types.length > 0) {
@@ -87,7 +87,7 @@ public class CreateActivity extends RxBaseActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         if (fragments.size() != 0) {
-            String[] types = EmUtil.getEmployInfo().service_type.split(",");
+            String[] types = EmUtil.getEmployInfo().serviceType.split(",");
             for (int i = 0; i < fragments.size(); i++) {
                 tabLayout.getTabAt(i).setText(pin2Hanzi(types[i]));
             }

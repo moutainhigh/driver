@@ -7,6 +7,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.easymi.component.db.SqliteHelper;
+import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.Log;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.LinkedList;
@@ -18,399 +20,348 @@ import java.util.List;
 
 public class Employ extends BaseEmploy implements Parcelable {
 
-    public String user_name;//工号
-    public String password;
-    public String name;//昵称
-
-    public String sex;
-
-    public String company_name;
-
-    public String portrait_path;
-
-    public double balance;
-    public String service_type;//服务类型
-
-    public String bank_name;
-    public String bank_card_no;
-    public String cash_person_name;
-
-    public double score;
-    public String company_phone;
-
-    public String app_key;
-
-    public Vehicle vehicle;//车辆信息
-
-    public String device_no;
-
-    //1正常，2已完善，正在审核，3.没完善资料，4驳回原因
-    @SerializedName("audit_type")
-    public int auditType;
-
-    @SerializedName("reject")
-    public String reject;
+//    public String user_name;//工号
+//    public String password;
+//    public String name;//昵称
+//
+//    public String sex;
+//
+//    public String company_name;
+//
+//    public String portrait_path;
+//
+//    public double balance;
+//    public String service_type;//服务类型
+//
+//    public String bank_name;
+//    public String bank_card_no;
+//    public String cash_person_name;
+//
+//    public double score;
+//    public String company_phone;
+//
+//    public String app_key;
+//
+//    public Vehicle vehicle;//车辆信息
+//
+//    public String device_no;
+//
+//    //1正常，2已完善，正在审核，3.没完善资料，4驳回原因
+//    @SerializedName("audit_type")
+//    public int auditType;
+//
+//    @SerializedName("reject")
+//    public String reject;
 
 //add hufeng
 
     /**
      * id
      */
-//    private Long id;
+//    public Long id;
 
     /**
      * 工号
      */
-    private String userName;
+    public String userName;
 
     /**
      * 密码
      */
-//    private String password;
+    public String password;
 
     /**
      * 昵称
      */
-    private String nickName;
+    public String nickName;
 
     /**
      * 真实姓名
      */
-    private String realName;
+    public String realName;
 
     /**
      * 身份证号码
      */
-    private String idCard;
+    public String idCard;
 
     /**
      * 性别 1，男；2，女；3，未知
      */
-//    private Integer sex;
+    public int sex;
 
     /**
      * 出生日期
      */
-    private Integer birthDate;
+    public long birthDate;
 
     /**
      * 手机号
      */
-//    private String phone;
+//    public String phone;
 
     /**
      * 头像照片地址
      */
-    private String portraitPath;
+    public String portraitPath;
 
     /**
      * 服务类型
      */
-    private String serviceType;
+    public String serviceType;
 
     /**
      * 紧急联系人（姓名+电话+关系）
      */
-    private String emergency;
+    public String emergency;
 
     /**
      * 紧急电话
      */
-    private String emergencyPhone;
+    public String emergencyPhone;
 
     /**
      * 驾驶证初次领取时间
      */
-    private Long licensingTime;
+    public long licensingTime;
 
     /**
      * 驾驶证有效期起
      */
-    private Integer driveLicenceStart;
+    public int driveLicenceStart;
 
     /**
      * 驾驶证有效期限止
      */
-    private Integer driveLicenceEnd;
+    public int driveLicenceEnd;
 
     /**
      * 等级
      */
-    private Long level;
+    public long level;
 
     /**
      * 入职时间
      */
-    private Integer dutyTime;
+    public long dutyTime;
 
     /**
      * 司机状态（0离线 5在线 10空闲 15派单 20接单 25前往预约地 30到达预约地 35前往目的地 40中途等待  45冻结）
      */
-//    private String status;
+//    public String status;
 
     /**
      * 推荐人
      */
-    private String introducer;
+    public String introducer;
 
     /**
      * 所属公司Id
      */
-    private Long companyId;
+    public long companyId;
 
     /**
      * 创建时间
      */
-    private Long created;
+    public long created;
 
     /**
      * 修改时间
      */
-    private Long updated;
+    public long updated;
 
     /**
      * 身份证照片地址
      */
-    private String idcardPath;
+    public String idcardPath;
 
     /**
      * 家庭地址
      */
-    private String homeAddress;
+    public String homeAddress;
 
     /**
      * 驾驶证照片地址
      */
-    private String driveLicensePath;
+    public String driveLicensePath;
 
     /**
      * 驾照类型
      */
-    private String driveLicenseType;
+    public String driveLicenseType;
 
     /**
      * 行驶证照片地址
      */
-    private String drivingLicensePath;
+    public String drivingLicensePath;
 
     /**
      * 备注
      */
-    private String remark;
+    public String remark;
 
     /**
      * 设备信息
      */
-    private String appVersion;
+    public String appVersion;
 
     /**
      * 类型
      */
-    private Long driverType;
+    public long driverType;
 
     /**
      * 设备编号
      */
-    private String deviceNo;
+    public String deviceNo;
 
     /**
      * 设备类型
      */
-    private String deviceType;
+    public String deviceType;
 
     /**
      * 全身照地址
      */
-    private String fullBodyPath;
+    public String fullBodyPath;
 
     /**
      * 身高
      */
-    private String height;
+    public String height;
 
     /**
      * 籍贯
      */
-    private String originPlace;
+    public String originPlace;
 
     /**
      * 机动车驾驶证号
      */
-    private String motorNo;
+    public String motorNo;
 
     /**
      * 国籍
      */
-    private String nationality;
+    public String nationality;
 
     /**
      * 网络预约出租车驾驶员证编号
      */
-    private String networkTaximanNo;
+    public String networkTaximanNo;
 
     /**
      * 驾驶员民族
      */
-    private String nation;
+    public String nation;
 
     /**
      * 驾驶员婚姻状况(0未婚，1已婚，2保密)
      */
-    private String maritalStatus;
+    public String maritalStatus;
 
     /**
      * 驾驶员外语能力
      */
-    private String foreignLanguageLevel;
+    public String foreignLanguageLevel;
 
     /**
      * 驾驶员通信地址
      */
-    private String email;
+    public String email;
 
     /**
      * 驾驶员学历
      */
-    private String education;
+    public String education;
 
     /**
      * 网络预约出租车驾驶员领证日期
      */
-    private Integer networkTaximanLicenseDate;
+    public long networkTaximanLicenseDate;
 
     /**
      * 驾驶员发证机构
      */
-    private String licenseOrganization;
+    public String licenseOrganization;
 
     /**
      * 交通违章次数
      */
-    private Integer trafficViolationTimes;
+    public int trafficViolationTimes;
 
     /**
      * 合同有效期起
      */
-    private Integer contractStart;
+    public long contractStart;
 
     /**
      * 合同有效期止
      */
-    private Integer contractEnd;
+    public long contractEnd;
 
     /**
      * NULL       NOT      NULL巡游出租汽车驾驶员
      */
-    private Integer isCruisingTaxiDrivers;
+    public int isCruisingTaxiDrivers;
 
     /**
      * 司机服务运营商
      */
-    private String driverServiceOperator;
+    public String driverServiceOperator;
 
     /**
      * 使用地图类型
      */
-    private String mapType;
+    public String mapType;
 
     /**
      * 身份证背面照片地址
      */
-    private String idcardBackPath;
+    public String idcardBackPath;
 
     /**
      * 手机型号
      */
-    private String mobileModel;
+    public String mobileModel;
 
     /**
      * 手机运营商
      */
-    private String mobileOperators;
+    public String mobileOperators;
 
     /**
      * NULL       NOT      NULL专职驾驶员
      */
-    private Integer isFulltimeDriver;
+    public int isFulltimeDriver;
 
     /**
      * 户口登记机关名称
      */
-    private String householdRegistrationName;
+    public String householdRegistrationName;
 
 
     protected Employ(Parcel in) {
-        user_name = in.readString();
-        password = in.readString();
-        name = in.readString();
-        sex = in.readString();
-        company_name = in.readString();
-        portrait_path = in.readString();
-        balance = in.readDouble();
-        service_type = in.readString();
-        bank_name = in.readString();
-        bank_card_no = in.readString();
-        cash_person_name = in.readString();
-        score = in.readDouble();
-        company_phone = in.readString();
-        app_key = in.readString();
-        device_no = in.readString();
-        auditType = in.readInt();
-        reject = in.readString();
         userName = in.readString();
+        password = in.readString();
         nickName = in.readString();
         realName = in.readString();
         idCard = in.readString();
-        if (in.readByte() == 0) {
-            birthDate = null;
-        } else {
-            birthDate = in.readInt();
-        }
+        sex = in.readInt();
+        birthDate = in.readLong();
         portraitPath = in.readString();
         serviceType = in.readString();
         emergency = in.readString();
         emergencyPhone = in.readString();
-        if (in.readByte() == 0) {
-            licensingTime = null;
-        } else {
-            licensingTime = in.readLong();
-        }
-        if (in.readByte() == 0) {
-            driveLicenceStart = null;
-        } else {
-            driveLicenceStart = in.readInt();
-        }
-        if (in.readByte() == 0) {
-            driveLicenceEnd = null;
-        } else {
-            driveLicenceEnd = in.readInt();
-        }
-        if (in.readByte() == 0) {
-            level = null;
-        } else {
-            level = in.readLong();
-        }
-        if (in.readByte() == 0) {
-            dutyTime = null;
-        } else {
-            dutyTime = in.readInt();
-        }
+        licensingTime = in.readLong();
+        driveLicenceStart = in.readInt();
+        driveLicenceEnd = in.readInt();
+        level = in.readLong();
+        dutyTime = in.readLong();
         introducer = in.readString();
-        if (in.readByte() == 0) {
-            companyId = null;
-        } else {
-            companyId = in.readLong();
-        }
-        if (in.readByte() == 0) {
-            created = null;
-        } else {
-            created = in.readLong();
-        }
-        if (in.readByte() == 0) {
-            updated = null;
-        } else {
-            updated = in.readLong();
-        }
+        companyId = in.readLong();
+        created = in.readLong();
+        updated = in.readLong();
         idcardPath = in.readString();
         homeAddress = in.readString();
         driveLicensePath = in.readString();
@@ -418,11 +369,7 @@ public class Employ extends BaseEmploy implements Parcelable {
         drivingLicensePath = in.readString();
         remark = in.readString();
         appVersion = in.readString();
-        if (in.readByte() == 0) {
-            driverType = null;
-        } else {
-            driverType = in.readLong();
-        }
+        driverType = in.readLong();
         deviceNo = in.readString();
         deviceType = in.readString();
         fullBodyPath = in.readString();
@@ -436,42 +383,18 @@ public class Employ extends BaseEmploy implements Parcelable {
         foreignLanguageLevel = in.readString();
         email = in.readString();
         education = in.readString();
-        if (in.readByte() == 0) {
-            networkTaximanLicenseDate = null;
-        } else {
-            networkTaximanLicenseDate = in.readInt();
-        }
+        networkTaximanLicenseDate = in.readLong();
         licenseOrganization = in.readString();
-        if (in.readByte() == 0) {
-            trafficViolationTimes = null;
-        } else {
-            trafficViolationTimes = in.readInt();
-        }
-        if (in.readByte() == 0) {
-            contractStart = null;
-        } else {
-            contractStart = in.readInt();
-        }
-        if (in.readByte() == 0) {
-            contractEnd = null;
-        } else {
-            contractEnd = in.readInt();
-        }
-        if (in.readByte() == 0) {
-            isCruisingTaxiDrivers = null;
-        } else {
-            isCruisingTaxiDrivers = in.readInt();
-        }
+        trafficViolationTimes = in.readInt();
+        contractStart = in.readLong();
+        contractEnd = in.readLong();
+        isCruisingTaxiDrivers = in.readInt();
         driverServiceOperator = in.readString();
         mapType = in.readString();
         idcardBackPath = in.readString();
         mobileModel = in.readString();
         mobileOperators = in.readString();
-        if (in.readByte() == 0) {
-            isFulltimeDriver = null;
-        } else {
-            isFulltimeDriver = in.readInt();
-        }
+        isFulltimeDriver = in.readInt();
         householdRegistrationName = in.readString();
     }
 
@@ -494,39 +417,39 @@ public class Employ extends BaseEmploy implements Parcelable {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
         ContentValues values = new ContentValues();
-        values.put("id", id);
-        values.put("user_name", user_name);
-        values.put("password", password);
-        values.put("name", name);
-        values.put("real_name", real_name);
-        values.put("sex", sex);
-        values.put("company_id", company_id);
-        values.put("company_name", company_name);
-        values.put("phone", phone);
-
-        values.put("balance", balance);
-        values.put("service_type", service_type);
-        values.put("child_type", child_type);
-
-        values.put("bank_name", bank_name);
-        values.put("bank_card_no", bank_card_no);
-        values.put("cash_person_name", cash_person_name);
-        values.put("status", status);
-
-        values.put("portrait_path", portrait_path);
-        values.put("score", score);
-        values.put("company_phone", company_phone);
-        values.put("auditType", auditType);
+//        values.put("id", id);
+//        values.put("user_name", user_name);
+//        values.put("password", password);
+//        values.put("name", name);
+//        values.put("real_name", real_name);
+//        values.put("sex", sex);
+//        values.put("company_id", company_id);
+//        values.put("company_name", company_name);
+//        values.put("phone", phone);
+//
+//        values.put("balance", balance);
+//        values.put("service_type", service_type);
+//        values.put("child_type", child_type);
+//
+//        values.put("bank_name", bank_name);
+//        values.put("bank_card_no", bank_card_no);
+//        values.put("cash_person_name", cash_person_name);
+//        values.put("status", status);
+//
+//        values.put("portrait_path", portrait_path);
+//        values.put("score", score);
+//        values.put("company_phone", company_phone);
+//        values.put("auditType", auditType);
 
 //hf
 
-//       values.put("id", id);
+        values.put("id", id);
         values.put("userName", userName);
-//     values.put("password", password);
+        values.put("password", password);
         values.put("nickName", nickName);
         values.put("realName", realName);
         values.put("idCard", idCard);
-//     values.put("sex", sex);
+        values.put("sex", sex);
         values.put("birthDate", birthDate);
         values.put("phone", phone);
         values.put("portraitPath", portraitPath);
@@ -538,7 +461,7 @@ public class Employ extends BaseEmploy implements Parcelable {
         values.put("driveLicenceEnd", driveLicenceEnd);
         values.put("level", level);
         values.put("dutyTime", dutyTime);
-//         values.put("status", status);
+        values.put("status", status);
         values.put("introducer", introducer);
         values.put("companyId", companyId);
         values.put("created", created);
@@ -616,63 +539,63 @@ public class Employ extends BaseEmploy implements Parcelable {
         try {
             if (cursor.moveToFirst()) {
                 driverInfo = new Employ();
-                driverInfo.id = cursor.getLong(cursor
-                        .getColumnIndex("id"));
-                driverInfo.user_name = cursor.getString(cursor
-                        .getColumnIndex("user_name"));
-                driverInfo.password = cursor.getString(cursor
-                        .getColumnIndex("password"));
-                driverInfo.name = cursor.getString(cursor
-                        .getColumnIndex("name"));
-                driverInfo.real_name = cursor.getString(cursor
-                        .getColumnIndex("real_name"));
-                driverInfo.sex = cursor.getString(cursor
-                        .getColumnIndex("sex"));
-                driverInfo.company_id = cursor.getLong(cursor
-                        .getColumnIndex("company_id"));
-                driverInfo.company_name = cursor.getString(cursor
-                        .getColumnIndex("company_name"));
-                driverInfo.phone = cursor.getString(cursor
-                        .getColumnIndex("phone"));
-
-                driverInfo.balance = cursor.getDouble(cursor
-                        .getColumnIndex("balance"));
-                driverInfo.service_type = cursor.getString(cursor
-                        .getColumnIndex("service_type"));
-                driverInfo.child_type = cursor.getString(cursor
-                        .getColumnIndex("child_type"));
-                driverInfo.bank_name = cursor.getString(cursor
-                        .getColumnIndex("bank_name"));
-                driverInfo.bank_card_no = cursor.getString(cursor
-                        .getColumnIndex("bank_card_no"));
-                driverInfo.cash_person_name = cursor.getString(cursor
-                        .getColumnIndex("cash_person_name"));
-                driverInfo.portrait_path = cursor.getString(cursor
-                        .getColumnIndex("portrait_path"));
-                driverInfo.score = cursor.getDouble(cursor
-                        .getColumnIndex("score"));
-                driverInfo.status = cursor.getString(cursor
-                        .getColumnIndex("status"));
-                driverInfo.company_phone = cursor.getString(cursor
-                        .getColumnIndex("company_phone"));
-
-                driverInfo.auditType = cursor.getInt(cursor
-                        .getColumnIndex("auditType"));
-                driverInfo.vehicle = Vehicle.findByEmployId(driverID);
+//                driverInfo.id = cursor.getLong(cursor
+//                        .getColumnIndex("id"));
+//                driverInfo.user_name = cursor.getString(cursor
+//                        .getColumnIndex("user_name"));
+//                driverInfo.password = cursor.getString(cursor
+//                        .getColumnIndex("password"));
+//                driverInfo.name = cursor.getString(cursor
+//                        .getColumnIndex("name"));
+//                driverInfo.real_name = cursor.getString(cursor
+//                        .getColumnIndex("real_name"));
+//                driverInfo.sex = cursor.getString(cursor
+//                        .getColumnIndex("sex"));
+//                driverInfo.company_id = cursor.getLong(cursor
+//                        .getColumnIndex("company_id"));
+//                driverInfo.company_name = cursor.getString(cursor
+//                        .getColumnIndex("company_name"));
+//                driverInfo.phone = cursor.getString(cursor
+//                        .getColumnIndex("phone"));
+//
+//                driverInfo.balance = cursor.getDouble(cursor
+//                        .getColumnIndex("balance"));
+//                driverInfo.service_type = cursor.getString(cursor
+//                        .getColumnIndex("service_type"));
+//                driverInfo.child_type = cursor.getString(cursor
+//                        .getColumnIndex("child_type"));
+//                driverInfo.bank_name = cursor.getString(cursor
+//                        .getColumnIndex("bank_name"));
+//                driverInfo.bank_card_no = cursor.getString(cursor
+//                        .getColumnIndex("bank_card_no"));
+//                driverInfo.cash_person_name = cursor.getString(cursor
+//                        .getColumnIndex("cash_person_name"));
+//                driverInfo.portrait_path = cursor.getString(cursor
+//                        .getColumnIndex("portrait_path"));
+//                driverInfo.score = cursor.getDouble(cursor
+//                        .getColumnIndex("score"));
+//                driverInfo.status = cursor.getString(cursor
+//                        .getColumnIndex("status"));
+//                driverInfo.company_phone = cursor.getString(cursor
+//                        .getColumnIndex("company_phone"));
+//
+//                driverInfo.auditType = cursor.getInt(cursor
+//                        .getColumnIndex("auditType"));
+//                driverInfo.vehicle = Vehicle.findByEmployId(driverID);
 
                 //add hufeng
 
-//                 driverInfo.id = cursor.getLong(cursor.getColumnIndex("id"));
+                driverInfo.id = cursor.getLong(cursor.getColumnIndex("id"));
                 driverInfo.userName = cursor.getString(cursor
                         .getColumnIndex("userName"));
-//     driverInfo.bank_card_no = cursor.getString(cursor.getColumnIndex("password"));
+                driverInfo.password = cursor.getString(cursor.getColumnIndex("password"));
                 driverInfo.nickName = cursor.getString(cursor
                         .getColumnIndex("nickName"));
                 driverInfo.realName = cursor.getString(cursor
                         .getColumnIndex("realName"));
                 driverInfo.idCard = cursor.getString(cursor
                         .getColumnIndex("idCard"));
-//     driverInfo.sex = cursor.getInt(cursor.getColumnIndex("sex"));
+                driverInfo.sex = cursor.getInt(cursor.getColumnIndex("sex"));
                 driverInfo.birthDate = cursor.getInt(cursor
                         .getColumnIndex("birthDate"));
                 driverInfo.phone = cursor.getString(cursor
@@ -695,7 +618,7 @@ public class Employ extends BaseEmploy implements Parcelable {
                         .getColumnIndex("level"));
                 driverInfo.dutyTime = cursor.getInt(cursor
                         .getColumnIndex("dutyTime"));
-//                 driverInfo.status = cursor.getString(cursor.getColumnIndex("status"));
+                driverInfo.status = cursor.getString(cursor.getColumnIndex("status"));
                 driverInfo.introducer = cursor.getString(cursor
                         .getColumnIndex("introducer"));
                 driverInfo.companyId = cursor.getLong(cursor
@@ -773,12 +696,6 @@ public class Employ extends BaseEmploy implements Parcelable {
                 driverInfo.householdRegistrationName = cursor.getString(cursor
                         .getColumnIndex("householdRegistrationName"));
 
-                /*
-                 * driverInfo.age =
-                 * cursor.getString(cursor.getColumnIndex("age"));
-                 * driverInfo.jialing =
-                 * cursor.getString(cursor.getColumnIndex("jialing"));
-                 */
             }
         } catch (Exception e) {
 //			CrashReport.setUserSceneTag();
@@ -840,48 +757,160 @@ public class Employ extends BaseEmploy implements Parcelable {
     public static Employ cursorToEmploy(Cursor cursor) {
         Employ driverInfo = new Employ();
 
-        driverInfo.id = cursor.getLong(cursor
-                .getColumnIndex("id"));
-        driverInfo.user_name = cursor.getString(cursor
-                .getColumnIndex("user_name"));
-        driverInfo.password = cursor.getString(cursor
-                .getColumnIndex("password"));
-        driverInfo.name = cursor.getString(cursor
-                .getColumnIndex("name"));
-        driverInfo.real_name = cursor.getString(cursor
-                .getColumnIndex("real_name"));
-        driverInfo.sex = cursor.getString(cursor
-                .getColumnIndex("sex"));
-        driverInfo.company_id = cursor.getLong(cursor
-                .getColumnIndex("company_id"));
-        driverInfo.company_name = cursor.getString(cursor
-                .getColumnIndex("company_name"));
+//        driverInfo.id = cursor.getLong(cursor
+//                .getColumnIndex("id"));
+//        driverInfo.user_name = cursor.getString(cursor
+//                .getColumnIndex("user_name"));
+//        driverInfo.password = cursor.getString(cursor
+//                .getColumnIndex("password"));
+//        driverInfo.name = cursor.getString(cursor
+//                .getColumnIndex("name"));
+//        driverInfo.real_name = cursor.getString(cursor
+//                .getColumnIndex("real_name"));
+//        driverInfo.sex = cursor.getString(cursor
+//                .getColumnIndex("sex"));
+//        driverInfo.company_id = cursor.getLong(cursor
+//                .getColumnIndex("company_id"));
+//        driverInfo.company_name = cursor.getString(cursor
+//                .getColumnIndex("company_name"));
+//        driverInfo.phone = cursor.getString(cursor
+//                .getColumnIndex("phone"));
+//
+//        driverInfo.balance = cursor.getDouble(cursor
+//                .getColumnIndex("balance"));
+//        driverInfo.service_type = cursor.getString(cursor
+//                .getColumnIndex("service_type"));
+//        driverInfo.child_type = cursor.getString(cursor
+//                .getColumnIndex("child_type"));
+//        driverInfo.bank_name = cursor.getString(cursor
+//                .getColumnIndex("bank_name"));
+//        driverInfo.bank_card_no = cursor.getString(cursor
+//                .getColumnIndex("bank_card_no"));
+//        driverInfo.cash_person_name = cursor.getString(cursor
+//                .getColumnIndex("cash_person_name"));
+//        driverInfo.portrait_path = cursor.getString(cursor
+//                .getColumnIndex("portrait_path"));
+//        driverInfo.score = cursor.getDouble(cursor
+//                .getColumnIndex("score"));
+//        driverInfo.status = cursor.getString(cursor
+//                .getColumnIndex("status"));
+//        driverInfo.company_phone = cursor.getString(cursor
+//                .getColumnIndex("company_phone"));
+//        driverInfo.auditType = cursor.getInt(cursor
+//                .getColumnIndex("auditType"));
+
+        //add hufeng
+
+        driverInfo.id = cursor.getLong(cursor.getColumnIndex("id"));
+        driverInfo.userName = cursor.getString(cursor
+                .getColumnIndex("userName"));
+        driverInfo.password = cursor.getString(cursor.getColumnIndex("password"));
+        driverInfo.nickName = cursor.getString(cursor
+                .getColumnIndex("nickName"));
+        driverInfo.realName = cursor.getString(cursor
+                .getColumnIndex("realName"));
+        driverInfo.idCard = cursor.getString(cursor
+                .getColumnIndex("idCard"));
+        driverInfo.sex = cursor.getInt(cursor.getColumnIndex("sex"));
+        driverInfo.birthDate = cursor.getInt(cursor
+                .getColumnIndex("birthDate"));
         driverInfo.phone = cursor.getString(cursor
                 .getColumnIndex("phone"));
-
-        driverInfo.balance = cursor.getDouble(cursor
-                .getColumnIndex("balance"));
-        driverInfo.service_type = cursor.getString(cursor
-                .getColumnIndex("service_type"));
-        driverInfo.child_type = cursor.getString(cursor
-                .getColumnIndex("child_type"));
-        driverInfo.bank_name = cursor.getString(cursor
-                .getColumnIndex("bank_name"));
-        driverInfo.bank_card_no = cursor.getString(cursor
-                .getColumnIndex("bank_card_no"));
-        driverInfo.cash_person_name = cursor.getString(cursor
-                .getColumnIndex("cash_person_name"));
-        driverInfo.portrait_path = cursor.getString(cursor
-                .getColumnIndex("portrait_path"));
-        driverInfo.score = cursor.getDouble(cursor
-                .getColumnIndex("score"));
-        driverInfo.status = cursor.getString(cursor
-                .getColumnIndex("status"));
-        driverInfo.company_phone = cursor.getString(cursor
-                .getColumnIndex("company_phone"));
-        driverInfo.auditType = cursor.getInt(cursor
-                .getColumnIndex("auditType"));
-
+        driverInfo.portraitPath = cursor.getString(cursor
+                .getColumnIndex("portraitPath"));
+        driverInfo.serviceType = cursor.getString(cursor
+                .getColumnIndex("serviceType"));
+        driverInfo.emergency = cursor.getString(cursor
+                .getColumnIndex("emergency"));
+        driverInfo.emergencyPhone = cursor.getString(cursor
+                .getColumnIndex("emergencyPhone"));
+        driverInfo.licensingTime = cursor.getLong(cursor
+                .getColumnIndex("licensingTime"));
+        driverInfo.driveLicenceStart = cursor.getInt(cursor
+                .getColumnIndex("driveLicenceStart"));
+        driverInfo.driveLicenceEnd = cursor.getInt(cursor
+                .getColumnIndex("driveLicenceEnd"));
+        driverInfo.level = cursor.getLong(cursor
+                .getColumnIndex("level"));
+        driverInfo.dutyTime = cursor.getInt(cursor
+                .getColumnIndex("dutyTime"));
+        driverInfo.status = cursor.getString(cursor.getColumnIndex("status"));
+        driverInfo.introducer = cursor.getString(cursor
+                .getColumnIndex("introducer"));
+        driverInfo.companyId = cursor.getLong(cursor
+                .getColumnIndex("companyId"));
+        driverInfo.created = cursor.getLong(cursor
+                .getColumnIndex("created"));
+        driverInfo.updated = cursor.getLong(cursor
+                .getColumnIndex("updated"));
+        driverInfo.idcardPath = cursor.getString(cursor
+                .getColumnIndex("idcardPath"));
+        driverInfo.homeAddress = cursor.getString(cursor
+                .getColumnIndex("homeAddress"));
+        driverInfo.driveLicensePath = cursor.getString(cursor
+                .getColumnIndex("driveLicensePath"));
+        driverInfo.driveLicenseType = cursor.getString(cursor
+                .getColumnIndex("driveLicenseType"));
+        driverInfo.drivingLicensePath = cursor.getString(cursor
+                .getColumnIndex("drivingLicensePath"));
+        driverInfo.remark = cursor.getString(cursor
+                .getColumnIndex("remark"));
+        driverInfo.appVersion = cursor.getString(cursor
+                .getColumnIndex("appVersion"));
+        driverInfo.driverType = cursor.getLong(cursor
+                .getColumnIndex("driverType"));
+        driverInfo.deviceNo = cursor.getString(cursor
+                .getColumnIndex("deviceNo"));
+        driverInfo.deviceType = cursor.getString(cursor
+                .getColumnIndex("deviceType"));
+        driverInfo.fullBodyPath = cursor.getString(cursor
+                .getColumnIndex("fullBodyPath"));
+        driverInfo.height = cursor.getString(cursor
+                .getColumnIndex("height"));
+        driverInfo.originPlace = cursor.getString(cursor
+                .getColumnIndex("originPlace"));
+        driverInfo.motorNo = cursor.getString(cursor
+                .getColumnIndex("motorNo"));
+        driverInfo.nationality = cursor.getString(cursor
+                .getColumnIndex("nationality"));
+        driverInfo.networkTaximanNo = cursor.getString(cursor
+                .getColumnIndex("networkTaximanNo"));
+        driverInfo.nation = cursor.getString(cursor
+                .getColumnIndex("nation"));
+        driverInfo.maritalStatus = cursor.getString(cursor
+                .getColumnIndex("maritalStatus"));
+        driverInfo.foreignLanguageLevel = cursor.getString(cursor
+                .getColumnIndex("foreignLanguageLevel"));
+        driverInfo.email = cursor.getString(cursor
+                .getColumnIndex("email"));
+        driverInfo.education = cursor.getString(cursor
+                .getColumnIndex("education"));
+        driverInfo.networkTaximanLicenseDate = cursor.getInt(cursor
+                .getColumnIndex("networkTaximanLicenseDate"));
+        driverInfo.licenseOrganization = cursor.getString(cursor
+                .getColumnIndex("licenseOrganization"));
+        driverInfo.trafficViolationTimes = cursor.getInt(cursor
+                .getColumnIndex("trafficViolationTimes"));
+        driverInfo.contractStart = cursor.getInt(cursor
+                .getColumnIndex("contractStart"));
+        driverInfo.contractEnd = cursor.getInt(cursor
+                .getColumnIndex("contractEnd"));
+        driverInfo.isCruisingTaxiDrivers = cursor.getInt(cursor
+                .getColumnIndex("isCruisingTaxiDrivers"));
+        driverInfo.driverServiceOperator = cursor.getString(cursor
+                .getColumnIndex("driverServiceOperator"));
+        driverInfo.mapType = cursor.getString(cursor
+                .getColumnIndex("mapType"));
+        driverInfo.idcardBackPath = cursor.getString(cursor
+                .getColumnIndex("idcardBackPath"));
+        driverInfo.mobileModel = cursor.getString(cursor
+                .getColumnIndex("mobileModel"));
+        driverInfo.mobileOperators = cursor.getString(cursor
+                .getColumnIndex("mobileOperators"));
+        driverInfo.isFulltimeDriver = cursor.getInt(cursor
+                .getColumnIndex("isFulltimeDriver"));
+        driverInfo.householdRegistrationName = cursor.getString(cursor
+                .getColumnIndex("householdRegistrationName"));
 
 
         return driverInfo;
@@ -894,47 +923,107 @@ public class Employ extends BaseEmploy implements Parcelable {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
         ContentValues values = new ContentValues();
+//        values.put("id", id);
+//        values.put("user_name", user_name);
+//        values.put("password", password);
+//        values.put("name", name);
+//        values.put("real_name", real_name);
+//        values.put("sex", sex);
+//        values.put("company_id", company_id);
+//        values.put("company_name", company_name);
+//        values.put("phone", phone);
+//        values.put("portrait_path", portrait_path);
+//
+//        values.put("balance", balance);
+//        values.put("service_type", service_type);
+//        values.put("child_type", child_type);
+//
+//        values.put("bank_name", bank_name);
+//        values.put("bank_card_no", bank_card_no);
+//        values.put("cash_person_name", cash_person_name);
+//        values.put("score", score);
+//        values.put("status", status);
+//        values.put("company_phone", company_phone);
+//        values.put("auditType", auditType);
+
+//hf
+
         values.put("id", id);
-        values.put("user_name", user_name);
+        values.put("userName", userName);
         values.put("password", password);
-        values.put("name", name);
-        values.put("real_name", real_name);
+        values.put("nickName", nickName);
+        values.put("realName", realName);
+        values.put("idCard", idCard);
         values.put("sex", sex);
-        values.put("company_id", company_id);
-        values.put("company_name", company_name);
+        values.put("birthDate", birthDate);
         values.put("phone", phone);
-        values.put("portrait_path", portrait_path);
-
-        values.put("balance", balance);
-        values.put("service_type", service_type);
-        values.put("child_type", child_type);
-
-        values.put("bank_name", bank_name);
-        values.put("bank_card_no", bank_card_no);
-        values.put("cash_person_name", cash_person_name);
-        values.put("score", score);
+        values.put("portraitPath", portraitPath);
+        values.put("serviceType", serviceType);
+        values.put("emergency", emergency);
+        values.put("emergencyPhone", emergencyPhone);
+        values.put("licensingTime", licensingTime);
+        values.put("driveLicenceStart", driveLicenceStart);
+        values.put("driveLicenceEnd", driveLicenceEnd);
+        values.put("level", level);
+        values.put("dutyTime", dutyTime);
         values.put("status", status);
-        values.put("company_phone", company_phone);
-        values.put("auditType", auditType);
+        values.put("introducer", introducer);
+        values.put("companyId", companyId);
+        values.put("created", created);
+        values.put("updated", updated);
+        values.put("idcardPath", idcardPath);
+        values.put("homeAddress", homeAddress);
+        values.put("driveLicensePath", driveLicensePath);
+        values.put("driveLicenseType", driveLicenseType);
+        values.put("drivingLicensePath", drivingLicensePath);
+        values.put("remark", remark);
+        values.put("appVersion", appVersion);
+        values.put("driverType", driverType);
+        values.put("deviceNo", deviceNo);
+        values.put("deviceType", deviceType);
+        values.put("fullBodyPath", fullBodyPath);
+        values.put("height", height);
+        values.put("originPlace", originPlace);
+        values.put("motorNo", motorNo);
+        values.put("nationality", nationality);
+        values.put("networkTaximanNo", networkTaximanNo);
+        values.put("nation", nation);
+        values.put("maritalStatus", maritalStatus);
+        values.put("foreignLanguageLevel", foreignLanguageLevel);
+        values.put("email", email);
+        values.put("education", education);
+        values.put("networkTaximanLicenseDate", networkTaximanLicenseDate);
+        values.put("licenseOrganization", licenseOrganization);
+        values.put("trafficViolationTimes", trafficViolationTimes);
+        values.put("contractStart", contractStart);
+        values.put("contractEnd", contractEnd);
+        values.put("isCruisingTaxiDrivers", isCruisingTaxiDrivers);
+        values.put("driverServiceOperator", driverServiceOperator);
+        values.put("mapType", mapType);
+        values.put("idcardBackPath", idcardBackPath);
+        values.put("mobileModel", mobileModel);
+        values.put("mobileOperators", mobileOperators);
+        values.put("isFulltimeDriver", isFulltimeDriver);
+        values.put("householdRegistrationName", householdRegistrationName);
 
-
-        /*
-         * values.put("age", age); values.put("jialing", jialing);
-         */
         boolean flag = db.update("t_driverinfo", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
         return flag;
     }
 
     public boolean saveOrUpdate() {
-        if (null != vehicle) { //保存或更新车辆信息
-            vehicle.saveOrUpdate(id);
-        }
+//        if (null != vehicle) { //保存或更新车辆信息
+//            vehicle.saveOrUpdate(id);
+//        }
         if (exists(this.id)) {
             return this.updateAll();
         } else {
             return this.save();
         }
+    }
+
+    public Employ() {
+
     }
 
     @Override
@@ -944,86 +1033,26 @@ public class Employ extends BaseEmploy implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(user_name);
-        dest.writeString(password);
-        dest.writeString(name);
-        dest.writeString(sex);
-        dest.writeString(company_name);
-        dest.writeString(portrait_path);
-        dest.writeDouble(balance);
-        dest.writeString(service_type);
-        dest.writeString(bank_name);
-        dest.writeString(bank_card_no);
-        dest.writeString(cash_person_name);
-        dest.writeDouble(score);
-        dest.writeString(company_phone);
-        dest.writeString(app_key);
-        dest.writeString(device_no);
-        dest.writeInt(auditType);
-        dest.writeString(reject);
         dest.writeString(userName);
+        dest.writeString(password);
         dest.writeString(nickName);
         dest.writeString(realName);
         dest.writeString(idCard);
-        if (birthDate == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(birthDate);
-        }
+        dest.writeInt(sex);
+        dest.writeLong(birthDate);
         dest.writeString(portraitPath);
         dest.writeString(serviceType);
         dest.writeString(emergency);
         dest.writeString(emergencyPhone);
-        if (licensingTime == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeLong(licensingTime);
-        }
-        if (driveLicenceStart == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(driveLicenceStart);
-        }
-        if (driveLicenceEnd == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(driveLicenceEnd);
-        }
-        if (level == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeLong(level);
-        }
-        if (dutyTime == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(dutyTime);
-        }
+        dest.writeLong(licensingTime);
+        dest.writeInt(driveLicenceStart);
+        dest.writeInt(driveLicenceEnd);
+        dest.writeLong(level);
+        dest.writeLong(dutyTime);
         dest.writeString(introducer);
-        if (companyId == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeLong(companyId);
-        }
-        if (created == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeLong(created);
-        }
-        if (updated == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeLong(updated);
-        }
+        dest.writeLong(companyId);
+        dest.writeLong(created);
+        dest.writeLong(updated);
         dest.writeString(idcardPath);
         dest.writeString(homeAddress);
         dest.writeString(driveLicensePath);
@@ -1031,12 +1060,7 @@ public class Employ extends BaseEmploy implements Parcelable {
         dest.writeString(drivingLicensePath);
         dest.writeString(remark);
         dest.writeString(appVersion);
-        if (driverType == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeLong(driverType);
-        }
+        dest.writeLong(driverType);
         dest.writeString(deviceNo);
         dest.writeString(deviceType);
         dest.writeString(fullBodyPath);
@@ -1050,54 +1074,19 @@ public class Employ extends BaseEmploy implements Parcelable {
         dest.writeString(foreignLanguageLevel);
         dest.writeString(email);
         dest.writeString(education);
-        if (networkTaximanLicenseDate == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(networkTaximanLicenseDate);
-        }
+        dest.writeLong(networkTaximanLicenseDate);
         dest.writeString(licenseOrganization);
-        if (trafficViolationTimes == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(trafficViolationTimes);
-        }
-        if (contractStart == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(contractStart);
-        }
-        if (contractEnd == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(contractEnd);
-        }
-        if (isCruisingTaxiDrivers == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(isCruisingTaxiDrivers);
-        }
+        dest.writeInt(trafficViolationTimes);
+        dest.writeLong(contractStart);
+        dest.writeLong(contractEnd);
+        dest.writeInt(isCruisingTaxiDrivers);
         dest.writeString(driverServiceOperator);
         dest.writeString(mapType);
         dest.writeString(idcardBackPath);
         dest.writeString(mobileModel);
         dest.writeString(mobileOperators);
-        if (isFulltimeDriver == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(isFulltimeDriver);
-        }
+        dest.writeInt(isFulltimeDriver);
         dest.writeString(householdRegistrationName);
-    }
-
-
-    public Employ() {
-
     }
 
 //    protected Employ(Parcel in) {

@@ -56,7 +56,10 @@ public class CreateDJPresenter implements CreateDJContract.Presenter {
     @Override
     public void queryPassenger(String phone) {
         Employ employ = EmUtil.getEmployInfo();
-        view.getManager().add(model.queryPassenger(employ.company_id, employ.company_name, phone).subscribe(new MySubscriber<>(context, true, true, new HaveErrSubscriberListener<PassengerResult>() {
+        view.getManager().add(model.queryPassenger(employ.company_id,
+//                employ.company_name,
+                "company_name",
+                phone).subscribe(new MySubscriber<>(context, true, true, new HaveErrSubscriberListener<PassengerResult>() {
             @Override
             public void onNext(PassengerResult result) {
                 view.showPassenger(result);
@@ -138,7 +141,12 @@ public class CreateDJPresenter implements CreateDJContract.Presenter {
         Employ employ = EmUtil.getEmployInfo();
         view.getManager().add(model.createOrder(passengerId, passengerName, passengerPhone, orderTime,
                 bookAddress, bookAddressLat, bookAddressLng, destination, destinationLat, destinationLng,
-                employ.company_id, employ.company_name, budgetFee, cid, employ.name, employ.id).subscribe(
+                employ.company_id,
+//                employ.company_name,
+                "company_name",
+                budgetFee, cid,
+                employ.nickName,
+                employ.id).subscribe(
                 new MySubscriber<>(context, true, false, djOrderResult -> view.createSuc(djOrderResult))
         ));
     }

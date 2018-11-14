@@ -70,15 +70,14 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     }
 
     @Override
-    public void acceptOrder(Long orderId, LoadingButton btn) {
-        Observable<ZCOrderResult> observable = model.doAccept(orderId);
+    public void acceptOrder(Long orderId, Long version,LoadingButton btn) {
+        Observable<ZCOrderResult> observable = model.doAccept(orderId,version);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, zcOrderResult -> {
-            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
-            updateDymOrder(zcOrderResult.order);
-            view.showOrder(zcOrderResult.order);
-
-
+//            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
+//            updateDymOrder(zcOrderResult.data);
+//            view.showOrder(zcOrderResult.data);
+            findOne(orderId);
         })));
     }
 
@@ -100,10 +99,10 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         Observable<ZCOrderResult> observable = model.toStart(orderId);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, zcOrderResult -> {
-            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
-            updateDymOrder(zcOrderResult.order);
-            view.showOrder(zcOrderResult.order);
-
+//            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
+//            updateDymOrder(zcOrderResult.data);
+//            view.showOrder(zcOrderResult.data);
+            findOne(orderId);
         })));
     }
 
@@ -112,10 +111,10 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         Observable<ZCOrderResult> observable = model.arriveStart(orderId);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, zcOrderResult -> {
-            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
-            updateDymOrder(zcOrderResult.order);
-            view.showOrder(zcOrderResult.order);
-
+//            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
+//            updateDymOrder(zcOrderResult.data);
+//            view.showOrder(zcOrderResult.data);
+            findOne(orderId);
         })));
     }
 
@@ -124,10 +123,10 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         Observable<ZCOrderResult> observable = model.startWait(orderId);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, zcOrderResult -> {
-            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
-            updateDymOrder(zcOrderResult.order);
-            view.showOrder(zcOrderResult.order);
-
+//            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
+//            updateDymOrder(zcOrderResult.data);
+//            view.showOrder(zcOrderResult.data);
+            findOne(orderId);
         })));
     }
 
@@ -136,10 +135,10 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         Observable<ZCOrderResult> observable = model.startWait(orderId);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, zcOrderResult -> {
-            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
-            updateDymOrder(zcOrderResult.order);
-            view.showOrder(zcOrderResult.order);
-
+//            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
+//            updateDymOrder(zcOrderResult.data);
+//            view.showOrder(zcOrderResult.data);
+            findOne(orderId);
         })));
     }
 
@@ -150,10 +149,10 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         }
         Observable<ZCOrderResult> observable = model.startDrive(orderId);
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, zcOrderResult -> {
-            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
-            updateDymOrder(zcOrderResult.order);
-            view.showOrder(zcOrderResult.order);
-
+//            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
+//            updateDymOrder(zcOrderResult.data);
+//            view.showOrder(zcOrderResult.data);
+            findOne(orderId);
         })));
     }
 
@@ -164,10 +163,10 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, zcOrderResult -> {
 //            dymOrder.updateConfirm(); #该逻辑移动到arrivalDistination接口里面
-            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
-            updateDymOrder(zcOrderResult.order);
-            view.showOrder(zcOrderResult.order);
-
+//            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
+//            updateDymOrder(zcOrderResult.data);
+//            view.showOrder(zcOrderResult.data);
+            findOne(zcOrder.orderId);
         })));
     }
 
@@ -198,8 +197,8 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             @Override
             public void onNext(ZCOrderResult zcOrderResult) {
                 zcOrderResult = orderResult2ZCOrder(zcOrderResult);
-                updateDymOrder(zcOrderResult.order);
-                view.showOrder(zcOrderResult.order);
+                updateDymOrder(zcOrderResult.data);
+                view.showOrder(zcOrderResult.data);
             }
 
             @Override
@@ -217,8 +216,8 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             @Override
             public void onNext(ZCOrderResult zcOrderResult) {
                 zcOrderResult = orderResult2ZCOrder(zcOrderResult);
-                updateDymOrder(zcOrderResult.order);
-                view.showOrder(zcOrderResult.order);
+                updateDymOrder(zcOrderResult.data);
+                view.showOrder(zcOrderResult.data);
             }
 
             @Override
@@ -233,10 +232,10 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         Observable<ZCOrderResult> observable = model.changeEnd(orderId, lat, lng, address);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, zcOrderResult -> {
-            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
-            updateDymOrder(zcOrderResult.order);
-            view.showOrder(zcOrderResult.order);
-
+//            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
+//            updateDymOrder(zcOrderResult.data);
+//            view.showOrder(zcOrderResult.data);
+            findOne(orderId);
         })));
     }
 
@@ -383,9 +382,9 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public ZCOrderResult orderResult2ZCOrder(ZCOrderResult zcOrderResult) {
-        zcOrderResult.order.addresses = zcOrderResult.address;
-        zcOrderResult.order.orderFee = zcOrderResult.orderFee;
-        zcOrderResult.order.coupon = zcOrderResult.coupon;
+//        zcOrderResult.order.addresses = zcOrderResult.address;
+//        zcOrderResult.order.orderFee = zcOrderResult.orderFee;
+//        zcOrderResult.order.coupon = zcOrderResult.coupon;
         return zcOrderResult;
     }
 

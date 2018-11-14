@@ -532,12 +532,12 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     public void showDriverStatus() {
         Employ employ = EmUtil.getEmployInfo();
 
-        if (employ.status.equals(EmployStatus.OFFLINE) || employ.status.equals(EmployStatus.FROZEN)) {
+        if (employ.status.equals(EmployStatus.FROZEN)) {
 //            ActManager.getInstance().finishAllActivity();
 //            Intent intent = new Intent(this, SplashActivity.class);
 //            startActivity(intent);
             EmUtil.employLogout(this);
-        } else if (employ.status.equals(EmployStatus.ONLINE)) {
+        } else if (employ.status.equals(EmployStatus.OFFLINE)) {
             showOffline();//非听单状态
             presenter.loadNoticeAndAnn();
             presenter.initDaemon();
@@ -605,11 +605,11 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     protected void onResume() {
         super.onResume();
         isFront = true;
-        boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
-        if (!isLogin) {
-            ARouter.getInstance().build("/personal/LoginActivity")/*.withFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)*/.navigation();
-            finish();
-        }
+//        boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
+//        if (!isLogin) {
+//            ARouter.getInstance().build("/personal/LoginActivity")/*.withFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)*/.navigation();
+//            finish();
+//        }
         mapView.onResume();
         presenter.loadDataOnResume();
         MqttManager.getInstance().pushLocNoLimit(new BuildPushData(EmUtil.getLastLoc()));

@@ -187,8 +187,8 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
 
         boolean haveSame = false;
         for (MultipleOrder order : multipleOrders) {
-            if (newOrder.orderId == order.orderId &&
-                    newOrder.orderStatus == DJOrderStatus.NEW_ORDER) {
+            if (newOrder.id == order.id &&
+                    newOrder.status == DJOrderStatus.NEW_ORDER) {
                 order.countTime = GRAB_TOTAL_TIME;//重置时间
                 haveSame = true;
             }
@@ -244,20 +244,20 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
                     LatLngBounds.Builder builder = new LatLngBounds.Builder();
                     builder.include(new LatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude));
 
-                    for (Address address : showIngOrder.addresses) {
-                        if (address.addrType == 1) {
-                            LatLonPoint point = new LatLonPoint(address.lat, address.lng);
+                    for (Address address : showIngOrder.orderAddressVos) {
+                        if (address.type == 1) {
+                            LatLonPoint point = new LatLonPoint(address.latitude, address.longitude);
                             pass.add(point);
                             showStartMarker(point);
-                        } else if (address.addrType == 2) {
-                            LatLonPoint point = new LatLonPoint(address.lat, address.lng);
+                        } else if (address.type == 2) {
+                            LatLonPoint point = new LatLonPoint(address.latitude, address.longitude);
                             pass.add(point);
-                        } else if (address.addrType == 3) {
-                            end = new LatLonPoint(address.lat, address.lng);
+                        } else if (address.type == 3) {
+                            end = new LatLonPoint(address.latitude, address.longitude);
                             hasEnd = true;
                             showEndMarker(end);
                         }
-                        builder.include(new LatLng(address.lat, address.lng));
+                        builder.include(new LatLng(address.latitude, address.longitude));
                     }
                     if (!hasEnd) {//没有终点时，起点就是路径规划的终点
                         end = pass.get(0);
@@ -492,7 +492,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
 
     @Override
     public void removerOrderById(long orderId) {
-        if (showIngOrder != null && showIngOrder.orderId == orderId) {
+        if (showIngOrder != null && showIngOrder.id == orderId) {
             showIngOrder.countTime = 1;//采用将时间置位1的方式移除订单
         }
     }
@@ -503,10 +503,10 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
     }
 
     private void showBottomByStatus() {
-        if (showIngOrder.orderStatus == DJOrderStatus.NEW_ORDER) {
+        if (showIngOrder.status == DJOrderStatus.NEW_ORDER) {
             bottomText.setText(R.string.grab_order);
             grabCon.setOnClickListener(v -> presenter.grabOrder(showIngOrder));
-        } else if (showIngOrder.orderStatus == DJOrderStatus.PAIDAN_ORDER) {
+        } else if (showIngOrder.status == DJOrderStatus.PAIDAN_ORDER) {
             bottomText.setText(R.string.accept_order);
             grabCon.setOnClickListener(v -> presenter.takeOrder(showIngOrder));
         }
@@ -515,7 +515,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
     private void buildFragments(MultipleOrder order, boolean showing) {
         try {
             Class clazz;
-            switch (order.orderType) {
+            switch (order.serviceType) {
                 case Config.DAIJIA:
                     //乘以1000
                     clazz = Class.forName("com.easymi.daijia.fragment.grab.DJGrabFragment");
@@ -523,10 +523,13 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
                 case Config.ZHUANCHE:
                     clazz = Class.forName("com.easymi.zhuanche.fragment.grab.ZCGrabFragment");
                     break;
+                case Config.TAXI:
+                    clazz = Class.forName("com.easymi.taxi.fragment.grab.TaxiGrabFragment");
+                    break;
                 default:
                     return;
             }
-            order.orderTime = order.orderTime * 1000;
+            order.bookTime = order.bookTime * 1000;
             Fragment fragment = (Fragment) clazz.newInstance();
             Bundle bundle = new Bundle();
             bundle.putSerializable("order", order);

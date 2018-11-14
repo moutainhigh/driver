@@ -23,7 +23,9 @@ public class PushDataOrder {
     @SerializedName("dark_cost")
     public double addedFee;//数据源来自于本地调价 不会来自后端
 
-
+    /**
+     * 订单状态
+     */
     public int status;//订单状态(出发前1，行驶中2，等待中3)
 
     @SerializedName("peak_mile")
@@ -38,7 +40,14 @@ public class PushDataOrder {
     @SerializedName("night_time_price")
     public double nightTimePrice;
 
+    /**
+     * 订单业务
+     */
+    public String business;
 
-
+    /**
+     * 用户id
+     */
+    public long passengerId;
 
 }

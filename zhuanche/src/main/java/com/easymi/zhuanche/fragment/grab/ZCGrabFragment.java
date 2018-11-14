@@ -72,13 +72,13 @@ public class ZCGrabFragment extends Fragment {
     }
 
     private void showBase() {
-        if (TextUtils.isEmpty(zcOrder.remark)) {
+        if (TextUtils.isEmpty(zcOrder.orderRemark)) {
             tvMark.setText("无备注");
         } else {
-            tvMark.setText(zcOrder.remark);
+            tvMark.setText(zcOrder.orderRemark);
         }
-        start_place.setText(zcOrder.startPlace);
-        end_place.setText(zcOrder.endPlace);
+        start_place.setText(zcOrder.getStartSite().address);
+        end_place.setText(zcOrder.getEndSite().address);
         order_time_text.setText(zcOrder.isBookOrder == 1 ? getString(R.string.appoint) : getString(R.string.jishi));
         tag_container.removeAllTags();
         if(StringUtils.isNotBlank(zcOrder.passengerTags)){
@@ -92,10 +92,10 @@ public class ZCGrabFragment extends Fragment {
             }
         }
 
-        order_type.setText(zcOrder.orderDetailType);
+        order_type.setText(zcOrder.getOrderType());
 
         long today = TimeUtil.parseTime("yyyy-MM-dd", TimeUtil.getTime("yyyy-MM-dd", System.currentTimeMillis()));
-        long orderDay = TimeUtil.parseTime("yyyy-MM-dd", TimeUtil.getTime("yyyy-MM-dd", zcOrder.orderTime));
+        long orderDay = TimeUtil.parseTime("yyyy-MM-dd", TimeUtil.getTime("yyyy-MM-dd", zcOrder.bookTime));
 
         String day;
         if (today == orderDay) {
@@ -107,18 +107,17 @@ public class ZCGrabFragment extends Fragment {
         } else if (orderDay - today == 3 * 24 * 60 * 60 * 1000) {
             day = getString(R.string.waitian);
         } else {
-            day = TimeUtil.getTime("yyyy-MM-dd", zcOrder.orderTime);
+            day = TimeUtil.getTime("yyyy-MM-dd", zcOrder.bookTime);
         }
         order_time_day.setText(day);
 
-        String minSec = TimeUtil.getTime("HH:mm", zcOrder.orderTime);
+        String minSec = TimeUtil.getTime("HH:mm", zcOrder.bookTime);
         order_time.setText(minSec);
 
-        List<Address> addresses = zcOrder.addresses;
         LatLng start = null;
-        for (Address address : addresses) {
-            if (address.addrType == 1) {
-                start = new LatLng(address.lat, address.lng);
+        for (Address address : zcOrder.orderAddressVos) {
+            if (address.type == 1) {
+                start = new LatLng(address.latitude, address.longitude);
                 break;
             }
         }

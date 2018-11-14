@@ -138,11 +138,11 @@ public class LiushuiActivity extends RxBaseActivity {
 
             }
         });
-        if (EmUtil.getEmployInfo().service_type.contains(Config.DAIJIA)) {
+        if (EmUtil.getEmployInfo().serviceType.contains(Config.DAIJIA)) {
             TabLayout.Tab daijiaTab = tabLayout.newTab();
             daijiaTab.setText(getString(R.string.create_daijia));
             tabLayout.addTab(daijiaTab);
-        } else if (EmUtil.getEmployInfo().service_type.contains(Config.ZHUANCHE)) {
+        } else if (EmUtil.getEmployInfo().serviceType.contains(Config.ZHUANCHE)) {
             TabLayout.Tab zhuancheTab = tabLayout.newTab();
             zhuancheTab.setText(getString(R.string.create_zhuanche));
             tabLayout.addTab(zhuancheTab);
@@ -223,7 +223,7 @@ public class LiushuiActivity extends RxBaseActivity {
 
         Observable<QueryOrdersResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .queryOverOrdersByBunsiness(driverId, business, startTime == null ? null : startTime / 1000,
-                        endTime == null ? null : endTime / 1000, EmUtil.getAppKey(), EmUtil.getEmployInfo().name, page, limit)
+                        endTime == null ? null : endTime / 1000, EmUtil.getAppKey(), EmUtil.getEmployInfo().realName, page, limit)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -284,13 +284,13 @@ public class LiushuiActivity extends RxBaseActivity {
         if (resultCode == RESULT_OK) {
             int pos = CLICK_POS - 1;
             BaseOrder order = orders.get(pos);
-            if (order.orderType.equals(Config.DAIJIA)) {
-                if (order.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {
-                    order.orderStatus = DJOrderStatus.FINISH_ORDER;
+            if (order.serviceType.equals(Config.DAIJIA)) {
+                if (order.status == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {
+                    order.status = DJOrderStatus.FINISH_ORDER;
                     order.baoxiaoStatus = 1;
                     adapter.notifyItemChanged(pos);
                     return;
-                } else if (order.orderStatus == DJOrderStatus.FINISH_ORDER && order.baoxiaoStatus == 1) {
+                } else if (order.status == DJOrderStatus.FINISH_ORDER && order.baoxiaoStatus == 1) {
                     order.baoxiaoStatus = 2;
                     adapter.notifyItemChanged(pos);
                     return;

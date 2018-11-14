@@ -31,6 +31,7 @@ import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
@@ -94,25 +95,26 @@ public class WorkPresenter implements WorkContract.Presenter {
         view.showOrders(null);
 
         long driverId = EmUtil.getEmployId();
+        String serviceType = EmUtil.getEmployInfo().serviceType;
 
         Observable<QueryOrdersResult> observable = model.indexOrders(driverId, EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false, false, new HaveErrSubscriberListener<QueryOrdersResult>() {
             @Override
             public void onNext(QueryOrdersResult emResult) {
                 view.stopRefresh();
-                List<MultipleOrder> orders = emResult.orders;
+                List<MultipleOrder> orders = emResult.data;
                 List<MultipleOrder> nowOrders = new ArrayList<>();
                 List<MultipleOrder> yuyueOrders = new ArrayList<>();
                 if (orders != null) {
                     for (MultipleOrder order : orders) {
                         DymOrder dymOrder;
-                        if (DymOrder.exists(order.orderId, order.orderType)) {//校验本地订单与服务器订单
-                            dymOrder = DymOrder.findByIDType(order.orderId, order.orderType);
-                            dymOrder.orderStatus = order.orderStatus;
+                        if (DymOrder.exists(order.id, order.serviceType)) {//校验本地订单与服务器订单
+                            dymOrder = DymOrder.findByIDType(order.id, order.serviceType);
+                            dymOrder.orderStatus = order.status;
                             dymOrder.updateStatus();
                         } else {//服务器有本地没得 创建数据
-                            dymOrder = new DymOrder(order.orderId, order.orderType,
-                                    order.passengerId, order.orderStatus);
+                            dymOrder = new DymOrder(order.id, order.serviceType,
+                                    order.passengerId, order.status);
                             dymOrder.save();
                         }
 
@@ -128,8 +130,8 @@ public class WorkPresenter implements WorkContract.Presenter {
                     for (DymOrder dymOrder : allDym) {
                         boolean isExist = false;
                         for (MultipleOrder order : orders) {
-                            if (dymOrder.orderId == order.orderId
-                                    && dymOrder.orderType.equals(order.orderType)) {
+                            if (dymOrder.orderId == order.id
+                                    && dymOrder.orderType.equals(order.serviceType)) {
                                 isExist = true;
                                 break;
                             }
@@ -162,7 +164,6 @@ public class WorkPresenter implements WorkContract.Presenter {
                     orders = new ArrayList<>();
                 }
 
-
                 startLocService();//重启定位更改定位周期
 
                 view.showOrders(orders);
@@ -176,6 +177,13 @@ public class WorkPresenter implements WorkContract.Presenter {
             }
         })));
 //        view.showOrders(initRecyclerData());
+
+//        Observable<QueryOrdersResult> observable1;
+//        if (serviceType.equals(Config.ZHUANCHE)){
+//            observable1 = model.indexOrders(driverId, EmUtil.getAppKey());
+//        }else if (serviceType.equals(Config.TAXI)){
+//            observable1 = model.indexOrders(driverId, EmUtil.getAppKey());
+//        }
     }
 
     @Override
@@ -209,7 +217,7 @@ public class WorkPresenter implements WorkContract.Presenter {
     public void queryNearDriver(Double lat, Double lng) {
         long driverId = EmUtil.getEmployId();
         double dis = 0;
-        if ("zhuanche".equals(employType)) {
+        if (Config.ZHUANCHE.equals(employType)) {
             dis = zcDriverKm;
         } else if ("daijia".equals(employType)) {
             dis = driverKm;
@@ -267,26 +275,25 @@ public class WorkPresenter implements WorkContract.Presenter {
 
     @Override
     public void loadEmploy(long id) {
-
         Observable<LoginResult> observable = model.getEmploy(id, EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
                 true, new HaveErrSubscriberListener<LoginResult>() {
             @Override
             public void onNext(LoginResult result) {
                 Employ employ = result.getEmployInfo();
-                if (employ.auditType == 2 || employ.auditType == 3 || employ.auditType == 4) {
-                    view.stopRefresh();
-                    view.showRegisterDialog(employ.company_phone, employ.auditType, employ.reject);
-                    return;
-                }
+//                if (employ.auditType == 2 || employ.auditType == 3 || employ.auditType == 4) {
+//                    view.stopRefresh();
+//                    view.showRegisterDialog(employ.company_phone, employ.auditType, employ.reject);
+//                    return;
+//                }
+//
+//                view.hideRegisterDialog();
 
-                view.hideRegisterDialog();
-
-                employType = employ.service_type;
+                employType = employ.serviceType;
                 String udid = XApp.getMyPreferences().getString(Config.SP_UDID, "");
-                if (StringUtils.isNotBlank(employ.device_no)
+                if (StringUtils.isNotBlank(employ.deviceNo)
                         && StringUtils.isNotBlank(udid)) {
-                    if (!employ.device_no.equals(udid)) {
+                    if (!employ.deviceNo.equals(udid)) {
                         ToastUtil.showMessage(context, context.getString(R.string.unbunding));
                         EmUtil.employLogout(context);
                         return;
@@ -302,6 +309,7 @@ public class WorkPresenter implements WorkContract.Presenter {
 
             @Override
             public void onError(int code) {
+                view.stopRefresh();
                 if (code == ErrCode.QUERY_ERROR.getCode()) {
                     EmUtil.employLogout(context);
                 }
@@ -326,7 +334,7 @@ public class WorkPresenter implements WorkContract.Presenter {
             List<SubSetting> settingList = GsonUtil.parseToList(result.appSetting, SubSetting[].class);
             if (settingList != null) {
                 for (SubSetting sub : settingList) {
-                    if ("zhuanche".equals(sub.businessType)) {
+                    if (Config.ZHUANCHE.equals(sub.businessType)) {
                         ZCSetting zcSetting = GsonUtil.parseJson(sub.subJson, ZCSetting.class);
                         if (zcSetting != null) {
                             ZCSetting.deleteAll();
@@ -417,11 +425,13 @@ public class WorkPresenter implements WorkContract.Presenter {
                 .subscribe(new MySubscriber<>(context, false, false, new HaveErrSubscriberListener<List<AnnAndNotice>>() {
                     @Override
                     public void onNext(List<AnnAndNotice> annAndNotices) {
+                        view.stopRefresh();
                         view.showHomeAnnAndNotice(annAndNotices);
                     }
 
                     @Override
                     public void onError(int code) {
+                        view.stopRefresh();
                         view.showHomeAnnAndNotice(null);
                     }
                 }));

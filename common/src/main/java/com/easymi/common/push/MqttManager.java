@@ -68,7 +68,7 @@ public class MqttManager implements LocObserver {
     private boolean isConnecting = false;
 
     String pullTopic;
-    String configTopic;
+//    String configTopic;
 
     private RxManager rxManager;
 
@@ -106,8 +106,10 @@ public class MqttManager implements LocObserver {
      * @return
      */
     public synchronized boolean creatConnect() {
-        pullTopic = "/driver" + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
-        configTopic = "/driver" + "/" + EmUtil.getAppKey() + "/config";
+//        pullTopic = "/driver" + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
+//        configTopic = "/driver" + "/" + EmUtil.getAppKey() + "/config";
+        pullTopic = "/driver"+ "/"+ EmUtil.getEmployId();
+//        configTopic = "/driver"+ "/config";
 
         if (!XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false)) {//未登陆 不连接
             return false;
@@ -166,7 +168,6 @@ public class MqttManager implements LocObserver {
                 isConnecting = true;
             } catch (Exception e) {
                 Log.e(TAG, "doConnect exception-->" + e.getMessage());
-
             }
         }
         return isConnecting;
@@ -236,7 +237,6 @@ public class MqttManager implements LocObserver {
                 Log.e(TAG, "subscribe  exception--> " + e.getMessage());
             }
         }
-
         return flag;
 
     }
@@ -269,17 +269,16 @@ public class MqttManager implements LocObserver {
         public void onSuccess(IMqttToken arg0) {
             //会话连接成功，就开始订阅消息
             isConnecting = false;
-
-
+            Log.e("hufeng", "连接成功");
             try {
                 if (lastSucTime == 0) {
                     client.subscribe(pullTopic, 1);
-                    client.subscribe(configTopic, 1);
+//                    client.subscribe(configTopic, 1);
                 } else {
                     if (System.currentTimeMillis() - lastSucTime < 2000) {//小于2秒的回调
                     } else {
                         client.subscribe(pullTopic, 1);
-                        client.subscribe(configTopic, 1);
+//                        client.subscribe(configTopic, 1);
                     }
                 }
                 lastSucTime = System.currentTimeMillis();
@@ -300,7 +299,7 @@ public class MqttManager implements LocObserver {
             if (null != client) {
                 try {
                     client.unsubscribe(pullTopic);
-                    client.unsubscribe(configTopic);
+//                    client.unsubscribe(configTopic);
                     Log.e(TAG, "取消订阅的topic");
                 } catch (Exception e) {
                     CrashReport.postCatchedException(e);
@@ -373,17 +372,18 @@ public class MqttManager implements LocObserver {
                     CrashReport.postCatchedException(exception);
                     return;
                 }
-                PushBean pushBean = new Gson().fromJson(pushStr, PushBean.class);
-                List<PushData> beanList = new ArrayList<>();
-                for (PushData datum : pushBean.data) {
-                    if (datum.calc.orderInfo != null
-                            && datum.calc.orderInfo.size() != 0) {//有订单时才需要保存
-                        beanList.add(datum);
-                    }
-                }
-                if (beanList.size() != 0) {
-                    FileUtil.savePushCache(XApp.getInstance(), new Gson().toJson(beanList));//只保存位置的list
-                }
+                //todo 为了张鹏，数组改成了单个实体
+//                PushBean pushBean = new Gson().fromJson(pushStr, PushBean.class);
+//                List<PushData> beanList = new ArrayList<>();
+//                for (PushData datum : pushBean.data) {
+//                    if (datum.location.orderInfo != null
+//                            && datum.location.orderInfo.size() != 0) {//有订单时才需要保存
+//                        beanList.add(datum);
+//                    }
+//                }
+//                if (beanList.size() != 0) {
+//                    FileUtil.savePushCache(XApp.getInstance(), new Gson().toJson(beanList));//只保存位置的list
+//                }
             }
             creatConnect();
         }
@@ -407,7 +407,7 @@ public class MqttManager implements LocObserver {
             Observable<GetFeeResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                     .gpsPush(Config.APP_KEY,
                             pushStr)
-                    .filter(new HttpResultFunc<>())
+                    .filter(new HttpResultFunc<>()) 
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread());
 

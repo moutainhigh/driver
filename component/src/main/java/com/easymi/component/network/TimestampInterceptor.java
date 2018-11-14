@@ -2,7 +2,6 @@ package com.easymi.component.network;
 
 import android.support.annotation.NonNull;
 
-import com.easymi.component.utils.Base64_2;
 
 import java.io.IOException;
 import java.net.URLDecoder;

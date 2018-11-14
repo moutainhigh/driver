@@ -87,7 +87,10 @@ public class TransferActivity extends RxBaseActivity {
             return;
         }
         Observable<TransferList> observable = ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
-                .getTransferList(start.lat, start.lng, 10, EmUtil.getAppKey(),(long) EmUtil.getEmployInfo().vehicle.serviceType)
+                .getTransferList(start.lat, start.lng, 10, EmUtil.getAppKey()
+//                        ,(long) EmUtil.getEmployInfo().vehicle.serviceType
+                        ,1l
+                )
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -119,8 +122,8 @@ public class TransferActivity extends RxBaseActivity {
 
     private Address getStartAddr() {
         Address startAddress = null;
-        if (order != null && order.addresses != null && order.addresses.size() != 0) {
-            for (Address address : order.addresses) {
+        if (order != null && order.orderAddressVos != null && order.orderAddressVos.size() != 0) {
+            for (Address address : order.orderAddressVos) {
                 if (address.addrType == 1) {
                     startAddress = address;
                     break;

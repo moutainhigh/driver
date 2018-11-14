@@ -121,7 +121,7 @@ public class FlowModel implements FlowContract.Model {
             pe.companyId = employ.company_id;
             pe.phone = employ.phone;
             pe.childType = employ.child_type;
-            pe.business = employ.service_type;
+            pe.business = employ.serviceType;
         }
         pushData.employ = pe;
 

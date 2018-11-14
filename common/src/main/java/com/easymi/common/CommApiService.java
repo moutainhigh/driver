@@ -29,6 +29,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 import rx.Observable;
@@ -52,7 +53,6 @@ public interface CommApiService {
                                                      @Query("page") int page,
                                                      @Query("limit") int limit);
 
-//
     /**
      //     * 上线接口
      //     *
@@ -212,16 +212,16 @@ public interface CommApiService {
                                  @Field("reason") String baoxiaoReason,
                                  @Field("app_key") String appKey);
 
-    /**
-     * 获取司机信息
-     *
-     * @param driverId
-     * @param appKey
-     * @return
-     */
-    @GET("driver/api/v1/getEmployById")
-    Observable<LoginResult> getDriverInfo(@Query("id") Long driverId,
-                                          @Query("app_key") String appKey);
+//    /**
+//     * 获取司机信息
+//     *
+//     * @param driverId
+//     * @param appKey
+//     * @return
+//     */
+//    @GET("driver/api/v1/getEmployById")
+//    Observable<LoginResult> getDriverInfo(@Query("id") Long driverId,
+//                                          @Query("app_key") String appKey);
 
     /**
      * 获取APP配置
@@ -252,44 +252,44 @@ public interface CommApiService {
     Observable<PushAnnouncement> employAfficheById(@Query("id") Long noticeId,
                                                    @Query("app_key") String appKey);
 
-    /**
-     * 专车 --> 查询单个订单
-     *
-     * @param orderId
-     * @param appKey
-     * @return
-     */
-    @GET("driver/api/v1/orderFindOne")
-    Observable<MultipleOrderResult> queryZCOrder(@Query("order_id") Long orderId,
-                                                 @Query("app_key") String appKey);
+//    /**
+//     * 专车 --> 查询单个订单
+//     *
+//     * @param orderId
+//     * @param appKey
+//     * @return
+//     */
+//    @GET("driver/api/v1/orderFindOne")
+//    Observable<MultipleOrderResult> queryZCOrder(@Query("order_id") Long orderId,
+//                                                 @Query("app_key") String appKey);
 
-    /**
-     * 专车 --> 抢单
-     *
-     * @param orderId
-     * @param driverId
-     * @param appKey
-     * @return
-     */
-    @FormUrlEncoded
-    @PUT("driver/api/v1/grabSpecialOrder")
-    Observable<MultipleOrderResult> grabZCOrder(@Field("order_id") Long orderId,
-                                                @Field("driver_id") Long driverId,
-                                                @Field("app_key") String appKey);
-
-    /**
-     * 专车 -->接单
-     *
-     * @param orderId
-     * @param driverId
-     * @param appKey
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("driver/api/v1/takeSpecialOrder")
-    Observable<MultipleOrderResult> takeZCOrder(@Field("order_id") Long orderId,
-                                                @Field("driver_id") Long driverId,
-                                                @Field("app_key") String appKey);
+//    /**
+//     * 专车 --> 抢单
+//     *
+//     * @param orderId
+//     * @param driverId
+//     * @param appKey
+//     * @return
+//     */
+//    @FormUrlEncoded
+//    @PUT("driver/api/v1/grabSpecialOrder")
+//    Observable<MultipleOrderResult> grabZCOrder(@Field("order_id") Long orderId,
+//                                                @Field("driver_id") Long driverId,
+//                                                @Field("app_key") String appKey);
+//
+//    /**
+//     * 专车 -->接单
+//     *
+//     * @param orderId
+//     * @param driverId
+//     * @param appKey
+//     * @return
+//     */
+//    @FormUrlEncoded
+//    @POST("driver/api/v1/takeSpecialOrder")
+//    Observable<MultipleOrderResult> takeZCOrder(@Field("order_id") Long orderId,
+//                                                @Field("driver_id") Long driverId,
+//                                                @Field("app_key") String appKey);
 
 
     /**
@@ -420,19 +420,21 @@ public interface CommApiService {
                                      @Query("lat") double lat,
                                      @Query("lng") double lng);
 
-    /**
-     * 通过http上传位置信息，30秒一次
-     * @param appKey
-     * @param gpsContent
-     * @return
-     */
-    @POST("/driver/api/v1/gpsPush")
-    @FormUrlEncoded
-    Observable<GetFeeResult> gpsPush(@Field("app_key") String appKey,
-                                     @Field("gps_content")String gpsContent);
+//    /**
+//     * 通过http上传位置信息，30秒一次
+//     *
+//     * @param appKey
+//     * @param gpsContent
+//     * @return
+//     */
+//    @POST("/driver/api/v1/gpsPush")
+//    @FormUrlEncoded
+//    Observable<GetFeeResult> gpsPush(@Field("app_key") String appKey,
+//                                     @Field("gps_content") String gpsContent);
 
 
     //add hufeng
+
     /**
      * 上线接口
      *
@@ -443,9 +445,133 @@ public interface CommApiService {
     @POST("api/v1/public/driver/online")
     Observable<EmResult> online(@Field("id") Long id);
 
-
+    /**
+     * 下线接口
+     *
+     * @param id
+     * @return
+     */
     @FormUrlEncoded
     @POST("api/v1/public/driver/offline")
     Observable<EmResult> offline(@Field("id") Long id);
+
+
+    /**
+     * 推送绑定接口
+     *
+     * @param userId
+     * @param aliBaBaKey
+     * @param mqttKey
+     * @param mqttClientId
+     * @param driverType
+     * @param type
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/public/message/push/binding")
+    Observable<EmResult> pushBinding(@Field("userId") long userId,
+                                     @Field("aliBaBaKey") String aliBaBaKey,
+                                     @Field("mqttKey") String mqttKey,
+                                     @Field("mqttClientId") String mqttClientId,
+                                     @Field("driverType") String driverType,
+                                     @Field("type") int type);
+
+    /**
+     * 查询所有订单接口
+     *
+     * @return
+     */
+    @GET("api/v1/taxi_online/order/list")
+    Observable<QueryOrdersResult> queryRunningOrders();
+
+
+    /**
+     * 专车 --> 查询单个订单
+     *
+     * @param appKey
+     * @return
+     */
+    @GET("api/v1/taxi_online/order/get/{id}")
+    Observable<MultipleOrderResult> queryZCOrder(@Path("id") Long id,
+                                                 @Query("appKey") String appKey);
+
+    /**
+     * 专车 --> 抢单
+     *
+     * @param driverId
+     * @param driverName
+     * @param driverPhone
+     * @param id          订单id
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/taxi_online/order/grab")
+    Observable<MultipleOrderResult> grabZCOrder(@Field("driverId") Long driverId,
+                                                @Field("driverName") String driverName,
+                                                @Field("driverPhone") String driverPhone,
+                                                @Field("id") Long id,
+                                                @Field("version") Long version);
+
+    /**
+     * 专车 -->接单
+     *
+     * @param driverId
+     * @param driverName
+     * @param driverPhone
+     * @param id          订单id
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/taxi_online/order/take")
+    Observable<MultipleOrderResult> takeZCOrder(@Field("driverId") Long driverId,
+                                                @Field("driverName") String driverName,
+                                                @Field("driverPhone") String driverPhone,
+                                                @Field("id") Long id,
+                                                @Field("version") Long version);
+
+    /**
+     * 出租车 --> 查询单个订单
+     *
+     * @param appKey
+     * @return
+     */
+    @GET("api/v1/taxi/normal/order/{id}")
+    Observable<MultipleOrderResult> queryTaxiOrder(@Path("id") Long id,
+                                                   @Query("appKey") String appKey);
+
+
+    /**
+     * 获取司机信息
+     *
+     * @param driverId
+     * @param appKey
+     * @return
+     */
+    @GET("api/v1/public/driver/get/{id}")
+    Observable<LoginResult> getDriverInfo(@Path("id") Long driverId,
+                                          @Query("app_key") String appKey);
+
+
+    /**
+     * 通过http上传位置信息，30秒一次
+     *
+     * @param appKey
+     * @param json
+     * @return
+     */
+    @POST("api/v1/public/message/location")
+    @FormUrlEncoded
+    Observable<GetFeeResult> gpsPush(@Field("app_key") String appKey,
+                                     @Field("json") String json);
+
+    /**
+     * 获取出租车列表
+     */
+    @GET("api/v1/taxi/normal/orders")
+    Observable<LoginResult> getTaxiOrders(@Query("driverPhone") String driverPhone,
+                                          @Query("page") int page,
+                                          @Query("size") int size,
+                                          @Query("status") int status);
+
 
 }

@@ -61,9 +61,10 @@ public interface GrabContract {
 
         Observable<MultipleOrderResult> queryZCOrder(Long orderId);
 
-        Observable<MultipleOrderResult> grabZCOrder(Long orderId);
+        Observable<MultipleOrderResult> grabZCOrder(Long orderId,Long version);
 
-        Observable<MultipleOrderResult> takeZCOrder(Long orderId);
+        Observable<MultipleOrderResult> takeZCOrder(Long orderId,Long version);
+
     }
 
 }

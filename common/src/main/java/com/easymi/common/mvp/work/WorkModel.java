@@ -30,7 +30,8 @@ public class WorkModel implements WorkContract.Model {
     @Override
     public Observable<QueryOrdersResult> indexOrders(Long driverId, String appKey) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .queryRunningOrders(driverId, appKey, 1, 100)
+//                .queryRunningOrders(driverId, appKey, 1, 100)
+                .queryRunningOrders()
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

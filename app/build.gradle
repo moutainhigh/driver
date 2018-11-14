@@ -50,7 +50,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
 }
 
 dependencies {
@@ -63,4 +62,6 @@ dependencies {
     implementation project(path: ':daemon')
     implementation project(path: ':component')
     implementation project(path: ':common')
+    implementation project(path: ':taxi')
+    implementation project(path: ':cityline')
 }

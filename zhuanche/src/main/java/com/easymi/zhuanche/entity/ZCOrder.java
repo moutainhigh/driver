@@ -1,5 +1,6 @@
 package com.easymi.zhuanche.entity;
 
+import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.entity.DymOrder;
 import com.google.gson.annotations.SerializedName;
 
@@ -22,49 +23,49 @@ public class ZCOrder implements Serializable {
     @SerializedName("orderTypeName")
     public String orderDetailType;
 
-    @SerializedName("order_no")
+    @SerializedName("orderNo")
     public String orderNumber;
 
-    @SerializedName("business")
+    @SerializedName("serviceType")
     public String orderType;
 
     @SerializedName("status")
     public int orderStatus;
 
-    @SerializedName("book_time")
+    @SerializedName("bookTime")
     public long bookTime;
 
-    @SerializedName("passenger_id")
+    @SerializedName("passengerId")
     public long passengerId;
 
-    @SerializedName("passenger_name")
+    @SerializedName("passengerName")
     public String passengerName;
 
-    @SerializedName("passenger_phone")
+    @SerializedName("passengerPhone")
     public String passengerPhone;
 
     @SerializedName("user_phone")
     public String userPhone;
 
-    @SerializedName("company_id")
+    @SerializedName("companyId")
     public long companyId;
 
-    @SerializedName("company_name")
+    @SerializedName("companyName")
     public String companyName;
 
-    @SerializedName("book_address")
+    @SerializedName("bookAddress")
     public String startPlace;
 
     @SerializedName("destination")
     public String endPlace;
 
-    @SerializedName("budget_fee")
+    @SerializedName("budgetFee")
     public double budgetFee;//预算费用 定价时取这字段当钱
 
-    @SerializedName("pre_pay")
+    @SerializedName("prepaid")
     public double prepay;//预付金额
 
-    @SerializedName("order_money")
+    @SerializedName("shouldPay")
     public double orderMoney;//应付金额
 
     @SerializedName("group_id")
@@ -75,13 +76,209 @@ public class ZCOrder implements Serializable {
 
     public String carNo;//车牌号
 
-    public List<Address> addresses;
-
     public DymOrder orderFee;
 
     public Coupon coupon;
 
-    @SerializedName("order_remark")
+    @SerializedName("orderRemark")
     public String remark;
+
+//    /**
+//     * 订单主键
+//     */
+//    public long id;
+
+//    /**
+//     *订单编号
+//     */
+//    public String orderNo;
+
+//    /**
+//     * 公司主键
+//     */
+//    public Long companyId;
+
+//    /**
+//     * 公司名称
+//     */
+//    public String companyName;
+
+//    /**
+//     * 预约时间
+//     */
+//    public long bookTime;
+//
+//    /**
+//     * 乘客主键
+//     */
+//    public Long passengerId;
+//
+//    /**
+//     * 乘客姓名
+//     */
+//    public String passengerName;
+//
+//    /**
+//     * 乘客电话
+//     */
+//    public String passengerPhone;
+
+    /**
+     * 司机主键
+     */
+    public long driverId;
+
+    /**
+     * 司机姓名
+     */
+    public String driverName;
+
+    /**
+     * 司机电话
+     */
+    public String driverPhone;
+
+    /**
+     * 订单渠道名称
+     */
+    public String channelAlias;
+
+//    /**
+//     * 服务类型
+//     */
+//    public String serviceType;
+
+//    /**
+//     * 预约地
+//     */
+//    public String bookAddress;
+
+//    /**
+//     * 目的地
+//     */
+//    public String destination;
+
+//    /**
+//     * 预算金额
+//     */
+//    public double budgetFee;
+
+//    /**
+//     * 预付费
+//     */
+//    public double prepaid;
+
+    /**
+     * 优惠券主键
+     */
+    public long couponId;
+
+    /**
+     * 预计时间
+     */
+    public int time;
+
+    /**
+     * 预计距离
+     */
+    public double distance;
+
+//    /**
+//     * 订单备注
+//     */
+//    public String orderRemark;
+
+//    /**
+//     * 应付金额
+//     */
+//    public double shouldPay;
+
+//    /**
+//     * 是否是预约订单 1是 2否
+//     */
+//    public int isBookOrder;
+
+    /**
+     * 订单地址信息json字符串
+     */
+    public String orderAddress;
+
+//    /**
+//     *订单状态
+//     */
+//    public int status;
+
+    /**
+     *乐观锁
+     */
+    public long version;
+
+    /**
+     * 下单人
+     */
+    public String operator;
+
+    /**
+     * 派单方式
+     */
+    public String assignType;
+
+    /**
+     * 接单方式
+     */
+    public String takeType;
+
+    /**
+     * 支付人
+     */
+    public String payer;
+
+
+    //hf
+    /**
+     * 专车业务id
+     */
+    private Long businessId;
+
+    /**
+     * 专车车型id
+     */
+    private Long modelId;
+
+
+    public List<Address> orderAddressVos;
+
+
+
+    public Address getStartSite(){
+        Address start = null;
+        if (orderAddressVos != null && orderAddressVos.size() != 0){
+            for (Address address : orderAddressVos) {
+                if (address.addrType == 1) {
+                    return address;
+                }
+            }
+        }else {
+            start = new Address();
+            start.addr = "未知位置";
+        }
+        return start;
+    }
+
+
+    public Address getEndSite(){
+        Address end = null;
+        if (orderAddressVos != null && orderAddressVos.size() != 0){
+            for (Address address : orderAddressVos) {
+                if (address.addrType == 3) {
+                    return address;
+                }
+            }
+        }else {
+            end = new Address();
+            end.addr = "未知位置";
+        }
+        return end;
+    }
 
 }

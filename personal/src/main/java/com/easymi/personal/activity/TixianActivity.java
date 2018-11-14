@@ -211,7 +211,7 @@ public class TixianActivity extends RxBaseActivity {
 
         Employ employ = EmUtil.getEmployInfo();
         Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .enchashment(employ.id, employ.real_name, employ.user_name, employ.phone, money,
+                .enchashment(employ.id, employ.real_name, employ.userName, employ.phone, money,
                         employ.company_id, EmUtil.getAppKey(), name, no, owner)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
@@ -247,17 +247,17 @@ public class TixianActivity extends RxBaseActivity {
             SharedPreferences.Editor editor = XApp.getPreferencesEditor();
             editor.apply();
 
-            balanceText.setText(String.valueOf(employ.balance));
-
-            if (StringUtils.isNotBlank(employ.bank_name)) {
-                bankName.setText(employ.bank_name);
-            }
-            if (StringUtils.isNotBlank(employ.bank_card_no)) {
-                bankNo.setText(employ.bank_card_no);
-            }
-            if (StringUtils.isNotBlank(employ.cash_person_name)) {
-                bankOwner.setText(employ.cash_person_name);
-            }
+//            balanceText.setText(String.valueOf(employ.balance));
+//
+//            if (StringUtils.isNotBlank(employ.bank_name)) {
+//                bankName.setText(employ.bank_name);
+//            }
+//            if (StringUtils.isNotBlank(employ.bank_card_no)) {
+//                bankNo.setText(employ.bank_card_no);
+//            }
+//            if (StringUtils.isNotBlank(employ.cash_person_name)) {
+//                bankOwner.setText(employ.cash_person_name);
+//            }
         })));
     }
 

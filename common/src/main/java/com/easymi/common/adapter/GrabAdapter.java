@@ -69,8 +69,8 @@ public class GrabAdapter extends PagerAdapter {
 
         //设置view上相关数据
         MultipleOrder multipleOrder = baseOrderList.get(position);
-        holder.startPlace.setText(multipleOrder.startPlace);
-        holder.endPlace.setText(multipleOrder.endPlace);
+        holder.startPlace.setText(multipleOrder.bookAddress);
+        holder.endPlace.setText(multipleOrder.destination);
         holder.orderTimeText.setText(multipleOrder.isBookOrder == 1 ? context.getString(R.string.yuyue) : context.getString(R.string.jishi));
         holder.tagContainer.setTheme(ColorFactory.NONE);
         holder.tagContainer.removeAllTags();

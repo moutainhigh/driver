@@ -15,22 +15,22 @@ public class Config {
     /**
      * 主机地址
      */
-    public static final String HOST = "http://10.10.2.37:10001/";
+    public static final String HOST = "http://10.10.2.132:10001/";
 //    public static final String HOST = "https://api.xiaokayun.cn/";//线上地址
 //    public static final String HOST = "http://api.xiaokakj.cn/";//测试服地址
 
     /**
      * MQTT配置
      */
-    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn";//线上地址
-//    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//测试地址
+//    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn";//线上地址
+    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//测试地址
     /**
      * APP_KEY
      */
 //    public static final String APP_KEY = "ae0ef1b6155647d9ae572ba53c103b6f";//demo281
-    public static final String APP_KEY = "488441998952435da895286632e82f40";//快些哥
+//    public static final String APP_KEY = "488441998952435da895286632e82f40";//快些哥
 //    public static final String APP_KEY = "815a46ca2a624cea04adb006785f76e1";//本地IP
-
+    public static final String APP_KEY = "1HAcient1kLqfeX7DVTV0dklUkpGEnUC";//资运
     /**
      * 上传图片地址.
      */
@@ -63,7 +63,7 @@ public class Config {
      */
     public static final String MQTT_USER_NAME = "xiaoka";
     public static final String MQTT_PSW = "&mv7dHapB5J!95BJ";
-    public static final String MQTT_PUSH_TOPIC = "/driver";
+    public static final String MQTT_PUSH_TOPIC = "/driver/gps";
 
     /**
      * SharedPrefence 常量配置
@@ -121,7 +121,8 @@ public class Config {
     public static final String SP_GPS_FILTER = "sp_gps_filter";
 
     public static final String DAIJIA = "daijia";
-    public static final String ZHUANCHE = "zhuanche";
+    public static final String ZHUANCHE = "special";
+    public static final String TAXI = "taxi";
 
     //需要导航的模式
     public static final String NAVI_MODE = "navi_mode";

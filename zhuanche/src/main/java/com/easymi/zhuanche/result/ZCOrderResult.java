@@ -13,11 +13,13 @@ import java.util.List;
  */
 
 public class ZCOrderResult extends EmResult {
-    public ZCOrder order;
 
-    public List<Address> address;
 
-    public DymOrder orderFee;
+    public ZCOrder data;
 
-    public Coupon coupon;
+//    public List<Address> address;
+//
+//    public DymOrder orderFee;
+//
+//    public Coupon coupon;
 }

@@ -69,7 +69,9 @@ public class CreateZCModel implements CreateZCContract.Model {
                         bookAddress, bookAddressLat, bookAddressLng, destination,
                         destinationLat, destinationLng, companyId, companyName,
                         budgetFee, EmUtil.getAppKey(), cid, orderPerson, orderPersonId,
-                        (long) EmUtil.getEmployInfo().vehicle.serviceType)
+//                        (long) EmUtil.getEmployInfo().vehicle.serviceType
+                        1l
+                )
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

@@ -156,7 +156,8 @@ public class SetActivity extends RxBaseActivity {
 //        intent.putExtra("tag", "ContactUs");
 //        intent.putExtra("title", getString(R.string.set_contract_us));
 //        startActivity(intent);
-        PhoneUtil.call(SetActivity.this, EmUtil.getEmployInfo().company_phone);
+//        PhoneUtil.call(SetActivity.this, EmUtil.getEmployInfo().company_phone);
+        PhoneUtil.call(SetActivity.this,"11111111");
     }
 
     public void aboutUs(View view) {

@@ -10,9 +10,10 @@ import java.util.List;
 
 public class PushBean {
     public String msg;
-    public List<PushData> data;
+//    public List<PushData> data;
+    public PushData data;
 
-    public PushBean(String msg, List<PushData> data) {
+    public PushBean(String msg, PushData data) {
         this.msg = msg;
         this.data = data;
     }

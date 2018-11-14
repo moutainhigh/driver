@@ -69,7 +69,7 @@ public interface FlowContract {
     }
 
     interface Presenter {
-        void acceptOrder(Long orderId, LoadingButton btn);
+        void acceptOrder(Long orderId, Long version,LoadingButton btn);
 
         void refuseOrder(Long orderId, String remark);
 
@@ -112,7 +112,7 @@ public interface FlowContract {
     }
 
     interface Model {
-        Observable<ZCOrderResult> doAccept(Long orderId);
+        Observable<ZCOrderResult> doAccept(Long orderId,Long version);
 
         Observable<ZCOrderResult> findOne(Long orderId);
 

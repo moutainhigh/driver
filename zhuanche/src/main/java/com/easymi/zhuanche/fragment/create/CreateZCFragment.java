@@ -97,10 +97,10 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
         isPrepared = false;
         findById();
 
-        if (null == EmUtil.getEmployInfo().vehicle) {
-            ToastUtil.showMessage(getActivity(), getString(R.string.no_car));
-            return;
-        }
+//        if (null == EmUtil.getEmployInfo().vehicle) {
+//            ToastUtil.showMessage(getActivity(), getString(R.string.no_car));
+//            return;
+//        }
 
         init();
 
@@ -355,7 +355,7 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
     public void createSuc(ZCOrderResult zcOrderResult) {
         ToastUtil.showMessage(getActivity(), getString(R.string.create_suc));
         Intent intent = new Intent(getActivity(), FlowActivity.class);
-        intent.putExtra("orderId", zcOrderResult.order.orderId);
+        intent.putExtra("orderId", zcOrderResult.data.orderId);
         startActivity(intent);
         getActivity().finish();
     }
@@ -386,6 +386,9 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
         }
 
         presenter.queryBudget(passenger.id, distance, duration,
-                orderTime == null ? System.currentTimeMillis() / 1000 : orderTime / 1000, selectedZCType.id, (long) EmUtil.getEmployInfo().vehicle.serviceType);
+                orderTime == null ? System.currentTimeMillis() / 1000 : orderTime / 1000, selectedZCType.id
+//                , (long) EmUtil.getEmployInfo().vehicle.serviceType
+                , 1l
+        );
     }
 }

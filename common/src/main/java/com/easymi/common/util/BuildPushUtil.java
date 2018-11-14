@@ -5,6 +5,7 @@ import com.easymi.common.entity.PushBean;
 import com.easymi.common.entity.PushData;
 import com.easymi.common.entity.PushDataLoc;
 import com.easymi.common.entity.PushDataOrder;
+import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
 import com.easymi.component.ZCOrderStatus;
 import com.easymi.component.entity.BaseEmploy;
@@ -46,33 +47,43 @@ public class BuildPushUtil {
         if (employ1 != null && employ1 instanceof Employ) {
             Employ employ = (Employ) employ1;
             pe = new PushEmploy();
-            pe.child_type = employ.child_type;
             pe.id = employ.id;
+            pe.name = employ.realName;
             pe.status = employ.status;
-            pe.real_name = employ.real_name;
-            pe.company_id = employ.company_id;
+            pe.companyId = employ.companyId;
             pe.phone = employ.phone;
             pe.child_type = employ.child_type;
-            pe.business = employ.service_type;
-            if (employ.vehicle != null) {
-                pe.model_id = employ.vehicle.serviceType;
-            }
+            pe.business = employ.serviceType;
+//            if (employ.vehicle != null) {
+//                pe.model_id = employ.vehicle.serviceType;
+//            }
         } else {
             //司机信息异常不处理
             return null;
         }
 
-        pushData.employ = pe;
-        pushData.calc = new PushDataLoc();
-        pushData.calc.lat = emLoc.latitude;
-        pushData.calc.lng = emLoc.longitude;
-        pushData.calc.speed = emLoc.speed;
-        pushData.calc.locationType = emLoc.locationType;
-        pushData.calc.appKey = EmUtil.getAppKey();
+        pushData.driver = pe;
+        pushData.appKey = EmUtil.getAppKey();
+        pushData.serviceType = ((Employ) employ1).serviceType;
+
+        pushData.location = new PushDataLoc();
+        pushData.location.latitude = emLoc.latitude;
+        pushData.location.longitude = emLoc.longitude;
+        pushData.location.speed = emLoc.speed;
+        pushData.location.locationType = emLoc.locationType;
+        pushData.location.appKey = EmUtil.getAppKey();
 //        pushData.calc.darkCost = buildPushData.darkCost;
 //        pushData.calc.darkMileage = buildPushData.darkMileage;
-        pushData.calc.positionTime = System.currentTimeMillis() / 1000;
-        pushData.calc.accuracy = (float) emLoc.accuracy;
+        pushData.location.positionTime = System.currentTimeMillis() / 1000;
+        pushData.location.accuracy = (float) emLoc.accuracy;
+
+        pushData.location.adCode = emLoc.adCode;
+        pushData.location.cityCode = emLoc.cityCode;
+        pushData.location.bearing = emLoc.bearing;
+        pushData.location.provider = emLoc.provider;
+        pushData.location.altitude = emLoc.altitude;
+        pushData.location.time = System.currentTimeMillis() / 1000;
+
 
         List<PushDataOrder> orderList = new ArrayList<>();
         for (DymOrder dymOrder : DymOrder.findAll()) {
@@ -82,7 +93,11 @@ public class BuildPushUtil {
             dataOrder.status = 0;
             dataOrder.addedKm = dymOrder.addedKm;
             dataOrder.addedFee = dymOrder.addedFee;
-            if (dymOrder.orderType.equals("daijia")) {
+
+            dataOrder.business = dymOrder.orderType;
+            dataOrder.passengerId = dymOrder.passengerId;
+
+            if (dymOrder.orderType.equals(Config.DAIJIA)) {
                 if (dymOrder.orderStatus < DJOrderStatus.GOTO_DESTINATION_ORDER) {//出发前
                     dataOrder.status = 1;
                 } else if (dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {//行驶中
@@ -90,7 +105,7 @@ public class BuildPushUtil {
                 } else if (dymOrder.orderStatus == DJOrderStatus.START_WAIT_ORDER) {//中途等待
                     dataOrder.status = 3;
                 }
-            } else if (dymOrder.orderType.equals("zhuanche")) {
+            } else if (dymOrder.orderType.equals(Config.ZHUANCHE)) {
                 if (dymOrder.orderStatus < ZCOrderStatus.GOTO_DESTINATION_ORDER) {//出发前
                     dataOrder.status = 1;
                 } else if (dymOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {//行驶中
@@ -107,41 +122,41 @@ public class BuildPushUtil {
                 orderList.add(dataOrder);
             }
         }
-        pushData.calc.orderInfo = orderList;
+        pushData.location.orderInfo = orderList;
 
+//        /**
+//         * 历史未上传的位置信息
+//         */
+//        String cacheStr = FileUtil.readPushCache();
+//        List<PushData> dataList = new ArrayList<>();
+//        if (!StringUtils.isBlank(cacheStr)) {
+//            List<PushData> list = GsonUtil.parseToList(cacheStr, PushData[].class);
+//            if (list != null && !list.isEmpty()) {
+//                Log.e("MqttManager", "缓存点");
+//                dataList.addAll(list);
+//            }
+//        }
+//
+//        //本次的位置信息
+//        dataList.add(pushData);
+//
+//        List<PushData> newestDataList = new ArrayList<>();
+//
+//        //能上传网络定位或者不限制任何
+//        boolean canPushNetLoc = GPSSetting.getInstance().getNetEnable() || noLimit;
+//        if (!canPushNetLoc) {
+//            for (PushData pd : dataList) {
+//                if (pd != null && pd.location != null && pd.location.locationType == 1) {
+//                    //只上传GPS类型的定位
+//                    newestDataList.add(pd);
+//                }
+//            }
+//        } else {
+//            newestDataList.addAll(dataList);
+//        }
+//        PushBean pushBean = new PushBean("gps", newestDataList);
 
-        /**
-         * 历史未上传的位置信息
-         */
-        String cacheStr = FileUtil.readPushCache();
-        List<PushData> dataList = new ArrayList<>();
-        if (!StringUtils.isBlank(cacheStr)) {
-            List<PushData> list = GsonUtil.parseToList(cacheStr, PushData[].class);
-            if (list != null && !list.isEmpty()) {
-                Log.e("MqttManager", "缓存点");
-                dataList.addAll(list);
-            }
-        }
-
-        //本次的位置信息
-        dataList.add(pushData);
-
-        List<PushData> newestDataList = new ArrayList<>();
-
-        //能上传网络定位或者不限制任何
-        boolean canPushNetLoc = GPSSetting.getInstance().getNetEnable() || noLimit;
-        if (!canPushNetLoc) {
-            for (PushData pd : dataList) {
-                if (pd != null && pd.calc != null && pd.calc.locationType == 1) {
-                    //只上传GPS类型的定位
-                    newestDataList.add(pd);
-                }
-            }
-        } else {
-            newestDataList.addAll(dataList);
-        }
-
-        PushBean pushBean = new PushBean("gps", newestDataList);
+        PushBean pushBean = new PushBean("gps", pushData);
 
         String pushStr = new Gson().toJson(pushBean);
         Log.e("MqttManager", "push loc data--->" + pushStr);

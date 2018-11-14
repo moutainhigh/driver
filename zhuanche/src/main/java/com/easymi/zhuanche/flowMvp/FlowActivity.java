@@ -311,7 +311,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 Intent intent = new Intent(FlowActivity.this, CancelActivity.class);
                 startActivityForResult(intent, CANCEL_ORDER);
             } else if (i == R.id.pop_contract_service) {
-                String phone = EmUtil.getEmployInfo().company_phone;
+//                String phone = EmUtil.getEmployInfo().company_phone;
+                String phone = "1111111";
                 PhoneUtil.call(FlowActivity.this, phone);
             } else if (i == R.id.pop_same_order) {
                 Intent intent = new Intent(FlowActivity.this, SameOrderActivity.class);
@@ -546,6 +547,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void showOrder(ZCOrder zcOrder) {
+//        zcOrder = new ZCOrder();
+//        zcOrder.orderStatus = ZCOrderStatus.TAKE_ORDER;
         if (null == zcOrder) {
             finish();
         } else {
@@ -921,8 +924,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     private Address getStartAddr() {
         Address startAddress = null;
-        if (zcOrder != null && zcOrder.addresses != null && zcOrder.addresses.size() != 0) {
-            for (Address address : zcOrder.addresses) {
+        if (zcOrder != null && zcOrder.orderAddressVos != null && zcOrder.orderAddressVos.size() != 0) {
+            for (Address address : zcOrder.orderAddressVos) {
                 if (address.addrType == 1) {
                     startAddress = address;
                     break;
@@ -934,8 +937,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     private Address getEndAddr() {
         Address endAddr = null;
-        if (zcOrder != null && zcOrder.addresses != null && zcOrder.addresses.size() != 0) {
-            for (Address address : zcOrder.addresses) {
+        if (zcOrder != null && zcOrder.orderAddressVos != null && zcOrder.orderAddressVos.size() != 0) {
+            for (Address address : zcOrder.orderAddressVos) {
                 if (address.addrType == 3) {
                     endAddr = address;
                     break;
@@ -965,7 +968,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         bridge = new ActFraCommBridge() {
             @Override
             public void doAccept(LoadingButton btn) {
-                presenter.acceptOrder(zcOrder.orderId, btn);
+                presenter.acceptOrder(zcOrder.orderId,zcOrder.version, btn);
             }
 
             @Override

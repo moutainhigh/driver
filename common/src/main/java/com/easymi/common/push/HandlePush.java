@@ -86,22 +86,22 @@ public class HandlePush implements FeeChangeSubject {
             JSONObject jb = new JSONObject(jsonStr);
             String msg = jb.optString("msg");
 
-            if (msg.equals("grabOrder")) { //抢单
+            if (msg.equals("robbing")) { //抢单
                 MultipleOrder order = new MultipleOrder();
-                order.orderId = jb.optJSONObject("data").optLong("id");
-                order.orderType = jb.optJSONObject("data").optString("business");
+                order.id = jb.optJSONObject("data").optLong("orderId");
+                order.serviceType = jb.optJSONObject("data").optString("serviceType");
                 loadOrder(order);
 //                XApp.getInstance().syntheticVoice();
-            } else if (msg.equals("sendOrder")) {//派单
+            } else if (msg.equals("sendorders")) {//派单
                 MultipleOrder order = new MultipleOrder();
-                order.orderId = jb.optJSONObject("data").optLong("id");
-                order.orderType = jb.optJSONObject("data").optString("business");
+                order.id = jb.optJSONObject("data").optLong("orderId");
+                order.serviceType = jb.optJSONObject("data").optString("serviceType");
                 loadOrder(order);
                 newShowNotify(XApp.getInstance(), "", XApp.getInstance().getString(R.string.send_order), XApp.getInstance().getString(R.string.send_order_content));
             } else if (msg.equals("cancelOrder")) {//取消订单
                 MultipleOrder order = new MultipleOrder();
-                order.orderId = jb.optJSONObject("data").optLong("id");
-                order.orderType = jb.optJSONObject("data").optString("business");
+                order.id = jb.optJSONObject("data").optLong("orderId");
+                order.serviceType = jb.optJSONObject("data").optString("serviceType");
 
                 Message message = new Message();
                 message.what = 1;
@@ -110,7 +110,7 @@ public class HandlePush implements FeeChangeSubject {
                 message.setData(bundle);
                 handler.sendMessage(message);
             } else if (msg.equals("costInfo")) { //费用信息
-                long orderId = jb.optJSONObject("data").optLong("OrderId");
+                long orderId = jb.optJSONObject("data").optLong("orderId");
                 String orderType = jb.optJSONObject("data").optString("OrderType");
                 DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
                 if (dymOrder != null) {
@@ -129,7 +129,7 @@ public class HandlePush implements FeeChangeSubject {
                     dymOrder.disFee = jb.optJSONObject("data").optDouble("MileageCost");
                     dymOrder.distance = jb.optJSONObject("data").optDouble("Mileges");
 
-                    if ("zhuanche".equals(orderType)) {
+                    if (Config.ZHUANCHE.equals(orderType)) {
                         dymOrder.peakCost = jb.optJSONObject("data").optDouble("PeakCost");
                         dymOrder.nightPrice = jb.optJSONObject("data").optDouble("NightPrice");
                         dymOrder.lowSpeedCost = jb.optJSONObject("data").optDouble("LowSpeedCost");
@@ -180,13 +180,13 @@ public class HandlePush implements FeeChangeSubject {
                 EmUtil.employLogout(XApp.getInstance());
             } else if (msg.equals("finishOrder")) { //支付成功
                 MultipleOrder order = new MultipleOrder();
-                order.orderId = jb.optJSONObject("data").optLong("id");
-                order.orderType = jb.optJSONObject("data").optString("business");
+                order.id = jb.optJSONObject("data").optLong("id");
+                order.serviceType = jb.optJSONObject("data").optString("business");
                 loadOrder(order);
             } else if (msg.equals("back_order")) {//订单回收
                 MultipleOrder order = new MultipleOrder();
-                order.orderId = jb.optJSONObject("data").optLong("id");
-                order.orderType = jb.optJSONObject("data").optString("business");
+                order.id = jb.optJSONObject("data").optLong("id");
+                order.serviceType = jb.optJSONObject("data").optString("business");
 
                 Message message = new Message();
                 message.what = 3;
@@ -218,7 +218,7 @@ public class HandlePush implements FeeChangeSubject {
                     dymOrder.disFee = jbData.optJSONObject("data").optDouble("MileageCost");
                     dymOrder.distance = jbData.optJSONObject("data").optDouble("Mileges");
 
-                    if ("zhuanche".equals(orderType)) {
+                    if (Config.ZHUANCHE.equals(orderType)) {
                         dymOrder.peakCost =jbData.optJSONObject("data").optDouble("PeakCost");
                         dymOrder.nightPrice = jbData.optJSONObject("data").optDouble("NightPrice");
                         dymOrder.lowSpeedCost = jbData.optJSONObject("data").optDouble("LowSpeedCost");
@@ -244,11 +244,13 @@ public class HandlePush implements FeeChangeSubject {
     }
 
     private void loadOrder(MultipleOrder multipleOrder) {
-        if (StringUtils.isNotBlank(multipleOrder.orderType)) {
-            if (multipleOrder.orderType.equals(Config.DAIJIA)) {
-                loadDJOrder(multipleOrder.orderId, Config.DAIJIA);
-            } else if (multipleOrder.orderType.equals(Config.ZHUANCHE)) {
-                loadZCOrder(multipleOrder.orderId, Config.ZHUANCHE);
+        if (StringUtils.isNotBlank(multipleOrder.serviceType)) {
+            if (multipleOrder.serviceType.equals(Config.DAIJIA)) {
+                loadDJOrder(multipleOrder.id, Config.DAIJIA);
+            } else if (multipleOrder.serviceType.equals(Config.ZHUANCHE)) {
+                loadZCOrder(multipleOrder.id, Config.ZHUANCHE);
+            }else if (multipleOrder.serviceType.equals(Config.TAXI)){
+                loadTaxiOrder(multipleOrder.id, Config.TAXI);
             }
         }
     }
@@ -270,7 +272,7 @@ public class HandlePush implements FeeChangeSubject {
                 List<SubSetting> settingList = GsonUtil.parseToList(result.appSetting, SubSetting[].class);
                 if (settingList != null) {
                     for (SubSetting sub : settingList) {
-                        if ("zhuanche".equals(sub.businessType)) {
+                        if (Config.ZHUANCHE.equals(sub.businessType)) {
                             ZCSetting zcSetting = GsonUtil.parseJson(sub.subJson, ZCSetting.class);
                             if (zcSetting != null) {
                                 ZCSetting.deleteAll();
@@ -318,6 +320,27 @@ public class HandlePush implements FeeChangeSubject {
     private void loadZCOrder(long orderId, String orderType) {
         Observable<MultipleOrderResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .queryZCOrder(orderId, EmUtil.getAppKey())
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        rxManager.add(observable.subscribe(new MySubscriber<>(XApp.getInstance(), false,
+                false, new HaveErrSubscriberListener<MultipleOrderResult>() {
+            @Override
+            public void onNext(MultipleOrderResult multipleOrderResult) {
+                loadOrderCallback.callback(multipleOrderResult, orderType);
+            }
+
+            @Override
+            public void onError(int code) {
+                rxManager.clear();
+            }
+        })));
+    }
+
+    private void loadTaxiOrder(long orderId, String orderType) {
+        Observable<MultipleOrderResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .queryTaxiOrder(orderId, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -434,9 +457,9 @@ public class HandlePush implements FeeChangeSubject {
     private OnLoadOrderCallback loadOrderCallback = new OnLoadOrderCallback() {
         @Override
         public void callback(MultipleOrderResult multipleOrderResult, String orderType) {
-            MultipleOrder order = multipleOrderResult.order;
+            MultipleOrder order = multipleOrderResult.data;
             if (order != null) {
-                if (order.orderStatus == DJOrderStatus.FINISH_ORDER) { //已完成订单
+                if (order.status == DJOrderStatus.FINISH_ORDER) { //已完成订单
                     String weihao = order.passengerPhone;
                     if (weihao.length() > 4) {
                         weihao = weihao.substring(weihao.length() - 4, weihao.length());
@@ -449,17 +472,17 @@ public class HandlePush implements FeeChangeSubject {
 
                     Intent intent1 = new Intent();
                     intent1.setAction(Config.BROAD_FINISH_ORDER);
-                    intent1.putExtra("orderId", order.orderId);
-                    intent1.putExtra("orderType", order.orderType);
+                    intent1.putExtra("orderId", order.id);
+                    intent1.putExtra("orderType", order.serviceType);
                     XApp.getInstance().sendBroadcast(intent1);
                     return;
                 }
-                if (order.orderStatus != DJOrderStatus.NEW_ORDER && order.orderStatus != DJOrderStatus.PAIDAN_ORDER) {
+                if (order.status != DJOrderStatus.NEW_ORDER && order.status != DJOrderStatus.PAIDAN_ORDER) {
                     return;
                 }
-                order.addresses = multipleOrderResult.address;
+//                order.orderAddressVos = multipleOrderResult.address;
                 String voiceStr = "";
-                if (order.orderStatus == DJOrderStatus.NEW_ORDER) {
+                if (order.status == DJOrderStatus.NEW_ORDER) {
                     voiceStr += XApp.getInstance().getString(R.string.grab_order) + ",";//抢单
                 } else {
                     voiceStr += XApp.getInstance().getString(R.string.send_order) + ",";//派单
@@ -470,14 +493,17 @@ public class HandlePush implements FeeChangeSubject {
                 } else if (orderType.equals(Config.ZHUANCHE)) {
                     voiceStr += XApp.getInstance().getString(R.string.create_zhuanche)
                             + XApp.getInstance().getString(R.string.order) + ",";//专车订单
+                }else if (orderType.equals(Config.TAXI)) {
+                    voiceStr += XApp.getInstance().getString(R.string.create_taxi)
+                            + XApp.getInstance().getString(R.string.order) + ",";//专车订单
                 }
                 String dis = 0 + XApp.getInstance().getString(R.string.meter);
-                if (EmUtil.getLastLoc() != null && order.addresses != null && order.addresses.size() != 0) {
+                if (EmUtil.getLastLoc() != null && order.orderAddressVos != null && order.orderAddressVos.size() != 0) {
                     LatLng my = new LatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
 
-                    for (Address address : order.addresses) {
-                        if (address.addrType == 1) {
-                            LatLng start = new LatLng(address.lat, address.lng);
+                    for (Address address : order.orderAddressVos) {
+                        if (address.type == 1) {
+                            LatLng start = new LatLng(address.latitude, address.longitude);
                             double meter = AMapUtils.calculateLineDistance(my, start);
                             DecimalFormat format;
                             if (meter > 1000) {
@@ -492,17 +518,19 @@ public class HandlePush implements FeeChangeSubject {
 
 
                 }
-                voiceStr += order.orderDetailType//酒后代驾
-                        + ","
-                        + XApp.getInstance().getString(R.string.to_you)//距您
+                voiceStr +=
+//                        order.orderDetailType//酒后代驾
+//                        + ","
+//                        +
+                        XApp.getInstance().getString(R.string.to_you)//距您
                         + dis //0.5公里
                         + ","
                         + XApp.getInstance().getString(R.string.from)//从
-                        + order.startPlace //xxx
+                        + order.getStartSite().address //xxx
                         + XApp.getInstance().getString(R.string.out)//出发
                         + ",";
-                if (StringUtils.isNotBlank(order.endPlace)) {
-                    voiceStr += XApp.getInstance().getString(R.string.to) + order.endPlace;//到xxx
+                if (StringUtils.isNotBlank(order.destination)) {
+                    voiceStr += XApp.getInstance().getString(R.string.to) + order.destination;//到xxx
                 }
                 Message message = new Message();
                 message.what = 0;
@@ -533,8 +561,8 @@ public class HandlePush implements FeeChangeSubject {
                 if (order1 != null) {
                     Intent intent1 = new Intent();
                     intent1.setAction(Config.BROAD_CANCEL_ORDER);
-                    intent1.putExtra("orderId", order1.orderId);
-                    intent1.putExtra("orderType", order1.orderType);
+                    intent1.putExtra("orderId", order1.id);
+                    intent1.putExtra("orderType", order1.serviceType);
                     XApp.getInstance().sendBroadcast(intent1);
                 }
                 XApp.getInstance().shake();
@@ -580,8 +608,8 @@ public class HandlePush implements FeeChangeSubject {
                 if (order3 != null) {
                     Intent intent3 = new Intent();
                     intent3.setAction(Config.BROAD_BACK_ORDER);
-                    intent3.putExtra("orderId", order3.orderId);
-                    intent3.putExtra("orderType", order3.orderType);
+                    intent3.putExtra("orderId", order3.id);
+                    intent3.putExtra("orderType", order3.serviceType);
                     XApp.getInstance().sendBroadcast(intent3);
                 }
                 XApp.getInstance().shake();

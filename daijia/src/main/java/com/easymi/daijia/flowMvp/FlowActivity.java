@@ -245,7 +245,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 Intent intent = new Intent(FlowActivity.this, CancelActivity.class);
                 startActivityForResult(intent, CANCEL_ORDER);
             } else if (i == R.id.pop_contract_service) {
-                String phone = EmUtil.getEmployInfo().company_phone;
+//                String phone = EmUtil.getEmployInfo().company_phone;
+                String phone = "11111111";
                 PhoneUtil.call(FlowActivity.this, phone);
             } else if (i == R.id.pop_same_order) {
                 Intent intent = new Intent(FlowActivity.this, SameOrderActivity.class);

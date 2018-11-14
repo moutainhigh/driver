@@ -25,6 +25,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.easymi.common.R;
 import com.easymi.common.entity.BusinessList;
 import com.easymi.common.entity.CompanyList;
+import com.easymi.component.Config;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.EmUtil;
@@ -73,7 +74,7 @@ public class InfoFragment extends AbsRegisterFragment {
         bindViews(view);
         employ = EmUtil.getEmployInfo();
         if (employ != null) {
-            tvName.setText(employ.name);
+            tvName.setText(employ.nickName);
             tvPhone.setText(employ.phone);
         }
         return view;
@@ -196,7 +197,7 @@ public class InfoFragment extends AbsRegisterFragment {
         if (daijiaRb.isChecked()) {
             registerRequest.serviceType = "daijia";
         } else {
-            registerRequest.serviceType = "zhuanche";
+            registerRequest.serviceType = Config.ZHUANCHE;
         }
 
         if (zhuancheRb.isChecked() && zhuanceType.getCheckedRadioButtonId() == R.id.car) {
@@ -221,7 +222,7 @@ public class InfoFragment extends AbsRegisterFragment {
         for (BusinessList.Business bs : businesses) {
             if ("daijia".equals(bs.business)) {
                 daijiaRb.setVisibility(View.VISIBLE);
-            } else if ("zhuanche".equals(bs.business)) {
+            } else if (Config.ZHUANCHE.equals(bs.business)) {
                 zhuancheRb.setVisibility(View.VISIBLE);
             }
         }

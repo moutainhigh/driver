@@ -54,7 +54,7 @@ public class ModelSetActivity extends RxBaseActivity {
         zhuancheSwitch = findViewById(R.id.zhuanche_enable);
 
         Employ employ = EmUtil.getEmployInfo();
-        String business = employ.service_type;
+        String business = employ.serviceType;
 
         if (!business.contains(Config.DAIJIA)) {
             daijiaCon.setVisibility(View.GONE);

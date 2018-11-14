@@ -55,8 +55,8 @@ public class ToStartFragment extends RxBaseFragment {
         callPhoneCon = $(R.id.call_phone_con);
         changEndCon = $(R.id.change_end_con);
 
-        startPlaceText.setText(zcOrder.startPlace);
-        endPlaceText.setText(zcOrder.endPlace);
+        startPlaceText.setText(zcOrder.getStartSite().addr);
+        endPlaceText.setText(zcOrder.getEndSite().addr);
         controlCon.setOnClickListener(view -> {
             Log.e("tag", "onClick");
             bridge.doToStart(controlCon);

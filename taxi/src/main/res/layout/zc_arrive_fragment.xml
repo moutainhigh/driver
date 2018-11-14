@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/control_con"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/btn_height"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+        <com.easymi.component.widget.LoadingButton
+            android:id="@+id/start_drive"
+            android:layout_width="0.0dp"
+            android:elevation="0.5dp"
+            android:layout_height="match_parent"
+            android:layout_weight="8"
+            android:background="@drawable/corners_button_bg"
+            android:gravity="center"
+            android:text="@string/start_drive"
+            android:textColor="@color/white" />
+
+        <LinearLayout
+            android:id="@+id/start_wait"
+            android:layout_width="0.0dp"
+            android:layout_height="@dimen/btn_height"
+            android:elevation="0.5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="2"
+            android:background="@drawable/corners_404456"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@mipmap/time_icon"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/start_wait"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/center_con"
+        android:clickable="true"
+        android:elevation="0.5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/corners_white"
+        android:layout_above="@+id/control_con"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center_vertical"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:background="@color/color_f4f4f4"
+            android:gravity="center"
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/iv_head"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@mipmap/ic_customer_head"/>
+            <TextView
+                android:id="@+id/tv_custom_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_666666"
+                android:text="客户姓名"
+                android:layout_marginTop="5dp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginLeft="10dp">
+
+            <ImageView
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:src="@drawable/circle_accent"
+                />
+
+            <View
+                android:layout_width="0.1dp"
+                android:layout_height="20dp"
+                android:background="@color/dark_gray"/>
+
+            <ImageView
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:src="@drawable/circle_yellow"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0.0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="15dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/start_place"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="锦绣大道南段小咖科技"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textColor="#232323"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/end_place"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="锦绣大道南段小咖科技"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textColor="#232323"
+                android:textSize="16sp"/>
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/call_phone_con"
+            android:layout_width="53dp"
+            android:layout_height="53dp"
+            android:background="@drawable/corners_f2f2f2_stroke"
+            android:layout_marginRight="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/phone_icon"
+                android:layout_gravity="center"/>
+        </FrameLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/change_end_con"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="2dp"
+        android:layout_alignParentRight="true"
+        android:layout_above="@+id/center_con"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/corners_white_gray_stroke_2"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@mipmap/change_end" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/change_end"
+            android:textSize="8sp" />
+    </LinearLayout>
+</RelativeLayout>

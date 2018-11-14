@@ -1,6 +1,8 @@
 package com.easymi.zhuanche;
 
 import com.easymi.common.entity.PullFeeResult;
+import com.easymi.common.result.GetFeeResult;
+import com.easymi.common.result.MultipleOrderResult;
 import com.easymi.component.result.EmResult;
 import com.easymi.zhuanche.entity.TransferList;
 import com.easymi.zhuanche.result.BudgetResult;
@@ -15,6 +17,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -24,44 +27,44 @@ import rx.Observable;
 
 public interface ZCApiService {
 
-    /**
-     * 查询单个订单
-     *
-     * @param orderId
-     * @param appKey
-     * @return
-     */
-    @GET("driver/api/v1/orderFindOne")
-    Observable<ZCOrderResult> indexOrders(@Query("order_id") Long orderId,
-                                          @Query("app_key") String appKey);
+//    /**
+//     * 查询单个订单
+//     *
+//     * @param orderId
+//     * @param appKey
+//     * @return
+//     */
+//    @GET("driver/api/v1/orderFindOne")
+//    Observable<ZCOrderResult> indexOrders(@Query("order_id") Long orderId,
+//                                          @Query("app_key") String appKey);
 
-    /**
-     * 抢单
-     *
-     * @param orderId
-     * @param driverId
-     * @param appKey
-     * @return
-     */
-    @FormUrlEncoded
-    @PUT("driver/api/v1/grabSpecialOrder")
-    Observable<ZCOrderResult> grabOrder(@Field("order_id") Long orderId,
-                                        @Field("driver_id") Long driverId,
-                                        @Field("app_key") String appKey);
-
-    /**
-     * 接单
-     *
-     * @param orderId
-     * @param driverId
-     * @param appKey
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("/driver/api/v1/takeSpecialOrder")
-    Observable<ZCOrderResult> takeOrder(@Field("order_id") Long orderId,
-                                        @Field("driver_id") Long driverId,
-                                        @Field("app_key") String appKey);
+//    /**
+//     * 抢单
+//     *
+//     * @param orderId
+//     * @param driverId
+//     * @param appKey
+//     * @return
+//     */
+//    @FormUrlEncoded
+//    @PUT("driver/api/v1/grabSpecialOrder")
+//    Observable<ZCOrderResult> grabOrder(@Field("order_id") Long orderId,
+//                                        @Field("driver_id") Long driverId,
+//                                        @Field("app_key") String appKey);
+//
+//    /**
+//     * 接单
+//     *
+//     * @param orderId
+//     * @param driverId
+//     * @param appKey
+//     * @return
+//     */
+//    @FormUrlEncoded
+//    @POST("/driver/api/v1/takeSpecialOrder")
+//    Observable<ZCOrderResult> takeOrder(@Field("order_id") Long orderId,
+//                                        @Field("driver_id") Long driverId,
+//                                        @Field("app_key") String appKey);
 
     /**
      * 拒单
@@ -89,44 +92,44 @@ public interface ZCApiService {
                                         @Field("destination") String destination,
                                         @Field("app_key") String appKey);
 
-    /**
-     * 前往预约地
-     *
-     * @param orderId
-     * @param appKey
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("/driver/api/v1/goToSpecialBookAddress")
-    Observable<ZCOrderResult> goToBookAddress(@Field("order_id") Long orderId,
-                                              @Field("app_key") String appKey);
+//    /**
+//     * 前往预约地
+//     *
+//     * @param orderId
+//     * @param appKey
+//     * @return
+//     */
+//    @FormUrlEncoded
+//    @POST("/driver/api/v1/goToSpecialBookAddress")
+//    Observable<ZCOrderResult> goToBookAddress(@Field("order_id") Long orderId,
+//                                              @Field("app_key") String appKey);
 
-    /**
-     * 到达预约地
-     *
-     * @param orderId
-     * @param appKey
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("driver/api/v1/arrivalSpecialBookAddress")
-    Observable<ZCOrderResult> arrivalBookAddress(@Field("order_id") Long orderId,
-                                                 @Field("app_key") String appKey,
-                                                 @Field("real_book_address") String realBookAddress,
-                                                 @Field("real_book_address_lat") Double realBookLat,
-                                                 @Field("real_book_address_lng") Double realBookLng);
+//    /**
+//     * 到达预约地
+//     *
+//     * @param orderId
+//     * @param appKey
+//     * @return
+//     */
+//    @FormUrlEncoded
+//    @POST("driver/api/v1/arrivalSpecialBookAddress")
+//    Observable<ZCOrderResult> arrivalBookAddress(@Field("order_id") Long orderId,
+//                                                 @Field("app_key") String appKey,
+//                                                 @Field("real_book_address") String realBookAddress,
+//                                                 @Field("real_book_address_lat") Double realBookLat,
+//                                                 @Field("real_book_address_lng") Double realBookLng);
 
-    /**
-     * 前往目的地
-     *
-     * @param orderId
-     * @param appKey
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("driver/api/v1/goToSpecialDistination")
-    Observable<ZCOrderResult> goToDistination(@Field("order_id") Long orderId,
-                                              @Field("app_key") String appKey);
+//    /**
+//     * 前往目的地
+//     *
+//     * @param orderId
+//     * @param appKey
+//     * @return
+//     */
+//    @FormUrlEncoded
+//    @POST("driver/api/v1/goToSpecialDistination")
+//    Observable<ZCOrderResult> goToDistination(@Field("order_id") Long orderId,
+//                                              @Field("app_key") String appKey);
 
     /**
      * 开始中途等待
@@ -140,54 +143,54 @@ public interface ZCApiService {
     Observable<ZCOrderResult> waitOrder(@Field("order_id") Long orderId,
                                         @Field("app_key") String appKey);
 
-    /**
-     * 到达目的地
-     *
-     * @param orderId
-     * @param appKey
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("driver/api/v1/arrivalSpecialDistination")
-    Observable<ZCOrderResult> arrivalDistination(@Field("order_id") Long orderId,
-                                                 @Field("app_key") String appKey,
-
-                                                 //用原始数据
-                                                 @Field("advance_price") Double advance_price,//垫付
-                                                 @Field("other_price") Double other_price,//附加费用
-                                                 @Field("remark") String remark,//备注
-
-                                                 //最新的数据
-                                                 @Field("distance") Double distance,
-                                                 @Field("distance_fee") Double distance_fee,
-                                                 @Field("time") Integer time,
-                                                 @Field("time_fee") Double time_fee,
-                                                 @Field("wait_time") Integer wait_time,
-                                                 @Field("wait_fee") Double wait_fee,
-
-                                                 //用原始数据
-                                                 @Field("add_distance") Double add_distance,
-                                                 @Field("add_fee") Double add_fee,
-
-                                                 //重新计算
-                                                 @Field("coupon_fee") Double coupon_fee,//优惠券
-                                                 @Field("total_fee") Double total_fee,//跑出来的钱 + 垫付 + 附加费用 (不算优惠券的钱)
-                                                 @Field("real_pay") Double real_pay,//total_fee - 优惠金额 - 预付费
-
-                                                 //最新的数据
-                                                 @Field("start_price") Double start_price,
-                                                 @Field("real_destination") String realAddress,
-                                                 @Field("real_destination_lat") Double realLat,
-                                                 @Field("real_destination_lng") Double realLng,
-                                                 @Field("min_cost") Double minCost,
-                                                 @Field("peak_cost") double peakCost,
-                                                 @Field("night_price") double nightPrice,
-                                                 @Field("low_speed_cost") double lowSpeedCost,
-                                                 @Field("low_speed_time") int lowSpeedTime,
-                                                 @Field("peak_mile") double peakMile,
-                                                 @Field("night_time") int nightTime,
-                                                 @Field("night_mile") double nightMile,
-                                                 @Field("night_time_price") double nightTimePrice);
+//    /**
+//     * 到达目的地
+//     *
+//     * @param orderId
+//     * @param appKey
+//     * @return
+//     */
+//    @FormUrlEncoded
+//    @POST("driver/api/v1/arrivalSpecialDistination")
+//    Observable<ZCOrderResult> arrivalDistination(@Field("order_id") Long orderId,
+//                                                 @Field("app_key") String appKey,
+//
+//                                                 //用原始数据
+//                                                 @Field("advance_price") Double advance_price,//垫付
+//                                                 @Field("other_price") Double other_price,//附加费用
+//                                                 @Field("remark") String remark,//备注
+//
+//                                                 //最新的数据
+//                                                 @Field("distance") Double distance,
+//                                                 @Field("distance_fee") Double distance_fee,
+//                                                 @Field("time") Integer time,
+//                                                 @Field("time_fee") Double time_fee,
+//                                                 @Field("wait_time") Integer wait_time,
+//                                                 @Field("wait_fee") Double wait_fee,
+//
+//                                                 //用原始数据
+//                                                 @Field("add_distance") Double add_distance,
+//                                                 @Field("add_fee") Double add_fee,
+//
+//                                                 //重新计算
+//                                                 @Field("coupon_fee") Double coupon_fee,//优惠券
+//                                                 @Field("total_fee") Double total_fee,//跑出来的钱 + 垫付 + 附加费用 (不算优惠券的钱)
+//                                                 @Field("real_pay") Double real_pay,//total_fee - 优惠金额 - 预付费
+//
+//                                                 //最新的数据
+//                                                 @Field("start_price") Double start_price,
+//                                                 @Field("real_destination") String realAddress,
+//                                                 @Field("real_destination_lat") Double realLat,
+//                                                 @Field("real_destination_lng") Double realLng,
+//                                                 @Field("min_cost") Double minCost,
+//                                                 @Field("peak_cost") double peakCost,
+//                                                 @Field("night_price") double nightPrice,
+//                                                 @Field("low_speed_cost") double lowSpeedCost,
+//                                                 @Field("low_speed_time") int lowSpeedTime,
+//                                                 @Field("peak_mile") double peakMile,
+//                                                 @Field("night_time") int nightTime,
+//                                                 @Field("night_mile") double nightMile,
+//                                                 @Field("night_time_price") double nightTimePrice);
 
     /**
      * 结算订单  /api/v1/finishOrder  PUT  id  int  是  订单id
@@ -355,5 +358,113 @@ public interface ZCApiService {
     Observable<EmResult> changeOrder(@Field("id") long orderId,
                                      @Field("employ_id") long employId,
                                      @Field("app_key") String appKey);
+
+
+//hf
+
+    /**
+     * 专车 --> 查询单个订单
+     *
+     * @param appKey
+     * @return
+     */
+    @GET("api/v1/taxi_online/order/get/{id}")
+    Observable<ZCOrderResult> indexOrders(@Path("id") Long id,
+                                          @Query("appKey") String appKey);
+
+
+    /**
+     * 专车 --> 抢单
+     *
+     * @param driverId
+     * @param driverName
+     * @param driverPhone
+     * @param id          订单id
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/taxi_online/order/grab")
+    Observable<ZCOrderResult> grabOrder(@Field("driverId") Long driverId,
+                                        @Field("driverName") String driverName,
+                                        @Field("driverPhone") String driverPhone,
+                                        @Field("id") Long id,
+                                        @Field("version") Long version);
+
+    /**
+     * 专车 -->接单
+     *
+     * @param driverId
+     * @param driverName
+     * @param driverPhone
+     * @param id          订单id
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/taxi_online/order/take")
+    Observable<ZCOrderResult> takeOrder(@Field("driverId") Long driverId,
+                                        @Field("driverName") String driverName,
+                                        @Field("driverPhone") String driverPhone,
+                                        @Field("id") Long id,
+                                        @Field("version") Long version);
+
+    /**
+     * 前往目的地
+     *
+     * @param id
+     * @param appKey
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/taxi_online/order/goto_destination")
+    Observable<ZCOrderResult> goToDistination(@Field("id") Long id,
+                                              @Field("app_key") String appKey);
+
+    /**
+     * 前往预约地
+     *
+     * @param id
+     * @param appKey
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/taxi_online/order/goto_book_place")
+    Observable<ZCOrderResult> goToBookAddress(@Field("id") Long id,
+                                              @Field("app_key") String appKey);
+
+    /**
+     * 到达预约地
+     *
+     * @param id
+     * @param appKey
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/taxi_online/order/arrive_book_place")
+    Observable<ZCOrderResult> arrivalBookAddress(@Field("id") Long id,
+                                                 @Field("app_key") String appKey);
+
+    /**
+     * 到达目的地
+     *
+     * @param orderId
+     * @param appKey
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/taxi_online/order/arrive_destination")
+    Observable<ZCOrderResult> arrivalDistination(@Field("id") Long orderId,
+                                                 @Field("app_key") String appKey);
+
+    /**
+     * 通过http上传位置信息，30秒一次
+     *
+     * @param appKey
+     * @param json
+     * @return
+     */
+    @POST("api/v1/public/message/location")
+    @FormUrlEncoded
+    Observable<GetFeeResult> gpsPush(@Field("app_key") String appKey,
+                                     @Field("json") String json);
 
 }

@@ -105,12 +105,11 @@ public class WorkTimeCounter {
         if (employ == null) {
             return;
         }
-        if (employ.auditType == 2 || employ.auditType == 3 || employ.auditType == 4) {
-
-            return;
-        }
+//        if (employ.auditType == 2 || employ.auditType == 3 || employ.auditType == 4) {
+//            return;
+//        }
         long driverId = employ.id;
-        String driverNo = employ.user_name;
+        String driverNo = employ.userName;
         long companyId = employ.company_id;
 
         int driverStatus;

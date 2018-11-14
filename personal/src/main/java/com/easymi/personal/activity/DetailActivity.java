@@ -63,8 +63,8 @@ public class DetailActivity extends RxBaseActivity {
         adapter = new DetailAdapter(this);
 
         Employ employ = EmUtil.getEmployInfo();
-        balanceText.setText(String.valueOf(employ.balance));
-
+//        balanceText.setText(String.valueOf(employ.balance));
+        balanceText.setText("0");
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
 

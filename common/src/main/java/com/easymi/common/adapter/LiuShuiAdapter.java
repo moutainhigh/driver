@@ -59,18 +59,18 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
     public void onBindViewHolder(Holder holder, int position) {
         BaseOrder baseOrder = baseOrders.get(position);
         String typeStr = baseOrder.orderDetailType;
-        if (baseOrder.orderType.equals(Config.DAIJIA)) {
+        if (baseOrder.serviceType.equals(Config.DAIJIA)) {
             typeStr = "代驾-" + typeStr;
-        } else if (baseOrder.orderType.equals(Config.ZHUANCHE)) {
+        } else if (baseOrder.serviceType.equals(Config.ZHUANCHE)) {
             typeStr = "专车-" + typeStr;
         }
         holder.orderType.setText(typeStr);
-        holder.orderEndPlace.setText(baseOrder.endPlace);
-        holder.orderStartPlace.setText(baseOrder.startPlace);
-        holder.orderStatus.setText(DJStatus2Str.int2Str(baseOrder.orderType, baseOrder.orderStatus));
-        holder.orderTime.setText(TimeUtil.getTime("yyyy-MM-dd HH:mm", baseOrder.orderTime * 1000));
-        holder.orderNumber.setText(baseOrder.orderNumber);
-        holder.orderMoney.setText(String.valueOf(baseOrder.orderMoney));
+        holder.orderEndPlace.setText(baseOrder.destination);
+        holder.orderStartPlace.setText(baseOrder.bookAddress);
+        holder.orderStatus.setText(DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status));
+        holder.orderTime.setText(TimeUtil.getTime("yyyy-MM-dd HH:mm", baseOrder.bookTime * 1000));
+        holder.orderNumber.setText(baseOrder.orderNo);
+        holder.orderMoney.setText(String.valueOf(baseOrder.budgetFee));
 
         if (baseOrder.baoxiaoStatus == 1) {
             holder.orderBaoxiao.setClickable(true);
@@ -79,7 +79,7 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
             holder.orderBaoxiao.setOnClickListener(view -> {
                 LiushuiActivity.CLICK_POS = position + 1;
                 Intent intent = new Intent(context, BaoxiaoActivity.class);
-                intent.putExtra("orderId", baseOrder.orderId);
+                intent.putExtra("orderId", baseOrder.id);
                 ((Activity) context).startActivityForResult(intent, LiushuiActivity.CLICK_POS);
             });
         } else if (baseOrder.baoxiaoStatus == 2) {
@@ -92,17 +92,17 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
             holder.orderBaoxiao.setText(context.getString(R.string.liushui_baoxiao_done));
         }
 
-        if (baseOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {
+        if (baseOrder.status == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {
             holder.rootView.setClickable(true);
             holder.rootView.setOnClickListener(v -> {
                 LiushuiActivity.CLICK_POS = position + 1;
-                if (baseOrder.orderType.equals(Config.DAIJIA)) {
+                if (baseOrder.serviceType.equals(Config.DAIJIA)) {
                     ARouter.getInstance().build("/daijia/FlowActivity")
-                            .withLong("orderId", baseOrder.orderId)
+                            .withLong("orderId", baseOrder.id)
                             .navigation((Activity) context, LiushuiActivity.CLICK_POS);
-                } else if (baseOrder.orderType.equals(Config.ZHUANCHE)) {
+                } else if (baseOrder.serviceType.equals(Config.ZHUANCHE)) {
                     ARouter.getInstance().build("/zhuanche/FlowActivity")
-                            .withLong("orderId", baseOrder.orderId)
+                            .withLong("orderId", baseOrder.id)
                             .navigation((Activity) context, LiushuiActivity.CLICK_POS);
                 }
             });
@@ -110,8 +110,8 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
         } else {
             holder.rootView.setClickable(false);
 
-            boolean canBaoxiao = (Config.DAIJIA.equals(baseOrder.orderType) && canBaoxiaoDJ)
-                    || (Config.ZHUANCHE.equals(baseOrder.orderType) && canBaoxiaoZC);
+            boolean canBaoxiao = (Config.DAIJIA.equals(baseOrder.serviceType) && canBaoxiaoDJ)
+                    || (Config.ZHUANCHE.equals(baseOrder.serviceType) && canBaoxiaoZC);
             if (canBaoxiao) {
                 holder.orderBaoxiao.setVisibility(View.VISIBLE);
             } else {

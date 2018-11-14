@@ -54,8 +54,8 @@ public class ArriveStartFragment extends RxBaseFragment {
         startWait = $(R.id.start_wait);
         callPhoneCon = $(R.id.call_phone_con);
 
-        startPlaceText.setText(zcOrder.startPlace);
-        endPlaceText.setText(zcOrder.endPlace);
+        startPlaceText.setText(zcOrder.getStartSite().addr);
+        endPlaceText.setText(zcOrder.getEndSite().addr);
         startDrive.setOnClickListener(view -> bridge.doStartDrive(startDrive));
         startWait.setOnClickListener(view -> bridge.doStartWait());
         callPhoneCon.setOnClickListener(view -> CallPhoneDialog.callDialog(getActivity(),zcOrder));

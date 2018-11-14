@@ -54,8 +54,8 @@ public class SlideArriveStartFragment extends RxBaseFragment {
         changeEndCon = $(R.id.change_end_con);
         callPhoneCon = $(R.id.call_phone_con);
 
-        startPlaceText.setText(zcOrder.startPlace);
-        endPlaceText.setText(zcOrder.endPlace);
+        startPlaceText.setText(zcOrder.getStartSite().addr);
+        endPlaceText.setText(zcOrder.getEndSite().addr);
         slideView.setmCallBack(new CustomSlideToUnlockView.CallBack() {
             @Override
             public void onSlide(int distance) {
