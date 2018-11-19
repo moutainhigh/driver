@@ -78,7 +78,7 @@ public class RefuseOrderDialog extends Dialog {
 
         public RefuseOrderDialog create() {
             dialog = new RefuseOrderDialog(context, R.style.Dialog);
-            View view = LayoutInflater.from(context).inflate(R.layout.zc_refuse_dialog, null, true);
+            View view = LayoutInflater.from(context).inflate(R.layout.taxi_refuse_dialog, null, true);
             ic_close = view.findViewById(R.id.ic_close);
             reason_1 = view.findViewById(R.id.reason_1);
             reason_2 = view.findViewById(R.id.reason_2);

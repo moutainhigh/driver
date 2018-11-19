@@ -71,7 +71,7 @@
 ////                return;
 ////            }
 ////        }
-//        View view = LayoutInflater.from(context).inflate(R.layout.zc_settle_dialog, null, false);
+//        View view = LayoutInflater.from(context).inflate(R.layout.taxi_settle_dialog, null, false);
 //        closeFragment = view.findViewById(R.id.close_fragment);
 //        prepayMoneyText = view.findViewById(R.id.prepay_money);
 //        needPayText = view.findViewById(R.id.need_pay_money);

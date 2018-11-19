@@ -78,7 +78,7 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
 
     @Override
     public int getLayoutResId() {
-        return R.layout.zhuanche_create_fragment;
+        return R.layout.taxi_create_fragment;
     }
 
     @Override

@@ -18,7 +18,7 @@ public class BaseEmploy {
 
     public int status;
 
-    public String real_name;//真实姓名
+//    public String real_name;//真实姓名
     public long company_id;
     public String phone;
     public String child_type;//服务子类型
@@ -32,7 +32,7 @@ public class BaseEmploy {
         SQLiteDatabase db = helper.openSqliteDatabase();
         ContentValues values = new ContentValues();
         values.put("id", id);
-        values.put("real_name", real_name);
+//        values.put("real_name", real_name);
         values.put("company_id", company_id);
         values.put("phone", phone);
         values.put("child_type", child_type);

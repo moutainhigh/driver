@@ -39,7 +39,7 @@ public class ArriveStartFragment extends RxBaseFragment {
 
     @Override
     public int getLayoutResId() {
-        return R.layout.zc_arrive_fragment;
+        return R.layout.taxi_arrive_fragment;
     }
 
     @Override

@@ -38,7 +38,8 @@
         android:gravity="center_vertical"
         android:orientation="vertical"
         android:paddingBottom="15dp"
-        android:paddingTop="15dp">
+        android:paddingTop="15dp"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -143,7 +144,8 @@
         android:layout_marginTop="2dp"
         android:background="@drawable/corners_white_gray_stroke_2"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="20dp"

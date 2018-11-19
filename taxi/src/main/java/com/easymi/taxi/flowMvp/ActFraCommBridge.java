@@ -22,10 +22,6 @@ public interface ActFraCommBridge {
 
     void doStartDrive(LoadingButton btn);
 
-    void doConfirmMoney(LoadingButton btn, DymOrder dymOrder);
-
-    void doPay(double money);
-
     void showSettleDialog();
 
     void changeEnd();
@@ -41,7 +37,5 @@ public interface ActFraCommBridge {
     void showDrive();
 
     void showCheating();
-
-    void toFeeDetail();
 
 }

@@ -46,10 +46,10 @@ import rx.schedulers.Schedulers;
 public class FlowModel implements FlowContract.Model {
 
     @Override
-    public Observable<ZCOrderResult> doAccept(Long orderId,Long version) {
+    public Observable<ZCOrderResult> doAccept(Long orderId, Long version) {
         return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
 //                .takeOrder(orderId, EmUtil.getEmployId(), EmUtil.getAppKey())
-                .takeOrder(EmUtil.getEmployId(),EmUtil.getEmployInfo().realName,EmUtil.getEmployInfo().phone,orderId,version)
+                .takeOrder(EmUtil.getEmployId(), EmUtil.getEmployInfo().realName, EmUtil.getEmployInfo().phone, orderId, version)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -74,18 +74,18 @@ public class FlowModel implements FlowContract.Model {
     }
 
     @Override
-    public Observable<ZCOrderResult> toStart(Long orderId,Long version) {
+    public Observable<ZCOrderResult> toStart(Long orderId, Long version) {
         return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
-                .goToBookAddress(orderId, EmUtil.getAppKey(),version)
+                .goToBookAddress(orderId, EmUtil.getAppKey(), version)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
-    public Observable<ZCOrderResult> arriveStart(Long orderId,Long version) {
+    public Observable<ZCOrderResult> arriveStart(Long orderId, Long version) {
         return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
-                .arrivalBookAddress(orderId, EmUtil.getAppKey(),version)
+                .arrivalBookAddress(orderId, EmUtil.getAppKey(), version)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -101,16 +101,17 @@ public class FlowModel implements FlowContract.Model {
     }
 
     @Override
-    public Observable<ZCOrderResult> startDrive(Long orderId,Long version) {
+    public Observable<ZCOrderResult> startDrive(Long orderId, Long version) {
+        EmLoc emLoc = EmUtil.getLastLoc();
         return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
-                .goToDistination(orderId, EmUtil.getAppKey(),version)
+                .goToDistination(orderId, EmUtil.getAppKey(), version, emLoc.longitude, emLoc.latitude, emLoc.address)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
-    public Observable<ZCOrderResult> arriveDes(ZCOrder zcOrder, DymOrder order,Long version) {
+    public Observable<ZCOrderResult> arriveDes(ZCOrder zcOrder, DymOrder order, Long version) {
         PushFee pushData = new PushFee();
 
         //司机的信息
@@ -122,8 +123,8 @@ public class FlowModel implements FlowContract.Model {
             pe.childType = employ.child_type;
             pe.id = employ.id;
             pe.status = employ.status;
-            pe.realName = employ.real_name;
-            pe.companyId = employ.company_id;
+            pe.realName = employ.realName;
+            pe.companyId = employ.companyId;
             pe.phone = employ.phone;
             pe.childType = employ.child_type;
             pe.business = employ.serviceType;
@@ -174,10 +175,10 @@ public class FlowModel implements FlowContract.Model {
         }
         pushData.calc.orderInfo = orderList;
         String json = GsonUtil.toJson(pushData);
-
+        EmLoc emLoc = EmUtil.getLastLoc();
         return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
 //                .pullFee(json, EmUtil.getAppKey())
-                .gpsPush(EmUtil.getAppKey(),json)
+                .gpsPush(EmUtil.getAppKey(), json)
 //                .flatMap(new Func1<PullFeeResult, Observable<ZCOrderResult>>() {
 //                    @Override
 //                    public Observable<ZCOrderResult> call(PullFeeResult pullFeeResult) {
@@ -247,7 +248,10 @@ public class FlowModel implements FlowContract.Model {
 //                                        finalOrder.orderId,
                                         zcOrder.orderId,
                                         EmUtil.getAppKey(),
-                                            version
+                                        version,
+                                        emLoc.longitude,
+                                        emLoc.latitude,
+                                        emLoc.address
 //                                        , finalOrder.paymentFee, finalOrder.extraFee,
 //                                        finalOrder.remark, finalOrder.distance, finalOrder.disFee, finalOrder.travelTime,
 //                                        finalOrder.travelFee, finalOrder.waitTime,

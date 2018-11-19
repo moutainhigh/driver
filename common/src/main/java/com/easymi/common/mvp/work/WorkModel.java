@@ -41,7 +41,7 @@ public class WorkModel implements WorkContract.Model {
     @Override
     public Observable<EmResult> online(Long driverId, String appKey) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .online(driverId)
+                .online(driverId,EmUtil.getEmployInfo().companyId)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -50,7 +50,7 @@ public class WorkModel implements WorkContract.Model {
     @Override
     public Observable<EmResult> offline(Long driverId, String appKey) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .offline(driverId)
+                .offline(driverId,EmUtil.getEmployInfo().companyId)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

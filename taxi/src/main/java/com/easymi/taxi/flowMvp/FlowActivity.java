@@ -12,10 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.text.Html;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.OrientationEventListener;
@@ -70,8 +67,6 @@ import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MapUtil;
 import com.easymi.component.utils.PhoneUtil;
-import com.easymi.component.utils.StringUtils;
-import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusBottomSheetDialog;
 import com.easymi.component.widget.CusToolbar;
@@ -80,7 +75,6 @@ import com.easymi.component.widget.overlay.DrivingRouteOverlay;
 import com.easymi.taxi.R;
 import com.easymi.taxi.activity.CancelActivity;
 import com.easymi.taxi.activity.ConsumerInfoActivity;
-import com.easymi.taxi.activity.SameOrderActivity;
 import com.easymi.taxi.activity.TransferActivity;
 import com.easymi.taxi.entity.ConsumerInfo;
 import com.easymi.taxi.entity.TaxiOrder;
@@ -97,6 +91,7 @@ import com.easymi.taxi.receiver.CancelOrderReceiver;
 import com.easymi.taxi.receiver.OrderFinishReceiver;
 import com.easymi.taxi.widget.FlowPopWindow;
 import com.easymi.taxi.widget.RefuseOrderDialog;
+import com.easymi.taxi.widget.TaxiSettleDialog;
 import com.google.gson.Gson;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
@@ -104,9 +99,6 @@ import net.cachapa.expandablelayout.ExpandableLayout;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import co.lujun.androidtagview.TagContainerLayout;
-import co.lujun.androidtagview.TagView;
 
 /**
  * Created by developerLzh on 2017/11/13 0013.
@@ -127,8 +119,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     TextView nextPlace;
     TextView leftTimeText;
     TextView orderNumberText;
-    TextView orderTypeText;
-    TagContainerLayout tagContainerLayout;
     LinearLayout drawerFrame;
     private MapView mapView;
     private TextView tvMark;
@@ -146,28 +136,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     LinearLayout to_appoint_navi_con_1;
 
     /**
-     * 已接单top
-     */
-    RelativeLayout to_appoint_layout;
-    TextView to_appoint_time;
-    TextView to_appoint_left_time;
-    LinearLayout to_appoint_navi_con;
-
-    /**
-     * 到达预约地top
-     */
-    RelativeLayout arrive_start_wait_layout;
-
-    /**
      * 前往终点top
      */
     RelativeLayout go_layout;
+    TextView to_appoint_time;
     LinearLayout naviCon;
 
-    /**
-     * 中途等待top
-     */
-    RelativeLayout middle_wait_layout;
 
     private TaxiOrder taxiOrder;
 
@@ -183,17 +157,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     private long orderId;
 
-    private boolean fromOld = false;//是否从横屏那边过来
-
-    private double payMoney;
-
-    private boolean isToFeeDetail = true;//是否是前往过费用详情界面
-
     private AlbumOrientationEventListener mAlbumOrientationEventListener;
 
     @Override
     public int getLayoutId() {
-        return R.layout.zc_activity_flow;
+        return R.layout.taxi_activity_flow;
     }
 
     @Override
@@ -207,8 +175,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
 
         orderId = getIntent().getLongExtra("orderId", -1);
-        fromOld = getIntent().getBooleanExtra("fromOld", false);//是否是从计价器过来的
-        isToFeeDetail = getIntent().getBooleanExtra("showSettle", false);//是否是从计价器过来的
         if (orderId == -1) {
             finish();
             return;
@@ -220,8 +186,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         nextPlace = findViewById(R.id.next_place);
         leftTimeText = findViewById(R.id.left_time);
         orderNumberText = findViewById(R.id.order_number_text);
-        orderTypeText = findViewById(R.id.order_type);
-        tagContainerLayout = findViewById(R.id.tag_container);
         drawerFrame = findViewById(R.id.drawer_frame);
         expandableLayout = findViewById(R.id.expandable_layout);
         tvMark = findViewById(R.id.tvMark);
@@ -234,28 +198,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         to_appoint_navi_con_1 = findViewById(R.id.to_appoint_navi_con_1);
 
         /**
-         * 已接单top
-         */
-        to_appoint_layout = findViewById(R.id.to_appoint_layout);
-        to_appoint_time = findViewById(R.id.to_appoint_time);
-        to_appoint_left_time = findViewById(R.id.to_appoint_left_time);
-        to_appoint_navi_con = findViewById(R.id.to_appoint_navi_con);
-
-        /**
-         * 到达预约地top
-         */
-        arrive_start_wait_layout = findViewById(R.id.arrive_start_wait_layout);
-
-        /**
          * 前往终点top
          */
         go_layout = findViewById(R.id.go_layout);
+        to_appoint_time = findViewById(R.id.to_appoint_time);
         naviCon = findViewById(R.id.navi_con);
-
-        /**
-         * 中途等待top
-         */
-        middle_wait_layout = findViewById(R.id.middle_wait_layout);
 
         mapView = findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
@@ -280,11 +227,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 } else {
                     popWindow.showCancel();
                 }
-//                if (StringUtils.isBlank(taxiOrder.groupId)) {
-//                    popWindow.hideSame();  //同城司机
-//                } else {
-//                    popWindow.showSame();
-//                }
                 if (taxiOrder.status == ZCOrderStatus.NEW_ORDER || taxiOrder.status == ZCOrderStatus.PAIDAN_ORDER) {
                     popWindow.hideConsumer();
                 } else {
@@ -295,7 +237,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 } else {
                     popWindow.hideTransfer();
                 }
-
                 popWindow.show(v);
             }
         });
@@ -313,10 +254,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 //                String phone = EmUtil.getEmployInfo().company_phone;
                 String phone = "111111111";
                 PhoneUtil.call(FlowActivity.this, phone);
-//            } else if (i == R.id.pop_same_order) {
-//                Intent intent = new Intent(FlowActivity.this, SameOrderActivity.class);
-//                intent.putExtra("groupId", taxiOrder.groupId);
-//                startActivity(intent);
             } else if (i == R.id.pop_consumer_msg) {
                 Intent intent = new Intent(FlowActivity.this, ConsumerInfoActivity.class);
                 intent.putExtra("orderId", orderId);
@@ -337,18 +274,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             tvMark.setText(taxiOrder.orderRemark);
         }
         orderNumberText.setText(taxiOrder.orderNo);
-        orderTypeText.setText(taxiOrder.orderDetailType);
-        tagContainerLayout.removeAllTags();
-        if (StringUtils.isNotBlank(taxiOrder.passengerTags)) {
-            if (taxiOrder.passengerTags.contains(",")) {
-                String[] tags = taxiOrder.passengerTags.split(",");
-                for (String tag : tags) {
-                    tagContainerLayout.addTag(tag);
-                }
-            } else {
-                tagContainerLayout.addTag(taxiOrder.passengerTags);
-            }
-        }
         drawerFrame.setOnClickListener(view -> {
             if (expandableLayout.isExpanded()) {
                 expandableLayout.collapse();
@@ -359,35 +284,68 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         if (taxiOrder.status == ZCOrderStatus.NEW_ORDER || taxiOrder.status == ZCOrderStatus.PAIDAN_ORDER) {
             hideTops();
-            not_accept_layout.setVisibility(View.VISIBLE);
-            to_appoint_navi_con_1.setOnClickListener(view -> presenter.navi(new LatLng(getStartAddr().latitude,
+            go_layout.setVisibility(View.VISIBLE);
+            naviCon.setOnClickListener(view -> presenter.navi(new LatLng(getStartAddr().latitude,
                     getStartAddr().longitude), getStartAddr().poi, orderId));
+//            not_accept_layout.setVisibility(View.VISIBLE);
+//            to_appoint_navi_con_1.setOnClickListener(view -> presenter.navi(new LatLng(getStartAddr().latitude,
+//                    getStartAddr().longitude), getStartAddr().poi, orderId));
+
         } else if (taxiOrder.status == ZCOrderStatus.TAKE_ORDER
                 || taxiOrder.status == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
             hideTops();
-            to_appoint_layout.setVisibility(View.VISIBLE);
-            to_appoint_navi_con.setOnClickListener(view -> presenter.navi(new LatLng(getStartAddr().latitude,
+            go_layout.setVisibility(View.VISIBLE);
+            naviCon.setOnClickListener(view -> presenter.navi(new LatLng(getStartAddr().latitude,
                     getStartAddr().longitude), getStartAddr().poi, orderId));
 
-            String time = getString(R.string.please_start_at)
-                    + TimeUtil.getTime("HH:mm", taxiOrder.bookTime * 1000)
-                    + getString(R.string.arrive_start);
-
-            SpannableString ss = new SpannableString(time);
-            ForegroundColorSpan colorSpan = new ForegroundColorSpan(Color.parseColor("#3c98e3"));
-            int startIndex = 2;
-            int endIndex = ss.length() - 7;
-            ss.setSpan(colorSpan, startIndex, endIndex, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-            to_appoint_time.setText(ss);
+            to_appoint_time.setVisibility(View.GONE);
+//            String time = getString(R.string.please_start_at)
+//                    + TimeUtil.getTime("HH:mm", taxiOrder.bookTime * 1000)
+//                    + getString(R.string.arrive_start);
+//
+//            SpannableString ss = new SpannableString(time);
+//            ForegroundColorSpan colorSpan = new ForegroundColorSpan(Color.parseColor("#3c98e3"));
+//            int startIndex = 2;
+//            int endIndex = ss.length() - 7;
+//            ss.setSpan(colorSpan, startIndex, endIndex, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//            to_appoint_time.setText(ss);
         } else if (taxiOrder.status == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER) {
             hideTops();
-            arrive_start_wait_layout.setVisibility(View.VISIBLE);
+            go_layout.setVisibility(View.VISIBLE);
+            naviCon.setOnClickListener(view -> presenter.navi(new LatLng(getEndAddr().latitude,
+                    getEndAddr().longitude), getEndAddr().poi, orderId));
+
+//            String time = getString(R.string.please_start_at)
+//                    + TimeUtil.getTime("HH:mm", taxiOrder.bookTime * 1000)
+//                    + getString(R.string.arrive_start);
+//
+//            SpannableString ss = new SpannableString(time);
+//            ForegroundColorSpan colorSpan = new ForegroundColorSpan(Color.parseColor("#3c98e3"));
+//            int startIndex = 2;
+//            int endIndex = ss.length() - 7;
+//            ss.setSpan(colorSpan, startIndex, endIndex, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//            to_appoint_time.setText(ss);
+            to_appoint_time.setVisibility(View.GONE);
         } else if (taxiOrder.status == ZCOrderStatus.START_WAIT_ORDER) {
             hideTops();
-            middle_wait_layout.setVisibility(View.VISIBLE);
+            go_layout.setVisibility(View.VISIBLE);
+            naviCon.setOnClickListener(view -> presenter.navi(new LatLng(getStartAddr().latitude,
+                    getStartAddr().longitude), getStartAddr().poi, orderId));
+
+//            String time = getString(R.string.please_start_at)
+//                    + TimeUtil.getTime("HH:mm", taxiOrder.bookTime * 1000)
+//                    + getString(R.string.arrive_start);
+//            SpannableString ss = new SpannableString(time);
+//            ForegroundColorSpan colorSpan = new ForegroundColorSpan(Color.parseColor("#3c98e3"));
+//            int startIndex = 2;
+//            int endIndex = ss.length() - 7;
+//            ss.setSpan(colorSpan, startIndex, endIndex, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            to_appoint_time.setText("中途等待");
+            to_appoint_time.setVisibility(View.VISIBLE);
         } else {
             hideTops();
             go_layout.setVisibility(View.VISIBLE);
+            to_appoint_time.setVisibility(View.GONE);
             naviCon.setOnClickListener(view -> {
                 if (null != getEndAddr()) {
                     presenter.navi(new LatLng(getEndAddr().latitude, getEndAddr().latitude), getEndAddr().address, orderId);
@@ -396,26 +354,14 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 }
             });
         }
-
-        tagContainerLayout.setOnTagClickListener(new TagView.OnTagClickListener() {
-            @Override
-            public void onTagClick(int position, String text) {
-
-            }
-
-            @Override
-            public void onTagLongClick(int position, String text) {
-
-            }
-
-            @Override
-            public void onTagCrossClick(int position) {
-
-            }
-        });
-
-        if (taxiOrder.status == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-            nextPlace.setText(taxiOrder.destination);
+        if (taxiOrder.status == ZCOrderStatus.NEW_ORDER ||
+                taxiOrder.status == ZCOrderStatus.PAIDAN_ORDER||
+                taxiOrder.status == ZCOrderStatus.TAKE_ORDER||
+                taxiOrder.status == ZCOrderStatus.GOTO_BOOKPALCE_ORDER||
+                taxiOrder.status == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER){
+            nextPlace.setText(taxiOrder.getStartSite().address);
+        }else {
+            nextPlace.setText(taxiOrder.getEndSite().address);
         }
 
     }
@@ -496,7 +442,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.replace(R.id.flow_frame, waitFragment);
             transaction.commit();
         } else if (taxiOrder.status == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-//            showToEndFragment();
+            showToEndFragment();
 //            if (isToFeeDetail) {
 //                if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
 //                    settleFragmentDialog.setDjOrder(taxiOrder);
@@ -740,7 +686,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         bottomSheetDialog = new CusBottomSheetDialog(this);
 
-        View view = LayoutInflater.from(this).inflate(R.layout.zc_pay_type_dialog, null, false);
+        View view = LayoutInflater.from(this).inflate(R.layout.taxi_pay_type_dialog, null, false);
 
         ImageView pay1Img = view.findViewById(R.id.pay_1_img);
         ImageView pay2Img = view.findViewById(R.id.pay_2_img);
@@ -871,7 +817,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                         "</tt></b></font>" +
                         getString(R.string.minute_);
             }
-            left_time_dis.setText(Html.fromHtml(disStr + timeStr));
+//            left_time_dis.setText(Html.fromHtml(disStr + timeStr));
+            leftTimeText.setText(Html.fromHtml(disStr + timeStr));
         } else {
             String disStr;
             int km = dis / 1000;
@@ -907,7 +854,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                         "</tt></b></font>" +
                         getString(R.string.minute_);
             }
-            to_appoint_left_time.setText(Html.fromHtml(disStr + timeStr));
+//            to_appoint_time.setText(Html.fromHtml(disStr + timeStr));
             leftTimeText.setText(Html.fromHtml(disStr + timeStr));
         }
     }
@@ -1071,27 +1018,18 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             }
 
             @Override
-            public void toFeeDetail() {
-                isToFeeDetail = true;
-            }
-
-            @Override
-            public void doConfirmMoney(LoadingButton btn, DymOrder dymOrder) {
-//                presenter.arriveDes(taxiOrder, btn, dymOrder);
-                presenter.changeOrderStatus(EmUtil.getEmployInfo().companyId,EmUtil.getLastLoc().address,EmUtil.getEmployId(),EmUtil.getLastLoc().latitude,
-                        EmUtil.getLastLoc().longitude,taxiOrder.id,30,null);
-            }
-
-            @Override
-            public void doPay(double money) {
-                payMoney = money;
-                presenter.getConsumerInfo(orderId);
-            }
-
-            @Override
             public void showSettleDialog() {
-//                settleFragmentDialog = new SettleFragmentDialog(FlowActivity.this, taxiOrder, bridge);
-//                settleFragmentDialog.show();
+                TaxiSettleDialog dialog = new TaxiSettleDialog(FlowActivity.this);
+                dialog.setOnMyClickListener((view, string) -> {
+                    if (TextUtils.isEmpty(string)){
+                        ToastUtil.showMessage(FlowActivity.this,"请输入结算金额");
+                    }else if (Double.parseDouble(string) == 0){
+                        ToastUtil.showMessage(FlowActivity.this,"请输入正确结算金额");
+                    }else {
+                        presenter.taxiSettlement(orderId,taxiOrder.orderNo,Double.parseDouble(string));
+                    }
+                });
+                dialog.show();
             }
         };
     }
@@ -1116,22 +1054,19 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void showConsumer(ConsumerInfo consumerInfo) {
-        showPayType(payMoney, consumerInfo);
+//        showPayType(payMoney, consumerInfo);
     }
 
     @Override
     public void hideTops() {
         not_accept_layout.setVisibility(View.GONE);
-        arrive_start_wait_layout.setVisibility(View.GONE);
-        to_appoint_layout.setVisibility(View.GONE);
         go_layout.setVisibility(View.GONE);
-        middle_wait_layout.setVisibility(View.GONE);
     }
 
-//    @Override
-//    public TaxiOrder getOrder() {
-//        return taxiOrder;
-//    }
+    @Override
+    public void settleSuc() {
+        finish();
+    }
 
     @Override
     protected void onStart() {

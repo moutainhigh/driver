@@ -98,21 +98,11 @@ public class BuildPushUtil {
             dataOrder.passengerId = dymOrder.passengerId;
 
             if (dymOrder.orderType.equals(Config.DAIJIA)) {
-                if (dymOrder.orderStatus < DJOrderStatus.GOTO_DESTINATION_ORDER) {//出发前
-                    dataOrder.status = 1;
-                } else if (dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {//行驶中
-                    dataOrder.status = 2;
-                } else if (dymOrder.orderStatus == DJOrderStatus.START_WAIT_ORDER) {//中途等待
-                    dataOrder.status = 3;
-                }
-            } else if (dymOrder.orderType.equals(Config.ZHUANCHE)) {
-                if (dymOrder.orderStatus < ZCOrderStatus.GOTO_DESTINATION_ORDER) {//出发前
-                    dataOrder.status = 1;
-                } else if (dymOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {//行驶中
-                    dataOrder.status = 2;
-                } else if (dymOrder.orderStatus == ZCOrderStatus.START_WAIT_ORDER) {//中途等待
-                    dataOrder.status = 3;
-                }
+
+            } else if (dymOrder.orderType.equals(Config.ZHUANCHE) || dymOrder.orderType.equals(Config.TAXI) ) {
+
+                dataOrder.status = dymOrder.orderStatus;
+
                 dataOrder.peakMile = dymOrder.peakMile;
                 dataOrder.nightTime = dymOrder.nightTime;
                 dataOrder.nightMile = dymOrder.nightMile;

@@ -147,4 +147,6 @@ public class Config {
 
     public static final String MI_APPID = "2882303761517793325";
     public static final String MI_APPKEY = "5891779394325";
+
+    public static final String SP_TOKEN = "sp_token";
 }

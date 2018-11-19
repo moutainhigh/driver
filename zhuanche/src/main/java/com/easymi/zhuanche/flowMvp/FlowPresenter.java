@@ -116,7 +116,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             findOne(orderId);
         })));
     }
-    //到达预约地
+
     @Override
     public void startWait(Long orderId, LoadingButton btn) {
         Observable<ZCOrderResult> observable = model.startWait(orderId);

@@ -8,6 +8,8 @@ public enum ErrCodeTran {
 
 
     SUCCESS(1, "成功"),
+
+
     /**
      * 請求參數無效
      */

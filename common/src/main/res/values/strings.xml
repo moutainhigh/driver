@@ -190,4 +190,7 @@
     <!--hf 我的订单相关-->
     <string name="com_my_order">我的订单</string>
     <string name="com_make_order">司机补单</string>
+    <string name="com_accept_order">我接的单</string>
+    <string name="com_assign_order">指派订单</string>
+    <string name="com_grab_order">可抢订单</string>
 </resources>

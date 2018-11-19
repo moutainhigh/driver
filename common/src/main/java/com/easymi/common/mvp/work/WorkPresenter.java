@@ -99,23 +99,25 @@ public class WorkPresenter implements WorkContract.Presenter {
             @Override
             public void onNext(CityLineResult cityLineResult) {
                 view.stopRefresh();
-
-                List<CityLine> orders = cityLineResult.data;
                 if (cityLineResult.data != null) {
-                    for (CityLine cityLine : orders) {
-                        cityLine.viewType = MultipleOrder.ITEM_POSTER;
-                    }
+                    List<CityLine> orders = new ArrayList<>();
 
-                    if (orders.size() != 0) {
+                    if (cityLineResult.data.size() != 0) {
                         CityLine header = new CityLine(CityLine.ITEM_HEADER);
                         orders.add(header);
+
+                        for (CityLine cityLine : cityLineResult.data) {
+                            cityLine.viewType = MultipleOrder.ITEM_POSTER;
+                            orders.add(cityLine);
+                        }
                     }
+                    view.showLineOrders(orders);
                 } else {
-                    orders = new ArrayList<>();
+                    startLocService();//重启定位更改定位周期
+                    view.showLineOrders(null);
                 }
 
-                startLocService();//重启定位更改定位周期
-                view.showLineOrders(orders);
+
             }
 
             @Override
@@ -228,7 +230,6 @@ public class WorkPresenter implements WorkContract.Presenter {
                 @Override
                 public void onNext(QueryOrdersResult emResult) {
                     view.stopRefresh();
-
                     List<MultipleOrder> orders = emResult.data;
                     List<MultipleOrder> nowOrders = new ArrayList<>();
                     List<MultipleOrder> yuyueOrders = new ArrayList<>();

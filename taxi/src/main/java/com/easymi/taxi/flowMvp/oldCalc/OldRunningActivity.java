@@ -73,7 +73,7 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
 
     @Override
     public int getLayoutId() {
-        return R.layout.zc_activity_old_running;
+        return R.layout.taxi_activity_old_running;
     }
 
     @Override
@@ -237,22 +237,6 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
             }
 
             @Override
-            public void toFeeDetail() {
-
-            }
-
-            @Override
-            public void doConfirmMoney(LoadingButton btn, DymOrder dymOrder) {
-                presenter.arriveDes(taxiOrder,btn, dymOrder);
-            }
-
-            @Override
-            public void doPay(double money) {
-                payMoney = money;
-                presenter.getConsumerInfo(orderId);
-            }
-
-            @Override
             public void showSettleDialog() {
 
             }
@@ -350,6 +334,11 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
 
     @Override
     public void hideTops() {
+
+    }
+
+    @Override
+    public void settleSuc() {
 
     }
 

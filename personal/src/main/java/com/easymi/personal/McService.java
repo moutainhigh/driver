@@ -1,5 +1,6 @@
 package com.easymi.personal;
 
+import com.easymi.common.result.SettingResult;
 import com.easymi.component.result.EmResult;
 import com.easymi.personal.entity.CarInfo;
 import com.easymi.personal.result.AnnResult;
@@ -463,5 +464,5 @@ public interface McService {
      * @return
      */
     @GET("api/v1/taxi_online/config/app/get")
-    Observable<com.easymi.common.result.SettingResult> getAppSetting();
+    Observable<SettingResult> getAppSetting();
 }

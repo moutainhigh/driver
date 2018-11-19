@@ -117,8 +117,8 @@ public class FlowModel implements FlowContract.Model {
             pe.childType = employ.child_type;
             pe.id = employ.id;
             pe.status = employ.status;
-            pe.realName = employ.real_name;
-            pe.companyId = employ.company_id;
+            pe.realName = employ.realName;
+            pe.companyId = employ.companyId;
             pe.phone = employ.phone;
             pe.childType = employ.child_type;
             pe.business = employ.serviceType;
@@ -314,4 +314,19 @@ public class FlowModel implements FlowContract.Model {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    @Override
+    public Observable<EmResult> taxiSettlement(Long orderId, String orderNo, double fee) {
+        EmLoc emLoc =  EmUtil.getLastLoc();
+        return ApiManager.getInstance().createApi(Config.HOST, TaxiApiService.class)
+                .taxiSettlement(orderId,orderNo,
+//                        EmUtil.getEmployId(),EmUtil.getEmployInfo().companyId,
+                        emLoc.longitude,emLoc.latitude,emLoc.address,fee)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+
+
 }

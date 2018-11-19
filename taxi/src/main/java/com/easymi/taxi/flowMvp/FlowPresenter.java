@@ -390,8 +390,22 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     public void changeOrderStatus(Long companyId, String detailAddress, Long driverId, Double latitude, Double longitude, Long orderId,
                                   int status, LoadingButton btn) {
         Observable<EmResult> observable = model.changeOrderStatus(companyId, detailAddress,driverId,latitude,longitude,orderId,status);
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, emResult -> {
-            findOne(orderId);
+        if (btn != null){
+            view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, emResult -> {
+                findOne(orderId);
+            })));
+        }else {
+            view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, emResult -> {
+                findOne(orderId);
+            })));
+        }
+    }
+
+    @Override
+    public void taxiSettlement(Long orderId, String orderNo, double fee) {
+        Observable<EmResult> observable = model.taxiSettlement(orderId, orderNo,fee);
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, zcOrderResult -> {
+            view.settleSuc();
         })));
     }
 

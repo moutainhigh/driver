@@ -78,6 +78,11 @@
         <activity android:name=".register.VehicleActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".mvp.order.OrderActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait" />
+
         <!--<service-->
             <!--android:name="com.easymi.common.daemon.DaemonService"-->
             <!--android:process=":process1" />-->

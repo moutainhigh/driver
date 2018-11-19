@@ -444,7 +444,10 @@ public interface ZCApiService {
     @POST("api/v1/taxi_online/order/goto_destination")
     Observable<ZCOrderResult> goToDistination(@Field("id") Long id,
                                               @Field("app_key") String appKey,
-                                              @Field("version") Long version);
+                                              @Field("version") Long version,
+                                              @Field("longitude") Double longitude,
+                                              @Field("latitude") Double latitude,
+                                              @Field("detailAddress") String detailAddress);
 
     /**
      * 到达目的地
@@ -457,7 +460,10 @@ public interface ZCApiService {
     @POST("api/v1/taxi_online/order/arrive_destination")
     Observable<ZCOrderResult> arrivalDistination(@Field("id") Long orderId,
                                                  @Field("app_key") String appKey,
-                                                 @Field("version") Long version);
+                                                 @Field("version") Long version,
+                                                 @Field("longitude") Double longitude,
+                                                 @Field("latitude") Double latitude,
+                                                 @Field("detailAddress") String detailAddress);
 
     /**
      * 通过http上传位置信息，30秒一次

@@ -35,7 +35,7 @@ public class TransferDriverAdapter extends RecyclerView.Adapter<TransferDriverAd
 
     @Override
     public THolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.zc_item_transfer, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.taxi_item_transfer, parent, false);
         return new THolder(view);
     }
 

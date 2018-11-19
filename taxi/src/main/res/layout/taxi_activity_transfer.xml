@@ -117,7 +117,7 @@
             android:overScrollMode="never"
             tools:itemCount="4"
             tools:layoutManager="LinearLayoutManager"
-            tools:listitem="@layout/zc_item_transfer"
+            tools:listitem="@layout/taxi_item_transfer"
             tools:orientation="vertical" />
 
     </com.easymi.component.widget.MultiStateView>

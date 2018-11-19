@@ -52,7 +52,7 @@ public class TaxiGrabFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.zc_grab_fragment, container, false);
+        View view = inflater.inflate(R.layout.taxi_grab_fragment, container, false);
         start_place = view.findViewById(R.id.start_place);
         end_place = view.findViewById(R.id.end_place);
         order_time_text = view.findViewById(R.id.order_time_text);
@@ -77,8 +77,8 @@ public class TaxiGrabFragment extends Fragment {
         } else {
             tvMark.setText(taxiOrder.orderRemark);
         }
-        start_place.setText(taxiOrder.bookAddress);
-        end_place.setText(taxiOrder.destination);
+        start_place.setText(taxiOrder.getStartSite().address);
+        end_place.setText(taxiOrder.getEndSite().address);
         order_time_text.setText(taxiOrder.isBookOrder == 1 ? getString(R.string.appoint) : getString(R.string.jishi));
         tag_container.removeAllTags();
         if(StringUtils.isNotBlank(taxiOrder.passengerTags)){
@@ -91,8 +91,6 @@ public class TaxiGrabFragment extends Fragment {
                 tag_container.addTag(taxiOrder.passengerTags);
             }
         }
-
-        order_type.setText(taxiOrder.orderDetailType);
 
         long today = TimeUtil.parseTime("yyyy-MM-dd", TimeUtil.getTime("yyyy-MM-dd", System.currentTimeMillis()));
         long orderDay = TimeUtil.parseTime("yyyy-MM-dd", TimeUtil.getTime("yyyy-MM-dd", taxiOrder.bookTime));

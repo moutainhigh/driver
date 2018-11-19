@@ -45,7 +45,7 @@ public class PushDataLoc {
     /**
      * 订单数据
      */
-    @SerializedName("order_info")
+    @SerializedName("orderInfo")
     public List<PushDataOrder> orderInfo;
 
 

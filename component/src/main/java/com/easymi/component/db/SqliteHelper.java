@@ -102,7 +102,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("name").append(" ").append("TEXT").append(",")
                 .append("real_name").append(" ").append("TEXT").append(",")
                 .append("phone").append(" ").append("TEXT").append(",")
-                .append("sex").append(" ").append("TEXT").append(",")
+//                .append("sex").append(" ").append("TEXT").append(",")
                 .append("company_name").append(" ").append("TEXT").append(",")
                 .append("portrait_path").append(" ").append("TEXT").append(",")
                 .append("score").append(" ").append("DOUBLE").append(",")
@@ -123,7 +123,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("nickName").append(" ").append("TEXT").append(",")
                 .append("realName").append(" ").append("TEXT").append(",")
                 .append("idCard").append(" ").append("TEXT").append(",")
-//              .append("sex").append(" ").append("INTEGER").append(",")
+                .append("sex").append(" ").append("INTEGER").append(",")
                 .append("birthDate").append(" ").append("INTEGER").append(",")
 //              .append("phone").append(" ").append("TEXT").append(",")
                 .append("portraitPath").append(" ").append("TEXT").append(",")
@@ -174,6 +174,8 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("mobileOperators").append(" ").append("TEXT").append(",")
                 .append("isFulltimeDriver").append(" ").append("INTEGER").append(",")
                 .append("householdRegistrationName").append(" ").append("TEXT").append(",")
+                .append("token").append(" ").append("TEXT").append(",")
+                .append("refreshToken").append(" ").append("TEXT").append(",")
 
                 .append("company_id").append(" ").append("LONG")
                 .append(");");

@@ -38,7 +38,7 @@ public class TransferActivity extends RxBaseActivity {
 
     @Override
     public int getLayoutId() {
-        return R.layout.zc_activity_transfer;
+        return R.layout.taxi_activity_transfer;
     }
 
     private TaxiOrder order;

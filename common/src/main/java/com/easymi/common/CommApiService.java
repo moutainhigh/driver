@@ -444,7 +444,7 @@ public interface CommApiService {
      */
     @FormUrlEncoded
     @POST("api/v1/public/driver/online")
-    Observable<EmResult> online(@Field("id") Long id);
+    Observable<EmResult> online(@Field("id") Long id,@Field("companyId") Long companyId);
 
     /**
      * 下线接口
@@ -454,7 +454,7 @@ public interface CommApiService {
      */
     @FormUrlEncoded
     @POST("api/v1/public/driver/offline")
-    Observable<EmResult> offline(@Field("id") Long id);
+    Observable<EmResult> offline(@Field("id") Long id,@Field("companyId") Long companyId);
 
 
     /**
@@ -540,6 +540,21 @@ public interface CommApiService {
     Observable<MultipleOrderResult> queryTaxiOrder(@Path("id") Long id,
                                                    @Query("appKey") String appKey);
 
+    /**
+     * 出租车 -->接单 抢单
+     *
+     * @param appKey
+     * @param companyId
+     * @param driverId
+     * @param orderId
+     * @return
+     */
+    @FormUrlEncoded
+    @PUT("api/v1/taxi/normal/order/receipt")
+    Observable<MultipleOrderResult> takeTaxiOrder(@Field("appKey") String appKey,
+                                                  @Field("companyId") Long companyId,
+                                                  @Field("driverId") Long driverId,
+                                                  @Field("orderId") Long orderId);
 
     /**
      * 获取司机信息
@@ -573,7 +588,6 @@ public interface CommApiService {
                                                 @Query("page") int page,
                                                 @Query("size") int size,
                                                 @Query("status") String status);
-
     /**
      * 获取工作台 城际专线 列表
      */

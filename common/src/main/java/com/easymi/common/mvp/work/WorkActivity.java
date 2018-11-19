@@ -42,6 +42,7 @@ import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.entity.CityLine;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
+import com.easymi.common.mvp.order.OrderActivity;
 import com.easymi.common.push.CountEvent;
 import com.easymi.common.push.MqttManager;
 import com.easymi.common.receiver.AnnReceiver;
@@ -175,7 +176,10 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
             onLineBtn.setStatus(LoadingButton.STATUS_LOADING);
             presenter.online(onLineBtn);
         });
-        offlineCon.setOnClickListener(v -> presenter.offline());
+//        offlineCon.setOnClickListener(v -> presenter.offline());
+        listenOrderCon.setOnClickListener(v -> {
+            presenter.offline();
+        });
 
         EmLoc emLoc = EmUtil.getLastLoc();
         if (emLoc != null) {
@@ -257,13 +261,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
     private void initNotifity() {
         notifityClose.setOnClickListener(v -> notifityCon.setVisibility(View.GONE));
-
-//        //模拟收到推送去查询通知
-//        presenter.loadNotice(1);
-//
-//        //模拟收到推送去查询公告
-//        presenter.loadAnn(1);
-
     }
 
     private OrderAdapter adapter;
@@ -432,22 +429,18 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         listenOrderCon.setVisibility(View.GONE);
         rippleBackground.stopRippleAnimation();
         bottomBtnCon.setVisibility(View.VISIBLE);
-        presenter.loadNoticeAndAnn();
     }
 
     @Override
     public void showNotify(AnnAndNotice notifity) {
-//        notifityCon.setVisibility(View.VISIBLE);
-//        notifityContent.setText(getString(R.string.new_notify) + notifity.noticeContent);
-//        XApp.getInstance().syntheticVoice(getString(R.string.new_notify) + notifity.noticeContent, true);
-//        notifityCon.setOnClickListener(v -> {
-//            notifityCon.setVisibility(View.GONE);
-//            ARouter.getInstance().build("/personal/NotifityActivity")
-//                    .navigation();
-//        });
-        if (bottomBtnCon.getVisibility() == View.VISIBLE) {
-            presenter.loadNoticeAndAnn();
-        }
+        notifityCon.setVisibility(View.VISIBLE);
+        notifityContent.setText(getString(R.string.new_notify) + notifity.noticeContent);
+        XApp.getInstance().syntheticVoice(getString(R.string.new_notify) + notifity.noticeContent, true);
+        notifityCon.setOnClickListener(v -> {
+            notifityCon.setVisibility(View.GONE);
+            ARouter.getInstance().build("/personal/NotifityActivity")
+                    .navigation();
+        });
     }
 
     List<Marker> markers = new ArrayList<>();
@@ -485,23 +478,18 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         LatLng center = new LatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
         LatLngBounds bounds = MapUtil.getBounds(latLngs, center);
         aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50));
-
     }
 
     @Override
     public void showAnn(AnnAndNotice announcement) {
-        if (bottomBtnCon.getVisibility() == View.VISIBLE) {
-            presenter.loadNoticeAndAnn();
-        }
-
-//        notifityCon.setVisibility(View.VISIBLE);
-//        notifityContent.setText(getString(R.string.new_ann) + announcement.annMessage);
-////        XApp.getInstance().syntheticVoice(getString(R.string.new_ann) + announcement.message, true);
-//        notifityCon.setOnClickListener(v -> {
-//            notifityCon.setVisibility(View.GONE);
-//            ARouter.getInstance().build("/personal/AnnouncementActivity")
-//                    .navigation();
-//        });
+        notifityCon.setVisibility(View.VISIBLE);
+        notifityContent.setText(getString(R.string.new_ann) + announcement.annMessage);
+//        XApp.getInstance().syntheticVoice(getString(R.string.new_ann) + announcement.message, true);
+        notifityCon.setOnClickListener(v -> {
+            notifityCon.setVisibility(View.GONE);
+            ARouter.getInstance().build("/personal/AnnouncementActivity")
+                    .navigation();
+        });
     }
 
     @Override
@@ -557,7 +545,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
             EmUtil.employLogout(this);
         } else if (String.valueOf(employ.status).equals(EmployStatus.OFFLINE)) {
             showOffline();//非听单状态
-            presenter.loadNoticeAndAnn();
+//            presenter.loadNoticeAndAnn();
             presenter.initDaemon();
         } else {
             showOnline();//听单状态

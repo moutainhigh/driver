@@ -305,6 +305,16 @@ public class Employ extends BaseEmploy implements Parcelable {
      */
     public String householdRegistrationName;
 
+    /**
+     * 登录token
+     */
+    public String token;
+
+    /**
+     * 刷新token
+     */
+    public String refreshToken;
+
 
     protected Employ(Parcel in) {
         id = in.readLong();
@@ -364,6 +374,8 @@ public class Employ extends BaseEmploy implements Parcelable {
         mobileOperators = in.readString();
         isFulltimeDriver = in.readInt();
         householdRegistrationName = in.readString();
+        token = in.readString();
+        refreshToken = in.readString();
     }
 
     public static final Creator<Employ> CREATOR = new Creator<Employ>() {
@@ -443,7 +455,8 @@ public class Employ extends BaseEmploy implements Parcelable {
         values.put("mobileOperators", mobileOperators);
         values.put("isFulltimeDriver", isFulltimeDriver);
         values.put("householdRegistrationName", householdRegistrationName);
-
+        values.put("token",token);
+        values.put("refreshToken",refreshToken);
         /*
          * values.put("age", age); values.put("jialing", jialing);
          */
@@ -593,7 +606,10 @@ public class Employ extends BaseEmploy implements Parcelable {
                         .getColumnIndex("isFulltimeDriver"));
                 driverInfo.householdRegistrationName = cursor.getString(cursor
                         .getColumnIndex("householdRegistrationName"));
-
+                driverInfo.token = cursor.getString(cursor
+                        .getColumnIndex("token"));
+                driverInfo.refreshToken = cursor.getString(cursor
+                        .getColumnIndex("refreshToken"));
             }
         } catch (Exception e) {
 //			CrashReport.setUserSceneTag();
@@ -765,7 +781,10 @@ public class Employ extends BaseEmploy implements Parcelable {
                 .getColumnIndex("isFulltimeDriver"));
         driverInfo.householdRegistrationName = cursor.getString(cursor
                 .getColumnIndex("householdRegistrationName"));
-
+        driverInfo.token = cursor.getString(cursor
+                .getColumnIndex("token"));
+        driverInfo.refreshToken = cursor.getString(cursor
+                .getColumnIndex("refreshToken"));
 
         return driverInfo;
     }
@@ -835,6 +854,8 @@ public class Employ extends BaseEmploy implements Parcelable {
         values.put("mobileOperators", mobileOperators);
         values.put("isFulltimeDriver", isFulltimeDriver);
         values.put("householdRegistrationName", householdRegistrationName);
+        values.put("token",token);
+        values.put("refreshToken",refreshToken);
 
         boolean flag = db.update("t_driverinfo", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
@@ -920,5 +941,7 @@ public class Employ extends BaseEmploy implements Parcelable {
         dest.writeString(mobileOperators);
         dest.writeInt(isFulltimeDriver);
         dest.writeString(householdRegistrationName);
+        dest.writeString(token);
+        dest.writeString(refreshToken);
     }
 }

@@ -35,7 +35,7 @@ public class WaitFragment extends RxBaseFragment {
 
     @Override
     public int getLayoutResId() {
-        return R.layout.zc_waiting_fragment;
+        return R.layout.taxi_waiting_fragment;
     }
 
     @Override

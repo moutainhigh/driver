@@ -1,12 +1,14 @@
 package com.easymi.common.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.easymi.common.R;
 import com.easymi.common.entity.MultipleOrder;
+import com.easymi.common.mvp.order.OrderActivity;
 import com.easymi.common.util.DJStatus2Str;
 import com.easymi.component.Config;
 import com.easymi.component.utils.StringUtils;
@@ -34,13 +36,13 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
         if (baseOrder.getItemType() == MultipleOrder.ITEM_HEADER) {
             baseViewHolder.setText(R.id.pinned_text, "订单信息");
             baseViewHolder.itemView.setOnClickListener(v -> {
-                ToastUtil.showMessage(context, "还没写订单列表");
+               context.startActivity(new Intent(context,OrderActivity.class));
             });
         } else if (baseOrder.getItemType() == MultipleOrder.ITEM_POSTER) {
             baseViewHolder.setText(R.id.order_time, TimeUtil.getTime(context.getString(R.string.time_format), baseOrder.bookTime * 1000));
             baseViewHolder.setText(R.id.order_start_place, "" + baseOrder.getStartSite().address);
             baseViewHolder.setText(R.id.order_end_place, baseOrder.getEndSite().address);
-            baseViewHolder.setText(R.id.order_status, "" + DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status));
+            baseViewHolder.setText(R.id.order_status, "" + DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status)+" >");
             baseViewHolder.setText(R.id.order_type, "" + baseOrder.getOrderType());
             baseViewHolder.itemView.setOnClickListener(v -> {
                 if (StringUtils.isNotBlank(baseOrder.serviceType)) {

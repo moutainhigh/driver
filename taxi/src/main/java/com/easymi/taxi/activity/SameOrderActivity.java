@@ -45,7 +45,7 @@ public class SameOrderActivity extends RxBaseActivity {
 
     @Override
     public int getLayoutId() {
-        return R.layout.zc_activity_same_order;
+        return R.layout.taxi_activity_same_order;
     }
 
     @Override

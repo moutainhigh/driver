@@ -346,8 +346,6 @@ public class CustomSlideToUnlockView extends RelativeLayout {
                     }
                 })
                 .start();
-
-
     }
 
 

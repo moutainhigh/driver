@@ -57,7 +57,7 @@ public class FlowPopWindow extends PopupWindow implements View.OnClickListener {
         setBackgroundDrawable(new ColorDrawable()); //设置背景,否则不会消失
 
         //设置需要显示的veiw
-        View view = View.inflate(context, R.layout.zc_flow_pop_layout, null);
+        View view = View.inflate(context, R.layout.taxi_flow_pop_layout, null);
         setContentView(view);
 
         //在没有绘制出来前,测量控件的尺寸
