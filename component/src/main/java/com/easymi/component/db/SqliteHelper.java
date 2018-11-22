@@ -254,6 +254,11 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("canCancelOrder").append(" ").append("INTEGER").append(",")
                 .append("isAddPrice").append(" ").append("INTEGER").append(",")
                 .append("employChangePrice").append(" ").append("INTEGER").append(",")
+
+                .append("driverRepLowBalance").append(" ").append("INTEGER").append(",")
+                .append("passengerDistance").append(" ").append("INTEGER").append(",")
+                .append("version").append(" ").append("INTEGER").append(",")
+
                 .append("employChangeOrder").append(" ").append("employChangeOrder")
                 .append(");");
         execCreateTableSQL(db);

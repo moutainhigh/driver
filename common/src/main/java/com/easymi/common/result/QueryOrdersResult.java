@@ -15,6 +15,4 @@ public class QueryOrdersResult extends EmResult {
     public int total;
     //hf
     public List<MultipleOrder> data;
-
-
 }

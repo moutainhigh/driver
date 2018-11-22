@@ -10,8 +10,10 @@ import com.google.gson.JsonElement;
  */
 
 public class RechargeResult extends EmResult {
-//    public Article article;
-    public JsonElement weixinResult;
-    public AliPay aliPayResult;
-    public UnionResult unionResult;
+
+//    public JsonElement weixinResult;
+//    public AliPay aliPayResult;
+//    public UnionResult unionResult;
+
+    public JsonElement data;
 }

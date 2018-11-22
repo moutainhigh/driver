@@ -12,8 +12,19 @@ public class Notifity {
     @SerializedName("created")
     public long time;
 
-    @SerializedName("notice_content")
+    @SerializedName("noticeContent")
     public String message;
 
     public int state;//1是未读 2是已读
+
+    public String noticeTitle;
+
+    public long employId;
+
+    public String employName;
+
+    public String employPhone;
+
+    public String sendWay;
+
 }

@@ -488,26 +488,10 @@ public class LoginActivity extends RxBaseActivity {
 
             SharedPreferences.Editor editor = XApp.getPreferencesEditor();
             editor.putString(Config.SP_TOKEN, employ.token);
-//            editor.apply();
-
-//            getSetting(employ);
-
-//            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
-            editor.putBoolean(Config.SP_ISLOGIN, true);
-            editor.putLong(Config.SP_DRIVERID, employ.id);
-            editor.putString(Config.SP_LOGIN_ACCOUNT, AesUtil.aesEncrypt(employ.phone, AesUtil.AAAAA));
-            editor.putBoolean(Config.SP_REMEMBER_PSW, checkboxRemember.isChecked());
-//            editor.putString(Config.SP_APP_KEY, employ.app_key);
-            editor.putString(Config.SP_APP_KEY, Config.APP_KEY);
-            editor.putString(Config.SP_LOGIN_PSW, employ.password);
-            editor.putString(Config.SP_LAT_QIYE_CODE, editQiye.getText().toString());
             editor.apply();
 
-            pushBinding(employ.id);
-            ARouter.getInstance()
-                    .build("/common/WorkActivity")
-                    .navigation();
-            finish();
+            getSetting(employ);
+
         })));
     }
 
@@ -515,6 +499,76 @@ public class LoginActivity extends RxBaseActivity {
     public boolean isEnableSwipe() {
         return false;
     }
+
+//    private void getSetting(Employ employ) {
+//        Observable<com.easymi.common.result.SettingResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
+//                .getAppSetting()
+//                .filter(new HttpResultFunc<>())
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread());
+//
+//        observable.subscribe(new MySubscriber<>(this, false, false, settingResult -> {
+//            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+//            editor.putBoolean(Config.SP_ISLOGIN, true);
+//            editor.putLong(Config.SP_DRIVERID, employ.id);
+//            editor.putString(Config.SP_LOGIN_ACCOUNT, AesUtil.aesEncrypt(employ.phone, AesUtil.AAAAA));
+//            editor.putBoolean(Config.SP_REMEMBER_PSW, checkboxRemember.isChecked());
+////            editor.putString(Config.SP_APP_KEY, employ.app_key);
+//            editor.putString(Config.SP_APP_KEY, Config.APP_KEY);
+//            editor.putString(Config.SP_LOGIN_PSW, employ.password);
+////            editor.putString(Config.SP_LAT_QIYE_CODE, editQiye.getText().toString());
+//            editor.apply();
+//
+////            String saveStr = XApp.getMyPreferences().getString(Config.SP_QIYE_CODE, "");
+////            if (StringUtils.isNotBlank(saveStr)) {
+////                List<String> stringList = new ArrayList<>();
+////                if (saveStr.contains(",")) {
+////                    stringList = Arrays.asList(saveStr.split(","));
+////                } else {
+////                    stringList.add(saveStr);
+////                }
+////                boolean haveStr = false;
+////                for (String s : stringList) {
+////                    if (s.equals(editQiye.getText().toString())) {
+////                        haveStr = true;
+////                        break;
+////                    }
+////                }
+////                if (!haveStr) {
+////                    saveStr += "," + editQiye.getText().toString();
+////                    XApp.getMyPreferences().edit().putString(Config.SP_QIYE_CODE, saveStr).apply();
+////                }
+////            } else {
+////                XApp.getMyPreferences().edit().putString(Config.SP_QIYE_CODE, editQiye.getText().toString()).apply();
+////            }
+//
+//            List<SubSetting> settingList = GsonUtil.parseToList(settingResult.appSetting, SubSetting[].class);
+//            if (settingList != null) {
+//                for (SubSetting sub : settingList) {
+//                    if (Config.ZHUANCHE.equals(sub.businessType)) {
+//                        ZCSetting zcSetting = GsonUtil.parseJson(sub.subJson, ZCSetting.class);
+//                        if (zcSetting != null) {
+//                            ZCSetting.deleteAll();
+//                            zcSetting.save();
+//                        }
+//                    } else if ("daijia".equals(sub.businessType)) {
+//                        Setting djSetting = GsonUtil.parseJson(sub.subJson, Setting.class);
+//                        if (djSetting != null) {
+//                            Setting.deleteAll();
+//                            djSetting.save();
+//                        }
+//                    }
+//                }
+//            }
+//
+//            pushBinding(employ.id);
+//
+//            ARouter.getInstance()
+//                    .build("/common/WorkActivity")
+//                    .navigation();
+//            finish();
+//        }));
+//    }
 
     private void getSetting(Employ employ) {
         Observable<com.easymi.common.result.SettingResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
@@ -529,53 +583,28 @@ public class LoginActivity extends RxBaseActivity {
             editor.putLong(Config.SP_DRIVERID, employ.id);
             editor.putString(Config.SP_LOGIN_ACCOUNT, AesUtil.aesEncrypt(employ.phone, AesUtil.AAAAA));
             editor.putBoolean(Config.SP_REMEMBER_PSW, checkboxRemember.isChecked());
-//            editor.putString(Config.SP_APP_KEY, employ.app_key);
             editor.putString(Config.SP_APP_KEY, Config.APP_KEY);
             editor.putString(Config.SP_LOGIN_PSW, employ.password);
-            editor.putString(Config.SP_LAT_QIYE_CODE, editQiye.getText().toString());
             editor.apply();
 
-            String saveStr = XApp.getMyPreferences().getString(Config.SP_QIYE_CODE, "");
-            if (StringUtils.isNotBlank(saveStr)) {
-                List<String> stringList = new ArrayList<>();
-                if (saveStr.contains(",")) {
-                    stringList = Arrays.asList(saveStr.split(","));
-                } else {
-                    stringList.add(saveStr);
-                }
-                boolean haveStr = false;
-                for (String s : stringList) {
-                    if (s.equals(editQiye.getText().toString())) {
-                        haveStr = true;
-                        break;
-                    }
-                }
-                if (!haveStr) {
-                    saveStr += "," + editQiye.getText().toString();
-                    XApp.getMyPreferences().edit().putString(Config.SP_QIYE_CODE, saveStr).apply();
-                }
-            } else {
-                XApp.getMyPreferences().edit().putString(Config.SP_QIYE_CODE, editQiye.getText().toString()).apply();
-            }
-
-            List<SubSetting> settingList = GsonUtil.parseToList(settingResult.appSetting, SubSetting[].class);
-            if (settingList != null) {
-                for (SubSetting sub : settingList) {
-                    if (Config.ZHUANCHE.equals(sub.businessType)) {
-                        ZCSetting zcSetting = GsonUtil.parseJson(sub.subJson, ZCSetting.class);
-                        if (zcSetting != null) {
+//            List<SubSetting> settingList = GsonUtil.parseToList(settingResult.appSetting, SubSetting[].class);
+//            if (settingList != null) {
+//                for (SubSetting sub : settingList) {
+//                    if (Config.ZHUANCHE.equals(sub.businessType)) {
+//                        ZCSetting zcSetting = GsonUtil.parseJson(sub.subJson, ZCSetting.class);
+                        if (settingResult.data != null) {
                             ZCSetting.deleteAll();
-                            zcSetting.save();
+                            settingResult.data.save();
                         }
-                    } else if ("daijia".equals(sub.businessType)) {
-                        Setting djSetting = GsonUtil.parseJson(sub.subJson, Setting.class);
-                        if (djSetting != null) {
-                            Setting.deleteAll();
-                            djSetting.save();
-                        }
-                    }
-                }
-            }
+//                    } else if ("daijia".equals(sub.businessType)) {
+//                        Setting djSetting = GsonUtil.parseJson(sub.subJson, Setting.class);
+//                        if (djSetting != null) {
+//                            Setting.deleteAll();
+//                            djSetting.save();
+//                        }
+//                    }
+//                }
+//            }
 
             pushBinding(employ.id);
 
@@ -585,6 +614,7 @@ public class LoginActivity extends RxBaseActivity {
             finish();
         }));
     }
+
 
     List<String> strList = new ArrayList<>();
 

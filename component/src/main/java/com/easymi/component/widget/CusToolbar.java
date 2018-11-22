@@ -41,7 +41,6 @@ public class CusToolbar extends RelativeLayout {
         title = view.findViewById(R.id.title);
         rightIcon = view.findViewById(R.id.right_icon);
         rightText = view.findViewById(R.id.right_text);
-
     }
 
     public CusToolbar setLeftIcon(int resId, OnClickListener listener) {

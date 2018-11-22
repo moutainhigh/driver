@@ -12,7 +12,7 @@ import java.util.List;
  */
 
 public class TixianResult extends EmResult {
-    @SerializedName("enchashments")
+    @SerializedName("data")
     public List<TixianRecord> tixianRecords;
     public int total;
 }

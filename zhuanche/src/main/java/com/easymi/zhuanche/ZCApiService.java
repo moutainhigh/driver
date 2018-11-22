@@ -192,21 +192,18 @@ public interface ZCApiService {
 //                                                 @Field("night_mile") double nightMile,
 //                                                 @Field("night_time_price") double nightTimePrice);
 
-    /**
-     * 结算订单  /api/v1/finishOrder  PUT  id  int  是  订单id
-     * app_key  string  是  系统key
-     * pay_type  string  是  支付类型(代付helppay，客户余额支付balance)
-     *
-     * @param orderId
-     * @param appKey
-     * @param payType
-     * @return
-     */
-    @FormUrlEncoded
-    @PUT("/api/v1/finishSpecialOrder")
-    Observable<EmResult> payOrder(@Field("id") Long orderId,
-                                  @Field("app_key") String appKey,
-                                  @Field("pay_type") String payType);
+//    /**
+//     * 结算订单  /api/v1/finishOrder  PUT  id  int  是  订单id
+//     * pay_type  string  是  支付类型(代付helppay，客户余额支付balance)
+//     *
+//     * @param orderId
+//     * @param payType
+//     * @return
+//     */
+//    @FormUrlEncoded
+//    @POST("api/v1/taxi_online/order/pay")
+//    Observable<EmResult> payOrder(@Field("id") Long orderId,
+//                                  @Field("operateType") String payType);
 
     /**
      * 补单
@@ -477,4 +474,18 @@ public interface ZCApiService {
     Observable<GetFeeResult> gpsPush(@Field("app_key") String appKey,
                                      @Field("json") String json);
 
+
+    /**
+     * 结算订单  /api/v1/finishOrder  PUT  id  int  是  订单id
+     * pay_type  string  是  支付类型(代付helppay，客户余额支付balance)
+     *
+     * @param orderId
+     * @param payType
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/taxi_online/order/pay")
+    Observable<EmResult> payOrder(@Field("id") Long orderId,
+                                  @Field("operateType") String payType,
+                                  @Field("version") Long version);
 }

@@ -18,7 +18,7 @@ import rx.schedulers.Schedulers;
  * Created by developerLzh on 2017/11/27 0027.
  */
 
-public class CreateZCModel implements CreateZCContract.Model {
+public class CreateTaxiModel implements CreateTaxiContract.Model {
 
     @Override
     public Observable<ZCTypeResult> queryZCType(Long companyId, Integer serviceType) {

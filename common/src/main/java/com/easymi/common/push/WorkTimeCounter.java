@@ -125,7 +125,8 @@ public class WorkTimeCounter {
         String nowDate = TimeUtil.getTime("yyyy-MM-dd", System.currentTimeMillis());
 
         Observable<WorkStatisticsResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .workStatistics(driverId, nowDate, EmUtil.getAppKey(), driverStatus, minute, driverNo, companyId)
+//                .workStatistics(driverId, nowDate, EmUtil.getAppKey(), driverStatus, minute, driverNo, companyId)
+                .workStatistics()
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

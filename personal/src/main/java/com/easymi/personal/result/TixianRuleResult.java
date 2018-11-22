@@ -9,6 +9,9 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class TixianRuleResult extends EmResult{
-    @SerializedName("system")
+//    @SerializedName("system")
+//    public TixianRule tixianRule;
+
+    @SerializedName("object")
     public TixianRule tixianRule;
 }

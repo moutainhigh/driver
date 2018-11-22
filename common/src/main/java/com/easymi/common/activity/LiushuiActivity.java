@@ -47,7 +47,7 @@ public class LiushuiActivity extends RxBaseActivity {
 
     LiuShuiAdapter adapter;
 
-    TabLayout tabLayout;
+//    TabLayout tabLayout;
 
     CusToolbar toolbar;
 
@@ -78,13 +78,13 @@ public class LiushuiActivity extends RxBaseActivity {
     @Override
     public void initViews(Bundle savedInstanceState) {
         recyclerView = findViewById(R.id.recyclerView);
-        tabLayout = findViewById(R.id.liushui_tab_layout);
+//        tabLayout = findViewById(R.id.liushui_tab_layout);
         errLayout = findViewById(R.id.cus_err_layout);
 
         orders = new ArrayList<>();
 
         initToolBar();
-        initTab();
+//        initTab();
         initRecycler();
         recyclerView.setRefreshing(true);
     }
@@ -114,48 +114,48 @@ public class LiushuiActivity extends RxBaseActivity {
         });
     }
 
-    private void initTab() {
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getText().equals(getString(R.string.create_daijia))) {
-                    business = Config.DAIJIA;
-                    page = 1;
-                } else if(tab.getText().equals(getString(R.string.create_zhuanche))){
-                    business = Config.ZHUANCHE;
-                    page = 1;
-                }
-                queryOrders();
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-        if (EmUtil.getEmployInfo().serviceType.contains(Config.DAIJIA)) {
-            TabLayout.Tab daijiaTab = tabLayout.newTab();
-            daijiaTab.setText(getString(R.string.create_daijia));
-            tabLayout.addTab(daijiaTab);
-        } else if (EmUtil.getEmployInfo().serviceType.contains(Config.ZHUANCHE)) {
-            TabLayout.Tab zhuancheTab = tabLayout.newTab();
-            zhuancheTab.setText(getString(R.string.create_zhuanche));
-            tabLayout.addTab(zhuancheTab);
-        }
-        TabLayout.Tab tab = tabLayout.getTabAt(0);
-        if(null != tab){
-            tab.select();
-        }
-//        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.create_zhuanche)));
-//        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.create_paotui)));
-//        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.create_huoyun)));
-//        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.create_zhuanxian)));
-    }
+//    private void initTab() {
+//        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+//            @Override
+//            public void onTabSelected(TabLayout.Tab tab) {
+//                if (tab.getText().equals(getString(R.string.create_daijia))) {
+//                    business = Config.DAIJIA;
+//                    page = 1;
+//                } else if(tab.getText().equals(getString(R.string.create_zhuanche))){
+//                    business = Config.ZHUANCHE;
+//                    page = 1;
+//                }
+//                queryOrders();
+//            }
+//
+//            @Override
+//            public void onTabUnselected(TabLayout.Tab tab) {
+//
+//            }
+//
+//            @Override
+//            public void onTabReselected(TabLayout.Tab tab) {
+//
+//            }
+//        });
+//        if (EmUtil.getEmployInfo().serviceType.contains(Config.DAIJIA)) {
+//            TabLayout.Tab daijiaTab = tabLayout.newTab();
+//            daijiaTab.setText(getString(R.string.create_daijia));
+//            tabLayout.addTab(daijiaTab);
+//        } else if (EmUtil.getEmployInfo().serviceType.contains(Config.ZHUANCHE)) {
+//            TabLayout.Tab zhuancheTab = tabLayout.newTab();
+//            zhuancheTab.setText(getString(R.string.create_zhuanche));
+//            tabLayout.addTab(zhuancheTab);
+//        }
+//        TabLayout.Tab tab = tabLayout.getTabAt(0);
+//        if(null != tab){
+//            tab.select();
+//        }
+////        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.create_zhuanche)));
+////        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.create_paotui)));
+////        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.create_huoyun)));
+////        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.create_zhuanxian)));
+//    }
 
     CusBottomSheetDialog dialog;
 
@@ -222,8 +222,8 @@ public class LiushuiActivity extends RxBaseActivity {
         Long driverId = EmUtil.getEmployId();
 
         Observable<QueryOrdersResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .queryOverOrdersByBunsiness(driverId, business, startTime == null ? null : startTime / 1000,
-                        endTime == null ? null : endTime / 1000, EmUtil.getAppKey(), EmUtil.getEmployInfo().realName, page, limit)
+                .queryOverOrdersByBunsiness(startTime == null ? null : startTime / 1000,
+                        endTime == null ? null : endTime / 1000, page, limit)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -237,7 +237,7 @@ public class LiushuiActivity extends RxBaseActivity {
                 if (page == 1) {
                     orders.clear();
                 }
-                orders.addAll(queryOrdersResult.orders == null ? new ArrayList<>() : queryOrdersResult.orders);
+                orders.addAll(queryOrdersResult.data == null ? new ArrayList<>() : queryOrdersResult.data);
                 adapter.setBaseOrders(orders);
                 if (page * 10 < queryOrdersResult.total) {
                     recyclerView.setLoadMoreEnable(true);

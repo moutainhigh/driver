@@ -60,8 +60,9 @@ public class TixianRuleActivity extends RxBaseActivity {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
         Observable<ArticleResult> observable = api
-                .getArticle(EmUtil.getAppKey(), alias,
-                        EmUtil.getEmployInfo() == null ? null : EmUtil.getEmployInfo().company_id)
+//                .getArticle(EmUtil.getAppKey(), alias,
+//                        EmUtil.getEmployInfo() == null ? null : EmUtil.getEmployInfo().company_id)
+                .getArticle()
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -70,7 +71,7 @@ public class TixianRuleActivity extends RxBaseActivity {
                 true, new NoErrSubscriberListener<ArticleResult>() {
             @Override
             public void onNext(ArticleResult articleResult) {
-                String html = articleResult.article.contents;
+                String html = articleResult.data.content;
                 String css = "<style type=\"text/css\"> img {" +
                         "width:auto" +//限定图片宽度填充屏幕
                         "height:auto;" +//限定图片高度自动

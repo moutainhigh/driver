@@ -101,7 +101,7 @@ public interface FlowContract {
 
         void updateDymOrder(ZCOrder zcOrder);
 
-        void payOrder(Long orderId, String payType);
+        void payOrder(Long orderId, String payType, Long version);
 
         void stopNavi();
 
@@ -134,6 +134,6 @@ public interface FlowContract {
 
         Observable<ConsumerResult> consumerInfo(Long orderId);
 
-        Observable<EmResult> payOrder(Long orderId, String payType);
+        Observable<EmResult> payOrder(Long orderId, String payType, Long version);
     }
 }

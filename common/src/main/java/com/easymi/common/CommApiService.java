@@ -89,27 +89,27 @@ public interface CommApiService {
                                                 @Query("business") String business,
                                                 @Query("app_key") String appKey);
 
-    /**
-     * 查询未支付和已完成订单
-     *
-     * @param driverId
-     * @param business
-     * @param startTime
-     * @param endTime
-     * @param appKey
-     * @param page
-     * @param limit
-     * @return
-     */
-    @GET("driver/api/v1/orders")
-    Observable<QueryOrdersResult> queryOverOrdersByBunsiness(@Query("driver_id") Long driverId,
-                                                             @Query("business") String business,
-                                                             @Query("start_time") Long startTime,
-                                                             @Query("end_time") Long endTime,
-                                                             @Query("app_key") String appKey,
-                                                             @Query("driver_name") String driverName,
-                                                             @Query("page") int page,
-                                                             @Query("limit") int limit);
+//    /**
+//     * 查询未支付和已完成订单
+//     *
+//     * @param driverId
+//     * @param business
+//     * @param startTime
+//     * @param endTime
+//     * @param appKey
+//     * @param page
+//     * @param limit
+//     * @return
+//     */
+//    @GET("driver/api/v1/orders")
+//    Observable<QueryOrdersResult> queryOverOrdersByBunsiness(@Query("driver_id") Long driverId,
+//                                                             @Query("business") String business,
+//                                                             @Query("start_time") Long startTime,
+//                                                             @Query("end_time") Long endTime,
+//                                                             @Query("app_key") String appKey,
+//                                                             @Query("driver_name") String driverName,
+//                                                             @Query("page") int page,
+//                                                             @Query("limit") int limit);
 
     /**
      * 查询所有通知
@@ -143,22 +143,22 @@ public interface CommApiService {
                                            @Query("limit") Integer limit
     );
 
-    /**
-     * 首页统计
-     *
-     * @param driverId
-     * @param nowDate
-     * @param appKey
-     * @return
-     */
-    @GET("driver/api/v1/driverInfo")
-    Observable<WorkStatisticsResult> workStatistics(@Query("driver_id") Long driverId,
-                                                    @Query("now_date") String nowDate,
-                                                    @Query("app_key") String appKey,
-                                                    @Query("is_online") Integer isOnline,
-                                                    @Query("minute") int minute,
-                                                    @Query("driver_no") String driverNo,
-                                                    @Query("company_id") long company_id);
+//    /**
+//     * 首页统计
+//     *
+//     * @param driverId
+//     * @param nowDate
+//     * @param appKey
+//     * @return
+//     */
+//    @GET("driver/api/v1/driverInfo")
+//    Observable<WorkStatisticsResult> workStatistics(@Query("driver_id") Long driverId,
+//                                                    @Query("now_date") String nowDate,
+//                                                    @Query("app_key") String appKey,
+//                                                    @Query("is_online") Integer isOnline,
+//                                                    @Query("minute") int minute,
+//                                                    @Query("driver_no") String driverNo,
+//                                                    @Query("company_id") long company_id);
 
     /**
      * 代驾 --> 查询单个订单
@@ -567,7 +567,6 @@ public interface CommApiService {
     Observable<LoginResult> getDriverInfo(@Path("id") Long driverId,
                                           @Query("app_key") String appKey);
 
-
     /**
      * 通过http上传位置信息，30秒一次
      *
@@ -601,4 +600,27 @@ public interface CommApiService {
     @GET("api/v1/taxi_online/order/running_list")
     Observable<QueryOrdersResult> getZCOrders(@Query("driverId") Long driverId,
                                               @Query("appKey") String appKey);
+
+    /**
+     * 业务订单
+     *
+     * @param startTime
+     * @param endTime
+     * @param page
+     * @param size
+     * @return
+     */
+    @GET("api/v1/public/orderCold/list")
+    Observable<QueryOrdersResult> queryOverOrdersByBunsiness(@Query("startTime") Long startTime,
+                                                             @Query("endTime") Long endTime,
+                                                             @Query("page") int page,
+                                                             @Query("size") int size);
+
+    /**
+     * 首页统计
+     *
+     * @return
+     */
+    @GET("api/v1/public/statistics/driver_profit/get")
+    Observable<WorkStatisticsResult> workStatistics();
 }

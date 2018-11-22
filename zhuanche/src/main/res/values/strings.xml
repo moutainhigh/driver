@@ -217,5 +217,5 @@
     <string name="no_car">暂无车辆，不能创建专车订单，请联系管理员</string>
 
     <string name="wait_consumer">等待乘客</string>
-
+    <string name="no_balance">你的余额不足，请前往充值</string>
 </resources>

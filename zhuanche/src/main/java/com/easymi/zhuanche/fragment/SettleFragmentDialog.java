@@ -293,7 +293,8 @@ public class SettleFragmentDialog {
         });
         payButton.setOnClickListener(v -> {
             if (null != bridge) {
-                bridge.doPay(dymOrder.orderShouldPay);
+//                bridge.doPay(dymOrder.orderShouldPay);
+                bridge.doPay(dymOrder.totalFee);
             }
         });
         closeFragment.setOnClickListener(v -> {
@@ -365,7 +366,7 @@ public class SettleFragmentDialog {
         dymOrder.orderShouldPay = Double.parseDouble(df.format(exls + paymentFee - dymOrder.prepay));
 
         if (context instanceof Activity) {
-            ((Activity)context).runOnUiThread(new Runnable() {
+            ((Activity) context).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     prepayMoneyText.setText(String.valueOf(dymOrder.prepay));
