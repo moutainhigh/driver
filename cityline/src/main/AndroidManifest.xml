@@ -1,0 +1,31 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.easymi.cityline">
+
+    <application>
+
+        <activity
+            android:name=".flowMvp.FlowActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSwipeBack" />
+
+        <activity
+            android:name=".activity.BanciSelectActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSwipeBack" />
+
+        <activity
+            android:name=".activity.CreateOrderActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSwipeBack" />
+
+        <activity
+            android:name=".activity.SelectPlaceOnMapActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSwipeBack" />
+
+    </application>
+</manifest>

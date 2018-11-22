@@ -16,7 +16,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "data.db";
 
-    private static final int VERSION = 67;
+    private static final int VERSION = 70;
 
     private StringBuffer sqlBuf;
 
@@ -71,6 +71,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
         createZCSettingTable(db);
         createVehicleInfoTable(db);
         createSystemTable(db);
+        createOrderCustomer(db);
     }
 
     @Override
@@ -92,6 +93,9 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
         db.execSQL("DROP TABLE IF EXISTS " + "t_systemconfig");
         createSystemTable(db);
+
+        db.execSQL("DROP TABLE IF EXISTS " + "t_zx_order_customer");
+        createOrderCustomer(db);
     }
 
     private void createDriverInfoTable(SQLiteDatabase db) {
@@ -289,6 +293,31 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("payType").append(" ").append("TEXT").append(",")
 
                 .append("canCallDriver").append(" ").append("INTEGER")
+                .append(");");
+        execCreateTableSQL(db);
+    }
+
+    private void createOrderCustomer(SQLiteDatabase db) {
+        sqlBuf.append("CREATE TABLE ").append("t_zx_order_customer").append(" (")
+                .append("id").append(" INTEGER PRIMARY KEY, ")
+                .append("customerId").append(" ").append("LONG").append(",")
+                .append("orderId").append(" ").append("LONG").append(",")
+                .append("orderType").append(" ").append("TEXT").append(",")
+                .append("name").append(" ").append("TEXT").append(",")
+                .append("phone").append(" ").append("TEXT").append(",")
+                .append("startAddr").append(" ").append("TEXT").append(",")
+                .append("endAddr").append(" ").append("TEXT").append(",")
+                .append("startLat").append(" ").append("DOUBLE").append(",")
+                .append("startLng").append(" ").append("DOUBLE").append(",")
+                .append("endLat").append(" ").append("DOUBLE").append(",")
+                .append("endLng").append(" ").append("DOUBLE").append(",")
+                .append("appointTime").append(" ").append("LONG").append(",")
+                .append("acceptSequence").append(" ").append("INTEGER").append(",")
+                .append("sendSequence").append(" ").append("INTEGER").append(",")
+                .append("num").append(" ").append("INTEGER").append(",")
+                .append("status").append(" ").append("INTEGER").append(",")
+                .append("photo").append(" ").append("TEXT").append(",")
+                .append("subStatus").append(" ").append("INTEGER")
                 .append(");");
         execCreateTableSQL(db);
     }

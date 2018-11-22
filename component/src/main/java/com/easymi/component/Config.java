@@ -15,7 +15,7 @@ public class Config {
     /**
      * 主机地址
      */
-    public static final String HOST = "http://10.10.2.132:10001/";
+    public static final String HOST = "http://10.10.2.12:10001/";
 //    public static final String HOST = "https://api.xiaokayun.cn/";//线上地址
 //    public static final String HOST = "http://api.xiaokakj.cn/";//测试服地址
 
@@ -123,7 +123,7 @@ public class Config {
     public static final String DAIJIA = "daijia";
     public static final String ZHUANCHE = "special";
     public static final String TAXI = "taxi";
-    public static final String CITYLINE = "cityline";
+    public static final String CITY_LINE = "city_line";
 
     //需要导航的模式
     public static final String NAVI_MODE = "navi_mode";

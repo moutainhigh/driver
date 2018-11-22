@@ -99,11 +99,21 @@ public class CustomSlideToUnlockView extends RelativeLayout {
         slideImageViewResIdAfter = mTypedArray.getResourceId(R.styleable.SlideToUnlockView_slideImageViewResIdAfter, -1);
         viewBackgroundResId = mTypedArray.getResourceId(R.styleable.SlideToUnlockView_sliderViewBackgroundResId, -1);
         textHint = mTypedArray.getString(R.styleable.SlideToUnlockView_sliderTextHint);
-        textSize = mTypedArray.getInteger(R.styleable.SlideToUnlockView_sliderTextSize, 7);
+        textSize = mTypedArray.getInteger(R.styleable.SlideToUnlockView_sliderTextSize, 25);
         textColorResId = mTypedArray.getColor(R.styleable.SlideToUnlockView_sliderTextColorResId, getResources().getColor(android.R.color.white));
         THRESHOLD = mTypedArray.getFloat(R.styleable.SlideToUnlockView_slideThreshold, 0.5f);
 
         mTypedArray.recycle();
+    }
+
+    public void setHint(String hint){
+        this.textHint = hint;
+        MarginLayoutParams tvParams = (MarginLayoutParams) tv_hint.getLayoutParams();
+        tvParams.setMargins(0, 0, slideImageViewWidth, 0);//textview的marginRight设置为和滑块的宽度一致
+        tv_hint.setLayoutParams(tvParams);
+        tv_hint.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+        tv_hint.setTextColor(textColorResId);
+        tv_hint.setText(TextUtils.isEmpty(textHint) ? mContext.getString(R.string.slide_arrive) : textHint);
     }
 
 

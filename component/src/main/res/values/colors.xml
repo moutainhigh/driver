@@ -36,6 +36,7 @@
     <color name="color_f2">#F2F2F2</color>
     <color name="color_fa">#FAFAFA</color>
     <color name="color_orange">#E0FF6100</color>
+    <color name="color_red">#ff0000</color>
     <color name="image_overlay_false">#20000000</color>
     <color name="image_overlay_true">#80000000</color>
     <color name="line_color">#EEEEEE</color>
