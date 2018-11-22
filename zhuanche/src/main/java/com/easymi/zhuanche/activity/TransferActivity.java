@@ -19,7 +19,6 @@ import com.easymi.component.utils.EmUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.MultiStateView;
 import com.easymi.zhuanche.R;
-import com.easymi.zhuanche.ZCApiService;
 import com.easymi.zhuanche.adapter.TransferDriverAdapter;
 import com.easymi.zhuanche.entity.Address;
 import com.easymi.zhuanche.entity.TransferList;

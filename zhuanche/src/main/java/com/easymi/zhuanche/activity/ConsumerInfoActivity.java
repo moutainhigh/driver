@@ -10,7 +10,6 @@ import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.widget.CusToolbar;
-import com.easymi.zhuanche.ZCApiService;
 import com.easymi.zhuanche.R;
 import com.easymi.zhuanche.result.ConsumerResult;
 
