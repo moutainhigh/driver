@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f2f2f2"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <com.easymi.component.widget.CusToolbar
+        android:id="@+id/cus_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <com.amap.api.maps.MapView
+            android:id="@+id/map_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/input_place_et"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/btn_height"
+            android:layout_margin="10dp"
+            android:gravity="center_vertical"
+            android:textSize="16sp"
+            android:background="@drawable/shape_white_rect"
+            android:ellipsize="end"
+            android:hint="请选择上车点"
+            android:textColor="@color/text_color_black"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp"
+            android:singleLine="true" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/dp_10"
+            android:drawableStart="@drawable/shape_gray_point"
+            android:text="@string/select_place_map_hint_1"
+            android:textColor="#4f4f4f" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:drawablePadding="@dimen/dp_10"
+            android:drawableStart="@drawable/shape_gray_point"
+            android:text="@string/select_place_map_hint_2"
+            android:textColor="#4f4f4f" />
+
+        <Button
+            android:id="@+id/confirm_pos_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/shape_button_gray"
+            android:text="@string/confirm"
+            android:textColor="@color/white" />
+    </LinearLayout>
+</LinearLayout>

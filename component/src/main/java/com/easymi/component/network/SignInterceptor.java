@@ -40,45 +40,8 @@ public class SignInterceptor implements Interceptor {
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {
 
-        Map<String, String> paramsMap = new HashMap<>();
-        String mPath = "";
-
-        Request request = chain.request();
-        String url = "" + request.url();
-
-        Log.e(LOG_TAG, "inside url --> " + url);
-
-        RequestBody body = request.body();
-
-        if (body == null) {
-            if (!TextUtils.isEmpty(url)) {
-                String[] result = url.split("[?]");
-                if (result.length > 1) {
-                    mPath = result[0].replaceAll(Config.HOST, "");  //获取path
-                    String[] params = result[1].split("&");
-                    for (String p : params) {
-                        String[] ps = p.split("=");
-                        paramsMap.put(ps[0], ps[1]);
-                    }
-                }
-            }
-        } else if (body instanceof FormBody) {
-            if (!TextUtils.isEmpty(url)) {
-                for (int i = 0; i < ((FormBody) body).size(); i++) {
-                    paramsMap.put(((FormBody) body).encodedName(i), ((FormBody) body).encodedValue(i));
-                }
-                mPath = url.replaceAll(Config.HOST, "");
-            }
-        }
-
-        if (TextUtils.isEmpty(mPath) || paramsMap.isEmpty()) {
-            Log.e(LOG_TAG, "url path or paramsMap is empty");
-            Log.e(LOG_TAG, "request method is " + request.method());
-            return chain.proceed(request);
-        }
-
-        return chain.proceed(request.newBuilder()
-                .addHeader("sign", sign(paramsMap, mPath))
+        return chain.proceed(chain.request().newBuilder()
+                .addHeader("token", "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NDI3ODgwOTYsInN1YiI6IntcImlkXCI6NTIsXCJuYW1lXCI6XCI4ODc3ODY2XCIsXCJ1c2VyVHlwZVwiOjIsXCJjb21wYW55SWRcIjoxLFwidGltZXN0YW1wXCI6MTU0Mjc4ODA5NixcImFwcEtleVwiOlwiMUhBY2llbnQxa0xxZmVYN0RWVFYwZGtsVWtwR0VuVUNcIn0iLCJleHAiOjE1NDI4NzQ0OTZ9.TTHjs4F16dmGakM0HTF_UuRkBwIhZg-P4LBkAfmcWjw")
                 .build());
     }
 

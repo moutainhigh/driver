@@ -17,7 +17,7 @@ import com.easymi.component.R;
 
 public class CusToolbar extends RelativeLayout {
 
-    private ImageView leftIcon;
+    public ImageView leftIcon;
     private TextView title;
     private ImageView rightIcon;
     private TextView rightText;
@@ -60,6 +60,10 @@ public class CusToolbar extends RelativeLayout {
         title.setText(textResId);
         return this;
     }
+    public CusToolbar setTitle(String text) {
+        title.setText(text);
+        return this;
+    }
 
     public CusToolbar setRightIcon(int resId, OnClickListener listener) {
         rightIcon.setVisibility(View.VISIBLE);
@@ -76,4 +80,19 @@ public class CusToolbar extends RelativeLayout {
         rightIcon.setVisibility(View.GONE);
         return this;
     }
+
+    public CusToolbar setRightText(String textResId, OnClickListener listener) {
+        rightText.setVisibility(View.VISIBLE);
+        rightText.setText(textResId);
+        rightText.setOnClickListener(listener);
+        rightIcon.setVisibility(View.GONE);
+        return this;
+    }
+
+    public CusToolbar setRightGone(){
+        rightText.setVisibility(View.GONE);
+        rightIcon.setVisibility(View.GONE);
+        return this;
+    }
+
 }
