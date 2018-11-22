@@ -485,7 +485,29 @@ public class LoginActivity extends RxBaseActivity {
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, loginBtn, loginResult -> {
             Employ employ = loginResult.getEmployInfo();
             employ.saveOrUpdate();
-            getSetting(employ);
+
+            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+            editor.putString(Config.SP_TOKEN, employ.token);
+//            editor.apply();
+
+//            getSetting(employ);
+
+//            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+            editor.putBoolean(Config.SP_ISLOGIN, true);
+            editor.putLong(Config.SP_DRIVERID, employ.id);
+            editor.putString(Config.SP_LOGIN_ACCOUNT, AesUtil.aesEncrypt(employ.phone, AesUtil.AAAAA));
+            editor.putBoolean(Config.SP_REMEMBER_PSW, checkboxRemember.isChecked());
+//            editor.putString(Config.SP_APP_KEY, employ.app_key);
+            editor.putString(Config.SP_APP_KEY, Config.APP_KEY);
+            editor.putString(Config.SP_LOGIN_PSW, employ.password);
+            editor.putString(Config.SP_LAT_QIYE_CODE, editQiye.getText().toString());
+            editor.apply();
+
+            pushBinding(employ.id);
+            ARouter.getInstance()
+                    .build("/common/WorkActivity")
+                    .navigation();
+            finish();
         })));
     }
 

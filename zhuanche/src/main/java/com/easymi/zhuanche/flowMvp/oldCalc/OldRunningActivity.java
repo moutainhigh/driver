@@ -243,7 +243,7 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
 
             @Override
             public void doConfirmMoney(LoadingButton btn, DymOrder dymOrder) {
-                presenter.arriveDes(zcOrder,btn, dymOrder);
+                presenter.arriveDes(zcOrder,zcOrder.version,btn, dymOrder);
             }
 
             @Override

@@ -34,7 +34,8 @@
             android:layout_centerVertical="true"
             android:gravity="center"
             android:text="@string/slide_arrive"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:textSize="25dp"/>
 
 
     </RelativeLayout>

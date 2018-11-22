@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class PushDataOrder {
-    @SerializedName("order_id")
+    @SerializedName("orderId")
     public long orderId;
 
     @SerializedName("order_type")

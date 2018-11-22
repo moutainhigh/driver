@@ -44,13 +44,13 @@ public class GrabPresenter implements GrabContract.Presenter {
     @Override
     public void queryOrder(MultipleOrder order) {
         Observable<MultipleOrderResult> observable = null;
-        if(order.serviceType.equals(Config.DAIJIA)){
+        if (order.serviceType.equals(Config.DAIJIA)) {
             observable = model.queryDJOrder(order.id);
-        } else if(order.serviceType.equals(Config.ZHUANCHE)){
+        } else if (order.serviceType.equals(Config.ZHUANCHE)) {
             observable = model.queryZCOrder(order.id);
         }
 
-        if(observable == null){
+        if (observable == null) {
             return;
         }
 
@@ -70,41 +70,46 @@ public class GrabPresenter implements GrabContract.Presenter {
 
     @Override
     public void grabOrder(MultipleOrder order) {
-        if(order.countTime > GRAB_VALID_TIME){
+        if (order.countTime > GRAB_VALID_TIME) {
             return;
         }
         Observable<MultipleOrderResult> observable = null;
-        if(order.serviceType.equals(Config.DAIJIA)){
+        if (order.serviceType.equals(Config.DAIJIA)) {
             observable = model.grabDJOrder(order.id);
-        } else if(order.serviceType.equals(Config.ZHUANCHE)){
-            observable = model.grabZCOrder(order.id,order.version);
-        }else if(order.serviceType.equals(Config.TAXI)){
-            observable = model.takeZCOrder(order.id,order.version);
+        } else if (order.serviceType.equals(Config.ZHUANCHE)) {
+            observable = model.grabZCOrder(order.id, order.version);
+        } else if (order.serviceType.equals(Config.TAXI)) {
+            observable = model.takeTaxiOrder(order.id, order.version);
         }
 
-        if(observable == null){
+        if (observable == null) {
             return;
         }
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<MultipleOrderResult>() {
             @Override
             public void onNext(MultipleOrderResult multipleOrderResult) {
-                MultipleOrder order = multipleOrderResult.data;
-                if (order != null) {
-                    if (order.serviceType.equals(Config.DAIJIA)) {
+                if (order.serviceType.equals(Config.DAIJIA)) {
+                    MultipleOrder multipleOrder = multipleOrderResult.data;
+                    if (multipleOrder != null) {
                         ARouter.getInstance()
                                 .build("/daijia/FlowActivity")
                                 .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                .withLong("orderId", order.id).navigation();
-                    } else if(order.serviceType.equals(Config.ZHUANCHE)){
+                                .withLong("orderId", multipleOrder.id).navigation();
+                    }
+                } else if (order.serviceType.equals(Config.ZHUANCHE)) {
+                    MultipleOrder multipleOrder = multipleOrderResult.data;
+                    if (multipleOrder != null) {
                         ARouter.getInstance()
                                 .build("/zhuanche/FlowActivity")
-                                .withLong("orderId", order.id).navigation();
-                    }else if (order.serviceType.equals(Config.TAXI)) {
-                        ARouter.getInstance()
-                                .build("/taxi/FlowActivity")
+                                .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                 .withLong("orderId", order.id).navigation();
                     }
+                } else if (order.serviceType.equals(Config.TAXI)) {
+                    ARouter.getInstance()
+                            .build("/taxi/FlowActivity")
+                            .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .withLong("orderId", order.id).navigation();
                 }
                 view.finishActivity();
             }
@@ -123,42 +128,47 @@ public class GrabPresenter implements GrabContract.Presenter {
 
     @Override
     public void takeOrder(MultipleOrder order) {
-        if(order.countTime > GRAB_VALID_TIME){
+        if (order.countTime > GRAB_VALID_TIME) {
             return;
         }
         Observable<MultipleOrderResult> observable = null;
-        if(order.serviceType.equals(Config.DAIJIA)){
+        if (order.serviceType.equals(Config.DAIJIA)) {
             observable = model.takeDJOrder(order.id);
-        } else if(order.serviceType.equals(Config.ZHUANCHE)){
-            observable = model.takeZCOrder(order.id,order.version);
-        } else if(order.serviceType.equals(Config.TAXI)){
-            observable = model.takeZCOrder(order.id,order.version);
+        } else if (order.serviceType.equals(Config.ZHUANCHE)) {
+            observable = model.takeZCOrder(order.id, order.version);
+        } else if (order.serviceType.equals(Config.TAXI)) {
+            observable = model.takeTaxiOrder(order.id, order.version);
         }
 
-        if(observable == null){
+        if (observable == null) {
             return;
         }
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<MultipleOrderResult>() {
             @Override
             public void onNext(MultipleOrderResult multipleOrderResult) {
-                MultipleOrder order = multipleOrderResult.data;
-                if (order != null) {
                     if (order.serviceType.equals(Config.DAIJIA)) {
-                        ARouter.getInstance()
-                                .build("/daijia/FlowActivity")
-                                .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                .withLong("orderId", order.id).navigation();
+                        MultipleOrder multipleOrder = multipleOrderResult.data;
+                        if (multipleOrder != null) {
+                            ARouter.getInstance()
+                                    .build("/daijia/FlowActivity")
+                                    .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    .withLong("orderId", multipleOrder.id).navigation();
+                        }
                     } else if (order.serviceType.equals(Config.ZHUANCHE)) {
-                        ARouter.getInstance()
-                                .build("/zhuanche/FlowActivity")
-                                .withLong("orderId", order.id).navigation();
-                    }else if (order.serviceType.equals(Config.TAXI)) {
+                        MultipleOrder multipleOrder = multipleOrderResult.data;
+                        if (multipleOrder != null) {
+                            ARouter.getInstance()
+                                    .build("/zhuanche/FlowActivity")
+                                    .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    .withLong("orderId", multipleOrder.id).navigation();
+                        }
+                    } else if (order.serviceType.equals(Config.TAXI)) {
                         ARouter.getInstance()
                                 .build("/taxi/FlowActivity")
+                                .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                 .withLong("orderId", order.id).navigation();
                     }
-                }
                 view.finishActivity();
             }
 

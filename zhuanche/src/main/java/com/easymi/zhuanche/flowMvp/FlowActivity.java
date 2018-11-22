@@ -416,9 +416,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         });
 
         if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-            nextPlace.setText(zcOrder.endPlace);
+            nextPlace.setText(zcOrder.getEndSite().addr);
+        }else {
+            nextPlace.setText(zcOrder.getStartSite().addr);
         }
-
     }
 
     WaitFragment waitFragment;
@@ -539,10 +540,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             }
         }
 
-        boolean forceOre = XApp.getMyPreferences().getBoolean(Config.SP_ALWAYS_OREN, false);
-        if (forceOre && !fromOld) {//始终横屏计价将自动跳转到横屏界面
-            toWhatOldByOrder(zcOrder);
-        }
+//        boolean forceOre = XApp.getMyPreferences().getBoolean(Config.SP_ALWAYS_OREN, false);
+//        if (forceOre && !fromOld) {//始终横屏计价将自动跳转到横屏界面
+//            toWhatOldByOrder(zcOrder);
+//        }
     }
 
     @Override
@@ -982,12 +983,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void doToStart(LoadingButton btn) {
-                presenter.toStart(zcOrder.orderId, btn);
+                presenter.toStart(zcOrder.orderId,zcOrder.version, btn);
             }
 
             @Override
             public void doArriveStart() {
-                presenter.arriveStart(zcOrder.orderId);
+                presenter.arriveStart(zcOrder.orderId,zcOrder.version);
             }
 
             @Override
@@ -1002,7 +1003,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void doStartDrive(LoadingButton btn) {
-                presenter.startDrive(zcOrder.orderId, btn);
+                presenter.startDrive(zcOrder.orderId,zcOrder.version, btn);
             }
 
             @Override
@@ -1074,7 +1075,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void doConfirmMoney(LoadingButton btn, DymOrder dymOrder) {
-                presenter.arriveDes(zcOrder, btn, dymOrder);
+                presenter.arriveDes(zcOrder,zcOrder.version, btn, dymOrder);
             }
 
             @Override
@@ -1329,7 +1330,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         if (zcOrder == null) {
             return;
         }
-
         if (orderId == zcOrder.orderId && orderType.equals(Config.ZHUANCHE)) {
             DymOrder dyo = DymOrder.findByIDType(orderId, orderType);
             if (null != waitFragment && waitFragment.isVisible()) {
@@ -1420,18 +1420,18 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         @Override
         public void onOrientationChanged(int orientation) {
-            if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
-                //已经显示结算对话框不显示
-                return;
-            }
-
-            if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN || !canGoOld) {
-                return;
-            }
-            android.util.Log.e("TAG", "orientation = " + orientation);
-            if ((orientation > 70 && orientation < 110) || (orientation > 250 && orientation < 290)) {
-                toWhatOldByOrder(zcOrder);
-            }
+//            if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
+//                //已经显示结算对话框不显示
+//                return;
+//            }
+//
+//            if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN || !canGoOld) {
+//                return;
+//            }
+//            android.util.Log.e("TAG", "orientation = " + orientation);
+//            if ((orientation > 70 && orientation < 110) || (orientation > 250 && orientation < 290)) {
+//                toWhatOldByOrder(zcOrder);
+//            }
         }
 
     }

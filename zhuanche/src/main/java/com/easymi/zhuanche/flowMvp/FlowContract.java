@@ -73,17 +73,17 @@ public interface FlowContract {
 
         void refuseOrder(Long orderId, String remark);
 
-        void toStart(Long orderId, LoadingButton btn);
+        void toStart(Long orderId,Long version, LoadingButton btn);
 
-        void arriveStart(Long orderId);
+        void arriveStart(Long orderId,Long version);
 
         void startWait(Long orderId, LoadingButton btn);
 
         void startWait(Long orderId);
 
-        void startDrive(Long orderId, LoadingButton btn);
+        void startDrive(Long orderId,Long version, LoadingButton btn);
 
-        void arriveDes(ZCOrder zcOrder, LoadingButton btn, DymOrder dymOrder);
+        void arriveDes(ZCOrder zcOrder,Long version, LoadingButton btn, DymOrder dymOrder);
 
         void navi(LatLng latLng, String poi, Long orderId);
 
@@ -118,15 +118,15 @@ public interface FlowContract {
 
         Observable<EmResult> refuseOrder(Long orderId, String remark);
 
-        Observable<ZCOrderResult> toStart(Long orderId);
+        Observable<ZCOrderResult> toStart(Long orderId,Long version);
 
-        Observable<ZCOrderResult> arriveStart(Long orderId);
+        Observable<ZCOrderResult> arriveStart(Long orderId,Long version);
 
         Observable<ZCOrderResult> startWait(Long orderId);
 
-        Observable<ZCOrderResult> startDrive(Long orderId);
+        Observable<ZCOrderResult> startDrive(Long orderId,Long version);
 
-        Observable<ZCOrderResult> arriveDes(ZCOrder zcOrder,DymOrder dymOrder);
+        Observable<ZCOrderResult> arriveDes(ZCOrder zcOrder,DymOrder dymOrder,Long version);
 
         Observable<ZCOrderResult> changeEnd(Long orderId, Double lat, Double lng, String address);
 

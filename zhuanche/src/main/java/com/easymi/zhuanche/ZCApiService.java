@@ -408,18 +408,6 @@ public interface ZCApiService {
                                         @Field("version") Long version);
 
     /**
-     * 前往目的地
-     *
-     * @param id
-     * @param appKey
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("api/v1/taxi_online/order/goto_destination")
-    Observable<ZCOrderResult> goToDistination(@Field("id") Long id,
-                                              @Field("app_key") String appKey);
-
-    /**
      * 前往预约地
      *
      * @param id
@@ -429,7 +417,8 @@ public interface ZCApiService {
     @FormUrlEncoded
     @POST("api/v1/taxi_online/order/goto_book_place")
     Observable<ZCOrderResult> goToBookAddress(@Field("id") Long id,
-                                              @Field("app_key") String appKey);
+                                              @Field("app_key") String appKey,
+                                              @Field("version") Long version);
 
     /**
      * 到达预约地
@@ -441,7 +430,24 @@ public interface ZCApiService {
     @FormUrlEncoded
     @POST("api/v1/taxi_online/order/arrive_book_place")
     Observable<ZCOrderResult> arrivalBookAddress(@Field("id") Long id,
-                                                 @Field("app_key") String appKey);
+                                                 @Field("app_key") String appKey,
+                                                 @Field("version") Long version);
+
+    /**
+     * 前往目的地
+     *
+     * @param id
+     * @param appKey
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/taxi_online/order/goto_destination")
+    Observable<ZCOrderResult> goToDistination(@Field("id") Long id,
+                                              @Field("app_key") String appKey,
+                                              @Field("version") Long version,
+                                              @Field("longitude") Double longitude,
+                                              @Field("latitude") Double latitude,
+                                              @Field("detailAddress") String detailAddress);
 
     /**
      * 到达目的地
@@ -453,7 +459,11 @@ public interface ZCApiService {
     @FormUrlEncoded
     @POST("api/v1/taxi_online/order/arrive_destination")
     Observable<ZCOrderResult> arrivalDistination(@Field("id") Long orderId,
-                                                 @Field("app_key") String appKey);
+                                                 @Field("app_key") String appKey,
+                                                 @Field("version") Long version,
+                                                 @Field("longitude") Double longitude,
+                                                 @Field("latitude") Double latitude,
+                                                 @Field("detailAddress") String detailAddress);
 
     /**
      * 通过http上传位置信息，30秒一次

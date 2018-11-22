@@ -63,6 +63,8 @@ public interface FlowContract {
 
         void hideTops();
 
+        void settleSuc();
+
         RxManager getManager();
     }
 
@@ -111,6 +113,8 @@ public interface FlowContract {
         void changeOrderStatus(Long companyId,String detailAddress, Long driverId, Double latitude,
                                Double longitude,Long orderId,int status, LoadingButton btn);
 
+        void taxiSettlement(Long orderId, String orderNo,double fee);
+
     }
 
     interface Model {
@@ -141,5 +145,7 @@ public interface FlowContract {
         Observable<EmResult> changeOrderStatus(Long companyId,String detailAddress, Long driverId, Double latitude,
                                                Double longitude,Long orderId,int status);
 
+        Observable<EmResult> taxiSettlement(Long orderId, String orderNo,double fee);
+//, Double longitude,Double latitude, String detailAddress
     }
 }

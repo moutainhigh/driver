@@ -1,11 +1,13 @@
 package com.easymi.common.mvp.work;
 
 import com.easymi.common.entity.AnnAndNotice;
+import com.easymi.common.entity.CityLine;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.entity.WorkStatistics;
 import com.easymi.common.push.CountEvent;
 import com.easymi.common.result.AnnouncementResult;
+import com.easymi.common.result.CityLineResult;
 import com.easymi.common.result.LoginResult;
 import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
@@ -77,6 +79,7 @@ public interface WorkContract {
 
         void hideRegisterDialog();
 
+        void showLineOrders(List<CityLine> cityLines);
     }
 
     interface Presenter {
@@ -129,6 +132,10 @@ public interface WorkContract {
         Observable<SystemResult> getSysConfig();
 
         Observable<EmResult> readOne(long id);
+
+        Observable<QueryOrdersResult> getTaxiOrders(String driverPhone,int page,int size,String status);
+
+        Observable<CityLineResult> getCityLineOrders(Long driverId, String appKey);
 
     }
 

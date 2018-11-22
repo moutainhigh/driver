@@ -7,7 +7,7 @@ public class PushFeeEmploy {
     public long id;
 
     @SerializedName("status")
-    public String status;
+    public int status;
 
     @SerializedName("realName")
     public String realName;//真实姓名

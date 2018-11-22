@@ -378,13 +378,24 @@ public interface TaxiApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("api/v1/taxi/normal/order/receipt")
+    @PUT("api/v1/taxi/normal/order/receipt")
     Observable<TaxiOrderResult> takeOrder(@Field("appKey") String appKey,
                                           @Field("companyId") Long companyId,
                                           @Field("driverId") Long driverId,
                                           @Field("orderId") Long orderId);
 
-
+    /**
+     * 修改订单状态
+     *
+     * @param companyId
+     * @param detailAddress
+     * @param driverId
+     * @param latitude
+     * @param longitude
+     * @param orderId
+     * @param status
+     * @return
+     */
     @FormUrlEncoded
     @PUT("api/v1/taxi/normal/order/status")
     Observable<EmResult> changeOrderStatus(@Field("companyId") Long companyId,
@@ -394,5 +405,24 @@ public interface TaxiApiService {
                                            @Field("longitude") Double longitude,
                                            @Field("orderId") Long orderId,
                                            @Field("status") int status);
+
+    /**
+     * 结算接口
+     *
+     * @param orderId
+     * @param orderNo
+     * @param fee
+     * @return
+     */
+    @FormUrlEncoded
+    @PUT("api/v1/taxi/normal/order/settlement")
+    Observable<EmResult> taxiSettlement(@Field("orderId") Long orderId,
+                                        @Field("orderNo") String orderNo,
+//                                        @Field("driverId") Long driverId,
+//                                        @Field("companyId") Long companyId,
+                                        @Field("longitude") Double longitude,
+                                        @Field("latitude") Double latitude,
+                                        @Field("detailAddress") String detailAddress,
+                                        @Field("fee") double fee);
 
 }

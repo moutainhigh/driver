@@ -117,8 +117,8 @@ public class FlowModel implements FlowContract.Model {
             pe.childType = employ.child_type;
             pe.id = employ.id;
             pe.status = employ.status;
-            pe.realName = employ.real_name;
-            pe.companyId = employ.company_id;
+            pe.realName = employ.realName;
+            pe.companyId = employ.companyId;
             pe.phone = employ.phone;
             pe.childType = employ.child_type;
             pe.business = employ.serviceType;

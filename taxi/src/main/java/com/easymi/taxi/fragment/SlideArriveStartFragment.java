@@ -39,7 +39,7 @@ public class SlideArriveStartFragment extends RxBaseFragment {
 
     @Override
     public int getLayoutResId() {
-        return R.layout.zc_slide_arrive_start_fragment;
+        return R.layout.taxi_slide_arrive_start_fragment;
     }
 
     @Override

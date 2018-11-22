@@ -44,7 +44,7 @@ public class CancelActivity extends RxBaseActivity {
 
     @Override
     public int getLayoutId() {
-        return R.layout.zc_activity_cancel_order;
+        return R.layout.taxi_activity_cancel_order;
     }
 
     @Override

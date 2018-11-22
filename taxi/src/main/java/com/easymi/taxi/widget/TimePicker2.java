@@ -52,7 +52,7 @@ public class TimePicker2 extends BottomSheetDialog {
 
     @SuppressLint("InflateParams")
     private void initView(Context context) {
-        mView = LayoutInflater.from(context).inflate(R.layout.zc_layout_time_picker, null);
+        mView = LayoutInflater.from(context).inflate(R.layout.taxi_layout_time_picker, null);
         mView.findViewById(R.id.btn_cancel).setOnClickListener(v -> dismiss());
         mView.findViewById(R.id.btn_confirm).setOnClickListener(v -> ensure());
         dayWheelView = mView.findViewById(R.id.day);
@@ -219,7 +219,7 @@ public class TimePicker2 extends BottomSheetDialog {
 
     private void initWheelView(WheelView wheelView, List<String> datas) {
         TimeWheelAdapter adapter = new TimeWheelAdapter(datas, wheelView.getContext());
-        adapter.setItemResource(R.layout.zc_item_picker);
+        adapter.setItemResource(R.layout.taxi_item_picker);
         adapter.setItemTextResource(R.id.tvContent);
         wheelView.setCyclic(false);
         wheelView.setCurrentItem(0);

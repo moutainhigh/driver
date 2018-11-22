@@ -67,10 +67,10 @@ public class WorkTimeCounter {
      */
     private void count() {
         Employ employ = EmUtil.getEmployInfo();
-        if (employ == null || StringUtils.isBlank(employ.status)) {
+        if (employ == null || StringUtils.isBlank(String.valueOf(employ.status))) {
             return;
         }
-        if (!employ.status.equals(EmployStatus.ONLINE)) {
+        if (!String.valueOf(employ.status).equals(EmployStatus.ONLINE)) {
             totalMinute++;
             long current = SystemClock.uptimeMillis();
             if (current - lastUpTime >= TIME_OFFSET) {
@@ -115,7 +115,7 @@ public class WorkTimeCounter {
         int driverStatus;
         if (statues <= 0) {
             driverStatus = 2;
-            if (EmUtil.getEmployInfo() != null && EmUtil.getEmployInfo().status.equals(EmployStatus.ONLINE)) {
+            if (EmUtil.getEmployInfo() != null && String.valueOf(EmUtil.getEmployInfo().status).equals(EmployStatus.ONLINE)) {
                 driverStatus = 1;
             }
         } else {

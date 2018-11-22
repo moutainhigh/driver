@@ -2,17 +2,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:background="#3320222c">
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/work_order_head"/>
     <TextView
         android:id="@+id/pinned_text"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:background="#3320222c"
         android:gravity="center_vertical"
         android:paddingLeft="10dp"
-        android:text="即时订单"
+        android:text="订单信息"
         android:textColor="@color/colorAccent" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/work_order_right"/>
 </LinearLayout>

@@ -19,37 +19,44 @@
             android:layout_below="@+id/ic_close"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:text=""
+            android:text="出租车"
             android:textColor="@color/white" />
 
-        <TextView
-            android:id="@+id/order_time"
+        <LinearLayout
+            android:id="@+id/rl_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/order_type"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            tools:text="15:30"
-            android:textColor="@color/white"
-            android:textSize="30sp" />
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/order_time_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/order_time"
+                android:layout_marginRight="2dp"
+                android:layout_toLeftOf="@+id/order_time"
+                android:paddingBottom="5dp"
+                tools:text="今天"
+                android:textColor="#727784"
+                android:layout_gravity="bottom"/>
+            <TextView
+                android:id="@+id/order_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                tools:text="15:30"
+                android:textColor="@color/white"
+                android:textSize="30sp" />
 
-        <TextView
-            android:id="@+id/order_time_day"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/order_time"
-            android:layout_marginRight="2dp"
-            android:layout_toLeftOf="@+id/order_time"
-            android:paddingBottom="4dp"
-            tools:text="今天"
-            android:textColor="#727784" />
-
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/order_dis_con"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/order_time"
+            android:layout_below="@+id/rl_time"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
             android:gravity="center"

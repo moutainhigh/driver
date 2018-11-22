@@ -418,10 +418,10 @@ public class MqttManager implements LocObserver {
                         @Override
                         public void onNext(GetFeeResult getFeeResult) {
 
-                            PullFeeEntity entity = new PullFeeEntity();
-                            entity.msg = "http_costInfo";
-                            entity.data = getFeeResult.data;
-                            HandlePush.getInstance().handPush(new Gson().toJson(entity));
+//                            PullFeeEntity entity = new PullFeeEntity();
+//                            entity.msg = "http_costInfo";
+//                            entity.data = getFeeResult.data;
+//                            HandlePush.getInstance().handPush(new Gson().toJson(entity));
                         }
 
                         @Override

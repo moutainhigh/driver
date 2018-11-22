@@ -40,7 +40,7 @@ public class AcceptFragment extends RxBaseFragment {
 
     @Override
     public int getLayoutResId() {
-        return R.layout.zc_accept_fragment;
+        return R.layout.taxi_accept_fragment;
     }
 
     @Override

@@ -40,7 +40,7 @@ public class ToStartFragment extends RxBaseFragment {
 
     @Override
     public int getLayoutResId() {
-        return R.layout.zc_to_start_fragment;
+        return R.layout.taxi_to_start_fragment;
     }
 
     @Override
@@ -55,8 +55,8 @@ public class ToStartFragment extends RxBaseFragment {
         callPhoneCon = $(R.id.call_phone_con);
         changEndCon = $(R.id.change_end_con);
 
-        startPlaceText.setText(taxiOrder.bookAddress);
-        endPlaceText.setText(taxiOrder.destination);
+        startPlaceText.setText(taxiOrder.getStartSite().address);
+        endPlaceText.setText(taxiOrder.getEndSite().address);
         controlCon.setOnClickListener(view -> {
             Log.e("tag", "onClick");
             bridge.doToStart(controlCon);

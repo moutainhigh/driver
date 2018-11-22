@@ -177,6 +177,11 @@ public class OldWaitActivity extends RxBaseActivity implements FlowContract.View
     }
 
     @Override
+    public void settleSuc() {
+
+    }
+
+    @Override
     public RxManager getManager() {
         return mRxManager;
     }
@@ -191,7 +196,7 @@ public class OldWaitActivity extends RxBaseActivity implements FlowContract.View
 
     @Override
     public int getLayoutId() {
-        return R.layout.zc_activity_old_wait;
+        return R.layout.taxi_activity_old_wait;
     }
 
     private LinearLayout back;

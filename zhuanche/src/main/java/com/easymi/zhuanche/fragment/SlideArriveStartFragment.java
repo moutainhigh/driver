@@ -2,6 +2,7 @@ package com.easymi.zhuanche.fragment;
 
 import android.os.Bundle;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -31,6 +32,9 @@ public class SlideArriveStartFragment extends RxBaseFragment {
     LinearLayout changeEndCon;
     FrameLayout callPhoneCon;
 
+    ImageView customHead;
+    TextView customName;
+
     @Override
     public void setArguments(Bundle args) {
         super.setArguments(args);
@@ -53,6 +57,11 @@ public class SlideArriveStartFragment extends RxBaseFragment {
         slideView = $(R.id.slider);
         changeEndCon = $(R.id.change_end_con);
         callPhoneCon = $(R.id.call_phone_con);
+
+        customHead = $(R.id.iv_head);
+        customName = $(R.id.tv_custom_name);
+        //todo 差客户头像
+        customName.setText(zcOrder.passengerName);
 
         startPlaceText.setText(zcOrder.getStartSite().addr);
         endPlaceText.setText(zcOrder.getEndSite().addr);

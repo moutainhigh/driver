@@ -9,6 +9,7 @@ import com.easymi.common.entity.QiNiuToken;
 import com.easymi.common.entity.RegisterRes;
 import com.easymi.common.entity.Vehicles;
 import com.easymi.common.result.AnnouncementResult;
+import com.easymi.common.result.CityLineResult;
 import com.easymi.common.result.LoginResult;
 import com.easymi.common.result.MultipleOrderResult;
 import com.easymi.common.result.NearDriverResult;
@@ -443,7 +444,7 @@ public interface CommApiService {
      */
     @FormUrlEncoded
     @POST("api/v1/public/driver/online")
-    Observable<EmResult> online(@Field("id") Long id);
+    Observable<EmResult> online(@Field("id") Long id,@Field("companyId") Long companyId);
 
     /**
      * 下线接口
@@ -453,7 +454,7 @@ public interface CommApiService {
      */
     @FormUrlEncoded
     @POST("api/v1/public/driver/offline")
-    Observable<EmResult> offline(@Field("id") Long id);
+    Observable<EmResult> offline(@Field("id") Long id,@Field("companyId") Long companyId);
 
 
     /**
@@ -476,13 +477,13 @@ public interface CommApiService {
                                      @Field("driverType") String driverType,
                                      @Field("type") int type);
 
-    /**
-     * 查询所有订单接口
-     *
-     * @return
-     */
-    @GET("api/v1/taxi_online/order/list")
-    Observable<QueryOrdersResult> queryRunningOrders();
+//    /**
+//     * 查询所有订单接口
+//     *
+//     * @return
+//     */
+//    @GET("api/v1/taxi_online/order/list")
+//    Observable<QueryOrdersResult> queryRunningOrders();
 
 
     /**
@@ -539,6 +540,21 @@ public interface CommApiService {
     Observable<MultipleOrderResult> queryTaxiOrder(@Path("id") Long id,
                                                    @Query("appKey") String appKey);
 
+    /**
+     * 出租车 -->接单 抢单
+     *
+     * @param appKey
+     * @param companyId
+     * @param driverId
+     * @param orderId
+     * @return
+     */
+    @FormUrlEncoded
+    @PUT("api/v1/taxi/normal/order/receipt")
+    Observable<MultipleOrderResult> takeTaxiOrder(@Field("appKey") String appKey,
+                                                  @Field("companyId") Long companyId,
+                                                  @Field("driverId") Long driverId,
+                                                  @Field("orderId") Long orderId);
 
     /**
      * 获取司机信息
@@ -565,13 +581,24 @@ public interface CommApiService {
                                      @Field("json") String json);
 
     /**
-     * 获取出租车列表
+     * 获取工作台 出租车 列表
      */
     @GET("api/v1/taxi/normal/orders")
-    Observable<LoginResult> getTaxiOrders(@Query("driverPhone") String driverPhone,
-                                          @Query("page") int page,
-                                          @Query("size") int size,
-                                          @Query("status") int status);
+    Observable<QueryOrdersResult> getTaxiOrders(@Query("driverPhone") String driverPhone,
+                                                @Query("page") int page,
+                                                @Query("size") int size,
+                                                @Query("status") String status);
+    /**
+     * 获取工作台 城际专线 列表
+     */
+    @GET("api/v1/bus/city/schedule/queryDriverSchedule")
+    Observable<CityLineResult> getCityLineOrders(@Query("driverId") Long driverId,
+                                                 @Query("appKey") String appKey);
 
-
+    /**
+     * 获取工作台 专车 列表
+     */
+    @GET("api/v1/taxi_online/order/running_list")
+    Observable<QueryOrdersResult> getZCOrders(@Query("driverId") Long driverId,
+                                              @Query("appKey") String appKey);
 }

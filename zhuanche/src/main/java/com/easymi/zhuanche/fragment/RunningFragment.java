@@ -10,6 +10,7 @@ import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.Setting;
 import com.easymi.component.entity.ZCSetting;
+import com.easymi.component.widget.CustomSlideToUnlockView;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.zhuanche.R;
 import com.easymi.zhuanche.flowMvp.ActFraCommBridge;
@@ -36,8 +37,9 @@ public class RunningFragment extends RxBaseFragment {
     TextView driveTimeText;
     TextView waitTimeText;
 
-    LoadingButton startWaitBtn;
-    LinearLayout settleBtn;
+//    LoadingButton startWaitBtn;
+//    LinearLayout settleBtn;
+    CustomSlideToUnlockView slideView;
 
     LinearLayout quanlanCon;
     ImageView quanlanImg;
@@ -69,8 +71,9 @@ public class RunningFragment extends RxBaseFragment {
         distanceText = $(R.id.distance);
         driveTimeText = $(R.id.drive_time);
         waitTimeText = $(R.id.wait_time);
-        startWaitBtn = $(R.id.start_wait);
-        settleBtn = $(R.id.settle);
+//        startWaitBtn = $(R.id.start_wait);
+//        settleBtn = $(R.id.settle);
+        slideView = $(R.id.slider);
 
         quanlanCon = $(R.id.quanlan_con);
         quanlanImg = $(R.id.quanlan_img);
@@ -85,8 +88,21 @@ public class RunningFragment extends RxBaseFragment {
         driveTimeText.setText(zcOrder.travelTime + "");
         waitTimeText.setText(zcOrder.waitTime + "");
 
-        startWaitBtn.setOnClickListener(view -> bridge.doStartWait(startWaitBtn));
-        settleBtn.setOnClickListener(view -> bridge.showSettleDialog());
+//        startWaitBtn.setOnClickListener(view -> bridge.doStartWait(startWaitBtn));
+//        settleBtn.setOnClickListener(view -> bridge.showSettleDialog());
+
+        slideView.setmCallBack(new CustomSlideToUnlockView.CallBack() {
+            @Override
+            public void onSlide(int distance) {
+
+            }
+
+            @Override
+            public void onUnlocked() {
+                bridge.showSettleDialog();
+                slideView.resetView();
+            }
+        });
 
         refreshImg.setOnClickListener(v -> {
             bridge.doRefresh();

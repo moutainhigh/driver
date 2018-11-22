@@ -28,15 +28,15 @@ public class DymOrder implements Serializable {
     public long passengerId;
 
     //起步费
-    @SerializedName("start_price")
+    @SerializedName("startPrice")
     public double startFee;
 
     //等候时间 分
-    @SerializedName("wait_time")
+    @SerializedName("waitTime")
     public int waitTime;
 
     //等候费
-    @SerializedName("wait_fee")
+    @SerializedName("waitFee")
     public double waitTimeFee;
 
     //行驶时间 分
@@ -44,14 +44,14 @@ public class DymOrder implements Serializable {
     public int travelTime;
 
     //行驶时间费
-    @SerializedName("time_fee")
+    @SerializedName("timeFee")
     public double travelFee;
 
     //行驶里程
     public double distance;
 
     //行驶时间费
-    @SerializedName("distance_fee")
+    @SerializedName("distanceFee")
     public double disFee;
 
     //总价(计价算出来的钱)
@@ -61,18 +61,19 @@ public class DymOrder implements Serializable {
     public int orderStatus;
 
     //垫付的钱
-    @SerializedName("cross_fee")
+    @SerializedName("advancePrice")
     public double paymentFee;
 
     //附加的服务费用
-    @SerializedName("other_fee")
+    @SerializedName("otherPrice")
     public double extraFee;
 
     //备注
+    @SerializedName("changePayReason")
     public String remark;
 
     //优惠券抵扣的金额
-    @SerializedName("coupon_fee")
+    @SerializedName("couponFee")
     public double couponFee;
 
     //订单总价钱 计价算出来的钱 + 垫付 + 附加费用 (不算优惠券的钱)
@@ -80,46 +81,46 @@ public class DymOrder implements Serializable {
     public double orderTotalFee;
 
     //还需支付的钱 订单总价钱 - 优惠金额 - 预付费
-    @SerializedName("real_pay")
+    @SerializedName("shouldPay")
     public double orderShouldPay;
 
     //预付费用
-    @SerializedName("pre_pay")
+    @SerializedName("prepaid")
     public double prepay;
 
-    @SerializedName("min_cost")
+    @SerializedName("minCost")
     public double minestMoney;//最低消费金额
 
     //运营高峰费
-    @SerializedName("peak_cost")
+    @SerializedName("peakCost")
     public double peakCost;
 
     //夜间费
-    @SerializedName("night_price")
+    @SerializedName("nightPrice")
     public double nightPrice;
 
     //低速费
-    @SerializedName("low_speed_cost")
+    @SerializedName("lowSpeedCost")
     public double lowSpeedCost;
 
     //低速时间
-    @SerializedName("low_speed_time")
+    @SerializedName("lowSpeedTime")
     public int lowSpeedTime;
 
     //高峰里程
-    @SerializedName("peak_mile")
+    @SerializedName("peakMile")
     public double peakMile;
 
     //夜间时间
-    @SerializedName("night_time")
+    @SerializedName("nightTime")
     public int nightTime;
 
     //夜间里程
-    @SerializedName("night_mile")
+    @SerializedName("nightMile")
     public double nightMile;
 
     //夜间时间费用
-    @SerializedName("night_time_price")
+    @SerializedName("nightTimePrice")
     public double nightTimePrice;
 
     //作弊增加的里程
@@ -127,6 +128,40 @@ public class DymOrder implements Serializable {
 
     //作弊增加的费用
     public double addedFee;//数据源来自于本地调价 不会来自后端
+
+    //add
+    /**
+     *加价里程
+     */
+    public Double addDistance;
+    /**
+     *加价费用
+     */
+    public Double addFee;
+    /**
+     *预算金额
+     */
+    private Double budgetFee;
+    /**
+     *定价金额
+     */
+    private Double fixedPrice;
+    /**
+     *信息费
+     */
+    private Double messagePrice;
+    /**
+     *实际付款
+     */
+    private Double realPay;
+    /**
+     *insurance_price
+     */
+    private Double insurancePrice;
+    /**
+     *支付类型
+     */
+    private String payType;
 
     public DymOrder(long orderId, String orderType, long passengerId, int orderStatus) {
         this.orderId = orderId;

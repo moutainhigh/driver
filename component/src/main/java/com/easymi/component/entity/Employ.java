@@ -20,45 +20,10 @@ import java.util.List;
 
 public class Employ extends BaseEmploy implements Parcelable {
 
-//    public String user_name;//工号
-//    public String password;
-//    public String name;//昵称
-//
-//    public String sex;
-//
-//    public String company_name;
-//
-//    public String portrait_path;
-//
-//    public double balance;
-//    public String service_type;//服务类型
-//
-//    public String bank_name;
-//    public String bank_card_no;
-//    public String cash_person_name;
-//
-//    public double score;
-//    public String company_phone;
-//
-//    public String app_key;
-//
-//    public Vehicle vehicle;//车辆信息
-//
-//    public String device_no;
-//
-//    //1正常，2已完善，正在审核，3.没完善资料，4驳回原因
-//    @SerializedName("audit_type")
-//    public int auditType;
-//
-//    @SerializedName("reject")
-//    public String reject;
-
-//add hufeng
-
-    /**
-     * id
-     */
-//    public Long id;
+//    /**
+//     * id
+//     */
+//    public long id;
 
     /**
      * 工号
@@ -95,9 +60,9 @@ public class Employ extends BaseEmploy implements Parcelable {
      */
     public long birthDate;
 
-    /**
-     * 手机号
-     */
+//    /**
+//     * 手机号
+//     */
 //    public String phone;
 
     /**
@@ -145,10 +110,10 @@ public class Employ extends BaseEmploy implements Parcelable {
      */
     public long dutyTime;
 
-    /**
-     * 司机状态（0离线 5在线 10空闲 15派单 20接单 25前往预约地 30到达预约地 35前往目的地 40中途等待  45冻结）
-     */
-//    public String status;
+//    /**
+//     * 司机状态（0离线 5在线 10空闲 15派单 20接单 25前往预约地 30到达预约地 35前往目的地 40中途等待  45冻结）
+//     */
+//    public int status;
 
     /**
      * 推荐人
@@ -340,8 +305,19 @@ public class Employ extends BaseEmploy implements Parcelable {
      */
     public String householdRegistrationName;
 
+    /**
+     * 登录token
+     */
+    public String token;
+
+    /**
+     * 刷新token
+     */
+    public String refreshToken;
+
 
     protected Employ(Parcel in) {
+        id = in.readLong();
         userName = in.readString();
         password = in.readString();
         nickName = in.readString();
@@ -349,6 +325,7 @@ public class Employ extends BaseEmploy implements Parcelable {
         idCard = in.readString();
         sex = in.readInt();
         birthDate = in.readLong();
+        phone = in.readString();
         portraitPath = in.readString();
         serviceType = in.readString();
         emergency = in.readString();
@@ -358,6 +335,7 @@ public class Employ extends BaseEmploy implements Parcelable {
         driveLicenceEnd = in.readInt();
         level = in.readLong();
         dutyTime = in.readLong();
+        status = in.readInt();
         introducer = in.readString();
         companyId = in.readLong();
         created = in.readLong();
@@ -396,6 +374,8 @@ public class Employ extends BaseEmploy implements Parcelable {
         mobileOperators = in.readString();
         isFulltimeDriver = in.readInt();
         householdRegistrationName = in.readString();
+        token = in.readString();
+        refreshToken = in.readString();
     }
 
     public static final Creator<Employ> CREATOR = new Creator<Employ>() {
@@ -417,31 +397,6 @@ public class Employ extends BaseEmploy implements Parcelable {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
         ContentValues values = new ContentValues();
-//        values.put("id", id);
-//        values.put("user_name", user_name);
-//        values.put("password", password);
-//        values.put("name", name);
-//        values.put("real_name", real_name);
-//        values.put("sex", sex);
-//        values.put("company_id", company_id);
-//        values.put("company_name", company_name);
-//        values.put("phone", phone);
-//
-//        values.put("balance", balance);
-//        values.put("service_type", service_type);
-//        values.put("child_type", child_type);
-//
-//        values.put("bank_name", bank_name);
-//        values.put("bank_card_no", bank_card_no);
-//        values.put("cash_person_name", cash_person_name);
-//        values.put("status", status);
-//
-//        values.put("portrait_path", portrait_path);
-//        values.put("score", score);
-//        values.put("company_phone", company_phone);
-//        values.put("auditType", auditType);
-
-//hf
 
         values.put("id", id);
         values.put("userName", userName);
@@ -500,7 +455,8 @@ public class Employ extends BaseEmploy implements Parcelable {
         values.put("mobileOperators", mobileOperators);
         values.put("isFulltimeDriver", isFulltimeDriver);
         values.put("householdRegistrationName", householdRegistrationName);
-
+        values.put("token",token);
+        values.put("refreshToken",refreshToken);
         /*
          * values.put("age", age); values.put("jialing", jialing);
          */
@@ -539,51 +495,6 @@ public class Employ extends BaseEmploy implements Parcelable {
         try {
             if (cursor.moveToFirst()) {
                 driverInfo = new Employ();
-//                driverInfo.id = cursor.getLong(cursor
-//                        .getColumnIndex("id"));
-//                driverInfo.user_name = cursor.getString(cursor
-//                        .getColumnIndex("user_name"));
-//                driverInfo.password = cursor.getString(cursor
-//                        .getColumnIndex("password"));
-//                driverInfo.name = cursor.getString(cursor
-//                        .getColumnIndex("name"));
-//                driverInfo.real_name = cursor.getString(cursor
-//                        .getColumnIndex("real_name"));
-//                driverInfo.sex = cursor.getString(cursor
-//                        .getColumnIndex("sex"));
-//                driverInfo.company_id = cursor.getLong(cursor
-//                        .getColumnIndex("company_id"));
-//                driverInfo.company_name = cursor.getString(cursor
-//                        .getColumnIndex("company_name"));
-//                driverInfo.phone = cursor.getString(cursor
-//                        .getColumnIndex("phone"));
-//
-//                driverInfo.balance = cursor.getDouble(cursor
-//                        .getColumnIndex("balance"));
-//                driverInfo.service_type = cursor.getString(cursor
-//                        .getColumnIndex("service_type"));
-//                driverInfo.child_type = cursor.getString(cursor
-//                        .getColumnIndex("child_type"));
-//                driverInfo.bank_name = cursor.getString(cursor
-//                        .getColumnIndex("bank_name"));
-//                driverInfo.bank_card_no = cursor.getString(cursor
-//                        .getColumnIndex("bank_card_no"));
-//                driverInfo.cash_person_name = cursor.getString(cursor
-//                        .getColumnIndex("cash_person_name"));
-//                driverInfo.portrait_path = cursor.getString(cursor
-//                        .getColumnIndex("portrait_path"));
-//                driverInfo.score = cursor.getDouble(cursor
-//                        .getColumnIndex("score"));
-//                driverInfo.status = cursor.getString(cursor
-//                        .getColumnIndex("status"));
-//                driverInfo.company_phone = cursor.getString(cursor
-//                        .getColumnIndex("company_phone"));
-//
-//                driverInfo.auditType = cursor.getInt(cursor
-//                        .getColumnIndex("auditType"));
-//                driverInfo.vehicle = Vehicle.findByEmployId(driverID);
-
-                //add hufeng
 
                 driverInfo.id = cursor.getLong(cursor.getColumnIndex("id"));
                 driverInfo.userName = cursor.getString(cursor
@@ -618,7 +529,7 @@ public class Employ extends BaseEmploy implements Parcelable {
                         .getColumnIndex("level"));
                 driverInfo.dutyTime = cursor.getInt(cursor
                         .getColumnIndex("dutyTime"));
-                driverInfo.status = cursor.getString(cursor.getColumnIndex("status"));
+                driverInfo.status = cursor.getInt(cursor.getColumnIndex("status"));
                 driverInfo.introducer = cursor.getString(cursor
                         .getColumnIndex("introducer"));
                 driverInfo.companyId = cursor.getLong(cursor
@@ -695,7 +606,10 @@ public class Employ extends BaseEmploy implements Parcelable {
                         .getColumnIndex("isFulltimeDriver"));
                 driverInfo.householdRegistrationName = cursor.getString(cursor
                         .getColumnIndex("householdRegistrationName"));
-
+                driverInfo.token = cursor.getString(cursor
+                        .getColumnIndex("token"));
+                driverInfo.refreshToken = cursor.getString(cursor
+                        .getColumnIndex("refreshToken"));
             }
         } catch (Exception e) {
 //			CrashReport.setUserSceneTag();
@@ -757,50 +671,6 @@ public class Employ extends BaseEmploy implements Parcelable {
     public static Employ cursorToEmploy(Cursor cursor) {
         Employ driverInfo = new Employ();
 
-//        driverInfo.id = cursor.getLong(cursor
-//                .getColumnIndex("id"));
-//        driverInfo.user_name = cursor.getString(cursor
-//                .getColumnIndex("user_name"));
-//        driverInfo.password = cursor.getString(cursor
-//                .getColumnIndex("password"));
-//        driverInfo.name = cursor.getString(cursor
-//                .getColumnIndex("name"));
-//        driverInfo.real_name = cursor.getString(cursor
-//                .getColumnIndex("real_name"));
-//        driverInfo.sex = cursor.getString(cursor
-//                .getColumnIndex("sex"));
-//        driverInfo.company_id = cursor.getLong(cursor
-//                .getColumnIndex("company_id"));
-//        driverInfo.company_name = cursor.getString(cursor
-//                .getColumnIndex("company_name"));
-//        driverInfo.phone = cursor.getString(cursor
-//                .getColumnIndex("phone"));
-//
-//        driverInfo.balance = cursor.getDouble(cursor
-//                .getColumnIndex("balance"));
-//        driverInfo.service_type = cursor.getString(cursor
-//                .getColumnIndex("service_type"));
-//        driverInfo.child_type = cursor.getString(cursor
-//                .getColumnIndex("child_type"));
-//        driverInfo.bank_name = cursor.getString(cursor
-//                .getColumnIndex("bank_name"));
-//        driverInfo.bank_card_no = cursor.getString(cursor
-//                .getColumnIndex("bank_card_no"));
-//        driverInfo.cash_person_name = cursor.getString(cursor
-//                .getColumnIndex("cash_person_name"));
-//        driverInfo.portrait_path = cursor.getString(cursor
-//                .getColumnIndex("portrait_path"));
-//        driverInfo.score = cursor.getDouble(cursor
-//                .getColumnIndex("score"));
-//        driverInfo.status = cursor.getString(cursor
-//                .getColumnIndex("status"));
-//        driverInfo.company_phone = cursor.getString(cursor
-//                .getColumnIndex("company_phone"));
-//        driverInfo.auditType = cursor.getInt(cursor
-//                .getColumnIndex("auditType"));
-
-        //add hufeng
-
         driverInfo.id = cursor.getLong(cursor.getColumnIndex("id"));
         driverInfo.userName = cursor.getString(cursor
                 .getColumnIndex("userName"));
@@ -834,7 +704,7 @@ public class Employ extends BaseEmploy implements Parcelable {
                 .getColumnIndex("level"));
         driverInfo.dutyTime = cursor.getInt(cursor
                 .getColumnIndex("dutyTime"));
-        driverInfo.status = cursor.getString(cursor.getColumnIndex("status"));
+        driverInfo.status = cursor.getInt(cursor.getColumnIndex("status"));
         driverInfo.introducer = cursor.getString(cursor
                 .getColumnIndex("introducer"));
         driverInfo.companyId = cursor.getLong(cursor
@@ -911,7 +781,10 @@ public class Employ extends BaseEmploy implements Parcelable {
                 .getColumnIndex("isFulltimeDriver"));
         driverInfo.householdRegistrationName = cursor.getString(cursor
                 .getColumnIndex("householdRegistrationName"));
-
+        driverInfo.token = cursor.getString(cursor
+                .getColumnIndex("token"));
+        driverInfo.refreshToken = cursor.getString(cursor
+                .getColumnIndex("refreshToken"));
 
         return driverInfo;
     }
@@ -923,30 +796,6 @@ public class Employ extends BaseEmploy implements Parcelable {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
         ContentValues values = new ContentValues();
-//        values.put("id", id);
-//        values.put("user_name", user_name);
-//        values.put("password", password);
-//        values.put("name", name);
-//        values.put("real_name", real_name);
-//        values.put("sex", sex);
-//        values.put("company_id", company_id);
-//        values.put("company_name", company_name);
-//        values.put("phone", phone);
-//        values.put("portrait_path", portrait_path);
-//
-//        values.put("balance", balance);
-//        values.put("service_type", service_type);
-//        values.put("child_type", child_type);
-//
-//        values.put("bank_name", bank_name);
-//        values.put("bank_card_no", bank_card_no);
-//        values.put("cash_person_name", cash_person_name);
-//        values.put("score", score);
-//        values.put("status", status);
-//        values.put("company_phone", company_phone);
-//        values.put("auditType", auditType);
-
-//hf
 
         values.put("id", id);
         values.put("userName", userName);
@@ -1005,6 +854,8 @@ public class Employ extends BaseEmploy implements Parcelable {
         values.put("mobileOperators", mobileOperators);
         values.put("isFulltimeDriver", isFulltimeDriver);
         values.put("householdRegistrationName", householdRegistrationName);
+        values.put("token",token);
+        values.put("refreshToken",refreshToken);
 
         boolean flag = db.update("t_driverinfo", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
@@ -1033,6 +884,7 @@ public class Employ extends BaseEmploy implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
         dest.writeString(userName);
         dest.writeString(password);
         dest.writeString(nickName);
@@ -1040,6 +892,7 @@ public class Employ extends BaseEmploy implements Parcelable {
         dest.writeString(idCard);
         dest.writeInt(sex);
         dest.writeLong(birthDate);
+        dest.writeString(phone);
         dest.writeString(portraitPath);
         dest.writeString(serviceType);
         dest.writeString(emergency);
@@ -1049,6 +902,7 @@ public class Employ extends BaseEmploy implements Parcelable {
         dest.writeInt(driveLicenceEnd);
         dest.writeLong(level);
         dest.writeLong(dutyTime);
+        dest.writeInt(status);
         dest.writeString(introducer);
         dest.writeLong(companyId);
         dest.writeLong(created);
@@ -1087,89 +941,7 @@ public class Employ extends BaseEmploy implements Parcelable {
         dest.writeString(mobileOperators);
         dest.writeInt(isFulltimeDriver);
         dest.writeString(householdRegistrationName);
+        dest.writeString(token);
+        dest.writeString(refreshToken);
     }
-
-//    protected Employ(Parcel in) {
-//        id = in.readLong();
-//        user_name = in.readString();
-//        password = in.readString();
-//        name = in.readString();
-//        real_name = in.readString();
-//        sex = in.readString();
-//        company_id = in.readLong();
-//        phone = in.readString();
-//        balance = in.readDouble();
-//        service_type = in.readString();
-//        bank_name = in.readString();
-//        bank_card_no = in.readString();
-//        cash_person_name = in.readString();
-//        portrait_path = in.readString();
-//        score = in.readDouble();
-//        status = in.readString();
-//        company_phone = in.readString();
-//        auditType = in.readInt();
-//    }
-//
-//    public static final Creator<Employ> CREATOR = new Creator<Employ>() {
-//        @Override
-//        public Employ createFromParcel(Parcel in) {
-//            return new Employ(in);
-//        }
-//
-//        @Override
-//        public Employ[] newArray(int size) {
-//            return new Employ[size];
-//        }
-//    };
-//
-//    @Override
-//    public String toString() {
-//        return "Employ{" +
-//                "id=" + id +
-//                ", user_name='" + user_name + '\'' +
-//                ", password='" + password + '\'' +
-//                ", name='" + name + '\'' +
-//                ", real_name='" + real_name + '\'' +
-//                ", sex='" + sex + '\'' +
-//                ", phone='" + phone + '\'' +
-//                ", company_id=" + company_id +
-//                ", balance=" + balance +
-//                ", service_type='" + service_type + '\'' +
-//                ", bank_name='" + bank_name + '\'' +
-//                ", bank_card_no='" + bank_card_no + '\'' +
-//                ", cash_person_name='" + cash_person_name + '\'' +
-//                ", portrait_path='" + portrait_path + '\'' +
-//                ", score='" + score + '\'' +
-//                ", status='" + status + '\'' +
-//                ", company_phone='" + company_phone + '\'' +
-//                ", auditType='" + auditType + '\'' +
-//                '}';
-//    }
-//
-//    @Override
-//    public int describeContents() {
-//        return 0;
-//    }
-//
-//    @Override
-//    public void writeToParcel(Parcel dest, int flags) {
-//        dest.writeLong(id);
-//        dest.writeString(user_name);
-//        dest.writeString(password);
-//        dest.writeString(name);
-//        dest.writeString(real_name);
-//        dest.writeString(sex);
-//        dest.writeLong(company_id);
-//        dest.writeString(phone);
-//        dest.writeDouble(balance);
-//        dest.writeString(service_type);
-//        dest.writeString(bank_name);
-//        dest.writeString(bank_card_no);
-//        dest.writeString(cash_person_name);
-//        dest.writeString(portrait_path);
-//        dest.writeDouble(score);
-//        dest.writeString(status);
-//        dest.writeString(company_phone);
-//        dest.writeInt(auditType);
-//    }
 }

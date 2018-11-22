@@ -58,8 +58,9 @@ public class ApiManager {
                 .connectTimeout(16000, TimeUnit.MILLISECONDS)
                 .addInterceptor(new TimestampInterceptor())//时间戳拦截器
                 .addInterceptor(new SignInterceptor())//签名拦截器
+                .addInterceptor(new TokenInterceptor())//token拦截器
                 .addInterceptor(logInterceptor) //添加日志拦截器,进行输出日志
-                .retryOnConnectionFailure(true)    //失败重连
+                .retryOnConnectionFailure(true) //失败重连
                 .cache(cache);
 
         if (Config.HOST.contains("https://")) {
