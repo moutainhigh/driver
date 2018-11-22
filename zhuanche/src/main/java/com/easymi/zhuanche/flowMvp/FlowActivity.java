@@ -291,7 +291,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 } else {
                     popWindow.showConsumer();
                 }
-                if ((zcOrder.orderStatus == ZCOrderStatus.TAKE_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER || zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER) && !notChangeOrder) {
+                if ((zcOrder.orderStatus == ZCOrderStatus.TAKE_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER|| zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER) && !notChangeOrder) {
                     popWindow.showTransfer();
                 } else {
                     popWindow.hideTransfer();
@@ -417,7 +417,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
             nextPlace.setText(zcOrder.getEndSite().addr);
-        } else {
+        }else {
             nextPlace.setText(zcOrder.getStartSite().addr);
         }
     }
@@ -527,7 +527,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
                 DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.ZHUANCHE);//确认费用后直接弹出支付页面
                 if (null != dymOrder) {
-                    bridge.doPay(dymOrder.totalFee);
+                    bridge.doPay(dymOrder.orderShouldPay);
                 }
             } else {
                 if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
@@ -766,22 +766,18 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         RadioButton pay3Btn = view.findViewById(R.id.pay_3_btn);
         RadioButton pay4Btn = view.findViewById(R.id.pay_4_btn);
 
-        pay1Text.setVisibility(View.GONE);
-        pay1Empty.setVisibility(View.GONE);
-        pay1Btn.setVisibility(View.GONE);
-        pay1Img.setVisibility(View.GONE);
-//        if (consumerInfo.consumerBalance < money) {
-        pay2Text.setVisibility(View.GONE);
-        pay2Empty.setVisibility(View.GONE);
-        pay2Btn.setVisibility(View.GONE);
-        pay2Img.setVisibility(View.GONE);
-//        }
-//        if (!consumerInfo.canSign) {
-        pay3Text.setVisibility(View.GONE);
-        pay3Empty.setVisibility(View.GONE);
-        pay3Btn.setVisibility(View.GONE);
-        pay3Img.setVisibility(View.GONE);
-//        }
+        if (consumerInfo.consumerBalance < money) {
+            pay2Text.setVisibility(View.GONE);
+            pay2Empty.setVisibility(View.GONE);
+            pay2Btn.setVisibility(View.GONE);
+            pay2Img.setVisibility(View.GONE);
+        }
+        if (!consumerInfo.canSign) {
+            pay3Text.setVisibility(View.GONE);
+            pay3Empty.setVisibility(View.GONE);
+            pay3Btn.setVisibility(View.GONE);
+            pay3Img.setVisibility(View.GONE);
+        }
         boolean canDaifu = ZCSetting.findOne().isPaid == 1;
         if (!canDaifu) {
             pay4Text.setVisibility(View.GONE);
@@ -813,21 +809,16 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         sure.setText(getString(R.string.pay_money) + money + getString(R.string.yuan));
 
         sure.setOnClickListener(view12 -> {
-//            if (pay2Btn.isChecked() || pay3Btn.isChecked() || pay4Btn.isChecked()) {
-//                if (pay4Btn.isChecked()) {
-//                    presenter.payOrder(orderId, "helppay");
-//                } else if (pay3Btn.isChecked()) {
-//                    presenter.payOrder(orderId, "sign");
-//                } else if (pay2Btn.isChecked()) {
-//                    presenter.payOrder(orderId, "balance");
-//                }
-//            } else {
-//                ToastUtil.showMessage(FlowActivity.this, getString(R.string.please_pay_title));
-//            }
-            if (money > EmUtil.getEmployInfo().balance) {
-                ToastUtil.showMessage(this, getResources().getString(R.string.no_balance));
-            }else {
-                presenter.payOrder(orderId, "PAY_DRIVER_BALANCE",zcOrder.version);
+            if (pay2Btn.isChecked() || pay3Btn.isChecked() || pay4Btn.isChecked()) {
+                if (pay4Btn.isChecked()) {
+                    presenter.payOrder(orderId, "helppay");
+                } else if (pay3Btn.isChecked()) {
+                    presenter.payOrder(orderId, "sign");
+                } else if (pay2Btn.isChecked()) {
+                    presenter.payOrder(orderId, "balance");
+                }
+            } else {
+                ToastUtil.showMessage(FlowActivity.this, getString(R.string.please_pay_title));
             }
         });
 
@@ -978,7 +969,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         bridge = new ActFraCommBridge() {
             @Override
             public void doAccept(LoadingButton btn) {
-                presenter.acceptOrder(zcOrder.orderId, zcOrder.version, btn);
+                presenter.acceptOrder(zcOrder.orderId,zcOrder.version, btn);
             }
 
             @Override
@@ -992,12 +983,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void doToStart(LoadingButton btn) {
-                presenter.toStart(zcOrder.orderId, zcOrder.version, btn);
+                presenter.toStart(zcOrder.orderId,zcOrder.version, btn);
             }
 
             @Override
             public void doArriveStart() {
-                presenter.arriveStart(zcOrder.orderId, zcOrder.version);
+                presenter.arriveStart(zcOrder.orderId,zcOrder.version);
             }
 
             @Override
@@ -1012,7 +1003,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void doStartDrive(LoadingButton btn) {
-                presenter.startDrive(zcOrder.orderId, zcOrder.version, btn);
+                presenter.startDrive(zcOrder.orderId,zcOrder.version, btn);
             }
 
             @Override
@@ -1084,15 +1075,13 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void doConfirmMoney(LoadingButton btn, DymOrder dymOrder) {
-                presenter.arriveDes(zcOrder, zcOrder.version, btn, dymOrder);
+                presenter.arriveDes(zcOrder,zcOrder.version, btn, dymOrder);
             }
 
             @Override
             public void doPay(double money) {
                 payMoney = money;
-//                presenter.getConsumerInfo(orderId);
-                showPayType(payMoney, null);
-
+                presenter.getConsumerInfo(orderId);
             }
 
             @Override

@@ -12,17 +12,11 @@ public class Announcement {
     @SerializedName("created")
     public long time;
 
-    @SerializedName("afficheTitle")
+    @SerializedName("affiche_title")
     public String message;
 
     public String url;
 
-    @SerializedName("afficheContent")
+    @SerializedName("affiche_content")
     public String content;
-
-    /**
-     *公司id
-     */
-    private Long companyId;
-
 }

@@ -193,7 +193,4 @@
     <string name="com_accept_order">我接的单</string>
     <string name="com_assign_order">指派订单</string>
     <string name="com_grab_order">可抢订单</string>
-
-    <string name="empty_text"></string>
-    <string name="com_no_read">全部都已读了哦</string>
 </resources>

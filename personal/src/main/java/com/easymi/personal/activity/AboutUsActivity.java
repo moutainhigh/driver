@@ -141,7 +141,7 @@ public class AboutUsActivity extends RxBaseActivity {
                 .observeOn(AndroidSchedulers.mainThread());
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
-                true, emResult -> webView.loadData(emResult.data.content, "text/html;charset=UTF-8", null))));
+                true, emResult -> webView.loadData(emResult.article.contents, "text/html;charset=UTF-8", null))));
     }
 
     @Override
@@ -194,7 +194,7 @@ public class AboutUsActivity extends RxBaseActivity {
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
                 true, articleResult -> {
-            String html = articleResult.data.content;
+            String html = articleResult.article.contents;
 
             String css = "<style type=\"text/css\"> img {" +
                     "width:auto;" +//限定图片宽度填充屏幕
@@ -213,16 +213,16 @@ public class AboutUsActivity extends RxBaseActivity {
 
             webView.loadData(html, "text/html; charset=UTF-8", null);
 
-            phoneText.setText(articleResult.data.phone);
-            webSiteText.setText(articleResult.data.url);
+            phoneText.setText(articleResult.article.phone);
+            webSiteText.setText(articleResult.article.url);
 
-            if (StringUtils.isNotBlank(articleResult.data.logo)) {
-                if (StringUtils.isNotBlank(articleResult.data.logo)) {
+            if (StringUtils.isNotBlank(articleResult.article.logo)) {
+                if (StringUtils.isNotBlank(articleResult.article.logo)) {
                     RequestOptions options = new RequestOptions()
                             .placeholder(R.mipmap.ic_launcher)
                             .diskCacheStrategy(DiskCacheStrategy.ALL);
                     Glide.with(AboutUsActivity.this)
-                            .load(Config.IMG_SERVER + articleResult.data.logo + Config.IMG_PATH)
+                            .load(Config.IMG_SERVER + articleResult.article.logo + Config.IMG_PATH)
                             .apply(options)
                             .into(logo);
                 }

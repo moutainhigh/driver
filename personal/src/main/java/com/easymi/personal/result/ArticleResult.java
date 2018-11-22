@@ -8,7 +8,5 @@ import com.easymi.personal.entity.Article;
  */
 
 public class ArticleResult extends EmResult {
-//    public Article article;
-
-        public Article data;
+    public Article article;
 }

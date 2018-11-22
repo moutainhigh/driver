@@ -10,6 +10,6 @@ import java.util.List;
  */
 
 public class NotifityResult extends EmResult {
-    public List<Notifity> data;
+    public List<Notifity> employNoticeRecords;
     public int total;
 }

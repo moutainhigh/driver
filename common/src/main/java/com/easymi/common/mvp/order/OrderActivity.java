@@ -7,7 +7,6 @@ import android.support.v4.view.ViewPager;
 
 import com.easymi.common.R;
 import com.easymi.common.adapter.VpAdapter;
-import com.easymi.common.widget.MakeOrderPopWindow;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.widget.CusToolbar;
 
@@ -30,8 +29,6 @@ public class OrderActivity extends RxBaseActivity {
     List<Fragment> fragments;
     VpAdapter adapter;
     boolean fastAssign = true;
-    //补单弹窗
-    MakeOrderPopWindow popWindow;
 
     @Override
     public void initToolBar() {
@@ -39,15 +36,9 @@ public class OrderActivity extends RxBaseActivity {
         toolbar.setTitle(R.string.liushui_title);
         toolbar.setLeftIcon(R.drawable.ic_arrow_back, v -> finish());
         toolbar.setRightText(R.string.com_make_order, v -> {
-            if (popWindow.isShowing()) {
-                popWindow.dismiss();
-            } else {
-                popWindow.show(v);
-            }
+            //todo 司机补单
         });
     }
-
-
 
     @Override
     public boolean isEnableSwipe() {
@@ -63,9 +54,6 @@ public class OrderActivity extends RxBaseActivity {
     public void initViews(Bundle savedInstanceState) {
         tabLayout = findViewById(R.id.tab_layout);
         viewPager = findViewById(R.id.view_pager);
-
-        popWindow = new MakeOrderPopWindow(this);
-//        popWindow.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.popwindow_background));
 
         initTabLayout();
     }

@@ -2,7 +2,6 @@ package com.easymi.personal.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.text.TextUtils;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -14,7 +13,6 @@ import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusErrLayout;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.SwipeRecyclerView;
@@ -94,7 +92,7 @@ public class NotifityActivity extends RxBaseActivity {
 
     private void queryData() {
         Observable<NotifityResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .notices(page, 10)
+                .notices(EmUtil.getEmployId(), EmUtil.getAppKey(), page, 10)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -107,8 +105,8 @@ public class NotifityActivity extends RxBaseActivity {
                 if (page == 1) {
                     notifities.clear();
                 }
-                if (notifityResult.data != null) {
-                    notifities.addAll(notifityResult.data);
+                if (notifityResult.employNoticeRecords != null) {
+                    notifities.addAll(notifityResult.employNoticeRecords);
                 }
                 adapter.setList(notifities);
                 if (notifityResult.total <= page * 10) {
@@ -118,10 +116,8 @@ public class NotifityActivity extends RxBaseActivity {
                 }
                 if (notifities.size() == 0) {
                     showErr(0);
-                    toolbar.setRightText(R.string.empty_text, null);
                 } else {
                     hideErr();
-                    toolbar.setRightText(R.string.all_read, v -> readAll());
                 }
             }
 
@@ -135,7 +131,7 @@ public class NotifityActivity extends RxBaseActivity {
 
     private void readOne(long id, int position) {
         Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .readNotice(id)
+                .readNotice(id, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -148,12 +144,8 @@ public class NotifityActivity extends RxBaseActivity {
     }
 
     private void readAll() {
-        if (TextUtils.isEmpty(getIds())){
-            ToastUtil.showMessage(this,getResources().getString(R.string.com_no_read));
-            return;
-        }
         Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .readAll(getIds(), EmUtil.getAppKey())
+                .readAll(EmUtil.getEmployId(), EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -163,20 +155,6 @@ public class NotifityActivity extends RxBaseActivity {
             recyclerView.onRefresh();
             recyclerView.setRefreshing(true);
         })));
-    }
-
-    public String getIds() {
-        String ids = null;
-        for (Notifity notifity : notifities) {
-            if (notifity.state == 1){
-                if (TextUtils.isEmpty(ids)) {
-                    ids = notifity.id + "";
-                } else {
-                    ids = ids + "," + notifity.id;
-                }
-            }
-        }
-        return ids;
     }
 
     /**

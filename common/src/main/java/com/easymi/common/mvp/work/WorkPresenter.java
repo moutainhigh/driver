@@ -3,13 +3,11 @@ package com.easymi.common.mvp.work;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.easymi.common.CommApiService;
 import com.easymi.common.R;
 import com.easymi.common.entity.AnnAndNotice;
 import com.easymi.common.entity.CityLine;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
-import com.easymi.common.push.CountEvent;
 import com.easymi.common.push.MqttManager;
 import com.easymi.common.push.WorkTimeCounter;
 import com.easymi.common.result.AnnouncementResult;
@@ -20,7 +18,6 @@ import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.common.result.SettingResult;
 import com.easymi.common.result.SystemResult;
-import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.Config;
 import com.easymi.component.EmployStatus;
 import com.easymi.component.app.XApp;
@@ -30,14 +27,11 @@ import com.easymi.component.entity.Setting;
 import com.easymi.component.entity.SubSetting;
 import com.easymi.component.entity.SystemConfig;
 import com.easymi.component.entity.ZCSetting;
-import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.ErrCode;
 import com.easymi.component.network.GsonUtil;
 import com.easymi.component.network.HaveErrSubscriberListener;
-import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
-import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
@@ -45,14 +39,10 @@ import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.LoadingButton;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by developerLzh on 2017/11/17 0017.
@@ -268,7 +258,8 @@ public class WorkPresenter implements WorkContract.Presenter {
                         for (DymOrder dymOrder : allDym) {
                             boolean isExist = false;
                             for (MultipleOrder order : orders) {
-                                if (dymOrder.orderId == order.id && dymOrder.orderType.equals(order.serviceType)) {
+                                if (dymOrder.orderId == order.id
+                                        && dymOrder.orderType.equals(order.serviceType)) {
                                     isExist = true;
                                     break;
                                 }
@@ -382,10 +373,9 @@ public class WorkPresenter implements WorkContract.Presenter {
     public void loadDataOnResume() {
         long driverId = EmUtil.getEmployId();
         loadEmploy(driverId);
-//        getAppSetting(driverId);//获取配置信息
+        getAppSetting(driverId);//获取配置信息
         uploadTime(-1);
         PhoneUtil.checkGps(context);
-        workStatistics();
     }
 
     /**
@@ -462,27 +452,29 @@ public class WorkPresenter implements WorkContract.Presenter {
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
                 true, result -> {
 
-//            //解析业务配置
-//            List<SubSetting> settingList = GsonUtil.parseToList(result.appSetting, SubSetting[].class);
-//            if (settingList != null) {
-//                for (SubSetting sub : settingList) {
-//                    if (Config.ZHUANCHE.equals(sub.businessType)) {
-//                        ZCSetting zcSetting = GsonUtil.parseJson(sub.subJson, ZCSetting.class);
-//                        if (zcSetting != null) {
-//                            ZCSetting.deleteAll();
-//                            zcSetting.save();
-//                            zcDriverKm = zcSetting.emploiesKm;
-//                        }
-//                    } else if ("daijia".equals(sub.businessType)) {
-//                        Setting djSetting = GsonUtil.parseJson(sub.subJson, Setting.class);
-//                        if (djSetting != null) {
-//                            Setting.deleteAll();
-//                            djSetting.save();
-//                            driverKm = djSetting.emploiesKm;
-//                        }
-//                    }
-//                }
-//            }
+            //解析业务配置
+            List<SubSetting> settingList = GsonUtil.parseToList(result.appSetting, SubSetting[].class);
+            if (settingList != null) {
+                for (SubSetting sub : settingList) {
+                    if (Config.ZHUANCHE.equals(sub.businessType)) {
+                        ZCSetting zcSetting = GsonUtil.parseJson(sub.subJson, ZCSetting.class);
+                        if (zcSetting != null) {
+                            ZCSetting.deleteAll();
+                            zcSetting.save();
+                            zcDriverKm = zcSetting.emploiesKm;
+                        }
+                    } else if ("daijia".equals(sub.businessType)) {
+                        Setting djSetting = GsonUtil.parseJson(sub.subJson, Setting.class);
+                        if (djSetting != null) {
+                            Setting.deleteAll();
+                            djSetting.save();
+                            driverKm = djSetting.emploiesKm;
+                        }
+                    }
+                }
+            }
+
+
         })));
 
 
@@ -576,30 +568,6 @@ public class WorkPresenter implements WorkContract.Presenter {
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
                 true, result -> {
             //do nothing
-        })));
-    }
-
-
-    public void workStatistics() {
-        CommApiService api = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class);
-
-        Observable<WorkStatisticsResult> observable = api
-                .workStatistics()
-                .filter(new HttpResultFunc<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        new RxManager().add(observable.subscribe(new MySubscriber<>(context, false,
-                true, result -> {
-            if (result != null && result.workStatistics != null) {
-                //值已后台返回为准
-//                totalMinute = result.workStatistics.minute;
-                CountEvent event = new CountEvent();
-                event.finishCount = result.workStatistics.finishCount;
-                event.income = result.workStatistics.income;
-//                event.minute = totalMinute;
-                EventBus.getDefault().post(event);
-            }
         })));
     }
 

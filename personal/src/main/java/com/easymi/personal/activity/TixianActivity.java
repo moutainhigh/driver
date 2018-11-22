@@ -27,9 +27,7 @@ import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
-import com.easymi.personal.entity.BankInfo;
 import com.easymi.personal.entity.TixianRule;
-import com.easymi.personal.result.BankResult;
 import com.easymi.personal.result.LoginResult;
 import com.easymi.personal.result.TixianResult;
 import com.easymi.personal.result.TixianRuleResult;
@@ -63,7 +61,7 @@ public class TixianActivity extends RxBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        getDriverInfo(EmUtil.getEmployId());
+        getDriverInfo(EmUtil.getEmployId());
     }
 
     @Override
@@ -149,9 +147,6 @@ public class TixianActivity extends RxBaseActivity {
         });
 
         getTixianConfig();//获取提现的规则
-        getBankInfo();
-
-        balanceText.setText(String.valueOf(EmUtil.getEmployInfo().balance));
     }
 
     private boolean moneyLegal(double money) {
@@ -200,22 +195,24 @@ public class TixianActivity extends RxBaseActivity {
                 return;
             }
         }
-        if (StringUtils.isBlank(no)) {
-            ToastUtil.showMessage(TixianActivity.this, getString(R.string.please_bank_number));
-            return;
-        }
+
         if (StringUtils.isBlank(name)) {
             ToastUtil.showMessage(TixianActivity.this, getString(R.string.please_bank_name));
             return;
         }
-
+        if (StringUtils.isBlank(no)) {
+            ToastUtil.showMessage(TixianActivity.this, getString(R.string.please_bank_number));
+            return;
+        }
         if (StringUtils.isBlank(owner)) {
             ToastUtil.showMessage(TixianActivity.this, getString(R.string.please_bank_owner));
             return;
         }
 
+        Employ employ = EmUtil.getEmployInfo();
         Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .enchashment(no, money, name, owner)
+                .enchashment(employ.id, employ.realName, employ.userName, employ.phone, money,
+                        employ.company_id, EmUtil.getAppKey(), name, no, owner)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -236,38 +233,39 @@ public class TixianActivity extends RxBaseActivity {
         cusToolbar.setTitle(R.string.tixian_title);
     }
 
-//    private void getDriverInfo(Long driverId) {
-//        Observable<LoginResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-//                .getDriverInfo(driverId, EmUtil.getAppKey())
-//                .filter(new HttpResultFunc<>())
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread());
-//
-//        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, loginResult -> {
-//            Employ employ = loginResult.getEmployInfo();
-//            employ.saveOrUpdate();
-//            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
-//            editor.apply();
-//
+    private void getDriverInfo(Long driverId) {
+        Observable<LoginResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
+                .getDriverInfo(driverId, EmUtil.getAppKey())
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, loginResult -> {
+            Employ employ = loginResult.getEmployInfo();
+            Log.e("okhttp", employ.toString());
+            employ.saveOrUpdate();
+            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+            editor.apply();
+
 //            balanceText.setText(String.valueOf(employ.balance));
 //
-////            if (StringUtils.isNotBlank(employ.bank_name)) {
-////                bankName.setText(employ.bank_name);
-////            }
-////            if (StringUtils.isNotBlank(employ.bank_card_no)) {
-////                bankNo.setText(employ.bank_card_no);
-////            }
-////            if (StringUtils.isNotBlank(employ.cash_person_name)) {
-////                bankOwner.setText(employ.cash_person_name);
-////            }
-//        })));
-//    }
+//            if (StringUtils.isNotBlank(employ.bank_name)) {
+//                bankName.setText(employ.bank_name);
+//            }
+//            if (StringUtils.isNotBlank(employ.bank_card_no)) {
+//                bankNo.setText(employ.bank_card_no);
+//            }
+//            if (StringUtils.isNotBlank(employ.cash_person_name)) {
+//                bankOwner.setText(employ.cash_person_name);
+//            }
+        })));
+    }
 
     private TixianRule tixianRule;
 
     private void getTixianConfig() {
         Observable<TixianRuleResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .tixianRule()
+                .tixianRule(EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -286,31 +284,5 @@ public class TixianActivity extends RxBaseActivity {
     @Override
     public boolean isEnableSwipe() {
         return true;
-    }
-
-
-    private void getBankInfo() {
-        Observable<BankResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .bankInfo()
-                .filter(new HttpResultFunc<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
-                false, bankResult -> {
-            if (bankResult.getCode() == 1 && bankResult.data != null) {
-                BankInfo bankInfo = bankResult.data;
-
-                if (StringUtils.isNotBlank(bankInfo.bankName)) {
-                    bankName.setText(bankInfo.bankName);
-                }
-                if (StringUtils.isNotBlank(bankInfo.bankCardNo)) {
-                    bankNo.setText(bankInfo.bankCardNo);
-                }
-                if (StringUtils.isNotBlank(bankInfo.payee)) {
-                    bankOwner.setText(bankInfo.payee);
-                }
-            }
-        })));
     }
 }

@@ -48,8 +48,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginTop="16dp"
-                    android:orientation="horizontal"
-                    >
+                    android:orientation="horizontal">
 
                     <Space
                         android:layout_width="10dp"
@@ -177,7 +176,6 @@
                     android:layout_height="45dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_marginBottom="16dp"
                     android:clickable="true">
 
                     <TextView
@@ -223,8 +221,7 @@
                     android:layout_marginBottom="16dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:clickable="true"
-                    android:visibility="gone">
+                    android:clickable="true">
 
                     <TextView
                         android:id="@+id/union_text"

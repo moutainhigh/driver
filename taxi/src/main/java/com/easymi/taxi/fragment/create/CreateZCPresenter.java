@@ -24,17 +24,17 @@ import java.util.List;
  * Created by developerLzh on 2017/11/27 0027.
  */
 
-public class CreateTaxiPresenter implements CreateTaxiContract.Presenter {
+public class CreateZCPresenter implements CreateZCContract.Presenter {
 
-    private CreateTaxiContract.View view;
-    private CreateTaxiContract.Model model;
+    private CreateZCContract.View view;
+    private CreateZCContract.Model model;
 
     private Context context;
 
-    public CreateTaxiPresenter(CreateTaxiContract.View view, Context context) {
+    public CreateZCPresenter(CreateZCContract.View view, Context context) {
         this.view = view;
         this.context = context;
-        this.model = new CreateTaxiModel();
+        this.model = new CreateZCModel();
     }
 
     @Override

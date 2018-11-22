@@ -306,9 +306,9 @@ public class FlowModel implements FlowContract.Model {
     }
 
     @Override
-    public Observable<EmResult> payOrder(Long orderId, String payType, Long version) {
+    public Observable<EmResult> payOrder(Long orderId, String payType) {
         return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
-                .payOrder(orderId, payType,version)
+                .payOrder(orderId, EmUtil.getAppKey(), payType)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

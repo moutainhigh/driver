@@ -96,7 +96,7 @@ public class AnnouncementActivity extends RxBaseActivity {
 
     private void queryData() {
         Observable<AnnouncementResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .employAffiches(page, 10)
+                .employAffiches(EmUtil.getEmployInfo().company_id, EmUtil.getAppKey(), page, 10)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

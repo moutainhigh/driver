@@ -28,13 +28,13 @@ public class SystemConfig {
     @SerializedName("withdrawals_memo")
     public String tixianMemo;//提现备注
 
-    @SerializedName("one")
+    @SerializedName("employ_money_1")
     public double payMoney1;//充值金额1
 
-    @SerializedName("two")
+    @SerializedName("employ_money_2")
     public double payMoney2;//充值金额2
 
-    @SerializedName("three")
+    @SerializedName("employ_money_3")
     public double payMoney3;//充值金额3
 
     //能否拨打附近司机电话,1允许,2不允许

@@ -10,14 +10,12 @@ import android.os.Message;
 import com.easymi.component.Config;
 import com.easymi.component.entity.SystemConfig;
 import com.easymi.component.pay.PayType;
-import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.Log;
 
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,8 +34,6 @@ import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
-import com.easymi.personal.entity.MoneyConfig;
-import com.easymi.personal.result.ConfigResult;
 import com.easymi.personal.result.LoginResult;
 import com.easymi.personal.result.PayResult;
 import com.easymi.personal.result.RechargeResult;
@@ -75,7 +71,7 @@ public class RechargeActivity extends RxBaseActivity {
     RelativeLayout payZfb;
     RelativeLayout payUnion;
 
-    private double limitMoney = 0;
+    private double limitMoney = 50;
 
     @Override
     public int getLayoutId() {
@@ -92,11 +88,10 @@ public class RechargeActivity extends RxBaseActivity {
 
         showWhatByConfig();
 
-        getConfigure();
-//        if (Config.COMM_USE) {
-//            payWx.setVisibility(View.GONE);
-//            payUnion.setVisibility(View.GONE);
-//        }
+        if (Config.COMM_USE) {
+            payWx.setVisibility(View.GONE);
+            payUnion.setVisibility(View.GONE);
+        }
 
         payWx.setOnClickListener(view -> {
             double money = getMoney();
@@ -118,79 +113,46 @@ public class RechargeActivity extends RxBaseActivity {
                 payZfb(money);
             }
         });
-//        payUnion.setOnClickListener(view -> {
-//            double money = getMoney();
-//            if (money == 0.0) {
-//                ToastUtil.showMessage(RechargeActivity.this, getString(R.string.recharge_0_money));
-//            } else if (money < limitMoney) {
-//                ToastUtil.showMessage(RechargeActivity.this, "最低充值" + limitMoney);
-//            } else {
-//                payUnion(money);
-//            }
-//        });
-    }
-
-    MoneyConfig moneyConfig;
-
-    private void getConfigure() {
-        Observable<ConfigResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .rechargeConfigure()
-                .filter(new HttpResultFunc<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, configResult -> {
-            if (configResult.getCode() == 1 && configResult.object != null) {
-                moneyConfig = configResult.object;
-                showWhatByConfig();
+        payUnion.setOnClickListener(view -> {
+            double money = getMoney();
+            if (money == 0.0) {
+                ToastUtil.showMessage(RechargeActivity.this, getString(R.string.recharge_0_money));
+            } else if (money < limitMoney) {
+                ToastUtil.showMessage(RechargeActivity.this, "最低充值" + limitMoney);
+            } else {
+                payUnion(money);
             }
-        })));
+        });
     }
 
-
-//    SystemConfig config;
+    SystemConfig config;
 
     private void showWhatByConfig() {
-//        config = SystemConfig.findOne();
-//        if (null != config) {
-//            if (StringUtils.isBlank(config.payType)) {
-//                payWx.setVisibility(View.GONE);
-//                payZfb.setVisibility(View.GONE);
-//                payUnion.setVisibility(View.GONE);
-//            } else {
-//                if (!config.payType.contains(PayType.CHANNEL_APP_WECHAT.getPayType())) {
-//                    payWx.setVisibility(View.GONE);
-//                }
-//                if (!config.payType.contains(PayType.CHANNEL_APP_ALI.getPayType())) {
-//                    payZfb.setVisibility(View.GONE);
-//                }
-//                if (!config.payType.contains(PayType.CHANNEL_APP_UNION.getPayType())) {
-//                    payUnion.setVisibility(View.GONE);
-//                }
-//            }
-//
-//            pay50.setText(getString(R.string.renminbi) + config.payMoney1);
-//            pay100.setText(getString(R.string.renminbi) + config.payMoney2);
-//            pay200.setText(getString(R.string.renminbi) + config.payMoney3);
-//
-//            limitMoney = config.payMoney1;
-//        }
-        if (moneyConfig == null ){
-            moneyConfig = new MoneyConfig();
-            moneyConfig.one = 50;
-            moneyConfig.two = 100;
-            moneyConfig.three = 200;
-        }else {
-            if (moneyConfig.one == 0 || moneyConfig.two == 0 || moneyConfig.three == 0) {
-                moneyConfig.one = 50;
-                moneyConfig.two = 100;
-                moneyConfig.three = 200;
+        config = SystemConfig.findOne();
+        if (null != config) {
+            if (StringUtils.isBlank(config.payType)) {
+                payWx.setVisibility(View.GONE);
+                payZfb.setVisibility(View.GONE);
+                payUnion.setVisibility(View.GONE);
+            } else {
+                if (!config.payType.contains(PayType.CHANNEL_APP_WECHAT.getPayType())) {
+                    payWx.setVisibility(View.GONE);
+                }
+                if (!config.payType.contains(PayType.CHANNEL_APP_ALI.getPayType())) {
+                    payZfb.setVisibility(View.GONE);
+                }
+                if (!config.payType.contains(PayType.CHANNEL_APP_UNION.getPayType())) {
+                    payUnion.setVisibility(View.GONE);
+                }
             }
-        }
 
-        pay50.setText(getString(R.string.renminbi) + moneyConfig.one);
-        pay100.setText(getString(R.string.renminbi) + moneyConfig.two);
-        pay200.setText(getString(R.string.renminbi) + moneyConfig.three);
+            pay50.setText(getString(R.string.renminbi) + config.payMoney1);
+            pay100.setText(getString(R.string.renminbi) + config.payMoney2);
+            pay200.setText(getString(R.string.renminbi) + config.payMoney3);
+
+            limitMoney = config.payMoney1;
+
+        }
     }
 
     @Override
@@ -206,16 +168,17 @@ public class RechargeActivity extends RxBaseActivity {
     }
 
     private void payWx(double money) {
-        recharge("CHANNEL_APP_WECHAT", money);
+//        new Payer().wxPay();
+        recharge(EmUtil.getEmployId(), "weixin", money);
     }
 
     private void payZfb(double money) {
-        recharge("CHANNEL_APP_ALI", money);
+        recharge(EmUtil.getEmployId(), "alipay", money);
     }
 
-//    private void payUnion(double money) {
-//        recharge("unionpay", money);
-//    }
+    private void payUnion(double money) {
+        recharge(EmUtil.getEmployId(), "unionpay", money);
+    }
 
     private void initEdit() {
         payCus.setOnFocusChangeListener((view, b) -> {
@@ -247,7 +210,6 @@ public class RechargeActivity extends RxBaseActivity {
         cusToolbar = findViewById(R.id.cus_toolbar);
 
         balanceText = findViewById(R.id.balance_text);
-
     }
 
     class MyCheckChangeLis implements CompoundButton.OnCheckedChangeListener {
@@ -291,22 +253,22 @@ public class RechargeActivity extends RxBaseActivity {
     private double getMoney() {
         double money = 0.0;
         if (pay50.isChecked()) {
-            if (moneyConfig != null) {
-                money = moneyConfig.one;
+            if (config != null) {
+                money = config.payMoney1;
             } else {
                 money = 50;
             }
         }
         if (pay100.isChecked()) {
-            if (moneyConfig != null) {
-                money = moneyConfig.two;
+            if (config != null) {
+                money = config.payMoney2;
             } else {
                 money = 100;
             }
         }
         if (pay200.isChecked()) {
-            if (moneyConfig != null) {
-                money = moneyConfig.three;
+            if (config != null) {
+                money = config.payMoney3;
             } else {
                 money = 200;
             }
@@ -338,33 +300,26 @@ public class RechargeActivity extends RxBaseActivity {
             editor.putLong(Config.SP_DRIVERID, employ.id);
             editor.apply();
 
-            balanceText.setText(String.valueOf(employ.balance));
+//            balanceText.setText(String.valueOf(employ.balance));
+            balanceText.setText("0");
         })));
     }
 
-    private void recharge(String payType, Double money) {
+    private void recharge(Long driverId, String payType, Double money) {
         Observable<RechargeResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .recharge(payType, money)
+                .recharge(driverId, EmUtil.getAppKey(), payType, money, 2)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, rechargeResult -> {
-            if (payType.equals("CHANNEL_APP_WECHAT")) {
-                launchWeixin(rechargeResult.data);
-            } else if (payType.equals("CHANNEL_APP_ALI")) {
-//                launchZfb(rechargeResult.aliPayResult.payUrl);
-                String url = null;
-                try {
-                     url = new JSONObject(rechargeResult.data.toString()).getString("ali_app_url");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                launchZfb(url);
+            if (payType.equals("weixin")) {
+                launchWeixin(rechargeResult.weixinResult);
+            } else if (payType.equals("alipay")) {
+                launchZfb(rechargeResult.aliPayResult.payUrl);
+            } else if (payType.equals("unionpay")) {
+                launchYiPay(rechargeResult.unionResult.data);
             }
-//            else if (payType.equals("unionpay")) {
-//                launchYiPay(rechargeResult.unionResult.data);
-//            }
         })));
     }
 

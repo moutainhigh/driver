@@ -112,7 +112,7 @@ public class Employ extends BaseEmploy implements Parcelable {
 
 //    /**
 //     * 司机状态（0离线 5在线 10空闲 15派单 20接单 25前往预约地 30到达预约地 35前往目的地 40中途等待  45冻结）
-//     */司机状态 1离线 2空闲 5派单 10接单 15前往预约地 20到达预约地 25前往目的地 28中途等待 45冻结   修改后的
+//     */
 //    public int status;
 
     /**
@@ -315,13 +315,6 @@ public class Employ extends BaseEmploy implements Parcelable {
      */
     public String refreshToken;
 
-    /**
-     * 余额
-     */
-    public double balance;
-
-
-
 
     protected Employ(Parcel in) {
         id = in.readLong();
@@ -383,7 +376,6 @@ public class Employ extends BaseEmploy implements Parcelable {
         householdRegistrationName = in.readString();
         token = in.readString();
         refreshToken = in.readString();
-        balance = in.readDouble();
     }
 
     public static final Creator<Employ> CREATOR = new Creator<Employ>() {
@@ -465,7 +457,6 @@ public class Employ extends BaseEmploy implements Parcelable {
         values.put("householdRegistrationName", householdRegistrationName);
         values.put("token",token);
         values.put("refreshToken",refreshToken);
-        values.put("balance",balance);
         /*
          * values.put("age", age); values.put("jialing", jialing);
          */
@@ -619,9 +610,6 @@ public class Employ extends BaseEmploy implements Parcelable {
                         .getColumnIndex("token"));
                 driverInfo.refreshToken = cursor.getString(cursor
                         .getColumnIndex("refreshToken"));
-                driverInfo.balance = cursor.getDouble(cursor
-                        .getColumnIndex("balance"));
-
             }
         } catch (Exception e) {
 //			CrashReport.setUserSceneTag();
@@ -797,8 +785,6 @@ public class Employ extends BaseEmploy implements Parcelable {
                 .getColumnIndex("token"));
         driverInfo.refreshToken = cursor.getString(cursor
                 .getColumnIndex("refreshToken"));
-        driverInfo.balance = cursor.getDouble(cursor
-                .getColumnIndex("balance"));
 
         return driverInfo;
     }
@@ -870,7 +856,6 @@ public class Employ extends BaseEmploy implements Parcelable {
         values.put("householdRegistrationName", householdRegistrationName);
         values.put("token",token);
         values.put("refreshToken",refreshToken);
-        values.put("balance",balance);
 
         boolean flag = db.update("t_driverinfo", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
@@ -958,6 +943,5 @@ public class Employ extends BaseEmploy implements Parcelable {
         dest.writeString(householdRegistrationName);
         dest.writeString(token);
         dest.writeString(refreshToken);
-        dest.writeDouble(balance);
     }
 }

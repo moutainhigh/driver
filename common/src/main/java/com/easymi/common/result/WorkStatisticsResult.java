@@ -10,6 +10,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class WorkStatisticsResult extends EmResult {
 
-    @SerializedName("data")
+    @SerializedName("driverInfo")
     public WorkStatistics workStatistics;
 }

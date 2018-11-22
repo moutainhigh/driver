@@ -11,40 +11,29 @@ import com.google.gson.annotations.SerializedName;
 public class ZCSetting {
 
     //附近司机推荐距离
-    @SerializedName("driverDistance")
+    @SerializedName("driver_distance")
     public double emploiesKm;
 
     //代付（1开启，2关闭)
-    @SerializedName("driverRepPay")
+    @SerializedName("driver_rep_pay")
     public int isPaid;
 
     //是否允许调价（1开启，2关闭)
     public int isAddPrice = 2;
 
     //确认费用时是否能加垫付费之类的
-    @SerializedName("driverAddCharge")
+    @SerializedName("driver_add_charge")
     public int employChangePrice;
 
-    @SerializedName("driverReimbursCharge")
+    @SerializedName("driver_reimburs_charge")
     public int isExpenses;//报销（1开启，2关闭）
 
     //是否能消单
-    @SerializedName("driverCancelOrder")
+    @SerializedName("driver_cancel_order")
     public int canCancelOrder;
 
-    @SerializedName("employChangeOrder")
+    @SerializedName("employ_change_order")
     public int employChangeOrder;//是否可以转单（1开启，2关闭)
-
-//    public int driverDistance;
-//    public int driverRepPay;  //允许代付  1，关闭；2，开启
-//    public int employChangeOrder;
-//    public int driverCancelOrder;
-//    public int driverReimbursCharge;
-//    public int driverAddCharge;
-
-    public int driverRepLowBalance; //允许代付时余额不足 1，关闭；2，开启
-    public int passengerDistance;
-    public int version;
 
 
     public static void deleteAll() {
@@ -64,11 +53,6 @@ public class ZCSetting {
         values.put("isAddPrice", isAddPrice);
         values.put("employChangePrice", employChangePrice);
         values.put("employChangeOrder", employChangeOrder);
-
-        values.put("driverRepLowBalance", driverRepLowBalance);
-        values.put("passengerDistance", passengerDistance);
-        values.put("version", version);
-
         db.insert("t_zc_settinginfo", null, values);
     }
 
@@ -85,10 +69,6 @@ public class ZCSetting {
                 settingInfo.isAddPrice = cursor.getInt(cursor.getColumnIndex("isAddPrice"));
                 settingInfo.employChangePrice = cursor.getInt(cursor.getColumnIndex("employChangePrice"));
                 settingInfo.employChangeOrder = cursor.getInt(cursor.getColumnIndex("employChangeOrder"));
-
-                settingInfo.driverRepLowBalance = cursor.getInt(cursor.getColumnIndex("driverRepLowBalance"));
-                settingInfo.passengerDistance = cursor.getInt(cursor.getColumnIndex("passengerDistance"));
-                settingInfo.version = cursor.getInt(cursor.getColumnIndex("version"));
             }
         } finally {
             cursor.close();

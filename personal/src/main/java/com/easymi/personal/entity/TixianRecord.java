@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class TixianRecord {
-    @SerializedName("created")
+    @SerializedName("application_time")
     public long time;
 
 
@@ -19,7 +19,7 @@ public class TixianRecord {
     @SerializedName("refuse_reason")
     public String refuseReason;
 
-    @SerializedName("fee")
+    @SerializedName("cost")
     public double money;
 
     public String getStatusStr(Context context) {

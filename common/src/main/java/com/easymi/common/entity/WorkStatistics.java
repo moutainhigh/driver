@@ -10,14 +10,12 @@ import java.io.Serializable;
 
 public class WorkStatistics implements Serializable{
 
-//    @SerializedName("finish_count")
-    @SerializedName("orderCount")
+    @SerializedName("finish_count")
     public int finishCount;
 
     @SerializedName("total_amount")
     public double totalAmount;
 
-    @SerializedName("orderProfit")
     public double income;
 
     public int minute;//在线时长

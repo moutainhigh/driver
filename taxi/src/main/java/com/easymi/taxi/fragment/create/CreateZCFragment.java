@@ -41,7 +41,7 @@ import static android.app.Activity.RESULT_OK;
  * 反射调用
  */
 
-public class CreateTaxiFragment extends RxLazyFragment implements CreateTaxiContract.View {
+public class CreateZCFragment extends RxLazyFragment implements CreateZCContract.View {
 
     TextView timeText;
     EditText nameText;
@@ -71,7 +71,7 @@ public class CreateTaxiFragment extends RxLazyFragment implements CreateTaxiCont
 
     private Budget budget;//预估价格
 
-    private CreateTaxiPresenter presenter;
+    private CreateZCPresenter presenter;
 
     private static final int START_CODE = 0X00;
     private static final int END_CODE = 0X01;
@@ -93,7 +93,7 @@ public class CreateTaxiFragment extends RxLazyFragment implements CreateTaxiCont
             return;
         }
 
-        presenter = new CreateTaxiPresenter(this, getActivity());
+        presenter = new CreateZCPresenter(this, getActivity());
         isPrepared = false;
         findById();
 

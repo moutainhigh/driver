@@ -15,7 +15,7 @@ import rx.Observable;
  * Created by developerLzh on 2017/11/27 0027.
  */
 
-public interface CreateTaxiContract {
+public interface CreateZCContract {
     interface View {
         void findById();
 

@@ -79,14 +79,14 @@ public class MsgActivity extends RxBaseActivity {
 
     private void queryNotify() {
         Observable<NotifityResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .notices( 1, 10)
+                .notices(EmUtil.getEmployId(), EmUtil.getAppKey(), 1, 10)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false,
                 false, notifityResult -> {
-            List<Notifity> notifityList = notifityResult.data;
+            List<Notifity> notifityList = notifityResult.employNoticeRecords;
             if (null != notifityList && notifityList.size() != 0) {
                 Notifity notifity = notifityList.get(0);
                 noticeContent.setText(notifity.message);
@@ -97,7 +97,7 @@ public class MsgActivity extends RxBaseActivity {
 
     private void queryAnn() {
         Observable<AnnouncementResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .employAffiches(1, 10)
+                .employAffiches(EmUtil.getEmployInfo().company_id, EmUtil.getAppKey(), 1, 10)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

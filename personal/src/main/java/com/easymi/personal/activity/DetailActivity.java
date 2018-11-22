@@ -63,7 +63,8 @@ public class DetailActivity extends RxBaseActivity {
         adapter = new DetailAdapter(this);
 
         Employ employ = EmUtil.getEmployInfo();
-        balanceText.setText(String.valueOf(employ.balance));
+//        balanceText.setText(String.valueOf(employ.balance));
+        balanceText.setText("0");
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
 
@@ -94,7 +95,7 @@ public class DetailActivity extends RxBaseActivity {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
         Observable<LiushuiResult> observable = api
-                .getLiushui(page, 10, null, null)
+                .getLiushui(page, 10, null, null, EmUtil.getAppKey(), EmUtil.getEmployInfo().company_id, EmUtil.getEmployId())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -106,7 +107,7 @@ public class DetailActivity extends RxBaseActivity {
                 if (page == 1) {
                     details.clear();
                 }
-                details.addAll(liushuiResult.data);
+                details.addAll(liushuiResult.driverPreSaveSerials);
                 if (liushuiResult.total > page * 10) {
                     recyclerView.setLoadMoreEnable(true);
                 } else {

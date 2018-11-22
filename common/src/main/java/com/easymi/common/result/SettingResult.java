@@ -1,6 +1,5 @@
 package com.easymi.common.result;
 
-import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.result.EmResult;
 import com.google.gson.annotations.SerializedName;
 
@@ -13,8 +12,9 @@ public class SettingResult extends EmResult {
 //    @SerializedName("daijiaApp")
 //    public Setting setting;
 
-//    @SerializedName("app_settings")
-//    public String appSetting;
+    @SerializedName("app_settings")
+    public String appSetting;
 
-    public ZCSetting data;
+
+
 }

@@ -12,7 +12,7 @@ public class Article {
     @SerializedName("company_id")
     public long companyId;
 
-    public String content;
+    public String contents;
 
     @SerializedName("company_phone")
     public String phone;

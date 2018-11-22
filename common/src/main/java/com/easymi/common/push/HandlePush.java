@@ -46,7 +46,6 @@ import com.easymi.component.EmployStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -99,7 +98,7 @@ public class HandlePush implements FeeChangeSubject {
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
                 loadOrder(order);
                 newShowNotify(XApp.getInstance(), "", XApp.getInstance().getString(R.string.send_order), XApp.getInstance().getString(R.string.send_order_content));
-            } else if (msg.equals("cancel")) {//取消订单
+            } else if (msg.equals("cancelOrder")) {//取消订单
                 MultipleOrder order = new MultipleOrder();
                 order.id = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
@@ -110,6 +109,45 @@ public class HandlePush implements FeeChangeSubject {
                 bundle.putSerializable("order", order);
                 message.setData(bundle);
                 handler.sendMessage(message);
+            } else if (msg.equals("costInfo")) { //费用信息
+                long orderId = jb.optJSONObject("data").optLong("orderId");
+                String orderType = jb.optJSONObject("data").optString("OrderType");
+                DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
+                if (dymOrder != null) {
+                    if(dymOrder.distance > jb.optJSONObject("data").optDouble("Mileges")){
+                        return;
+                    }
+                    dymOrder.startFee = jb.optJSONObject("data").optDouble("StartPrice");
+                    dymOrder.waitTime = jb.optJSONObject("data").optInt("WaitTime") / 60;
+                    dymOrder.waitTimeFee = jb.optJSONObject("data").optDouble("WaitTimeFee");
+                    dymOrder.travelTime = jb.optJSONObject("data").optInt("DriverTime") / 60;
+                    dymOrder.travelFee = jb.optJSONObject("data").optDouble("DriveTimeCost");
+                    dymOrder.totalFee = jb.optJSONObject("data").optDouble("TotalAmount");
+
+                    dymOrder.minestMoney = jb.optJSONObject("data").optDouble("MinCost");
+
+                    dymOrder.disFee = jb.optJSONObject("data").optDouble("MileageCost");
+                    dymOrder.distance = jb.optJSONObject("data").optDouble("Mileges");
+
+                    if (Config.ZHUANCHE.equals(orderType)) {
+                        dymOrder.peakCost = jb.optJSONObject("data").optDouble("PeakCost");
+                        dymOrder.nightPrice = jb.optJSONObject("data").optDouble("NightPrice");
+                        dymOrder.lowSpeedCost = jb.optJSONObject("data").optDouble("LowSpeedCost");
+                        dymOrder.lowSpeedTime = jb.optJSONObject("data").getInt("LowSpeedTime") / 60;
+                        dymOrder.peakMile = jb.optJSONObject("data").optDouble("PeakMile");
+                        dymOrder.nightTime = jb.optJSONObject("data").getInt("NightTime") / 60;
+                        dymOrder.nightMile = jb.optJSONObject("data").optDouble("NightMile");
+                        dymOrder.nightTimePrice = jb.optJSONObject("data").optDouble("NightTimePrice");
+                    }
+
+                    DecimalFormat decimalFormat = new DecimalFormat("#0.0");
+                    decimalFormat.setRoundingMode(RoundingMode.DOWN);
+                    dymOrder.distance = Double.parseDouble(decimalFormat.format(dymOrder.distance));
+                    //公里数保留一位小数。。
+
+                    dymOrder.updateFee();
+                    notifyObserver(orderId, orderType);
+                }
             } else if (msg.equals("driver_status")) { //司机状态
                 String status = jb.optJSONObject("data").optString("status");
 
@@ -123,7 +161,7 @@ public class HandlePush implements FeeChangeSubject {
                 long id = jb.optJSONObject("data").optLong("id");
 
                 loadNotice(id);
-            } else if (msg.equals("message")) {//公告
+            } else if (msg.equals("announcement")) {//公告
                 long id = jb.optJSONObject("data").optLong("id");
 
                 loadAnn(id);
@@ -137,7 +175,7 @@ public class HandlePush implements FeeChangeSubject {
                 EmUtil.employLogout(XApp.getInstance());
             } else if (msg.equals("unbunding")) {//解绑
                 XApp.getInstance().shake();
-                XApp.getInstance().syntheticVoice("您的账户已被管理员解绑");
+                XApp.getInstance().syntheticVoice("您的账户已被管理员姐绑");
 //                XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.unbunding));
                 EmUtil.employLogout(XApp.getInstance());
             } else if (msg.equals("finishOrder")) { //支付成功
@@ -161,79 +199,34 @@ public class HandlePush implements FeeChangeSubject {
             } else if (msg.equals("http_costInfo")) { //费用信息
                 String data = jb.optString("data");
                 JSONObject jbData = new JSONObject(data.replaceAll("\\\\\\\"","--"));
-                long orderId = jbData.optLong("OrderId");
-                String orderType = jbData.optString("OrderType");
+                long orderId = jbData.optJSONObject("data").optLong("OrderId");
+                String orderType = jbData.optJSONObject("data").optString("OrderType");
                 DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
                 if (dymOrder != null) {
-                    if(dymOrder.distance > jbData.optDouble("Mileges")){
+                    if(dymOrder.distance > jbData.optJSONObject("data").optDouble("Mileges")){
                         return;
                     }
-                    dymOrder.startFee = jbData.optDouble("StartPrice");
-                    dymOrder.waitTime = jbData.optInt("WaitTime") / 60;
-                    dymOrder.waitTimeFee = jbData.optDouble("WaitTimeFee");
-                    dymOrder.travelTime = jbData.optInt("DriverTime") / 60;
-                    dymOrder.travelFee = jbData.optDouble("DriveTimeCost");
-                    dymOrder.totalFee = jbData.optDouble("TotalAmount");
+                    dymOrder.startFee = jbData.optJSONObject("data").optDouble("StartPrice");
+                    dymOrder.waitTime = jbData.optJSONObject("data").optInt("WaitTime") / 60;
+                    dymOrder.waitTimeFee = jbData.optJSONObject("data").optDouble("WaitTimeFee");
+                    dymOrder.travelTime = jbData.optJSONObject("data").optInt("DriverTime") / 60;
+                    dymOrder.travelFee = jbData.optJSONObject("data").optDouble("DriveTimeCost");
+                    dymOrder.totalFee = jbData.optJSONObject("data").optDouble("TotalAmount");
 
-                    dymOrder.minestMoney = jbData.optDouble("MinCost");
+                    dymOrder.minestMoney = jbData.optJSONObject("data").optDouble("MinCost");
 
-                    dymOrder.disFee = jbData.optDouble("MileageCost");
-                    dymOrder.distance = jbData.optDouble("Mileges");
-
-                    if (Config.ZHUANCHE.equals(orderType)) {
-                        dymOrder.peakCost =jbData.optDouble("PeakCost");
-                        dymOrder.nightPrice = jbData.optDouble("NightPrice");
-                        dymOrder.lowSpeedCost = jbData.optDouble("LowSpeedCost");
-                        dymOrder.lowSpeedTime = jbData.getInt("LowSpeedTime") / 60;
-                        dymOrder.peakMile = jbData.optDouble("PeakMile");
-                        dymOrder.nightTime = jbData.getInt("NightTime") / 60;
-                        dymOrder.nightMile = jbData.optDouble("NightMile");
-                        dymOrder.nightTimePrice = jbData.optDouble("NightTimePrice");
-                    }
-
-                    DecimalFormat decimalFormat = new DecimalFormat("#0.0");
-                    decimalFormat.setRoundingMode(RoundingMode.DOWN);
-                    dymOrder.distance = Double.parseDouble(decimalFormat.format(dymOrder.distance));
-                    //公里数保留一位小数。。
-
-                    dymOrder.updateFee();
-                    notifyObserver(orderId, orderType);
-                }
-            } else if (msg.equals("realFee")) { //费用信息
-                String data = jb.optString("data");
-                JSONObject jbData = new JSONObject(data.replaceAll("\\\\\\\"","--"));
-                long orderId = jbData.optLong("orderId");
-                String orderType = jbData.optString("orderType");
-                DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
-                if (dymOrder != null) {
-//                    if(dymOrder.distance > jbData.optDouble("Mileges")){
-//                        return;
-//                    }
-                    dymOrder.startFee = jbData.optDouble("startFee");
-                    dymOrder.waitTime = jbData.optInt("waitTime") / 60;
-                    dymOrder.waitTimeFee = jbData.optDouble("waitFee");
-                    dymOrder.travelTime = jbData.optInt("time") / 60;
-                    dymOrder.travelFee = jbData.optDouble("timeFee");
-                    dymOrder.totalFee = jbData.optDouble("totalFee");
-
-                    dymOrder.minestMoney = jbData.optDouble("minCost");
-
-                    dymOrder.disFee = jbData.optDouble("distanceFee");
-                    dymOrder.distance = new BigDecimal(jbData.optDouble("distance")/1000).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-                    //add
-                    dymOrder.addDistance = jbData.optDouble("addDistance");
-                    dymOrder.addFee = jbData.optDouble("addFee");
-
+                    dymOrder.disFee = jbData.optJSONObject("data").optDouble("MileageCost");
+                    dymOrder.distance = jbData.optJSONObject("data").optDouble("Mileges");
 
                     if (Config.ZHUANCHE.equals(orderType)) {
-                        dymOrder.peakCost =jbData.optDouble("peakFee");
-                        dymOrder.nightPrice = jbData.optDouble("nightMileFee"); //**不祥的预感
-                        dymOrder.lowSpeedCost = jbData.optDouble("lowSpeedFee");
-                        dymOrder.lowSpeedTime = jbData.getInt("lowSpeedTime") / 60;
-                        dymOrder.peakMile = jbData.optDouble("peakMile");
-                        dymOrder.nightTime = jbData.getInt("nightTime") / 60;
-                        dymOrder.nightMile = jbData.optDouble("nightMile");
-                        dymOrder.nightTimePrice = jbData.optDouble("nightTimeFee");
+                        dymOrder.peakCost =jbData.optJSONObject("data").optDouble("PeakCost");
+                        dymOrder.nightPrice = jbData.optJSONObject("data").optDouble("NightPrice");
+                        dymOrder.lowSpeedCost = jbData.optJSONObject("data").optDouble("LowSpeedCost");
+                        dymOrder.lowSpeedTime = jbData.optJSONObject("data").getInt("LowSpeedTime") / 60;
+                        dymOrder.peakMile = jbData.optJSONObject("data").optDouble("PeakMile");
+                        dymOrder.nightTime = jbData.optJSONObject("data").getInt("NightTime") / 60;
+                        dymOrder.nightMile = jbData.optJSONObject("data").optDouble("NightMile");
+                        dymOrder.nightTimePrice = jbData.optJSONObject("data").optDouble("NightTimePrice");
                     }
 
                     DecimalFormat decimalFormat = new DecimalFormat("#0.0");
@@ -276,24 +269,24 @@ public class HandlePush implements FeeChangeSubject {
                 false, new HaveErrSubscriberListener<SettingResult>() {
             @Override
             public void onNext(SettingResult result) {
-//                List<SubSetting> settingList = GsonUtil.parseToList(result.appSetting, SubSetting[].class);
-//                if (settingList != null) {
-//                    for (SubSetting sub : settingList) {
-//                        if (Config.ZHUANCHE.equals(sub.businessType)) {
-//                            ZCSetting zcSetting = GsonUtil.parseJson(sub.subJson, ZCSetting.class);
-//                            if (zcSetting != null) {
-//                                ZCSetting.deleteAll();
-//                                zcSetting.save();
-//                            }
-//                        } else if ("daijia".equals(sub.businessType)) {
-//                            Setting djSetting = GsonUtil.parseJson(sub.subJson, Setting.class);
-//                            if (djSetting != null) {
-//                                Setting.deleteAll();
-//                                djSetting.save();
-//                            }
-//                        }
-//                    }
-//                }
+                List<SubSetting> settingList = GsonUtil.parseToList(result.appSetting, SubSetting[].class);
+                if (settingList != null) {
+                    for (SubSetting sub : settingList) {
+                        if (Config.ZHUANCHE.equals(sub.businessType)) {
+                            ZCSetting zcSetting = GsonUtil.parseJson(sub.subJson, ZCSetting.class);
+                            if (zcSetting != null) {
+                                ZCSetting.deleteAll();
+                                zcSetting.save();
+                            }
+                        } else if ("daijia".equals(sub.businessType)) {
+                            Setting djSetting = GsonUtil.parseJson(sub.subJson, Setting.class);
+                            if (djSetting != null) {
+                                Setting.deleteAll();
+                                djSetting.save();
+                            }
+                        }
+                    }
+                }
             }
 
             @Override

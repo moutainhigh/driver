@@ -129,19 +129,19 @@ public class PersonalActivity extends RxBaseActivity {
             userName.setText("("+employ.userName+")");
 //            ratingBar.setStarMark((float) (employ.score == 0 ? 5.0 : employ.score));
             ratingBar.setStarMark(5);
-            driverBalance.setText(String.valueOf(employ.balance));
-
-            if (StringUtils.isNotBlank(employ.portraitPath)) {
-                RequestOptions options = new RequestOptions()
-                        .centerCrop()
-                        .transform(new GlideCircleTransform())
-                        .placeholder(R.mipmap.photo_default)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL);
-                Glide.with(PersonalActivity.this)
-                        .load(Config.IMG_SERVER + employ.portraitPath + Config.IMG_PATH)
-                        .apply(options)
-                        .into(driverPhoto);
-            }
+//            driverBalance.setText(String.valueOf(employ.balance));
+            driverBalance.setText("0");
+//            if (StringUtils.isNotBlank(employ.portrait_path)) {
+//                RequestOptions options = new RequestOptions()
+//                        .centerCrop()
+//                        .transform(new GlideCircleTransform())
+//                        .placeholder(R.mipmap.photo_default)
+//                        .diskCacheStrategy(DiskCacheStrategy.ALL);
+//                Glide.with(PersonalActivity.this)
+//                        .load(Config.IMG_SERVER + employ.portrait_path + Config.IMG_PATH)
+//                        .apply(options)
+//                        .into(driverPhoto);
+//            }
         }
     }
 

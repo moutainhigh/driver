@@ -12,7 +12,7 @@ import java.util.List;
  */
 
 public class AnnouncementResult extends EmResult {
-    @SerializedName("data")
+    @SerializedName("employ_affiches")
     public List<Announcement> employAffiches;
     public int total;
 }

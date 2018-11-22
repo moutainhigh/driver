@@ -174,7 +174,7 @@ public class ArticleActivity extends RxBaseActivity implements View.OnClickListe
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
                 true, emResult -> {
-            String html = emResult.data.content;
+            String html = emResult.article.contents;
 
             String css = "<style type=\"text/css\"> img {" +
                     "width:auto" +//限定图片宽度填充屏幕
@@ -208,7 +208,7 @@ public class ArticleActivity extends RxBaseActivity implements View.OnClickListe
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
                 true, articleResult -> {
-            String html = articleResult.data.content;
+            String html = articleResult.article.contents;
             String css = "<style type=\"text/css\"> img {" +
                     "width:auto" +//限定图片宽度填充屏幕
                     "height:auto;" +//限定图片高度自动
