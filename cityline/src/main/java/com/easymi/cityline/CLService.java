@@ -23,7 +23,6 @@ import rx.Observable;
  */
 
 public interface CLService {
-
     /**
      * 查询班次
      *
