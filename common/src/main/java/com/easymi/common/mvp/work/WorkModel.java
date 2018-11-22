@@ -77,7 +77,8 @@ public class WorkModel implements WorkContract.Model {
     @Override
     public Observable<WorkStatisticsResult> getDriverStatistics(Long id, String nowDate, int isOnline, int minute, String driverNo, long companyId) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .workStatistics(id, nowDate, EmUtil.getAppKey(), isOnline, minute, driverNo, companyId)
+//                .workStatistics(id, nowDate, EmUtil.getAppKey(), isOnline, minute, driverNo, companyId)
+                .workStatistics()
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

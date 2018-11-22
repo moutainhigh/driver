@@ -159,9 +159,9 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, zcOrderResult -> {
 //            dymOrder.updateConfirm(); #该逻辑移动到arrivalDistination接口里面
 //            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
-//            updateDymOrder(zcOrderResult.data);
-//            view.showOrder(zcOrderResult.data);
-            findOne(zcOrder.orderId);
+            updateDymOrder(zcOrderResult.data);
+            view.showOrder(zcOrderResult.data);
+//            findOne(zcOrder.orderId);
         })));
     }
 
@@ -349,8 +349,8 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     //选择支付类型后的结算接口
     @Override
-    public void payOrder(Long orderId, String payType) {
-        Observable<EmResult> observable = model.payOrder(orderId, payType);
+    public void payOrder(Long orderId, String payType, Long version) {
+        Observable<EmResult> observable = model.payOrder(orderId, payType,version);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, emResult -> {
             DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);

@@ -12,7 +12,7 @@ public class PushDataOrder {
     @SerializedName("orderId")
     public long orderId;
 
-    @SerializedName("order_type")
+    @SerializedName("orderType")
     public String orderType;
 
     //作弊增加的里程

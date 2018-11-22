@@ -84,8 +84,7 @@ public class PocketActivity extends RxBaseActivity {
             editor.putLong(Config.SP_DRIVERID, employ.id);
             editor.apply();
 
-//            balanceText.setText(String.valueOf(employ.balance));
-            balanceText.setText("0");
+            balanceText.setText(String.valueOf(employ.balance));
         })));
     }
 

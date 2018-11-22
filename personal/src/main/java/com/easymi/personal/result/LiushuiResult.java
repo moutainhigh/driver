@@ -10,6 +10,7 @@ import java.util.List;
  */
 
 public class LiushuiResult extends EmResult {
-    public List<Detail> driverPreSaveSerials;
+//    public List<Detail> driverPreSaveSerials;
+    public List<Detail> data;
     public int total;
 }

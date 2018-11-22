@@ -11,24 +11,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/liushui_tab_layout"
-        android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="@dimen/bar_height"
-        android:layout_marginTop="-6dp"
-        android:background="@color/colorPrimary"
-        android:paddingTop="10dp"
-        app:tabBackground="@color/colorPrimary"
-        app:tabGravity="center"
-        app:tabIndicatorColor="@color/colorAccent"
-        app:tabIndicatorHeight="4dp"
-        app:tabMode="fixed"
-        app:tabSelectedTextColor="@color/white"
-        app:tabTextColor="@color/dark_gray"
-        app:textSize="16sp">
+    <!--<android.support.design.widget.TabLayout-->
+        <!--android:id="@+id/liushui_tab_layout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:visibility="gone"-->
+        <!--android:layout_height="@dimen/bar_height"-->
+        <!--android:layout_marginTop="-6dp"-->
+        <!--android:background="@color/colorPrimary"-->
+        <!--android:paddingTop="10dp"-->
+        <!--app:tabBackground="@color/colorPrimary"-->
+        <!--app:tabGravity="center"-->
+        <!--app:tabIndicatorColor="@color/colorAccent"-->
+        <!--app:tabIndicatorHeight="4dp"-->
+        <!--app:tabMode="fixed"-->
+        <!--app:tabSelectedTextColor="@color/white"-->
+        <!--app:tabTextColor="@color/dark_gray"-->
+        <!--app:textSize="16sp">-->
 
-    </android.support.design.widget.TabLayout>
+    <!--</android.support.design.widget.TabLayout>-->
 
     <FrameLayout
         android:layout_width="match_parent"

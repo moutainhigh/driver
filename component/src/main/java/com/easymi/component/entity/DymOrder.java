@@ -171,6 +171,7 @@ public class DymOrder implements Serializable {
     }
 
     public DymOrder() {
+
     }
 
     /**
@@ -182,6 +183,7 @@ public class DymOrder implements Serializable {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
         ContentValues values = new ContentValues();
+        values.put("id", id);
         values.put("orderId", orderId);
         values.put("orderType", orderType);
         values.put("passengerId", passengerId);
@@ -378,6 +380,7 @@ public class DymOrder implements Serializable {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
         ContentValues values = new ContentValues();
+        values.put("id", id);
         values.put("orderId", orderId);
         values.put("orderType", orderType);
         values.put("startFee", startFee);

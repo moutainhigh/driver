@@ -1,28 +1,39 @@
 package com.easymi.zhuanche.flowMvp;
 
+import com.easymi.common.entity.PullFeeResult;
+import com.easymi.common.entity.PushData;
+import com.easymi.common.entity.PushDataLoc;
+import com.easymi.common.entity.PushDataOrder;
 import com.easymi.common.entity.PushFee;
 import com.easymi.common.entity.PushFeeEmploy;
 import com.easymi.common.entity.PushFeeLoc;
 import com.easymi.common.entity.PushFeeOrder;
+import com.easymi.common.push.HandlePush;
 import com.easymi.common.result.GetFeeResult;
 import com.easymi.component.Config;
+import com.easymi.component.DJOrderStatus;
 import com.easymi.component.ZCOrderStatus;
 import com.easymi.component.entity.BaseEmploy;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
+import com.easymi.component.entity.PushEmploy;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.GsonUtil;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.Log;
+import com.easymi.zhuanche.ZCApiService;
 import com.easymi.zhuanche.entity.ZCOrder;
 import com.easymi.zhuanche.result.ConsumerResult;
 import com.easymi.zhuanche.result.ZCOrderResult;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.http.Field;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
@@ -306,9 +317,9 @@ public class FlowModel implements FlowContract.Model {
     }
 
     @Override
-    public Observable<EmResult> payOrder(Long orderId, String payType) {
+    public Observable<EmResult> payOrder(Long orderId, String payType, Long version) {
         return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
-                .payOrder(orderId, EmUtil.getAppKey(), payType)
+                .payOrder(orderId, payType,version)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

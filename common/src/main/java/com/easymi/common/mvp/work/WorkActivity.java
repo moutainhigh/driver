@@ -166,6 +166,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
         createOrder.setOnClickListener(v -> {
             Intent intent = new Intent(WorkActivity.this, CreateActivity.class);
+
             startActivity(intent);
         });
 
@@ -185,6 +186,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         if (emLoc != null) {
             receiveLoc(emLoc);
         }
+
     }
 
     private RegisterDialog registerDialog;
@@ -234,8 +236,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
             registerDialog.dismiss();
         }
     }
-
-
 
     private void initGuide() {
         boolean showGuide = XApp.getMyPreferences().getBoolean(Config.SP_SHOW_GUIDE, true);

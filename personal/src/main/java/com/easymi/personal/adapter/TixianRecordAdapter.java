@@ -53,10 +53,10 @@ public class TixianRecordAdapter extends RecyclerView.Adapter<TixianRecordAdapte
             holder.tixianRecordStatus.setTextColor(context.getResources().getColor(R.color.dark_gray));
         } else {
             holder.tixianRecordStatus.setTextColor(context.getResources().getColor(R.color.colorAccent));
-            if (tixianRecord.status == 3) {
-                holder.tixianRecordRefuse.setVisibility(View.VISIBLE);
-                holder.tixianRecordRefuse.setText(tixianRecord.refuseReason);
-            }
+//            if (tixianRecord.status == 3) {
+//                holder.tixianRecordRefuse.setVisibility(View.VISIBLE);
+//                holder.tixianRecordRefuse.setText(tixianRecord.refuseReason);
+//            }
         }
 
         holder.dian1.setVisibility(View.VISIBLE);
@@ -66,10 +66,6 @@ public class TixianRecordAdapter extends RecyclerView.Adapter<TixianRecordAdapte
 
         if (position == 0) {
             holder.dian1.setVisibility(View.GONE);
-        } else if (position == list.size() - 1) {
-            holder.dian2.setVisibility(View.GONE);
-            holder.dian3.setVisibility(View.GONE);
-            holder.dian4.setVisibility(View.GONE);
         }
     }
 
