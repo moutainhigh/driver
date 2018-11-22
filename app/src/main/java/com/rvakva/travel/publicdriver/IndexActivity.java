@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.easymi.cityline.CLService;
 import com.easymi.cityline.activity.CreateOrderActivity;
 import com.easymi.cityline.entity.OrderCustomer;
 import com.easymi.cityline.entity.ZXOrder;
 import com.easymi.cityline.flowMvp.FlowActivity;
+import com.easymi.common.activity.SplashActivity;
 import com.easymi.component.Config;
 import com.easymi.component.ZXOrderStatus;
 import com.easymi.component.app.XApp;
@@ -39,11 +41,8 @@ public class IndexActivity extends RxBaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        Intent intent = new Intent(this, SplashActivity.class);
-//        startActivity(intent);
-//        buildZxOrder();
-
-        XApp.getInstance().startLocService();
+        Intent intent = new Intent(this, SplashActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -58,8 +57,8 @@ public class IndexActivity extends RxBaseActivity {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
-        Intent intent = new Intent(this, CreateOrderActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, CreateOrderActivity.class);
+//        startActivity(intent);
 
 //        Observable<EmResult2<List<ZXOrder>>> observable = ApiManager.getInstance().createApi(Config.HOST, CLService.class)
 //                .queryDriverSchedule()
@@ -129,70 +128,10 @@ public class IndexActivity extends RxBaseActivity {
                     orderCustomer.saveOrUpdate();
                 }
 
-                Intent intent = new Intent(IndexActivity.this, FlowActivity.class);
-                intent.putExtra("zxOrder", zxOrder);
-                startActivity(intent);
-                finish();
+                ARouter.getInstance().build("/cityline/FlowActivity").withSerializable("zxOrder",zxOrder).navigation();
 
             }
         })));
-    }
-
-    private void buildZxOrder() {
-        DecimalFormat df = new DecimalFormat("#0.000000");
-        ZXOrder zxOrder = new ZXOrder();
-        zxOrder.orderId = 1;
-        zxOrder.orderType = Config.CITY_LINE;
-        zxOrder.startSite = "温江站";
-        zxOrder.endSite = "青白江站";
-        zxOrder.startOutTime = System.currentTimeMillis() + 6 * 10 * 1000;
-        zxOrder.startJierenTime = System.currentTimeMillis() + 20 * 1000;
-        zxOrder.startLat = 30.687326;
-        zxOrder.startLng = 103.864365;
-
-        zxOrder.endLat = 30.66837;
-        zxOrder.endLng = 103.813924;
-
-        DymOrder dymOrder = new DymOrder();
-        dymOrder.orderStatus = ZXOrderStatus.WAIT_START;
-        dymOrder.orderId = zxOrder.orderId;
-        dymOrder.orderType = Config.CITY_LINE;
-        dymOrder.saveOrUpdate();
-
-        if (OrderCustomer.findByIDTypeOrderByAcceptSeq(zxOrder.orderId, zxOrder.orderType).size() == 0) {
-            for (int i = 0; i < 6; i++) {
-                OrderCustomer orderCustomer = new OrderCustomer();
-                orderCustomer.customerId = i;
-                orderCustomer.orderId = zxOrder.orderId;
-                orderCustomer.orderType = Config.CITY_LINE;
-                orderCustomer.name = "刘子豪" + i;
-                orderCustomer.phone = "18148140090";
-                orderCustomer.photo = "xxxx";
-                orderCustomer.startAddr = "起点" + i;
-                orderCustomer.endAddr = "终点" + i;
-
-                orderCustomer.startLat = Double.parseDouble(df.format(zxOrder.startLat + (i * 0.001)));
-                orderCustomer.startLng = Double.parseDouble(df.format(zxOrder.startLng + (i * 0.001)));
-
-                orderCustomer.endLat = Double.parseDouble(df.format(zxOrder.endLat + (i * 0.001)));
-                orderCustomer.endLng = Double.parseDouble(df.format(zxOrder.endLng + (i * 0.001)));
-
-                orderCustomer.appointTime = System.currentTimeMillis() + 2 * 1 * 1000 + i * 1 * 1000;
-                orderCustomer.acceptSequence = i;
-                orderCustomer.sendSequence = i;
-                orderCustomer.num = i;
-                orderCustomer.status = 0;
-                orderCustomer.subStatus = 0;
-
-                orderCustomer.save();
-            }
-        }
-
-        Intent intent = new Intent(this, FlowActivity.class);
-        intent.putExtra("zxOrder", zxOrder);
-        startActivity(intent);
-        finish();
-
     }
 
 }
