@@ -355,7 +355,7 @@ public class CreateTaxiFragment extends RxLazyFragment implements CreateTaxiCont
     public void createSuc(TaxiOrderResult taxiOrderResult) {
         ToastUtil.showMessage(getActivity(), getString(R.string.create_suc));
         Intent intent = new Intent(getActivity(), FlowActivity.class);
-        intent.putExtra("orderId", taxiOrderResult.data.id);
+        intent.putExtra("orderId", taxiOrderResult.data.orderId);
         startActivity(intent);
         getActivity().finish();
     }

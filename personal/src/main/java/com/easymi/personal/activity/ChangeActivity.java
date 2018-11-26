@@ -18,6 +18,7 @@ import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.AesUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.PhoneUtil;
+import com.easymi.component.utils.SHA256Util;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
@@ -89,10 +90,9 @@ public class ChangeActivity extends RxBaseActivity {
         McService mcService = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
         Observable<EmResult> observable = mcService
-                .updatePsw(EmUtil.getEmployId(),
-                        AesUtil.aesEncrypt(editOld.getText().toString(), AesUtil.AAAAA),
-                        AesUtil.aesEncrypt(editNew.getText().toString(), AesUtil.AAAAA),
-                        EmUtil.getAppKey())
+                .updatePsw(SHA256Util.getSHA256StrJava(editNew.getText().toString()),
+                        SHA256Util.getSHA256StrJava(editOld.getText().toString()),
+                        EmUtil.getEmployInfo().realName)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

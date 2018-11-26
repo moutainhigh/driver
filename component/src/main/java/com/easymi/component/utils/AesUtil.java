@@ -69,14 +69,13 @@ public class AesUtil {
   
     public static String aesEncrypt(String content, String password) {
         try {  
-            IvParameterSpec zeroIv = new IvParameterSpec(VIPARA.getBytes());
+            IvParameterSpec zeroIv = new IvParameterSpec(password.getBytes());
             SecretKeySpec key = new SecretKeySpec(password.getBytes(), "AES");
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             cipher.init(Cipher.ENCRYPT_MODE, key, zeroIv);
             byte[] encryptedData = cipher.doFinal(content.getBytes(bm));  
               
-            return Base64_2.encode(encryptedData);  
-//          return byte2HexStr(encryptedData);  
+            return Base64.encode(encryptedData);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();  
         } catch (NoSuchPaddingException e) {
@@ -109,9 +108,8 @@ public class AesUtil {
   
     public static String aesDecrypt(String content, String password) {
         try {  
-            byte[] byteMi = Base64_2.decode(content);  
-//          byte[] byteMi=  str2ByteArray(content);  
-            IvParameterSpec zeroIv = new IvParameterSpec(VIPARA.getBytes());
+            byte[] byteMi = Base64.decode(content);
+            IvParameterSpec zeroIv = new IvParameterSpec(password.getBytes());
             SecretKeySpec key = new SecretKeySpec(password.getBytes(), "AES");
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, key, zeroIv);

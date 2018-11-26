@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 /**
  * Created by developerLzh on 2017/11/3 0003.
- * 所有订单的基本信息
+ * 热订单详情
  */
 public class BaseOrder implements Serializable {
 
@@ -17,10 +17,30 @@ public class BaseOrder implements Serializable {
     public String passengerTags;
 
 //hf
+
     /**
-     * 订单主键
+     * 热订单id
      */
     public long id;
+    /**
+     * 班次状态  专线特有
+     */
+    public int scheduleStatus;
+
+    /**
+     *订单状态 专线没有此值
+     */
+    public int status;
+
+    /**
+     * 班次id  专线特有
+     */
+    public long scheduleId;
+
+    /**
+     * 订单主键  专线没有此值
+     */
+    public long orderId;
 
     /**
      *订单编号
@@ -30,7 +50,7 @@ public class BaseOrder implements Serializable {
     /**
      * 公司主键
      */
-    public Long companyId;
+    public long companyId;
 
     /**
      * 公司名称
@@ -45,7 +65,7 @@ public class BaseOrder implements Serializable {
     /**
      * 乘客主键
      */
-    public Long passengerId;
+    public long passengerId;
 
     /**
      * 乘客姓名
@@ -85,11 +105,13 @@ public class BaseOrder implements Serializable {
     /**
      * 预约地
      */
+    @SerializedName("startAddress")
     public String bookAddress;
 
     /**
      * 目的地
      */
+    @SerializedName("endAddress")
     public String destination;
 
     /**
@@ -138,35 +160,146 @@ public class BaseOrder implements Serializable {
     public String orderAddress;
 
     /**
-     *订单状态
-     */
-    public int status;
-
-    /**
      *乐观锁
      */
     public long version;
 
-    /**
-     * 下单人
-     */
-    public String operator;
+//热订单
+//    /**
+//     *主键
+//     */
+//    private Long id;
+
+//    /**
+//     *订单主键(专线订单无此值)
+//     */
+//    private Long orderId;
+
+//    /**
+//     *业务类型
+//     */
+//    private String serviceType;
+
+//    /**
+//     *订单状态
+//     */
+//    private Integer status;
+
+//    /**
+//     *预约时间
+//     */
+//    private Long bookTime;
+
+//    /**
+//     *出发地
+//     */
+//    private String startAddress;
 
     /**
-     * 派单方式
+     * 起点纬度
      */
-    public String assignType;
+    public double startLatitude;
 
     /**
-     * 接单方式
+     * 起点经度
      */
-    public String takeType;
+    public double startLongitude;
+
+//    /**
+//     *目的地
+//     */
+//    private String endAddress;
 
     /**
-     * 支付人
+     * 终点纬度
      */
-    public String payer;
+    public double endLatitude;
 
+    /**
+     * 终点经度
+     */
+    public double endLongitude;
 
+//    /**
+//     * 班次ID
+//     */
+//    private Long scheduleId;
+
+    /**
+     * 线路ID
+     */
+    public long lineId;
+
+    /**
+     * 线路名称
+     */
+    public String  lineName;
+
+//    /**
+//     * 班次出发时间
+//     */
+//    public long scheduleTime;
+
+    /**
+     * 购买票数
+     */
+    public int ticket;
+
+    /**
+     * 分钟数
+     */
+    public int minute;
+          
+    /**
+     * 停止售票时间
+     */
+    public int stopSaleMinute;
+
+    /**
+     * 座位数
+     */
+    public int seats;
+
+//    /**
+//     * 班次状态
+//     */
+//    private Integer scheduleStatus;
+
+    /**
+     * 售票中
+     */
+    public static final int SCHEDULE_STATUS_SALE = 1;
+    /**
+     * 等待行程开始
+     */
+    public static final int SCHEDULE_STATUS_PREPARE = 5;
+    /**
+     * 司机接人
+     */
+    public static final int SCHEDULE_STATUS_TAKE = 10;
+    /**
+     * 司机送人
+     */
+    public static final int SCHEDULE_STATUS_RUN = 15;
+    /**
+     * 已结束
+     */
+    public static final int SCHEDULE_STATUS_FINISH = 20;
+
+    public String getZXOrderStatusStr() {
+        if (scheduleStatus == SCHEDULE_STATUS_SALE) {
+            return "售票中";
+        } else if (scheduleStatus == SCHEDULE_STATUS_PREPARE) {
+            return "未开始";
+        } else if (scheduleStatus == SCHEDULE_STATUS_TAKE) {
+            return "正在接人";
+        } else if (scheduleStatus == SCHEDULE_STATUS_RUN) {
+            return "正在送人";
+        } else if (scheduleStatus == SCHEDULE_STATUS_FINISH) {
+            return "已完成";
+        } else {
+            return "";
+        }
+    }
 
 }

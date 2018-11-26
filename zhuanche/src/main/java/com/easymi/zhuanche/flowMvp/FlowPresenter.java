@@ -84,8 +84,8 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     //拒单
     @Override
-    public void refuseOrder(Long orderId, String remark) {
-        Observable<EmResult> observable = model.refuseOrder(orderId, remark);
+    public void refuseOrder(Long orderId,String orderType, String remark) {
+        Observable<EmResult> observable = model.refuseOrder(orderId,orderType, remark);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, zcOrderResult -> {
             DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);

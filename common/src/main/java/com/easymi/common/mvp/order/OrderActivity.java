@@ -47,8 +47,6 @@ public class OrderActivity extends RxBaseActivity {
         });
     }
 
-
-
     @Override
     public boolean isEnableSwipe() {
         return false;

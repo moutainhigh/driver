@@ -984,7 +984,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             @Override
             public void doRefuse() {
                 RefuseOrderDialog.Builder builder = new RefuseOrderDialog.Builder(FlowActivity.this);
-                builder.setApplyClick(reason -> presenter.refuseOrder(zcOrder.orderId, reason));
+                builder.setApplyClick(reason -> presenter.refuseOrder(zcOrder.orderId, zcOrder.orderType, reason));
                 RefuseOrderDialog dialog1 = builder.create();
                 dialog1.setCanceledOnTouchOutside(true);
                 dialog1.show();
@@ -1002,11 +1002,13 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void doStartWait(LoadingButton btn) {
+                //前往目的地的中途等待
                 presenter.startWait(zcOrder.orderId, btn);
             }
 
             @Override
             public void doStartWait() {
+                //到达预约地的中途等待
                 presenter.startWait(zcOrder.orderId);
             }
 

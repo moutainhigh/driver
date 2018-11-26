@@ -320,6 +320,10 @@ public class Employ extends BaseEmploy implements Parcelable {
      */
     public double balance;
 
+    /**
+     * 司机平均星级
+     */
+    public double star;
 
 
 

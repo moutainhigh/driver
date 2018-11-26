@@ -104,7 +104,7 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
 
         init();
 
-        presenter.queryZCType();//查询代驾子类型
+        presenter.queryZCType();//查询专车子类型
     }
 
 

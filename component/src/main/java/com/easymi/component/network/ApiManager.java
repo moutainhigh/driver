@@ -22,7 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiManager {
 
     private OkHttpClient mOkHttpClient;
-
+    private OkHttpClient mOkHttpClientRSA;
     /**
      * 内部静态类实现单例,且在第一次使用时才加载.
      */
@@ -52,12 +52,16 @@ public class ApiManager {
 
         Ssl ssl = new Ssl(XApp.getInstance(), "");
 
+        EncryptInterceptor encryptInterceptor = new EncryptInterceptor();
+
         //创建okhttp客户端
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.readTimeout(16000, TimeUnit.MILLISECONDS)
                 .connectTimeout(16000, TimeUnit.MILLISECONDS)
+                .addInterceptor(encryptInterceptor)  //加密拦截器
                 .addInterceptor(new TokenInterceptor())//token拦截器
                 .addInterceptor(logInterceptor) //添加日志拦截器,进行输出日志
+
                 .retryOnConnectionFailure(true) //失败重连
                 .cache(cache);
 
@@ -66,6 +70,23 @@ public class ApiManager {
         }
 
         mOkHttpClient = builder.build();
+
+
+        //创建okhttp客户端
+        OkHttpClient.Builder builderRSA = new OkHttpClient.Builder();
+        builderRSA.readTimeout(16000, TimeUnit.MILLISECONDS)
+                .connectTimeout(16000, TimeUnit.MILLISECONDS)
+                .addInterceptor(new TokenInterceptor())//token拦截器
+                .addInterceptor(logInterceptor) //添加日志拦截器,进行输出日志
+
+                .retryOnConnectionFailure(true) //失败重连
+                .cache(cache);
+
+        if (Config.HOST.contains("https://")) {
+            builderRSA.sslSocketFactory(ssl.getSslSocketFactory(), ssl.getTrustManager());
+        }
+
+        mOkHttpClientRSA = builderRSA.build();
     }
 
     /**
@@ -79,7 +100,8 @@ public class ApiManager {
     public <T> T createApi(String hostUrl, Class<T> service) {
         Retrofit retrofit = new Retrofit.Builder()
                 .client(mOkHttpClient)
-                .addConverterFactory(GsonConverterFactory.create()) //添加一个Gson转化
+//                .addConverterFactory(GsonConverterFactory.create()) //添加一个Gson转化
+                .addConverterFactory(KeyGsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create()) //添加一个rxjava转换
                 .baseUrl(hostUrl)
                 .build();
@@ -87,4 +109,24 @@ public class ApiManager {
         return retrofit.create(service);
     }
 
+
+    /**
+     * 创建一个网络访问的api.
+     *
+     * @param hostUrl 该api的host地址
+     * @param service api的class类型
+     * @param <T>     实际需要返回类型
+     * @return 实际返回的api实例
+     */
+    public <T> T createLoginApi(String hostUrl, Class<T> service) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .client(mOkHttpClientRSA)
+//                .addConverterFactory(GsonConverterFactory.create()) //添加一个Gson转化
+                .addConverterFactory(KeyGsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create()) //添加一个rxjava转换
+                .baseUrl(hostUrl)
+                .build();
+
+        return retrofit.create(service);
+    }
 }

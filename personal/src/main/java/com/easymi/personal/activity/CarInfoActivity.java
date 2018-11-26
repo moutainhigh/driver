@@ -115,8 +115,6 @@ public class CarInfoActivity extends RxBaseActivity {
             rv.setLayoutManager(new LinearLayoutManager(this));
             rv.setAdapter(adapter);
         }
-
-
     }
 
 

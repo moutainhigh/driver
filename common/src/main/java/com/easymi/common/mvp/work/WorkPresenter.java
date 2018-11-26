@@ -2,6 +2,7 @@ package com.easymi.common.mvp.work;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import com.easymi.common.CommApiService;
 import com.easymi.common.R;
@@ -23,6 +24,7 @@ import com.easymi.common.result.SystemResult;
 import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.Config;
 import com.easymi.component.EmployStatus;
+import com.easymi.component.ZXOrderStatus;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.Employ;
@@ -102,42 +104,42 @@ public class WorkPresenter implements WorkContract.Presenter {
 //        }
     }
 
-    public void cityLineOrder(){
-        Observable<CityLineResult> observable = model.getCityLineOrders(EmUtil.getEmployId(),Config.APP_KEY);
-        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context,
-                false, false, new HaveErrSubscriberListener<CityLineResult>() {
-            @Override
-            public void onNext(CityLineResult cityLineResult) {
-                view.stopRefresh();
-                if (cityLineResult.data != null) {
-                    List<CityLine> orders = new ArrayList<>();
-
-                    if (cityLineResult.data.size() != 0) {
-                        CityLine header = new CityLine(CityLine.ITEM_HEADER);
-                        orders.add(header);
-
-                        for (CityLine cityLine : cityLineResult.data) {
-                            cityLine.viewType = MultipleOrder.ITEM_POSTER;
-                            orders.add(cityLine);
-                        }
-                    }
-                    view.showLineOrders(orders);
-                } else {
-                    startLocService();//重启定位更改定位周期
-                    view.showLineOrders(null);
-                }
-
-
-            }
-
-            @Override
-            public void onError(int code) {
-                view.stopRefresh();
-                startLocService();//重启定位更改定位周期
-                view.showLineOrders(null);
-            }
-        })));
-    }
+//    public void cityLineOrder() {
+//        Observable<CityLineResult> observable = model.getCityLineOrders(EmUtil.getEmployId(), Config.APP_KEY);
+//        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context,
+//                false, false, new HaveErrSubscriberListener<CityLineResult>() {
+//            @Override
+//            public void onNext(CityLineResult cityLineResult) {
+//                view.stopRefresh();
+//                if (cityLineResult.data != null) {
+//                    List<CityLine> orders = new ArrayList<>();
+//
+//                    if (cityLineResult.data.size() != 0) {
+//                        CityLine header = new CityLine(CityLine.ITEM_HEADER);
+//                        orders.add(header);
+//
+//                        for (CityLine cityLine : cityLineResult.data) {
+//                            cityLine.viewType = MultipleOrder.ITEM_POSTER;
+//                            orders.add(cityLine);
+//                        }
+//                    }
+//                    view.showLineOrders(orders);
+//                } else {
+//                    startLocService();//重启定位更改定位周期
+//                    view.showLineOrders(null);
+//                }
+//
+//
+//            }
+//
+//            @Override
+//            public void onError(int code) {
+//                view.stopRefresh();
+//                startLocService();//重启定位更改定位周期
+//                view.showLineOrders(null);
+//            }
+//        })));
+//    }
 
     @Override
     public void indexOrders() {
@@ -225,96 +227,105 @@ public class WorkPresenter implements WorkContract.Presenter {
 //        })));
 //        view.showOrders(initRecyclerData());
 
-        //todo 需要根据业务区分查询那个业务的订单
+//        //todo 需要根据业务区分查询那个业务的订单
+//        if (EmUtil.getEmployInfo().serviceType.equals(Config.CITY_LINE)){
+//            cityLineOrder();
+//        }else {
+//            Observable<QueryOrdersResult> observable = null;
+//            if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)){
+//                observable = model.indexOrders(EmUtil.getEmployId(), EmUtil.getAppKey());
+//            }else if (EmUtil.getEmployInfo().serviceType.equals(Config.TAXI)){
+//                observable = model.getTaxiOrders(EmUtil.getEmployInfo().phone,1,100,"5,10,15,20,25,28");
+//            }
+        Observable<QueryOrdersResult> observable = model.indexOrders(EmUtil.getEmployId(), EmUtil.getAppKey());
+        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false, false, new HaveErrSubscriberListener<QueryOrdersResult>() {
+            @Override
+            public void onNext(QueryOrdersResult emResult) {
+                view.stopRefresh();
 
-        if (EmUtil.getEmployInfo().serviceType.equals(Config.CITY_LINE)){
-            cityLineOrder();
-        }else {
-            Observable<QueryOrdersResult> observable = null;
-            if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)){
-                observable = model.indexOrders(EmUtil.getEmployId(), EmUtil.getAppKey());
-            }else if (EmUtil.getEmployInfo().serviceType.equals(Config.TAXI)){
-                observable = model.getTaxiOrders(EmUtil.getEmployInfo().phone,1,100,"5,10,15,20,25,28");
-            }
-            view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false, false, new HaveErrSubscriberListener<QueryOrdersResult>() {
-                @Override
-                public void onNext(QueryOrdersResult emResult) {
-                    view.stopRefresh();
-                    List<MultipleOrder> orders = emResult.data;
-                    List<MultipleOrder> nowOrders = new ArrayList<>();
-                    List<MultipleOrder> yuyueOrders = new ArrayList<>();
-                    if (orders != null) {
-                        for (MultipleOrder order : orders) {
-                            DymOrder dymOrder;
-                            if (DymOrder.exists(order.id, order.serviceType)) {//校验本地订单与服务器订单
-                                dymOrder = DymOrder.findByIDType(order.id, order.serviceType);
-                                dymOrder.orderStatus = order.status;
-                                dymOrder.updateStatus();
-                            } else {//服务器有本地没得 创建数据
-                                dymOrder = new DymOrder(order.id, order.serviceType,
-                                        order.passengerId, order.status);
-                                dymOrder.save();
+                if (emResult.data != null) {
+                    List<MultipleOrder> orders = new ArrayList<>();
+
+                    if (emResult.data.size() != 0) {
+                        MultipleOrder header = new MultipleOrder(CityLine.ITEM_HEADER);
+                        orders.add(header);
+
+                        for (MultipleOrder order : emResult.data) {
+                            DymOrder dymOrder = null;
+                            //校验本地订单与服务器订单
+                            if (TextUtils.equals(order.serviceType, Config.ZHUANCHE) || TextUtils.equals(order.serviceType, Config.TAXI)) {
+                                if (DymOrder.exists(order.orderId, order.serviceType)) {
+                                    //非专线 本地有
+                                    dymOrder = DymOrder.findByIDType(order.orderId, order.serviceType);
+                                    dymOrder.orderStatus = order.status;
+                                    dymOrder.updateStatus();
+                                } else {
+                                    //非专线  本地没有
+                                    dymOrder = new DymOrder(order.orderId, order.serviceType,
+                                            order.passengerId, order.status);
+                                    dymOrder.id = order.id;
+                                    dymOrder.saveOrUpdate();
+                                }
+                            } else if (TextUtils.equals(order.serviceType, Config.CITY_LINE)) {
+                                if (DymOrder.exists(order.scheduleId, order.serviceType)) {
+                                    //专线 本地有
+                                    dymOrder = DymOrder.findByIDType(order.scheduleId, order.serviceType);
+                                    dymOrder.orderStatus = order.scheduleStatus;
+                                    dymOrder.updateStatus();
+                                } else {
+                                    //专线 本地没有
+                                    dymOrder = new DymOrder();
+                                    dymOrder.id = order.id;
+                                    dymOrder.orderStatus = ZXOrderStatus.WAIT_START;
+                                    dymOrder.orderId = order.scheduleId;
+                                    dymOrder.orderType = order.serviceType;
+                                    dymOrder.saveOrUpdate();
+                                }
                             }
-
                             order.viewType = MultipleOrder.ITEM_POSTER;
-                            if (order.isBookOrder == 2) {
-                                nowOrders.add(order);
-                            } else {
-                                yuyueOrders.add(order);
-                            }
+                            orders.add(order);
                         }
 
                         List<DymOrder> allDym = DymOrder.findAll();
                         for (DymOrder dymOrder : allDym) {
                             boolean isExist = false;
                             for (MultipleOrder order : orders) {
-                                if (dymOrder.orderId == order.id && dymOrder.orderType.equals(order.serviceType)) {
-                                    isExist = true;
-                                    break;
+                                if (dymOrder.orderType.equals(Config.CITY_LINE)){
+                                    if ((dymOrder.orderId == order.scheduleId)) {
+                                        isExist = true;
+                                        break;
+                                    }
+                                }else if (dymOrder.orderType.equals(Config.ZHUANCHE)  || dymOrder.orderType.equals(Config.TAXI) ){
+                                    if (dymOrder.orderId == order.orderId) {
+                                        isExist = true;
+                                        break;
+                                    }
                                 }
                             }
                             if (!isExist) {
                                 dymOrder.delete();
                             }
                         }
-                        orders.clear();
-                        //预约header
-                        if (yuyueOrders.size() != 0) {
-                            MultipleOrder header1 = new MultipleOrder(MultipleOrder.ITEM_HEADER);
-                            header1.isBookOrder = 1;
-                            orders.add(header1);
-                        }
-
-                        //预约单
-                        orders.addAll(yuyueOrders);
-
-                        //即时header
-                        if (nowOrders.size() != 0) {
-                            MultipleOrder header2 = new MultipleOrder(MultipleOrder.ITEM_HEADER);
-                            header2.isBookOrder = 2;
-                            orders.add(header2);
-                        }
-                        //即时单
-                        orders.addAll(nowOrders);
                     } else {
                         DymOrder.deleteAll();
-                        orders = new ArrayList<>();
                     }
-
                     startLocService();//重启定位更改定位周期
-
                     view.showOrders(orders);
-                }
-
-                @Override
-                public void onError(int code) {
-                    view.stopRefresh();
+                } else {
+                    DymOrder.deleteAll();
                     startLocService();//重启定位更改定位周期
                     view.showOrders(null);
                 }
-            })));
-        }
+            }
 
+            @Override
+            public void onError(int code) {
+                view.stopRefresh();
+                startLocService();//重启定位更改定位周期
+                view.showOrders(null);
+            }
+        })));
+//        }
     }
 
     @Override

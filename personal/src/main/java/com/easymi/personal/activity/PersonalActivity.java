@@ -90,12 +90,11 @@ public class PersonalActivity extends RxBaseActivity {
         Employ employ = EmUtil.getEmployInfo();
         showBase(employ);
 
-        if (employ != null && employ.serviceType.contains(Config.ZHUANCHE)) {
-            rlCarInfo.setVisibility(View.VISIBLE);
-        } else {
-            rlCarInfo.setVisibility(View.GONE);
-        }
-
+//        if (employ != null && employ.serviceType.contains(Config.ZHUANCHE)) {
+//            rlCarInfo.setVisibility(View.VISIBLE);
+//        } else {
+//            rlCarInfo.setVisibility(View.GONE);
+//        }
     }
 
     @Override
@@ -127,8 +126,7 @@ public class PersonalActivity extends RxBaseActivity {
         if (employ != null) {
             driverName.setText(employ.realName);
             userName.setText("("+employ.userName+")");
-//            ratingBar.setStarMark((float) (employ.score == 0 ? 5.0 : employ.score));
-            ratingBar.setStarMark(5);
+            ratingBar.setStarMark((float) (employ.star == 0 ? 5.0 : employ.star));
             driverBalance.setText(String.valueOf(employ.balance));
 
             if (StringUtils.isNotBlank(employ.portraitPath)) {

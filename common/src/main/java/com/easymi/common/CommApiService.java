@@ -41,18 +41,18 @@ import rx.Observable;
 
 public interface CommApiService {
 
-    /**
-     * 查询所有订单接口
-     *
-     * @param driverId
-     * @param appKey
-     * @return
-     */
-    @GET("driver/api/v1/runningOrders")
-    Observable<QueryOrdersResult> queryRunningOrders(@Query("driver_id") Long driverId,
-                                                     @Query("app_key") String appKey,
-                                                     @Query("page") int page,
-                                                     @Query("limit") int limit);
+//    /**
+//     * 查询所有订单接口
+//     *
+//     * @param driverId
+//     * @param appKey
+//     * @return
+//     */
+//    @GET("driver/api/v1/runningOrders")
+//    Observable<QueryOrdersResult> queryRunningOrders(@Query("driver_id") Long driverId,
+//                                                     @Query("app_key") String appKey,
+//                                                     @Query("page") int page,
+//                                                     @Query("limit") int limit);
 
     /**
      //     * 上线接口
@@ -444,7 +444,7 @@ public interface CommApiService {
      */
     @FormUrlEncoded
     @POST("api/v1/public/driver/online")
-    Observable<EmResult> online(@Field("id") Long id,@Field("companyId") Long companyId);
+    Observable<EmResult> online(@Field("id") Long id, @Field("companyId") Long companyId);
 
     /**
      * 下线接口
@@ -454,7 +454,7 @@ public interface CommApiService {
      */
     @FormUrlEncoded
     @POST("api/v1/public/driver/offline")
-    Observable<EmResult> offline(@Field("id") Long id,@Field("companyId") Long companyId);
+    Observable<EmResult> offline(@Field("id") Long id, @Field("companyId") Long companyId);
 
 
     /**
@@ -587,6 +587,7 @@ public interface CommApiService {
                                                 @Query("page") int page,
                                                 @Query("size") int size,
                                                 @Query("status") String status);
+
     /**
      * 获取工作台 城际专线 列表
      */
@@ -610,7 +611,7 @@ public interface CommApiService {
      * @param size
      * @return
      */
-    @GET("api/v1/public/orderCold/list")
+    @GET("api/v1/public/order/cold/list")
     Observable<QueryOrdersResult> queryOverOrdersByBunsiness(@Query("startTime") Long startTime,
                                                              @Query("endTime") Long endTime,
                                                              @Query("page") int page,
@@ -623,4 +624,20 @@ public interface CommApiService {
      */
     @GET("api/v1/public/statistics/driver_profit/get")
     Observable<WorkStatisticsResult> workStatistics();
+
+    /**
+     * 获取工作台 所有业务列表
+     */
+    @GET("api/v1/public/order/hot/list")
+    Observable<QueryOrdersResult> queryRunningOrders(@Query("page") int page,
+                                                     @Query("size") int size,
+                                                     @Query("status") String status);
+
+
+    /**
+     * 通用拒单 专车出租车用
+     */
+    @GET("api/v1/public/order/refusal")
+    Observable<EmResult> refuseOrder(@Query("orderId") long orderId,
+                                     @Query("serviceType") String serviceType);
 }

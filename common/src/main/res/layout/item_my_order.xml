@@ -49,110 +49,153 @@
                 android:layout_marginRight="10dp"/>
         </LinearLayout>
 
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp">
-
-            <ImageView
-                android:id="@+id/time_icon"
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                android:layout_centerVertical="true"
-                android:src="@mipmap/ic_time_black" />
-
-            <TextView
-                android:id="@+id/order_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/time_icon"
-                android:text="11月12日 14:03"
-                android:textColor="@color/color_666666" />
-        </RelativeLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="15dp"
             android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp">
 
+                    <ImageView
+                        android:id="@+id/time_icon"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/ic_time_black" />
+
+                    <TextView
+                        android:id="@+id/order_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toRightOf="@+id/time_icon"
+                        android:text="11月12日 14:03"
+                        android:textColor="@color/color_666666" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="15dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/start_icon"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_marginTop="2dp"
+                            android:src="@drawable/circle_accent" />
+
+                        <View
+                            android:layout_width="0.1dp"
+                            android:layout_height="20dp"
+                            android:background="#e5e5e5" />
+
+                        <ImageView
+                            android:id="@+id/end_icon"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_marginBottom="2dp"
+                            android:src="@drawable/circle_yellow" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0.0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/order_start_place"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:lines="1"
+                            android:text="成都市温江区锦绣大道"
+                            android:textColor="@color/color_666666"
+                            android:textSize="14sp" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="0.0dp"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/order_end_place"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="10dp"
+                            android:ellipsize="end"
+                            android:lines="1"
+                            android:text="成都市温江区锦绣大道"
+                            android:textColor="@color/color_666666"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/start_icon"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_marginTop="2dp"
-                    android:src="@drawable/circle_accent" />
-
-                <View
-                    android:layout_width="0.1dp"
-                    android:layout_height="20dp"
-                    android:background="#e5e5e5" />
-
-                <ImageView
-                    android:id="@+id/end_icon"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_marginBottom="2dp"
-                    android:src="@drawable/circle_yellow" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0.0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
-
+                android:orientation="vertical"
+                android:layout_marginRight="14dp">
                 <TextView
-                    android:id="@+id/order_start_place"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:ellipsize="end"
+                    android:id="@+id/tv_accept"
+                    android:layout_width="58dp"
+                    android:layout_height="30dp"
+                    android:text="@string/accept_order"
                     android:gravity="center"
-                    android:lines="1"
-                    android:text="成都市温江区锦绣大道"
-                    android:textColor="@color/color_666666"
-                    android:textSize="14sp" />
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="0.0dp"
-                    android:layout_weight="1" />
+                    android:background="@drawable/com_corners_blue"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone"/>
 
                 <TextView
-                    android:id="@+id/order_end_place"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
+                    android:id="@+id/tv_refuse"
+                    android:layout_width="58dp"
+                    android:layout_height="30dp"
+                    android:text="拒单"
+                    android:gravity="center"
+                    android:background="@drawable/corner_line_4dp"
+                    android:textColor="@color/color_999999"
                     android:layout_marginTop="10dp"
-                    android:ellipsize="end"
-                    android:lines="1"
-                    android:text="成都市温江区锦绣大道"
-                    android:textColor="@color/color_666666"
-                    android:textSize="14sp" />
+                    android:visibility="gone"/>
 
+                <TextView
+                    android:id="@+id/tv_grab"
+                    android:layout_width="58dp"
+                    android:layout_height="30dp"
+                    android:text="@string/grab_order_content"
+                    android:gravity="center"
+                    android:background="@drawable/com_corners_blue"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone"/>
             </LinearLayout>
-
         </LinearLayout>
-
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="15dp" />
-
     </LinearLayout>
 
 </LinearLayout>

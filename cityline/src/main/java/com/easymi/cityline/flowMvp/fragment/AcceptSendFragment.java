@@ -246,14 +246,11 @@ public class AcceptSendFragment extends RxBaseFragment {
         }
         bridge.changeToolbar(StaticVal.TOOLBAR_FLOW);
 
-        naviBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (current.status == 0) {
-                    bridge.navi(new LatLng(current.startLat, current.startLng), orderId);
-                } else {
-                    bridge.navi(new LatLng(current.endLat, current.endLng), orderId);
-                }
+        naviBtn.setOnClickListener(view -> {
+            if (current.status == 0) {
+                bridge.navi(new LatLng(current.startLat, current.startLng), orderId);
+            } else {
+                bridge.navi(new LatLng(current.endLat, current.endLng), orderId);
             }
         });
     }

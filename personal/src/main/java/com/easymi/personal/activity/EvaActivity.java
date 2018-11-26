@@ -20,6 +20,7 @@ import com.easymi.personal.McService;
 import com.easymi.personal.R;
 import com.easymi.personal.entity.RateInfo;
 import com.easymi.personal.result.EvaResult;
+import com.easymi.personal.result.RateResult;
 
 import co.lujun.androidtagview.ColorFactory;
 import co.lujun.androidtagview.TagContainerLayout;
@@ -76,14 +77,9 @@ public class EvaActivity extends RxBaseActivity {
         star_four_number = findViewById(R.id.star_four_number);
         star_five_number = findViewById(R.id.star_five_number);
 
-        getEva();
-//        ratingBar.setStarMark(0f);
-//
-//        tagContainerLayout.removeAllTags();
-//        tagContainerLayout.addTag("长得帅");
-//        tagContainerLayout.addTag("说话平和");
-//        tagContainerLayout.addTag("很长的tag很长的tag很长的tag很长的tag");
-//        tagContainerLayout.addTag("财大气粗");
+//        getEva();
+        getStar();
+        getTag();
     }
 
     @Override
@@ -95,54 +91,118 @@ public class EvaActivity extends RxBaseActivity {
 
     @SuppressLint("SetTextI18n")
     private void getEva() {
-        Employ employ = EmUtil.getEmployInfo();
+//        Employ employ = EmUtil.getEmployInfo();
+//
+//        McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
+//
+//        Observable<EvaResult> observable = api
+//                .driverRate(employ.id, EmUtil.getAppKey())
+//                .filter(new HttpResultFunc<>())
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread());
+//
+//        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
+//                false, result -> {
+//            if (null != result.driverRate) {
+//                rate_text.setText(String.valueOf(result.driverRate.rate == 0 ? 5 : result.driverRate.rate));
+//                ratingBar.setStarMark(result.driverRate.rate == 0 ? 5 : result.driverRate.rate);
+//                total_number.setText(String.valueOf(result.driverRate.total_finish_count));
+//
+//                star_one_number.setText(String.valueOf(result.driverRate.star_one) + getString(R.string.number));
+//                star_two_number.setText(String.valueOf(result.driverRate.star_two) + getString(R.string.number));
+//                star_three_number.setText(String.valueOf(result.driverRate.star_three) + getString(R.string.number));
+//                star_four_number.setText(String.valueOf(result.driverRate.star_four) + getString(R.string.number));
+//                star_five_number.setText(String.valueOf(result.driverRate.star_five) + getString(R.string.number));
+//
+//                double onePercent = (double) result.driverRate.star_one / (double) result.driverRate.total_finish_count;
+//                one_star_progress.setProgress((int) (onePercent * 100));
+//
+//                double twoPercent = (double) result.driverRate.star_two / (double) result.driverRate.total_finish_count;
+//                two_star_progress.setProgress((int) (twoPercent * 100));
+//
+//                double threePercent = (double) result.driverRate.star_three / (double) result.driverRate.total_finish_count;
+//                three_star_progress.setProgress((int) (threePercent * 100));
+//
+//                double fourPercent = (double) result.driverRate.star_four / (double) result.driverRate.total_finish_count;
+//                four_star_progress.setProgress((int) (fourPercent * 100));
+//
+//                double fivePercent = (double) result.driverRate.star_five / (double) result.driverRate.total_finish_count;
+//                five_star_progress.setProgress((int) (fivePercent * 100));
+//            }
+//            if (null != result.rateInfos && result.rateInfos.size() != 0) {
+//                for (RateInfo rateInfo : result.rateInfos) {
+//                    tagContainerLayout.addTag(rateInfo.rate + "  " + rateInfo.count);
+//                }
+//            }
+//        })));
+    }
 
+    @Override
+    public boolean isEnableSwipe() {
+        return true;
+    }
+
+
+    public void getStar() {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
-        Observable<EvaResult> observable = api
-                .driverRate(employ.id, EmUtil.getAppKey())
+        Observable<RateResult> observable = api
+                .driverstar()
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
                 false, result -> {
-            if (null != result.driverRate) {
-                rate_text.setText(String.valueOf(result.driverRate.rate == 0 ? 5 : result.driverRate.rate));
-                ratingBar.setStarMark(result.driverRate.rate == 0 ? 5 : result.driverRate.rate);
-                total_number.setText(String.valueOf(result.driverRate.total_finish_count));
+            if (null != result.data) {
+//                rate_text.setText(String.valueOf(result.data.rate == 0 ? 5 : result.data.rate));
+//                ratingBar.setStarMark(result.data.rate == 0 ? 5 : result.data.rate);
 
-                star_one_number.setText(String.valueOf(result.driverRate.star_one) + getString(R.string.number));
-                star_two_number.setText(String.valueOf(result.driverRate.star_two) + getString(R.string.number));
-                star_three_number.setText(String.valueOf(result.driverRate.star_three) + getString(R.string.number));
-                star_four_number.setText(String.valueOf(result.driverRate.star_four) + getString(R.string.number));
-                star_five_number.setText(String.valueOf(result.driverRate.star_five) + getString(R.string.number));
+                rate_text.setText(String.valueOf(EmUtil.getEmployInfo().star == 0 ? 5 : EmUtil.getEmployInfo().star));
+                ratingBar.setStarMark(EmUtil.getEmployInfo().star == 0 ? 5 : (float) EmUtil.getEmployInfo().star);
 
-                double onePercent = (double) result.driverRate.star_one / (double) result.driverRate.total_finish_count;
+                total_number.setText(String.valueOf(result.data.evaluateCount));
+
+                star_one_number.setText(String.valueOf(result.data.one) + getString(R.string.number));
+                star_two_number.setText(String.valueOf(result.data.two) + getString(R.string.number));
+                star_three_number.setText(String.valueOf(result.data.three) + getString(R.string.number));
+                star_four_number.setText(String.valueOf(result.data.four) + getString(R.string.number));
+                star_five_number.setText(String.valueOf(result.data.five) + getString(R.string.number));
+
+                double onePercent = (double) result.data.one / (double) result.data.evaluateCount;
                 one_star_progress.setProgress((int) (onePercent * 100));
 
-                double twoPercent = (double) result.driverRate.star_two / (double) result.driverRate.total_finish_count;
+                double twoPercent = (double) result.data.two / (double) result.data.evaluateCount;
                 two_star_progress.setProgress((int) (twoPercent * 100));
 
-                double threePercent = (double) result.driverRate.star_three / (double) result.driverRate.total_finish_count;
+                double threePercent = (double) result.data.three / (double) result.data.evaluateCount;
                 three_star_progress.setProgress((int) (threePercent * 100));
 
-                double fourPercent = (double) result.driverRate.star_four / (double) result.driverRate.total_finish_count;
+                double fourPercent = (double) result.data.four / (double) result.data.evaluateCount;
                 four_star_progress.setProgress((int) (fourPercent * 100));
 
-                double fivePercent = (double) result.driverRate.star_five / (double) result.driverRate.total_finish_count;
+                double fivePercent = (double) result.data.five / (double) result.data.evaluateCount;
                 five_star_progress.setProgress((int) (fivePercent * 100));
-            }
-            if (null != result.rateInfos && result.rateInfos.size() != 0) {
-                for (RateInfo rateInfo : result.rateInfos) {
-                    tagContainerLayout.addTag(rateInfo.rate + "  " + rateInfo.count);
-                }
             }
         })));
     }
 
-    @Override
-    public boolean isEnableSwipe() {
-        return true;
+    public void getTag() {
+        McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
+
+        Observable<EvaResult> observable = api
+                .drivertag(1, 5)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
+                false, result -> {
+            if (null != result.data && result.data.size() != 0) {
+                for (RateInfo rateInfo : result.data) {
+                    tagContainerLayout.addTag(rateInfo.content + "  " + rateInfo.count);
+                }
+            }
+        })));
     }
 }

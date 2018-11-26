@@ -5,6 +5,6 @@ package com.easymi.personal.entity;
  */
 
 public class RateInfo {
-    public String rate;
+    public String content;
     public int count;
 }

@@ -2,6 +2,7 @@ package com.easymi.common.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
@@ -10,12 +11,23 @@ import com.easymi.common.R;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.mvp.order.OrderActivity;
 import com.easymi.common.util.DJStatus2Str;
+import com.easymi.common.util.ZXStatus2Str;
 import com.easymi.component.Config;
+import com.easymi.component.entity.DymOrder;
+import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HttpResultFunc3;
+import com.easymi.component.network.MySubscriber;
+import com.easymi.component.network.NoErrSubscriberListener;
+import com.easymi.component.result.EmResult2;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
 
 import java.util.List;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by hiwhitley on 2016/10/17.
@@ -39,40 +51,40 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
                context.startActivity(new Intent(context,OrderActivity.class));
             });
         } else if (baseOrder.getItemType() == MultipleOrder.ITEM_POSTER) {
+
             baseViewHolder.setText(R.id.order_time, TimeUtil.getTime(context.getString(R.string.time_format), baseOrder.bookTime * 1000));
-            baseViewHolder.setText(R.id.order_start_place, "" + baseOrder.getStartSite().address);
-            baseViewHolder.setText(R.id.order_end_place, baseOrder.getEndSite().address);
-            baseViewHolder.setText(R.id.order_status, "" + DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status)+" >");
             baseViewHolder.setText(R.id.order_type, "" + baseOrder.getOrderType());
+            baseViewHolder.setText(R.id.order_start_place, "" + baseOrder.bookAddress);
+            baseViewHolder.setText(R.id.order_end_place, baseOrder.destination);
+            if (TextUtils.equals(baseOrder.serviceType,Config.CITY_LINE)){
+//                DymOrder dymOrder = DymOrder.findByIDType(baseOrder.scheduleId,baseOrder.serviceType);
+//                baseViewHolder.setText(R.id.order_status, "" + ZXStatus2Str.int2Str(baseOrder.serviceType, dymOrder.orderStatus)+" >");
+                baseViewHolder.setText(R.id.order_status, "" + baseOrder.getZXOrderStatusStr()+" >");
+            }else {
+//                DymOrder dymOrder = DymOrder.findByIDType(baseOrder.orderId,baseOrder.serviceType);
+//                baseViewHolder.setText(R.id.order_status, "" + DJStatus2Str.int2Str(baseOrder.serviceType, dymOrder.orderStatus)+" >");
+                baseViewHolder.setText(R.id.order_status, "" + DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status)+" >");
+            }
+
             baseViewHolder.itemView.setOnClickListener(v -> {
                 if (StringUtils.isNotBlank(baseOrder.serviceType)) {
-                    if (baseOrder.serviceType.equals(Config.DAIJIA)) {
-                        if (baseOrder.status == 1) {
-//                            ARouter.getInstance().build("/daijia/GrabActivity").withLong("orderId", baseOrder.id).navigation();
-                        } else {
-                            ARouter.getInstance()
-                                    .build("/daijia/FlowActivity")
-                                    .withLong("orderId", baseOrder.id).navigation();
-                        }
-                    } else if (baseOrder.serviceType.equals(Config.ZHUANCHE)) {
-//                        if (baseOrder.status == 1) {
-////                            ARouter.getInstance().build("/daijia/GrabActivity").withLong("orderId", baseOrder.id).navigation();
-//                        } else {
+                    if (baseOrder.serviceType.equals(Config.ZHUANCHE)) {
                         ARouter.getInstance()
                                 .build("/zhuanche/FlowActivity")
-                                .withLong("orderId", baseOrder.id).navigation();
-//                        }
+                                .withLong("orderId", baseOrder.orderId).navigation();
                     } else if (baseOrder.serviceType.equals(Config.TAXI)) {
-//                        if (baseOrder.status == 1) {
-////                            ARouter.getInstance().build("/daijia/GrabActivity").withLong("orderId", baseOrder.id).navigation();
-//                        } else {
                         ARouter.getInstance()
                                 .build("/taxi/FlowActivity")
-                                .withLong("orderId", baseOrder.id).navigation();
-//                        }
+                                .withLong("orderId", baseOrder.orderId).navigation();
+                    }else if (baseOrder.serviceType.equals(Config.CITY_LINE)) {
+
+                        ARouter.getInstance().build("/cityline/FlowActivity").withSerializable("baseOrder",baseOrder).navigation();
                     }
                 }
             });
         }
     }
+
+
+
 }

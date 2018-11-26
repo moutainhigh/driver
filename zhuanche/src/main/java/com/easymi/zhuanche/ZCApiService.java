@@ -66,20 +66,20 @@ public interface ZCApiService {
 //                                        @Field("driver_id") Long driverId,
 //                                        @Field("app_key") String appKey);
 
-    /**
-     * 拒单
-     *
-     * @param orderId
-     * @param driverId
-     * @param appKey
-     * @return
-     */
-    @FormUrlEncoded
-    @PUT("driver/api/v1/refuseSpecialOrder")
-    Observable<EmResult> refuseOrder(@Field("order_id") Long orderId,
-                                     @Field("driver_id") Long driverId,
-                                     @Field("app_key") String appKey,
-                                     @Field("remark") String remark);
+//    /**
+//     * 拒单
+//     *
+//     * @param orderId
+//     * @param driverId
+//     * @param appKey
+//     * @return
+//     */
+//    @FormUrlEncoded
+//    @PUT("driver/api/v1/refuseSpecialOrder")
+//    Observable<EmResult> refuseOrder(@Field("order_id") Long orderId,
+//                                     @Field("driver_id") Long driverId,
+//                                     @Field("app_key") String appKey,
+//                                     @Field("remark") String remark);
 
     /**
      * 司机修改终点
@@ -248,29 +248,29 @@ public interface ZCApiService {
                                           @Field("order_person_id") Long orderPersonId,
                                           @Field("car_type") Long carType);
 
-    /**
-     * 预估价格
-     *
-     * @param passengerId
-     * @param companyId
-     * @param distance
-     * @param time
-     * @param orderTime
-     * @param channel
-     * @param typeId
-     * @param appKey
-     * @return
-     */
-    @GET("api/v1/getSpecialBudgetPrice")
-    Observable<BudgetResult> getBudgetPrice(@Query("passenger_id") Long passengerId,
-                                            @Query("company_id") Long companyId,
-                                            @Query("distance") Double distance,
-                                            @Query("time") Integer time,
-                                            @Query("order_time") Long orderTime,
-                                            @Query("channel") String channel,
-                                            @Query("typeId") Long typeId,
-                                            @Query("model_id") Long modelId,
-                                            @Query("app_key") String appKey);
+//    /**
+//     * 预估价格
+//     *
+//     * @param passengerId
+//     * @param companyId
+//     * @param distance
+//     * @param time
+//     * @param orderTime
+//     * @param channel
+//     * @param typeId
+//     * @param appKey
+//     * @return
+//     */
+//    @GET("api/v1/getSpecialBudgetPrice")
+//    Observable<BudgetResult> getBudgetPrice(@Query("passenger_id") Long passengerId,
+//                                            @Query("company_id") Long companyId,
+//                                            @Query("distance") Double distance,
+//                                            @Query("time") Integer time,
+//                                            @Query("order_time") Long orderTime,
+//                                            @Query("channel") String channel,
+//                                            @Query("typeId") Long typeId,
+//                                            @Query("model_id") Long modelId,
+//                                            @Query("app_key") String appKey);
 
     /**
      * 获取专车子类型
@@ -285,27 +285,24 @@ public interface ZCApiService {
                                            @Query("company_id") Long companyId,
                                            @Query("service_type") Integer serviceType);
 
-    @GET("api/v1/passengerMustBe")
-    Observable<PassengerResult> queryPassenger(@Query("company_id") Long companyId,
-                                               @Query("company_name") String companyName,
-                                               @Query("phone") String phone,
-                                               @Query("app_key") String appKey,
-                                               @Query("channel") String channel);
+//    @GET("api/v1/passengerMustBe")
+//    Observable<PassengerResult> queryPassenger(@Query("company_id") Long companyId,
+//                                               @Query("company_name") String companyName,
+//                                               @Query("phone") String phone,
+//                                               @Query("app_key") String appKey,
+//                                               @Query("channel") String channel);
 
     /**
      * 销单
      *
      * @param orderId
-     * @param driverId
-     * @param appKey
+     * @param memo
      * @return
      */
     @FormUrlEncoded
-    @PUT("driver/api/v1/cancelSpecialOrder")
-    Observable<EmResult> cancelOrder(@Field("order_id") Long orderId,
-                                     @Field("driver_id") Long driverId,
-                                     @Field("app_key") String appKey,
-                                     @Field("remark") String remark);
+    @PUT("api/v1/public/order/cancel")
+    Observable<EmResult> cancelOrder(@Field("orderId") Long orderId,
+                                     @Field("memo") String memo);
 
     /**
      * 同单司机
@@ -476,16 +473,62 @@ public interface ZCApiService {
 
 
     /**
-     * 结算订单  /api/v1/finishOrder  PUT  id  int  是  订单id
-     * pay_type  string  是  支付类型(代付helppay，客户余额支付balance)
+     * 结算订单
+     * pay_type  string
      *
      * @param orderId
-     * @param payType
+     * @param channel
      * @return
      */
     @FormUrlEncoded
-    @POST("api/v1/taxi_online/order/pay")
+    @POST("api/v1/public/pay/order")
     Observable<EmResult> payOrder(@Field("id") Long orderId,
-                                  @Field("operateType") String payType,
-                                  @Field("version") Long version);
+                                  @Field("channel") String channel);
+
+    /**
+     * 拒单
+     *
+     * @param orderId
+     * @param serviceType
+     * @param remark
+     * @return
+     */
+    @FormUrlEncoded
+    @PUT("api/v1/public/order/refusal")
+    Observable<EmResult> refuseOrder(@Field("orderId") long orderId,
+                                     @Query("serviceType") String serviceType,
+                                     @Field("remark") String remark);
+
+    /**
+     * 根据电话验证客户是新客户还是老客户
+     *
+     * @param phone
+     * @return
+     */
+    @GET("api/v1/public/login/passenger/is_exist")
+    Observable<PassengerResult> queryPassenger(@Query("phone") String phone);
+
+    /**
+     * 预算费用
+     *
+     * @param passengerId
+     * @param companyId
+     * @param distance
+     * @param time
+     * @param orderTime
+     * @param channel
+     * @param typeId
+     * @param appKey
+     * @return
+     */
+    @GET("api/v1/getSpecialBudgetPrice")
+    Observable<BudgetResult> getBudgetPrice(@Query("passenger_id") Long passengerId,
+                                            @Query("company_id") Long companyId,
+                                            @Query("distance") Double distance,
+                                            @Query("time") Integer time,
+                                            @Query("order_time") Long orderTime,
+                                            @Query("channel") String channel,
+                                            @Query("typeId") Long typeId,
+                                            @Query("model_id") Long modelId,
+                                            @Query("app_key") String appKey);
 }

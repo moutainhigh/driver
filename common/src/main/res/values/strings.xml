@@ -52,6 +52,7 @@
     <string name="grab_order_content">抢单</string>
     <string name="send_order">派单</string>
     <string name="accept_order">接单</string>
+    <string name="accept_order_refuse">拒单</string>
     <string name="send_order_content">您有新的订单了，快去接单吧</string>
 
     <string name="cancel_order">消单</string>
@@ -80,6 +81,8 @@
     <string name="jishi_order">即时订单</string>
     <string name="yuyue_order">预约订单</string>
     <string name="time_format">MM月dd日 HH:mm</string>
+
+    <string name="time_five_format">yyyy-MM-dd HH:mm</string>
 
 
     <string name="baoxiao_hint_1">请输入报销金额</string>
@@ -119,6 +122,18 @@
     <string name="finish_order">已完成</string>
     <string name="des_order">已销单 ></string>
     <string name="rate_order">已完成</string>
+
+    <string name="zx_new_order">新单</string>
+    <string name="zx_pai_order">已派单</string>
+    <string name="zx_accept_order">已接单</string>
+    <string name="zx_wait_start">等待开始行程</string>
+    <string name="zx_accept_plan">接人规划</string>
+    <string name="zx_send_plan">送人规划</string>
+    <string name="zx_accepting">接人中</string>
+    <string name="zx_sending">送人中</string>
+    <string name="zx_send_over">送完客户</string>
+    <string name="zx_line_over">行程结束</string>
+
 
     <string name="reject_net">网络连接不可用，可能是由于您主动设置了禁用网络，请前往应用管理中打开。设置完毕后请重新启动程序</string>
 

@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="wrap_content"
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -19,7 +19,9 @@
             android:layout_width="0.0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
 
             <TextView
                 android:id="@+id/order_type"
@@ -35,7 +37,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="visible">
 
                 <ImageView
                     android:layout_width="10dp"
@@ -145,7 +148,7 @@
         <LinearLayout
             android:id="@+id/right_con"
             android:layout_width="wrap_content"
-            android:layout_height="180dp"
+            android:layout_height="match_parent"
             android:gravity="center_vertical|right"
             android:orientation="vertical">
 
@@ -199,7 +202,8 @@
                 android:paddingRight="8dp"
                 android:paddingTop="5dp"
                 android:text="@string/liushui_baoxiao"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="gone"/>
 
         </LinearLayout>
     </LinearLayout>

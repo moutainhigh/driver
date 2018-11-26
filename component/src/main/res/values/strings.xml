@@ -80,4 +80,7 @@
     <string name="update_now">立即更新</string>
     <string name="be_later">以后再说</string>
     <string name="ingore_this">忽略该版</string>
+
+
+    <string name="rsa_public_key">MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCCaYfJgPjUXWXoifblGGZSFPsP1JYe758iLuRYUNS06MyAwuM+nlM6lC5QbnCOkj5khslbcMvT0+MtoSpe+neGI+oEKU/p203ENqD+I2PxjfTu7AZc+C2Ccw48PlTNVqH/juyhg4Cch7eETPclCdR4XPqO5lI9voDgjvTR/FhJXwIDAQAB</string>
 </resources>

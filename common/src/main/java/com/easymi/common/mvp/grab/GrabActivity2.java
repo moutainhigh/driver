@@ -187,7 +187,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
 
         boolean haveSame = false;
         for (MultipleOrder order : multipleOrders) {
-            if (newOrder.id == order.id &&
+            if (newOrder.orderId == order.orderId &&
                     newOrder.status == DJOrderStatus.NEW_ORDER) {
                 order.countTime = GRAB_TOTAL_TIME;//重置时间
                 haveSame = true;
@@ -492,7 +492,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
 
     @Override
     public void removerOrderById(long orderId) {
-        if (showIngOrder != null && showIngOrder.id == orderId) {
+        if (showIngOrder != null && showIngOrder.orderId == orderId) {
             showIngOrder.countTime = 1;//采用将时间置位1的方式移除订单
         }
     }

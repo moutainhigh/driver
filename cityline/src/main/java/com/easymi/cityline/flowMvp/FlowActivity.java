@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ import com.amap.api.navi.model.AMapNaviPath;
 import com.amap.api.navi.model.RouteOverlayOptions;
 import com.amap.api.navi.view.RouteOverLay;
 import com.amap.api.services.route.DriveRouteResult;
+import com.easymi.cityline.CLService;
 import com.easymi.cityline.R;
 import com.easymi.cityline.StaticVal;
 import com.easymi.cityline.adapter.LeftWindowAdapter;
@@ -41,10 +43,16 @@ import com.easymi.component.Config;
 import com.easymi.component.ZXOrderStatus;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
+import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HttpResultFunc3;
+import com.easymi.component.network.MySubscriber;
+import com.easymi.component.network.NoErrSubscriberListener;
+import com.easymi.component.result.EmResult2;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
@@ -57,9 +65,13 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 /**
  * Created by liuzihao on 2018/11/15.
- *
+ * <p>
  * 订单执行流程
  */
 @Route(path = "/cityline/FlowActivity")
@@ -102,11 +114,18 @@ public class FlowActivity extends RxBaseActivity implements
 
     @Override
     public void initViews(Bundle savedInstanceState) {
-        zxOrder = (ZXOrder) getIntent().getSerializableExtra("zxOrder");
-        if (null == zxOrder) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        BaseOrder baseOrder = (BaseOrder) getIntent().getSerializableExtra("baseOrder");
+
+        if (null == baseOrder) {
             finish();
             return;
         }
+
+        baseToZX(baseOrder);
+
+        getCustomers(zxOrder);
+
         presenter = new FlowPresenter(this, this);
 
         mapView = findViewById(R.id.map_view);
@@ -116,6 +135,64 @@ public class FlowActivity extends RxBaseActivity implements
         initMap();
         initBridget();
         initFragment();
+    }
+
+    private void getCustomers(ZXOrder zxOrder) {
+        Observable<EmResult2<List<OrderCustomer>>> observable = ApiManager.getInstance().createApi(Config.HOST, CLService.class)
+                .getOrderCustomers(zxOrder.orderId)
+                .filter(new HttpResultFunc3<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, result2 -> {
+            List<OrderCustomer> orderCustomers = result2.getData();
+            for (int i = 0; i < orderCustomers.size(); i++) {
+                OrderCustomer orderCustomer = orderCustomers.get(i);
+
+                orderCustomer.appointTime = orderCustomer.appointTime * 1000;
+                orderCustomer.num = i;
+                orderCustomer.acceptSequence = i;
+                orderCustomer.sendSequence = i;
+                orderCustomer.status = 0;
+                orderCustomer.subStatus = 0;
+
+                orderCustomer.orderId = zxOrder.orderId;
+                orderCustomer.orderType = zxOrder.orderType;
+
+                for (OrderCustomer.OrderAddressVo orderAddressVo : orderCustomer.orderAddressVos) {
+                    if (orderAddressVo.type == 1) { //起点
+                        orderCustomer.startAddr = orderAddressVo.address;
+                        orderCustomer.startLat = orderAddressVo.latitude;
+                        orderCustomer.startLng = orderAddressVo.longitude;
+                    } else { //终点
+                        orderCustomer.endAddr = orderAddressVo.address;
+                        orderCustomer.endLat = orderAddressVo.latitude;
+                        orderCustomer.endLng = orderAddressVo.longitude;
+                    }
+                }
+                orderCustomer.saveOrUpdate();
+            }
+        })));
+    }
+
+    public void baseToZX(BaseOrder baseOrder){
+        zxOrder = new ZXOrder();
+
+        zxOrder.orderId = baseOrder.scheduleId;
+        zxOrder.orderType = baseOrder.serviceType;
+        zxOrder.startSite = baseOrder.bookAddress;
+        zxOrder.endSite = baseOrder.destination;
+        zxOrder.startOutTime = baseOrder.bookTime * 1000;//开始出发时间
+        zxOrder.minute = baseOrder.minute;//xx分钟前开始接人
+        zxOrder.startJierenTime = baseOrder.bookTime - baseOrder.minute * 60 * 1000;//开始接人时间
+        zxOrder.startLat = baseOrder.startLatitude;
+        zxOrder.startLng = baseOrder.startLongitude;
+        zxOrder.endLat = baseOrder.endLatitude;
+        zxOrder.endLng = baseOrder.endLongitude;
+        zxOrder.status = baseOrder.scheduleStatus;
+        zxOrder.lineId = baseOrder.lineId;//线路Id
+        zxOrder.lineName = baseOrder.lineName;//线路Id
+        zxOrder.seats = baseOrder.seats;//剩余票数
     }
 
     ChangePopWindow changePopWindow;
@@ -356,7 +433,6 @@ public class FlowActivity extends RxBaseActivity implements
     @Override
     public void initBridget() {
         bridge = new ActFraCommBridge() {
-
 
             @Override
             public void showBounds(List<LatLng> latLngs) {

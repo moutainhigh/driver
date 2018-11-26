@@ -106,7 +106,9 @@ public class DetailActivity extends RxBaseActivity {
                 if (page == 1) {
                     details.clear();
                 }
-                details.addAll(liushuiResult.data);
+                if (liushuiResult.data !=null){
+                    details.addAll(liushuiResult.data);
+                }
                 if (liushuiResult.total > page * 10) {
                     recyclerView.setLoadMoreEnable(true);
                 } else {

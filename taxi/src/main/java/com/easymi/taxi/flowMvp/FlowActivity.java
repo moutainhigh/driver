@@ -918,7 +918,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             @Override
             public void doRefuse() {
                 RefuseOrderDialog.Builder builder = new RefuseOrderDialog.Builder(FlowActivity.this);
-                builder.setApplyClick(reason -> presenter.refuseOrder(taxiOrder.id, reason));
+                builder.setApplyClick(reason -> presenter.refuseOrder(taxiOrder.id,taxiOrder.serviceType, reason));
                 RefuseOrderDialog dialog1 = builder.create();
                 dialog1.setCanceledOnTouchOutside(true);
                 dialog1.show();

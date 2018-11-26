@@ -32,7 +32,7 @@ public class CreateZCModel implements CreateZCContract.Model {
     @Override
     public Observable<PassengerResult> queryPassenger(Long companyId, String companyName, String phone) {
         return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
-                .queryPassenger(companyId, companyName, phone, EmUtil.getAppKey(), "supplement")
+                .queryPassenger(phone)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

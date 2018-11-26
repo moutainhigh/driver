@@ -58,9 +58,9 @@ public class FlowModel implements FlowContract.Model {
     }
 
     @Override
-    public Observable<EmResult> refuseOrder(Long orderId, String remark) {
+    public Observable<EmResult> refuseOrder(Long orderId,String orderType, String remark) {
         return ApiManager.getInstance().createApi(Config.HOST, TaxiApiService.class)
-                .refuseOrder(orderId, EmUtil.getEmployId(), EmUtil.getAppKey(), remark)
+                .refuseOrder(orderId, orderType, remark)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -282,7 +282,7 @@ public class FlowModel implements FlowContract.Model {
     @Override
     public Observable<EmResult> cancelOrder(Long orderId, String remark) {
         return ApiManager.getInstance().createApi(Config.HOST, TaxiApiService.class)
-                .cancelOrder(orderId, EmUtil.getEmployId(), EmUtil.getAppKey(), remark)
+                .cancelOrder(orderId, remark)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

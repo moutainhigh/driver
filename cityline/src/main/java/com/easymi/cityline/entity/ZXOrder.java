@@ -37,6 +37,7 @@ public class ZXOrder implements Serializable {
 
     @SerializedName("id")
     public long orderId;
+
     public String orderType;
 
     @SerializedName("startAddress")

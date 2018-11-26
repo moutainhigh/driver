@@ -64,20 +64,20 @@ public interface TaxiApiService {
 //                                          @Field("driver_id") Long driverId,
 //                                          @Field("app_key") String appKey);
 
-    /**
-     * 拒单
-     *
-     * @param orderId
-     * @param driverId
-     * @param appKey
-     * @return
-     */
-    @FormUrlEncoded
-    @PUT("driver/api/v1/refuseSpecialOrder")
-    Observable<EmResult> refuseOrder(@Field("order_id") Long orderId,
-                                     @Field("driver_id") Long driverId,
-                                     @Field("app_key") String appKey,
-                                     @Field("remark") String remark);
+//    /**
+//     * 拒单
+//     *
+//     * @param orderId
+//     * @param driverId
+//     * @param appKey
+//     * @return
+//     */
+//    @FormUrlEncoded
+//    @PUT("driver/api/v1/refuseSpecialOrder")
+//    Observable<EmResult> refuseOrder(@Field("order_id") Long orderId,
+//                                     @Field("driver_id") Long driverId,
+//                                     @Field("app_key") String appKey,
+//                                     @Field("remark") String remark);
 
     /**
      * 司机修改终点
@@ -297,16 +297,13 @@ public interface TaxiApiService {
      * 销单
      *
      * @param orderId
-     * @param driverId
-     * @param appKey
+     * @param memo
      * @return
      */
     @FormUrlEncoded
-    @PUT("driver/api/v1/cancelSpecialOrder")
-    Observable<EmResult> cancelOrder(@Field("order_id") Long orderId,
-                                     @Field("driver_id") Long driverId,
-                                     @Field("app_key") String appKey,
-                                     @Field("remark") String remark);
+    @PUT("api/v1/public/order/cancel")
+    Observable<EmResult> cancelOrder(@Field("orderId") long orderId,
+                                     @Field("memo") String memo);
 
     /**
      * 同单司机
@@ -425,4 +422,17 @@ public interface TaxiApiService {
                                         @Field("detailAddress") String detailAddress,
                                         @Field("fee") double fee);
 
+    /**
+     * 通用拒单 专车出租车用
+     *
+     * @param orderId
+     * @param serviceType
+     * @param remark
+     * @return
+     */
+    @FormUrlEncoded
+    @PUT("api/v1/public/order/refusal")
+    Observable<EmResult> refuseOrder(@Field("orderId") long orderId,
+                                     @Field("serviceType") String serviceType,
+                                     @Field("remark") String remark);
 }

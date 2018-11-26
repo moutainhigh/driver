@@ -265,7 +265,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
     private OrderAdapter adapter;
 
-    private NoticeAdapter noticeAdapter;
+//    private NoticeAdapter noticeAdapter;
 
     @Override
     public void findById() {
@@ -337,32 +337,33 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
             noOrderText.setVisibility(View.GONE);
             presenter.loadEmploy(EmUtil.getEmployId());
         });
+
         swipeRefreshLayout.setRefreshing(true);
     }
 
-    //专线班次列表
-    List<CityLine> lines = new ArrayList<>();
+//    //专线班次列表
+//    List<CityLine> lines = new ArrayList<>();
     @Override
     public void showLineOrders(List<CityLine> cityLines) {
-        lines.clear();
-        if (cityLines == null || cityLines.size() == 0) {
-            showEmpty(0);
-        } else {
-            lines.addAll(cityLines);
-            hideEmpty();
-        }
-
-        CityLineAdapter adapter = new CityLineAdapter(lines, this);
-        recyclerView.setAdapter(adapter);
-        PinnedHeaderDecoration pinnedHeaderDecoration = new PinnedHeaderDecoration();
-        //设置只有RecyclerItem.ITEM_HEADER的item显示标签
-        pinnedHeaderDecoration.setPinnedTypeHeader(MultipleOrder.ITEM_HEADER);
-        pinnedHeaderDecoration.registerTypePinnedHeader(MultipleOrder.ITEM_HEADER, (parent, adapterPosition) -> true);
-        pinnedHeaderDecoration.registerTypePinnedHeader(MultipleOrder.ITEM_DESC, (parent, adapterPosition) -> true);
-        recyclerView.addItemDecoration(pinnedHeaderDecoration);
+//        lines.clear();
+//        if (cityLines == null || cityLines.size() == 0) {
+//            showEmpty(0);
+//        } else {
+//            lines.addAll(cityLines);
+//            hideEmpty();
+//        }
+//
+//        CityLineAdapter adapter = new CityLineAdapter(lines, this);
+//        recyclerView.setAdapter(adapter);
+//        PinnedHeaderDecoration pinnedHeaderDecoration = new PinnedHeaderDecoration();
+//        //设置只有RecyclerItem.ITEM_HEADER的item显示标签
+//        pinnedHeaderDecoration.setPinnedTypeHeader(MultipleOrder.ITEM_HEADER);
+//        pinnedHeaderDecoration.registerTypePinnedHeader(MultipleOrder.ITEM_HEADER, (parent, adapterPosition) -> true);
+//        pinnedHeaderDecoration.registerTypePinnedHeader(MultipleOrder.ITEM_DESC, (parent, adapterPosition) -> true);
+//        recyclerView.addItemDecoration(pinnedHeaderDecoration);
     }
 
-    //专车出租车订单列表
+    //全业务订单列表
     List<MultipleOrder> orders = new ArrayList<>();
     @Override
     public void showOrders(List<MultipleOrder> MultipleOrders) {
@@ -537,15 +538,10 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     @Override
     public void showDriverStatus() {
         Employ employ = EmUtil.getEmployInfo();
-
         if (String.valueOf(employ.status).equals(EmployStatus.FROZEN)) {
-//            ActManager.getInstance().finishAllActivity();
-//            Intent intent = new Intent(this, SplashActivity.class);
-//            startActivity(intent);
             EmUtil.employLogout(this);
         } else if (String.valueOf(employ.status).equals(EmployStatus.OFFLINE)) {
             showOffline();//非听单状态
-//            presenter.loadNoticeAndAnn();
             presenter.initDaemon();
         } else {
             showOnline();//听单状态
@@ -556,22 +552,21 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
     @Override
     public void showHomeAnnAndNotice(List<AnnAndNotice> annAndNoticeList) {
-        stopRefresh();
-        if (null != annAndNoticeList && annAndNoticeList.size() != 0) {
-            hideEmpty();
-            noticeAdapter = new NoticeAdapter(annAndNoticeList);
-            noticeAdapter.setOnDeleteNoticeListener(id -> presenter.deleteNotice(id));
-            recyclerView.setAdapter(noticeAdapter);
-            PinnedHeaderDecoration pinnedHeaderDecoration = new PinnedHeaderDecoration();
-            //设置只有RecyclerItem.ITEM_HEADER的item显示标签
-            pinnedHeaderDecoration.setPinnedTypeHeader(AnnAndNotice.ITEM_HEADER);
-            pinnedHeaderDecoration.registerTypePinnedHeader(AnnAndNotice.ITEM_HEADER, (parent, adapterPosition) -> true);
-            pinnedHeaderDecoration.registerTypePinnedHeader(AnnAndNotice.ITEM_DESC, (parent, adapterPosition) -> true);
-            recyclerView.addItemDecoration(pinnedHeaderDecoration);
-        } else {
-            showEmpty(1);
-        }
-
+//        stopRefresh();
+//        if (null != annAndNoticeList && annAndNoticeList.size() != 0) {
+//            hideEmpty();
+//            noticeAdapter = new NoticeAdapter(annAndNoticeList);
+//            noticeAdapter.setOnDeleteNoticeListener(id -> presenter.deleteNotice(id));
+//            recyclerView.setAdapter(noticeAdapter);
+//            PinnedHeaderDecoration pinnedHeaderDecoration = new PinnedHeaderDecoration();
+//            //设置只有RecyclerItem.ITEM_HEADER的item显示标签
+//            pinnedHeaderDecoration.setPinnedTypeHeader(AnnAndNotice.ITEM_HEADER);
+//            pinnedHeaderDecoration.registerTypePinnedHeader(AnnAndNotice.ITEM_HEADER, (parent, adapterPosition) -> true);
+//            pinnedHeaderDecoration.registerTypePinnedHeader(AnnAndNotice.ITEM_DESC, (parent, adapterPosition) -> true);
+//            recyclerView.addItemDecoration(pinnedHeaderDecoration);
+//        } else {
+//            showEmpty(1);
+//        }
     }
 
     @Override

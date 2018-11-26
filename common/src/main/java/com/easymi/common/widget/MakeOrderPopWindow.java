@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.PopupWindow;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.easymi.common.R;
 import com.easymi.common.activity.CreateActivity;
 import com.easymi.component.Config;
@@ -126,10 +128,13 @@ public class MakeOrderPopWindow extends PopupWindow implements View.OnClickListe
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int positon, long arg3) {
             HashMap<String,Object> map=(HashMap<String,Object>)parent.getItemAtPosition(positon);
-
-            Intent intent = new Intent(context, CreateActivity.class);
-            intent.putExtra("type",(String) map.get("type"));
-            context.startActivity(intent);
+            if (TextUtils.equals((String) map.get("type"),Config.CITY_LINE)){
+                ARouter.getInstance().build("/cityline/CreateOrderActivity").navigation();
+            }else {
+                Intent intent = new Intent(context, CreateActivity.class);
+                intent.putExtra("type",(String) map.get("type"));
+                context.startActivity(intent);
+            }
         }
     }
 

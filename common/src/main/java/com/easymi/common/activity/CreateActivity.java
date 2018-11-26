@@ -38,7 +38,7 @@ public class CreateActivity extends RxBaseActivity {
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_create_order;
+        return R.layout.activity_com_create_order;
     }
 
     @Override
@@ -53,7 +53,11 @@ public class CreateActivity extends RxBaseActivity {
     @Override
     public void initToolBar() {
         toolbar = findViewById(R.id.cus_toolbar);
-        toolbar.setTitle(R.string.work_create);
+        if (Config.ZHUANCHE.equals(orderType)) {
+            toolbar.setTitle(pin2Hanzi(orderType));
+        } else if (Config.TAXI.equals(orderType)) {
+            toolbar.setTitle(pin2Hanzi(orderType));
+        }
         toolbar.setLeftBack(v -> finish());
     }
 
@@ -70,17 +74,11 @@ public class CreateActivity extends RxBaseActivity {
 //            if (types != null && types.length > 0) {
 //                for (String type : types) {
             if (Config.ZHUANCHE.equals(orderType)) {
-                toolbar.setTitle(pin2Hanzi(orderType));
                 Class zhuanche = Class.forName("com.easymi.zhuanche.fragment.create.CreateZCFragment");
                 fragments.add((Fragment) zhuanche.newInstance());
             } else if (Config.TAXI.equals(orderType)) {
-                toolbar.setTitle(pin2Hanzi(orderType));
                 Class taxi = Class.forName("com.easymi.taxi.fragment.create.CreateTaxiFragment");
                 fragments.add((Fragment) taxi.newInstance());
-            } else if (Config.CITY_LINE.equals(orderType)) {
-                toolbar.setTitle(pin2Hanzi(orderType));
-                Class cityline = Class.forName("com.easymi.cityline.fragment.create.CreateZCFragment");
-                fragments.add((Fragment) cityline.newInstance());
             }
 //                }
 //            }
@@ -107,8 +105,6 @@ public class CreateActivity extends RxBaseActivity {
             return R.string.create_zhuanche;
         } else if (type.equals(Config.TAXI)) {
             return R.string.create_taxi;
-        } else if (type.equals(Config.CITY_LINE)){
-            return R.string.create_zhuanxian;
         }
         return 0;
     }

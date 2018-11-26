@@ -1,5 +1,7 @@
 package com.easymi.component.base;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.LocationManager;
@@ -10,12 +12,17 @@ import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 
+import com.easymi.component.Config;
 import com.easymi.component.R;
 import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
+import com.easymi.component.entity.TiredNotice;
+import com.easymi.component.network.GsonUtil;
 import com.easymi.component.receiver.GpsReceiver;
 import com.easymi.component.receiver.NetWorkChangeReceiver;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.SysUtil;
 import com.easymi.component.widget.swipeback.ikew.SwipeBackActivityBase;
 import com.easymi.component.widget.swipeback.ikew.SwipeBackActivityHelper;
@@ -36,9 +43,12 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
         NetWorkChangeReceiver.OnNetChange, SwipeBackActivityBase {
 
     protected RxManager mRxManager;
+
     private GpsReceiver gpsReceiver;
 
     private NetWorkChangeReceiver netChangeReceiver;
+    //疲劳驾驶
+    private TiredReceiver tiredReceiver;
 
     private SwipeBackActivityHelper mHelper;
 
@@ -61,7 +71,6 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
 //        }
 
         setContentView(getLayoutId());
-
 
         //初始化控件
         initViews(savedInstanceState);
@@ -118,6 +127,11 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
         IntentFilter netFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(netChangeReceiver, netFilter);
 
+
+        tiredReceiver = new TiredReceiver();
+        IntentFilter tiredFilter = new IntentFilter(Config.TIRED_NOTICE);
+        registerReceiver(tiredReceiver, tiredFilter);
+
     }
 
     @Override
@@ -148,6 +162,7 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
         super.onStop();
         unregisterReceiver(gpsReceiver);
         unregisterReceiver(netChangeReceiver);
+        unregisterReceiver(tiredReceiver);
     }
 
     /**
@@ -280,6 +295,33 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
     }
 
     protected void choosePic(int x, int y) {
+
+    }
+
+    class TiredReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if(StringUtils.isNotBlank(action)){
+                if (intent.getAction().equals(Config.TIRED_NOTICE)) {
+                    TiredNotice tiredNotice = GsonUtil.parseJson(intent.getStringExtra("data"),TiredNotice.class);
+                    String message = "";
+                    if (tiredNotice.isTired == 1){
+                        message = "您已处于疲劳驾驶状态"+tiredNotice.tiredTime+"分钟，为了保障您和乘客的安全，请休息片刻再继续工作。休息时间："+tiredNotice.relaxTime+"分钟。";
+                    }else {
+                        message = "您即将进入疲劳驾驶状态，请合理安排工作休息时间。正常工作状态剩余时间:"+tiredNotice.remainTime+"分钟。";
+                    }
+
+                    AlertDialog dialog = new AlertDialog.Builder(XApp.getInstance())
+                            .setTitle("疲劳提醒")
+                            .setMessage(message)
+                            .setNegativeButton("好的，我知道了", (dialogInterface, i) -> dialogInterface.dismiss())
+                            .create();
+                    dialog.show();
+                }
+            }
+        }
 
     }
 }

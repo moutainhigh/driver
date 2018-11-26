@@ -2,14 +2,22 @@ package com.easymi.common.mvp.order;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.easymi.common.R;
 import com.easymi.common.adapter.MyOrderAdapter;
+import com.easymi.common.entity.MultipleOrder;
+import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseFragment;
+import com.easymi.component.entity.BaseOrder;
+import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.CusErrLayout;
 import com.easymi.component.widget.SwipeRecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
@@ -19,13 +27,18 @@ import java.util.ArrayList;
  * Description:
  * History:
  */
-public class GrabFragment extends RxBaseFragment{
+public class GrabFragment extends RxBaseFragment implements MyOrderContract.View{
 
     SwipeRecyclerView recyclerView;
     CusErrLayout cus_err_layout;
 
-    private ArrayList<String> list = new ArrayList<>();
+    private ArrayList<MultipleOrder> list = new ArrayList<>();
     private MyOrderAdapter adapter;
+
+    private int page = 1;
+    private int size = 10;
+    private MyOrderPresenter presenter;
+
     @Override
     public int getLayoutResId() {
         return R.layout.fragment_base_order;
@@ -36,16 +49,94 @@ public class GrabFragment extends RxBaseFragment{
         recyclerView = $(R.id.recyclerView);
         cus_err_layout = $(R.id.cus_err_layout);
 
-        list.clear();
-        list.add("");
-        list.add("");
-        list.add("");
-        adapter = new MyOrderAdapter(getContext());
+        initAdapter();
+        initPresenter();
+    }
+
+    public void initPresenter(){
+        presenter = new MyOrderPresenter(getContext(),this);
+        setRefresh();
+    }
+
+    public void setRefresh(){
+        presenter.indexOrders(page,size,"1");
+    }
+
+    public void initAdapter(){
+        adapter = new MyOrderAdapter(getContext(),2);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
+
+        recyclerView.setOnLoadListener(new SwipeRecyclerView.OnLoadListener() {
+            @Override
+            public void onRefresh() {
+                page = 1;
+                setRefresh();
+            }
+
+            @Override
+            public void onLoadMore() {
+                page ++ ;
+                setRefresh();
+            }
+        });
+
+        adapter.setItemClickListener((view, baseOrder) -> {
+            if (StringUtils.isNotBlank(baseOrder.serviceType)){
+                if (view.getId() == R.id.root ) {
+                    if (baseOrder.serviceType.equals(Config.ZHUANCHE)) {
+                        ARouter.getInstance()
+                                .build("/zhuanche/FlowActivity")
+                                .withLong("orderId", baseOrder.orderId).navigation();
+                    } else if (baseOrder.serviceType.equals(Config.TAXI)) {
+                        ARouter.getInstance()
+                                .build("/taxi/FlowActivity")
+                                .withLong("orderId", baseOrder.orderId).navigation();
+                    }
+                }else if (view.getId() == R.id.tv_grab){
+                    presenter.grabOrder((MultipleOrder) baseOrder);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void showOrders(List<MultipleOrder> MultipleOrders, int total) {
+        recyclerView.complete();
+        if (page == 1){
+            list.clear();
+        }
+        if (MultipleOrders!=null){
+            list.addAll(MultipleOrders);
+        }
+        if (list.size() == 0){
+            cus_err_layout.setText(R.string.empty_hint);
+            cus_err_layout.setVisibility(View.VISIBLE);
+        }else {
+            cus_err_layout.setVisibility(View.GONE);
+        }
+        if (total > page * 10) {
+            recyclerView.setLoadMoreEnable(true);
+        } else {
+            recyclerView.setLoadMoreEnable(false);
+            recyclerView.onNoMore(getResources().getString(R.string.lib_no_more_data));
+        }
         adapter.setBaseOrders(list);
     }
+
+    @Override
+    public void doSuccesd() {
+        setRefresh();
+    }
+
+    @Override
+    public RxManager getRxManager() {
+        return new RxManager();
+    }
+
+
+
 }

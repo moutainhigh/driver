@@ -11,6 +11,11 @@ import java.util.List;
  */
 
 public class EvaResult extends EmResult {
-    public List<RateInfo> rateInfos;
-    public EvaBean driverRate;
+
+
+    public List<RateInfo> data;
+
+//    public EvaBean driverRate;
+
+
 }

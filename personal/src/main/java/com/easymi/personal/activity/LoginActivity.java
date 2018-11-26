@@ -43,9 +43,12 @@ import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.AesUtil;
+import com.easymi.component.utils.Base64;
+import com.easymi.component.utils.Base64Utils;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
+import com.easymi.component.utils.RsaUtils;
 import com.easymi.component.utils.SHA256Util;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
@@ -57,10 +60,18 @@ import com.easymi.personal.adapter.PopAdapter;
 import com.easymi.personal.result.LoginResult;
 import com.easymi.personal.result.SettingResult;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -115,9 +126,7 @@ public class LoginActivity extends RxBaseActivity {
             }
             PhoneUtil.hideKeyboard(this);
 
-
             login(editAccount.getText().toString(), editPsw.getText().toString(), editQiye.getText().toString());
-
 
         });
         editAccount = findViewById(R.id.login_et_account);
@@ -384,7 +393,7 @@ public class LoginActivity extends RxBaseActivity {
     }
 
     private void login(String name, String psw, String qiyeCode) {
-        McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
+        McService api = ApiManager.getInstance().createLoginApi(Config.HOST, McService.class);
 
         String udid = PhoneUtil.getUDID(this);
 
@@ -474,10 +483,23 @@ public class LoginActivity extends RxBaseActivity {
 //                getSetting(employ);
 //            })));
 //        }
+        String randomStr = RsaUtils.getRandomString(16);
+        Log.e("hufeng/randomStr",randomStr);
+        XApp.getPreferencesEditor().putString(Config.AES_PASSWORD,randomStr).apply();
 
+        String name_rsa = null;
+        String pws_rsa = null;
+        String randomStr_rsa = null;
+        try {
+            name_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey(name.getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
+            pws_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey(SHA256Util.getSHA256StrJava(psw).getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
+            randomStr_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey(randomStr.getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Observable<LoginResult> observable = api
-                .loginByPW(name,
-                        SHA256Util.getSHA256StrJava(psw))
+                .loginByPW(name_rsa, pws_rsa, randomStr_rsa)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -490,8 +512,7 @@ public class LoginActivity extends RxBaseActivity {
             editor.putString(Config.SP_TOKEN, employ.token);
             editor.apply();
 
-            getSetting(employ);
-
+            getSetting(employ, name, psw);
         })));
     }
 
@@ -570,7 +591,7 @@ public class LoginActivity extends RxBaseActivity {
 //        }));
 //    }
 
-    private void getSetting(Employ employ) {
+    private void getSetting(Employ employ, String name, String psw) {
         Observable<com.easymi.common.result.SettingResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .getAppSetting()
                 .filter(new HttpResultFunc<>())
@@ -581,10 +602,9 @@ public class LoginActivity extends RxBaseActivity {
             SharedPreferences.Editor editor = XApp.getPreferencesEditor();
             editor.putBoolean(Config.SP_ISLOGIN, true);
             editor.putLong(Config.SP_DRIVERID, employ.id);
-            editor.putString(Config.SP_LOGIN_ACCOUNT, AesUtil.aesEncrypt(employ.phone, AesUtil.AAAAA));
+            editor.putString(Config.SP_LOGIN_ACCOUNT, AesUtil.aesEncrypt(name, AesUtil.AAAAA));
             editor.putBoolean(Config.SP_REMEMBER_PSW, checkboxRemember.isChecked());
-            editor.putString(Config.SP_APP_KEY, Config.APP_KEY);
-            editor.putString(Config.SP_LOGIN_PSW, employ.password);
+            editor.putString(Config.SP_LOGIN_PSW, AesUtil.aesEncrypt(psw, AesUtil.AAAAA));
             editor.apply();
 
 //            List<SubSetting> settingList = GsonUtil.parseToList(settingResult.appSetting, SubSetting[].class);
@@ -592,10 +612,10 @@ public class LoginActivity extends RxBaseActivity {
 //                for (SubSetting sub : settingList) {
 //                    if (Config.ZHUANCHE.equals(sub.businessType)) {
 //                        ZCSetting zcSetting = GsonUtil.parseJson(sub.subJson, ZCSetting.class);
-                        if (settingResult.data != null) {
-                            ZCSetting.deleteAll();
-                            settingResult.data.save();
-                        }
+            if (settingResult.data != null) {
+                ZCSetting.deleteAll();
+                settingResult.data.save();
+            }
 //                    } else if ("daijia".equals(sub.businessType)) {
 //                        Setting djSetting = GsonUtil.parseJson(sub.subJson, Setting.class);
 //                        if (djSetting != null) {
@@ -627,12 +647,13 @@ public class LoginActivity extends RxBaseActivity {
     //手机唯一识别码
     String androidID = Settings.Secure.getString(XApp.getInstance().getContentResolver(), Settings.Secure.ANDROID_ID);
     String id = androidID + Build.SERIAL;
+
     //绑定推送
     private void pushBinding(long userId) {
         Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .pushBinding(userId,
                         "12323",
-                        "/driver"+ "/"+ EmUtil.getEmployId(),
+                        "/driver" + "/" + EmUtil.getEmployId(),
                         "driver-" + EmUtil.getEmployId(),
                         "ANDROID",
                         2)
@@ -641,12 +662,11 @@ public class LoginActivity extends RxBaseActivity {
                 .observeOn(AndroidSchedulers.mainThread());
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, false, emResult -> {
-            if (emResult.getCode() == 0) {
+            if (emResult.getCode() == 1) {
                 Log.e("hufeng/binding", "bindingMerchants is Ok");
             } else {
                 ToastUtil.showMessage(this, emResult.getMessage());
             }
         })));
     }
-
 }

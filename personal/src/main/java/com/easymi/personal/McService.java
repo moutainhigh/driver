@@ -1,6 +1,7 @@
 package com.easymi.personal;
 
 import com.easymi.common.result.SettingResult;
+import com.easymi.component.entity.Employ;
 import com.easymi.component.result.EmResult;
 import com.easymi.personal.entity.CarInfo;
 import com.easymi.personal.result.AnnResult;
@@ -16,6 +17,7 @@ import com.easymi.personal.result.LiushuiResult;
 import com.easymi.personal.result.LoginResult;
 import com.easymi.personal.result.NotifityResult;
 import com.easymi.personal.result.PicCodeResult;
+import com.easymi.personal.result.RateResult;
 import com.easymi.personal.result.RechargeResult;
 import com.easymi.personal.result.ShareResult;
 import com.easymi.personal.result.StatisResult;
@@ -259,21 +261,21 @@ public interface McService {
 //                                        @Field("type") Integer type);
 
 
-    /**
-     * 登录后修改密码
-     *
-     * @param driver_id
-     * @param old_password
-     * @param new_password
-     * @param app_key
-     * @return
-     */
-    @PUT("/driver/api/v1/updatePassword")
-    @FormUrlEncoded
-    Observable<EmResult> updatePsw(@Field("driver_id") Long driver_id,
-                                   @Field("old_password") String old_password,
-                                   @Field("new_password") String new_password,
-                                   @Field("app_key") String app_key);
+//    /**
+//     * 登录后修改密码
+//     *
+//     * @param driver_id
+//     * @param old_password
+//     * @param new_password
+//     * @param app_key
+//     * @return
+//     */
+//    @PUT("/driver/api/v1/updatePassword")
+//    @FormUrlEncoded
+//    Observable<EmResult> updatePsw(@Field("driver_id") Long driver_id,
+//                                   @Field("old_password") String old_password,
+//                                   @Field("new_password") String new_password,
+//                                   @Field("app_key") String app_key);
 
 //    /**
 //     * 分页查询提现申请
@@ -334,16 +336,16 @@ public interface McService {
                                       @Query("type") Integer type);
 
 
-    /**
-     * 客户的评价接口
-     *
-     * @param driverId
-     * @param appKey
-     * @return
-     */
-    @GET("/driver/api/v1/driverRate")
-    Observable<EvaResult> driverRate(@Query("driver_id") Long driverId,
-                                     @Query("app_key") String appKey);
+//    /**
+//     * 客户的评价接口
+//     *
+//     * @param driverId
+//     * @param appKey
+//     * @return
+//     */
+//    @GET("/driver/api/v1/driverRate")
+//    Observable<EvaResult> driverRate(@Query("driver_id") Long driverId,
+//                                     @Query("app_key") String appKey);
 
     /**
      * 统计中心
@@ -460,11 +462,11 @@ public interface McService {
     @FormUrlEncoded
     @POST("api/v1/public/driver/login")
     Observable<LoginResult> loginByPW(@Field("phone") String phone,
-                                      @Field("password") String password);
-
+                                      @Field("password") String password,
+                                      @Field("randomStr") String randomStr);
 
     /**
-     * 获取APP配置
+     * 获取APP配置  现在主要只有专车的
      *
      * @return
      */
@@ -543,13 +545,14 @@ public interface McService {
 
     /**
      * 获取司机提现规则
+     *
      * @return
      */
     @GET("api/v1/public/driver/put_forward_configure")
     Observable<TixianRuleResult> tixianRule();
 
     /**
-     * 文章获取
+     * 提现规则文章获取
      *
      * @return
      */
@@ -566,9 +569,10 @@ public interface McService {
 
     /**
      * 申请提现
-     * @param account  提现银行卡号
-     * @param fee  提现金额
-     * @param payType  银行名字
+     *
+     * @param account 提现银行卡号
+     * @param fee     提现金额
+     * @param payType 银行名字
      * @param payee   持卡人名字
      * @return
      */
@@ -591,8 +595,8 @@ public interface McService {
     /**
      * 司机充值
      *
-     * @param channel   充值方式
-     * @param fee  充值金额
+     * @param channel 充值方式
+     * @param fee     充值金额
      * @return
      */
     @FormUrlEncoded
@@ -610,9 +614,42 @@ public interface McService {
      * @param endTime
      * @return
      */
-    @GET("api/v1/public/driver/account")
+    @GET("api/v1/public/driver/flowing/list")
     Observable<LiushuiResult> getLiushui(@Query("page") Integer page,
                                          @Query("size") Integer size,
                                          @Query("startTime") Long startTime,
                                          @Query("endTime") Long endTime);
+
+    /**
+     * 登录后修改密码  司机端修改司机密码接口
+     *
+     * @param newPassword
+     * @param oldPassword
+     * @param operator
+     * @return
+     */
+    @PUT("api/v1/public/driver/updatePwd")
+    @FormUrlEncoded
+    Observable<EmResult> updatePsw(@Field("newPassword") String newPassword,
+                                   @Field("oldPassword") String oldPassword,
+                                   @Field("operator") String operator);
+
+    /**
+     * 查询司机评价标签 列表查询
+     *
+     * @param page
+     * @param size
+     * @return
+     */
+    @GET("api/v1/public/statistics/evaluate_content/list")
+    Observable<EvaResult> drivertag(@Query("page") int page,
+                                    @Query("size") int size);
+
+    /**
+     * 查询司机评价等级
+     *
+     * @return
+     */
+    @GET("api/v1/public/statistics/evaluate_grade/get")
+    Observable<RateResult> driverstar();
 }

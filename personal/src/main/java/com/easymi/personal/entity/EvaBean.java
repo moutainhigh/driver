@@ -5,11 +5,11 @@ package com.easymi.personal.entity;
  */
 
 public class EvaBean {
-    public int total_finish_count;
+    public int evaluateCount;
     public float rate;
-    public int star_one;
-    public int star_two;
-    public int star_three;
-    public int star_four;
-    public int star_five;
+    public int one;
+    public int two;
+    public int three;
+    public int four;
+    public int five;
 }

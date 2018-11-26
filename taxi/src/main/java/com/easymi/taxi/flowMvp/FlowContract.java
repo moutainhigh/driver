@@ -71,7 +71,7 @@ public interface FlowContract {
     interface Presenter {
         void acceptOrder(Long orderId, LoadingButton btn);
 
-        void refuseOrder(Long orderId, String remark);
+        void refuseOrder(Long orderId,String orderType, String remark);
 
         void toStart(Long orderId, LoadingButton btn);
 
@@ -122,7 +122,7 @@ public interface FlowContract {
 
         Observable<TaxiOrderResult> findOne(Long orderId);
 
-        Observable<EmResult> refuseOrder(Long orderId, String remark);
+        Observable<EmResult> refuseOrder(Long orderId,String orderType, String remark);
 
         Observable<TaxiOrderResult> toStart(Long orderId);
 

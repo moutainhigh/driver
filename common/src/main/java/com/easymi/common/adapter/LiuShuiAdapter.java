@@ -13,6 +13,8 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.easymi.common.R;
 import com.easymi.common.activity.BaoxiaoActivity;
 import com.easymi.common.activity.LiushuiActivity;
+import com.easymi.common.util.ZXStatus2Str;
+import com.easymi.component.ZXOrderStatus;
 import com.easymi.component.entity.Setting;
 import com.easymi.common.util.DJStatus2Str;
 import com.easymi.component.Config;
@@ -58,16 +60,20 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
     @Override
     public void onBindViewHolder(Holder holder, int position) {
         BaseOrder baseOrder = baseOrders.get(position);
-        String typeStr = baseOrder.orderDetailType;
-        if (baseOrder.serviceType.equals(Config.DAIJIA)) {
-            typeStr = "代驾-" + typeStr;
-        } else if (baseOrder.serviceType.equals(Config.ZHUANCHE)) {
-            typeStr = "专车-" + typeStr;
+        String typeStr = null;
+        if (baseOrder.serviceType.equals(Config.ZHUANCHE)) {
+            typeStr = "专车";
+            holder.orderStatus.setText(DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status));
+        }else if (baseOrder.serviceType.equals(Config.TAXI)) {
+            typeStr = "出租车";
+            holder.orderStatus.setText(DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status));
+        } else if (baseOrder.serviceType.equals(Config.CITY_LINE)) {
+            typeStr = "城际专线";
+            holder.orderStatus.setText(ZXStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status));
         }
         holder.orderType.setText(typeStr);
         holder.orderEndPlace.setText(baseOrder.destination);
         holder.orderStartPlace.setText(baseOrder.bookAddress);
-        holder.orderStatus.setText(DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status));
         holder.orderTime.setText(TimeUtil.getTime("yyyy-MM-dd HH:mm", baseOrder.bookTime * 1000));
         holder.orderNumber.setText(baseOrder.orderNo);
         holder.orderMoney.setText(String.valueOf(baseOrder.budgetFee));
@@ -79,7 +85,7 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
             holder.orderBaoxiao.setOnClickListener(view -> {
                 LiushuiActivity.CLICK_POS = position + 1;
                 Intent intent = new Intent(context, BaoxiaoActivity.class);
-                intent.putExtra("orderId", baseOrder.id);
+                intent.putExtra("orderId", baseOrder.orderId);
                 ((Activity) context).startActivityForResult(intent, LiushuiActivity.CLICK_POS);
             });
         } else if (baseOrder.baoxiaoStatus == 2) {
@@ -98,11 +104,11 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
                 LiushuiActivity.CLICK_POS = position + 1;
                 if (baseOrder.serviceType.equals(Config.DAIJIA)) {
                     ARouter.getInstance().build("/daijia/FlowActivity")
-                            .withLong("orderId", baseOrder.id)
+                            .withLong("orderId", baseOrder.orderId)
                             .navigation((Activity) context, LiushuiActivity.CLICK_POS);
                 } else if (baseOrder.serviceType.equals(Config.ZHUANCHE)) {
                     ARouter.getInstance().build("/zhuanche/FlowActivity")
-                            .withLong("orderId", baseOrder.id)
+                            .withLong("orderId", baseOrder.orderId)
                             .navigation((Activity) context, LiushuiActivity.CLICK_POS);
                 }
             });
