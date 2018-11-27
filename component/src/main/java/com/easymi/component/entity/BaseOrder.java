@@ -12,6 +12,7 @@ public class BaseOrder implements Serializable {
 
     public String orderDetailType;
 
+    @SerializedName("examineStatus")
     public int baoxiaoStatus;//1未报销，2申请中，3已报销
 
     public String passengerTags;

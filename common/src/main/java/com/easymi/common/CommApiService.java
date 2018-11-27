@@ -199,19 +199,19 @@ public interface CommApiService {
                                                 @Field("driver_id") Long driverId,
                                                 @Field("app_key") String appKey);
 
-    /**
-     * @param orderId
-     * @param baoxiaoMoney  报销金额
-     * @param baoxiaoReason 报销理由
-     * @param appKey
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("/driver/api/v1/wipeOutApply")
-    Observable<EmResult> baoxiao(@Field("order_id") Long orderId,
-                                 @Field("money") Double baoxiaoMoney,
-                                 @Field("reason") String baoxiaoReason,
-                                 @Field("app_key") String appKey);
+//    /**
+//     * @param orderId
+//     * @param baoxiaoMoney  报销金额
+//     * @param baoxiaoReason 报销理由
+//     * @param appKey
+//     * @return
+//     */
+//    @FormUrlEncoded
+//    @POST("/driver/api/v1/wipeOutApply")
+//    Observable<EmResult> baoxiao(@Field("order_id") Long orderId,
+//                                 @Field("money") Double baoxiaoMoney,
+//                                 @Field("reason") String baoxiaoReason,
+//                                 @Field("app_key") String appKey);
 
 //    /**
 //     * 获取司机信息
@@ -233,25 +233,25 @@ public interface CommApiService {
     @GET("api/v1/appSetting")
     Observable<SettingResult> getAppSetting(@Query("app_key") String appKey);
 
-    /**
-     * 查询通知
-     *
-     * @param noticeId
-     * @return
-     */
-    @GET("driver/api/v1/notice")
-    Observable<NotitfyResult> loadNotice(@Query("id") Long noticeId,
-                                         @Query("app_key") String appKey);
-
-    /**
-     * 查询通知
-     *
-     * @param noticeId
-     * @return
-     */
-    @GET("driver/api/v1/employAfficheById")
-    Observable<PushAnnouncement> employAfficheById(@Query("id") Long noticeId,
-                                                   @Query("app_key") String appKey);
+//    /**
+//     * 查询通知
+//     *
+//     * @param noticeId
+//     * @return
+//     */
+//    @GET("driver/api/v1/notice")
+//    Observable<NotitfyResult> loadNotice(@Query("id") Long noticeId,
+//                                         @Query("app_key") String appKey);
+//
+//    /**
+//     * 查询公告
+//     *
+//     * @param noticeId
+//     * @return
+//     */
+//    @GET("driver/api/v1/employAfficheById")
+//    Observable<PushAnnouncement> employAfficheById(@Query("id") Long noticeId,
+//                                                   @Query("app_key") String appKey);
 
 //    /**
 //     * 专车 --> 查询单个订单
@@ -640,4 +640,36 @@ public interface CommApiService {
     @GET("api/v1/public/order/refusal")
     Observable<EmResult> refuseOrder(@Query("orderId") long orderId,
                                      @Query("serviceType") String serviceType);
+
+    /**
+     * @param orderId
+     * @param reimburseFee  报销金额
+     * @param reimburseCause 报销理由
+     * @return
+     */
+    @GET("api/v1/public/order/cold/list")
+    Observable<EmResult> baoxiao(@Query("orderId") Long orderId,
+                                 @Query("reimburseFee") Double reimburseFee,
+                                 @Query("reimburseCause") String reimburseCause);
+
+
+    /**
+     * 查询单个通知
+     *
+     * @param noticeId
+     * @return
+     */
+    @GET("api/v1/public/notice/employ/record/{id}")
+    Observable<NotitfyResult> loadNotice(@Path("id") Long noticeId,
+                                         @Query("app_key") String appKey);
+
+    /**
+     * 查询单个公告
+     *
+     * @param noticeId
+     * @return
+     */
+    @GET("api/v1/public/message/affiche/{id}")
+    Observable<PushAnnouncement> employAfficheById(@Path("id") Long noticeId,
+                                                   @Query("app_key") String appKey);
 }

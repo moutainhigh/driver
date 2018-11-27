@@ -339,10 +339,18 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
                 dymOrder = new DymOrder(zcOrder.orderId, zcOrder.orderType,
                         zcOrder.passengerId, zcOrder.orderStatus);
             }
+            dymOrder.orderStatus = zcOrder.orderStatus;
             dymOrder.save();
         } else {
+            if (null != zcOrder.orderFee) {
+                dymOrder = zcOrder.orderFee;
+                dymOrder.orderId = zcOrder.orderId;
+                dymOrder.orderType = zcOrder.orderType;
+                dymOrder.passengerId = zcOrder.passengerId;
+                dymOrder.orderStatus = zcOrder.orderStatus;
+            }
             dymOrder.orderStatus = zcOrder.orderStatus;
-            dymOrder.updateStatus();
+            dymOrder.updateAll();
         }
         MqttManager.getInstance().pushLoc(new BuildPushData(EmUtil.getLastLoc()));
     }

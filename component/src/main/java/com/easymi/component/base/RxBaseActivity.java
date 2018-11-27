@@ -54,6 +54,8 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
 
     protected long lastChangeTime = 0;
 
+    private HttpCustomReceiver customReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,6 +134,9 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
         IntentFilter tiredFilter = new IntentFilter(Config.TIRED_NOTICE);
         registerReceiver(tiredReceiver, tiredFilter);
 
+        customReceiver = new HttpCustomReceiver();
+        IntentFilter customFilter = new IntentFilter(Config.HTTP_CUSTOM);
+        registerReceiver(customReceiver, customFilter);
     }
 
     @Override
@@ -163,6 +168,7 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
         unregisterReceiver(gpsReceiver);
         unregisterReceiver(netChangeReceiver);
         unregisterReceiver(tiredReceiver);
+        unregisterReceiver(customReceiver);
     }
 
     /**
@@ -319,6 +325,19 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
                             .setNegativeButton("好的，我知道了", (dialogInterface, i) -> dialogInterface.dismiss())
                             .create();
                     dialog.show();
+                }
+            }
+        }
+    }
+
+    class HttpCustomReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if(StringUtils.isNotBlank(action)){
+                if (intent.getAction().equals(Config.HTTP_CUSTOM)) {
+                    ToastUtil.showMessage(context,intent.getIntExtra("http_custom",0)+"");
                 }
             }
         }

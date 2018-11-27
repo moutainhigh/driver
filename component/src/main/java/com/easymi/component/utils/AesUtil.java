@@ -71,8 +71,8 @@ public class AesUtil {
         try {  
             IvParameterSpec zeroIv = new IvParameterSpec(password.getBytes());
             SecretKeySpec key = new SecretKeySpec(password.getBytes(), "AES");
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, key, zeroIv);
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, key);
             byte[] encryptedData = cipher.doFinal(content.getBytes(bm));  
               
             return Base64.encode(encryptedData);
@@ -88,11 +88,8 @@ public class AesUtil {
             e.printStackTrace();  
         } catch (BadPaddingException e) {
             e.printStackTrace();  
-        } catch (InvalidAlgorithmParameterException e) {
-            // TODO Auto-generated catch block  
-            e.printStackTrace();  
-        }  
-  
+        }
+
         return null;  
     }  
   
@@ -111,8 +108,8 @@ public class AesUtil {
             byte[] byteMi = Base64.decode(content);
             IvParameterSpec zeroIv = new IvParameterSpec(password.getBytes());
             SecretKeySpec key = new SecretKeySpec(password.getBytes(), "AES");
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-            cipher.init(Cipher.DECRYPT_MODE, key, zeroIv);
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            cipher.init(Cipher.DECRYPT_MODE, key);
             byte[] decryptedData = cipher.doFinal(byteMi);  
             return new String(decryptedData, "utf-8");
         } catch (NoSuchAlgorithmException e) {
@@ -127,10 +124,7 @@ public class AesUtil {
             e.printStackTrace();  
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();  
-        } catch (InvalidAlgorithmParameterException e) {
-            // TODO Auto-generated catch block  
-            e.printStackTrace();  
-        }  
+        }
         return null;  
     }  
   

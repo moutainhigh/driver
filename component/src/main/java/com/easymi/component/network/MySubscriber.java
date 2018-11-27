@@ -1,8 +1,10 @@
 package com.easymi.component.network;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ParseException;
 
+import com.easymi.component.Config;
 import com.easymi.component.R;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
@@ -115,7 +117,13 @@ public class MySubscriber<T> extends Subscriber<T> implements ProgressDismissLis
     public void onError(Throwable e) {
         e.printStackTrace();
         if (e instanceof HttpException) {
-            ToastUtil.showMessage(context, context.getString(R.string.response_error) + ((HttpException) e).code());//400、500、404之类的响应码错误
+            if (((HttpException) e).code() == 403 ||((HttpException) e).code() == 401 ||((HttpException) e).code() == 423 ||((HttpException) e).code() == 410){
+                Intent intent = new Intent(Config.HTTP_CUSTOM);
+                intent.putExtra("http_custom",((HttpException) e).code());
+                context.sendBroadcast(intent);
+            }else {
+                ToastUtil.showMessage(context, context.getString(R.string.response_error) + ((HttpException) e).code());//400、500、404之类的响应码错误
+            }
         } else if (e instanceof SocketTimeoutException || e instanceof SocketException) {
             ToastUtil.showMessage(context, context.getString(R.string.out_time));//连接超时错误
         } else if (e instanceof ConnectException) {

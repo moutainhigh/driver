@@ -90,7 +90,7 @@ public class ApiManager {
     }
 
     /**
-     * 创建一个网络访问的api.
+     * 创建一个使用aes加密参数的网络访问的api.
      *
      * @param hostUrl 该api的host地址
      * @param service api的class类型
@@ -111,7 +111,7 @@ public class ApiManager {
 
 
     /**
-     * 创建一个网络访问的api.
+     * 创建一个不适用aes加密参数的网络访问的api.
      *
      * @param hostUrl 该api的host地址
      * @param service api的class类型
@@ -121,7 +121,6 @@ public class ApiManager {
     public <T> T createLoginApi(String hostUrl, Class<T> service) {
         Retrofit retrofit = new Retrofit.Builder()
                 .client(mOkHttpClientRSA)
-//                .addConverterFactory(GsonConverterFactory.create()) //添加一个Gson转化
                 .addConverterFactory(KeyGsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create()) //添加一个rxjava转换
                 .baseUrl(hostUrl)

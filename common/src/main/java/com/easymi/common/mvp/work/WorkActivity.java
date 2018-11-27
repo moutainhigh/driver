@@ -35,7 +35,6 @@ import com.easymi.common.R;
 import com.easymi.common.activity.CreateActivity;
 import com.easymi.common.activity.ModelSetActivity;
 import com.easymi.common.adapter.CityLineAdapter;
-import com.easymi.common.adapter.NoticeAdapter;
 import com.easymi.common.adapter.OrderAdapter;
 import com.easymi.common.entity.AnnAndNotice;
 import com.easymi.common.entity.BuildPushData;
@@ -80,6 +79,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.projcet.hf.securitycenter.dialog.MainDialog;
 
 /**
  * Created by developerLzh on 2017/11/3 0003.
@@ -176,6 +177,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
             onLineBtn.setClickable(false);
             onLineBtn.setStatus(LoadingButton.STATUS_LOADING);
             presenter.online(onLineBtn);
+            new MainDialog(WorkActivity.this).show();
         });
 //        offlineCon.setOnClickListener(v -> presenter.offline());
         listenOrderCon.setOnClickListener(v -> {
@@ -186,7 +188,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         if (emLoc != null) {
             receiveLoc(emLoc);
         }
-
     }
 
     private RegisterDialog registerDialog;

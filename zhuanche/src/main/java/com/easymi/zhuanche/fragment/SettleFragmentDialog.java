@@ -281,7 +281,6 @@ public class SettleFragmentDialog {
             extraFeeEdit.setEnabled(false);
             paymentEdit.setEnabled(false);
             remarkEdit.setEnabled(false);
-
         }
 
         confirmBtn.setOnClickListener(v -> {

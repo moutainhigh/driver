@@ -101,8 +101,6 @@ public class GrabPresenter implements GrabContract.Presenter {
             @Override
             public void onNext(MultipleOrderResult multipleOrderResult) {
                 if (order.serviceType.equals(Config.ZHUANCHE)) {
-                    MultipleOrder multipleOrder = multipleOrderResult.data;
-                    if (multipleOrder != null) {
 //                        if (order.orderId == 0){
                             ARouter.getInstance()
                                     .build("/zhuanche/FlowActivity")
@@ -114,7 +112,7 @@ public class GrabPresenter implements GrabContract.Presenter {
 //                                    .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 //                                    .withLong("orderId", order.orderId).navigation();
 //                        }
-                    }
+
                 } else if (order.serviceType.equals(Config.TAXI)) {
 //                    if (order.orderId == 0){
                         ARouter.getInstance()
@@ -174,8 +172,7 @@ public class GrabPresenter implements GrabContract.Presenter {
             @Override
             public void onNext(MultipleOrderResult multipleOrderResult) {
                     if (order.serviceType.equals(Config.ZHUANCHE)) {
-                        MultipleOrder multipleOrder = multipleOrderResult.data;
-                        if (multipleOrder != null) {
+
 //                            if (order.orderId == 0){
                                 ARouter.getInstance()
                                         .build("/zhuanche/FlowActivity")
@@ -187,7 +184,7 @@ public class GrabPresenter implements GrabContract.Presenter {
 //                                        .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 //                                        .withLong("orderId", order.orderId).navigation();
 //                            }
-                        }
+
                     } else if (order.serviceType.equals(Config.TAXI)) {
 //                        if (order.orderId == 0){
                             ARouter.getInstance()

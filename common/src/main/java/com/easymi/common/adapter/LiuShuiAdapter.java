@@ -116,13 +116,13 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
         } else {
             holder.rootView.setClickable(false);
 
-            boolean canBaoxiao = (Config.DAIJIA.equals(baseOrder.serviceType) && canBaoxiaoDJ)
-                    || (Config.ZHUANCHE.equals(baseOrder.serviceType) && canBaoxiaoZC);
-            if (canBaoxiao) {
+//            boolean canBaoxiao = (Config.DAIJIA.equals(baseOrder.serviceType) && canBaoxiaoDJ)
+//                    || (Config.ZHUANCHE.equals(baseOrder.serviceType) && canBaoxiaoZC);
+//            if (canBaoxiao) {
                 holder.orderBaoxiao.setVisibility(View.VISIBLE);
-            } else {
-                holder.orderBaoxiao.setVisibility(View.GONE);
-            }
+//            } else {
+//                holder.orderBaoxiao.setVisibility(View.GONE);
+//            }
         }
     }
 

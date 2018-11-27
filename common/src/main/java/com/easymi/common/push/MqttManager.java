@@ -108,7 +108,7 @@ public class MqttManager implements LocObserver {
     public synchronized boolean creatConnect() {
 //        pullTopic = "/driver" + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
 //        configTopic = "/driver" + "/" + EmUtil.getAppKey() + "/config";
-        pullTopic = "/driver"+ "/"+ EmUtil.getEmployId();
+        pullTopic = "/driver" + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
 //        configTopic = "/driver"+ "/config";
 
         if (!XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false)) {//未登陆 不连接

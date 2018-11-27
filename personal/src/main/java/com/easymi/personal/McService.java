@@ -462,8 +462,9 @@ public interface McService {
     @FormUrlEncoded
     @POST("api/v1/public/driver/login")
     Observable<LoginResult> loginByPW(@Field("phone") String phone,
-                                      @Field("password") String password,
-                                      @Field("randomStr") String randomStr);
+                                      @Field("password") String password
+                                    , @Field("randomStr") String randomStr
+    );
 
     /**
      * 获取APP配置  现在主要只有专车的

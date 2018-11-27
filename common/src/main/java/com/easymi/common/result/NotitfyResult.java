@@ -14,6 +14,6 @@ public class NotitfyResult extends EmResult{
     public List<AnnAndNotice> employNoticeRecords;
     public int total;
 
-    public AnnAndNotice employNoticeRecord;
+    public AnnAndNotice data;
 
 }

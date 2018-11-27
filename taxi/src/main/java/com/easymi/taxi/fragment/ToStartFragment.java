@@ -2,6 +2,7 @@ package com.easymi.taxi.fragment;
 
 import android.os.Bundle;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -32,6 +33,9 @@ public class ToStartFragment extends RxBaseFragment {
     TextView endPlaceText;
     LinearLayout changEndCon;
 
+    ImageView customHead;
+    TextView customName;
+
     @Override
     public void setArguments(Bundle args) {
         super.setArguments(args);
@@ -54,6 +58,11 @@ public class ToStartFragment extends RxBaseFragment {
         controlCon = $(R.id.to_start_btn);
         callPhoneCon = $(R.id.call_phone_con);
         changEndCon = $(R.id.change_end_con);
+
+        customHead = $(R.id.iv_head);
+        customName = $(R.id.tv_custom_name);
+        //todo 差客户头像
+        customName.setText(taxiOrder.passengerName);
 
         startPlaceText.setText(taxiOrder.getStartSite().address);
         endPlaceText.setText(taxiOrder.getEndSite().address);

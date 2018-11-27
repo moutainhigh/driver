@@ -1107,12 +1107,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void showToEndFragment() {
-        DymOrder order = DymOrder.findByIDType(orderId, Config.ZHUANCHE);
+//        DymOrder order = DymOrder.findByIDType(orderId, Config.ZHUANCHE);
 //        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);//动态设置为遵循传感器
         toolbar.setTitle(R.string.zc_status_to_end);
         runningFragment = new RunningFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("zcOrder", order);
+        bundle.putSerializable("zcOrder", zcOrder.orderFee);
         runningFragment.setArguments(bundle);
         runningFragment.setBridge(bridge);
 

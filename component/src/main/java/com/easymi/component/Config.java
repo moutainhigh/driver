@@ -15,7 +15,7 @@ public class Config {
     /**
      * 主机地址
      */
-    public static final String HOST = "http://10.10.2.12:10001/";
+    public static final String HOST = "http://10.10.2.37:10001/";
 //    public static final String HOST = "https://api.xiaokayun.cn/";//线上地址
 //    public static final String HOST = "http://api.xiaokakj.cn/";//测试服地址
 
@@ -134,6 +134,7 @@ public class Config {
     public static final String BROAD_ANN = "com.easymi.v5driver.BROAD_ANN";
     public static final String BROAD_FINISH_ORDER = "com.easymi.v5driver.BROAD_FINISH_ORDER";
     public static final String TIRED_NOTICE = "com.easymi.v5driver.TIRED_NOTICE";
+    public static final String HTTP_CUSTOM = "com.easymi.v5driver.HTTP_CUSTOM";
 
     //    public static final int FREE_LOC_TIME = 5000;//闲时定位时间 毫秒
 //    public static final int BUSY_LOC_TIME = 5000;//忙时定位时间 毫秒

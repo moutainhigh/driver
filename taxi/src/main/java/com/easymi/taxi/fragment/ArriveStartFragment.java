@@ -2,6 +2,7 @@ package com.easymi.taxi.fragment;
 
 import android.os.Bundle;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -31,6 +32,9 @@ public class ArriveStartFragment extends RxBaseFragment {
     TextView endPlaceText;
     FrameLayout callPhoneCon;
 
+    ImageView customHead;
+    TextView customName;
+
     @Override
     public void setArguments(Bundle args) {
         super.setArguments(args);
@@ -54,8 +58,13 @@ public class ArriveStartFragment extends RxBaseFragment {
         startWait = $(R.id.start_wait);
         callPhoneCon = $(R.id.call_phone_con);
 
-        startPlaceText.setText(taxiOrder.bookAddress);
-        endPlaceText.setText(taxiOrder.destination);
+        customHead = $(R.id.iv_head);
+        customName = $(R.id.tv_custom_name);
+        //todo 差客户头像
+        customName.setText(taxiOrder.passengerName);
+
+        startPlaceText.setText(taxiOrder.getStartSite().address);
+        endPlaceText.setText(taxiOrder.getEndSite().address);
         startDrive.setOnClickListener(view -> bridge.doStartDrive(startDrive));
         startWait.setOnClickListener(view -> bridge.doStartWait());
         callPhoneCon.setOnClickListener(view -> CallPhoneDialog.callDialog(getActivity(), taxiOrder));

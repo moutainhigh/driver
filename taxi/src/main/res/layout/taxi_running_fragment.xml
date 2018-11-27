@@ -69,7 +69,7 @@
             android:layout_height="55dp"
             android:layout_gravity="center_horizontal|bottom"
             android:elevation="0.5dp"
-            SlideToUnlockView:sliderTextHint="@string/slider_destance"
+            SlideToUnlockView:sliderTextHint="@string/taxi_slider_destance"
             SlideToUnlockView:sliderTextSize="25"
             />
 

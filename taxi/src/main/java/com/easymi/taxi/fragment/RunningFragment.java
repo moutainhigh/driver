@@ -46,6 +46,8 @@ public class RunningFragment extends RxBaseFragment {
 
     ImageView refreshImg;
 
+
+
     @Override
     public void setArguments(Bundle args) {
         super.setArguments(args);

@@ -18,13 +18,13 @@ public class AnnAndNotice implements MultiItemEntity, Serializable {
     @SerializedName("affiche_title")
     public String annMessage;//公告的标题
 
-    @SerializedName("notice_title")
+    @SerializedName("noticeTitle")
     public String noticeTitle;//通知的标题
 
-    @SerializedName("notice_content")
+    @SerializedName("noticeContent")
     public String noticeContent;//通知的内容
 
-    //通知状态,为1时表示纬度消息
+    //通知状态,为1时表示未读消息
     @SerializedName("state")
     public int state;
 

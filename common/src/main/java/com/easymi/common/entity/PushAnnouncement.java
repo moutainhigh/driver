@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class PushAnnouncement extends EmResult {
 
-    @SerializedName("employ_affiche_request")
+    @SerializedName("data")
     public AnnounceRequest request;
 
     public static class AnnounceRequest {
@@ -13,10 +13,10 @@ public class PushAnnouncement extends EmResult {
         @SerializedName("id")
         public long id;
 
-        @SerializedName("affiche_title")
+        @SerializedName("afficheTitle")
         public String title;
 
-        @SerializedName("affiche_content")
+        @SerializedName("content")
         public String content;
 
     }

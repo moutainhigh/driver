@@ -390,10 +390,10 @@ public class HandlePush implements FeeChangeSubject {
             @Override
             public void onNext(NotitfyResult multipleOrderResult) {
                 XApp.getInstance().shake();
-                XApp.getInstance().syntheticVoice(multipleOrderResult.employNoticeRecord.noticeContent, XApp.NEW_MSG);
+                XApp.getInstance().syntheticVoice(multipleOrderResult.data.noticeContent, XApp.NEW_MSG);
                 Intent intent = new Intent();
                 intent.setAction(Config.BROAD_NOTICE);
-                intent.putExtra("notice", multipleOrderResult.employNoticeRecord.noticeContent);
+                intent.putExtra("notice", multipleOrderResult.data.noticeContent);
                 intent.setPackage(XApp.getInstance().getPackageName());
                 XApp.getInstance().sendBroadcast(intent);
             }

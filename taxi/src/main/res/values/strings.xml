@@ -13,7 +13,7 @@
     <string name="start_wait">等待</string>
 
     <string name="huadongdaoda">滑动到达预约地</string>
-
+    <string name="taxi_slider_destance">滑动到达目的地</string>
 
     <string name="zc_click_wait">中途等待</string>
     <string name="click_start">点击出发</string>
