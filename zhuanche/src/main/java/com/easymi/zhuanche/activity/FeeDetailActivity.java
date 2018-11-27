@@ -135,7 +135,7 @@ public class FeeDetailActivity extends RxBaseActivity {
         height_pay_fee.setText(dymOrder.peakCost + getString(R.string.yuan));
 
         night_fee_title.setText("夜间里程费(" + dymOrder.nightMile + "公里)");
-        night_pay_fee.setText(dymOrder.nightPrice + getString(R.string.yuan));
+        night_pay_fee.setText(dymOrder.nightMileFee + getString(R.string.yuan));
 
         night_time_fee_title.setText("夜间时间费(" + dymOrder.nightTime + "分钟)");
         night_time_fee.setText(dymOrder.nightTimePrice + "元");

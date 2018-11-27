@@ -90,8 +90,8 @@ public class MakeOrderPopWindow extends PopupWindow implements View.OnClickListe
     }
 
     public void initData(){
-//        String orderType = EmUtil.getEmployInfo().serviceType;
-        String orderType = "taxi,special,cityline";
+        String orderType = EmUtil.getEmployInfo().serviceType;
+//        String orderType = "taxi,special,cityline";
         String[] types = orderType.split(",");
         for (int i = 0;i<types.length;i++){
             HashMap<String,Object> map = new HashMap<String,Object>();
@@ -99,9 +99,6 @@ public class MakeOrderPopWindow extends PopupWindow implements View.OnClickListe
             switch (types[i]){
                 case Config.ZHUANCHE:
                     map.put("name",context.getResources().getString(R.string.create_zhuanche));
-                    break;
-                case Config.TAXI:
-                    map.put("name",context.getResources().getString(R.string.create_taxi));
                     break;
                 case Config.CITY_LINE:
                     map.put("name",context.getResources().getString(R.string.create_zhuanxian));

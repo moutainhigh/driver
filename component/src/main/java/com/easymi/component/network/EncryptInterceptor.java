@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.utils.AesUtil;
+import com.easymi.component.utils.Log;
 
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -34,9 +35,13 @@ public class EncryptInterceptor implements Interceptor {
         if (encryptSet == null || encryptSet.request == null) {
             return chain.proceed(originRequest);
         }
+        //排除登录接口，其余接口使用拦截器进行aes加密。
+        String url = chain.request().url().toString();
+        if (url.contains("api/v1/public/driver/login")){
+            return chain.proceed(originRequest);
+        }
 
         return chain.proceed(encryptSet.request.newBuilder()
-                .addHeader("X-type", "sign")
                 .build());
     }
 

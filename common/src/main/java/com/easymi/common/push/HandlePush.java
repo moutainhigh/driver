@@ -92,13 +92,17 @@ public class HandlePush implements FeeChangeSubject {
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
-                loadOrder(order);
+                if(!DymOrder.exists(order.orderId,order.serviceType)){
+                    loadOrder(order);
+                }
 //                XApp.getInstance().syntheticVoice();
             } else if (msg.equals("sendorders")) {//派单
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
-                loadOrder(order);
+                if(!DymOrder.exists(order.orderId,order.serviceType)){
+                    loadOrder(order);
+                }
                 newShowNotify(XApp.getInstance(), "", XApp.getInstance().getString(R.string.send_order), XApp.getInstance().getString(R.string.send_order_content));
             } else if (msg.equals("cancel")) {//取消订单
                 MultipleOrder order = new MultipleOrder();

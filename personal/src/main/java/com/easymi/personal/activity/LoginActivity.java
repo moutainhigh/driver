@@ -393,7 +393,7 @@ public class LoginActivity extends RxBaseActivity {
     }
 
     private void login(String name, String psw, String qiyeCode) {
-        McService api = ApiManager.getInstance().createLoginApi(Config.HOST, McService.class);
+        McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
         String udid = PhoneUtil.getUDID(this);
 

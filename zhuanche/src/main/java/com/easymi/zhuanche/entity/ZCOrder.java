@@ -78,6 +78,7 @@ public class ZCOrder implements Serializable {
 
     public DymOrder orderFee;
 
+    @SerializedName("salesCouponVo")
     public Coupon coupon;
 
     @SerializedName("orderRemark")

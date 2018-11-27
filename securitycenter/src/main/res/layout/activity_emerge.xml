@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <cn.projcet.hf.securitycenter.widget.CusToolbar
+        android:id="@+id/cus_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="45dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/color_f3f4f5">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_ffffff"
+        android:orientation="vertical"
+        android:paddingBottom="5dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="15dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="紧急联系人
+开启行程自动分享"
+            android:textColor="@color/color_333333"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:lineSpacingExtra="3dp"
+            android:text="添加紧急联系人后，当您开启自动分享行程或者使用一键报警功能时，行程信息会通过短信自动分享给紧急联系人。紧急情况下，紧急联系人可以致电xx平台客服确认您的行程信息（目前仅支持号码归属地为中国大陆地区的手机号码）"
+            android:textColor="@color/color_666666"
+            android:textSize="13sp"
+            android:layout_marginBottom="20dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="45dp"
+            android:paddingRight="45dp"
+            android:layout_marginBottom="10dp"
+            android:visibility="visible">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="自动分享行程"
+                    android:textColor="@color/color_333333"
+                    android:textSize="14sp"
+                    />
+
+                <cn.projcet.hf.securitycenter.widget.SwitchButton
+                    android:id="@+id/voice_able_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:checked="true"
+                    app:kswBackDrawable="@drawable/ios_back_drawable"
+                    app:kswThumbDrawable="@drawable/ios_thumb_selector"
+                    app:kswThumbMarginBottom="-4dp"
+                    app:kswThumbMarginLeft="-4dp"
+                    app:kswThumbMarginRight="-4dp"
+                    app:kswThumbMarginTop="-2dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="生效时间段"
+                    android:textColor="@color/color_333333"
+                    android:textSize="14sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00：00-23：59"
+                    android:textSize="14sp"
+                    android:textColor="@color/color_333333"
+                    android:drawableRight="@mipmap/ic_right"
+                    android:drawablePadding="5dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/color_f3f4f5">
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/color_ffffff">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="紧急联系人信息"
+            android:textColor="@color/color_333333"
+            android:textSize="16sp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>

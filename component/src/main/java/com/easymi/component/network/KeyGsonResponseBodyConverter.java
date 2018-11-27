@@ -35,17 +35,9 @@ public class KeyGsonResponseBodyConverter<T> implements Converter<ResponseBody, 
     public T convert(ResponseBody value) throws IOException {
         try {
             String str = value.string();
-            Log.e("str", str);
             String jsonStr = AesUtil.aesDecrypt(str, XApp.getMyPreferences().getString(Config.AES_PASSWORD,AesUtil.AAAAA));
-//            JsonData jsonData = gson.fromJson(str, JsonData.class);
-//            if (jsonData.data != null) {
-//                String s = AesApi.getInstance().aesDecrypt(jsonData.data.toString());
-//                jsonData.data = gson.fromJson(s, Object.class);
-//            }
-//            String res = gson.toJson(jsonData);
-            Log.e("Converter", jsonStr);
             String urlString = URLDecoder.decode(jsonStr);
-            Log.e("urlString", urlString);
+            Log.e("responseJson", urlString);
             return adapter.fromJson(urlString);
         } finally {
             value.close();

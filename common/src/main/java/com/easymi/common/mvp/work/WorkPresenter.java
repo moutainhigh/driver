@@ -245,10 +245,9 @@ public class WorkPresenter implements WorkContract.Presenter {
 
                 if (emResult.data != null) {
                     List<MultipleOrder> orders = new ArrayList<>();
-
+                    MultipleOrder header = new MultipleOrder(CityLine.ITEM_HEADER);
+                    orders.add(header);
                     if (emResult.data.size() != 0) {
-                        MultipleOrder header = new MultipleOrder(CityLine.ITEM_HEADER);
-                        orders.add(header);
 
                         for (MultipleOrder order : emResult.data) {
                             DymOrder dymOrder = null;
@@ -257,8 +256,10 @@ public class WorkPresenter implements WorkContract.Presenter {
                                 if (DymOrder.exists(order.orderId, order.serviceType)) {
                                     //非专线 本地有
                                     dymOrder = DymOrder.findByIDType(order.orderId, order.serviceType);
+                                    dymOrder.orderId = order.orderId;
+                                    dymOrder.passengerId = order.passengerId;
                                     dymOrder.orderStatus = order.status;
-                                    dymOrder.updateStatus();
+                                    dymOrder.updateAll();
                                 } else {
                                     //非专线  本地没有
                                     dymOrder = new DymOrder(order.orderId, order.serviceType,

@@ -417,7 +417,6 @@ public class MqttManager implements LocObserver {
                     new HaveErrSubscriberListener<GetFeeResult>() {
                         @Override
                         public void onNext(GetFeeResult getFeeResult) {
-
 //                            PullFeeEntity entity = new PullFeeEntity();
 //                            entity.msg = "http_costInfo";
 //                            entity.data = getFeeResult.data;

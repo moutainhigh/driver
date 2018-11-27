@@ -51,7 +51,8 @@ public class Config {
     /**
      * 图片服务器地址
      */
-    public static final String IMG_SERVER = "https://assets.xiaokayun.cn/";
+//    public static final String IMG_SERVER = "https://assets.xiaokayun.cn/";
+    public static final String IMG_SERVER = "http://pimkcibsb.bkt.clouddn.com/";
     //    public static final String IMG_PATH = "?imageView2/1/w/10/h/10/format/webp/q/75|imageslim";
     public static final String IMG_PATH = "";
 

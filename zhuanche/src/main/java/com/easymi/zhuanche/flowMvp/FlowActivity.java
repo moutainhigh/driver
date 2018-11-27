@@ -183,8 +183,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     private long orderId;
 
-    private boolean fromOld = false;//是否从横屏那边过来
-
     private double payMoney;
 
     private boolean isToFeeDetail = true;//是否是前往过费用详情界面
@@ -208,7 +206,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
 
         orderId = getIntent().getLongExtra("orderId", -1);
-        fromOld = getIntent().getBooleanExtra("fromOld", false);//是否是从计价器过来的
         isToFeeDetail = getIntent().getBooleanExtra("showSettle", false);//是否是从计价器过来的
         if (orderId == -1) {
             finish();
@@ -540,10 +537,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             }
         }
 
-//        boolean forceOre = XApp.getMyPreferences().getBoolean(Config.SP_ALWAYS_OREN, false);
-//        if (forceOre && !fromOld) {//始终横屏计价将自动跳转到横屏界面
-//            toWhatOldByOrder(zcOrder);
-//        }
     }
 
     @Override
@@ -1107,12 +1100,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void showToEndFragment() {
-//        DymOrder order = DymOrder.findByIDType(orderId, Config.ZHUANCHE);
+        DymOrder order = DymOrder.findByIDType(orderId, Config.ZHUANCHE);
 //        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);//动态设置为遵循传感器
         toolbar.setTitle(R.string.zc_status_to_end);
         runningFragment = new RunningFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("zcOrder", zcOrder.orderFee);
+        bundle.putSerializable("zcOrder", order);
         runningFragment.setArguments(bundle);
         runningFragment.setBridge(bridge);
 

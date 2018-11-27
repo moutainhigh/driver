@@ -71,26 +71,10 @@ public class ApiManager {
 
         mOkHttpClient = builder.build();
 
-
-        //创建okhttp客户端
-        OkHttpClient.Builder builderRSA = new OkHttpClient.Builder();
-        builderRSA.readTimeout(16000, TimeUnit.MILLISECONDS)
-                .connectTimeout(16000, TimeUnit.MILLISECONDS)
-                .addInterceptor(new TokenInterceptor())//token拦截器
-                .addInterceptor(logInterceptor) //添加日志拦截器,进行输出日志
-
-                .retryOnConnectionFailure(true) //失败重连
-                .cache(cache);
-
-        if (Config.HOST.contains("https://")) {
-            builderRSA.sslSocketFactory(ssl.getSslSocketFactory(), ssl.getTrustManager());
-        }
-
-        mOkHttpClientRSA = builderRSA.build();
     }
 
     /**
-     * 创建一个使用aes加密参数的网络访问的api.
+     * 创建一个使用网络访问的api.
      *
      * @param hostUrl 该api的host地址
      * @param service api的class类型
@@ -109,23 +93,4 @@ public class ApiManager {
         return retrofit.create(service);
     }
 
-
-    /**
-     * 创建一个不适用aes加密参数的网络访问的api.
-     *
-     * @param hostUrl 该api的host地址
-     * @param service api的class类型
-     * @param <T>     实际需要返回类型
-     * @return 实际返回的api实例
-     */
-    public <T> T createLoginApi(String hostUrl, Class<T> service) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .client(mOkHttpClientRSA)
-                .addConverterFactory(KeyGsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create()) //添加一个rxjava转换
-                .baseUrl(hostUrl)
-                .build();
-
-        return retrofit.create(service);
-    }
 }

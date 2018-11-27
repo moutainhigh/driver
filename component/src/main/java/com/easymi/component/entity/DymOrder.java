@@ -50,7 +50,7 @@ public class DymOrder implements Serializable {
     //行驶里程
     public double distance;
 
-    //行驶时间费
+    //行驶里程费
     @SerializedName("distanceFee")
     public double disFee;
 
@@ -91,16 +91,12 @@ public class DymOrder implements Serializable {
     @SerializedName("minCost")
     public double minestMoney;//最低消费金额
 
-    //运营高峰费
-    @SerializedName("peakCost")
-    public double peakCost;
-
     //夜间费
     @SerializedName("nightPrice")
     public double nightPrice;
 
     //低速费
-    @SerializedName("lowSpeedCost")
+    @SerializedName("lowSpeedFee")
     public double lowSpeedCost;
 
     //低速时间
@@ -111,6 +107,10 @@ public class DymOrder implements Serializable {
     @SerializedName("peakMile")
     public double peakMile;
 
+    //运营高峰费
+    @SerializedName("peakFee")
+    public double peakCost;
+
     //夜间时间
     @SerializedName("nightTime")
     public int nightTime;
@@ -119,8 +119,11 @@ public class DymOrder implements Serializable {
     @SerializedName("nightMile")
     public double nightMile;
 
+    //夜间里程费
+    public double nightMileFee;
+
     //夜间时间费用
-    @SerializedName("nightTimePrice")
+    @SerializedName("nightTimeFee")
     public double nightTimePrice;
 
     //作弊增加的里程
@@ -361,6 +364,7 @@ public class DymOrder implements Serializable {
         orderInfo.nightTime = cursor.getInt(cursor.getColumnIndex("nightTime"));
         orderInfo.nightMile = cursor.getDouble(cursor.getColumnIndex("nightMile"));
         orderInfo.nightTimePrice = cursor.getDouble(cursor.getColumnIndex("nightTimePrice"));
+        orderInfo.passengerId = cursor.getLong(cursor.getColumnIndex("passengerId"));
 
         return orderInfo;
     }
@@ -392,7 +396,7 @@ public class DymOrder implements Serializable {
         values.put("distance", distance);
         values.put("disFee", disFee);
         values.put("minestMoney", minestMoney);
-
+        values.put("passengerId", passengerId);
         values.put("orderStatus", orderStatus);
 
         values.put("paymentFee", paymentFee);

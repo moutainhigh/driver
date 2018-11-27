@@ -46,6 +46,7 @@ import com.easymi.component.widget.LoadingButton;
 import com.easymi.zhuanche.entity.ZCOrder;
 import com.easymi.zhuanche.result.ZCOrderResult;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,21 +72,18 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     //接单
     @Override
-    public void acceptOrder(Long orderId, Long version,LoadingButton btn) {
-        Observable<ZCOrderResult> observable = model.doAccept(orderId,version);
+    public void acceptOrder(Long orderId, Long version, LoadingButton btn) {
+        Observable<ZCOrderResult> observable = model.doAccept(orderId, version);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, zcOrderResult -> {
-//            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
-//            updateDymOrder(zcOrderResult.data);
-//            view.showOrder(zcOrderResult.data);
             findOne(orderId);
         })));
     }
 
     //拒单
     @Override
-    public void refuseOrder(Long orderId,String orderType, String remark) {
-        Observable<EmResult> observable = model.refuseOrder(orderId,orderType, remark);
+    public void refuseOrder(Long orderId, String orderType, String remark) {
+        Observable<EmResult> observable = model.refuseOrder(orderId, orderType, remark);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, zcOrderResult -> {
             DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
@@ -95,22 +93,21 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             view.refuseSuc();
         })));
     }
+
     //前往预约地
     @Override
-    public void toStart(Long orderId,Long version, LoadingButton btn) {
-        Observable<ZCOrderResult> observable = model.toStart(orderId,version);
+    public void toStart(Long orderId, Long version, LoadingButton btn) {
+        Observable<ZCOrderResult> observable = model.toStart(orderId, version);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, zcOrderResult -> {
-//            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
-//            updateDymOrder(zcOrderResult.data);
-//            view.showOrder(zcOrderResult.data);
             findOne(orderId);
         })));
     }
+
     //到达预约地
     @Override
-    public void arriveStart(Long orderId,Long version) {
-        Observable<ZCOrderResult> observable = model.arriveStart(orderId,version);
+    public void arriveStart(Long orderId, Long version) {
+        Observable<ZCOrderResult> observable = model.arriveStart(orderId, version);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, zcOrderResult -> {
             findOne(orderId);
@@ -138,11 +135,11 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     //前往目的地
     @Override
-    public void startDrive(Long orderId,Long version, LoadingButton btn) {
+    public void startDrive(Long orderId, Long version, LoadingButton btn) {
         if (!PhoneUtil.checkGps(context)) {
             return;
         }
-        Observable<ZCOrderResult> observable = model.startDrive(orderId,version);
+        Observable<ZCOrderResult> observable = model.startDrive(orderId, version);
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, zcOrderResult -> {
             updateDymOrder(zcOrderResult.data);
             view.showOrder(zcOrderResult.data);
@@ -152,16 +149,13 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     //到达目的地
     @Override
-    public void arriveDes(ZCOrder zcOrder,Long version, LoadingButton btn, DymOrder dymOrder) {
+    public void arriveDes(ZCOrder zcOrder, Long version, LoadingButton btn, DymOrder dymOrder) {
 
-        Observable<ZCOrderResult> observable = model.arriveDes(zcOrder, dymOrder,version);
+        Observable<ZCOrderResult> observable = model.arriveDes(zcOrder, dymOrder, version);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, zcOrderResult -> {
-//            dymOrder.updateConfirm(); #该逻辑移动到arrivalDistination接口里面
-//            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
             updateDymOrder(zcOrderResult.data);
             view.showOrder(zcOrderResult.data);
-//            findOne(zcOrder.orderId);
         })));
     }
 
@@ -191,7 +185,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<ZCOrderResult>() {
             @Override
             public void onNext(ZCOrderResult zcOrderResult) {
-//                zcOrderResult = orderResult2ZCOrder(zcOrderResult);
                 updateDymOrder(zcOrderResult.data);
                 view.showOrder(zcOrderResult.data);
             }
@@ -210,7 +203,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, needShowProgress, false, new HaveErrSubscriberListener<ZCOrderResult>() {
             @Override
             public void onNext(ZCOrderResult zcOrderResult) {
-//                zcOrderResult = orderResult2ZCOrder(zcOrderResult);
                 updateDymOrder(zcOrderResult.data);
                 view.showOrder(zcOrderResult.data);
             }
@@ -227,9 +219,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         Observable<ZCOrderResult> observable = model.changeEnd(orderId, lat, lng, address);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, zcOrderResult -> {
-//            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
-//            updateDymOrder(zcOrderResult.data);
-//            view.showOrder(zcOrderResult.data);
             findOne(orderId);
         })));
     }
@@ -335,6 +324,12 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
                 dymOrder.orderType = zcOrder.orderType;
                 dymOrder.passengerId = zcOrder.passengerId;
                 dymOrder.orderStatus = zcOrder.orderStatus;
+
+                dymOrder.waitTime = zcOrder.orderFee.waitTime / 60;
+                dymOrder.travelTime = zcOrder.orderFee.travelTime / 60;
+                dymOrder.distance = new BigDecimal(zcOrder.orderFee.distance / 1000).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                dymOrder.lowSpeedTime = zcOrder.orderFee.lowSpeedTime / 60;
+                dymOrder.nightTime = zcOrder.orderFee.nightTime / 60;
             } else {
                 dymOrder = new DymOrder(zcOrder.orderId, zcOrder.orderType,
                         zcOrder.passengerId, zcOrder.orderStatus);
@@ -343,11 +338,19 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             dymOrder.save();
         } else {
             if (null != zcOrder.orderFee) {
+                long id = dymOrder.id;
                 dymOrder = zcOrder.orderFee;
+                dymOrder.id = id;
                 dymOrder.orderId = zcOrder.orderId;
                 dymOrder.orderType = zcOrder.orderType;
                 dymOrder.passengerId = zcOrder.passengerId;
                 dymOrder.orderStatus = zcOrder.orderStatus;
+
+                dymOrder.waitTime = zcOrder.orderFee.waitTime / 60;
+                dymOrder.travelTime = zcOrder.orderFee.travelTime / 60;
+                dymOrder.distance = new BigDecimal(zcOrder.orderFee.distance / 1000).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                dymOrder.lowSpeedTime = zcOrder.orderFee.lowSpeedTime / 60;
+                dymOrder.nightTime = zcOrder.orderFee.nightTime / 60;
             }
             dymOrder.orderStatus = zcOrder.orderStatus;
             dymOrder.updateAll();
@@ -358,7 +361,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     //选择支付类型后的结算接口
     @Override
     public void payOrder(Long orderId, String payType, Long version) {
-        Observable<EmResult> observable = model.payOrder(orderId, payType,version);
+        Observable<EmResult> observable = model.payOrder(orderId, payType, version);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, emResult -> {
             DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);

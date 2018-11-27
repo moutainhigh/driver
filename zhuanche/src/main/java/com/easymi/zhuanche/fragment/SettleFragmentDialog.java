@@ -292,8 +292,8 @@ public class SettleFragmentDialog {
         });
         payButton.setOnClickListener(v -> {
             if (null != bridge) {
-//                bridge.doPay(dymOrder.orderShouldPay);
-                bridge.doPay(dymOrder.totalFee);
+                bridge.doPay(dymOrder.orderShouldPay);
+//                bridge.doPay(dymOrder.totalFee);
             }
         });
         closeFragment.setOnClickListener(v -> {
@@ -355,7 +355,11 @@ public class SettleFragmentDialog {
             if (zcOrder.coupon.couponType == 2) {
                 dymOrder.couponFee = zcOrder.coupon.deductible;
             } else if (zcOrder.coupon.couponType == 1) {
-                dymOrder.couponFee = Double.parseDouble(df.format(canCouponMoney * (100 - zcOrder.coupon.discount) / 100));
+                if ((canCouponMoney * (100 - zcOrder.coupon.discount) / 100) >= zcOrder.coupon.TopMoney){
+                    dymOrder.couponFee = zcOrder.coupon.TopMoney;
+                }else {
+                    dymOrder.couponFee = Double.parseDouble(df.format(canCouponMoney * (100 - zcOrder.coupon.discount) / 100));
+                }
             }
         }
         double exls = Double.parseDouble(df.format(canCouponMoney - dymOrder.couponFee));//打折抵扣后应付的钱

@@ -54,6 +54,8 @@ public class BuildPushUtil {
             pe.phone = employ.phone;
             pe.child_type = employ.child_type;
             pe.business = employ.serviceType;
+
+
 //            if (employ.vehicle != null) {
 //                pe.model_id = employ.vehicle.serviceType;
 //            }
