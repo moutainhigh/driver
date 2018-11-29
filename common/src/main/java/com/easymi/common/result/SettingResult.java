@@ -13,7 +13,7 @@ import java.util.List;
 public class SettingResult extends EmResult {
 
 //    @SerializedName("daijiaApp")
-//    public Setting setting;
+//    public TaxiSetting setting;
 
 //    @SerializedName("app_settings")
 //    public String appSetting;
@@ -21,6 +21,5 @@ public class SettingResult extends EmResult {
     public List<ZCSetting> data;
 
     public ZCSetting zcSetting;
-
 
 }

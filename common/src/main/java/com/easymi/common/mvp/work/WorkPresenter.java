@@ -14,7 +14,6 @@ import com.easymi.common.push.CountEvent;
 import com.easymi.common.push.MqttManager;
 import com.easymi.common.push.WorkTimeCounter;
 import com.easymi.common.result.AnnouncementResult;
-import com.easymi.common.result.CityLineResult;
 import com.easymi.common.result.LoginResult;
 import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
@@ -28,20 +27,16 @@ import com.easymi.component.ZXOrderStatus;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.Employ;
-import com.easymi.component.entity.Setting;
-import com.easymi.component.entity.SubSetting;
 import com.easymi.component.entity.SystemConfig;
 import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.ErrCode;
-import com.easymi.component.network.GsonUtil;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
@@ -270,9 +265,9 @@ public class WorkPresenter implements WorkContract.Presenter {
                             } else if (TextUtils.equals(order.serviceType, Config.CITY_LINE)) {
                                 if (DymOrder.exists(order.scheduleId, order.serviceType)) {
                                     //专线 本地有
-                                    dymOrder = DymOrder.findByIDType(order.scheduleId, order.serviceType);
-                                    dymOrder.orderStatus = order.scheduleStatus;
-                                    dymOrder.updateStatus();
+//                                    dymOrder = DymOrder.findByIDType(order.scheduleId, order.serviceType);
+//                                    dymOrder.orderStatus = order.scheduleStatus;
+//                                    dymOrder.updateStatus();
                                 } else {
                                     //专线 本地没有
                                     dymOrder = new DymOrder();
@@ -480,9 +475,9 @@ public class WorkPresenter implements WorkContract.Presenter {
 //                            zcDriverKm = zcSetting.emploiesKm;
 //                        }
 //                    } else if ("daijia".equals(sub.businessType)) {
-//                        Setting djSetting = GsonUtil.parseJson(sub.subJson, Setting.class);
+//                        TaxiSetting djSetting = GsonUtil.parseJson(sub.subJson, TaxiSetting.class);
 //                        if (djSetting != null) {
-//                            Setting.deleteAll();
+//                            TaxiSetting.deleteAll();
 //                            djSetting.save();
 //                            driverKm = djSetting.emploiesKm;
 //                        }
@@ -603,7 +598,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                 CountEvent event = new CountEvent();
                 event.finishCount = result.workStatistics.finishCount;
                 event.income = result.workStatistics.income;
-//                event.minute = totalMinute;
+                event.minute = -1;
                 EventBus.getDefault().post(event);
             }
         })));

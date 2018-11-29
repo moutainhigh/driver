@@ -8,10 +8,8 @@ import android.widget.TextView;
 
 import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.entity.DymOrder;
-import com.easymi.component.entity.Setting;
 import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.widget.CustomSlideToUnlockView;
-import com.easymi.component.widget.LoadingButton;
 import com.easymi.zhuanche.R;
 import com.easymi.zhuanche.flowMvp.ActFraCommBridge;
 import com.easymi.zhuanche.flowMvp.FlowActivity;

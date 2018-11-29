@@ -117,7 +117,8 @@ public class MySubscriber<T> extends Subscriber<T> implements ProgressDismissLis
     public void onError(Throwable e) {
         e.printStackTrace();
         if (e instanceof HttpException) {
-            if (((HttpException) e).code() == 403 ||((HttpException) e).code() == 401 ||((HttpException) e).code() == 423 ||((HttpException) e).code() == 410){
+            if (((HttpException) e).code() == 403 ||((HttpException) e).code() == 401
+                    ||((HttpException) e).code() == 423 ||((HttpException) e).code() == 410 || ((HttpException) e).code() == 500){
                 Intent intent = new Intent(Config.HTTP_CUSTOM);
                 intent.putExtra("http_custom",((HttpException) e).code());
                 context.sendBroadcast(intent);

@@ -34,8 +34,7 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.entity.NetWorkUtil;
-import com.easymi.component.entity.Setting;
-import com.easymi.component.entity.SubSetting;
+import com.easymi.component.entity.TaxiSetting;
 import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.GsonUtil;
@@ -43,7 +42,6 @@ import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.AesUtil;
-import com.easymi.component.utils.Base64;
 import com.easymi.component.utils.Base64Utils;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
@@ -58,20 +56,11 @@ import com.easymi.personal.McService;
 import com.easymi.personal.R;
 import com.easymi.personal.adapter.PopAdapter;
 import com.easymi.personal.result.LoginResult;
-import com.easymi.personal.result.SettingResult;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -541,23 +530,26 @@ public class LoginActivity extends RxBaseActivity {
 
             if (settingResult.data != null) {
                 for (ZCSetting sub : settingResult.data) {
-                    if (employ.serviceType.equals(sub.serviceType)) {
+                    if (sub.serviceType.equals(Config.ZHUANCHE)){
                         ZCSetting.deleteAll();
                         sub.save();
+                    }else if (sub.serviceType.equals(Config.TAXI)){
+                        TaxiSetting.deleteAll();
+                        TaxiSetting taxiSetting = new TaxiSetting();
+                        taxiSetting.isPaid = sub.isPaid;
+                        taxiSetting.isExpenses = sub.isExpenses;
+                        taxiSetting.canCancelOrder = sub.canCancelOrder;
+                        taxiSetting.isAddPrice = sub.isAddPrice;
+                        taxiSetting.employChangePrice = sub.employChangePrice;
+                        taxiSetting.employChangeOrder = sub.employChangeOrder;
+                        taxiSetting.driverRepLowBalance = sub.driverRepLowBalance;
+                        taxiSetting.passengerDistance = sub.passengerDistance;
+                        taxiSetting.version = sub.version;
+                        taxiSetting.grabOrder = sub.grabOrder;
+                        taxiSetting.distributeOrder = sub.distributeOrder;
+                        taxiSetting.serviceType = sub.serviceType;
+                        taxiSetting.save();
                     }
-//                    if (Config.ZHUANCHE.equals(sub.serviceType)) {
-//                        ZCSetting zcSetting = GsonUtil.parseJson(sub.subJson, ZCSetting.class);
-//                        if (settingResult.data != null) {
-//                            ZCSetting.deleteAll();
-//                            settingResult.data.save();
-//                        }
-//                    } else if (Config.TAXI.equals(sub.serviceType)) {
-//                        Setting djSetting = GsonUtil.parseJson(sub.subJson, Setting.class);
-//                        if (djSetting != null) {
-//                            Setting.deleteAll();
-//                            djSetting.save();
-//                        }
-//                    }
                 }
             }
 

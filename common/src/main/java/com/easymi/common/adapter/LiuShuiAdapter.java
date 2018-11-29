@@ -14,8 +14,6 @@ import com.easymi.common.R;
 import com.easymi.common.activity.BaoxiaoActivity;
 import com.easymi.common.activity.LiushuiActivity;
 import com.easymi.common.util.ZXStatus2Str;
-import com.easymi.component.ZXOrderStatus;
-import com.easymi.component.entity.Setting;
 import com.easymi.common.util.DJStatus2Str;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
@@ -41,7 +39,7 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
     public LiuShuiAdapter(Context context) {
         this.context = context;
         baseOrders = new ArrayList<>();
-//        canBaoxiaoDJ = Setting.findOne().isExpenses == 1;
+//        canBaoxiaoDJ = TaxiSetting.findOne().isExpenses == 1;
 //        canBaoxiaoZC = ZCSetting.findOne().isExpenses == 1;
     }
 

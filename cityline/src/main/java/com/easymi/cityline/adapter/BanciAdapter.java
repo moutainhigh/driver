@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.easymi.cityline.R;
 import com.easymi.cityline.entity.ZXOrder;
-import com.easymi.component.entity.Setting;
+import com.easymi.component.entity.TaxiSetting;
 import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.utils.TimeUtil;
 
@@ -37,7 +37,7 @@ public class BanciAdapter extends RecyclerView.Adapter<BanciAdapter.Holder> {
     public BanciAdapter(Context context) {
         this.context = context;
         baseOrders = new ArrayList<>();
-        canBaoxiaoDJ = Setting.findOne().isExpenses == 1;
+        canBaoxiaoDJ = TaxiSetting.findOne().isExpenses == 1;
         canBaoxiaoZC = ZCSetting.findOne().isExpenses == 1;
     }
 

@@ -26,7 +26,7 @@ public class MyOrderModel implements MyOrderContract.Model {
     @Override
     public Observable<QueryOrdersResult> indexOrders(int page,int size,String status) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .queryRunningOrders( page, size,status)
+                .queryMyOrders( page, size,status,EmUtil.getEmployInfo().serviceType)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -62,7 +62,7 @@ public class MyOrderModel implements MyOrderContract.Model {
     @Override
     public Observable<EmResult> refuseOrder(Long orderId, String serviceType) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .refuseOrder(orderId,serviceType)
+                .refuseOrder(orderId,serviceType,"临时有事")
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

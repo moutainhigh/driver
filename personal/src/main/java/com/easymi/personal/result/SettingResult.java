@@ -1,6 +1,6 @@
 package com.easymi.personal.result;
 
-import com.easymi.component.entity.Setting;
+import com.easymi.component.entity.TaxiSetting;
 import com.easymi.component.result.EmResult;
 import com.google.gson.annotations.SerializedName;
 
@@ -10,5 +10,5 @@ import com.google.gson.annotations.SerializedName;
 
 public class SettingResult extends EmResult {
     @SerializedName("daijiaApp")
-    public Setting setting;
+    public TaxiSetting taxiSetting;
 }

@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.model.Marker;
 import com.easymi.cityline.R;
-import com.easymi.component.entity.Setting;
+import com.easymi.component.entity.TaxiSetting;
 
 /**
  * Created by developerLzh on 2017/12/25 0025.
@@ -18,11 +18,11 @@ import com.easymi.component.entity.Setting;
 public class LeftWindowAdapter implements AMap.InfoWindowAdapter {
 
     private Context context;
-    private Setting setting;
+    private TaxiSetting taxiSetting;
 
     public LeftWindowAdapter(Context context) {
         this.context = context;
-        setting = Setting.findOne();
+        taxiSetting = TaxiSetting.findOne();
     }
 
     @Override

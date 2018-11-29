@@ -135,11 +135,11 @@ public class WorkTimeCounter {
                 true, result -> {
             if (result != null && result.workStatistics != null) {
                 //值已后台返回为准
-                totalMinute = result.workStatistics.minute;
+//                totalMinute = result.workStatistics.minute;
                 CountEvent event = new CountEvent();
                 event.finishCount = result.workStatistics.finishCount;
                 event.income = result.workStatistics.income;
-                event.minute = totalMinute;
+                event.minute = minute;
                 EventBus.getDefault().post(event);
             }
         }));

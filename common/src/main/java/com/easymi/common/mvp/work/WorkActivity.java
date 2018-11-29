@@ -541,7 +541,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         Employ employ = EmUtil.getEmployInfo();
         if (String.valueOf(employ.status).equals(EmployStatus.FROZEN)) {
             EmUtil.employLogout(this);
-        } else if (String.valueOf(employ.status).equals(EmployStatus.OFFLINE)) {
+        } else if (String.valueOf(employ.status).equals(EmployStatus.OFFLINE) || employ.status == 0) {
             showOffline();//非听单状态
             presenter.initDaemon();
         } else {

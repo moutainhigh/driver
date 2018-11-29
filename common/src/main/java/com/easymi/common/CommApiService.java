@@ -635,13 +635,15 @@ public interface CommApiService {
     /**
      * 通用拒单 专车出租车用
      */
-    @GET("api/v1/public/order/refusal")
+    @FormUrlEncoded
+    @PUT("api/v1/public/order/refusal")
     Observable<EmResult> refuseOrder(@Query("orderId") long orderId,
-                                     @Query("serviceType") String serviceType);
+                                     @Query("serviceType") String serviceType,
+                                     @Field("remark") String remark);
 
     /**
      * @param orderId
-     * @param reimburseFee  报销金额
+     * @param reimburseFee   报销金额
      * @param reimburseCause 报销理由
      * @return
      */
@@ -670,4 +672,14 @@ public interface CommApiService {
     @GET("api/v1/public/message/affiche/{id}")
     Observable<PushAnnouncement> employAfficheById(@Path("id") Long noticeId,
                                                    @Query("app_key") String appKey);
+
+    /**
+     * 我的订单接口
+     */
+    @GET("api/v1/public/orders")
+    Observable<QueryOrdersResult> queryMyOrders(@Query("page") int page,
+                                                @Query("size") int size,
+                                                @Query("status") String status,
+                                                @Query("serviceType") String serviceType);
+
 }

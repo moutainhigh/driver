@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.model.Marker;
 import com.easymi.common.R;
-import com.easymi.component.entity.Setting;
+import com.easymi.component.entity.TaxiSetting;
 import com.easymi.component.utils.PhoneUtil;
 
 /**
@@ -20,11 +20,11 @@ import com.easymi.component.utils.PhoneUtil;
 public class NearInfoWindowAdapter implements AMap.InfoWindowAdapter {
 
     private Context context;
-    private Setting setting;
+    private TaxiSetting taxiSetting;
 
     public NearInfoWindowAdapter(Context context) {
         this.context = context;
-        setting = Setting.findOne();
+        taxiSetting = TaxiSetting.findOne();
     }
 
     @Override
@@ -41,8 +41,8 @@ public class NearInfoWindowAdapter implements AMap.InfoWindowAdapter {
         TextView tv = view.findViewById(R.id.driver_name);
         ImageView callPhone = view.findViewById(R.id.call_phone);
         tv.setText(driverName);
-        if (null != setting) {
-            if (setting.canCallDriver == 2) {
+        if (null != taxiSetting) {
+            if (taxiSetting.canCallDriver == 2) {
                 callPhone.setVisibility(View.GONE);
             } else {
                 callPhone.setVisibility(View.VISIBLE);

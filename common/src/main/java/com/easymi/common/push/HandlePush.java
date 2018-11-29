@@ -1,6 +1,5 @@
 package com.easymi.common.push;
 
-import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -19,8 +18,6 @@ import com.easymi.common.R;
 import com.easymi.common.entity.Address;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.PushAnnouncement;
-import com.easymi.common.util.CommonUtil;
-import com.easymi.component.entity.Setting;
 import com.easymi.common.mvp.grab.GrabActivity2;
 import com.easymi.common.mvp.work.WorkActivity;
 import com.easymi.common.result.MultipleOrderResult;
@@ -31,16 +28,12 @@ import com.easymi.component.DJOrderStatus;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.Employ;
-import com.easymi.component.entity.SubSetting;
-import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.network.ApiManager;
-import com.easymi.component.network.GsonUtil;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.EmployStatus;
 
@@ -297,9 +290,9 @@ public class HandlePush implements FeeChangeSubject {
 //                                zcSetting.save();
 //                            }
 //                        } else if ("daijia".equals(sub.businessType)) {
-//                            Setting djSetting = GsonUtil.parseJson(sub.subJson, Setting.class);
+//                            TaxiSetting djSetting = GsonUtil.parseJson(sub.subJson, TaxiSetting.class);
 //                            if (djSetting != null) {
-//                                Setting.deleteAll();
+//                                TaxiSetting.deleteAll();
 //                                djSetting.save();
 //                            }
 //                        }

@@ -8,8 +8,10 @@ import android.support.v4.view.ViewPager;
 import com.easymi.common.R;
 import com.easymi.common.adapter.VpAdapter;
 import com.easymi.common.widget.MakeOrderPopWindow;
+import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.ZCSetting;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.widget.CusToolbar;
 
 import java.util.ArrayList;
@@ -30,7 +32,6 @@ public class OrderActivity extends RxBaseActivity {
     ViewPager viewPager;
     List<Fragment> fragments;
     VpAdapter adapter;
-    boolean fastAssign = true;
     //补单弹窗
     MakeOrderPopWindow popWindow;
 
@@ -39,13 +40,16 @@ public class OrderActivity extends RxBaseActivity {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.liushui_title);
         toolbar.setLeftIcon(R.drawable.ic_arrow_back, v -> finish());
-        toolbar.setRightText(R.string.com_make_order, v -> {
-            if (popWindow.isShowing()) {
-                popWindow.dismiss();
-            } else {
-                popWindow.show(v);
-            }
-        });
+        if (EmUtil.getEmployInfo().serviceType.equals(Config.CITY_LINE)){
+            toolbar.setRightText(R.string.com_make_order, v -> {
+//                if (popWindow.isShowing()) {
+//                    popWindow.dismiss();
+//                } else {
+//                    popWindow.show(v);
+//                }
+
+            });
+        }
     }
 
     @Override
@@ -99,7 +103,21 @@ public class OrderActivity extends RxBaseActivity {
 
             @Override
             public void onPageSelected(int position) {
-
+                if (ZCSetting.findOne().grabOrder == 1){
+                    if (position == 0){
+                        ((AccpteFragment)fragments.get(position)).setRefresh();
+                    }else if (position == 1){
+                        ((AssignFragment)fragments.get(position)).setRefresh();
+                    }else if (position == 2){
+                        ((GrabFragment)fragments.get(position)).setRefresh();
+                    }
+                }else {
+                    if (position == 0){
+                        ((AccpteFragment)fragments.get(position)).setRefresh();
+                    }else if (position == 1){
+                        ((AssignFragment)fragments.get(position)).setRefresh();
+                    }
+                }
             }
 
             @Override

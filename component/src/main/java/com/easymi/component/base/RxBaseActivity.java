@@ -331,13 +331,26 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
     }
 
     class HttpCustomReceiver extends BroadcastReceiver {
-
+//        http状态码：
+//        触发防重：403
+//        token过期：401
+//        后台权限被拦截：423
+//        账号被别人登陆或aeskey 失效：410
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if(StringUtils.isNotBlank(action)){
                 if (intent.getAction().equals(Config.HTTP_CUSTOM)) {
-                    ToastUtil.showMessage(context,intent.getIntExtra("http_custom",0)+"");
+                   int httpCode = intent.getIntExtra("http_custom",0);
+                    if (httpCode == 401){
+                        ToastUtil.showMessage(context,"验证过期，请重新登陆");
+                    }else if (httpCode == 403){
+                        ToastUtil.showMessage(context,"点太快了，请慢一点");
+                    }else if (httpCode == 423){
+                        ToastUtil.showMessage(context,"您没有权限做此操作哦");
+                    } else if (httpCode == 410) {
+                        ToastUtil.showMessage(context,"账号被其他人登陆了哦");
+                    }
                 }
             }
         }

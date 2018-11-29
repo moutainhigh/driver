@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.easymi.component.ZCOrderStatus;
 import com.easymi.component.entity.DymOrder;
-import com.easymi.component.entity.Setting;
 import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MathUtil;
@@ -267,7 +266,7 @@ public class SettleFragmentDialog {
             confirmBtn.setVisibility(View.VISIBLE);
             payButton.setVisibility(View.GONE);
             dialogTitle.setText(context.getString(R.string.confirm_money));
-            addedHint.setVisibility(View.VISIBLE);
+//            addedHint.setVisibility(View.VISIBLE);
         } else {
             addedHint.setVisibility(View.GONE);
             confirmBtn.setVisibility(View.GONE);

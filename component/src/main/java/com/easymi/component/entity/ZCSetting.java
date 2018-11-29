@@ -35,7 +35,7 @@ public class ZCSetting {
     @SerializedName("employChangeOrder")
     public int employChangeOrder;//是否可以转单（1开启，2关闭)
 
-    public int driverRepLowBalance; //允许代付时余额不足 1，关闭；2，开启  //现在用的1开启，2关闭
+    public int driverRepLowBalance; //允许代付时余额不足  //现在用的1开启，2关闭
     public int passengerDistance;
     public int version;
 

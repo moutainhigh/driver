@@ -550,8 +550,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         if (null == zcOrder) {
             finish();
         } else {
-            if (zcOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER && ZCSetting.findOne().isPaid == 2){
-                finish();
+            ZCSetting zcSetting = ZCSetting.findOne();
+            if (zcSetting.isPaid == 2){
+                if (zcOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER){
+                    finish();
+                }
             }
             this.zcOrder = zcOrder;
             showTopView();
@@ -782,7 +785,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         pay3Btn.setVisibility(View.GONE);
         pay3Img.setVisibility(View.GONE);
 //        }
-        boolean canDaifu = ZCSetting.findOne().isPaid == 2;
+        boolean canDaifu = (ZCSetting.findOne().isPaid == 1);
         if (!canDaifu) {
             pay4Text.setVisibility(View.GONE);
             pay4Empty.setVisibility(View.GONE);
