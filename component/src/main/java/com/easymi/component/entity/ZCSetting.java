@@ -35,17 +35,13 @@ public class ZCSetting {
     @SerializedName("employChangeOrder")
     public int employChangeOrder;//是否可以转单（1开启，2关闭)
 
-//    public int driverDistance;
-//    public int driverRepPay;  //允许代付  1，关闭；2，开启
-//    public int employChangeOrder;
-//    public int driverCancelOrder;
-//    public int driverReimbursCharge;
-//    public int driverAddCharge;
-
-    public int driverRepLowBalance; //允许代付时余额不足 1，关闭；2，开启
+    public int driverRepLowBalance; //允许代付时余额不足 1，关闭；2，开启  //现在用的1开启，2关闭
     public int passengerDistance;
     public int version;
 
+    public int grabOrder; //抢单开关
+    public int distributeOrder; //派单开关
+    public String serviceType; //业务类型
 
     public static void deleteAll() {
         SqliteHelper helper = SqliteHelper.getInstance();
@@ -69,6 +65,10 @@ public class ZCSetting {
         values.put("passengerDistance", passengerDistance);
         values.put("version", version);
 
+        values.put("grabOrder", grabOrder);
+        values.put("distributeOrder", distributeOrder);
+        values.put("serviceType", serviceType);
+
         db.insert("t_zc_settinginfo", null, values);
     }
 
@@ -89,6 +89,10 @@ public class ZCSetting {
                 settingInfo.driverRepLowBalance = cursor.getInt(cursor.getColumnIndex("driverRepLowBalance"));
                 settingInfo.passengerDistance = cursor.getInt(cursor.getColumnIndex("passengerDistance"));
                 settingInfo.version = cursor.getInt(cursor.getColumnIndex("version"));
+
+                settingInfo.grabOrder = cursor.getInt(cursor.getColumnIndex("grabOrder"));
+                settingInfo.distributeOrder = cursor.getInt(cursor.getColumnIndex("distributeOrder"));
+                settingInfo.serviceType = cursor.getString(cursor.getColumnIndex("serviceType"));
             }
         } finally {
             cursor.close();

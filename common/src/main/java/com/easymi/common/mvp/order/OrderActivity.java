@@ -9,6 +9,7 @@ import com.easymi.common.R;
 import com.easymi.common.adapter.VpAdapter;
 import com.easymi.common.widget.MakeOrderPopWindow;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.widget.CusToolbar;
 
 import java.util.ArrayList;
@@ -72,22 +73,22 @@ public class OrderActivity extends RxBaseActivity {
     private void initTabLayout() {
         fragments = new ArrayList<>();
         fragments.add(new AccpteFragment());
-        if (fastAssign){
-            fragments.add(new AssignFragment());
+        fragments.add(new AssignFragment());
+        if (ZCSetting.findOne().grabOrder == 1){
+            fragments.add(new GrabFragment());
         }
-        fragments.add(new GrabFragment());
-
         viewPager.setOffscreenPageLimit(fragments.size());
         adapter = new VpAdapter(getSupportFragmentManager(), fragments);
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
         tabLayout.getTabAt(0).setText(getString(R.string.com_accept_order));
-        if (fastAssign){
+
+        if (ZCSetting.findOne().grabOrder == 1){
             tabLayout.getTabAt(1).setText(getString(R.string.com_assign_order));
             tabLayout.getTabAt(2).setText(getString(R.string.com_grab_order));
         }else {
-            tabLayout.getTabAt(1).setText(getString(R.string.com_grab_order));
+            tabLayout.getTabAt(1).setText(getString(R.string.com_assign_order));
         }
 
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {

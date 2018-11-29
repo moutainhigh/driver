@@ -319,7 +319,7 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
                         message = "您即将进入疲劳驾驶状态，请合理安排工作休息时间。正常工作状态剩余时间:"+tiredNotice.remainTime+"分钟。";
                     }
 
-                    AlertDialog dialog = new AlertDialog.Builder(XApp.getInstance())
+                    AlertDialog dialog = new AlertDialog.Builder(RxBaseActivity.this)
                             .setTitle("疲劳提醒")
                             .setMessage(message)
                             .setNegativeButton("好的，我知道了", (dialogInterface, i) -> dialogInterface.dismiss())

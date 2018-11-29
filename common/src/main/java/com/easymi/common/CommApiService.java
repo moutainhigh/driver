@@ -54,13 +54,13 @@ public interface CommApiService {
 //                                                     @Query("page") int page,
 //                                                     @Query("limit") int limit);
 
-    /**
-     //     * 上线接口
-     //     *
-     //     * @param driverId
-     //     * @param appKey
-     //     * @return
-     //     */
+//    /**
+//     //     * 上线接口
+//     //     *
+//     //     * @param driverId
+//     //     * @param appKey
+//     //     * @return
+//     //     */
 //    @FormUrlEncoded
 //    @PUT("driver/api/v1/online")
 //    Observable<EmResult> online(@Field("driver_id") Long driverId,
@@ -77,17 +77,15 @@ public interface CommApiService {
      *
      * @param lat
      * @param lng
-     * @param distance
-     * @param appKey
+     * @param range
+     * @param serviceType
      * @return
      */
-    @GET("driver/api/v1/getNearDrivers")
-    Observable<NearDriverResult> getNearDrivers(@Query("driver_id") Long driverId,
-                                                @Query("lat") Double lat,
+    @GET("api/v1/public/driver/ranges")
+    Observable<NearDriverResult> getNearDrivers(@Query("lat") Double lat,
                                                 @Query("lng") Double lng,
-                                                @Query("distance") Double distance,
-                                                @Query("business") String business,
-                                                @Query("app_key") String appKey);
+                                                @Query("range") Double range,
+                                                @Query("serviceType") String serviceType);
 
 //    /**
 //     * 查询未支付和已完成订单

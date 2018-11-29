@@ -241,9 +241,9 @@ public class HandlePush implements FeeChangeSubject {
                         dymOrder.nightTimePrice = jbData.optDouble("nightTimeFee");
                     }
 
-                    DecimalFormat decimalFormat = new DecimalFormat("#0.0");
-                    decimalFormat.setRoundingMode(RoundingMode.DOWN);
-                    dymOrder.distance = Double.parseDouble(decimalFormat.format(dymOrder.distance));
+//                    DecimalFormat decimalFormat = new DecimalFormat("#0.0");
+//                    decimalFormat.setRoundingMode(RoundingMode.DOWN);
+//                    dymOrder.distance = Double.parseDouble(decimalFormat.format(dymOrder.distance));
                     //公里数保留一位小数。。
 
                     dymOrder.updateFee();

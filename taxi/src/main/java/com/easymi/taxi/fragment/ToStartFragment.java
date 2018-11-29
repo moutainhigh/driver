@@ -6,8 +6,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseFragment;
+import com.easymi.component.utils.GlideCircleTransform;
 import com.easymi.component.utils.Log;
+import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.taxi.R;
 import com.easymi.taxi.entity.TaxiOrder;
@@ -63,6 +69,18 @@ public class ToStartFragment extends RxBaseFragment {
         customName = $(R.id.tv_custom_name);
         //todo 差客户头像
         customName.setText(taxiOrder.passengerName);
+
+        if (StringUtils.isNotBlank(taxiOrder.avatar)) {
+            RequestOptions options = new RequestOptions()
+                    .centerCrop()
+                    .transform(new GlideCircleTransform())
+                    .placeholder(R.mipmap.ic_customer_head)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL);
+            Glide.with(this)
+                    .load(Config.IMG_SERVER + taxiOrder.avatar + Config.IMG_PATH)
+                    .apply(options)
+                    .into(customHead);
+        }
 
         startPlaceText.setText(taxiOrder.getStartSite().address);
         endPlaceText.setText(taxiOrder.getEndSite().address);

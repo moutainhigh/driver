@@ -53,6 +53,7 @@ import com.easymi.common.push.MqttManager;
 import com.easymi.common.trace.TraceInterface;
 import com.easymi.common.trace.TraceReceiver;
 import com.easymi.component.Config;
+import com.easymi.component.DJOrderStatus;
 import com.easymi.component.ZCOrderStatus;
 import com.easymi.component.activity.PlaceActivity;
 import com.easymi.component.app.XApp;
@@ -272,27 +273,27 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             } else {
                 ZCSetting setting = ZCSetting.findOne();
                 boolean notCancel = setting.canCancelOrder != 1;
-                boolean notChangeOrder = setting.employChangeOrder != 1;
+//                boolean notChangeOrder = setting.employChangeOrder != 1;
                 if (notCancel || zcOrder.orderStatus == ZCOrderStatus.NEW_ORDER || zcOrder.orderStatus == ZCOrderStatus.PAIDAN_ORDER || zcOrder.orderStatus >= ZCOrderStatus.GOTO_DESTINATION_ORDER) {
                     popWindow.hideCancel();
                 } else {
                     popWindow.showCancel();
                 }
-                if (StringUtils.isBlank(zcOrder.groupId)) {
-                    popWindow.hideSame();
-                } else {
-                    popWindow.showSame();
-                }
+//                if (StringUtils.isBlank(zcOrder.groupId)) {
+//                    popWindow.hideSame();
+//                } else {
+//                    popWindow.showSame();
+//                }
                 if (zcOrder.orderStatus == ZCOrderStatus.NEW_ORDER || zcOrder.orderStatus == ZCOrderStatus.PAIDAN_ORDER) {
                     popWindow.hideConsumer();
                 } else {
                     popWindow.showConsumer();
                 }
-                if ((zcOrder.orderStatus == ZCOrderStatus.TAKE_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER || zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER) && !notChangeOrder) {
-                    popWindow.showTransfer();
-                } else {
-                    popWindow.hideTransfer();
-                }
+//                if ((zcOrder.orderStatus == ZCOrderStatus.TAKE_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER || zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER) && !notChangeOrder) {
+//                    popWindow.showTransfer();
+//                } else {
+//                    popWindow.hideTransfer();
+//                }
 
                 popWindow.show(v);
             }
@@ -309,21 +310,24 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 startActivityForResult(intent, CANCEL_ORDER);
             } else if (i == R.id.pop_contract_service) {
 //                String phone = EmUtil.getEmployInfo().company_phone;
-                String phone = "1111111";
+                String phone = zcOrder.companyPhone;
                 PhoneUtil.call(FlowActivity.this, phone);
-            } else if (i == R.id.pop_same_order) {
-                Intent intent = new Intent(FlowActivity.this, SameOrderActivity.class);
-                intent.putExtra("groupId", zcOrder.groupId);
-                startActivity(intent);
-            } else if (i == R.id.pop_consumer_msg) {
+            }
+//            else if (i == R.id.pop_same_order) {
+//                Intent intent = new Intent(FlowActivity.this, SameOrderActivity.class);
+//                intent.putExtra("groupId", zcOrder.groupId);
+//                startActivity(intent);
+//            }
+            else if (i == R.id.pop_consumer_msg) {
                 Intent intent = new Intent(FlowActivity.this, ConsumerInfoActivity.class);
                 intent.putExtra("orderId", orderId);
                 startActivity(intent);
-            } else if (i == R.id.pop_order_transfer) {
-                Intent intent = new Intent(FlowActivity.this, TransferActivity.class);
-                intent.putExtra("order", zcOrder);
-                startActivityForResult(intent, CHANGE_ORDER);
             }
+//            else if (i == R.id.pop_order_transfer) {
+//                Intent intent = new Intent(FlowActivity.this, TransferActivity.class);
+//                intent.putExtra("order", zcOrder);
+//                startActivityForResult(intent, CHANGE_ORDER);
+//            }
         });
     }
 
@@ -546,6 +550,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         if (null == zcOrder) {
             finish();
         } else {
+            if (zcOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER && ZCSetting.findOne().isPaid == 2){
+                finish();
+            }
             this.zcOrder = zcOrder;
             showTopView();
             initBridge();
@@ -775,7 +782,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         pay3Btn.setVisibility(View.GONE);
         pay3Img.setVisibility(View.GONE);
 //        }
-        boolean canDaifu = ZCSetting.findOne().isPaid == 1;
+        boolean canDaifu = ZCSetting.findOne().isPaid == 2;
         if (!canDaifu) {
             pay4Text.setVisibility(View.GONE);
             pay4Empty.setVisibility(View.GONE);
@@ -817,8 +824,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 //            } else {
 //                ToastUtil.showMessage(FlowActivity.this, getString(R.string.please_pay_title));
 //            }
-            if (money > EmUtil.getEmployInfo().balance) {
-                ToastUtil.showMessage(this, getResources().getString(R.string.no_balance));
+            if (ZCSetting.findOne().driverRepLowBalance == 2){
+                if (money > EmUtil.getEmployInfo().balance) {
+                    ToastUtil.showMessage(this, getResources().getString(R.string.no_balance));
+                }else {
+                    presenter.payOrder(orderId, "PAY_DRIVER_BALANCE",zcOrder.version);
+                }
             }else {
                 presenter.payOrder(orderId, "PAY_DRIVER_BALANCE",zcOrder.version);
             }

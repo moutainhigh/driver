@@ -4,6 +4,8 @@ import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.result.EmResult;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Created by liuzihao on 2018/3/6.
  */
@@ -16,5 +18,9 @@ public class SettingResult extends EmResult {
 //    @SerializedName("app_settings")
 //    public String appSetting;
 
-    public ZCSetting data;
+    public List<ZCSetting> data;
+
+    public ZCSetting zcSetting;
+
+
 }

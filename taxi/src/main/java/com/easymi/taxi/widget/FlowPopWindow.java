@@ -37,9 +37,9 @@ public class FlowPopWindow extends PopupWindow implements View.OnClickListener {
 
     TextView cancel;
     TextView contract;
-    TextView same;
+//    TextView same;
     TextView consumer;
-    private final View transfer;
+//    private final View transfer;
 
 
     public FlowPopWindow(Context context) {
@@ -69,15 +69,15 @@ public class FlowPopWindow extends PopupWindow implements View.OnClickListener {
         //设置监听
         cancel = view.findViewById(R.id.pop_cancel_order);   //取消订单
         contract = view.findViewById(R.id.pop_contract_service);    //联系后台
-        same = view.findViewById(R.id.pop_same_order);        //同单司机
+//        same = view.findViewById(R.id.pop_same_order);        //同单司机
         consumer = view.findViewById(R.id.pop_consumer_msg);   //客户信息
-        transfer = view.findViewById(R.id.pop_order_transfer);
+//        transfer = view.findViewById(R.id.pop_order_transfer);
 
         cancel.setOnClickListener(this);
         contract.setOnClickListener(this);
         consumer.setOnClickListener(this);
-        same.setOnClickListener(this);
-        transfer.setOnClickListener(this);
+//        same.setOnClickListener(this);
+//        transfer.setOnClickListener(this);
 
     }
 
@@ -93,17 +93,17 @@ public class FlowPopWindow extends PopupWindow implements View.OnClickListener {
         }
     }
 
-    public void hideSame() {
-        if (null != same) {
-            same.setVisibility(View.GONE);
-        }
-    }
-
-    public void showSame() {
-        if (null != same) {
-            same.setVisibility(View.VISIBLE);
-        }
-    }
+//    public void hideSame() {
+//        if (null != same) {
+//            same.setVisibility(View.GONE);
+//        }
+//    }
+//
+//    public void showSame() {
+//        if (null != same) {
+//            same.setVisibility(View.VISIBLE);
+//        }
+//    }
 
     public void showConsumer(){
         if (null != consumer) {
@@ -117,17 +117,17 @@ public class FlowPopWindow extends PopupWindow implements View.OnClickListener {
         }
     }
 
-    public void showTransfer(){
-        if (null != transfer) {
-            transfer.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public void hideTransfer(){
-        if (null != transfer) {
-            transfer.setVisibility(View.GONE);
-        }
-    }
+//    public void showTransfer(){
+//        if (null != transfer) {
+//            transfer.setVisibility(View.VISIBLE);
+//        }
+//    }
+//
+//    public void hideTransfer(){
+//        if (null != transfer) {
+//            transfer.setVisibility(View.GONE);
+//        }
+//    }
 
     //文本点击事件监听
     @Override

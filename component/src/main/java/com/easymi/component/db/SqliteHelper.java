@@ -263,6 +263,10 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("passengerDistance").append(" ").append("INTEGER").append(",")
                 .append("version").append(" ").append("INTEGER").append(",")
 
+                .append("grabOrder").append(" ").append("INTEGER").append(",")
+                .append("distributeOrder").append(" ").append("INTEGER").append(",")
+                .append("serviceType").append(" ").append("TEXT").append(",")
+
                 .append("employChangeOrder").append(" ").append("employChangeOrder")
                 .append(");");
         execCreateTableSQL(db);

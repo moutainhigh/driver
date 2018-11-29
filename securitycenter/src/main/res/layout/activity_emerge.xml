@@ -25,9 +25,11 @@
         android:paddingBottom="5dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:paddingTop="15dp">
+        android:paddingTop="15dp"
+        android:visibility="visible">
 
         <TextView
+            android:id="@+id/tv_hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -38,6 +40,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/tv_notice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -47,6 +50,7 @@
             android:textSize="13sp"
             android:layout_marginBottom="20dp"/>
         <LinearLayout
+            android:id="@+id/lin_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -69,7 +73,7 @@
                     />
 
                 <cn.projcet.hf.securitycenter.widget.SwitchButton
-                    android:id="@+id/voice_able_btn"
+                    android:id="@+id/share_able_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -95,6 +99,7 @@
                     android:textColor="@color/color_333333"
                     android:textSize="14sp" />
                 <TextView
+                    android:id="@+id/tv_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="00：00-23：59"
@@ -115,7 +120,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/color_ffffff">
+        android:background="@color/color_ffffff"
+        android:paddingBottom="15dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -126,7 +132,143 @@
             android:layout_marginTop="20dp"
             android:textStyle="bold"/>
         <TextView
+            android:id="@+id/tv_lianxiren_hint"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="自动分享行程给选中的联系人，一键报警时通知全部联系人"
+            android:textSize="12sp"
+            android:textColor="@color/color_666666"
+            android:layout_marginTop="5dp"
+            android:visibility="gone"/>
+    </LinearLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:src="@color/color_eeeeee"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/color_ffffff"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="电话:"
+                android:textColor="@color/color_333333" />
+            <EditText
+                android:id="@+id/et_phone"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:hint="请输入联系人电话"
+                android:textColor="@color/color_999999"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:background="@null"
+                android:textSize="14sp"
+                android:textColorHint="@color/color_999999"/>
+            <TextView
+                android:id="@+id/tv_tongxunlu"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="通讯录"
+                android:gravity="center_vertical"
+                android:drawableRight="@mipmap/ic_right"
+                android:drawablePadding="5dp"
+                android:textColor="@color/color_red"
+                android:textSize="12sp"/>
+        </LinearLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:src="@color/color_eeeeee"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="姓名:"
+                android:textColor="@color/color_333333" />
+            <EditText
+                android:id="@+id/et_name"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:hint=""
+                android:textColor="@color/color_999999"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:background="@null"
+                android:textSize="14sp"
+                android:textColorHint="@color/color_999999"/>
+        </LinearLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:src="@color/color_eeeeee"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/color_f3f4f5">
+            <TextView
+                android:id="@+id/tv_zengjia"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/btn_color_2c3c55_4dp"
+                android:layout_marginTop="40dp"
+                android:text="确认新增"
+                android:textSize="16sp"
+                android:textColor="@color/color_ffffff"
+                android:gravity="center"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/lin_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:background="@color/color_f3f4f5"
+        android:visibility="visible">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/tv_add"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="添加新的紧急联系人"
+            android:textColor="@color/color_999999"
+            android:gravity="center_vertical"
+            android:textSize="12sp"
+            android:drawableLeft="@mipmap/ic_zengjia"
+            android:drawablePadding="5dp"
+            android:layout_marginTop="20dp"/>
     </LinearLayout>
 </LinearLayout>

@@ -261,6 +261,16 @@ public class BaseOrder implements Serializable {
      */
     public int seats;
 
+    /**
+     * 客服电话
+     */
+    public String companyPhone;
+
+    /**
+     * 客户头像
+     */
+    public String avatar;
+
 //    /**
 //     * 班次状态
 //     */

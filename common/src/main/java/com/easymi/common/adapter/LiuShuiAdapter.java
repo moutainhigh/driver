@@ -32,8 +32,8 @@ import java.util.List;
 
 public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> {
 
-    private final boolean canBaoxiaoDJ;
-    private final boolean canBaoxiaoZC;
+//    private final boolean canBaoxiaoDJ;
+//    private final boolean canBaoxiaoZC;
     private Context context;
 
     private List<BaseOrder> baseOrders;
@@ -41,8 +41,8 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
     public LiuShuiAdapter(Context context) {
         this.context = context;
         baseOrders = new ArrayList<>();
-        canBaoxiaoDJ = Setting.findOne().isExpenses == 1;
-        canBaoxiaoZC = ZCSetting.findOne().isExpenses == 1;
+//        canBaoxiaoDJ = Setting.findOne().isExpenses == 1;
+//        canBaoxiaoZC = ZCSetting.findOne().isExpenses == 1;
     }
 
     public void setBaseOrders(List<BaseOrder> baseOrders) {
@@ -116,13 +116,11 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
         } else {
             holder.rootView.setClickable(false);
 
-//            boolean canBaoxiao = (Config.DAIJIA.equals(baseOrder.serviceType) && canBaoxiaoDJ)
-//                    || (Config.ZHUANCHE.equals(baseOrder.serviceType) && canBaoxiaoZC);
-//            if (canBaoxiao) {
+            if (ZCSetting.findOne().isExpenses == 1) {
                 holder.orderBaoxiao.setVisibility(View.VISIBLE);
-//            } else {
-//                holder.orderBaoxiao.setVisibility(View.GONE);
-//            }
+            } else {
+                holder.orderBaoxiao.setVisibility(View.GONE);
+            }
         }
     }
 

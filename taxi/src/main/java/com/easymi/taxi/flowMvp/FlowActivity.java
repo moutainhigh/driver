@@ -232,11 +232,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 } else {
                     popWindow.showConsumer();
                 }
-                if ((taxiOrder.status == ZCOrderStatus.TAKE_ORDER || taxiOrder.status == ZCOrderStatus.GOTO_BOOKPALCE_ORDER|| taxiOrder.status == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER) && !notChangeOrder) {
-                    popWindow.showTransfer();
-                } else {
-                    popWindow.hideTransfer();
-                }
+//                if ((taxiOrder.status == ZCOrderStatus.TAKE_ORDER || taxiOrder.status == ZCOrderStatus.GOTO_BOOKPALCE_ORDER|| taxiOrder.status == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER) && !notChangeOrder) {
+//                    popWindow.showTransfer();
+//                } else {
+//                    popWindow.hideTransfer();
+//                }
                 popWindow.show(v);
             }
         });
@@ -251,18 +251,19 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 Intent intent = new Intent(FlowActivity.this, CancelActivity.class);
                 startActivityForResult(intent, CANCEL_ORDER);
             } else if (i == R.id.pop_contract_service) {
-//                String phone = EmUtil.getEmployInfo().company_phone;
-                String phone = "111111111";
+                String phone = taxiOrder.companyPhone;
+//                String phone = "111111111";
                 PhoneUtil.call(FlowActivity.this, phone);
             } else if (i == R.id.pop_consumer_msg) {
                 Intent intent = new Intent(FlowActivity.this, ConsumerInfoActivity.class);
                 intent.putExtra("orderId", orderId);
                 startActivity(intent);
-            } else if (i == R.id.pop_order_transfer) {
-                Intent intent = new Intent(FlowActivity.this, TransferActivity.class);
-                intent.putExtra("order", taxiOrder);
-                startActivityForResult(intent, CHANGE_ORDER);
             }
+//            else if (i == R.id.pop_order_transfer) {
+//                Intent intent = new Intent(FlowActivity.this, TransferActivity.class);
+//                intent.putExtra("order", taxiOrder);
+//                startActivityForResult(intent, CHANGE_ORDER);
+//            }
         });
     }
 

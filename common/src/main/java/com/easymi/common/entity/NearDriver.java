@@ -5,12 +5,12 @@ package com.easymi.common.entity;
  */
 
 public class NearDriver {
-    public long employ_id;
-    public String employ_name;
-    public String employ_phone;
+    public long id;
+    public String name;
+    public String phone;
     public long employ_company_id;
     public double distance;
-    public double lat;
-    public double lng;
+    public double latitude;
+    public double longitude;
     public String status;
 }

@@ -128,7 +128,8 @@
     <string name="yuan_coupon">元优惠券</string>
 
     <string name="cus_pay">客户在线支付</string>
-    <string name="help_pay">收取现金</string>
+    <!--<string name="help_pay">收取现金</string>-->
+    <string name="help_pay">司机代付</string>
     <string name="cus_balance">余额支付</string>
     <string name="qiandan">签单支付</string>
 

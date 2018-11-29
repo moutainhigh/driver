@@ -358,20 +358,14 @@ public class WorkPresenter implements WorkContract.Presenter {
 
     @Override
     public void queryNearDriver(Double lat, Double lng) {
-        long driverId = EmUtil.getEmployId();
         double dis = 0;
-        if (Config.ZHUANCHE.equals(employType)) {
-            dis = zcDriverKm;
-        } else if ("daijia".equals(employType)) {
-            dis = driverKm;
-        }
-
+        dis = ZCSetting.findOne().emploiesKm;
         if (dis <= 0) {
             //距离为0时不调用接口.
             return;
         }
 
-        Observable<NearDriverResult> observable = model.queryNearDriver(driverId, lat, lng, dis, employType);
+        Observable<NearDriverResult> observable = model.queryNearDriver(lat, lng, dis, employType);
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
                 true, nearDriverResult -> {
             if (null != nearDriverResult.emploies && nearDriverResult.emploies.size() != 0) {
@@ -461,9 +455,9 @@ public class WorkPresenter implements WorkContract.Presenter {
         })));
     }
 
-    //查询附近司机的距离
-    private double driverKm = 0;
-    private double zcDriverKm = 0;
+//    //查询附近司机的距离
+//    private double driverKm = 0;
+//    private double zcDriverKm = 0;
 
     //能拨打电话
     boolean canCallPhone = true;

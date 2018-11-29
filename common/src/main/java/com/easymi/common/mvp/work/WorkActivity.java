@@ -177,7 +177,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
             onLineBtn.setClickable(false);
             onLineBtn.setStatus(LoadingButton.STATUS_LOADING);
             presenter.online(onLineBtn);
-            new MainDialog(WorkActivity.this).show();
+//            new MainDialog(WorkActivity.this,105,Config.APP_KEY,XApp.getMyPreferences().getString(Config.AES_PASSWORD,""));
         });
 //        offlineCon.setOnClickListener(v -> presenter.offline());
         listenOrderCon.setOnClickListener(v -> {
@@ -463,18 +463,18 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
 
         for (NearDriver driver : drivers) {
-            if (driver.employ_id == EmUtil.getEmployId()) {
+            if (driver.id == EmUtil.getEmployId()) {
                 continue;//自己就不显示marker
             }
-            options.position(new LatLng(driver.lat, driver.lng));
+            options.position(new LatLng(driver.latitude, driver.longitude));
             options.icon(BitmapDescriptorFactory.fromView(getMarkerView(driver)));
             Marker marker = aMap.addMarker(options);
             marker.setInfoWindowEnable(true);
-            marker.setSnippet(driver.employ_name);
-            marker.setTitle(driver.employ_phone);
+            marker.setSnippet(driver.name);
+            marker.setTitle(driver.phone);
             markers.add(marker);
 
-            LatLng latLng = new LatLng(driver.lat, driver.lng);
+            LatLng latLng = new LatLng(driver.latitude, driver.longitude);
             latLngs.add(latLng);
         }
         LatLng center = new LatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
@@ -827,7 +827,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
             overly_bg.setBackgroundResource(R.mipmap.map__busy_maker_bg);
         }
         TextView driverName = v.findViewById(R.id.overly_driver_name);
-        driverName.setText(driver.employ_name);
+        driverName.setText(driver.name);
 
         return v;
     }

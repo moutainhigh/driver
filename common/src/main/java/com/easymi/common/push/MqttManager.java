@@ -108,7 +108,7 @@ public class MqttManager implements LocObserver {
     public synchronized boolean creatConnect() {
 //        pullTopic = "/driver" + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
 //        configTopic = "/driver" + "/" + EmUtil.getAppKey() + "/config";
-        pullTopic = "/driver" + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
+        pullTopic = "/trip/driver" + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
 //        configTopic = "/driver"+ "/config";
 
         if (!XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false)) {//未登陆 不连接
@@ -139,7 +139,7 @@ public class MqttManager implements LocObserver {
 
         Integer qos = 0;
         Boolean retained = false;
-        String pullTopic = "/driver" + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
+        String pullTopic = "/trip/driver" + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
         String message = "{\"terminal_uid\":\"" + clientId + "\"}";
         conOpt.setWill(pullTopic, message.getBytes(), qos, retained);
 

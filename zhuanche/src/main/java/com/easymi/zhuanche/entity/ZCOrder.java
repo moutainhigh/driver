@@ -246,10 +246,18 @@ public class ZCOrder implements Serializable {
      */
     private Long modelId;
 
+    /**
+     * 客服电话
+     */
+    public String companyPhone;
+
+    /**
+     * 客户头像
+     */
+    public String avatar;
+
 
     public List<Address> orderAddressVos;
-
-
 
     public Address getStartSite(){
         Address start = null;

@@ -6,7 +6,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseFragment;
+import com.easymi.component.utils.GlideCircleTransform;
+import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.zhuanche.R;
 import com.easymi.zhuanche.entity.ZCOrder;
@@ -63,11 +69,23 @@ public class ArriveStartFragment extends RxBaseFragment {
         //todo 差客户头像
         customName.setText(zcOrder.passengerName);
 
+        if (StringUtils.isNotBlank(zcOrder.avatar)) {
+            RequestOptions options = new RequestOptions()
+                    .centerCrop()
+                    .transform(new GlideCircleTransform())
+                    .placeholder(R.mipmap.ic_customer_head)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL);
+            Glide.with(this)
+                    .load(Config.IMG_SERVER + zcOrder.avatar + Config.IMG_PATH)
+                    .apply(options)
+                    .into(customHead);
+        }
+
         startPlaceText.setText(zcOrder.getStartSite().addr);
         endPlaceText.setText(zcOrder.getEndSite().addr);
         startDrive.setOnClickListener(view -> bridge.doStartDrive(startDrive));
         startWait.setOnClickListener(view -> bridge.doStartWait());
-        callPhoneCon.setOnClickListener(view -> CallPhoneDialog.callDialog(getActivity(),zcOrder));
+        callPhoneCon.setOnClickListener(view -> CallPhoneDialog.callDialog(getActivity(), zcOrder));
         $(R.id.change_end_con).setOnClickListener(view -> bridge.changeEnd());
     }
 }

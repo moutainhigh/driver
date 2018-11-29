@@ -118,8 +118,6 @@ public class LoginActivity extends RxBaseActivity {
 
         loginBtn = findViewById(R.id.login_button);
         loginBtn.setOnClickListener(v -> {
-//            login("13518181189", "1234");
-
             if (!checkboxAgreement.isChecked()) {
                 ToastUtil.showMessage(LoginActivity.this, getString(R.string.please_agree_agreement));
                 return;
@@ -483,9 +481,12 @@ public class LoginActivity extends RxBaseActivity {
 //                getSetting(employ);
 //            })));
 //        }
+
+        XApp.getPreferencesEditor().putString(Config.SP_TOKEN, "").apply();
+
         String randomStr = RsaUtils.getRandomString(16);
-        Log.e("hufeng/randomStr",randomStr);
-        XApp.getPreferencesEditor().putString(Config.AES_PASSWORD,randomStr).apply();
+        Log.e("hufeng/randomStr", randomStr);
+        XApp.getPreferencesEditor().putString(Config.AES_PASSWORD, randomStr).apply();
 
         String name_rsa = null;
         String pws_rsa = null;
@@ -538,24 +539,27 @@ public class LoginActivity extends RxBaseActivity {
             editor.putString(Config.SP_LOGIN_PSW, AesUtil.aesEncrypt(psw, AesUtil.AAAAA));
             editor.apply();
 
-//            List<SubSetting> settingList = GsonUtil.parseToList(settingResult.appSetting, SubSetting[].class);
-//            if (settingList != null) {
-//                for (SubSetting sub : settingList) {
-//                    if (Config.ZHUANCHE.equals(sub.businessType)) {
-//                        ZCSetting zcSetting = GsonUtil.parseJson(sub.subJson, ZCSetting.class);
             if (settingResult.data != null) {
-                ZCSetting.deleteAll();
-                settingResult.data.save();
-            }
-//                    } else if ("daijia".equals(sub.businessType)) {
+                for (ZCSetting sub : settingResult.data) {
+                    if (employ.serviceType.equals(sub.serviceType)) {
+                        ZCSetting.deleteAll();
+                        sub.save();
+                    }
+//                    if (Config.ZHUANCHE.equals(sub.serviceType)) {
+//                        ZCSetting zcSetting = GsonUtil.parseJson(sub.subJson, ZCSetting.class);
+//                        if (settingResult.data != null) {
+//                            ZCSetting.deleteAll();
+//                            settingResult.data.save();
+//                        }
+//                    } else if (Config.TAXI.equals(sub.serviceType)) {
 //                        Setting djSetting = GsonUtil.parseJson(sub.subJson, Setting.class);
 //                        if (djSetting != null) {
 //                            Setting.deleteAll();
 //                            djSetting.save();
 //                        }
 //                    }
-//                }
-//            }
+                }
+            }
 
             pushBinding(employ.id);
 

@@ -467,11 +467,11 @@ public interface McService {
     );
 
     /**
-     * 获取APP配置  现在主要只有专车的
+     * 获取APP配置
      *
      * @return
      */
-    @GET("api/v1/taxi_online/config/app/get")
+    @GET("api/v1/public/driver/app")
     Observable<SettingResult> getAppSetting();
 
 

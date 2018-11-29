@@ -15,9 +15,8 @@ public class Config {
     /**
      * 主机地址
      */
-    public static final String HOST = "http://10.10.2.37:10001/";
-//    public static final String HOST = "https://api.xiaokayun.cn/";//线上地址
-//    public static final String HOST = "http://api.xiaokakj.cn/";//测试服地址
+    public static final String HOST = "http://10.10.2.130:10001/";
+//    public static final String HOST = "http://ziyun.xiaokakj.com/";//线上地址
 
     /**
      * MQTT配置

@@ -4,8 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class SubSetting {
 
-    //zhuanche,daijia
-    @SerializedName("business_type")
+    //zhuanche,taxi
+    @SerializedName("serviceType")
     public String businessType;
 
     @SerializedName("setting")

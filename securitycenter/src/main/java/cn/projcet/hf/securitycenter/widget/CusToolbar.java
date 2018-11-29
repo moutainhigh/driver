@@ -40,7 +40,7 @@ public class CusToolbar extends RelativeLayout {
     }
 
     public void init() {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.bar_layout, this);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_bar, this);
         leftIcon = view.findViewById(R.id.left_icon);
         title = view.findViewById(R.id.title);
         rightIcon = view.findViewById(R.id.right_icon);

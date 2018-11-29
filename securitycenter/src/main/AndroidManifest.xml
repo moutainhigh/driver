@@ -1,2 +1,26 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cn.projcet.hf.securitycenter" />
+    package="cn.projcet.hf.securitycenter" >
+
+    <application>
+        <activity
+            android:name=".activity.EmergeActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.CallPoliceActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.AddEmergeActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.LuyinActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.WebActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait"/>
+    </application>
+</manifest>

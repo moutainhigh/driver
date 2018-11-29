@@ -50,23 +50,23 @@
             android:textColor="@android:color/white"
             android:textSize="16sp" />
 
-        <View
-            android:layout_width="100dp"
-            android:layout_height="0.1dp"
-            android:background="@color/dark_gray" />
+        <!--<View-->
+            <!--android:layout_width="100dp"-->
+            <!--android:layout_height="0.1dp"-->
+            <!--android:background="@color/dark_gray" />-->
 
-        <TextView
-            android:id="@+id/pop_same_order"
-            android:layout_width="100dp"
-            android:layout_height="0dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:paddingBottom="8dp"
-            android:paddingTop="8dp"
-            android:text="@string/same_order_driver"
-            android:textColor="@android:color/white"
-            android:textSize="16sp" />
+        <!--<TextView-->
+            <!--android:id="@+id/pop_same_order"-->
+            <!--android:layout_width="100dp"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center"-->
+            <!--android:paddingBottom="8dp"-->
+            <!--android:paddingTop="8dp"-->
+            <!--android:text="@string/same_order_driver"-->
+            <!--android:textColor="@android:color/white"-->
+            <!--android:textSize="16sp" />-->
 
         <View
             android:layout_width="100dp"
@@ -88,25 +88,25 @@
             android:textColor="@android:color/white"
             android:textSize="16sp" />
 
-        <View
-            android:layout_width="100dp"
-            android:layout_height="0.1dp"
-            android:background="@color/dark_gray" />
+        <!--<View-->
+            <!--android:layout_width="100dp"-->
+            <!--android:layout_height="0.1dp"-->
+            <!--android:background="@color/dark_gray" />-->
 
-        <TextView
-            android:id="@+id/pop_order_transfer"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:paddingBottom="8dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingTop="8dp"
-            android:text="@string/order_transfer"
-            android:textColor="@android:color/white"
-            android:textSize="16sp" />
+        <!--<TextView-->
+            <!--android:id="@+id/pop_order_transfer"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center"-->
+            <!--android:paddingBottom="8dp"-->
+            <!--android:paddingLeft="8dp"-->
+            <!--android:paddingRight="8dp"-->
+            <!--android:paddingTop="8dp"-->
+            <!--android:text="@string/order_transfer"-->
+            <!--android:textColor="@android:color/white"-->
+            <!--android:textSize="16sp" />-->
 
     </LinearLayout>
 </LinearLayout>

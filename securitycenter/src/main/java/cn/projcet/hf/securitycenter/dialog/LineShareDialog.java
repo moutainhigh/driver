@@ -32,7 +32,8 @@ public class LineShareDialog {
     private CusBottomSheetDialog dialog;
 
     public LineShareDialog(Context context) {
-        View view = LayoutInflater.from(context).inflate(R.layout.layout_main, null, false);
+        this.context = context;
+        View view = LayoutInflater.from(context).inflate(R.layout.layout_line_share, null, false);
 
         lin_no_content = view.findViewById(R.id.lin_no_content);
         btn_call_car = view.findViewById(R.id.btn_call_car);
@@ -45,6 +46,7 @@ public class LineShareDialog {
         dialog = new CusBottomSheetDialog(context);
         dialog.setCancelable(false);
         dialog.setContentView(view);
+
         getData();
         initView();
     }
