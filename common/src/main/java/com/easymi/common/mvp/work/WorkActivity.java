@@ -417,6 +417,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         bottomBtnCon.setVisibility(View.GONE);
         MqttManager.getInstance().pushLocNoLimit(new BuildPushData(EmUtil.getLastLoc()));
         presenter.indexOrders();
+        swipeRefreshLayout.setRefreshing(true);
+        hideEmpty();
+        recyclerView.setVisibility(View.VISIBLE);
 //        Employ employ = EmUtil.getEmployInfo();
 //        employ.status = 2;
 //        employ.updateAll();
@@ -428,6 +431,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         listenOrderCon.setVisibility(View.GONE);
         rippleBackground.stopRippleAnimation();
         bottomBtnCon.setVisibility(View.VISIBLE);
+        swipeRefreshLayout.setRefreshing(false);
+        showEmpty(0);
+        recyclerView.setVisibility(View.GONE);
 //        Employ employ = EmUtil.getEmployInfo();
 //        employ.status = 1;
 //        employ.updateAll();
