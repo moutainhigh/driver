@@ -102,6 +102,8 @@ public class FlowActivity extends RxBaseActivity implements
 
     public static boolean isMapTouched = false;
 
+    private boolean isOrderLoadOk = false;//订单查询是否完成
+
     @Override
     public boolean isEnableSwipe() {
         return false;
@@ -144,7 +146,8 @@ public class FlowActivity extends RxBaseActivity implements
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, result2 -> {
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, false, result2 -> {
+            isOrderLoadOk = true;
             List<OrderCustomer> orderCustomers = result2.getData();
             for (int i = 0; i < orderCustomers.size(); i++) {
                 OrderCustomer orderCustomer = orderCustomers.get(i);
@@ -153,8 +156,24 @@ public class FlowActivity extends RxBaseActivity implements
                 orderCustomer.num = i;
                 orderCustomer.acceptSequence = i;
                 orderCustomer.sendSequence = i;
-                orderCustomer.status = 0;
-                orderCustomer.subStatus = 0;
+                //后端状态与本地状态衔接 这些仅仅针对于本地数据库首次创建时
+                if (orderCustomer.status <= OrderCustomer.CITY_LINE_STATUS_NEW) {
+                    orderCustomer.status = 0;
+                    orderCustomer.subStatus = 0;
+                } else if (orderCustomer.status == OrderCustomer.CITY_LINE_STATUS_TAKE) {
+                    orderCustomer.status = 0;
+                    orderCustomer.subStatus = 1;
+                } else if (orderCustomer.status == OrderCustomer.CITY_LINE_STATUS_RUN) {
+                    orderCustomer.status = 3;
+                    orderCustomer.subStatus = 1;
+                } else if (orderCustomer.status == OrderCustomer.CITY_LINE_STATUS_SKIP) {
+                    orderCustomer.status = 5;
+                    orderCustomer.subStatus = 1;
+                } else if (orderCustomer.status == OrderCustomer.CITY_LINE_STATUS_FINISH) {
+                    orderCustomer.status = 4;
+                    orderCustomer.subStatus = 1;
+                }
+
 
                 orderCustomer.orderId = zxOrder.orderId;
                 orderCustomer.orderType = zxOrder.orderType;
@@ -172,10 +191,11 @@ public class FlowActivity extends RxBaseActivity implements
                 }
                 orderCustomer.saveOrUpdate();
             }
+            showFragmentByStatus();
         })));
     }
 
-    public void baseToZX(BaseOrder baseOrder){
+    public void baseToZX(BaseOrder baseOrder) {
         zxOrder = new ZXOrder();
 
         zxOrder.orderId = baseOrder.scheduleId;
@@ -318,7 +338,7 @@ public class FlowActivity extends RxBaseActivity implements
                 customer.status = 3;
                 customer.updateStatus();
             } else { //跳过接的直接置为跳过送状态
-                customer.status = 6;
+                customer.status = 5;
                 customer.updateStatus();
             }
         }
@@ -387,7 +407,9 @@ public class FlowActivity extends RxBaseActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        showFragmentByStatus();
+        if (isOrderLoadOk) {
+            showFragmentByStatus();
+        }
     }
 
     /**

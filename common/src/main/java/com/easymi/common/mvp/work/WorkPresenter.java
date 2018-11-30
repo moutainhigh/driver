@@ -25,6 +25,7 @@ import com.easymi.component.Config;
 import com.easymi.component.EmployStatus;
 import com.easymi.component.ZXOrderStatus;
 import com.easymi.component.app.XApp;
+import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.entity.SystemConfig;
@@ -264,10 +265,18 @@ public class WorkPresenter implements WorkContract.Presenter {
                                 }
                             } else if (TextUtils.equals(order.serviceType, Config.CITY_LINE)) {
                                 if (DymOrder.exists(order.scheduleId, order.serviceType)) {
-                                    //专线 本地有
-//                                    dymOrder = DymOrder.findByIDType(order.scheduleId, order.serviceType);
-//                                    dymOrder.orderStatus = order.scheduleStatus;
-//                                    dymOrder.updateStatus();
+                                    //专线 本地有 状态同步
+                                    dymOrder = DymOrder.findByIDType(order.scheduleId, order.serviceType);
+                                    if(order.status <= BaseOrder.SCHEDULE_STATUS_PREPARE){
+                                        dymOrder.orderStatus = ZXOrderStatus.WAIT_START;
+                                    } else if(order.status == BaseOrder.SCHEDULE_STATUS_TAKE){
+                                        dymOrder.orderStatus = ZXOrderStatus.ACCEPT_ING;
+                                    } else if(order.status == BaseOrder.SCHEDULE_STATUS_RUN){
+                                        dymOrder.orderStatus = ZXOrderStatus.SEND_ING;
+                                    } else if(order.status == BaseOrder.SCHEDULE_STATUS_FINISH){
+                                        dymOrder.orderStatus = ZXOrderStatus.SEND_OVER;
+                                    }
+                                    dymOrder.updateStatus();
                                 } else {
                                     //专线 本地没有
                                     dymOrder = new DymOrder();

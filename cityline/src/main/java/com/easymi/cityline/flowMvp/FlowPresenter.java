@@ -1,7 +1,9 @@
 package com.easymi.cityline.flowMvp;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.navi.AMapNavi;
@@ -35,6 +37,8 @@ import com.easymi.component.DJOrderStatus;
 import com.easymi.component.activity.NaviActivity;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
+import com.easymi.component.network.ErrCode;
+import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.rxmvp.RxManager;
@@ -202,12 +206,31 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
 
     @Override
     public void arriveStart(OrderCustomer orderCustomer) {
-        view.getManager().add(model.arriveStart(orderCustomer.id).subscribe(new MySubscriber<Object>(context, true, true, new NoErrSubscriberListener<Object>() {
-            @Override
-            public void onNext(Object o) {
-                view.arriveStartSuc(orderCustomer);
-            }
-        })));
+        view.getManager().add(model.arriveStart(orderCustomer.id).subscribe(new MySubscriber<>(context,
+                true,
+                true,
+                new HaveErrSubscriberListener<Object>() {
+                    @Override
+                    public void onNext(Object o) {
+                        view.arriveStartSuc(orderCustomer);
+                    }
+
+                    @Override
+                    public void onError(int code) {
+                        if (code == ErrCode.ORDER_STATUS_ERR.getCode()) {
+                            AlertDialog dialog = new AlertDialog.Builder(context)
+                                    .setMessage("请确认客户是否已完成支付，否则无法进行下一步操作")
+                                    .setPositiveButton("了解", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    })
+                                    .create();
+                            dialog.show();
+                        }
+                    }
+                })));
     }
 
     @Override

@@ -21,6 +21,39 @@ import java.util.List;
  */
 
 public class OrderCustomer implements Serializable {
+    /**
+     * 专线订单未支付
+     */
+    public static final int CITY_LINE_STATUS_PAY = 1;
+    /**
+     * 专线订单已支付
+     */
+    public static final int CITY_LINE_STATUS_NEW = 5;
+    /**
+     * 专线订单等待接人
+     */
+    public static final int CITY_LINE_STATUS_TAKE = 10;
+    /**
+     * 专线订单接人后出发
+     */
+    public static final int CITY_LINE_STATUS_RUN = 15;
+    /**
+     * 专线订单跳过执行
+     */
+    public static final int CITY_LINE_STATUS_SKIP = 20;
+    /**
+     * 专线订单已到达终点站
+     */
+    public static final int CITY_LINE_STATUS_FINISH = 25;
+    /**
+     * 专线订单已评价
+     */
+    public static final int CITY_LINE_STATUS_REVIEW = 30;
+    /**
+     * 专线订单已退票
+     */
+    public static final int CITY_LINE_STATUS_CANCEL = 35;
+
     public long id;//主键
 
     @SerializedName("passengerId")
@@ -78,7 +111,7 @@ public class OrderCustomer implements Serializable {
         if (status == 4) {
             return "已送";
         }
-        if (status == 6) {
+        if (status == 5) {
             return "跳过";
         }
         return "";

@@ -138,6 +138,11 @@ public class MySubscriber<T> extends Subscriber<T> implements ProgressDismissLis
                     //服务人员不存在时，退出到登录界面
                     EmUtil.employLogout(context);
                 }
+//                else if(((ApiException) e).getErrCode() == ErrCode.ORDER_STATUS_ERR.getCode()){
+//                    //订单状态错误
+//                    //如遇客户未支付也会提示该错误
+//
+//                }
             } else {
                 ToastUtil.showMessage(context, context.getString(R.string.unknown_error));//服务器定义的错误
             }
