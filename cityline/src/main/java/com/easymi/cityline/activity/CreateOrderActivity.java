@@ -370,7 +370,7 @@ public class CreateOrderActivity extends RxBaseActivity {
         String orderAddress = new Gson().toJson(models);
         Observable<Object> observable = ApiManager.getInstance().createApi(Config.HOST, CLService.class)
                 .createOrder(
-                        System.currentTimeMillis(),
+                        System.currentTimeMillis()/1000,
                         "driver",
                         stationResult.endStationVo.id,
                         orderAddress,

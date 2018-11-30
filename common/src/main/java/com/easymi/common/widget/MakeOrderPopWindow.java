@@ -97,9 +97,9 @@ public class MakeOrderPopWindow extends PopupWindow implements View.OnClickListe
             HashMap<String,Object> map = new HashMap<String,Object>();
             map.put("type",types[i]);
             switch (types[i]){
-                case Config.ZHUANCHE:
-                    map.put("name",context.getResources().getString(R.string.create_zhuanche));
-                    break;
+//                case Config.ZHUANCHE:
+//                    map.put("name",context.getResources().getString(R.string.create_zhuanche));
+//                    break;
                 case Config.CITY_LINE:
                     map.put("name",context.getResources().getString(R.string.create_zhuanxian));
                     break;

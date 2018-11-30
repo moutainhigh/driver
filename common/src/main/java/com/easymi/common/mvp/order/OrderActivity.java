@@ -42,12 +42,11 @@ public class OrderActivity extends RxBaseActivity {
         toolbar.setLeftIcon(R.drawable.ic_arrow_back, v -> finish());
         if (EmUtil.getEmployInfo().serviceType.equals(Config.CITY_LINE)){
             toolbar.setRightText(R.string.com_make_order, v -> {
-//                if (popWindow.isShowing()) {
-//                    popWindow.dismiss();
-//                } else {
-//                    popWindow.show(v);
-//                }
-
+                if (popWindow.isShowing()) {
+                    popWindow.dismiss();
+                } else {
+                    popWindow.show(v);
+                }
             });
         }
     }
@@ -78,9 +77,9 @@ public class OrderActivity extends RxBaseActivity {
         fragments = new ArrayList<>();
         fragments.add(new AccpteFragment());
         fragments.add(new AssignFragment());
-        if (ZCSetting.findOne().grabOrder == 1){
-            fragments.add(new GrabFragment());
-        }
+//        if (ZCSetting.findOne().grabOrder == 1){
+//            fragments.add(new GrabFragment());
+//        }
         viewPager.setOffscreenPageLimit(fragments.size());
         adapter = new VpAdapter(getSupportFragmentManager(), fragments);
         viewPager.setAdapter(adapter);
@@ -88,12 +87,12 @@ public class OrderActivity extends RxBaseActivity {
 
         tabLayout.getTabAt(0).setText(getString(R.string.com_accept_order));
 
-        if (ZCSetting.findOne().grabOrder == 1){
+//        if (ZCSetting.findOne().grabOrder == 1){
+//            tabLayout.getTabAt(1).setText(getString(R.string.com_assign_order));
+//            tabLayout.getTabAt(2).setText(getString(R.string.com_grab_order));
+//        }else {
             tabLayout.getTabAt(1).setText(getString(R.string.com_assign_order));
-            tabLayout.getTabAt(2).setText(getString(R.string.com_grab_order));
-        }else {
-            tabLayout.getTabAt(1).setText(getString(R.string.com_assign_order));
-        }
+//        }
 
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -103,21 +102,21 @@ public class OrderActivity extends RxBaseActivity {
 
             @Override
             public void onPageSelected(int position) {
-                if (ZCSetting.findOne().grabOrder == 1){
+//                if (ZCSetting.findOne().grabOrder == 1){
+//                    if (position == 0){
+//                        ((AccpteFragment)fragments.get(position)).setRefresh();
+//                    }else if (position == 1){
+//                        ((AssignFragment)fragments.get(position)).setRefresh();
+//                    }else if (position == 2){
+//                        ((GrabFragment)fragments.get(position)).setRefresh();
+//                    }
+//                }else {
                     if (position == 0){
                         ((AccpteFragment)fragments.get(position)).setRefresh();
                     }else if (position == 1){
                         ((AssignFragment)fragments.get(position)).setRefresh();
-                    }else if (position == 2){
-                        ((GrabFragment)fragments.get(position)).setRefresh();
                     }
-                }else {
-                    if (position == 0){
-                        ((AccpteFragment)fragments.get(position)).setRefresh();
-                    }else if (position == 1){
-                        ((AssignFragment)fragments.get(position)).setRefresh();
-                    }
-                }
+//                }
             }
 
             @Override

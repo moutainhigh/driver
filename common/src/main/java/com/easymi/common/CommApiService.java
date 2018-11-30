@@ -563,7 +563,7 @@ public interface CommApiService {
      */
     @GET("api/v1/public/driver/get/{id}")
     Observable<LoginResult> getDriverInfo(@Path("id") Long driverId,
-                                          @Query("app_key") String appKey);
+                                          @Query("appKey") String appKey);
 
     /**
      * 通过http上传位置信息，30秒一次
@@ -637,8 +637,8 @@ public interface CommApiService {
      */
     @FormUrlEncoded
     @PUT("api/v1/public/order/refusal")
-    Observable<EmResult> refuseOrder(@Query("orderId") long orderId,
-                                     @Query("serviceType") String serviceType,
+    Observable<EmResult> refuseOrder(@Field("orderId") long orderId,
+                                     @Field("serviceType") String serviceType,
                                      @Field("remark") String remark);
 
     /**

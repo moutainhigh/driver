@@ -116,8 +116,8 @@ public interface McService {
      * @param alias
      * @return
      */
-    @GET("driver/api/v1/articlebyalias")
-    Observable<ArticleResult> getArticle(@Query("app_key") String appKey,
+    @GET("v1/public/article_configure/get")
+    Observable<ArticleResult> getArticle(@Query("appKey") String appKey,
                                          @Query("alias") String alias,
                                          @Query("companyId") Long companyId);
 
@@ -463,7 +463,7 @@ public interface McService {
     @POST("api/v1/public/driver/login")
     Observable<LoginResult> loginByPW(@Field("phone") String phone,
                                       @Field("password") String password
-                                    , @Field("randomStr") String randomStr
+            , @Field("randomStr") String randomStr
     );
 
     /**
@@ -653,4 +653,14 @@ public interface McService {
      */
     @GET("api/v1/public/statistics/evaluate_grade/get")
     Observable<RateResult> driverstar();
+
+    /**
+     * 下线接口
+     *
+     * @param id
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/public/driver/offline")
+    Observable<EmResult> offline(@Field("id") Long id, @Field("companyId") Long companyId);
 }

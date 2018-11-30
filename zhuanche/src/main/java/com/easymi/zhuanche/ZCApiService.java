@@ -300,7 +300,7 @@ public interface ZCApiService {
      * @return
      */
     @FormUrlEncoded
-    @PUT("api/v1/public/order/cancel")
+    @POST("api/v1/public/order/cancel")
     Observable<EmResult> cancelOrder(@Field("orderId") Long orderId,
                                      @Field("memo") String memo);
 
@@ -496,7 +496,7 @@ public interface ZCApiService {
     @FormUrlEncoded
     @PUT("api/v1/public/order/refusal")
     Observable<EmResult> refuseOrder(@Field("orderId") long orderId,
-                                     @Query("serviceType") String serviceType,
+                                     @Field("serviceType") String serviceType,
                                      @Field("remark") String remark);
 
     /**

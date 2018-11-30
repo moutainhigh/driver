@@ -101,6 +101,7 @@
 
     <string name="no_order">暂无订单，赶快去接单吧</string>
     <string name="no_ann_and_notice">暂无通知和公告</string>
+    <string name="no_work">空闲中,快上线接单吧</string>
 
     <string name="freezed">您的账户已被冻结，请联系管理员</string>
     <string name="unbunding">您的账户已被管理员解绑</string>

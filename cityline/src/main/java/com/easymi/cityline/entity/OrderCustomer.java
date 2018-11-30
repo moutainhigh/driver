@@ -333,7 +333,7 @@ public class OrderCustomer implements Serializable {
     }
 
     public boolean saveOrUpdate() {
-        if (exists(id, Config.CITY_LINE)) {
+        if (exists(orderId, Config.CITY_LINE)) {
             return this.updateBase();
         } else {
             return this.save();

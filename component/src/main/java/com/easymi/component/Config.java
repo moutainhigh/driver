@@ -15,7 +15,7 @@ public class Config {
     /**
      * 主机地址
      */
-//    public static final String HOST = "http://10.10.2.37:10001/";
+//    public static final String HOST = "http://10.10.2.12:10001/";
     public static final String HOST = "http://api.xiaokakj.com/";//线上地址
 
     /**

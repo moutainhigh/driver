@@ -91,7 +91,7 @@ public enum ErrCode {
     /**
      * 查询错误
      */
-    QUERY_VALIDATE_ERR(40004, "查询错误"),
+    QUERY_VALIDATE_ERR(40004, "未查到相关信息哦"),
 
     /**
      * 数据不存在

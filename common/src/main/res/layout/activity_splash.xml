@@ -3,12 +3,17 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/splash"
+    <!--<pl.droidsonroids.gif.GifImageView-->
+        <!--android:id="@+id/splash"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="@mipmap/splash"-->
+        <!--/>-->
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@mipmap/splash"
-        />
+        android:src="@mipmap/splash"
+        android:scaleType="fitXY"/>
 
     <TextView
         android:id="@+id/jump_over"

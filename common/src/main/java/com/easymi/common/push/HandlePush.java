@@ -118,13 +118,17 @@ public class HandlePush implements FeeChangeSubject {
                 message.setData(bundle);
                 handler.sendMessage(message);
             } else if (msg.equals("notice")) {//通知
-                long id = jb.optJSONObject("data").optLong("id");
+//                long id = jb.optJSONObject("data").optLong("id");
+                String data = jb.optString("data");
+                JSONObject dt = new JSONObject(data);
 
-                loadNotice(id);
-            } else if (msg.equals("message")) {//公告
-                long id = jb.optJSONObject("data").optLong("id");
+                loadAnn(dt.optLong("id"));
+            } else if (msg.equals("message")) {//公告  )
+//                long id = jb.optJSONObject("data").optLong("id");
+                String data = jb.optString("data");
+                JSONObject dt = new JSONObject(data);
 
-                loadAnn(id);
+                loadNotice(dt.optLong("id"));
             } else if (msg.equals("freezed")) {//冻结
                 XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.freezed));
