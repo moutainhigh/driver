@@ -4,7 +4,6 @@ package cn.projcet.hf.securitycenter.network;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
-import cn.projcet.hf.securitycenter.CApp;
 import cn.projcet.hf.securitycenter.CenterConfig;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
@@ -47,7 +46,7 @@ public class ApiManager {
         HttpLoggingInterceptor logInterceptor = new HttpLoggingInterceptor();   //拦截器用来输出请求日志方便调试
         logInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY); //日志输出等级为BODY(打印请求和返回值的头部和body信息)
 
-        Ssl ssl = new Ssl(CApp.getInstance(), "");
+//        Ssl ssl = new Ssl(CApp.getInstance(), "");
 
         EncryptInterceptor encryptInterceptor = new EncryptInterceptor();
 
@@ -56,14 +55,15 @@ public class ApiManager {
         builder.readTimeout(16000, TimeUnit.MILLISECONDS)
                 .connectTimeout(16000, TimeUnit.MILLISECONDS)
                 .addInterceptor(encryptInterceptor)
+                .addInterceptor(new TokenInterceptor())//token拦截器
                 .addInterceptor(logInterceptor) //添加日志拦截器,进行输出日志
                 .retryOnConnectionFailure(true) //失败重连
                 ;
 //                .cache(cache);
 
-        if (CenterConfig.HOST.contains("https://")) {
-            builder.sslSocketFactory(ssl.getSslSocketFactory(), ssl.getTrustManager());
-        }
+//        if (CenterConfig.HOST.contains("https://")) {
+//            builder.sslSocketFactory(ssl.getSslSocketFactory(), ssl.getTrustManager());
+//        }
 
         mOkHttpClient = builder.build();
     }

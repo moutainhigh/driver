@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.easymi.component.R;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.utils.Log;
 
 /**
  * Created by developerLzh on 2017/5/4.
@@ -70,7 +71,7 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
     @Override
     public void onPause() {
         super.onPause();
-        webView.loadData("about:blank", "text/html", "UTF-8");
+//        webView.loadData("about:blank", "text/html", "UTF-8");
         webView.onPause();
     }
 
@@ -125,9 +126,11 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
         webView.getSettings().setUseWideViewPort(true);
         webView.getSettings().setLoadWithOverviewMode(true);
 
+        //解决部分H5中的一些控件标签可能使用后android中不支持 造成的白屏不显示问题
+        webView.getSettings().setDomStorageEnabled(true);
+
         webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
         webView.loadUrl(url);
-
 
         webView.setWebViewClient(new WebViewClient() {
 

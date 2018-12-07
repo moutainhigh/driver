@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
-import cn.projcet.hf.securitycenter.CApp;
 import cn.projcet.hf.securitycenter.CenterConfig;
 import cn.projcet.hf.securitycenter.utils.AesUtil;
 import okhttp3.FormBody;
@@ -119,7 +118,7 @@ public class EncryptInterceptor implements Interceptor {
         try {
             //将默认的url编码还原后加密在url编码
             String decoderStr = URLDecoder.decode(content, "utf-8");
-            value = AesUtil.aesEncrypt(decoderStr, CApp.getMyPreferences().getString(CenterConfig.AES_PASSWORD,AesUtil.AAAAA));
+            value = AesUtil.aesEncrypt(decoderStr, CenterConfig.AES_KEY);
             value = URLEncoder.encode(value, "utf-8");
         } catch (Exception e) {
             e.printStackTrace();

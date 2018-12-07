@@ -20,6 +20,7 @@ import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.common.result.SettingResult;
 import com.easymi.common.result.SystemResult;
+import com.easymi.common.result.VehicleResult;
 import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.Config;
 import com.easymi.component.EmployStatus;
@@ -29,6 +30,7 @@ import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.entity.SystemConfig;
+import com.easymi.component.entity.Vehicle;
 import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.ErrCode;
@@ -38,6 +40,7 @@ import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
@@ -100,139 +103,10 @@ public class WorkPresenter implements WorkContract.Presenter {
 //        }
     }
 
-//    public void cityLineOrder() {
-//        Observable<CityLineResult> observable = model.getCityLineOrders(EmUtil.getEmployId(), Config.APP_KEY);
-//        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context,
-//                false, false, new HaveErrSubscriberListener<CityLineResult>() {
-//            @Override
-//            public void onNext(CityLineResult cityLineResult) {
-//                view.stopRefresh();
-//                if (cityLineResult.data != null) {
-//                    List<CityLine> orders = new ArrayList<>();
-//
-//                    if (cityLineResult.data.size() != 0) {
-//                        CityLine header = new CityLine(CityLine.ITEM_HEADER);
-//                        orders.add(header);
-//
-//                        for (CityLine cityLine : cityLineResult.data) {
-//                            cityLine.viewType = MultipleOrder.ITEM_POSTER;
-//                            orders.add(cityLine);
-//                        }
-//                    }
-//                    view.showLineOrders(orders);
-//                } else {
-//                    startLocService();//重启定位更改定位周期
-//                    view.showLineOrders(null);
-//                }
-//
-//
-//            }
-//
-//            @Override
-//            public void onError(int code) {
-//                view.stopRefresh();
-//                startLocService();//重启定位更改定位周期
-//                view.showLineOrders(null);
-//            }
-//        })));
-//    }
-
     @Override
     public void indexOrders() {
         view.showOrders(null);
-//        long driverId = EmUtil.getEmployId();
-//
-//        Observable<QueryOrdersResult> observable = model.indexOrders(driverId, EmUtil.getAppKey());
-//        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false, false, new HaveErrSubscriberListener<QueryOrdersResult>() {
-//            @Override
-//            public void onNext(QueryOrdersResult emResult) {
-//                view.stopRefresh();
-//                List<MultipleOrder> orders = emResult.data;
-//                List<MultipleOrder> nowOrders = new ArrayList<>();
-//                List<MultipleOrder> yuyueOrders = new ArrayList<>();
-//                if (orders != null) {
-//                    for (MultipleOrder order : orders) {
-//                        DymOrder dymOrder;
-//                        if (DymOrder.exists(order.id, order.serviceType)) {//校验本地订单与服务器订单
-//                            dymOrder = DymOrder.findByIDType(order.id, order.serviceType);
-//                            dymOrder.orderStatus = order.status;
-//                            dymOrder.updateStatus();
-//                        } else {//服务器有本地没得 创建数据
-//                            dymOrder = new DymOrder(order.id, order.serviceType,
-//                                    order.passengerId, order.status);
-//                            dymOrder.save();
-//                        }
-//
-//                        order.viewType = MultipleOrder.ITEM_POSTER;
-//                        if (order.isBookOrder == 2) {
-//                            nowOrders.add(order);
-//                        } else {
-//                            yuyueOrders.add(order);
-//                        }
-//                    }
-//
-//                    List<DymOrder> allDym = DymOrder.findAll();
-//                    for (DymOrder dymOrder : allDym) {
-//                        boolean isExist = false;
-//                        for (MultipleOrder order : orders) {
-//                            if (dymOrder.orderId == order.id
-//                                    && dymOrder.orderType.equals(order.serviceType)) {
-//                                isExist = true;
-//                                break;
-//                            }
-//                        }
-//                        if (!isExist) {
-//                            dymOrder.delete();
-//                        }
-//                    }
-//                    orders.clear();
-//                    //预约header
-//                    if (yuyueOrders.size() != 0) {
-//                        MultipleOrder header1 = new MultipleOrder(MultipleOrder.ITEM_HEADER);
-//                        header1.isBookOrder = 1;
-//                        orders.add(header1);
-//                    }
-//
-//                    //预约单
-//                    orders.addAll(yuyueOrders);
-//
-//                    //即时header
-//                    if (nowOrders.size() != 0) {
-//                        MultipleOrder header2 = new MultipleOrder(MultipleOrder.ITEM_HEADER);
-//                        header2.isBookOrder = 2;
-//                        orders.add(header2);
-//                    }
-//                    //即时单
-//                    orders.addAll(nowOrders);
-//                } else {
-//                    DymOrder.deleteAll();
-//                    orders = new ArrayList<>();
-//                }
-//
-//                startLocService();//重启定位更改定位周期
-//
-//                view.showOrders(orders);
-//            }
-//
-//            @Override
-//            public void onError(int code) {
-//                view.stopRefresh();
-//                startLocService();//重启定位更改定位周期
-//                view.showOrders(null);
-//            }
-//        })));
-//        view.showOrders(initRecyclerData());
 
-//        //todo 需要根据业务区分查询那个业务的订单
-//        if (EmUtil.getEmployInfo().serviceType.equals(Config.CITY_LINE)){
-//            cityLineOrder();
-//        }else {
-//            Observable<QueryOrdersResult> observable = null;
-//            if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)){
-//                observable = model.indexOrders(EmUtil.getEmployId(), EmUtil.getAppKey());
-//            }else if (EmUtil.getEmployInfo().serviceType.equals(Config.TAXI)){
-//                observable = model.getTaxiOrders(EmUtil.getEmployInfo().phone,1,100,"5,10,15,20,25,28");
-//            }
         Observable<QueryOrdersResult> observable = model.indexOrders(EmUtil.getEmployId(), EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false, false, new HaveErrSubscriberListener<QueryOrdersResult>() {
             @Override
@@ -267,13 +141,13 @@ public class WorkPresenter implements WorkContract.Presenter {
                                 if (DymOrder.exists(order.scheduleId, order.serviceType)) {
                                     //专线 本地有 状态同步
                                     dymOrder = DymOrder.findByIDType(order.scheduleId, order.serviceType);
-                                    if(order.status <= BaseOrder.SCHEDULE_STATUS_PREPARE){
+                                    if (order.status <= BaseOrder.SCHEDULE_STATUS_PREPARE) {
                                         dymOrder.orderStatus = ZXOrderStatus.WAIT_START;
-                                    } else if(order.status == BaseOrder.SCHEDULE_STATUS_TAKE){
+                                    } else if (order.status == BaseOrder.SCHEDULE_STATUS_TAKE) {
                                         dymOrder.orderStatus = ZXOrderStatus.ACCEPT_ING;
-                                    } else if(order.status == BaseOrder.SCHEDULE_STATUS_RUN){
+                                    } else if (order.status == BaseOrder.SCHEDULE_STATUS_RUN) {
                                         dymOrder.orderStatus = ZXOrderStatus.SEND_ING;
-                                    } else if(order.status == BaseOrder.SCHEDULE_STATUS_FINISH){
+                                    } else if (order.status == BaseOrder.SCHEDULE_STATUS_FINISH) {
                                         dymOrder.orderStatus = ZXOrderStatus.SEND_OVER;
                                     }
                                     dymOrder.updateStatus();
@@ -295,12 +169,12 @@ public class WorkPresenter implements WorkContract.Presenter {
                         for (DymOrder dymOrder : allDym) {
                             boolean isExist = false;
                             for (MultipleOrder order : orders) {
-                                if (dymOrder.orderType.equals(Config.CITY_LINE)){
+                                if (dymOrder.orderType.equals(Config.CITY_LINE)) {
                                     if ((dymOrder.orderId == order.scheduleId)) {
                                         isExist = true;
                                         break;
                                     }
-                                }else if (dymOrder.orderType.equals(Config.ZHUANCHE)  || dymOrder.orderType.equals(Config.TAXI) ){
+                                } else if (dymOrder.orderType.equals(Config.ZHUANCHE) || dymOrder.orderType.equals(Config.TAXI)) {
                                     if (dymOrder.orderId == order.orderId) {
                                         isExist = true;
                                         break;
@@ -341,6 +215,7 @@ public class WorkPresenter implements WorkContract.Presenter {
     @Override
     public void online(LoadingButton btn) {
         long driverId = EmUtil.getEmployId();
+        Log.e("hufeng/driverId",XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1)+"");
 
         Observable<EmResult> observable = model.online(driverId, EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, btn, emResult -> {
@@ -352,6 +227,7 @@ public class WorkPresenter implements WorkContract.Presenter {
     @Override
     public void offline() {
         long driverId = EmUtil.getEmployId();
+        Log.e("hufeng/driverId2",driverId+"");
         Observable<EmResult> observable = model.offline(driverId, EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, true,
                 true, emResult -> {
@@ -423,13 +299,6 @@ public class WorkPresenter implements WorkContract.Presenter {
             @Override
             public void onNext(LoginResult result) {
                 Employ employ = result.getEmployInfo();
-//                if (employ.auditType == 2 || employ.auditType == 3 || employ.auditType == 4) {
-//                    view.stopRefresh();
-//                    view.showRegisterDialog(employ.company_phone, employ.auditType, employ.reject);
-//                    return;
-//                }
-//
-//                view.hideRegisterDialog();
 
                 employType = employ.serviceType;
                 String udid = XApp.getMyPreferences().getString(Config.SP_UDID, "");
@@ -447,6 +316,9 @@ public class WorkPresenter implements WorkContract.Presenter {
                 editor.apply();
                 view.showDriverStatus();
                 MqttManager.getInstance().creatConnect();//在查询完服务人员后初始化mqtt
+                if (employ.serviceType.equals(Config.ZHUANCHE) || employ.serviceType.equals(Config.TAXI)) {
+                    driverehicle(employ);
+                }
             }
 
             @Override
@@ -459,9 +331,59 @@ public class WorkPresenter implements WorkContract.Presenter {
         })));
     }
 
-//    //查询附近司机的距离
-//    private double driverKm = 0;
-//    private double zcDriverKm = 0;
+    public void driverehicle(Employ employ) {
+        CommApiService api = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class);
+
+        Observable<VehicleResult> observable = api
+                .driverehicle()
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        new RxManager().add(observable.subscribe(new MySubscriber<>(context, false,
+                true, result -> {
+            if (result == null || result.getCode() != 1) {
+                ToastUtil.showMessage(context, "未绑定车辆车型，不能接单");
+            } else {
+                if (result.data != null && result.data.size() > 0) {
+                    //todo 处理数组中有null的情况
+                    if (result.data.get(0) != null) {
+                        Vehicle vehicle = result.data.get(0);
+                        if (vehicle.serviceType.contains(Config.ZHUANCHE)) {
+                            employ.modelId = vehicle.vehicleModel;
+                            employ.updateAll();
+                        } else if (TextUtils.equals(vehicle.serviceType, Config.TAXI)) {
+                            employ.taxiModelId = vehicle.vehicleModel;
+                            employ.updateAll();
+                        }
+                    }
+                    else if (result.data.get(1) != null) {
+                        Vehicle vehicle = result.data.get(1);
+                        if (TextUtils.equals(vehicle.serviceType, Config.ZHUANCHE)) {
+                            employ.modelId = vehicle.vehicleModel;
+                            employ.updateAll();
+                        }
+                        else if (TextUtils.equals(vehicle.serviceType, Config.TAXI)) {
+                            employ.taxiModelId = vehicle.vehicleModel;
+                            employ.updateAll();
+                        }
+                    }
+
+//                    for (Vehicle vehicle : result.data) {
+//                        //todo 没有区分业务的字段后分开存储车型，多业务会出问题
+//                        if (TextUtils.equals(vehicle.serviceType, Config.ZHUANCHE)) {
+//                            employ.modelId = vehicle.vehicleModel;
+//                            employ.updateAll();
+//                        } else if (TextUtils.equals(vehicle.serviceType, Config.TAXI)) {
+//                            employ.modelId = vehicle.vehicleModel;
+//                            employ.updateAll();
+//                        }
+//                    }
+                }
+            }
+        })));
+    }
+
 
     //能拨打电话
     boolean canCallPhone = true;

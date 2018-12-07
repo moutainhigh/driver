@@ -29,6 +29,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.easymi.common.CommApiService;
 import com.easymi.component.Config;
+import com.easymi.component.activity.WebActivity;
 import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
@@ -237,8 +238,8 @@ public class LoginActivity extends RxBaseActivity {
 
     private void initBox() {
         textAgreement.setOnClickListener(view -> {
-            Intent intent = new Intent(LoginActivity.this, ArticleActivity.class);
-            intent.putExtra("tag", "DriverServiceAgreement");
+            Intent intent = new Intent(LoginActivity.this, WebActivity.class);
+            intent.putExtra("url", "http://h5.xiaokakj.com/#/protocol?articleName=driverLogin&appKey="+Config.APP_KEY);
             intent.putExtra("title", getString(R.string.login_agreement));
             startActivity(intent);
         });
@@ -527,6 +528,7 @@ public class LoginActivity extends RxBaseActivity {
             editor.putBoolean(Config.SP_REMEMBER_PSW, checkboxRemember.isChecked());
             editor.putString(Config.SP_LOGIN_PSW, AesUtil.aesEncrypt(psw, AesUtil.AAAAA));
             editor.apply();
+
 
             if (settingResult.data != null) {
                 for (ZCSetting sub : settingResult.data) {

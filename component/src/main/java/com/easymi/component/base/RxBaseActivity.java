@@ -344,12 +344,14 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
                    int httpCode = intent.getIntExtra("http_custom",0);
                     if (httpCode == 401){
                         ToastUtil.showMessage(context,"验证过期，请重新登陆");
+                        EmUtil.employLogout(context);
                     }else if (httpCode == 403){
                         ToastUtil.showMessage(context,"点太快了，请慢一点");
                     }else if (httpCode == 423){
                         ToastUtil.showMessage(context,"您没有权限做此操作哦");
                     } else if (httpCode == 410) {
                         ToastUtil.showMessage(context,"账号被其他人登陆了哦");
+                        EmUtil.employLogout(context);
                     }
                 }
             }

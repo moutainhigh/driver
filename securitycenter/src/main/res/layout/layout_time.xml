@@ -38,14 +38,19 @@
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
-        <TextView
+        <cn.projcet.hf.securitycenter.widget.wheelview.WheelView
+            android:id="@+id/center_hint"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:text="到"
-            android:textColor="@color/color_333333"
-            android:textSize="17sp"
-            android:gravity="center"/>
+            android:layout_weight="1" />
+        <!--<TextView-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:text="到"-->
+            <!--android:textColor="@color/color_333333"-->
+            <!--android:textSize="17sp"-->
+            <!--android:gravity="center"/>-->
 
         <cn.projcet.hf.securitycenter.widget.wheelview.WheelView
             android:id="@+id/end"

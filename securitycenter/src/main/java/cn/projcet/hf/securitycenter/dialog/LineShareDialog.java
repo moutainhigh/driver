@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import cn.projcet.hf.securitycenter.CenterConfig;
 import cn.projcet.hf.securitycenter.R;
 
 /**
@@ -27,6 +28,7 @@ public class LineShareDialog {
     LinearLayout lin_duanxin;
     LinearLayout lin_QQ;
     TextView tv_content;
+    ImageView iv_close;
 
     private Context context;
     private CusBottomSheetDialog dialog;
@@ -42,6 +44,7 @@ public class LineShareDialog {
         lin_duanxin = view.findViewById(R.id.lin_duanxin);
         lin_QQ = view.findViewById(R.id.lin_QQ);
         tv_content = view.findViewById(R.id.tv_content);
+        iv_close = view.findViewById(R.id.iv_close);
 
         dialog = new CusBottomSheetDialog(context);
         dialog.setCancelable(false);
@@ -52,10 +55,10 @@ public class LineShareDialog {
     }
 
     public void getData(){
-        //todo 需要的数据的获取  是否获取到分享的行程
-        if (true){
+        if (CenterConfig.ORDERID != 0){
             lin_have_content.setVisibility(View.VISIBLE);
             lin_no_content.setVisibility(View.GONE);
+            //todo 如何展示司机相关的信息，以及点击相关分享如何返回到项目进行分享
         }else {
             lin_have_content.setVisibility(View.GONE);
             lin_no_content.setVisibility(View.VISIBLE);
@@ -63,9 +66,11 @@ public class LineShareDialog {
     }
 
     public void initView(){
+        //我知道了
         btn_call_car.setOnClickListener(v -> {
             dialog.dismiss();
         });
+
         lin_weixin.setOnClickListener(v -> {
             dialog.dismiss();
         });
@@ -75,9 +80,14 @@ public class LineShareDialog {
         lin_QQ.setOnClickListener(v -> {
             dialog.dismiss();
         });
+        iv_close.setOnClickListener(v -> {
+            dialog.dismiss();
+        });
     }
 
     public void show(){
         dialog.show();
     }
+
+
 }

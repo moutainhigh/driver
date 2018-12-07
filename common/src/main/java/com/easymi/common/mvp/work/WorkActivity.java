@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -81,6 +82,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.projcet.hf.securitycenter.dialog.MainDialog;
+
 
 /**
  * Created by developerLzh on 2017/11/3 0003.
@@ -177,7 +179,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
             onLineBtn.setClickable(false);
             onLineBtn.setStatus(LoadingButton.STATUS_LOADING);
             presenter.online(onLineBtn);
-//            new MainDialog(WorkActivity.this,105,Config.APP_KEY,XApp.getMyPreferences().getString(Config.AES_PASSWORD,""));
         });
 //        offlineCon.setOnClickListener(v -> presenter.offline());
         listenOrderCon.setOnClickListener(v -> {
@@ -321,9 +322,16 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         });
         toolbar.setTitle(R.string.work_title);
         toolbar.setRightIcon(R.drawable.ic_more_icon, view -> {
-            ARouter.getInstance()
-                    .build("/personal/MoreActivity")
-                    .navigation();
+//            ARouter.getInstance()
+//                    .build("/personal/MoreActivity")
+//                    .navigation();
+            new MainDialog(WorkActivity.this,
+                    105,
+                    Config.APP_KEY,XApp.getMyPreferences().getString(Config.AES_PASSWORD,""),
+                    XApp.getMyPreferences().getString(Config.SP_TOKEN,""),
+                    0,
+                    "",
+                    "18180635910");
         });
     }
 
@@ -342,33 +350,13 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         swipeRefreshLayout.setRefreshing(true);
     }
 
-//    //专线班次列表
-//    List<CityLine> lines = new ArrayList<>();
-    @Override
-    public void showLineOrders(List<CityLine> cityLines) {
-//        lines.clear();
-//        if (cityLines == null || cityLines.size() == 0) {
-//            showEmpty(0);
-//        } else {
-//            lines.addAll(cityLines);
-//            hideEmpty();
-//        }
-//
-//        CityLineAdapter adapter = new CityLineAdapter(lines, this);
-//        recyclerView.setAdapter(adapter);
-//        PinnedHeaderDecoration pinnedHeaderDecoration = new PinnedHeaderDecoration();
-//        //设置只有RecyclerItem.ITEM_HEADER的item显示标签
-//        pinnedHeaderDecoration.setPinnedTypeHeader(MultipleOrder.ITEM_HEADER);
-//        pinnedHeaderDecoration.registerTypePinnedHeader(MultipleOrder.ITEM_HEADER, (parent, adapterPosition) -> true);
-//        pinnedHeaderDecoration.registerTypePinnedHeader(MultipleOrder.ITEM_DESC, (parent, adapterPosition) -> true);
-//        recyclerView.addItemDecoration(pinnedHeaderDecoration);
-    }
-
     //全业务订单列表
     List<MultipleOrder> orders = new ArrayList<>();
+
     @Override
     public void showOrders(List<MultipleOrder> MultipleOrders) {
         orders.clear();
+
         if (MultipleOrders == null || MultipleOrders.size() == 0) {
             showEmpty(0);
         } else {
@@ -385,7 +373,21 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         pinnedHeaderDecoration.registerTypePinnedHeader(MultipleOrder.ITEM_DESC, (parent, adapterPosition) -> true);
         recyclerView.addItemDecoration(pinnedHeaderDecoration);
 
+//        if (orders.size() == 0) {
+//            setHeaderView(recyclerView);
+//        } else {
+//            setHeaderView(null);
+//        }
     }
+
+    private void setHeaderView(RecyclerView view) {
+        View header = LayoutInflater.from(this).inflate(R.layout.order_pinned_layout, view, false);
+        header.setOnClickListener(v -> {
+            startActivity(new Intent(this, OrderActivity.class));
+        });
+        adapter.setHeaderView(header);
+    }
+
 
     private AMap aMap;
 
@@ -423,6 +425,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         bottomBtnCon.setVisibility(View.GONE);
         MqttManager.getInstance().pushLocNoLimit(new BuildPushData(EmUtil.getLastLoc()));
         presenter.indexOrders();
+        swipeRefreshLayout.setRefreshing(true);
+        hideEmpty();
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -431,6 +436,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         listenOrderCon.setVisibility(View.GONE);
         rippleBackground.stopRippleAnimation();
         bottomBtnCon.setVisibility(View.VISIBLE);
+        swipeRefreshLayout.setRefreshing(false);
+        showEmpty(0);
+        recyclerView.setVisibility(View.GONE);
     }
 
     @Override
@@ -522,6 +530,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         listenOrderCon.setVisibility(View.VISIBLE);
         rippleBackground.startRippleAnimation();
         bottomBtnCon.setVisibility(View.GONE);
+        swipeRefreshLayout.setRefreshing(true);
     }
 
     @Override
@@ -529,6 +538,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         listenOrderCon.setVisibility(View.GONE);
         rippleBackground.stopRippleAnimation();
         bottomBtnCon.setVisibility(View.VISIBLE);
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -587,7 +597,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
             noOrderText.setCompoundDrawables(null, drawable, null, null);
         } else {
-            noOrderText.setText(R.string.no_ann_and_notice);
+            noOrderText.setText(R.string.no_work);
             Drawable drawable = getResources().getDrawable(R.mipmap.ic_no_order);
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
             noOrderText.setCompoundDrawables(null, drawable, null, null);

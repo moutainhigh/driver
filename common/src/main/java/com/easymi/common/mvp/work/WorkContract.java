@@ -79,7 +79,6 @@ public interface WorkContract {
 
         void hideRegisterDialog();
 
-        void showLineOrders(List<CityLine> cityLines);
     }
 
     interface Presenter {

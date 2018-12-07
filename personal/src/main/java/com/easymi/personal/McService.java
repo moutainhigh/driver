@@ -1,5 +1,7 @@
 package com.easymi.personal;
 
+import com.easymi.common.entity.PushAnnouncement;
+import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.SettingResult;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.result.EmResult;
@@ -116,8 +118,8 @@ public interface McService {
      * @param alias
      * @return
      */
-    @GET("driver/api/v1/articlebyalias")
-    Observable<ArticleResult> getArticle(@Query("app_key") String appKey,
+    @GET("v1/public/article_configure/get")
+    Observable<ArticleResult> getArticle(@Query("appKey") String appKey,
                                          @Query("alias") String alias,
                                          @Query("companyId") Long companyId);
 
@@ -394,15 +396,15 @@ public interface McService {
     Observable<ArticleResult> getArticleById(@Query("app_key") String appKey,
                                              @Query("id") Long id);
 
-    /**
-     * 查询单个公告
-     *
-     * @param noticeId
-     * @return
-     */
-    @GET("driver/api/v1/employAfficheById")
-    Observable<AnnResult> employAfficheById(@Query("id") Long noticeId,
-                                            @Query("app_key") String appKey);
+//    /**
+//     * 查询单个公告
+//     *
+//     * @param noticeId
+//     * @return
+//     */
+//    @GET("driver/api/v1/employAfficheById")
+//    Observable<AnnResult> employAfficheById(@Query("id") Long noticeId,
+//                                            @Query("app_key") String appKey);
 
 //    /**
 //     * 获取APP配置
@@ -463,7 +465,7 @@ public interface McService {
     @POST("api/v1/public/driver/login")
     Observable<LoginResult> loginByPW(@Field("phone") String phone,
                                       @Field("password") String password
-                                    , @Field("randomStr") String randomStr
+            , @Field("randomStr") String randomStr
     );
 
     /**
@@ -552,13 +554,13 @@ public interface McService {
     @GET("api/v1/public/driver/put_forward_configure")
     Observable<TixianRuleResult> tixianRule();
 
-    /**
-     * 提现规则文章获取
-     *
-     * @return
-     */
-    @GET("api/v1/public/article_configure/get/driverPutForward")
-    Observable<ArticleResult> getArticle();
+//    /**
+//     * 提现规则文章获取
+//     *
+//     * @return
+//     */
+//    @GET("api/v1/public/article_configure/get/driverPutForward")
+//    Observable<ArticleResult> getArticle();
 
     /**
      * 获取司机银行卡信息
@@ -653,4 +655,34 @@ public interface McService {
      */
     @GET("api/v1/public/statistics/evaluate_grade/get")
     Observable<RateResult> driverstar();
+
+    /**
+     * 下线接口
+     *
+     * @param id
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/public/driver/offline")
+    Observable<EmResult> offline(@Field("id") Long id, @Field("companyId") Long companyId);
+
+
+    /**
+     * 文章获取
+     *
+     * @return
+     */
+    @GET("api/v1/public/article_configure/get/{alias}")
+    Observable<ArticleResult> getArticle(@Path("alias") String alias);
+
+
+    /**
+     * 查询单个公告
+     *
+     * @param noticeId
+     * @return
+     */
+    @GET("api/v1/public/message/affiche/{id}")
+    Observable<PushAnnouncement> employAfficheById(@Path("id") Long noticeId,
+                                                   @Query("appKey") String appKey);
 }

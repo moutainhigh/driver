@@ -325,6 +325,15 @@ public class Employ extends BaseEmploy implements Parcelable {
      */
     public double star;
 
+    /**
+     * specialModel 专车车辆型号
+     */
+    public long modelId;
+
+    /**
+     * specialModel 出租车车辆型号
+     */
+    public long taxiModelId;
 
 
     protected Employ(Parcel in) {
@@ -388,6 +397,8 @@ public class Employ extends BaseEmploy implements Parcelable {
         token = in.readString();
         refreshToken = in.readString();
         balance = in.readDouble();
+        modelId = in.readLong();
+        taxiModelId = in.readLong();
     }
 
     public static final Creator<Employ> CREATOR = new Creator<Employ>() {
@@ -470,6 +481,8 @@ public class Employ extends BaseEmploy implements Parcelable {
         values.put("token",token);
         values.put("refreshToken",refreshToken);
         values.put("balance",balance);
+        values.put("modelId",modelId);
+        values.put("taxiModelId",taxiModelId);
         /*
          * values.put("age", age); values.put("jialing", jialing);
          */
@@ -625,6 +638,9 @@ public class Employ extends BaseEmploy implements Parcelable {
                         .getColumnIndex("refreshToken"));
                 driverInfo.balance = cursor.getDouble(cursor
                         .getColumnIndex("balance"));
+                driverInfo.modelId = cursor.getLong(cursor
+                        .getColumnIndex("modelId"));
+                driverInfo.taxiModelId = cursor.getLong(cursor.getColumnIndex("taxiModelId"));
 
             }
         } catch (Exception e) {
@@ -803,7 +819,9 @@ public class Employ extends BaseEmploy implements Parcelable {
                 .getColumnIndex("refreshToken"));
         driverInfo.balance = cursor.getDouble(cursor
                 .getColumnIndex("balance"));
-
+        driverInfo.modelId = cursor.getLong(cursor
+                .getColumnIndex("modelId"));
+        driverInfo.taxiModelId = cursor.getLong(cursor.getColumnIndex("taxiModelId"));
         return driverInfo;
     }
 
@@ -875,6 +893,8 @@ public class Employ extends BaseEmploy implements Parcelable {
         values.put("token",token);
         values.put("refreshToken",refreshToken);
         values.put("balance",balance);
+        values.put("modelId",modelId);
+        values.put("taxiModelId",taxiModelId);
 
         boolean flag = db.update("t_driverinfo", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
@@ -963,5 +983,7 @@ public class Employ extends BaseEmploy implements Parcelable {
         dest.writeString(token);
         dest.writeString(refreshToken);
         dest.writeDouble(balance);
+        dest.writeLong(modelId);
+        dest.writeLong(taxiModelId);
     }
 }

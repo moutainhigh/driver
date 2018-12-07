@@ -18,6 +18,7 @@ import com.easymi.common.result.GetFeeResult;
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.common.result.SettingResult;
 import com.easymi.common.result.SystemResult;
+import com.easymi.common.result.VehicleResult;
 import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.result.EmResult;
 
@@ -563,7 +564,7 @@ public interface CommApiService {
      */
     @GET("api/v1/public/driver/get/{id}")
     Observable<LoginResult> getDriverInfo(@Path("id") Long driverId,
-                                          @Query("app_key") String appKey);
+                                          @Query("appKey") String appKey);
 
     /**
      * 通过http上传位置信息，30秒一次
@@ -637,9 +638,21 @@ public interface CommApiService {
      */
     @FormUrlEncoded
     @PUT("api/v1/public/order/refusal")
-    Observable<EmResult> refuseOrder(@Query("orderId") long orderId,
-                                     @Query("serviceType") String serviceType,
+    Observable<EmResult> refuseOrder(@Field("orderId") long orderId,
+                                     @Field("serviceType") String serviceType,
                                      @Field("remark") String remark);
+
+//    /**
+//     * @param orderId
+//     * @param reimburseFee   报销金额
+//     * @param reimburseCause 报销理由
+//     * @return
+//     */
+//    @GET("api/v1/public/order/cold/list")
+//    Observable<EmResult> baoxiao(@Query("orderId") Long orderId,
+//                                 @Query("reimburseFee") Double reimburseFee,
+//                                 @Query("reimburseCause") String reimburseCause);
+
 
     /**
      * @param orderId
@@ -647,11 +660,13 @@ public interface CommApiService {
      * @param reimburseCause 报销理由
      * @return
      */
-    @GET("api/v1/public/order/cold/list")
-    Observable<EmResult> baoxiao(@Query("orderId") Long orderId,
-                                 @Query("reimburseFee") Double reimburseFee,
-                                 @Query("reimburseCause") String reimburseCause);
-
+    @FormUrlEncoded
+    @POST("api/v1/public/finance/order_reimburse/save")
+    Observable<EmResult> baoxiao(@Field("orderId") Long orderId,
+                                 @Field("reimburseFee") Double reimburseFee,
+                                 @Field("reimburseCause") String reimburseCause,
+                                 @Field("reimburseType") String reimburseType
+    );
 
     /**
      * 查询单个通知
@@ -682,4 +697,19 @@ public interface CommApiService {
                                                 @Query("status") String status,
                                                 @Query("serviceType") String serviceType);
 
+//    /**
+//     * 获取专车车型
+//     *
+//     * @return
+//     */
+//    @GET("api/v1/taxi_online/driver_vehicle/vehicle")
+//    Observable<VehicleResult> driverehicle();
+
+    /**
+     * 获取专车出租车的车型
+     *
+     * @return
+     */
+    @GET("api/v1/public/driver/vehicle")
+    Observable<VehicleResult> driverehicle();
 }

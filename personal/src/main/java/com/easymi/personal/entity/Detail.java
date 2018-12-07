@@ -7,13 +7,17 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class Detail {
-    @SerializedName("created")
+    @SerializedName("time")
     public Long time;
 
-    @SerializedName("memo")
+
+    //driver_recharge 司机充值
+    //PAY_DRIVER_BALANCE 余额支付
+    //ADMIN_DRIVER_RECHARGE 后台充值
+    @SerializedName("type")
     public String purpose;
 
-    @SerializedName("money")
+    @SerializedName("cost")
     public double money;
 
 

@@ -6,4 +6,17 @@
     <string name="out_time">网络连接超时，请检查网络连接</string>
     <string name="no_internet">网络连接失败，请检查网络连接</string>
     <string name="parse_error">数据异常，解析失败</string>
+
+    <string name="no_gps">该设备未发现GPS定位芯片，无法准确定位</string>
+    <string name="closed_wifi">请打开你的WiFi，有助于精确定位</string>
+
+    <string name="please_open_gps">请开启GPS定位服务</string>
+    <string name="ok">确定</string>
+
+    <string name="lost_net_work">网络连接已断开</string>
+
+    <string name="notifyTitle">提示</string>
+    <string name="notifyMsg">当前应用缺少必要权限。\n\n请点击\"设置\"-\"权限\"-打开所需权限。</string>
+    <string name="setting">设置</string>
+    <string name="cancel">取消</string>
 </resources>

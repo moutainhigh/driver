@@ -18,6 +18,7 @@ import com.easymi.component.activity.WebActivity;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
@@ -129,7 +130,11 @@ public class SetActivity extends RxBaseActivity {
     }
 
     public void helpCenter(View view) {
-        Intent intent = new Intent(SetActivity.this, HelpCenterActivity.class);
+//        Intent intent = new Intent(SetActivity.this, HelpCenterActivity.class);
+//        startActivity(intent);
+        Intent intent = new Intent(this, WebActivity.class);
+        intent.putExtra("url", "http://h5.xiaokakj.com/#/protocol?articleName=driverHelp&appKey="+Config.APP_KEY);
+        intent.putExtra("title", getString(R.string.set_about_us));
         startActivity(intent);
     }
 
@@ -161,9 +166,13 @@ public class SetActivity extends RxBaseActivity {
     }
 
     public void aboutUs(View view) {
-        Intent intent = new Intent(SetActivity.this, AboutUsActivity.class);
-//        intent.putExtra("tag", "AboutUs");
-//        intent.putExtra("title", getString(R.string.set_about_us));
+//        Intent intent = new Intent(SetActivity.this, AboutUsActivity.class);
+////        intent.putExtra("tag", "AboutUs");
+////        intent.putExtra("title", getString(R.string.set_about_us));
+//        startActivity(intent);
+        Intent intent = new Intent(this, WebActivity.class);
+        intent.putExtra("url", "http://h5.xiaokakj.com/#/protocol?articleName=driverAboutUs&appKey="+Config.APP_KEY);
+        intent.putExtra("title", getString(R.string.set_about_us));
         startActivity(intent);
     }
 
@@ -172,8 +181,8 @@ public class SetActivity extends RxBaseActivity {
                 .setTitle(getString(R.string.set_hint))
                 .setMessage(getString(R.string.set_sure_exit))
                 .setPositiveButton(getString(R.string.set_sure), (dialogInterface, i) -> {
-//                    doLogOut();
-                    EmUtil.employLogout(SetActivity.this);
+                    doLogOut();
+//                    EmUtil.employLogout(SetActivity.this);
                 })
                 .setNegativeButton(getString(R.string.set_cancel), (dialogInterface, i) -> dialogInterface.dismiss())
                 .create();
@@ -181,21 +190,31 @@ public class SetActivity extends RxBaseActivity {
 
     }
 
+
+    //注销接口没有，临时调用了下线接口，解决gu没删除的问题 // 被别人登录后就gg了，下线都报410
     private void doLogOut() {
         if (null != WorkPresenter.timeCounter) {
             WorkPresenter.timeCounter.forceUpload(-1);
         }
         McService mcService = ApiManager.getInstance().createApi(Config.HOST, McService.class);
         Observable<EmResult> observable = mcService
-                .employLoginOut(EmUtil.getEmployId(), EmUtil.getAppKey())
+                .offline(EmUtil.getEmployId(), EmUtil.getEmployInfo().companyId)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
-                true, emResult ->
-                EmUtil.employLogout(SetActivity.this)))
-        );
+                true, new HaveErrSubscriberListener<EmResult>() {
+            @Override
+            public void onNext(EmResult emResult) {
+                EmUtil.employLogout(SetActivity.this);
+            }
+
+            @Override
+            public void onError(int code) {
+                EmUtil.employLogout(SetActivity.this);
+            }
+        })));
     }
 
     @Override

@@ -1,14 +1,19 @@
 package cn.projcet.hf.securitycenter.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import cn.projcet.hf.securitycenter.CenterConfig;
 import cn.projcet.hf.securitycenter.R;
+import cn.projcet.hf.securitycenter.utils.PhoneUtil;
 import cn.projcet.hf.securitycenter.widget.CusToolbar;
 
 /**
@@ -39,6 +44,7 @@ public class CallPoliceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_call_police);
         initToolbar();
         initView();
+        initData();
     }
 
     public void initToolbar() {
@@ -48,7 +54,10 @@ public class CallPoliceActivity extends AppCompatActivity {
         });
         toolbar.setTitle("一键报警");
         toolbar.setRightText("功能说明",v -> {
-
+            Intent intent = new Intent(this, WebActivity.class);
+            intent.putExtra("url", "http://h5.xiaokakj.com/#/protocol?articleName=passengerSafetyFunction&appKey="+CenterConfig.APPKEY);
+            intent.putExtra("title", "功能说明");
+            startActivity(intent);
         });
     }
 
@@ -63,5 +72,21 @@ public class CallPoliceActivity extends AppCompatActivity {
         tv_book_site = findViewById(R.id.tv_book_site);
         tv_end_site = findViewById(R.id.tv_end_site);
         tv_call_police = findViewById(R.id.tv_call_police);
+    }
+
+    public void initData(){
+        //todo 当前位置如何传递和处理
+        if (CenterConfig.ORDERID == 0){
+            lin_order_info.setVisibility(View.GONE);
+        }else {
+            lin_order_info.setVisibility(View.VISIBLE);
+            //todo 订单信息的获取和展示
+
+        }
+
+        tv_call_police.setOnClickListener(v -> {
+            //todo 调用接口并且拨打110
+            PhoneUtil.call(this,"110");
+        });
     }
 }

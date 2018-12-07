@@ -21,6 +21,7 @@ public class TokenInterceptor implements Interceptor {
         String sToken = XApp.getMyPreferences().getString(Config.SP_TOKEN, "");
         Request.Builder builder = chain.request().newBuilder();
         builder.addHeader("token", sToken);
+        builder.addHeader("appKey", Config.APP_KEY);
         return chain.proceed(builder.build());
     }
 }

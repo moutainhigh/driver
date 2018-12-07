@@ -231,6 +231,25 @@ public class OrderCustomer implements Serializable {
     }
 
     /**
+     * 判断数据库中是否已保存订单相关的OrderCustomer
+     */
+    public static boolean existsById(long id, String orderType) {
+        SqliteHelper helper = SqliteHelper.getInstance();
+        SQLiteDatabase db = helper.openSqliteDatabase();
+        Cursor cursor = db.rawQuery(
+                "select count(*) from t_zx_order_customer where id = ? and orderType = ?",
+                new String[]{String.valueOf(id), orderType});
+        boolean flag = false;
+        try {
+            if (cursor.moveToNext()) {
+                flag = (cursor.getInt(0) == 1);
+            }
+        } finally {
+            cursor.close();
+        }
+        return flag;
+    }
+    /**
      * 根据ID和type查询数据
      */
     public static List<OrderCustomer> findByIDTypeOrderByAcceptSeq(long orderId, String orderType) {
@@ -333,7 +352,9 @@ public class OrderCustomer implements Serializable {
     }
 
     public boolean saveOrUpdate() {
-        if (exists(id, Config.CITY_LINE)) {
+        //hf add
+//        if (exists(orderId, Config.CITY_LINE)) {
+        if (existsById(id, Config.CITY_LINE)) {
             return this.updateBase();
         } else {
             return this.save();
@@ -360,6 +381,16 @@ public class OrderCustomer implements Serializable {
         values.put("endLat", endLat);
         values.put("endLng", endLng);
         values.put("appointTime", appointTime);
+
+        //hf add
+        values.put("status", status);
+        values.put("photo", photo);
+        values.put("subStatus", subStatus);
+        values.put("orderId",orderId);
+        values.put("orderType", orderType);
+        values.put("acceptSequence", acceptSequence);
+        values.put("sendSequence", sendSequence);
+        values.put("num", num);
 
         boolean flag = db.update("t_zx_order_customer", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;

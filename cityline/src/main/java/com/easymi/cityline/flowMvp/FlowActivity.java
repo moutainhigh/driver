@@ -153,7 +153,7 @@ public class FlowActivity extends RxBaseActivity implements
                 OrderCustomer orderCustomer = orderCustomers.get(i);
 
                 orderCustomer.appointTime = orderCustomer.appointTime * 1000;
-                orderCustomer.num = i;
+                orderCustomer.num = i + 1;
                 orderCustomer.acceptSequence = i;
                 orderCustomer.sendSequence = i;
                 //后端状态与本地状态衔接 这些仅仅针对于本地数据库首次创建时
@@ -204,7 +204,7 @@ public class FlowActivity extends RxBaseActivity implements
         zxOrder.endSite = baseOrder.destination;
         zxOrder.startOutTime = baseOrder.bookTime * 1000;//开始出发时间
         zxOrder.minute = baseOrder.minute;//xx分钟前开始接人
-        zxOrder.startJierenTime = baseOrder.bookTime - baseOrder.minute * 60 * 1000;//开始接人时间
+        zxOrder.startJierenTime = baseOrder.bookTime * 1000 - baseOrder.minute * 60 * 1000;//开始接人时间
         zxOrder.startLat = baseOrder.startLatitude;
         zxOrder.startLng = baseOrder.startLongitude;
         zxOrder.endLat = baseOrder.endLatitude;

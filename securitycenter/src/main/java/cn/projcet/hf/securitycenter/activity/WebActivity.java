@@ -101,6 +101,9 @@ public class WebActivity extends AppCompatActivity {
         webView.getSettings().setUseWideViewPort(true);
         webView.getSettings().setLoadWithOverviewMode(true);
 
+        //解决部分H5中的一些控件标签可能使用后android中不支持 造成的白屏不显示问题
+        webView.getSettings().setDomStorageEnabled(true);
+
         webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
         webView.loadUrl(url);
 

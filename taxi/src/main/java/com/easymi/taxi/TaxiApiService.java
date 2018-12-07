@@ -301,7 +301,7 @@ public interface TaxiApiService {
      * @return
      */
     @FormUrlEncoded
-    @PUT("api/v1/public/order/cancel")
+    @POST("api/v1/public/order/cancel")
     Observable<EmResult> cancelOrder(@Field("orderId") long orderId,
                                      @Field("memo") String memo);
 

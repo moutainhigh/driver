@@ -76,7 +76,7 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
         holder.orderNumber.setText(baseOrder.orderNo);
         holder.orderMoney.setText(String.valueOf(baseOrder.budgetFee));
 
-        if (baseOrder.baoxiaoStatus == 1) {
+        if (baseOrder.baoxiaoStatus == 0) {
             holder.orderBaoxiao.setClickable(true);
             holder.orderBaoxiao.setTextSize(14);
             holder.orderBaoxiao.setText(context.getString(R.string.liushui_baoxiao));
@@ -86,14 +86,24 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
                 intent.putExtra("orderId", baseOrder.orderId);
                 ((Activity) context).startActivityForResult(intent, LiushuiActivity.CLICK_POS);
             });
-        } else if (baseOrder.baoxiaoStatus == 2) {
+        } else if (baseOrder.baoxiaoStatus == 1) {
             holder.orderBaoxiao.setClickable(false);
             holder.orderBaoxiao.setTextSize(10);
             holder.orderBaoxiao.setText(context.getString(R.string.liushui_baoxiao_sheheing));
-        } else if (baseOrder.baoxiaoStatus == 3) {
+        } else if (baseOrder.baoxiaoStatus == 2) {
             holder.orderBaoxiao.setClickable(false);
             holder.orderBaoxiao.setTextSize(14);
             holder.orderBaoxiao.setText(context.getString(R.string.liushui_baoxiao_done));
+        } else if (baseOrder.baoxiaoStatus == 3) {
+            holder.orderBaoxiao.setClickable(true);
+            holder.orderBaoxiao.setTextSize(10);
+            holder.orderBaoxiao.setText(context.getString(R.string.liushui_baoxiao_refuse));
+            holder.orderBaoxiao.setOnClickListener(view -> {
+                LiushuiActivity.CLICK_POS = position + 1;
+                Intent intent = new Intent(context, BaoxiaoActivity.class);
+                intent.putExtra("orderId", baseOrder.orderId);
+                ((Activity) context).startActivityForResult(intent, LiushuiActivity.CLICK_POS);
+            });
         }
 
         if (baseOrder.status == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {

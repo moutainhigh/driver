@@ -4,7 +4,6 @@ import android.content.res.Configuration;
 
 import java.util.Locale;
 
-import cn.projcet.hf.securitycenter.CApp;
 import cn.projcet.hf.securitycenter.result.EmResult2;
 import rx.functions.Func1;
 
@@ -27,22 +26,22 @@ public class HttpResultFunc2<T> implements Func1<EmResult2<T>, T> {
     public T call(EmResult2<T> t) {
         if (t.getCode() != 1) {
             String msg = t.getMessage();
-            Configuration config = CApp.getInstance().getResources().getConfiguration();   //获取默认配置
-            if (config.locale == Locale.TAIWAN || config.locale == Locale.TRADITIONAL_CHINESE) {
+//            Configuration config = CApp.getInstance().getResources().getConfiguration();   //获取默认配置
+//            if (config.locale == Locale.TAIWAN || config.locale == Locale.TRADITIONAL_CHINESE) {
                 for (ErrCodeTran errCode : ErrCodeTran.values()) {
                     if (t.getCode() == errCode.getCode()) {
                         msg = errCode.getShowMsg();
                         break;
                     }
                 }
-            } else {
-                for (ErrCode errCode : ErrCode.values()) {
-                    if (t.getCode() == errCode.getCode()) {
-                        msg = errCode.getShowMsg();
-                        break;
-                    }
-                }
-            }
+//            } else {
+//                for (ErrCode errCode : ErrCode.values()) {
+//                    if (t.getCode() == errCode.getCode()) {
+//                        msg = errCode.getShowMsg();
+//                        break;
+//                    }
+//                }
+//            }
             throw new ApiException(t.getCode(), msg);
         } else {
             return t.getData();

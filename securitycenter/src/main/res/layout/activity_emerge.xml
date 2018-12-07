@@ -28,16 +28,28 @@
         android:paddingTop="15dp"
         android:visibility="visible">
 
-        <TextView
-            android:id="@+id/tv_hint"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/lin_hint"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="紧急联系人
-开启行程自动分享"
-            android:textColor="@color/color_333333"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:orientation="vertical"
+            android:visibility="gone">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="紧急联系人"
+                android:textColor="@color/color_333333"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="开启行程自动分享"
+                android:textColor="@color/color_333333"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_notice"
@@ -57,7 +69,7 @@
             android:paddingLeft="45dp"
             android:paddingRight="45dp"
             android:layout_marginBottom="10dp"
-            android:visibility="visible">
+            android:visibility="gone">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -78,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:checked="true"
+                    android:checked="false"
                     app:kswBackDrawable="@drawable/ios_back_drawable"
                     app:kswThumbDrawable="@drawable/ios_thumb_selector"
                     app:kswThumbMarginBottom="-4dp"
@@ -102,7 +114,7 @@
                     android:id="@+id/tv_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="00：00-23：59"
+                    android:text="未设置"
                     android:textSize="14sp"
                     android:textColor="@color/color_333333"
                     android:drawableRight="@mipmap/ic_right"
@@ -147,6 +159,7 @@
         android:layout_height="1px"
         android:src="@color/color_eeeeee"/>
     <LinearLayout
+        android:id="@+id/lin_add"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -254,7 +267,8 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:scrollbars="none">
 
         </android.support.v7.widget.RecyclerView>
@@ -268,7 +282,6 @@
             android:gravity="center_vertical"
             android:textSize="12sp"
             android:drawableLeft="@mipmap/ic_zengjia"
-            android:drawablePadding="5dp"
-            android:layout_marginTop="20dp"/>
+            android:drawablePadding="5dp"/>
     </LinearLayout>
 </LinearLayout>

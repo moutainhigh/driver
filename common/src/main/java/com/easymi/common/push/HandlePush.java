@@ -97,7 +97,7 @@ public class HandlePush implements FeeChangeSubject {
                     loadOrder(order);
                 }
                 newShowNotify(XApp.getInstance(), "", XApp.getInstance().getString(R.string.send_order), XApp.getInstance().getString(R.string.send_order_content));
-            } else if (msg.equals("cancel")) {//取消订单
+            } else if (msg.equals("Cancel")) {//取消订单
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
@@ -117,14 +117,19 @@ public class HandlePush implements FeeChangeSubject {
                 bundle.putSerializable("status", status);
                 message.setData(bundle);
                 handler.sendMessage(message);
-            } else if (msg.equals("notice")) {//通知
-                long id = jb.optJSONObject("data").optLong("id");
-
-                loadNotice(id);
-            } else if (msg.equals("message")) {//公告
-                long id = jb.optJSONObject("data").optLong("id");
+            } else if (msg.equals("notice")) {//通知   （改为公告）
+//                long id = jb.optJSONObject("data").optLong("id");
+//                String data = jb.optString("data");
+//                JSONObject dt = new JSONObject(data);
+                long id = jb.optLong("data");
 
                 loadAnn(id);
+            } else if (msg.equals("message")) {//公告    （改为通知）
+//                long id = jb.optJSONObject("data").optLong("id");
+                String data = jb.optString("data");
+                JSONObject dt = new JSONObject(data);
+
+                loadNotice(dt.optLong("id"));
             } else if (msg.equals("freezed")) {//冻结
                 XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.freezed));
@@ -143,7 +148,7 @@ public class HandlePush implements FeeChangeSubject {
                 order.orderId = jb.optJSONObject("data").optLong("id");
                 order.serviceType = jb.optJSONObject("data").optString("business");
                 loadOrder(order);
-            } else if (msg.equals("back_order")) {//订单回收
+            } else if (msg.equals("Recovery")) {//订单回收
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("id");
                 order.serviceType = jb.optJSONObject("data").optString("business");

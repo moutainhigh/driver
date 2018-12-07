@@ -91,7 +91,7 @@ public enum ErrCode {
     /**
      * 查询错误
      */
-    QUERY_VALIDATE_ERR(40004, "查询错误"),
+    QUERY_VALIDATE_ERR(40004, "未查到相关信息哦"),
 
     /**
      * 数据不存在
@@ -294,7 +294,262 @@ public enum ErrCode {
      */
     SCHEDULE_TICKET_DEFICIENCY(40074, "班次票数不足"),
 
+    /**
+     * 当前司机未冻结
+     */
+    DRIVER_UN_FROZEN(40075, "当前司机未冻结"),
+    /**
+     * 当前司机冻结
+     */
+    DRIVER_FROZEN(40076, "当前司机冻结"),
+    /**
+     * 车辆不存在
+     */
+    CAR_NOT_EXIST(40077, "车辆不存在"),
+    /**
+     * 公司不存在
+     */
+    COMPANY_NOT_EXIST(40078, "公司不存在"),
+    /**
+     * 支付金额错误
+     */
+    FEE_ERROR(40079, "支付金额错误"),
+    /**
+     * 该车辆已经是该线路的常用车辆不能重复添加
+     */
+    LINE_VEHICLE_EXIST(40080, "该车辆已经是该线路的常用车辆不能重复添加"),
+
+    /**
+     * 申请提现失败
+     */
+    DRIVER_PUT_FORWARD_ERR(40082, "申请提现失败"),
+
+    /**
+     * 提现申请不存在
+     */
+    PUT_FORWARD_NOT_EXIST(40083, "提现申请不存在"),
+
+    /**
+     * 提现申请已经处理
+     */
+    PUT_FORWARD_HAS_DEAL(40084, "提现申请已经处理"),
+
+    /**
+     * 订单报销记录已经存在
+     */
+    ORDER_REIMBURSE_HAS_EXIST(40085, "订单报销记录已经存在"),
+
+    /**
+     * 订单报销不存在
+     */
+    ORDER_REIMBURSE_NOT_EXIST(40086, "订单报销不存在"),
+
+    /**
+     * 订单报销已经处理
+     */
+    ORDER_REIMBURSE_HAS_DEAL(40087, "订单报销已经处理"),
+    /**
+     * 司机账户余额不足
+     */
+    DRIVER_BALANCE_NOT_ENOUGH(40088, "司机账户余额不足"),
+    /**
+     * 专线订单跳过执行失败
+     */
+    ORDER_SKIP_ERROR(40089, "专线订单跳过执行失败"),
+    /**
+     * 专线订单出发失败
+     */
+    ORDER_RUN_ERROR(40090, "专线订单出发失败"),
+    /**
+     * 专线订单支付失败
+     */
+    ORDER_PAY_ERROR(40091, "专线订单支付失败"),
+    /**
+     * 终止任务失败
+     */
+    STOP_TASK_ERROR(40092, "终止任务失败"),
+    /**
+     * 订单已经申请过发票
+     */
+    ORDER_HAS_INVOICE(40093, "订单已经申请过发票"),
+    /**
+     * 申请发票失败
+     */
+    INVOICE_ERR(40094, "申请发票失败"),
+    /**
+     * 订单完成失败
+     */
+    ORDER_FINISH_ERROR(40095, "订单完成失败"),
+    /**
+     * 发票申请已经处理
+     */
+    INVOICE_HAS_DEAL(40096, "发票申请已经处理"),
+    /**
+     * 发票申请不存在
+     */
+    INVOICE_NOT_EXIST(40097, "发票申请不存在"),
+    /**
+     * 脏数据
+     */
+    VERSION_ERROR(40098, "问题数据"),
+
+
+    /**
+     * 分布式锁，加锁失败
+     */
+    LOCK_ERROR(40099, "分布式锁，加锁失败"),
+
+    /**
+     * 订单到达预约地失败
+     */
+    ORDER_ARRIVE_BOOK_PLACE_ERROR(40100, "订单到达预约地失败"),
+
+    /**
+     * 订单前往目的地失败
+     */
+    ORDER_GOTO_DESTINATION_ERROR(40101, "订单前往目的地失败"),
+
+    /**
+     * 订单到达目的地失败
+     */
+    ORDER_ARRIVE_DESTINATION_ERROR(40102, "订单到达目的地失败"),
+
+    /**
+     * 主账号不允许修改
+     */
+    ADMIN_IS_MAIN_UPDATE_ERR(40103, "主账号不允许修改"),
+    /**
+     * 司机已经存在,不能重复添加
+     */
+    DRIVER_HAD_EXIST(40104, "司机已经存在,不能重复添加"),
+
+    /**
+     * 账号重复
+     */
+    ACCOUNT_REPEAT_ERR(40105, "账号重复"),
+
+    /**
+     * 手机号重复
+     */
+    PHONE_REPEAT_ERR(40106, "手机号重复"),
+
+    /**
+     * 同一区域不能存在多个服务机构
+     */
+    SERVER_REPEAT_ERR(40107, "同一区域不能存在多个服务机构"),
+
+    /**
+     * 司机密码错误
+     */
+    DRIVER_PASSWORD_ERROR(40108, "司机密码错误"),
+    /**
+     * 开通服务机构已达到上限
+     */
+    COMPANY_NUM_MAX_ERROR(40109, "开通服务机构已达到上限"),
+
+    /**
+     * 优惠券已使用或已失效
+     */
+    COUPON_STATUS_ERROR(40110, "优惠券已使用或已失效"),
+
+    /**
+     * 优惠券业务类型错误
+     */
+    COUPON_SERVICE_TYPE_ERROR(40111, "优惠券业务类型错误"),
+
+    /**
+     * 优惠券类型错误
+     */
+    COUPON_TYPE_ERROR(40112, "优惠券类型错误"),
+    /**
+     * 班次已经存在
+     */
+    SCHEDULE_IS_EXIST(40113, "班次已经存在"),
+
+    /**
+     * 不是超级管理员 没有权限
+     */
+    ADMIN_IS_NOT_MAIN_ERR(40114, "不是超级管理员 没有权限"),
+
+    /**
+     * 自动派单自动抢单不能同时打开
+     */
+    GRAB_DISTRIBUTE_ORDER(40115, "自动派单自动抢单不能同时打开"),
+
+    /**
+     * 车型名称已经存在
+     */
+    VEHICLE_MODELS_HAS_EXIST(40116, "车型名称已经存在"),
+
+    /**
+     * 开通业务名称已经存在
+     */
+    BUSINESS_TYPE_HAS_EXIST(40117, "开通业务名称已经存在"),
+
+    /**
+     * 提成名称已经存在
+     */
+    ROYALTY_RATIO_HAS_EXIST(40118, "提成名称已经存在"),
+    /**
+     * 收费标准名称已经存在
+     */
+    CHARGING_HAS_EXIST(40119, "收费标准名称已经存在"),
+    /**
+     * 客户电话已经存在
+     */
+    PASSENGER_PHONE_HAS_EXIST(40120, "客户电话已经存在"),
+
+    /**
+     * 客户身份证已经存在
+     */
+    PASSENGER_ID_CARD_HAS_EXIST(40121, "客户身份证已经存在"),
+    /**
+     * 当前车型正在使用中
+     */
+    VEHICLE_MODELS_IN_USE(40122, "当前车型正在使用中"),
+    /**
+     * 当前类型正在使用中
+     */
+    BUSINESS_TYPE_IN_USE(40123, "当前类型正在使用中"),
+    /**
+     * 超级权限不能变更
+     */
+    ADMIN_UPDATE_MAIN_ERR(40124, "超级权限不能变更"),
+    /**
+     * 司机重复绑定车辆
+     */
+    DRIVER_BIND_CAR_REPEATED(40125, "司机重复绑定车辆"),
+    /**
+     * 司机没有绑定车辆
+     */
+    DRIVER_NOT_BIND_CAR(40127, "司机没有绑定车辆"),
+
+    /**
+     * 司机有正在执行的订单
+     */
+    DRIVER_HAS_RUNNING_ORDER(40128, "司机有正在执行的订单"),
+
+    /**
+     * 司机已在线上
+     */
+    DRIVER_LOGIN_REPEATED(40129, "司机已在线上"),
+
+    /**
+     * 提示该角色正在使用，不能删除
+     */
+    ROLE_OCCUPATION_ERR(40130, "提示该角色正在使用，不能删除"),
+
 //    /**
+//     * 司机有正在执行的订单
+//     */
+//    DRIVER_HAS_RUNNING_ORDER(40124, "司机有正在执行的订单"),
+//    /**
+//     * 司机已在线上，不能重复登录
+//     */
+//    DRIVER_LOGIN_REPEATED(40125, "司机已在线上，不能重复登录"),
+
+
+    //    /**
 //     * 请求参数无效
 //     */
 //    INVALID_PARAMETER_CODE(20000, "请求参数无效"),
@@ -416,7 +671,7 @@ public enum ErrCode {
 //     * 数据不匹配
 //     */
     NOT_MATCH(20032, "数据已更新"),
-//    /**
+    //    /**
 //     * 用户id无效
 //     */
 //    INVALID_USERID_CODE(20033, "用户id无效"),
@@ -751,7 +1006,7 @@ public enum ErrCode {
 //     * 查询失败
 //     */
     QUERY_ERROR(30011, "查询失败"),
-//    /**
+    //    /**
 //     * 脏数据
 //     */
 //    VERSION_ERROR(30012, "脏数据"),
@@ -908,7 +1163,7 @@ public enum ErrCode {
 //     * 该服务人员已存在执行中的订单，不能再次接单
 //     */
     DRIVER_GOTO_PRE_ORDER_CODE(30050, "您已存在执行中的订单，不能再次接单"),
-//    /**
+    //    /**
 //     * 差一点就抢到了
 //     */
     GRAB_ORDER_ERROR(30051, "差一点就抢到了"),

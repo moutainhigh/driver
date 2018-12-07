@@ -113,17 +113,17 @@ public class SplashActivity extends RxBaseActivity {
 
         loadLanguage();
 
-        GifImageView view = findViewById(R.id.splash);
-        try {
-            Log.e(TAG, "try");
-            if(!Config.COMM_USE){
-                gifFromAssets = new GifDrawable(getAssets(), "splash_gif.gif");
-                view.setBackground(gifFromAssets);
-                gifFromAssets.pause();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
+//        GifImageView view = findViewById(R.id.splash);
+//        try {
+//            Log.e(TAG, "try");
+//            if(!Config.COMM_USE){
+//                gifFromAssets = new GifDrawable(getAssets(), "splash_gif.gif");
+//                view.setBackground(gifFromAssets);
+//                gifFromAssets.pause();
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
             if (!rxPermissions.isGranted(Manifest.permission.ACCESS_COARSE_LOCATION)
                     || !rxPermissions.isGranted(Manifest.permission.READ_PHONE_STATE)
                     || !rxPermissions.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -134,7 +134,7 @@ public class SplashActivity extends RxBaseActivity {
                 Log.e(TAG, "checkForUpdate");
                 checkForUpdate();
             }
-        }
+//        }
     }
 
     private void delayIn() {

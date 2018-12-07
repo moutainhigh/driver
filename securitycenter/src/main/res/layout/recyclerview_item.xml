@@ -73,7 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginRight="15dp"
-                android:src="@mipmap/ic_zengjia" />
+                android:src="@mipmap/ic_select" />
         </LinearLayout>
     </com.daimajia.swipe.SwipeLayout>
 </LinearLayout>
