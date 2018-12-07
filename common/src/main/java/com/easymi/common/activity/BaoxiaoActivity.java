@@ -134,7 +134,9 @@ public class BaoxiaoActivity extends RxBaseActivity {
 
     private void baoxiaoMoney() {
         Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .baoxiao(orderId, baoxiaoMoney, baoxiaoReason)
+                .baoxiao(orderId, baoxiaoMoney, baoxiaoReason
+                        ,"司机报销"
+                        )
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

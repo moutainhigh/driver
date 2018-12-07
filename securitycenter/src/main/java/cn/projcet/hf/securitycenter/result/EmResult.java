@@ -25,4 +25,13 @@ public class EmResult {
         this.msg = message;
     }
 
+    /**
+     * 录音保护授权 0未授权
+     */
+    public int soundRecordCheck;
+    /**
+     * 紧急联系人授权 0未授权
+     */
+    public int emergeContackCheck;
+
 }

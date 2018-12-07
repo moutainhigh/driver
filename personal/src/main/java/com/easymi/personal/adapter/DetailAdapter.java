@@ -2,6 +2,7 @@ package com.easymi.personal.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,16 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailHold
     public void onBindViewHolder(DetailHolder holder, int position) {
         Detail detail = list.get(position);
         holder.detailTime.setText(TimeUtil.getTime("yyyy-MM-dd HH:mm", detail.time * 1000));
-        holder.detailPurpose.setText(detail.purpose);
+        if (TextUtils.equals(detail.purpose,"DRIVER_RECHARGE")){
+            holder.detailPurpose.setText("司机充值");
+        }else if (TextUtils.equals(detail.purpose,"PAY_DRIVER_BALANCE")){
+            holder.detailPurpose.setText("余额支付");
+        }else if (TextUtils.equals(detail.purpose,"ADMIN_DRIVER_RECHARGE")){
+            holder.detailPurpose.setText("后台充值");
+        }else {
+            holder.detailPurpose.setText("其他");
+        }
+
         holder.detailMoney.setText("¥" + detail.money);
         if(detail.money > 0){
             holder.detailMoney.setTextColor(context.getResources().getColor(R.color.yellow));

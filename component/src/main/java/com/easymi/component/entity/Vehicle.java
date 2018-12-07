@@ -24,27 +24,28 @@ public class Vehicle {
     @SerializedName("id")
     public long vehicleId;//车型id
 
-    @SerializedName("company_id")
+    @SerializedName("companyId")
     public long companyId;
 
     public String vehicleBrand;// 车辆厂牌
 
-    public String vehicleModel; // 车辆型号
+    @SerializedName("carModel")
+    public long vehicleModel; // 车辆型号
 
-    @SerializedName("plate_color")
+    @SerializedName("plateColor")
     public String plateColor; // 车牌颜色
 
-    @SerializedName("vehicle_no")
+    @SerializedName("vehicleNo")
     public String vehicleNo;// 车牌
 
-    @SerializedName("vehicle_type")
+    @SerializedName("vehicleType")
     public String vehicleType;// 车辆使用类型
 
-    @SerializedName("commercial_type")
+    @SerializedName("commercialType")
     public int commercialType; // 开展业务
 
-    @SerializedName("service_type")
-    public int serviceType;// 车辆类型
+    @SerializedName("serviceType")
+    public String serviceType;// 车辆类型
 
     /**
      * 保存数据
@@ -110,13 +111,13 @@ public class Vehicle {
                 vehicle.companyId = cursor.getInt(cursor.getColumnIndex("companyId"));
 
                 vehicle.vehicleBrand = cursor.getString(cursor.getColumnIndex("vehicleBrand"));
-                vehicle.vehicleModel = cursor.getString(cursor.getColumnIndex("vehicleModel"));
+                vehicle.vehicleModel = cursor.getLong(cursor.getColumnIndex("vehicleModel"));
                 vehicle.plateColor = cursor.getString(cursor.getColumnIndex("plateColor"));
                 vehicle.vehicleNo = cursor.getString(cursor.getColumnIndex("vehicleNo"));
                 vehicle.vehicleType = cursor.getString(cursor.getColumnIndex("vehicleType"));
 
                 vehicle.commercialType = cursor.getInt(cursor.getColumnIndex("commercialType"));
-                vehicle.serviceType = cursor.getInt(cursor.getColumnIndex("serviceType"));
+                vehicle.serviceType = cursor.getString(cursor.getColumnIndex("serviceType"));
             }
         } finally {
             cursor.close();

@@ -13,7 +13,7 @@ public class BaseOrder implements Serializable {
     public String orderDetailType;
 
     @SerializedName("examineStatus")
-    public int baoxiaoStatus;//1未报销，2申请中，3已报销
+    public int baoxiaoStatus;//1未报销，2申请中，3已报销  ///0 -可以申请  1- 申请中   2-申请同意  3-申请拒绝
 
     public String passengerTags;
 
@@ -118,6 +118,7 @@ public class BaseOrder implements Serializable {
     /**
      * 预算金额
      */
+    @SerializedName("money")
     public double budgetFee;
 
     /**

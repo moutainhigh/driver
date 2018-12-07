@@ -429,7 +429,7 @@
                 android:layout_height="50dp"
                 android:background="@color/white"
                 android:onClick="helpCenter"
-                android:visibility="gone">
+                android:visibility="visible">
 
 
                 <TextView

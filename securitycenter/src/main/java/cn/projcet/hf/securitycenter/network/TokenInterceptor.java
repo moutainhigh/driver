@@ -1,12 +1,10 @@
-package com.easymi.component.network;
+package cn.projcet.hf.securitycenter.network;
 
 import android.text.TextUtils;
 
-import com.easymi.component.Config;
-import com.easymi.component.app.XApp;
-
 import java.io.IOException;
 
+import cn.projcet.hf.securitycenter.CenterConfig;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -18,10 +16,9 @@ public class TokenInterceptor implements Interceptor {
 
     @Override
     public Response intercept(Chain chain) throws IOException {
-        String sToken = XApp.getMyPreferences().getString(Config.SP_TOKEN, "");
+        String sToken = CenterConfig.TOKEN;
         Request.Builder builder = chain.request().newBuilder();
         builder.addHeader("token", sToken);
-        builder.addHeader("appKey", Config.APP_KEY);
         return chain.proceed(builder.build());
     }
 }

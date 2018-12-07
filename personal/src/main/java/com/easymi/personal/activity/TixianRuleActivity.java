@@ -53,7 +53,7 @@ public class TixianRuleActivity extends RxBaseActivity {
 
         tixianRule.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 
-        getArticle("DriverRuleOfCash");
+        getArticle("driverPutForward");
     }
 
     private void getArticle(String alias) {
@@ -62,7 +62,7 @@ public class TixianRuleActivity extends RxBaseActivity {
         Observable<ArticleResult> observable = api
 //                .getArticle(EmUtil.getAppKey(), alias,
 //                        EmUtil.getEmployInfo() == null ? null : EmUtil.getEmployInfo().company_id)
-                .getArticle()
+                .getArticle(alias)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

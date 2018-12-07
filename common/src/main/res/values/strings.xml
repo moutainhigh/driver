@@ -20,6 +20,7 @@
     <string name="liushui_title">业务流水</string>
     <string name="liushui_baoxiao_sheheing">报销审核中</string>
     <string name="liushui_baoxiao_done">已报销</string>
+    <string name="liushui_baoxiao_refuse">报销已拒绝</string>
 
     <string name="create_daijia">代驾</string>
     <string name="create_zhuanche">专车</string>

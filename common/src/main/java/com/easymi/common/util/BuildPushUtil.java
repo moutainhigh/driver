@@ -54,8 +54,13 @@ public class BuildPushUtil {
             pe.phone = employ.phone;
             pe.child_type = employ.child_type;
             pe.business = employ.serviceType;
-
-
+            if (employ.serviceType.equals(Config.ZHUANCHE)){
+                pe.modelId = employ.modelId;
+            }else if (employ.serviceType.equals(Config.TAXI)){
+                pe.modelId = employ.taxiModelId;
+            }else {
+                pe.modelId = employ.modelId;
+            }
 //            if (employ.vehicle != null) {
 //                pe.model_id = employ.vehicle.serviceType;
 //            }

@@ -8,11 +8,10 @@ import com.google.gson.TypeAdapter;
 import java.io.IOException;
 import java.net.URLDecoder;
 
-import cn.projcet.hf.securitycenter.CApp;
 import cn.projcet.hf.securitycenter.CenterConfig;
-import cn.projcet.hf.securitycenter.utils.AesUtil;
-import okhttp3.ResponseBody;
-import retrofit2.Converter;
+        import cn.projcet.hf.securitycenter.utils.AesUtil;
+        import okhttp3.ResponseBody;
+        import retrofit2.Converter;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
@@ -35,7 +34,7 @@ public class KeyGsonResponseBodyConverter<T> implements Converter<ResponseBody, 
     public T convert(ResponseBody value) throws IOException {
         try {
             String str = value.string();
-            String jsonStr = AesUtil.aesDecrypt(str, CApp.getMyPreferences().getString(CenterConfig.AES_PASSWORD,AesUtil.AAAAA));
+            String jsonStr = AesUtil.aesDecrypt(str,CenterConfig.AES_KEY);
             String urlString = URLDecoder.decode(jsonStr);
             Log.e("responseJson", urlString);
             return adapter.fromJson(urlString);

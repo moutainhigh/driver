@@ -81,6 +81,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.projcet.hf.securitycenter.dialog.MainDialog;
+
 
 /**
  * Created by developerLzh on 2017/11/3 0003.
@@ -177,7 +179,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
             onLineBtn.setClickable(false);
             onLineBtn.setStatus(LoadingButton.STATUS_LOADING);
             presenter.online(onLineBtn);
-//            new MainDialog(WorkActivity.this,105,Config.APP_KEY,XApp.getMyPreferences().getString(Config.AES_PASSWORD,""));
         });
 //        offlineCon.setOnClickListener(v -> presenter.offline());
         listenOrderCon.setOnClickListener(v -> {
@@ -321,9 +322,16 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         });
         toolbar.setTitle(R.string.work_title);
         toolbar.setRightIcon(R.drawable.ic_more_icon, view -> {
-            ARouter.getInstance()
-                    .build("/personal/MoreActivity")
-                    .navigation();
+//            ARouter.getInstance()
+//                    .build("/personal/MoreActivity")
+//                    .navigation();
+            new MainDialog(WorkActivity.this,
+                    105,
+                    Config.APP_KEY,XApp.getMyPreferences().getString(Config.AES_PASSWORD,""),
+                    XApp.getMyPreferences().getString(Config.SP_TOKEN,""),
+                    0,
+                    "",
+                    "18180635910");
         });
     }
 
@@ -420,9 +428,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         swipeRefreshLayout.setRefreshing(true);
         hideEmpty();
         recyclerView.setVisibility(View.VISIBLE);
-//        Employ employ = EmUtil.getEmployInfo();
-//        employ.status = 2;
-//        employ.updateAll();
     }
 
     @Override
@@ -434,9 +439,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         swipeRefreshLayout.setRefreshing(false);
         showEmpty(0);
         recyclerView.setVisibility(View.GONE);
-//        Employ employ = EmUtil.getEmployInfo();
-//        employ.status = 1;
-//        employ.updateAll();
     }
 
     @Override

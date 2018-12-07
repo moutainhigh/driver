@@ -94,7 +94,7 @@ public class XApp extends MultiDexApplication {
         int current = SysUtil.getVersionCode(this);
         if (current > lastVersion) {
             SharedPreferences.Editor editor = getPreferencesEditor();
-            editor.putLong(Config.SP_DRIVERID, 0);
+            editor.putLong(Config.SP_DRIVERID, -1);
             editor.putBoolean(Config.SP_ISLOGIN, false);
             editor.putInt(Config.SP_LAST_VERSION, current);
             editor.apply();

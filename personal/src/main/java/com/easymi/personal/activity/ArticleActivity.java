@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.easymi.common.entity.PushAnnouncement;
 import com.easymi.component.Config;
 import com.easymi.component.R;
 import com.easymi.component.base.RxBaseActivity;
@@ -132,16 +133,16 @@ public class ArticleActivity extends RxBaseActivity implements View.OnClickListe
     }
 
     private void getAnn(long annId) {
-        Observable<AnnResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
+        Observable<PushAnnouncement> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .employAfficheById(annId, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, new NoErrSubscriberListener<AnnResult>() {
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, new NoErrSubscriberListener<PushAnnouncement>() {
             @Override
-            public void onNext(AnnResult annResult) {
-                String html = annResult.ann.content;
+            public void onNext(PushAnnouncement annResult) {
+                String html = annResult.request.content;
                 String css = "<style type=\"text/css\"> img {" +
                         "width:auto;" +//限定图片宽度填充屏幕
                         "height:auto;" +//限定图片高度自动
@@ -200,8 +201,9 @@ public class ArticleActivity extends RxBaseActivity implements View.OnClickListe
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
         Observable<ArticleResult> observable = api
-                .getArticle(EmUtil.getAppKey(), alias,
-                        EmUtil.getEmployInfo() == null ? null : EmUtil.getEmployInfo().company_id)
+//                .getArticle(EmUtil.getAppKey(), alias,
+//                        EmUtil.getEmployInfo() == null ? null : EmUtil.getEmployInfo().company_id)
+                .getArticle(alias)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

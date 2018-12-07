@@ -130,19 +130,19 @@ public class AboutUsActivity extends RxBaseActivity {
 
     }
 
-    private void getArticle(String alias) {
-        McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
-
-        Observable<ArticleResult> observable = api
-                .getArticle(EmUtil.getAppKey(), alias,
-                        EmUtil.getEmployInfo() == null ? null : EmUtil.getEmployInfo().company_id)
-                .filter(new HttpResultFunc<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
-                true, emResult -> webView.loadData(emResult.data.content, "text/html;charset=UTF-8", null))));
-    }
+//    private void getArticle(String alias) {
+//        McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
+//
+//        Observable<ArticleResult> observable = api
+//                .getArticle(EmUtil.getAppKey(), alias,
+//                        EmUtil.getEmployInfo() == null ? null : EmUtil.getEmployInfo().company_id)
+//                .filter(new HttpResultFunc<>())
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread());
+//
+//        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
+//                true, emResult -> webView.loadData(emResult.data.content, "text/html;charset=UTF-8", null))));
+//    }
 
     @Override
     public void onResume() {

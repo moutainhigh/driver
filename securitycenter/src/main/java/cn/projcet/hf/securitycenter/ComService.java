@@ -1,5 +1,6 @@
 package cn.projcet.hf.securitycenter;
 
+import cn.projcet.hf.securitycenter.result.ContactResult;
 import cn.projcet.hf.securitycenter.result.EmResult;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
@@ -13,13 +14,13 @@ import rx.Observable;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: ComConfig
+ * FileName: ComService
  * Author: shine
  * Date: 2018/11/26 下午6:44
  * Description:
  * History:
  */
-public interface ComConfig {
+public interface ComService {
 
     /**
      * 检测该乘客录音是否授权，是否绑定紧急联系人
@@ -39,7 +40,7 @@ public interface ComConfig {
      * @return
      */
     @FormUrlEncoded
-    @PUT("api/v1/safe/trip_emerge_choose")
+    @POST("api/v1/safe/trip_emerge_choose")
     Observable<EmResult> tripEmergeChoose(@Field("id") long id,
                                           @Field("emergCheck") int emergCheck,
                                           @Field("appKey") String appKey);
@@ -59,28 +60,28 @@ public interface ComConfig {
     Observable<EmResult> tripEmergeContact(@Field("emergName") String emergName,
                                            @Field("emergPhone") String emergPhone,
                                            @Field("passengerId") long passengerId,
-                                           @Field("passengerPhone") long passengerPhone,
+                                           @Field("passengerPhone") String passengerPhone,
                                            @Field("appKey") String appKey);
 
     /**
      * 修改紧急联系人
      *
      * @param id
-     * @param emergCheck
      * @return
      */
     @FormUrlEncoded
-    @PUT("api/v1/safe/trip_emerge_contact")
-    Observable<EmResult> amentEmerge(@Field("emergCheck") int emergCheck,
-                                     @Field("emergName") String emergName,
-                                     @Field("emergPhone") String emergPhone,
-                                     @Field("id") long id,
-                                     @Field("passengerId") long passengerId,
-                                     @Field("passengerPhone") long passengerPhone,
-                                     @Field("shareAuto") int shareAuto,
-                                     @Field("shareEnd") long shareEnd,
-                                     @Field("shareStart") long shareStart,
-                                     @Field("appKey") String appKey);
+    @POST("api/v1/safe/trip_emerge_contacts")
+    Observable<EmResult> amentEmerge(
+//            @Field("emergCheck") int emergCheck,
+            @Field("emergName") String emergName,
+            @Field("emergPhone") String emergPhone,
+            @Field("id") long id,
+            @Field("passengerId") long passengerId,
+            @Field("passengerPhone") String passengerPhone,
+//            @Field("shareAuto") int shareAuto,
+//            @Field("shareEnd") long shareEnd,
+//            @Field("shareStart") long shareStart,
+            @Field("appKey") String appKey);
 
     /**
      * 查询单个紧急联系人
@@ -89,9 +90,8 @@ public interface ComConfig {
      * @return
      */
     @GET("api/v1/safe/trip_emerge_contact/{id}")
-    Observable<EmResult> contactById(@Query("id") long id,
+    Observable<EmResult> contactById(@Path("id") long id,
                                      @Query("appKey") String appKey);
-
 
     /**
      * 删除紧急联系人
@@ -99,28 +99,27 @@ public interface ComConfig {
      * @param id 紧急联系人的id
      * @return
      */
-    @DELETE("api/v1/safe/trip_emerge_contact/{id}")
-    Observable<EmResult> deleteContact(@Query("id") long id,
-                                       @Query("appKey") String appKey);
+    @FormUrlEncoded
+    @POST("api/v1/safe/trip_emerge_contacts_del")
+    Observable<EmResult> deleteContact(@Field("id") long id,
+                                       @Field("appKey") String appKey);
 
     /**
      * 查询紧急联系人列表，是否绑定紧急联系人
      *
      * @param passengerId 乘客id
-     * @param shareAuto   自动分享 1：已开启自动分享,0:已关闭自动分享
      * @return
      */
     @GET("api/v1/safe/trip_emerge_contacts")
-    Observable<EmResult> contactList(@Query("passengerId") long passengerId,
-                                     @Query("shareAuto") int shareAuto,
-                                     @Query("appKey") String appKey);
+    Observable<ContactResult> contactList(@Query("passengerId") long passengerId,
+                                          @Query("appKey") String appKey);
 
     /**
      * 行程自动分享开启，关闭
      *
      * @param appKey
      * @param passengerId
-     * @param shareAuto
+     * @param shareAuto   1:开启自动分享;0:关闭自动分享
      * @param shareEnd
      * @param shareStart
      * @return

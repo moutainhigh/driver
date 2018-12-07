@@ -16,7 +16,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "data.db";
 
-    private static final int VERSION = 71;
+    private static final int VERSION = 72;
 
     private StringBuffer sqlBuf;
 
@@ -180,6 +180,8 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("householdRegistrationName").append(" ").append("TEXT").append(",")
                 .append("token").append(" ").append("TEXT").append(",")
                 .append("refreshToken").append(" ").append("TEXT").append(",")
+                .append("modelId").append(" ").append("LONG").append(",")
+                .append("taxiModelId").append(" ").append("LONG").append(",")
 
                 .append("company_id").append(" ").append("LONG")
                 .append(");");
@@ -292,7 +294,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("vehicleType").append(" ").append("TEXT").append(",")
                 .append("commercialType").append(" ").append("INTEGER").append(",")
 
-                .append("serviceType").append(" ").append("INTEGER")
+                .append("serviceType").append(" ").append("TEXT")
                 .append(");");
         execCreateTableSQL(db);
     }

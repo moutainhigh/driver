@@ -29,7 +29,7 @@
         android:id="@+id/detail_purpose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="费用报销"
+        android:text=""
         android:layout_marginTop="10dp"
         android:layout_below="@+id/top"
         android:layout_marginLeft="30dp"

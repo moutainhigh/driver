@@ -10,7 +10,7 @@ public class PushEmploy {
     //daijia,zhuanche
     public String business;
     //车型id
-    public long model_id;
+    public long modelId;
 
     /**
      * id

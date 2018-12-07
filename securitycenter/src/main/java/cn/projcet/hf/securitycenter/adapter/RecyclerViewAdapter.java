@@ -18,6 +18,7 @@ import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 import java.util.ArrayList;
 
 import cn.projcet.hf.securitycenter.R;
+import cn.projcet.hf.securitycenter.entity.Contact;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
@@ -30,11 +31,16 @@ import cn.projcet.hf.securitycenter.R;
 public class RecyclerViewAdapter extends RecyclerSwipeAdapter<RecyclerViewAdapter.SimpleViewHolder> {
 
     private Context mContext;
-    private ArrayList<String> mDataset;
+    private ArrayList<Contact> mDataset = new ArrayList<>();
 
-    public RecyclerViewAdapter(Context context, ArrayList<String> objects) {
+    public RecyclerViewAdapter(Context context) {
         this.mContext = context;
-        this.mDataset = objects;
+    }
+
+    public void setList( ArrayList<Contact> objects){
+        this.mDataset.clear();
+        this.mDataset.addAll(objects);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -45,9 +51,17 @@ public class RecyclerViewAdapter extends RecyclerSwipeAdapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(final SimpleViewHolder viewHolder, final int position) {
-        String item = mDataset.get(position);
+        Contact item = mDataset.get(position);
 
-        viewHolder.name.setText(item);
+        viewHolder.name.setText(item.emerg_name);
+        viewHolder.tv_phone.setText(item.emerg_phone);
+
+        if (item.emerg_check == 1){
+            viewHolder.iv_check.setVisibility(View.VISIBLE);
+        }else {
+            viewHolder.iv_check.setVisibility(View.GONE);
+        }
+
         viewHolder.swipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
         viewHolder.swipeLayout.addSwipeListener(new SimpleSwipeListener() {
             @Override
@@ -57,17 +71,26 @@ public class RecyclerViewAdapter extends RecyclerSwipeAdapter<RecyclerViewAdapte
         });
 
         viewHolder.tv_delete.setOnClickListener(view -> {
-            mItemManger.removeShownLayouts(viewHolder.swipeLayout);
-            mDataset.remove(position);
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, mDataset.size());
-            mItemManger.closeAllItems();
-//            Toast.makeText(view.getContext(), "Deleted " + viewHolder.textViewData.getText().toString() + "!", Toast.LENGTH_SHORT).show();
+//            mItemManger.removeShownLayouts(viewHolder.swipeLayout);
+//            mDataset.remove(position);
+//            notifyItemRemoved(position);
+//            notifyItemRangeChanged(position, mDataset.size());
+//            mItemManger.closeAllItems();
+            if (itemClickListener != null){
+                itemClickListener.itemClick(view,item);
+            }
         });
         viewHolder.tv_edit.setOnClickListener(v -> {
-
+            if (itemClickListener != null){
+                itemClickListener.itemClick(v,item);
+            }
         });
 
+        viewHolder.lin_item.setOnClickListener(v -> {
+            if (itemClickListener != null){
+                itemClickListener.itemClick(v,item);
+            }
+        });
 //        mItemManger.bind(viewHolder.itemView, position);
     }
 
@@ -100,19 +123,17 @@ public class RecyclerViewAdapter extends RecyclerSwipeAdapter<RecyclerViewAdapte
             name = itemView.findViewById(R.id.name);
             tv_phone = itemView.findViewById(R.id.tv_phone);
             iv_check = itemView.findViewById(R.id.iv_check);
-
-            lin_item.setOnClickListener(view -> {
-
-            });
-
-            tv_edit.setOnClickListener(view -> {
-
-            });
-
-            tv_delete.setOnClickListener(view -> {
-
-            });
         }
     }
 
+
+    private ItemClickListener itemClickListener;
+
+    public void setItemClickListener(ItemClickListener listener) {
+        this.itemClickListener = listener;
+    }
+
+    public interface ItemClickListener {
+        void itemClick(View view,Contact contact);
+    }
 }

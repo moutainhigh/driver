@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.easymi.component.Config;
+import com.easymi.component.activity.WebActivity;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.Employ;
@@ -83,7 +84,14 @@ public class TixianActivity extends RxBaseActivity {
         tixianRuleText = findViewById(R.id.tixian_rule);
         tixianRecord = findViewById(R.id.tixian_record);
 
-        tixianRuleText.setOnClickListener(view -> startActivity(new Intent(TixianActivity.this, TixianRuleActivity.class)));
+        tixianRuleText.setOnClickListener(view -> {
+                    //                startActivity(new Intent(TixianActivity.this, TixianRuleActivity.class))
+                    Intent intent = new Intent(this, WebActivity.class);
+                    intent.putExtra("url", "http://h5.xiaokakj.com/#/protocol?articleName=driverPutForward&appKey=" + Config.APP_KEY);
+                    intent.putExtra("title", getString(R.string.tixian_rule));
+                    startActivity(intent);
+                }
+        );
         tixianRecord.setOnClickListener(view -> startActivity(new Intent(TixianActivity.this, TixianRecordActivity.class)));
         apply.setOnClickListener(view -> apply());
 

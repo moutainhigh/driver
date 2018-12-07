@@ -130,7 +130,11 @@ public class SetActivity extends RxBaseActivity {
     }
 
     public void helpCenter(View view) {
-        Intent intent = new Intent(SetActivity.this, HelpCenterActivity.class);
+//        Intent intent = new Intent(SetActivity.this, HelpCenterActivity.class);
+//        startActivity(intent);
+        Intent intent = new Intent(this, WebActivity.class);
+        intent.putExtra("url", "http://h5.xiaokakj.com/#/protocol?articleName=driverHelp&appKey="+Config.APP_KEY);
+        intent.putExtra("title", getString(R.string.set_about_us));
         startActivity(intent);
     }
 
@@ -162,9 +166,13 @@ public class SetActivity extends RxBaseActivity {
     }
 
     public void aboutUs(View view) {
-        Intent intent = new Intent(SetActivity.this, AboutUsActivity.class);
-//        intent.putExtra("tag", "AboutUs");
-//        intent.putExtra("title", getString(R.string.set_about_us));
+//        Intent intent = new Intent(SetActivity.this, AboutUsActivity.class);
+////        intent.putExtra("tag", "AboutUs");
+////        intent.putExtra("title", getString(R.string.set_about_us));
+//        startActivity(intent);
+        Intent intent = new Intent(this, WebActivity.class);
+        intent.putExtra("url", "http://h5.xiaokakj.com/#/protocol?articleName=driverAboutUs&appKey="+Config.APP_KEY);
+        intent.putExtra("title", getString(R.string.set_about_us));
         startActivity(intent);
     }
 
