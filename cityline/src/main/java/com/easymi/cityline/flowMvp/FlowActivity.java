@@ -890,15 +890,15 @@ public class FlowActivity extends RxBaseActivity implements
     protected void onPause() {
         super.onPause();
         mapView.onPause();
+        notStartFragment.cancelTimer();
+        finishFragment.cancelTimer();
+        acceptSendFragment.cancelTimer();
     }
 
     @Override
     protected void onDestroy() {
         mapView.onDestroy();
         presenter.stopNavi();
-        notStartFragment.cancelTimer();
-        finishFragment.cancelTimer();
-        acceptSendFragment.cancelTimer();
         super.onDestroy();
     }
 

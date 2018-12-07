@@ -141,13 +141,13 @@ public class WorkPresenter implements WorkContract.Presenter {
                                 if (DymOrder.exists(order.scheduleId, order.serviceType)) {
                                     //专线 本地有 状态同步
                                     dymOrder = DymOrder.findByIDType(order.scheduleId, order.serviceType);
-                                    if (order.status <= BaseOrder.SCHEDULE_STATUS_PREPARE) {
+                                    if (order.scheduleStatus <= BaseOrder.SCHEDULE_STATUS_PREPARE) {
                                         dymOrder.orderStatus = ZXOrderStatus.WAIT_START;
-                                    } else if (order.status == BaseOrder.SCHEDULE_STATUS_TAKE) {
+                                    } else if (order.scheduleStatus == BaseOrder.SCHEDULE_STATUS_TAKE) {
                                         dymOrder.orderStatus = ZXOrderStatus.ACCEPT_ING;
-                                    } else if (order.status == BaseOrder.SCHEDULE_STATUS_RUN) {
+                                    } else if (order.scheduleStatus == BaseOrder.SCHEDULE_STATUS_RUN) {
                                         dymOrder.orderStatus = ZXOrderStatus.SEND_ING;
-                                    } else if (order.status == BaseOrder.SCHEDULE_STATUS_FINISH) {
+                                    } else if (order.scheduleStatus == BaseOrder.SCHEDULE_STATUS_FINISH) {
                                         dymOrder.orderStatus = ZXOrderStatus.SEND_OVER;
                                     }
                                     dymOrder.updateStatus();
@@ -227,7 +227,6 @@ public class WorkPresenter implements WorkContract.Presenter {
     @Override
     public void offline() {
         long driverId = EmUtil.getEmployId();
-        Log.e("hufeng/driverId2",driverId+"");
         Observable<EmResult> observable = model.offline(driverId, EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, true,
                 true, emResult -> {
@@ -316,9 +315,9 @@ public class WorkPresenter implements WorkContract.Presenter {
                 editor.apply();
                 view.showDriverStatus();
                 MqttManager.getInstance().creatConnect();//在查询完服务人员后初始化mqtt
-                if (employ.serviceType.equals(Config.ZHUANCHE) || employ.serviceType.equals(Config.TAXI)) {
+//                if (employ.serviceType.equals(Config.ZHUANCHE) || employ.serviceType.equals(Config.TAXI)) {
                     driverehicle(employ);
-                }
+//                }
             }
 
             @Override
@@ -357,8 +356,25 @@ public class WorkPresenter implements WorkContract.Presenter {
                             employ.updateAll();
                         }
                     }
-                    else if (result.data.get(1) != null) {
+                    if (result.data.size()==2){
+                        return;
+                    }
+                    if (result.data.get(1) != null) {
                         Vehicle vehicle = result.data.get(1);
+                        if (TextUtils.equals(vehicle.serviceType, Config.ZHUANCHE)) {
+                            employ.modelId = vehicle.vehicleModel;
+                            employ.updateAll();
+                        }
+                        else if (TextUtils.equals(vehicle.serviceType, Config.TAXI)) {
+                            employ.taxiModelId = vehicle.vehicleModel;
+                            employ.updateAll();
+                        }
+                    }
+                    if (result.data.size()==3){
+                        return;
+                    }
+                    if (result.data.get(2) != null) {
+                        Vehicle vehicle = result.data.get(2);
                         if (TextUtils.equals(vehicle.serviceType, Config.ZHUANCHE)) {
                             employ.modelId = vehicle.vehicleModel;
                             employ.updateAll();

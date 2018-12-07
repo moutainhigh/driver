@@ -37,6 +37,8 @@ public class TimeDialog {
     private ArrayList<String> endTime = new ArrayList<>();
     private ArrayList<String> center = new ArrayList<>();
 
+    private OnSelectListener onSelectListener;
+
     public TimeDialog(Context context) {
         this.context = context;
         View view = LayoutInflater.from(context).inflate(R.layout.layout_time, null, false);
@@ -59,16 +61,16 @@ public class TimeDialog {
         endTime.clear();
         for (int i = 0; i <= 24; i++) {
             StringBuilder sb = new StringBuilder("");
-            if (i<10){
-                sb.append("0").append(i+"").append(":00");
-            }else {
-                sb.append(i+"").append(":00");
+            if (i < 10) {
+                sb.append("0").append(i + "").append(":00");
+            } else {
+                sb.append(i + "").append(":00");
             }
             if (i == 0) {
                 startTime.add(sb.toString());
-            }else if (i == 24){
+            } else if (i == 24) {
                 endTime.add(sb.toString());
-            }else {
+            } else {
                 startTime.add(sb.toString());
                 endTime.add(sb.toString());
             }
@@ -82,6 +84,13 @@ public class TimeDialog {
             dialog.dismiss();
         });
         tv_sure.setOnClickListener(v -> {
+            int startIndex = start.getCurrentItem();
+            int endIndex = end.getCurrentItem();
+            String startStr = startTime.get(startIndex);
+            String endStr = startTime.get(endIndex);
+            if (onSelectListener != null) {
+                onSelectListener.onSelect(startStr + "-" + endStr);
+            }
             dialog.dismiss();
         });
         initWheelView(start, startTime);
@@ -120,5 +129,14 @@ public class TimeDialog {
         public int getItemsCount() {
             return datas != null ? datas.size() : 0;
         }
+    }
+
+    public TimeDialog setOnSelectListener(OnSelectListener listener) {
+        this.onSelectListener = listener;
+        return this;
+    }
+
+    public interface OnSelectListener {
+        void onSelect(String timeStr);
     }
 }

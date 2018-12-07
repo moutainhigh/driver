@@ -70,7 +70,7 @@ public class WorkTimeCounter {
         if (employ == null || StringUtils.isBlank(String.valueOf(employ.status))) {
             return;
         }
-        if (!String.valueOf(employ.status).equals(EmployStatus.ONLINE)) {
+        if (String.valueOf(employ.status).equals(EmployStatus.ONLINE)) {
             totalMinute++;
             long current = SystemClock.uptimeMillis();
             if (current - lastUpTime >= TIME_OFFSET) {

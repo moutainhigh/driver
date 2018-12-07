@@ -37,7 +37,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailHold
 
     @Override
     public DetailHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.detail_item, parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.detail_item, parent, false);
 
         return new DetailHolder(view);
     }
@@ -46,18 +46,36 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailHold
     public void onBindViewHolder(DetailHolder holder, int position) {
         Detail detail = list.get(position);
         holder.detailTime.setText(TimeUtil.getTime("yyyy-MM-dd HH:mm", detail.time * 1000));
-        if (TextUtils.equals(detail.purpose,"DRIVER_RECHARGE")){
+        //ALIPAY_DRIVER_RECHARGE  支付宝充值
+        //WECHAT_DRIVER_RECHARGE  微信充值
+        //PAY_DRIVER_ROYALTY  提成
+        //DRIVER_PUT_FORWARD  提现申請
+        //REJECT_PUT_FORWARD 提现拒絕
+        //ACCEPT_PUT_FORWARD 提现同意
+        if (TextUtils.equals(detail.purpose, "DRIVER_RECHARGE")) {
             holder.detailPurpose.setText("司机充值");
-        }else if (TextUtils.equals(detail.purpose,"PAY_DRIVER_BALANCE")){
+        } else if (TextUtils.equals(detail.purpose, "PAY_DRIVER_BALANCE")) {
             holder.detailPurpose.setText("余额支付");
-        }else if (TextUtils.equals(detail.purpose,"ADMIN_DRIVER_RECHARGE")){
+        } else if (TextUtils.equals(detail.purpose, "ADMIN_DRIVER_RECHARGE")) {
             holder.detailPurpose.setText("后台充值");
+        } else if (TextUtils.equals(detail.purpose, "ALIPAY_DRIVER_RECHARGE")) {
+            holder.detailPurpose.setText("支付宝充值");
+        }else if (TextUtils.equals(detail.purpose, "WECHAT_DRIVER_RECHARGE")) {
+            holder.detailPurpose.setText("微信充值");
+        }else if (TextUtils.equals(detail.purpose, "PAY_DRIVER_ROYALTY")){
+            holder.detailPurpose.setText("提成");
+        }else if (TextUtils.equals(detail.purpose, "DRIVER_PUT_FORWARD")) {
+            holder.detailPurpose.setText("提现申請");
+        }else if (TextUtils.equals(detail.purpose, "REJECT_PUT_FORWARD")) {
+            holder.detailPurpose.setText("提现拒絕");
+        }else if (TextUtils.equals(detail.purpose, "ACCEPT_PUT_FORWARD")) {
+            holder.detailPurpose.setText("提现通过");
         }else {
             holder.detailPurpose.setText("其他");
         }
 
         holder.detailMoney.setText("¥" + detail.money);
-        if(detail.money > 0){
+        if (detail.money > 0) {
             holder.detailMoney.setTextColor(context.getResources().getColor(R.color.yellow));
         } else {
             holder.detailMoney.setTextColor(context.getResources().getColor(R.color.colorAccent));

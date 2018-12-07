@@ -104,7 +104,6 @@ public class EmergeActivity extends CheckPermissionsActivity {
         } else {
             hintFirst();
             getContactList();
-
         }
     }
 
@@ -171,14 +170,16 @@ public class EmergeActivity extends CheckPermissionsActivity {
         });
         tv_time.setOnClickListener(v -> {
             TimeDialog timeDialog = new TimeDialog(this);
+            timeDialog.setOnSelectListener(new TimeDialog.OnSelectListener() {
+                @Override
+                public void onSelect(String timeStr) {
+                    tv_time.setText(timeStr);
+                    startTime = timeStr.split("-")[0];
+                    endTime = timeStr.split("-")[1];
+                    shareAutoTime();
+                }
+            });
             timeDialog.show();
-        });
-        share_able_btn.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                shareAutoAment(1);
-            } else {
-                shareAutoAment(0);
-            }
         });
     }
 
@@ -190,6 +191,7 @@ public class EmergeActivity extends CheckPermissionsActivity {
         lin_list.setVisibility(View.GONE);
         lin_add.setVisibility(View.VISIBLE);
         lin_hint.setVisibility(View.VISIBLE);
+        setAutoShatre();
     }
 
     /**
@@ -211,11 +213,25 @@ public class EmergeActivity extends CheckPermissionsActivity {
         } else {
             share_able_btn.setChecked(false);
         }
+        startTime = contact.share_start;
+        endTime = contact.share_end;
         if (TextUtils.isEmpty(startTime) && TextUtils.isEmpty(endTime)) {
             tv_time.setText(startTime + "-" + endTime + "");
         } else {
             tv_time.setText("未设置");
         }
+        setAutoShatre();
+    }
+
+    //除了第一次加载 其余的根据开关状态调用接口
+    public void setAutoShatre(){
+        share_able_btn.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                shareAutoAment(1);
+            } else {
+                shareAutoAment(0);
+            }
+        });
     }
 
     //获取联系人列表
@@ -226,7 +242,7 @@ public class EmergeActivity extends CheckPermissionsActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        new RxManager().add(observable.subscribe(new MySubscriber<>(this, true,
+        new RxManager().add(observable.subscribe(new MySubscriber<>(this, false,
                 true, emResult -> {
             if (emResult.getCode() == 1) {
                 hintFirst();
@@ -253,7 +269,7 @@ public class EmergeActivity extends CheckPermissionsActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        new RxManager().add(observable.subscribe(new MySubscriber<>(this, true,
+        new RxManager().add(observable.subscribe(new MySubscriber<>(this, false,
                 true, emResult -> {
             if (emResult.getCode() == 1) {
                 getContactList();
@@ -271,7 +287,7 @@ public class EmergeActivity extends CheckPermissionsActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        new RxManager().add(observable.subscribe(new MySubscriber<>(this, true,
+        new RxManager().add(observable.subscribe(new MySubscriber<>(this, false,
                 true, emResult -> {
             if (emResult.getCode() == 1) {
                 getContactList();
@@ -289,10 +305,10 @@ public class EmergeActivity extends CheckPermissionsActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        new RxManager().add(observable.subscribe(new MySubscriber<>(this, true,
+        new RxManager().add(observable.subscribe(new MySubscriber<>(this, false,
                 true, emResult -> {
             if (emResult.getCode() == 1) {
-                getContactList();
+                ToastUtil.showMessage(this, "时间设置成功");
             } else {
                 ToastUtil.showMessage(this, emResult.getMessage());
             }
@@ -307,7 +323,7 @@ public class EmergeActivity extends CheckPermissionsActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        new RxManager().add(observable.subscribe(new MySubscriber<>(this, true,
+        new RxManager().add(observable.subscribe(new MySubscriber<>(this, false,
                 true, emResult -> {
             if (emResult.getCode() == 1) {
                 getContactList();
@@ -326,7 +342,7 @@ public class EmergeActivity extends CheckPermissionsActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        new RxManager().add(observable.subscribe(new MySubscriber<>(this, true,
+        new RxManager().add(observable.subscribe(new MySubscriber<>(this, false,
                 true, emResult -> {
             if (emResult.getCode() == 1) {
                 getContactList();

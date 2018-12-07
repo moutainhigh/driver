@@ -84,28 +84,36 @@ public class MainDialog {
         iv_colse.setOnClickListener(v -> {
             dialog.dismiss();
         });
+        //行程分享
         lin_line_share.setOnClickListener(v -> {
             LineShareDialog shareDialog = new LineShareDialog(mContext);
             shareDialog.show();
             dialog.dismiss();
         });
+        //一键报警
         lin_baojin.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, CallPoliceActivity.class);
             mContext.startActivity(intent);
             dialog.dismiss();
         });
+
+        //录音授权
         lin_luyin.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, LuyinActivity.class);
             intent.putExtra("soundRecordCheck",soundRecordCheck);
             mContext.startActivity(intent);
             dialog.dismiss();
         });
+
+        //联系人设置
         lin_lianxiren.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, EmergeActivity.class);
             intent.putExtra("emergeContackCheck",emergeContackCheck);
             mContext.startActivity(intent);
             dialog.dismiss();
         });
+
+        //安全中心描述
         lin_decript.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, WebActivity.class);
             intent.putExtra("url", "http://h5.xiaokakj.com/#/protocol?articleName=passengerSafetyCenter&appKey="+CenterConfig.APPKEY);

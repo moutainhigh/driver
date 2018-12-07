@@ -157,9 +157,7 @@ public class AcceptSendFragment extends RxBaseFragment {
                     && dymOrder.orderStatus == ZXOrderStatus.ACCEPT_ING) {//还在接人时，移除所有非0
                 iterator.remove();
             } else if (orderCustomer.status != 3
-                    && dymOrder.orderStatus == ZXOrderStatus.SEND_ING) {//还在送人时，移除所有非3
-                iterator.remove();
-            } else {//正常情况下不会进这个else
+                    && dymOrder.orderStatus == ZXOrderStatus.SEND_ING) { //还在送人时，移除所有非3
                 iterator.remove();
             }
         }

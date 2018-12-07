@@ -66,10 +66,10 @@ public class ChangeActivity extends RxBaseActivity {
 
             String oldPswSave = AesUtil.aesDecrypt(XApp.getMyPreferences().getString(Config.SP_LOGIN_PSW, ""), AesUtil.AAAAA);
 
-            if (DymOrder.findAll().size() != 0) {
-                ToastUtil.showMessage(ChangeActivity.this, getString(R.string.be_busy));
-                return;
-            }
+//            if (DymOrder.findAll().size() != 0) {
+//                ToastUtil.showMessage(ChangeActivity.this, getString(R.string.be_busy));
+//                return;
+//            }
             if (!oldPsw.equals(oldPswSave)) {
                 ToastUtil.showMessage(ChangeActivity.this, getString(R.string.not_same_old));
                 return;

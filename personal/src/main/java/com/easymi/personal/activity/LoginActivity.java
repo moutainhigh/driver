@@ -361,13 +361,16 @@ public class LoginActivity extends RxBaseActivity {
 
         editQiye.setText(XApp.getMyPreferences().getString(Config.SP_LAT_QIYE_CODE, ""));
 
-        String enAcc = XApp.getMyPreferences().getString(Config.SP_LOGIN_ACCOUNT, "");
-        String enPsw = XApp.getMyPreferences().getString(Config.SP_LOGIN_PSW, "");
-        if (StringUtils.isNotBlank(enAcc) && StringUtils.isNotBlank(enPsw)) {
-            String acc = AesUtil.aesDecrypt(enAcc, AesUtil.AAAAA);
-            String psw = AesUtil.aesDecrypt(enPsw, AesUtil.AAAAA);
-            editAccount.setText(acc);
-            editPsw.setText(psw);
+        checkboxRemember.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_REMEMBER_PSW,false));
+        if (XApp.getMyPreferences().getBoolean(Config.SP_REMEMBER_PSW,false)){
+            String enAcc = XApp.getMyPreferences().getString(Config.SP_LOGIN_ACCOUNT, "");
+            String enPsw = XApp.getMyPreferences().getString(Config.SP_LOGIN_PSW, "");
+            if (StringUtils.isNotBlank(enAcc) && StringUtils.isNotBlank(enPsw)) {
+                String acc = AesUtil.aesDecrypt(enAcc, AesUtil.AAAAA);
+                String psw = AesUtil.aesDecrypt(enPsw, AesUtil.AAAAA);
+                editAccount.setText(acc);
+                editPsw.setText(psw);
+            }
         }
     }
 
@@ -526,7 +529,11 @@ public class LoginActivity extends RxBaseActivity {
             editor.putLong(Config.SP_DRIVERID, employ.id);
             editor.putString(Config.SP_LOGIN_ACCOUNT, AesUtil.aesEncrypt(name, AesUtil.AAAAA));
             editor.putBoolean(Config.SP_REMEMBER_PSW, checkboxRemember.isChecked());
-            editor.putString(Config.SP_LOGIN_PSW, AesUtil.aesEncrypt(psw, AesUtil.AAAAA));
+            if (checkboxRemember.isChecked()){
+                editor.putString(Config.SP_LOGIN_PSW, AesUtil.aesEncrypt(psw, AesUtil.AAAAA));
+            }else {
+                editor.putString(Config.SP_LOGIN_PSW, "");
+            }
             editor.apply();
 
 
