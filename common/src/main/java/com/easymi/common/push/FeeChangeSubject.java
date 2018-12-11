@@ -12,6 +12,6 @@ public interface FeeChangeSubject {
     void addObserver(FeeChangeObserver obj);
     //移除观察者
     void deleteObserver(FeeChangeObserver obj);
-    //当主题方法改变时,这个方法被调用,通知所有的观察者
+    //当主题方法改变时,这个方法被调用,通知所有的观察
     void notifyObserver(long orderId,String orderType);
 }

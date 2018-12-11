@@ -46,10 +46,12 @@ import com.amap.api.navi.view.RouteOverLay;
 import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.route.DriveRouteResult;
 import com.easymi.common.entity.BuildPushData;
+import com.easymi.common.entity.PassengerLocation;
 import com.easymi.common.push.FeeChangeObserver;
 import com.easymi.common.push.HandlePush;
 //import com.easymi.common.push.MQTTService;
 import com.easymi.common.push.MqttManager;
+import com.easymi.common.push.PassengerLocObserver;
 import com.easymi.common.trace.TraceInterface;
 import com.easymi.common.trace.TraceReceiver;
 import com.easymi.component.Config;
@@ -117,6 +119,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         LocObserver,
         TraceInterface,
         FeeChangeObserver,
+        PassengerLocObserver,
         CancelOrderReceiver.OnCancelListener,
         AMap.OnMapTouchListener,
         OrderFinishReceiver.OnFinishListener {
@@ -284,11 +287,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 //                } else {
 //                    popWindow.showSame();
 //                }
-                if (zcOrder.orderStatus == ZCOrderStatus.NEW_ORDER || zcOrder.orderStatus == ZCOrderStatus.PAIDAN_ORDER) {
-                    popWindow.hideConsumer();
-                } else {
-                    popWindow.showConsumer();
-                }
+//                if (zcOrder.orderStatus == ZCOrderStatus.NEW_ORDER || zcOrder.orderStatus == ZCOrderStatus.PAIDAN_ORDER) {
+//                    popWindow.hideConsumer();
+//                } else {
+//                    popWindow.showConsumer();
+//                }
 //                if ((zcOrder.orderStatus == ZCOrderStatus.TAKE_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER || zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER) && !notChangeOrder) {
 //                    popWindow.showTransfer();
 //                } else {
@@ -318,11 +321,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 //                intent.putExtra("groupId", zcOrder.groupId);
 //                startActivity(intent);
 //            }
-            else if (i == R.id.pop_consumer_msg) {
-                Intent intent = new Intent(FlowActivity.this, ConsumerInfoActivity.class);
-                intent.putExtra("orderId", orderId);
-                startActivity(intent);
-            }
+//            else if (i == R.id.pop_consumer_msg) {
+//                Intent intent = new Intent(FlowActivity.this, ConsumerInfoActivity.class);
+//                intent.putExtra("orderId", orderId);
+//                startActivity(intent);
+//            }
 //            else if (i == R.id.pop_order_transfer) {
 //                Intent intent = new Intent(FlowActivity.this, TransferActivity.class);
 //                intent.putExtra("order", zcOrder);
@@ -362,14 +365,14 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         if (zcOrder.orderStatus == ZCOrderStatus.NEW_ORDER) {
             hideTops();
             not_accept_layout.setVisibility(View.VISIBLE);
-            to_appoint_navi_con_1.setOnClickListener(view -> presenter.navi(new LatLng(getStartAddr().lat,
-                    getStartAddr().lng), getStartAddr().poi, orderId));
+            to_appoint_navi_con_1.setOnClickListener(view ->
+                    presenter.navi(new LatLng(getStartAddr().lat, getStartAddr().lng), getStartAddr().poi, orderId));
         } else if (zcOrder.orderStatus == ZCOrderStatus.TAKE_ORDER
                 || zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
             hideTops();
             to_appoint_layout.setVisibility(View.VISIBLE);
-            to_appoint_navi_con.setOnClickListener(view -> presenter.navi(new LatLng(getStartAddr().lat,
-                    getStartAddr().lng), getStartAddr().poi, orderId));
+            to_appoint_navi_con.setOnClickListener(view ->
+                    presenter.navi(new LatLng(getStartAddr().lat, getStartAddr().lng), getStartAddr().poi, orderId));
 
             String time = getString(R.string.please_start_at)
                     + TimeUtil.getTime("HH:mm", zcOrder.bookTime * 1000)
@@ -392,7 +395,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             go_layout.setVisibility(View.VISIBLE);
             naviCon.setOnClickListener(view -> {
                 if (null != getEndAddr()) {
-                    presenter.navi(new LatLng(getEndAddr().lat, getEndAddr().lat), getEndAddr().addr, orderId);
+                    presenter.navi(new LatLng(getEndAddr().lat, getEndAddr().lng), getEndAddr().poi, orderId);
                 } else {
                     ToastUtil.showMessage(FlowActivity.this, getString(R.string.illegality_place));
                 }
@@ -1154,6 +1157,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         super.onStart();
         LocReceiver.getInstance().addObserver(this);//添加位置订阅
         HandlePush.getInstance().addObserver(this);//添加订单变化订阅
+        HandlePush.getInstance().addPLObserver(this);//添加订单变化订阅
 
         traceReceiver = new TraceReceiver(this);
         IntentFilter filter2 = new IntentFilter();
@@ -1213,6 +1217,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         super.onStop();
         LocReceiver.getInstance().deleteObserver(this);//取消位置订阅
         HandlePush.getInstance().deleteObserver(this);//取消订单变化订阅
+        HandlePush.getInstance().deletePLObserver(this);//取消订单变化订阅
 
         unregisterReceiver(traceReceiver);
         unregisterReceiver(cancelOrderReceiver);
@@ -1345,6 +1350,29 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
     }
 
+    private Marker plMaker;
+
+    @Override
+    public void plChange(PassengerLocation plocation) {
+        if (plMaker != null){
+            plMaker.remove();
+        }
+        if (null != plocation) {
+//            LatLng plLatlng = new LatLng(plocation.latitude, plocation.longitude);
+//            receiveLoc(plocation);//手动调用上次位置 减少从北京跳过来的时间
+//            aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(plLatlng, 19));//移动镜头，首次镜头快速跳到指定位置
+
+            MarkerOptions markerOption = new MarkerOptions();
+            markerOption.position(new LatLng(plocation.latitude, plocation.longitude));
+            markerOption.draggable(false);//设置Marker可拖动
+            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                    .decodeResource(getResources(), R.mipmap.blue_dot)));
+            // 将Marker设置为贴地显示，可以双指下拉地图查看效果
+            markerOption.setFlat(true);//设置marker平贴地图效果
+            plMaker = aMap.addMarker(markerOption);
+        }
+    }
+
     @Override
     public void feeChanged(long orderId, String orderType) {
         if (zcOrder == null) {
@@ -1429,7 +1457,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     public boolean isEnableSwipe() {
         return false;
     }
-
 
     private class AlbumOrientationEventListener extends OrientationEventListener {
         private int mOrientation;

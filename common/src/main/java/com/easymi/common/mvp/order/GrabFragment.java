@@ -87,15 +87,15 @@ public class GrabFragment extends RxBaseFragment implements MyOrderContract.View
         adapter.setItemClickListener((view, baseOrder) -> {
             if (StringUtils.isNotBlank(baseOrder.serviceType)){
                 if (view.getId() == R.id.root ) {
-                    if (baseOrder.serviceType.equals(Config.ZHUANCHE)) {
-                        ARouter.getInstance()
-                                .build("/zhuanche/FlowActivity")
-                                .withLong("orderId", baseOrder.orderId).navigation();
-                    } else if (baseOrder.serviceType.equals(Config.TAXI)) {
-                        ARouter.getInstance()
-                                .build("/taxi/FlowActivity")
-                                .withLong("orderId", baseOrder.orderId).navigation();
-                    }
+//                    if (baseOrder.serviceType.equals(Config.ZHUANCHE)) {
+//                        ARouter.getInstance()
+//                                .build("/zhuanche/FlowActivity")
+//                                .withLong("orderId", baseOrder.orderId).navigation();
+//                    } else if (baseOrder.serviceType.equals(Config.TAXI)) {
+//                        ARouter.getInstance()
+//                                .build("/taxi/FlowActivity")
+//                                .withLong("orderId", baseOrder.orderId).navigation();
+//                    }
                 }else if (view.getId() == R.id.tv_grab){
                     presenter.grabOrder((MultipleOrder) baseOrder);
                 }

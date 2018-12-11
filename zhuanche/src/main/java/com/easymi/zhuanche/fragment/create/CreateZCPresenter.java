@@ -10,6 +10,7 @@ import com.amap.api.services.route.DriveStep;
 import com.amap.api.services.route.RideRouteResult;
 import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
+import com.easymi.common.result.CreateOrderResult;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
@@ -38,12 +39,9 @@ public class CreateZCPresenter implements CreateZCContract.Presenter {
     }
 
     @Override
-    public void queryZCType() {
-        Employ employ = EmUtil.getEmployInfo();
-        view.getManager().add(model.queryZCType(employ.company_id,
-//                employ.vehicle.serviceType
-                1
-        ).subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<ZCTypeResult>() {
+    public void queryZCType(String adcode,String citycode,int carModel,double lat,double lng) {
+        view.getManager().add(model.queryZCType( adcode, citycode, carModel, lat, lng)
+                .subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<ZCTypeResult>() {
             @Override
             public void onNext(ZCTypeResult zcTypeResult) {
                 view.showTypeTab(zcTypeResult);
@@ -76,11 +74,10 @@ public class CreateZCPresenter implements CreateZCContract.Presenter {
     }
 
     @Override
-    public void queryBudget(Long passengerId, Double distance, Integer time, Long orderTime, Long typeId,Long modelId) {
-        Employ employ = EmUtil.getEmployInfo();
-        view.getManager().add(model.getBudgetPrice(passengerId, employ.company_id,
-                distance == null ? 0.0 : distance, time == null ? 0 : time, orderTime, typeId,modelId)
-                .subscribe(new MySubscriber<BudgetResult>(context, false,
+    public void queryBudget(Long businessId, Long companyId, Double distance,Integer time, Long modelId) {
+        view.getManager().add(model.getBudgetPrice(businessId, companyId,
+                distance == null ? 0.0 : distance, time == null ? 0 : time, modelId)
+                .subscribe(new MySubscriber<>(context, false,
                         false, new HaveErrSubscriberListener<BudgetResult>() {
                     @Override
                     public void onNext(BudgetResult budgetResult) {
@@ -140,15 +137,35 @@ public class CreateZCPresenter implements CreateZCContract.Presenter {
     }
 
     @Override
-    public void createOrder(Long passengerId, String passengerName, String passengerPhone, long orderTime, String bookAddress, Double bookAddressLat, Double bookAddressLng, String destination, Double destinationLat, Double destinationLng, Double budgetFee, Long cid) {
-        Employ employ = EmUtil.getEmployInfo();
-        view.getManager().add(model.createOrder(passengerId, passengerName, passengerPhone, orderTime,
-                bookAddress, bookAddressLat, bookAddressLng, destination, destinationLat, destinationLng,
-                employ.company_id,
-//                employ.company_name,
-                "company_name",
-                budgetFee, cid, employ.nickName, employ.id).subscribe(
-                new MySubscriber<>(context, true, false, zcOrderResult -> view.createSuc(zcOrderResult))
+    public void createOrder(Long bookTime,
+                            Double budgetFee,
+                            Long businessId,
+                            String channelAlias,
+                            Long companyId,
+                            Long driverId,
+                            String driverName,
+                            String driverPhone,
+                            Long modelId,
+                            String orderAddress,
+                            Long passengerId,
+                            String passengerName,
+                            String passengerPhone,
+                            String serviceType) {
+        view.getManager().add(model.createOrder( bookTime,
+                 budgetFee,
+                 businessId,
+                 channelAlias,
+                 companyId,
+                 driverId,
+                 driverName,
+                 driverPhone,
+                 modelId,
+                 orderAddress,
+                 passengerId,
+                 passengerName,
+                 passengerPhone,
+                 serviceType).subscribe(
+                new MySubscriber<>(context, true, false, createOrderResult -> view.createSuc(createOrderResult))
         ));
     }
 }

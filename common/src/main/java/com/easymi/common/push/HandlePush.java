@@ -17,6 +17,7 @@ import com.easymi.common.CommApiService;
 import com.easymi.common.R;
 import com.easymi.common.entity.Address;
 import com.easymi.common.entity.MultipleOrder;
+import com.easymi.common.entity.PassengerLocation;
 import com.easymi.common.entity.PushAnnouncement;
 import com.easymi.common.mvp.grab.GrabActivity2;
 import com.easymi.common.mvp.work.WorkActivity;
@@ -29,11 +30,13 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.GsonUtil;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.EmployStatus;
 
@@ -54,13 +57,14 @@ import rx.schedulers.Schedulers;
  * Created by Administrator on 2017/1/11.
  */
 
-public class HandlePush implements FeeChangeSubject {
+public class HandlePush implements FeeChangeSubject,PassengerLocSubject {
 
     private RxManager rxManager;
 
     public static int NOTIFY_ID = 1993;
 
     private static List<FeeChangeObserver> observers;
+    private static List<PassengerLocObserver> plObservers;
     private static HandlePush instance;
 
     private HandlePush() {
@@ -253,6 +257,11 @@ public class HandlePush implements FeeChangeSubject {
                 intent.setAction(Config.TIRED_NOTICE);
                 intent.putExtra("data",data);
                 XApp.getInstance().sendBroadcast(intent);
+            }else if (msg.equals("passenger_gps")){
+                String data = jb.optString("data");
+                PassengerLocation location = GsonUtil.parseJson(data, PassengerLocation.class);
+                Log.e("hufeng/location",data);
+                notifyPLObserver(location);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -531,8 +540,6 @@ public class HandlePush implements FeeChangeSubject {
                             }
                         }
                     }
-
-
                 }
                 voiceStr +=
 //                        order.orderDetailType//酒后代驾
@@ -669,6 +676,40 @@ public class HandlePush implements FeeChangeSubject {
         }
         for (FeeChangeObserver observer : observers) {
             observer.feeChanged(orderId, orderType);
+        }
+    }
+
+    @Override
+    public void addPLObserver(PassengerLocObserver obj) {
+        if (null == plObservers) {
+            plObservers = new ArrayList<>();
+        }
+        boolean hasd = false;
+        for (PassengerLocObserver observer : plObservers) {
+            if (obj == observer) {
+                hasd = true;
+            }
+        }
+        if (!hasd) {//避免重复添加观察者
+            plObservers.add(obj);
+        }
+    }
+
+    @Override
+    public void deletePLObserver(PassengerLocObserver obj) {
+        if (null == plObservers) {
+            return;
+        }
+        plObservers.remove(obj);
+    }
+
+    @Override
+    public void notifyPLObserver(PassengerLocation passengerLocation) {
+        if (null == plObservers) {
+            return;
+        }
+        for (PassengerLocObserver observer : plObservers) {
+            observer.plChange(passengerLocation);
         }
     }
 

@@ -67,7 +67,11 @@ public interface GrabContract {
 
         Observable<MultipleOrderResult> queryTaxiOrder(Long orderId);
 
+        Observable<MultipleOrderResult> grabTaxiOrder(Long orderId,Long version);
+
         Observable<MultipleOrderResult> takeTaxiOrder(Long orderId,Long version);
+
+
     }
 
 }

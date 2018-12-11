@@ -54,16 +54,7 @@ public class BuildPushUtil {
             pe.phone = employ.phone;
             pe.child_type = employ.child_type;
             pe.business = employ.serviceType;
-            if (employ.serviceType.equals(Config.ZHUANCHE)){
-                pe.modelId = employ.modelId;
-            }else if (employ.serviceType.equals(Config.TAXI)){
-                pe.modelId = employ.taxiModelId;
-            }else {
-                pe.modelId = employ.modelId;
-            }
-//            if (employ.vehicle != null) {
-//                pe.model_id = employ.vehicle.serviceType;
-//            }
+            pe.modelId = employ.modelId;
         } else {
             //司机信息异常不处理
             return null;
@@ -106,7 +97,7 @@ public class BuildPushUtil {
 
             if (dymOrder.orderType.equals(Config.DAIJIA)) {
 
-            } else if (dymOrder.orderType.equals(Config.ZHUANCHE) || dymOrder.orderType.equals(Config.TAXI) ) {
+            } else if (dymOrder.orderType.equals(Config.ZHUANCHE) || dymOrder.orderType.equals(Config.TAXI)) {
 
                 dataOrder.status = dymOrder.orderStatus;
 

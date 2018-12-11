@@ -139,7 +139,7 @@
         android:background="@drawable/corners_white_gray_stroke_2"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="20dp"

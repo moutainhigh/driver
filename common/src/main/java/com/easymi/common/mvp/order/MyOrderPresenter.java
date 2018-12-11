@@ -4,26 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
-import com.alibaba.android.arouter.launcher.ARouter;
-import com.easymi.common.entity.CityLine;
 import com.easymi.common.entity.MultipleOrder;
-import com.easymi.common.mvp.work.WorkContract;
-import com.easymi.common.mvp.work.WorkModel;
-import com.easymi.common.push.WorkTimeCounter;
 import com.easymi.common.result.MultipleOrderResult;
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.component.Config;
-import com.easymi.component.ZXOrderStatus;
-import com.easymi.component.entity.DymOrder;
 import com.easymi.component.network.ErrCode;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
-import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.ToastUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import rx.Observable;
 

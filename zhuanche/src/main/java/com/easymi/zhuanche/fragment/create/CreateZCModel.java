@@ -1,5 +1,6 @@
 package com.easymi.zhuanche.fragment.create;
 
+import com.easymi.common.result.CreateOrderResult;
 import com.easymi.component.Config;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
@@ -21,9 +22,9 @@ import rx.schedulers.Schedulers;
 public class CreateZCModel implements CreateZCContract.Model {
 
     @Override
-    public Observable<ZCTypeResult> queryZCType(Long companyId, Integer serviceType) {
+    public Observable<ZCTypeResult> queryZCType(String adcode,String citycode,int carModel,double lat,double lng) {
         return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
-                .getZCBusiness(EmUtil.getAppKey(), 1, 100, companyId, serviceType)
+                .getZCBusiness( adcode, citycode, carModel, lat, lng)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -39,40 +40,46 @@ public class CreateZCModel implements CreateZCContract.Model {
     }
 
     @Override
-    public Observable<BudgetResult> getBudgetPrice(Long passengerId, Long companyId, Double distance, Integer time, Long orderTime, Long typeId, Long modelId) {
+    public Observable<BudgetResult> getBudgetPrice(Long businessId, Long companyId, Double distance,Integer time, Long modelId) {
         return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
-                .getBudgetPrice(passengerId, companyId, distance, time, orderTime, "supplement", typeId, modelId, EmUtil.getAppKey())
+                .getBudgetPrice(businessId, companyId, distance, time, modelId)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
-    public Observable<ZCOrderResult> createOrder(Long passengerId,
-                                                 String passengerName,
-                                                 String passengerPhone,
-                                                 long orderTime,
-                                                 String bookAddress,
-                                                 Double bookAddressLat,
-                                                 Double bookAddressLng,
-                                                 String destination,
-                                                 Double destinationLat,
-                                                 Double destinationLng,
-                                                 Long companyId,
-                                                 String companyName,
-                                                 Double budgetFee,
-                                                 Long cid,
-                                                 String orderPerson,
-                                                 Long orderPersonId) {
+    public Observable<CreateOrderResult> createOrder(Long bookTime,
+                                                     Double budgetFee,
+                                                     Long businessId,
+                                                     String channelAlias,
+                                                     Long companyId,
+                                                     Long driverId,
+                                                     String driverName,
+                                                     String driverPhone,
+                                                     Long modelId,
+                                                     String orderAddress,
+                                                     Long passengerId,
+                                                     String passengerName,
+                                                     String passengerPhone,
+                                                     String serviceType) {
         return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
-                .createOrder(passengerId, passengerName, passengerPhone, orderTime,
-                        bookAddress, bookAddressLat, bookAddressLng, destination,
-                        destinationLat, destinationLng, companyId, companyName,
-                        budgetFee, EmUtil.getAppKey(), cid, orderPerson, orderPersonId,
-//                        (long) EmUtil.getEmployInfo().vehicle.serviceType
-                        1l
+                .createOrder(bookTime,
+                        budgetFee,
+                        businessId,
+                        channelAlias,
+                        companyId,
+                        driverId,
+                        driverName,
+                        driverPhone,
+                        modelId,
+                        orderAddress,
+                        passengerId,
+                        passengerName,
+                        passengerPhone,
+                        serviceType
                 )
-                .filter(new HttpResultFunc<>())
+                .filter(new HttpResultFunc())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

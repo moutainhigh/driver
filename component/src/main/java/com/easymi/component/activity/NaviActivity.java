@@ -255,17 +255,17 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     @Override
     public void onCalculateRouteFailure(int i) {
-//        Toast.makeText(this, "路线规划失败", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "路线规划失败", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onReCalculateRouteForYaw() {
-//        XApp.getInstance().syntheticVoice("您已偏航，正在重新规划路径");
+        XApp.getInstance().syntheticVoice("您已偏航，正在重新规划路径");
     }
 
     @Override
     public void onReCalculateRouteForTrafficJam() {
-//        XApp.getInstance().syntheticVoice("为躲避拥堵，正在重新规划路径");
+        XApp.getInstance().syntheticVoice("为躲避拥堵，正在重新规划路径");
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.easymi.zhuanche.fragment.create;
 import android.widget.TextView;
 
 import com.amap.api.services.core.LatLonPoint;
+import com.easymi.common.result.CreateOrderResult;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.zhuanche.result.BudgetResult;
 import com.easymi.zhuanche.result.ZCOrderResult;
@@ -45,41 +46,55 @@ public interface CreateZCContract {
 
         void showDisAndTimeErr();
 
-        void createSuc(ZCOrderResult zcOrderResult);
+        void createSuc(CreateOrderResult createOrderResult);
     }
 
     interface Presenter {
-        void queryZCType();
+        void queryZCType(String adcode, String citycode, int carModel, double lat, double lng);
 
         void queryPassenger(String phone);
 
-        void queryBudget(Long passengerId, Double distance, Integer time, Long orderTime, Long typeId,Long modelId);
+        void queryBudget(Long businessId, Long companyId, Double distance, Integer time, Long modelId);
 
         void routePlan(LatLonPoint start, LatLonPoint end);
 
-        void createOrder(Long passengerId, String passengerName,
-                         String passengerPhone, long orderTime,
-                         String bookAddress, Double bookAddressLat,
-                         Double bookAddressLng, String destination,
-                         Double destinationLat, Double destinationLng,
-                         Double budgetFee, Long cid);
+        void createOrder(Long bookTime,
+                         Double budgetFee,
+                         Long businessId,
+                         String channelAlias,
+                         Long companyId,
+                         Long driverId,
+                         String driverName,
+                         String driverPhone,
+                         Long modelId,
+                         String orderAddress,
+                         Long passengerId,
+                         String passengerName,
+                         String passengerPhone,
+                         String serviceType);
     }
 
     interface Model {
-        Observable<ZCTypeResult> queryZCType(Long companyId,Integer serviceType);
+        Observable<ZCTypeResult> queryZCType(String adcode, String citycode, int carModel, double lat, double lng);
 
         Observable<PassengerResult> queryPassenger(Long companyId, String companyName, String phone);
 
-        Observable<BudgetResult> getBudgetPrice(Long passengerId, Long companyId, Double distance, Integer time, Long orderTime, Long typeId,Long modelId);
+        Observable<BudgetResult> getBudgetPrice(Long businessId, Long companyId, Double distance, Integer time, Long modelId);
 
-        Observable<ZCOrderResult> createOrder(Long passengerId, String passengerName,
-                                              String passengerPhone, long orderTime,
-                                              String bookAddress, Double bookAddressLat,
-                                              Double bookAddressLng, String destination,
-                                              Double destinationLat, Double destinationLng,
-                                              Long companyId, String companyName,
-                                              Double budgetFee, Long cid,
-                                              String orderPerson, Long orderPersonId);
+        Observable<CreateOrderResult> createOrder(Long bookTime,
+                                              Double budgetFee,
+                                              Long businessId,
+                                              String channelAlias,
+                                              Long companyId,
+                                              Long driverId,
+                                              String driverName,
+                                              String driverPhone,
+                                              Long modelId,
+                                              String orderAddress,
+                                              Long passengerId,
+                                              String passengerName,
+                                              String passengerPhone,
+                                              String serviceType);
 
     }
 }

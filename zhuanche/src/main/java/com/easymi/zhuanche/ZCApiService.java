@@ -1,6 +1,7 @@
 package com.easymi.zhuanche;
 
 import com.easymi.common.entity.PullFeeResult;
+import com.easymi.common.result.CreateOrderResult;
 import com.easymi.common.result.GetFeeResult;
 import com.easymi.common.result.MultipleOrderResult;
 import com.easymi.component.result.EmResult;
@@ -205,48 +206,48 @@ public interface ZCApiService {
 //    Observable<EmResult> payOrder(@Field("id") Long orderId,
 //                                  @Field("operateType") String payType);
 
-    /**
-     * 补单
-     *
-     * @param passengerId
-     * @param passengerName
-     * @param passengerPhone
-     * @param bookTime
-     * @param bookAddress
-     * @param bookAddressLat
-     * @param bookAddressLng
-     * @param destination
-     * @param destinationLat
-     * @param destinationLng
-     * @param companyId
-     * @param companyName
-     * @param budgetFee
-     * @param appKey
-     * @param cid            订单类型id
-     * @param orderPerson
-     * @param orderPersonId
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("/driver/api/v1/createSpecialOrder")
-    Observable<ZCOrderResult> createOrder(@Field("passenger_id") Long passengerId,
-                                          @Field("passenger_name") String passengerName,
-                                          @Field("passenger_phone") String passengerPhone,
-                                          @Field("book_time") Long bookTime,
-                                          @Field("book_address") String bookAddress,
-                                          @Field("book_address_lat") Double bookAddressLat,
-                                          @Field("book_address_lng") Double bookAddressLng,
-                                          @Field("destination") String destination,
-                                          @Field("destination_lat") Double destinationLat,
-                                          @Field("destination_lng") Double destinationLng,
-                                          @Field("company_id") Long companyId,
-                                          @Field("company_name") String companyName,
-                                          @Field("budget_fee") Double budgetFee,
-                                          @Field("app_key") String appKey,
-                                          @Field("cid") Long cid,
-                                          @Field("order_person") String orderPerson,
-                                          @Field("order_person_id") Long orderPersonId,
-                                          @Field("car_type") Long carType);
+//    /**
+//     * 补单
+//     *
+//     * @param passengerId
+//     * @param passengerName
+//     * @param passengerPhone
+//     * @param bookTime
+//     * @param bookAddress
+//     * @param bookAddressLat
+//     * @param bookAddressLng
+//     * @param destination
+//     * @param destinationLat
+//     * @param destinationLng
+//     * @param companyId
+//     * @param companyName
+//     * @param budgetFee
+//     * @param appKey
+//     * @param cid            订单类型id
+//     * @param orderPerson
+//     * @param orderPersonId
+//     * @return
+//     */
+//    @FormUrlEncoded
+//    @POST("/driver/api/v1/createSpecialOrder")
+//    Observable<ZCOrderResult> createOrder(@Field("passenger_id") Long passengerId,
+//                                          @Field("passenger_name") String passengerName,
+//                                          @Field("passenger_phone") String passengerPhone,
+//                                          @Field("book_time") Long bookTime,
+//                                          @Field("book_address") String bookAddress,
+//                                          @Field("book_address_lat") Double bookAddressLat,
+//                                          @Field("book_address_lng") Double bookAddressLng,
+//                                          @Field("destination") String destination,
+//                                          @Field("destination_lat") Double destinationLat,
+//                                          @Field("destination_lng") Double destinationLng,
+//                                          @Field("company_id") Long companyId,
+//                                          @Field("company_name") String companyName,
+//                                          @Field("budget_fee") Double budgetFee,
+//                                          @Field("app_key") String appKey,
+//                                          @Field("cid") Long cid,
+//                                          @Field("order_person") String orderPerson,
+//                                          @Field("order_person_id") Long orderPersonId,
+//                                          @Field("car_type") Long carType);
 
 //    /**
 //     * 预估价格
@@ -272,18 +273,18 @@ public interface ZCApiService {
 //                                            @Query("model_id") Long modelId,
 //                                            @Query("app_key") String appKey);
 
-    /**
-     * 获取专车子类型
-     *
-     * @param appKey
-     * @return
-     */
-    @GET("/api/v1/specialcar/bustree")
-    Observable<ZCTypeResult> getZCBusiness(@Query("app_key") String appKey,
-                                           @Query("page") Integer page,
-                                           @Query("limit") Integer limit,
-                                           @Query("company_id") Long companyId,
-                                           @Query("service_type") Integer serviceType);
+//    /**
+//     * 获取专车子类型
+//     *
+//     * @param appKey
+//     * @return
+//     */
+//    @GET("/api/v1/specialcar/bustree")
+//    Observable<ZCTypeResult> getZCBusiness(@Query("app_key") String appKey,
+//                                           @Query("page") Integer page,
+//                                           @Query("limit") Integer limit,
+//                                           @Query("company_id") Long companyId,
+//                                           @Query("service_type") Integer serviceType);
 
 //    @GET("api/v1/passengerMustBe")
 //    Observable<PassengerResult> queryPassenger(@Query("company_id") Long companyId,
@@ -505,30 +506,72 @@ public interface ZCApiService {
      * @param phone
      * @return
      */
-    @GET("api/v1/public/login/passenger/is_exist")
+    @GET("api/v1/public/info/passenger/is_exist")
     Observable<PassengerResult> queryPassenger(@Query("phone") String phone);
+
 
     /**
      * 预算费用
      *
-     * @param passengerId
+     * @param businessId
      * @param companyId
      * @param distance
      * @param time
-     * @param orderTime
-     * @param channel
-     * @param typeId
-     * @param appKey
+     * @param modelId
      * @return
      */
-    @GET("api/v1/getSpecialBudgetPrice")
-    Observable<BudgetResult> getBudgetPrice(@Query("passenger_id") Long passengerId,
-                                            @Query("company_id") Long companyId,
+    @GET("api/v1/taxi_online/order/budget")
+    Observable<BudgetResult> getBudgetPrice(@Query("businessId") Long businessId,
+                                            @Query("companyId") Long companyId,
                                             @Query("distance") Double distance,
                                             @Query("time") Integer time,
-                                            @Query("order_time") Long orderTime,
-                                            @Query("channel") String channel,
-                                            @Query("typeId") Long typeId,
-                                            @Query("model_id") Long modelId,
-                                            @Query("app_key") String appKey);
+                                            @Query("modelId") Long modelId);
+
+    /**
+     * 根据公司id获取业务配置信息（获取专车子类型）
+     *
+     * @param
+     * @return
+     */
+    @GET("api/v1/taxi_online/business_config/driver/business")
+    Observable<ZCTypeResult> getZCBusiness(@Query("adcode") String adcode,
+                                           @Query("citycode") String citycode,
+                                           @Query("carModel") int carModel,
+                                           @Query("lat") double lat,
+                                           @Query("lng") double lng);
+
+    /**
+     *  补单
+     * @param bookTime
+     * @param budgetFee
+     * @param businessId
+     * @param channelAlias
+     * @param companyId
+     * @param driverId
+     * @param driverName
+     * @param driverPhone
+     * @param modelId
+     * @param orderAddress
+     * @param passengerId
+     * @param passengerName
+     * @param passengerPhone
+     * @param serviceType
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/taxi_online/order/driver/create")
+    Observable<CreateOrderResult> createOrder(@Field("bookTime") Long bookTime,
+                                              @Field("budgetFee") Double budgetFee,
+                                              @Field("businessId") Long businessId,
+                                              @Field("channelAlias") String channelAlias,
+                                              @Field("companyId") Long companyId,
+                                              @Field("driverId") Long driverId,
+                                              @Field("driverName") String driverName,
+                                              @Field("driverPhone") String driverPhone,
+                                              @Field("modelId") Long modelId,
+                                              @Field("orderAddress") String orderAddress,
+                                              @Field("passengerId") Long passengerId,
+                                              @Field("passengerName") String passengerName,
+                                              @Field("passengerPhone") String passengerPhone,
+                                              @Field("serviceType") String serviceType);
 }

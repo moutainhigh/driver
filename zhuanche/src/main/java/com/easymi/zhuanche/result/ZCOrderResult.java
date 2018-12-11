@@ -14,7 +14,6 @@ import java.util.List;
 
 public class ZCOrderResult extends EmResult {
 
-
     public ZCOrder data;
 
 //    public List<Address> address;

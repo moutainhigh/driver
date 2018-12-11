@@ -428,6 +428,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         swipeRefreshLayout.setRefreshing(true);
         hideEmpty();
         recyclerView.setVisibility(View.VISIBLE);
+        presenter.loadEmploy(EmUtil.getEmployId());
     }
 
     @Override
@@ -439,6 +440,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         swipeRefreshLayout.setRefreshing(false);
         showEmpty(0);
         recyclerView.setVisibility(View.GONE);
+        presenter.loadEmploy(EmUtil.getEmployId());
     }
 
     @Override

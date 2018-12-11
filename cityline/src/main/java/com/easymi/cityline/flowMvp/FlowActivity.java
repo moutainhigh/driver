@@ -126,7 +126,6 @@ public class FlowActivity extends RxBaseActivity implements
 
         baseToZX(baseOrder);
 
-        getCustomers(zxOrder);
 
         presenter = new FlowPresenter(this, this);
 
@@ -137,6 +136,12 @@ public class FlowActivity extends RxBaseActivity implements
         initMap();
         initBridget();
         initFragment();
+
+//        if (OrderCustomer.exists(zxOrder.orderId, Config.CITY_LINE)) {
+        getCustomers(zxOrder);
+//        }else {
+//            showFragmentByStatus();
+//        }
     }
 
     private void getCustomers(ZXOrder zxOrder) {
@@ -173,7 +178,6 @@ public class FlowActivity extends RxBaseActivity implements
                     orderCustomer.status = 4;
                     orderCustomer.subStatus = 1;
                 }
-
 
                 orderCustomer.orderId = zxOrder.orderId;
                 orderCustomer.orderType = zxOrder.orderType;
@@ -796,6 +800,7 @@ public class FlowActivity extends RxBaseActivity implements
     @Override
     public void arriveStartSuc(OrderCustomer orderCustomer) {
         orderCustomer.subStatus = 1;
+        orderCustomer.appointTime = System.currentTimeMillis()+10*60*1000;
         orderCustomer.updateSubStatus();
         acceptSendFragment.showWhatByStatus();
     }
@@ -813,13 +818,31 @@ public class FlowActivity extends RxBaseActivity implements
         }
     }
 
+
     @Override
     public void jumpAcceptSuc(OrderCustomer orderCustomer) {
         orderCustomer.status = 2;
         orderCustomer.updateStatus();
         List<OrderCustomer> customers = OrderCustomer.findByIDTypeOrderByAcceptSeq(zxOrder.orderId, zxOrder.orderType);
+
         if (orderCustomer.id == customers.get(customers.size() - 1).id) { //接完最后一个更新订单状态
-            presenter.startSend(zxOrder.orderId);
+            if (customers.size() == 1) {
+                //add hf  只有一个客户，并且跳过了。直接结束
+                presenter.finishTask(zxOrder.orderId);
+            } else {
+                //多个客户全部跳过问题
+                boolean isAllJump = true;
+                for (int i = 0; i < (customers.size() - 1); i++) {
+                    if (customers.get(i).status != 2) {
+                        isAllJump = false;
+                    }
+                }
+                if (!isAllJump) {
+                    presenter.startSend(zxOrder.orderId);
+                } else {
+                    presenter.finishTask(zxOrder.orderId);
+                }
+            }
         } else {
             acceptSendFragment.showWhatByStatus();
             acceptSendFragment.resetSpeakedHint();
@@ -837,8 +860,6 @@ public class FlowActivity extends RxBaseActivity implements
             acceptSendFragment.showWhatByStatus();
             acceptSendFragment.resetSpeakedHint();
         }
-
-
     }
 
     @Override

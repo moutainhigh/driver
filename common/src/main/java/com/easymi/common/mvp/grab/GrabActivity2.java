@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
@@ -37,6 +38,7 @@ import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.PhoneUtil;
+import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.HLoadView;
 import com.easymi.component.widget.RotateImageView;
 import com.easymi.component.widget.overlay.DrivingRouteOverlay;
@@ -46,6 +48,7 @@ import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
 import net.lucode.hackware.magicindicator.buildins.circlenavigator.CircleNavigator;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -127,9 +130,9 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
 
         shake();
 
-        String voiceStr = getIntent().getStringExtra("voiceStr");
-        XApp.getInstance().shake();
-        XApp.getInstance().syntheticVoice(voiceStr, XApp.GRAB);
+//        String voiceStr = getIntent().getStringExtra("voiceStr");
+//        XApp.getInstance().shake();
+//        XApp.getInstance().syntheticVoice(voiceStr, XApp.GRAB);
 
 //        mSwipeBackHelper.setSwipeBackEnable(false);//抢单界面不允许侧滑返回
 
@@ -199,9 +202,9 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
         }
 
         shake();
-        String voiceStr = getIntent().getStringExtra("voiceStr");
-        XApp.getInstance().syntheticVoice(voiceStr);
-        XApp.getInstance().shake();
+//        String voiceStr = getIntent().getStringExtra("voiceStr");
+//        XApp.getInstance().syntheticVoice(voiceStr);
+//        XApp.getInstance().shake();
 
         multipleOrders.add(newOrder);
         buildFragments(newOrder, false);//添加一个fragment
@@ -546,12 +549,13 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
         } catch (java.lang.InstantiationException e) {
             e.printStackTrace();
         }
-
     }
 
     public void closeGrab(View view) {
         finishActivity();
     }
+
+
 
     private void shake() {
         boolean shakeAble = XApp.getMyPreferences().getBoolean(Config.SP_SHAKE_ABLE, true);

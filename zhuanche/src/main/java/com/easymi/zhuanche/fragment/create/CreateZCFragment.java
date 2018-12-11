@@ -13,9 +13,13 @@ import android.widget.TextView;
 
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.core.PoiItem;
+import com.easymi.common.entity.Address;
+import com.easymi.common.result.CreateOrderResult;
+import com.easymi.component.Config;
 import com.easymi.component.activity.PlaceActivity;
 import com.easymi.component.base.RxLazyFragment;
 import com.easymi.component.entity.EmLoc;
+import com.easymi.component.network.GsonUtil;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
@@ -32,6 +36,7 @@ import com.easymi.zhuanche.result.ZCTypeResult;
 import com.easymi.zhuanche.result.PassengerResult;
 import com.easymi.zhuanche.widget.TimePicker2;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -97,14 +102,20 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
         isPrepared = false;
         findById();
 
-//        if (null == EmUtil.getEmployInfo().vehicle) {
-//            ToastUtil.showMessage(getActivity(), getString(R.string.no_car));
-//            return;
-//        }
+        if (0 == EmUtil.getEmployInfo().modelId) {
+            ToastUtil.showMessage(getActivity(), getString(R.string.no_car));
+            return;
+        }
 
         init();
 
-        presenter.queryZCType();//查询专车子类型
+//        presenter.queryZCType(EmUtil.getLastLoc().adCode, EmUtil.getLastLoc().cityCode,
+//                (int) EmUtil.getEmployInfo().modelId, EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);//查询专车子类型
+    }
+
+    public void initQueryZCType(){
+        presenter.queryZCType(startPoi.getAdCode(), startPoi.getCityCode(),
+                (int) EmUtil.getEmployInfo().modelId, startPoi.getLatLonPoint().getLatitude(), startPoi.getLatLonPoint().getLongitude());//查询专车子类型
     }
 
 
@@ -156,6 +167,8 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
         startPlace.setTextColor(getResources().getColor(R.color.text_color_black));
         startPoi = new PoiItem("", new LatLonPoint(emLoc.latitude, emLoc.longitude), emLoc.poiName, emLoc.address);
 
+        initQueryZCType();
+
         startPlace.setOnClickListener(view -> {
             Intent intent = new Intent(getActivity(), PlaceActivity.class);
             intent.putExtra("hint", getString(R.string.where_start));
@@ -191,10 +204,10 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
                 ToastUtil.showMessage(getActivity(), getString(R.string.no_start));
                 return;
             }
-//            if (budget == null) {
-//                ToastUtil.showMessage(getActivity(), getString(R.string.no_budget));
-//                return;
-//            }
+            if (budget == null) {
+                ToastUtil.showMessage(getActivity(), getString(R.string.no_budget));
+                return;
+            }
 
             if (endPoi == null) {
                 ToastUtil.showMessage(getActivity(), getString(R.string.please_end));
@@ -207,22 +220,49 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
                     return;
                 }
                 //判断预约时间是否正确
-                long t = System.currentTimeMillis()/60000;
+                long t = System.currentTimeMillis() / 60000;
                 long preTime = selectedZCType.minBookTime;
-                if ((orderTime/60000 - t) < preTime) {
+                if ((orderTime / 60000 - t) < preTime) {
                     ToastUtil.showMessage(getActivity(), "选中时间无效,请重新选择时间");
                     return;
                 }
             }
 
-            presenter.createOrder(passenger.id, passenger.name, passenger.phone,
-                    orderTime == null ? System.currentTimeMillis() / 1000 : orderTime / 1000, startPoi.getTitle(),
-                    startPoi.getLatLonPoint().getLatitude(), startPoi.getLatLonPoint().getLongitude(),
-                    endPoi == null ? "" : endPoi.getTitle(),
-                    endPoi == null ? null : endPoi.getLatLonPoint().getLatitude(),
-                    endPoi == null ? null : endPoi.getLatLonPoint().getLongitude(),
-                    budget == null ? null : budget.total, selectedZCType.id);
+            presenter.createOrder(
+                    orderTime == null ? System.currentTimeMillis() / 1000 : orderTime / 1000,
+                    budget == null ? null : budget.total,
+                    selectedZCType.id,
+                    "driver",
+                    EmUtil.getEmployInfo().companyId,
+                    EmUtil.getEmployId(),
+                    EmUtil.getEmployInfo().realName,
+                    EmUtil.getEmployInfo().phone,
+                    EmUtil.getEmployInfo().modelId,
+                    getAddressJson(),
+                    passenger.id,
+                    passenger.name,
+                    passenger.phone,
+                    Config.ZHUANCHE);
         });
+    }
+
+    public String getAddressJson() {
+        List<Address> listJson = new ArrayList<>();
+        Address start = new Address();
+        start.address = startPoi.getTitle();
+        start.latitude = startPoi.getLatLonPoint().getLatitude();
+        start.longitude = startPoi.getLatLonPoint().getLongitude();
+        start.type = 1;
+        start.sort = 1;
+        Address end = new Address();
+        end.address = startPoi.getTitle();
+        end.latitude = startPoi.getLatLonPoint().getLatitude();
+        end.longitude = startPoi.getLatLonPoint().getLongitude();
+        end.type = 1;
+        end.sort = 1;
+        listJson.add(start);
+        listJson.add(end);
+        return GsonUtil.toJson(listJson);
     }
 
     @Override
@@ -235,7 +275,7 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
     @Override
     public void showTypeTab(ZCTypeResult result) {
         tabLayout.removeAllTabs();
-        List<ZCType> zcTypes = result.types;
+        List<ZCType> zcTypes = result.data;
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -292,14 +332,18 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
 
     @Override
     public void showPassenger(PassengerResult result) {
-        passenger = result.passenger;
-        nameText.setText(passenger.name);
-        getBudget();
+        if (result.data.isExist) {
+            passenger = result.data.passengerVo;
+            nameText.setText(passenger.name);
+            getBudget();
+        } else {
+            ToastUtil.showMessage(getContext(), getContext().getResources().getString(R.string.no_passenger));
+        }
     }
 
     @Override
     public void showBudget(BudgetResult result) {
-        budget = result.budgetFee;
+        budget = result.data;
         esMoneyCon.setVisibility(View.VISIBLE);
         if (distance == null || duration == null) {
             about.setVisibility(View.GONE);
@@ -308,7 +352,7 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
             about.setVisibility(View.VISIBLE);
             unit.setText(getString(R.string.yuan));
         }
-        esMoney.setText(String.valueOf(result.budgetFee.total));
+        esMoney.setText(String.valueOf(result.data.total));
     }
 
     @Override
@@ -352,10 +396,10 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
     }
 
     @Override
-    public void createSuc(ZCOrderResult zcOrderResult) {
+    public void createSuc(CreateOrderResult createOrderResult) {
         ToastUtil.showMessage(getActivity(), getString(R.string.create_suc));
         Intent intent = new Intent(getActivity(), FlowActivity.class);
-        intent.putExtra("orderId", zcOrderResult.data.orderId);
+        intent.putExtra("orderId", createOrderResult.data);
         startActivity(intent);
         getActivity().finish();
     }
@@ -369,6 +413,7 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
                 Log.e("poi", startPoi.toString());
                 startPlace.setText(startPoi.getTitle());
                 startPlace.setTextColor(getResources().getColor(R.color.text_color_black));
+                initQueryZCType();
             } else if (requestCode == END_CODE) {
                 endPoi = data.getParcelableExtra("poiItem");
                 endPlace.setText(endPoi.getTitle());
@@ -381,14 +426,10 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
     }
 
     private void getBudget() {
-        if (null == passenger || selectedZCType == null) {
+        if (null == passenger || selectedZCType == null || endPoi == null || startPoi == null) {
             return;
         }
 
-        presenter.queryBudget(passenger.id, distance, duration,
-                orderTime == null ? System.currentTimeMillis() / 1000 : orderTime / 1000, selectedZCType.id
-//                , (long) EmUtil.getEmployInfo().vehicle.serviceType
-                , 1l
-        );
+        presenter.queryBudget(selectedZCType.id, EmUtil.getEmployInfo().companyId, distance, duration, EmUtil.getEmployInfo().modelId);
     }
 }

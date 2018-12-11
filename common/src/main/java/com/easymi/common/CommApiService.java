@@ -540,7 +540,7 @@ public interface CommApiService {
                                                    @Query("appKey") String appKey);
 
     /**
-     * 出租车 -->接单 抢单
+     * 出租车 -->接单
      *
      * @param appKey
      * @param companyId
@@ -551,6 +551,22 @@ public interface CommApiService {
     @FormUrlEncoded
     @PUT("api/v1/taxi/normal/order/receipt")
     Observable<MultipleOrderResult> takeTaxiOrder(@Field("appKey") String appKey,
+                                                  @Field("companyId") Long companyId,
+                                                  @Field("driverId") Long driverId,
+                                                  @Field("orderId") Long orderId);
+
+    /**
+     * 出租车 --> 抢单
+     *
+     * @param appKey
+     * @param companyId
+     * @param driverId
+     * @param orderId
+     * @return
+     */
+    @FormUrlEncoded
+    @PUT("api/v1/taxi/normal/order/grab")
+    Observable<MultipleOrderResult> grabTaxiOrder(@Field("appKey") String appKey,
                                                   @Field("companyId") Long companyId,
                                                   @Field("driverId") Long driverId,
                                                   @Field("orderId") Long orderId);

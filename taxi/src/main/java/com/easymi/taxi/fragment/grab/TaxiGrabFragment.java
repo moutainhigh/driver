@@ -19,6 +19,9 @@ import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
 import com.easymi.common.entity.Address;
 import com.easymi.common.entity.MultipleOrder;
+import com.easymi.component.Config;
+import com.easymi.component.DJOrderStatus;
+import com.easymi.component.app.XApp;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
@@ -155,6 +158,9 @@ public class TaxiGrabFragment extends Fragment {
                         if (paths != null && paths.size() != 0) {
                             DrivePath path = paths.get(0);
                             int dis = (int) path.getDistance();
+                            //添加语音播报 hf add
+                            grabVoice(dis);
+
                             if (dis > 1000) {
                                 double km = (double) dis / 1000;
                                 DecimalFormat format = new DecimalFormat("#0.0");
@@ -184,5 +190,58 @@ public class TaxiGrabFragment extends Fragment {
         RouteSearch.DriveRouteQuery query = new RouteSearch.DriveRouteQuery(fromAndTo,
                 RouteSearch.DRIVING_MULTI_STRATEGY_FASTEST_SHORTEST, null, null, "");
         routeSearch.calculateDriveRouteAsyn(query);
+    }
+
+
+    public void grabVoice(double lineDis) {
+        String voiceStr = "";
+        if (taxiOrder.status == DJOrderStatus.NEW_ORDER) {
+            voiceStr += XApp.getInstance().getString(com.easymi.common.R.string.grab_order) + ",";//抢单
+        } else {
+            voiceStr += XApp.getInstance().getString(com.easymi.common.R.string.send_order) + ",";//派单
+        }
+        if (taxiOrder.serviceType.equals(Config.DAIJIA)) {
+            voiceStr += XApp.getInstance().getString(com.easymi.common.R.string.create_daijia)
+                    + XApp.getInstance().getString(com.easymi.common.R.string.order) + ",";//代驾订单
+        } else if (taxiOrder.serviceType.equals(Config.ZHUANCHE)) {
+            voiceStr += XApp.getInstance().getString(com.easymi.common.R.string.create_zhuanche)
+                    + XApp.getInstance().getString(com.easymi.common.R.string.order) + ",";//专车订单
+        } else if (taxiOrder.serviceType.equals(Config.TAXI)) {
+            voiceStr += XApp.getInstance().getString(com.easymi.common.R.string.create_taxi)
+                    + XApp.getInstance().getString(com.easymi.common.R.string.order) + ",";//专车订单
+        }
+        String dis = 0 + XApp.getInstance().getString(com.easymi.common.R.string.meter);
+        if (EmUtil.getLastLoc() != null && taxiOrder.orderAddressVos != null && taxiOrder.orderAddressVos.size() != 0) {
+            LatLng my = new LatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
+
+            for (Address address : taxiOrder.orderAddressVos) {
+                if (address.type == 1) {
+                    LatLng start = new LatLng(address.latitude, address.longitude);
+//                    double meter = AMapUtils.calculateLineDistance(my, start);
+                    DecimalFormat format;
+                    if (lineDis > 1000) {
+                        format = new DecimalFormat("#0.0");
+                        dis = format.format(lineDis / (double) 1000) + XApp.getInstance().getString(com.easymi.common.R.string.k_meter);
+                    } else {
+                        format = new DecimalFormat("#0");
+                        dis = format.format(lineDis) + XApp.getInstance().getString(com.easymi.common.R.string.meter);
+                    }
+                }
+            }
+        }
+        voiceStr +=
+                XApp.getInstance().getString(com.easymi.common.R.string.to_you)//距您
+                        + dis //0.5公里
+                        + ","
+                        + XApp.getInstance().getString(com.easymi.common.R.string.from)//从
+                        + taxiOrder.getStartSite().address //xxx
+                        + XApp.getInstance().getString(com.easymi.common.R.string.out)//出发
+                        + ",";
+        if (StringUtils.isNotBlank(taxiOrder.destination)) {
+            voiceStr += XApp.getInstance().getString(com.easymi.common.R.string.to) + taxiOrder.destination;//到xxx
+        }
+
+        XApp.getInstance().shake();
+        XApp.getInstance().syntheticVoice(voiceStr, XApp.GRAB);
     }
 }

@@ -7,6 +7,7 @@ import com.easymi.common.CommApiService;
 import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.Config;
 import com.easymi.component.EmployStatus;
+import com.easymi.component.app.XApp;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
@@ -101,10 +102,25 @@ public class WorkTimeCounter {
             mSubscription.unsubscribe();
         }
 
+
         Employ employ = EmUtil.getEmployInfo();
         if (employ == null) {
             return;
         }
+
+        /**
+         * 根据本地缓存的上班时间戳进行计算听单时长 start
+         */
+        if ( employ.status > 1 && XApp.getMyPreferences().getLong(Config.ONLINE_TIME,0) != 0){
+            totalMinute = (int) ((System.currentTimeMillis() - XApp.getMyPreferences().getLong(Config.ONLINE_TIME,0))/(1000 * 60));
+        }else {
+            totalMinute = 0;
+        }
+
+        /**
+         * 根据本地缓存的上班时间戳进行计算听单时长 end
+         */
+
 //        if (employ.auditType == 2 || employ.auditType == 3 || employ.auditType == 4) {
 //            return;
 //        }

@@ -69,7 +69,7 @@ public class OrderCustomer implements Serializable {
     @SerializedName("passengerPhone")
     public String phone;//客户电话
 
-    @SerializedName("passengerPhoto")
+    @SerializedName("avatar")
     public String photo;//客户头像
 
     public List<OrderAddressVo> orderAddressVos;//位置信息集合
@@ -171,6 +171,7 @@ public class OrderCustomer implements Serializable {
         SQLiteDatabase db = helper.openSqliteDatabase();
         ContentValues values = new ContentValues();
         values.put("subStatus", subStatus);
+        values.put("appointTime", appointTime);
 
         boolean flag = db.update("t_zx_order_customer", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
@@ -380,7 +381,7 @@ public class OrderCustomer implements Serializable {
         values.put("startLng", startLng);
         values.put("endLat", endLat);
         values.put("endLng", endLng);
-        values.put("appointTime", appointTime);
+//        values.put("appointTime", appointTime);
 
         //hf add
         values.put("status", status);
@@ -388,13 +389,31 @@ public class OrderCustomer implements Serializable {
         values.put("subStatus", subStatus);
         values.put("orderId",orderId);
         values.put("orderType", orderType);
-        values.put("acceptSequence", acceptSequence);
-        values.put("sendSequence", sendSequence);
-        values.put("num", num);
+//        values.put("acceptSequence", acceptSequence);
+//        values.put("sendSequence", sendSequence);
+//        values.put("num", num);
 
         boolean flag = db.update("t_zx_order_customer", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
         return flag;
     }
 
+
+
+//    /**
+//     * 更新接人时间
+//     *
+//     * @return
+//     */
+//    public boolean updateBookTime() {
+//        SqliteHelper helper = SqliteHelper.getInstance();
+//        SQLiteDatabase db = helper.openSqliteDatabase();
+//        ContentValues values = new ContentValues();
+//
+//        values.put("appointTime", appointTime);
+//
+//        boolean flag = db.update("t_zx_order_customer", values, " id = ? ",
+//                new String[]{String.valueOf(id)}) == 1;
+//        return flag;
+//    }
 }

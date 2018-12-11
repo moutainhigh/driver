@@ -80,6 +80,15 @@ public class GrabModel implements GrabContract.Model {
     }
 
     @Override
+    public Observable<MultipleOrderResult> grabTaxiOrder(Long orderId, Long version) {
+        return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .grabTaxiOrder(Config.APP_KEY,EmUtil.getEmployInfo().companyId,EmUtil.getEmployId(),orderId)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
     public Observable<MultipleOrderResult> takeTaxiOrder(Long orderId, Long version) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .takeTaxiOrder(Config.APP_KEY,EmUtil.getEmployInfo().companyId,EmUtil.getEmployId(),orderId)

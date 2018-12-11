@@ -232,8 +232,8 @@ public interface ComService {
      * @return
      */
     @GET("api/v1/safe/wx/auth")
-    Observable<EmResult> shareContents(@Query("url") String url,
-                                       @Query("appKey") String appKey);
+    Observable<EmResult> shareWx(@Query("url") String url,
+                                 @Query("appKey") String appKey);
 
 
 }

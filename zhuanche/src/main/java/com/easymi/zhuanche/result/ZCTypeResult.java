@@ -10,5 +10,5 @@ import java.util.List;
  */
 
 public class ZCTypeResult extends EmResult {
-    public List<ZCType> types;
+    public List<ZCType> data;
 }

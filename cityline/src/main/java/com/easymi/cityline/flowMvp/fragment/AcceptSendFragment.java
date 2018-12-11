@@ -144,7 +144,6 @@ public class AcceptSendFragment extends RxBaseFragment {
 
         dymOrder = DymOrder.findByIDType(orderId, orderType);
 
-
         if (dymOrder.orderStatus == ZXOrderStatus.ACCEPT_ING) {
             orderCustomers = OrderCustomer.findByIDTypeOrderByAcceptSeq(orderId, orderType);
         } else {
@@ -247,6 +246,7 @@ public class AcceptSendFragment extends RxBaseFragment {
 
             toPlace.setText(current.status < 3 ? current.startAddr : current.endAddr);
         }
+
         bridge.changeToolbar(StaticVal.TOOLBAR_FLOW);
 
         naviBtn.setOnClickListener(view -> {

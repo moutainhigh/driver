@@ -80,7 +80,7 @@
     <string name="create_suc">创建订单成功</string>
 
     <string name="no_type">未选择业务类型,无法继续</string>
-    <string name="no_passenger">未查询到客户信息,无法继续</string>
+    <string name="no_passenger">该客户不存在，不能补单</string>
     <string name="no_start">未选择起点,无法继续</string>
     <string name="no_budget">预估价格失败,无法继续</string>
     <string name="leagel_phone">请输入合法的手机号码</string>
@@ -219,4 +219,5 @@
 
     <string name="wait_consumer">等待乘客</string>
     <string name="no_balance">你的余额不足，请前往充值</string>
+
 </resources>

@@ -44,10 +44,12 @@ import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.route.DriveRouteResult;
 import com.easymi.common.entity.Address;
 import com.easymi.common.entity.BuildPushData;
+import com.easymi.common.entity.PassengerLocation;
 import com.easymi.common.push.FeeChangeObserver;
 import com.easymi.common.push.HandlePush;
 //import com.easymi.common.push.MQTTService;
 import com.easymi.common.push.MqttManager;
+import com.easymi.common.push.PassengerLocObserver;
 import com.easymi.common.trace.TraceInterface;
 import com.easymi.common.trace.TraceReceiver;
 import com.easymi.component.Config;
@@ -108,6 +110,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         LocObserver,
         TraceInterface,
         FeeChangeObserver,
+        PassengerLocObserver,
         CancelOrderReceiver.OnCancelListener,
         AMap.OnMapTouchListener,
         OrderFinishReceiver.OnFinishListener {
@@ -227,11 +230,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 } else {
                     popWindow.showCancel();
                 }
-                if (taxiOrder.status == ZCOrderStatus.NEW_ORDER || taxiOrder.status == ZCOrderStatus.PAIDAN_ORDER) {
-                    popWindow.hideConsumer();
-                } else {
-                    popWindow.showConsumer();
-                }
+//                if (taxiOrder.status == ZCOrderStatus.NEW_ORDER || taxiOrder.status == ZCOrderStatus.PAIDAN_ORDER) {
+//                    popWindow.hideConsumer();
+//                } else {
+//                    popWindow.showConsumer();
+//                }
 //                if ((taxiOrder.status == ZCOrderStatus.TAKE_ORDER || taxiOrder.status == ZCOrderStatus.GOTO_BOOKPALCE_ORDER|| taxiOrder.status == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER) && !notChangeOrder) {
 //                    popWindow.showTransfer();
 //                } else {
@@ -254,11 +257,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 String phone = taxiOrder.companyPhone;
 //                String phone = "111111111";
                 PhoneUtil.call(FlowActivity.this, phone);
-            } else if (i == R.id.pop_consumer_msg) {
-                Intent intent = new Intent(FlowActivity.this, ConsumerInfoActivity.class);
-                intent.putExtra("orderId", orderId);
-                startActivity(intent);
             }
+//            else if (i == R.id.pop_consumer_msg) {
+//                Intent intent = new Intent(FlowActivity.this, ConsumerInfoActivity.class);
+//                intent.putExtra("orderId", orderId);
+//                startActivity(intent);
+//            }
 //            else if (i == R.id.pop_order_transfer) {
 //                Intent intent = new Intent(FlowActivity.this, TransferActivity.class);
 //                intent.putExtra("order", taxiOrder);
@@ -349,19 +353,19 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             to_appoint_time.setVisibility(View.GONE);
             naviCon.setOnClickListener(view -> {
                 if (null != getEndAddr()) {
-                    presenter.navi(new LatLng(getEndAddr().latitude, getEndAddr().latitude), getEndAddr().address, orderId);
+                    presenter.navi(new LatLng(getEndAddr().latitude, getEndAddr().longitude), getEndAddr().address, orderId);
                 } else {
                     ToastUtil.showMessage(FlowActivity.this, getString(R.string.illegality_place));
                 }
             });
         }
         if (taxiOrder.status == ZCOrderStatus.NEW_ORDER ||
-                taxiOrder.status == ZCOrderStatus.PAIDAN_ORDER||
-                taxiOrder.status == ZCOrderStatus.TAKE_ORDER||
-                taxiOrder.status == ZCOrderStatus.GOTO_BOOKPALCE_ORDER||
-                taxiOrder.status == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER){
+                taxiOrder.status == ZCOrderStatus.PAIDAN_ORDER ||
+                taxiOrder.status == ZCOrderStatus.TAKE_ORDER ||
+                taxiOrder.status == ZCOrderStatus.GOTO_BOOKPALCE_ORDER ||
+                taxiOrder.status == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER) {
             nextPlace.setText(taxiOrder.getStartSite().address);
-        }else {
+        } else {
             nextPlace.setText(taxiOrder.getEndSite().address);
         }
 
@@ -919,7 +923,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             @Override
             public void doRefuse() {
                 RefuseOrderDialog.Builder builder = new RefuseOrderDialog.Builder(FlowActivity.this);
-                builder.setApplyClick(reason -> presenter.refuseOrder(taxiOrder.id,taxiOrder.serviceType, reason));
+                builder.setApplyClick(reason -> presenter.refuseOrder(taxiOrder.id, taxiOrder.serviceType, reason));
                 RefuseOrderDialog dialog1 = builder.create();
                 dialog1.setCanceledOnTouchOutside(true);
                 dialog1.show();
@@ -928,15 +932,15 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             @Override
             public void doToStart(LoadingButton btn) {
 //                presenter.toStart(taxiOrder.id, btn);
-                presenter.changeOrderStatus(EmUtil.getEmployInfo().companyId,EmUtil.getLastLoc().address,EmUtil.getEmployId(),EmUtil.getLastLoc().latitude,
-                        EmUtil.getLastLoc().longitude,taxiOrder.id,15,btn);
+                presenter.changeOrderStatus(EmUtil.getEmployInfo().companyId, EmUtil.getLastLoc().address, EmUtil.getEmployId(), EmUtil.getLastLoc().latitude,
+                        EmUtil.getLastLoc().longitude, taxiOrder.id, 15, btn);
             }
 
             @Override
             public void doArriveStart() {
 //                presenter.arriveStart(taxiOrder.id);
-                presenter.changeOrderStatus(EmUtil.getEmployInfo().companyId,EmUtil.getLastLoc().address,EmUtil.getEmployId(),EmUtil.getLastLoc().latitude,
-                        EmUtil.getLastLoc().longitude,taxiOrder.id,20,null);
+                presenter.changeOrderStatus(EmUtil.getEmployInfo().companyId, EmUtil.getLastLoc().address, EmUtil.getEmployId(), EmUtil.getLastLoc().latitude,
+                        EmUtil.getLastLoc().longitude, taxiOrder.id, 20, null);
             }
 
             @Override
@@ -952,8 +956,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             @Override
             public void doStartDrive(LoadingButton btn) {
 //                presenter.startDrive(taxiOrder.id, btn);
-                presenter.changeOrderStatus(EmUtil.getEmployInfo().companyId,EmUtil.getLastLoc().address,EmUtil.getEmployId(),EmUtil.getLastLoc().latitude,
-                        EmUtil.getLastLoc().longitude,taxiOrder.id,25,null);
+                presenter.changeOrderStatus(EmUtil.getEmployInfo().companyId, EmUtil.getLastLoc().address, EmUtil.getEmployId(), EmUtil.getLastLoc().latitude,
+                        EmUtil.getLastLoc().longitude, taxiOrder.id, 25, null);
             }
 
             @Override
@@ -1022,12 +1026,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             public void showSettleDialog() {
                 TaxiSettleDialog dialog = new TaxiSettleDialog(FlowActivity.this);
                 dialog.setOnMyClickListener((view, string) -> {
-                    if (TextUtils.isEmpty(string)){
-                        ToastUtil.showMessage(FlowActivity.this,"请输入结算金额");
-                    }else if (Double.parseDouble(string) == 0){
-                        ToastUtil.showMessage(FlowActivity.this,"请输入正确结算金额");
-                    }else {
-                        presenter.taxiSettlement(orderId,taxiOrder.orderNo,Double.parseDouble(string));
+                    if (TextUtils.isEmpty(string)) {
+                        ToastUtil.showMessage(FlowActivity.this, "请输入结算金额");
+                    } else if (Double.parseDouble(string) == 0) {
+                        ToastUtil.showMessage(FlowActivity.this, "请输入正确结算金额");
+                    } else {
+                        presenter.taxiSettlement(orderId, taxiOrder.orderNo, Double.parseDouble(string));
                     }
                 });
                 dialog.show();
@@ -1074,6 +1078,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         super.onStart();
         LocReceiver.getInstance().addObserver(this);//添加位置订阅
         HandlePush.getInstance().addObserver(this);//添加订单变化订阅
+        HandlePush.getInstance().addPLObserver(this);//添加订单变化订阅
 
         traceReceiver = new TraceReceiver(this);
         IntentFilter filter2 = new IntentFilter();
@@ -1133,6 +1138,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         super.onStop();
         LocReceiver.getInstance().deleteObserver(this);//取消位置订阅
         HandlePush.getInstance().deleteObserver(this);//取消订单变化订阅
+        HandlePush.getInstance().deletePLObserver(this);//取消订单变化订阅
 
         unregisterReceiver(traceReceiver);
         unregisterReceiver(cancelOrderReceiver);
@@ -1265,6 +1271,29 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
     }
 
+    private Marker plMaker;
+
+    @Override
+    public void plChange(PassengerLocation plocation) {
+        if (plMaker != null){
+            plMaker.remove();
+        }
+        if (null != plocation) {
+            LatLng plLatlng = new LatLng(plocation.latitude, plocation.longitude);
+//            receiveLoc(plocation);//手动调用上次位置 减少从北京跳过来的时间
+//            aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(plLatlng, 19));//移动镜头，首次镜头快速跳到指定位置
+
+            MarkerOptions markerOption = new MarkerOptions();
+            markerOption.position(new LatLng(plocation.latitude, plocation.longitude));
+            markerOption.draggable(false);//设置Marker可拖动
+            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                    .decodeResource(getResources(), R.mipmap.blue_dot)));
+            // 将Marker设置为贴地显示，可以双指下拉地图查看效果
+            markerOption.setFlat(true);//设置marker平贴地图效果
+            plMaker = aMap.addMarker(markerOption);
+        }
+    }
+
     @Override
     public void feeChanged(long orderId, String orderType) {
         if (taxiOrder == null) {
@@ -1351,7 +1380,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         return false;
     }
 
-
     private class AlbumOrientationEventListener extends OrientationEventListener {
         private int mOrientation;
 
@@ -1374,5 +1402,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 //            }
         }
     }
+
 
 }

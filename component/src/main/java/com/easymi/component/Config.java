@@ -15,7 +15,7 @@ public class Config {
     /**
      * 主机地址
      */
-//    public static final String HOST = "http://10.10.2.37:10001/";
+//    public static final String HOST = "http://10.10.2.43:10001/";
     public static final String HOST = "http://api.xiaokakj.com/";//线上地址
 
     /**
@@ -51,7 +51,8 @@ public class Config {
      * 图片服务器地址
      */
 //    public static final String IMG_SERVER = "https://assets.xiaokayun.cn/";
-    public static final String IMG_SERVER = "http://pimkcibsb.bkt.clouddn.com/";
+//    public static final String IMG_SERVER = "http://pimkcibsb.bkt.clouddn.com/";
+    public static final String IMG_SERVER = "http://assets.xiaokakj.com/";
     //    public static final String IMG_PATH = "?imageView2/1/w/10/h/10/format/webp/q/75|imageslim";
     public static final String IMG_PATH = "";
 
@@ -150,4 +151,6 @@ public class Config {
     public static final String SP_TOKEN = "sp_token";
 
     public static final String AES_PASSWORD = "aes_password";
+
+    public static final String ONLINE_TIME = "online_time";
 }

@@ -88,7 +88,7 @@ public class GrabPresenter implements GrabContract.Presenter {
 //            }
         } else if (order.serviceType.equals(Config.TAXI)) {
 //            if (order.orderId == 0){
-                observable = model.takeTaxiOrder(order.id, order.version);
+                observable = model.grabTaxiOrder(order.id, order.version);
 //            }else {
 //                observable = model.takeTaxiOrder(order.orderId, order.version);
 //            }

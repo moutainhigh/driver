@@ -7,9 +7,19 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import cn.projcet.hf.securitycenter.CenterConfig;
+import cn.projcet.hf.securitycenter.ComService;
 import cn.projcet.hf.securitycenter.R;
+import cn.projcet.hf.securitycenter.network.ApiManager;
+import cn.projcet.hf.securitycenter.network.HttpResultFunc;
+import cn.projcet.hf.securitycenter.network.MySubscriber;
+import cn.projcet.hf.securitycenter.result.EmResult;
+import cn.projcet.hf.securitycenter.rxmvp.RxManager;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
@@ -59,6 +69,7 @@ public class LineShareDialog {
             lin_have_content.setVisibility(View.VISIBLE);
             lin_no_content.setVisibility(View.GONE);
             //todo 如何展示司机相关的信息，以及点击相关分享如何返回到项目进行分享
+            getContents();
         }else {
             lin_have_content.setVisibility(View.GONE);
             lin_no_content.setVisibility(View.VISIBLE);
@@ -90,4 +101,23 @@ public class LineShareDialog {
     }
 
 
+    public void getContents(){
+        double lat = 0;
+        double lng = 0;
+        Observable<EmResult> observable = ApiManager.getInstance().createApi(CenterConfig.HOST, ComService.class)
+                .shareContents(lat,lng,CenterConfig.ORDERID,CenterConfig.AES_KEY)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        new RxManager().add(observable.subscribe(new MySubscriber<>(context, true,
+                true, emResult -> {
+            if (emResult.getCode() == 1){
+                //todo 分享的内容
+
+            }else {
+                Toast.makeText(context,emResult.getMessage(),Toast.LENGTH_LONG);
+            }
+        })));
+    }
 }

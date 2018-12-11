@@ -215,12 +215,12 @@ public class WorkPresenter implements WorkContract.Presenter {
     @Override
     public void online(LoadingButton btn) {
         long driverId = EmUtil.getEmployId();
-        Log.e("hufeng/driverId",XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1)+"");
-
         Observable<EmResult> observable = model.online(driverId, EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, btn, emResult -> {
             view.onlineSuc();
+            XApp.getPreferencesEditor().putLong(Config.ONLINE_TIME, System.currentTimeMillis()).apply();
             uploadTime(2);
+
         })));
     }
 
@@ -231,6 +231,7 @@ public class WorkPresenter implements WorkContract.Presenter {
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, true,
                 true, emResult -> {
             view.offlineSuc();
+            XApp.getPreferencesEditor().putLong(Config.ONLINE_TIME, 0).apply();
             uploadTime(1);
         })));
     }
@@ -316,7 +317,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                 view.showDriverStatus();
                 MqttManager.getInstance().creatConnect();//在查询完服务人员后初始化mqtt
 //                if (employ.serviceType.equals(Config.ZHUANCHE) || employ.serviceType.equals(Config.TAXI)) {
-                    driverehicle(employ);
+                driverehicle(employ);
 //                }
             }
 
@@ -344,57 +345,14 @@ public class WorkPresenter implements WorkContract.Presenter {
             if (result == null || result.getCode() != 1) {
                 ToastUtil.showMessage(context, "未绑定车辆车型，不能接单");
             } else {
+                String driverService = EmUtil.getEmployInfo().serviceType;
                 if (result.data != null && result.data.size() > 0) {
-                    //todo 处理数组中有null的情况
-                    if (result.data.get(0) != null) {
-                        Vehicle vehicle = result.data.get(0);
-                        if (vehicle.serviceType.contains(Config.ZHUANCHE)) {
-                            employ.modelId = vehicle.vehicleModel;
-                            employ.updateAll();
-                        } else if (TextUtils.equals(vehicle.serviceType, Config.TAXI)) {
-                            employ.taxiModelId = vehicle.vehicleModel;
-                            employ.updateAll();
-                        }
-                    }
-                    if (result.data.size()==2){
-                        return;
-                    }
-                    if (result.data.get(1) != null) {
-                        Vehicle vehicle = result.data.get(1);
-                        if (TextUtils.equals(vehicle.serviceType, Config.ZHUANCHE)) {
+                    for (Vehicle vehicle : result.data) {
+                        if (vehicle.serviceType.contains(driverService)) {
                             employ.modelId = vehicle.vehicleModel;
                             employ.updateAll();
                         }
-                        else if (TextUtils.equals(vehicle.serviceType, Config.TAXI)) {
-                            employ.taxiModelId = vehicle.vehicleModel;
-                            employ.updateAll();
-                        }
                     }
-                    if (result.data.size()==3){
-                        return;
-                    }
-                    if (result.data.get(2) != null) {
-                        Vehicle vehicle = result.data.get(2);
-                        if (TextUtils.equals(vehicle.serviceType, Config.ZHUANCHE)) {
-                            employ.modelId = vehicle.vehicleModel;
-                            employ.updateAll();
-                        }
-                        else if (TextUtils.equals(vehicle.serviceType, Config.TAXI)) {
-                            employ.taxiModelId = vehicle.vehicleModel;
-                            employ.updateAll();
-                        }
-                    }
-
-//                    for (Vehicle vehicle : result.data) {
-//                        //todo 没有区分业务的字段后分开存储车型，多业务会出问题
-//                        if (TextUtils.equals(vehicle.serviceType, Config.ZHUANCHE)) {
-//                            employ.modelId = vehicle.vehicleModel;
-//                            employ.updateAll();
-//                        } else if (TextUtils.equals(vehicle.serviceType, Config.TAXI)) {
-//                            employ.modelId = vehicle.vehicleModel;
-//                            employ.updateAll();
-//                        }
-//                    }
                 }
             }
         })));

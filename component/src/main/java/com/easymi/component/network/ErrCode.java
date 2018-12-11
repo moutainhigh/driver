@@ -539,6 +539,11 @@ public enum ErrCode {
      */
     ROLE_OCCUPATION_ERR(40130, "提示该角色正在使用，不能删除"),
 
+    /**
+     * 提示该角色正在使用，不能删除
+     */
+    IS_COMMON_VEHICLE_ERR(40133, "同车司机正在线上不能登陆"),
+
 //    /**
 //     * 司机有正在执行的订单
 //     */

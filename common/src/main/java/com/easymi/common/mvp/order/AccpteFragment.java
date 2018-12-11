@@ -99,17 +99,17 @@ public class AccpteFragment extends RxBaseFragment implements MyOrderContract.Vi
 
         adapter.setItemClickListener((view, baseOrder) -> {
             if (view.getId() == R.id.root && StringUtils.isNotBlank(baseOrder.serviceType)) {
-                if (baseOrder.serviceType.equals(Config.ZHUANCHE)) {
-                    ARouter.getInstance()
-                            .build("/zhuanche/FlowActivity")
-                            .withLong("orderId", baseOrder.orderId).navigation();
-                } else if (baseOrder.serviceType.equals(Config.TAXI)) {
-                    ARouter.getInstance()
-                            .build("/taxi/FlowActivity")
-                            .withLong("orderId", baseOrder.orderId).navigation();
-                }else if (baseOrder.serviceType.equals(Config.CITY_LINE)) {
-                    ARouter.getInstance().build("/cityline/FlowActivity").withSerializable("baseOrder",baseOrder).navigation();
-                }
+//                if (baseOrder.serviceType.equals(Config.ZHUANCHE)) {
+//                    ARouter.getInstance()
+//                            .build("/zhuanche/FlowActivity")
+//                            .withLong("orderId", baseOrder.orderId).navigation();
+//                } else if (baseOrder.serviceType.equals(Config.TAXI)) {
+//                    ARouter.getInstance()
+//                            .build("/taxi/FlowActivity")
+//                            .withLong("orderId", baseOrder.orderId).navigation();
+//                }else if (baseOrder.serviceType.equals(Config.CITY_LINE)) {
+//                    ARouter.getInstance().build("/cityline/FlowActivity").withSerializable("baseOrder",baseOrder).navigation();
+//                }
             }
         });
     }

@@ -8,5 +8,5 @@ import com.easymi.zhuanche.entity.Budget;
  */
 
 public class BudgetResult extends EmResult{
-    public Budget budgetFee;
+    public Budget data;
 }

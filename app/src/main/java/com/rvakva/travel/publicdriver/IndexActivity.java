@@ -90,48 +90,48 @@ public class IndexActivity extends RxBaseActivity {
 //                })));
     }
 
-    private void getCustomers(ZXOrder zxOrder) {
-        Observable<EmResult2<List<OrderCustomer>>> observable = ApiManager.getInstance().createApi(Config.HOST, CLService.class)
-                .getOrderCustomers(zxOrder.orderId)
-                .filter(new HttpResultFunc3<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        mRxManager.add(observable.subscribe(new MySubscriber<EmResult2<List<OrderCustomer>>>(this, false, false, new NoErrSubscriberListener<EmResult2<List<OrderCustomer>>>() {
-            @Override
-            public void onNext(EmResult2<List<OrderCustomer>> result2) {
-                List<OrderCustomer> orderCustomers = result2.getData();
-                for (int i = 0; i < orderCustomers.size(); i++) {
-                    OrderCustomer orderCustomer = orderCustomers.get(i);
-
-                    orderCustomer.appointTime = orderCustomer.appointTime * 1000;
-                    orderCustomer.num = i;
-                    orderCustomer.acceptSequence = i;
-                    orderCustomer.sendSequence = i;
-                    orderCustomer.status = 0;
-                    orderCustomer.subStatus = 0;
-
-                    orderCustomer.orderId = zxOrder.orderId;
-                    orderCustomer.orderType = zxOrder.orderType;
-
-                    for (OrderCustomer.OrderAddressVo orderAddressVo : orderCustomer.orderAddressVos) {
-                        if (orderAddressVo.type == 1) { //起点
-                            orderCustomer.startAddr = orderAddressVo.address;
-                            orderCustomer.startLat = orderAddressVo.latitude;
-                            orderCustomer.startLng = orderAddressVo.longitude;
-                        } else { //终点
-                            orderCustomer.endAddr = orderAddressVo.address;
-                            orderCustomer.endLat = orderAddressVo.latitude;
-                            orderCustomer.endLng = orderAddressVo.longitude;
-                        }
-                    }
-                    orderCustomer.saveOrUpdate();
-                }
-
-                ARouter.getInstance().build("/cityline/FlowActivity").withSerializable("zxOrder",zxOrder).navigation();
-
-            }
-        })));
-    }
+//    private void getCustomers(ZXOrder zxOrder) {
+//        Observable<EmResult2<List<OrderCustomer>>> observable = ApiManager.getInstance().createApi(Config.HOST, CLService.class)
+//                .getOrderCustomers(zxOrder.orderId)
+//                .filter(new HttpResultFunc3<>())
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread());
+//
+//        mRxManager.add(observable.subscribe(new MySubscriber<EmResult2<List<OrderCustomer>>>(this, false, false, new NoErrSubscriberListener<EmResult2<List<OrderCustomer>>>() {
+//            @Override
+//            public void onNext(EmResult2<List<OrderCustomer>> result2) {
+//                List<OrderCustomer> orderCustomers = result2.getData();
+//                for (int i = 0; i < orderCustomers.size(); i++) {
+//                    OrderCustomer orderCustomer = orderCustomers.get(i);
+//
+//                    orderCustomer.appointTime = orderCustomer.appointTime * 1000;
+//                    orderCustomer.num = i;
+//                    orderCustomer.acceptSequence = i;
+//                    orderCustomer.sendSequence = i;
+//                    orderCustomer.status = 0;
+//                    orderCustomer.subStatus = 0;
+//
+//                    orderCustomer.orderId = zxOrder.orderId;
+//                    orderCustomer.orderType = zxOrder.orderType;
+//
+//                    for (OrderCustomer.OrderAddressVo orderAddressVo : orderCustomer.orderAddressVos) {
+//                        if (orderAddressVo.type == 1) { //起点
+//                            orderCustomer.startAddr = orderAddressVo.address;
+//                            orderCustomer.startLat = orderAddressVo.latitude;
+//                            orderCustomer.startLng = orderAddressVo.longitude;
+//                        } else { //终点
+//                            orderCustomer.endAddr = orderAddressVo.address;
+//                            orderCustomer.endLat = orderAddressVo.latitude;
+//                            orderCustomer.endLng = orderAddressVo.longitude;
+//                        }
+//                    }
+//                    orderCustomer.saveOrUpdate();
+//                }
+//
+//                ARouter.getInstance().build("/cityline/FlowActivity").withSerializable("zxOrder",zxOrder).navigation();
+//
+//            }
+//        })));
+//    }
 
 }
