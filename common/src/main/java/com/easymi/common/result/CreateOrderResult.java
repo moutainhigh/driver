@@ -1,6 +1,7 @@
 package com.easymi.common.result;
 
-import cn.projcet.hf.securitycenter.result.EmResult;
+
+import com.easymi.component.result.EmResult;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
@@ -10,7 +11,7 @@ import cn.projcet.hf.securitycenter.result.EmResult;
  * Description:
  * History:
  */
-public class CreateOrderResult extends EmResult{
+public class CreateOrderResult extends EmResult {
 
     public Long data;
 }

@@ -79,7 +79,7 @@ public class CreateZCModel implements CreateZCContract.Model {
                         passengerPhone,
                         serviceType
                 )
-                .filter(new HttpResultFunc())
+                .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

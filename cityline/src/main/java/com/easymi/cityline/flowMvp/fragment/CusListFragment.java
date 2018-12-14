@@ -9,7 +9,7 @@ import android.widget.Button;
 import com.easymi.cityline.R;
 import com.easymi.cityline.StaticVal;
 import com.easymi.cityline.adapter.CusListAdapter;
-import com.easymi.cityline.entity.OrderCustomer;
+import com.easymi.common.entity.OrderCustomer;
 import com.easymi.cityline.flowMvp.ActFraCommBridge;
 import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.entity.DymOrder;

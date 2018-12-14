@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <cn.projcet.hf.securitycenter.widget.CusToolbar
+    <com.easymin.driver.securitycenter.widget.CusToolbar
         android:id="@+id/cus_toolbar"
         android:layout_width="match_parent"
         android:layout_height="45dp" />

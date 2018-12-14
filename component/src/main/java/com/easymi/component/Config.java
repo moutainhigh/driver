@@ -21,8 +21,8 @@ public class Config {
     /**
      * MQTT配置
      */
-    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn";//线上地址
 //    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//测试地址
+    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn";//线上地址
     /**
      * APP_KEY
      */
@@ -41,18 +41,18 @@ public class Config {
     /**
      * QQ分享id
      */
-    public static final String QQ_APP_ID = "1106099902";
+    public static final String QQ_APP_ID = "1107818477";
     /**
      * 微信分享id
      */
-    public static final String WX_APP_ID = "wx228f2bdb16568b58"; //微信app id
+    public static final String WX_APP_ID = "wxe2bbe0ee7fa51624"; //微信app id
 
     /**
      * 图片服务器地址
      */
 //    public static final String IMG_SERVER = "https://assets.xiaokayun.cn/";
-//    public static final String IMG_SERVER = "http://pimkcibsb.bkt.clouddn.com/";
-    public static final String IMG_SERVER = "http://assets.xiaokakj.com/";
+//    public static final String IMG_SERVER = "http://pimkcibsb.bkt.clouddn.com/";  //本地
+    public static final String IMG_SERVER = "http://assets.xiaokakj.com/";  //线上
     //    public static final String IMG_PATH = "?imageView2/1/w/10/h/10/format/webp/q/75|imageslim";
     public static final String IMG_PATH = "";
 

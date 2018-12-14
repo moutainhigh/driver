@@ -115,9 +115,9 @@ public class MyOrderPresenter implements MyOrderContract.Presenter {
     public void takeOrder(MultipleOrder order) {
         Observable<MultipleOrderResult> observable = null;
         if (order.serviceType.equals(Config.ZHUANCHE)) {
-            observable = model.takeZCOrder(order.orderId, order.version);
+            observable = model.takeZCOrder(order.id, order.version);
         } else if (order.serviceType.equals(Config.TAXI)) {
-            observable = model.takeTaxiOrder(order.orderId, order.version);
+            observable = model.takeTaxiOrder(order.id, order.version);
         }
         if (observable == null) {
             return;

@@ -113,12 +113,11 @@ public class WorkPresenter implements WorkContract.Presenter {
             public void onNext(QueryOrdersResult emResult) {
                 view.stopRefresh();
 
+                List<MultipleOrder> orders = new ArrayList<>();
+                MultipleOrder header = new MultipleOrder(MultipleOrder.ITEM_HEADER);
+                orders.add(header);
                 if (emResult.data != null) {
-                    List<MultipleOrder> orders = new ArrayList<>();
-                    MultipleOrder header = new MultipleOrder(CityLine.ITEM_HEADER);
-                    orders.add(header);
                     if (emResult.data.size() != 0) {
-
                         for (MultipleOrder order : emResult.data) {
                             DymOrder dymOrder = null;
                             //校验本地订单与服务器订单
@@ -193,7 +192,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                 } else {
                     DymOrder.deleteAll();
                     startLocService();//重启定位更改定位周期
-                    view.showOrders(null);
+                    view.showOrders(orders);
                 }
             }
 
@@ -286,6 +285,7 @@ public class WorkPresenter implements WorkContract.Presenter {
 
     @Override
     public void onPause() {
+
     }
 
     //表示司机业务

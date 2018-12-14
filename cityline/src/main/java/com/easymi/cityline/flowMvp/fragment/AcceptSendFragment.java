@@ -17,7 +17,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.easymi.cityline.R;
 import com.easymi.cityline.StaticVal;
-import com.easymi.cityline.entity.OrderCustomer;
+import com.easymi.common.entity.OrderCustomer;
 import com.easymi.cityline.flowMvp.ActFraCommBridge;
 import com.easymi.component.Config;
 import com.easymi.component.ZXOrderStatus;

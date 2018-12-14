@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <cn.projcet.hf.securitycenter.widget.CusToolbar
+    <com.easymin.driver.securitycenter.widget.CusToolbar
         android:id="@+id/cus_toolbar"
         android:layout_width="match_parent"
         android:layout_height="45dp" />
@@ -84,7 +84,7 @@
                     android:textSize="14sp"
                     />
 
-                <cn.projcet.hf.securitycenter.widget.SwitchButton
+                <com.easymin.driver.securitycenter.widget.SwitchButton
                     android:id="@+id/share_able_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

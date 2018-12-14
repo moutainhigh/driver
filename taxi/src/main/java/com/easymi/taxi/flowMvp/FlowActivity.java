@@ -1278,19 +1278,21 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         if (plMaker != null){
             plMaker.remove();
         }
-        if (null != plocation) {
-            LatLng plLatlng = new LatLng(plocation.latitude, plocation.longitude);
+        if (taxiOrder.status < ZCOrderStatus.GOTO_DESTINATION_ORDER){
+            if (null != plocation) {
+                LatLng plLatlng = new LatLng(plocation.latitude, plocation.longitude);
 //            receiveLoc(plocation);//手动调用上次位置 减少从北京跳过来的时间
 //            aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(plLatlng, 19));//移动镜头，首次镜头快速跳到指定位置
 
-            MarkerOptions markerOption = new MarkerOptions();
-            markerOption.position(new LatLng(plocation.latitude, plocation.longitude));
-            markerOption.draggable(false);//设置Marker可拖动
-            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                    .decodeResource(getResources(), R.mipmap.blue_dot)));
-            // 将Marker设置为贴地显示，可以双指下拉地图查看效果
-            markerOption.setFlat(true);//设置marker平贴地图效果
-            plMaker = aMap.addMarker(markerOption);
+                MarkerOptions markerOption = new MarkerOptions();
+                markerOption.position(new LatLng(plocation.latitude, plocation.longitude));
+                markerOption.draggable(false);//设置Marker可拖动
+                markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                        .decodeResource(getResources(), R.mipmap.blue_dot)));
+                // 将Marker设置为贴地显示，可以双指下拉地图查看效果
+                markerOption.setFlat(true);//设置marker平贴地图效果
+                plMaker = aMap.addMarker(markerOption);
+            }
         }
     }
 

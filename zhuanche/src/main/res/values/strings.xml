@@ -219,5 +219,5 @@
 
     <string name="wait_consumer">等待乘客</string>
     <string name="no_balance">你的余额不足，请前往充值</string>
-
+    <string name="bo_budget_hint">起点距离终点太近，无法预算费用</string>
 </resources>

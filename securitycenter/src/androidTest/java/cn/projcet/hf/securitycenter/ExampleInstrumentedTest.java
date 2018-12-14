@@ -1,4 +1,4 @@
-package cn.projcet.hf.securitycenter;
+package com.easymin.driver.securitycenter;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("cn.projcet.hf.securitycenter.test", appContext.getPackageName());
+        assertEquals("com.easymin.driver.securitycenter.test", appContext.getPackageName());
     }
 }

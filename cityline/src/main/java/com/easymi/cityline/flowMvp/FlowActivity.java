@@ -29,7 +29,7 @@ import com.easymi.cityline.CLService;
 import com.easymi.cityline.R;
 import com.easymi.cityline.StaticVal;
 import com.easymi.cityline.adapter.LeftWindowAdapter;
-import com.easymi.cityline.entity.OrderCustomer;
+import com.easymi.common.entity.OrderCustomer;
 import com.easymi.cityline.entity.ZXOrder;
 import com.easymi.cityline.flowMvp.fragment.AcceptSendFragment;
 import com.easymi.cityline.flowMvp.fragment.ChangeSeqFragment;
@@ -125,8 +125,6 @@ public class FlowActivity extends RxBaseActivity implements
         }
 
         baseToZX(baseOrder);
-
-
         presenter = new FlowPresenter(this, this);
 
         mapView = findViewById(R.id.map_view);
@@ -137,16 +135,13 @@ public class FlowActivity extends RxBaseActivity implements
         initBridget();
         initFragment();
 
-//        if (OrderCustomer.exists(zxOrder.orderId, Config.CITY_LINE)) {
         getCustomers(zxOrder);
-//        }else {
-//            showFragmentByStatus();
-//        }
+
     }
 
     private void getCustomers(ZXOrder zxOrder) {
         Observable<EmResult2<List<OrderCustomer>>> observable = ApiManager.getInstance().createApi(Config.HOST, CLService.class)
-                .getOrderCustomers(zxOrder.orderId)
+                .getOrderCustomers(zxOrder.orderId, "5,10,15,20")
                 .filter(new HttpResultFunc3<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -154,8 +149,23 @@ public class FlowActivity extends RxBaseActivity implements
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, false, result2 -> {
             isOrderLoadOk = true;
             List<OrderCustomer> orderCustomers = result2.getData();
+
             for (int i = 0; i < orderCustomers.size(); i++) {
                 OrderCustomer orderCustomer = orderCustomers.get(i);
+
+//                List<OrderCustomer> allCus = OrderCustomer.findByIDTypeOrderByAcceptSeq(zxOrder.orderId, zxOrder.orderType);
+//                for (OrderCustomer cusOrder : allCus) {
+//                    boolean isExist = false;
+//
+//                    if ((cusOrder.id == orderCustomer.id)) {
+//                        isExist = true;
+//                        break;
+//                    }
+//
+//                    if (!isExist) {
+//                        cusOrder.delete(cusOrder.id);
+//                    }
+//                }
 
                 orderCustomer.appointTime = orderCustomer.appointTime * 1000;
                 orderCustomer.num = i + 1;
@@ -193,6 +203,7 @@ public class FlowActivity extends RxBaseActivity implements
                         orderCustomer.endLng = orderAddressVo.longitude;
                     }
                 }
+
                 orderCustomer.saveOrUpdate();
             }
             showFragmentByStatus();
@@ -411,6 +422,7 @@ public class FlowActivity extends RxBaseActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+        mapView.onResume();
         if (isOrderLoadOk) {
             showFragmentByStatus();
         }
@@ -800,7 +812,7 @@ public class FlowActivity extends RxBaseActivity implements
     @Override
     public void arriveStartSuc(OrderCustomer orderCustomer) {
         orderCustomer.subStatus = 1;
-        orderCustomer.appointTime = System.currentTimeMillis()+10*60*1000;
+        orderCustomer.appointTime = System.currentTimeMillis() + 10 * 60 * 1000;
         orderCustomer.updateSubStatus();
         acceptSendFragment.showWhatByStatus();
     }
@@ -992,8 +1004,7 @@ public class FlowActivity extends RxBaseActivity implements
         if (null != dymOrder) {
             if (dymOrder.orderStatus == ZXOrderStatus.ACCEPT_ING
                     || dymOrder.orderStatus == ZXOrderStatus.SEND_ING) {
-                if (!isMapTouched
-                        && currentFragment instanceof AcceptSendFragment) {
+                if (!isMapTouched && currentFragment instanceof AcceptSendFragment) {
                     aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 19), delayAnimate ? Config.NORMAL_LOC_TIME : 0, null);
                     delayAnimate = true;
                 }

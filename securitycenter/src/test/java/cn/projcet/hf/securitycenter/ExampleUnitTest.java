@@ -1,4 +1,4 @@
-package cn.projcet.hf.securitycenter;
+package com.easymin.driver.securitycenter;
 
 import org.junit.Test;
 

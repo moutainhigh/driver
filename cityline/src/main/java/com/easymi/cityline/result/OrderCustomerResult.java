@@ -1,6 +1,6 @@
 package com.easymi.cityline.result;
 
-import com.easymi.cityline.entity.OrderCustomer;
+import com.easymi.common.entity.OrderCustomer;
 
 import java.util.List;
 

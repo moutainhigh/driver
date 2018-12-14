@@ -14,7 +14,7 @@ import com.amap.api.maps.model.LatLng;
 import com.easymi.cityline.R;
 import com.easymi.cityline.StaticVal;
 import com.easymi.cityline.adapter.SequenceAdapter;
-import com.easymi.cityline.entity.OrderCustomer;
+import com.easymi.common.entity.OrderCustomer;
 import com.easymi.cityline.entity.Sequence;
 import com.easymi.cityline.flowMvp.ActFraCommBridge;
 import com.easymi.cityline.widget.ItemDragCallback;

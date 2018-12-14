@@ -3,7 +3,7 @@ package com.easymi.cityline.flowMvp;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.navi.model.AMapNaviPath;
 import com.amap.api.services.route.DriveRouteResult;
-import com.easymi.cityline.entity.OrderCustomer;
+import com.easymi.common.entity.OrderCustomer;
 import com.easymi.cityline.entity.ZXOrder;
 import com.easymi.cityline.result.OrderCustomerResult;
 import com.easymi.cityline.result.ZxOrderResult;

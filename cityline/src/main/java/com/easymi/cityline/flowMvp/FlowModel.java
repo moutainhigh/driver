@@ -3,7 +3,7 @@ package com.easymi.cityline.flowMvp;
 import android.content.Context;
 
 import com.easymi.cityline.CLService;
-import com.easymi.cityline.entity.OrderCustomer;
+import com.easymi.common.entity.OrderCustomer;
 import com.easymi.cityline.entity.ZXOrder;
 import com.easymi.cityline.result.OrderCustomerResult;
 import com.easymi.cityline.result.ZxOrderResult;
@@ -108,7 +108,7 @@ public class FlowModel implements FlowContract.Model {
     @Override
     public Observable<EmResult2<List<OrderCustomer>>> geOrderCustomers(long orderId) {
         return ApiManager.getInstance().createApi(Config.HOST, CLService.class)
-                .getOrderCustomers(orderId)
+                .getOrderCustomers(orderId,"5,10,15,20")
                 .filter(new HttpResultFunc3<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

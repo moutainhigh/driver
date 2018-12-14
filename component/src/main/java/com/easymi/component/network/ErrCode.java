@@ -299,9 +299,9 @@ public enum ErrCode {
      */
     DRIVER_UN_FROZEN(40075, "当前司机未冻结"),
     /**
-     * 当前司机冻结
+     * 当前司机已被冻结
      */
-    DRIVER_FROZEN(40076, "当前司机冻结"),
+    DRIVER_FROZEN(40076, "当前司机已被冻结"),
     /**
      * 车辆不存在
      */
@@ -542,7 +542,7 @@ public enum ErrCode {
     /**
      * 提示该角色正在使用，不能删除
      */
-    IS_COMMON_VEHICLE_ERR(40133, "同车司机正在线上不能登陆"),
+    IS_COMMON_VEHICLE_ERR(40133, "同车司机正在线上不能登录"),
 
 //    /**
 //     * 司机有正在执行的订单
@@ -554,7 +554,7 @@ public enum ErrCode {
 //    DRIVER_LOGIN_REPEATED(40125, "司机已在线上，不能重复登录"),
 
 
-    //    /**
+//    /**
 //     * 请求参数无效
 //     */
 //    INVALID_PARAMETER_CODE(20000, "请求参数无效"),

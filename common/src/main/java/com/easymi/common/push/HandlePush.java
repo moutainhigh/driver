@@ -101,7 +101,7 @@ public class HandlePush implements FeeChangeSubject,PassengerLocSubject {
                     loadOrder(order);
                 }
                 newShowNotify(XApp.getInstance(), "", XApp.getInstance().getString(R.string.send_order), XApp.getInstance().getString(R.string.send_order_content));
-            } else if (msg.equals("Cancel")) {//取消订单
+            } else if (msg.equals("cancel")) {//取消订单
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
@@ -134,11 +134,11 @@ public class HandlePush implements FeeChangeSubject,PassengerLocSubject {
                 JSONObject dt = new JSONObject(data);
 
                 loadNotice(dt.optLong("id"));
-            } else if (msg.equals("freezed")) {//冻结
+            } else if (msg.equals("thaw")) {//冻结
                 XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.freezed));
                 EmUtil.employLogout(XApp.getInstance());
-            } else if (msg.equals("offline")) {//强制下线
+            } else if (msg.equals("force_offline")) {//强制下线
                 XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.force_offline));
                 EmUtil.employLogout(XApp.getInstance());
@@ -147,15 +147,15 @@ public class HandlePush implements FeeChangeSubject,PassengerLocSubject {
                 XApp.getInstance().syntheticVoice("您的账户已被管理员解绑");
 //                XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.unbunding));
                 EmUtil.employLogout(XApp.getInstance());
-            } else if (msg.equals("finishOrder")) { //支付成功
+            } else if (msg.equals("finish")) { //支付成功
                 MultipleOrder order = new MultipleOrder();
-                order.orderId = jb.optJSONObject("data").optLong("id");
-                order.serviceType = jb.optJSONObject("data").optString("business");
+                order.orderId = jb.optJSONObject("data").optLong("orderId");
+                order.serviceType = jb.optJSONObject("data").optString("serviceType");
                 loadOrder(order);
-            } else if (msg.equals("Recovery")) {//订单回收
+            } else if (msg.equals("reAssign")) {//订单被改派
                 MultipleOrder order = new MultipleOrder();
-                order.orderId = jb.optJSONObject("data").optLong("id");
-                order.serviceType = jb.optJSONObject("data").optString("business");
+                order.orderId = jb.optJSONObject("data").optLong("orderId");
+                order.serviceType = jb.optJSONObject("data").optString("serviceType");
 
                 Message message = new Message();
                 message.what = 3;
@@ -260,7 +260,6 @@ public class HandlePush implements FeeChangeSubject,PassengerLocSubject {
             }else if (msg.equals("passenger_gps")){
                 String data = jb.optString("data");
                 PassengerLocation location = GsonUtil.parseJson(data, PassengerLocation.class);
-                Log.e("hufeng/location",data);
                 notifyPLObserver(location);
             }
         } catch (JSONException e) {
@@ -592,7 +591,6 @@ public class HandlePush implements FeeChangeSubject,PassengerLocSubject {
                 XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.you_have_order_cancel), XApp.CANCEL);
                 newShowNotify(XApp.getInstance(), "", XApp.getInstance().getString(R.string.cancel_order)
                         , XApp.getInstance().getString(R.string.you_have_order_cancel));
-
                 break;
             case 2:
                 Bundle bundle2 = msg.getData();
@@ -612,7 +610,7 @@ public class HandlePush implements FeeChangeSubject,PassengerLocSubject {
                             XApp.getInstance().shake();
                             XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.please_admin));
                             EmUtil.employLogout(XApp.getInstance());
-                        } else if (status.equals(EmployStatus.OFFLINE)) {
+                        } else if (status.equals(EmployStatus.ONLINE)) {
                             XApp.getInstance().shake();
                             XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.force_offline));
                             EmUtil.employLogout(XApp.getInstance());

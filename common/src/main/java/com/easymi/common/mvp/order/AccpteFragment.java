@@ -40,7 +40,7 @@ import rx.schedulers.Schedulers;
  * Description:
  * History:
  */
-public class AccpteFragment extends RxBaseFragment implements MyOrderContract.View{
+public class AccpteFragment extends RxBaseFragment implements MyOrderContract.View {
 
     SwipeRecyclerView recyclerView;
     CusErrLayout cus_err_layout;
@@ -66,17 +66,17 @@ public class AccpteFragment extends RxBaseFragment implements MyOrderContract.Vi
 
     }
 
-    public void initPresenter(){
-        presenter = new MyOrderPresenter(getContext(),this);
+    public void initPresenter() {
+        presenter = new MyOrderPresenter(getContext(), this);
         setRefresh();
     }
 
-    public void setRefresh(){
-        presenter.indexOrders(page,size,"10,15,20,25,28");
+    public void setRefresh() {
+        presenter.indexOrders(page, size, "10,15,20,25,28,30,35");
     }
 
-    public void initAdapter(){
-        adapter = new MyOrderAdapter(getContext(),1);
+    public void initAdapter() {
+        adapter = new MyOrderAdapter(getContext(), 1);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -92,22 +92,25 @@ public class AccpteFragment extends RxBaseFragment implements MyOrderContract.Vi
 
             @Override
             public void onLoadMore() {
-                page ++ ;
+                page++;
                 setRefresh();
             }
         });
 
         adapter.setItemClickListener((view, baseOrder) -> {
             if (view.getId() == R.id.root && StringUtils.isNotBlank(baseOrder.serviceType)) {
-//                if (baseOrder.serviceType.equals(Config.ZHUANCHE)) {
-//                    ARouter.getInstance()
-//                            .build("/zhuanche/FlowActivity")
-//                            .withLong("orderId", baseOrder.orderId).navigation();
-//                } else if (baseOrder.serviceType.equals(Config.TAXI)) {
-//                    ARouter.getInstance()
-//                            .build("/taxi/FlowActivity")
-//                            .withLong("orderId", baseOrder.orderId).navigation();
-//                }else if (baseOrder.serviceType.equals(Config.CITY_LINE)) {
+                if (baseOrder.status < 35) {
+                    if (baseOrder.serviceType.equals(Config.ZHUANCHE)) {
+                        ARouter.getInstance()
+                                .build("/zhuanche/FlowActivity")
+                                .withLong("orderId", baseOrder.id).navigation();
+                    } else if (baseOrder.serviceType.equals(Config.TAXI)) {
+                        ARouter.getInstance()
+                                .build("/taxi/FlowActivity")
+                                .withLong("orderId", baseOrder.id).navigation();
+                    }
+                }
+//                else if (baseOrder.serviceType.equals(Config.CITY_LINE)) {
 //                    ARouter.getInstance().build("/cityline/FlowActivity").withSerializable("baseOrder",baseOrder).navigation();
 //                }
             }
@@ -116,18 +119,18 @@ public class AccpteFragment extends RxBaseFragment implements MyOrderContract.Vi
 
 
     @Override
-    public void showOrders(List<MultipleOrder> MultipleOrders,int total) {
+    public void showOrders(List<MultipleOrder> MultipleOrders, int total) {
         recyclerView.complete();
-        if (page == 1){
+        if (page == 1) {
             list.clear();
         }
-        if (MultipleOrders!=null){
+        if (MultipleOrders != null) {
             list.addAll(MultipleOrders);
         }
-        if (list.size() == 0){
+        if (list.size() == 0) {
             cus_err_layout.setText(R.string.empty_hint);
             cus_err_layout.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             cus_err_layout.setVisibility(View.GONE);
         }
         if (total > page * 10) {

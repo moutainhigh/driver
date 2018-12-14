@@ -94,6 +94,10 @@ public class MultipleOrder extends BaseOrder implements Serializable, MultiItemE
                     return address;
                 }
             }
+            if (start == null){
+                start = new Address();
+                start.address = "未知位置";
+            }
         }else {
             start = new Address();
             start.address = "未知位置";
@@ -109,6 +113,10 @@ public class MultipleOrder extends BaseOrder implements Serializable, MultiItemE
                 if (address.type == 3) {
                     return address;
                 }
+            }
+            if (end == null){
+                end = new Address();
+                end.address = "未知位置";
             }
         }else {
             end = new Address();

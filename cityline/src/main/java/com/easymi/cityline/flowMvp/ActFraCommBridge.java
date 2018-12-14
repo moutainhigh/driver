@@ -2,7 +2,7 @@ package com.easymi.cityline.flowMvp;
 
 
 import com.amap.api.maps.model.LatLng;
-import com.easymi.cityline.entity.OrderCustomer;
+import com.easymi.common.entity.OrderCustomer;
 
 import java.util.List;
 

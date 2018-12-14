@@ -95,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:text="锦绣大道南段小咖科技"
                 android:singleLine="true"
-                android:ellipsize="end"
+                android:ellipsize="marquee"
                 android:textColor="#232323"
                 android:textSize="16sp"/>
             <TextView
@@ -105,7 +105,7 @@
                 android:layout_marginTop="10dp"
                 android:text="锦绣大道南段小咖科技"
                 android:singleLine="true"
-                android:ellipsize="end"
+                android:ellipsize="marquee"
                 android:textColor="#232323"
                 android:textSize="16sp"/>
 

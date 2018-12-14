@@ -83,9 +83,9 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Holder> 
             holder.tv_grab.setVisibility(View.VISIBLE);
             holder.tv_refuse.setVisibility(View.GONE);
         }else if (mType == 3){
-            holder.tv_accept.setVisibility(View.VISIBLE);
+            holder.tv_accept.setVisibility(View.GONE);
             holder.tv_grab.setVisibility(View.GONE);
-            holder.tv_refuse.setVisibility(View.VISIBLE);
+            holder.tv_refuse.setVisibility(View.GONE);
         }
 
         holder.root.setOnClickListener(v -> {

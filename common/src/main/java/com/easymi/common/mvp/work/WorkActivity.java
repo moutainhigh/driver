@@ -553,7 +553,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         Employ employ = EmUtil.getEmployInfo();
         if (String.valueOf(employ.status).equals(EmployStatus.FROZEN)) {
             EmUtil.employLogout(this);
-        } else if (String.valueOf(employ.status).equals(EmployStatus.OFFLINE) || employ.status == 0) {
+        } else if (String.valueOf(employ.status).equals(EmployStatus.ONLINE) || employ.status == 1 ) {
             showOffline();//非听单状态
             presenter.initDaemon();
         } else {
@@ -783,10 +783,10 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
     @Override
     public void onStatusChange(String status) {
-        if (status.equals(EmployStatus.ONLINE)) {
-            showOffline();
-        } else {
+        if (status.equals(EmployStatus.WORK)) {
             showOnline();
+        } else {
+            showOffline();
         }
     }
 
@@ -833,7 +833,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         View v = getLayoutInflater().inflate(R.layout.map_overly, null);
         RelativeLayout overly_bg = v.findViewById(R.id.overly_bg);
 
-        if (driver.status.equals(EmployStatus.FREE)) {
+        if (driver.status.equals(EmployStatus.WORK)) {
             overly_bg.setBackgroundResource(R.mipmap.map__free_maker_bg);
         } else {
             overly_bg.setBackgroundResource(R.mipmap.map__busy_maker_bg);

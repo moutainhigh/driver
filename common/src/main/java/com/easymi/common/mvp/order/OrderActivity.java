@@ -38,9 +38,9 @@ public class OrderActivity extends RxBaseActivity {
     @Override
     public void initToolBar() {
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.liushui_title);
+        toolbar.setTitle(R.string.com_my_order);
         toolbar.setLeftIcon(R.drawable.ic_arrow_back, v -> finish());
-//        if (EmUtil.getEmployInfo().serviceType.equals(Config.CITY_LINE)){
+        if (!EmUtil.getEmployInfo().serviceType.equals(Config.TAXI)){
             toolbar.setRightText(R.string.com_make_order, v -> {
                 if (popWindow.isShowing()) {
                     popWindow.dismiss();
@@ -48,7 +48,7 @@ public class OrderActivity extends RxBaseActivity {
                     popWindow.show(v);
                 }
             });
-//        }
+        }
     }
 
     @Override
@@ -76,7 +76,10 @@ public class OrderActivity extends RxBaseActivity {
     private void initTabLayout() {
         fragments = new ArrayList<>();
         fragments.add(new AccpteFragment());
-        fragments.add(new AssignFragment());
+        if (!EmUtil.getEmployInfo().serviceType.equals(Config.CITY_LINE)){
+            fragments.add(new AssignFragment());
+        }
+
 //        if (ZCSetting.findOne().grabOrder == 1){
 //            fragments.add(new GrabFragment());
 //        }
@@ -91,7 +94,9 @@ public class OrderActivity extends RxBaseActivity {
 //            tabLayout.getTabAt(1).setText(getString(R.string.com_assign_order));
 //            tabLayout.getTabAt(2).setText(getString(R.string.com_grab_order));
 //        }else {
+        if (!EmUtil.getEmployInfo().serviceType.equals(Config.CITY_LINE)){
             tabLayout.getTabAt(1).setText(getString(R.string.com_assign_order));
+        }
 //        }
 
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {

@@ -6,18 +6,18 @@ package com.easymi.component;
 
 public class EmployStatus {
     /**
-     * 离线
+     * 离线(未登录)
      */
     public static final String OFFLINE = String.valueOf(1);
     /**
-     * 在线
+     * 在线(登录未听单)
      */
     public static final String ONLINE = String.valueOf(2);
 
     /**
-     * 空闲
+     * 空闲（登录后听单中）
      */
-    public static final String FREE = String.valueOf(2);
+    public static final String WORK = String.valueOf(3);
     /**
      * 派单
      */

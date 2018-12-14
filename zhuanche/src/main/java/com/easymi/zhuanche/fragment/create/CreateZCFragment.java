@@ -109,14 +109,15 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
 
         init();
 
-//        presenter.queryZCType(EmUtil.getLastLoc().adCode, EmUtil.getLastLoc().cityCode,
-//                (int) EmUtil.getEmployInfo().modelId, EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);//查询专车子类型
+        presenter.queryZCType(EmUtil.getLastLoc().adCode, EmUtil.getLastLoc().cityCode,
+                (int) EmUtil.getEmployInfo().modelId, EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);//查询专车子类型
     }
 
-    public void initQueryZCType(){
-        presenter.queryZCType(startPoi.getAdCode(), startPoi.getCityCode(),
-                (int) EmUtil.getEmployInfo().modelId, startPoi.getLatLonPoint().getLatitude(), startPoi.getLatLonPoint().getLongitude());//查询专车子类型
-    }
+//    public void initQueryZCType(){
+//       //adcode和citycode获取不到
+//        presenter.queryZCType(startPoi.getAdCode(), startPoi.getCityCode(),
+//                (int) EmUtil.getEmployInfo().modelId, startPoi.getLatLonPoint().getLatitude(), startPoi.getLatLonPoint().getLongitude());//查询专车子类型
+//    }
 
 
     @Override
@@ -167,7 +168,7 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
         startPlace.setTextColor(getResources().getColor(R.color.text_color_black));
         startPoi = new PoiItem("", new LatLonPoint(emLoc.latitude, emLoc.longitude), emLoc.poiName, emLoc.address);
 
-        initQueryZCType();
+//        initQueryZCType();
 
         startPlace.setOnClickListener(view -> {
             Intent intent = new Intent(getActivity(), PlaceActivity.class);
@@ -255,11 +256,11 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
         start.type = 1;
         start.sort = 1;
         Address end = new Address();
-        end.address = startPoi.getTitle();
-        end.latitude = startPoi.getLatLonPoint().getLatitude();
-        end.longitude = startPoi.getLatLonPoint().getLongitude();
-        end.type = 1;
-        end.sort = 1;
+        end.address = endPoi.getTitle();
+        end.latitude = endPoi.getLatLonPoint().getLatitude();
+        end.longitude = endPoi.getLatLonPoint().getLongitude();
+        end.type = 3;
+        end.sort = 2;
         listJson.add(start);
         listJson.add(end);
         return GsonUtil.toJson(listJson);
@@ -386,6 +387,10 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
     public void showDisAndTime(float mile, float sec) {
         distance = (double) (mile / 1000);
         duration = (int) sec / 60;
+        if (distance == 0 || duration == 0){
+            ToastUtil.showMessage(getContext(),getContext().getResources().getString(R.string.bo_budget_hint));
+            return;
+        }
         getBudget();
     }
 
@@ -413,7 +418,7 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
                 Log.e("poi", startPoi.toString());
                 startPlace.setText(startPoi.getTitle());
                 startPlace.setTextColor(getResources().getColor(R.color.text_color_black));
-                initQueryZCType();
+//                initQueryZCType();
             } else if (requestCode == END_CODE) {
                 endPoi = data.getParcelableExtra("poiItem");
                 endPlace.setText(endPoi.getTitle());

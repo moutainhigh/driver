@@ -1,6 +1,7 @@
 package com.easymi.common.util;
 
 import com.easymi.common.entity.BuildPushData;
+import com.easymi.common.entity.OrderCustomer;
 import com.easymi.common.entity.PushBean;
 import com.easymi.common.entity.PushData;
 import com.easymi.common.entity.PushDataLoc;
@@ -82,34 +83,51 @@ public class BuildPushUtil {
         pushData.location.altitude = emLoc.altitude;
         pushData.location.time = System.currentTimeMillis() / 1000;
 
-
         List<PushDataOrder> orderList = new ArrayList<>();
+
+
         for (DymOrder dymOrder : DymOrder.findAll()) {
             PushDataOrder dataOrder = new PushDataOrder();
-            dataOrder.orderId = dymOrder.orderId;
-            dataOrder.orderType = dymOrder.orderType;
-            dataOrder.status = 0;
-            dataOrder.addedKm = dymOrder.addedKm;
-            dataOrder.addedFee = dymOrder.addedFee;
+            if (dymOrder.orderType.equals(Config.CITY_LINE)) {
+                if (dymOrder.orderStatus == 30 || dymOrder.orderStatus == 35){
+                    for (OrderCustomer orderCustomer : OrderCustomer.findByIDTypeOrderByAcceptSeq(dymOrder.orderId, dymOrder.orderType)) {
+                        dataOrder.orderId = orderCustomer.orderId;
+                        dataOrder.orderType = orderCustomer.orderType;
 
-            dataOrder.business = dymOrder.orderType;
-            dataOrder.passengerId = dymOrder.passengerId;
-
-            if (dymOrder.orderType.equals(Config.DAIJIA)) {
-
-            } else if (dymOrder.orderType.equals(Config.ZHUANCHE) || dymOrder.orderType.equals(Config.TAXI)) {
-
+                        dataOrder.business = orderCustomer.orderType;
+                        dataOrder.passengerId = orderCustomer.customerId;
+                    }
+                    orderList.add(dataOrder);
+                }
+            } else {
+                dataOrder.orderId = dymOrder.orderId;
+                dataOrder.orderType = dymOrder.orderType;
                 dataOrder.status = dymOrder.orderStatus;
+                dataOrder.addedKm = dymOrder.addedKm;
+                dataOrder.addedFee = dymOrder.addedFee;
 
-                dataOrder.peakMile = dymOrder.peakMile;
-                dataOrder.nightTime = dymOrder.nightTime;
-                dataOrder.nightMile = dymOrder.nightMile;
-                dataOrder.nightTimePrice = dymOrder.nightTimePrice;
-            }
-            if (dataOrder.status != 0) {
-                orderList.add(dataOrder);
+                dataOrder.business = dymOrder.orderType;
+                dataOrder.passengerId = dymOrder.passengerId;
+
+                if (dymOrder.orderType.equals(Config.DAIJIA)) {
+
+                } else if (dymOrder.orderType.equals(Config.ZHUANCHE) || dymOrder.orderType.equals(Config.TAXI)) {
+
+                    dataOrder.status = dymOrder.orderStatus;
+
+                    dataOrder.peakMile = dymOrder.peakMile;
+                    dataOrder.nightTime = dymOrder.nightTime;
+                    dataOrder.nightMile = dymOrder.nightMile;
+                    dataOrder.nightTimePrice = dymOrder.nightTimePrice;
+                }
+                if (dataOrder.status != 0) {
+                    orderList.add(dataOrder);
+                }
             }
         }
+//            }
+//        }
+
         pushData.location.orderInfo = orderList;
 
 //        /**

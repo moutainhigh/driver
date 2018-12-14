@@ -1,6 +1,6 @@
 package com.easymi.cityline;
 
-import com.easymi.cityline.entity.OrderCustomer;
+import com.easymi.common.entity.OrderCustomer;
 import com.easymi.cityline.entity.ZXOrder;
 import com.easymi.cityline.result.OrderCustomerResult;
 import com.easymi.cityline.result.PriceResult;
@@ -61,7 +61,8 @@ public interface CLService {
      */
     @GET("/api/v1/bus/city/order/list")
     Observable<EmResult2<List<OrderCustomer>>> getOrderCustomers(
-            @Query("scheduleId") long scheduleId);
+            @Query("scheduleId") long scheduleId,
+            @Query("status") String status);
 
     /**
      * 班次结束
