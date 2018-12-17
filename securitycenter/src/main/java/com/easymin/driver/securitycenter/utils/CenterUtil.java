@@ -37,7 +37,7 @@ public class CenterUtil {
         this.mContext = context;
     }
 
-    public CenterUtil(Context context,String appKey,String aeskey,String token) {
+    public CenterUtil(Context context, String appKey, String aeskey, String token) {
         this.mContext = context;
         CenterConfig.APPKEY = appKey;
         CenterConfig.AES_KEY = aeskey;
@@ -68,9 +68,15 @@ public class CenterUtil {
 
         new RxManager().add(observable.subscribe(new MySubscriber<>(mContext, false,
                 true, emResult -> {
-            AudioUtil audioUtil = new AudioUtil();
-//                audioUtil.onRecord(mContext,true);
-            anyToken();
+            if (emResult.getCode() == 1){
+//                if (emResult.soundRecordCheck != 0){
+                    AudioUtil audioUtil = new AudioUtil();
+                    audioUtil.onRecord(mContext, true);
+                    anyToken();
+//                }
+            }else {
+                ToastUtil.showMessage(mContext,emResult.getMessage());
+            }
         })));
     }
 
@@ -84,7 +90,11 @@ public class CenterUtil {
 
         new RxManager().add(observable.subscribe(new MySubscriber<>(mContext, false,
                 true, emResult -> {
-
+            if (emResult.getCode() == 1){
+                CenterConfig.QINIU_TOKEN = emResult.qiniuyun;
+            }else {
+                ToastUtil.showMessage(mContext,emResult.getMessage());
+            }
         })));
     }
 
@@ -113,7 +123,7 @@ public class CenterUtil {
 
         new RxManager().add(observable.subscribe(new MySubscriber<>(mContext, false,
                 true, emResult -> {
-            ToastUtil.showMessage(mContext,"driverUp");
+
         })));
     }
 

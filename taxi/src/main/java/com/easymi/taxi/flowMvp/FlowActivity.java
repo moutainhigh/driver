@@ -95,6 +95,7 @@ import com.easymi.taxi.receiver.OrderFinishReceiver;
 import com.easymi.taxi.widget.FlowPopWindow;
 import com.easymi.taxi.widget.RefuseOrderDialog;
 import com.easymi.taxi.widget.TaxiSettleDialog;
+import com.easymin.driver.securitycenter.utils.AudioUtil;
 import com.easymin.driver.securitycenter.utils.CenterUtil;
 import com.google.gson.Gson;
 
@@ -1266,6 +1267,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
         if (orderId == taxiOrder.id
                 && orderType.equals(taxiOrder.serviceType)) {
+            AudioUtil audioUtil = new AudioUtil();
+            audioUtil.onRecord(this, false);
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setMessage(msg)
                     .setPositiveButton(R.string.ok, (dialog1, which) -> {

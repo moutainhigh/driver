@@ -82,20 +82,13 @@ public class RecordingService extends Service {
         File f;
 
         do {
-            mFileName = getString(R.string.default_file_name) + ".mp4";
+            mFileName = getString(R.string.default_file_name) + System.currentTimeMillis() +".mp4";
             mFilePath = Environment.getExternalStorageDirectory().getAbsolutePath();
             mFilePath += "/SoundRecorder/" + mFileName;
             f = new File(mFilePath);
         } while (f.exists() && !f.isDirectory());
     }
 
-//    public String getFilePath(){
-//        if (!TextUtils.isEmpty(mFilePath)  && mFilePath.contains(getString(R.string.default_file_name))){
-//            return mFilePath;
-//        }else {
-//            return "";
-//        }
-//    }
 
     // 停止录音
     public void stopRecording() {

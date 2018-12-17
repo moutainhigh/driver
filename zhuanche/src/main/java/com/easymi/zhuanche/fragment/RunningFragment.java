@@ -10,6 +10,7 @@ import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.widget.CustomSlideToUnlockView;
+import com.easymi.component.widget.LoadingButton;
 import com.easymi.zhuanche.R;
 import com.easymi.zhuanche.flowMvp.ActFraCommBridge;
 import com.easymi.zhuanche.flowMvp.FlowActivity;
@@ -37,7 +38,7 @@ public class RunningFragment extends RxBaseFragment {
 
 //    LoadingButton startWaitBtn;
 //    LinearLayout settleBtn;
-    CustomSlideToUnlockView slideView;
+    LoadingButton slideView;
 
     LinearLayout quanlanCon;
     ImageView quanlanImg;
@@ -89,17 +90,21 @@ public class RunningFragment extends RxBaseFragment {
 //        startWaitBtn.setOnClickListener(view -> bridge.doStartWait(startWaitBtn));
 //        settleBtn.setOnClickListener(view -> bridge.showSettleDialog());
 
-        slideView.setmCallBack(new CustomSlideToUnlockView.CallBack() {
-            @Override
-            public void onSlide(int distance) {
+//        slideView.setmCallBack(new CustomSlideToUnlockView.CallBack() {
+//            @Override
+//            public void onSlide(int distance) {
+//
+//            }
+//
+//            @Override
+//            public void onUnlocked() {
+//                bridge.showSettleDialog();
+//                slideView.resetView();
+//            }
+//        });
 
-            }
-
-            @Override
-            public void onUnlocked() {
-                bridge.showSettleDialog();
-                slideView.resetView();
-            }
+        slideView.setOnClickListener(v -> {
+            bridge.showSettleDialog();
         });
 
         refreshImg.setOnClickListener(v -> {

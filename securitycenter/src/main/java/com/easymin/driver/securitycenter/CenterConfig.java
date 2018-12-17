@@ -67,5 +67,5 @@ public class CenterConfig {
     /**
      * 七牛云上传地址
      */
-    public static final String QINIU_TOKEN = "";
+    public static  String QINIU_TOKEN = "";
 }

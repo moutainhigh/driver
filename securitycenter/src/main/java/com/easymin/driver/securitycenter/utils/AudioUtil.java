@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
 import android.os.SystemClock;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -22,6 +24,8 @@ import java.io.File;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
@@ -43,9 +47,14 @@ public class AudioUtil {
             context.startService(intent);
         } else {
             context.stopService(intent);
-            CenterUtil centerUtil = new CenterUtil(context);
-            centerUtil.putAudio(new File(Environment.getExternalStorageDirectory() + "/SoundRecorder/"
-                    +context.getString(R.string.default_file_name)),CenterConfig.QINIU_TOKEN);
+
+            String filePaht = context.getSharedPreferences("sp_name_audio", MODE_PRIVATE).getString("audio_path", "");
+            Log.e("hufeng",filePaht);
+
+            if (!TextUtils.isEmpty(filePaht)){
+                CenterUtil centerUtil = new CenterUtil(context);
+                centerUtil.putAudio(new File(filePaht),CenterConfig.QINIU_TOKEN);
+            }
         }
     }
 

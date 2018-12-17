@@ -101,6 +101,7 @@ import com.easymi.zhuanche.receiver.CancelOrderReceiver;
 import com.easymi.zhuanche.receiver.OrderFinishReceiver;
 import com.easymi.zhuanche.widget.FlowPopWindow;
 import com.easymi.zhuanche.widget.RefuseOrderDialog;
+import com.easymin.driver.securitycenter.utils.AudioUtil;
 import com.easymin.driver.securitycenter.utils.CenterUtil;
 import com.google.gson.Gson;
 
@@ -1349,6 +1350,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
         if (orderId == zcOrder.orderId
                 && orderType.equals(zcOrder.orderType)) {
+            AudioUtil audioUtil = new AudioUtil();
+            audioUtil.onRecord(this, false);
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setMessage(msg)
                     .setPositiveButton(R.string.ok, (dialog1, which) -> {

@@ -45,6 +45,7 @@ import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.zhuanche.entity.ZCOrder;
 import com.easymi.zhuanche.result.ZCOrderResult;
+import com.easymin.driver.securitycenter.utils.AudioUtil;
 import com.easymin.driver.securitycenter.utils.CenterUtil;
 
 import java.math.BigDecimal;
@@ -157,6 +158,8 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, zcOrderResult -> {
             updateDymOrder(zcOrderResult.data);
             view.showOrder(zcOrderResult.data);
+            AudioUtil audioUtil = new AudioUtil();
+            audioUtil.onRecord(context, false);
         })));
     }
 

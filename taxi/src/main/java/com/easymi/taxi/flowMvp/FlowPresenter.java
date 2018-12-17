@@ -44,6 +44,7 @@ import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.taxi.entity.TaxiOrder;
 import com.easymi.taxi.result.TaxiOrderResult;
+import com.easymin.driver.securitycenter.utils.AudioUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -165,6 +166,8 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             updateDymOrder(zcOrderResult.data);
             view.showOrder(zcOrderResult.data);
 
+            AudioUtil audioUtil = new AudioUtil();
+            audioUtil.onRecord(context, false);
         })));
     }
 

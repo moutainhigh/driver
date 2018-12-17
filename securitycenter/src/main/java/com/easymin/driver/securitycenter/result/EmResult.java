@@ -34,4 +34,8 @@ public class EmResult {
      */
     public int emergeContackCheck;
 
+    /**
+     * 七牛云token
+     */
+    public String qiniuyun;
 }

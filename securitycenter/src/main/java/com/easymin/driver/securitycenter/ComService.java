@@ -187,24 +187,7 @@ public interface ComService {
                                   @Field("serviceType") String serviceType,
                                   @Field("appKey") String appKey);
 
-    /**
-     * 自动分享,司机接单后调用的接口
-     *
-     * @param serviceType
-     * @param orderId
-     * @param passengerId
-     * @param passengerPhone
-     * @param serviceType
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("api/v1/safe/sms_share_auto")
-    Observable<EmResult> smsShareAuto(@Field("companyId") long companyId,
-                                      @Field("orderId") long orderId,
-                                      @Field("passengerId") long passengerId,
-                                      @Field("passengerPhone") long passengerPhone,
-                                      @Field("serviceType") String serviceType,
-                                      @Field("appKey") String appKey);
+
 
     /**
      * 乘客对录音授权
@@ -254,12 +237,13 @@ public interface ComService {
      * @param serviceType
      * @return
      */
-    @GET("api/v1/safe/sms_share_auto")
-    Observable<EmResult> smsShareAuto(@Query("orderId") long orderId,
-                                      @Query("companyId") long companyId,
-                                      @Query("passengerId") long passengerId,
-                                      @Query("passengerPhone") String passengerPhone,
-                                      @Query("serviceType") String serviceType);
+    @FormUrlEncoded
+    @POST("api/v1/safe/sms_share_auto")
+    Observable<EmResult> smsShareAuto(@Field("orderId") long orderId,
+                                      @Field("companyId") long companyId,
+                                      @Field("passengerId") long passengerId,
+                                      @Field("passengerPhone") String passengerPhone,
+                                      @Field("serviceType") String serviceType);
 
     /**
      * 检测乘客授权
@@ -276,7 +260,7 @@ public interface ComService {
      *
      * @return
      */
-    @GET("api/v1/safe/app/any_token")
+    @GET("api/v1/safe/app/qny_token")
     Observable<EmResult> anyToken();
 
 

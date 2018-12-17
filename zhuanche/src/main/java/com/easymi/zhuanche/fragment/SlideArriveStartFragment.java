@@ -14,6 +14,7 @@ import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.utils.GlideCircleTransform;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.CustomSlideToUnlockView;
+import com.easymi.component.widget.LoadingButton;
 import com.easymi.zhuanche.R;
 import com.easymi.zhuanche.entity.ZCOrder;
 import com.easymi.zhuanche.flowMvp.ActFraCommBridge;
@@ -32,7 +33,7 @@ public class SlideArriveStartFragment extends RxBaseFragment {
         this.bridge = bridge;
     }
 
-    CustomSlideToUnlockView slideView;
+    LoadingButton slideView;
     TextView startPlaceText;
     TextView endPlaceText;
     LinearLayout changeEndCon;
@@ -83,16 +84,19 @@ public class SlideArriveStartFragment extends RxBaseFragment {
 
         startPlaceText.setText(zcOrder.getStartSite().addr);
         endPlaceText.setText(zcOrder.getEndSite().addr);
-        slideView.setmCallBack(new CustomSlideToUnlockView.CallBack() {
-            @Override
-            public void onSlide(int distance) {
-
-            }
-
-            @Override
-            public void onUnlocked() {
-                bridge.doArriveStart();
-            }
+//        slideView.setmCallBack(new CustomSlideToUnlockView.CallBack() {
+//            @Override
+//            public void onSlide(int distance) {
+//
+//            }
+//
+//            @Override
+//            public void onUnlocked() {
+//                bridge.doArriveStart();
+//            }
+//        });
+        slideView.setOnClickListener(v -> {
+            bridge.doArriveStart();
         });
         callPhoneCon.setOnClickListener(view -> CallPhoneDialog.callDialog(getActivity(),zcOrder));
         changeEndCon.setOnClickListener(view -> bridge.changeEnd());
