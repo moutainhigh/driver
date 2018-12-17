@@ -2,6 +2,7 @@ package com.easymin.driver.securitycenter.utils;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.easymin.driver.securitycenter.CenterConfig;
 import com.easymin.driver.securitycenter.ComService;
@@ -36,6 +37,13 @@ public class CenterUtil {
         this.mContext = context;
     }
 
+    public CenterUtil(Context context,String appKey,String aeskey,String token) {
+        this.mContext = context;
+        CenterConfig.APPKEY = appKey;
+        CenterConfig.AES_KEY = aeskey;
+        CenterConfig.TOKEN = token;
+    }
+
     //检测自动分享
     public void smsShareAuto(long orderId, long companyId, long passengerId, String passengerPhone, String serviceType) {
         Observable<EmResult> observable = ApiManager.getInstance().createApi(CenterConfig.HOST, ComService.class)
@@ -50,7 +58,7 @@ public class CenterUtil {
         })));
     }
 
-    //检测乘客授权
+    //检测乘客录音授权
     public void checkingAuth(long passengerId) {
         Observable<EmResult> observable = ApiManager.getInstance().createApi(CenterConfig.HOST, ComService.class)
                 .checkingAuth(passengerId)
@@ -60,7 +68,9 @@ public class CenterUtil {
 
         new RxManager().add(observable.subscribe(new MySubscriber<>(mContext, false,
                 true, emResult -> {
-
+            AudioUtil audioUtil = new AudioUtil();
+//                audioUtil.onRecord(mContext,true);
+            anyToken();
         })));
     }
 
@@ -103,7 +113,7 @@ public class CenterUtil {
 
         new RxManager().add(observable.subscribe(new MySubscriber<>(mContext, false,
                 true, emResult -> {
-
+            ToastUtil.showMessage(mContext,"driverUp");
         })));
     }
 
@@ -123,7 +133,7 @@ public class CenterUtil {
     }
 
     //上传音频文件到七牛云
-    private void putAudio(File file, String token) {
+    public void putAudio(File file, String token) {
         RequestBody audioRequestBody = RequestBody.create(MediaType.parse("image/jpg"), file);
         RequestBody tokenBody = RequestBody.create(MediaType.parse("multipart/form-data"), token);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), audioRequestBody);

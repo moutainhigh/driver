@@ -33,7 +33,7 @@ import rx.schedulers.Schedulers;
  */
 public class AudioUtil {
 
-    private void onRecord(Context context, boolean start) {
+    public void onRecord(Context context, boolean start) {
         Intent intent = new Intent(context, RecordingService.class);
         if (start) {
             File folder = new File(Environment.getExternalStorageDirectory() + "/SoundRecorder");
@@ -43,6 +43,9 @@ public class AudioUtil {
             context.startService(intent);
         } else {
             context.stopService(intent);
+            CenterUtil centerUtil = new CenterUtil(context);
+            centerUtil.putAudio(new File(Environment.getExternalStorageDirectory() + "/SoundRecorder/"
+                    +context.getString(R.string.default_file_name)),CenterConfig.QINIU_TOKEN);
         }
     }
 

@@ -205,9 +205,9 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
             try {
                 //再次强调，最后一个参数为true时代表多路径，否则代表单路径
                 strategy = mAMapNavi.strategyConvert(
-                        XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, true),
+                        XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, false),
                         XApp.getMyPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
-                        XApp.getMyPreferences().getBoolean(Config.SP_COST, true),
+                        XApp.getMyPreferences().getBoolean(Config.SP_COST, false),
                         XApp.getMyPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
                         false);
             } catch (Exception e) {

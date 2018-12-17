@@ -63,4 +63,9 @@ public class CenterConfig {
      * 七牛云上传地址
      */
     public static final String QINIU_HOST = "http://up-z2.qiniu.com";
+
+    /**
+     * 七牛云上传地址
+     */
+    public static final String QINIU_TOKEN = "";
 }

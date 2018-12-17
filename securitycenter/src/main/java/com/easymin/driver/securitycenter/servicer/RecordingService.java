@@ -6,6 +6,7 @@ import android.media.MediaRecorder;
 import android.os.Environment;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.easymin.driver.securitycenter.R;
@@ -81,13 +82,20 @@ public class RecordingService extends Service {
         File f;
 
         do {
-            mFileName = getString(R.string.default_file_name)
-                    + "_" + (System.currentTimeMillis()) + ".mp4";
+            mFileName = getString(R.string.default_file_name) + ".mp4";
             mFilePath = Environment.getExternalStorageDirectory().getAbsolutePath();
             mFilePath += "/SoundRecorder/" + mFileName;
             f = new File(mFilePath);
         } while (f.exists() && !f.isDirectory());
     }
+
+//    public String getFilePath(){
+//        if (!TextUtils.isEmpty(mFilePath)  && mFilePath.contains(getString(R.string.default_file_name))){
+//            return mFilePath;
+//        }else {
+//            return "";
+//        }
+//    }
 
     // 停止录音
     public void stopRecording() {

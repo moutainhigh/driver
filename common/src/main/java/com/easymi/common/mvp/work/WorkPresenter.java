@@ -39,12 +39,14 @@ import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.AesUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.LoadingButton;
+import com.easymin.driver.securitycenter.utils.CenterUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -216,6 +218,13 @@ public class WorkPresenter implements WorkContract.Presenter {
         long driverId = EmUtil.getEmployId();
         Observable<EmResult> observable = model.online(driverId, EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, btn, emResult -> {
+            //一键报警 上线
+            CenterUtil centerUtil = new CenterUtil(context,Config.APP_KEY,
+                    XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
+                    XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
+            centerUtil.driverUp(driverId,EmUtil.getEmployInfo().companyId,EmUtil.getEmployInfo().userName,EmUtil.getEmployInfo().realName,
+                    EmUtil.getEmployInfo().phone,System.currentTimeMillis()/1000,EmUtil.getEmployInfo().serviceType);
+
             view.onlineSuc();
             XApp.getPreferencesEditor().putLong(Config.ONLINE_TIME, System.currentTimeMillis()).apply();
             uploadTime(2);
@@ -229,9 +238,17 @@ public class WorkPresenter implements WorkContract.Presenter {
         Observable<EmResult> observable = model.offline(driverId, EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, true,
                 true, emResult -> {
+            //一键报警  下线
+            CenterUtil centerUtil = new CenterUtil(context,Config.APP_KEY,
+                    XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
+                    XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
+            centerUtil.driverDown(driverId,EmUtil.getEmployInfo().companyId,EmUtil.getEmployInfo().userName,EmUtil.getEmployInfo().realName,
+                    EmUtil.getEmployInfo().phone,System.currentTimeMillis()/1000,EmUtil.getEmployInfo().serviceType);
+
             view.offlineSuc();
             XApp.getPreferencesEditor().putLong(Config.ONLINE_TIME, 0).apply();
             uploadTime(1);
+
         })));
     }
 

@@ -13,10 +13,13 @@ import com.amap.api.services.route.WalkRouteResult;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.result.MultipleOrderResult;
 import com.easymi.component.Config;
+import com.easymi.component.app.XApp;
 import com.easymi.component.network.ErrCode;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.utils.AesUtil;
 import com.easymi.component.utils.EmUtil;
+import com.easymin.driver.securitycenter.utils.CenterUtil;
 
 import java.util.List;
 
@@ -48,7 +51,7 @@ public class GrabPresenter implements GrabContract.Presenter {
             observable = model.queryDJOrder(order.orderId);
         } else if (order.serviceType.equals(Config.ZHUANCHE)) {
             observable = model.queryZCOrder(order.orderId);
-        }else if (order.serviceType.equals(Config.TAXI)) {
+        } else if (order.serviceType.equals(Config.TAXI)) {
             observable = model.queryTaxiOrder(order.orderId);
         }
 
@@ -72,6 +75,7 @@ public class GrabPresenter implements GrabContract.Presenter {
 
     /**
      * 抢单是根据id查询订单详情 属于冷数据。直接取id，id就是订单id
+     *
      * @param order
      */
     @Override
@@ -82,13 +86,13 @@ public class GrabPresenter implements GrabContract.Presenter {
         Observable<MultipleOrderResult> observable = null;
         if (order.serviceType.equals(Config.ZHUANCHE)) {
 //            if (order.orderId == 0){
-                observable = model.grabZCOrder(order.id, order.version);
+            observable = model.grabZCOrder(order.id, order.version);
 //            }else {
 //                observable = model.grabZCOrder(order.orderId, order.version);
 //            }
         } else if (order.serviceType.equals(Config.TAXI)) {
 //            if (order.orderId == 0){
-                observable = model.grabTaxiOrder(order.id, order.version);
+            observable = model.grabTaxiOrder(order.id, order.version);
 //            }else {
 //                observable = model.takeTaxiOrder(order.orderId, order.version);
 //            }
@@ -100,12 +104,17 @@ public class GrabPresenter implements GrabContract.Presenter {
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<MultipleOrderResult>() {
             @Override
             public void onNext(MultipleOrderResult multipleOrderResult) {
+                CenterUtil centerUtil = new CenterUtil(context,Config.APP_KEY,
+                        XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
+                        XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
+                centerUtil.smsShareAuto(order.id, EmUtil.getEmployInfo().companyId, order.passengerId, order.passengerPhone, order.serviceType);
+                centerUtil.checkingAuth(order.passengerId);
                 if (order.serviceType.equals(Config.ZHUANCHE)) {
 //                        if (order.orderId == 0){
-                            ARouter.getInstance()
-                                    .build("/zhuanche/FlowActivity")
-                                    .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                    .withLong("orderId", order.id).navigation();
+                    ARouter.getInstance()
+                            .build("/zhuanche/FlowActivity")
+                            .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .withLong("orderId", order.id).navigation();
 //                        }else {
 //                            ARouter.getInstance()
 //                                    .build("/zhuanche/FlowActivity")
@@ -115,10 +124,10 @@ public class GrabPresenter implements GrabContract.Presenter {
 
                 } else if (order.serviceType.equals(Config.TAXI)) {
 //                    if (order.orderId == 0){
-                        ARouter.getInstance()
-                                .build("/taxi/FlowActivity")
-                                .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                .withLong("orderId", order.id).navigation();
+                    ARouter.getInstance()
+                            .build("/taxi/FlowActivity")
+                            .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .withLong("orderId", order.id).navigation();
 //                    }else {
 //                        ARouter.getInstance()
 //                                .build("/taxi/FlowActivity")
@@ -140,8 +149,10 @@ public class GrabPresenter implements GrabContract.Presenter {
             }
         })));
     }
+
     /**
      * 抢单界面是根据id查询订单详情 属于冷数据。直接取id，id就是订单id
+     *
      * @param order
      */
     @Override
@@ -152,13 +163,13 @@ public class GrabPresenter implements GrabContract.Presenter {
         Observable<MultipleOrderResult> observable = null;
         if (order.serviceType.equals(Config.ZHUANCHE)) {
 //            if (order.orderId == 0){
-                observable = model.takeZCOrder(order.id, order.version);
+            observable = model.takeZCOrder(order.id, order.version);
 //            }else {
 //                observable = model.takeZCOrder(order.orderId, order.version);
 //            }
         } else if (order.serviceType.equals(Config.TAXI)) {
 //            if (order.orderId == 0){
-                observable = model.takeTaxiOrder(order.id, order.version);
+            observable = model.takeTaxiOrder(order.id, order.version);
 //            }else {
 //                observable = model.takeTaxiOrder(order.orderId, order.version);
 //            }
@@ -171,13 +182,18 @@ public class GrabPresenter implements GrabContract.Presenter {
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<MultipleOrderResult>() {
             @Override
             public void onNext(MultipleOrderResult multipleOrderResult) {
-                    if (order.serviceType.equals(Config.ZHUANCHE)) {
+                CenterUtil centerUtil = new CenterUtil(context,Config.APP_KEY,
+                        XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
+                        XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
+                centerUtil.smsShareAuto(order.id, EmUtil.getEmployInfo().companyId, order.passengerId, order.passengerPhone, order.serviceType);
+                centerUtil.checkingAuth(order.passengerId);
+                if (order.serviceType.equals(Config.ZHUANCHE)) {
 
 //                            if (order.orderId == 0){
-                                ARouter.getInstance()
-                                        .build("/zhuanche/FlowActivity")
-                                        .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                        .withLong("orderId", order.id).navigation();
+                    ARouter.getInstance()
+                            .build("/zhuanche/FlowActivity")
+                            .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .withLong("orderId", order.id).navigation();
 //                            }else {
 //                                ARouter.getInstance()
 //                                        .build("/zhuanche/FlowActivity")
@@ -185,19 +201,19 @@ public class GrabPresenter implements GrabContract.Presenter {
 //                                        .withLong("orderId", order.orderId).navigation();
 //                            }
 
-                    } else if (order.serviceType.equals(Config.TAXI)) {
+                } else if (order.serviceType.equals(Config.TAXI)) {
 //                        if (order.orderId == 0){
-                            ARouter.getInstance()
-                                    .build("/taxi/FlowActivity")
-                                    .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                    .withLong("orderId", order.id).navigation();
+                    ARouter.getInstance()
+                            .build("/taxi/FlowActivity")
+                            .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .withLong("orderId", order.id).navigation();
 //                        }else {
 //                            ARouter.getInstance()
 //                                    .build("/taxi/FlowActivity")
 //                                    .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 //                                    .withLong("orderId", order.orderId).navigation();
 //                        }
-                    }
+                }
                 view.finishActivity();
             }
 

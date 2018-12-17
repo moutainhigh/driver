@@ -64,6 +64,7 @@ import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.loc.LocService;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.AesUtil;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
@@ -94,6 +95,7 @@ import com.easymi.taxi.receiver.OrderFinishReceiver;
 import com.easymi.taxi.widget.FlowPopWindow;
 import com.easymi.taxi.widget.RefuseOrderDialog;
 import com.easymi.taxi.widget.TaxiSettleDialog;
+import com.easymin.driver.securitycenter.utils.CenterUtil;
 import com.google.gson.Gson;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
@@ -918,6 +920,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             @Override
             public void doAccept(LoadingButton btn) {
                 presenter.acceptOrder(taxiOrder.id, btn);
+                CenterUtil centerUtil = new CenterUtil(FlowActivity.this,Config.APP_KEY,
+                        XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
+                        XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
+                centerUtil.smsShareAuto( taxiOrder.orderId, EmUtil.getEmployInfo().companyId,  taxiOrder.passengerId,  taxiOrder.passengerPhone,  taxiOrder.serviceType);
+                centerUtil.checkingAuth( taxiOrder.passengerId);
             }
 
             @Override
