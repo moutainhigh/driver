@@ -13,7 +13,6 @@ public class CenterConfig {
     /**
      * 主机地址
      */
-//    public static final String HOST = "http://10.10.2.24:10001/";
     public static final String HOST = "http://api.xiaokakj.com/";//线上地址
     /**
      * aes加密key
@@ -59,4 +58,9 @@ public class CenterConfig {
 //     * 紧急联系人设置 0未设置
 //     */
 //    public static int emergeContackCheck;
+
+    /**
+     * 七牛云上传地址
+     */
+    public static final String QINIU_HOST = "http://up-z2.qiniu.com";
 }

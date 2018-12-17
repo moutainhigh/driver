@@ -830,14 +830,18 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 //            } else {
 //                ToastUtil.showMessage(FlowActivity.this, getString(R.string.please_pay_title));
 //            }
-            if (ZCSetting.findOne().driverRepLowBalance == 2){
-                if (money > EmUtil.getEmployInfo().balance) {
-                    ToastUtil.showMessage(this, getResources().getString(R.string.no_balance));
+            if (pay4Btn.isChecked()) {
+                if (ZCSetting.findOne().driverRepLowBalance == 2){
+                    if (money > EmUtil.getEmployInfo().balance) {
+                        ToastUtil.showMessage(this, getResources().getString(R.string.no_balance));
+                    }else {
+                        presenter.payOrder(orderId, "PAY_DRIVER_BALANCE",zcOrder.version);
+                    }
                 }else {
                     presenter.payOrder(orderId, "PAY_DRIVER_BALANCE",zcOrder.version);
                 }
             }else {
-                presenter.payOrder(orderId, "PAY_DRIVER_BALANCE",zcOrder.version);
+                ToastUtil.showMessage(this,"请选择支付方式");
             }
         });
 

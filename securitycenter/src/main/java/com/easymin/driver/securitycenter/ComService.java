@@ -2,14 +2,20 @@ package com.easymin.driver.securitycenter;
 
 import com.easymin.driver.securitycenter.result.ContactResult;
 import com.easymin.driver.securitycenter.result.EmResult;
+
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 import rx.Observable;
 
 /**
@@ -236,4 +242,106 @@ public interface ComService {
                                  @Query("appKey") String appKey);
 
 
+//司机端
+
+    /**
+     * 检测自动分享
+     *
+     * @param orderId
+     * @param companyId
+     * @param passengerId
+     * @param passengerPhone
+     * @param serviceType
+     * @return
+     */
+    @GET("api/v1/safe/sms_share_auto")
+    Observable<EmResult> smsShareAuto(@Query("orderId") long orderId,
+                                      @Query("companyId") long companyId,
+                                      @Query("passengerId") long passengerId,
+                                      @Query("passengerPhone") String passengerPhone,
+                                      @Query("serviceType") String serviceType);
+
+    /**
+     * 检测乘客授权
+     *
+     * @param passengerId
+     * @return
+     */
+    @GET("api/v1/safe/checking_auth")
+    Observable<EmResult> checkingAuth(@Query("passengerId") long passengerId);
+
+
+    /**
+     * 开始获取七牛云token
+     *
+     * @return
+     */
+    @GET("api/v1/safe/app/any_token")
+    Observable<EmResult> anyToken();
+
+
+    /**
+     * 七牛云的语音文件key上传后台
+     *
+     * @param orderId
+     * @param passengerId
+     * @param recordFile  录音文件上传到七牛云的key
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/safe/up_sound_record")
+    Observable<EmResult> upSoundRecord(@Field("orderId") long orderId,
+                                       @Field("passengerId") long passengerId,
+                                       @Field("recordFile") String recordFile);
+
+    /**
+     * 上线
+     *
+     * @param driverId
+     * @param companyId
+     * @param driverNo
+     * @param driverName
+     * @param driverPhone
+     * @param onTime      10位时间戳
+     * @param serviceType
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/safe/trip_tired_driving_record")
+    Observable<EmResult> driverUp(@Field("driverId") long driverId,
+                                  @Field("companyId") long companyId,
+                                  @Field("driverNo") String driverNo,
+                                  @Field("driverName") String driverName,
+                                  @Field("driverPhone") String driverPhone,
+                                  @Field("onTime") long onTime,
+                                  @Field("serviceType") String serviceType);
+
+    /**
+     * 下线
+     *
+     * @param driverId
+     * @param companyId
+     * @param driverNo
+     * @param driverName
+     * @param driverPhone
+     * @param offTime     10位时间戳
+     * @param serviceType
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/safe/trip_tired_driving_off")
+    Observable<EmResult> driverDown(@Field("driverId") long driverId,
+                                    @Field("companyId") long companyId,
+                                    @Field("driverNo") String driverNo,
+                                    @Field("driverName") String driverName,
+                                    @Field("driverPhone") String driverPhone,
+                                    @Field("offTime") long offTime,
+                                    @Field("serviceType") String serviceType);
+
+
+    @Multipart
+    @POST
+    Observable<EmResult> uploadPic(@Url String url,
+                                   @Part("token") RequestBody token,
+                                   @Part MultipartBody.Part audio);
 }

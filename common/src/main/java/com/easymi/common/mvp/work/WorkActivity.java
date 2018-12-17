@@ -81,7 +81,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.projcet.hf.securitycenter.dialog.MainDialog;
 
 
 /**
@@ -325,13 +324,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
             ARouter.getInstance()
                     .build("/personal/MoreActivity")
                     .navigation();
-//            new MainDialog(WorkActivity.this,
-//                    105,
-//                    Config.APP_KEY,XApp.getMyPreferences().getString(Config.AES_PASSWORD,""),
-//                    XApp.getMyPreferences().getString(Config.SP_TOKEN,""),
-//                    0,
-//                    "",
-//                    "18180635910");
         });
     }
 

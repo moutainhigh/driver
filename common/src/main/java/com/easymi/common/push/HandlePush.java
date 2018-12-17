@@ -496,7 +496,7 @@ public class HandlePush implements FeeChangeSubject,PassengerLocSubject {
 
                     Intent intent1 = new Intent();
                     intent1.setAction(Config.BROAD_FINISH_ORDER);
-                    intent1.putExtra("orderId", order.orderId);
+                    intent1.putExtra("orderId", order.id);
                     intent1.putExtra("orderType", order.serviceType);
                     XApp.getInstance().sendBroadcast(intent1);
                     return;
