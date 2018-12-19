@@ -16,8 +16,8 @@ public class Config {
      * 主机地址
      */
 //    public static final String HOST = "http://10.10.2.43:10001/";
-    public static final String HOST = "http://api.xiaokakj.com/";//线上地址
-
+//    public static final String HOST = "http://api.xiaokakj.com/";//线上地址
+    public static final String HOST = "http://v6.xiaokakj.com/";//测试地址
     /**
      * MQTT配置
      */
@@ -26,7 +26,8 @@ public class Config {
     /**
      * APP_KEY
      */
-    public static final String APP_KEY = "1HAcient1kLqfeX7DVTV0dklUkpGEnUC";//资运
+//    public static final String APP_KEY = "1HAcient1kLqfeX7DVTV0dklUkpGEnUC";//资运
+    public static final String APP_KEY = "xoRfvofrZw25b95ZBZY2venOYlSwWFOV ";//测试
     /**
      * 上传图片地址.
      */

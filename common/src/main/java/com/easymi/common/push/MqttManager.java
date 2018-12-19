@@ -405,8 +405,7 @@ public class MqttManager implements LocObserver {
             XApp.getPreferencesEditor().putLong(Config.SP_LAST_GPS_PUSH_TIME, System.currentTimeMillis()).apply();
 
             Observable<GetFeeResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                    .gpsPush(Config.APP_KEY,
-                            pushStr)
+                    .gpsPush(Config.APP_KEY, pushStr)
                     .filter(new HttpResultFunc<>()) 
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread());

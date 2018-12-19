@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.NotificationCompat;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.model.LatLng;
 import com.easymi.common.CommApiService;
@@ -35,10 +36,12 @@ import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.AesUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.EmployStatus;
+import com.easymin.driver.securitycenter.utils.CenterUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,7 +60,7 @@ import rx.schedulers.Schedulers;
  * Created by Administrator on 2017/1/11.
  */
 
-public class HandlePush implements FeeChangeSubject,PassengerLocSubject {
+public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
 
     private RxManager rxManager;
 
@@ -89,7 +92,7 @@ public class HandlePush implements FeeChangeSubject,PassengerLocSubject {
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
-                if(!DymOrder.exists(order.orderId,order.serviceType)){
+                if (!DymOrder.exists(order.orderId, order.serviceType)) {
                     loadOrder(order);
                 }
 //                XApp.getInstance().syntheticVoice();
@@ -97,7 +100,7 @@ public class HandlePush implements FeeChangeSubject,PassengerLocSubject {
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
-                if(!DymOrder.exists(order.orderId,order.serviceType)){
+                if (!DymOrder.exists(order.orderId, order.serviceType)) {
                     loadOrder(order);
                 }
                 newShowNotify(XApp.getInstance(), "", XApp.getInstance().getString(R.string.send_order), XApp.getInstance().getString(R.string.send_order_content));
@@ -167,12 +170,12 @@ public class HandlePush implements FeeChangeSubject,PassengerLocSubject {
                 loadSetting();
             } else if (msg.equals("http_costInfo")) { //费用信息
                 String data = jb.optString("data");
-                JSONObject jbData = new JSONObject(data.replaceAll("\\\\\\\"","--"));
+                JSONObject jbData = new JSONObject(data.replaceAll("\\\\\\\"", "--"));
                 long orderId = jbData.optLong("OrderId");
                 String orderType = jbData.optString("OrderType");
                 DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
                 if (dymOrder != null) {
-                    if(dymOrder.distance > jbData.optDouble("Mileges")){
+                    if (dymOrder.distance > jbData.optDouble("Mileges")) {
                         return;
                     }
                     dymOrder.startFee = jbData.optDouble("StartPrice");
@@ -188,7 +191,7 @@ public class HandlePush implements FeeChangeSubject,PassengerLocSubject {
                     dymOrder.distance = jbData.optDouble("Mileges");
 
                     if (Config.ZHUANCHE.equals(orderType)) {
-                        dymOrder.peakCost =jbData.optDouble("PeakCost");
+                        dymOrder.peakCost = jbData.optDouble("PeakCost");
                         dymOrder.nightPrice = jbData.optDouble("NightPrice");
                         dymOrder.lowSpeedCost = jbData.optDouble("LowSpeedCost");
                         dymOrder.lowSpeedTime = jbData.getInt("LowSpeedTime") / 60;
@@ -208,7 +211,7 @@ public class HandlePush implements FeeChangeSubject,PassengerLocSubject {
                 }
             } else if (msg.equals("realFee")) { //费用信息
                 String data = jb.optString("data");
-                JSONObject jbData = new JSONObject(data.replaceAll("\\\\\\\"","--"));
+                JSONObject jbData = new JSONObject(data.replaceAll("\\\\\\\"", "--"));
                 long orderId = jbData.optLong("orderId");
                 String orderType = jbData.optString("orderType");
                 DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
@@ -226,14 +229,14 @@ public class HandlePush implements FeeChangeSubject,PassengerLocSubject {
                     dymOrder.minestMoney = jbData.optDouble("minCost");
 
                     dymOrder.disFee = jbData.optDouble("distanceFee");
-                    dymOrder.distance = new BigDecimal(jbData.optDouble("distance")/1000).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    dymOrder.distance = new BigDecimal(jbData.optDouble("distance") / 1000).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
                     //add
                     dymOrder.addDistance = jbData.optDouble("addDistance");
                     dymOrder.addFee = jbData.optDouble("addFee");
 
 
                     if (Config.ZHUANCHE.equals(orderType)) {
-                        dymOrder.peakCost =jbData.optDouble("peakFee");
+                        dymOrder.peakCost = jbData.optDouble("peakFee");
                         dymOrder.nightPrice = jbData.optDouble("nightMileFee"); //**不祥的预感
                         dymOrder.lowSpeedCost = jbData.optDouble("lowSpeedFee");
                         dymOrder.lowSpeedTime = jbData.getInt("lowSpeedTime") / 60;
@@ -251,16 +254,47 @@ public class HandlePush implements FeeChangeSubject,PassengerLocSubject {
                     dymOrder.updateFee();
                     notifyObserver(orderId, orderType);
                 }
-            }else if (msg.equals("tiredDriverNotice")){
+            } else if (msg.equals("tiredDriverNotice")) {
                 String data = jb.optString("data");
                 Intent intent = new Intent();
                 intent.setAction(Config.TIRED_NOTICE);
-                intent.putExtra("data",data);
+                intent.putExtra("data", data);
                 XApp.getInstance().sendBroadcast(intent);
-            }else if (msg.equals("passenger_gps")){
+            } else if (msg.equals("passenger_gps")) {
                 String data = jb.optString("data");
                 PassengerLocation location = GsonUtil.parseJson(data, PassengerLocation.class);
                 notifyPLObserver(location);
+            } else if (msg.equals("flashAssign")) {
+                MultipleOrder order = new MultipleOrder();
+                order.orderId = jb.optJSONObject("data").optLong("orderId");
+                order.serviceType = jb.optJSONObject("data").optString("serviceType");
+
+                order.passengerId = jb.optJSONObject("data").optLong("passengerId");
+                order.passengerPhone = jb.optJSONObject("data").optString("userPhone");
+
+                XApp.getInstance().shake();
+                XApp.getInstance().syntheticVoice("您有快速指派订单需要处理");
+
+                //一键报警 //todo 一键报警
+//                CenterUtil centerUtil = new CenterUtil(XApp.getInstance(),Config.APP_KEY,
+//                        XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
+//                        XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
+
+                if (StringUtils.isNotBlank(order.serviceType)) {
+                    if (order.serviceType.equals(Config.ZHUANCHE)) {
+                        ARouter.getInstance()
+                                .build("/zhuanche/FlowActivity")
+                                .withLong("orderId", order.orderId).navigation();
+//                        centerUtil.smsShareAuto(order.orderId, EmUtil.getEmployInfo().companyId, order.passengerId, order.passengerPhone, order.serviceType);
+//                        centerUtil.checkingAuth(order.passengerId);
+                    } else if (order.serviceType.equals(Config.TAXI)) {
+                        ARouter.getInstance()
+                                .build("/taxi/FlowActivity")
+                                .withLong("orderId", order.orderId).navigation();
+//                        centerUtil.smsShareAuto(order.orderId, EmUtil.getEmployInfo().companyId, order.passengerId, order.passengerPhone, order.serviceType);
+//                        centerUtil.checkingAuth(order.passengerId);
+                    }
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -273,7 +307,7 @@ public class HandlePush implements FeeChangeSubject,PassengerLocSubject {
                 loadDJOrder(multipleOrder.orderId, Config.DAIJIA);
             } else if (multipleOrder.serviceType.equals(Config.ZHUANCHE)) {
                 loadZCOrder(multipleOrder.orderId, Config.ZHUANCHE);
-            }else if (multipleOrder.serviceType.equals(Config.TAXI)){
+            } else if (multipleOrder.serviceType.equals(Config.TAXI)) {
                 loadTaxiOrder(multipleOrder.orderId, Config.TAXI);
             }
         }
@@ -517,7 +551,7 @@ public class HandlePush implements FeeChangeSubject,PassengerLocSubject {
                 } else if (orderType.equals(Config.ZHUANCHE)) {
                     voiceStr += XApp.getInstance().getString(R.string.create_zhuanche)
                             + XApp.getInstance().getString(R.string.order) + ",";//专车订单
-                }else if (orderType.equals(Config.TAXI)) {
+                } else if (orderType.equals(Config.TAXI)) {
                     voiceStr += XApp.getInstance().getString(R.string.create_taxi)
                             + XApp.getInstance().getString(R.string.order) + ",";//专车订单
                 }
@@ -545,12 +579,12 @@ public class HandlePush implements FeeChangeSubject,PassengerLocSubject {
 //                        + ","
 //                        +
                         XApp.getInstance().getString(R.string.to_you)//距您
-                        + dis //0.5公里
-                        + ","
-                        + XApp.getInstance().getString(R.string.from)//从
-                        + order.getStartSite().address //xxx
-                        + XApp.getInstance().getString(R.string.out)//出发
-                        + ",";
+                                + dis //0.5公里
+                                + ","
+                                + XApp.getInstance().getString(R.string.from)//从
+                                + order.getStartSite().address //xxx
+                                + XApp.getInstance().getString(R.string.out)//出发
+                                + ",";
                 if (StringUtils.isNotBlank(order.destination)) {
                     voiceStr += XApp.getInstance().getString(R.string.to) + order.destination;//到xxx
                 }
@@ -617,7 +651,7 @@ public class HandlePush implements FeeChangeSubject,PassengerLocSubject {
                         } else {
                             Intent intent2 = new Intent();
                             intent2.setAction(Config.BROAD_EMPLOY_STATUS_CHANGE);
-                            intent2.putExtra("status", employ.status+"");
+                            intent2.putExtra("status", employ.status + "");
                             XApp.getInstance().sendBroadcast(intent2);
                         }
                     }

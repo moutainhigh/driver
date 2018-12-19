@@ -921,11 +921,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             @Override
             public void doAccept(LoadingButton btn) {
                 presenter.acceptOrder(taxiOrder.id, btn);
-                CenterUtil centerUtil = new CenterUtil(FlowActivity.this,Config.APP_KEY,
-                        XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
-                        XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
-                centerUtil.smsShareAuto( taxiOrder.orderId, EmUtil.getEmployInfo().companyId,  taxiOrder.passengerId,  taxiOrder.passengerPhone,  taxiOrder.serviceType);
-                centerUtil.checkingAuth( taxiOrder.passengerId);
+                //todo 一键报警
+//                CenterUtil centerUtil = new CenterUtil(FlowActivity.this,Config.APP_KEY,
+//                        XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
+//                        XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
+//                centerUtil.smsShareAuto( taxiOrder.orderId, EmUtil.getEmployInfo().companyId,  taxiOrder.passengerId,  taxiOrder.passengerPhone,  taxiOrder.serviceType);
+//                centerUtil.checkingAuth( taxiOrder.passengerId);
             }
 
             @Override
@@ -1267,8 +1268,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
         if (orderId == taxiOrder.id
                 && orderType.equals(taxiOrder.serviceType)) {
-            AudioUtil audioUtil = new AudioUtil();
-            audioUtil.onRecord(this, false);
+            //todo 一键报警
+//            AudioUtil audioUtil = new AudioUtil();
+//            audioUtil.onRecord(this, false);
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setMessage(msg)
                     .setPositiveButton(R.string.ok, (dialog1, which) -> {

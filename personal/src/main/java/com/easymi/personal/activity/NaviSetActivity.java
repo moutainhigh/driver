@@ -33,9 +33,9 @@ public class NaviSetActivity extends RxBaseActivity {
         cost = findViewById(R.id.cost);
         hightspeed = findViewById(R.id.hightspeed);
 
-        congestion.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, true));
+        congestion.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, false));
         avoidhightspeed.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false));
-        cost.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_COST, true));
+        cost.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_COST, false));
         hightspeed.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_HIGHT_SPEED, false));
 
         congestion.setOnCheckedChangeListener((compoundButton, b) ->

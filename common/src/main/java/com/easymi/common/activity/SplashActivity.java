@@ -128,7 +128,8 @@ public class SplashActivity extends RxBaseActivity {
                     || !rxPermissions.isGranted(Manifest.permission.READ_PHONE_STATE)
                     || !rxPermissions.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     || !rxPermissions.isGranted(Manifest.permission.ACCESS_FINE_LOCATION)
-                    || !rxPermissions.isGranted(Manifest.permission.RECORD_AUDIO)) {
+//                    || !rxPermissions.isGranted(Manifest.permission.RECORD_AUDIO)
+                    ) {
                 Log.e(TAG, "showDialog");
                 showDialog();
             } else {

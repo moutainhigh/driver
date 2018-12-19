@@ -67,9 +67,8 @@ public class SlideArriveStartFragment extends RxBaseFragment {
 
         customHead = $(R.id.iv_head);
         customName = $(R.id.tv_custom_name);
-        //todo 差客户头像
-        customName.setText(zcOrder.passengerName);
 
+        customName.setText(zcOrder.passengerName);
         if (StringUtils.isNotBlank(zcOrder.avatar)) {
             RequestOptions options = new RequestOptions()
                     .centerCrop()

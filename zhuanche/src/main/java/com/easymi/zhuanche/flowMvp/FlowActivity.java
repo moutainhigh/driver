@@ -556,9 +556,13 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         if (null == zcOrder) {
             finish();
         } else {
+            if (zcOrder.orderStatus >= DJOrderStatus.FINISH_ORDER){
+                ToastUtil.showMessage(this,getResources().getString(R.string.order_finish));
+                finish();
+            }
             ZCSetting zcSetting = ZCSetting.findOne();
-            if (zcSetting.isPaid == 2){
-                if (zcOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER){
+            if (zcSetting.isPaid == 2) {
+                if (zcOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {
                     finish();
                 }
             }
@@ -834,17 +838,17 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 //                ToastUtil.showMessage(FlowActivity.this, getString(R.string.please_pay_title));
 //            }
             if (pay4Btn.isChecked()) {
-                if (ZCSetting.findOne().driverRepLowBalance == 2){
+                if (ZCSetting.findOne().driverRepLowBalance == 2) {
                     if (money > EmUtil.getEmployInfo().balance) {
                         ToastUtil.showMessage(this, getResources().getString(R.string.no_balance));
-                    }else {
-                        presenter.payOrder(orderId, "PAY_DRIVER_BALANCE",zcOrder.version);
+                    } else {
+                        presenter.payOrder(orderId, "PAY_DRIVER_BALANCE", zcOrder.version);
                     }
-                }else {
-                    presenter.payOrder(orderId, "PAY_DRIVER_BALANCE",zcOrder.version);
+                } else {
+                    presenter.payOrder(orderId, "PAY_DRIVER_BALANCE", zcOrder.version);
                 }
-            }else {
-                ToastUtil.showMessage(this,"请选择支付方式");
+            } else {
+                ToastUtil.showMessage(this, "请选择支付方式");
             }
         });
 
@@ -996,11 +1000,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             @Override
             public void doAccept(LoadingButton btn) {
                 presenter.acceptOrder(zcOrder.orderId, zcOrder.version, btn);
-                CenterUtil centerUtil = new CenterUtil(FlowActivity.this,Config.APP_KEY,
-                        XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
-                        XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
-                centerUtil.smsShareAuto( zcOrder.orderId, EmUtil.getEmployInfo().companyId,  zcOrder.passengerId,  zcOrder.passengerPhone,  zcOrder.orderType);
-                centerUtil.checkingAuth( zcOrder.passengerId);
+                //todo 一键报警
+//                CenterUtil centerUtil = new CenterUtil(FlowActivity.this,Config.APP_KEY,
+//                        XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
+//                        XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
+//                centerUtil.smsShareAuto( zcOrder.orderId, EmUtil.getEmployInfo().companyId,  zcOrder.passengerId,  zcOrder.passengerPhone,  zcOrder.orderType);
+//                centerUtil.checkingAuth( zcOrder.passengerId);
             }
 
             @Override
@@ -1201,6 +1206,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         mapView.onResume();
         lastLatlng = new LatLng(location.latitude, location.longitude);
         presenter.findOne(orderId);
+
     }
 
     @Override
@@ -1350,8 +1356,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
         if (orderId == zcOrder.orderId
                 && orderType.equals(zcOrder.orderType)) {
-            AudioUtil audioUtil = new AudioUtil();
-            audioUtil.onRecord(this, false);
+            //todo 一键报警
+//            AudioUtil audioUtil = new AudioUtil();
+//            audioUtil.onRecord(this, false);
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setMessage(msg)
                     .setPositiveButton(R.string.ok, (dialog1, which) -> {
@@ -1368,10 +1375,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void plChange(PassengerLocation plocation) {
-        if (plMaker != null){
+        if (plMaker != null) {
             plMaker.remove();
         }
-        if (zcOrder.orderStatus < ZCOrderStatus.GOTO_DESTINATION_ORDER){
+        if (zcOrder.orderStatus < ZCOrderStatus.GOTO_DESTINATION_ORDER) {
             if (null != plocation) {
 //            LatLng plLatlng = new LatLng(plocation.latitude, plocation.longitude);
 //            receiveLoc(plocation);//手动调用上次位置 减少从北京跳过来的时间
@@ -1461,10 +1468,14 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
     }
 
+
     @Override
     public void onFinishOrder(long orderId, String orderType) {
         if (orderId == this.orderId && orderType.equals(Config.ZHUANCHE)) {
             ToastUtil.showMessage(this, getString(R.string.finished_order));
+            if (bottomSheetDialog != null) {
+                bottomSheetDialog.dismiss();
+            }
             finish();
         }
     }

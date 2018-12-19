@@ -55,6 +55,7 @@ import com.easymi.component.widget.CustomPopWindow;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
+import com.easymi.personal.activity.register.RegisterAcitivty;
 import com.easymi.personal.adapter.PopAdapter;
 import com.easymi.personal.result.LoginResult;
 
@@ -124,9 +125,11 @@ public class LoginActivity extends RxBaseActivity {
 
         registerText = findViewById(R.id.login_register);
         registerText.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, RegisterLocalActivity.class);
-            intent.putExtra("url", Config.REGISTER_URL);
-            intent.putExtra("title", getString(R.string.register_title));
+//            Intent intent = new Intent(LoginActivity.this, RegisterLocalActivity.class);
+//            intent.putExtra("url", Config.REGISTER_URL);
+//            intent.putExtra("title", getString(R.string.register_title));
+//            startActivity(intent);
+            Intent intent = new Intent(LoginActivity.this, RegisterAcitivty.class);
             startActivity(intent);
         });
 

@@ -104,11 +104,12 @@ public class GrabPresenter implements GrabContract.Presenter {
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<MultipleOrderResult>() {
             @Override
             public void onNext(MultipleOrderResult multipleOrderResult) {
-                CenterUtil centerUtil = new CenterUtil(context,Config.APP_KEY,
-                        XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
-                        XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
-                centerUtil.smsShareAuto(order.id, EmUtil.getEmployInfo().companyId, order.passengerId, order.passengerPhone, order.serviceType);
-                centerUtil.checkingAuth(order.passengerId);
+                //todo 一键报警
+//                CenterUtil centerUtil = new CenterUtil(context,Config.APP_KEY,
+//                        XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
+//                        XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
+//                centerUtil.smsShareAuto(order.id, EmUtil.getEmployInfo().companyId, order.passengerId, order.passengerPhone, order.serviceType);
+//                centerUtil.checkingAuth(order.passengerId);
                 if (order.serviceType.equals(Config.ZHUANCHE)) {
 //                        if (order.orderId == 0){
                     ARouter.getInstance()
@@ -182,11 +183,12 @@ public class GrabPresenter implements GrabContract.Presenter {
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<MultipleOrderResult>() {
             @Override
             public void onNext(MultipleOrderResult multipleOrderResult) {
-                CenterUtil centerUtil = new CenterUtil(context,Config.APP_KEY,
-                        XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
-                        XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
-                centerUtil.smsShareAuto(order.id, EmUtil.getEmployInfo().companyId, order.passengerId, order.passengerPhone, order.serviceType);
-                centerUtil.checkingAuth(order.passengerId);
+                //todo 一键报警
+//                CenterUtil centerUtil = new CenterUtil(context,Config.APP_KEY,
+//                        XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
+//                        XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
+//                centerUtil.smsShareAuto(order.id, EmUtil.getEmployInfo().companyId, order.passengerId, order.passengerPhone, order.serviceType);
+//                centerUtil.checkingAuth(order.passengerId);
                 if (order.serviceType.equals(Config.ZHUANCHE)) {
 
 //                            if (order.orderId == 0){

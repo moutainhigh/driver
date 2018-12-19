@@ -500,13 +500,22 @@ public interface ZCApiService {
                                      @Field("serviceType") String serviceType,
                                      @Field("remark") String remark);
 
+//    /**
+//     * 根据电话验证客户是新客户还是老客户
+//     *
+//     * @param phone
+//     * @return
+//     */
+//    @GET("api/v1/public/info/passenger/is_exist")
+//    Observable<PassengerResult> queryPassenger(@Query("phone") String phone);
+
     /**
-     * 根据电话验证客户是新客户还是老客户
+     * 根据电话验证客户是新客户还是老客户  根据电话号码查询客户信息，如果客户不存在，新建客户信息
      *
      * @param phone
      * @return
      */
-    @GET("api/v1/public/info/passenger/is_exist")
+    @GET("api/v1/taxi_online/order/getPassengerByPhone")
     Observable<PassengerResult> queryPassenger(@Query("phone") String phone);
 
 

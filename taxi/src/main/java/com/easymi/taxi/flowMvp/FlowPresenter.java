@@ -165,9 +165,9 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             zcOrderResult = orderResult2ZCOrder(zcOrderResult);
             updateDymOrder(zcOrderResult.data);
             view.showOrder(zcOrderResult.data);
-
-            AudioUtil audioUtil = new AudioUtil();
-            audioUtil.onRecord(context, false);
+            //todo 一键报警
+//            AudioUtil audioUtil = new AudioUtil();
+//            audioUtil.onRecord(context, false);
         })));
     }
 
@@ -267,19 +267,26 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             mAMapNavi = AMapNavi.getInstance(context);
             mAMapNavi.addAMapNaviListener(this);
         }
-        /**
-         * congestion - 是否躲避拥堵
-         avoidspeed - 不走高速
-         cost - 避免收费
-         hightspeed - 高速优先
-         multipleRoute - 单路径or多路径
-         */
-        boolean congestion = true;
-        boolean avoidspeed = false;
-        boolean cost = false;
-        boolean hightspeed = true;
-        boolean multipleRoute = true;
-        int strateFlag = mAMapNavi.strategyConvert(congestion, cost, avoidspeed, hightspeed, multipleRoute);
+//        /**
+//         * congestion - 是否躲避拥堵
+//         avoidspeed - 不走高速
+//         cost - 避免收费
+//         hightspeed - 高速优先
+//         multipleRoute - 单路径or多路径
+//         */
+//        boolean congestion = true;
+//        boolean avoidspeed = false;
+//        boolean cost = false;
+//        boolean hightspeed = true;
+//        boolean multipleRoute = true;
+//        int strateFlag = mAMapNavi.strategyConvert(congestion, cost, avoidspeed, hightspeed, multipleRoute);
+
+        int strateFlag = mAMapNavi.strategyConvert(
+                XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, false),
+                XApp.getMyPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
+                XApp.getMyPreferences().getBoolean(Config.SP_COST, false),
+                XApp.getMyPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
+                false);
 
         NaviLatLng start = new NaviLatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
         NaviLatLng end = new NaviLatLng(endLat, endLng);

@@ -10,5 +10,5 @@ import com.easymi.zhuanche.entity.PassengerVo;
 
 public class PassengerResult extends EmResult {
 
-    public PassengerVo data;
+    public Passenger data;
 }

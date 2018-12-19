@@ -1,20 +1,30 @@
-package com.easymi.personal.activity;
+package com.easymi.personal.activity.register;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.utils.GlideRoundTransform;
 import com.easymi.personal.R;
 import com.easymi.personal.widget.CusImgHint;
+//import com.luck.picture.lib.PictureSelector;
+//import com.luck.picture.lib.config.PictureConfig;
+//import com.luck.picture.lib.entity.LocalMedia;
+
+import java.util.List;
 
 /**
  * Created by developerLzh on 2017/11/7 0007.
  */
 
-public class RegisterActivity2 extends RxBaseActivity {
+public class RegisterPhotoActivity extends RxBaseActivity {
 
     ImageView frontImg;
     ImageView backImg;
@@ -37,7 +47,7 @@ public class RegisterActivity2 extends RxBaseActivity {
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_register_2;
+        return R.layout.activity_register_photo;
     }
 
     @Override
@@ -106,7 +116,7 @@ public class RegisterActivity2 extends RxBaseActivity {
 //                            .diskCacheStrategy(DiskCacheStrategy.ALL)
 //                            .transform(new GlideRoundTransform());
 //
-//                    Glide.with(RegisterActivity2.this)
+//                    Glide.with(RegisterPhotoActivity.this)
 //                            .load(images.get(0).getCutPath())
 //                            .apply(options)
 //                            .into(currentImg);
@@ -119,7 +129,6 @@ public class RegisterActivity2 extends RxBaseActivity {
 //                    } else if (i == R.id.driving_img) {
 //                        imgPaths[2] = images.get(0).getCutPath();
 //                    }
-//
 //                }
 //            }
 //        }

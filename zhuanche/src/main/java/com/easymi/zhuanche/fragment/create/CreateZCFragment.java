@@ -333,13 +333,13 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
 
     @Override
     public void showPassenger(PassengerResult result) {
-        if (result.data.isExist) {
-            passenger = result.data.passengerVo;
+//        if (result.data.isExist) {
+            passenger = result.data;
             nameText.setText(passenger.name);
             getBudget();
-        } else {
-            ToastUtil.showMessage(getContext(), getContext().getResources().getString(R.string.no_passenger));
-        }
+//        } else {
+//            ToastUtil.showMessage(getContext(), getContext().getResources().getString(R.string.no_passenger));
+//        }
     }
 
     @Override

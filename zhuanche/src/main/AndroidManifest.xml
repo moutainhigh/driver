@@ -7,7 +7,8 @@
             android:name=".flowMvp.FlowActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack"
+            />
         <activity
             android:name=".activity.CancelActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
