@@ -53,6 +53,7 @@ public class EmUtil {
         SharedPreferences.Editor editor = XApp.getPreferencesEditor();
         editor.putBoolean(Config.SP_ISLOGIN, false);
         editor.putString(Config.APP_KEY, "");//重置APPKEY
+        editor.putString(Config.SP_TOKEN, "");
         editor.putLong(Config.SP_DRIVERID, -1);
         editor.apply();
 

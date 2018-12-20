@@ -14,16 +14,16 @@ import android.widget.Toast;
 
 import com.easymi.common.entity.Pic;
 import com.easymi.common.entity.RegisterRes;
-import com.easymi.component.Glide4Engine;
+//import com.easymi.component.Glide4Engine;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.RxProgressHUD;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.yalantis.ucrop.UCrop;
-import com.zhihu.matisse.Matisse;
-import com.zhihu.matisse.MimeType;
-import com.zhihu.matisse.internal.entity.CaptureStrategy;
+//import com.zhihu.matisse.Matisse;
+//import com.zhihu.matisse.MimeType;
+//import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -65,32 +65,32 @@ public class AbsRegisterFragment extends Fragment {
     }
 
     protected void choicePic(int requestCode, float x, float y) {
-        if (requestCode >= 100) {
-            throw new IllegalArgumentException("request code must less than 100");
-        }
-
-        this.mX = x;
-        this.mY = y;
-
-        Disposable d = rxPermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA).subscribe(granted -> {
-            if (granted) {
-                Matisse.from(this)
-                        .choose(MimeType.allOf())
-                        .capture(true)
-                        //适配7.0权限
-                        .captureStrategy(new CaptureStrategy(false, getActivity().getPackageName() + ".fileProvider"))
-                        .countable(false)
-                        .maxSelectable(1)
-                        .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
-                        .thumbnailScale(0.85f)
-                        .imageEngine(new Glide4Engine())
-                        .forResult(requestCode);
-            } else {
-                Toast.makeText(getActivity(), "请开启应用权限", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        if (requestCode >= 100) {
+//            throw new IllegalArgumentException("request code must less than 100");
+//        }
+//
+//        this.mX = x;
+//        this.mY = y;
+//
+//        Disposable d = rxPermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//                Manifest.permission.READ_EXTERNAL_STORAGE,
+//                Manifest.permission.CAMERA).subscribe(granted -> {
+//            if (granted) {
+//                Matisse.from(this)
+//                        .choose(MimeType.allOf())
+//                        .capture(true)
+//                        //适配7.0权限
+//                        .captureStrategy(new CaptureStrategy(false, getActivity().getPackageName() + ".fileProvider"))
+//                        .countable(false)
+//                        .maxSelectable(1)
+//                        .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+//                        .thumbnailScale(0.85f)
+//                        .imageEngine(new Glide4Engine())
+//                        .forResult(requestCode);
+//            } else {
+//                Toast.makeText(getActivity(), "请开启应用权限", Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 
     protected void handlePic(int requestCode, int resultCode, Intent data, OnSelectPicListener listener) {
@@ -101,8 +101,8 @@ public class AbsRegisterFragment extends Fragment {
             int originCode = requestCode / 100;
             listener.onSelectPicResult(originCode, UCrop.getOutput(data));
         } else {
-            Uri uri = Matisse.obtainResult(data).get(0);
-            openCropActivity(uri, requestCode * 100, mX, mY);
+//            Uri uri = Matisse.obtainResult(data).get(0);
+//            openCropActivity(uri, requestCode * 100, mX, mY);
         }
     }
 

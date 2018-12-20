@@ -28,6 +28,7 @@ import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.RatingBar;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
+import com.easymi.personal.activity.register.RegisterBaseActivity;
 import com.easymi.personal.result.LoginResult;
 
 import rx.Observable;
@@ -181,6 +182,11 @@ public class PersonalActivity extends RxBaseActivity {
 
     public void toCarInfo(View view) {
         Intent intent = new Intent(this, CarInfoActivity.class);
+        startActivity(intent);
+    }
+
+    public void toInfo(View view){
+        Intent intent = new Intent(this, RegisterBaseActivity.class);
         startActivity(intent);
     }
 

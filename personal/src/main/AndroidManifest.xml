@@ -232,5 +232,30 @@
             android:screenOrientation="portrait"
             android:theme="@style/ThemeSwipeBack" />
 
+        <activity
+            android:name=".activity.register.RegisterAcitivty"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSwipeBack" />
+        <!--<activity-->
+            <!--android:name=".activity.register.RegisterBaseActivity"-->
+            <!--android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:theme="@style/ThemeSwipeBack" />-->
+        <!--<activity-->
+            <!--android:name=".activity.register.RegisterPhotoActivity"-->
+            <!--android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:theme="@style/ThemeSwipeBack" />-->
+        <activity
+            android:name=".activity.register.RegisterListActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSwipeBack" />
+        <activity
+            android:name=".activity.register.RegisterNoticeActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSwipeBack" />
     </application>
 </manifest>

@@ -12,8 +12,12 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.utils.GlideRoundTransform;
+import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.R;
 import com.easymi.personal.widget.CusImgHint;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.entity.LocalMedia;
 //import com.luck.picture.lib.PictureSelector;
 //import com.luck.picture.lib.config.PictureConfig;
 //import com.luck.picture.lib.entity.LocalMedia;
@@ -26,6 +30,7 @@ import java.util.List;
 
 public class RegisterPhotoActivity extends RxBaseActivity {
 
+    CusToolbar toolbar;
     ImageView frontImg;
     ImageView backImg;
     ImageView drivingImg;
@@ -45,25 +50,39 @@ public class RegisterPhotoActivity extends RxBaseActivity {
 
     private String[] imgPaths = new String[3];
 
+
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_register_photo;
     }
 
     @Override
-    public void initViews(Bundle savedInstanceState) {
+    public void initToolBar() {
+        super.initToolBar();
+        toolbar.setLeftIcon(R.drawable.ic_arrow_back, v -> finish());
+        toolbar.setTitle(R.string.register_become);
+    }
+
+    public void findById(){
+        toolbar = findViewById(R.id.toolbar);
         frontImg = findViewById(R.id.front_img);
         backImg = findViewById(R.id.back_img);
         drivingImg = findViewById(R.id.driving_img);
-
         frontCon = findViewById(R.id.front_con);
         backCon = findViewById(R.id.back_con);
         drivingCon = findViewById(R.id.driving_con);
-
         cusImgHint = findViewById(R.id.cus_hint);
-
         applyBtn = findViewById(R.id.apply);
+    }
 
+    @Override
+    public void initViews(Bundle savedInstanceState) {
+        findById();
+        initLisenter();
+    }
+
+    public void initLisenter(){
         applyBtn.setOnClickListener(v -> finish());
 
         frontCon.setOnClickListener(v -> {
@@ -74,7 +93,7 @@ public class RegisterPhotoActivity extends RxBaseActivity {
                 cusImgHint.setText(R.string.register_hint_id_card);
             } else {
                 currentImg = frontImg;
-                choosePic(4, 3);
+                choicePic(4, 3);
             }
         });
 
@@ -86,7 +105,7 @@ public class RegisterPhotoActivity extends RxBaseActivity {
                 cusImgHint.setText(R.string.register_hint_id_card);
             } else {
                 currentImg = backImg;
-                choosePic(4, 3);
+                choicePic(4, 3);
             }
         });
 
@@ -98,42 +117,42 @@ public class RegisterPhotoActivity extends RxBaseActivity {
                 cusImgHint.setText(R.string.register_hint_driving);
             } else {
                 currentImg = drivingImg;
-                choosePic(8, 3);
+                choicePic(8, 3);
             }
         });
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (resultCode == RESULT_OK) {
-//            if (requestCode == PictureConfig.CHOOSE_REQUEST) {
-//                List<LocalMedia> images = PictureSelector.obtainMultipleResult(data);
-//                if (images != null && images.size() > 0) {
-//
-//                    RequestOptions options = new RequestOptions()
-//                            .centerCrop()
-//                            .placeholder(R.mipmap.register_photo)
-//                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                            .transform(new GlideRoundTransform());
-//
-//                    Glide.with(RegisterPhotoActivity.this)
-//                            .load(images.get(0).getCutPath())
-//                            .apply(options)
-//                            .into(currentImg);
-//                    currentImg.setVisibility(View.VISIBLE);
-//                    int i = currentImg.getId();
-//                    if (i == R.id.front_img) {
-//                        imgPaths[0] = images.get(0).getCutPath();
-//                    } else if (i == R.id.back_img) {
-//                        imgPaths[1] = images.get(0).getCutPath();
-//                    } else if (i == R.id.driving_img) {
-//                        imgPaths[2] = images.get(0).getCutPath();
-//                    }
-//                }
-//            }
-//        }
-//        super.onActivityResult(requestCode, resultCode, data);
-//    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == PictureConfig.CHOOSE_REQUEST) {
+                List<LocalMedia> images = PictureSelector.obtainMultipleResult(data);
+                if (images != null && images.size() > 0) {
+
+                    RequestOptions options = new RequestOptions()
+                            .centerCrop()
+                            .placeholder(R.mipmap.register_photo)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .transform(new GlideRoundTransform());
+
+                    Glide.with(RegisterPhotoActivity.this)
+                            .load(images.get(0).getCutPath())
+                            .apply(options)
+                            .into(currentImg);
+                    currentImg.setVisibility(View.VISIBLE);
+                    int i = currentImg.getId();
+                    if (i == R.id.front_img) {
+                        imgPaths[0] = images.get(0).getCutPath();
+                    } else if (i == R.id.back_img) {
+                        imgPaths[1] = images.get(0).getCutPath();
+                    } else if (i == R.id.driving_img) {
+                        imgPaths[2] = images.get(0).getCutPath();
+                    }
+                }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     @Override
     public boolean isEnableSwipe() {

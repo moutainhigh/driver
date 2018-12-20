@@ -35,10 +35,16 @@ public class KeyGsonResponseBodyConverter<T> implements Converter<ResponseBody, 
     public T convert(ResponseBody value) throws IOException {
         try {
             String str = value.string();
-            String jsonStr = AesUtil.aesDecrypt(str, XApp.getMyPreferences().getString(Config.AES_PASSWORD,AesUtil.AAAAA));
-            String urlString = URLDecoder.decode(jsonStr);
-            Log.e("responseJson", urlString);
-            return adapter.fromJson(urlString);
+            if (!str.contains("{")){
+                String jsonStr = AesUtil.aesDecrypt(str, XApp.getMyPreferences().getString(Config.AES_PASSWORD,AesUtil.AAAAA));
+                String urlString = URLDecoder.decode(jsonStr);
+                Log.e("responseJson", urlString);
+                return adapter.fromJson(urlString);
+            }else {
+                String urlString = URLDecoder.decode(str);
+                Log.e("responseJson", urlString);
+                return adapter.fromJson(urlString);
+            }
         } finally {
             value.close();
         }

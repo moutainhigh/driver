@@ -72,7 +72,7 @@ public class AccpteFragment extends RxBaseFragment implements MyOrderContract.Vi
     }
 
     public void setRefresh() {
-        presenter.indexOrders(page, size, "10,15,20,25,28,30,35");
+        presenter.indexOrders(page, size, "10,15,20,25,28,30,35,40");
     }
 
     public void initAdapter() {

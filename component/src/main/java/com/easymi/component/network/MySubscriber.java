@@ -119,9 +119,10 @@ public class MySubscriber<T> extends Subscriber<T> implements ProgressDismissLis
         if (e instanceof HttpException) {
             if (((HttpException) e).code() == 403 ||((HttpException) e).code() == 401
                     ||((HttpException) e).code() == 423 ||((HttpException) e).code() == 410){
-                Intent intent = new Intent(Config.HTTP_CUSTOM);
-                intent.putExtra("http_custom",((HttpException) e).code());
-                context.sendBroadcast(intent);
+//                Intent intent = new Intent(Config.HTTP_CUSTOM);
+//                intent.putExtra("http_custom",((HttpException) e).code());
+//                context.sendBroadcast(intent);
+                ToastUtil.showMessage(context, context.getString(R.string.response_error) + ((HttpException) e).code());//400、500、404之类的响应码错误
             }else {
                 ToastUtil.showMessage(context, context.getString(R.string.response_error) + ((HttpException) e).code());//400、500、404之类的响应码错误
             }

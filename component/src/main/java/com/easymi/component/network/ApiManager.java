@@ -22,7 +22,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiManager {
 
     private OkHttpClient mOkHttpClient;
-    private OkHttpClient mOkHttpClientRSA;
     /**
      * 内部静态类实现单例,且在第一次使用时才加载.
      */

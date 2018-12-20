@@ -336,6 +336,11 @@ public class Employ extends BaseEmploy implements Parcelable {
      */
     public long taxiModelId;
 
+    /**
+     * 注册状态：1.未注册；2.审核中；3驳回；4通过
+     */
+    public int registerStatus;
+
 
     protected Employ(Parcel in) {
         id = in.readLong();
@@ -400,6 +405,7 @@ public class Employ extends BaseEmploy implements Parcelable {
         balance = in.readDouble();
         modelId = in.readLong();
         taxiModelId = in.readLong();
+        registerStatus = in.readInt();
     }
 
     public static final Creator<Employ> CREATOR = new Creator<Employ>() {
@@ -484,6 +490,7 @@ public class Employ extends BaseEmploy implements Parcelable {
         values.put("balance",balance);
         values.put("modelId",modelId);
         values.put("taxiModelId",taxiModelId);
+        values.put("registerStatus",registerStatus);
         /*
          * values.put("age", age); values.put("jialing", jialing);
          */
@@ -643,6 +650,7 @@ public class Employ extends BaseEmploy implements Parcelable {
                         .getColumnIndex("modelId"));
                 driverInfo.taxiModelId = cursor.getLong(cursor.getColumnIndex("taxiModelId"));
 
+                driverInfo.registerStatus = cursor.getInt(cursor.getColumnIndex("registerStatus"));
             }
         } catch (Exception e) {
 //			CrashReport.setUserSceneTag();
@@ -823,6 +831,8 @@ public class Employ extends BaseEmploy implements Parcelable {
         driverInfo.modelId = cursor.getLong(cursor
                 .getColumnIndex("modelId"));
         driverInfo.taxiModelId = cursor.getLong(cursor.getColumnIndex("taxiModelId"));
+
+        driverInfo.registerStatus = cursor.getInt(cursor.getColumnIndex("registerStatus"));
         return driverInfo;
     }
 
@@ -896,6 +906,8 @@ public class Employ extends BaseEmploy implements Parcelable {
         values.put("balance",balance);
         values.put("modelId",modelId);
         values.put("taxiModelId",taxiModelId);
+
+        values.put("registerStatus",registerStatus);
 
         boolean flag = db.update("t_driverinfo", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
@@ -986,5 +998,6 @@ public class Employ extends BaseEmploy implements Parcelable {
         dest.writeDouble(balance);
         dest.writeLong(modelId);
         dest.writeLong(taxiModelId);
+        dest.writeInt(registerStatus);
     }
 }

@@ -556,8 +556,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         if (null == zcOrder) {
             finish();
         } else {
-            if (zcOrder.orderStatus >= DJOrderStatus.FINISH_ORDER){
-                ToastUtil.showMessage(this,getResources().getString(R.string.order_finish));
+            if (zcOrder.orderStatus >= DJOrderStatus.FINISH_ORDER) {
+                ToastUtil.showMessage(this, getResources().getString(R.string.order_finish));
                 finish();
             }
             ZCSetting zcSetting = ZCSetting.findOne();
@@ -701,11 +701,13 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
      */
     @Override
     public void showPath(int[] ints, AMapNaviPath path) {
-        if (null != routeOverLay) {
-            routeOverLay.removeFromMap();
-        }
+
+//        if (null != routeOverLay) {
+//            routeOverLay.removeFromMap();
+//        }
 //        aMap.moveCamera(CameraUpdateFactory.changeTilt(0));
-        routeOverLay = new RouteOverLay(aMap, path, this);
+        RouteOverLay routeOverLay = new RouteOverLay(aMap, path, this);
+
         routeOverLay.setStartPointBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.yellow_dot_small));
         routeOverLay.setEndPointBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.blue_dot_small));
         routeOverLay.setTrafficLine(true);
@@ -720,6 +722,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         routeOverLay.setRouteOverlayOptions(options);
 
         routeOverLay.addToMap();
+
+        if (this.routeOverLay != null) {
+            this.routeOverLay.removeFromMap();
+        }
+        this.routeOverLay = routeOverLay;
+
     }
 
     private DrivingRouteOverlay drivingRouteOverlay;
@@ -744,6 +752,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         latLngs.add(new LatLng(lastLoc.latitude, lastLoc.longitude));
         LatLngBounds bounds = MapUtil.getBounds(latLngs);
         aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(this) / 1.5), (int) (DensityUtil.getDisplayWidth(this) / 1.5), 0));
+//        if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+//            aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLatlng, 19));
+//        }
     }
 
     private CusBottomSheetDialog bottomSheetDialog;//支付弹窗
@@ -1282,6 +1293,13 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             }
         }
 
+        if (zcOrder != null && zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER){
+            if (null != getEndAddr()) {
+                presenter.routePlanByNavi(getEndAddr().lat, getEndAddr().lng);
+
+            }
+        }
+
         if (null != zcOrder) {
             if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER
                     || zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
@@ -1372,28 +1390,34 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     }
 
     private Marker plMaker;
-
+    private PassengerLocation mPlocation;
     @Override
     public void plChange(PassengerLocation plocation) {
-        if (plMaker != null) {
-            plMaker.remove();
-        }
-        if (zcOrder.orderStatus < ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-            if (null != plocation) {
-//            LatLng plLatlng = new LatLng(plocation.latitude, plocation.longitude);
-//            receiveLoc(plocation);//手动调用上次位置 减少从北京跳过来的时间
-//            aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(plLatlng, 19));//移动镜头，首次镜头快速跳到指定位置
-
-                MarkerOptions markerOption = new MarkerOptions();
-                markerOption.position(new LatLng(plocation.latitude, plocation.longitude));
-                markerOption.draggable(false);//设置Marker可拖动
-                markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                        .decodeResource(getResources(), R.mipmap.blue_dot)));
-                // 将Marker设置为贴地显示，可以双指下拉地图查看效果
-                markerOption.setFlat(true);//设置marker平贴地图效果
-                plMaker = aMap.addMarker(markerOption);
+        if (zcOrder != null && zcOrder.orderStatus < ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+            if (null != mPlocation) {
+                if (plocation.latitude != mPlocation.latitude && plocation.longitude != mPlocation.longitude){
+                    if (plMaker != null) {
+                        plMaker.remove();
+                    }
+                    mPlocation = plocation;
+                    addPlMaker();
+                }
+            }else {
+                mPlocation = plocation;
+                addPlMaker();
             }
         }
+    }
+
+    public void addPlMaker(){
+        MarkerOptions markerOption = new MarkerOptions();
+        markerOption.position(new LatLng(mPlocation.latitude, mPlocation.longitude));
+        markerOption.draggable(false);//设置Marker可拖动
+        markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                .decodeResource(getResources(), R.mipmap.blue_dot)));
+        // 将Marker设置为贴地显示，可以双指下拉地图查看效果
+        markerOption.setFlat(true);//设置marker平贴地图效果
+        plMaker = aMap.addMarker(markerOption);
     }
 
     @Override

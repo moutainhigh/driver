@@ -1,5 +1,6 @@
 package com.easymi.personal;
 
+import com.easymi.common.entity.CompanyList;
 import com.easymi.common.entity.PushAnnouncement;
 import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.SettingResult;
@@ -464,8 +465,8 @@ public interface McService {
     @FormUrlEncoded
     @POST("api/v1/public/driver/login")
     Observable<LoginResult> loginByPW(@Field("phone") String phone,
-                                      @Field("password") String password
-            , @Field("randomStr") String randomStr
+                                      @Field("password") String password,
+                                      @Field("randomStr") String randomStr
     );
 
     /**
@@ -685,4 +686,49 @@ public interface McService {
     @GET("api/v1/public/message/affiche/{id}")
     Observable<PushAnnouncement> employAfficheById(@Path("id") Long noticeId,
                                                    @Query("appKey") String appKey);
+
+
+    //注册相关
+
+    /**
+     * 公司表列表查询
+     *
+     * @return
+     */
+    @GET("api/v1/public/system/companys")
+    Observable<CompanyList> qureyCompanys(@Query("appKey") String appKey);
+
+    /**
+     * 发送短信登录接口
+     *
+     * @param code
+     * @param phone
+     * @param random
+     * @param type
+     * @param userType
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/public/app/captcha/send_sms")
+    Observable<EmResult> sendSms(@Field("code") String code,
+                                 @Field("phone") String phone,
+                                 @Field("random") String random,
+                                 @Field("type") String type,
+                                 @Field("userType") String userType);
+
+    /**
+     * 司机注册接口
+     *
+     * @param password
+     * @param phone
+     * @param smsCode
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/public/driver/register/save")
+    Observable<LoginResult> register(@Field("password") String password,
+                                     @Field("phone") String phone,
+                                     @Field("smsCode") String smsCode);
+
+
 }

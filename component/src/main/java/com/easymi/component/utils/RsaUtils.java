@@ -1,8 +1,11 @@
 // Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
 package com.easymi.component.utils;
 
+import android.content.Context;
 import android.util.Log;
 
+
+import com.easymi.component.R;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -373,5 +376,17 @@ public class RsaUtils {
             sb.append(base.charAt(number));
         }
         return sb.toString();
+    }
+
+
+    //hf
+    public static String encryptAndEncode(Context context ,String content){
+        String str = "";
+        try {
+            str = Base64Utils.encode(RsaUtils.encryptByPublicKey(content.getBytes("UTF-8"), context.getResources().getString(R.string.rsa_public_key)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return str;
     }
 }

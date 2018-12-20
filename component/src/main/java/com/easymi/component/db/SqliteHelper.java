@@ -182,6 +182,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("refreshToken").append(" ").append("TEXT").append(",")
                 .append("modelId").append(" ").append("LONG").append(",")
                 .append("taxiModelId").append(" ").append("LONG").append(",")
+                .append("registerStatus").append(" ").append("INTEGER").append(",")
 
                 .append("company_id").append(" ").append("LONG")
                 .append(");");

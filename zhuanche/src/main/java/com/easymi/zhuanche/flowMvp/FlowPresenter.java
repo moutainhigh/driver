@@ -33,6 +33,7 @@ import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.push.MqttManager;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
+import com.easymi.component.ZCOrderStatus;
 import com.easymi.component.activity.NaviActivity;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
@@ -445,15 +446,18 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     @Override
     public void onCalculateRouteSuccess(int[] ints) {
         Log.e("FlowerPresenter", "onCalculateRouteSuccess()");
+        AMapNaviPath path;
         HashMap<Integer, AMapNaviPath> paths = mAMapNavi.getNaviPaths();
         if (null != paths && paths.size() != 0) {
-            AMapNaviPath path = paths.get(ints[0]);
-            if (path != null) {
-                view.showPath(ints, path);
-                view.showLeft(path.getAllLength(), path.getAllTime());
-                if (XApp.getMyPreferences().getBoolean(Config.SP_DEFAULT_NAVI, true)) {
-                    mAMapNavi.startNavi(NaviType.GPS);
-                }
+            path = paths.get(ints[0]);
+        } else {
+            path = mAMapNavi.getNaviPath();
+        }
+        if (path != null) {
+            view.showPath(ints, path);
+            view.showLeft(path.getAllLength(), path.getAllTime());
+            if (XApp.getMyPreferences().getBoolean(Config.SP_DEFAULT_NAVI, true)) {
+                mAMapNavi.startNavi(NaviType.GPS);
             }
         }
     }
@@ -533,6 +537,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
      */
     @Override
     public void onNaviInfoUpdate(NaviInfo naviInfo) {
+        Log.e("hufeng", "onNaviInfoUpdate");
         view.showLeft(naviInfo.getPathRetainDistance(), naviInfo.getPathRetainTime());
     }
 

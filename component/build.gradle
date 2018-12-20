@@ -46,12 +46,14 @@ dependencies {
     api rootProject.ext.aliThirdPush
     api rootProject.ext.mqtt
     api rootProject.ext.mqttService
-//    api rootProject.ext.pictureSelector
+    api rootProject.ext.pictureSelector
     api rootProject.ext.bugly
     api rootProject.ext.buglyNativecrashreport
-    api rootProject.ext.glide
-    api rootProject.ext.matisse
-    api rootProject.ext.ucrop
+//    api rootProject.ext.glide
+//    api rootProject.ext.matisse
+//    api(rootProject.ext.ucrop){
+//        exclude group: 'com.github.bumptech.glide'
+//    }
     api rootProject.ext.rxpermissions
 
 }

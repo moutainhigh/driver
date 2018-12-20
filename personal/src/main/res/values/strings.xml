@@ -24,6 +24,7 @@
     <string name="person_jiangli">推荐奖励</string>
     <string name="person_pingjia">乘客评价</string>
     <string name="person_message">消息中心</string>
+    <string name="person_driver">成为司机</string>
     <string name="my_message">我的消息</string>
     <string name="person_set">设置</string>
     <string name="person_tuiguang">推广</string>
@@ -52,7 +53,9 @@
     <!-- 注册字符串 -->
     <string name="register_driver">服务端注册</string>
     <string name="register_send_code">发送验证码</string>
+    <string name="register_send_succed">发送成功</string>
     <string name="register_code_hint">请输入验证码</string>
+    <string name="rg_iamge_code">请输入图形验证码</string>
     <string name="register_password_hint">设置登录密码</string>
     <string name="register_agg">已阅读并同意《服务人员合作协议》</string>
     <string name="register">注册</string>
@@ -60,6 +63,7 @@
     <string name="register_input_ps">请输入登录密码</string>
     <string name="register_contract_phone">联系人电话</string>
     <string name="register_contract_hint">紧急联系人电话</string>
+    <string name="register_contract_phone_hint">请输入正确的紧急联系人电话</string>
 
     <string name="register_base_msg">基本信息</string>
     <string name="register_pic_msg">图像信息</string>
@@ -68,14 +72,20 @@
     <string name="register_phone">手机号码</string>
     <string name="register_ic_card">身份证号</string>
     <string name="register_contract">紧急联系人</string>
-
     <string name="register_type">业务类型</string>
     <string name="register_type_hint">请选择您的业务类型</string>
     <string name="register_compney">所属分公司</string>
     <string name="register_compney_hint">请选择您的所属分公司</string>
-    <string name="register_time">驾驶证有效起止</string>
-    <string name="register_time_hint">请选择驾驶证有效时间</string>
+    <string name="register_time_end">驾驶证有效截止时间</string>
+    <string name="register_time_start">驾驶证有效开始时间</string>
+    <string name="register_time_hint">请选择有效时间</string>
 
+
+    <string name="register_become">成为司机</string>
+    <string name="register_checking">信息正在审核中</string>
+    <string name="register_wait">请耐心等待</string>
+    <string name="register_no_pass">审核未通过</string>
+    <string name="register_amend">去修改</string>
 
     <string name="register_please_name">请输入您的姓名</string>
     <string name="register_please_phone">请输入手机号码</string>

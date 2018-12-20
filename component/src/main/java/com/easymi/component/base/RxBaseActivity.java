@@ -1,9 +1,11 @@
 package com.easymi.component.base;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.os.Build;
@@ -11,8 +13,10 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.Toast;
 
 import com.easymi.component.Config;
+//import com.easymi.component.Glide4Engine;
 import com.easymi.component.R;
 import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
@@ -30,7 +34,16 @@ import com.easymi.component.widget.swipeback.ikew.Utils;
 import com.easymi.component.utils.NetUtil;
 import com.easymi.component.utils.PhoneFunc;
 import com.easymi.component.utils.ToastUtil;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.config.PictureMimeType;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+//import com.zhihu.matisse.Matisse;
+//import com.zhihu.matisse.MimeType;
+//import com.zhihu.matisse.internal.entity.CaptureStrategy;
+
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by hcc on 16/8/7 21:18
@@ -79,6 +92,7 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
         //初始化ToolBar
         initToolBar();
 
+        rxPermissions = new RxPermissions(this);
     }
 
     @Override
@@ -300,10 +314,6 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
 
     }
 
-    protected void choosePic(int x, int y) {
-
-    }
-
     class TiredReceiver extends BroadcastReceiver {
 
         @Override
@@ -356,6 +366,42 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
                 }
             }
         }
+    }
+    private RxPermissions rxPermissions;
 
+    protected void choicePic(int x, int y) {
+        Disposable d = rxPermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA).subscribe(granted -> {
+            if (granted) {
+                // 进入相册 以下是例子：用不到的api可以不写
+                PictureSelector.create(this)
+                        .openGallery(PictureMimeType.ofImage())//全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()
+                        .maxSelectNum(1)// 最大图片选择数量 int
+                        .minSelectNum(1)// 最小选择数量 int
+                        .imageSpanCount(4)// 每行显示个数 int
+                        .selectionMode(PictureConfig.SINGLE)// 多选 or 单选 PictureConfig.MULTIPLE or PictureConfig.SINGLE
+                        .isCamera(true)// 是否显示拍照按钮 true or false
+                        .isZoomAnim(true)// 图片列表点击 缩放效果 默认true
+                        .sizeMultiplier(0.5f)// glide 加载图片大小 0~1之间 如设置 .glideOverride()无效
+                        .setOutputCameraPath("/emdriver")// 自定义拍照保存路径,可不填
+                        .enableCrop(true)// 是否裁剪 true or false
+                        .compress(true)// 是否压缩 true or false
+                        .withAspectRatio(x, y)// int 裁剪比例 如16:9 3:2 3:4 1:1 可自定义
+                        .hideBottomControls(false)// 是否显示uCrop工具栏，默认不显示 true or false
+                        .isGif(false)// 是否显示gif图片 true or false
+                        .freeStyleCropEnabled(true)// 裁剪框是否可拖拽 true or false
+                        .circleDimmedLayer(false)// 是否圆形裁剪 true or false
+                        .showCropFrame(true)// 是否显示裁剪矩形边框 圆形裁剪时建议设为false   true or false
+                        .showCropGrid(true)// 是否显示裁剪矩形网格 圆形裁剪时建议设为false    true or false
+                        .openClickSound(false)// 是否开启点击声音 true or false
+                        .previewEggs(false)// 预览图片时 是否增强左右滑动图片体验(图片滑动一半即可看到上一张是否选中) true or false
+                        .rotateEnabled(true) // 裁剪是否可旋转图片 true or false
+                        .scaleEnabled(true)// 裁剪是否可放大缩小图片 true or false
+                        .forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
+            } else {
+                Toast.makeText(this, "请开启应用权限", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

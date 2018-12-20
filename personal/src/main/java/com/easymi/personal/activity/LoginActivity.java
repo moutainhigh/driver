@@ -180,7 +180,6 @@ public class LoginActivity extends RxBaseActivity {
         } else {
             strList.add(saveStr);
         }
-
     }
 
     CustomPopWindow mListPopWindow;

@@ -37,7 +37,10 @@ public class EncryptInterceptor implements Interceptor {
         }
         //排除登录接口，其余接口使用拦截器进行aes加密。
         String url = chain.request().url().toString();
-        if (url.contains("api/v1/public/driver/login")){
+        if (url.contains("api/v1/public/driver/login")
+                || url.contains("api/v1/public/driver/register/save")
+                || url.contains("api/v1/public/app/captcha/send_sms")
+                ) {
             return chain.proceed(originRequest);
         }
 
@@ -111,12 +114,12 @@ public class EncryptInterceptor implements Interceptor {
     /**
      * AES 解密
      *
-     * @param content  密文
+     * @param content 密文
      * @return
      */
 
     public static String aesDecrypt(String content) {
-        return AesUtil.aesDecrypt(content,"");
+        return AesUtil.aesDecrypt(content, "");
     }
 
     /**
@@ -127,7 +130,7 @@ public class EncryptInterceptor implements Interceptor {
         try {
             //将默认的url编码还原后加密在url编码
             String decoderStr = URLDecoder.decode(content, "utf-8");
-            value = AesUtil.aesEncrypt(decoderStr, XApp.getMyPreferences().getString(Config.AES_PASSWORD,AesUtil.AAAAA));
+            value = AesUtil.aesEncrypt(decoderStr, XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA));
             value = URLEncoder.encode(value, "utf-8");
         } catch (Exception e) {
             e.printStackTrace();

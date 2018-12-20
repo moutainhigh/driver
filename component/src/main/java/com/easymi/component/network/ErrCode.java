@@ -544,6 +544,10 @@ public enum ErrCode {
      */
     IS_COMMON_VEHICLE_ERR(40133, "同车司机正在线上不能登录"),
 
+    /**
+     * 还有未完成的订单
+     */
+    ORDER_NOT_FINISH(40138, "还有未完成的订单"),
 //    /**
 //     * 司机有正在执行的订单
 //     */
@@ -554,7 +558,7 @@ public enum ErrCode {
 //    DRIVER_LOGIN_REPEATED(40125, "司机已在线上，不能重复登录"),
 
 
-//    /**
+    //    /**
 //     * 请求参数无效
 //     */
 //    INVALID_PARAMETER_CODE(20000, "请求参数无效"),
