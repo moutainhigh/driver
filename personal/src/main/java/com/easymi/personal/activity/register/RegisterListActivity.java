@@ -1,13 +1,16 @@
 package com.easymi.personal.activity.register;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.easymi.common.entity.BusinessList;
 import com.easymi.common.entity.CompanyList;
+import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.personal.R;
@@ -41,6 +44,9 @@ public class RegisterListActivity extends RxBaseActivity{
 
     private List<CompanyList.Company> companies = new ArrayList<>();
 
+    private BusinessType selectType;
+    private CompanyList.Company selectComPany;
+
     @Override
     public boolean isEnableSwipe() {
         return false;
@@ -55,12 +61,30 @@ public class RegisterListActivity extends RxBaseActivity{
     public void initViews(Bundle savedInstanceState) {
         findById();
         type = getIntent().getIntExtra("type",0);
-        if (type == 1){
+        initAdapter();
 
+        if (type == 1){
+            getData();
+            adapter.setList(listType);
         }else if (type == 2){
             getCompany();
         }
-        initAdapter();
+
+        button_sure.setOnClickListener(v -> {
+            if (type == 1){
+                if (selectType != null){
+                    setResult();
+                }else {
+                    ToastUtil.showMessage(this,"请选择业务类型");
+                }
+            }else if (type == 2){
+                if (selectComPany != null){
+                    setResult();
+                }else {
+                    ToastUtil.showMessage(this,"请选择服务机构");
+                }
+            }
+        });
     }
 
     @Override
@@ -75,7 +99,19 @@ public class RegisterListActivity extends RxBaseActivity{
     }
 
     public void getData(){
-
+        listType.clear();
+        BusinessType businessType = new BusinessType();
+        businessType.name = "专车";
+        businessType.type = Config.ZHUANCHE;
+        BusinessType businessType1 = new BusinessType();
+        businessType1.name = "城际专线";
+        businessType1.type = Config.CITY_LINE;
+        BusinessType businessType2 = new BusinessType();
+        businessType2.name = "出租车";
+        businessType2.type =  Config.TAXI;
+        listType.add(businessType);
+        listType.add(businessType2);
+        listType.add(businessType1);
     }
 
     public void findById() {
@@ -91,13 +127,34 @@ public class RegisterListActivity extends RxBaseActivity{
         recyclerView.setLayoutManager(layoutManager);
 
         recyclerView.setAdapter(adapter);
+        adapter.setItemClickListener(position -> {
+            if (type == 1){
+                adapter.setSelect(position);
+                selectType = listType.get(position);
+            }else if (type == 2){
+                adapter.setSelect(position);
+                selectComPany = companies.get(position);
+            }
+        });
     }
 
     private void getCompany() {
         Observable<CompanyList> observable = RegisterModel.getCompanys();
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, companyList -> {
-
+            if (companyList.getCode() == 1){
+                companies.clear();
+                companies.addAll(companyList.companies);
+                adapter.setList(companies);
+            }
         })));
+    }
+
+    public void setResult(){
+        Intent intent = new Intent();
+        intent.putExtra("selectType",selectType);
+        intent.putExtra("selectComPany",selectComPany);
+        setResult(RESULT_OK,intent);
+        finish();
     }
 
 }

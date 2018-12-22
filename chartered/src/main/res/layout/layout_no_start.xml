@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:SlideToUnlockView="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingTop="15dp"
+            android:paddingLeft="15dp">
+
+            <TextView
+                android:id="@+id/start_site"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="安岳站"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_right_cheft"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"/>
+
+            <TextView
+                android:id="@+id/end_site"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="绵阳北站"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"/>
+
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp">
+            <TextView
+                android:id="@+id/start_jieren_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="06:00开始接人"
+                android:layout_alignParentRight="true"/>
+            <TextView
+                android:id="@+id/start_out_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@+id/start_jieren_time"
+                android:text="2018年10月29日 07:00开始"/>
+
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/dark_gray"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:clickable="true"
+        android:layout_alignParentBottom="true">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/dark_gray"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="距离开始接人时间："
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="15dp"/>
+
+        <TextView
+            android:id="@+id/time_count_down"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="00天00时00分"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="@color/yellow"
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp"
+            />
+
+        <LinearLayout
+            android:id="@+id/control_con"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!--<com.easymi.component.widget.CustomSlideToUnlockView-->
+            <!--android:id="@+id/slider"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="55dp"-->
+            <!--android:elevation="0.5dp"-->
+            <!--android:layout_gravity="center_horizontal|bottom"-->
+            <!--SlideToUnlockView:sliderTextSize="22"-->
+            <!--SlideToUnlockView:sliderTextHint="滑动开始接人"-->
+            <!--/>-->
+
+            <Button
+                android:id="@+id/bottom_btn"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/btn_height"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="10dp"
+                android:background="@drawable/corners_button_selector"
+                android:text="规划路线"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

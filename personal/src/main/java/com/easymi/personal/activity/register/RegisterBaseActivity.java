@@ -17,23 +17,26 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.easymi.common.entity.CompanyList;
-import com.easymi.common.register.AbsRegisterFragment;
-import com.easymi.common.register.InfoFragment;
-import com.easymi.common.register.PersonInfoFragment;
 import com.easymi.common.register.RegisterRequest;
 import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.Employ;
+import com.easymi.component.network.GsonUtil;
+import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.CommonUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.GlideCircleTransform;
+import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
+import com.easymi.component.utils.RsaUtils;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.TimeDialog;
 import com.easymi.personal.R;
+import com.easymi.personal.entity.BusinessType;
+import com.easymi.personal.result.RegisterResult;
 import com.easymi.personal.widget.CusImgHint;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.entity.LocalMedia;
@@ -49,6 +52,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import rx.Observable;
+
 /**
  * Created by developerLzh on 2017/11/7 0007.
  */
@@ -60,7 +65,7 @@ public class RegisterBaseActivity extends RxBaseActivity {
     ImageView lPhotoImg;
     CusImgHint cusImgHint;
     EditText et_name;
-    EditText et_driver_phone;
+    TextView et_driver_phone;
     EditText et_idcard;
     EditText et_contact;
     EditText et_contact_phone;
@@ -70,14 +75,25 @@ public class RegisterBaseActivity extends RxBaseActivity {
     TextView tv_time_start;
     TextView tv_time_end;
 
+    RequestOptions options = new RequestOptions()
+            .centerCrop()
+            .placeholder(R.mipmap.register_photo)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .optionalTransform(new GlideCircleTransform());
+
     private boolean photoHintShowed = false;
 
     private String imgPath;  //头像地址
+    private BusinessType selecType; //选中业务
     private CompanyList.Company company; //选中公司
+    private long startTime;
+    private long endTime;
 
     Calendar calendar = Calendar.getInstance(Locale.CHINA);//获取日期格式器对象
 
     private Employ employ;
+
+    private RegisterRequest registerInfo;
 
     @Override
     public int getLayoutId() {
@@ -90,11 +106,22 @@ public class RegisterBaseActivity extends RxBaseActivity {
         employ = getIntent().getParcelableExtra("employ");
         initLisenter();
 
-//        employ = EmUtil.getEmployInfo();
-//        if (employ != null) {
-//            tvName.setText(employ.nickName);
-//            tvPhone.setText(employ.phone);
-//        }
+        et_driver_phone.setText(employ.phone);
+
+        if (employ.registerStatus != 1){
+            getDriverInfo();
+        }
+    }
+
+    public void initData(RegisterRequest registerRequest) {
+        registerInfo = registerRequest;
+        
+        Glide.with(RegisterBaseActivity.this)
+                .load(Config.IMG_SERVER + registerInfo.portraitPath + Config.IMG_PATH)
+                .apply(options)
+                .into(lPhotoImg);
+
+
     }
 
     @Override
@@ -122,18 +149,26 @@ public class RegisterBaseActivity extends RxBaseActivity {
     }
 
     public void initLisenter() {
+        /**
+         * 业务类型选择
+         */
         tv_type.setOnClickListener(v -> {
             Intent intent = new Intent(this, RegisterListActivity.class);
             intent.putExtra("type", 1);
-            startActivity(intent);
+            startActivityForResult(intent, 0x00);
         });
-
+        /**
+         * 服务企业选择
+         */
         tv_compney.setOnClickListener(v -> {
             Intent intent = new Intent(this, RegisterListActivity.class);
             intent.putExtra("type", 2);
-            startActivity(intent);
+            startActivityForResult(intent, 0x00);
         });
 
+        /**
+         * 驾照有效起时间选择
+         */
         tv_time_start.setOnClickListener(v -> {
             //生成一个DatePickerDialog对象，并显示。显示的DatePickerDialog控件可以选择年月日，并设置
             DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
@@ -143,10 +178,16 @@ public class RegisterBaseActivity extends RxBaseActivity {
                 calendar.set(Calendar.MONTH, month);
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
+                startTime = calendar.getTimeInMillis() / 1000;
+                Log.e("hufeng", "startTime:" + startTime);
+
                 tv_time_start.setText(TimeUtil.getTime(TimeUtil.YMD_4_CN, calendar.getTimeInMillis()));
             }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
             datePickerDialog.show();
         });
+        /**
+         * 驾照有效截止时间选择
+         */
         tv_time_end.setOnClickListener(v -> {
             //生成一个DatePickerDialog对象，并显示。显示的DatePickerDialog控件可以选择年月日，并设置
             DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
@@ -155,6 +196,8 @@ public class RegisterBaseActivity extends RxBaseActivity {
                 calendar.set(Calendar.YEAR, year);
                 calendar.set(Calendar.MONTH, month);
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                endTime = calendar.getTimeInMillis() / 1000;
 
                 tv_time_end.setText(TimeUtil.getTime(TimeUtil.YMD_4_CN, calendar.getTimeInMillis()));
             }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
@@ -173,10 +216,9 @@ public class RegisterBaseActivity extends RxBaseActivity {
         });
 
         findViewById(R.id.next_step).setOnClickListener(v -> {
-            if (!check()){
+            if (!check()) {
                 next();
             }
-            startActivity(new Intent(this, RegisterPhotoActivity.class));
         });
     }
 
@@ -186,7 +228,7 @@ public class RegisterBaseActivity extends RxBaseActivity {
             return true;
         }
         if (TextUtils.isEmpty(et_name.getText().toString())) {
-            ToastUtil.showMessage(this, "身份证号码错误");
+            ToastUtil.showMessage(this, "请输入司机姓名");
             return true;
         }
         if (!StringUtils.isNotBlank(et_driver_phone.getText().toString()) && !CommonUtil.isMobileNO(et_driver_phone.getText().toString())) {
@@ -197,11 +239,7 @@ public class RegisterBaseActivity extends RxBaseActivity {
 //            ToastUtil.showMessage(this, getString(R.string.login_pl_phone));
 //            return true;
 //        }
-        if (et_idcard.getText().toString().length() != 18) {
-            ToastUtil.showMessage(this, "身份证号码错误");
-            return true;
-        }
-        if (et_idcard.getText().toString().length() != 18) {
+        if (et_idcard.getText().toString().length() != 18 && et_idcard.getText().toString().length() != 15) {
             ToastUtil.showMessage(this, "身份证号码错误");
             return true;
         }
@@ -217,15 +255,15 @@ public class RegisterBaseActivity extends RxBaseActivity {
             ToastUtil.showMessage(this, "请选择所属分公司");
             return true;
         }
-        if (company == null) {
+        if (selecType == null) {
             ToastUtil.showMessage(this, "请选择业务类型");
             return true;
         }
-        if (company == null) {
+        if (TextUtils.isEmpty(tv_time_start.getText().toString())) {
             ToastUtil.showMessage(this, "请选择驾驶证有效开始时间");
             return true;
         }
-        if (company == null) {
+        if (TextUtils.isEmpty(tv_time_end.getText().toString())) {
             ToastUtil.showMessage(this, "请选择驾驶证有效截止时间");
             return true;
         }
@@ -239,11 +277,6 @@ public class RegisterBaseActivity extends RxBaseActivity {
                 List<LocalMedia> images = PictureSelector.obtainMultipleResult(data);
                 if (images != null && images.size() > 0) {
                     imgPath = images.get(0).getCutPath();
-                    RequestOptions options = new RequestOptions()
-                            .centerCrop()
-                            .placeholder(R.mipmap.register_photo)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .optionalTransform(new GlideCircleTransform());
 
                     Glide.with(RegisterBaseActivity.this)
                             .load(imgPath)
@@ -251,30 +284,54 @@ public class RegisterBaseActivity extends RxBaseActivity {
                             .into(lPhotoImg);
                 }
             }
+            if (requestCode == 0x00) {
+                if (data.getSerializableExtra("selectType") != null) {
+                    selecType = (BusinessType) data.getSerializableExtra("selectType");
+                    tv_type.setText(selecType.name);
+                }
+                if (data.getSerializableExtra("selectComPany") != null) {
+                    company = (CompanyList.Company) data.getSerializableExtra("selectComPany");
+                    tv_compney.setText(company.companyName);
+                }
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void next() {
-//        //个人信息参数
-//        RegisterRequest registerRequest = new RegisterRequest();
-//        registerRequest.driverId = employ.id;
-//        registerRequest.idCard = idCard.getText().toString();
-//        registerRequest.emergency = emergency.getText().toString();
-//        registerRequest.emergencyPhone = emergencyPhone.getText().toString();
-//        registerRequest.companyId = selectedCompany.id;
-//        registerRequest.introducer = introducer.getText().toString();
-//        registerRequest.portraitPath = headPath;
-//        if (daijiaRb.isChecked()) {
-//            registerRequest.serviceType = "daijia";
-//        } else {
-//            registerRequest.serviceType = Config.ZHUANCHE;
-//        }
+        //个人信息参数
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.driverId = employ.id;
+        registerRequest.driverName = et_name.getText().toString().trim();
+        registerRequest.driverPhone = et_driver_phone.getText().toString().trim();
+        registerRequest.idCard = et_idcard.getText().toString().trim();
+        registerRequest.emergency = et_contact.getText().toString().trim();
+        registerRequest.emergencyPhone = et_contact_phone.getText().toString().trim();
+        registerRequest.companyId = company.id;
+        registerRequest.serviceType = selecType.type;
+        registerRequest.startTime = startTime;
+        registerRequest.endTime = endTime;
+        registerRequest.portraitPath = imgPath;
+        registerRequest.introducer = et_work_number.getText().toString().trim();
 
+        Intent intent = new Intent(this, RegisterPhotoActivity.class);
+        intent.putExtra("registerRequest", registerRequest);
+        startActivity(intent);
     }
 
     @Override
     public boolean isEnableSwipe() {
         return false;
+    }
+
+
+    public void getDriverInfo() {
+        String id_rsa = RsaUtils.encryptAndEncode(this, employ.id+"");
+        Observable<RegisterResult> observable = RegisterModel.getDriverInfo(id_rsa);
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, emResult -> {
+            if (emResult.getCode() == 1) {
+                initData(emResult.data);
+            }
+        })));
     }
 }

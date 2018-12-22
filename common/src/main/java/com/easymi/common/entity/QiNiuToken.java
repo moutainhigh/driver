@@ -5,6 +5,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class QiNiuToken extends EmResult{
 
-    @SerializedName("Qiniu")
+    @SerializedName("qiniuyun")
     public String qiNiu;
 }

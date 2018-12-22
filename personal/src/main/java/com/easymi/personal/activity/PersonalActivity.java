@@ -185,10 +185,10 @@ public class PersonalActivity extends RxBaseActivity {
         startActivity(intent);
     }
 
-    public void toInfo(View view){
-        Intent intent = new Intent(this, RegisterBaseActivity.class);
-        startActivity(intent);
-    }
+//    public void toInfo(View view){
+//        Intent intent = new Intent(this, RegisterBaseActivity.class);
+//        startActivity(intent);
+//    }
 
     @Override
     public boolean isEnableSwipe() {

@@ -56,6 +56,8 @@ import com.easymi.component.widget.LoadingButton;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
 import com.easymi.personal.activity.register.RegisterAcitivty;
+import com.easymi.personal.activity.register.RegisterBaseActivity;
+import com.easymi.personal.activity.register.RegisterNoticeActivity;
 import com.easymi.personal.adapter.PopAdapter;
 import com.easymi.personal.result.LoginResult;
 
@@ -125,12 +127,9 @@ public class LoginActivity extends RxBaseActivity {
 
         registerText = findViewById(R.id.login_register);
         registerText.setOnClickListener(v -> {
-//            Intent intent = new Intent(LoginActivity.this, RegisterLocalActivity.class);
-//            intent.putExtra("url", Config.REGISTER_URL);
-//            intent.putExtra("title", getString(R.string.register_title));
-//            startActivity(intent);
             Intent intent = new Intent(LoginActivity.this, RegisterAcitivty.class);
             startActivity(intent);
+            finish();
         });
 
         resetPsw = findViewById(R.id.login_forget);
@@ -502,13 +501,29 @@ public class LoginActivity extends RxBaseActivity {
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, loginBtn, loginResult -> {
             Employ employ = loginResult.getEmployInfo();
+            XApp.getPreferencesEditor().putLong(Config.SP_DRIVERID, employ.id).apply();
             employ.saveOrUpdate();
-
-            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
-            editor.putString(Config.SP_TOKEN, employ.token);
-            editor.apply();
-
-            getSetting(employ, name, psw);
+            //1.未注册；2.审核中；3驳回；4通过
+            if (employ.registerStatus == 4){
+                SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+                editor.putString(Config.SP_TOKEN, employ.token);
+                editor.apply();
+                getSetting(employ, name, psw);
+            }else if (employ.registerStatus == 3){
+                Intent intent = new Intent(this, RegisterNoticeActivity.class);
+                intent.putExtra("type", 3);
+//                intent.putExtra("driverId", employ.id);
+                startActivity(intent);
+            }else if (employ.registerStatus == 2){
+                Intent intent = new Intent(this, RegisterNoticeActivity.class);
+                intent.putExtra("type", 2);
+//                intent.putExtra("driverId", employ.id);
+                startActivity(intent);
+            }else if (employ.registerStatus == 1){
+                Intent intent = new Intent(this, RegisterBaseActivity.class);
+                intent.putExtra("employ",employ);
+                startActivity(intent);
+            }
         })));
     }
 
@@ -528,7 +543,6 @@ public class LoginActivity extends RxBaseActivity {
         observable.subscribe(new MySubscriber<>(this, false, false, settingResult -> {
             SharedPreferences.Editor editor = XApp.getPreferencesEditor();
             editor.putBoolean(Config.SP_ISLOGIN, true);
-            editor.putLong(Config.SP_DRIVERID, employ.id);
             editor.putString(Config.SP_LOGIN_ACCOUNT, AesUtil.aesEncrypt(name, AesUtil.AAAAA));
             editor.putBoolean(Config.SP_REMEMBER_PSW, checkboxRemember.isChecked());
             if (checkboxRemember.isChecked()){
@@ -537,7 +551,6 @@ public class LoginActivity extends RxBaseActivity {
                 editor.putString(Config.SP_LOGIN_PSW, "");
             }
             editor.apply();
-
 
             if (settingResult.data != null) {
                 for (ZCSetting sub : settingResult.data) {

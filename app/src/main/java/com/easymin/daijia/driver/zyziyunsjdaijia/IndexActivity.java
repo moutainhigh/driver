@@ -58,8 +58,7 @@ public class IndexActivity extends RxBaseActivity {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
-//        Intent intent = new Intent(this, CreateOrderActivity.class);
-//        startActivity(intent);
+        ARouter.getInstance().build("/chartered/FlowActivity").navigation();
 
 //        Observable<EmResult2<List<ZXOrder>>> observable = ApiManager.getInstance().createApi(Config.HOST, CLService.class)
 //                .queryDriverSchedule()
@@ -89,6 +88,8 @@ public class IndexActivity extends RxBaseActivity {
 //                        getCustomers(zxOrder);
 //                    }
 //                })));
+
+
     }
 
 //    private void getCustomers(ZXOrder zxOrder) {

@@ -87,6 +87,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="right|center_vertical"
+                        android:textColor="@color/color_333333"
                         android:layout_marginRight="15dp"
                         android:background="@null"
                         android:hint="@string/register_please_name"
@@ -112,13 +113,14 @@
                         android:text="@string/register_phone"
                         android:textColor="#232323" />
 
-                    <EditText
+                    <TextView
                         android:id="@+id/et_driver_phone"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="right|center_vertical"
                         android:layout_marginRight="15dp"
                         android:background="@null"
+                        android:textColor="@color/color_333333"
                         android:hint="@string/register_please_phone"
                         android:textSize="14sp" />
 
@@ -149,6 +151,7 @@
                         android:gravity="right|center_vertical"
                         android:layout_marginRight="15dp"
                         android:background="@null"
+                        android:textColor="@color/color_333333"
                         android:hint="@string/register_please_id_card"
                         android:textSize="14sp" />
 
@@ -180,6 +183,7 @@
                         android:layout_marginRight="15dp"
                         android:background="@null"
                         android:hint="@string/register_contract"
+                        android:textColor="@color/color_333333"
                         android:textSize="14sp" />
 
                 </LinearLayout>
@@ -209,6 +213,7 @@
                         android:gravity="right|center_vertical"
                         android:layout_marginRight="15dp"
                         android:background="@null"
+                        android:textColor="@color/color_333333"
                         android:hint="@string/register_contract_hint"
                         android:textSize="14sp" />
 
@@ -240,6 +245,7 @@
                         android:layout_marginRight="15dp"
                         android:background="@null"
                         android:hint="@string/register_compney_hint"
+                        android:textColor="@color/color_333333"
                         android:textSize="14sp"
                         android:drawableRight="@mipmap/ic_register_right"
                         android:drawablePadding="5dp"/>
@@ -271,6 +277,7 @@
                         android:layout_marginRight="15dp"
                         android:background="@null"
                         android:hint="@string/register_type_hint"
+                        android:textColor="@color/color_333333"
                         android:textSize="14sp"
                         android:drawableRight="@mipmap/ic_register_right"
                         android:drawablePadding="5dp"/>
@@ -301,6 +308,7 @@
                         android:gravity="right|center_vertical"
                         android:layout_marginRight="15dp"
                         android:background="@null"
+                        android:textColor="@color/color_333333"
                         android:hint="@string/register_time_hint"
                         android:textSize="14sp" />
 
@@ -329,6 +337,7 @@
                         android:gravity="right|center_vertical"
                         android:layout_marginRight="15dp"
                         android:background="@null"
+                        android:textColor="@color/color_333333"
                         android:hint="@string/register_time_hint"
                         android:textSize="14sp" />
 
@@ -358,6 +367,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginRight="15dp"
                         android:background="@null"
+                        android:textColor="@color/color_333333"
                         android:gravity="center_vertical|right"
                         android:hint="@string/register_refer_no"
                         android:textSize="14sp" />

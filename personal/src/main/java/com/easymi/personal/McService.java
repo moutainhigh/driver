@@ -2,12 +2,11 @@ package com.easymi.personal;
 
 import com.easymi.common.entity.CompanyList;
 import com.easymi.common.entity.PushAnnouncement;
-import com.easymi.common.result.NotitfyResult;
+import com.easymi.common.entity.QiNiuToken;
+import com.easymi.common.entity.RegisterRes;
 import com.easymi.common.result.SettingResult;
-import com.easymi.component.entity.Employ;
 import com.easymi.component.result.EmResult;
 import com.easymi.personal.entity.CarInfo;
-import com.easymi.personal.result.AnnResult;
 import com.easymi.personal.result.AnnouncementResult;
 import com.easymi.personal.result.ArticleResult;
 import com.easymi.personal.result.BankResult;
@@ -22,6 +21,7 @@ import com.easymi.personal.result.NotifityResult;
 import com.easymi.personal.result.PicCodeResult;
 import com.easymi.personal.result.RateResult;
 import com.easymi.personal.result.RechargeResult;
+import com.easymi.personal.result.RegisterResult;
 import com.easymi.personal.result.ShareResult;
 import com.easymi.personal.result.StatisResult;
 import com.easymi.personal.result.TixianResult;
@@ -695,8 +695,8 @@ public interface McService {
      *
      * @return
      */
-    @GET("api/v1/public/system/companys")
-    Observable<CompanyList> qureyCompanys(@Query("appKey") String appKey);
+    @GET("api/v1/public/system/app/companys")
+    Observable<CompanyList> qureyCompanys();
 
     /**
      * 发送短信登录接口
@@ -730,5 +730,31 @@ public interface McService {
                                      @Field("phone") String phone,
                                      @Field("smsCode") String smsCode);
 
+
+    @GET("api/v1/public/app/qny_token")
+    Observable<QiNiuToken> getToken();
+
+    @FormUrlEncoded
+    @POST("api/v1/public/driver/register/apply/save")
+    Observable<RegisterRes> applyDriver(@Field("driverId") String driverId,
+                                        @Field("realName") String realName,
+                                        @Field("phone") String phone,
+                                        @Field("idCard") String idCard,
+                                        @Field("emergency") String emergency,
+                                        @Field("emergencyPhone") String emergencyPhone,
+                                        @Field("companyId") String companyId,
+                                        @Field("serviceType") String serviceType,
+                                        @Field("driveLicenceStart") String startTime,
+                                        @Field("driveLicenceEnd") String endTime,
+                                        @Field("introducer") String introducer,
+                                        @Field("portraitPath") String portraitPath,
+                                        @Field("idCardHeadPath") String idCardHeadPath,
+                                        @Field("idCardBackPath") String idCardBackPath,
+                                        @Field("driveLicensePath") String driveLicensePath);
+
+
+
+    @GET("api/v1/public/driver/register/get")
+    Observable<RegisterResult> getDriverInfo(@Query("driverId") String driverId);
 
 }

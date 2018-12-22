@@ -7,14 +7,21 @@ public class RegisterRequest implements Parcelable {
 
     public boolean needCarInfo;
 
-    //代驾和无车注册
+    //代驾和无车注册  (新版整理)
     public long driverId;
+    public String driverName;
+    public String driverPhone;
     public String idCard;
     public String emergency;
     public String emergencyPhone;
-    public String introducer;
-    public long companyId;
     public String serviceType;
+    public long companyId;
+    public long startTime;
+    public long endTime;
+    public String introducer;
+
+    public String remark;
+
 
     //头像图片
     public String portraitPath;
@@ -52,15 +59,20 @@ public class RegisterRequest implements Parcelable {
     public RegisterRequest() {
     }
 
+
     protected RegisterRequest(Parcel in) {
         needCarInfo = in.readByte() != 0;
         driverId = in.readLong();
+        driverName = in.readString();
+        driverPhone = in.readString();
         idCard = in.readString();
         emergency = in.readString();
         emergencyPhone = in.readString();
-        introducer = in.readString();
-        companyId = in.readLong();
         serviceType = in.readString();
+        companyId = in.readLong();
+        startTime = in.readLong();
+        endTime = in.readLong();
+        introducer = in.readString();
         portraitPath = in.readString();
         idCardPath = in.readString();
         idCardBackPath = in.readString();
@@ -126,12 +138,16 @@ public class RegisterRequest implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeByte((byte) (needCarInfo ? 1 : 0));
         dest.writeLong(driverId);
+        dest.writeString(driverName);
+        dest.writeString(driverPhone);
         dest.writeString(idCard);
         dest.writeString(emergency);
         dest.writeString(emergencyPhone);
-        dest.writeString(introducer);
-        dest.writeLong(companyId);
         dest.writeString(serviceType);
+        dest.writeLong(companyId);
+        dest.writeLong(startTime);
+        dest.writeLong(endTime);
+        dest.writeString(introducer);
         dest.writeString(portraitPath);
         dest.writeString(idCardPath);
         dest.writeString(idCardBackPath);

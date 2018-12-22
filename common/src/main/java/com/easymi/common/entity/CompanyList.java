@@ -3,23 +3,24 @@ package com.easymi.common.entity;
 import com.easymi.component.result.EmResult;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class CompanyList extends EmResult {
+public class CompanyList extends EmResult{
 
-    @SerializedName("companyinfos")
+    @SerializedName("data")
     public List<Company> companies;
 
 
-    public static class Company {
+    public static class Company  implements Serializable{
 
         @SerializedName("id")
         public long id;
 
-        @SerializedName("company_name")
+        @SerializedName("companyName")
         public String companyName;
 
-        @SerializedName("company_short_name")
+        @SerializedName("companyShortName")
         public String companyShortName;
 
         @SerializedName("is_main_company")

@@ -137,7 +137,7 @@ public class MqttManager implements LocObserver {
         // 心跳包发送间隔，单位：秒
         conOpt.setKeepAliveInterval(10);
 
-        Integer qos = 0;
+        Integer qos = 1;
         Boolean retained = false;
         String pullTopic = "/trip/driver" + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
         String message = "{\"terminal_uid\":\"" + clientId + "\"}";

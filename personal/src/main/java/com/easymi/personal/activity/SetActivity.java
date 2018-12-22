@@ -166,10 +166,6 @@ public class SetActivity extends RxBaseActivity {
     }
 
     public void aboutUs(View view) {
-//        Intent intent = new Intent(SetActivity.this, AboutUsActivity.class);
-////        intent.putExtra("tag", "AboutUs");
-////        intent.putExtra("title", getString(R.string.set_about_us));
-//        startActivity(intent);
         Intent intent = new Intent(this, WebActivity.class);
         intent.putExtra("url", "http://h5.xiaokakj.com/#/protocol?articleName=driverAboutUs&appKey="+Config.APP_KEY);
         intent.putExtra("title", getString(R.string.set_about_us));
@@ -187,7 +183,6 @@ public class SetActivity extends RxBaseActivity {
                 .setNegativeButton(getString(R.string.set_cancel), (dialogInterface, i) -> dialogInterface.dismiss())
                 .create();
         dialog.show();
-
     }
 
 

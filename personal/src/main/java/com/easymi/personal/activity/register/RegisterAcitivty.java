@@ -61,6 +61,7 @@ public class RegisterAcitivty extends RxBaseActivity {
 
     private String randomNum;//唯一标示符 图形验证码
 
+
     @Override
     public boolean isEnableSwipe() {
         return false;
@@ -82,6 +83,8 @@ public class RegisterAcitivty extends RxBaseActivity {
         initBox();
 
         getImgCode();
+
+        setLoginBtnEnable(false);
 
         register_button.setOnClickListener(v -> {
             if (!StringUtils.isNotBlank(et_phone.getText().toString())) {

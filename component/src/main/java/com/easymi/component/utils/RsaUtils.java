@@ -378,7 +378,6 @@ public class RsaUtils {
         return sb.toString();
     }
 
-
     //hf
     public static String encryptAndEncode(Context context ,String content){
         String str = "";

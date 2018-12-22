@@ -1,5 +1,7 @@
 package com.easymi.personal.entity;
 
+import java.io.Serializable;
+
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: BusinessType
@@ -8,7 +10,7 @@ package com.easymi.personal.entity;
  * Description:
  * History:
  */
-public class BusinessType {
+public class BusinessType implements Serializable{
 
     public String name;
 
