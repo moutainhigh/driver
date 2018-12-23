@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.easymi.component.Config;
-import com.easymin.R;
+import com.easymin.chartered.R;
 
 /**
  * Created by developerLzh on 2017/12/19 0019.

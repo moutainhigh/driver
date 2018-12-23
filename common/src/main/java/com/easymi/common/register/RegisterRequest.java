@@ -3,29 +3,38 @@ package com.easymi.common.register;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 public class RegisterRequest implements Parcelable {
 
     public boolean needCarInfo;
 
     //代驾和无车注册  (新版整理)
     public long driverId;
+    @SerializedName("realName")
     public String driverName;
+    @SerializedName("phone")
     public String driverPhone;
     public String idCard;
     public String emergency;
     public String emergencyPhone;
     public String serviceType;
     public long companyId;
+    @SerializedName("driveLicenceStart")
     public long startTime;
+    @SerializedName("driveLicenceEnd")
     public long endTime;
     public String introducer;
 
     public String remark;
+    public String companyName;
+    public int version;
 
 
     //头像图片
     public String portraitPath;
     //身份证图片
+    @SerializedName("idCardHeadPath")
     public String idCardPath;
     //身份证背面图片
     public String idCardBackPath;

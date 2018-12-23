@@ -37,12 +37,15 @@ import com.easymi.component.network.ErrCode;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
+import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import rx.Observable;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
@@ -59,8 +62,6 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
     private FlowContract.Model model;
 
     AMapNavi mAMapNavi;
-
-    private long driverId = 43;
 
     public FlowPresenter(Context context, FlowContract.View view) {
         this.context = context;
@@ -160,6 +161,23 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
             mAMapNavi.stopNavi();
             mAMapNavi.destroy();
         }
+    }
+
+    @Override
+    public void findOne(long orderId) {
+        Observable<EmResult> observable = model.findOne(orderId);
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, false, false,
+                new HaveErrSubscriberListener<EmResult>() {
+            @Override
+            public void onNext(EmResult emResult) {
+                view.showOrder(null);
+            }
+
+            @Override
+            public void onError(int code) {
+                view.showOrder(null);
+            }
+        })));
     }
 
     @Override

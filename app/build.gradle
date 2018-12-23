@@ -6,8 +6,8 @@ android {
         applicationId "com.easymin.daijia.driver.zyziyunsjdaijia"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 8896
-        versionName "V5.0.2.020"
+        versionCode 8897
+        versionName "V6.0.2.021"
         multiDexEnabled true
 
         ndk {
@@ -65,4 +65,6 @@ dependencies {
     implementation project(path: ':taxi')
     implementation project(path: ':cityline')
     implementation project(path: ':securitycenter')
+    implementation project(path: ':passengerbus')
+    implementation project(path: ':chartered')
 }

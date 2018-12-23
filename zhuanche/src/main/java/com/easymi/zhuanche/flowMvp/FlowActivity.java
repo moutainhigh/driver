@@ -40,6 +40,8 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.maps.utils.overlay.SmoothMoveMarker;
+import com.amap.api.navi.AMapNaviView;
+import com.amap.api.navi.AMapNaviViewListener;
 import com.amap.api.navi.model.AMapNaviPath;
 import com.amap.api.navi.model.RouteOverlayOptions;
 import com.amap.api.navi.view.RouteOverLay;
@@ -52,6 +54,7 @@ import com.easymi.common.push.HandlePush;
 //import com.easymi.common.push.MQTTService;
 import com.easymi.common.push.MqttManager;
 import com.easymi.common.push.PassengerLocObserver;
+import com.easymi.common.result.SettingResult;
 import com.easymi.common.trace.TraceInterface;
 import com.easymi.common.trace.TraceReceiver;
 import com.easymi.component.Config;
@@ -66,6 +69,9 @@ import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.loc.LocService;
+import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HttpResultFunc;
+import com.easymi.component.network.MySubscriber;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.AesUtil;
 import com.easymi.component.utils.DensityUtil;
@@ -81,6 +87,7 @@ import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.component.widget.overlay.DrivingRouteOverlay;
 import com.easymi.zhuanche.R;
+import com.easymi.zhuanche.ZCApiService;
 import com.easymi.zhuanche.activity.CancelActivity;
 import com.easymi.zhuanche.activity.ConsumerInfoActivity;
 import com.easymi.zhuanche.activity.SameOrderActivity;
@@ -99,6 +106,7 @@ import com.easymi.zhuanche.fragment.ToStartFragment;
 import com.easymi.zhuanche.fragment.WaitFragment;
 import com.easymi.zhuanche.receiver.CancelOrderReceiver;
 import com.easymi.zhuanche.receiver.OrderFinishReceiver;
+import com.easymi.zhuanche.result.PassengerLcResult;
 import com.easymi.zhuanche.widget.FlowPopWindow;
 import com.easymi.zhuanche.widget.RefuseOrderDialog;
 import com.easymin.driver.securitycenter.utils.AudioUtil;
@@ -113,6 +121,9 @@ import java.util.List;
 
 import co.lujun.androidtagview.TagContainerLayout;
 import co.lujun.androidtagview.TagView;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by developerLzh on 2017/11/13 0013.
@@ -125,7 +136,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         PassengerLocObserver,
         CancelOrderReceiver.OnCancelListener,
         AMap.OnMapTouchListener,
-        OrderFinishReceiver.OnFinishListener {
+        OrderFinishReceiver.OnFinishListener
+//        , AMapNaviViewListener
+{
     public static final int CANCEL_ORDER = 0X01;
     public static final int CHANGE_END = 0X02;
     public static final int CHANGE_ORDER = 0X03;
@@ -163,7 +176,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     /**
      * 到达预约地top
      */
-    RelativeLayout arrive_start_wait_layout;
+    RelativeLayout arrive_start_layout;
 
     /**
      * 前往终点top
@@ -249,7 +262,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         /**
          * 到达预约地top
          */
-        arrive_start_wait_layout = findViewById(R.id.arrive_start_wait_layout);
+        arrive_start_layout = findViewById(R.id.arrive_start_layout);
 
         /**
          * 前往终点top
@@ -389,7 +402,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             to_appoint_time.setText(ss);
         } else if (zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER) {
             hideTops();
-            arrive_start_wait_layout.setVisibility(View.VISIBLE);
+            arrive_start_layout.setVisibility(View.VISIBLE);
         } else if (zcOrder.orderStatus == ZCOrderStatus.START_WAIT_ORDER) {
             hideTops();
             middle_wait_layout.setVisibility(View.VISIBLE);
@@ -551,8 +564,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void showOrder(ZCOrder zcOrder) {
-//        zcOrder = new ZCOrder();
-//        zcOrder.orderStatus = ZCOrderStatus.TAKE_ORDER;
         if (null == zcOrder) {
             finish();
         } else {
@@ -571,6 +582,16 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             initBridge();
             showBottomFragment(zcOrder);
             showMapBounds();
+
+            if (zcOrder.orderStatus < ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+                if (mPlocation == null) {
+                    passengerLoc(zcOrder.passengerId);
+                }
+            } else {
+                if (plMaker != null) {
+                    plMaker.remove();
+                }
+            }
         }
     }
 
@@ -619,9 +640,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 latLngs.add(new LatLng(getStartAddr().lat, getStartAddr().lng));
                 presenter.routePlanByNavi(getStartAddr().lat, getStartAddr().lng);
             }
-            if (null != getEndAddr()) {
-                latLngs.add(new LatLng(getEndAddr().lat, getEndAddr().lng));
-            }
+//            if (null != getEndAddr()) {
+//                latLngs.add(new LatLng(getEndAddr().lat, getEndAddr().lng));
+//            }
             LatLngBounds bounds = MapUtil.getBounds(latLngs, lastLatlng);
             aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(this) / 1.5), (int) (DensityUtil.getDisplayWidth(this) / 1.5), 0));
         } else if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
@@ -746,15 +767,16 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         drivingRouteOverlay.addToMap();
         drivingRouteOverlay.zoomToSpan();
         List<LatLng> latLngs = new ArrayList<>();
-        latLngs.add(new LatLng(result.getStartPos().getLatitude(), result.getStartPos().getLongitude()));
-        latLngs.add(new LatLng(result.getTargetPos().getLatitude(), result.getTargetPos().getLongitude()));
+//        latLngs.add(new LatLng(result.getStartPos().getLatitude(), result.getStartPos().getLongitude()));
+
         EmLoc lastLoc = EmUtil.getLastLoc();
-        latLngs.add(new LatLng(lastLoc.latitude, lastLoc.longitude));
+        latLngs.add(new LatLng(lastLoc.latitude, lastLoc.latitude));
+        latLngs.add(new LatLng(result.getTargetPos().getLatitude(), result.getTargetPos().getLongitude()));
+
+//        latLngs.add(new LatLng(lastLoc.latitude, lastLoc.longitude));
         LatLngBounds bounds = MapUtil.getBounds(latLngs);
         aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(this) / 1.5), (int) (DensityUtil.getDisplayWidth(this) / 1.5), 0));
-//        if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-//            aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLatlng, 19));
-//        }
+
     }
 
     private CusBottomSheetDialog bottomSheetDialog;//支付弹窗
@@ -827,9 +849,42 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         pay3Text.setOnClickListener(view14 -> pay3Btn.setChecked(true));
         pay3Img.setOnClickListener(view14 -> pay3Btn.setChecked(true));
 
-        pay4Empty.setOnClickListener(view14 -> pay4Btn.setChecked(true));
-        pay4Text.setOnClickListener(view14 -> pay4Btn.setChecked(true));
-        pay4Img.setOnClickListener(view14 -> pay4Btn.setChecked(true));
+        pay4Empty.setOnClickListener(view14 -> {
+            if (pay4Btn.isChecked()){
+                pay4Btn.setChecked(false);
+                pay3Btn.setChecked(true);
+                pay2Btn.setChecked(false);
+                pay1Btn.setChecked(false);
+            }else {
+                pay4Btn.setChecked(true);
+                pay3Btn.setChecked(false);
+                pay2Btn.setChecked(false);
+                pay1Btn.setChecked(false);
+            } });
+        pay4Text.setOnClickListener(view14 -> {
+            if (pay4Btn.isChecked()){
+                pay4Btn.setChecked(false);
+                pay3Btn.setChecked(true);
+                pay2Btn.setChecked(false);
+                pay1Btn.setChecked(false);
+            }else {
+                pay4Btn.setChecked(true);
+                pay3Btn.setChecked(false);
+                pay2Btn.setChecked(false);
+                pay1Btn.setChecked(false);
+            } });
+        pay4Img.setOnClickListener(view14 -> {
+            if (pay4Btn.isChecked()){
+                pay4Btn.setChecked(false);
+                pay3Btn.setChecked(true);
+                pay2Btn.setChecked(false);
+                pay1Btn.setChecked(false);
+            }else {
+                pay4Btn.setChecked(true);
+                pay3Btn.setChecked(false);
+                pay2Btn.setChecked(false);
+                pay1Btn.setChecked(false);
+            } });
 
         Button sure = view.findViewById(R.id.pay_button);
         ImageView close = view.findViewById(R.id.ic_close);
@@ -1169,7 +1224,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     @Override
     public void hideTops() {
         not_accept_layout.setVisibility(View.GONE);
-        arrive_start_wait_layout.setVisibility(View.GONE);
+        arrive_start_layout.setVisibility(View.GONE);
         to_appoint_layout.setVisibility(View.GONE);
         go_layout.setVisibility(View.GONE);
         middle_wait_layout.setVisibility(View.GONE);
@@ -1293,10 +1348,15 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             }
         }
 
-        if (zcOrder != null && zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER){
-            if (null != getEndAddr()) {
-                presenter.routePlanByNavi(getEndAddr().lat, getEndAddr().lng);
-
+        if (zcOrder != null) {
+            if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+                if (null != getEndAddr()) {
+                    presenter.routePlanByNavi(getEndAddr().lat, getEndAddr().lng);
+                }
+            } else if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
+                if (null != getEndAddr()) {
+                    presenter.routePlanByNavi(getStartAddr().lat, getStartAddr().lng);
+                }
             }
         }
 
@@ -1391,25 +1451,30 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     private Marker plMaker;
     private PassengerLocation mPlocation;
+
     @Override
     public void plChange(PassengerLocation plocation) {
         if (zcOrder != null && zcOrder.orderStatus < ZCOrderStatus.GOTO_DESTINATION_ORDER) {
             if (null != mPlocation) {
-                if (plocation.latitude != mPlocation.latitude && plocation.longitude != mPlocation.longitude){
+                if (plocation.latitude != mPlocation.latitude && plocation.longitude != mPlocation.longitude) {
                     if (plMaker != null) {
                         plMaker.remove();
                     }
                     mPlocation = plocation;
                     addPlMaker();
                 }
-            }else {
+            } else {
                 mPlocation = plocation;
                 addPlMaker();
+            }
+        } else {
+            if (plMaker != null) {
+                plMaker.remove();
             }
         }
     }
 
-    public void addPlMaker(){
+    public void addPlMaker() {
         MarkerOptions markerOption = new MarkerOptions();
         markerOption.position(new LatLng(mPlocation.latitude, mPlocation.longitude));
         markerOption.draggable(false);//设置Marker可拖动
@@ -1453,46 +1518,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
     }
 
-//    @Override
-//    public void onConfigurationChanged(Configuration newConfig) {
-//        android.util.Log.e("lifecycle", "onConfigurationChanged()");
-//        super.onConfigurationChanged(newConfig);
-//        if (System.currentTimeMillis() - lastChangeTime > 1000) {
-//            lastChangeTime = System.currentTimeMillis();
-//        } else {//有的胎神手机这个方法要回调两次
-//            return;
-//        }
-//        DisplayMetrics dm = new DisplayMetrics();
-//        getWindowManager().getDefaultDisplay().getMetrics(dm);
-//        int width = dm.widthPixels;
-//        int height = dm.heightPixels;
-//        if (width > height) {//横屏
-//            toWhatOldByOrder(zcOrder);
-//        } else {//竖屏
-//
-//        }
-//    }
-
-    private void toWhatOldByOrder(ZCOrder zcOrder) {
-        if (zcOrder == null || !canGoOld) {
-            return;
-        }
-        if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-            canGoOld = false;
-            Intent intent = new Intent(FlowActivity.this, OldRunningActivity.class);
-            intent.putExtra("orderId", zcOrder.orderId);
-            startActivity(intent);
-            finish();
-        } else if (zcOrder.orderStatus == ZCOrderStatus.START_WAIT_ORDER) {
-            canGoOld = false;
-            Intent intent = new Intent(FlowActivity.this, OldWaitActivity.class);
-            intent.putExtra("orderId", zcOrder.orderId);
-            startActivity(intent);
-            finish();
-        }
-    }
-
-
     @Override
     public void onFinishOrder(long orderId, String orderType) {
         if (orderId == this.orderId && orderType.equals(Config.ZHUANCHE)) {
@@ -1531,7 +1556,21 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 //                toWhatOldByOrder(zcOrder);
 //            }
         }
+    }
 
+    public void passengerLoc(long passengerId) {
+        Observable<PassengerLcResult> observable = ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
+                .passengerLoc(passengerId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        observable.subscribe(new MySubscriber<>(this, false, false, passengerLcResult -> {
+            if (passengerLcResult.getCode() == 1) {
+                plChange(passengerLcResult.data);
+            }else if (passengerLcResult.getCode() == 40005){
+                ToastUtil.showMessage(this,"客户已退出app，未获取到客户位置");
+            }
+        }));
     }
 
 }

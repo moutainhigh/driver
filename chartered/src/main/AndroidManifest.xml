@@ -1,2 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.easymin" />
+    package="com.easymin.chartered">
+
+    <application>
+
+        <activity
+            android:name=".flowMvp.FlowActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSwipeBack" />
+
+
+    </application>
+</manifest>

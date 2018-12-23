@@ -43,6 +43,7 @@ import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
+import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.zhuanche.entity.ZCOrder;
 import com.easymi.zhuanche.result.ZCOrderResult;
@@ -410,37 +411,37 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void onInitNaviFailure() {
-
+        Log.e("FlowerPresenter", "onInitNaviFailure()");
     }
 
     @Override
     public void onInitNaviSuccess() {
-
+        Log.e("FlowerPresenter", "onInitNaviSuccess()");
     }
 
     @Override
     public void onLocationChange(AMapNaviLocation aMapNaviLocation) {
-
+        Log.e("FlowerPresenter", "onLocationChange()");
     }
 
     @Override
     public void onGetNavigationText(int i, String s) {
-
+        Log.e("FlowerPresenter", s);
     }
 
     @Override
     public void onArriveDestination(boolean b) {
-
+        Log.e("FlowerPresenter", "onArriveDestination()");
     }
 
     @Override
     public void onStartNavi(int i) {
-
+        Log.e("FlowerPresenter", "onStartNavi()");
     }
 
     @Override
     public void onTrafficStatusUpdate() {
-
+        Log.e("FlowerPresenter", "onTrafficStatusUpdate()");
     }
 
     @Override
@@ -464,42 +465,42 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void notifyParallelRoad(int i) {
-
+        Log.e("FlowerPresenter", "notifyParallelRoad()");
     }
 
     @Override
     public void OnUpdateTrafficFacility(AMapNaviTrafficFacilityInfo aMapNaviTrafficFacilityInfo) {
-
+        Log.e("FlowerPresenter", "OnUpdateTrafficFacility()");
     }
 
     @Override
     public void OnUpdateTrafficFacility(AMapNaviTrafficFacilityInfo[] aMapNaviTrafficFacilityInfos) {
-
+        Log.e("FlowerPresenter", "OnUpdateTrafficFacility()");
     }
 
     @Override
     public void OnUpdateTrafficFacility(TrafficFacilityInfo trafficFacilityInfo) {
-
+        Log.e("FlowerPresenter", "OnUpdateTrafficFacility()");
     }
 
     @Override
     public void updateAimlessModeStatistics(AimLessModeStat aimLessModeStat) {
-
+        Log.e("FlowerPresenter", "updateAimlessModeStatistics()");
     }
 
     @Override
     public void updateAimlessModeCongestionInfo(AimLessModeCongestionInfo aimLessModeCongestionInfo) {
-
+        Log.e("FlowerPresenter", "updateAimlessModeCongestionInfo()");
     }
 
     @Override
     public void onPlayRing(int i) {
-
+        Log.e("FlowerPresenter", "onPlayRing()");
     }
 
     @Override
     public void onCalculateRouteFailure(int i) {
-
+        Log.e("FlowerPresenter", "onCalculateRouteFailure()");
     }
 
     /**
@@ -522,12 +523,12 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void onArrivedWayPoint(int i) {
-
+        Log.e("FlowerPresenter", "onArrivedWayPoint()");
     }
 
     @Override
     public void onGpsOpenStatus(boolean b) {
-
+        Log.e("FlowerPresenter", "onGpsOpenStatus()");
     }
 
     /**
@@ -543,47 +544,47 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void onNaviInfoUpdated(AMapNaviInfo aMapNaviInfo) {
-
+        Log.e("FlowerPresenter", "onNaviInfoUpdated()");
     }
 
     @Override
     public void updateCameraInfo(AMapNaviCameraInfo[] aMapNaviCameraInfos) {
-
+        Log.e("FlowerPresenter", "updateCameraInfo()");
     }
 
     @Override
     public void onServiceAreaUpdate(AMapServiceAreaInfo[] aMapServiceAreaInfos) {
-
+        Log.e("FlowerPresenter", "onServiceAreaUpdate()");
     }
 
     @Override
     public void showCross(AMapNaviCross aMapNaviCross) {
-
+        Log.e("FlowerPresenter", "showCross()");
     }
 
     @Override
     public void hideCross() {
-
+        Log.e("FlowerPresenter", "hideCross()");
     }
 
     @Override
     public void showModeCross(AMapModelCross aMapModelCross) {
-
+        Log.e("FlowerPresenter", "showModeCross()");
     }
 
     @Override
     public void hideModeCross() {
-
+        Log.e("FlowerPresenter", "hideModeCross()");
     }
 
     @Override
     public void showLaneInfo(AMapLaneInfo[] aMapLaneInfos, byte[] bytes, byte[] bytes1) {
-
+        Log.e("FlowerPresenter", "showLaneInfo()");
     }
 
     @Override
     public void hideLaneInfo() {
-
+        Log.e("FlowerPresenter", "hideLaneInfo()");
     }
 
     @Override
@@ -593,28 +594,21 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void onEndEmulatorNavi() {
-
+        Log.e("FlowerPresenter", "onEndEmulatorNavi()");
     }
 
     @Override
     public void onArriveDestination() {
-
+        Log.e("FlowerPresenter", "onArriveDestination()");
     }
 
     public void onExitPage(int i) {
-
+        Log.e("FlowerPresenter", "onExitPage()");
     }
 
     public void onReCalculateRoute(int i) {
-
+        Log.e("FlowerPresenter", "onReCalculateRoute()");
     }
 
-    public void showLaneInfo(AMapLaneInfo info) {
-
-    }
-
-    public void updateIntervalCameraInfo(AMapNaviCameraInfo info1, AMapNaviCameraInfo info2, int i) {
-
-    }
 
 }

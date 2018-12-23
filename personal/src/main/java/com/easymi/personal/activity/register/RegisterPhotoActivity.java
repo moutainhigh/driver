@@ -13,8 +13,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.easymi.common.entity.Pic;
+import com.easymi.common.entity.QiNiuToken;
 import com.easymi.common.entity.RegisterRes;
 import com.easymi.common.register.RegisterRequest;
+import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.EmUtil;
@@ -29,6 +31,7 @@ import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +67,15 @@ public class RegisterPhotoActivity extends RxBaseActivity {
     private String[] imgPaths = new String[3];
 
     private RegisterRequest registerRequest;
+    private RegisterRequest registerInfo;
+
+    RequestOptions options = new RequestOptions()
+            .centerCrop()
+            .placeholder(R.mipmap.register_photo)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .transform(new GlideRoundTransform());
+
+    private String qiniuToken;
 
     @Override
     public int getLayoutId() {
@@ -95,6 +107,28 @@ public class RegisterPhotoActivity extends RxBaseActivity {
         initLisenter();
         registerRequest = getIntent().getParcelableExtra("registerRequest");
 
+        if (getIntent().getParcelableExtra("registerInfo") != null){
+            registerInfo = getIntent().getParcelableExtra("registerInfo");
+
+            frontHintShowed = true;
+            backHintShowed = true;
+            drivingHintShowed = true;
+
+            Glide.with(RegisterPhotoActivity.this)
+                    .load(Config.IMG_SERVER + registerInfo.idCardPath + Config.IMG_PATH)
+                    .apply(options)
+                    .into(frontImg);
+
+            Glide.with(RegisterPhotoActivity.this)
+                    .load(Config.IMG_SERVER + registerInfo.idCardBackPath + Config.IMG_PATH)
+                    .apply(options)
+                    .into(backImg);
+
+            Glide.with(RegisterPhotoActivity.this)
+                    .load(Config.IMG_SERVER + registerInfo.driveLicensePath + Config.IMG_PATH)
+                    .apply(options)
+                    .into(drivingImg);
+        }
     }
 
     public void initLisenter() {
@@ -145,12 +179,6 @@ public class RegisterPhotoActivity extends RxBaseActivity {
             if (requestCode == PictureConfig.CHOOSE_REQUEST) {
                 List<LocalMedia> images = PictureSelector.obtainMultipleResult(data);
                 if (images != null && images.size() > 0) {
-
-                    RequestOptions options = new RequestOptions()
-                            .centerCrop()
-                            .placeholder(R.mipmap.register_photo)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .transform(new GlideRoundTransform());
 
                     Glide.with(RegisterPhotoActivity.this)
                             .load(images.get(0).getCutPath())
@@ -222,21 +250,66 @@ public class RegisterPhotoActivity extends RxBaseActivity {
             return;
         }
         if (registerRequest.idCardPath == null) {
-            ToastUtil.showMessage(this, "未上传身份证正面");
-            return;
+            if (registerInfo == null){
+                ToastUtil.showMessage(this, "未上传身份证正面");
+                return;
+            }
         }
         if (registerRequest.idCardBackPath == null) {
-            ToastUtil.showMessage(this, "未上传身份证反面");
-            return;
+            if (registerInfo == null){
+                ToastUtil.showMessage(this, "未上传身份证反面");
+                return;
+            }
         }
         if (registerRequest.driveLicensePath == null) {
-            ToastUtil.showMessage(this, "未上传驾驶证");
-            return;
+            if (registerInfo == null){
+                ToastUtil.showMessage(this, "未上传驾驶证");
+                return;
+            }
         }
-
-        uploadAllPicsAndCommit(registerRequest);
+        if (registerInfo!=null){
+            registerRequest.portraitPath = registerInfo.portraitPath;
+            registerRequest.idCardPath = registerInfo.idCardPath;
+            registerRequest.idCardBackPath = registerInfo.idCardBackPath;
+            registerRequest.driveLicensePath = registerInfo.driveLicensePath;
+            uploadAllPicsAndUpdate(registerRequest);
+        }else {
+            uploadAllPicsAndCommit(registerRequest);
+        }
     }
 
+    /**
+     *  更新修改信息
+     */
+    protected void uploadAllPicsAndUpdate(RegisterRequest request) {
+        //todo 缺少更新图片操作
+        Observable<RegisterRes> observable = RegisterModel.applyUpdate(RegisterPhotoActivity.this,request);
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, RegisterRes -> {
+            if (RegisterRes.getCode() == 1) {
+                ToastUtil.showMessage(RegisterPhotoActivity.this, "资料提交成功");
+                EmUtil.employLogout(RegisterPhotoActivity.this);
+            }
+        })));
+    }
+
+//    public void getQiniuToken(){
+//        Observable<QiNiuToken> observable = RegisterModel.getQiniuToken();
+//        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, qiNiuToken -> {
+//            if (qiNiuToken.getCode() == 1){
+//                qiniuToken = qiNiuToken.qiNiu;
+//                if (qiniuToken == null) {
+//                    throw new IllegalArgumentException("token无效");
+//                }
+//            }
+//        })));
+//    }
+//
+//    public void updateImage(RegisterRequest registerRequest,File file,String token){
+//        Observable<Pic> observable = RegisterModel.putPic(file,token);
+//        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, Pic -> {
+//
+//        })));
+//    }
 
     private RxProgressHUD progressHUD;
     protected void showDialog() {

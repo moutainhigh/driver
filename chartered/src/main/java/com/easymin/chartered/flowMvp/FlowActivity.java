@@ -3,6 +3,7 @@ package com.easymin.chartered.flowMvp;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -28,12 +29,15 @@ import com.amap.api.services.route.DriveRouteResult;
 import com.easymi.common.entity.OrderCustomer;
 import com.easymi.common.receiver.CancelOrderReceiver;
 import com.easymi.component.Config;
+import com.easymi.component.DJOrderStatus;
+import com.easymi.component.ZCOrderStatus;
 import com.easymi.component.ZXOrderStatus;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
+import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.network.ApiManager;
@@ -44,10 +48,14 @@ import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
+import com.easymi.component.utils.MapUtil;
+import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.overlay.DrivingRouteOverlay;
-import com.easymin.R;
+import com.easymin.chartered.R;
 import com.easymin.chartered.adapter.LeftWindowAdapter;
+import com.easymin.chartered.fragment.NotStartFragment;
+import com.easymin.chartered.fragment.ToStartFragment;
 import com.easymin.chartered.receiver.OrderFinishReceiver;
 import com.google.gson.Gson;
 
@@ -75,7 +83,7 @@ public class FlowActivity extends RxBaseActivity implements
         AMap.OnMapTouchListener,
         OrderFinishReceiver.OnFinishListener, AMap.OnMarkerClickListener, AMap.OnMapClickListener {
 
-    CusToolbar cusToolbar;
+    CusToolbar toolbar;
     MapView mapView;
     FrameLayout fragmentFrame;
 
@@ -96,6 +104,10 @@ public class FlowActivity extends RxBaseActivity implements
 
     private boolean isOrderLoadOk = false;//订单查询是否完成
 
+    private long orderId;
+
+    private BaseOrder baseOrder;
+
     @Override
     public boolean isEnableSwipe() {
         return false;
@@ -109,9 +121,9 @@ public class FlowActivity extends RxBaseActivity implements
     @Override
     public void initViews(Bundle savedInstanceState) {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        BaseOrder baseOrder = (BaseOrder) getIntent().getSerializableExtra("baseOrder");
 
-        if (null == baseOrder) {
+        orderId = getIntent().getLongExtra("orderId", -1);
+        if (orderId == -1) {
             finish();
             return;
         }
@@ -123,107 +135,34 @@ public class FlowActivity extends RxBaseActivity implements
 
         mapView.onCreate(savedInstanceState);
         initMap();
-        initBridget();
-        initFragment();
 
+        setTestOrder();
+    }
 
+    /**
+     * 添加的测试数据
+     */
+    public void setTestOrder() {
+        baseOrder = new BaseOrder();
+        baseOrder.status = 10;
     }
 
     @Override
-    public void changeToolbar(int flag) {
-//        DymOrder dymOrder = DymOrder.findByIDType(zxOrder.orderId, zxOrder.orderType);
-//        if (null == dymOrder) {
-//            return;
-//        }
-//        if (flag == StaticVal.TOOLBAR_NOT_START) {
-            cusToolbar.setLeftBack(view -> finish());
-            cusToolbar.setTitle("行程未开始");
-            cusToolbar.setRightGone();
-//        } else if (flag == StaticVal.TOOLBAR_CHANGE_ACCEPT) {
-//            cusToolbar.setLeftBack(view -> {
-//                if (dymOrder.orderStatus <= ZXOrderStatus.WAIT_START) {
-//                    bridge.toNotStart();
-//                } else if (dymOrder.orderStatus == ZXOrderStatus.ACCEPT_PLAN) {
-//                    finish();
-//                } else if (dymOrder.orderStatus == ZXOrderStatus.ACCEPT_ING) {
-//                    bridge.toCusList(StaticVal.PLAN_ACCEPT);
-//                }
-//            });
-//            cusToolbar.setTitle("行程规划");
-//            cusToolbar.setRightGone();
-//        } else if (flag == StaticVal.TOOLBAR_CHANGE_SEND) {
-//            cusToolbar.setLeftBack(view -> {
-//                if (dymOrder.orderStatus <= ZXOrderStatus.WAIT_START) {
-//                    bridge.toNotStart();
-//                } else if (dymOrder.orderStatus == ZXOrderStatus.SEND_PLAN) {
-//                    finish();
-//                } else if (dymOrder.orderStatus == ZXOrderStatus.ACCEPT_ING) {
-//                    bridge.toCusList(StaticVal.PLAN_ACCEPT);
-//                } else if (dymOrder.orderStatus == ZXOrderStatus.SEND_ING) {
-//                    bridge.toCusList(StaticVal.PLAN_SEND);
-//                }
-//            });
-//            cusToolbar.setTitle("行程规划");
-//            cusToolbar.setRightGone();
-//        } else if (flag == StaticVal.TOOLBAR_ACCEPT_ING) {
-//            cusToolbar.setLeftBack(view -> bridge.toAcSend());
-//            cusToolbar.setTitle("正在接人");
-//            cusToolbar.setRightText(R.string.change_sequence, view -> {
-//                //展示修改顺序的pop
-//                changePopWindow = new ChangePopWindow(FlowActivity.this);
-//                changePopWindow.setOnClickListener(view1 -> {
-//                    long id = view1.getId();
-//                    if (id == R.id.pop_change_accept) {
-//                        bridge.toChangeSeq(StaticVal.PLAN_ACCEPT);
-//                    } else if (id == R.id.pop_change_send) {
-//                        bridge.toChangeSeq(StaticVal.PLAN_SEND);
-//                    }
-//                });
-//                changePopWindow.show(view);
-//            });
-//        } else if (flag == StaticVal.TOOLBAR_SEND_ING) {
-//            cusToolbar.setLeftBack(view -> bridge.toAcSend());
-//            cusToolbar.setTitle("正在送人");
-//            cusToolbar.setRightText(R.string.change_sequence, view -> {
-//                //展示修改顺序的pop
-//                changePopWindow = new ChangePopWindow(FlowActivity.this);
-//                changePopWindow.hideAccept();
-//                changePopWindow.setOnClickListener(view1 -> {
-//                    long id = view1.getId();
-//                    if (id == R.id.pop_change_accept) {
-//                        bridge.toChangeSeq(StaticVal.PLAN_ACCEPT);
-//                    } else if (id == R.id.pop_change_send) {
-//                        bridge.toChangeSeq(StaticVal.PLAN_SEND);
-//                    }
-//                });
-//                changePopWindow.show(view);
-//            });
-//        } else if (flag == StaticVal.TOOLBAR_FLOW) {
-//            cusToolbar.setLeftBack(view -> finish());
-//            cusToolbar.setRightText("查看规划", view -> {
-//                if (dymOrder.orderStatus == ZXOrderStatus.ACCEPT_ING) {
-//                    bridge.toCusList(StaticVal.PLAN_ACCEPT);
-//                } else {
-//                    bridge.toCusList(StaticVal.PLAN_SEND);
-//                }
-//            });
-//            OrderCustomer current = acceptSendFragment.getCurrent();
-//            if (current.status == 0) { //未接
-//                if (current.subStatus == 0) {
-//                    cusToolbar.setTitle("前往预约地");
-//                } else if (current.subStatus == 1) {
-//                    cusToolbar.setTitle("等待中");
-//                }
-//            } else if (current.status == 3) {
-//                cusToolbar.setTitle("行程中");
-//            }
-//        } else if (flag == StaticVal.TOOLBAR_FINISH) {
-//            cusToolbar.setLeftBack(view -> finish());
-//            cusToolbar.setTitle("行程结束");
-//            cusToolbar.setRightGone();
-//        }
+    public void showOrder(BaseOrder baseOrder) {
+        //初始进入界面查询订单信息
+        if (null == baseOrder) {
+            finish();
+        } else {
+            if (baseOrder.status >= DJOrderStatus.FINISH_ORDER) {
+                ToastUtil.showMessage(this, getResources().getString(R.string.order_finish));
+                finish();
+            }
+            this.baseOrder = baseOrder;
+            initBridget();
+            showBottomFragment(baseOrder);
+            showMapBounds();
+        }
     }
-
 
 
     @Override
@@ -234,24 +173,40 @@ public class FlowActivity extends RxBaseActivity implements
     @Override
     public void initToolBar() {
         super.initToolBar();
-        cusToolbar = findViewById(R.id.cus_toolbar);
+        toolbar = findViewById(R.id.cus_toolbar);
+        toolbar.setLeftIcon(R.drawable.ic_arrow_back, v -> finish());
     }
+
+    NotStartFragment notStartFragment;
 
     /**
      * 初始化fragment
      */
     @Override
     public void initFragment() {
+        notStartFragment = new NotStartFragment();
+        Bundle orderBundle = new Bundle();
+//        orderBundle.putSerializable("zxOrder", zxOrder);
+        notStartFragment.setArguments(orderBundle);
+        notStartFragment.setBridge(bridge);
 
+
+        showFragmentByStatus();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mapView.onResume();
-        if (isOrderLoadOk) {
-            showFragmentByStatus();
+        EmLoc location = EmUtil.getLastLoc();
+        if (location == null) {
+            ToastUtil.showMessage(this, getString(R.string.loc_failed));
+            finish();
+            return;
         }
+        mapView.onResume();
+        lastLatlng = new LatLng(location.latitude, location.longitude);
+//        presenter.findOne(orderId);
+        showOrder(baseOrder);
     }
 
     /**
@@ -314,11 +269,6 @@ public class FlowActivity extends RxBaseActivity implements
             }
 
             @Override
-            public void changeToolbar(int flag) {
-                FlowActivity.this.changeToolbar(flag);
-            }
-
-            @Override
             public void clearMap() {
                 aMap.clear();
                 smoothMoveMarker = null;
@@ -336,8 +286,6 @@ public class FlowActivity extends RxBaseActivity implements
                 presenter.routePlanByRouteSearch(startLatlng, passLatlngs, endLatlng);
             }
 
-
-
             @Override
             public void doRefresh() {
                 isMapTouched = false;
@@ -353,7 +301,139 @@ public class FlowActivity extends RxBaseActivity implements
             public void navi(LatLng latLng, Long orderId) {
 //                presenter.navi(latLng, orderId);
             }
+
+            @Override
+            public void toNotStart() {
+                switchFragment(notStartFragment).commit();
+            }
         };
+    }
+
+    @Override
+    public void showBottomFragment(BaseOrder baseOrder) {
+        if (baseOrder.status == ZCOrderStatus.TAKE_ORDER) {
+            toolbar.setTitle(R.string.status_no_start);
+            NotStartFragment notStartFragment = new NotStartFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("baseOrder", baseOrder);
+            notStartFragment.setArguments(bundle);
+            notStartFragment.setBridge(bridge);
+
+            FragmentManager manager = getSupportFragmentManager();
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+            transaction.replace(R.id.fragment_frame, notStartFragment);
+            transaction.commit();
+        } else if (baseOrder.status == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
+            toolbar.setTitle(R.string.status_to_start);
+            ToStartFragment fragment = new ToStartFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("baseOrder", baseOrder);
+            fragment.setArguments(bundle);
+            fragment.setBridge(bridge);
+
+            FragmentManager manager = getSupportFragmentManager();
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+            transaction.replace(R.id.fragment_frame, fragment);
+            transaction.commit();
+        } else if (baseOrder.status == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER) {
+            toolbar.setTitle(R.string.status_arrive_start);
+//            ArriveStartFragment fragment = new ArriveStartFragment();
+//            Bundle bundle = new Bundle();
+//            bundle.putSerializable("zcOrder", zcOrder);
+//            fragment.setArguments(bundle);
+//            fragment.setBridge(bridge);
+//
+//            FragmentManager manager = getSupportFragmentManager();
+//            FragmentTransaction transaction = manager.beginTransaction();
+//            transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+//            transaction.replace(R.id.fragment_frame, fragment);
+//            transaction.commit();
+        }  else if (baseOrder.status == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+//            showToEndFragment();
+//            if (isToFeeDetail) {
+//                if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
+//                    settleFragmentDialog.setDjOrder(zcOrder);
+//                } else {
+//                    settleFragmentDialog = new SettleFragmentDialog(FlowActivity.this, zcOrder, bridge);
+//                    settleFragmentDialog.show();
+//                }
+//                isToFeeDetail = false;
+//            }
+        }
+    }
+
+    @Override
+    public void showMapBounds() {
+        List<LatLng> latLngs = new ArrayList<>();
+//        if (zcOrder.orderStatus == ZCOrderStatus.NEW_ORDER
+//                || zcOrder.orderStatus == ZCOrderStatus.PAIDAN_ORDER
+//                || zcOrder.orderStatus == ZCOrderStatus.TAKE_ORDER
+//                ) {
+//            if (null != getStartAddr()) {
+//                latLngs.add(new LatLng(getStartAddr().lat, getStartAddr().lng));
+//                presenter.routePlanByNavi(getStartAddr().lat, getStartAddr().lng);
+//            }
+//            if (null != getEndAddr()) {
+//                latLngs.add(new LatLng(getEndAddr().lat, getEndAddr().lng));
+//            }
+//            LatLngBounds bounds = MapUtil.getBounds(latLngs, lastLatlng);
+//            aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(this) / 1.5), (int) (DensityUtil.getDisplayWidth(this) / 1.5), 0));
+//        } else if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
+//            if (null != getStartAddr()) {
+//                latLngs.add(new LatLng(getStartAddr().lat, getStartAddr().lng));
+//                presenter.routePlanByNavi(getStartAddr().lat, getStartAddr().lng);
+//            } else {
+//                presenter.stopNavi();
+//                leftTimeText.setText("");
+//            }
+//            LatLngBounds bounds = MapUtil.getBounds(latLngs, lastLatlng);
+//            aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(this) / 1.5), (int) (DensityUtil.getDisplayWidth(this) / 1.5), 0));
+//        } else if (zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER
+//                || zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER
+//                || zcOrder.orderStatus == ZCOrderStatus.START_WAIT_ORDER
+//                || zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_DESTINATION_ORDER
+//                ) {
+//            if (null != getEndAddr()) {
+//                latLngs.add(new LatLng(getEndAddr().lat, getEndAddr().lng));
+//                presenter.routePlanByNavi(getEndAddr().lat, getEndAddr().lng);
+//            }
+//            if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+//                aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLatlng, 19));
+//            } else {
+//                LatLngBounds bounds = MapUtil.getBounds(latLngs, lastLatlng);
+//                aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(this) / 1.5), (int) (DensityUtil.getDisplayWidth(this) / 1.5), 0));
+//            }
+//        }
+//        if (null != getStartAddr()) {
+//            if (null == startMarker) {
+//                MarkerOptions markerOption = new MarkerOptions();
+//                markerOption.position(new LatLng(getStartAddr().lat, getStartAddr().lng));
+//                markerOption.draggable(false);//设置Marker可拖动
+//                markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+//                        .decodeResource(getResources(), R.mipmap.ic_start)));
+//                // 将Marker设置为贴地显示，可以双指下拉地图查看效果
+//                markerOption.setFlat(true);//设置marker平贴地图效果
+//                startMarker = aMap.addMarker(markerOption);
+//            } else {
+//                startMarker.setPosition(new LatLng(getStartAddr().lat, getStartAddr().lng));
+//            }
+//        }
+//        if (null != getEndAddr()) {
+//            if (null == endMarker) {
+//                MarkerOptions markerOption = new MarkerOptions();
+//                markerOption.position(new LatLng(getEndAddr().lat, getEndAddr().lng));
+//                markerOption.draggable(false);//设置Marker可拖动
+//                markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+//                        .decodeResource(getResources(), R.mipmap.ic_end)));
+//                // 将Marker设置为贴地显示，可以双指下拉地图查看效果
+//                markerOption.setFlat(true);//设置marker平贴地图效果
+//                endMarker = aMap.addMarker(markerOption);
+//            } else {
+//                endMarker.setPosition(new LatLng(getEndAddr().lat, getEndAddr().lng));
+//            }
+//        }
     }
 
 
@@ -539,7 +619,7 @@ public class FlowActivity extends RxBaseActivity implements
 //        DymOrder dymOrder = DymOrder.findByIDType(zxOrder.orderId, zxOrder.orderType);
 //        if (null != dymOrder) {
 //            if (dymOrder.orderStatus <= ZXOrderStatus.WAIT_START) {
-//                bridge.toNotStart();
+        bridge.toNotStart();
 //            } else if (dymOrder.orderStatus == ZXOrderStatus.ACCEPT_PLAN) {
 //                bridge.toChangeSeq(StaticVal.PLAN_ACCEPT);
 //            } else if (dymOrder.orderStatus == ZXOrderStatus.SEND_PLAN) {
@@ -691,7 +771,7 @@ public class FlowActivity extends RxBaseActivity implements
 
     @Override
     public void onBackPressed() {
-        cusToolbar.leftIcon.callOnClick();
+        toolbar.leftIcon.callOnClick();
     }
 
     @Override

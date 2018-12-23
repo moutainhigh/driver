@@ -188,10 +188,10 @@
 
                 <RadioButton
                     android:id="@+id/pay_4_btn"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:button="@drawable/checkbox_button_bg_selector"
-                    android:checked="false"
+
                     android:gravity="center_vertical" />
 
             </RadioGroup>

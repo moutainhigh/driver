@@ -115,13 +115,39 @@ public class RegisterBaseActivity extends RxBaseActivity {
 
     public void initData(RegisterRequest registerRequest) {
         registerInfo = registerRequest;
-        
+
+        photoHintShowed = true;
+
         Glide.with(RegisterBaseActivity.this)
                 .load(Config.IMG_SERVER + registerInfo.portraitPath + Config.IMG_PATH)
                 .apply(options)
                 .into(lPhotoImg);
 
+        et_name.setText(registerInfo.driverName);
+        et_driver_phone.setText(registerInfo.driverPhone);
+        et_idcard.setText(registerInfo.idCard);
+        et_contact.setText(registerInfo.emergency);
+        et_contact_phone.setText(registerInfo.emergencyPhone);
 
+        tv_type.setText(setWorkType(registerInfo.serviceType));
+        //todo 公司回显
+        tv_compney.setText(registerInfo.companyName);
+
+        tv_time_start.setText(TimeUtil.getTime(TimeUtil.YMD_4_CN, registerInfo.startTime));
+        tv_time_end.setText(TimeUtil.getTime(TimeUtil.YMD_4_CN, registerInfo.endTime));
+        et_work_number.setText(registerInfo.introducer);
+    }
+
+    public String setWorkType(String serviceType){
+        String serviceName = null;
+        if (TextUtils.equals(serviceType,Config.ZHUANCHE)){
+            serviceName = "专车";
+        }else if (TextUtils.equals(serviceType,Config.TAXI)){
+            serviceName = "出租车";
+        }else if (TextUtils.equals(serviceType,Config.CITY_LINE)){
+            serviceName = "城际专线";
+        }
+        return serviceName;
     }
 
     @Override
@@ -224,8 +250,10 @@ public class RegisterBaseActivity extends RxBaseActivity {
 
     private boolean check() {
         if (TextUtils.isEmpty(imgPath)) {
-            ToastUtil.showMessage(this, "未上传头像");
-            return true;
+            if (registerInfo == null){
+                ToastUtil.showMessage(this, "未上传头像");
+                return true;
+            }
         }
         if (TextUtils.isEmpty(et_name.getText().toString())) {
             ToastUtil.showMessage(this, "请输入司机姓名");
@@ -235,10 +263,6 @@ public class RegisterBaseActivity extends RxBaseActivity {
             ToastUtil.showMessage(this, getString(R.string.register_cheack_phone));
             return true;
         }
-//        if (!StringUtils.isNotBlank(et_driver_phone.getText().toString())){
-//            ToastUtil.showMessage(this, getString(R.string.login_pl_phone));
-//            return true;
-//        }
         if (et_idcard.getText().toString().length() != 18 && et_idcard.getText().toString().length() != 15) {
             ToastUtil.showMessage(this, "身份证号码错误");
             return true;
@@ -252,12 +276,16 @@ public class RegisterBaseActivity extends RxBaseActivity {
             return true;
         }
         if (company == null) {
-            ToastUtil.showMessage(this, "请选择所属分公司");
-            return true;
+            if (registerInfo == null){
+                ToastUtil.showMessage(this, "请选择所属分公司");
+                return true;
+            }
         }
         if (selecType == null) {
-            ToastUtil.showMessage(this, "请选择业务类型");
-            return true;
+            if (registerInfo == null){
+                ToastUtil.showMessage(this, "请选择业务类型");
+                return true;
+            }
         }
         if (TextUtils.isEmpty(tv_time_start.getText().toString())) {
             ToastUtil.showMessage(this, "请选择驾驶证有效开始时间");
@@ -307,15 +335,37 @@ public class RegisterBaseActivity extends RxBaseActivity {
         registerRequest.idCard = et_idcard.getText().toString().trim();
         registerRequest.emergency = et_contact.getText().toString().trim();
         registerRequest.emergencyPhone = et_contact_phone.getText().toString().trim();
-        registerRequest.companyId = company.id;
-        registerRequest.serviceType = selecType.type;
-        registerRequest.startTime = startTime;
-        registerRequest.endTime = endTime;
-        registerRequest.portraitPath = imgPath;
+        if (company == null){
+            registerRequest.companyId = registerInfo.companyId;
+        }else {
+            registerRequest.companyId = company.id;
+        }
+        if (selecType  == null){
+            registerRequest.serviceType = registerInfo.serviceType;
+        }else {
+            registerRequest.serviceType = selecType.type;
+        }
+        if (startTime == 0){
+            registerRequest.startTime = registerInfo.startTime;
+        }else {
+            registerRequest.startTime = startTime;
+        }
+        if (endTime == 0){
+            registerRequest.endTime = registerInfo.endTime;
+        }else {
+            registerRequest.endTime = endTime;
+        }
+        if (TextUtils.isEmpty(imgPath)){
+//            registerRequest.portraitPath = registerInfo.portraitPath;
+        }else {
+            registerRequest.portraitPath = imgPath;
+        }
+
         registerRequest.introducer = et_work_number.getText().toString().trim();
 
         Intent intent = new Intent(this, RegisterPhotoActivity.class);
         intent.putExtra("registerRequest", registerRequest);
+        intent.putExtra("registerInfo", registerInfo);
         startActivity(intent);
     }
 

@@ -2,6 +2,8 @@ package com.easymin.chartered.flowMvp;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.navi.model.AMapNaviPath;
 import com.amap.api.services.route.DriveRouteResult;
+import com.easymi.component.entity.BaseOrder;
+import com.easymi.component.result.EmResult;
 import com.easymi.component.rxmvp.RxManager;
 
 import java.util.List;
@@ -41,8 +43,11 @@ public interface FlowContract {
 
         void showFragmentByStatus();
 
-        void changeToolbar(int flag);
+        void showOrder(BaseOrder baseOrder);
 
+        void showBottomFragment(BaseOrder baseOrder);
+
+        void showMapBounds();
 
         RxManager getManager();
     }
@@ -53,9 +58,11 @@ public interface FlowContract {
         void routePlanByRouteSearch(LatLng start, List<LatLng> latLngs, LatLng end);
 
         void stopNavi();
+
+        void findOne(long orderId);
     }
 
     interface Model {
-
+        Observable<EmResult> findOne(long orderId);
     }
 }

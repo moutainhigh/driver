@@ -72,9 +72,7 @@ public class LocReceiver extends BroadcastReceiver implements LocSubject {
                 editor.apply();//保存上次的位置信息 json格式字符创
                 notifyObserver(emLoc);
             }
-
         }
-
     }
 
     /**

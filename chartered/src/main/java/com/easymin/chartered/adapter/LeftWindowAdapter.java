@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.model.Marker;
 import com.easymi.component.entity.TaxiSetting;
-import com.easymin.R;
+import com.easymin.chartered.R;
 
 /**
  * Created by developerLzh on 2017/12/25 0025.

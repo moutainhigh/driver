@@ -19,7 +19,7 @@
             android:layout_height="@dimen/btn_height"
             android:layout_weight="8"
             android:background="@drawable/corners_button_bg"
-            android:text="@string/to_start"
+            android:text="前往预约地"
             android:textColor="@color/white" />
 
     </LinearLayout>

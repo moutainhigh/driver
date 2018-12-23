@@ -4,9 +4,13 @@ import android.content.Context;
 import com.easymi.common.entity.OrderCustomer;
 import com.easymi.component.Config;
 import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.network.HttpResultFunc3;
+import com.easymi.component.result.EmResult;
 import com.easymi.component.result.EmResult2;
+import com.easymi.component.utils.EmUtil;
+import com.easymin.chartered.CharteredService;
 
 import java.util.List;
 
@@ -31,4 +35,12 @@ public class FlowModel implements FlowContract.Model {
     }
 
 
+    @Override
+    public Observable<EmResult> findOne(long orderId) {
+        return ApiManager.getInstance().createApi(Config.HOST, CharteredService.class)
+                .findOne(orderId)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }
