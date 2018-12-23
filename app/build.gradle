@@ -6,8 +6,8 @@ android {
         applicationId "com.easymin.daijia.driver.zyziyunsjdaijia"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 8897
-        versionName "V6.0.2.021"
+        versionCode 8898
+        versionName "V6.0.2.022"
         multiDexEnabled true
 
         ndk {

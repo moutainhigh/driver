@@ -25,8 +25,8 @@ public class Config {
     /**
      * APP_KEY
      */
-//    public static final String APP_KEY = "1HAcient1kLqfeX7DVTV0dklUkpGEnUC";//资运
-    public static final String APP_KEY = "xoRfvofrZw25b95ZBZY2venOYlSwWFOV ";//v6
+    public static final String APP_KEY = "1HAcient1kLqfeX7DVTV0dklUkpGEnUC";//资运
+//    public static final String APP_KEY = "xoRfvofrZw25b95ZBZY2venOYlSwWFOV ";//v6
     /**
      * 上传图片地址.
      */

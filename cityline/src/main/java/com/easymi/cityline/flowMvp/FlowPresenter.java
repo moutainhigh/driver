@@ -285,7 +285,6 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
     @Override
     public void onLocationChange(AMapNaviLocation aMapNaviLocation) {
         Log.e("FlowerPresenter", "onCalculateRouteSuccess()");
-        ToastUtil.showMessage(context,"onCalculateRouteSuccess");
     }
 
     @Override
