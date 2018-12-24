@@ -60,13 +60,16 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
         BaseOrder baseOrder = baseOrders.get(position);
         String typeStr = null;
         if (baseOrder.serviceType.equals(Config.ZHUANCHE)) {
-            typeStr = "专车";
+            typeStr = context.getResources().getString(R.string.create_zhuanche);
             holder.orderStatus.setText(DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status));
         }else if (baseOrder.serviceType.equals(Config.TAXI)) {
-            typeStr = "出租车";
+            typeStr = context.getResources().getString(R.string.create_taxi);
             holder.orderStatus.setText(DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status));
         } else if (baseOrder.serviceType.equals(Config.CITY_LINE)) {
-            typeStr = "城际专线";
+            typeStr = context.getResources().getString(R.string.create_zhuanxian);
+            holder.orderStatus.setText(ZXStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status));
+        }else if (baseOrder.serviceType.equals(Config.CHARTERED)){
+            typeStr = context.getResources().getString(R.string.create_chartered);
             holder.orderStatus.setText(ZXStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status));
         }
         holder.orderType.setText(typeStr);

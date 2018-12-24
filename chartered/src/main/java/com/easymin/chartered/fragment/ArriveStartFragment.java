@@ -1,9 +1,7 @@
 package com.easymin.chartered.fragment;
 
 import android.os.Bundle;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.amap.api.maps.model.LatLng;
@@ -11,28 +9,25 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.easymi.component.Config;
-import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.base.RxBaseFragment;
-import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.utils.GlideCircleTransform;
-import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
+import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CustomSlideToUnlockView;
-import com.easymi.component.widget.LoadingButton;
 import com.easymin.chartered.R;
 import com.easymin.chartered.entity.CharteredOrder;
 import com.easymin.chartered.flowMvp.ActFraCommBridge;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: ToStartFragment
+ * FileName: ArriveStartFragment
  * Author: shine
- * Date: 2018/12/22 下午3:43
+ * Date: 2018/12/24 下午5:00
  * Description:
  * History:
  */
-public class ToStartFragment extends RxBaseFragment {
+public class ArriveStartFragment extends RxBaseFragment {
 
     private CharteredOrder baseOrder;
 
@@ -58,7 +53,7 @@ public class ToStartFragment extends RxBaseFragment {
 
     @Override
     public int getLayoutResId() {
-        return R.layout.layout_to_start_fragment;
+        return R.layout.layout_arrive_start;
     }
 
     @Override
@@ -76,6 +71,7 @@ public class ToStartFragment extends RxBaseFragment {
         slider = $(R.id.slider);
 
         customer_name.setText(baseOrder.passengerName);
+
         String weihao;
         if (baseOrder.passengerPhone != null && baseOrder.passengerPhone.length() > 4) {
             weihao = baseOrder.passengerPhone.substring(baseOrder.passengerPhone.length() - 4, baseOrder.passengerPhone.length());
@@ -100,9 +96,10 @@ public class ToStartFragment extends RxBaseFragment {
                     .into(customer_photo);
         }
 
-        to_place.setText(baseOrder.getStartSite().address);
 
-        slider.setHint("滑动到达乘客位置");
+        to_place.setText(baseOrder.getEndSite().address);
+
+        slider.setHint("滑动开始出发");
         slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
             @Override
             public void onSlide(int distance) {
@@ -111,12 +108,12 @@ public class ToStartFragment extends RxBaseFragment {
 
             @Override
             public void onUnlocked() {
-                bridge.arriveStart();
+                bridge.doStartDrive();
             }
         });
 
         navi_view.setOnClickListener(v -> {
-            bridge.navi(new LatLng(baseOrder.getStartSite().latitude,baseOrder.getStartSite().longitude),baseOrder.id);
+            ToastUtil.showMessage(getContext(),"乘客上车出发后方可导航");
         });
 
     }

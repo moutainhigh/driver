@@ -1,0 +1,59 @@
+package com.easymin.chartered.entity;
+
+import com.easymi.common.entity.Address;
+import com.easymi.component.entity.BaseOrder;
+
+import java.io.Serializable;
+import java.util.List;
+
+/**
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: CharteredOrder
+ * Author: shine
+ * Date: 2018/12/24 下午1:53
+ * Description:
+ * History:
+ */
+public class CharteredOrder extends BaseOrder implements Serializable {
+
+    public List<Address> orderAddressVos;
+
+    public Address getStartSite(){
+        Address start = null;
+        if (orderAddressVos != null && orderAddressVos.size() != 0){
+            for (Address address : orderAddressVos) {
+                if (address.type == 1) {
+                    return address;
+                }
+            }
+            if (start == null){
+                start = new Address();
+                start.address = "未知位置";
+            }
+        }else {
+            start = new Address();
+            start.address = "未知位置";
+        }
+        return start;
+    }
+
+
+    public Address getEndSite(){
+        Address end = null;
+        if (orderAddressVos != null && orderAddressVos.size() != 0){
+            for (Address address : orderAddressVos) {
+                if (address.type == 3) {
+                    return address;
+                }
+            }
+            if (end == null){
+                end = new Address();
+                end.address = "未知位置";
+            }
+        }else {
+            end = new Address();
+            end.address = "未知位置";
+        }
+        return end;
+    }
+}

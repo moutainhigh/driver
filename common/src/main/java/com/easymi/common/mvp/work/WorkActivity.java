@@ -49,6 +49,7 @@ import com.easymi.common.receiver.AnnReceiver;
 import com.easymi.common.receiver.CancelOrderReceiver;
 import com.easymi.common.receiver.EmployStatusChangeReceiver;
 import com.easymi.common.receiver.NoticeReceiver;
+import com.easymi.common.receiver.OrderRefreshReceiver;
 import com.easymi.common.register.InfoActivity;
 import com.easymi.common.util.CommonUtil;
 import com.easymi.common.widget.NearInfoWindowAdapter;
@@ -88,7 +89,12 @@ import java.util.List;
  */
 
 @Route(path = "/common/WorkActivity")
-public class WorkActivity extends RxBaseActivity implements WorkContract.View, LocObserver, CancelOrderReceiver.OnCancelListener, EmployStatusChangeReceiver.OnStatusChangeListener, AMap.OnMarkerClickListener, AMap.OnMapClickListener, NoticeReceiver.OnReceiveNotice, AnnReceiver.OnReceiveAnn {
+public class WorkActivity extends RxBaseActivity implements WorkContract.View,
+        LocObserver, CancelOrderReceiver.OnCancelListener,
+        EmployStatusChangeReceiver.OnStatusChangeListener,
+        AMap.OnMarkerClickListener, AMap.OnMapClickListener,
+        NoticeReceiver.OnReceiveNotice,
+        AnnReceiver.OnReceiveAnn, OrderRefreshReceiver.OnRefreshOrderListener{
 
     LinearLayout bottomBar;
 
@@ -141,6 +147,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
     private NoticeReceiver noticeReceiver;
     private AnnReceiver annReceiver;
+    private OrderRefreshReceiver orderRefreshReceiver;
 
     private WorkPresenter presenter;
 
@@ -265,8 +272,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
     }
 
     private OrderAdapter adapter;
-
-//    private NoticeAdapter noticeAdapter;
 
     @Override
     public void findById() {
@@ -669,6 +674,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
         annReceiver = new AnnReceiver(this);
         registerReceiver(annReceiver, new IntentFilter(Config.BROAD_ANN));
+
+        orderRefreshReceiver = new OrderRefreshReceiver(this);
+        registerReceiver(orderRefreshReceiver, new IntentFilter(Config.ORDER_REFRESH));
     }
 
     @Override
@@ -680,6 +688,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
 
         unregisterReceiver(noticeReceiver);
         unregisterReceiver(annReceiver);
+        unregisterReceiver(orderRefreshReceiver);
     }
 
     public void mapHideShow(View view) {
@@ -834,5 +843,11 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View, L
         driverName.setText(driver.name);
 
         return v;
+    }
+
+    @Override
+    public void onRefreshOrder() {
+        swipeRefreshLayout.setRefreshing(true);
+        presenter.indexOrders();
     }
 }

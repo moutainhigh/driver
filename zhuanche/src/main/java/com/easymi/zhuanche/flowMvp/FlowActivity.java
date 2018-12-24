@@ -850,41 +850,44 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         pay3Img.setOnClickListener(view14 -> pay3Btn.setChecked(true));
 
         pay4Empty.setOnClickListener(view14 -> {
-            if (pay4Btn.isChecked()){
+            if (pay4Btn.isChecked()) {
                 pay4Btn.setChecked(false);
                 pay3Btn.setChecked(true);
                 pay2Btn.setChecked(false);
                 pay1Btn.setChecked(false);
-            }else {
+            } else {
                 pay4Btn.setChecked(true);
                 pay3Btn.setChecked(false);
                 pay2Btn.setChecked(false);
                 pay1Btn.setChecked(false);
-            } });
+            }
+        });
         pay4Text.setOnClickListener(view14 -> {
-            if (pay4Btn.isChecked()){
+            if (pay4Btn.isChecked()) {
                 pay4Btn.setChecked(false);
                 pay3Btn.setChecked(true);
                 pay2Btn.setChecked(false);
                 pay1Btn.setChecked(false);
-            }else {
+            } else {
                 pay4Btn.setChecked(true);
                 pay3Btn.setChecked(false);
                 pay2Btn.setChecked(false);
                 pay1Btn.setChecked(false);
-            } });
+            }
+        });
         pay4Img.setOnClickListener(view14 -> {
-            if (pay4Btn.isChecked()){
+            if (pay4Btn.isChecked()) {
                 pay4Btn.setChecked(false);
                 pay3Btn.setChecked(true);
                 pay2Btn.setChecked(false);
                 pay1Btn.setChecked(false);
-            }else {
+            } else {
                 pay4Btn.setChecked(true);
                 pay3Btn.setChecked(false);
                 pay2Btn.setChecked(false);
                 pay1Btn.setChecked(false);
-            } });
+            }
+        });
 
         Button sure = view.findViewById(R.id.pay_button);
         ImageView close = view.findViewById(R.id.ic_close);
@@ -1185,9 +1188,16 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             @Override
             public void doPay(double money) {
                 payMoney = money;
-//                presenter.getConsumerInfo(orderId);
-                showPayType(payMoney, null);
-
+                boolean canDaifu = (ZCSetting.findOne().isPaid == 1);
+                if (canDaifu) {
+                    showPayType(payMoney, null);
+                } else {
+//                    ToastUtil.showMessage(FlowActivity.this,"费用信息已发送到客户");
+                    if (settleFragmentDialog != null) {
+                        settleFragmentDialog.dismiss();
+                    }
+                    finish();
+                }
             }
 
             @Override
@@ -1218,7 +1228,16 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void showConsumer(ConsumerInfo consumerInfo) {
-        showPayType(payMoney, consumerInfo);
+        boolean canDaifu = (ZCSetting.findOne().isPaid == 1);
+        if (canDaifu) {
+            showPayType(payMoney, consumerInfo);
+        } else {
+//            ToastUtil.showMessage(this,"费用信息已发送到客户");
+            if (settleFragmentDialog != null) {
+                settleFragmentDialog.dismiss();
+            }
+            finish();
+        }
     }
 
     @Override
@@ -1567,8 +1586,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         observable.subscribe(new MySubscriber<>(this, false, false, passengerLcResult -> {
             if (passengerLcResult.getCode() == 1) {
                 plChange(passengerLcResult.data);
-            }else if (passengerLcResult.getCode() == 40005){
-                ToastUtil.showMessage(this,"客户已退出app，未获取到客户位置");
+            } else if (passengerLcResult.getCode() == 40005) {
+                ToastUtil.showMessage(this, "客户已退出app，未获取到客户位置");
             }
         }));
     }

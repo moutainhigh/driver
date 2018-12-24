@@ -22,12 +22,16 @@
 
             <TextView
                 android:id="@+id/start_site"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="安岳站"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:gravity="center"
                 android:textSize="18sp"
                 android:textColor="@color/black"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -38,9 +42,13 @@
 
             <TextView
                 android:id="@+id/end_site"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="绵阳北站"
+                android:gravity="center"
+                android:singleLine="true"
+                android:ellipsize="marquee"
                 android:textSize="18sp"
                 android:textColor="@color/black"
                 android:textStyle="bold"/>

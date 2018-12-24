@@ -11,6 +11,8 @@ import com.easymi.component.entity.DymOrder;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.TimeUtil;
 import com.easymin.chartered.R;
+import com.easymin.chartered.StaticVal;
+import com.easymin.chartered.entity.CharteredOrder;
 import com.easymin.chartered.flowMvp.ActFraCommBridge;
 
 import java.util.ArrayList;
@@ -34,7 +36,7 @@ public class NotStartFragment extends RxBaseFragment {
     TextView timeCountDown;
     Button bottomBtn;
 
-//    ZXOrder zxOrder;
+    CharteredOrder baseOrder;
 
     ActFraCommBridge bridge;
 
@@ -45,7 +47,7 @@ public class NotStartFragment extends RxBaseFragment {
     @Override
     public void setArguments(Bundle args) {
         super.setArguments(args);
-//        zxOrder = (ZXOrder) args.getSerializable("zxOrder");
+        baseOrder = (CharteredOrder) args.getSerializable("baseOrder");
     }
 
     @Override
@@ -61,35 +63,13 @@ public class NotStartFragment extends RxBaseFragment {
         timeCountDown = $(R.id.time_count_down);
         bottomBtn = $(R.id.bottom_btn);
 
-//        startSite.setText(zxOrder.startSite);
-//        endSite.setText(zxOrder.endSite);
-//        startOutTime.setText(TimeUtil.getTime("yyyy年MM月dd日 HH:mm", zxOrder.startOutTime) + "出发");
-//        startJierenTime.setText(TimeUtil.getTime("HH:mm", zxOrder.startJierenTime) + "开始接人");
+        startSite.setText(baseOrder.getStartSite().address);
+        endSite.setText(baseOrder.getEndSite().address);
+        book_time.setText(TimeUtil.getTime("yyyy年MM月dd日 HH:mm", baseOrder.bookTime*1000) + "出发");
         initCountDown();
 
-        onHiddenChanged(false);
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (!hidden) {
-            bridge.clearMap();
-//            LatLng startLatlng = new LatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
-//            LatLng middle = new LatLng(zxOrder.startLat, zxOrder.startLng);
-//            LatLng endLatlng = new LatLng(zxOrder.endLat, zxOrder.endLng);
-//            bridge.addMarker(startLatlng, StaticVal.MARKER_FLAG_START);
-//            bridge.addMarker(endLatlng, StaticVal.MARKER_FLAG_END);
-//            List<LatLng> latLngs = new ArrayList<>();
-//            latLngs.add(middle);
-//            bridge.routePath(startLatlng, latLngs, endLatlng);
-//            latLngs.add(startLatlng);
-//            latLngs.add(endLatlng);
-//
-//            bridge.showBounds(latLngs);
-//            bridge.changeToolbar(StaticVal.TOOLBAR_NOT_START);
-        }
-    }
 
     long jieRenTimeLeftSec;
 
@@ -98,8 +78,7 @@ public class NotStartFragment extends RxBaseFragment {
 
     private void initCountDown() {
         cancelTimer();
-//        jieRenTimeLeftSec = (zxOrder.startJierenTime - System.currentTimeMillis()) / 1000;//剩余的秒钟数
-        jieRenTimeLeftSec = 30*60;
+        jieRenTimeLeftSec = (baseOrder.bookTime*1000 - System.currentTimeMillis()) / 1000;//剩余的秒钟数
         if (jieRenTimeLeftSec < 0) {
             jieRenTimeLeftSec = 0;
         }
@@ -177,19 +156,9 @@ public class NotStartFragment extends RxBaseFragment {
         sb.append("分");
         timeCountDown.setText(sb.toString());
 
-//        if (leftSec > 0) {
-//            bottomBtn.setText("行程规划");
-//            bottomBtn.setOnClickListener(view -> bridge.toChangeSeq(StaticVal.PLAN_ACCEPT));
-//        } else {
-//            bottomBtn.setText("行程规划");
-//            bottomBtn.setOnClickListener(view -> {
-//                DymOrder dymOrder = DymOrder.findByIDType(zxOrder.orderId, zxOrder.orderType);
-//                if (null != dymOrder) {
-//                    dymOrder.orderStatus = ZXOrderStatus.ACCEPT_PLAN;
-//                    dymOrder.updateStatus();
-//                }
-//                bridge.toChangeSeq(StaticVal.PLAN_ACCEPT);
-//            });
-//        }
+        bottomBtn.setOnClickListener(view -> {
+            bridge.toStart();
+        });
+
     }
 }

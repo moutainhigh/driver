@@ -295,6 +295,13 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
 //                        centerUtil.checkingAuth(order.passengerId);
                     }
                 }
+            }else if (msg.equals("chartered")){
+                XApp.getInstance().shake();
+                XApp.getInstance().syntheticVoice("您有定制包车订单需要处理");
+
+                Intent intent = new Intent();
+                intent.setAction(Config.ORDER_REFRESH);
+                XApp.getInstance().sendBroadcast(intent);
             }
         } catch (JSONException e) {
             e.printStackTrace();

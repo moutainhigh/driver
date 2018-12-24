@@ -1,5 +1,6 @@
 package com.easymin.chartered.flowMvp;
 
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,6 +27,7 @@ import com.amap.api.navi.model.AMapNaviPath;
 import com.amap.api.navi.model.RouteOverlayOptions;
 import com.amap.api.navi.view.RouteOverLay;
 import com.amap.api.services.route.DriveRouteResult;
+import com.easymi.common.entity.Address;
 import com.easymi.common.entity.OrderCustomer;
 import com.easymi.common.receiver.CancelOrderReceiver;
 import com.easymi.component.Config;
@@ -51,10 +53,17 @@ import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MapUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
+import com.easymi.component.widget.LoadingButton;
 import com.easymi.component.widget.overlay.DrivingRouteOverlay;
 import com.easymin.chartered.R;
+import com.easymin.chartered.StaticVal;
+import com.easymin.chartered.activity.FinishActivity;
 import com.easymin.chartered.adapter.LeftWindowAdapter;
+import com.easymin.chartered.entity.CharteredOrder;
+import com.easymin.chartered.fragment.ArriveStartFragment;
+import com.easymin.chartered.fragment.ConfirmOrderFragment;
 import com.easymin.chartered.fragment.NotStartFragment;
+import com.easymin.chartered.fragment.RunningFragment;
 import com.easymin.chartered.fragment.ToStartFragment;
 import com.easymin.chartered.receiver.OrderFinishReceiver;
 import com.google.gson.Gson;
@@ -106,7 +115,7 @@ public class FlowActivity extends RxBaseActivity implements
 
     private long orderId;
 
-    private BaseOrder baseOrder;
+    private CharteredOrder baseOrder;
 
     @Override
     public boolean isEnableSwipe() {
@@ -135,25 +144,15 @@ public class FlowActivity extends RxBaseActivity implements
 
         mapView.onCreate(savedInstanceState);
         initMap();
-
-        setTestOrder();
-    }
-
-    /**
-     * 添加的测试数据
-     */
-    public void setTestOrder() {
-        baseOrder = new BaseOrder();
-        baseOrder.status = 10;
     }
 
     @Override
-    public void showOrder(BaseOrder baseOrder) {
+    public void showOrder(CharteredOrder baseOrder) {
         //初始进入界面查询订单信息
         if (null == baseOrder) {
             finish();
         } else {
-            if (baseOrder.status >= DJOrderStatus.FINISH_ORDER) {
+            if (baseOrder.status > DJOrderStatus.FINISH_ORDER) {
                 ToastUtil.showMessage(this, getResources().getString(R.string.order_finish));
                 finish();
             }
@@ -179,20 +178,6 @@ public class FlowActivity extends RxBaseActivity implements
 
     NotStartFragment notStartFragment;
 
-    /**
-     * 初始化fragment
-     */
-    @Override
-    public void initFragment() {
-        notStartFragment = new NotStartFragment();
-        Bundle orderBundle = new Bundle();
-//        orderBundle.putSerializable("zxOrder", zxOrder);
-        notStartFragment.setArguments(orderBundle);
-        notStartFragment.setBridge(bridge);
-
-
-        showFragmentByStatus();
-    }
 
     @Override
     protected void onResume() {
@@ -205,8 +190,8 @@ public class FlowActivity extends RxBaseActivity implements
         }
         mapView.onResume();
         lastLatlng = new LatLng(location.latitude, location.longitude);
-//        presenter.findOne(orderId);
-        showOrder(baseOrder);
+        presenter.findOne(orderId);
+//        showOrder(baseOrder);
     }
 
     /**
@@ -259,16 +244,6 @@ public class FlowActivity extends RxBaseActivity implements
             }
 
             @Override
-            public void addMarker(LatLng latLng, int flag) {
-                FlowActivity.this.addMarker(latLng, flag);
-            }
-
-            @Override
-            public void toOrderList() {
-                FlowActivity.this.finish();
-            }
-
-            @Override
             public void clearMap() {
                 aMap.clear();
                 smoothMoveMarker = null;
@@ -278,7 +253,7 @@ public class FlowActivity extends RxBaseActivity implements
 
             @Override
             public void routePath(LatLng toLatlng) {
-                presenter.routeLineByNavi(lastLatlng, null, toLatlng);
+                presenter.routePlanByNavi(toLatlng.latitude, toLatlng.longitude);
             }
 
             @Override
@@ -299,12 +274,44 @@ public class FlowActivity extends RxBaseActivity implements
 
             @Override
             public void navi(LatLng latLng, Long orderId) {
-//                presenter.navi(latLng, orderId);
+//                if (baseOrder.status == ZCOrderStatus.TAKE_ORDER
+//                        || baseOrder.status == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
+//                    presenter.navi(new LatLng(getStartAddr().latitude, getStartAddr().longitude),  orderId);
+//                } else if (baseOrder.status == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER
+//                        || baseOrder.status == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+//                    presenter.navi(new LatLng(getEndAddr().latitude, getEndAddr().longitude), orderId);
+//                }
+                presenter.navi(latLng, orderId);
             }
 
             @Override
             public void toNotStart() {
                 switchFragment(notStartFragment).commit();
+            }
+
+            @Override
+            public void toStart() {
+                presenter.changeStauts(baseOrder.id, DJOrderStatus.GOTO_BOOKPALCE_ORDER);
+            }
+
+            @Override
+            public void arriveStart() {
+                presenter.changeStauts(baseOrder.id, DJOrderStatus.ARRIVAL_BOOKPLACE_ORDER);
+            }
+
+            @Override
+            public void doStartDrive() {
+                presenter.changeStauts(baseOrder.id, DJOrderStatus.GOTO_DESTINATION_ORDER);
+            }
+
+            @Override
+            public void arriveDestance() {
+                presenter.changeStauts(baseOrder.id, DJOrderStatus.ARRIVAL_DESTINATION_ORDER);
+            }
+
+            @Override
+            public void toFinish(LoadingButton button) {
+                presenter.orderConfirm(baseOrder.id, baseOrder.version,button);
             }
         };
     }
@@ -338,132 +345,157 @@ public class FlowActivity extends RxBaseActivity implements
             transaction.replace(R.id.fragment_frame, fragment);
             transaction.commit();
         } else if (baseOrder.status == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER) {
-            toolbar.setTitle(R.string.status_arrive_start);
-//            ArriveStartFragment fragment = new ArriveStartFragment();
-//            Bundle bundle = new Bundle();
-//            bundle.putSerializable("zcOrder", zcOrder);
-//            fragment.setArguments(bundle);
-//            fragment.setBridge(bridge);
-//
-//            FragmentManager manager = getSupportFragmentManager();
-//            FragmentTransaction transaction = manager.beginTransaction();
-//            transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
-//            transaction.replace(R.id.fragment_frame, fragment);
-//            transaction.commit();
-        }  else if (baseOrder.status == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-//            showToEndFragment();
-//            if (isToFeeDetail) {
-//                if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
-//                    settleFragmentDialog.setDjOrder(zcOrder);
-//                } else {
-//                    settleFragmentDialog = new SettleFragmentDialog(FlowActivity.this, zcOrder, bridge);
-//                    settleFragmentDialog.show();
-//                }
-//                isToFeeDetail = false;
-//            }
+            toolbar.setTitle(R.string.wait_arrive_start);
+            ArriveStartFragment fragment = new ArriveStartFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("baseOrder", baseOrder);
+            fragment.setArguments(bundle);
+            fragment.setBridge(bridge);
+
+            FragmentManager manager = getSupportFragmentManager();
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+            transaction.replace(R.id.fragment_frame, fragment);
+            transaction.commit();
+        } else if (baseOrder.status == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+            toolbar.setTitle(R.string.status_to_end);
+            RunningFragment fragment = new RunningFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("baseOrder", baseOrder);
+            fragment.setArguments(bundle);
+            fragment.setBridge(bridge);
+
+            FragmentManager manager = getSupportFragmentManager();
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+            transaction.replace(R.id.fragment_frame, fragment);
+            transaction.commit();
+        } else if (baseOrder.status == ZCOrderStatus.ARRIVAL_DESTINATION_ORDER) {
+            toolbar.setTitle(R.string.confirm_order);
+            ConfirmOrderFragment fragment = new ConfirmOrderFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("baseOrder", baseOrder);
+            fragment.setArguments(bundle);
+            fragment.setBridge(bridge);
+
+            FragmentManager manager = getSupportFragmentManager();
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+            transaction.replace(R.id.fragment_frame, fragment);
+            transaction.commit();
         }
     }
+
+    private Marker startMarker;
+    private Marker endMarker;
 
     @Override
     public void showMapBounds() {
         List<LatLng> latLngs = new ArrayList<>();
-//        if (zcOrder.orderStatus == ZCOrderStatus.NEW_ORDER
-//                || zcOrder.orderStatus == ZCOrderStatus.PAIDAN_ORDER
-//                || zcOrder.orderStatus == ZCOrderStatus.TAKE_ORDER
-//                ) {
-//            if (null != getStartAddr()) {
-//                latLngs.add(new LatLng(getStartAddr().lat, getStartAddr().lng));
-//                presenter.routePlanByNavi(getStartAddr().lat, getStartAddr().lng);
-//            }
-//            if (null != getEndAddr()) {
-//                latLngs.add(new LatLng(getEndAddr().lat, getEndAddr().lng));
-//            }
-//            LatLngBounds bounds = MapUtil.getBounds(latLngs, lastLatlng);
-//            aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(this) / 1.5), (int) (DensityUtil.getDisplayWidth(this) / 1.5), 0));
-//        } else if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
-//            if (null != getStartAddr()) {
-//                latLngs.add(new LatLng(getStartAddr().lat, getStartAddr().lng));
-//                presenter.routePlanByNavi(getStartAddr().lat, getStartAddr().lng);
-//            } else {
-//                presenter.stopNavi();
+        if (baseOrder.status == ZCOrderStatus.NEW_ORDER
+                || baseOrder.status == ZCOrderStatus.PAIDAN_ORDER
+                || baseOrder.status == ZCOrderStatus.TAKE_ORDER
+                ) {
+            if (null != getStartAddr()) {
+                latLngs.add(new LatLng(getStartAddr().latitude, getStartAddr().longitude));
+                presenter.routePlanByNavi(getStartAddr().latitude, getStartAddr().longitude);
+            }
+            if (null != getEndAddr()) {
+                latLngs.add(new LatLng(getEndAddr().latitude, getEndAddr().longitude));
+            }
+            LatLngBounds bounds = MapUtil.getBounds(latLngs, lastLatlng);
+            aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(this) / 1.5), (int) (DensityUtil.getDisplayWidth(this) / 1.5), 0));
+        } else if (baseOrder.status == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
+            if (null != getStartAddr()) {
+                latLngs.add(new LatLng(getStartAddr().latitude, getStartAddr().longitude));
+                presenter.routePlanByNavi(getStartAddr().latitude, getStartAddr().longitude);
+            } else {
+                presenter.stopNavi();
 //                leftTimeText.setText("");
-//            }
-//            LatLngBounds bounds = MapUtil.getBounds(latLngs, lastLatlng);
-//            aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(this) / 1.5), (int) (DensityUtil.getDisplayWidth(this) / 1.5), 0));
-//        } else if (zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER
-//                || zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER
-//                || zcOrder.orderStatus == ZCOrderStatus.START_WAIT_ORDER
-//                || zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_DESTINATION_ORDER
-//                ) {
-//            if (null != getEndAddr()) {
-//                latLngs.add(new LatLng(getEndAddr().lat, getEndAddr().lng));
-//                presenter.routePlanByNavi(getEndAddr().lat, getEndAddr().lng);
-//            }
-//            if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-//                aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLatlng, 19));
-//            } else {
-//                LatLngBounds bounds = MapUtil.getBounds(latLngs, lastLatlng);
-//                aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(this) / 1.5), (int) (DensityUtil.getDisplayWidth(this) / 1.5), 0));
-//            }
-//        }
-//        if (null != getStartAddr()) {
-//            if (null == startMarker) {
-//                MarkerOptions markerOption = new MarkerOptions();
-//                markerOption.position(new LatLng(getStartAddr().lat, getStartAddr().lng));
-//                markerOption.draggable(false);//设置Marker可拖动
-//                markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-//                        .decodeResource(getResources(), R.mipmap.ic_start)));
-//                // 将Marker设置为贴地显示，可以双指下拉地图查看效果
-//                markerOption.setFlat(true);//设置marker平贴地图效果
-//                startMarker = aMap.addMarker(markerOption);
-//            } else {
-//                startMarker.setPosition(new LatLng(getStartAddr().lat, getStartAddr().lng));
-//            }
-//        }
-//        if (null != getEndAddr()) {
-//            if (null == endMarker) {
-//                MarkerOptions markerOption = new MarkerOptions();
-//                markerOption.position(new LatLng(getEndAddr().lat, getEndAddr().lng));
-//                markerOption.draggable(false);//设置Marker可拖动
-//                markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-//                        .decodeResource(getResources(), R.mipmap.ic_end)));
-//                // 将Marker设置为贴地显示，可以双指下拉地图查看效果
-//                markerOption.setFlat(true);//设置marker平贴地图效果
-//                endMarker = aMap.addMarker(markerOption);
-//            } else {
-//                endMarker.setPosition(new LatLng(getEndAddr().lat, getEndAddr().lng));
-//            }
-//        }
-    }
-
-
-    /**
-     * 添加起终种类的marker
-     *
-     * @param latLng
-     * @param flag
-     */
-    @Override
-    public void addMarker(LatLng latLng, int flag) {
-        MarkerOptions markerOption = new MarkerOptions();
-        markerOption.position(latLng);
-        markerOption.draggable(false);//设置Marker可拖动
-//        if (flag == StaticVal.MARKER_FLAG_START) {
-//            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-//                    .decodeResource(getResources(), R.mipmap.ic_start)));
-//        } else if (flag == StaticVal.MARKER_FLAG_END) {
-//            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-//                    .decodeResource(getResources(), R.mipmap.ic_end)));
-//        }
-        // 将Marker设置为贴地显示，可以双指下拉地图查看效果
-        markerOption.setFlat(true);//设置marker平贴地图效果
-        aMap.addMarker(markerOption);
-
+            }
+            LatLngBounds bounds = MapUtil.getBounds(latLngs, lastLatlng);
+            aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(this) / 1.5), (int) (DensityUtil.getDisplayWidth(this) / 1.5), 0));
+        } else if (baseOrder.status == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER
+                || baseOrder.status == ZCOrderStatus.GOTO_DESTINATION_ORDER
+                || baseOrder.status == ZCOrderStatus.START_WAIT_ORDER
+                || baseOrder.status == ZCOrderStatus.ARRIVAL_DESTINATION_ORDER
+                ) {
+            if (null != getEndAddr()) {
+                latLngs.add(new LatLng(getEndAddr().latitude, getEndAddr().longitude));
+                presenter.routePlanByNavi(getEndAddr().latitude, getEndAddr().longitude);
+            }
+            if (baseOrder.status == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+                aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLatlng, 19));
+            } else {
+                LatLngBounds bounds = MapUtil.getBounds(latLngs, lastLatlng);
+                aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(this) / 1.5), (int) (DensityUtil.getDisplayWidth(this) / 1.5), 0));
+            }
+        }
+        if (null != getStartAddr()) {
+            if (null == startMarker) {
+                MarkerOptions markerOption = new MarkerOptions();
+                markerOption.position(new LatLng(getStartAddr().latitude, getStartAddr().longitude));
+                markerOption.draggable(false);//设置Marker可拖动
+                markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                        .decodeResource(getResources(), R.mipmap.ic_start)));
+                // 将Marker设置为贴地显示，可以双指下拉地图查看效果
+                markerOption.setFlat(true);//设置marker平贴地图效果
+                startMarker = aMap.addMarker(markerOption);
+            } else {
+                startMarker.setPosition(new LatLng(getStartAddr().latitude, getStartAddr().longitude));
+            }
+        }
+        if (null != getEndAddr()) {
+            if (null == endMarker) {
+                MarkerOptions markerOption = new MarkerOptions();
+                markerOption.position(new LatLng(getEndAddr().latitude, getEndAddr().longitude));
+                markerOption.draggable(false);//设置Marker可拖动
+                markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                        .decodeResource(getResources(), R.mipmap.ic_end)));
+                // 将Marker设置为贴地显示，可以双指下拉地图查看效果
+                markerOption.setFlat(true);//设置marker平贴地图效果
+                endMarker = aMap.addMarker(markerOption);
+            } else {
+                endMarker.setPosition(new LatLng(getEndAddr().latitude, getEndAddr().longitude));
+            }
+        }
     }
 
     @Override
-    public void addMarker(LatLng latLng, int flag, int num) {
+    public void toFinish() {
+        DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.CHARTERED);
+        if (null != dymOrder) {
+            dymOrder.delete();
+        }
+        Intent intent = new Intent(FlowActivity.this, FinishActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
+    private Address getStartAddr() {
+        Address startAddress = null;
+        if (baseOrder != null && baseOrder.orderAddressVos != null && baseOrder.orderAddressVos.size() != 0) {
+            for (Address address : baseOrder.orderAddressVos) {
+                if (address.type == 1) {
+                    startAddress = address;
+                    break;
+                }
+            }
+        }
+        return startAddress;
+    }
+
+    private Address getEndAddr() {
+        Address endAddr = null;
+        if (baseOrder != null && baseOrder.orderAddressVos != null && baseOrder.orderAddressVos.size() != 0) {
+            for (Address address : baseOrder.orderAddressVos) {
+                if (address.type == 3) {
+                    endAddr = address;
+                    break;
+                }
+            }
+        }
+        return endAddr;
     }
 
     /**
@@ -483,19 +515,19 @@ public class FlowActivity extends RxBaseActivity implements
             builder.include(latLng);
         }
         LatLngBounds bounds = builder.build();
-//        if (currentFragment instanceof ChangeSeqFragment) {
-//            int left = DensityUtil.dp2px(this, 10);
-//            int bottom = DensityUtil.dp2px(this, 260);
-//            int top = DensityUtil.dp2px(this, 45);
-//            aMap.animateCamera(CameraUpdateFactory.newLatLngBoundsRect(bounds, left, left, top, bottom));
-//        } else {
-//
-//            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(
-//                    bounds,
-//                    (int) (DensityUtil.getDisplayWidth(this) / 1.5),
-//                    (int) (DensityUtil.getDisplayWidth(this) / 2),
-//                    0));
-//        }
+        if (currentFragment instanceof ArriveStartFragment) {
+            int left = DensityUtil.dp2px(this, 10);
+            int bottom = DensityUtil.dp2px(this, 260);
+            int top = DensityUtil.dp2px(this, 45);
+            aMap.animateCamera(CameraUpdateFactory.newLatLngBoundsRect(bounds, left, left, top, bottom));
+        } else {
+
+            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(
+                    bounds,
+                    (int) (DensityUtil.getDisplayWidth(this) / 1.5),
+                    (int) (DensityUtil.getDisplayWidth(this) / 2),
+                    0));
+        }
 
 
         latLngs.remove(lastLatlng);//后续可能会使用这个latLngs 所以移除加入的上次位置
@@ -570,7 +602,6 @@ public class FlowActivity extends RxBaseActivity implements
 
     @Override
     public void showLeft(int dis, int time) {
-//        acceptSendFragment.showLeft(dis);
         int km = dis / 1000;
         if (km > 1) {
             String disKm = new DecimalFormat("#0.0").format((double) dis / 1000);
@@ -611,27 +642,18 @@ public class FlowActivity extends RxBaseActivity implements
             marker.setTitle(leftTime);//leftTime
             marker.showInfoWindow();
         }
+
+        if ( dis < 200) { //小于200米)
+            if (baseOrder.status == DJOrderStatus.GOTO_BOOKPALCE_ORDER){
+                XApp.getInstance().syntheticVoice("距离上车点还有" + dis + "米");
+                XApp.getInstance().shake();
+            }else if (baseOrder.status == DJOrderStatus.GOTO_DESTINATION_ORDER){
+                XApp.getInstance().syntheticVoice("距离下车点还有" + dis + "米");
+                XApp.getInstance().shake();
+            }
+        }
     }
 
-
-    @Override
-    public void showFragmentByStatus() {
-//        DymOrder dymOrder = DymOrder.findByIDType(zxOrder.orderId, zxOrder.orderType);
-//        if (null != dymOrder) {
-//            if (dymOrder.orderStatus <= ZXOrderStatus.WAIT_START) {
-        bridge.toNotStart();
-//            } else if (dymOrder.orderStatus == ZXOrderStatus.ACCEPT_PLAN) {
-//                bridge.toChangeSeq(StaticVal.PLAN_ACCEPT);
-//            } else if (dymOrder.orderStatus == ZXOrderStatus.SEND_PLAN) {
-//                bridge.toChangeSeq(StaticVal.PLAN_SEND);
-//            } else if (dymOrder.orderStatus == ZXOrderStatus.ACCEPT_ING
-//                    || dymOrder.orderStatus == ZXOrderStatus.SEND_ING) {
-//                bridge.toAcSend();
-//            } else if (dymOrder.orderStatus == ZXOrderStatus.SEND_OVER) {
-//
-//            }
-//        }
-    }
 
     @Override
     protected void onStart() {
