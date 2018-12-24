@@ -111,7 +111,8 @@ public class BuildPushUtil {
 
                 if (dymOrder.orderType.equals(Config.DAIJIA)) {
 
-                } else if (dymOrder.orderType.equals(Config.ZHUANCHE) || dymOrder.orderType.equals(Config.TAXI)) {
+                } else if (dymOrder.orderType.equals(Config.ZHUANCHE)
+                        || dymOrder.orderType.equals(Config.TAXI)) {
 
                     dataOrder.status = dymOrder.orderStatus;
 
@@ -125,8 +126,6 @@ public class BuildPushUtil {
                 }
             }
         }
-//            }
-//        }
 
         pushData.location.orderInfo = orderList;
 

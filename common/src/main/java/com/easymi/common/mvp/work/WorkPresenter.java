@@ -123,7 +123,9 @@ public class WorkPresenter implements WorkContract.Presenter {
                         for (MultipleOrder order : emResult.data) {
                             DymOrder dymOrder = null;
                             //校验本地订单与服务器订单
-                            if (TextUtils.equals(order.serviceType, Config.ZHUANCHE) || TextUtils.equals(order.serviceType, Config.TAXI)) {
+                            if (TextUtils.equals(order.serviceType, Config.ZHUANCHE)
+                                    || TextUtils.equals(order.serviceType, Config.TAXI)
+                                    || TextUtils.equals(order.serviceType, Config.CHARTERED)) {
                                 if (DymOrder.exists(order.orderId, order.serviceType)) {
                                     //非专线 本地有
                                     dymOrder = DymOrder.findByIDType(order.orderId, order.serviceType);
