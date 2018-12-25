@@ -1,33 +1,28 @@
-//package com.easymin.passengerbus.flowMvp;
-//
-//import com.amap.api.maps.model.LatLng;
-//import com.amap.api.navi.model.AMapNaviPath;
-//import com.amap.api.services.route.DriveRouteResult;
-//import com.easymi.common.entity.OrderCustomer;
-//import com.easymi.component.result.EmResult2;
-//import com.easymi.component.rxmvp.RxManager;
-//
-//import java.util.List;
-//
-//import rx.Observable;
-//
-///**
-// * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
-// * FileName: FlowContract
-// * Author: shine
-// * Date: 2018/12/18 下午1:55
-// * Description:
-// * History:
-// */
-//public interface FlowContract {
-//
-//    interface View {
-//        void initFragment();
-//
-//        void initMap();
-//
-//        void initBridget();
-//
+package com.easymin.passengerbus.flowMvp;
+
+import com.easymi.component.result.EmResult2;
+import com.easymi.component.rxmvp.RxManager;
+import com.easymin.passengerbus.entity.BusStationResult;
+
+import rx.Observable;
+
+/**
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FlowContract
+ * Author: shine
+ * Date: 2018/12/18 下午1:55
+ * Description:
+ * History:
+ */
+public interface FlowContract {
+
+    interface View {
+        void initFragment();
+
+        void initMap();
+
+        void initBridget();
+
 //        void addMarker(LatLng latLng, int flag);
 //
 //        void addMarker(LatLng latLng, int flag, int num);
@@ -52,18 +47,19 @@
 //
 //        void jumpSendSuc(OrderCustomer orderCustomer);
 //
-//        void showFragmentByStatus();
+        void showFragmentByStatus();
 //
-//        void changeToolbar(int flag);
+        void changeToolbar(int flag);
 //
 //        void startOutSuc();
 //        void startSendSuc();
 //        void finishTaskSuc();
-//
-//        RxManager getManager();
-//    }
-//
-//    interface Presenter {
+
+        void showBusLineInfo(BusStationResult busStationResult);
+        RxManager getManager();
+    }
+
+    interface Presenter {
 //        void routeLineByNavi(LatLng start, List<LatLng> latLngs, LatLng end);
 //
 //        void routePlanByRouteSearch(LatLng start, List<LatLng> latLngs, LatLng end);
@@ -89,10 +85,12 @@
 //        void startSend(long orderId);
 //
 //        void finishTask(long orderId);
-//    }
-//
-//    interface Model {
-//        Observable<EmResult2<List<ZXOrder>>> getZxOrderList();
+
+        void findBusOrderById(long id);
+    }
+
+    interface Model {
+//        Observable<EmResult2<List<BCOrder>>> getZxOrderList();
 //
 //        Observable<Object> startSend(long orderId);
 //
@@ -107,5 +105,7 @@
 //        Observable<Object> sendCustomer(long id);
 //
 //        Observable<EmResult2<List<OrderCustomer>>> geOrderCustomers(long orderId);
-//    }
-//}
+
+        Observable<EmResult2<BusStationResult>> findBusOrderById(long id);
+    }
+}

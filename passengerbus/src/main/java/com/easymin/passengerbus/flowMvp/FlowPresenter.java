@@ -1,3 +1,18 @@
+package com.easymin.passengerbus.flowMvp;
+
+import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
+
+import com.amap.api.navi.AMapNaviListener;
+import com.easymi.component.network.ErrCode;
+import com.easymi.component.network.HaveErrSubscriberListener;
+import com.easymi.component.network.MySubscriber;
+import com.easymi.component.result.EmResult2;
+import com.easymi.component.utils.ToastUtil;
+import com.easymin.passengerbus.entity.BusStationResult;
+import com.easymin.passengerbus.flowMvp.FlowContract;
+
 //package com.easymin.passengerbus.flowMvp;
 //
 //import android.content.Context;
@@ -53,21 +68,40 @@
 // * Description:
 // * History:
 // */
-//public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
-//
-//    private Context context;
-//    private FlowContract.View view;
-//    private FlowContract.Model model;
-//
-//    AMapNavi mAMapNavi;
-//
+public class FlowPresenter implements FlowContract.Presenter {
+
+
+    private Context context;
+    private FlowContract.View view;
+    private FlowContract.Model model;
+
 //    private long driverId = 43;
-//
-//    public FlowPresenter(Context context, FlowContract.View view) {
-//        this.context = context;
-//        this.view = view;
-//        model = new FlowModel(context);
-//    }
+
+    public FlowPresenter(Context context, FlowContract.View view) {
+        this.context = context;
+        this.view = view;
+        model = new FlowModel(context);
+    }
+
+    @Override
+    public void findBusOrderById(long id) {
+        view.getManager().add(model.findBusOrderById(id).subscribe(new MySubscriber<>(context,
+                true,
+                true,
+                new HaveErrSubscriberListener<EmResult2<BusStationResult>>() {
+
+                    @Override
+                    public void onNext(EmResult2<BusStationResult> result) {
+                        view.showBusLineInfo(result.getData());
+                    }
+
+                    @Override
+                    public void onError(int code) {
+                        ToastUtil.showMessage(context, "获取班车路线失败！");
+                    }
+                })));
+    }
+
 //
 //    @Override
 //    public void navi(LatLng latLng, Long orderId) {
@@ -471,4 +505,4 @@
 //    public void updateIntervalCameraInfo(AMapNaviCameraInfo info1, AMapNaviCameraInfo info2, int i) {
 //
 //    }
-//}
+}

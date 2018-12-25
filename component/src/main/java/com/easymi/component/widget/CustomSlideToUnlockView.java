@@ -24,6 +24,8 @@ import com.github.florent37.viewanimator.AnimationListener;
 import com.github.florent37.viewanimator.ViewAnimator;
 import com.nineoldandroids.view.ViewHelper;
 
+import java.io.Serializable;
+
 /**
  * CustomSlideToUnlockView
  * 责任人:  Chuck
@@ -116,6 +118,19 @@ public class CustomSlideToUnlockView extends RelativeLayout {
         tv_hint.setText(TextUtils.isEmpty(textHint) ? mContext.getString(R.string.slide_arrive) : textHint);
     }
 
+
+
+    public String setHint2(String hint){
+        this.textHint = hint;
+        MarginLayoutParams tvParams = (MarginLayoutParams) tv_hint.getLayoutParams();
+        tvParams.setMargins(0, 0, slideImageViewWidth, 0);//textview的marginRight设置为和滑块的宽度一致
+        tv_hint.setLayoutParams(tvParams);
+        tv_hint.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+        tv_hint.setTextColor(textColorResId);
+        tv_hint.setText(TextUtils.isEmpty(textHint) ? mContext.getString(R.string.slide_arrive) : textHint);
+
+        return hint;
+    }
 
     private int mActionDownX, mLastX, mSlidedDistance;
 

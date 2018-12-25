@@ -58,7 +58,10 @@ public class IndexActivity extends RxBaseActivity {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
-        ARouter.getInstance().build("/chartered/FlowActivity").navigation();
+//        Intent intent= new Intent();
+//        intent.setClassName(this,"com.easymin.passengerbus.flowMvp.BcFlowActivity");
+//        startActivity(intent);
+//        ARouter.getInstance().build("/passengerbus/BcFlowActivity").navigation();
 
 //        Observable<EmResult2<List<ZXOrder>>> observable = ApiManager.getInstance().createApi(Config.HOST, CLService.class)
 //                .queryDriverSchedule()

@@ -2,6 +2,7 @@ package com.easymin.passengerbus.flowMvp;
 
 import com.amap.api.maps.model.LatLng;
 import com.easymi.common.entity.OrderCustomer;
+import com.easymin.passengerbus.entity.BusStationResult;
 
 import java.util.List;
 
@@ -16,16 +17,8 @@ import java.util.List;
 public interface ActFraCommBridge {
 
 
-    void showBounds(List<LatLng> latLngs);
 
-    void addMarker(LatLng latLng, int flag);
 
-    void addMarker(LatLng latLng, int flag, int num);
-
-    void toCusList(int flag);
-    void toNotStart();
-    void toAcSend();
-    void toChangeSeq(int flag);
     void toFinished();
     void toOrderList();
 
@@ -36,8 +29,6 @@ public interface ActFraCommBridge {
     void routePath(LatLng toLatlng);
 
     void routePath(LatLng startLatlng, List<LatLng> passLatlngs, LatLng endLatlng);
-
-    void startOutSet();
 
     void arriveStart(OrderCustomer orderCustomer);
 
@@ -53,5 +44,9 @@ public interface ActFraCommBridge {
 
     void countStartOver();
 
-    void navi(LatLng latLng, Long orderId);
+    /**
+     * 滑动到达下一站
+     */
+    void slideToNext();
+
 }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:paddingTop="23dp">
+
+
+        <TextView
+            android:id="@+id/tv_line_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="起点站：五口村站"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            />
+        <TextView
+            android:id="@+id/tv_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="请按照线路规划行驶"
+            android:textColor="#999999"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="24dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            />
+
+        <TextView
+            android:id="@+id/tv_start"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="点击开始行程"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:background="@color/blue"
+            android:gravity="center"
+            />
+    </LinearLayout>
+
+
+</LinearLayout>
