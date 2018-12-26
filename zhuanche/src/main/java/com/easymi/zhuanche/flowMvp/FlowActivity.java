@@ -30,9 +30,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
+import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
@@ -140,6 +145,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         CancelOrderReceiver.OnCancelListener,
         AMap.OnMapTouchListener,
         OrderFinishReceiver.OnFinishListener
+//        , LocationSource, AMapLocationListener
 {
     public static final int CANCEL_ORDER = 0X01;
     public static final int CHANGE_END = 0X02;
@@ -565,6 +571,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
     }
 
+
     @Override
     public void initMap() {
         aMap = mapView.getMap();
@@ -576,7 +583,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         aMap.setOnMapTouchListener(this);
 
-//        aMap.getUiSettings().setMyLocationButtonEnabled(true);
+        aMap.getUiSettings().setMyLocationButtonEnabled(true);
         // 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false
         aMap.setMyLocationEnabled(true);
 
@@ -603,8 +610,73 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                     .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
             aMap.setMyLocationStyle(myLocationStyle);
+
         }
     }
+//
+//    //声明AMapLocationClient类对象，定位发起端
+//    private AMapLocationClient mLocationClient = null;
+//    //声明mLocationOption对象，定位参数
+//    public AMapLocationClientOption mLocationOption = null;
+//    //声明mListener对象，定位监听器
+//    private LocationSource.OnLocationChangedListener mListener = null;
+//
+//    private void location() {
+//        //初始化定位
+//        mLocationClient = new AMapLocationClient(getApplicationContext());
+//        //设置定位回调监听
+//        mLocationClient.setLocationListener(this);
+//        //初始化定位参数
+//        mLocationOption = new AMapLocationClientOption();
+//        //设置定位模式为Hight_Accuracy高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
+//        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+//        //设置是否返回地址信息（默认返回地址信息）
+//        mLocationOption.setNeedAddress(true);
+//        //设置是否只定位一次,默认为false
+//        mLocationOption.setOnceLocation(false);
+//        //设置是否强制刷新WIFI，默认为强制刷新
+//        mLocationOption.setWifiActiveScan(true);
+//        //设置是否允许模拟位置,默认为false，不允许模拟位置  true方法开启允许位置模拟
+//        mLocationOption.setMockEnable(true);
+//        //设置定位间隔,单位毫秒,默认为2000ms
+//        mLocationOption.setInterval(2000);
+//        //给定位客户端对象设置定位参数
+//        mLocationClient.setLocationOption(mLocationOption);
+//        //启动定位
+//        mLocationClient.startLocation();
+//    }
+//
+//    //标识，用于判断是否只显示一次定位信息和用户重新定位
+//    private boolean isFirstLoc = true;
+//
+//    @Override
+//    public void onLocationChanged(AMapLocation aMapLocation) {
+//        // 如果不设置标志位，此时再拖动地图时，它会不断将地图移动到当前的位置
+//        if (isFirstLoc) {
+////            //设置缩放级别
+////            aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
+////            //将地图移动到定位点
+////            aMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude())));
+//            //点击定位按钮 能够将地图的中心移动到定位点
+//            mListener.onLocationChanged(aMapLocation);
+//            //添加图钉
+////            MarkerOptions markerOption = new MarkerOptions();
+////            markerOption.position(new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude()));
+////            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+////                    .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
+////            aMap.addMarker(markerOption);
+//        }
+//    }
+//
+//    @Override
+//    public void activate(OnLocationChangedListener onLocationChangedListener) {
+//        mListener = onLocationChangedListener;
+//    }
+//
+//    @Override
+//    public void deactivate() {
+//        mListener = null;
+//    }
 
     private Marker startMarker;
     private Marker endMarker;
@@ -749,11 +821,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         drivingRouteOverlay.addToMap();
         drivingRouteOverlay.zoomToSpan();
         List<LatLng> latLngs = new ArrayList<>();
-//        latLngs.add(new LatLng(result.getStartPos().getLatitude(), result.getStartPos().getLongitude()));
-
+        latLngs.add(new LatLng(result.getStartPos().getLatitude(), result.getStartPos().getLongitude()));
+        latLngs.add(new LatLng(result.getTargetPos().getLatitude(), result.getTargetPos().getLongitude()));
         EmLoc lastLoc = EmUtil.getLastLoc();
         latLngs.add(new LatLng(lastLoc.latitude, lastLoc.latitude));
-        latLngs.add(new LatLng(result.getTargetPos().getLatitude(), result.getTargetPos().getLongitude()));
 
 //        latLngs.add(new LatLng(lastLoc.latitude, lastLoc.longitude));
         LatLngBounds bounds = MapUtil.getBounds(latLngs);
@@ -997,12 +1068,19 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
     }
 
-//    boolean isRecalc = false;
-
     @Override
     public void showReCal() {
-//        isRecalc = true;
-        presenter.routePlanByNavi(getEndAddr().lat, getEndAddr().lng);
+        if (zcOrder != null) {
+            if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+                if (null != getEndAddr()) {
+                    presenter.routePlanByNavi(getEndAddr().lat, getEndAddr().lng);
+                }
+            } else if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
+                if (null != getEndAddr()) {
+                    presenter.routePlanByNavi(getStartAddr().lat, getStartAddr().lng);
+                }
+            }
+        }
     }
 
     private Address getStartAddr() {
@@ -1295,6 +1373,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         mAlbumOrientationEventListener.disable();
         mapView.onDestroy();
         presenter.stopNavi();
+//        //add
+//        mLocationClient.stopLocation();//停止定位
+//        mLocationClient.onDestroy();//销毁定位客户端。
+
         super.onDestroy();
     }
 
@@ -1518,6 +1600,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     public boolean isEnableSwipe() {
         return false;
     }
+
 
     private class AlbumOrientationEventListener extends OrientationEventListener {
         private int mOrientation;

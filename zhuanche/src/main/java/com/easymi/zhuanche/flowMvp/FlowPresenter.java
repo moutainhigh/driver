@@ -508,7 +508,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     public void onReCalculateRouteForYaw() {
         Log.e("FlowerPresenter", "onReCalculateRouteForYaw()");
         view.showReCal();
-//        XApp.getInstance().syntheticVoice("您已偏航，已为您重新规划路径");
+        XApp.getInstance().syntheticVoice("您已偏航，已为您重新规划路径");
     }
 
     /**

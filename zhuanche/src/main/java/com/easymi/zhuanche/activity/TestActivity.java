@@ -1,203 +1,227 @@
 package com.easymi.zhuanche.activity;
 
-import android.graphics.BitmapFactory;
-import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
+import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.MarkerOptions;
-import com.amap.api.maps.model.MyLocationStyle;
-import com.amap.api.navi.AMapNavi;
-import com.amap.api.navi.AMapNaviListener;
-import com.amap.api.navi.AMapNaviView;
-import com.amap.api.navi.AMapNaviViewListener;
-import com.amap.api.navi.model.AMapLaneInfo;
-import com.amap.api.navi.model.AMapModelCross;
-import com.amap.api.navi.model.AMapNaviCameraInfo;
-import com.amap.api.navi.model.AMapNaviCross;
-import com.amap.api.navi.model.AMapNaviInfo;
-import com.amap.api.navi.model.AMapNaviLocation;
-import com.amap.api.navi.model.AMapNaviTrafficFacilityInfo;
-import com.amap.api.navi.model.AMapServiceAreaInfo;
-import com.amap.api.navi.model.AimLessModeCongestionInfo;
-import com.amap.api.navi.model.AimLessModeStat;
-import com.amap.api.navi.model.NaviInfo;
-import com.amap.api.navi.model.NaviLatLng;
-import com.autonavi.tbt.TrafficFacilityInfo;
-import com.easymi.component.Config;
-import com.easymi.component.app.XApp;
-import com.easymi.component.base.RxBaseActivity;
-import com.easymi.component.entity.EmLoc;
-import com.easymi.component.loc.LocObserver;
-import com.easymi.component.loc.LocReceiver;
-import com.easymi.component.utils.ToastUtil;
 import com.easymi.zhuanche.R;
-import com.google.gson.Gson;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Route(path = "/zhuanche/TestActivity")
-public class TestActivity extends RxBaseActivity implements LocObserver ,AMap.OnMyLocationChangeListener {
-
-//    AMapNaviView mAMapNaviView;
-
-    MapView map_view;
-
+public class TestActivity extends AppCompatActivity implements LocationSource, AMapLocationListener,OnCheckedChangeListener{
+    private MapView mapView;
+    //AMap是地图对象
     private AMap aMap;
-    protected AMapNavi mAMapNavi;
-
-    protected NaviLatLng mEndLatlng;
-    protected NaviLatLng mStartLatlng;
-
-    protected final List<NaviLatLng> sList = new ArrayList<>();
-    protected final List<NaviLatLng> eList = new ArrayList<>();
-
+    //声明AMapLocationClient类对象，定位发起端
+    private AMapLocationClient mLocationClient = null;
+    //声明mLocationOption对象，定位参数
+    public AMapLocationClientOption mLocationOption = null;
+    //声明mListener对象，定位监听器
+    private LocationSource.OnLocationChangedListener mListener = null;
     //标识，用于判断是否只显示一次定位信息和用户重新定位
     private boolean isFirstLoc = true;
+    private Bundle savedInstanceState;
 
-    private LatLng lastLatlng;
-
+    private RadioGroup mGPSModeGroup;
+    private TextView mLocationErrText;
     @Override
-    public boolean isEnableSwipe() {
-        return false;
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);// 不显示程序的标题栏
+        setContentView(R.layout.activity_test);
+
+        //初始化控件
+        initView();
+    }
+    /**
+     * 获取控件
+     */
+    private void initView() {
+        mapView= (MapView) findViewById(R.id.map);
+        //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，实现地图生命周期管理
+        mapView.onCreate(savedInstanceState);
+        if (aMap == null) {
+            aMap = mapView.getMap();
+            //设置显示定位按钮 并且可以点击
+            UiSettings settings = aMap.getUiSettings();
+            aMap.setLocationSource(this);//设置了定位的监听
+            // 是否显示定位按钮
+            settings.setMyLocationButtonEnabled(true);
+            aMap.setMyLocationEnabled(true);//显示定位层并且可以触发定位,默认是flase
+        }
+
+        //找控件
+        mGPSModeGroup = (RadioGroup) findViewById(R.id.gps_radio_group);
+        mGPSModeGroup.setOnCheckedChangeListener(this);
+        mLocationErrText = (TextView)findViewById(R.id.location_errInfo_text);
+        mLocationErrText.setVisibility(View.GONE);
+
+        //开始定位
+        location();
+    }
+
+
+    private void location() {
+        //初始化定位
+        mLocationClient = new AMapLocationClient(getApplicationContext());
+        //设置定位回调监听
+        mLocationClient.setLocationListener(this);
+        //初始化定位参数
+        mLocationOption = new AMapLocationClientOption();
+        //设置定位模式为Hight_Accuracy高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+        //设置是否返回地址信息（默认返回地址信息）
+        mLocationOption.setNeedAddress(true);
+        //设置是否只定位一次,默认为false
+        mLocationOption.setOnceLocation(false);
+        //设置是否强制刷新WIFI，默认为强制刷新
+        mLocationOption.setWifiActiveScan(true);
+        //设置是否允许模拟位置,默认为false，不允许模拟位置  true方法开启允许位置模拟
+        mLocationOption.setMockEnable(true);
+        //设置定位间隔,单位毫秒,默认为2000ms
+        mLocationOption.setInterval(2000);
+        //给定位客户端对象设置定位参数
+        mLocationClient.setLocationOption(mLocationOption);
+        //启动定位
+        mLocationClient.startLocation();
     }
 
     @Override
-    public int getLayoutId() {
-        return R.layout.activity_test;
+    public void activate(OnLocationChangedListener onLocationChangedListener) {
+        mListener = onLocationChangedListener;
     }
 
     @Override
-    public void initViews(Bundle savedInstanceState) {
-//        mAMapNaviView = findViewById(R.id.navi_view);
-//        mAMapNaviView = findViewById(com.easymi.component.R.id.navi_view);
-//        mAMapNaviView.onCreate(savedInstanceState);
-//        mAMapNaviView.setAMapNaviViewListener(this);
-
-        map_view = findViewById(R.id.map_view);
-        map_view.onCreate(savedInstanceState);
-
-        mAMapNavi = AMapNavi.getInstance(this);
-//        mAMapNavi.addAMapNaviListener(this);
-        mAMapNavi.setUseInnerVoice(true);
-
-        mStartLatlng = new NaviLatLng(30.875611,103.675388);
-        mEndLatlng = new NaviLatLng(30.875634,103.675312);
-
-        sList.add(mStartLatlng);
-        eList.add(mEndLatlng);
-
-        initMap();
+    public void deactivate() {
+        mListener = null;
     }
 
-
-    public void initMap() {
-        aMap = map_view.getMap();
-        aMap.getUiSettings().setZoomControlsEnabled(false);
-        aMap.getUiSettings().setRotateGesturesEnabled(false);
-        aMap.getUiSettings().setRotateGesturesEnabled(false);
-        aMap.getUiSettings().setTiltGesturesEnabled(false);//倾斜手势
-        aMap.getUiSettings().setLogoBottomMargin(-50);//隐藏logo
-
-//        aMap.setOnMyLocationChangeListener(this);
-
-        aMap.getUiSettings().setMyLocationButtonEnabled(true);
-        // 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false
-        aMap.setMyLocationEnabled(true);
-        aMap.setOnMyLocationChangeListener(this);
-
-        String locStr = XApp.getMyPreferences().getString(Config.SP_LAST_LOC, "");
-        EmLoc emLoc = new Gson().fromJson(locStr, EmLoc.class);
-//        if (null != emLoc) {
-            lastLatlng = new LatLng(emLoc.latitude, emLoc.longitude);
-            receiveLoc(emLoc);//手动调用上次位置 减少从北京跳过来的时间
-//            aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLatlng, 17));//移动镜头，首次镜头快速跳到指定位置
-//
-//            MarkerOptions markerOption = new MarkerOptions();
-//            markerOption.position(new LatLng(emLoc.latitude, emLoc.longitude));
-//            markerOption.draggable(false);//设置Marker可拖动
-//            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-//                    .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
-//            // 将Marker设置为贴地显示，可以双指下拉地图查看效果
-//            markerOption.setFlat(true);//设置marker平贴地图效果
-//            myFirstMarker = aMap.addMarker(markerOption);
-
-        MyLocationStyle myLocationStyle = new MyLocationStyle();
-        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);
-        myLocationStyle.strokeWidth(0);
-        myLocationStyle.strokeColor(R.color.white);
-        myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
-        aMap.setMyLocationStyle(myLocationStyle);
-
-
-//        }
-    }
-
+    /**
+     * 定位成功后回调函数
+     */
     @Override
-    protected void onStart() {
-        super.onStart();
-        LocReceiver.getInstance().addObserver(this);//添加位置订阅
-    }
+    public void onLocationChanged(AMapLocation aMapLocation) {
+        if (aMapLocation != null) {
+            if (aMapLocation.getErrorCode() == 0) {
+                //定位成功回调信息，设置相关消息
+                aMapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见官方定位类型表
+                aMapLocation.getLatitude();//获取纬度
+                aMapLocation.getLongitude();//获取经度
+                aMapLocation.getAccuracy();//获取精度信息
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date date = new Date(aMapLocation.getTime());
+                df.format(date);//定位时间
+                aMapLocation.getAddress();
+                //地址，如果option中设置isNeedAddress为false，则没有此结果，网络定位结果中会有地址信息，GPS定位不返回地址信息。
+                aMapLocation.getCountry();//国家信息
+                aMapLocation.getProvince();//省信息
+                aMapLocation.getCity();//城市信息
+                aMapLocation.getDistrict();//城区信息
+                aMapLocation.getStreet();//街道信息
+                aMapLocation.getStreetNum();//街道门牌号信息
+                aMapLocation.getCityCode();//城市编码
+                aMapLocation.getAdCode();//地区编码
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        LocReceiver.getInstance().deleteObserver(this);//取消位置订阅
-    }
+                // 如果不设置标志位，此时再拖动地图时，它会不断将地图移动到当前的位置
+                if (isFirstLoc) {
+                    //设置缩放级别
+                    aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
+                    //将地图移动到定位点
+                    aMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude())));
+                    //点击定位按钮 能够将地图的中心移动到定位点
+                    mListener.onLocationChanged(aMapLocation);
+                    //添加图钉
+                    //  aMap.addMarker(getMarkerOptions(amapLocation));
+                    //获取定位信息
+                    StringBuffer buffer = new StringBuffer();
+                    buffer.append(aMapLocation.getCountry() + ""
+                            + aMapLocation.getProvince() + ""
+                            + aMapLocation.getCity() + ""
+                            + aMapLocation.getProvince() + ""
+                            + aMapLocation.getDistrict() + ""
+                            + aMapLocation.getStreet() + ""
+                            + aMapLocation.getStreetNum());
+                    Toast.makeText(getApplicationContext(), buffer.toString(), Toast.LENGTH_LONG).show();
+                    isFirstLoc = false;
+                }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        map_view.onResume();
-    }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        map_view.onPause();
-
+            } else {
+                //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
+                Log.e("AmapError", "location Error, ErrCode:"
+                        + aMapLocation.getErrorCode() + ", errInfo:"
+                        + aMapLocation.getErrorInfo());
+                Toast.makeText(getApplicationContext(), "定位失败", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        map_view.onDestroy();
+        //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
+        mapView.onDestroy();
+        mLocationClient.stopLocation();//停止定位
+        mLocationClient.onDestroy();//销毁定位客户端。
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //在activity执行onResume时执行mMapView.onResume ()，实现地图生命周期管理
+        mapView.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //在activity执行onPause时执行mMapView.onPause ()，实现地图生命周期管理
+        mapView.onPause();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //在activity执行onSaveInstanceState时执行mMapView.onSaveInstanceState (outState)，实现地图生命周期管理
+        mapView.onSaveInstanceState(outState);
     }
 
 
+    //监听事件，实现3D旋转
     @Override
-    public void receiveLoc(EmLoc loc) {
-        // 如果不设置标志位，此时再拖动地图时，它会不断将地图移动到当前的位置
-        if (isFirstLoc) {
-            //设置缩放级别
-            aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
-            //将地图移动到定位点
-            aMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(loc.latitude, loc.longitude)));
+    public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
+        if (i == R.id.gps_locate_button) {// 设置定位的类型为定位模式
+            aMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
 
-            //添加图钉
-//            MarkerOptions markerOption = new MarkerOptions();
-//            markerOption.position(new LatLng(loc.latitude, loc.longitude));
-//            markerOption.draggable(false);//设置Marker可拖动
-//            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-//                    .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
-//            // 将Marker设置为贴地显示，可以双指下拉地图查看效果
-//            markerOption.setFlat(true);//设置marker平贴地图效果
-//
-//            aMap.addMarker(markerOption);
-            isFirstLoc = false;
+        } else if (i == R.id.gps_follow_button) {// 设置定位的类型为 跟随模式
+            aMap.setMyLocationType(AMap.LOCATION_TYPE_MAP_FOLLOW);
+
+        } else if (i == R.id.gps_rotate_button) {// 设置定位的类型为根据地图面向方向旋转
+            aMap.setMyLocationType(AMap.LOCATION_TYPE_MAP_ROTATE);
+
         }
-    }
-
-
-    @Override
-    public void onMyLocationChange(Location location) {
 
     }
 }
