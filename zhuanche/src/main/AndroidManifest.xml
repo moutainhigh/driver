@@ -52,6 +52,10 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeSwipeBack" />
-
+        <activity
+            android:name=".activity.TestActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSwipeBack" />
     </application>
 </manifest>

@@ -43,6 +43,7 @@ import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
+import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.zhuanche.entity.ZCOrder;
 import com.easymi.zhuanche.result.ZCOrderResult;
@@ -174,12 +175,9 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         intent.putExtra("endLatlng", end);
         intent.putExtra("orderId", orderId);
         intent.putExtra("orderType", Config.ZHUANCHE);
-//        ZCOrder zcOrder = view.getOrder();
-//        if (zcOrder != null && (zcOrder.orderStatus < DJOrderStatus.ARRIVAL_BOOKPLACE_ORDER)) {
-//            intent.putExtra(Config.NAVI_MODE, Config.WALK_TYPE);
-//        } else {
+
         intent.putExtra(Config.NAVI_MODE, Config.DRIVE_TYPE);
-//        }
+
         stopNavi();//停止当前页面的导航，在到导航页时重新初始化导航
         context.startActivity(intent);
     }
@@ -285,6 +283,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
         startLs.add(start);
         endLs.add(end);
+//        mAMapNavi.switchParallelRoad();
         mAMapNavi.calculateDriveRoute(startLs, endLs, null, strateFlag);
     }
 
@@ -326,6 +325,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
                 RouteSearch.DRIVING_MULTI_STRATEGY_FASTEST_SHORTEST, null, null, "");
         routeSearch.calculateDriveRouteAsyn(query);
     }
+
 
     @Override
     public void updateDymOrder(ZCOrder zcOrder) {
@@ -402,9 +402,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public ZCOrderResult orderResult2ZCOrder(ZCOrderResult zcOrderResult) {
-//        zcOrderResult.order.addresses = zcOrderResult.address;
-//        zcOrderResult.data.orderFee = zcOrderResult.orderFee;
-//        zcOrderResult.order.coupon = zcOrderResult.coupon;
         return zcOrderResult;
     }
 
@@ -421,6 +418,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     @Override
     public void onLocationChange(AMapNaviLocation aMapNaviLocation) {
         Log.e("FlowerPresenter", "onLocationChange()");
+//        routePlanByNavi(aMapNaviLocation.getCoord().getLatitude(),aMapNaviLocation.getCoord().getLongitude());
     }
 
     @Override
@@ -509,6 +507,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     public void onReCalculateRouteForYaw() {
         Log.e("FlowerPresenter", "onReCalculateRouteForYaw()");
         view.showReCal();
+//        XApp.getInstance().syntheticVoice("您已偏航，已为您重新规划路径");
     }
 
     /**
@@ -516,8 +515,9 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
      */
     @Override
     public void onReCalculateRouteForTrafficJam() {
-        Log.e("FlowerPresenter", "onReCalculateRouteForTrafficJam()");
-        view.showReCal();
+//        Log.e("FlowerPresenter", "onReCalculateRouteForTrafficJam()");
+//        view.showReCal();
+//        XApp.getInstance().syntheticVoice("为躲避拥堵，正在重新规划路径");
     }
 
     @Override
@@ -527,7 +527,10 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void onGpsOpenStatus(boolean b) {
-        Log.e("FlowerPresenter", "onGpsOpenStatus()");
+        if (!b){
+            ToastUtil.showMessage(context,"请打开手机gps");
+        }
+
     }
 
     /**

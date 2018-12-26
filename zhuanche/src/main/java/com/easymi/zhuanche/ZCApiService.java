@@ -588,7 +588,7 @@ public interface ZCApiService {
 
 
     /**
-     * 根据公司id获取业务配置信息（获取专车子类型）
+     * 乘客位置请求
      *
      * @param
      * @return
