@@ -419,6 +419,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     public void onLocationChange(AMapNaviLocation aMapNaviLocation) {
         Log.e("FlowerPresenter", "onLocationChange()");
 //        routePlanByNavi(aMapNaviLocation.getCoord().getLatitude(),aMapNaviLocation.getCoord().getLongitude());
+
     }
 
     @Override
@@ -530,7 +531,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         if (!b){
             ToastUtil.showMessage(context,"请打开手机gps");
         }
-
     }
 
     /**

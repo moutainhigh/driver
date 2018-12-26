@@ -569,14 +569,14 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     public void initMap() {
         aMap = mapView.getMap();
         aMap.getUiSettings().setZoomControlsEnabled(false);
-//        aMap.getUiSettings().setRotateGesturesEnabled(false);
-//        aMap.getUiSettings().setRotateGesturesEnabled(false);
+        aMap.getUiSettings().setRotateGesturesEnabled(false);
+        aMap.getUiSettings().setRotateGesturesEnabled(false);
         aMap.getUiSettings().setTiltGesturesEnabled(false);//倾斜手势
         aMap.getUiSettings().setLogoBottomMargin(-50);//隐藏logo
 
         aMap.setOnMapTouchListener(this);
 
-        aMap.getUiSettings().setMyLocationButtonEnabled(true);
+//        aMap.getUiSettings().setMyLocationButtonEnabled(true);
         // 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false
         aMap.setMyLocationEnabled(true);
 
@@ -584,7 +584,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         EmLoc emLoc = new Gson().fromJson(locStr, EmLoc.class);
         if (null != emLoc) {
             lastLatlng = new LatLng(emLoc.latitude, emLoc.longitude);
-            receiveLoc(emLoc);//手动调用上次位置 减少从北京跳过来的时间
+//            receiveLoc(emLoc);//手动调用上次位置 减少从北京跳过来的时间
             aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLatlng, 17));//移动镜头，首次镜头快速跳到指定位置
 
 //            MarkerOptions markerOption = new MarkerOptions();
@@ -597,7 +597,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 //            myFirstMarker = aMap.addMarker(markerOption);
 
             MyLocationStyle myLocationStyle = new MyLocationStyle();
-            myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);
+            myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_MAP_ROTATE);
             myLocationStyle.strokeWidth(0);
             myLocationStyle.strokeColor(R.color.transparent);
             myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
@@ -661,7 +661,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                         .decodeResource(getResources(), R.mipmap.ic_start)));
                 // 将Marker设置为贴地显示，可以双指下拉地图查看效果
-                markerOption.setFlat(true);//设置marker平贴地图效果
+//                markerOption.setFlat(true);//设置marker平贴地图效果
                 startMarker = aMap.addMarker(markerOption);
             } else {
                 startMarker.setPosition(new LatLng(getStartAddr().lat, getStartAddr().lng));
@@ -675,7 +675,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                         .decodeResource(getResources(), R.mipmap.ic_end)));
                 // 将Marker设置为贴地显示，可以双指下拉地图查看效果
-                markerOption.setFlat(true);//设置marker平贴地图效果
+//                markerOption.setFlat(true);//设置marker平贴地图效果
                 endMarker = aMap.addMarker(markerOption);
             } else {
                 endMarker.setPosition(new LatLng(getEndAddr().lat, getEndAddr().lng));
@@ -704,12 +704,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
      */
     @Override
     public void showPath(int[] ints, AMapNaviPath path) {
-
 //        if (null != routeOverLay) {
 //            routeOverLay.removeFromMap();
 //        }
 //        aMap.moveCamera(CameraUpdateFactory.changeTilt(0));
-
 
         RouteOverLay routeOverLay = new RouteOverLay(aMap, path, this);
 
@@ -1312,7 +1310,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         unregisterReceiver(orderFinishReceiver);
     }
 
-    SmoothMoveMarker smoothMoveMarker;
+//    SmoothMoveMarker smoothMoveMarker;
 
     private LatLng lastLatlng;
 
