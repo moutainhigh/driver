@@ -8,10 +8,8 @@ import android.widget.TextView;
 import com.easymi.component.base.RxBaseFragment;
 import com.easymin.passengerbus.R;
 import com.easymin.passengerbus.entity.BusStationResult;
-import com.easymin.passengerbus.entity.ChangeTitleEvent;
-import com.easymin.passengerbus.flowMvp.ActFraCommBridge;
-
-import org.greenrobot.eventbus.EventBus;
+import com.easymin.passengerbus.flowmvp.ActFraCommBridge;
+import com.easymin.passengerbus.flowmvp.BcFlowActivity;
 
 /**
  * 开始行程
@@ -19,7 +17,6 @@ import org.greenrobot.eventbus.EventBus;
 public class BcStartFragment extends RxBaseFragment {
 
     private TextView tvLineAddress;
-    private TextView tvTip;
     private TextView tvStart;
 
     private ActFraCommBridge bridge;
@@ -44,12 +41,13 @@ public class BcStartFragment extends RxBaseFragment {
 
     @Override
     public void finishCreateView(Bundle state) {
+//        bridge.changeToolbar(BcFlowActivity.STARTRUNNING);
+
         initView();
     }
 
     private void initView() {
         tvLineAddress = $(R.id.tv_line_address);
-        tvTip = $(R.id.tv_tip);
         tvStart = $(R.id.tv_start);
 
 
@@ -60,9 +58,8 @@ public class BcStartFragment extends RxBaseFragment {
         tvStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChangeTitleEvent event = new ChangeTitleEvent();
-                event.setChange(true);
-                EventBus.getDefault().post(event);
+
+                bridge.arriveStart();
 
             }
         });

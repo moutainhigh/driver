@@ -1,15 +1,10 @@
-package com.easymin.passengerbus.flowMvp;
-
-
-import android.app.ProgressDialog;
+package com.easymin.passengerbus.flowmvp;
 import android.graphics.Color;
-import android.graphics.NinePatch;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Pair;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -23,34 +18,26 @@ import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.PolylineOptions;
-import com.amap.api.maps.utils.SpatialRelationUtil;
-import com.amap.api.maps.utils.overlay.SmoothMoveMarker;
 import com.amap.api.services.route.BusRouteResult;
 import com.amap.api.services.route.DriveRouteResult;
 import com.amap.api.services.route.RideRouteResult;
 import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
 import com.easymi.common.entity.OrderCustomer;
-import com.easymi.common.push.CountEvent;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.DensityUtil;
-import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MapUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymin.passengerbus.R;
 import com.easymin.passengerbus.entity.BusStationResult;
-import com.easymin.passengerbus.entity.ChangeTitleEvent;
+import com.easymin.passengerbus.fragment.BcEndFragment;
 import com.easymin.passengerbus.fragment.BcRuningFragment;
 import com.easymin.passengerbus.fragment.BcStartFragment;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,11 +78,20 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
     /**
      * 行程状态
      */
-    public final int STARTRUNNING = 1;
-    public final int RUNNING = 2;
-    public final int ENDRUNING = 3;
+    public static final int STARTRUNNING = 1;
+    public static final int RUNNING = 2;
+    public static final int ENDRUNING = 3;
 
     LatLng mylocation;
+
+
+    Fragment currentFragment;
+
+    BcStartFragment bcStartFragment;
+
+    BcRuningFragment bcRuningFragment;
+
+    BcEndFragment bcEndFragment;
 
     @Override
     public boolean isEnableSwipe() {
@@ -109,7 +105,6 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
 
     @Override
     public void initViews(Bundle savedInstanceState) {
-        EventBus.getDefault().register(this);
         toolbar = findViewById(R.id.cus_toolbar);
         fragmentFrame = findViewById(R.id.fragment_frame);
         tvTipLayout = findViewById(R.id.tv_tip_layout);
@@ -123,15 +118,52 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
 
     }
 
-    private void initPresnter() {
-        presenter = new FlowPresenter(this, this);
-        presenter.findBusOrderById(11);
+    public void initFragment() {
+//
+//        bcStartFragment = new BcStartFragment();
+//        Bundle bundle1 = new Bundle();
+//        bundle1.putSerializable("busLineResult", busRouteResult);
+//        bcStartFragment.setArguments(bundle1);
+//        bcStartFragment.setBridge(bridge);
+//
+//        FragmentManager manager1 = getSupportFragmentManager();
+//        FragmentTransaction transaction1 = manager1.beginTransaction();
+//        transaction1.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+//        transaction1.replace(R.id.fragment_frame, bcStartFragment);
+//        transaction1.commit();
+
+        bcRuningFragment = new BcRuningFragment();
+        Bundle bundle2 = new Bundle();
+        bundle2.putSerializable("busLineResult", busRouteResult);
+        bcRuningFragment.setArguments(bundle2);
+        bcRuningFragment.setBridge(bridge);
+
+        FragmentManager manager2 = getSupportFragmentManager();
+        FragmentTransaction transaction2 = manager2.beginTransaction();
+        transaction2.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+        transaction2.replace(R.id.fragment_frame, bcRuningFragment);
+        transaction2.commit();
+
+
+        bcEndFragment = new BcEndFragment();
+        Bundle bundle3 = new Bundle();
+        bundle3.putSerializable("busLineResult", busRouteResult);
+        bcRuningFragment.setArguments(bundle3);
+        bcRuningFragment.setBridge(bridge);
+
+        FragmentManager manager3 = getSupportFragmentManager();
+        FragmentTransaction transaction3 = manager3.beginTransaction();
+        transaction3.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+        transaction3.replace(R.id.fragment_frame, bcRuningFragment);
+        transaction3.commit();
+
+
+
     }
 
-
-    @Override
-    public void initFragment() {
-
+        private void initPresnter() {
+        presenter = new FlowPresenter(this, this);
+        presenter.findBusOrderById(11);
     }
 
 
@@ -162,76 +194,41 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
         bridge = new ActFraCommBridge() {
 
             @Override
-            public void toFinished() {
-
-            }
-
-            @Override
-            public void toOrderList() {
-
-            }
-
-            @Override
             public void changeToolbar(int flag) {
+                if (flag == STARTRUNNING) {
+                    toolbar.setTitle("线路站点");
+                } else if (flag == RUNNING) {
+                    toolbar.setTitle("行程中");
+                } else if (flag == ENDRUNING) {
+                    toolbar.setTitle("到达站点");
+                }
+                toolbar.setBackgroundColor(Color.parseColor("#ffffff"));
 
             }
 
             @Override
-            public void clearMap() {
+            public void arriveStart() {
+                //调用出发接口
+//                presenter.startStation(busRouteResult.id);
+                presenter.startStation(58);
 
             }
 
             @Override
-            public void routePath(LatLng toLatlng) {
-
-            }
-
-            @Override
-            public void routePath(LatLng startLatlng, List<LatLng> passLatlngs, LatLng endLatlng) {
-
-            }
-
-            @Override
-            public void arriveStart(OrderCustomer orderCustomer) {
-
-            }
-
-            @Override
-            public void acceptCustomer(OrderCustomer orderCustomer) {
-
-            }
-
-            @Override
-            public void jumpAccept(OrderCustomer orderCustomer) {
-
-            }
-
-            @Override
-            public void arriveEnd(OrderCustomer orderCustomer) {
-
-            }
-
-            @Override
-            public void jumpSend(OrderCustomer orderCustomer) {
-
-            }
-
-            @Override
-            public void doRefresh() {
-
-            }
-
-            @Override
-            public void countStartOver() {
+            public void arriveEnd() {
+                //到达
+//                presenter.endStation(busRouteResult.id);
+                presenter.endStation(58);
 
             }
 
             @Override
             public void slideToNext() {
 
-                //调用滑动到达下一站接口
+                switchFragment(currentFragment).commit();
 
-//                changeToolbar(int flag)
+                //调用滑动到达下一站接口
+//                presenter.arriveStation(busRouteResult.id, busRouteResult.stations.get());
             }
 
         };
@@ -242,18 +239,6 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
 
     }
 
-    @Override
-    public void changeToolbar(int flag) {
-        if (flag == STARTRUNNING) {
-            toolbar.setTitle("线路站点");
-        } else if (flag == RUNNING) {
-            toolbar.setTitle("行程中");
-        } else if (flag == ENDRUNING) {
-            toolbar.setTitle("到达站点");
-        }
-        toolbar.setBackgroundColor(Color.parseColor("#ffffff"));
-    }
-
 
     @Override
     public void showBusLineInfo(BusStationResult busStationResult) {
@@ -262,6 +247,9 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
         //显示正在行驶的路线
 
         tvTipLayout.setText("行程：" + busStationResult.startStation + "到" + busStationResult.endStation);
+
+        initBridget();
+        initFragment();
         showBottonFragment(busRouteResult);
 
         //设置bound
@@ -298,8 +286,20 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
             aMap.addMarker(markerOption);
         }
 
+
+
+
     }
 
+    @Override
+    public void showNext() {
+        switchFragment(bcRuningFragment).commit();
+    }
+
+    /**
+     * 显示第一个fragment
+     * @param result
+     */
     public void showBottonFragment(BusStationResult result) {
         BcStartFragment bcStartFragment = new BcStartFragment();
         Bundle bundle = new Bundle();
@@ -314,27 +314,31 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
         transaction.commit();
     }
 
+    /**
+     * fragment 切换
+     *
+     * @param targetFragment
+     * @return
+     */
+    private FragmentTransaction switchFragment(Fragment targetFragment) {
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void changeTitle(ChangeTitleEvent event) {
-        if (event.getChange() == true) {
-            toolbar.setTitle("行程中");
-            showRuningLayout();
+        FragmentTransaction transaction = getSupportFragmentManager()
+                .beginTransaction();
+        if (!targetFragment.isAdded()) {
+            //第一次使用switchFragment()时currentFragment为null，所以要判断一下
+            if (currentFragment != null) {
+                transaction.hide(currentFragment);
+            }
+            transaction.add(R.id.fragment_frame, targetFragment, targetFragment.getClass().getName());
+        } else {
+            transaction
+                    .hide(currentFragment)
+                    .show(targetFragment);
         }
-    }
+        currentFragment = targetFragment;
 
-    public void showRuningLayout() {
-        BcRuningFragment bcRuningFragment = new BcRuningFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("busLineResult", busRouteResult);
-        bcRuningFragment.setArguments(bundle);
-        bcRuningFragment.setBridge(bridge);
-
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
-        transaction.replace(R.id.fragment_frame, bcRuningFragment);
-        transaction.commit();
+        initToolBar();
+        return transaction;
     }
 
     @Override
@@ -356,7 +360,6 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
 
     @Override
     protected void onStop() {
-        EventBus.getDefault().unregister(this);
         mRxManager.clear();
         mapView.onDestroy();
         super.onStop();

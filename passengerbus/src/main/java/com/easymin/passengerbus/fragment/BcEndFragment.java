@@ -1,11 +1,13 @@
 package com.easymin.passengerbus.fragment;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.easymi.component.base.RxBaseFragment;
 import com.easymin.passengerbus.R;
-import com.easymin.passengerbus.flowMvp.ActFraCommBridge;
+import com.easymin.passengerbus.flowmvp.ActFraCommBridge;
+import com.easymin.passengerbus.flowmvp.BcFlowActivity;
 
 /**
  * 行程结束
@@ -28,11 +30,20 @@ public class BcEndFragment extends RxBaseFragment{
 
     @Override
     public void finishCreateView(Bundle state) {
+//        bridge.changeToolbar(BcFlowActivity.ENDRUNING);
         initView();
+
     }
 
     private void initView() {
         tvLineAddress = $(R.id.tv_line_address);
         tvEnd = $(R.id.tv_end);
+
+        tvEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bridge.arriveEnd();
+            }
+        });
     }
 }

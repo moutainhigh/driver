@@ -11,8 +11,8 @@ import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.widget.CustomSlideToUnlockView;
 import com.easymin.passengerbus.R;
 import com.easymin.passengerbus.entity.BusStationResult;
-import com.easymin.passengerbus.entity.BusStationsBean;
-import com.easymin.passengerbus.flowMvp.ActFraCommBridge;
+import com.easymin.passengerbus.flowmvp.ActFraCommBridge;
+import com.easymin.passengerbus.flowmvp.BcFlowActivity;
 
 /**
  * 行程中
@@ -53,7 +53,18 @@ public class BcRuningFragment extends RxBaseFragment{
 
     @Override
     public void finishCreateView(Bundle state) {
+
+//        if (curStr.equals("滑动前往下一站")) {
+//
+//            bridge.changeToolbar(BcFlowActivity.RUNNING);
+//
+//        } else if (curStr.equals("滑动到达站点")) {
+//
+//            bridge.changeToolbar(BcFlowActivity.ENDRUNING);
+//
+//        }
         initView();
+
     }
 
     private void initView() {
@@ -93,13 +104,15 @@ public class BcRuningFragment extends RxBaseFragment{
     Handler handler = new Handler();
 
     private void resetView() {
-//        slider.setVisibility(View.GONE);
         if (curStr.equals("滑动前往下一站")) {
             slider.setHint("滑动到达站点");
             curStr = slider.setHint2("滑动到达站点");
+
+
         } else if (curStr.equals("滑动到达站点")) {
             slider.setHint("滑动前往下一站");
             curStr = slider.setHint2("滑动前往下一站");
+
         }
 
         handler.postDelayed(() -> getActivity().runOnUiThread(() -> {

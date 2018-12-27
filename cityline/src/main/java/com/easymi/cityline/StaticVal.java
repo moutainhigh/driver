@@ -22,5 +22,7 @@ public class StaticVal {
     public static final int TOOLBAR_FLOW = 0x10;
     public static final int TOOLBAR_FINISH = 0x9;
 
+
+
     public static final String OUT_TIME_COUNT_OVER = "com.easymi.cityline.OUT_TIME_COUNT_OVER";
 }

@@ -16,6 +16,7 @@ public class BusStationsBean {
      "updated": 1545461802,
      "appKey": "1HAcient1kLqfeX7DVTV0dklUkpGEnUC"
      */
+    //只是站点
     public int id;
     public String name;
     public String address;
