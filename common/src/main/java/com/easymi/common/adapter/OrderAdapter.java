@@ -84,6 +84,10 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
                         ARouter.getInstance()
                                 .build("/chartered/FlowActivity")
                                 .withLong("orderId", baseOrder.orderId).navigation();
+                    } else if (baseOrder.serviceType.equals(Config.RENTAL)){
+                        ARouter.getInstance()
+                                .build("/rental/FlowActivity")
+                                .withLong("orderId", baseOrder.orderId).navigation();
                     }
                 }
             });

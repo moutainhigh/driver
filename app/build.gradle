@@ -67,4 +67,5 @@ dependencies {
     implementation project(path: ':securitycenter')
     implementation project(path: ':passengerbus')
     implementation project(path: ':chartered')
+    implementation project(path: ':rental')
 }

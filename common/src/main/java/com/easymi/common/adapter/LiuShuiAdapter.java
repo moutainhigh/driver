@@ -71,6 +71,9 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
         }else if (baseOrder.serviceType.equals(Config.CHARTERED)){
             typeStr = context.getResources().getString(R.string.create_chartered);
             holder.orderStatus.setText(ZXStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status));
+        }else if (baseOrder.serviceType.equals(Config.RENTAL)){
+            typeStr = context.getResources().getString(R.string.create_rental);
+            holder.orderStatus.setText(ZXStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status));
         }
         holder.orderType.setText(typeStr);
         holder.orderEndPlace.setText(baseOrder.destination);

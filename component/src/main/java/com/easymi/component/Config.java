@@ -15,8 +15,10 @@ public class Config {
     /**
      * 主机地址
      */
-//    public static final String HOST = "http://10.10.2.43:10001/";
-    public static final String HOST = "http://10.10.2.35:10001/";//兵哥的
+//    public static final String HOST = "http://10.10.2.43:10001/";  //杰克
+//    public static final String HOST = "http://10.10.2.35:10001/";//兵哥的
+//    public static final String HOST = "http://47.94.204.67:10022/";//外网
+    public static final String HOST = "http://10.10.2.23:10001/";//俊俏
 //    public static final String HOST = "http://api.xiaokakj.com/";//线上地址
     /**
      * MQTT配置
@@ -125,6 +127,7 @@ public class Config {
     public static final String TAXI = "taxi";
     public static final String CITY_LINE = "cityline";
     public static final String CHARTERED = "chartered";
+    public static final String RENTAL = "rental";
 
     //需要导航的模式
     public static final String NAVI_MODE = "navi_mode";

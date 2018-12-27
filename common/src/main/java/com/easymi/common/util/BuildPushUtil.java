@@ -85,7 +85,6 @@ public class BuildPushUtil {
 
         List<PushDataOrder> orderList = new ArrayList<>();
 
-
         for (DymOrder dymOrder : DymOrder.findAll()) {
             PushDataOrder dataOrder = new PushDataOrder();
             if (dymOrder.orderType.equals(Config.CITY_LINE)) {

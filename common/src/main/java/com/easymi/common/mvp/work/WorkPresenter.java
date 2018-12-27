@@ -125,7 +125,9 @@ public class WorkPresenter implements WorkContract.Presenter {
                             //校验本地订单与服务器订单
                             if (TextUtils.equals(order.serviceType, Config.ZHUANCHE)
                                     || TextUtils.equals(order.serviceType, Config.TAXI)
-                                    || TextUtils.equals(order.serviceType, Config.CHARTERED)) {
+                                    || TextUtils.equals(order.serviceType, Config.CHARTERED)
+                                    || TextUtils.equals(order.serviceType, Config.RENTAL)
+                                    ) {
                                 if (DymOrder.exists(order.orderId, order.serviceType)) {
                                     //非专线 本地有
                                     dymOrder = DymOrder.findByIDType(order.orderId, order.serviceType);
@@ -177,7 +179,11 @@ public class WorkPresenter implements WorkContract.Presenter {
                                         isExist = true;
                                         break;
                                     }
-                                } else if (dymOrder.orderType.equals(Config.ZHUANCHE) || dymOrder.orderType.equals(Config.TAXI)) {
+                                } else if (dymOrder.orderType.equals(Config.ZHUANCHE)
+                                        || dymOrder.orderType.equals(Config.TAXI)
+                                        || TextUtils.equals(order.serviceType, Config.CHARTERED)
+                                        || TextUtils.equals(order.serviceType, Config.RENTAL)
+                                        ) {
                                     if (dymOrder.orderId == order.orderId) {
                                         isExist = true;
                                         break;
@@ -372,6 +378,8 @@ public class WorkPresenter implements WorkContract.Presenter {
                             employ.updateAll();
                         }
                     }
+                }else {
+                    ToastUtil.showMessage(context, "未绑定车辆车型，不能接单");
                 }
             }
         })));
@@ -490,18 +498,6 @@ public class WorkPresenter implements WorkContract.Presenter {
                         view.showHomeAnnAndNotice(null);
                     }
                 }));
-    }
-
-
-    public void deleteNotice(long id) {
-        if (id == 0) {
-            return;
-        }
-        Observable<EmResult> observable = model.readOne(id);
-        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
-                true, result -> {
-            //do nothing
-        })));
     }
 
 

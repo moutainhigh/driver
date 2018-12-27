@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">rental</string>
+
+    <string name="canceled_order">当前订单已被取消:)</string>
+    <string name="backed_order">当前订单已被收回:)</string>
+
+    <string name="km">公里</string>
+    <string name="left">剩余</string>
+    <string name="meter">米</string>
+    <string name="about_">大约</string>
+    <string name="hour_">时</string>
+    <string name="minute_">分钟</string>
+
+    <string name="loc_failed">定位失败,无法继续操作</string>
+    <string name="order_finish">该订单已完成</string>
+
+    <string name="status_no_start">行程未开始</string>
+    <string name="status_to_start">前往预约地</string>
+    <string name="wait_arrive_start">等待乘客上车</string>
+    <string name="status_to_end">执行中</string>
+    <string name="confirm_order">确认订单</string>
+
+    <string name="order_over">行程结束</string>
+    <string name="custom_phone_four">手机尾号：</string>
+</resources>
