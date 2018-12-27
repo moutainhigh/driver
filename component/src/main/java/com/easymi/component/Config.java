@@ -124,6 +124,7 @@ public class Config {
     public static final String ZHUANCHE = "special";
     public static final String TAXI = "taxi";
     public static final String CITY_LINE = "cityline";
+    public static final String CHARTERED = "chartered";
 
     //需要导航的模式
     public static final String NAVI_MODE = "navi_mode";
@@ -138,6 +139,7 @@ public class Config {
     public static final String BROAD_FINISH_ORDER = "com.easymi.v5driver.BROAD_FINISH_ORDER";
     public static final String TIRED_NOTICE = "com.easymi.v5driver.TIRED_NOTICE";
     public static final String HTTP_CUSTOM = "com.easymi.v5driver.HTTP_CUSTOM";
+    public static final String ORDER_REFRESH = "com.easymi.v5driver.ORDER_REFRESH";
 
     //    public static final int FREE_LOC_TIME = 5000;//闲时定位时间 毫秒
 //    public static final int BUSY_LOC_TIME = 5000;//忙时定位时间 毫秒

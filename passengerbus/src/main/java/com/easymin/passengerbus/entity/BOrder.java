@@ -7,5 +7,5 @@ package com.easymin.passengerbus.entity;
  * @email:
  * @description:
  */
-public class BcOrder {
+public class BOrder {
 }
