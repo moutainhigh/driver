@@ -2,6 +2,8 @@ package com.easymin.chartered.flowMvp;
 
 import com.amap.api.maps.model.LatLng;
 import com.easymi.common.entity.OrderCustomer;
+import com.easymi.component.entity.BaseOrder;
+import com.easymi.component.widget.LoadingButton;
 
 import java.util.List;
 
@@ -18,12 +20,6 @@ public interface ActFraCommBridge {
 
     void showBounds(List<LatLng> latLngs);
 
-    void addMarker(LatLng latLng, int flag);
-
-    void toOrderList();
-
-    void changeToolbar(int flag);
-
     void clearMap();
 
     void routePath(LatLng toLatlng);
@@ -35,4 +31,16 @@ public interface ActFraCommBridge {
     void countStartOver();
 
     void navi(LatLng latLng, Long orderId);
+
+    void toNotStart();
+
+    void toStart();
+
+    void arriveStart();
+
+    void doStartDrive();
+
+    void arriveDestance();
+
+    void toFinish(LoadingButton button);
 }

@@ -129,11 +129,13 @@ public class MultipleOrder extends BaseOrder implements Serializable, MultiItemE
     public String getOrderType(){
         String orderType = null;
         if (serviceType.equals(Config.ZHUANCHE)){
-            orderType = "专车";
+            orderType = "城内打车";
         }else if (serviceType.equals(Config.TAXI)){
             orderType = "出租车";
         }else if (serviceType.equals(Config.CITY_LINE)){
             orderType = "城际专线";
+        }else if (serviceType.equals(Config.CHARTERED)){
+            orderType = "定制包车";
         }
         return orderType;
     }

@@ -43,6 +43,7 @@ import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
+import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.zhuanche.entity.ZCOrder;
 import com.easymi.zhuanche.result.ZCOrderResult;
@@ -174,12 +175,9 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         intent.putExtra("endLatlng", end);
         intent.putExtra("orderId", orderId);
         intent.putExtra("orderType", Config.ZHUANCHE);
-//        ZCOrder zcOrder = view.getOrder();
-//        if (zcOrder != null && (zcOrder.orderStatus < DJOrderStatus.ARRIVAL_BOOKPLACE_ORDER)) {
-//            intent.putExtra(Config.NAVI_MODE, Config.WALK_TYPE);
-//        } else {
+
         intent.putExtra(Config.NAVI_MODE, Config.DRIVE_TYPE);
-//        }
+
         stopNavi();//停止当前页面的导航，在到导航页时重新初始化导航
         context.startActivity(intent);
     }
@@ -285,6 +283,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
         startLs.add(start);
         endLs.add(end);
+//        mAMapNavi.switchParallelRoad();
         mAMapNavi.calculateDriveRoute(startLs, endLs, null, strateFlag);
     }
 
@@ -326,6 +325,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
                 RouteSearch.DRIVING_MULTI_STRATEGY_FASTEST_SHORTEST, null, null, "");
         routeSearch.calculateDriveRouteAsyn(query);
     }
+
 
     @Override
     public void updateDymOrder(ZCOrder zcOrder) {
@@ -402,45 +402,44 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public ZCOrderResult orderResult2ZCOrder(ZCOrderResult zcOrderResult) {
-//        zcOrderResult.order.addresses = zcOrderResult.address;
-//        zcOrderResult.data.orderFee = zcOrderResult.orderFee;
-//        zcOrderResult.order.coupon = zcOrderResult.coupon;
         return zcOrderResult;
     }
 
     @Override
     public void onInitNaviFailure() {
-
+        Log.e("FlowerPresenter", "onInitNaviFailure()");
     }
 
     @Override
     public void onInitNaviSuccess() {
-
+        Log.e("FlowerPresenter", "onInitNaviSuccess()");
     }
 
     @Override
     public void onLocationChange(AMapNaviLocation aMapNaviLocation) {
+        Log.e("FlowerPresenter", "onLocationChange()");
+//        routePlanByNavi(aMapNaviLocation.getCoord().getLatitude(),aMapNaviLocation.getCoord().getLongitude());
 
     }
 
     @Override
     public void onGetNavigationText(int i, String s) {
-
+        Log.e("FlowerPresenter", s);
     }
 
     @Override
     public void onArriveDestination(boolean b) {
-
+        Log.e("FlowerPresenter", "onArriveDestination()");
     }
 
     @Override
     public void onStartNavi(int i) {
-
+        Log.e("FlowerPresenter", "onStartNavi()");
     }
 
     @Override
     public void onTrafficStatusUpdate() {
-
+        Log.e("FlowerPresenter", "onTrafficStatusUpdate()");
     }
 
     @Override
@@ -464,42 +463,42 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void notifyParallelRoad(int i) {
-
+        Log.e("FlowerPresenter", "notifyParallelRoad()");
     }
 
     @Override
     public void OnUpdateTrafficFacility(AMapNaviTrafficFacilityInfo aMapNaviTrafficFacilityInfo) {
-
+        Log.e("FlowerPresenter", "OnUpdateTrafficFacility()");
     }
 
     @Override
     public void OnUpdateTrafficFacility(AMapNaviTrafficFacilityInfo[] aMapNaviTrafficFacilityInfos) {
-
+        Log.e("FlowerPresenter", "OnUpdateTrafficFacility()");
     }
 
     @Override
     public void OnUpdateTrafficFacility(TrafficFacilityInfo trafficFacilityInfo) {
-
+        Log.e("FlowerPresenter", "OnUpdateTrafficFacility()");
     }
 
     @Override
     public void updateAimlessModeStatistics(AimLessModeStat aimLessModeStat) {
-
+        Log.e("FlowerPresenter", "updateAimlessModeStatistics()");
     }
 
     @Override
     public void updateAimlessModeCongestionInfo(AimLessModeCongestionInfo aimLessModeCongestionInfo) {
-
+        Log.e("FlowerPresenter", "updateAimlessModeCongestionInfo()");
     }
 
     @Override
     public void onPlayRing(int i) {
-
+        Log.e("FlowerPresenter", "onPlayRing()");
     }
 
     @Override
     public void onCalculateRouteFailure(int i) {
-
+        Log.e("FlowerPresenter", "onCalculateRouteFailure()");
     }
 
     /**
@@ -509,6 +508,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     public void onReCalculateRouteForYaw() {
         Log.e("FlowerPresenter", "onReCalculateRouteForYaw()");
         view.showReCal();
+        XApp.getInstance().syntheticVoice("您已偏航，已为您重新规划路径");
     }
 
     /**
@@ -516,18 +516,21 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
      */
     @Override
     public void onReCalculateRouteForTrafficJam() {
-        Log.e("FlowerPresenter", "onReCalculateRouteForTrafficJam()");
-        view.showReCal();
+//        Log.e("FlowerPresenter", "onReCalculateRouteForTrafficJam()");
+//        view.showReCal();
+//        XApp.getInstance().syntheticVoice("为躲避拥堵，正在重新规划路径");
     }
 
     @Override
     public void onArrivedWayPoint(int i) {
-
+        Log.e("FlowerPresenter", "onArrivedWayPoint()");
     }
 
     @Override
     public void onGpsOpenStatus(boolean b) {
-
+        if (!b){
+            ToastUtil.showMessage(context,"请打开手机gps");
+        }
     }
 
     /**
@@ -543,47 +546,47 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void onNaviInfoUpdated(AMapNaviInfo aMapNaviInfo) {
-
+        Log.e("FlowerPresenter", "onNaviInfoUpdated()");
     }
 
     @Override
     public void updateCameraInfo(AMapNaviCameraInfo[] aMapNaviCameraInfos) {
-
+        Log.e("FlowerPresenter", "updateCameraInfo()");
     }
 
     @Override
     public void onServiceAreaUpdate(AMapServiceAreaInfo[] aMapServiceAreaInfos) {
-
+        Log.e("FlowerPresenter", "onServiceAreaUpdate()");
     }
 
     @Override
     public void showCross(AMapNaviCross aMapNaviCross) {
-
+        Log.e("FlowerPresenter", "showCross()");
     }
 
     @Override
     public void hideCross() {
-
+        Log.e("FlowerPresenter", "hideCross()");
     }
 
     @Override
     public void showModeCross(AMapModelCross aMapModelCross) {
-
+        Log.e("FlowerPresenter", "showModeCross()");
     }
 
     @Override
     public void hideModeCross() {
-
+        Log.e("FlowerPresenter", "hideModeCross()");
     }
 
     @Override
     public void showLaneInfo(AMapLaneInfo[] aMapLaneInfos, byte[] bytes, byte[] bytes1) {
-
+        Log.e("FlowerPresenter", "showLaneInfo()");
     }
 
     @Override
     public void hideLaneInfo() {
-
+        Log.e("FlowerPresenter", "hideLaneInfo()");
     }
 
     @Override
@@ -593,28 +596,21 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void onEndEmulatorNavi() {
-
+        Log.e("FlowerPresenter", "onEndEmulatorNavi()");
     }
 
     @Override
     public void onArriveDestination() {
-
+        Log.e("FlowerPresenter", "onArriveDestination()");
     }
 
     public void onExitPage(int i) {
-
+        Log.e("FlowerPresenter", "onExitPage()");
     }
 
     public void onReCalculateRoute(int i) {
-
+        Log.e("FlowerPresenter", "onReCalculateRoute()");
     }
 
-    public void showLaneInfo(AMapLaneInfo info) {
-
-    }
-
-    public void updateIntervalCameraInfo(AMapNaviCameraInfo info1, AMapNaviCameraInfo info2, int i) {
-
-    }
 
 }

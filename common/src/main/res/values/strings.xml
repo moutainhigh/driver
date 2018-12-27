@@ -23,11 +23,12 @@
     <string name="liushui_baoxiao_refuse">报销已拒绝</string>
 
     <string name="create_daijia">代驾</string>
-    <string name="create_zhuanche">专车</string>
+    <string name="create_zhuanche">城内打车</string>
     <string name="create_taxi">出租车</string>
     <string name="create_paotui">跑腿</string>
     <string name="create_huoyun">货运</string>
     <string name="create_zhuanxian">城际专线</string>
+    <string name="create_chartered">定制包车</string>
 
     <string name="hint">提示</string>
     <string name="sure">确定</string>

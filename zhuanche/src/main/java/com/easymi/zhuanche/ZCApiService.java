@@ -8,6 +8,7 @@ import com.easymi.component.result.EmResult;
 import com.easymi.zhuanche.entity.TransferList;
 import com.easymi.zhuanche.result.BudgetResult;
 import com.easymi.zhuanche.result.ConsumerResult;
+import com.easymi.zhuanche.result.PassengerLcResult;
 import com.easymi.zhuanche.result.ZCOrderResult;
 import com.easymi.zhuanche.result.ZCTypeResult;
 import com.easymi.zhuanche.result.PassengerResult;
@@ -583,4 +584,16 @@ public interface ZCApiService {
                                               @Field("passengerName") String passengerName,
                                               @Field("passengerPhone") String passengerPhone,
                                               @Field("serviceType") String serviceType);
+
+
+
+    /**
+     * 乘客位置请求
+     *
+     * @param
+     * @return
+     */
+    @GET("api/v1/public/passenger/location")
+    Observable<PassengerLcResult> passengerLoc(@Query("passengerId") Long passengerId);
+
 }

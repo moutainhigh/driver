@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="#f7f7f7"
     android:orientation="vertical">
 
@@ -23,6 +23,13 @@
             android:layout_marginBottom="55dp"
             android:layout_marginTop="45dp" />
 
+        <!--<com.amap.api.navi.AMapNaviView-->
+        <!--android:id="@+id/map_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_marginBottom="55dp"-->
+        <!--android:layout_marginTop="45dp" />-->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,11 +37,11 @@
             android:orientation="vertical">
 
             <RelativeLayout
-                android:visibility="gone"
                 android:id="@+id/not_accept_layout"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:visibility="gone">
 
 
                 <LinearLayout
@@ -85,11 +92,11 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:visibility="gone"
                 android:id="@+id/to_appoint_layout"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:visibility="gone">
 
 
                 <LinearLayout
@@ -146,25 +153,26 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:visibility="gone"
-                android:id="@+id/arrive_start_wait_layout"
+                android:id="@+id/arrive_start_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:visibility="gone">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/arrive_start_wait_text"
                     android:layout_centerInParent="true"
-                    android:padding="10dp"/>
+                    android:padding="10dp"
+                    android:text="@string/arrive_start_wait_text" />
             </RelativeLayout>
 
             <RelativeLayout
-                android:visibility="gone"
                 android:id="@+id/go_layout"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/go_text"
@@ -196,9 +204,9 @@
                         android:marqueeRepeatLimit="marquee_forever"
                         android:paddingRight="5dp"
                         android:singleLine="true"
-                        tools:text="xxxxx"
                         android:textColor="#232323"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        tools:text="xxxxx" />
 
                     <TextView
                         android:id="@+id/left_time"
@@ -237,17 +245,18 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:visibility="gone"
                 android:id="@+id/middle_wait_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:visibility="gone">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/middle_wait_text"
                     android:layout_centerInParent="true"
-                    android:padding="10dp"/>
+                    android:padding="10dp"
+                    android:text="@string/middle_wait_text" />
             </RelativeLayout>
 
             <net.cachapa.expandablelayout.ExpandableLayout
@@ -335,18 +344,18 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_marginLeft="10dp"
-                        android:paddingTop="8dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
+                        android:layout_marginLeft="10dp"
                         android:gravity="center_vertical"
-                        android:layout_height="wrap_content">
+                        android:orientation="horizontal"
+                        android:paddingTop="8dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="订单备注"
                             android:layout_gravity="top"
+                            android:text="订单备注"
                             android:textColor="#232323"
                             android:textSize="16sp" />
 
@@ -355,8 +364,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
-                            tools:text="无备注无备注无备注无备注无备注无备注无备注无备注无备注无备注无备注无备注无备注无备注"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            tools:text="无备注无备注无备注无备注无备注无备注无备注无备注无备注无备注无备注无备注无备注无备注" />
 
                     </LinearLayout>
 

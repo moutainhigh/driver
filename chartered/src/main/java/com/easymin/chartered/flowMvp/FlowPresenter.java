@@ -37,12 +37,18 @@ import com.easymi.component.network.ErrCode;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
+import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
+import com.easymi.component.utils.ToastUtil;
+import com.easymi.component.widget.LoadingButton;
+import com.easymin.chartered.result.OrderListResult;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import rx.Observable;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
@@ -60,8 +66,6 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
 
     AMapNavi mAMapNavi;
 
-    private long driverId = 43;
-
     public FlowPresenter(Context context, FlowContract.View view) {
         this.context = context;
         this.view = view;
@@ -69,39 +73,28 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
     }
 
     @Override
-    public void routeLineByNavi(LatLng start, List<LatLng> latLngs, LatLng end) {
-        stopNavi();
-        if (start == null || end == null) {
-            return;
-        }
-        //重新初始化导航
-        mAMapNavi = AMapNavi.getInstance(context);
-        mAMapNavi.addAMapNaviListener(this);
-
-        NaviLatLng startNavi = new NaviLatLng(start.latitude, start.longitude);
-        NaviLatLng endNavi = new NaviLatLng(end.latitude, end.longitude);
-
-        List<NaviLatLng> naviLatLngs = new ArrayList<>();
-        if (null != latLngs && latLngs.size() != 0) {
-            for (LatLng latLng : latLngs) {
-                NaviLatLng passNavi = new NaviLatLng(latLng.latitude, latLng.longitude);
-                naviLatLngs.add(passNavi);
-            }
+    public void routePlanByNavi(Double endLat, Double endLng) {
+        if (null == mAMapNavi) {
+            mAMapNavi = AMapNavi.getInstance(context);
+            mAMapNavi.addAMapNaviListener(this);
         }
 
-        int strategy = mAMapNavi.strategyConvert(
-                XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, true),
+        int strateFlag = mAMapNavi.strategyConvert(
+                XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, false),
                 XApp.getMyPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
-                XApp.getMyPreferences().getBoolean(Config.SP_COST, true),
+                XApp.getMyPreferences().getBoolean(Config.SP_COST, false),
                 XApp.getMyPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
                 false);
+
+        NaviLatLng start = new NaviLatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
+        NaviLatLng end = new NaviLatLng(endLat, endLng);
 
         List<NaviLatLng> startLs = new ArrayList<>();
         List<NaviLatLng> endLs = new ArrayList<>();
 
-        startLs.add(startNavi);
-        endLs.add(endNavi);
-        mAMapNavi.calculateDriveRoute(startLs, endLs, naviLatLngs, strategy);
+        startLs.add(start);
+        endLs.add(end);
+        mAMapNavi.calculateDriveRoute(startLs, endLs, null, strateFlag);
     }
 
     RouteSearch routeSearch;
@@ -154,6 +147,22 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
     }
 
     @Override
+    public void navi(LatLng latLng, Long orderId) {
+        NaviLatLng start = new NaviLatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
+        NaviLatLng end = new NaviLatLng(latLng.latitude, latLng.longitude);
+        Intent intent = new Intent(context, NaviActivity.class);
+        intent.putExtra("startLatlng", start);
+        intent.putExtra("endLatlng", end);
+        intent.putExtra("orderId", orderId);
+        intent.putExtra("orderType", Config.CHARTERED);
+
+        intent.putExtra(Config.NAVI_MODE, Config.DRIVE_TYPE);
+
+        stopNavi();//停止当前页面的导航，在到导航页时重新初始化导航
+        context.startActivity(intent);
+    }
+
+    @Override
     public void stopNavi() {
         //since 1.6.0 不再在naviview destroy的时候自动执行AMapNavi.stopNavi();请自行执行
         if (null != mAMapNavi) {
@@ -161,6 +170,64 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
             mAMapNavi.destroy();
         }
     }
+
+
+
+    @Override
+    public void findOne(long orderId) {
+        Observable<OrderListResult> observable = model.findOne(orderId);
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, false, false,
+                new HaveErrSubscriberListener<OrderListResult>() {
+            @Override
+            public void onNext(OrderListResult emResult) {
+                view.showOrder(emResult.data);
+            }
+
+            @Override
+            public void onError(int code) {
+                view.showOrder(null);
+            }
+        })));
+    }
+
+    @Override
+    public void changeStauts(Long orderId, int status) {
+        Observable<EmResult> observable = model.changeStauts(orderId,status);
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, false, false,
+                new HaveErrSubscriberListener<EmResult>() {
+                    @Override
+                    public void onNext(EmResult emResult) {
+                        if (emResult.getCode() == 1){
+                            findOne(orderId);
+                        }
+                    }
+
+                    @Override
+                    public void onError(int code) {
+                        Log.e("hufeng/code","errorCode:"+code);
+                    }
+                })));
+    }
+
+    @Override
+    public void orderConfirm(long orderId, long version,LoadingButton button) {
+        Observable<EmResult> observable = model.orderConfirm(orderId,version);
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, button,
+                new HaveErrSubscriberListener<EmResult>() {
+                    @Override
+                    public void onNext(EmResult emResult) {
+                        if (emResult.getCode() == 1){
+                            view.toFinish();
+                        }
+                    }
+
+                    @Override
+                    public void onError(int code) {
+                        Log.e("hufeng/code","errorCode:"+code);
+                    }
+                })));
+    }
+
 
     @Override
     public void onInitNaviFailure() {

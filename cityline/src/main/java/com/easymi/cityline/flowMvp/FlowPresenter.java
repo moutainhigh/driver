@@ -44,6 +44,7 @@ import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
+import com.easymi.component.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -283,7 +284,7 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
 
     @Override
     public void onLocationChange(AMapNaviLocation aMapNaviLocation) {
-
+        Log.e("FlowerPresenter", "onCalculateRouteSuccess()");
     }
 
     @Override

@@ -23,6 +23,7 @@ import com.easymi.personal.result.LoginResult;
 import com.easymi.personal.result.RegisterResult;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -62,7 +63,7 @@ public class RegisterModel {
     }
 
 
-    private static Observable<Pic> putPic(File file, String token) {
+    public static Observable<Pic> putPic(File file, String token) {
         RequestBody photoRequestBody = RequestBody.create(MediaType.parse("image/jpg"), file);
         RequestBody tokenBody = RequestBody.create(MediaType.parse("multipart/form-data"), token);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), photoRequestBody);
@@ -70,7 +71,7 @@ public class RegisterModel {
                 .uploadPic(Config.HOST_UP_PIC, tokenBody, body);
     }
 
-    public static Observable<RegisterRes> applyDriver(Context context,RegisterRequest request, List<String> pics) {
+    public static Observable<RegisterRes> applyDriver(Context context, RegisterRequest request, List<String> pics) {
 
         String portraitPath = pics.get(0);
         String idCardPath = pics.get(1);
@@ -79,21 +80,21 @@ public class RegisterModel {
 
         return ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .applyDriver(
-                        RsaUtils.encryptAndEncode(context, request.driverId+""),
-                        RsaUtils.encryptAndEncode(context, request.driverName+""),
-                        RsaUtils.encryptAndEncode(context, request.driverPhone+""),
-                        RsaUtils.encryptAndEncode(context, request.idCard+""),
-                        RsaUtils.encryptAndEncode(context, request.emergency+""),
-                        RsaUtils.encryptAndEncode(context, request.emergencyPhone+""),
-                        RsaUtils.encryptAndEncode(context, request.companyId+""),
-                        RsaUtils.encryptAndEncode(context, request.serviceType+""),
-                        RsaUtils.encryptAndEncode(context, request.startTime+""),
-                        RsaUtils.encryptAndEncode(context, request.endTime+""),
-                        RsaUtils.encryptAndEncode(context, request.introducer+""),
-                        RsaUtils.encryptAndEncode(context, portraitPath+""),
-                        RsaUtils.encryptAndEncode(context, idCardPath+""),
-                        RsaUtils.encryptAndEncode(context, idCardBackPath+""),
-                        RsaUtils.encryptAndEncode(context, driveLicensePath+""))
+                        RsaUtils.encryptAndEncode(context, request.driverId + ""),
+                        RsaUtils.encryptAndEncode(context, request.driverName + ""),
+                        RsaUtils.encryptAndEncode(context, request.driverPhone + ""),
+                        RsaUtils.encryptAndEncode(context, request.idCard + ""),
+                        RsaUtils.encryptAndEncode(context, request.emergency + ""),
+                        RsaUtils.encryptAndEncode(context, request.emergencyPhone + ""),
+                        RsaUtils.encryptAndEncode(context, request.companyId + ""),
+                        RsaUtils.encryptAndEncode(context, request.serviceType + ""),
+                        RsaUtils.encryptAndEncode(context, request.startTime + ""),
+                        RsaUtils.encryptAndEncode(context, request.endTime + ""),
+                        RsaUtils.encryptAndEncode(context, request.introducer + ""),
+                        RsaUtils.encryptAndEncode(context, portraitPath + ""),
+                        RsaUtils.encryptAndEncode(context, idCardPath + ""),
+                        RsaUtils.encryptAndEncode(context, idCardBackPath + ""),
+                        RsaUtils.encryptAndEncode(context, driveLicensePath + ""))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -108,14 +109,39 @@ public class RegisterModel {
                     if (token == null) {
                         throw new IllegalArgumentException("token无效");
                     }
+                    Observable<Pic> portraitPic = null;
+                    Observable<Pic> idCardPic = null;
+                    Observable<Pic> idCardBackPic = null;
+                    Observable<Pic> driveLicensePic = null;
+
+//                    List<Observable<Pic>> lsit = new ArrayList<>();
+
                     //必传图片
-                    Observable<Pic> portraitPic = putPic(new File(request.portraitPath), token);
-                    Observable<Pic> idCardPic = putPic(new File(request.idCardPath), token);
-                    Observable<Pic> idCardBackPic = putPic(new File(request.idCardBackPath), token);
-                    Observable<Pic> driveLicensePic = putPic(new File(request.driveLicensePath), token);
-
+//                    if (!TextUtils.isEmpty(request.portraitPath)) {
+                        portraitPic = putPic(new File(request.portraitPath), token);
+//                        lsit.add(portraitPic);
+//                    }
+//                    if (!TextUtils.isEmpty(request.idCardPath)) {
+                        idCardPic = putPic(new File(request.idCardPath), token);
+//                        lsit.add(idCardPic);
+//                    }
+//                    if (!TextUtils.isEmpty(request.idCardBackPath)) {
+                        idCardBackPic = putPic(new File(request.idCardBackPath), token);
+//                        lsit.add(idCardBackPic);
+//                    }
+//                    if (!TextUtils.isEmpty(request.driveLicensePath)) {
+                        driveLicensePic = putPic(new File(request.driveLicensePath), token);
+//                        lsit.add(driveLicensePic);
+//                    }
+//
                     Observable<Pic> pics;
-
+////                    //todo 为空能加入不并不知道
+////                    for (int i = 0;i<lsit.size();i++){
+////
+////                    }
+//                    if (portraitPic == null ){
+//
+//                    }
                     pics = Observable.concat(portraitPic, idCardPic, idCardBackPic, driveLicensePic);
 
                     return pics.subscribeOn(Schedulers.io())
@@ -137,6 +163,46 @@ public class RegisterModel {
         return ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .getDriverInfo(driverId)
                 .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+
+    public static Observable<QiNiuToken> getQiniuToken() {
+        return ApiManager.getInstance().createApi(Config.HOST, McService.class)
+                .getToken()
+                .subscribeOn(Schedulers.io())
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+
+    public static Observable<RegisterRes> applyUpdate(Context context, RegisterRequest request) {
+
+        String portraitPath = request.portraitPath;
+        String idCardPath = request.idCardPath;
+        String idCardBackPath = request.idCardBackPath;
+        String driveLicensePath = request.driveLicensePath;
+
+        return ApiManager.getInstance().createApi(Config.HOST, McService.class)
+                .applyUpdate(
+                        RsaUtils.encryptAndEncode(context, request.driverId + ""),
+                        RsaUtils.encryptAndEncode(context, request.driverName + ""),
+                        RsaUtils.encryptAndEncode(context, request.driverPhone + ""),
+                        RsaUtils.encryptAndEncode(context, request.idCard + ""),
+                        RsaUtils.encryptAndEncode(context, request.emergency + ""),
+                        RsaUtils.encryptAndEncode(context, request.emergencyPhone + ""),
+                        RsaUtils.encryptAndEncode(context, request.companyId + ""),
+                        RsaUtils.encryptAndEncode(context, request.serviceType + ""),
+                        RsaUtils.encryptAndEncode(context, request.startTime + ""),
+                        RsaUtils.encryptAndEncode(context, request.endTime + ""),
+                        RsaUtils.encryptAndEncode(context, request.introducer + ""),
+                        RsaUtils.encryptAndEncode(context, portraitPath + ""),
+                        RsaUtils.encryptAndEncode(context, idCardPath + ""),
+                        RsaUtils.encryptAndEncode(context, idCardBackPath + ""),
+                        RsaUtils.encryptAndEncode(context, driveLicensePath + ""),
+                        RsaUtils.encryptAndEncode(context, request.version + ""))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

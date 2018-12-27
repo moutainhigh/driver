@@ -512,17 +512,20 @@ public class LoginActivity extends RxBaseActivity {
             }else if (employ.registerStatus == 3){
                 Intent intent = new Intent(this, RegisterNoticeActivity.class);
                 intent.putExtra("type", 3);
-//                intent.putExtra("driverId", employ.id);
                 startActivity(intent);
             }else if (employ.registerStatus == 2){
                 Intent intent = new Intent(this, RegisterNoticeActivity.class);
                 intent.putExtra("type", 2);
-//                intent.putExtra("driverId", employ.id);
                 startActivity(intent);
             }else if (employ.registerStatus == 1){
                 Intent intent = new Intent(this, RegisterBaseActivity.class);
                 intent.putExtra("employ",employ);
                 startActivity(intent);
+            }else {
+                SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+                editor.putString(Config.SP_TOKEN, employ.token);
+                editor.apply();
+                getSetting(employ, name, psw);
             }
         })));
     }

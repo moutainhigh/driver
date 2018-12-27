@@ -22,12 +22,16 @@
 
             <TextView
                 android:id="@+id/start_site"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="安岳站"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:gravity="center"
                 android:textSize="18sp"
                 android:textColor="@color/black"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -38,9 +42,13 @@
 
             <TextView
                 android:id="@+id/end_site"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="绵阳北站"
+                android:gravity="center"
+                android:singleLine="true"
+                android:ellipsize="marquee"
                 android:textSize="18sp"
                 android:textColor="@color/black"
                 android:textStyle="bold"/>
@@ -55,19 +63,13 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginBottom="15dp">
+
             <TextView
-                android:id="@+id/start_jieren_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="06:00开始接人"
-                android:layout_alignParentRight="true"/>
-            <TextView
-                android:id="@+id/start_out_time"
+                android:id="@+id/book_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:layout_toLeftOf="@+id/start_jieren_time"
-                android:text="2018年10月29日 07:00开始"/>
+                android:text="2018年10月29日 07:00"/>
 
 
         </RelativeLayout>
@@ -95,8 +97,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="距离开始接人时间："
+            android:text="距离开始时间："
             android:layout_marginTop="15dp"
+            android:textColor="@color/color_333333"
             android:layout_marginLeft="15dp"
             android:layout_marginBottom="15dp"/>
 
@@ -118,16 +121,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <!--<com.easymi.component.widget.CustomSlideToUnlockView-->
-            <!--android:id="@+id/slider"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="55dp"-->
-            <!--android:elevation="0.5dp"-->
-            <!--android:layout_gravity="center_horizontal|bottom"-->
-            <!--SlideToUnlockView:sliderTextSize="22"-->
-            <!--SlideToUnlockView:sliderTextHint="滑动开始接人"-->
-            <!--/>-->
-
             <Button
                 android:id="@+id/bottom_btn"
                 android:layout_width="match_parent"
@@ -135,7 +128,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_margin="10dp"
                 android:background="@drawable/corners_button_selector"
-                android:text="规划路线"
+                android:text="开始行程"
                 android:textColor="@color/white" />
 
         </LinearLayout>

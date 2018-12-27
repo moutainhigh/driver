@@ -20,7 +20,6 @@
             android:elevation="0.5dp"
             android:layout_gravity="center_horizontal|bottom"
             SlideToUnlockView:sliderTextSize="25"
-
             />
 
     </LinearLayout>

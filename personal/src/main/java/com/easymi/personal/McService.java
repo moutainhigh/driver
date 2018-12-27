@@ -735,7 +735,7 @@ public interface McService {
     Observable<QiNiuToken> getToken();
 
     @FormUrlEncoded
-    @POST("api/v1/public/driver/register/apply/save")
+    @POST("api/v1/public/driver/register/apply/app/save")
     Observable<RegisterRes> applyDriver(@Field("driverId") String driverId,
                                         @Field("realName") String realName,
                                         @Field("phone") String phone,
@@ -752,6 +752,24 @@ public interface McService {
                                         @Field("idCardBackPath") String idCardBackPath,
                                         @Field("driveLicensePath") String driveLicensePath);
 
+    @FormUrlEncoded
+    @POST("api/v1/public/driver/register/apply/app/update")
+    Observable<RegisterRes> applyUpdate(@Field("driverId") String driverId,
+                                        @Field("realName") String realName,
+                                        @Field("phone") String phone,
+                                        @Field("idCard") String idCard,
+                                        @Field("emergency") String emergency,
+                                        @Field("emergencyPhone") String emergencyPhone,
+                                        @Field("companyId") String companyId,
+                                        @Field("serviceType") String serviceType,
+                                        @Field("driveLicenceStart") String startTime,
+                                        @Field("driveLicenceEnd") String endTime,
+                                        @Field("introducer") String introducer,
+                                        @Field("portraitPath") String portraitPath,
+                                        @Field("idCardHeadPath") String idCardHeadPath,
+                                        @Field("idCardBackPath") String idCardBackPath,
+                                        @Field("driveLicensePath") String driveLicensePath,
+                                        @Field("version") String version);
 
 
     @GET("api/v1/public/driver/register/get")
