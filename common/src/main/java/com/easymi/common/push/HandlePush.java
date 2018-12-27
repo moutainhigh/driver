@@ -302,6 +302,13 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 Intent intent = new Intent();
                 intent.setAction(Config.ORDER_REFRESH);
                 XApp.getInstance().sendBroadcast(intent);
+            }else if (msg.equals("rental")){
+                XApp.getInstance().shake();
+                XApp.getInstance().syntheticVoice("您有包车租车订单需要处理");
+
+                Intent intent = new Intent();
+                intent.setAction(Config.ORDER_REFRESH);
+                XApp.getInstance().sendBroadcast(intent);
             }
         } catch (JSONException e) {
             e.printStackTrace();
