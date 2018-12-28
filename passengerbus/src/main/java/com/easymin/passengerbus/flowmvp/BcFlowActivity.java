@@ -23,7 +23,6 @@ import com.amap.api.services.route.DriveRouteResult;
 import com.amap.api.services.route.RideRouteResult;
 import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
-import com.easymi.common.entity.OrderCustomer;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.loc.LocObserver;
@@ -119,18 +118,6 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
     }
 
     public void initFragment() {
-//
-//        bcStartFragment = new BcStartFragment();
-//        Bundle bundle1 = new Bundle();
-//        bundle1.putSerializable("busLineResult", busRouteResult);
-//        bcStartFragment.setArguments(bundle1);
-//        bcStartFragment.setBridge(bridge);
-//
-//        FragmentManager manager1 = getSupportFragmentManager();
-//        FragmentTransaction transaction1 = manager1.beginTransaction();
-//        transaction1.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
-//        transaction1.replace(R.id.fragment_frame, bcStartFragment);
-//        transaction1.commit();
 
         bcRuningFragment = new BcRuningFragment();
         Bundle bundle2 = new Bundle();

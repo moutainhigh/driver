@@ -127,6 +127,9 @@ public class Config {
     public static final String TAXI = "taxi";
     public static final String CITY_LINE = "cityline";
     public static final String CHARTERED = "chartered";
+    public static final String RENTAL = "rental";
+
+
 
     //需要导航的模式
     public static final String NAVI_MODE = "navi_mode";

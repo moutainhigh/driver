@@ -33,13 +33,7 @@ public interface BusApiService {
     @GET("api/v1/bus/country/driver/line/{id}")
     Observable<EmResult2<BusStationResult>> findBusInfoById(@Path("id") long id);
 
-    /**
-     * 班次站点查询
-     * @param scheduleId
-     * @return
-     */
-    @GET("api/v1/bus/country/driver/schedule/stations")
-    Observable<Object> findStations(@Query("scheduleId") long scheduleId);
+
 
 
     /**
@@ -48,8 +42,18 @@ public interface BusApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("api/v1/bus/country/driver/schedule/start")
+    @POST("api/v1/bus/country/driver/schedule/startSchedule")
     Observable<EmResult2<Object>> start(@Field("scheduleId") long scheduleId);
+
+    /**
+     * 出发站点
+     * @param scheduleId
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/bus/country/driver/schedule/startStation")
+    Observable<Object> findStations(@Query("scheduleId") long scheduleId,
+                                    @Query("stationId") long stationId);
 
 
     /**
@@ -58,7 +62,7 @@ public interface BusApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("api/v1/bus/country/driver/schedule/arrive")
+    @POST("api/v1/bus/country/driver/schedule/arriveStation")
     Observable<EmResult2<Object>> arriveStation(@Field("scheduleId") long scheduleId,
                                         @Field("stationId") long stationId);
 
@@ -69,7 +73,7 @@ public interface BusApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("api/v1/bus/country/driver/schedule/finish")
+    @POST("api/v1/bus/country/driver/schedule/finishSchedule")
     Observable<EmResult2<Object>> finish(@Field("scheduleId") long scheduleId);
 
 }
