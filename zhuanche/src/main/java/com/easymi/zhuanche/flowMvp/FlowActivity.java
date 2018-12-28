@@ -604,16 +604,18 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 //            myFirstMarker = aMap.addMarker(markerOption);
 
             MyLocationStyle myLocationStyle = new MyLocationStyle();
-            myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_MAP_ROTATE);
+            myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER);
             myLocationStyle.strokeWidth(0);
             myLocationStyle.strokeColor(R.color.transparent);
             myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                     .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
             aMap.setMyLocationStyle(myLocationStyle);
 
+
+//            location();
         }
     }
-//
+
 //    //声明AMapLocationClient类对象，定位发起端
 //    private AMapLocationClient mLocationClient = null;
 //    //声明mLocationOption对象，定位参数
@@ -653,10 +655,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 //    public void onLocationChanged(AMapLocation aMapLocation) {
 //        // 如果不设置标志位，此时再拖动地图时，它会不断将地图移动到当前的位置
 //        if (isFirstLoc) {
-////            //设置缩放级别
-////            aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
-////            //将地图移动到定位点
-////            aMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude())));
+//            //设置缩放级别
+//            aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
+//            //将地图移动到定位点
+//            aMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude())));
 //            //点击定位按钮 能够将地图的中心移动到定位点
 //            mListener.onLocationChanged(aMapLocation);
 //            //添加图钉
@@ -665,6 +667,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 ////            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
 ////                    .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
 ////            aMap.addMarker(markerOption);
+//            isFirstLoc = false;
 //        }
 //    }
 //
@@ -802,7 +805,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             this.routeOverLay.removeFromMap();
         }
         this.routeOverLay = routeOverLay;
-
     }
 
     private DrivingRouteOverlay drivingRouteOverlay;
@@ -948,17 +950,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         sure.setText(getString(R.string.pay_money) + money + getString(R.string.yuan));
 
         sure.setOnClickListener(view12 -> {
-//            if (pay2Btn.isChecked() || pay3Btn.isChecked() || pay4Btn.isChecked()) {
-//                if (pay4Btn.isChecked()) {
-//                    presenter.payOrder(orderId, "helppay");
-//                } else if (pay3Btn.isChecked()) {
-//                    presenter.payOrder(orderId, "sign");
-//                } else if (pay2Btn.isChecked()) {
-//                    presenter.payOrder(orderId, "balance");
-//                }
-//            } else {
-//                ToastUtil.showMessage(FlowActivity.this, getString(R.string.please_pay_title));
-//            }
             if (pay4Btn.isChecked()) {
                 if (ZCSetting.findOne().driverRepLowBalance == 2) {
                     if (money > EmUtil.getEmployInfo().balance) {
@@ -1318,7 +1309,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     @Override
     protected void onStart() {
         super.onStart();
-        LocReceiver.getInstance().addObserver(this);//添加位置订阅
+//        LocReceiver.getInstance().addObserver(this);//添加位置订阅
         HandlePush.getInstance().addObserver(this);//添加订单变化订阅
         HandlePush.getInstance().addPLObserver(this);//添加订单变化订阅
 
@@ -1373,17 +1364,19 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         mAlbumOrientationEventListener.disable();
         mapView.onDestroy();
         presenter.stopNavi();
-//        //add
-//        mLocationClient.stopLocation();//停止定位
-//        mLocationClient.onDestroy();//销毁定位客户端。
-
+        //add
+//        if (mLocationClient !=null){
+//            mLocationClient.stopLocation();//停止定位
+//            mLocationClient.onDestroy();//销毁定位客户端。
+//        }
+//
         super.onDestroy();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        LocReceiver.getInstance().deleteObserver(this);//取消位置订阅
+//        LocReceiver.getInstance().deleteObserver(this);//取消位置订阅
         HandlePush.getInstance().deleteObserver(this);//取消订单变化订阅
         HandlePush.getInstance().deletePLObserver(this);//取消订单变化订阅
 

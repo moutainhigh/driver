@@ -205,13 +205,11 @@ public interface McService {
      * 注销
      *
      * @param driverId
-     * @param appKey
      * @return
      */
     @FormUrlEncoded
-    @PUT("driver/api/v1/employLoginOut")
-    Observable<EmResult> employLoginOut(@Field("id") Long driverId,
-                                        @Field("app_key") String appKey);
+    @POST("api/v1/public/driver/cancellation")
+    Observable<EmResult> employLoginOut(@Field("id") Long driverId);
 
     /**
      * 根据区域编码获取公司

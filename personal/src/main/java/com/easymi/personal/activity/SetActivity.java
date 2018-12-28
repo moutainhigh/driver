@@ -178,22 +178,20 @@ public class SetActivity extends RxBaseActivity {
                 .setMessage(getString(R.string.set_sure_exit))
                 .setPositiveButton(getString(R.string.set_sure), (dialogInterface, i) -> {
                     doLogOut();
-//                    EmUtil.employLogout(SetActivity.this);
                 })
                 .setNegativeButton(getString(R.string.set_cancel), (dialogInterface, i) -> dialogInterface.dismiss())
                 .create();
         dialog.show();
     }
 
-
-    //注销接口没有，临时调用了下线接口，解决gu没删除的问题 // 被别人登录后就gg了，下线都报410
+    //注销
     private void doLogOut() {
         if (null != WorkPresenter.timeCounter) {
             WorkPresenter.timeCounter.forceUpload(-1);
         }
         McService mcService = ApiManager.getInstance().createApi(Config.HOST, McService.class);
         Observable<EmResult> observable = mcService
-                .offline(EmUtil.getEmployId(), EmUtil.getEmployInfo().companyId)
+                .employLoginOut(EmUtil.getEmployId())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

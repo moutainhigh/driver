@@ -378,7 +378,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                             employ.updateAll();
                         }
                     }
-                }else {
+                } else {
                     ToastUtil.showMessage(context, "未绑定车辆车型，不能接单");
                 }
             }

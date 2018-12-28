@@ -219,8 +219,6 @@ public class LiushuiActivity extends RxBaseActivity {
     }
 
     private void queryOrders() {
-        Long driverId = EmUtil.getEmployId();
-
         Observable<QueryOrdersResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .queryOverOrdersByBunsiness(startTime == null ? null : startTime / 1000,
                         endTime == null ? null : endTime / 1000, page, limit)

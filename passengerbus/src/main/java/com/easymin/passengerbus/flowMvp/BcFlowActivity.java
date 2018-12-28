@@ -137,7 +137,6 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
 
     @Override
     public void initMap() {
-
         aMap = mapView.getMap();
         aMap.getUiSettings().setZoomControlsEnabled(false);
         aMap.getUiSettings().setRotateGesturesEnabled(false);
@@ -148,13 +147,8 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
 
         aMap.setOnMapTouchListener(this);
 
-
-
         mRouteSearch = new RouteSearch(this);
         mRouteSearch.setRouteSearchListener(this);
-
-
-
     }
 
     @Override
