@@ -88,7 +88,7 @@ public class XApp extends MultiDexApplication {
 
         initDataBase();
 
-        CrashReport.initCrashReport(getApplicationContext(), "3816555448", false);
+        CrashReport.initCrashReport(getApplicationContext(), "28ff5239b4", true);
 
         int lastVersion = XApp.getMyPreferences().getInt(Config.SP_LAST_VERSION, 0);
         int current = SysUtil.getVersionCode(this);
@@ -100,6 +100,8 @@ public class XApp extends MultiDexApplication {
             editor.apply();
         }
     }
+
+
 
     private void initDataBase() {
         SqliteHelper.init(this);

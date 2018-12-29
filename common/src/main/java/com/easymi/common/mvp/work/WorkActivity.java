@@ -72,6 +72,7 @@ import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.component.widget.pinned.PinnedHeaderDecoration;
 import com.skyfishjy.library.RippleBackground;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
@@ -81,7 +82,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 
 /**
@@ -94,7 +94,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         EmployStatusChangeReceiver.OnStatusChangeListener,
         AMap.OnMarkerClickListener, AMap.OnMapClickListener,
         NoticeReceiver.OnReceiveNotice,
-        AnnReceiver.OnReceiveAnn, OrderRefreshReceiver.OnRefreshOrderListener{
+        AnnReceiver.OnReceiveAnn, OrderRefreshReceiver.OnRefreshOrderListener {
 
     LinearLayout bottomBar;
 
@@ -331,6 +331,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
                     .build("/personal/MoreActivity")
                     .navigation();
 
+            CrashReport.testJavaCrash();
 //            ARouter.getInstance()
 //                    .build("/passengerbus/BcFlowActivity")
 //                    .navigation();
@@ -555,7 +556,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         Employ employ = EmUtil.getEmployInfo();
         if (String.valueOf(employ.status).equals(EmployStatus.FROZEN)) {
             EmUtil.employLogout(this);
-        } else if (String.valueOf(employ.status).equals(EmployStatus.ONLINE) || employ.status == 1 ) {
+        } else if (String.valueOf(employ.status).equals(EmployStatus.ONLINE) || employ.status == 1) {
             showOffline();//非听单状态
             presenter.initDaemon();
         } else {
