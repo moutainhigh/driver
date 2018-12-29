@@ -138,14 +138,14 @@ import rx.schedulers.Schedulers;
  */
 @Route(path = "/zhuanche/FlowActivity")
 public class FlowActivity extends RxBaseActivity implements FlowContract.View,
-        LocObserver,
+//        LocObserver,
         TraceInterface,
         FeeChangeObserver,
         PassengerLocObserver,
         CancelOrderReceiver.OnCancelListener,
         AMap.OnMapTouchListener,
         OrderFinishReceiver.OnFinishListener
-//        , LocationSource, AMapLocationListener
+        ,AMapLocationListener
 {
     public static final int CANCEL_ORDER = 0X01;
     public static final int CHANGE_END = 0X02;
@@ -286,7 +286,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         mapView = findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
 
-        initMap();
         initPop();
         initToolbar();
     }
@@ -554,6 +553,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 }
             }
             this.zcOrder = zcOrder;
+            initMap();
             showTopView();
             initBridge();
             showBottomFragment(zcOrder);
@@ -571,6 +571,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
     }
 
+    MyLocationStyle myLocationStyle;
 
     @Override
     public void initMap() {
@@ -594,92 +595,65 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 //            receiveLoc(emLoc);//手动调用上次位置 减少从北京跳过来的时间
             aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLatlng, 17));//移动镜头，首次镜头快速跳到指定位置
 
-//            MarkerOptions markerOption = new MarkerOptions();
-//            markerOption.position(new LatLng(emLoc.latitude, emLoc.longitude));
-//            markerOption.draggable(false);//设置Marker可拖动
-//            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-//                    .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
-//            // 将Marker设置为贴地显示，可以双指下拉地图查看效果
-//            markerOption.setFlat(true);//设置marker平贴地图效果
-//            myFirstMarker = aMap.addMarker(markerOption);
-
-            MyLocationStyle myLocationStyle = new MyLocationStyle();
+            myLocationStyle = new MyLocationStyle();
             myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER);
-            myLocationStyle.strokeWidth(0);
-            myLocationStyle.strokeColor(R.color.transparent);
             myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                     .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
             aMap.setMyLocationStyle(myLocationStyle);
 
-
-//            location();
+            location();
         }
     }
 
-//    //声明AMapLocationClient类对象，定位发起端
-//    private AMapLocationClient mLocationClient = null;
-//    //声明mLocationOption对象，定位参数
-//    public AMapLocationClientOption mLocationOption = null;
-//    //声明mListener对象，定位监听器
-//    private LocationSource.OnLocationChangedListener mListener = null;
-//
-//    private void location() {
-//        //初始化定位
-//        mLocationClient = new AMapLocationClient(getApplicationContext());
-//        //设置定位回调监听
-//        mLocationClient.setLocationListener(this);
-//        //初始化定位参数
-//        mLocationOption = new AMapLocationClientOption();
-//        //设置定位模式为Hight_Accuracy高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
-//        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-//        //设置是否返回地址信息（默认返回地址信息）
-//        mLocationOption.setNeedAddress(true);
-//        //设置是否只定位一次,默认为false
-//        mLocationOption.setOnceLocation(false);
-//        //设置是否强制刷新WIFI，默认为强制刷新
-//        mLocationOption.setWifiActiveScan(true);
-//        //设置是否允许模拟位置,默认为false，不允许模拟位置  true方法开启允许位置模拟
-//        mLocationOption.setMockEnable(true);
-//        //设置定位间隔,单位毫秒,默认为2000ms
-//        mLocationOption.setInterval(2000);
-//        //给定位客户端对象设置定位参数
-//        mLocationClient.setLocationOption(mLocationOption);
-//        //启动定位
-//        mLocationClient.startLocation();
-//    }
-//
-//    //标识，用于判断是否只显示一次定位信息和用户重新定位
-//    private boolean isFirstLoc = true;
-//
-//    @Override
-//    public void onLocationChanged(AMapLocation aMapLocation) {
-//        // 如果不设置标志位，此时再拖动地图时，它会不断将地图移动到当前的位置
-//        if (isFirstLoc) {
-//            //设置缩放级别
-//            aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
-//            //将地图移动到定位点
-//            aMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude())));
-//            //点击定位按钮 能够将地图的中心移动到定位点
-//            mListener.onLocationChanged(aMapLocation);
-//            //添加图钉
-////            MarkerOptions markerOption = new MarkerOptions();
-////            markerOption.position(new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude()));
-////            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-////                    .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
-////            aMap.addMarker(markerOption);
-//            isFirstLoc = false;
-//        }
-//    }
-//
-//    @Override
-//    public void activate(OnLocationChangedListener onLocationChangedListener) {
-//        mListener = onLocationChangedListener;
-//    }
-//
-//    @Override
-//    public void deactivate() {
-//        mListener = null;
-//    }
+    //声明AMapLocationClient类对象，定位发起端
+    private AMapLocationClient mLocationClient = null;
+    //声明mLocationOption对象，定位参数
+    public AMapLocationClientOption mLocationOption = null;
+
+    private void location() {
+        //初始化定位
+        mLocationClient = new AMapLocationClient(getApplicationContext());
+        //设置定位回调监听
+        mLocationClient.setLocationListener(this);
+        //初始化定位参数
+        mLocationOption = new AMapLocationClientOption();
+        //设置定位模式为Hight_Accuracy高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+        //设置是否返回地址信息（默认返回地址信息）
+        mLocationOption.setNeedAddress(true);
+        //设置是否只定位一次,默认为false
+        mLocationOption.setOnceLocation(false);
+        //设置是否允许模拟位置,默认为false，不允许模拟位置  true方法开启允许位置模拟
+        mLocationOption.setMockEnable(true);
+        //设置定位间隔,单位毫秒,默认为2000ms
+        mLocationOption.setInterval(2000);
+        //给定位客户端对象设置定位参数
+        mLocationClient.setLocationOption(mLocationOption);
+        //启动定位
+        mLocationClient.startLocation();
+    }
+
+    @Override
+    public void onLocationChanged(AMapLocation aMapLocation) {
+        if (!isMapTouched){
+            if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER){
+                if (aMapLocation.getSpeed()>0){
+                    ToastUtil.showMessage(this,"/speed:"+aMapLocation.getSpeed());
+                }
+//                if (aMapLocation.getSpeed()*3.6 >= 5){
+                    aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
+                    myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_MAP_ROTATE);
+                    aMap.setMyLocationStyle(myLocationStyle);
+//                }
+            }
+        }else {
+            myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER);
+            aMap.setMyLocationStyle(myLocationStyle);
+            if ((System.currentTimeMillis()-XApp.getMyPreferences().getLong(Config.DOWN_TIME,0))/1000 > 10){
+                isMapTouched = false;
+            }
+        }
+    }
 
     private Marker startMarker;
     private Marker endMarker;
@@ -1389,64 +1363,64 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     private LatLng lastLatlng;
 
-    @Override
-    public void receiveLoc(EmLoc location) {
-        if (null == location) {
-            return;
-        }
-        Log.e("locPos", "bearing 2 >>>>" + location.bearing);
-        LatLng latLng = new LatLng(location.latitude, location.longitude);
-
-//        if (null == smoothMoveMarker) {//首次进入
-//            smoothMoveMarker = new SmoothMoveMarker(aMap);
-//            smoothMoveMarker.setDescriptor(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-//                    .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
-//            smoothMoveMarker.setPosition(lastLatlng);
-//            smoothMoveMarker.setRotate(location.bearing);
-//        } else {
-//            if (null != myFirstMarker) {//去除掉首次的位置marker
-//                myFirstMarker.remove();
-//            }
-//            List<LatLng> latLngs = new ArrayList<>();
-//            latLngs.add(lastLatlng);
-//            latLngs.add(latLng);
-//            smoothMoveMarker.setPosition(lastLatlng);
-//            smoothMoveMarker.setPoints(latLngs);
+//    @Override
+//    public void receiveLoc(EmLoc location) {
+//        if (null == location) {
+//            return;
+//        }
+//        Log.e("locPos", "bearing 2 >>>>" + location.bearing);
+//        LatLng latLng = new LatLng(location.latitude, location.longitude);
 //
-//            smoothMoveMarker.setTotalDuration(Config.NORMAL_LOC_TIME / 1000);
+////        if (null == smoothMoveMarker) {//首次进入
+////            smoothMoveMarker = new SmoothMoveMarker(aMap);
+////            smoothMoveMarker.setDescriptor(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+////                    .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
+////            smoothMoveMarker.setPosition(lastLatlng);
+////            smoothMoveMarker.setRotate(location.bearing);
+////        } else {
+////            if (null != myFirstMarker) {//去除掉首次的位置marker
+////                myFirstMarker.remove();
+////            }
+////            List<LatLng> latLngs = new ArrayList<>();
+////            latLngs.add(lastLatlng);
+////            latLngs.add(latLng);
+////            smoothMoveMarker.setPosition(lastLatlng);
+////            smoothMoveMarker.setPoints(latLngs);
+////
+////            smoothMoveMarker.setTotalDuration(Config.NORMAL_LOC_TIME / 1000);
+////
+////            smoothMoveMarker.setRotate(location.bearing);
+////            smoothMoveMarker.startSmoothMove();
+////            Marker marker = smoothMoveMarker.getMarker();
+////            if (null != marker) {
+////                marker.setDraggable(false);
+////                marker.setClickable(false);
+////                marker.setAnchor(0.5f, 0.5f);
+////            }
+////        }
 //
-//            smoothMoveMarker.setRotate(location.bearing);
-//            smoothMoveMarker.startSmoothMove();
-//            Marker marker = smoothMoveMarker.getMarker();
-//            if (null != marker) {
-//                marker.setDraggable(false);
-//                marker.setClickable(false);
-//                marker.setAnchor(0.5f, 0.5f);
+//        if (zcOrder != null) {
+//            if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+//                if (null != getEndAddr()) {
+//                    presenter.routePlanByNavi(getEndAddr().lat, getEndAddr().lng);
+//                }
+//            } else if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
+//                if (null != getEndAddr()) {
+//                    presenter.routePlanByNavi(getStartAddr().lat, getStartAddr().lng);
+//                }
 //            }
 //        }
-
-        if (zcOrder != null) {
-            if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-                if (null != getEndAddr()) {
-                    presenter.routePlanByNavi(getEndAddr().lat, getEndAddr().lng);
-                }
-            } else if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
-                if (null != getEndAddr()) {
-                    presenter.routePlanByNavi(getStartAddr().lat, getStartAddr().lng);
-                }
-            }
-        }
-
-        if (null != zcOrder) {
-            if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER
-                    || zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
-                if (!isMapTouched) {
-                    aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17), Config.NORMAL_LOC_TIME, null);
-                }
-            }
-        }
-        lastLatlng = latLng;
-    }
+//
+//        if (null != zcOrder) {
+//            if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER
+//                    || zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
+//                if (!isMapTouched) {
+//                    aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17), Config.NORMAL_LOC_TIME, null);
+//                }
+//            }
+//        }
+//        lastLatlng = latLng;
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1569,14 +1543,18 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     public void onTouch(MotionEvent motionEvent) {
         if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
             Log.e("mapTouch", "-----map onTouched-----");
-            if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+            if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
                 isMapTouched = true;
+                XApp.getPreferencesEditor().putLong(Config.DOWN_TIME, System.currentTimeMillis()).apply();
+                Log.e("hufeng/DOWN_TIME",System.currentTimeMillis()+"");
             }
             if (null != runningFragment) {
                 runningFragment.mapStatusChanged();
             }
         }
     }
+
+
 
     @Override
     public void onFinishOrder(long orderId, String orderType) {

@@ -30,6 +30,8 @@ public class BusStationResult extends EmResult implements Serializable{
 
     public String startStation;
     public String endStation;
+    //只是班次
+    public long id;
 
     public List<BusStationsBean> stations;
 

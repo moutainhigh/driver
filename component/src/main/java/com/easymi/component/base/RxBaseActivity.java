@@ -367,6 +367,8 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
             }
         }
     }
+
+
     private RxPermissions rxPermissions;
 
     protected void choicePic(int x, int y) {

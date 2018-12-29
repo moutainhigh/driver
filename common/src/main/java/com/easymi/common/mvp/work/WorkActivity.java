@@ -331,6 +331,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
                     .build("/personal/MoreActivity")
                     .navigation();
 
+//            ARouter.getInstance()
+//                    .build("/passengerbus/BcFlowActivity")
+//                    .navigation();
         });
     }
 
