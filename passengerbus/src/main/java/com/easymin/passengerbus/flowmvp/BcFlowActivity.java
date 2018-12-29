@@ -1,4 +1,4 @@
-package com.easymin.passengerbus.flowMvp;
+package com.easymin.passengerbus.flowmvp;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -93,6 +93,8 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
 
     BcEndFragment bcEndFragment;
 
+    private Long scheduleId;
+
     @Override
     public boolean isEnableSwipe() {
         return false;
@@ -112,6 +114,7 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
         mapView = findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
         toolbar.setTitle("线路站点");
+        scheduleId = getIntent().getLongExtra("scheduleId", 0);
         initMap();
 
         initPresnter();
@@ -136,20 +139,24 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
         bcEndFragment = new BcEndFragment();
         Bundle bundle3 = new Bundle();
         bundle3.putSerializable("busLineResult", busRouteResult);
-        bcRuningFragment.setArguments(bundle3);
-        bcRuningFragment.setBridge(bridge);
+        bcEndFragment.setArguments(bundle3);
+        bcEndFragment.setBridge(bridge);
 
         FragmentManager manager3 = getSupportFragmentManager();
         FragmentTransaction transaction3 = manager3.beginTransaction();
         transaction3.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
-        transaction3.replace(R.id.fragment_frame, bcRuningFragment);
+        transaction3.replace(R.id.fragment_frame, bcEndFragment);
         transaction3.commit();
+
+
 
     }
 
         private void initPresnter() {
         presenter = new FlowPresenter(this, this);
-        presenter.findBusOrderById(11);
+        if (scheduleId != null && scheduleId != 0) {
+            presenter.findBusOrderById(scheduleId);
+        }
     }
 
 
@@ -190,7 +197,8 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
             public void arriveStart() {
                 //调用出发接口
 //                presenter.startStation(busRouteResult.id);
-                presenter.startStation(58);
+                presenter.startStation(scheduleId);
+
 
             }
 
@@ -198,17 +206,26 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
             public void arriveEnd() {
                 //到达
 //                presenter.endStation(busRouteResult.id);
-                presenter.endStation(58);
+                presenter.endStation(scheduleId);
 
             }
 
+
             @Override
-            public void slideToNext() {
+            public void slideToNext(long stationId) {
 
                 switchFragment(currentFragment).commit();
 
                 //调用滑动到达下一站接口
-//                presenter.arriveStation(busRouteResult.id, busRouteResult.stations.get());
+
+                presenter.toNextStation(scheduleId, stationId);
+            }
+
+            @Override
+            public void sideToArrived(long stationId) {
+                //滑动到达下一站
+
+                presenter.arriveStation(scheduleId, stationId);
             }
 
         };
@@ -226,7 +243,9 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
 //        aMap.clear();// 清理地图上的所有覆盖物
         //显示正在行驶的路线
 
-        tvTipLayout.setText("行程：" + busStationResult.startStation + "到" + busStationResult.endStation);
+        tvTipLayout.setText(
+                "行程：" + busStationResult.stationVos.get(0).address
+                        + "到" + busStationResult.stationVos.get(busRouteResult.stationVos.size()-1).address);
 
         initBridget();
         initFragment();
@@ -234,30 +253,30 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
 
         //设置bound
         List<LatLng> latLngs = new ArrayList<>();
-        latLngs.add(new LatLng(busStationResult.stations.get(0).latitude, busStationResult.stations.get(0).longitude));
-        latLngs.add(new LatLng((busStationResult.stations.get(busStationResult.stations.size()-1).latitude),
-                (busStationResult.stations.get(busStationResult.stations.size()-1).longitude)));
+        latLngs.add(new LatLng(busStationResult.stationVos.get(0).latitude, busStationResult.stationVos.get(0).longitude));
+        latLngs.add(new LatLng((busStationResult.stationVos.get(busStationResult.stationVos.size()-1).latitude),
+                (busStationResult.stationVos.get(busStationResult.stationVos.size()-1).longitude)));
 
         LatLngBounds bounds = MapUtil.getBounds(latLngs);
         aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(BcFlowActivity.this) / 1.5),
                 (int) (DensityUtil.getDisplayWidth(BcFlowActivity.this) / 1.5), 0));
 
         //添加站点marker
-        List<LatLng> stations = new ArrayList<LatLng>();
+        List<LatLng> stationVos = new ArrayList<LatLng>();
 
-        for (int i= 0; i < busRouteResult.stations.size(); i ++) {
-            stations.add(new LatLng(busStationResult.stations.get(i).latitude, busStationResult.stations.get(i).longitude));
+        for (int i= 0; i < busRouteResult.stationVos.size(); i ++) {
+            stationVos.add(new LatLng(busStationResult.stationVos.get(i).latitude, busStationResult.stationVos.get(i).longitude));
 
             markerOption = new MarkerOptions()
                     .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_bus_dot))
-                    .title(busRouteResult.stations.get(i).address )
-                    .position(new LatLng(busStationResult.stations.get(i).latitude, busStationResult.stations.get(i).longitude))
+                    .title(busRouteResult.stationVos.get(i).address )
+                    .position(new LatLng(busStationResult.stationVos.get(i).latitude, busStationResult.stationVos.get(i).longitude))
                     .setInfoWindowOffset(0,-5)
                     .draggable(true);
 
             //绘制路线
             aMap.addPolyline(new PolylineOptions().
-                    addAll(stations)
+                    addAll(stationVos)
                     .width(15)
                     .color(Color.parseColor("#3C98E3")));
             aMap.addMarker(markerOption);
@@ -400,19 +419,23 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
 //        aMap.addMarker(new MarkerOptions());
 
 
-        moveToShowStationName(mylocation);
+//        moveToShowStationName(mylocation);
     }
 
     /**
      * 显示移动后 到达站点的名字
      */
     private void moveToShowStationName(LatLng mylocation) {
-        for (int i = 0; i <= busRouteResult.stations.size()-1; i ++) {
-            LatLng stationLatLng = new LatLng(busRouteResult.stations.get(i).latitude, busRouteResult.stations.get(i).longitude);
+
+        if (busRouteResult.stationVos == null) {
+            return;
+        }
+        for (int i = 0; i <= busRouteResult.stationVos.size()-1; i ++) {
+            LatLng stationLatLng = new LatLng(busRouteResult.stationVos.get(i).latitude, busRouteResult.stationVos.get(i).longitude);
             if (mylocation == stationLatLng) {
                 markerOption = new MarkerOptions()
                         .icon(BitmapDescriptorFactory.fromResource(R.mipmap.amap_bus))
-                        .position(mylocation).title(busRouteResult.stations.get(i).name)
+                        .position(mylocation).title(busRouteResult.stationVos.get(i).name)
                         .draggable(true)
                         .period(10);
                 aMap.addMarker(markerOption);

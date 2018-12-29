@@ -11,7 +11,8 @@ import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.widget.CustomSlideToUnlockView;
 import com.easymin.passengerbus.R;
 import com.easymin.passengerbus.entity.BusStationResult;
-import com.easymin.passengerbus.flowMvp.ActFraCommBridge;
+import com.easymin.passengerbus.flowmvp.ActFraCommBridge;
+import com.easymin.passengerbus.flowmvp.BcFlowActivity;
 
 /**
  * 行程中
@@ -31,8 +32,7 @@ public class BcRuningFragment extends RxBaseFragment{
      * 当前状态
      */
     private String curStr;
-
-
+    int index;
 
     @Override
     public void setArguments(@Nullable Bundle args) {
@@ -53,16 +53,17 @@ public class BcRuningFragment extends RxBaseFragment{
     @Override
     public void finishCreateView(Bundle state) {
 
-//        if (curStr.equals("滑动前往下一站")) {
-//
-//            bridge.changeToolbar(BcFlowActivity.RUNNING);
-//
-//        } else if (curStr.equals("滑动到达站点")) {
-//
-//            bridge.changeToolbar(BcFlowActivity.ENDRUNING);
-//
-//        }
         initView();
+
+        if (curStr.equals("滑动前往下一站")) {
+
+            bridge.changeToolbar(BcFlowActivity.RUNNING);
+
+        } else if (curStr.equals("滑动到达站点")) {
+
+            bridge.changeToolbar(BcFlowActivity.ENDRUNING);
+
+        }
 
     }
 
@@ -79,7 +80,17 @@ public class BcRuningFragment extends RxBaseFragment{
         }
 
         slider.setOnClickListener(v -> {
-            bridge.slideToNext();
+
+//            for (int i = 1; i <= result.stationVos.size()-1; i++) {
+//
+//                if (curStr.equals("滑动前往下一站")) {
+//                    bridge.slideToNext(result.stationVos.get(i).id);
+//
+//                } else if (curStr.equals("滑动到达站点")) {
+//                    bridge.sideToArrived(result.stationVos.get(i).id);
+//                }
+//            }
+
         });
 
 
@@ -95,6 +106,18 @@ public class BcRuningFragment extends RxBaseFragment{
             public void onUnlocked() {
 
                 resetView();
+                index = result.stationVos.get(0).id;
+                int total = result.stationVos.get(result.stationVos.size()-1).id;
+
+                if (index < total){
+                    index = index + 1;
+                }
+                if (curStr.equals("滑动前往下一站")) {
+                    bridge.slideToNext(index);
+
+                } else if (curStr.equals("滑动到达站点")) {
+                    bridge.sideToArrived(index);
+                }
             }
         });
 

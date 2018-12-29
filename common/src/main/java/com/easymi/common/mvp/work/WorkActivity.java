@@ -327,13 +327,13 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         toolbar.setTitle(R.string.work_title);
         toolbar.setRightIcon(R.drawable.ic_more_icon, view -> {
 
-            ARouter.getInstance()
-                    .build("/personal/MoreActivity")
-                    .navigation();
-
 //            ARouter.getInstance()
-//                    .build("/passengerbus/BcFlowActivity")
+//                    .build("/personal/MoreActivity")
 //                    .navigation();
+
+            ARouter.getInstance()
+                    .build("/passengerbus/BcFlowActivity")
+                    .navigation();
         });
     }
 

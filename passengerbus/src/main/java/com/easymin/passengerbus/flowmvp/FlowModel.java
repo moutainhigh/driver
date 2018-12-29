@@ -1,4 +1,4 @@
-package com.easymin.passengerbus.flowMvp;
+package com.easymin.passengerbus.flowmvp;
 
 import android.content.Context;
 
@@ -61,6 +61,15 @@ public class FlowModel implements FlowContract.Model {
     public Observable<EmResult2<BusStationResult>> findBusOrderById(long id) {
         return ApiManager.getInstance().createApi(Config.HOST, BusApiService.class)
                 .findBusInfoById(id)
+                .filter(new HttpResultFunc3<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<EmResult2<Object>> toNextStation(long scheduleId, long stationId) {
+        return ApiManager.getInstance().createApi(Config.HOST, BusApiService.class)
+                .toNextStation(scheduleId, stationId)
                 .filter(new HttpResultFunc3<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

@@ -138,6 +138,8 @@ public class MultipleOrder extends BaseOrder implements Serializable, MultiItemE
             orderType = "定制包车";
         }else if (serviceType.equals(Config.RENTAL)){
             orderType = "包车租车";
+        } else if (serviceType.equals(Config.COUNTRY)) {
+            orderType = "客运班车";
         }
         return orderType;
     }

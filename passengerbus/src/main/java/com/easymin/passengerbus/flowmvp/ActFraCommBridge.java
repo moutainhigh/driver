@@ -1,4 +1,4 @@
-package com.easymin.passengerbus.flowMvp;
+package com.easymin.passengerbus.flowmvp;
 
 import com.amap.api.maps.model.LatLng;
 import com.easymi.common.entity.OrderCustomer;
@@ -34,6 +34,12 @@ public interface ActFraCommBridge {
     /**
      * 滑动到达下一站
      */
-    void slideToNext();
+    void slideToNext(long stationId);
+
+    /**
+     * 滑动到达站点
+     */
+    void sideToArrived(long stationId);
+
 
 }

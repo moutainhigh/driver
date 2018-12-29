@@ -59,7 +59,7 @@ public class IndexActivity extends RxBaseActivity {
     @Override
     public void initViews(Bundle savedInstanceState) {
 //        Intent intent= new Intent();
-//        intent.setClassName(this,"com.easymin.passengerbus.flowMvp.BcFlowActivity");
+//        intent.setClassName(this,"com.easymin.passengerbus.flowmvp.BcFlowActivity");
 //        startActivity(intent);
 //        ARouter.getInstance().build("/passengerbus/BcFlowActivity").navigation();
 

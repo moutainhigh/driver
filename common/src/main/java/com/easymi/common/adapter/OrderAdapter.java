@@ -56,11 +56,11 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
             baseViewHolder.setText(R.id.order_type, "" + baseOrder.getOrderType());
             baseViewHolder.setText(R.id.order_start_place, "" + baseOrder.bookAddress);
             baseViewHolder.setText(R.id.order_end_place, baseOrder.destination);
-            if (TextUtils.equals(baseOrder.serviceType,Config.CITY_LINE)){
+            if (TextUtils.equals(baseOrder.serviceType,Config.CITY_LINE) || TextUtils.equals(baseOrder.serviceType,Config.COUNTRY)){//专线
 //                DymOrder dymOrder = DymOrder.findByIDType(baseOrder.scheduleId,baseOrder.serviceType);
 //                baseViewHolder.setText(R.id.order_status, "" + ZXStatus2Str.int2Str(baseOrder.serviceType, dymOrder.orderStatus)+" >");
                 baseViewHolder.setText(R.id.order_status, "" + baseOrder.getZXOrderStatusStr()+" >");
-            }else {
+            } else {
 //                DymOrder dymOrder = DymOrder.findByIDType(baseOrder.orderId,baseOrder.serviceType);
 //                baseViewHolder.setText(R.id.order_status, "" + DJStatus2Str.int2Str(baseOrder.serviceType, dymOrder.orderStatus)+" >");
                 baseViewHolder.setText(R.id.order_status, "" + DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status)+" >");
@@ -88,6 +88,11 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
                         ARouter.getInstance()
                                 .build("/rental/FlowActivity")
                                 .withLong("orderId", baseOrder.orderId).navigation();
+                    } else if (baseOrder.serviceType.equals(Config.COUNTRY)) {
+                        ARouter.getInstance()
+                                .build("/passengerbus/BcFlowActivity")
+                                .withLong("orderId", baseOrder.orderId)
+                                .withLong("scheduleId", baseOrder.scheduleId).navigation();
                     }
                 }
             });
