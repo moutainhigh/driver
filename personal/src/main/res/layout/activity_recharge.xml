@@ -113,7 +113,6 @@
                     android:background="@drawable/corners_efefef"
                     android:gravity="center_vertical"
                     android:hint="@string/recharge_please_money"
-                    android:inputType="number"
                     android:paddingLeft="10dp"
                     android:textSize="14sp" />
 

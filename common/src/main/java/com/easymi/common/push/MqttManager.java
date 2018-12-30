@@ -348,12 +348,15 @@ public class MqttManager implements LocObserver {
         pushInternalLoc(data, false);
     }
 
+
+
     public void pushLocNoLimit(BuildPushData data) {
         pushInternalLoc(data, true);
     }
 
     private void pushInternalLoc(BuildPushData data, boolean noLimit) {
         String pushStr = BuildPushUtil.buildPush(data, noLimit);
+
         if (client != null && client.isConnected()) {
             if (data != null) {
                 if (pushStr == null) {
@@ -397,9 +400,9 @@ public class MqttManager implements LocObserver {
         if (NetUtil.getNetWorkState(XApp.getInstance()) == NetUtil.NETWORK_NONE) {
             return; //没网
         }
-        if (DymOrder.findAll().size() == 0) {
-            return;
-        }
+//        if (DymOrder.findAll().size() == 0) {
+//            return;
+//        }
         long lastPushTime = XApp.getMyPreferences().getLong(Config.SP_LAST_GPS_PUSH_TIME, 0);
         if (System.currentTimeMillis() - lastPushTime > 30 * 1000) {
             XApp.getPreferencesEditor().putLong(Config.SP_LAST_GPS_PUSH_TIME, System.currentTimeMillis()).apply();
@@ -430,4 +433,5 @@ public class MqttManager implements LocObserver {
             FileUtil.delete("v5driver", "pushCache.txt");
         }
     }
+
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.amap.api.navi.model.NaviLatLng;
 import com.easymi.cityline.CLService;
 import com.easymi.cityline.activity.CreateOrderActivity;
 import com.easymi.common.entity.OrderCustomer;
@@ -21,6 +22,8 @@ import com.easymi.component.network.HttpResultFunc3;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult2;
+import com.easymi.component.utils.EmUtil;
+import com.easymi.zhuanche.activity.TestActivity;
 import com.easymin.daijia.driver.zyziyunsjdaijia.R;
 
 import java.text.DecimalFormat;
@@ -92,7 +95,20 @@ public class IndexActivity extends RxBaseActivity {
 //                    }
 //                })));
 
+//        initNaiv();
+    }
 
+    public void initNaiv(){
+        NaviLatLng start = new NaviLatLng(30.857643, 103.834576);
+        NaviLatLng end = new NaviLatLng(30.847643, 103.884576);
+        Intent intent = new Intent(this, TestActivity.class);
+        intent.putExtra("startLatlng", start);
+        intent.putExtra("endLatlng", end);
+        intent.putExtra("orderId", 1);
+        intent.putExtra("orderType", Config.CITY_LINE);
+
+        intent.putExtra(Config.NAVI_MODE, Config.DRIVE_TYPE);
+        startActivity(intent);
     }
 
 //    private void getCustomers(ZXOrder zxOrder) {

@@ -155,7 +155,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
                 loadOrder(order);
-            } else if (msg.equals("reAssign")) {//订单被改派
+            } else if (msg.equals("reAssign")) {//订单被改派 （收回）
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");

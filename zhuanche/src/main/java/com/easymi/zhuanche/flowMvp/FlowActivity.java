@@ -145,8 +145,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         CancelOrderReceiver.OnCancelListener,
         AMap.OnMapTouchListener,
         OrderFinishReceiver.OnFinishListener
-        ,AMapLocationListener
-{
+        , AMapLocationListener {
     public static final int CANCEL_ORDER = 0X01;
     public static final int CHANGE_END = 0X02;
     public static final int CHANGE_ORDER = 0X03;
@@ -288,6 +287,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         initPop();
         initToolbar();
+
     }
 
     @Override
@@ -588,21 +588,25 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         // 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false
         aMap.setMyLocationEnabled(true);
 
-        String locStr = XApp.getMyPreferences().getString(Config.SP_LAST_LOC, "");
-        EmLoc emLoc = new Gson().fromJson(locStr, EmLoc.class);
-        if (null != emLoc) {
-            lastLatlng = new LatLng(emLoc.latitude, emLoc.longitude);
-//            receiveLoc(emLoc);//手动调用上次位置 减少从北京跳过来的时间
-            aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLatlng, 17));//移动镜头，首次镜头快速跳到指定位置
+//        String locStr = XApp.getMyPreferences().getString(Config.SP_LAST_LOC, "");
+//        EmLoc emLoc = new Gson().fromJson(locStr, EmLoc.class);
+//        if (null != emLoc) {
+//            lastLatlng = new LatLng(emLoc.latitude, emLoc.longitude);
+////            receiveLoc(emLoc);//手动调用上次位置 减少从北京跳过来的时间
+//            aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLatlng, 17));//移动镜头，首次镜头快速跳到指定位置
 
-            myLocationStyle = new MyLocationStyle();
+        myLocationStyle = new MyLocationStyle();
+        if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+            myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_MAP_ROTATE);
+        } else {
             myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER);
-            myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                    .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
-            aMap.setMyLocationStyle(myLocationStyle);
-
-            location();
         }
+        myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
+        aMap.setMyLocationStyle(myLocationStyle);
+
+        location();
+//        }
     }
 
     //声明AMapLocationClient类对象，定位发起端
@@ -635,21 +639,27 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
-        if (!isMapTouched){
-            if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER){
-                if (aMapLocation.getSpeed()>0){
-                    ToastUtil.showMessage(this,"/speed:"+aMapLocation.getSpeed());
-                }
+        if (!isMapTouched) {
+            if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+
 //                if (aMapLocation.getSpeed()*3.6 >= 5){
-                    aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
-                    myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_MAP_ROTATE);
-                    aMap.setMyLocationStyle(myLocationStyle);
+                aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
+                myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_MAP_ROTATE);
+                aMap.setMyLocationStyle(myLocationStyle);
 //                }
             }
-        }else {
+        } else {
+            //todo 地图滑动第二次才生效的问题
             myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER);
             aMap.setMyLocationStyle(myLocationStyle);
-            if ((System.currentTimeMillis()-XApp.getMyPreferences().getLong(Config.DOWN_TIME,0))/1000 > 10){
+            Log.e("hufeng/currentTimeMillis", System.currentTimeMillis() + "");
+            Log.e("hufeng/DOWN_TIME", XApp.getMyPreferences().getLong(Config.DOWN_TIME, 0) + "");
+            Log.e("hufeng/time", System.currentTimeMillis() - XApp.getMyPreferences().getLong(Config.DOWN_TIME, 0) + "");
+            Log.e("hufeng/time", (System.currentTimeMillis() - XApp.getMyPreferences().getLong(Config.DOWN_TIME, 0)) / 1000 + "");
+            Log.e("hufeng/time", (0 > 5) + "");
+            Log.e("hufeng/time", ((System.currentTimeMillis() - XApp.getMyPreferences().getLong(Config.DOWN_TIME, 0)) / 1000 > 5) + "");
+            Log.e("hufeng/isMapTouched", isMapTouched + "");
+            if ((System.currentTimeMillis() - XApp.getMyPreferences().getLong(Config.DOWN_TIME, 0)) / 1000 > 5) {
                 isMapTouched = false;
             }
         }
@@ -1339,11 +1349,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         mapView.onDestroy();
         presenter.stopNavi();
         //add
-//        if (mLocationClient !=null){
-//            mLocationClient.stopLocation();//停止定位
-//            mLocationClient.onDestroy();//销毁定位客户端。
-//        }
-//
+        if (mLocationClient != null) {
+            mLocationClient.stopLocation();//停止定位
+            mLocationClient.onDestroy();//销毁定位客户端。
+        }
+
         super.onDestroy();
     }
 
@@ -1546,14 +1556,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
                 isMapTouched = true;
                 XApp.getPreferencesEditor().putLong(Config.DOWN_TIME, System.currentTimeMillis()).apply();
-                Log.e("hufeng/DOWN_TIME",System.currentTimeMillis()+"");
             }
             if (null != runningFragment) {
                 runningFragment.mapStatusChanged();
             }
         }
     }
-
 
 
     @Override

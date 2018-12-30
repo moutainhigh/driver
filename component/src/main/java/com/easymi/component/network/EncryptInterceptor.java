@@ -129,11 +129,14 @@ public class EncryptInterceptor implements Interceptor {
      */
     private String encrypt(String content) {
         String value = content;
+        Log.e("hufeng/value",value);
         try {
             //将默认的url编码还原后加密在url编码
             String decoderStr = URLDecoder.decode(content, "utf-8");
             value = AesUtil.aesEncrypt(decoderStr, XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA));
+            Log.e("hufeng/aesvalue",value);
             value = URLEncoder.encode(value, "utf-8");
+            Log.e("hufeng/encode",value);
         } catch (Exception e) {
             e.printStackTrace();
         }

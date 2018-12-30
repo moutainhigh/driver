@@ -419,7 +419,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     public void onLocationChange(AMapNaviLocation aMapNaviLocation) {
         Log.e("FlowerPresenter", "onLocationChange()");
 //        routePlanByNavi(aMapNaviLocation.getCoord().getLatitude(),aMapNaviLocation.getCoord().getLongitude());
-
     }
 
     @Override

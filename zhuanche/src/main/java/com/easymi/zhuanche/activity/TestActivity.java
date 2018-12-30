@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
@@ -23,205 +24,424 @@ import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.navi.AMapNavi;
+import com.amap.api.navi.AMapNaviListener;
+import com.amap.api.navi.AMapNaviView;
+import com.amap.api.navi.AMapNaviViewListener;
+import com.amap.api.navi.enums.AMapNaviRingType;
+import com.amap.api.navi.enums.NaviType;
+import com.amap.api.navi.model.AMapLaneInfo;
+import com.amap.api.navi.model.AMapModelCross;
+import com.amap.api.navi.model.AMapNaviCameraInfo;
+import com.amap.api.navi.model.AMapNaviCross;
+import com.amap.api.navi.model.AMapNaviInfo;
+import com.amap.api.navi.model.AMapNaviLocation;
+import com.amap.api.navi.model.AMapNaviTrafficFacilityInfo;
+import com.amap.api.navi.model.AMapServiceAreaInfo;
+import com.amap.api.navi.model.AimLessModeCongestionInfo;
+import com.amap.api.navi.model.AimLessModeStat;
+import com.amap.api.navi.model.NaviInfo;
+import com.amap.api.navi.model.NaviLatLng;
+import com.autonavi.tbt.TrafficFacilityInfo;
+import com.easymi.component.Config;
+import com.easymi.component.DJOrderStatus;
+import com.easymi.component.app.XApp;
+import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.entity.DymOrder;
+import com.easymi.component.utils.StringUtils;
 import com.easymi.zhuanche.R;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
-@Route(path = "/zhuanche/TestActivity")
-public class TestActivity extends AppCompatActivity implements LocationSource, AMapLocationListener,OnCheckedChangeListener{
-    private MapView mapView;
-    //AMap是地图对象
-    private AMap aMap;
-    //声明AMapLocationClient类对象，定位发起端
-    private AMapLocationClient mLocationClient = null;
-    //声明mLocationOption对象，定位参数
-    public AMapLocationClientOption mLocationOption = null;
-    //声明mListener对象，定位监听器
-    private LocationSource.OnLocationChangedListener mListener = null;
-    //标识，用于判断是否只显示一次定位信息和用户重新定位
-    private boolean isFirstLoc = true;
-    private Bundle savedInstanceState;
+public class TestActivity extends RxBaseActivity implements AMapNaviListener, AMapNaviViewListener {
 
-    private RadioGroup mGPSModeGroup;
-    private TextView mLocationErrText;
+    AMapNaviView mAMapNaviView;
+
+    protected AMapNavi mAMapNavi;
+
+    protected NaviLatLng mEndLatlng;
+    protected NaviLatLng mStartLatlng;
+    protected final List<NaviLatLng> sList = new ArrayList<>();
+    protected final List<NaviLatLng> eList = new ArrayList<>();
+
+    protected List<NaviLatLng> wayPoints;
+
+    private long orderId;
+    private String orderType;
+    private int naviMode;
+
+//    LinearLayout simpleFeeCon;
+//    TextView lcTxt;
+//    TextView feeTxt;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        requestWindowFeature(Window.FEATURE_NO_TITLE);// 不显示程序的标题栏
-        setContentView(R.layout.activity_test);
-
-        //初始化控件
-        initView();
+    public int getLayoutId() {
+        return R.layout.activity_test;
     }
-    /**
-     * 获取控件
-     */
-    private void initView() {
-        mapView= (MapView) findViewById(R.id.map);
-        //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，实现地图生命周期管理
-        mapView.onCreate(savedInstanceState);
-        if (aMap == null) {
-            aMap = mapView.getMap();
-            //设置显示定位按钮 并且可以点击
-            UiSettings settings = aMap.getUiSettings();
-            aMap.setLocationSource(this);//设置了定位的监听
-            // 是否显示定位按钮
-            settings.setMyLocationButtonEnabled(true);
-            aMap.setMyLocationEnabled(true);//显示定位层并且可以触发定位,默认是flase
+
+    @Override
+    public void initViews(Bundle savedInstanceState) {
+
+        mStartLatlng = getIntent().getParcelableExtra("startLatlng");
+        mEndLatlng = getIntent().getParcelableExtra("endLatlng");
+
+        orderId = getIntent().getLongExtra("orderId", -1);
+        orderType = getIntent().getStringExtra("orderType");
+        naviMode = getIntent().getIntExtra(Config.NAVI_MODE, Config.DRIVE_TYPE);
+
+        wayPoints = getIntent().getParcelableArrayListExtra("wayPoints");
+
+        if (null == mStartLatlng || mEndLatlng == null) {
+            finish();
+            return;
         }
 
-        //找控件
-        mGPSModeGroup = (RadioGroup) findViewById(R.id.gps_radio_group);
-        mGPSModeGroup.setOnCheckedChangeListener(this);
-        mLocationErrText = (TextView)findViewById(R.id.location_errInfo_text);
-        mLocationErrText.setVisibility(View.GONE);
+        sList.add(mStartLatlng);
+        eList.add(mEndLatlng);
 
-        //开始定位
-        location();
+        mAMapNaviView = findViewById(com.easymi.component.R.id.navi_view);
+        mAMapNaviView.onCreate(savedInstanceState);
+        mAMapNaviView.setAMapNaviViewListener(this);
+
+        mAMapNavi = AMapNavi.getInstance(this);
+        mAMapNavi.addAMapNaviListener(this);
+        mAMapNavi.setUseInnerVoice(true);
+
     }
 
+    private Timer timer;
+    private TimerTask timerTask;
 
-    private void location() {
-        //初始化定位
-        mLocationClient = new AMapLocationClient(getApplicationContext());
-        //设置定位回调监听
-        mLocationClient.setLocationListener(this);
-        //初始化定位参数
-        mLocationOption = new AMapLocationClientOption();
-        //设置定位模式为Hight_Accuracy高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
-        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-        //设置是否返回地址信息（默认返回地址信息）
-        mLocationOption.setNeedAddress(true);
-        //设置是否只定位一次,默认为false
-        mLocationOption.setOnceLocation(false);
-        //设置是否强制刷新WIFI，默认为强制刷新
-        mLocationOption.setWifiActiveScan(true);
-        //设置是否允许模拟位置,默认为false，不允许模拟位置  true方法开启允许位置模拟
-        mLocationOption.setMockEnable(true);
-        //设置定位间隔,单位毫秒,默认为2000ms
-        mLocationOption.setInterval(2000);
-        //给定位客户端对象设置定位参数
-        mLocationClient.setLocationOption(mLocationOption);
-        //启动定位
-        mLocationClient.startLocation();
+//    private void showFee() {
+//        simpleFeeCon = findViewById(com.easymi.component.R.id.simple_fee_con);
+//        lcTxt = findViewById(com.easymi.component.R.id.lc);
+//        feeTxt = findViewById(com.easymi.component.R.id.fee);
+//        DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
+//        if (dymOrder != null && dymOrder.orderType.equals(Config.DAIJIA)) {
+//            if (dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
+//                simpleFeeCon.setVisibility(View.VISIBLE);
+//                lcTxt.setText(getString(com.easymi.component.R.string.order_dis) + dymOrder.distance + getString(com.easymi.component.R.string.dis_unit));
+//                feeTxt.setText(getString(com.easymi.component.R.string.order_fee) + dymOrder.totalFee + getString(com.easymi.component.R.string.money_unit));
+//
+//                timer = new Timer();
+//                timerTask = new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        runOnUiThread(() -> {
+//                            DymOrder dymOrder1 = DymOrder.findByIDType(orderId, orderType);
+//                            lcTxt.setText(getString(com.easymi.component.R.string.order_dis) + dymOrder1.distance + getString(com.easymi.component.R.string.dis_unit));
+//                            feeTxt.setText(getString(com.easymi.component.R.string.order_fee) + dymOrder1.totalFee + getString(com.easymi.component.R.string.money_unit));
+//                        });
+//                    }
+//                };
+//                timer.schedule(timerTask, 2000, 2000);
+//            } else {
+//                simpleFeeCon.setVisibility(View.GONE);
+//            }
+//        }
+//    }
+
+    @Override
+    public boolean isEnableSwipe() {
+        return false;
     }
 
     @Override
-    public void activate(OnLocationChangedListener onLocationChangedListener) {
-        mListener = onLocationChangedListener;
+    protected void onStart() {
+        super.onStart();
+
     }
 
     @Override
-    public void deactivate() {
-        mListener = null;
-    }
-
-    /**
-     * 定位成功后回调函数
-     */
-    @Override
-    public void onLocationChanged(AMapLocation aMapLocation) {
-        if (aMapLocation != null) {
-            if (aMapLocation.getErrorCode() == 0) {
-                //定位成功回调信息，设置相关消息
-                aMapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见官方定位类型表
-                aMapLocation.getLatitude();//获取纬度
-                aMapLocation.getLongitude();//获取经度
-                aMapLocation.getAccuracy();//获取精度信息
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date date = new Date(aMapLocation.getTime());
-                df.format(date);//定位时间
-                aMapLocation.getAddress();
-                //地址，如果option中设置isNeedAddress为false，则没有此结果，网络定位结果中会有地址信息，GPS定位不返回地址信息。
-                aMapLocation.getCountry();//国家信息
-                aMapLocation.getProvince();//省信息
-                aMapLocation.getCity();//城市信息
-                aMapLocation.getDistrict();//城区信息
-                aMapLocation.getStreet();//街道信息
-                aMapLocation.getStreetNum();//街道门牌号信息
-                aMapLocation.getCityCode();//城市编码
-                aMapLocation.getAdCode();//地区编码
-
-                // 如果不设置标志位，此时再拖动地图时，它会不断将地图移动到当前的位置
-                if (isFirstLoc) {
-                    //设置缩放级别
-                    aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
-                    //将地图移动到定位点
-                    aMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude())));
-                    //点击定位按钮 能够将地图的中心移动到定位点
-                    mListener.onLocationChanged(aMapLocation);
-                    //添加图钉
-                    //  aMap.addMarker(getMarkerOptions(amapLocation));
-                    //获取定位信息
-                    StringBuffer buffer = new StringBuffer();
-                    buffer.append(aMapLocation.getCountry() + ""
-                            + aMapLocation.getProvince() + ""
-                            + aMapLocation.getCity() + ""
-                            + aMapLocation.getProvince() + ""
-                            + aMapLocation.getDistrict() + ""
-                            + aMapLocation.getStreet() + ""
-                            + aMapLocation.getStreetNum());
-                    Toast.makeText(getApplicationContext(), buffer.toString(), Toast.LENGTH_LONG).show();
-                    isFirstLoc = false;
-                }
-
-
-            } else {
-                //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
-                Log.e("AmapError", "location Error, ErrCode:"
-                        + aMapLocation.getErrorCode() + ", errInfo:"
-                        + aMapLocation.getErrorInfo());
-                Toast.makeText(getApplicationContext(), "定位失败", Toast.LENGTH_LONG).show();
-            }
+    protected void onStop() {
+        super.onStop();
+        if (null != timer) {
+            timer.cancel();
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
-        mapView.onDestroy();
-        mLocationClient.stopLocation();//停止定位
-        mLocationClient.onDestroy();//销毁定位客户端。
+        if (null != timerTask) {
+            timerTask.cancel();
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //在activity执行onResume时执行mMapView.onResume ()，实现地图生命周期管理
-        mapView.onResume();
+        mAMapNaviView.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //在activity执行onPause时执行mMapView.onPause ()，实现地图生命周期管理
-        mapView.onPause();
+        mAMapNaviView.onPause();
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        //在activity执行onSaveInstanceState时执行mMapView.onSaveInstanceState (outState)，实现地图生命周期管理
-        mapView.onSaveInstanceState(outState);
+    protected void onDestroy() {
+        super.onDestroy();
+        mAMapNaviView.onDestroy();
+        //since 1.6.0 不再在naviview destroy的时候自动执行AMapNavi.stopNavi();请自行执行
+        //mAMapNavi是全局的，执行订单页面还需要用，所以这里不能销毁资源
+//        mAMapNavi.stopNavi();
+//        mAMapNavi.destroy();
+//        XApp.getInstance().stopVoice();
     }
 
-
-    //监听事件，实现3D旋转
     @Override
-    public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
-        if (i == R.id.gps_locate_button) {// 设置定位的类型为定位模式
-            aMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
+    public void onInitNaviFailure() {
+        com.easymi.component.utils.Log.e("NaviActivity","初始化导航失败");
+    }
 
-        } else if (i == R.id.gps_follow_button) {// 设置定位的类型为 跟随模式
-            aMap.setMyLocationType(AMap.LOCATION_TYPE_MAP_FOLLOW);
+    @Override
+    public void onInitNaviSuccess() {
 
-        } else if (i == R.id.gps_rotate_button) {// 设置定位的类型为根据地图面向方向旋转
-            aMap.setMyLocationType(AMap.LOCATION_TYPE_MAP_ROTATE);
+        if (naviMode == Config.WALK_TYPE) {
+            mAMapNavi.calculateWalkRoute(mStartLatlng, mEndLatlng);
+        } else {
+            /**
+             * 方法: int strategy=mAMapNavi.strategyConvert(congestion, avoidhightspeed, cost, hightspeed, multipleroute); 参数:
+             *
+             * @congestion 躲避拥堵
+             * @avoidhightspeed 不走高速
+             * @cost 避免收费
+             * @hightspeed 高速优先
+             * @multipleroute 多路径
+             *
+             *  说明: 以上参数都是boolean类型，其中multipleroute参数表示是否多条路线，如果为true则此策略会算出多条路线。
+             *  注意: 不走高速与高速优先不能同时为true 高速优先与避免收费不能同时为true
+             */
+            int strategy = 0;
+            try {
+                //再次强调，最后一个参数为true时代表多路径，否则代表单路径
+                strategy = mAMapNavi.strategyConvert(
+                        XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, false),
+                        XApp.getMyPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
+                        XApp.getMyPreferences().getBoolean(Config.SP_COST, false),
+                        XApp.getMyPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
+                        false);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            mAMapNavi.calculateDriveRoute(sList, eList, wayPoints, strategy);
+        }
+
+    }
+
+    @Override
+    public void onStartNavi(int i) {
+
+    }
+
+    @Override
+    public void onTrafficStatusUpdate() {
+
+    }
+
+    @Override
+    public void onLocationChange(AMapNaviLocation aMapNaviLocation) {
+
+    }
+
+    @Override
+    public void onGetNavigationText(int i, String s) {
+
+    }
+
+    @Override
+    public void onGetNavigationText(String s) {
+//        XApp.getInstance().syntheticVoice(s, true); //设置使用高德内置语音时将不再回调此方法
+    }
+
+    @Override
+    public void onEndEmulatorNavi() {
+
+    }
+
+    @Override
+    public void onArriveDestination() {
+
+    }
+
+    @Override
+    public void onCalculateRouteFailure(int i) {
+        Toast.makeText(this, "路线规划失败", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onReCalculateRouteForYaw() {
+        XApp.getInstance().syntheticVoice("您已偏航，正在重新规划路径");
+    }
+
+    @Override
+    public void onReCalculateRouteForTrafficJam() {
+        XApp.getInstance().syntheticVoice("为躲避拥堵，正在重新规划路径");
+    }
+
+    @Override
+    public void onArrivedWayPoint(int i) {
+
+    }
+
+    @Override
+    public void onGpsOpenStatus(boolean b) {
+
+    }
+
+    @Override
+    public void onNaviInfoUpdate(NaviInfo naviInfo) {
+
+    }
+
+    @Override
+    public void onNaviInfoUpdated(AMapNaviInfo aMapNaviInfo) {
+
+    }
+
+    @Override
+    public void updateCameraInfo(AMapNaviCameraInfo[] aMapNaviCameraInfos) {
+
+    }
+
+    @Override
+    public void onServiceAreaUpdate(AMapServiceAreaInfo[] aMapServiceAreaInfos) {
+
+    }
+
+    @Override
+    public void showCross(AMapNaviCross aMapNaviCross) {
+
+    }
+
+    @Override
+    public void hideCross() {
+
+    }
+
+    @Override
+    public void showModeCross(AMapModelCross aMapModelCross) {
+
+    }
+
+    @Override
+    public void hideModeCross() {
+
+    }
+
+    @Override
+    public void showLaneInfo(AMapLaneInfo[] aMapLaneInfos, byte[] bytes, byte[] bytes1) {
+
+    }
+
+    @Override
+    public void hideLaneInfo() {
+
+    }
+
+    @Override
+    public void onCalculateRouteSuccess(int[] ints) {
+//        XApp.getInstance().syntheticVoice("路径规划成功");
+        mAMapNavi.startNavi(NaviType.GPS);//驾车导航
+    }
+
+    @Override
+    public void notifyParallelRoad(int i) {
+
+    }
+
+    @Override
+    public void OnUpdateTrafficFacility(AMapNaviTrafficFacilityInfo aMapNaviTrafficFacilityInfo) {
+
+    }
+
+    @Override
+    public void OnUpdateTrafficFacility(AMapNaviTrafficFacilityInfo[] aMapNaviTrafficFacilityInfos) {
+
+    }
+
+    @Override
+    public void OnUpdateTrafficFacility(TrafficFacilityInfo trafficFacilityInfo) {
+
+    }
+
+    @Override
+    public void updateAimlessModeStatistics(AimLessModeStat aimLessModeStat) {
+
+    }
+
+    @Override
+    public void updateAimlessModeCongestionInfo(AimLessModeCongestionInfo aimLessModeCongestionInfo) {
+
+    }
+
+    @Override
+    public void onPlayRing(int i) {
+//        XApp.getInstance().syntheticVoice("叮咚", false);
+        if (i == AMapNaviRingType.RING_CAMERA) {//（导航状态）高速上通过测速电子眼的提示音
+
+        } else if (i == AMapNaviRingType.RING_EDOG) { // 巡航状态下通过电子狗的提示音
+
+        } else if (i == AMapNaviRingType.RING_REROUTE) {//偏航重算的提示音L
+
+        } else if (i == AMapNaviRingType.RING_TURN) { // 马上到达转向路口的提示音
 
         }
+    }
+
+    @Override
+    public void onNaviSetting() {
+
+    }
+
+    @Override
+    public void onNaviCancel() {
+        mAMapNavi.destroy();
+        finish();
+    }
+
+    @Override
+    public boolean onNaviBackClick() {
+        return false;
+    }
+
+    @Override
+    public void onNaviMapMode(int i) {
+
+    }
+
+    @Override
+    public void onNaviTurnClick() {
+
+    }
+
+    @Override
+    public void onNextRoadClick() {
+
+    }
+
+    @Override
+    public void onScanViewButtonClick() {
+
+    }
+
+    @Override
+    public void onLockMap(boolean b) {
+
+    }
+
+    @Override
+    public void onNaviViewLoaded() {
+
+    }
+
+    public void showLaneInfo(AMapLaneInfo info) {
+
+    }
+
+    public void updateIntervalCameraInfo(AMapNaviCameraInfo info1, AMapNaviCameraInfo info2, int i) {
 
     }
 }
