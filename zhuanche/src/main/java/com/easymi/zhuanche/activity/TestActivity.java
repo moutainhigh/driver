@@ -75,9 +75,6 @@ public class TestActivity extends RxBaseActivity implements AMapNaviListener, AM
     private String orderType;
     private int naviMode;
 
-//    LinearLayout simpleFeeCon;
-//    TextView lcTxt;
-//    TextView feeTxt;
 
     @Override
     public int getLayoutId() {
@@ -117,34 +114,6 @@ public class TestActivity extends RxBaseActivity implements AMapNaviListener, AM
     private Timer timer;
     private TimerTask timerTask;
 
-//    private void showFee() {
-//        simpleFeeCon = findViewById(com.easymi.component.R.id.simple_fee_con);
-//        lcTxt = findViewById(com.easymi.component.R.id.lc);
-//        feeTxt = findViewById(com.easymi.component.R.id.fee);
-//        DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
-//        if (dymOrder != null && dymOrder.orderType.equals(Config.DAIJIA)) {
-//            if (dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
-//                simpleFeeCon.setVisibility(View.VISIBLE);
-//                lcTxt.setText(getString(com.easymi.component.R.string.order_dis) + dymOrder.distance + getString(com.easymi.component.R.string.dis_unit));
-//                feeTxt.setText(getString(com.easymi.component.R.string.order_fee) + dymOrder.totalFee + getString(com.easymi.component.R.string.money_unit));
-//
-//                timer = new Timer();
-//                timerTask = new TimerTask() {
-//                    @Override
-//                    public void run() {
-//                        runOnUiThread(() -> {
-//                            DymOrder dymOrder1 = DymOrder.findByIDType(orderId, orderType);
-//                            lcTxt.setText(getString(com.easymi.component.R.string.order_dis) + dymOrder1.distance + getString(com.easymi.component.R.string.dis_unit));
-//                            feeTxt.setText(getString(com.easymi.component.R.string.order_fee) + dymOrder1.totalFee + getString(com.easymi.component.R.string.money_unit));
-//                        });
-//                    }
-//                };
-//                timer.schedule(timerTask, 2000, 2000);
-//            } else {
-//                simpleFeeCon.setVisibility(View.GONE);
-//            }
-//        }
-//    }
 
     @Override
     public boolean isEnableSwipe() {

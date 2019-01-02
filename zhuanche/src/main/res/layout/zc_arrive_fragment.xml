@@ -124,6 +124,7 @@
                 android:text="锦绣大道南段小咖科技"
                 android:singleLine="true"
                 android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
                 android:textColor="#232323"
                 android:textSize="16sp"/>
             <TextView
@@ -134,6 +135,7 @@
                 android:text="锦绣大道南段小咖科技"
                 android:singleLine="true"
                 android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
                 android:textColor="#232323"
                 android:textSize="16sp"/>
 

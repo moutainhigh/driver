@@ -95,6 +95,7 @@
                 android:layout_height="wrap_content"
                 android:text="锦绣大道南段小咖科技"
                 android:singleLine="true"
+                android:marqueeRepeatLimit="marquee_forever"
                 android:ellipsize="marquee"
                 android:textColor="#232323"
                 android:textSize="16sp"/>
@@ -106,6 +107,7 @@
                 android:text="锦绣大道南段小咖科技"
                 android:singleLine="true"
                 android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
                 android:textColor="#232323"
                 android:textSize="16sp"/>
 

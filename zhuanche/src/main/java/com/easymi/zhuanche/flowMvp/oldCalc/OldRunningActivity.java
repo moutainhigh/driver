@@ -358,6 +358,11 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
         return mRxManager;
     }
 
+    @Override
+    public void reRout() {
+
+    }
+
     private void showView() {
         DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.ZHUANCHE);
         if (dymOrder == null) {

@@ -408,6 +408,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     @Override
     public void onInitNaviFailure() {
         Log.e("FlowerPresenter", "onInitNaviFailure()");
+        view.reRout();
     }
 
     @Override
@@ -429,6 +430,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     @Override
     public void onArriveDestination(boolean b) {
         Log.e("FlowerPresenter", "onArriveDestination()");
+        XApp.getInstance().syntheticVoice("即将到达目的地");
     }
 
     @Override
@@ -539,7 +541,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
      */
     @Override
     public void onNaviInfoUpdate(NaviInfo naviInfo) {
-        Log.e("hufeng", "onNaviInfoUpdate");
+        Log.e("FlowerPresenter", "onNaviInfoUpdate");
         view.showLeft(naviInfo.getPathRetainDistance(), naviInfo.getPathRetainTime());
     }
 

@@ -66,6 +66,8 @@ public interface FlowContract {
 //        ZCOrder getOrder();
 
         RxManager getManager();
+
+        void reRout();
     }
 
     interface Presenter {

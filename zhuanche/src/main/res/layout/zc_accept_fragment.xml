@@ -98,7 +98,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
+                android:singleLine="true"
                 android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
                 android:textColor="#232323"
                 android:textSize="18sp"/>
             <TextView
@@ -107,7 +109,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="17dp"
                 android:text=""
+                android:singleLine="true"
                 android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
                 android:textColor="#232323"
                 android:textSize="18sp"/>
 

@@ -54,6 +54,9 @@ public class AcceptFragment extends RxBaseFragment {
         startPlaceText = $(R.id.start_place);
         endPlaceText = $(R.id.end_place);
 
+        startPlaceText.setSelected(true);
+        endPlaceText.setSelected(true);
+
         startPlaceText.setText(zcOrder.getStartSite().addr);
         endPlaceText.setText(zcOrder.getEndSite().addr);
         acceptBtn.setOnClickListener(view -> {

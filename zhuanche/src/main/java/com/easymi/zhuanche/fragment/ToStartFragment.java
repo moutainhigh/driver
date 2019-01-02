@@ -66,6 +66,10 @@ public class ToStartFragment extends RxBaseFragment {
 
         customHead = $(R.id.iv_head);
         customName = $(R.id.tv_custom_name);
+
+        startPlaceText.setSelected(true);
+        endPlaceText.setSelected(true);
+
         //todo 差客户头像
         customName.setText(zcOrder.passengerName);
 

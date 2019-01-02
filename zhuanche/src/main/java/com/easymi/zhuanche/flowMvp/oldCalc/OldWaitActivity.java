@@ -182,6 +182,11 @@ public class OldWaitActivity extends RxBaseActivity implements FlowContract.View
     }
 
     @Override
+    public void reRout() {
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);

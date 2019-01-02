@@ -60,11 +60,11 @@ public class LocService extends Service implements AMapLocationListener {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (null != intent.getAction() && intent.getAction().equals(START_LOC)) {
+        if (intent != null && null != intent.getAction() && intent.getAction().equals(START_LOC)) {
             startLoc();
             return START_STICKY;
         } else {
-            if (intent.getAction() != null && intent.getAction().equals(STOP_LOC)) {
+            if (intent != null && intent.getAction() != null && intent.getAction().equals(STOP_LOC)) {
                 stopService();
             }
         }
@@ -145,7 +145,7 @@ public class LocService extends Service implements AMapLocationListener {
 
     private void startTrace() {
 
-        Log.e("trace","开始纠偏");
+        Log.e("trace", "开始纠偏");
         if (null == lbsTraceClient) {
             lbsTraceClient = LBSTraceClient.getInstance(this);
             lbsTraceClient.startTrace((list, list1, s) -> {
@@ -167,9 +167,9 @@ public class LocService extends Service implements AMapLocationListener {
     }
 
     private void stopTrace() {
-        Log.e("trace","停止纠偏");
+        Log.e("trace", "停止纠偏");
         if (null != lbsTraceClient) {
-            Log.e("trace","停止纠偏zz");
+            Log.e("trace", "停止纠偏zz");
             lbsTraceClient.stopTrace();
             lbsTraceClient = null;
         }
@@ -235,7 +235,7 @@ public class LocService extends Service implements AMapLocationListener {
                 notificationChannel.enableLights(true);//是否在桌面icon右上角展示小圆点
                 notificationChannel.setLightColor(Color.BLUE); //小圆点颜色
                 notificationChannel.setShowBadge(true); //是否在久按桌面图标时显示此渠道的通知
-                notificationChannel.setSound(null,null);
+                notificationChannel.setSound(null, null);
                 notificationManager.createNotificationChannel(notificationChannel);
                 isCreateChannel = true;
             }
