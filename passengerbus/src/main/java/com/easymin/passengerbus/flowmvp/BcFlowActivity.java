@@ -1,4 +1,4 @@
-package com.easymin.passengerbus.flowmvp;
+package com.easymin.passengerbus.flowMvp;
 
 import android.graphics.Color;
 import android.os.Bundle;

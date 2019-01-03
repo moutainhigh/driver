@@ -146,7 +146,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         CancelOrderReceiver.OnCancelListener,
         AMap.OnMapTouchListener,
         OrderFinishReceiver.OnFinishListener
-        , AMapLocationListener {
+//        , AMapLocationListener
+{
     public static final int CANCEL_ORDER = 0X01;
     public static final int CHANGE_END = 0X02;
     public static final int CHANGE_ORDER = 0X03;
@@ -588,72 +589,72 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         // 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false
         aMap.setMyLocationEnabled(true);
 
-//        String locStr = XApp.getMyPreferences().getString(Config.SP_LAST_LOC, "");
-//        EmLoc emLoc = new Gson().fromJson(locStr, EmLoc.class);
-//        if (null != emLoc) {
-//            lastLatlng = new LatLng(emLoc.latitude, emLoc.longitude);
-////            receiveLoc(emLoc);//手动调用上次位置 减少从北京跳过来的时间
-//            aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLatlng, 17));//移动镜头，首次镜头快速跳到指定位置
+        String locStr = XApp.getMyPreferences().getString(Config.SP_LAST_LOC, "");
+        EmLoc emLoc = new Gson().fromJson(locStr, EmLoc.class);
+        if (null != emLoc) {
+            lastLatlng = new LatLng(emLoc.latitude, emLoc.longitude);
+            receiveLoc(emLoc);//手动调用上次位置 减少从北京跳过来的时间
+            aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLatlng, 17));//移动镜头，首次镜头快速跳到指定位置
 
-        myLocationStyle = new MyLocationStyle();
-        if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-            myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);
-        } else {
-            myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER);
-        }
-        myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
-        aMap.setMyLocationStyle(myLocationStyle);
-
-        location();
-//        }
-    }
-
-    //声明AMapLocationClient类对象，定位发起端
-    private AMapLocationClient mLocationClient = null;
-    //声明mLocationOption对象，定位参数
-    public AMapLocationClientOption mLocationOption = null;
-
-    private void location() {
-        //初始化定位
-        mLocationClient = new AMapLocationClient(getApplicationContext());
-        //设置定位回调监听
-        mLocationClient.setLocationListener(this);
-        //初始化定位参数
-        mLocationOption = new AMapLocationClientOption();
-        //设置定位模式为Hight_Accuracy高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
-        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-        //设置是否返回地址信息（默认返回地址信息）
-        mLocationOption.setNeedAddress(true);
-        //设置是否只定位一次,默认为false
-        mLocationOption.setOnceLocation(false);
-        //设置是否允许模拟位置,默认为false，不允许模拟位置  true方法开启允许位置模拟
-        mLocationOption.setMockEnable(true);
-        //设置定位间隔,单位毫秒,默认为2000ms
-        mLocationOption.setInterval(2000);
-        //给定位客户端对象设置定位参数
-        mLocationClient.setLocationOption(mLocationOption);
-        //启动定位
-        mLocationClient.startLocation();
-    }
-
-    @Override
-    public void onLocationChanged(AMapLocation aMapLocation) {
-        if (!isMapTouched) {
+            myLocationStyle = new MyLocationStyle();
             if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-                aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
                 myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);
-                aMap.setMyLocationStyle(myLocationStyle);
+            } else {
+                myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER);
             }
-        } else {
-            //todo 地图滑动第二次才生效的问题
-            myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER);
+            myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                    .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
             aMap.setMyLocationStyle(myLocationStyle);
-            if ((System.currentTimeMillis() - XApp.getMyPreferences().getLong(Config.DOWN_TIME, 0)) / 1000 > 5) {
-                isMapTouched = false;
-            }
+
+//        location();
         }
     }
+
+//    //声明AMapLocationClient类对象，定位发起端
+//    private AMapLocationClient mLocationClient = null;
+//    //声明mLocationOption对象，定位参数
+//    public AMapLocationClientOption mLocationOption = null;
+//
+//    private void location() {
+//        //初始化定位
+//        mLocationClient = new AMapLocationClient(getApplicationContext());
+//        //设置定位回调监听
+//        mLocationClient.setLocationListener(this);
+//        //初始化定位参数
+//        mLocationOption = new AMapLocationClientOption();
+//        //设置定位模式为Hight_Accuracy高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
+//        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+//        //设置是否返回地址信息（默认返回地址信息）
+//        mLocationOption.setNeedAddress(true);
+//        //设置是否只定位一次,默认为false
+//        mLocationOption.setOnceLocation(false);
+//        //设置是否允许模拟位置,默认为false，不允许模拟位置  true方法开启允许位置模拟
+//        mLocationOption.setMockEnable(true);
+//        //设置定位间隔,单位毫秒,默认为2000ms
+//        mLocationOption.setInterval(2000);
+//        //给定位客户端对象设置定位参数
+//        mLocationClient.setLocationOption(mLocationOption);
+//        //启动定位
+//        mLocationClient.startLocation();
+//    }
+
+//    @Override
+//    public void onLocationChanged(AMapLocation aMapLocation) {
+//        if (!isMapTouched) {
+//            myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);
+//            aMap.setMyLocationStyle(myLocationStyle);
+//            if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+//                aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
+//            }
+//        } else {
+//            //todo 地图滑动第二次才生效的问题
+//            myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER);
+//            aMap.setMyLocationStyle(myLocationStyle);
+//            if ((System.currentTimeMillis() - XApp.getMyPreferences().getLong(Config.DOWN_TIME, 0)) / 1000 > 5) {
+//                isMapTouched = false;
+//            }
+//        }
+//    }
 
     private Marker startMarker;
     private Marker endMarker;
@@ -802,7 +803,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         EmLoc lastLoc = EmUtil.getLastLoc();
         latLngs.add(new LatLng(lastLoc.latitude, lastLoc.latitude));
 
-//        latLngs.add(new LatLng(lastLoc.latitude, lastLoc.longitude));
         LatLngBounds bounds = MapUtil.getBounds(latLngs);
         aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(this) / 1.5), (int) (DensityUtil.getDisplayWidth(this) / 1.5), 0));
 
@@ -1351,12 +1351,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         mAlbumOrientationEventListener.disable();
         mapView.onDestroy();
         presenter.stopNavi();
-        //add
-        if (mLocationClient != null) {
-            mLocationClient.stopLocation();//停止定位
-            mLocationClient.onDestroy();//销毁定位客户端。
-        }
-
+//        //add
+//        if (mLocationClient != null) {
+//            mLocationClient.stopLocation();//停止定位
+//            mLocationClient.onDestroy();//销毁定位客户端。
+//        }
         super.onDestroy();
     }
 
@@ -1383,6 +1382,44 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
         Log.e("locPos", "bearing 2 >>>>" + location.bearing);
         LatLng latLng = new LatLng(location.latitude, location.longitude);
+
+        if (myLocationStyle == null) {
+            myLocationStyle = new MyLocationStyle();
+        }
+        if (!isMapTouched) {
+            if (zcOrder != null){
+                if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+                    aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
+                    myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);
+                }
+            }
+            if (aMap != null){
+                aMap.setMyLocationStyle(myLocationStyle);
+            }
+        } else {
+            //todo 地图滑动第二次才生效的问题
+            myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER);
+            if (aMap != null){
+                aMap.setMyLocationStyle(myLocationStyle);
+            }
+            if ((System.currentTimeMillis() - XApp.getMyPreferences().getLong(Config.DOWN_TIME, 0)) / 1000 > 5) {
+                isMapTouched = false;
+            }
+        }
+
+        if (zcOrder != null) {
+            if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+                if (null != getEndAddr()) {
+                    presenter.routePlanByNavi(getEndAddr().lat, getEndAddr().lng);
+                }
+            } else if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
+                if (null != getEndAddr()) {
+                    presenter.routePlanByNavi(getStartAddr().lat, getStartAddr().lng);
+                }
+            }
+        }
+
+        lastLatlng = latLng;
 
 //        if (null == smoothMoveMarker) {//首次进入
 //            smoothMoveMarker = new SmoothMoveMarker(aMap);
@@ -1474,6 +1511,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
     }
 
+    private AlertDialog cancelDialog;
+
     @Override
     public void onCancelOrder(long orderId, String orderType, String msg) {
         if (zcOrder == null) {
@@ -1484,15 +1523,17 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             //todo 一键报警
 //            AudioUtil audioUtil = new AudioUtil();
 //            audioUtil.onRecord(this, false);
-            AlertDialog dialog = new AlertDialog.Builder(this)
-                    .setMessage(msg)
-                    .setPositiveButton(R.string.ok, (dialog1, which) -> {
-                        dialog1.dismiss();
-                        finish();
-                    })
-                    .setOnDismissListener(dialog12 -> finish())
-                    .create();
-            dialog.show();
+            if (cancelDialog == null) {
+                cancelDialog = new AlertDialog.Builder(this)
+                        .setMessage(msg)
+                        .setPositiveButton(R.string.ok, (dialog1, which) -> {
+                            dialog1.dismiss();
+                            finish();
+                        })
+                        .setOnDismissListener(dialog12 -> finish())
+                        .create();
+                cancelDialog.show();
+            }
         }
     }
 
@@ -1502,17 +1543,17 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     @Override
     public void plChange(PassengerLocation plocation) {
         if (zcOrder != null && zcOrder.orderStatus < ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-            if (zcOrder.orderId == mPlocation.orderId){
-                if (null != mPlocation){
+            if (null != mPlocation) {
+                if (zcOrder.passengerId == mPlocation.passengerId) {
                     if (plocation.latitude != mPlocation.latitude && plocation.longitude != mPlocation.longitude) {
                         mPlocation = plocation;
                         addPlMaker();
                     }
-                }else {
+                } else {
                     mPlocation = plocation;
                     addPlMaker();
                 }
-            }else {
+            } else {
                 if (plMaker != null) {
                     plMaker.remove();
                 }
@@ -1623,9 +1664,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         observable.subscribe(new MySubscriber<>(this, false, false, passengerLcResult -> {
             if (passengerLcResult.getCode() == 1) {
                 plChange(passengerLcResult.data);
-            } else if (passengerLcResult.getCode() == 40005) {
-                ToastUtil.showMessage(this, "客户退出app或微信下单，未获取到客户位置");
             }
+//            else if (passengerLcResult.getCode() == 40005) {
+//                ToastUtil.showMessage(this, "客户退出app或微信下单，未获取到客户位置");
+//            }
         }));
     }
 

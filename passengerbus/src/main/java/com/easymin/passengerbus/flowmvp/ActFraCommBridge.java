@@ -1,4 +1,4 @@
-package com.easymin.passengerbus.flowmvp;
+package com.easymin.passengerbus.flowMvp;
 
 import com.amap.api.maps.model.LatLng;
 import com.easymi.common.entity.OrderCustomer;

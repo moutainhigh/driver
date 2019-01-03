@@ -11,8 +11,8 @@ import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.widget.CustomSlideToUnlockView;
 import com.easymin.passengerbus.R;
 import com.easymin.passengerbus.entity.BusStationResult;
-import com.easymin.passengerbus.flowmvp.ActFraCommBridge;
-import com.easymin.passengerbus.flowmvp.BcFlowActivity;
+import com.easymin.passengerbus.flowMvp.ActFraCommBridge;
+import com.easymin.passengerbus.flowMvp.BcFlowActivity;
 
 /**
  * 行程中

@@ -16,13 +16,13 @@ public class Config {
      * 主机地址
      */
 //    public static final String HOST = "http://10.10.2.43:10001/";  //杰克
-    public static final String HOST = "http://10.10.2.35:10001/";//兵哥的
+//    public static final String HOST = "http://10.10.2.35:10001/";//兵哥的
 //    public static final String HOST = "http://47.94.204.67:10022/";//外网
 //    public static final String HOST = "http://10.10.2.23:10001/";//俊俏
 //    public static final String HOST = "http://10.10.2.130:10001/";//130测试地址 （内网）
 //    public static final String HOST = "http://47.94.204.67:20001/";//130测试地址（外网）
 //    public static final String HOST = "http://api.xiaokakj.com/";//线上地址
-//    public static final String HOST = "http://api.xiaokakj.cn/";//线上地址
+    public static final String HOST = "http://api.xiaokakj.cn/";//线上地址
     /**
      * MQTT配置
      */

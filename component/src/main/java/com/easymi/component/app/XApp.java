@@ -443,9 +443,9 @@ public class XApp extends MultiDexApplication {
      * 开启定位服务
      */
     public void startLocService() {
-        if (SysUtil.isServiceWork(this, "com.easymi.component.loc.LocService")) {
-            return;
-        }
+//        if (SysUtil.isServiceWork(this, "com.easymi.component.loc.LocService")) {
+//            return;
+//        }
         Intent intent = new Intent(this, LocService.class);
         intent.setAction(LocService.START_LOC);
         intent.setPackage(this.getPackageName());

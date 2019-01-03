@@ -1,4 +1,4 @@
-package com.easymin.passengerbus.flowmvp;
+package com.easymin.passengerbus.flowMvp;
 
 import android.content.Context;
 
