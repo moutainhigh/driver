@@ -1,4 +1,4 @@
-package com.easymin.passengerbus.flowMvp;
+package com.easymin.passengerbus.flowmvp;
 
 import android.content.Context;
 
@@ -95,6 +95,25 @@ public class FlowPresenter implements FlowContract.Presenter {
                     @Override
                     public void onError(int code) {
                         ToastUtil.showMessage(context, "获取班车路线失败！");
+                    }
+                })));
+    }
+
+    @Override
+    public void toNextStation(long scheduleId, long stationId) {
+        view.getManager().add(model.toNextStation(scheduleId, stationId).subscribe(new MySubscriber<>(context,
+                true,
+                true,
+                new HaveErrSubscriberListener<EmResult2<Object>>() {
+
+                    @Override
+                    public void onNext(EmResult2<Object> result) {
+//                        view.showBusLineInfo(result.getData());
+                    }
+
+                    @Override
+                    public void onError(int code) {
+//                        ToastUtil.showMessage(context, "获取班车路线失败！");
                     }
                 })));
     }

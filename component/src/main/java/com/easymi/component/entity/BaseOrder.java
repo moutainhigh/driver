@@ -298,6 +298,7 @@ public class BaseOrder implements Serializable {
      */
     public static final int SCHEDULE_STATUS_FINISH = 20;
 
+
     public String getZXOrderStatusStr() {
         if (scheduleStatus == SCHEDULE_STATUS_SALE) {
             return "售票中";

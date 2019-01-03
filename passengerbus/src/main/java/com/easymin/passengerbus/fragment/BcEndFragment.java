@@ -6,7 +6,8 @@ import android.widget.TextView;
 
 import com.easymi.component.base.RxBaseFragment;
 import com.easymin.passengerbus.R;
-import com.easymin.passengerbus.flowMvp.ActFraCommBridge;
+import com.easymin.passengerbus.flowmvp.ActFraCommBridge;
+import com.easymin.passengerbus.flowmvp.BcFlowActivity;
 
 /**
  * 行程结束
@@ -29,7 +30,7 @@ public class BcEndFragment extends RxBaseFragment{
 
     @Override
     public void finishCreateView(Bundle state) {
-//        bridge.changeToolbar(BcFlowActivity.ENDRUNING);
+        bridge.changeToolbar(BcFlowActivity.ENDRUNING);
         initView();
 
     }

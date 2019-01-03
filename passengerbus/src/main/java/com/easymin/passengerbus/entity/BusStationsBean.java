@@ -22,4 +22,5 @@ public class BusStationsBean {
     public String address;
     public double longitude;
     public double latitude;
+
 }

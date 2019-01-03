@@ -1,4 +1,4 @@
-package com.easymin.passengerbus.flowMvp;
+package com.easymin.passengerbus.flowmvp;
 
 import com.easymi.component.result.EmResult2;
 import com.easymi.component.rxmvp.RxManager;
@@ -28,6 +28,7 @@ public interface FlowContract {
 
         void showNext();
 
+
         RxManager getManager();
     }
 
@@ -41,6 +42,8 @@ public interface FlowContract {
 
         void findBusOrderById(long id);
 
+        void toNextStation(long scheduleId, long stationId);
+
     }
 
     interface Model {
@@ -50,5 +53,7 @@ public interface FlowContract {
         Observable<EmResult2<Object>> endStation(long scheduleId);
 
         Observable<EmResult2<BusStationResult>> findBusOrderById(long id);
+
+        Observable<EmResult2<Object>> toNextStation(long scheduleId, long stationId);
     }
 }

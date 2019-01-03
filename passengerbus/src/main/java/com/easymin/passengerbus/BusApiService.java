@@ -30,8 +30,8 @@ public interface BusApiService {
 //    Observable<SettingResult> getAppSetting(@Path("id") long id);
 
 
-    @GET("api/v1/bus/country/driver/line/{id}")
-    Observable<EmResult2<BusStationResult>> findBusInfoById(@Path("id") long id);
+//    @GET("api/v1/bus/country/driver/line/{id}")
+//    Observable<EmResult2<BusStationResult>> findBusInfoById(@Path("id") long id);
 
     /**
      * 开始班次
@@ -49,8 +49,8 @@ public interface BusApiService {
      */
     @FormUrlEncoded
     @POST("api/v1/bus/country/driver/schedule/startStation")
-    Observable<Object> findStations(@Query("scheduleId") long scheduleId,
-                                    @Query("stationId") long stationId);
+    Observable<EmResult2<Object>> toNextStation(@Field("scheduleId") long scheduleId,
+                                                @Field("stationId") long stationId);
 
 
     /**
@@ -61,7 +61,7 @@ public interface BusApiService {
     @FormUrlEncoded
     @POST("api/v1/bus/country/driver/schedule/arriveStation")
     Observable<EmResult2<Object>> arriveStation(@Field("scheduleId") long scheduleId,
-                                        @Field("stationId") long stationId);
+                                                @Field("stationId") long stationId);
 
 
     /**
@@ -72,5 +72,16 @@ public interface BusApiService {
     @FormUrlEncoded
     @POST("api/v1/bus/country/driver/schedule/finishSchedule")
     Observable<EmResult2<Object>> finish(@Field("scheduleId") long scheduleId);
+
+
+    /**
+     * 查询班次完整信息(包含站点)
+     api/v1/bus/country/driver/schedule/班次ID
+     */
+
+    @GET("api/v1/bus/country/driver/schedule/{scheduleId}")
+    Observable<EmResult2<BusStationResult>> findBusInfoById(@Path("scheduleId") long scheduleId);
+
+
 
 }

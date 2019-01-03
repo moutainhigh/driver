@@ -8,7 +8,8 @@ import android.widget.TextView;
 import com.easymi.component.base.RxBaseFragment;
 import com.easymin.passengerbus.R;
 import com.easymin.passengerbus.entity.BusStationResult;
-import com.easymin.passengerbus.flowMvp.ActFraCommBridge;
+import com.easymin.passengerbus.flowmvp.ActFraCommBridge;
+import com.easymin.passengerbus.flowmvp.BcFlowActivity;
 
 /**
  * 开始行程
@@ -40,7 +41,7 @@ public class BcStartFragment extends RxBaseFragment {
 
     @Override
     public void finishCreateView(Bundle state) {
-//        bridge.changeToolbar(BcFlowActivity.STARTRUNNING);
+        bridge.changeToolbar(BcFlowActivity.STARTRUNNING);
 
         initView();
     }
@@ -53,7 +54,7 @@ public class BcStartFragment extends RxBaseFragment {
         if (result == null) {
             return;
         }
-        tvLineAddress.setText("起点站：" + result.startStation);
+        tvLineAddress.setText("起点站：" + result.stationVos.get(0).address);
         tvStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
