@@ -1,11 +1,13 @@
 package com.easymin.passengerbus.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 
 import com.easymi.component.base.RxBaseFragment;
 import com.easymin.passengerbus.R;
+import com.easymin.passengerbus.entity.BusStationResult;
 import com.easymin.passengerbus.flowmvp.ActFraCommBridge;
 import com.easymin.passengerbus.flowmvp.BcFlowActivity;
 
@@ -19,8 +21,18 @@ public class BcEndFragment extends RxBaseFragment{
 
     private ActFraCommBridge bridge;
 
+    private BusStationResult result;
+
+
     public void setBridge(ActFraCommBridge bridge) {
         this.bridge = bridge;
+    }
+
+    @Override
+    public void setArguments(@Nullable Bundle args) {
+        super.setArguments(args);
+        result = (BusStationResult) args.getSerializable("busLineResult");
+
     }
 
     @Override
@@ -37,6 +49,7 @@ public class BcEndFragment extends RxBaseFragment{
 
     private void initView() {
         tvLineAddress = $(R.id.tv_line_address);
+        tvLineAddress.setText(result.stationVos.get(result.stationVos.size()-1).address);
         tvEnd = $(R.id.tv_end);
 
         tvEnd.setOnClickListener(v -> bridge.arriveEnd());
