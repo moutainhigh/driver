@@ -42,4 +42,7 @@ public interface ActFraCommBridge {
     void sideToArrived(long stationId);
 
 
+    void showEndFragment();
+
+
 }

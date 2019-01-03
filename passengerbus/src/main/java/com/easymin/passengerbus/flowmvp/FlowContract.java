@@ -28,6 +28,8 @@ public interface FlowContract {
 
         void showNext();
 
+        void finishFragment();
+
 
         RxManager getManager();
     }

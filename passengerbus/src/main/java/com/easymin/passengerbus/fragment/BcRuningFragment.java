@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.amap.api.services.help.Tip;
 import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.widget.CustomSlideToUnlockView;
 import com.easymin.passengerbus.R;
@@ -56,7 +57,6 @@ public class BcRuningFragment extends RxBaseFragment{
         initView();
 
         if (curStr.equals("滑动前往下一站")) {
-
             bridge.changeToolbar(BcFlowActivity.RUNNING);
 
         } else if (curStr.equals("滑动到达站点")) {
@@ -105,19 +105,48 @@ public class BcRuningFragment extends RxBaseFragment{
             @Override
             public void onUnlocked() {
 
+//                index = result.stationVos.get(0).id;
+//                int total = result.stationVos.get(result.stationVos.size()-1).id;
+
+
+
+                    if (result.stationVos.size() > 0 && index < result.stationVos.size()-1) {
+                        //下标从0开始
+                        index = index + 1;
+
+
+                        if (curStr.equals("滑动前往下一站")) {
+                            bridge.slideToNext(result.stationVos.get(index).id);
+                        } else if (curStr.equals("滑动到达站点")) {
+
+                            bridge.sideToArrived(result.stationVos.get(index).id);
+                        }
+
+                    } else if (index == result.stationVos.size()-1){
+
+                        if (curStr.equals("滑动前往下一站")) {
+                            bridge.sideToArrived(result.stationVos.get(index).id);
+
+                        }
+                        bridge.showEndFragment();
+                    }
+
                 resetView();
-                index = result.stationVos.get(0).id;
-                int total = result.stationVos.get(result.stationVos.size()-1).id;
 
-                if (index < total){
-                    index = index + 1;
-                }
-                if (curStr.equals("滑动前往下一站")) {
-                    bridge.slideToNext(index);
+//                if (index < total){
+//                    index = index + 1;
+//
+//                    if (curStr.equals("滑动前往下一站")) {
+//
+//
+//                    } else if (curStr.equals("滑动到达站点")) {
+//                        bridge.sideToArrived(index);
+//                    }
+//
+//                } else if (index >= total){
+//
+//                }
 
-                } else if (curStr.equals("滑动到达站点")) {
-                    bridge.sideToArrived(index);
-                }
             }
         });
 
@@ -130,10 +159,19 @@ public class BcRuningFragment extends RxBaseFragment{
             slider.setHint("滑动到达站点");
             curStr = slider.setHint2("滑动到达站点");
 
+            tvLineAddress.setText(result.stationVos.get(index).address);
+            tvTip.setVisibility(View.VISIBLE);
 
         } else if (curStr.equals("滑动到达站点")) {
             slider.setHint("滑动前往下一站");
             curStr = slider.setHint2("滑动前往下一站");
+
+            if (index > 1) {
+                tvTip.setVisibility(View.GONE);
+            } else if (index == 1){
+                tvTip.setVisibility(View.VISIBLE);
+            }
+            tvLineAddress.setText(result.stationVos.get(index).address);
 
         }
 

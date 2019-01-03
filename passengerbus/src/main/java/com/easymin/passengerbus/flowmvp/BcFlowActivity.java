@@ -214,18 +214,21 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
             @Override
             public void slideToNext(long stationId) {
 
-                switchFragment(currentFragment).commit();
-
+//                switchFragment(currentFragment).commit();
                 //调用滑动到达下一站接口
-
                 presenter.toNextStation(scheduleId, stationId);
             }
 
             @Override
             public void sideToArrived(long stationId) {
                 //滑动到达下一站
-
                 presenter.arriveStation(scheduleId, stationId);
+            }
+
+            @Override
+            public void showEndFragment() {
+                switchFragment(bcEndFragment).commit();
+
             }
 
         };
@@ -287,6 +290,11 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
     @Override
     public void showNext() {
         switchFragment(bcRuningFragment).commit();
+    }
+
+    @Override
+    public void finishFragment() {
+        finish();
     }
 
     /**

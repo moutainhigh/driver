@@ -70,7 +70,7 @@ public class FlowPresenter implements FlowContract.Presenter {
 
                     @Override
                     public void onNext(EmResult2<Object> result) {
-//                        view.showBusLineInfo(result.getData());
+                        view.finishFragment();
                     }
 
                     @Override
