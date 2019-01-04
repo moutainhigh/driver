@@ -63,7 +63,6 @@ public interface BusApiService {
     Observable<EmResult2<Object>> arriveStation(@Field("scheduleId") long scheduleId,
                                                 @Field("stationId") long stationId);
 
-
     /**
      * 结束班次
      * @param scheduleId

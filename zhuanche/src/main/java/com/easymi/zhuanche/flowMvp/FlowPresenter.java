@@ -254,19 +254,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             mAMapNavi = AMapNavi.getInstance(context);
             mAMapNavi.addAMapNaviListener(this);
         }
-//        /**
-//         * congestion - 是否躲避拥堵
-//         avoidspeed - 不走高速
-//         cost - 避免收费
-//         hightspeed - 高速优先
-//         multipleRoute - 单路径or多路径
-//         */
-//        boolean congestion = false;
-//        boolean avoidspeed = false;
-//        boolean cost = false;
-//        boolean hightspeed = true;
-//        boolean multipleRoute = true;
-//        int strateFlag = mAMapNavi.strategyConvert(congestion, cost, avoidspeed, hightspeed, multipleRoute);
 
         int strateFlag = mAMapNavi.strategyConvert(
                 XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, false),
@@ -283,7 +270,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
         startLs.add(start);
         endLs.add(end);
-//        mAMapNavi.switchParallelRoad();
         mAMapNavi.calculateDriveRoute(startLs, endLs, null, strateFlag);
     }
 
@@ -425,6 +411,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     @Override
     public void onGetNavigationText(int i, String s) {
         Log.e("FlowerPresenter", s);
+        XApp.getInstance().syntheticVoice(s, true);
     }
 
     @Override

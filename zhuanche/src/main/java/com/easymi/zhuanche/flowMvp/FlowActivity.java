@@ -1387,19 +1387,19 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             myLocationStyle = new MyLocationStyle();
         }
         if (!isMapTouched) {
-            if (zcOrder != null){
+            if (zcOrder != null) {
                 if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-                    aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
+                    aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17), Config.NORMAL_LOC_TIME, null);
                     myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);
                 }
             }
-            if (aMap != null){
+            if (aMap != null) {
                 aMap.setMyLocationStyle(myLocationStyle);
             }
         } else {
-            //todo 地图滑动第二次才生效的问题
+            //todo 地图滑动第二次才生效的问题待处理
             myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER);
-            if (aMap != null){
+            if (aMap != null) {
                 aMap.setMyLocationStyle(myLocationStyle);
             }
             if ((System.currentTimeMillis() - XApp.getMyPreferences().getLong(Config.DOWN_TIME, 0)) / 1000 > 5) {
@@ -1543,17 +1543,23 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     @Override
     public void plChange(PassengerLocation plocation) {
         if (zcOrder != null && zcOrder.orderStatus < ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-            if (null != mPlocation) {
-                if (zcOrder.passengerId == mPlocation.passengerId) {
-                    if (plocation.latitude != mPlocation.latitude && plocation.longitude != mPlocation.longitude) {
-                        mPlocation = plocation;
-                        addPlMaker();
+            if (plocation != null) {
+                if (null != mPlocation) {
+                    if (zcOrder.passengerId == plocation.passengerId) {
+                        if (plocation.latitude != mPlocation.latitude && plocation.longitude != mPlocation.longitude) {
+                            mPlocation = plocation;
+                            addPlMaker();
+                        }
+                    } else {
+                        if (plMaker != null) {
+                            plMaker.remove();
+                        }
                     }
                 } else {
                     mPlocation = plocation;
                     addPlMaker();
                 }
-            } else {
+            }else {
                 if (plMaker != null) {
                     plMaker.remove();
                 }

@@ -47,6 +47,9 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="距离2.5公里，预计5分钟到达"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
             android:textColor="#999999"
             android:textSize="14sp"
             android:layout_marginTop="8dp"
@@ -68,7 +71,7 @@
                 android:id="@+id/tv_waite_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="09:24"
+                android:text="00:24"
                 android:textColor="@color/blue"
                 android:textSize="24dp"
                 />

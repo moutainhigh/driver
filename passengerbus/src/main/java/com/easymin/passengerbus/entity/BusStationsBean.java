@@ -1,7 +1,9 @@
 package com.easymin.passengerbus.entity;
 
 
-public class BusStationsBean {
+import java.io.Serializable;
+
+public class BusStationsBean implements Serializable{
     /**
      * "id": 9,
      "companyId": 1,

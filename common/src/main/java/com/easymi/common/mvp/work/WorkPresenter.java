@@ -379,7 +379,11 @@ public class WorkPresenter implements WorkContract.Presenter {
                         }
                     }
                 } else {
-                    ToastUtil.showMessage(context, "未绑定车辆车型，不能接单");
+                    if (employ.serviceType.contains(Config.ZHUANCHE)
+                            || employ.serviceType.contains(Config.TAXI)
+//                            || employ.serviceType.contains(Config.CITY_LINE)
+                            )
+                        ToastUtil.showMessage(context, "未绑定车辆车型，不能接单");
                 }
             }
         })));
