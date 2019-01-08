@@ -20,7 +20,9 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.services.route.BusRouteResult;
+import com.amap.api.services.route.DrivePath;
 import com.amap.api.services.route.DriveRouteResult;
+import com.amap.api.services.route.DriveStep;
 import com.amap.api.services.route.RideRouteResult;
 import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
@@ -28,6 +30,7 @@ import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
+import com.easymi.component.network.GsonUtil;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.Log;
@@ -35,6 +38,7 @@ import com.easymi.component.utils.MapUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymin.passengerbus.R;
 import com.easymin.passengerbus.entity.BusStationResult;
+import com.easymin.passengerbus.entity.BusStationsBean;
 import com.easymin.passengerbus.fragment.BcEndFragment;
 import com.easymin.passengerbus.fragment.BcRuningFragment;
 import com.easymin.passengerbus.fragment.BcStartFragment;
@@ -43,7 +47,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Route(path = "/passengerbus/BcFlowActivity")
-public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchListener, FlowContract.View, LocObserver, AMap.OnMarkerClickListener, RouteSearch.OnRouteSearchListener {
+public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchListener, FlowContract.View, LocObserver, AMap.OnMarkerClickListener {
 
     private MapView mapView;
 
@@ -62,19 +66,10 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
     /**
      * 地图相关
      */
-
-    private BusStationResult busRouteResult;
+    //路径相关
+    private List<BusStationsBean> listLine = new ArrayList<>();
     private MarkerOptions markerOption;
 
-    /**
-     * 路径规划相关
-     */
-
-    private RouteSearch mRouteSearch;
-    private DriveRouteResult mDriveRouteResult;
-
-    //规划的是驾车路径
-    private final int ROUTE_TYPE_DRIVE = 2;
 
     /**
      * 行程状态
@@ -116,10 +111,12 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
         mapView.onCreate(savedInstanceState);
         toolbar.setTitle("线路站点");
         scheduleId = getIntent().getLongExtra("scheduleId", 0);
+
         initMap();
+        initBridget();
+        initFragment();
 
         initPresnter();
-
     }
 
     @Override
@@ -129,30 +126,23 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
     }
 
     public void initFragment() {
+        bcStartFragment = new BcStartFragment();
+        Bundle bundle = new Bundle();
+        bundle.putLong("scheduleId", scheduleId);
+        bcStartFragment.setArguments(bundle);
+        bcStartFragment.setBridge(bridge);
 
         bcRuningFragment = new BcRuningFragment();
         Bundle bundle2 = new Bundle();
-        bundle2.putSerializable("busLineResult", busRouteResult);
+        bundle2.putLong("scheduleId", scheduleId);
         bcRuningFragment.setArguments(bundle2);
         bcRuningFragment.setBridge(bridge);
 
-        FragmentManager manager2 = getSupportFragmentManager();
-        FragmentTransaction transaction2 = manager2.beginTransaction();
-        transaction2.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
-        transaction2.replace(R.id.fragment_frame, bcRuningFragment);
-        transaction2.commit();
-
         bcEndFragment = new BcEndFragment();
         Bundle bundle3 = new Bundle();
-        bundle3.putSerializable("busLineResult", busRouteResult);
+        bundle3.putLong("scheduleId", scheduleId);
         bcEndFragment.setArguments(bundle3);
         bcEndFragment.setBridge(bridge);
-
-        FragmentManager manager3 = getSupportFragmentManager();
-        FragmentTransaction transaction3 = manager3.beginTransaction();
-        transaction3.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
-        transaction3.replace(R.id.fragment_frame, bcEndFragment);
-        transaction3.commit();
     }
 
     private void initPresnter() {
@@ -175,8 +165,6 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
 
         aMap.setOnMapTouchListener(this);
 
-        mRouteSearch = new RouteSearch(this);
-        mRouteSearch.setRouteSearchListener(this);
     }
 
     @Override
@@ -192,75 +180,91 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
                     toolbar.setTitle("到达站点");
                 }
                 toolbar.setBackgroundColor(Color.parseColor("#ffffff"));
-
             }
 
             @Override
             public void arriveStart() {
                 //调用出发接口
-//                presenter.startStation(busRouteResult.id);
                 presenter.startStation(scheduleId);
-
-
             }
 
             @Override
             public void arriveEnd() {
                 //到达
-//                presenter.endStation(busRouteResult.id);
                 presenter.endStation(scheduleId);
-
-            }
-
-
-            @Override
-            public void slideToNext(long stationId) {
-
-//                switchFragment(currentFragment).commit();
-                //调用滑动到达下一站接口
-                presenter.toNextStation(scheduleId, stationId);
             }
 
             @Override
-            public void sideToArrived(long stationId) {
+            public void slideToNext(int index) {
+                //前往下一站
+                presenter.toNextStation(scheduleId, listLine.get(index).id);
+
+            }
+
+            @Override
+            public void sideToArrived(int index) {
                 //滑动到达下一站
-                presenter.arriveStation(scheduleId, stationId);
+                presenter.arriveStation(scheduleId, listLine.get(index).id);
+                initPop(index);
             }
 
             @Override
             public void showEndFragment() {
                 switchFragment(bcEndFragment).commit();
-
             }
-
         };
     }
 
-    @Override
-    public void showFragmentByStatus() {
-
+    public void initPop(int index){
+        if (listMarker != null){
+            listMarker.get(index).setTitle(listLine.get(index).address);
+            listMarker.get(index).setSnippet("");
+            listMarker.get(index).showInfoWindow();
+        }
     }
-
 
     @Override
     public void showBusLineInfo(BusStationResult busStationResult) {
-        busRouteResult = busStationResult;
+        listLine = BusStationsBean.findByScheduleId(busStationResult.id);
+
+        Log.e("hufeng", GsonUtil.toJson(listLine));
+
 //        aMap.clear();// 清理地图上的所有覆盖物
 
         //显示正在行驶的路线
-        tvTipLayout.setText(
-                "行程：" + busStationResult.stationVos.get(0).address
-                        + "到" + busStationResult.stationVos.get(busRouteResult.stationVos.size() - 1).address);
+        tvTipLayout.setText("行程：" + busStationResult.stationVos.get(0).address
+                + "到" + busStationResult.stationVos.get(listLine.size() - 1).address);
 
-        initBridget();
-        initFragment();
-        showBottonFragment(busRouteResult);
+        showLines();
+        //进入班车跑单界面后根据本地数据展示对应的fragment
+        showFragmentByStatus();
+    }
 
+    public void showFragmentByStatus() {
+        for (int i = 0; i < listLine.size(); i++) {
+            if (listLine.get(0).status != BusStationsBean.LEAVE_STATION) {
+                switchFragment(bcStartFragment).commit();
+                break;
+            } else if (listLine.get(listLine.size() - 1).status != BusStationsBean.TO_STATION) {
+                switchFragment(bcRuningFragment).commit();
+                break;
+            } else {
+                switchFragment(bcEndFragment).commit();
+                break;
+            }
+        }
+    }
+
+    ArrayList<Marker> listMarker = new ArrayList<>();
+
+    public void showLines() {
+        listMarker.clear();
+        //第一个未开始加载的地图
         //设置bound
         List<LatLng> latLngs = new ArrayList<>();
-        latLngs.add(new LatLng(busStationResult.stationVos.get(0).latitude, busStationResult.stationVos.get(0).longitude));
-        latLngs.add(new LatLng((busStationResult.stationVos.get(busStationResult.stationVos.size() - 1).latitude),
-                (busStationResult.stationVos.get(busStationResult.stationVos.size() - 1).longitude)));
+        latLngs.add(new LatLng(listLine.get(0).latitude, listLine.get(0).longitude));
+        latLngs.add(new LatLng((listLine.get(listLine.size() - 1).latitude),
+                (listLine.get(listLine.size() - 1).longitude)));
 
         LatLngBounds bounds = MapUtil.getBounds(latLngs);
         aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(BcFlowActivity.this) / 1.5),
@@ -269,28 +273,33 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
         //添加站点marker
         List<LatLng> stationVos = new ArrayList<LatLng>();
 
-        for (int i = 0; i < busRouteResult.stationVos.size(); i++) {
-            stationVos.add(new LatLng(busStationResult.stationVos.get(i).latitude, busStationResult.stationVos.get(i).longitude));
+        for (int i = 0; i < listLine.size(); i++) {
+
+            stationVos.add(new LatLng(listLine.get(i).latitude, listLine.get(i).longitude));
 
             markerOption = new MarkerOptions()
                     .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_bus_dot))
-                    .title(busRouteResult.stationVos.get(i).address)
-                    .position(new LatLng(busStationResult.stationVos.get(i).latitude, busStationResult.stationVos.get(i).longitude))
-                    .setInfoWindowOffset(0, -5)
+                    .title(listLine.get(i).address)
+                    .position(new LatLng(listLine.get(i).latitude, listLine.get(i).longitude))
+
                     .draggable(true);
 
             //绘制路线
-            aMap.addPolyline(new PolylineOptions().
-                    addAll(stationVos)
+            aMap.addPolyline(new PolylineOptions()
+                    .addAll(stationVos)
                     .width(15)
                     .color(Color.parseColor("#3C98E3")));
-            aMap.addMarker(markerOption);
+            Marker marker = aMap.addMarker(markerOption);
+            listMarker.add(marker);
         }
-
     }
 
     @Override
     public void showNext() {
+        listLine.get(0).status = BusStationsBean.LEAVE_STATION;
+        listLine.get(1).status = BusStationsBean.TO_STATION;
+        listLine.get(0).updateStatus();
+        listLine.get(1).updateStatus();
         switchFragment(bcRuningFragment).commit();
     }
 
@@ -299,24 +308,6 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
         finish();
     }
 
-    /**
-     * 显示第一个fragment
-     *
-     * @param result
-     */
-    public void showBottonFragment(BusStationResult result) {
-        BcStartFragment bcStartFragment = new BcStartFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("busLineResult", result);
-        bcStartFragment.setArguments(bundle);
-        bcStartFragment.setBridge(bridge);
-
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
-        transaction.replace(R.id.fragment_frame, bcStartFragment);
-        transaction.commit();
-    }
 
     /**
      * fragment 切换
@@ -426,7 +417,6 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
 //        aMap.addMarker(markerOption);
 //        aMap.addMarker(new MarkerOptions());
 
-
 //        moveToShowStationName(mylocation);
     }
 
@@ -435,15 +425,15 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
      */
     private void moveToShowStationName(LatLng mylocation) {
 
-        if (busRouteResult.stationVos == null) {
+        if (listLine == null) {
             return;
         }
-        for (int i = 0; i <= busRouteResult.stationVos.size() - 1; i++) {
-            LatLng stationLatLng = new LatLng(busRouteResult.stationVos.get(i).latitude, busRouteResult.stationVos.get(i).longitude);
+        for (int i = 0; i <= listLine.size() - 1; i++) {
+            LatLng stationLatLng = new LatLng(listLine.get(i).latitude, listLine.get(i).longitude);
             if (mylocation == stationLatLng) {
                 markerOption = new MarkerOptions()
                         .icon(BitmapDescriptorFactory.fromResource(R.mipmap.amap_bus))
-                        .position(mylocation).title(busRouteResult.stationVos.get(i).name)
+                        .position(mylocation).title(listLine.get(i).name)
                         .draggable(true)
                         .period(10);
                 aMap.addMarker(markerOption);
@@ -459,36 +449,5 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
     }
 
 
-    /**
-     * 开始搜索路径规划方案
-     */
-    private void searchRouteResult(int route_type_drive, int drivingDefault) {
-//        final RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(
-//                mStartPoint, mEndPoint);
-//        if (routeType == ROUTE_TYPE_DRIVE) {// 驾车路径规划
-//            RouteSearch.DriveRouteQuery query = new RouteSearch.DriveRouteQuery(fromAndTo, mode, null,
-//                    null, "");// 第一个参数表示路径规划的起点和终点，第二个参数表示驾车模式，第三个参数表示途经点，第四个参数表示避让区域，第五个参数表示避让道路
-//            mRouteSearch.calculateDriveRouteAsyn(query);// 异步路径规划驾车模式查询
-//        }
-    }
 
-    @Override
-    public void onBusRouteSearched(BusRouteResult busRouteResult, int i) {
-
-    }
-
-    @Override
-    public void onDriveRouteSearched(DriveRouteResult driveRouteResult, int i) {
-
-    }
-
-    @Override
-    public void onWalkRouteSearched(WalkRouteResult walkRouteResult, int i) {
-
-    }
-
-    @Override
-    public void onRideRouteSearched(RideRouteResult rideRouteResult, int i) {
-
-    }
 }

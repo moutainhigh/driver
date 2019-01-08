@@ -22,8 +22,6 @@ public interface FlowContract {
 
         void initBridget();
 
-        void showFragmentByStatus();
-
         void showBusLineInfo(BusStationResult busStationResult);
 
         void showNext();

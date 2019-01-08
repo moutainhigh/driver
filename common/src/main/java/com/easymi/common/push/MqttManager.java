@@ -68,7 +68,7 @@ public class MqttManager implements LocObserver {
     private boolean isConnecting = false;
 
     String pullTopic;
-//    String configTopic;
+    String configTopic;
 
     private RxManager rxManager;
 
@@ -107,7 +107,7 @@ public class MqttManager implements LocObserver {
      */
     public synchronized boolean creatConnect() {
 //        pullTopic = "/driver" + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
-//        configTopic = "/driver" + "/" + EmUtil.getAppKey() + "/config";
+        configTopic = "/driver" + "/" + EmUtil.getAppKey() + "/config";
         pullTopic = "/trip/driver" + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
 //        configTopic = "/driver"+ "/config";
 
@@ -189,7 +189,7 @@ public class MqttManager implements LocObserver {
 
         if (client != null && client.isConnected()) {
 
-//            Log.e(TAG, "Publishing to topic \"" + topicName + "\" qos " + qos);
+            Log.e(TAG, "Publishing to topic \"" + topicName + "\" qos " + qos);
 
             // Create and configure a message
             MqttMessage message = new MqttMessage(pushStr.getBytes());
@@ -204,7 +204,6 @@ public class MqttManager implements LocObserver {
             } catch (MqttException e) {
                 Log.e(TAG, "Publishing msg exception " + e.getMessage());
             }
-
         }
 
         return flag;
@@ -273,12 +272,12 @@ public class MqttManager implements LocObserver {
             try {
                 if (lastSucTime == 0) {
                     client.subscribe(pullTopic, 1);
-//                    client.subscribe(configTopic, 1);
+                    client.subscribe(configTopic, 1);
                 } else {
                     if (System.currentTimeMillis() - lastSucTime < 2000) {//小于2秒的回调
                     } else {
                         client.subscribe(pullTopic, 1);
-//                        client.subscribe(configTopic, 1);
+                        client.subscribe(configTopic, 1);
                     }
                 }
                 lastSucTime = System.currentTimeMillis();
@@ -299,7 +298,7 @@ public class MqttManager implements LocObserver {
             if (null != client) {
                 try {
                     client.unsubscribe(pullTopic);
-//                    client.unsubscribe(configTopic);
+                    client.unsubscribe(configTopic);
                     Log.e(TAG, "取消订阅的topic");
                 } catch (Exception e) {
                     CrashReport.postCatchedException(e);
@@ -389,8 +388,8 @@ public class MqttManager implements LocObserver {
 //                }
             }
             creatConnect();
+            gpsPush(pushStr); //更改到断连就http上报
         }
-        gpsPush(pushStr);
     }
 
     /**
@@ -404,7 +403,7 @@ public class MqttManager implements LocObserver {
 //            return;
 //        }
         long lastPushTime = XApp.getMyPreferences().getLong(Config.SP_LAST_GPS_PUSH_TIME, 0);
-        if (System.currentTimeMillis() - lastPushTime > 30 * 1000) {
+        if (System.currentTimeMillis() - lastPushTime > 5 * 1000) {
             XApp.getPreferencesEditor().putLong(Config.SP_LAST_GPS_PUSH_TIME, System.currentTimeMillis()).apply();
 
             Observable<GetFeeResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)

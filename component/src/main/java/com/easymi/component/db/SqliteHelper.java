@@ -72,6 +72,8 @@ public class SqliteHelper extends SQLiteOpenHelper {
         createVehicleInfoTable(db);
         createSystemTable(db);
         createOrderCustomer(db);
+
+        createBusStation(db);
     }
 
     @Override
@@ -96,6 +98,9 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
         db.execSQL("DROP TABLE IF EXISTS " + "t_zx_order_customer");
         createOrderCustomer(db);
+
+        db.execSQL("DROP TABLE IF EXISTS " + "t_bus_order_station");
+        createBusStation(db);
     }
 
     private void createDriverInfoTable(SQLiteDatabase db) {
@@ -341,6 +346,23 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append(");");
         execCreateTableSQL(db);
     }
+
+    private void createBusStation(SQLiteDatabase db) {
+        sqlBuf.append("CREATE TABLE ").append("t_bus_order_station").append(" (")
+                .append("growId").append(" INTEGER PRIMARY KEY, ")
+                .append("id").append(" ").append("INTEGER").append(",")
+                .append("name").append(" ").append("TEXT").append(",")
+                .append("address").append(" ").append("TEXT").append(",")
+                .append("longitude").append(" ").append("DOUBLE").append(",")
+                .append("latitude").append(" ").append("DOUBLE").append(",")
+                .append("scheduleId").append(" ").append("LONG").append(",")
+                .append("orderType").append(" ").append("TEXT").append(",")
+                .append("status").append(" ").append("INTEGER").append(",")
+                .append("waitTime").append(" ").append("LONG")
+                .append(");");
+        execCreateTableSQL(db);
+    }
+
 
     private void execCreateTableSQL(SQLiteDatabase db) {
         db.execSQL(sqlBuf.toString());

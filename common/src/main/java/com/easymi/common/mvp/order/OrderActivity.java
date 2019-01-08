@@ -40,7 +40,7 @@ public class OrderActivity extends RxBaseActivity {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.com_my_order);
         toolbar.setLeftIcon(R.drawable.ic_arrow_back, v -> finish());
-        if (!EmUtil.getEmployInfo().serviceType.equals(Config.TAXI)){
+        if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE) || EmUtil.getEmployInfo().serviceType.equals(Config.CITY_LINE)){
             toolbar.setRightText(R.string.com_make_order, v -> {
                 if (popWindow.isShowing()) {
                     popWindow.dismiss();

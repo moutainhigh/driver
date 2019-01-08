@@ -56,7 +56,7 @@ public class ApiManager {
         //创建okhttp客户端
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.readTimeout(16000, TimeUnit.MILLISECONDS)
-                .connectTimeout(16000, TimeUnit.MILLISECONDS)
+                .connectTimeout(8000, TimeUnit.MILLISECONDS)
                 .addInterceptor(encryptInterceptor)  //加密拦截器
                 .addInterceptor(new TokenInterceptor())//token拦截器
                 .addInterceptor(logInterceptor) //添加日志拦截器,进行输出日志

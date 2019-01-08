@@ -8,8 +8,12 @@ import android.widget.TextView;
 import com.easymi.component.base.RxBaseFragment;
 import com.easymin.passengerbus.R;
 import com.easymin.passengerbus.entity.BusStationResult;
+import com.easymin.passengerbus.entity.BusStationsBean;
 import com.easymin.passengerbus.flowMvp.ActFraCommBridge;
 import com.easymin.passengerbus.flowMvp.BcFlowActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 行程结束
@@ -21,8 +25,9 @@ public class BcEndFragment extends RxBaseFragment{
 
     private ActFraCommBridge bridge;
 
-    private BusStationResult result;
+    private long scheduleId;
 
+    private List<BusStationsBean> listLine = new ArrayList<>();
 
     public void setBridge(ActFraCommBridge bridge) {
         this.bridge = bridge;
@@ -31,8 +36,7 @@ public class BcEndFragment extends RxBaseFragment{
     @Override
     public void setArguments(@Nullable Bundle args) {
         super.setArguments(args);
-        result = (BusStationResult) args.getSerializable("busLineResult");
-
+        scheduleId = args.getLong("scheduleId");
     }
 
     @Override
@@ -48,10 +52,16 @@ public class BcEndFragment extends RxBaseFragment{
     }
 
     private void initView() {
+        listLine = BusStationsBean.findByScheduleId(scheduleId);
+
         tvLineAddress = $(R.id.tv_line_address);
-        tvLineAddress.setText(result.stationVos.get(result.stationVos.size()-1).address);
+        tvLineAddress.setText("终点站："+listLine.get(listLine.size()-1).address);
         tvEnd = $(R.id.tv_end);
 
-        tvEnd.setOnClickListener(v -> bridge.arriveEnd());
+        ((BcFlowActivity)getActivity()).initPop(listLine.size()-1);
+
+        tvEnd.setOnClickListener(v ->{
+            bridge.arriveEnd();
+        });
     }
 }

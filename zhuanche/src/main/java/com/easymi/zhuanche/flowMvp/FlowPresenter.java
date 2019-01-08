@@ -113,7 +113,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     public void arriveStart(Long orderId, Long version) {
         Observable<ZCOrderResult> observable = model.arriveStart(orderId, version);
 
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, zcOrderResult -> {
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, false, false, zcOrderResult -> {
             findOne(orderId);
         })));
     }
@@ -132,7 +132,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     public void startWait(Long orderId) {
         Observable<ZCOrderResult> observable = model.startWait(orderId);
 
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, zcOrderResult -> {
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, false, false, zcOrderResult -> {
             findOne(orderId);
         })));
     }
@@ -186,7 +186,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     public void findOne(Long orderId) {
         Observable<ZCOrderResult> observable = model.findOne(orderId);
 
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<ZCOrderResult>() {
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, false, false, new HaveErrSubscriberListener<ZCOrderResult>() {
             @Override
             public void onNext(ZCOrderResult zcOrderResult) {
                 updateDymOrder(zcOrderResult.data);
@@ -222,7 +222,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     public void changeEnd(Long orderId, Double lat, Double lng, String address) {
         Observable<ZCOrderResult> observable = model.changeEnd(orderId, lat, lng, address);
 
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, zcOrderResult -> {
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, false, false, zcOrderResult -> {
             findOne(orderId);
         })));
     }
@@ -231,7 +231,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     public void cancelOrder(Long orderId, String remark) {
         Observable<EmResult> observable = model.cancelOrder(orderId, remark);
 
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, zcOrderResult -> {
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, false, true, zcOrderResult -> {
             DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
             if (null != dymOrder) {
                 dymOrder.delete();
@@ -411,7 +411,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     @Override
     public void onGetNavigationText(int i, String s) {
         Log.e("FlowerPresenter", s);
-        XApp.getInstance().syntheticVoice(s, true);
     }
 
     @Override
@@ -579,7 +578,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void onGetNavigationText(String s) {
-//        XApp.getInstance().syntheticVoice(s, true);
+//        XApp.getInstance().syntheticVoice(s, false);
     }
 
     @Override

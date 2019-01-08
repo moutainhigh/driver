@@ -2,11 +2,16 @@ package com.easymin.passengerbus.flowMvp;
 
 import android.content.Context;
 
+import com.easymi.component.Config;
+import com.easymi.component.entity.DymOrder;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult2;
 import com.easymi.component.utils.ToastUtil;
 import com.easymin.passengerbus.entity.BusStationResult;
+import com.easymin.passengerbus.entity.BusStationsBean;
+
+import java.util.List;
 
 
 public class FlowPresenter implements FlowContract.Presenter {
@@ -89,12 +94,34 @@ public class FlowPresenter implements FlowContract.Presenter {
 
                     @Override
                     public void onNext(EmResult2<BusStationResult> result) {
+                        if (result.getCode() == 1) {
+                            for (BusStationsBean busStation : result.getData().stationVos) {
+                                if (!BusStationsBean.existsById(busStation.id, result.getData().id)) {
+                                    busStation.scheduleId = result.getData().id;
+                                    busStation.orderType = Config.COUNTRY;
+                                    busStation.save();
+                                }
+                            }
+                            List<BusStationsBean> stations = BusStationsBean.findAll();
+                            for (BusStationsBean station : stations) {
+                                boolean isExist = false;
+                                for (BusStationsBean order : result.getData().stationVos) {
+                                    if (order.id == station.id && result.getData().id == station.scheduleId) {
+                                        isExist = true;
+                                        break;
+                                    }
+                                }
+                                if (!isExist) {
+                                    station.delete(station.id,station.scheduleId);
+                                }
+                            }
+                        }
                         view.showBusLineInfo(result.getData());
                     }
 
                     @Override
                     public void onError(int code) {
-                        ToastUtil.showMessage(context, "获取班车路线失败！");
+
                     }
                 })));
     }

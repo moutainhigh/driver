@@ -444,6 +444,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
         options.rotateAngle(EmUtil.getLastLoc().bearing);
         options.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                 .decodeResource(getResources(), R.mipmap.ic_start)));
+        options.setFlat(true);//设置marker平贴地图效果
         startMarker = aMap.addMarker(options);
     }
 
@@ -476,6 +477,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
         options.rotateAngle(EmUtil.getLastLoc().bearing);
         options.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                 .decodeResource(getResources(), R.mipmap.ic_end)));
+        options.setFlat(true);//设置marker平贴地图效果
         endMarker = aMap.addMarker(options);
     }
 

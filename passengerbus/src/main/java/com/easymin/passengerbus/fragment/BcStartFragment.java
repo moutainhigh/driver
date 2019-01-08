@@ -8,8 +8,12 @@ import android.widget.TextView;
 import com.easymi.component.base.RxBaseFragment;
 import com.easymin.passengerbus.R;
 import com.easymin.passengerbus.entity.BusStationResult;
+import com.easymin.passengerbus.entity.BusStationsBean;
 import com.easymin.passengerbus.flowMvp.ActFraCommBridge;
 import com.easymin.passengerbus.flowMvp.BcFlowActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 开始行程
@@ -21,7 +25,10 @@ public class BcStartFragment extends RxBaseFragment {
 
     private ActFraCommBridge bridge;
 
-    private BusStationResult result;
+    private long scheduleId;
+
+    private List<BusStationsBean> listLine = new ArrayList<>();
+
 
     public void setBridge(ActFraCommBridge bridge) {
         this.bridge = bridge;
@@ -30,8 +37,7 @@ public class BcStartFragment extends RxBaseFragment {
     @Override
     public void setArguments(@Nullable Bundle args) {
         super.setArguments(args);
-        result = (BusStationResult) args.getSerializable("busLineResult");
-
+        scheduleId = args.getLong("scheduleId");
     }
 
     @Override
@@ -50,18 +56,14 @@ public class BcStartFragment extends RxBaseFragment {
         tvLineAddress = $(R.id.tv_line_address);
         tvStart = $(R.id.tv_start);
 
+        listLine = BusStationsBean.findByScheduleId(scheduleId);
 
-        if (result == null) {
+        if (listLine == null || listLine.size() == 0) {
             return;
         }
-        tvLineAddress.setText("起点站：" + result.stationVos.get(0).address);
-        tvStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                bridge.arriveStart();
-
-            }
+        tvLineAddress.setText("起点站：" + listLine.get(0).address);
+        tvStart.setOnClickListener(v ->{
+            bridge.arriveStart();
         });
     }
 }

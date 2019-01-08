@@ -329,8 +329,10 @@ public class SettleFragmentDialog {
         calcMoney();
     }
 
+    DecimalFormat df = new DecimalFormat("#0.00");
+
     private void calcMoney() {
-        DecimalFormat df = new DecimalFormat("#0.0");
+
         if (zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_DESTINATION_ORDER) {//到达于目的地后就无需计算了
             return;
         }
@@ -372,7 +374,8 @@ public class SettleFragmentDialog {
                 @Override
                 public void run() {
                     prepayMoneyText.setText(String.valueOf(dymOrder.prepay));
-                    needPayText.setText(String.valueOf(dymOrder.orderShouldPay));
+//                    needPayText.setText(String.valueOf(dymOrder.orderShouldPay));
+                    needPayText.setText(df.format(dymOrder.orderShouldPay));
                 }
             });
         }

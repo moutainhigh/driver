@@ -15,10 +15,6 @@ import java.util.List;
  */
 public interface ActFraCommBridge {
 
-
-
-
-
     void changeToolbar(int flag);
 
     /**
@@ -34,15 +30,16 @@ public interface ActFraCommBridge {
     /**
      * 滑动到达下一站
      */
-    void slideToNext(long stationId);
+    void slideToNext(int index);
 
     /**
      * 滑动到达站点
      */
-    void sideToArrived(long stationId);
+    void sideToArrived(int index);
 
 
     void showEndFragment();
+
 
 
 }

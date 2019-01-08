@@ -562,7 +562,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             if (zcOrder.orderStatus < ZCOrderStatus.GOTO_DESTINATION_ORDER) {
                 if (mPlocation == null) {
-                    passengerLoc(zcOrder.passengerId);
+                    passengerLoc(zcOrder.orderId);
                 }
             } else {
                 if (plMaker != null) {
@@ -597,6 +597,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLatlng, 17));//移动镜头，首次镜头快速跳到指定位置
 
             myLocationStyle = new MyLocationStyle();
+
+            myLocationStyle.strokeColor(Color.argb(0, 0, 0, 0));// 设置圆形的边框颜色
+            myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));// 设置圆形的填充颜色
+
             if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
                 myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);
             } else {
@@ -959,11 +963,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void showLeft(int dis, int time) {
-
         if (zcOrder.orderStatus == ZCOrderStatus.NEW_ORDER) {
             String disStr = getString(R.string.to_start_about);
             int km = dis / 1000;
-            if (km > 1) {
+            if (km >= 1) {
                 String disKm = new DecimalFormat("#0.0").format((double) dis / 1000);
                 disStr += "<font color='blue'><b><tt>" +
                         disKm + "</tt></b></font>" + getString(R.string.km);
@@ -996,7 +999,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         } else {
             String disStr;
             int km = dis / 1000;
-            if (km > 1) {
+            if (km >= 1) {
                 String disKm = new DecimalFormat("#0.0").format((double) dis / 1000);
                 disStr = getString(R.string.left) +
                         "<font color='black'><b><tt>" +
@@ -1351,6 +1354,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         mAlbumOrientationEventListener.disable();
         mapView.onDestroy();
         presenter.stopNavi();
+
+        if (mPlocation!= null){
+            mPlocation = null;
+        }
+
 //        //add
 //        if (mLocationClient != null) {
 //            mLocationClient.stopLocation();//停止定位
@@ -1385,6 +1393,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         if (myLocationStyle == null) {
             myLocationStyle = new MyLocationStyle();
+
+            myLocationStyle.strokeColor(Color.argb(0, 0, 0, 0));// 设置圆形的边框颜色
+            myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));// 设置圆形的填充颜色
         }
         if (!isMapTouched) {
             if (zcOrder != null) {
@@ -1545,7 +1556,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         if (zcOrder != null && zcOrder.orderStatus < ZCOrderStatus.GOTO_DESTINATION_ORDER) {
             if (plocation != null) {
                 if (null != mPlocation) {
-                    if (zcOrder.passengerId == plocation.passengerId) {
+                    if (zcOrder.orderId == plocation.orderId) {
                         if (plocation.latitude != mPlocation.latitude && plocation.longitude != mPlocation.longitude) {
                             mPlocation = plocation;
                             addPlMaker();
@@ -1579,7 +1590,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         markerOption.position(new LatLng(mPlocation.latitude, mPlocation.longitude));
         markerOption.draggable(false);//设置Marker可拖动
         markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                .decodeResource(getResources(), R.mipmap.blue_dot)));
+                .decodeResource(getResources(), R.mipmap.ic_passenger_location)));
         // 将Marker设置为贴地显示，可以双指下拉地图查看效果
         markerOption.setFlat(true);//设置marker平贴地图效果
         plMaker = aMap.addMarker(markerOption);
@@ -1661,9 +1672,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
     }
 
-    public void passengerLoc(long passengerId) {
+    public void passengerLoc(long orderId) {
         Observable<PassengerLcResult> observable = ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
-                .passengerLoc(passengerId)
+                .passengerLoc(orderId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 

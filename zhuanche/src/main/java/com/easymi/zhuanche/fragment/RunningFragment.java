@@ -15,6 +15,8 @@ import com.easymi.zhuanche.R;
 import com.easymi.zhuanche.flowMvp.ActFraCommBridge;
 import com.easymi.zhuanche.flowMvp.FlowActivity;
 
+import java.text.DecimalFormat;
+
 /**
  * Created by developerLzh on 2017/11/13 0013.
  */
@@ -82,7 +84,8 @@ public class RunningFragment extends RxBaseFragment {
 
         feeCon = $(R.id.fee_con);
 
-        serviceMoneyText.setText(zcOrder.totalFee + "");
+        serviceMoneyText.setText(df.format(zcOrder.totalFee));
+//        serviceMoneyText.setText(zcOrder.totalFee + "");
         distanceText.setText(zcOrder.distance + "");
         driveTimeText.setText(zcOrder.travelTime + "");
         waitTimeText.setText(zcOrder.waitTime + "");
@@ -139,14 +142,18 @@ public class RunningFragment extends RxBaseFragment {
             return true;
         });
     }
+    DecimalFormat df = new DecimalFormat("#0.00");
 
     public void showFee(DymOrder dymOrder) {
         getActivity().runOnUiThread(() -> {
             RunningFragment.this.zcOrder = dymOrder;
-            serviceMoneyText.setText(zcOrder.totalFee + "");
+//            serviceMoneyText.setText(zcOrder.totalFee + "");
+            serviceMoneyText.setText(df.format(zcOrder.totalFee));
+
             distanceText.setText(zcOrder.distance + "");
             driveTimeText.setText(zcOrder.travelTime + "");
-            waitTimeText.setText(zcOrder.waitTime + "");    });
+            waitTimeText.setText(zcOrder.waitTime + "");
+        });
 
     }
 

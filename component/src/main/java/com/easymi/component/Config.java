@@ -17,13 +17,13 @@ public class Config {
      */
 //    public static final String HOST = "http://10.10.2.12:10001/";  //张鹏
 //    public static final String HOST = "http://10.10.2.43:10001/";  //杰克
-    public static final String HOST = "http://10.10.2.35:10001/";//兵哥的
+//    public static final String HOST = "http://10.10.2.35:10001/";//兵哥的
 //    public static final String HOST = "http://47.94.204.67:10022/";//外网
 //    public static final String HOST = "http://10.10.2.23:10001/";//俊俏
 //    public static final String HOST = "http://10.10.2.130:10001/";//130测试地址 （内网）
 //    public static final String HOST = "http://47.94.204.67:20001/";//130测试地址（外网）
 //    public static final String HOST = "http://api.xiaokakj.com/";//线上地址
-//    public static final String HOST = "http://api.xiaokakj.cn/";//线上地址
+    public static final String HOST = "http://api.xiaokakj.cn/";//线上地址
     /**
      * MQTT配置
      */
@@ -33,7 +33,9 @@ public class Config {
      * APP_KEY
      */
     public static final String APP_KEY = "1HAcient1kLqfeX7DVTV0dklUkpGEnUC";//资运
-//    public static final String APP_KEY = "xoRfvofrZw25b95ZBZY2venOYlSwWFOV ";//v6
+//    public static final String APP_KEY = "xoRfvofrZw25b95ZBZY2venOYlSwWFOV";//v6
+//    public static final String APP_KEY = "SsCMJL77sZMI0iudBi5XZeNjzmILOjih";  // 林凯
+//    public static final String APP_KEY = "eubACO3wp3rjz1OBcDSa4LeS4qM4586o";  // 麒策
     /**
      * 上传图片地址.
      */
