@@ -2,6 +2,7 @@ package com.easymin.passengerbus.flowMvp;
 
 import com.amap.api.maps.model.LatLng;
 import com.easymi.common.entity.OrderCustomer;
+import com.easymi.component.widget.LoadingButton;
 
 import java.util.List;
 
@@ -20,12 +21,12 @@ public interface ActFraCommBridge {
     /**
      * 出发
      */
-    void arriveStart();
+    void arriveStart(LoadingButton button);
 
     /**
      * 到达终点
      */
-    void arriveEnd();
+    void arriveEnd(LoadingButton button);
 
     /**
      * 滑动到达下一站

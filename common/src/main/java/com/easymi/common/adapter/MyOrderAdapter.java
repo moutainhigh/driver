@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.easymi.common.R;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.util.DJStatus2Str;
+import com.easymi.component.BusOrderStatus;
 import com.easymi.component.Config;
 import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.utils.TimeUtil;
@@ -63,14 +64,15 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Holder> 
         MultipleOrder baseOrder = list.get(position);
 
         holder.order_type.setText("" + baseOrder.getOrderType());
-        holder.order_status.setText(DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status));
         holder.order_time.setText(TimeUtil.getTime(context.getString(R.string.time_five_format), baseOrder.bookTime * 1000));
         holder.order_start_place.setText(baseOrder.getStartSite().address);
         holder.order_end_place.setText(baseOrder.getEndSite().address);
 
         if (TextUtils.equals(baseOrder.serviceType, Config.CITY_LINE)) {
             holder.order_status.setText("" + baseOrder.getZXOrderStatusStr() + " >");
-        } else {
+        } else if (TextUtils.equals(baseOrder.serviceType, Config.COUNTRY)) {
+            holder.order_status.setText(BusOrderStatus.status2Str(baseOrder.status) + " >");
+        }else {
             holder.order_status.setText(DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status) + " >");
         }
 

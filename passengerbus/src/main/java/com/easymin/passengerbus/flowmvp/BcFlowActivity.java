@@ -36,6 +36,7 @@ import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MapUtil;
 import com.easymi.component.widget.CusToolbar;
+import com.easymi.component.widget.LoadingButton;
 import com.easymin.passengerbus.R;
 import com.easymin.passengerbus.entity.BusStationResult;
 import com.easymin.passengerbus.entity.BusStationsBean;
@@ -183,15 +184,15 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
             }
 
             @Override
-            public void arriveStart() {
+            public void arriveStart(LoadingButton button) {
                 //调用出发接口
-                presenter.startStation(scheduleId);
+                presenter.startStation(scheduleId,button);
             }
 
             @Override
-            public void arriveEnd() {
+            public void arriveEnd(LoadingButton button) {
                 //到达
-                presenter.endStation(scheduleId);
+                presenter.endStation(scheduleId,button);
             }
 
             @Override
@@ -225,6 +226,12 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
 
     @Override
     public void showBusLineInfo(BusStationResult busStationResult) {
+
+        if (busStationResult == null){
+            finish();
+            return;
+        }
+
         listLine = BusStationsBean.findByScheduleId(busStationResult.id);
 
         Log.e("hufeng", GsonUtil.toJson(listLine));
@@ -444,10 +451,8 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-
         return false;
     }
-
 
 
 }

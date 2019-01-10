@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.easymi.component.base.RxBaseFragment;
+import com.easymi.component.widget.LoadingButton;
 import com.easymin.passengerbus.R;
 import com.easymin.passengerbus.entity.BusStationResult;
 import com.easymin.passengerbus.entity.BusStationsBean;
@@ -21,7 +22,7 @@ import java.util.List;
 public class BcStartFragment extends RxBaseFragment {
 
     private TextView tvLineAddress;
-    private TextView tvStart;
+    private LoadingButton tvStart;
 
     private ActFraCommBridge bridge;
 
@@ -63,7 +64,7 @@ public class BcStartFragment extends RxBaseFragment {
         }
         tvLineAddress.setText("起点站：" + listLine.get(0).address);
         tvStart.setOnClickListener(v ->{
-            bridge.arriveStart();
+            bridge.arriveStart(tvStart);
         });
     }
 }

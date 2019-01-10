@@ -15,6 +15,7 @@ import com.easymi.common.activity.BaoxiaoActivity;
 import com.easymi.common.activity.LiushuiActivity;
 import com.easymi.common.util.ZXStatus2Str;
 import com.easymi.common.util.DJStatus2Str;
+import com.easymi.component.BusOrderStatus;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
 import com.easymi.component.entity.BaseOrder;
@@ -74,6 +75,9 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
         }else if (baseOrder.serviceType.equals(Config.RENTAL)){
             typeStr = context.getResources().getString(R.string.create_rental);
             holder.orderStatus.setText(DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status));
+        }else if (baseOrder.serviceType.equals(Config.COUNTRY)){
+            typeStr = context.getResources().getString(R.string.create_bus_country);
+            holder.orderStatus.setText(BusOrderStatus.status2Str(baseOrder.status));
         }
         holder.orderType.setText(typeStr);
         holder.orderEndPlace.setText(baseOrder.destination);

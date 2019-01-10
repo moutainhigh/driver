@@ -81,6 +81,10 @@
     <string name="be_later">以后再说</string>
     <string name="ingore_this">忽略该版</string>
 
+    <string name="bus_status_new">新班次</string>
+    <string name="bus_status_begain">已出发</string>
+    <string name="bus_status_end">已结束</string>
+
 
     <string name="rsa_public_key">MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCCaYfJgPjUXWXoifblGGZSFPsP1JYe758iLuRYUNS06MyAwuM+nlM6lC5QbnCOkj5khslbcMvT0+MtoSpe+neGI+oEKU/p203ENqD+I2PxjfTu7AZc+C2Ccw48PlTNVqH/juyhg4Cch7eETPclCdR4XPqO5lI9voDgjvTR/FhJXwIDAQAB</string>
 </resources>

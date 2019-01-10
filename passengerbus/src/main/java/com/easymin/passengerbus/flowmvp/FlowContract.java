@@ -2,6 +2,7 @@ package com.easymin.passengerbus.flowMvp;
 
 import com.easymi.component.result.EmResult2;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.widget.LoadingButton;
 import com.easymin.passengerbus.entity.BusStationResult;
 
 import rx.Observable;
@@ -34,16 +35,15 @@ public interface FlowContract {
 
     interface Presenter {
 
-        void startStation(long scheduleId);
+        void startStation(long scheduleId,LoadingButton button);
 
         void arriveStation(long scheduleId, long stationId);
 
-        void endStation(long scheduleId);
+        void endStation(long scheduleId,LoadingButton button);
 
         void findBusOrderById(long id);
 
         void toNextStation(long scheduleId, long stationId);
-
     }
 
     interface Model {

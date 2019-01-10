@@ -8,6 +8,7 @@ import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult2;
 import com.easymi.component.utils.ToastUtil;
+import com.easymi.component.widget.LoadingButton;
 import com.easymin.passengerbus.entity.BusStationResult;
 import com.easymin.passengerbus.entity.BusStationsBean;
 
@@ -15,7 +16,6 @@ import java.util.List;
 
 
 public class FlowPresenter implements FlowContract.Presenter {
-
 
     private Context context;
     private FlowContract.View view;
@@ -29,10 +29,9 @@ public class FlowPresenter implements FlowContract.Presenter {
     }
 
     @Override
-    public void startStation(long scheduleId) {
+    public void startStation(long scheduleId,LoadingButton button) {
         view.getManager().add(model.startStation(scheduleId).subscribe(new MySubscriber<>(context,
-                true,
-                true,
+                button,
                 new HaveErrSubscriberListener<EmResult2<Object>>() {
 
                     @Override
@@ -67,10 +66,9 @@ public class FlowPresenter implements FlowContract.Presenter {
     }
 
     @Override
-    public void endStation(long scheduleId) {
+    public void endStation(long scheduleId,LoadingButton button) {
         view.getManager().add(model.endStation(scheduleId).subscribe(new MySubscriber<>(context,
-                true,
-                true,
+                button,
                 new HaveErrSubscriberListener<EmResult2<Object>>() {
 
                     @Override
@@ -121,7 +119,7 @@ public class FlowPresenter implements FlowContract.Presenter {
 
                     @Override
                     public void onError(int code) {
-
+                        view.showBusLineInfo(null);
                     }
                 })));
     }

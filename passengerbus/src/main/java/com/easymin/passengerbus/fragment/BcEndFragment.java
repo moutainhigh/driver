@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.easymi.component.base.RxBaseFragment;
+import com.easymi.component.widget.LoadingButton;
 import com.easymin.passengerbus.R;
 import com.easymin.passengerbus.entity.BusStationResult;
 import com.easymin.passengerbus.entity.BusStationsBean;
@@ -21,7 +22,7 @@ import java.util.List;
 public class BcEndFragment extends RxBaseFragment{
 
     private TextView tvLineAddress;
-    private TextView tvEnd;
+    private LoadingButton tvEnd;
 
     private ActFraCommBridge bridge;
 
@@ -48,7 +49,6 @@ public class BcEndFragment extends RxBaseFragment{
     public void finishCreateView(Bundle state) {
         bridge.changeToolbar(BcFlowActivity.ENDRUNING);
         initView();
-
     }
 
     private void initView() {
@@ -61,7 +61,7 @@ public class BcEndFragment extends RxBaseFragment{
         ((BcFlowActivity)getActivity()).initPop(listLine.size()-1);
 
         tvEnd.setOnClickListener(v ->{
-            bridge.arriveEnd();
+            bridge.arriveEnd(tvEnd);
         });
     }
 }

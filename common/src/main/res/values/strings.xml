@@ -30,6 +30,7 @@
     <string name="create_zhuanxian">城际专线</string>
     <string name="create_chartered">定制包车</string>
     <string name="create_rental">包车租车</string>
+    <string name="create_bus_country">客运班车</string>
 
     <string name="hint">提示</string>
     <string name="sure">确定</string>

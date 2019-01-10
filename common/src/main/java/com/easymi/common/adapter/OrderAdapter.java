@@ -12,6 +12,7 @@ import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.mvp.order.OrderActivity;
 import com.easymi.common.util.DJStatus2Str;
 import com.easymi.common.util.ZXStatus2Str;
+import com.easymi.component.BusOrderStatus;
 import com.easymi.component.Config;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.network.ApiManager;
@@ -48,7 +49,7 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
         if (baseOrder.getItemType() == MultipleOrder.ITEM_HEADER) {
             baseViewHolder.setText(R.id.pinned_text, "订单信息");
             baseViewHolder.itemView.setOnClickListener(v -> {
-               context.startActivity(new Intent(context,OrderActivity.class));
+                context.startActivity(new Intent(context, OrderActivity.class));
             });
         } else if (baseOrder.getItemType() == MultipleOrder.ITEM_POSTER) {
 
@@ -56,14 +57,12 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
             baseViewHolder.setText(R.id.order_type, "" + baseOrder.getOrderType());
             baseViewHolder.setText(R.id.order_start_place, "" + baseOrder.bookAddress);
             baseViewHolder.setText(R.id.order_end_place, baseOrder.destination);
-            if (TextUtils.equals(baseOrder.serviceType,Config.CITY_LINE) || TextUtils.equals(baseOrder.serviceType,Config.COUNTRY)){//专线
-//                DymOrder dymOrder = DymOrder.findByIDType(baseOrder.scheduleId,baseOrder.serviceType);
-//                baseViewHolder.setText(R.id.order_status, "" + ZXStatus2Str.int2Str(baseOrder.serviceType, dymOrder.orderStatus)+" >");
-                baseViewHolder.setText(R.id.order_status, "" + baseOrder.getZXOrderStatusStr()+" >");
+            if (TextUtils.equals(baseOrder.serviceType, Config.CITY_LINE)) {//专线
+                baseViewHolder.setText(R.id.order_status, "" + baseOrder.getZXOrderStatusStr() + " >");
+            } else if (TextUtils.equals(baseOrder.serviceType, Config.COUNTRY)) {
+                baseViewHolder.setText(R.id.order_status, "" + BusOrderStatus.status2Str(baseOrder.scheduleStatus) + " >");
             } else {
-//                DymOrder dymOrder = DymOrder.findByIDType(baseOrder.orderId,baseOrder.serviceType);
-//                baseViewHolder.setText(R.id.order_status, "" + DJStatus2Str.int2Str(baseOrder.serviceType, dymOrder.orderStatus)+" >");
-                baseViewHolder.setText(R.id.order_status, "" + DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status)+" >");
+                baseViewHolder.setText(R.id.order_status, "" + DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status) + " >");
             }
 
             baseViewHolder.itemView.setOnClickListener(v -> {
@@ -76,15 +75,15 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
                         ARouter.getInstance()
                                 .build("/taxi/FlowActivity")
                                 .withLong("orderId", baseOrder.orderId).navigation();
-                    }else if (baseOrder.serviceType.equals(Config.CITY_LINE)) {
+                    } else if (baseOrder.serviceType.equals(Config.CITY_LINE)) {
                         ARouter.getInstance()
                                 .build("/cityline/FlowActivity")
-                                .withSerializable("baseOrder",baseOrder).navigation();
-                    }else if (baseOrder.serviceType.equals(Config.CHARTERED)){
+                                .withSerializable("baseOrder", baseOrder).navigation();
+                    } else if (baseOrder.serviceType.equals(Config.CHARTERED)) {
                         ARouter.getInstance()
                                 .build("/chartered/FlowActivity")
                                 .withLong("orderId", baseOrder.orderId).navigation();
-                    } else if (baseOrder.serviceType.equals(Config.RENTAL)){
+                    } else if (baseOrder.serviceType.equals(Config.RENTAL)) {
                         ARouter.getInstance()
                                 .build("/rental/FlowActivity")
                                 .withLong("orderId", baseOrder.orderId).navigation();
@@ -98,7 +97,6 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
             });
         }
     }
-
 
 
 }

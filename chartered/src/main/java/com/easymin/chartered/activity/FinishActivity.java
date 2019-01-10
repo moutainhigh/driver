@@ -24,6 +24,9 @@ public class FinishActivity extends RxBaseActivity{
     TextView countDown;
     TextView back;
 
+    /**
+     * 5秒倒计时计时器
+     */
     Timer timer;
     TimerTask timerTask;
 

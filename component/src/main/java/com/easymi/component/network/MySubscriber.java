@@ -137,7 +137,6 @@ public class MySubscriber<T> extends Subscriber<T> implements ProgressDismissLis
                 Intent intent = new Intent(Config.HTTP_CUSTOM);
                 intent.putExtra("http_custom",((HttpException) e).code());
                 context.sendBroadcast(intent);
-//                ToastUtil.showMessage(context, context.getString(R.string.response_error) + ((HttpException) e).code());//400、500、404之类的响应码错误
             }else {
                 ToastUtil.showMessage(context, context.getString(R.string.response_error) + ((HttpException) e).code());//400、500、404之类的响应码错误
             }
