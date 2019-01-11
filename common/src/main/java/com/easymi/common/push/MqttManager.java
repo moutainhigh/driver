@@ -315,12 +315,7 @@ public class MqttManager implements LocObserver {
         @Override
         public void connectionLost(Throwable cause) {
             //失去连接
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    creatConnect();
-                }
-            }, 5000);
+            handler.postDelayed(() -> creatConnect(), 5000);
         }
 
         @Override

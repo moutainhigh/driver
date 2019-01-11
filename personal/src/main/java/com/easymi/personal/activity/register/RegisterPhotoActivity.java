@@ -107,7 +107,7 @@ public class RegisterPhotoActivity extends RxBaseActivity {
         initLisenter();
         registerRequest = getIntent().getParcelableExtra("registerRequest");
 
-        if (getIntent().getParcelableExtra("registerInfo") != null){
+        if (getIntent().getParcelableExtra("registerInfo") != null) {
             registerInfo = getIntent().getParcelableExtra("registerInfo");
 
             frontHintShowed = true;
@@ -128,6 +128,8 @@ public class RegisterPhotoActivity extends RxBaseActivity {
                     .load(Config.IMG_SERVER + registerInfo.driveLicensePath + Config.IMG_PATH)
                     .apply(options)
                     .into(drivingImg);
+
+            getQiniuToken();
         }
     }
 
@@ -188,13 +190,25 @@ public class RegisterPhotoActivity extends RxBaseActivity {
                     int i = currentImg.getId();
                     if (i == R.id.front_img) {
                         imgPaths[0] = images.get(0).getCutPath();
-                        registerRequest.idCardPath = imgPaths[0];
+                        if (registerInfo != null) {
+                            updateImage(0,new File(imgPaths[0]));
+                        }else {
+                            registerRequest.idCardPath = imgPaths[0];
+                        }
                     } else if (i == R.id.back_img) {
                         imgPaths[1] = images.get(0).getCutPath();
-                        registerRequest.idCardBackPath = imgPaths[1];
+                        if (registerInfo != null) {
+                            updateImage(1,new File(imgPaths[1]));
+                        }else {
+                            registerRequest.idCardBackPath = imgPaths[1];
+                        }
                     } else if (i == R.id.driving_img) {
                         imgPaths[2] = images.get(0).getCutPath();
-                        registerRequest.driveLicensePath = imgPaths[2];
+                        if (registerInfo != null) {
+                            updateImage(2,new File(imgPaths[2]));
+                        }else {
+                            registerRequest.driveLicensePath = imgPaths[2];
+                        }
                     }
                 }
             }
@@ -220,7 +234,7 @@ public class RegisterPhotoActivity extends RxBaseActivity {
             @Override
             public void onCompleted() {
                 dismissDialog();
-                Observable<RegisterRes> observable = RegisterModel.applyDriver(RegisterPhotoActivity.this,request, picHash);
+                Observable<RegisterRes> observable = RegisterModel.applyDriver(RegisterPhotoActivity.this, request, picHash);
                 Subscription rd = observable.subscribe(new MySubscriber<>(RegisterPhotoActivity.this, false, false, registerRes -> {
                     ToastUtil.showMessage(RegisterPhotoActivity.this, "资料提交成功");
                     EmUtil.employLogout(RegisterPhotoActivity.this);
@@ -245,45 +259,46 @@ public class RegisterPhotoActivity extends RxBaseActivity {
 
     private void next() {
         //check
-        if (registerRequest == null) {
-            ToastUtil.showMessage(this, "参数异常");
-            return;
-        }
-        if (registerRequest.idCardPath == null) {
-            if (registerInfo == null){
-                ToastUtil.showMessage(this, "未上传身份证正面");
-                return;
-            }
-        }
-        if (registerRequest.idCardBackPath == null) {
-            if (registerInfo == null){
-                ToastUtil.showMessage(this, "未上传身份证反面");
-                return;
-            }
-        }
-        if (registerRequest.driveLicensePath == null) {
-            if (registerInfo == null){
-                ToastUtil.showMessage(this, "未上传驾驶证");
-                return;
-            }
-        }
-        if (registerInfo!=null){
-            registerRequest.portraitPath = registerInfo.portraitPath;
+        if (registerInfo != null) {
+//            registerRequest.portraitPath = registerInfo.portraitPath;
             registerRequest.idCardPath = registerInfo.idCardPath;
             registerRequest.idCardBackPath = registerInfo.idCardBackPath;
             registerRequest.driveLicensePath = registerInfo.driveLicensePath;
             uploadAllPicsAndUpdate(registerRequest);
-        }else {
+        } else {
+            if (registerRequest == null) {
+                ToastUtil.showMessage(this, "参数异常");
+                return;
+            }
+            if (registerRequest.idCardPath == null) {
+                if (registerInfo == null) {
+                    ToastUtil.showMessage(this, "未上传身份证正面");
+                    return;
+                }
+            }
+            if (registerRequest.idCardBackPath == null) {
+                if (registerInfo == null) {
+                    ToastUtil.showMessage(this, "未上传身份证反面");
+                    return;
+                }
+            }
+            if (registerRequest.driveLicensePath == null) {
+                if (registerInfo == null) {
+                    ToastUtil.showMessage(this, "未上传驾驶证");
+                    return;
+                }
+            }
+
             uploadAllPicsAndCommit(registerRequest);
         }
     }
 
     /**
-     *  更新修改信息
+     * 更新修改信息
      */
     protected void uploadAllPicsAndUpdate(RegisterRequest request) {
         //todo 缺少更新图片操作
-        Observable<RegisterRes> observable = RegisterModel.applyUpdate(RegisterPhotoActivity.this,request);
+        Observable<RegisterRes> observable = RegisterModel.applyUpdate(RegisterPhotoActivity.this, request);
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, RegisterRes -> {
             if (RegisterRes.getCode() == 1) {
                 ToastUtil.showMessage(RegisterPhotoActivity.this, "资料提交成功");
@@ -292,26 +307,34 @@ public class RegisterPhotoActivity extends RxBaseActivity {
         })));
     }
 
-//    public void getQiniuToken(){
-//        Observable<QiNiuToken> observable = RegisterModel.getQiniuToken();
-//        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, qiNiuToken -> {
-//            if (qiNiuToken.getCode() == 1){
-//                qiniuToken = qiNiuToken.qiNiu;
-//                if (qiniuToken == null) {
-//                    throw new IllegalArgumentException("token无效");
-//                }
-//            }
-//        })));
-//    }
-//
-//    public void updateImage(RegisterRequest registerRequest,File file,String token){
-//        Observable<Pic> observable = RegisterModel.putPic(file,token);
-//        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, Pic -> {
-//
-//        })));
-//    }
+    public void getQiniuToken() {
+        Observable<QiNiuToken> observable = RegisterModel.getQiniuToken();
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, qiNiuToken -> {
+            if (qiNiuToken.getCode() == 1) {
+                qiniuToken = qiNiuToken.qiNiu;
+                if (qiniuToken == null) {
+                    throw new IllegalArgumentException("token无效");
+                }
+            }
+        })));
+    }
 
+    public void updateImage(int type, File file) {
+        Observable<Pic> observable = RegisterModel.putPic(file, qiniuToken);
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, pic -> {
+            if (type == 0){
+                registerInfo.idCardPath = pic.hashCode;
+            }else if (type == 1){
+                registerInfo.idCardBackPath = pic.hashCode;
+            }else if (type == 2){
+                registerInfo.driveLicensePath = pic.hashCode;
+            }
+        })));
+    }
+
+    //加载pud
     private RxProgressHUD progressHUD;
+
     protected void showDialog() {
         if (progressHUD == null) {
             progressHUD = new RxProgressHUD.Builder(this)

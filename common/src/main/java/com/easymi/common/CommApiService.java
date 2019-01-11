@@ -42,37 +42,6 @@ import rx.Observable;
 
 public interface CommApiService {
 
-//    /**
-//     * 查询所有订单接口
-//     *
-//     * @param driverId
-//     * @param appKey
-//     * @return
-//     */
-//    @GET("driver/api/v1/runningOrders")
-//    Observable<QueryOrdersResult> queryRunningOrders(@Query("driver_id") Long driverId,
-//                                                     @Query("app_key") String appKey,
-//                                                     @Query("page") int page,
-//                                                     @Query("limit") int limit);
-
-//    /**
-//     //     * 上线接口
-//     //     *
-//     //     * @param driverId
-//     //     * @param appKey
-//     //     * @return
-//     //     */
-//    @FormUrlEncoded
-//    @PUT("driver/api/v1/online")
-//    Observable<EmResult> online(@Field("driver_id") Long driverId,
-//                                @Field("app_key") String appKey);
-//
-//
-//    @FormUrlEncoded
-//    @PUT("driver/api/v1/offline")
-//    Observable<EmResult> offline(@Field("driver_id") Long driverId,
-//                                 @Field("app_key") String appKey);
-
     /**
      * 查询附近司机
      *
@@ -87,28 +56,6 @@ public interface CommApiService {
                                                 @Query("lng") Double lng,
                                                 @Query("range") Double range,
                                                 @Query("serviceType") String serviceType);
-
-//    /**
-//     * 查询未支付和已完成订单
-//     *
-//     * @param driverId
-//     * @param business
-//     * @param startTime
-//     * @param endTime
-//     * @param appKey
-//     * @param page
-//     * @param limit
-//     * @return
-//     */
-//    @GET("driver/api/v1/orders")
-//    Observable<QueryOrdersResult> queryOverOrdersByBunsiness(@Query("driver_id") Long driverId,
-//                                                             @Query("business") String business,
-//                                                             @Query("start_time") Long startTime,
-//                                                             @Query("end_time") Long endTime,
-//                                                             @Query("app_key") String appKey,
-//                                                             @Query("driver_name") String driverName,
-//                                                             @Query("page") int page,
-//                                                             @Query("limit") int limit);
 
     /**
      * 查询所有通知
@@ -141,23 +88,6 @@ public interface CommApiService {
                                            @Query("page") Integer page,
                                            @Query("limit") Integer limit
     );
-
-//    /**
-//     * 首页统计
-//     *
-//     * @param driverId
-//     * @param nowDate
-//     * @param appKey
-//     * @return
-//     */
-//    @GET("driver/api/v1/driverInfo")
-//    Observable<WorkStatisticsResult> workStatistics(@Query("driver_id") Long driverId,
-//                                                    @Query("now_date") String nowDate,
-//                                                    @Query("app_key") String appKey,
-//                                                    @Query("is_online") Integer isOnline,
-//                                                    @Query("minute") int minute,
-//                                                    @Query("driver_no") String driverNo,
-//                                                    @Query("company_id") long company_id);
 
     /**
      * 代驾 --> 查询单个订单
@@ -198,31 +128,6 @@ public interface CommApiService {
                                                 @Field("driver_id") Long driverId,
                                                 @Field("app_key") String appKey);
 
-//    /**
-//     * @param orderId
-//     * @param baoxiaoMoney  报销金额
-//     * @param baoxiaoReason 报销理由
-//     * @param appKey
-//     * @return
-//     */
-//    @FormUrlEncoded
-//    @POST("/driver/api/v1/wipeOutApply")
-//    Observable<EmResult> baoxiao(@Field("order_id") Long orderId,
-//                                 @Field("money") Double baoxiaoMoney,
-//                                 @Field("reason") String baoxiaoReason,
-//                                 @Field("app_key") String appKey);
-
-//    /**
-//     * 获取司机信息
-//     *
-//     * @param driverId
-//     * @param appKey
-//     * @return
-//     */
-//    @GET("driver/api/v1/getEmployById")
-//    Observable<LoginResult> getDriverInfo(@Query("id") Long driverId,
-//                                          @Query("app_key") String appKey);
-
     /**
      * 获取APP配置
      *
@@ -231,66 +136,6 @@ public interface CommApiService {
      */
     @GET("api/v1/appSetting")
     Observable<SettingResult> getAppSetting(@Query("app_key") String appKey);
-
-//    /**
-//     * 查询通知
-//     *
-//     * @param noticeId
-//     * @return
-//     */
-//    @GET("driver/api/v1/notice")
-//    Observable<NotitfyResult> loadNotice(@Query("id") Long noticeId,
-//                                         @Query("app_key") String appKey);
-//
-//    /**
-//     * 查询公告
-//     *
-//     * @param noticeId
-//     * @return
-//     */
-//    @GET("driver/api/v1/employAfficheById")
-//    Observable<PushAnnouncement> employAfficheById(@Query("id") Long noticeId,
-//                                                   @Query("app_key") String appKey);
-
-//    /**
-//     * 专车 --> 查询单个订单
-//     *
-//     * @param orderId
-//     * @param appKey
-//     * @return
-//     */
-//    @GET("driver/api/v1/orderFindOne")
-//    Observable<MultipleOrderResult> queryZCOrder(@Query("order_id") Long orderId,
-//                                                 @Query("app_key") String appKey);
-
-//    /**
-//     * 专车 --> 抢单
-//     *
-//     * @param orderId
-//     * @param driverId
-//     * @param appKey
-//     * @return
-//     */
-//    @FormUrlEncoded
-//    @PUT("driver/api/v1/grabSpecialOrder")
-//    Observable<MultipleOrderResult> grabZCOrder(@Field("order_id") Long orderId,
-//                                                @Field("driver_id") Long driverId,
-//                                                @Field("app_key") String appKey);
-//
-//    /**
-//     * 专车 -->接单
-//     *
-//     * @param orderId
-//     * @param driverId
-//     * @param appKey
-//     * @return
-//     */
-//    @FormUrlEncoded
-//    @POST("driver/api/v1/takeSpecialOrder")
-//    Observable<MultipleOrderResult> takeZCOrder(@Field("order_id") Long orderId,
-//                                                @Field("driver_id") Long driverId,
-//                                                @Field("app_key") String appKey);
-
 
     /**
      * 获取系统配置
@@ -420,19 +265,6 @@ public interface CommApiService {
                                      @Query("lat") double lat,
                                      @Query("lng") double lng);
 
-//    /**
-//     * 通过http上传位置信息，30秒一次
-//     *
-//     * @param appKey
-//     * @param gpsContent
-//     * @return
-//     */
-//    @POST("/driver/api/v1/gpsPush")
-//    @FormUrlEncoded
-//    Observable<GetFeeResult> gpsPush(@Field("app_key") String appKey,
-//                                     @Field("gps_content") String gpsContent);
-
-
     //add hufeng
 
     /**
@@ -475,15 +307,6 @@ public interface CommApiService {
                                      @Field("mqttClientId") String mqttClientId,
                                      @Field("driverType") String driverType,
                                      @Field("type") int type);
-
-//    /**
-//     * 查询所有订单接口
-//     *
-//     * @return
-//     */
-//    @GET("api/v1/taxi_online/order/list")
-//    Observable<QueryOrdersResult> queryRunningOrders();
-
 
     /**
      * 专车 --> 查询单个订单
@@ -658,18 +481,6 @@ public interface CommApiService {
                                      @Field("serviceType") String serviceType,
                                      @Field("remark") String remark);
 
-//    /**
-//     * @param orderId
-//     * @param reimburseFee   报销金额
-//     * @param reimburseCause 报销理由
-//     * @return
-//     */
-//    @GET("api/v1/public/order/cold/list")
-//    Observable<EmResult> baoxiao(@Query("orderId") Long orderId,
-//                                 @Query("reimburseFee") Double reimburseFee,
-//                                 @Query("reimburseCause") String reimburseCause);
-
-
     /**
      * @param orderId
      * @param reimburseFee   报销金额
@@ -712,14 +523,6 @@ public interface CommApiService {
                                                 @Query("size") int size,
                                                 @Query("status") String status,
                                                 @Query("serviceType") String serviceType);
-
-//    /**
-//     * 获取专车车型
-//     *
-//     * @return
-//     */
-//    @GET("api/v1/taxi_online/driver_vehicle/vehicle")
-//    Observable<VehicleResult> driverehicle();
 
     /**
      * 获取专车出租车的车型

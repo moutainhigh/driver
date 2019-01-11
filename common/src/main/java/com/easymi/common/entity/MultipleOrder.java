@@ -1,8 +1,10 @@
 package com.easymi.common.entity;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.easymi.common.R;
 import com.easymi.common.mvp.grab.GrabActivity2;
 import com.easymi.component.Config;
+import com.easymi.component.app.XApp;
 import com.easymi.component.entity.BaseOrder;
 import com.google.gson.annotations.SerializedName;
 
@@ -16,22 +18,13 @@ import java.util.List;
  */
 
 public class MultipleOrder extends BaseOrder implements Serializable, MultiItemEntity {
-//    /**
-//     * 是否是预约单
-//     */
-//    public int isBookOrder;//1是预约单 2是即时单
-//
-//    @SerializedName("company_id")
-//    public long companyId;
-//
-//    @SerializedName("company_name")
-//    public String companyName;
+
 
     public int countTime = GrabActivity2.GRAB_TOTAL_TIME;
 
     public List<Address> orderAddressVos;
 
-//专车特殊字段
+    //专车特殊字段
     /**
      * 专车业务id
      */
@@ -86,6 +79,10 @@ public class MultipleOrder extends BaseOrder implements Serializable, MultiItemE
                 '}';
     }
 
+    /**
+     * 获取订单预约起点
+     * @return
+     */
     public Address getStartSite(){
         Address start = null;
         if (orderAddressVos != null && orderAddressVos.size() != 0){
@@ -96,16 +93,19 @@ public class MultipleOrder extends BaseOrder implements Serializable, MultiItemE
             }
             if (start == null){
                 start = new Address();
-                start.address = "未知位置";
+                start.address = XApp.getInstance().getResources().getString(R.string.unknown_site);
             }
         }else {
             start = new Address();
-            start.address = "未知位置";
+            start.address = XApp.getInstance().getResources().getString(R.string.unknown_site);
         }
         return start;
     }
 
-
+    /**
+     * 获取订单预约终点
+     * @return
+     */
     public Address getEndSite(){
         Address end = null;
         if (orderAddressVos != null && orderAddressVos.size() != 0){
@@ -116,30 +116,33 @@ public class MultipleOrder extends BaseOrder implements Serializable, MultiItemE
             }
             if (end == null){
                 end = new Address();
-                end.address = "未知位置";
+                end.address = XApp.getInstance().getResources().getString(R.string.unknown_site);
             }
         }else {
             end = new Address();
-            end.address = "未知位置";
+            end.address = XApp.getInstance().getResources().getString(R.string.unknown_site);
         }
         return end;
     }
 
-
+    /**
+     * 获取业务类型名称
+     * @return
+     */
     public String getOrderType(){
         String orderType = null;
         if (serviceType.equals(Config.ZHUANCHE)){
-            orderType = "城内打车";
+            orderType = XApp.getInstance().getResources().getString(R.string.create_zhuanche);
         }else if (serviceType.equals(Config.TAXI)){
-            orderType = "出租车";
+            orderType = XApp.getInstance().getResources().getString(R.string.create_taxi);
         }else if (serviceType.equals(Config.CITY_LINE)){
-            orderType = "城际专线";
+            orderType = XApp.getInstance().getResources().getString(R.string.create_zhuanxian);
         }else if (serviceType.equals(Config.CHARTERED)){
-            orderType = "定制包车";
+            orderType = XApp.getInstance().getResources().getString(R.string.create_chartered);
         }else if (serviceType.equals(Config.RENTAL)){
-            orderType = "包车租车";
+            orderType = XApp.getInstance().getResources().getString(R.string.create_rental);
         } else if (serviceType.equals(Config.COUNTRY)) {
-            orderType = "客运班车";
+            orderType = XApp.getInstance().getResources().getString(R.string.create_bus_country);
         }
         return orderType;
     }

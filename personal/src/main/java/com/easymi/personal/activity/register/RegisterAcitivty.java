@@ -131,6 +131,8 @@ public class RegisterAcitivty extends RxBaseActivity {
             }
             sendSms();
         });
+
+        iv_image_code.setOnClickListener(view -> getImgCode() );
     }
 
     public void findById() {

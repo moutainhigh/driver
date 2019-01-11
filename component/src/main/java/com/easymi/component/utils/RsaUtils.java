@@ -382,7 +382,9 @@ public class RsaUtils {
     public static String encryptAndEncode(Context context ,String content){
         String str = "";
         try {
+            Log.e("hufeng/content",content);
             str = Base64Utils.encode(RsaUtils.encryptByPublicKey(content.getBytes("UTF-8"), context.getResources().getString(R.string.rsa_public_key)));
+            Log.e("hufeng/str",str);
         } catch (Exception e) {
             e.printStackTrace();
         }

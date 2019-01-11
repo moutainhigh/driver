@@ -27,8 +27,9 @@ public class Config {
     /**
      * MQTT配置
      */
-    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//测试地址
+    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//预发地址
 //    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn";//线上地址
+//    public static final String MQTT_HOST = "tcp://10.10.4.12:1883";//本地地址
     /**
      * APP_KEY
      */
@@ -61,16 +62,21 @@ public class Config {
      * 图片服务器地址
      */
 //    public static final String IMG_SERVER = "https://assets.xiaokayun.cn/";
-//    public static final String IMG_SERVER = "http://pimkcibsb.bkt.clouddn.com/";  //本地
-    public static final String IMG_SERVER = "http://assets.xiaokakj.com/";  //线上
+    public static final String IMG_SERVER = "http://pimkcibsb.bkt.clouddn.com/";  //本地
+//    public static final String IMG_SERVER = "http://assets.xiaokakj.com/";  //线上
     //    public static final String IMG_PATH = "?imageView2/1/w/10/h/10/format/webp/q/75|imageslim";
     public static final String IMG_PATH = "";
 
     /**
      * MQTT
      */
+    //线上和预发
     public static final String MQTT_USER_NAME = "xiaoka";
     public static final String MQTT_PSW = "&mv7dHapB5J!95BJ";
+//    //本地
+//    public static final String MQTT_USER_NAME = "admin";
+//    public static final String MQTT_PSW = "public";
+
     public static final String MQTT_PUSH_TOPIC = "/driver/gps";
 
     /**
@@ -120,8 +126,6 @@ public class Config {
 
     public static final String SP_SHOW_GUIDE = "show_guide";//是否播放静音音乐音乐
 
-//    public static final String SP_LAST_GET_FEE_TIME = "sp_last_get_fee_time";//是否播放静音音乐音乐
-
     public static final String SP_LAST_VERSION = "sp_last_version";//是否播放静音音乐音乐
     public static final String SP_LAST_GPS_PUSH_TIME = "sp_last_gps_push_time";//mqtt上次响应的时间点
 
@@ -132,7 +136,9 @@ public class Config {
     public static final String ZHUANCHE = "special";
     public static final String TAXI = "taxi";
     public static final String CITY_LINE = "cityline";
+    //定制包车
     public static final String CHARTERED = "chartered";
+    //租车
     public static final String RENTAL = "rental";
     //班车
     public static final String COUNTRY = "country";
