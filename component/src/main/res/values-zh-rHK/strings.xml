@@ -49,7 +49,7 @@
     <string name="des_place">[未知目的地]</string>
 
     <string name="no_gps">該設備未發現GPS定位芯片，無法準確定位</string>
-    <string name="closed_wifi">請打開你的WiFi，有助於精確定位</string>
+    <string name="closed_wifi">請打開妳的WiFi，有助於精確定位</string>
 
     <string name="please_open_gps">請開啟GPS定位服務</string>
     <string name="ok">確定</string>
@@ -57,7 +57,7 @@
     <string name="lost_net_work">網絡連接已斷開</string>
 
     <string name="succeed">成功</string>
-    <string name="empty_hint">這裡空空如也</string>
+    <string name="empty_hint">這裏空空如也</string>
 
     <string name="empty_string"> </string>
 
@@ -67,9 +67,10 @@
     <string name="update_failed">更新應用失敗，即將退出</string>
     <string name="down_loading">下載中...</string>
 
+
     <string name="money_unit">元</string>
-    <string name="dis_unit">公里</string>
-    <string name="order_dis">訂單里程：</string>
+    <string name="dis_unit">公裏</string>
+    <string name="order_dis">訂單裏程：</string>
     <string name="order_fee">訂單費用：</string>
     <string name="key_word">汽車站|火車站|機場</string>
     <string name="down_loading_2">下載中 - </string>
@@ -79,4 +80,10 @@
     <string name="update_now">立即更新</string>
     <string name="be_later">以後再說</string>
     <string name="ingore_this">忽略該版</string>
+
+    <string name="bus_status_new">新班次</string>
+    <string name="bus_status_begain">已出發</string>
+    <string name="bus_status_end">已結束</string>
+
+    <string name="unknown_site">未知位置</string>
 </resources>

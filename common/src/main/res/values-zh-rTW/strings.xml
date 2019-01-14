@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">v5driver</string>
+    <string name="app_name">v6driver</string>
 
-    <!-- 工作台界面str-->
+    <!-- 工作臺界面str-->
     <string name="work_fin_order">完成訂單</string>
     <string name="work_hour">時</string>
     <string name="work_minute">分</string>
@@ -13,19 +13,24 @@
     <string name="work_create">創建訂單</string>
     <string name="work_offline">停止聽單</string>
     <string name="work_listen_order">聽單中...</string>
-    <string name="work_title">工作台</string>
+    <string name="work_title">工作臺</string>
 
     <!-- 流水str-->
     <string name="liushui_baoxiao">報銷</string>
     <string name="liushui_title">業務流水</string>
     <string name="liushui_baoxiao_sheheing">報銷審核中</string>
     <string name="liushui_baoxiao_done">已報銷</string>
+    <string name="liushui_baoxiao_refuse">報銷已拒絕</string>
 
     <string name="create_daijia">代駕</string>
-    <string name="create_zhuanche">專車</string>
+    <string name="create_zhuanche">城內打車</string>
+    <string name="create_taxi">出租車</string>
     <string name="create_paotui">跑腿</string>
     <string name="create_huoyun">貨運</string>
     <string name="create_zhuanxian">城際專線</string>
+    <string name="create_chartered">定制包車</string>
+    <string name="create_rental">包車租車</string>
+    <string name="create_bus_country">客運班車</string>
 
     <string name="hint">提示</string>
     <string name="sure">確定</string>
@@ -51,13 +56,14 @@
     <string name="grab_order_content">搶單</string>
     <string name="send_order">派單</string>
     <string name="accept_order">接單</string>
+    <string name="accept_order_refuse">拒單</string>
     <string name="send_order_content">您有新的訂單了，快去接單吧</string>
 
     <string name="cancel_order">消單</string>
-    <string name="you_have_order_cancel">您有訂單被取消，請注意查看</string>
+    <string name="you_have_order_cancel">您有訂單被取消，請註意查看</string>
 
     <string name="back_order">訂單收回</string>
-    <string name="you_have_order_back">您有訂單被收回，請注意查看</string>
+    <string name="you_have_order_back">您有訂單被收回，請註意查看</string>
 
     <string name="force_offline">您已被管理員強制下線</string>
 
@@ -80,24 +86,28 @@
     <string name="yuyue_order">預約訂單</string>
     <string name="time_format">MM月dd日 HH:mm</string>
 
+    <string name="time_five_format">yyyy-MM-dd HH:mm</string>
+
 
     <string name="baoxiao_hint_1">請輸入報銷金額</string>
-    <string name="baoxiao_hint_2"> 請輸入報銷原因(不能超過100個字元)</string>
+    <string name="baoxiao_hint_2"> 請輸入報銷原因(不能超過100個字符)</string>
 
     <string name="baoxiao_apply">提交</string>
     <string name="baoxiao_suc">您的報銷請求已提交，等待審核</string>
 
     <string name="jump_gif">跳過</string>
 
-    <string name="please_admin">您的賬戶已被凍結，請聯繫管理員</string>
-    <string name="force_offline_please_admin">您已被強制下線，請聯繫管理員</string>
+    <string name="please_admin">您的賬戶已被凍結，請聯系管理員</string>
+    <string name="force_offline_please_admin">您已被強制下線，請聯系管理員</string>
 
     <string name="baoxiao_shenhe">當前訂單報銷申請已經提交，正在審核中</string>
     <string name="baoxiao_done">當前訂單已經報銷過</string>
 
     <string name="no_order">暫無訂單，趕快去接單吧</string>
+    <string name="no_ann_and_notice">暫無通知和公告</string>
+    <string name="no_work">空閑中,快上線接單吧</string>
 
-    <string name="freezed">您的賬戶已被凍結，請聯繫管理員</string>
+    <string name="freezed">您的賬戶已被凍結，請聯系管理員</string>
     <string name="unbunding">您的賬戶已被管理員解綁</string>
 
     <string name="pay_suc_1">手機尾號為</string>
@@ -114,13 +124,35 @@
     <string name="to_end_order">前往目的地 ></string>
     <string name="wait_order">等待中 ></string>
     <string name="not_pay_order">未支付 ></string>
-    <string name="finish_order">已完成 ></string>
-    <string name="des_order">已銷單</string>
+    <string name="finish_order">已完成</string>
+    <string name="des_order">已銷單 ></string>
     <string name="rate_order">已完成</string>
 
-    <string name="com_perfect_info">亲爱的师傅您好：\n&#160;&#160;&#160;&#160;您的资料还未完善，请尽快完善提交资料，管理员审核通过之后您就可以开启接单旅程了。</string>
+    <string name="zx_new_order">新單</string>
+    <string name="zx_pai_order">已派單</string>
+    <string name="zx_accept_order">已接單</string>
+    <string name="zx_wait_start">等待開始行程</string>
+    <string name="zx_accept_plan">接人規劃</string>
+    <string name="zx_send_plan">送人規劃</string>
+    <string name="zx_accepting">接人中</string>
+    <string name="zx_sending">送人中</string>
+    <string name="zx_send_over">送完客戶</string>
+    <string name="zx_line_over">行程結束</string>
+
+
+    <string name="reject_net">網絡連接不可用，可能是由於您主動設置了禁用網絡，請前往應用管理中打開。設置完畢後請重新啟動程序</string>
+
+    <string name="date_unit">MM月dd日 HH:mm</string>
+
+    <string name="home_gonggao">公告</string>
+    <string name="home_notice">通知</string>
+    <string name="listen_order_set">模式設置</string>
+    <string name="listen_order_set_2">聽單設置</string>
+    <string name="listen_order_more_one">至少選擇壹種聽單業務</string>
+
+    <string name="com_perfect_info">親愛的師傅您好：\n&#160;&#160;&#160;&#160;您的資料還未完善，請盡快完善提交資料，管理員審核通過之後您就可以開啟接單旅程了。</string>
     <string name="com_perfect">完善資料</string>
-    <string name="com_perfect2">資訊完善</string>
+    <string name="com_perfect2">信息完善</string>
     <string name="com_head_img">頭像</string>
     <string name="com_name">*姓名</string>
     <string name="com_input_name">請輸入您的真實姓名</string>
@@ -128,20 +160,20 @@
     <string name="com_input_phone">請輸入手機號</string>
     <string name="com_card">*身份證號</string>
     <string name="com_input_card">請輸入身份證號</string>
-    <string name="com_contacts">*緊急連絡人</string>
-    <string name="com_input_contacts">請輸入緊急連絡人姓名</string>
-    <string name="com_contacts_phone">*緊急連絡人電話</string>
-    <string name="com_input_contacts_phone">請輸入緊急連絡人電話</string>
+    <string name="com_contacts">*緊急聯系人</string>
+    <string name="com_input_contacts">請輸入緊急聯系人姓名</string>
+    <string name="com_contacts_phone">*緊急聯系人電話</string>
+    <string name="com_input_contacts_phone">請輸入緊急聯系人電話</string>
     <string name="com_introducer">推薦服務人員電話</string>
     <string name="com_input_introducer">請輸入推薦服務人員電話</string>
-    <string name="com_company">注册公司</string>
-    <string name="com_type">注册業務</string>
+    <string name="com_company">註冊公司</string>
+    <string name="com_type">註冊業務</string>
     <string name="com_daijia">代駕</string>
     <string name="com_zhuanche">專車</string>
-    <string name="com_car">有車注册</string>
-    <string name="com_no_car">無車注册</string>
-    <string name="com_next">下一步</string>
-    <string name="com_car_photo">上传车辆45度角照片</string>
+    <string name="com_car">有車註冊</string>
+    <string name="com_no_car">無車註冊</string>
+    <string name="com_next">下壹步</string>
+    <string name="com_car_photo">上傳車輛45度角照片</string>
     <string name="com_car_no">*車牌號</string>
     <string name="com_input_car_no">請輸入您的車牌號</string>
     <string name="com_car_name">*車輛廠牌</string>
@@ -153,25 +185,35 @@
     <string name="com_oil">*燃料類型</string>
     <string name="com_seat">*核定載人數（人）</string>
     <string name="com_input_seat">請輸入核定載客人數</string>
-    <string name="com_km">*車輛已行駛公里（KM）</string>
-    <string name="com_input_km">請輸入車輛已行駛公里數</string>
+    <string name="com_km">*車輛已行駛公裏（KM）</string>
+    <string name="com_input_km">請輸入車輛已行駛公裏數</string>
     <string name="com_car_vin">*車輛識別VIN</string>
-    <string name="com_input_car_vin">请输入17位车辆识别VIN</string>
+    <string name="com_input_car_vin">請輸入17位車輛識別VIN</string>
     <string name="com_buy_date">*購車日期</string>
-    <string name="com_input_buy_date">請选择購車日期</string>
-    <string name="com_register_date">*車輛注册日期</string>
-    <string name="com_input_register_date">請选择車輛注册日期</string>
+    <string name="com_input_buy_date">請選擇購車日期</string>
+    <string name="com_register_date">*車輛註冊日期</string>
+    <string name="com_input_register_date">請選擇車輛註冊日期</string>
     <string name="com_check_date">*車輛年檢日期</string>
-    <string name="com_input_check_date">請选择車輛年檢日期</string>
-    <string name="com_pic_info">圖片資訊</string>
+    <string name="com_input_check_date">請選擇車輛年檢日期</string>
+    <string name="com_pic_info">圖片信息</string>
     <string name="com_car_license">行駛證（必填）</string>
     <string name="com_transportation_license">運輸證</string>
-    <string name="com_commit">提交稽核</string>
-    <string name="com_look_pic">查看示例图片</string>
-    <string name="com_card1">身份证正面（必填）</string>
-    <string name="com_card2">身份证反面（必填）</string>
-    <string name="com_license">驾驶证（必填）</string>
-    <string name="com_full">手持身份证照片</string>
-    <string name="com_complete_info">亲爱的师傅您好：\n&#160;&#160;&#160;&#160;您的资料已提交成功，管理人员正在审核，如有疑问请及时联后台管理人员，审核通过后您可开启接单旅程了。</string>
+    <string name="com_commit">提交審核</string>
+    <string name="com_look_pic">查看示例圖片</string>
+    <string name="com_card1">身份證正面（必填）</string>
+    <string name="com_card2">身份證反面（必填）</string>
+    <string name="com_license">駕駛證（必填）</string>
+    <string name="com_full">手持身份證照片</string>
+    <string name="com_complete_info">親愛的師傅您好：\n&#160;&#160;&#160;&#160;您的資料已提交成功，管理人員正在審核，如有疑問請及時聯後臺管理人員，審核通過後您可開啟接單旅程了。</string>
 
+
+    <!--hf 我的訂單相關-->
+    <string name="com_my_order">我的訂單</string>
+    <string name="com_make_order">司機補單</string>
+    <string name="com_accept_order">我接的單</string>
+    <string name="com_assign_order">指派訂單</string>
+    <string name="com_grab_order">可搶訂單</string>
+
+    <string name="empty_text"></string>
+    <string name="com_no_read">全部都已讀了哦</string>
 </resources>

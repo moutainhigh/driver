@@ -1,4 +1,25 @@
 <resources>
-    <string name="app_name">passengerbus</string>
+    <string name="app_name">rental</string>
 
+    <string name="canceled_order">當前訂單已被取消:)</string>
+    <string name="backed_order">當前訂單已被收回:)</string>
+
+    <string name="km">公裏</string>
+    <string name="left">剩余</string>
+    <string name="meter">米</string>
+    <string name="about_">大約</string>
+    <string name="hour_">時</string>
+    <string name="minute_">分鐘</string>
+
+    <string name="loc_failed">定位失敗,無法繼續操作</string>
+    <string name="order_finish">該訂單已完成</string>
+
+    <string name="status_no_start">行程未開始</string>
+    <string name="status_to_start">前往預約地</string>
+    <string name="wait_arrive_start">等待乘客上車</string>
+    <string name="status_to_end">執行中</string>
+    <string name="confirm_order">確認訂單</string>
+
+    <string name="order_over">行程結束</string>
+    <string name="custom_phone_four">手機尾號：</string>
 </resources>

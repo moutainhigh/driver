@@ -19,16 +19,16 @@
     <string name="click_start">點擊出發</string>
     <string name="settle">結算</string>
     <string name="service_fee">服務費用</string>
-    <string name="drive_distance">行駛里程</string>
+    <string name="drive_distance">行駛裏程</string>
     <string name="drive_time">行駛時間</string>
     <string name="wait_time">等待時間</string>
     <string name="minutes">分鐘</string>
 
     <string name="wait_fee">等待費用</string>
 
-    <string name="km">公里</string>
+    <string name="km">公裏</string>
 
-    <string name="current_mileage">當前公里數：</string>
+    <string name="current_mileage">當前公裏數：</string>
     <string name="current_fee">當前費用：</string>
     <string name="change_confirm">確定</string>
     <string name="cancel">取消</string>
@@ -60,7 +60,7 @@
     <string name="illegality_place">無效的目的地,無法導航</string>
 
     <string name="cancel_reason">請選擇消單原因</string>
-    <string name="cancel_reason_1">與客戶協商一致取消訂單</string>
+    <string name="cancel_reason_1">與客戶協商壹致取消訂單</string>
     <string name="cancel_reason_2">客戶呼叫多人，只用先到司機</string>
     <string name="cancel_reason_3">客戶拒接電話</string>
     <string name="cancel_reason_4">客戶單方面取消</string>
@@ -83,20 +83,21 @@
     <string name="no_passenger">未查詢到客戶信息,無法繼續</string>
     <string name="no_start">未選擇起點,無法繼續</string>
     <string name="no_budget">預估價格失敗,無法繼續</string>
+    <string name="leagel_phone">請輸入合法的手機號碼</string>
 
     <string name="please_start">請選擇預約地</string>
     <string name="please_end">請選擇目的地</string>
 
-    <string name="contract_service">聯繫客服</string>
+    <string name="contract_service">聯系客服</string>
     <string name="same_order_driver">同單司機</string>
     <string name="consumer_msg">客戶信息</string>
-    <string name="order_transfer">转单</string>
+    <string name="order_transfer">轉單</string>
 
     <string name="refuse_reason">請輸入拒單理由</string>
     <string name="ok">確定</string>
 
     <string name="qb_fee">起步費用</string>
-    <string name="lc_fee">里程費用</string>
+    <string name="lc_fee">裏程費用</string>
     <string name="time_fee">時間費用</string>
     <string name="dh_fee">等候費用</string>
     <string name="coupon_text">優惠券</string>
@@ -123,18 +124,18 @@
 
     <string name="pay_suc">結算完成</string>
 
-    <string name="k_k_meter">公里</string>
+    <string name="k_k_meter">公裏</string>
     <string name="yuan_coupon">元優惠券</string>
 
     <string name="cus_pay">客戶在線支付</string>
     <string name="help_pay">收取現金</string>
-    <string name="cus_balance">餘額支付</string>
+    <string name="cus_balance">余額支付</string>
     <string name="qiandan">簽單支付</string>
 
     <string name="pay_title">選擇支付類型</string>
     <string name="please_pay_title">請選擇支付類型</string>
 
-    <string name="fee_hint">注:墊付費用不參與優惠券計算</string>
+    <string name="fee_hint">註:墊付費用不參與優惠券計算</string>
 
     <string name="quan_lan">全覽</string>
 
@@ -145,7 +146,7 @@
     <string name="taxi_meter">計價器</string>
     <string name="back">返回</string>
     <string name="waited">已等候</string>
-    <string name="lc_km">里程(公里)</string>
+    <string name="lc_km">裏程(公裏)</string>
     <string name="total_fee_yuan">總金額(元)</string>
 
 
@@ -168,7 +169,7 @@
     <string name="consumer_type">客戶類型</string>
     <string name="order_company">訂單所屬公司</string>
     <string name="consumer_company">客戶所屬公司</string>
-    <string name="consumer_balance">餘額</string>
+    <string name="consumer_balance">余額</string>
     <string name="can_sign">簽單</string>
 
     <string name="can_sign_consumer">簽單客戶</string>
@@ -192,7 +193,7 @@
     <string name="personal_consumer">個人客戶</string>
     <string name="qiye_consumer">企業客戶</string>
 
-    <string name="left">剩餘</string>
+    <string name="left">剩余</string>
     <string name="meter">米</string>
     <string name="about_">大約</string>
     <string name="hour_">時</string>
@@ -205,6 +206,27 @@
     <string name="user_phone">使用人</string>
     <string name="passenger_phone">下單人</string>
 
-    <string name="leagel_phone">请输入合法的手机号码</string>
+    <string name="middle_wait_text">已出發，中途等待乘客</string>
+
+    <string name="arrive_start_wait_text">已到達乘客起點，正等候乘客上車</string>
+
+    <string name="to_start_about">去乘客起點約</string>
+    <string name="please_start_at">請在</string>
+    <string name="arrive_start">點前到達預約地</string>
+
+    <string name="no_car">暫無車輛，不能創建專車訂單，請聯系管理員</string>
+
+    <string name="wait_consumer">等待乘客</string>
+    <string name="change_sequence">修改順序</string>
+    <string name="look_rule">查看規劃</string>
+
+
+    <string name="select_place_map_hint_1">請選擇地圖中有色塊的區域範圍</string>
+    <string name="select_place_map_hint_2">請盡量選擇車輛方便停靠的位置</string>
+    <string name="input_detail_on_address">請輸入詳細的上車地址</string>
+    <string name="input_detail_off_address">請輸入詳細的下車地址</string>
+
+    <string name="select_aboard_place">選擇上車點</string>
+    <string name="select_debus_place">選擇下車點</string>
 
 </resources>
