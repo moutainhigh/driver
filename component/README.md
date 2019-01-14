@@ -23,8 +23,10 @@
 | widget        |    自定义控件   |  公用或常用的视图控件集合  |
 
 ## 特殊或重要类使用介绍
- * Config  最常用的配置类，包含了项目所有基本配置信息。如后台地址、mqtt配置、appkey配置、七牛云上传回显地址、分享app_id、SharedPrefence常量配置等等 
- * NaviActivity  导航activity，所有需要导航的业务都是使用这个activity进行导航，只需要传入起点终点信息即可进行基本导航。
- * XApp  Application实现类。包含了ARouter、DataBase、讯飞IflytekTTS、bugly以及其他三方库和常用配置的初始化
- * RxBaseActivity  所有activity的基类，包含mRxManager、ActManager的初始化，gpsReceiver、netChangeReceiver、tiredReceiver、HttpCustomReceiver等的事件接收和统一分发
- * SqliteHelper  数据库操作类，对应表的创建、更新、删除都在这个表操作。每次更改了表字段或者数据库，需要版本号加一，用于避免应用需要卸载安装。
+ * Config 最常用的配置类，包含了项目所有基本配置信息。如后台地址、mqtt配置、appkey配置、七牛云上传回显地址、分享app_id、SharedPrefence常量配置等等 
+ * NaviActivity 导航activity，所有需要导航的业务都是使用这个activity进行导航，只需要传入起点终点信息即可进行基本导航。
+ * XApp Application实现类。包含了ARouter、DataBase、讯飞IflytekTTS、bugly以及其他三方库和常用配置的初始化
+ * RxBaseActivity 所有activity的基类，包含mRxManager、ActManager的初始化，gpsReceiver、netChangeReceiver、tiredReceiver、HttpCustomReceiver等的事件接收和统一分发
+ * SqliteHelper 数据库操作类，对应表的创建、更新、删除都在这个表操作。每次更改了表字段或者数据库，需要版本号加一，用于避免应用需要卸载安装。
+ * ApiManager 网络请求的管理类，设置网络请求的相关配置，以及添加日志、token、加密等拦截器等。设置日志输出等级。
+ 
