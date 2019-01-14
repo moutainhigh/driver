@@ -28,7 +28,14 @@ v6司机端软件架构说明
       id4(app) --> passengerbus --> common
       id4(app) --> personal --> common
       id4(app) --> securitycenter --> common
-      
+      zhuanche --> common
+      taxi --> common
+      cityline --> common
+      chartered --> common
+      rental --> common
+      passengerbus --> common
+      personal --> common
+      securitycenter --> common
 ```
 
 ## 参与贡献
