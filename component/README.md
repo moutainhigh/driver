@@ -29,5 +29,5 @@
  * RxBaseActivity 所有activity的基类，包含mRxManager、ActManager的初始化，gpsReceiver、netChangeReceiver、tiredReceiver、HttpCustomReceiver等的事件接收和统一分发
  * SqliteHelper 数据库操作类，对应表的创建、更新、删除都在这个表操作。每次更改了表字段或者数据库，需要版本号加一，用于避免应用需要卸载安装。
  * ApiManager 网络请求的管理类，设置网络请求的相关配置，以及添加日志、token、加密等拦截器等。设置日志输出等级。
- 
+
  
