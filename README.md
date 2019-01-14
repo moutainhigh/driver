@@ -20,7 +20,14 @@ v6司机端软件架构说明
 
 ```mermaid
    graph TD
-      id4(A) --> B
+      id4(app) --> zhuanche
+      id4(app) --> taxi
+      id4(app) --> cityline
+      id4(app) --> chartered
+      id4(app) --> rental
+      id4(app) --> passengerbus
+      id4(app) --> personal
+      id4(app) --> securitycenter
 ```
 
 ## 参与贡献
