@@ -20,7 +20,7 @@ v6司机端软件架构说明
 
 ```mermaid
    graph TD
-      A[id4(A)] --> A[id4(B)]
+      id4(A) --> B
 ```
 
 ## 参与贡献
