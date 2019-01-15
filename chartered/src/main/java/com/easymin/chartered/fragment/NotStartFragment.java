@@ -70,12 +70,20 @@ public class NotStartFragment extends RxBaseFragment {
 
     }
 
-
+    /**
+     * 接人剩余时间
+     */
     long jieRenTimeLeftSec;
 
+    /**
+     * 定时器
+     */
     private Timer timer;
     private TimerTask timerTask;
 
+    /**
+     * 初始化定时器
+     */
     private void initCountDown() {
         cancelTimer();
         jieRenTimeLeftSec = (baseOrder.bookTime*1000 - System.currentTimeMillis()) / 1000;//剩余的秒钟数
@@ -112,6 +120,9 @@ public class NotStartFragment extends RxBaseFragment {
         }
     }
 
+    /**
+     * 取消定时器
+     */
     public void cancelTimer() {
         if (timer != null) {
             timer.cancel();
@@ -123,6 +134,10 @@ public class NotStartFragment extends RxBaseFragment {
         }
     }
 
+    /**
+     * 倒计时显示
+     * @param leftSec
+     */
     private void setLeftText(long leftSec) {
         long day = leftSec / 60 / 60 / 24;
         long hour = (leftSec / 60 / 60) % 24;

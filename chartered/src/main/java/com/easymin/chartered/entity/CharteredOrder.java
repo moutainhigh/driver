@@ -1,6 +1,7 @@
 package com.easymin.chartered.entity;
 
 import com.easymi.common.entity.Address;
+import com.easymi.component.app.XApp;
 import com.easymi.component.entity.BaseOrder;
 
 import java.io.Serializable;
@@ -17,7 +18,10 @@ import java.util.List;
 public class CharteredOrder extends BaseOrder implements Serializable {
 
     public List<Address> orderAddressVos;
-
+    /**
+     * 获取订单预约起点
+     * @return
+     */
     public Address getStartSite(){
         Address start = null;
         if (orderAddressVos != null && orderAddressVos.size() != 0){
@@ -28,16 +32,19 @@ public class CharteredOrder extends BaseOrder implements Serializable {
             }
             if (start == null){
                 start = new Address();
-                start.address = "未知位置";
+                start.address = XApp.getInstance().getResources().getString(com.easymi.common.R.string.unknown_site);
             }
         }else {
             start = new Address();
-            start.address = "未知位置";
+            start.address = XApp.getInstance().getResources().getString(com.easymi.common.R.string.unknown_site);
         }
         return start;
     }
 
-
+    /**
+     * 获取订单预约终点
+     * @return
+     */
     public Address getEndSite(){
         Address end = null;
         if (orderAddressVos != null && orderAddressVos.size() != 0){
@@ -48,11 +55,11 @@ public class CharteredOrder extends BaseOrder implements Serializable {
             }
             if (end == null){
                 end = new Address();
-                end.address = "未知位置";
+                end.address = XApp.getInstance().getResources().getString(com.easymi.common.R.string.unknown_site);
             }
         }else {
             end = new Address();
-            end.address = "未知位置";
+            end.address = XApp.getInstance().getResources().getString(com.easymi.common.R.string.unknown_site);
         }
         return end;
     }

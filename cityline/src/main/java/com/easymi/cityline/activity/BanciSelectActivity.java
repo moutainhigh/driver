@@ -29,9 +29,13 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by liuzihao on 2017/11/14.
- *
- * 选择班次
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ * Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 选择班次
+ * History:
+ * @author hufeng
  */
 
 public class BanciSelectActivity extends RxBaseActivity {
@@ -73,6 +77,9 @@ public class BanciSelectActivity extends RxBaseActivity {
         super.onResume();
     }
 
+    /**
+     * 初始化列表
+     */
     private void initRecycler() {
         adapter = new BanciAdapter(this);
         adapter.setOnItemClickListener(zxOrder -> {
@@ -113,6 +120,9 @@ public class BanciSelectActivity extends RxBaseActivity {
         toolbar.setLeftIcon(R.drawable.ic_arrow_back, v -> finish());
     }
 
+    /**
+     * 查询专线订单
+     */
     private void queryOrders() {
         Observable<EmResult2<List<ZXOrder>>> observable = ApiManager.getInstance().createApi(Config.HOST, CLService.class)
                 .queryDriverSchedule()
@@ -130,11 +140,9 @@ public class BanciSelectActivity extends RxBaseActivity {
                         orders.clear();
                         orders.addAll(result2.getData() == null ? new ArrayList<>() : result2.getData());
                         adapter.setBaseOrders(result2.getData());
-//                if (page * 10 < result2.getTotal()) {
-//                    recyclerView.setLoadMoreEnable(true);
-//                } else {
+
                         recyclerView.setLoadMoreEnable(false);
-//                }
+
                         if (orders.size() == 0) {
                             showErr(0);
                         } else {
@@ -165,6 +173,9 @@ public class BanciSelectActivity extends RxBaseActivity {
         });
     }
 
+    /**
+     * 显示错误布局
+     */
     private void hideErr() {
         errLayout.setVisibility(View.GONE);
     }

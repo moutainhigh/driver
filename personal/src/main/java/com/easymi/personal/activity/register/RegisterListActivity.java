@@ -101,17 +101,30 @@ public class RegisterListActivity extends RxBaseActivity{
     public void getData(){
         listType.clear();
         BusinessType businessType = new BusinessType();
-        businessType.name = "专车";
+        businessType.name = getResources().getString(com.easymi.common.R.string.create_zhuanche);
         businessType.type = Config.ZHUANCHE;
         BusinessType businessType1 = new BusinessType();
-        businessType1.name = "城际专线";
+        businessType1.name = getResources().getString(com.easymi.common.R.string.create_zhuanxian);
         businessType1.type = Config.CITY_LINE;
         BusinessType businessType2 = new BusinessType();
-        businessType2.name = "出租车";
+        businessType2.name = getResources().getString(com.easymi.common.R.string.create_taxi);
         businessType2.type =  Config.TAXI;
         listType.add(businessType);
         listType.add(businessType2);
         listType.add(businessType1);
+
+        BusinessType businessType3 = new BusinessType();
+        businessType3.name = getResources().getString(com.easymi.common.R.string.create_chartered);
+        businessType3.type = Config.CHARTERED;
+        BusinessType businessType4 = new BusinessType();
+        businessType4.name = getResources().getString(com.easymi.common.R.string.create_rental);
+        businessType4.type = Config.RENTAL;
+        BusinessType businessType5 = new BusinessType();
+        businessType5.name = getResources().getString(com.easymi.common.R.string.create_bus_country);
+        businessType5.type =  Config.COUNTRY;
+        listType.add(businessType3);
+        listType.add(businessType4);
+        listType.add(businessType5);
     }
 
     public void findById() {

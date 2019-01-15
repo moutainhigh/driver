@@ -10,8 +10,13 @@ package com.easymin.chartered;
  */
 public class StaticVal {
 
+    /**
+     * 起点
+     */
     public static final int MARKER_FLAG_START = 20;//起点
+    /**
+     * 终点
+     */
     public static final int MARKER_FLAG_END = 21;//终点
-
 
 }

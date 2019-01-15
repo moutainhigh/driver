@@ -80,10 +80,6 @@ public class ArriveStartFragment extends RxBaseFragment {
         }
         customer_phone.setText(getContext().getString(R.string.custom_phone_four) + weihao);
 
-        call_phone.setOnClickListener(v -> {
-            PhoneUtil.call(getActivity(), baseOrder.passengerPhone);
-        });
-
         if (StringUtils.isNotBlank(baseOrder.avatar)) {
             RequestOptions options = new RequestOptions()
                     .centerCrop()
@@ -96,8 +92,11 @@ public class ArriveStartFragment extends RxBaseFragment {
                     .into(customer_photo);
         }
 
-
         to_place.setText(baseOrder.getEndSite().address);
+
+        call_phone.setOnClickListener(v -> {
+            PhoneUtil.call(getActivity(), baseOrder.passengerPhone);
+        });
 
         slider.setHint("滑动开始出发");
         slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {

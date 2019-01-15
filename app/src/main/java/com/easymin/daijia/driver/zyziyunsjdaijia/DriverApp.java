@@ -40,13 +40,6 @@ public class DriverApp extends XApp {
         if (!isAppProcess()) {//防止多次调用onCreate()
             return;
         }
-
-//        if (BuildConfig.DEBUG) {           // 这两行必须写在init之前，否则这些配置在init过程中将无效
-//            ARouter.openLog();     // 打印日志
-//            ARouter.openDebug();   // 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
-//        }
-//        ARouter.init(this); // 尽可能早，推荐在Application中初始化
-
     }
 
     /**
@@ -75,6 +68,10 @@ public class DriverApp extends XApp {
         HuaWeiRegister.register(this);
     }
 
+    /**
+     * 保活进程
+     * @return
+     */
     protected DaemonConfigurations getDaemonConfigurations() {
         DaemonConfigurations.DaemonConfiguration configuration1 = new DaemonConfigurations.DaemonConfiguration(
                 getPackageName() + ":process1",
@@ -91,6 +88,9 @@ public class DriverApp extends XApp {
         return new DaemonConfigurations(configuration1, configuration2, listener);
     }
 
+    /**
+     * 进程监听
+     */
     class MyDaemonListener implements DaemonConfigurations.DaemonListener {
         @Override
         public void onPersistentStart(Context context) {

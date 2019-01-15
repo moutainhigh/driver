@@ -17,6 +17,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.easymi.common.entity.CompanyList;
+import com.easymi.common.entity.Pic;
+import com.easymi.common.entity.QiNiuToken;
 import com.easymi.common.register.RegisterRequest;
 import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
@@ -46,6 +48,7 @@ import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -93,6 +96,9 @@ public class RegisterBaseActivity extends RxBaseActivity {
 
     private Employ employ;
 
+    /**
+     * 之前提交过的资料
+     */
     private RegisterRequest registerInfo;
 
     @Override
@@ -108,11 +114,15 @@ public class RegisterBaseActivity extends RxBaseActivity {
 
         et_driver_phone.setText(employ.phone);
 
-        if (employ.registerStatus != 1){
+        if (employ.registerStatus != 1) {
             getDriverInfo();
         }
     }
 
+    /**
+     * 加载获取到的之前提交的资料
+     * @param registerRequest
+     */
     public void initData(RegisterRequest registerRequest) {
         registerInfo = registerRequest;
 
@@ -130,7 +140,7 @@ public class RegisterBaseActivity extends RxBaseActivity {
         et_contact_phone.setText(registerInfo.emergencyPhone);
 
         tv_type.setText(setWorkType(registerInfo.serviceType));
-        //todo 公司回显
+
         tv_compney.setText(registerInfo.companyName);
 
         tv_time_start.setText(TimeUtil.getTime(TimeUtil.YMD_4_CN, registerInfo.startTime));
@@ -138,14 +148,25 @@ public class RegisterBaseActivity extends RxBaseActivity {
         et_work_number.setText(registerInfo.introducer);
     }
 
-    public String setWorkType(String serviceType){
+    /**
+     * 获取对应业务名称
+     * @param serviceType
+     * @return
+     */
+    public String setWorkType(String serviceType) {
         String serviceName = null;
-        if (TextUtils.equals(serviceType,Config.ZHUANCHE)){
-            serviceName = "专车";
-        }else if (TextUtils.equals(serviceType,Config.TAXI)){
-            serviceName = "出租车";
-        }else if (TextUtils.equals(serviceType,Config.CITY_LINE)){
-            serviceName = "城际专线";
+        if (TextUtils.equals(serviceType, Config.ZHUANCHE)) {
+            serviceName = getResources().getString(R.string.create_zhuanche);
+        } else if (TextUtils.equals(serviceType, Config.TAXI)) {
+            serviceName = getResources().getString(R.string.create_taxi);
+        } else if (TextUtils.equals(serviceType, Config.CITY_LINE)) {
+            serviceName = getResources().getString(R.string.create_zhuanxian);
+        }else if (TextUtils.equals(serviceType, Config.CHARTERED)) {
+            serviceName = getResources().getString(R.string.create_chartered);
+        } else if (TextUtils.equals(serviceType, Config.RENTAL)) {
+            serviceName = getResources().getString(R.string.create_rental);
+        }else if (TextUtils.equals(serviceType, Config.COUNTRY)) {
+            serviceName = getResources().getString(R.string.create_bus_country);
         }
         return serviceName;
     }
@@ -205,7 +226,6 @@ public class RegisterBaseActivity extends RxBaseActivity {
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
                 startTime = calendar.getTimeInMillis() / 1000;
-                Log.e("hufeng", "startTime:" + startTime);
 
                 tv_time_start.setText(TimeUtil.getTime(TimeUtil.YMD_4_CN, calendar.getTimeInMillis()));
             }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
@@ -229,6 +249,10 @@ public class RegisterBaseActivity extends RxBaseActivity {
             }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
             datePickerDialog.show();
         });
+
+        /**
+         * 头像点击选择
+         */
         findViewById(R.id.photo_con).setOnClickListener(v -> {
             if (!photoHintShowed) {
                 photoHintShowed = true;
@@ -241,6 +265,9 @@ public class RegisterBaseActivity extends RxBaseActivity {
             }
         });
 
+        /**
+         * 下一步
+         */
         findViewById(R.id.next_step).setOnClickListener(v -> {
             if (!check()) {
                 next();
@@ -248,9 +275,13 @@ public class RegisterBaseActivity extends RxBaseActivity {
         });
     }
 
+    /**
+     * 参数检查
+     * @return
+     */
     private boolean check() {
         if (TextUtils.isEmpty(imgPath)) {
-            if (registerInfo == null){
+            if (registerInfo == null) {
                 ToastUtil.showMessage(this, "未上传头像");
                 return true;
             }
@@ -276,13 +307,13 @@ public class RegisterBaseActivity extends RxBaseActivity {
             return true;
         }
         if (company == null) {
-            if (registerInfo == null){
+            if (registerInfo == null) {
                 ToastUtil.showMessage(this, "请选择所属分公司");
                 return true;
             }
         }
         if (selecType == null) {
-            if (registerInfo == null){
+            if (registerInfo == null) {
                 ToastUtil.showMessage(this, "请选择业务类型");
                 return true;
             }
@@ -310,6 +341,10 @@ public class RegisterBaseActivity extends RxBaseActivity {
                             .load(imgPath)
                             .apply(options)
                             .into(lPhotoImg);
+
+                    if (registerInfo != null) {
+                        getQiniuToken(imgPath);
+                    }
                 }
             }
             if (requestCode == 0x00) {
@@ -326,6 +361,9 @@ public class RegisterBaseActivity extends RxBaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    /**
+     * 参数赋值
+     */
     private void next() {
         //个人信息参数
         RegisterRequest registerRequest = new RegisterRequest();
@@ -335,30 +373,34 @@ public class RegisterBaseActivity extends RxBaseActivity {
         registerRequest.idCard = et_idcard.getText().toString().trim();
         registerRequest.emergency = et_contact.getText().toString().trim();
         registerRequest.emergencyPhone = et_contact_phone.getText().toString().trim();
-        if (company == null){
+        if (company == null) {
             registerRequest.companyId = registerInfo.companyId;
-        }else {
+        } else {
             registerRequest.companyId = company.id;
         }
-        if (selecType  == null){
+        if (selecType == null) {
             registerRequest.serviceType = registerInfo.serviceType;
-        }else {
+        } else {
             registerRequest.serviceType = selecType.type;
         }
-        if (startTime == 0){
+        if (startTime == 0) {
             registerRequest.startTime = registerInfo.startTime;
-        }else {
+        } else {
             registerRequest.startTime = startTime;
         }
-        if (endTime == 0){
+        if (endTime == 0) {
             registerRequest.endTime = registerInfo.endTime;
-        }else {
+        } else {
             registerRequest.endTime = endTime;
         }
-        if (TextUtils.isEmpty(imgPath)){
-//            registerRequest.portraitPath = registerInfo.portraitPath;
-        }else {
-            registerRequest.portraitPath = imgPath;
+        if (TextUtils.isEmpty(imgPath)) {
+                registerRequest.portraitPath = registerInfo.portraitPath;
+        } else {
+            if (registerInfo != null) {
+                registerRequest.portraitPath = registerInfo.portraitPath;
+            }else {
+                registerRequest.portraitPath = imgPath;
+            }
         }
 
         registerRequest.introducer = et_work_number.getText().toString().trim();
@@ -369,14 +411,35 @@ public class RegisterBaseActivity extends RxBaseActivity {
         startActivity(intent);
     }
 
+    public void getQiniuToken(String imagPath) {
+        Observable<QiNiuToken> observable = RegisterModel.getQiniuToken();
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, qiNiuToken -> {
+            if (qiNiuToken.getCode() == 1) {
+                if (qiNiuToken.qiNiu == null) {
+                    throw new IllegalArgumentException("token无效");
+                }
+                updateImage(new File(imagPath), qiNiuToken.qiNiu);
+            }
+        })));
+    }
+
+    public void updateImage(File file, String token) {
+        Observable<Pic> observable = RegisterModel.putPic(file, token);
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, pic -> {
+            registerInfo.portraitPath = pic.hashCode;
+        })));
+    }
+
     @Override
     public boolean isEnableSwipe() {
         return false;
     }
 
-
+    /**
+     * 获取司机提交过的注册资料
+     */
     public void getDriverInfo() {
-        String id_rsa = RsaUtils.encryptAndEncode(this, employ.id+"");
+        String id_rsa = RsaUtils.encryptAndEncode(this, employ.id + "");
         Observable<RegisterResult> observable = RegisterModel.getDriverInfo(id_rsa);
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, emResult -> {
             if (emResult.getCode() == 1) {

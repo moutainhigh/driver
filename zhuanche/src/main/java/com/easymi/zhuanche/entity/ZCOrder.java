@@ -1,7 +1,9 @@
 package com.easymi.zhuanche.entity;
 
+import com.easymi.component.app.XApp;
 import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.entity.DymOrder;
+import com.easymi.zhuanche.R;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -258,7 +260,10 @@ public class ZCOrder implements Serializable {
 
 
     public List<Address> orderAddressVos;
-
+    /**
+     * 获取订单预约起点
+     * @return
+     */
     public Address getStartSite(){
         Address start = null;
         if (orderAddressVos != null && orderAddressVos.size() != 0){
@@ -269,12 +274,15 @@ public class ZCOrder implements Serializable {
             }
         }else {
             start = new Address();
-            start.addr = "未知位置";
+            start.addr = XApp.getInstance().getResources().getString(R.string.unknown_site);
         }
         return start;
     }
 
-
+    /**
+     * 获取订单预约终点
+     * @return
+     */
     public Address getEndSite(){
         Address end = null;
         if (orderAddressVos != null && orderAddressVos.size() != 0){
@@ -285,7 +293,7 @@ public class ZCOrder implements Serializable {
             }
         }else {
             end = new Address();
-            end.addr = "未知位置";
+            end.addr = XApp.getInstance().getResources().getString(R.string.unknown_site);
         }
         return end;
     }

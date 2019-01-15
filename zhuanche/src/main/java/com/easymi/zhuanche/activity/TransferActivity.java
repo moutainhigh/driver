@@ -89,7 +89,7 @@ public class TransferActivity extends RxBaseActivity {
         Observable<TransferList> observable = ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
                 .getTransferList(start.lat, start.lng, 10, EmUtil.getAppKey()
 //                        ,(long) EmUtil.getEmployInfo().vehicle.serviceType
-                        ,1l
+                        ,1L
                 )
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())

@@ -152,7 +152,8 @@ public class LoginActivity extends RxBaseActivity {
 
         initQiye();
 
-        ActManager.getInstance().removeActivity(this);//该activity不加入Activity栈
+        //该activity不加入Activity栈
+        ActManager.getInstance().removeActivity(this);
 
         ActManager.getInstance().finishAllActivity();
     }
@@ -190,7 +191,7 @@ public class LoginActivity extends RxBaseActivity {
         //创建并显示popWindow
         mListPopWindow = new CustomPopWindow.PopupWindowBuilder(this)
                 .setView(contentView)
-                .size(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)//显示大小
+                .size(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 .create()
                 .showAsDropDown(editQiye, 0, 0);
 

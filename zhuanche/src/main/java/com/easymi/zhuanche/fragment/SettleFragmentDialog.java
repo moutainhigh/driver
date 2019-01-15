@@ -266,7 +266,6 @@ public class SettleFragmentDialog {
             confirmBtn.setVisibility(View.VISIBLE);
             payButton.setVisibility(View.GONE);
             dialogTitle.setText(context.getString(R.string.confirm_money));
-//            addedHint.setVisibility(View.VISIBLE);
         } else {
             addedHint.setVisibility(View.GONE);
             confirmBtn.setVisibility(View.GONE);
@@ -332,8 +331,8 @@ public class SettleFragmentDialog {
     DecimalFormat df = new DecimalFormat("#0.00");
 
     private void calcMoney() {
-
-        if (zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_DESTINATION_ORDER) {//到达于目的地后就无需计算了
+        //到达于目的地后就无需计算了
+        if (zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_DESTINATION_ORDER) {
             return;
         }
 

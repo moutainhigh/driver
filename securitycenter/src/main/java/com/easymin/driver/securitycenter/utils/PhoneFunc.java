@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import java.util.List;
 import java.util.regex.Pattern;
 
+@SuppressWarnings("AlibabaAvoidPatternCompileInMethod")
 public class PhoneFunc {
 
     private static TelephonyManager sTelManager;
@@ -19,11 +20,13 @@ public class PhoneFunc {
     public static boolean hasGps(Context paramContext) {
         final LocationManager mgr = (LocationManager) paramContext
                 .getSystemService(Context.LOCATION_SERVICE);
-        if (mgr == null)
+        if (mgr == null) {
             return false;
+        }
         final List<String> providers = mgr.getAllProviders();
-        if (providers == null)
+        if (providers == null) {
             return false;
+        }
         return providers.contains(LocationManager.GPS_PROVIDER);
     }
 
@@ -43,8 +46,9 @@ public class PhoneFunc {
         if (paramContext != null) {
             NetworkInfo localNetworkInfo = ((ConnectivityManager) paramContext
                     .getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
-            if (localNetworkInfo != null)
+            if (localNetworkInfo != null) {
                 return localNetworkInfo.isAvailable();
+            }
         }
         return false;
     }
@@ -90,15 +94,17 @@ public class PhoneFunc {
     }
 
     public static String getPhoneNumber() {
-        if (sTelManager != null)
+        if (sTelManager != null) {
             return sTelManager.getLine1Number();
+        }
         return null;
     }
 
     public static String getImei() {
         String str = sTelManager.getDeviceId();
-        if (TextUtils.isEmpty(str))
+        if (TextUtils.isEmpty(str)) {
             return "";
+        }
         return checkIMEI(str);
     }
 
@@ -115,16 +121,18 @@ public class PhoneFunc {
         return paramString;
     }
 
+    private static Pattern NUMBER_PATTERN = Pattern.compile("[0-9]*");
     private static boolean isIMEI(String paramString) {
-        return Pattern.compile("[0-9]*").matcher(paramString).matches();
+        return NUMBER_PATTERN.matcher(paramString).matches();
     }
 
     private static int getIMEICheckDigit(String paramString)
             throws IllegalArgumentException {
         int i = 0;
-        if (paramString.length() != 14)
+        if (paramString.length() != 14) {
             throw new IllegalArgumentException(
                     "IMEI Calculate Check digit, wrong length of imei");
+        }
         for (int j = 0; j < paramString.length(); j++) {
             int m = Character.digit(paramString.charAt(j), 10);
             if (j % 2 != 0)
@@ -132,8 +140,9 @@ public class PhoneFunc {
             i += m / 10 + m % 10;
         }
         int k = i % 10;
-        if (k == 0)
+        if (k == 0) {
             return 0;
+        }
         return 10 - k;
     }
 

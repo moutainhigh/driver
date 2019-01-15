@@ -106,10 +106,8 @@ public class MqttManager implements LocObserver {
      * @return
      */
     public synchronized boolean creatConnect() {
-//        pullTopic = "/driver" + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
         configTopic = "/driver" + "/" + EmUtil.getAppKey() + "/config";
         pullTopic = "/trip/driver" + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
-//        configTopic = "/driver"+ "/config";
 
         if (!XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false)) {//未登陆 不连接
             return false;
@@ -315,12 +313,7 @@ public class MqttManager implements LocObserver {
         @Override
         public void connectionLost(Throwable cause) {
             //失去连接
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    creatConnect();
-                }
-            }, 5000);
+            handler.postDelayed(() -> creatConnect(), 5000);
         }
 
         @Override

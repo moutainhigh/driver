@@ -23,4 +23,4 @@ public class Coupon implements Serializable{
     @SerializedName("couponTypeVoucherTopMoney")
     public double TopMoney;
 
-}
+ }

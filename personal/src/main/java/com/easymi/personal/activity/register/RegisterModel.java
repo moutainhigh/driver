@@ -45,7 +45,15 @@ import rx.schedulers.Schedulers;
  */
 public class RegisterModel {
 
-
+    /**
+     * 发送短信验证码
+     * @param code
+     * @param phone
+     * @param random
+     * @param type
+     * @param userType
+     * @return
+     */
     public static Observable<EmResult> getSms(String code, String phone, String random, String type, String userType) {
         return ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .sendSms(code, phone, random, type, userType)
@@ -54,6 +62,10 @@ public class RegisterModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    /**
+     * 获取注册选择的所属公司（服务机构）
+     * @return
+     */
     public static Observable<CompanyList> getCompanys() {
         return ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .qureyCompanys()
@@ -62,7 +74,12 @@ public class RegisterModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-
+    /**
+     * 上传图片到七牛云
+     * @param file
+     * @param token
+     * @return
+     */
     public static Observable<Pic> putPic(File file, String token) {
         RequestBody photoRequestBody = RequestBody.create(MediaType.parse("image/jpg"), file);
         RequestBody tokenBody = RequestBody.create(MediaType.parse("multipart/form-data"), token);
@@ -71,12 +88,26 @@ public class RegisterModel {
                 .uploadPic(Config.HOST_UP_PIC, tokenBody, body);
     }
 
+
+    /**
+     * 司机注册提交审核资料
+     * @param context
+     * @param request
+     * @param pics
+     * @return
+     */
     public static Observable<RegisterRes> applyDriver(Context context, RegisterRequest request, List<String> pics) {
 
         String portraitPath = pics.get(0);
         String idCardPath = pics.get(1);
         String idCardBackPath = pics.get(2);
         String driveLicensePath = pics.get(3);
+
+//        Log.e("hufeng",GsonUtil.toJson(request));
+//        Log.e("hufeng/portraitPath",portraitPath);
+//        Log.e("hufeng/idCardPath",idCardPath);
+//        Log.e("hufeng/idCardBackPath",idCardBackPath);
+//        Log.e("hufeng/driveLicensePath",driveLicensePath);
 
         return ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .applyDriver(
@@ -100,6 +131,11 @@ public class RegisterModel {
     }
 
 
+    /**
+     * 批量4张上传图片
+     * @param request
+     * @return
+     */
     public static Observable<Pic> uploadPics(RegisterRequest request) {
         return ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .getToken()
@@ -115,7 +151,6 @@ public class RegisterModel {
                     Observable<Pic> driveLicensePic = null;
 
 //                    List<Observable<Pic>> lsit = new ArrayList<>();
-
                     //必传图片
 //                    if (!TextUtils.isEmpty(request.portraitPath)) {
                         portraitPic = putPic(new File(request.portraitPath), token);
@@ -149,7 +184,13 @@ public class RegisterModel {
                 });
     }
 
-
+    /**
+     * 提交电话号码和验证码密码去注册基本司机信息信息
+     * @param password
+     * @param phone
+     * @param smsCode
+     * @return
+     */
     public static Observable<LoginResult> register(String password, String phone, String smsCode) {
         return ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .register(password, phone, smsCode)
@@ -158,7 +199,11 @@ public class RegisterModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-
+    /**
+     * 获取司机之前的注册信息
+     * @param driverId
+     * @return
+     */
     public static Observable<RegisterResult> getDriverInfo(String driverId) {
         return ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .getDriverInfo(driverId)
@@ -167,7 +212,10 @@ public class RegisterModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-
+    /**
+     * 获取七牛云token
+     * @return
+     */
     public static Observable<QiNiuToken> getQiniuToken() {
         return ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .getToken()
@@ -178,6 +226,12 @@ public class RegisterModel {
     }
 
 
+    /**
+     * 更新注册提交资料
+     * @param context
+     * @param request
+     * @return
+     */
     public static Observable<RegisterRes> applyUpdate(Context context, RegisterRequest request) {
 
         String portraitPath = request.portraitPath;

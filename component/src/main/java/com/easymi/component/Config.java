@@ -22,27 +22,28 @@ public class Config {
 //    public static final String HOST = "http://10.10.2.23:10001/";//俊俏
 //    public static final String HOST = "http://10.10.2.130:10001/";//130测试地址 （内网）
 //    public static final String HOST = "http://47.94.204.67:20001/";//130测试地址（外网）
-//    public static final String HOST = "http://api.xiaokakj.com/";//线上地址
-    public static final String HOST = "http://api.xiaokakj.cn/";//线上地址
+    public static final String HOST = "http://api.xiaokakj.com/";//线上地址
+//    public static final String HOST = "http://api.xiaokakj.cn/";//预发
     /**
      * MQTT配置
      */
-    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//测试地址
-//    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn";//线上地址
+//    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//预发地址
+    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn";//线上地址
+//    public static final String MQTT_HOST = "tcp://10.10.4.12:1883";//本地地址
     /**
      * APP_KEY
      */
-    public static final String APP_KEY = "1HAcient1kLqfeX7DVTV0dklUkpGEnUC";//资运
+//    public static final String APP_KEY = "1HAcient1kLqfeX7DVTV0dklUkpGEnUC";//资运
 //    public static final String APP_KEY = "xoRfvofrZw25b95ZBZY2venOYlSwWFOV";//v6
 //    public static final String APP_KEY = "SsCMJL77sZMI0iudBi5XZeNjzmILOjih";  // 林凯
-//    public static final String APP_KEY = "eubACO3wp3rjz1OBcDSa4LeS4qM4586o";  // 麒策
+    public static final String APP_KEY = "eubACO3wp3rjz1OBcDSa4LeS4qM4586o";  // 麒策
 //    public static final String APP_KEY = "VC9NFbO9LnaxiFRi5HDQspvp45p8uP6w";  // 哈喽
     /**
      * 上传图片地址.
      */
     public static final String HOST_UP_PIC = "http://up-z2.qiniu.com";
-
-    public static final boolean COMM_USE = false;//是否是通用司机端
+    //是否是通用司机端
+    public static final boolean COMM_USE = false;
 
     /**
      * 司机注册地址
@@ -69,8 +70,13 @@ public class Config {
     /**
      * MQTT
      */
+    //线上和预发
     public static final String MQTT_USER_NAME = "xiaoka";
     public static final String MQTT_PSW = "&mv7dHapB5J!95BJ";
+//    //本地
+//    public static final String MQTT_USER_NAME = "admin";
+//    public static final String MQTT_PSW = "public";
+
     public static final String MQTT_PUSH_TOPIC = "/driver/gps";
 
     /**
@@ -120,8 +126,6 @@ public class Config {
 
     public static final String SP_SHOW_GUIDE = "show_guide";//是否播放静音音乐音乐
 
-//    public static final String SP_LAST_GET_FEE_TIME = "sp_last_get_fee_time";//是否播放静音音乐音乐
-
     public static final String SP_LAST_VERSION = "sp_last_version";//是否播放静音音乐音乐
     public static final String SP_LAST_GPS_PUSH_TIME = "sp_last_gps_push_time";//mqtt上次响应的时间点
 
@@ -132,7 +136,9 @@ public class Config {
     public static final String ZHUANCHE = "special";
     public static final String TAXI = "taxi";
     public static final String CITY_LINE = "cityline";
+    //定制包车
     public static final String CHARTERED = "chartered";
+    //租车
     public static final String RENTAL = "rental";
     //班车
     public static final String COUNTRY = "country";
@@ -155,10 +161,10 @@ public class Config {
     //    public static final int FREE_LOC_TIME = 5000;//闲时定位时间 毫秒
 //    public static final int BUSY_LOC_TIME = 5000;//忙时定位时间 毫秒
     public static final int NORMAL_LOC_TIME = 5000;//固定定位时间 毫秒
-
-    public static final boolean NEED_TRACE = false;//是否纠偏
-
-    public static final boolean SAVE_LOGO = false;//是否保存位置信息
+    //是否纠偏
+    public static final boolean NEED_TRACE = false;
+    //是否保存位置信息
+    public static final boolean SAVE_LOGO = false;
 
     public static final String MI_APPID = "2882303761517793325";
     public static final String MI_APPKEY = "5891779394325";

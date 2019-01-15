@@ -42,9 +42,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by liuzihao on 2018/11/21.
- * <p>
- * 专线补单
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ * Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 专线补单
+ * History:
  */
 @Route(path = "/cityline/CreateOrderActivity")
 public class CreateOrderActivity extends RxBaseActivity {
