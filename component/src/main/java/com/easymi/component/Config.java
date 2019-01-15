@@ -22,28 +22,28 @@ public class Config {
 //    public static final String HOST = "http://10.10.2.23:10001/";//俊俏
 //    public static final String HOST = "http://10.10.2.130:10001/";//130测试地址 （内网）
 //    public static final String HOST = "http://47.94.204.67:20001/";//130测试地址（外网）
-//    public static final String HOST = "http://api.xiaokakj.com/";//线上地址
-    public static final String HOST = "http://api.xiaokakj.cn/";//线上地址
+    public static final String HOST = "http://api.xiaokakj.com/";//线上地址
+//    public static final String HOST = "http://api.xiaokakj.cn/";//预发
     /**
      * MQTT配置
      */
-    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//预发地址
-//    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn";//线上地址
+//    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//预发地址
+    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn";//线上地址
 //    public static final String MQTT_HOST = "tcp://10.10.4.12:1883";//本地地址
     /**
      * APP_KEY
      */
-    public static final String APP_KEY = "1HAcient1kLqfeX7DVTV0dklUkpGEnUC";//资运
+//    public static final String APP_KEY = "1HAcient1kLqfeX7DVTV0dklUkpGEnUC";//资运
 //    public static final String APP_KEY = "xoRfvofrZw25b95ZBZY2venOYlSwWFOV";//v6
 //    public static final String APP_KEY = "SsCMJL77sZMI0iudBi5XZeNjzmILOjih";  // 林凯
-//    public static final String APP_KEY = "eubACO3wp3rjz1OBcDSa4LeS4qM4586o";  // 麒策
+    public static final String APP_KEY = "eubACO3wp3rjz1OBcDSa4LeS4qM4586o";  // 麒策
 //    public static final String APP_KEY = "VC9NFbO9LnaxiFRi5HDQspvp45p8uP6w";  // 哈喽
     /**
      * 上传图片地址.
      */
     public static final String HOST_UP_PIC = "http://up-z2.qiniu.com";
-
-    public static final boolean COMM_USE = false;//是否是通用司机端
+    //是否是通用司机端
+    public static final boolean COMM_USE = false;
 
     /**
      * 司机注册地址
@@ -62,8 +62,8 @@ public class Config {
      * 图片服务器地址
      */
 //    public static final String IMG_SERVER = "https://assets.xiaokayun.cn/";
-    public static final String IMG_SERVER = "http://pimkcibsb.bkt.clouddn.com/";  //本地
-//    public static final String IMG_SERVER = "http://assets.xiaokakj.com/";  //线上
+//    public static final String IMG_SERVER = "http://pimkcibsb.bkt.clouddn.com/";  //本地
+    public static final String IMG_SERVER = "http://assets.xiaokakj.com/";  //线上
     //    public static final String IMG_PATH = "?imageView2/1/w/10/h/10/format/webp/q/75|imageslim";
     public static final String IMG_PATH = "";
 
@@ -161,10 +161,10 @@ public class Config {
     //    public static final int FREE_LOC_TIME = 5000;//闲时定位时间 毫秒
 //    public static final int BUSY_LOC_TIME = 5000;//忙时定位时间 毫秒
     public static final int NORMAL_LOC_TIME = 5000;//固定定位时间 毫秒
-
-    public static final boolean NEED_TRACE = false;//是否纠偏
-
-    public static final boolean SAVE_LOGO = false;//是否保存位置信息
+    //是否纠偏
+    public static final boolean NEED_TRACE = false;
+    //是否保存位置信息
+    public static final boolean SAVE_LOGO = false;
 
     public static final String MI_APPID = "2882303761517793325";
     public static final String MI_APPKEY = "5891779394325";

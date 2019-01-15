@@ -388,7 +388,7 @@ public class CreateTaxiFragment extends RxLazyFragment implements CreateTaxiCont
         presenter.queryBudget(passenger.id, distance, duration,
                 orderTime == null ? System.currentTimeMillis() / 1000 : orderTime / 1000, selectedZCType.id
 //                , (long) EmUtil.getEmployInfo().vehicle.serviceType)
-                , 1l)
+                , 1L)
         ;
     }
 }

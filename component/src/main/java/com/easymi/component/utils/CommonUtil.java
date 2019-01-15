@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
  * 常用一般工具类.
  */
 
+@SuppressWarnings("AlibabaAvoidPatternCompileInMethod")
 public class CommonUtil {
     /**
      * 将double类型的数字转化保留1位小数后以String类型返回.
@@ -99,6 +100,9 @@ public class CommonUtil {
         return number;
     }
 
+
+    private static Pattern NUMBER_PATTERN = Pattern.compile("[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]|[\ud800\udc00-\udbff\udfff\ud800-\udfff]",
+            Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
     /**
      * 判断一个字符串是否含有emoji表情.
      *
@@ -107,9 +111,9 @@ public class CommonUtil {
      */
     public static boolean isEmoji(String string) {
         // TODO: 2017/1/3 当emoji表情增加时,需要扩展范围
-        Pattern p = Pattern.compile("[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]|[\ud800\udc00-\udbff\udfff\ud800-\udfff]",
-                Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
-        Matcher m = p.matcher(string);
+//        Pattern p = Pattern.compile("[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]|[\ud800\udc00-\udbff\udfff\ud800-\udfff]",
+//                Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
+        Matcher m = NUMBER_PATTERN.matcher(string);
         return m.find();
     }
 

@@ -70,7 +70,7 @@ public class CreateTaxiModel implements CreateTaxiContract.Model {
                         destinationLat, destinationLng, companyId, companyName,
                         budgetFee, EmUtil.getAppKey(), cid, orderPerson, orderPersonId
 //                        , (long) EmUtil.getEmployInfo().vehicle.serviceType
-                        , 1l
+                        , 1L
                 )
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())

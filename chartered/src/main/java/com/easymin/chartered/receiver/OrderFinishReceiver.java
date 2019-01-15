@@ -7,9 +7,13 @@ import android.content.Intent;
 import com.easymi.component.Config;
 
 /**
- * Created by liuzihao on 2018/3/6.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: OrderFinishReceiver
+ * Author: shine
+ * Date: 2018/12/24 下午5:00
+ * Description:
+ * History:
  */
-
 public class OrderFinishReceiver extends BroadcastReceiver {
     private OnFinishListener finishListener;
 

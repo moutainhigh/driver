@@ -17,30 +17,41 @@ import java.util.List;
  */
 public interface ActFraCommBridge {
 
-
-    void showBounds(List<LatLng> latLngs);
-
-    void clearMap();
-
-    void routePath(LatLng toLatlng);
-
-    void routePath(LatLng startLatlng, List<LatLng> passLatlngs, LatLng endLatlng);
-
-    void doRefresh();
-
+    /**
+     * 倒计时结束
+     */
     void countStartOver();
 
+    /**
+     * 开始导航
+     * @param latLng
+     * @param orderId
+     */
     void navi(LatLng latLng, Long orderId);
 
-    void toNotStart();
-
+    /**
+     * 开始行程
+     */
     void toStart();
 
+    /**
+     * 到达预约地
+     */
     void arriveStart();
 
+    /**
+     * 前往预约地
+     */
     void doStartDrive();
 
+    /**
+     * 到达目的地
+     */
     void arriveDestance();
 
+    /**
+     * 订单完成
+     * @param button
+     */
     void toFinish(LoadingButton button);
 }

@@ -176,9 +176,6 @@ public class FlowActivity extends RxBaseActivity implements
         toolbar.setLeftIcon(R.drawable.ic_arrow_back, v -> finish());
     }
 
-    NotStartFragment notStartFragment;
-
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -239,54 +236,13 @@ public class FlowActivity extends RxBaseActivity implements
         bridge = new ActFraCommBridge() {
 
             @Override
-            public void showBounds(List<LatLng> latLngs) {
-                boundsZoom(latLngs);
-            }
-
-            @Override
-            public void clearMap() {
-                aMap.clear();
-                smoothMoveMarker = null;
-                initMap();
-                receiveLoc(EmUtil.getLastLoc());//第一时间加上自身位置
-            }
-
-            @Override
-            public void routePath(LatLng toLatlng) {
-                presenter.routePlanByNavi(toLatlng.latitude, toLatlng.longitude);
-            }
-
-            @Override
-            public void routePath(LatLng startLatlng, List<LatLng> passLatlngs, LatLng endLatlng) {
-                presenter.routePlanByRouteSearch(startLatlng, passLatlngs, endLatlng);
-            }
-
-            @Override
-            public void doRefresh() {
-                isMapTouched = false;
-                aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLatlng, 19));
-            }
-
-            @Override
             public void countStartOver() {
 
             }
 
             @Override
             public void navi(LatLng latLng, Long orderId) {
-//                if (baseOrder.status == ZCOrderStatus.TAKE_ORDER
-//                        || baseOrder.status == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
-//                    presenter.navi(new LatLng(getStartAddr().latitude, getStartAddr().longitude),  orderId);
-//                } else if (baseOrder.status == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER
-//                        || baseOrder.status == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-//                    presenter.navi(new LatLng(getEndAddr().latitude, getEndAddr().longitude), orderId);
-//                }
                 presenter.navi(latLng, orderId);
-            }
-
-            @Override
-            public void toNotStart() {
-                switchFragment(notStartFragment).commit();
             }
 
             @Override
@@ -472,6 +428,10 @@ public class FlowActivity extends RxBaseActivity implements
         finish();
     }
 
+    /**
+     * 获取订单起点
+     * @return
+     */
     private Address getStartAddr() {
         Address startAddress = null;
         if (baseOrder != null && baseOrder.orderAddressVos != null && baseOrder.orderAddressVos.size() != 0) {
@@ -485,6 +445,10 @@ public class FlowActivity extends RxBaseActivity implements
         return startAddress;
     }
 
+    /**
+     * 获取订单终点
+     * @return
+     */
     private Address getEndAddr() {
         Address endAddr = null;
         if (baseOrder != null && baseOrder.orderAddressVos != null && baseOrder.orderAddressVos.size() != 0) {
@@ -528,7 +492,6 @@ public class FlowActivity extends RxBaseActivity implements
                     (int) (DensityUtil.getDisplayWidth(this) / 2),
                     0));
         }
-
 
         latLngs.remove(lastLatlng);//后续可能会使用这个latLngs 所以移除加入的上次位置
     }
@@ -671,9 +634,6 @@ public class FlowActivity extends RxBaseActivity implements
     protected void onPause() {
         super.onPause();
         mapView.onPause();
-//        notStartFragment.cancelTimer();
-//        finishFragment.cancelTimer();
-//        acceptSendFragment.cancelTimer();
     }
 
     @Override
@@ -688,10 +648,6 @@ public class FlowActivity extends RxBaseActivity implements
         if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
             Log.e("mapTouch", "-----map onTouched-----");
             isMapTouched = true;
-//
-//            if (null != acceptSendFragment) {
-//                acceptSendFragment.mapStatusChanged();
-//            }
         }
     }
 
@@ -734,18 +690,10 @@ public class FlowActivity extends RxBaseActivity implements
                 marker.setAnchor(0.5f, 0.5f);
             }
         }
-
-//        if (dymOrder == null) {
-//            dymOrder = DymOrder.findByIDType(zxOrder.orderId, zxOrder.orderType);
-//        }
-
         if (null != dymOrder) {
             if (dymOrder.orderStatus == ZXOrderStatus.ACCEPT_ING
                     || dymOrder.orderStatus == ZXOrderStatus.SEND_ING) {
-//                if (!isMapTouched && currentFragment instanceof AcceptSendFragment) {
-//                    aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 19), delayAnimate ? Config.NORMAL_LOC_TIME : 0, null);
-//                    delayAnimate = true;
-//                }
+
             }
         }
 
@@ -786,9 +734,7 @@ public class FlowActivity extends RxBaseActivity implements
 
     @Override
     public void onMapClick(LatLng latLng) {
-//        if (null != smoothMoveMarker) {
-//            smoothMoveMarker.getMarker().hideInfoWindow();
-//        }
+
     }
 
     @Override

@@ -392,7 +392,6 @@ public enum ErrCode {
      */
     VERSION_ERROR(40098, "问题数据"),
 
-
     /**
      * 分布式锁，加锁失败
      */
@@ -552,6 +551,11 @@ public enum ErrCode {
      * 订单已被收回
      */
     ORDER_CANCEL(40139, "订单已被收回"),
+
+    /**
+     * 司机状态错误
+     */
+    DRIVER_STATUS_ERRv(40180, "司机状态错误"),
 
     /**
      * 乘客账号异常，请联系管理员处理

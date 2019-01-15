@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import java.util.List;
 import java.util.regex.Pattern;
 
+@SuppressWarnings("AlibabaAvoidPatternCompileInMethod")
 public class PhoneFunc {
 
     private static TelephonyManager sTelManager;
@@ -115,8 +116,9 @@ public class PhoneFunc {
         return paramString;
     }
 
+    private static Pattern NUMBER_PATTERN = Pattern.compile("[0-9]*");
     private static boolean isIMEI(String paramString) {
-        return Pattern.compile("[0-9]*").matcher(paramString).matches();
+        return NUMBER_PATTERN.matcher(paramString).matches();
     }
 
     private static int getIMEICheckDigit(String paramString)

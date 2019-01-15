@@ -57,6 +57,9 @@ public class ConfirmOrderFragment extends RxBaseFragment {
         });
     }
 
+    /**
+     * 加载布局id
+     */
     public void findById(){
         tv_name = getActivity().findViewById(R.id.tv_name);
         tv_phone = getActivity().findViewById(R.id.tv_phone);
@@ -67,6 +70,9 @@ public class ConfirmOrderFragment extends RxBaseFragment {
         complet_order = getActivity().findViewById(R.id.complet_order);
     }
 
+    /**
+     * 加载显示数据
+     */
     public void initData(){
         tv_name.setText(baseOrder.passengerName);
         tv_phone.setText(baseOrder.passengerPhone);

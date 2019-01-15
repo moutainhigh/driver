@@ -8,8 +8,11 @@ import java.util.regex.Pattern;
  * Created by Administrator on 2017/6/12 0012.
  */
 
+@SuppressWarnings("AlibabaAvoidPatternCompileInMethod")
 public class IdUtils {
 
+    private static Pattern ID_PATTERN = Pattern.compile("(\\d{14}[0-9a-zA-Z])|(\\d{17}[0-9a-zA-Z])");
+    private static Pattern BIRTH_PATTERN = Pattern.compile("\\d{6}(\\d{2})(\\d{2})(\\d{2}).*");
     /**
      * 判断身份证格式
      *
@@ -18,12 +21,13 @@ public class IdUtils {
      */
     public static boolean isIdNum(String idNum) {
 
-        // 中国公民身份证格式：长度为15或18位，最后一位可以为字母
-        Pattern idNumPattern = Pattern.compile("(\\d{14}[0-9a-zA-Z])|(\\d{17}[0-9a-zA-Z])");
+//        // 中国公民身份证格式：长度为15或18位，最后一位可以为字母
+//        Pattern idNumPattern = Pattern.compile("(\\d{14}[0-9a-zA-Z])|(\\d{17}[0-9a-zA-Z])");
 
         // 格式验证
-        if (!idNumPattern.matcher(idNum).matches())
+        if (!ID_PATTERN.matcher(idNum).matches()) {
             return false;
+        }
 
         // 合法性验证
 
@@ -38,9 +42,9 @@ public class IdUtils {
             System.out.println("一代身份证：" + idNum);
 
             // 提取身份证上的前6位以及出生年月日
-            Pattern birthDatePattern = Pattern.compile("\\d{6}(\\d{2})(\\d{2})(\\d{2}).*");
+//            Pattern birthDatePattern = Pattern.compile("\\d{6}(\\d{2})(\\d{2})(\\d{2}).*");
 
-            Matcher birthDateMather = birthDatePattern.matcher(idNum);
+            Matcher birthDateMather = BIRTH_PATTERN.matcher(idNum);
 
             if (birthDateMather.find()) {
 
@@ -57,9 +61,9 @@ public class IdUtils {
             System.out.println("二代身份证：" + idNum);
 
             // 提取身份证上的前6位以及出生年月日
-            Pattern birthDatePattern = Pattern.compile("\\d{6}(\\d{4})(\\d{2})(\\d{2}).*");
+//            Pattern birthDatePattern = Pattern.compile("\\d{6}(\\d{4})(\\d{2})(\\d{2}).*");
 
-            Matcher birthDateMather = birthDatePattern.matcher(idNum);
+            Matcher birthDateMather = BIRTH_PATTERN.matcher(idNum);
 
             if (birthDateMather.find()) {
 
