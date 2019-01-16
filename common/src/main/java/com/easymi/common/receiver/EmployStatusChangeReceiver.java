@@ -7,7 +7,9 @@ import android.content.Intent;
 import com.easymi.component.Config;
 
 /**
- * Created by developerLzh on 2017/12/19 0019.
+ *
+ * @author developerLzh
+ * @date 2017/12/19 0019
  */
 
 public class EmployStatusChangeReceiver extends BroadcastReceiver {

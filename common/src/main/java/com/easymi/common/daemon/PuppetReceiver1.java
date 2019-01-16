@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 
 /**
- * Created by developerLzh on 2017/11/9 0009.
+ *
+ * @author developerLzh
+ * @date 2017/11/9 0009
  */
 
 public class PuppetReceiver1 extends BroadcastReceiver {

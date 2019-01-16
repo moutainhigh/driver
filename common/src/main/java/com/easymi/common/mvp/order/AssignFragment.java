@@ -30,6 +30,7 @@ import java.util.List;
  * Date: 2018/11/15 下午4:05
  * Description:
  * History:
+ * @author hufeng
  */
 public class AssignFragment extends RxBaseFragment implements MyOrderContract.View{
 
@@ -57,15 +58,22 @@ public class AssignFragment extends RxBaseFragment implements MyOrderContract.Vi
         initPresenter();
     }
 
+    /**
+     * 初始化presenter 请求数据
+     */
     public void initPresenter(){
         presenter = new MyOrderPresenter(getContext(),this);
         setRefresh();
     }
-
+    /**
+     * 请求数据
+     */
     public void setRefresh(){
         presenter.indexOrders(page,size,"5");
     }
-
+    /**
+     * 加载adapter
+     */
     public void initAdapter(){
         adapter = new MyOrderAdapter(getContext(),3);
 

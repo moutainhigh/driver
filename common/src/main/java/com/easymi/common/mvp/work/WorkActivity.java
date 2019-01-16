@@ -68,6 +68,7 @@ import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MapUtil;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
+import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.component.widget.pinned.PinnedHeaderDecoration;
@@ -85,7 +86,9 @@ import java.util.List;
 
 
 /**
- * Created by developerLzh on 2017/11/3 0003.
+ *
+ * @author developerLzh
+ * @date 2017/11/3 0003
  */
 
 @Route(path = "/common/WorkActivity")
@@ -97,56 +100,54 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         AnnReceiver.OnReceiveAnn, OrderRefreshReceiver.OnRefreshOrderListener {
 
     LinearLayout bottomBar;
-
     MapView mapView;
-
     RippleBackground rippleBackground;
-
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
-
     CusToolbar toolbar;
-
     LinearLayout createOrder;
-
     ImageView pullIcon;
     LinearLayout peek_con;
-
     ImageView refreshImg;
     FrameLayout loadingFrame;
     ImageView loadingImg;
-
     LinearLayout offlineCon;
-
     LoadingButton onLineBtn;
-
     RelativeLayout listenOrderCon;
-
     RelativeLayout notifityCon;
     TextView notifityContent;
     ImageView notifityClose;
-
     TextView currentPlace;
-
     ExpandableLayout expandableLayout;
-
     TextView finishNo;
     TextView onLineHour;
     TextView onLineMonute;
     TextView todayIncome;
-
     TextView noOrderText;
-
     LinearLayout bottomBtnCon;
-
     LinearLayout guideFrame;
     ImageView gotoSet;
 
+    /**
+     * 取消订单
+     */
     private CancelOrderReceiver cancelOrderReceiver;
+    /**
+     * 司机状态
+     */
     private EmployStatusChangeReceiver employStatusChangeReceiver;
 
+    /**
+     * 通知
+     */
     private NoticeReceiver noticeReceiver;
+    /**
+     * 公告
+     */
     private AnnReceiver annReceiver;
+    /**
+     * 刷新订单
+     */
     private OrderRefreshReceiver orderRefreshReceiver;
 
     private WorkPresenter presenter;
@@ -167,7 +168,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
 
         findById();
 
-//        initGuide();
         initMap();
         initNotifity();
 
@@ -186,7 +186,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
             onLineBtn.setStatus(LoadingButton.STATUS_LOADING);
             presenter.online(onLineBtn);
         });
-//        offlineCon.setOnClickListener(v -> presenter.offline());
         listenOrderCon.setOnClickListener(v -> {
             presenter.offline();
         });
@@ -242,28 +241,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     public void hideRegisterDialog() {
         if (registerDialog != null) {
             registerDialog.dismiss();
-        }
-    }
-
-    private void initGuide() {
-        boolean showGuide = XApp.getMyPreferences().getBoolean(Config.SP_SHOW_GUIDE, true);
-        if (showGuide) {
-            guideFrame.setVisibility(View.VISIBLE);
-            gotoSet.setOnClickListener(v -> {
-                guideFrame.setVisibility(View.GONE);
-                XApp.getPreferencesEditor().putBoolean(Config.SP_SHOW_GUIDE, false).apply();
-                try {
-                    Intent intent = new Intent();
-                    intent.setAction("android.intent.action.VIEW");
-                    Uri content_url = Uri.parse("http://help.xiaokayun.cn");
-                    intent.setData(content_url);
-                    startActivity(intent);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            });
-        } else {
-            guideFrame.setVisibility(View.GONE);
         }
     }
 
@@ -331,10 +308,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
                     .build("/personal/MoreActivity")
                     .navigation();
 
-//            CrashReport.testJavaCrash();
-//            ARouter.getInstance()
-//                    .build("/passengerbus/BcFlowActivity")
-//                    .navigation();
         });
     }
 
@@ -353,13 +326,14 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         swipeRefreshLayout.setRefreshing(true);
     }
 
-    //全业务订单列表
+    /**
+     * 全业务订单列表
+     */
     List<MultipleOrder> orders = new ArrayList<>();
 
     @Override
     public void showOrders(List<MultipleOrder> MultipleOrders) {
         orders.clear();
-
         if (MultipleOrders == null || MultipleOrders.size() == 0) {
             showEmpty(0);
         } else {
@@ -376,11 +350,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         pinnedHeaderDecoration.registerTypePinnedHeader(MultipleOrder.ITEM_DESC, (parent, adapterPosition) -> true);
         recyclerView.addItemDecoration(pinnedHeaderDecoration);
 
-//        if (orders.size() == 0) {
-//            setHeaderView(recyclerView);
-//        } else {
-//            setHeaderView(null);
-//        }
     }
 
     private void setHeaderView(RecyclerView view) {
@@ -469,9 +438,10 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         markers.clear();
         this.drivers = drivers;
         MarkerOptions options = new MarkerOptions();
-        options.draggable(false);//设置Marker可拖动
+        //设置Marker可拖动
+        options.draggable(false);
         // 将Marker设置为贴地显示，可以双指下拉地图查看效果
-        options.setFlat(true);//设置marker平贴地图效果
+        options.setFlat(true);
         List<LatLng> latLngs = new ArrayList<>();
 
 
@@ -499,7 +469,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     public void showAnn(AnnAndNotice announcement) {
         notifityCon.setVisibility(View.VISIBLE);
         notifityContent.setText(getString(R.string.new_ann) + announcement.annMessage);
-//        XApp.getInstance().syntheticVoice(getString(R.string.new_ann) + announcement.message, true);
         notifityCon.setOnClickListener(v -> {
             notifityCon.setVisibility(View.GONE);
             ARouter.getInstance().build("/personal/AnnouncementActivity")
@@ -561,8 +530,10 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
             presenter.initDaemon();
         } else {
             showOnline();//听单状态
-            presenter.indexOrders();
-            presenter.initDaemon();
+            if (presenter !=null){
+                presenter.indexOrders();
+                presenter.initDaemon();
+            }
         }
     }
 
@@ -621,14 +592,16 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     @Override
     protected void onResume() {
         super.onResume();
+        mapView.onResume();
         isFront = true;
         boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
         if (!isLogin) {
-            ARouter.getInstance().build("/personal/LoginActivity")/*.withFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)*/.navigation();
+            ARouter.getInstance().build("/personal/LoginActivity").navigation();
             finish();
         }
-        mapView.onResume();
-        presenter.loadDataOnResume();
+        if (presenter!=null){
+            presenter.loadDataOnResume();
+        }
         MqttManager.getInstance().pushLocNoLimit(new BuildPushData(EmUtil.getLastLoc()));
     }
 
@@ -717,6 +690,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
 
     private EmLoc location;
 
+    /**
+     * 当前司机位置marker
+     */
     private Marker myLocMarker;
 
     @Override
@@ -829,11 +805,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     public void modelSet(View view) {
         Intent intent = new Intent(WorkActivity.this, ModelSetActivity.class);
         startActivity(intent);
-    }
-
-    public void tongji(View view) {
-        ARouter.getInstance().build("/personal/StatsActivity")
-                .navigation();
     }
 
     private View getMarkerView(NearDriver driver) {

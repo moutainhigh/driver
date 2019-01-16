@@ -10,6 +10,7 @@ import com.easymi.common.R;
  * Date: 2018/11/14 下午4:26
  * Description:
  * History:
+ * @author hufeng
  */
 public class CityLine implements MultiItemEntity {
 

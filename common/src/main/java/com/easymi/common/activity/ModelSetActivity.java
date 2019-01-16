@@ -16,7 +16,9 @@ import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.switchButton.SwitchButton;
 
 /**
- * Created by liuzihao on 2018/4/25.
+ *
+ * @author liuzihao
+ * @date 2018/4/25
  */
 
 public class ModelSetActivity extends RxBaseActivity {

@@ -17,7 +17,9 @@ import com.easymi.component.entity.DymOrder;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2018/11/15.
+ *
+ * @author liuzihao
+ * @date 2018/11/15
  */
 
 public class CusListFragment extends RxBaseFragment {
@@ -50,6 +52,9 @@ public class CusListFragment extends RxBaseFragment {
         changeUi();
     }
 
+    /**
+     * 显示ui
+     */
     private void changeUi() {
         if (button == null) {
             return;
@@ -102,6 +107,9 @@ public class CusListFragment extends RxBaseFragment {
         }
     }
 
+    /**
+     * 添加数据到适配器
+     */
     private void showList() {
         if (flag == StaticVal.PLAN_ACCEPT) {
             orderCustomerList = OrderCustomer.findByIDTypeOrderByAcceptSeq(orderId, orderType);

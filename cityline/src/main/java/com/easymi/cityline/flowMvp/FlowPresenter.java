@@ -51,7 +51,9 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2018/11/15.
+ *
+ * @author liuzihao
+ * @date 2018/11/15
  */
 
 public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
@@ -60,9 +62,12 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
     private FlowContract.View view;
     private FlowContract.Model model;
 
+    /**
+     * 导航
+     */
     AMapNavi mAMapNavi;
 
-    private long driverId = 43;
+    RouteSearch routeSearch;
 
     public FlowPresenter(Context context, FlowContract.View view) {
         this.context = context;
@@ -137,8 +142,6 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
         mAMapNavi.calculateDriveRoute(startLs, endLs, naviLatLngs, strategy);
     }
 
-    RouteSearch routeSearch;
-
     @Override
     public void routePlanByRouteSearch(LatLng start, List<LatLng> latLngs, LatLng end) {
         if (start == null || end == null) {
@@ -190,8 +193,10 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
     public void stopNavi() {
         //since 1.6.0 不再在naviview destroy的时候自动执行AMapNavi.stopNavi();请自行执行
         if (null != mAMapNavi) {
-            mAMapNavi.stopNavi();
-            mAMapNavi.destroy();
+            new Thread(() -> { //
+                mAMapNavi.stopNavi();
+                mAMapNavi.destroy();
+            }).start();
         }
     }
 

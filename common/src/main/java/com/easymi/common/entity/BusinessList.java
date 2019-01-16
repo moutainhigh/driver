@@ -5,6 +5,9 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+/**
+ * @author hufeng
+ */
 public class BusinessList extends EmResult {
 
     @SerializedName("business")
@@ -17,7 +20,6 @@ public class BusinessList extends EmResult {
 
         @SerializedName("business_name")
         public String businessName;
-
 
         @SerializedName("sort")
         public int sort;

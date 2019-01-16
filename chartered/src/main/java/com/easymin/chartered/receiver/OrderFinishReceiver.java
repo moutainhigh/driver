@@ -13,6 +13,7 @@ import com.easymi.component.Config;
  * Date: 2018/12/24 下午5:00
  * Description:
  * History:
+ * @author hufeng
  */
 public class OrderFinishReceiver extends BroadcastReceiver {
     private OnFinishListener finishListener;
@@ -36,6 +37,11 @@ public class OrderFinishReceiver extends BroadcastReceiver {
     }
 
     public interface OnFinishListener {
+        /**
+         * 完成订单的监听
+         * @param orderId
+         * @param orderType
+         */
         void onFinishOrder(long orderId, String orderType);
     }
 }

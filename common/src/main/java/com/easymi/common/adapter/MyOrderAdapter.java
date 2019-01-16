@@ -46,6 +46,10 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Holder> 
         list = new ArrayList<>();
     }
 
+    /**
+     * 设置数据
+     * @param orders
+     */
     public void setBaseOrders(List<MultipleOrder> orders) {
         this.list = orders;
         notifyDataSetChanged();
@@ -146,6 +150,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Holder> 
     }
 
 
+
     private ItemClickListener itemClickListener;
 
     public void setItemClickListener(ItemClickListener listener) {
@@ -153,6 +158,11 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Holder> 
     }
 
     public interface ItemClickListener {
+        /**
+         * 列表单击监听
+         * @param view
+         * @param baseOrder
+         */
         void itemClick(View view,BaseOrder baseOrder);
     }
 

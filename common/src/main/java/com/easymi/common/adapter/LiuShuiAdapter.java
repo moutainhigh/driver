@@ -26,13 +26,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2017/11/14.
+ *
+ * @author liuzihao
+ * @date 2017/11/14
  */
 
 public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> {
 
-//    private final boolean canBaoxiaoDJ;
-//    private final boolean canBaoxiaoZC;
     private Context context;
 
     private List<BaseOrder> baseOrders;
@@ -40,10 +40,12 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
     public LiuShuiAdapter(Context context) {
         this.context = context;
         baseOrders = new ArrayList<>();
-//        canBaoxiaoDJ = TaxiSetting.findOne().isExpenses == 1;
-//        canBaoxiaoZC = ZCSetting.findOne().isExpenses == 1;
     }
 
+    /**
+     * 设置数据
+     * @param baseOrders
+     */
     public void setBaseOrders(List<BaseOrder> baseOrders) {
         this.baseOrders = baseOrders;
         notifyDataSetChanged();

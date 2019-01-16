@@ -17,7 +17,9 @@ public class ItemDragCallback extends ItemTouchHelper.Callback{
 
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-        final int swipeFlags = 0;//禁止侧滑
+
+        //禁止侧滑
+        final int swipeFlags = 0;
         final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
         //其实只有UP、DOWN即可完成排序，加上LEFT、RIGHT只是为了滑动更飘逸
         return makeMovementFlags(dragFlags,swipeFlags);

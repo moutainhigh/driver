@@ -33,6 +33,10 @@ public class ArriveStartFragment extends RxBaseFragment {
 
     private ActFraCommBridge bridge;
 
+    /**
+     * 设置bridge
+     * @param bridge
+     */
     public void setBridge(ActFraCommBridge bridge) {
         this.bridge = bridge;
     }

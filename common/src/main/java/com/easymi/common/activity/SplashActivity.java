@@ -37,7 +37,9 @@ import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
 /**
- * Created by developerLzh on 2017/11/3 0003.
+ *
+ * @author developerLzh
+ * @date 2017/11/3 0003
  */
 @Route(path = "/common/SplashActivity")
 public class SplashActivity extends RxBaseActivity {
@@ -53,6 +55,9 @@ public class SplashActivity extends RxBaseActivity {
         return R.layout.activity_splash;
     }
 
+    /**
+     * 权限管理
+     */
     RxPermissions rxPermissions;
 
     GifDrawable gifFromAssets;
@@ -277,15 +282,18 @@ public class SplashActivity extends RxBaseActivity {
         Log.e(TAG, "loadLanguage");
         SharedPreferences preferences = XApp.getMyPreferences();
 
-        Configuration config = getResources().getConfiguration();   //获取默认配置
+        //获取默认配置
+        Configuration config = getResources().getConfiguration();
         int language = preferences.getInt(Config.SP_USER_LANGUAGE, Config.SP_LANGUAGE_AUTO);
         switch (language) {
             case Config.SP_SIMPLIFIED_CHINESE:
-                config.locale = Locale.SIMPLIFIED_CHINESE;  //加载简体中文
+                //加载简体中文
+                config.locale = Locale.SIMPLIFIED_CHINESE;
                 break;
 
             case Config.SP_TRADITIONAL_CHINESE:
-                config.locale = Locale.TRADITIONAL_CHINESE;  //加载台湾繁体
+                //加载台湾繁体
+                config.locale = Locale.TRADITIONAL_CHINESE;
                 break;
 
             case Config.SP_LANGUAGE_AUTO:
@@ -306,9 +314,13 @@ public class SplashActivity extends RxBaseActivity {
                 break;
 
             case Config.SP_ENGLISH:
-                config.locale = Locale.ENGLISH;    //获取默认区域
+                //获取默认区域
+                config.locale = Locale.ENGLISH;
+                break;
+            default:
                 break;
         }
-        getBaseContext().getResources().updateConfiguration(config, null);   //更新配置文件
+        //更新配置文件
+        getBaseContext().getResources().updateConfiguration(config, null);
     }
 }

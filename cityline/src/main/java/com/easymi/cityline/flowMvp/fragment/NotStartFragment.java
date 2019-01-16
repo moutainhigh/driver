@@ -24,7 +24,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Created by liuzihao on 2018/11/16.
+ *
+ * @author liuzihao
+ * @date 2018/11/16
  */
 
 public class NotStartFragment extends RxBaseFragment {
@@ -40,6 +42,10 @@ public class NotStartFragment extends RxBaseFragment {
 
     ActFraCommBridge bridge;
 
+    /**
+     * 设置bridge
+     * @param bridge
+     */
     public void setBridge(ActFraCommBridge bridge) {
         this.bridge = bridge;
     }
@@ -97,12 +103,19 @@ public class NotStartFragment extends RxBaseFragment {
 
     long jieRenTimeLeftSec;
 
+    /**
+     * 行程开始倒计时
+     */
     private Timer timer;
     private TimerTask timerTask;
 
+    /**
+     * 初始化计时器
+     */
     private void initCountDown() {
         cancelTimer();
-        jieRenTimeLeftSec = (zxOrder.startJierenTime - System.currentTimeMillis()) / 1000;//剩余的秒钟数
+        //剩余的秒钟数
+        jieRenTimeLeftSec = (zxOrder.startJierenTime - System.currentTimeMillis()) / 1000;
         if (jieRenTimeLeftSec < 0) {
             jieRenTimeLeftSec = 0;
         }
@@ -136,6 +149,9 @@ public class NotStartFragment extends RxBaseFragment {
         }
     }
 
+    /**
+     * 取消计时器
+     */
     public void cancelTimer() {
         if (timer != null) {
             timer.cancel();
@@ -147,6 +163,10 @@ public class NotStartFragment extends RxBaseFragment {
         }
     }
 
+    /**
+     * 设置显示距离开始时间的计时
+     * @param leftSec
+     */
     private void setLeftText(long leftSec) {
         long day = leftSec / 60 / 60 / 24;
         long hour = (leftSec / 60 / 60) % 24;

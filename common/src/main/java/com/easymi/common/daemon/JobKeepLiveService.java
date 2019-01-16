@@ -17,7 +17,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Created by developerLzh on 2017/12/14 0014.
+ *
+ * @author developerLzh
+ * @date 2017/12/14 0014
  */
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -34,9 +36,15 @@ public class JobKeepLiveService extends JobService {
         return false;
     }
 
+    /**
+     * 定时器
+     */
     private Timer timer;
     private TimerTask timerTask;
 
+    /**
+     * 检查保活时候在运行
+     */
     private void checkAlive() {
         if (timer != null) {
             timer.cancel();
@@ -55,12 +63,6 @@ public class JobKeepLiveService extends JobService {
                 boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
                 Log.e("JobKeepLiveService", "isLogin-->" + isLogin);
                 if (isLogin) {
-//                    if (!PhoneUtil.isServiceRunning(MQTTService.class.getName(), JobKeepLiveService.this)) {
-//                        Log.e("JobKeepLiveService", "!isServiceRunning MQTTService");
-//                        Intent mqtt = new Intent(JobKeepLiveService.this, MQTTService.class);
-//                        mqtt.setPackage(JobKeepLiveService.this.getPackageName());
-//                        startService(mqtt);
-//                    }
                     if (!PhoneUtil.isServiceRunning(LocService.class.getName(), JobKeepLiveService.this)) {
                         Log.e("JobKeepLiveService", "!isServiceRunning LocService");
                         XApp.getInstance().startLocService();

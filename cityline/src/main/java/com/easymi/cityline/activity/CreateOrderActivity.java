@@ -68,14 +68,30 @@ public class CreateOrderActivity extends RxBaseActivity {
     TextView count_down;
     Button btn;
 
+    /**
+     * 专线订单
+     */
     private ZXOrder zxOrder = null;
+    /**
+     * 站点信息
+     */
     private StationResult stationResult = null;
-
+    /**
+     * 起点信息
+     */
     private MapPositionModel startSite = null;
+    /**
+     * 终点信息
+     */
     private MapPositionModel endSite = null;
-
+    /**
+     * 费用信息
+     */
     private PriceResult priceResult = null;
 
+    /**
+     * 座位数
+     */
     private int seatNo = 0;
 
     @Override
@@ -149,14 +165,7 @@ public class CreateOrderActivity extends RxBaseActivity {
                     (ArrayList<? extends Parcelable>) stationResult.endStationVo.coordinate);
             startActivityForResult(intent, 3);
         });
-//        edit_phone.setOnFocusChangeListener((view, b) -> {
-//            String edit = edit_phone.getText().toString();
-//            if(StringUtils.isNotBlank(edit)){
-//                edit_phone.setSelection(edit.length() - 1);
-//            } else {
-//                edit_phone.setSelection(0);
-//            }
-//        });
+
         edit_phone.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -203,6 +212,9 @@ public class CreateOrderActivity extends RxBaseActivity {
         });
     }
 
+    /**
+     * 计算价格
+     */
     private void calcPrice() {
         double money = 0;
         if (null != priceResult) {
@@ -228,12 +240,13 @@ public class CreateOrderActivity extends RxBaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == 0) { //班次
+            if (requestCode == 0) {
+                //班次
                 ZXOrder newZxOrder = (ZXOrder) data.getSerializableExtra("zxOrder");
                 if (null != zxOrder) {
-                    if (zxOrder.orderId != newZxOrder.orderId) { //班次变化后  重新键入
+                    if (zxOrder.orderId != newZxOrder.orderId) {
+                        //班次变化后  重新键入
                         zxOrder = newZxOrder;
                         initViewByZxOrder();
                     }
@@ -242,10 +255,12 @@ public class CreateOrderActivity extends RxBaseActivity {
                     initViewByZxOrder();
                 }
                 banci_select.setText(zxOrder.lineName);
-            } else if (requestCode == 1) { //起点
+            } else if (requestCode == 1) {
+                //起点
                 startSite = data.getParcelableExtra("pos_model");
                 start_place.setText(startSite.getAddress());
-            } else if (requestCode == 3) { //终点
+            } else if (requestCode == 3) {
+                //终点
                 endSite = data.getParcelableExtra("pos_model");
                 end_place.setText(endSite.getAddress());
             }
@@ -253,6 +268,9 @@ public class CreateOrderActivity extends RxBaseActivity {
         }
     }
 
+    /**
+     * 加载专线数据
+     */
     private void initViewByZxOrder() {
         stationResult = null;
 
@@ -273,6 +291,9 @@ public class CreateOrderActivity extends RxBaseActivity {
         queryStation(zxOrder.orderId);
     }
 
+    /**
+     * 设置按钮能否点击
+     */
     private void setBtnEnable() {
         if (zxOrder != null
                 && stationResult != null
@@ -366,6 +387,9 @@ public class CreateOrderActivity extends RxBaseActivity {
                 })));
     }
 
+    /**
+     * 创建订单
+     */
     private void createOrder() {
         List<MapPositionModel> models = new ArrayList<>();
         models.add(startSite);

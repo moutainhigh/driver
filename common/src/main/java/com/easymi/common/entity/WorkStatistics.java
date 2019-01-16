@@ -10,15 +10,23 @@ import java.io.Serializable;
 
 public class WorkStatistics implements Serializable{
 
-//    @SerializedName("finish_count")
+    /**
+     * 完成单量
+     */
     @SerializedName("orderCount")
     public int finishCount;
 
     @SerializedName("total_amount")
     public double totalAmount;
 
+    /**
+     * 今日收益
+     */
     @SerializedName("orderProfit")
     public double income;
 
-    public int minute;//在线时长
+    /**
+     * 在线时长
+     */
+    public int minute;
 }

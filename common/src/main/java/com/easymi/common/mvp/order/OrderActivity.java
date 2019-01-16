@@ -24,6 +24,7 @@ import java.util.List;
  * Date: 2018/11/14 下午7:26
  * Description:
  * History:
+ * @author hufeng
  */
 public class OrderActivity extends RxBaseActivity {
 
@@ -31,8 +32,13 @@ public class OrderActivity extends RxBaseActivity {
     CusToolbar toolbar;
     ViewPager viewPager;
     List<Fragment> fragments;
+    /**
+     * fragment适配器
+     */
     VpAdapter adapter;
-    //补单弹窗
+    /**
+     * 补单弹窗
+     */
     MakeOrderPopWindow popWindow;
 
     @Override
@@ -67,7 +73,6 @@ public class OrderActivity extends RxBaseActivity {
         viewPager = findViewById(R.id.view_pager);
 
         popWindow = new MakeOrderPopWindow(this);
-//        popWindow.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.popwindow_background));
 
         initTabLayout();
     }

@@ -8,7 +8,9 @@ import com.easymi.cityline.R;
 import com.easymi.component.Config;
 
 /**
- * Created by developerLzh on 2017/12/19 0019.
+ *
+ * @author developerLzh
+ * @date 2017/12/19 0019
  */
 
 public class CancelOrderReceiver extends BroadcastReceiver {
@@ -39,6 +41,12 @@ public class CancelOrderReceiver extends BroadcastReceiver {
     }
 
     public interface OnCancelListener {
+        /**
+         * 取消订单和收回监听
+         * @param orderId
+         * @param orderType
+         * @param msg
+         */
         void onCancelOrder(long orderId, String orderType, String msg);
     }
 }

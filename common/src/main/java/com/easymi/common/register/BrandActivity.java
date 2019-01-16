@@ -30,6 +30,9 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+/**
+ * @author hufeng
+ */
 public class BrandActivity extends RxBaseActivity {
 
     @Override

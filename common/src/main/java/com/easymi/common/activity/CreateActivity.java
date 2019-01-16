@@ -18,12 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2017/11/16.
+ *
+ * @author liuzihao
+ * @date 2017/11/16
  */
 @Route(path = "/common/CreateActivity")
 public class CreateActivity extends RxBaseActivity {
 
-    //    TabLayout tabLayout;
     ViewPager viewPager;
 
     CusToolbar toolbar;
@@ -43,7 +44,6 @@ public class CreateActivity extends RxBaseActivity {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
-//        tabLayout = findViewById(R.id.create_tab_layout);
         viewPager = findViewById(R.id.create_view_pager);
 
         orderType = getIntent().getStringExtra("type");
@@ -90,14 +90,6 @@ public class CreateActivity extends RxBaseActivity {
         adapter = new VpAdapter(getSupportFragmentManager(), fragments);
         viewPager.setAdapter(adapter);
 
-//        tabLayout.setupWithViewPager(viewPager);
-
-//        if (fragments.size() != 0) {
-//            String[] types = EmUtil.getEmployInfo().serviceType.split(",");
-//            for (int i = 0; i < fragments.size(); i++) {
-//                tabLayout.getTabAt(i).setText(pin2Hanzi(types[i]));
-//            }
-//        }
     }
 
     private int pin2Hanzi(String type) {

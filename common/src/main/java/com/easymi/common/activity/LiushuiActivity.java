@@ -38,7 +38,9 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by liuzihao on 2017/11/14.
+ *
+ * @author liuzihao
+ * @date 2017/11/14
  */
 @Route(path = "/common/LiushuiActivity")
 public class LiushuiActivity extends RxBaseActivity {
@@ -47,22 +49,29 @@ public class LiushuiActivity extends RxBaseActivity {
 
     LiuShuiAdapter adapter;
 
-//    TabLayout tabLayout;
-
     CusToolbar toolbar;
 
     CusErrLayout errLayout;
 
     private String business;
 
+    /**
+     * 流水筛选开始时间结束时间
+     */
     private Long startTime;
     private Long endTime;
 
     private int page = 1;
     private int limit = 10;
 
+    /**
+     * 流水数据
+     */
     private List<BaseOrder> orders;
 
+    /**
+     * 报销下标
+     */
     public static int CLICK_POS = 0x00;
 
     @Override
@@ -78,13 +87,11 @@ public class LiushuiActivity extends RxBaseActivity {
     @Override
     public void initViews(Bundle savedInstanceState) {
         recyclerView = findViewById(R.id.recyclerView);
-//        tabLayout = findViewById(R.id.liushui_tab_layout);
         errLayout = findViewById(R.id.cus_err_layout);
 
         orders = new ArrayList<>();
 
         initToolBar();
-//        initTab();
         initRecycler();
         recyclerView.setRefreshing(true);
     }
@@ -114,49 +121,9 @@ public class LiushuiActivity extends RxBaseActivity {
         });
     }
 
-//    private void initTab() {
-//        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-//            @Override
-//            public void onTabSelected(TabLayout.Tab tab) {
-//                if (tab.getText().equals(getString(R.string.create_daijia))) {
-//                    business = Config.DAIJIA;
-//                    page = 1;
-//                } else if(tab.getText().equals(getString(R.string.create_zhuanche))){
-//                    business = Config.ZHUANCHE;
-//                    page = 1;
-//                }
-//                queryOrders();
-//            }
-//
-//            @Override
-//            public void onTabUnselected(TabLayout.Tab tab) {
-//
-//            }
-//
-//            @Override
-//            public void onTabReselected(TabLayout.Tab tab) {
-//
-//            }
-//        });
-//        if (EmUtil.getEmployInfo().serviceType.contains(Config.DAIJIA)) {
-//            TabLayout.Tab daijiaTab = tabLayout.newTab();
-//            daijiaTab.setText(getString(R.string.create_daijia));
-//            tabLayout.addTab(daijiaTab);
-//        } else if (EmUtil.getEmployInfo().serviceType.contains(Config.ZHUANCHE)) {
-//            TabLayout.Tab zhuancheTab = tabLayout.newTab();
-//            zhuancheTab.setText(getString(R.string.create_zhuanche));
-//            tabLayout.addTab(zhuancheTab);
-//        }
-//        TabLayout.Tab tab = tabLayout.getTabAt(0);
-//        if(null != tab){
-//            tab.select();
-//        }
-////        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.create_zhuanche)));
-////        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.create_paotui)));
-////        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.create_huoyun)));
-////        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.create_zhuanxian)));
-//    }
-
+    /**
+     * 自定义选择弹框
+     */
     CusBottomSheetDialog dialog;
 
     @Override
@@ -218,6 +185,9 @@ public class LiushuiActivity extends RxBaseActivity {
         });
     }
 
+    /**
+     * 查询流水
+     */
     private void queryOrders() {
         Observable<QueryOrdersResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .queryOverOrdersByBunsiness(startTime == null ? null : startTime / 1000,
@@ -272,6 +242,9 @@ public class LiushuiActivity extends RxBaseActivity {
         });
     }
 
+    /**
+     * 隐藏错误布局
+     */
     private void hideErr() {
         errLayout.setVisibility(View.GONE);
     }

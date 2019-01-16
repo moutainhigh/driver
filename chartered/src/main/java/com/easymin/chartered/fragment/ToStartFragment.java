@@ -31,13 +31,17 @@ import com.easymin.chartered.flowMvp.ActFraCommBridge;
  * Date: 2018/12/22 下午3:43
  * Description:
  * History:
+ * @author hufeng
  */
 public class ToStartFragment extends RxBaseFragment {
 
     private CharteredOrder baseOrder;
 
     private ActFraCommBridge bridge;
-
+    /**
+     * 设置bridge
+     * @param bridge
+     */
     public void setBridge(ActFraCommBridge bridge) {
         this.bridge = bridge;
     }

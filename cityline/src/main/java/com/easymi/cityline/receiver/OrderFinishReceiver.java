@@ -7,7 +7,9 @@ import android.content.Intent;
 import com.easymi.component.Config;
 
 /**
- * Created by liuzihao on 2018/3/6.
+ *
+ * @author liuzihao
+ * @date 2018/3/6
  */
 
 public class OrderFinishReceiver extends BroadcastReceiver {
@@ -32,6 +34,11 @@ public class OrderFinishReceiver extends BroadcastReceiver {
     }
 
     public interface OnFinishListener {
+        /**
+         * 完成订单监听
+         * @param orderId
+         * @param orderType
+         */
         void onFinishOrder(long orderId, String orderType);
     }
 }

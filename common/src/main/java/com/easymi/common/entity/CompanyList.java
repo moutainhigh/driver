@@ -6,6 +6,9 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * @author hufeng
+ */
 public class CompanyList extends EmResult{
 
     @SerializedName("data")

@@ -28,7 +28,9 @@ import rx.Observable;
 import static com.easymi.common.mvp.grab.GrabActivity2.GRAB_VALID_TIME;
 
 /**
- * Created by developerLzh on 2017/11/22 0022.
+ *
+ * @author developerLzh
+ * @date 2017/11/22 0022
  */
 
 public class GrabPresenter implements GrabContract.Presenter {
@@ -62,7 +64,6 @@ public class GrabPresenter implements GrabContract.Presenter {
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<MultipleOrderResult>() {
             @Override
             public void onNext(MultipleOrderResult multipleOrderResult) {
-//                multipleOrderResult.data.orderAddressVos = multipleOrderResult.address;
                 view.showBase(multipleOrderResult.data);
             }
 
@@ -85,17 +86,9 @@ public class GrabPresenter implements GrabContract.Presenter {
         }
         Observable<MultipleOrderResult> observable = null;
         if (order.serviceType.equals(Config.ZHUANCHE)) {
-//            if (order.orderId == 0){
             observable = model.grabZCOrder(order.id, order.version);
-//            }else {
-//                observable = model.grabZCOrder(order.orderId, order.version);
-//            }
         } else if (order.serviceType.equals(Config.TAXI)) {
-//            if (order.orderId == 0){
             observable = model.grabTaxiOrder(order.id, order.version);
-//            }else {
-//                observable = model.takeTaxiOrder(order.orderId, order.version);
-//            }
         }
         if (observable == null) {
             return;
@@ -111,30 +104,16 @@ public class GrabPresenter implements GrabContract.Presenter {
 //                centerUtil.smsShareAuto(order.id, EmUtil.getEmployInfo().companyId, order.passengerId, order.passengerPhone, order.serviceType);
 //                centerUtil.checkingAuth(order.passengerId);
                 if (order.serviceType.equals(Config.ZHUANCHE)) {
-//                        if (order.orderId == 0){
                     ARouter.getInstance()
                             .build("/zhuanche/FlowActivity")
                             .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             .withLong("orderId", order.id).navigation();
-//                        }else {
-//                            ARouter.getInstance()
-//                                    .build("/zhuanche/FlowActivity")
-//                                    .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                                    .withLong("orderId", order.orderId).navigation();
-//                        }
 
                 } else if (order.serviceType.equals(Config.TAXI)) {
-//                    if (order.orderId == 0){
                     ARouter.getInstance()
                             .build("/taxi/FlowActivity")
                             .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             .withLong("orderId", order.id).navigation();
-//                    }else {
-//                        ARouter.getInstance()
-//                                .build("/taxi/FlowActivity")
-//                                .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                                .withLong("orderId", order.orderId).navigation();
-//                    }
                 }
                 view.finishActivity();
             }
@@ -163,17 +142,9 @@ public class GrabPresenter implements GrabContract.Presenter {
         }
         Observable<MultipleOrderResult> observable = null;
         if (order.serviceType.equals(Config.ZHUANCHE)) {
-//            if (order.orderId == 0){
             observable = model.takeZCOrder(order.id, order.version);
-//            }else {
-//                observable = model.takeZCOrder(order.orderId, order.version);
-//            }
         } else if (order.serviceType.equals(Config.TAXI)) {
-//            if (order.orderId == 0){
             observable = model.takeTaxiOrder(order.id, order.version);
-//            }else {
-//                observable = model.takeTaxiOrder(order.orderId, order.version);
-//            }
         }
 
         if (observable == null) {
@@ -191,30 +162,15 @@ public class GrabPresenter implements GrabContract.Presenter {
 //                centerUtil.checkingAuth(order.passengerId);
                 if (order.serviceType.equals(Config.ZHUANCHE)) {
 
-//                            if (order.orderId == 0){
                     ARouter.getInstance()
                             .build("/zhuanche/FlowActivity")
                             .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             .withLong("orderId", order.id).navigation();
-//                            }else {
-//                                ARouter.getInstance()
-//                                        .build("/zhuanche/FlowActivity")
-//                                        .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                                        .withLong("orderId", order.orderId).navigation();
-//                            }
-
                 } else if (order.serviceType.equals(Config.TAXI)) {
-//                        if (order.orderId == 0){
                     ARouter.getInstance()
                             .build("/taxi/FlowActivity")
                             .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             .withLong("orderId", order.id).navigation();
-//                        }else {
-//                            ARouter.getInstance()
-//                                    .build("/taxi/FlowActivity")
-//                                    .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                                    .withLong("orderId", order.orderId).navigation();
-//                        }
                 }
                 view.finishActivity();
             }

@@ -69,11 +69,6 @@ public interface WorkContract {
 
         RxManager getRxManager();
 
-//        void showPerfectInfoDialog();
-//        void hidePerfectInfoDialog();
-//
-//        void showCompleteDialog(String companyPhone);
-//        void hideCompleteDialog();
 
         void showRegisterDialog(String companyPhone, int type, String reason);
 
@@ -104,9 +99,6 @@ public interface WorkContract {
         void getAppSetting(long id);
 
         void loadNoticeAndAnn();
-
-//        void startOnlineTimer();
-        //...
     }
 
     interface Model {

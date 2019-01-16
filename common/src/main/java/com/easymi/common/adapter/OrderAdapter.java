@@ -31,7 +31,9 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by hiwhitley on 2016/10/17.
+ *
+ * @author hiwhitley
+ * @date 2016/10/17
  */
 
 public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseViewHolder> {
@@ -57,7 +59,8 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
             baseViewHolder.setText(R.id.order_type, "" + baseOrder.getOrderType());
             baseViewHolder.setText(R.id.order_start_place, "" + baseOrder.bookAddress);
             baseViewHolder.setText(R.id.order_end_place, baseOrder.destination);
-            if (TextUtils.equals(baseOrder.serviceType, Config.CITY_LINE)) {//专线
+            if (TextUtils.equals(baseOrder.serviceType, Config.CITY_LINE)) {
+                //专线
                 baseViewHolder.setText(R.id.order_status, "" + baseOrder.getZXOrderStatusStr() + " >");
             } else if (TextUtils.equals(baseOrder.serviceType, Config.COUNTRY)) {
                 baseViewHolder.setText(R.id.order_status, "" + BusOrderStatus.status2Str(baseOrder.scheduleStatus) + " >");

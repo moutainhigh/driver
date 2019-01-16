@@ -3,7 +3,9 @@ package com.easymi.common.entity;
 import com.easymi.component.entity.EmLoc;
 
 /**
- * Created by liuzihao on 2018/3/13.
+ *
+ * @author liuzihao
+ * @date 2018/3/13
  *
  * 构造上行数据模型
  */
@@ -14,5 +16,8 @@ public class BuildPushData {
         this.emLoc = emLoc;
     }
 
+    /**
+     * 推送数据格式
+     */
     public EmLoc emLoc;
 }

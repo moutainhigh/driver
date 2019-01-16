@@ -3,15 +3,14 @@ package com.easymi.common.entity;
 import com.easymi.component.entity.PushEmploy;
 
 /**
- * Created by liuzihao on 2017/12/18.
+ *
+ * @author liuzihao
+ * @date 2017/12/18
  * <p>
  * 上行数据最外层
  */
 
 public class PushData {
-
-//    public PushDataLoc calc;
-//    public PushEmploy employ;
 
     /**
      * 司机所开通的业务类型

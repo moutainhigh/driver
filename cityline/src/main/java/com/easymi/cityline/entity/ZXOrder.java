@@ -46,12 +46,21 @@ public class ZXOrder implements Serializable {
     @SerializedName("endAddress")
     public String endSite;
 
+    /**
+     * 开始出发时间
+     */
     @SerializedName("time")
-    public long startOutTime;//开始出发时间
+    public long startOutTime;
 
-    public int minute;//xx分钟前开始接人
+    /**
+     * xx分钟前开始接人
+     */
+    public int minute;
 
-    public long startJierenTime;//开始接人时间
+    /**
+     * 开始接人时间
+     */
+    public long startJierenTime;
 
     @SerializedName("startLatitude")
     public double startLat;
@@ -67,15 +76,22 @@ public class ZXOrder implements Serializable {
 
     public int status;
 
-    public long lineId;//线路Id
-    public String lineName;//线路Id
+    //线路Id
+    public long lineId;
+    //线路Id
+    public String lineName;
 
-    public int seats;//剩余票数
+    //剩余票数
+    public int seats;
 
     public ZXOrder() {
 
     }
 
+    /**
+     * 更具班次状态获取状态文字
+     * @return
+     */
     public String getOrderStatusStr() {
         if (status == SCHEDULE_STATUS_SALE) {
             return "售票中";

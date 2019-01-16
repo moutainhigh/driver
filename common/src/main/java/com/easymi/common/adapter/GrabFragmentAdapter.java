@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by developerLzh on 2018/1/5 0005.
+ *
+ * @author developerLzh
+ * @date 2018/1/5 0005
  */
 
 public class GrabFragmentAdapter extends FragmentStatePagerAdapter {

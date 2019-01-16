@@ -5,7 +5,9 @@ import android.location.Location;
 import com.amap.api.location.AMapLocation;
 
 /**
- * Created by developerLzh on 2017/11/18 0018.
+ *
+ * @author developerLzh
+ * @date 2017/11/18 0018
  * <p>
  * doc:
  * http://amappc.cn-hangzhou.oss-pub.aliyun-inc.com/lbs/static/unzip/Android_Location_Doc/index.html

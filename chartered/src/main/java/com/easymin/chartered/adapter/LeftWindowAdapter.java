@@ -12,7 +12,9 @@ import com.easymi.component.entity.TaxiSetting;
 import com.easymin.chartered.R;
 
 /**
- * Created by developerLzh on 2017/12/25 0025.
+ *
+ * @author developerLzh
+ * @date 2017/12/25 0025
  */
 
 public class LeftWindowAdapter implements AMap.InfoWindowAdapter {

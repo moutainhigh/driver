@@ -12,17 +12,17 @@ import com.easymi.cityline.R;
 import com.easymi.component.entity.TaxiSetting;
 
 /**
- * Created by developerLzh on 2017/12/25 0025.
+ *
+ * @author developerLzh
+ * @date 2017/12/25 0025
  */
 
 public class LeftWindowAdapter implements AMap.InfoWindowAdapter {
 
     private Context context;
-    private TaxiSetting taxiSetting;
 
     public LeftWindowAdapter(Context context) {
         this.context = context;
-        taxiSetting = TaxiSetting.findOne();
     }
 
     @Override

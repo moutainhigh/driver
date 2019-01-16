@@ -7,6 +7,7 @@ package com.easymi.common.entity;
  * Date: 2018/12/11 上午11:57
  * Description:
  * History:
+ * @author hufeng
  */
 public class PassengerLocation {
 
@@ -17,11 +18,20 @@ public class PassengerLocation {
      * latitude : 30.686619
      * serviceType : taxi
      */
-
+    /**
+     * 客户id
+     */
     public long passengerId;
+    /**
+     * 订单id
+     */
     public long orderId;
+
     public double longitude;
     public double latitude;
+    /**
+     * 服务类型
+     */
     public String serviceType;
 
 }

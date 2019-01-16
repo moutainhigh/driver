@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * view pager adapter
+ * @author hufeng
  */
 public class VpAdapter extends FragmentPagerAdapter {
     private List<Fragment> data;

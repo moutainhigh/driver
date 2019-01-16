@@ -39,6 +39,7 @@ import rx.schedulers.Schedulers;
  * Date: 2018/11/15 下午4:05
  * Description:
  * History:
+ * @author hufeng
  */
 public class AccpteFragment extends RxBaseFragment implements MyOrderContract.View {
 
@@ -63,18 +64,26 @@ public class AccpteFragment extends RxBaseFragment implements MyOrderContract.Vi
 
         initAdapter();
         initPresenter();
-
     }
 
+    /**
+     * 初始化presenter 请求数据
+     */
     public void initPresenter() {
         presenter = new MyOrderPresenter(getContext(), this);
         setRefresh();
     }
 
+    /**
+     * 请求数据
+     */
     public void setRefresh() {
         presenter.indexOrders(page, size, "10,15,20,25,28,30,35,40");
     }
 
+    /**
+     * 加载adapter
+     */
     public void initAdapter() {
         adapter = new MyOrderAdapter(getContext(), 1);
 
@@ -110,9 +119,6 @@ public class AccpteFragment extends RxBaseFragment implements MyOrderContract.Vi
                                 .withLong("orderId", baseOrder.id).navigation();
                     }
                 }
-//                else if (baseOrder.serviceType.equals(Config.CITY_LINE)) {
-//                    ARouter.getInstance().build("/cityline/FlowActivity").withSerializable("baseOrder",baseOrder).navigation();
-//                }
             }
         });
     }

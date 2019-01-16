@@ -30,7 +30,9 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2018/11/15.
+ *
+ * @author liuzihao
+ * @date 2018/11/15
  */
 
 public class ChangeSeqFragment extends RxBaseFragment {
@@ -48,12 +50,21 @@ public class ChangeSeqFragment extends RxBaseFragment {
     SequenceAdapter adapter;
     ItemTouchHelper itemTouchHelper;
 
-    private int min = -1;//可排序的最小值
-    private int max = -1;//可排序的最大值
+    /**
+     * 可排序的最小值
+     */
+    private int min = -1;
+    /**
+     * 可排序的最大值
+     */
+    private int max = -1;
 
     ActFraCommBridge bridge;
 
-    private int flag;//规划接人或者送人
+    /**
+     * 规划接人或者送人
+     */
+    private int flag;
     private boolean countStratOver = false;
 
     public void setCountStratOver(boolean countStratOver) {
@@ -73,6 +84,9 @@ public class ChangeSeqFragment extends RxBaseFragment {
         changeUi();
     }
 
+    /**
+     * 根据接人送人状态展示对应信息
+     */
     private void changeUi() {
         if (null == hintText) {
             return;
@@ -153,6 +167,9 @@ public class ChangeSeqFragment extends RxBaseFragment {
         changeUi();
     }
 
+    /**
+     * 初始化列表
+     */
     private void initRecycler() {
         adapter = new SequenceAdapter(getActivity());
         LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -213,7 +230,6 @@ public class ChangeSeqFragment extends RxBaseFragment {
                 });
             }
             showInMap();
-//            adapter.setSequences(buildData());
             return false;
         });
 
@@ -225,6 +241,10 @@ public class ChangeSeqFragment extends RxBaseFragment {
 
     }
 
+    /**
+     * 根据状态构造数据
+     * @return
+     */
     private List<Sequence> buildData() {
         List<Sequence> sequences = new ArrayList<>();
 
@@ -273,6 +293,9 @@ public class ChangeSeqFragment extends RxBaseFragment {
         return sequences;
     }
 
+    /**
+     * 显示路径规划在地图上
+     */
     private void showInMap() {
         if (bridge == null) {
             return;

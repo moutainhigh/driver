@@ -20,7 +20,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Created by developerLzh on 2017/11/9 0009.
+ *
+ * @author developerLzh
+ * @date 2017/11/9 0009
  * <p>
  * 保活service
  */
@@ -46,9 +48,15 @@ public class DaemonService extends Service {
         return START_STICKY;
     }
 
+    /**
+     * 定时器
+     */
     private Timer timer;
     private TimerTask timerTask;
 
+    /**
+     * 检查保活时候在运行
+     */
     private void checkAlive() {
         if (timer != null) {
             timer.cancel();
@@ -67,12 +75,6 @@ public class DaemonService extends Service {
                 boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
                 Log.e("DaemonService", "isLogin-->" + isLogin);
                 if (isLogin) {
-//                    if (!PhoneUtil.isServiceRunning(MQTTService.class.getName(), DaemonService.this)) {
-//                        Log.e("DaemonService", "!isServiceRunning MQTTService");
-//                        Intent mqtt = new Intent(DaemonService.this, MQTTService.class);
-//                        mqtt.setPackage(DaemonService.this.getPackageName());
-//                        startService(mqtt);
-//                    }
                     if (!PhoneUtil.isServiceRunning(LocService.class.getName(), DaemonService.this)) {
                         Log.e("DaemonService", "!isServiceRunning LocService");
                         XApp.getInstance().startLocService();

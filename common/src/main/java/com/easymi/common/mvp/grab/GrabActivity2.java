@@ -55,13 +55,21 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Created by developerLzh on 2017/11/2 0002.
+ *
+ * @author developerLzh
+ * @date 2017/11/2 0002
  */
 
 public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
 
-    public static final int GRAB_TOTAL_TIME = 18;//加上预览订单的时间
-    public static final int GRAB_VALID_TIME = 15;//可以抢单的时间
+    /**
+     * 加上预览订单的时间
+     */
+    public static final int GRAB_TOTAL_TIME = 18;
+    /**
+     * 可以抢单的时间
+     */
+    public static final int GRAB_VALID_TIME = 15;
 
     LinearLayout expandBtnCon;
     MapView mapView;
@@ -93,13 +101,25 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
 
     List<MultipleOrder> multipleOrders = new ArrayList<>();
 
-    private int pageIndex = 0; //page索引
+    /**
+     * page索引
+     */
+    private int pageIndex = 0;
 
     private List<Fragment> fragments;
 
-    private Marker startMarker;//起点marker
-    private List<Marker> passMarkers;//途经点marker
-    private Marker endMarker;//终点marker
+    /**
+     * 起点marker
+     */
+    private Marker startMarker;
+    /**
+     * 途经点marker
+     */
+    private List<Marker> passMarkers;
+    /**
+     * 终点marker
+     */
+    private Marker endMarker;
 
     @Override
     public void onBackPressed() {
@@ -130,17 +150,12 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
 
         shake();
 
-//        String voiceStr = getIntent().getStringExtra("voiceStr");
-//        XApp.getInstance().shake();
-//        XApp.getInstance().syntheticVoice(voiceStr, XApp.GRAB);
-
-//        mSwipeBackHelper.setSwipeBackEnable(false);//抢单界面不允许侧滑返回
-
         fragments = new ArrayList<>();
 
         presenter = new GrabPresenter(this, this);
         multipleOrders.add(showIngOrder);
-        buildFragments(showIngOrder, true);//添加一个fragment
+        //添加一个fragment
+        buildFragments(showIngOrder, true);
 
         expandBtnCon = findViewById(R.id.expand_btn_con);
         mapView = findViewById(R.id.map_view);
@@ -173,6 +188,9 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
 
     }
 
+    /**
+     * 加载计数指示器
+     */
     private void initIndicator() {
         CircleNavigator circleNavigator = new CircleNavigator(this);
         circleNavigator.setCircleCount(multipleOrders.size());
@@ -193,7 +211,8 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
             if (newOrder.orderId == order.orderId
                     && (newOrder.status == DJOrderStatus.NEW_ORDER || newOrder.status == DJOrderStatus.PAIDAN_ORDER)
                     ) {
-                order.countTime = GRAB_TOTAL_TIME;//重置时间
+                //重置时间
+                order.countTime = GRAB_TOTAL_TIME;
                 haveSame = true;
             }
         }
@@ -208,17 +227,22 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
 //        XApp.getInstance().shake();
 
         multipleOrders.add(newOrder);
-        buildFragments(newOrder, false);//添加一个fragment
+        //添加一个fragment
+        buildFragments(newOrder, false);
         adapter.setData(fragments);
         initIndicator();
     }
 
+    /**
+     * 初始化地图
+     */
     private void initMap() {
         aMap = mapView.getMap();
         aMap.getUiSettings().setZoomControlsEnabled(false);
         aMap.getUiSettings().setRotateGesturesEnabled(false);
         aMap.getUiSettings().setRotateGesturesEnabled(false);
-        aMap.getUiSettings().setTiltGesturesEnabled(false);//倾斜手势
+        //倾斜手势
+        aMap.getUiSettings().setTiltGesturesEnabled(false);
 
         MarkerOptions options = new MarkerOptions();
         options.position(new LatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude));
@@ -229,6 +253,9 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
         aMap.addMarker(options);
     }
 
+    /**
+     * 初始化收缩框
+     */
     private void initExpand() {
         expandBtnCon.setOnClickListener(v -> {
             if (expandableLayout.isExpanded()) {
@@ -263,13 +290,15 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
                         }
                         builder.include(new LatLng(address.latitude, address.longitude));
                     }
-                    if (!hasEnd) {//没有终点时，起点就是路径规划的终点
+                    if (!hasEnd) {
+                        //没有终点时，起点就是路径规划的终点
                         end = pass.get(0);
                         presenter.routePlanByRouteSearch(end, null);
                     } else {
                         presenter.routePlanByRouteSearch(end, pass);
                     }
-                    pass.remove(0);//这是起点的位置
+                    pass.remove(0);
+                    //这是起点的位置
                     showPassMarker(pass);
 
                     aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 50));
@@ -309,6 +338,9 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
 
     }
 
+    /**
+     * 计时器
+     */
     private Timer timer;
     private TimerTask timerTask;
 
@@ -318,6 +350,9 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
         rotateImage.startRotate();
     }
 
+    /**
+     * 抢单接单倒计时
+     */
     private void countTime() {
         cancelTimer();
         timer = new Timer();
@@ -332,7 +367,8 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
                     } else {
                         if (showIngOrder.countTime <= 0) {
                             cancelTimer();
-                            multipleOrders.remove(showIngOrder);//移除当前订单
+                            //移除当前订单
+                            multipleOrders.remove(showIngOrder);
                             fragments.remove(showIngFragment);
                             if (multipleOrders.size() == 0) {
                                 finish();
@@ -363,6 +399,9 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
         timer.schedule(timerTask, 1000, 1000);
     }
 
+    /**
+     * 取消计时器
+     */
     private void cancelTimer() {
         if (timer != null) {
             timer.cancel();
@@ -378,7 +417,6 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
     public void showGrabCountDown() {
         rotateImage.pauseRotate();
         shadeFrame.setVisibility(View.GONE);
-//        grabCon.setOnClickListener(v -> presenter.grabOrder(showIngOrder.orderId));
     }
 
     @Override
@@ -427,7 +465,8 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
 
         overlay.setRouteWidth(50);
         overlay.setIsColorfulline(false);
-        overlay.setNodeIconVisibility(false);//隐藏转弯的节点
+        //隐藏转弯的节点
+        overlay.setNodeIconVisibility(false);
         overlay.addToMap();
         overlay.zoomToSpan();
         aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(new LatLngBounds(
@@ -444,7 +483,8 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
         options.rotateAngle(EmUtil.getLastLoc().bearing);
         options.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                 .decodeResource(getResources(), R.mipmap.ic_start)));
-        options.setFlat(true);//设置marker平贴地图效果
+        //设置marker平贴地图效果
+        options.setFlat(true);
         startMarker = aMap.addMarker(options);
     }
 
@@ -477,7 +517,8 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
         options.rotateAngle(EmUtil.getLastLoc().bearing);
         options.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                 .decodeResource(getResources(), R.mipmap.ic_end)));
-        options.setFlat(true);//设置marker平贴地图效果
+        //设置marker平贴地图效果
+        options.setFlat(true);
         endMarker = aMap.addMarker(options);
     }
 
@@ -499,7 +540,8 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
     @Override
     public void removerOrderById(long orderId) {
         if (showIngOrder != null && showIngOrder.orderId == orderId) {
-            showIngOrder.countTime = 1;//采用将时间置位1的方式移除订单
+            //采用将时间置位1的方式移除订单
+            showIngOrder.countTime = 1;
         }
     }
 
@@ -508,6 +550,9 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
         return mRxManager;
     }
 
+    /**
+     * 根据订单状态判断是接单还是抢单
+     */
     private void showBottomByStatus() {
         if (showIngOrder.status == DJOrderStatus.NEW_ORDER) {
             bottomText.setText(R.string.grab_order);
@@ -518,6 +563,11 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
         }
     }
 
+    /**
+     * 初始化fragment
+     * @param order
+     * @param showing
+     */
     private void buildFragments(MultipleOrder order, boolean showing) {
         try {
             Class clazz;
@@ -554,15 +604,21 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
         }
     }
 
+    /**
+     * 关闭抢单接单页面
+     * @param view
+     */
     public void closeGrab(View view) {
         finishActivity();
     }
 
-
-
+    /**
+     * 判断是否震动手机
+     */
     private void shake() {
         boolean shakeAble = XApp.getMyPreferences().getBoolean(Config.SP_SHAKE_ABLE, true);
-        if (shakeAble) {//震动
+        if (shakeAble) {
+            //震动
             PhoneUtil.vibrate(XApp.getInstance(), false);
         }
     }

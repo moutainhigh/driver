@@ -1,7 +1,9 @@
 package com.easymi.common.entity;
 
 /**
- * Created by liuzihao on 2018/11/2.
+ *
+ * @author liuzihao
+ * @date 2018/11/2
  */
 
 public class PullFeeEntity {

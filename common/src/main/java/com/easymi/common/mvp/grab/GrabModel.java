@@ -14,7 +14,9 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by developerLzh on 2017/11/22 0022.
+ *
+ * @author developerLzh
+ * @date 2017/11/22 0022
  */
 
 public class GrabModel implements GrabContract.Model {

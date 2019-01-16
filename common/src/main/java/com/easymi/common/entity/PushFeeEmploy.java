@@ -6,11 +6,17 @@ public class PushFeeEmploy {
     @SerializedName("id")
     public long id;
 
+    /**
+     * 司机状态
+     */
     @SerializedName("status")
     public int status;
 
+    /**
+     * 真实姓名
+     */
     @SerializedName("realName")
-    public String realName;//真实姓名
+    public String realName;
 
     @SerializedName("companyId")
     public long companyId;
@@ -18,8 +24,11 @@ public class PushFeeEmploy {
     @SerializedName("phone")
     public String phone;
 
+    /**
+     * 服务子类型
+     */
     @SerializedName("childType")
-    public String childType;//服务子类型
+    public String childType;
 
     @SerializedName("business")
     public String business;

@@ -27,6 +27,7 @@ import java.util.TimerTask;
  * Date: 2018/12/22 下午1:30
  * Description:
  * History:
+ * @author hufeng
  */
 public class NotStartFragment extends RxBaseFragment {
 
@@ -39,7 +40,10 @@ public class NotStartFragment extends RxBaseFragment {
     CharteredOrder baseOrder;
 
     ActFraCommBridge bridge;
-
+    /**
+     * 设置bridge
+     * @param bridge
+     */
     public void setBridge(ActFraCommBridge bridge) {
         this.bridge = bridge;
     }

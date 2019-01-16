@@ -12,7 +12,9 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2017/11/15.
+ *
+ * @author liuzihao
+ * @date 2017/11/15
  * <p>
  * 复合型订单，包含了所有业务订单的字段
  */

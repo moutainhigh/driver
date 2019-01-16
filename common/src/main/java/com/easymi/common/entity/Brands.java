@@ -6,6 +6,9 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+/**
+ * @author hufeng
+ */
 public class Brands extends EmResult{
 
     @SerializedName("content")

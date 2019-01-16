@@ -9,7 +9,13 @@ import java.util.List;
  */
 
 public class ZxOrderResult {
+    /**
+     * 专线订单数据
+     */
     public List<ZXOrder> lists;
 
+    /**
+     * 专线订单总数
+     */
     public int total;
 }

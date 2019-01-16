@@ -4,6 +4,9 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+/**
+ * @author hufeng
+ */
 public class PushFeeLoc {
 
     @SerializedName("lat")
@@ -21,11 +24,17 @@ public class PushFeeLoc {
     @SerializedName("accuracy")
     public float accuracy;
 
+    /**
+     * 速度
+     */
     @SerializedName("speed")
-    public float speed;//速度
+    public float speed;
 
+    /**
+     * 定位类型
+     */
     @SerializedName("locationType")
-    public int locationType;//定位类型
+    public int locationType;
 
     @SerializedName("orderInfo")
     public List<PushFeeOrder> orderInfo;

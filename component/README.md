@@ -24,7 +24,7 @@
 
 # How To Use
 ## XApp.java
-应用的Application应该继承自该类。提供给外部调用的函数：
+应用的Application应该继承自该类。包含了ARouter、DataBase、讯飞IflytekTTS、bugly以及其他三方库和常用配置的初始化，提供给外部调用的函数：
 ```java
     /**
      * 语音合成
@@ -57,10 +57,10 @@
 ```
 
 ## RxBaseActivity.java
-**所有的Activity都应该继承自该类**，内部提供Activity栈管理、网络监控、Gps监控、Rx管理、权限请求管理、选择图片等。
+所有activity的基类，**所有的Activity都应该继承自该类**，内部提供Activity栈管理、网络监控、Gps监控、Rx管理、权限请求管理、选择图片、tiredReceiver、HttpCustomReceiver等的事件接收和统一分发等。
 
 ## SqliteHelper.java
-数据库帮助类，继承自SQLiteOpenHelper。静态变量VERSION代表数据库版本号，版本号只能曾不能减，在数据库更新时会回调onUpgrade函数，具体使用方法参见SQLiteOpenHelper注释文档
+数据库帮助类，继承自SQLiteOpenHelper。静态变量VERSION代表数据库版本号，版本号只能增加不能减，在数据库更新时需要增加版本号，会回调onUpgrade函数，避免应用需要卸载安装。具体使用方法参见SQLiteOpenHelper注释文档
 
 ## 几个重要的实体类
 ### DymOrder.java
@@ -69,13 +69,13 @@
 位置信息
 
 ## LocService.java
-核心定位服务,通过改变Config.NORMAL_LOC_TIME的值可改变定位周期。在客户端App上不需要常驻通知栏持续定位，故注释了开启前台进程的代码：
+核心定位服务,通过改变Config.NORMAL_LOC_TIME的值可改变定位周期。在司机端App上需要常驻通知栏持续定位，故开启前台进程的代码：
 ```java
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            locClient.enableBackgroundLocation(NOTI_ID, buildNotification());
-//        } else {
-//            startForeground(NOTI_ID, buildNotification());
-//        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            locClient.enableBackgroundLocation(NOTI_ID, buildNotification());
+        } else {
+            startForeground(NOTI_ID, buildNotification());
+        }
 ```
 这里重点提一下关于兼容Andorid O的代码片段，由于Andorid O上加强了通知的管理，在开启通知栏前必须创建通知渠道：
 ```java
@@ -218,15 +218,15 @@ void messageArrived(String topic, MqttMessage message){
 在接收到数据后，该函数内部会将消息以广播发出，由MessageReceiver.java处理
 
 ### MessageReceiver.java
-消息处理类，根据消息的不同type区分消息类型，作相应的处理。在订单状态变化和司机位置信息这里使用到了观察者的设计模式，在有需要的地方添加观察者即可。
+消息处理类，根据消息的不同type区分消息类型，作相应的处理。在订单信息和乘客位置信息这里使用到了观察者的设计模式，在有需要的地方添加观察者即可。
 
 ## 更新组件
 如果需要更换检测更新的地址，在UpdateHelper.java里的checkUrl()更改链接地址。
 ## 工具类
-util包下大多的工具类能够通过名字来辨识作用，这里重点说下EmUtil。这里面有一些很实用的函数，比如完全退出、获取公司id等等
+util包下大多的工具类能够通过名字来辨识作用，这里重点说下EmUtil。这里面有一些很实用的函数，比如完全退出等等
 ## 配置文件Config.java
+最常用的配置类，包含了项目所有基本配置信息。如后台地址、mqtt配置、appkey配置、七牛云上传回显地址、分享app_id、SharedPrefence常量配置等等 
 打包需要替换的字段：
-
 
 字段|释义
 --|:--:
@@ -237,11 +237,7 @@ QQ_APP_ID|QQ分享id
 WX_APP_ID|微信分享id
 
 ## 特殊或重要类使用介绍
- * Config 最常用的配置类，包含了项目所有基本配置信息。如后台地址、mqtt配置、appkey配置、七牛云上传回显地址、分享app_id、SharedPrefence常量配置等等 
  * NaviActivity 导航activity，所有需要导航的业务都是使用这个activity进行导航，只需要传入起点终点信息即可进行基本导航。
- * XApp Application实现类。包含了ARouter、DataBase、讯飞IflytekTTS、bugly以及其他三方库和常用配置的初始化
- * RxBaseActivity 所有activity的基类，包含mRxManager、ActManager的初始化，gpsReceiver、netChangeReceiver、tiredReceiver、HttpCustomReceiver等的事件接收和统一分发
- * SqliteHelper 数据库操作类，对应表的创建、更新、删除都在这个表操作。每次更改了表字段或者数据库，需要版本号加一，用于避免应用需要卸载安装。
  * ApiManager 网络请求的管理类，设置网络请求的相关配置，以及添加日志、token、加密等拦截器等。设置日志输出等级。
 
  

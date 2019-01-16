@@ -28,7 +28,9 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by liuzihao on 2017/12/24.
+ *
+ * @author liuzihao
+ * @date 2017/12/24
  */
 
 public class BaoxiaoActivity extends RxBaseActivity {
@@ -132,6 +134,9 @@ public class BaoxiaoActivity extends RxBaseActivity {
         cusToolbar.setLeftBack(view -> finish());
     }
 
+    /**
+     * 提交报销
+     */
     private void baoxiaoMoney() {
         Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .baoxiao(orderId, baoxiaoMoney, baoxiaoReason
@@ -148,6 +153,10 @@ public class BaoxiaoActivity extends RxBaseActivity {
         })));
     }
 
+    /**
+     * 设置申请能否点击
+     * @param clickable
+     */
     private void setApplyBtnClickable(boolean clickable) {
         applyBtn.setEnabled(clickable);
         if (clickable) {

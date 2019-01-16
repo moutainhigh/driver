@@ -33,11 +33,16 @@ public class Config {
     /**
      * APP_KEY
      */
-//    public static final String APP_KEY = "1HAcient1kLqfeX7DVTV0dklUkpGEnUC";//资运
+    public static final String APP_KEY = "1HAcient1kLqfeX7DVTV0dklUkpGEnUC";//资运
 //    public static final String APP_KEY = "xoRfvofrZw25b95ZBZY2venOYlSwWFOV";//v6
 //    public static final String APP_KEY = "SsCMJL77sZMI0iudBi5XZeNjzmILOjih";  // 林凯
-    public static final String APP_KEY = "eubACO3wp3rjz1OBcDSa4LeS4qM4586o";  // 麒策
+//    public static final String APP_KEY = "eubACO3wp3rjz1OBcDSa4LeS4qM4586o";  // 麒策
 //    public static final String APP_KEY = "VC9NFbO9LnaxiFRi5HDQspvp45p8uP6w";  // 哈喽
+    /**
+     * v6rvakva
+     */
+//    public static final String APP_KEY = "4ji3EvuwNziPKF8QXqXMTukGqPmlwOFJ";
+
     /**
      * 上传图片地址.
      */
@@ -64,7 +69,7 @@ public class Config {
 //    public static final String IMG_SERVER = "https://assets.xiaokayun.cn/";
 //    public static final String IMG_SERVER = "http://pimkcibsb.bkt.clouddn.com/";  //本地
     public static final String IMG_SERVER = "http://assets.xiaokakj.com/";  //线上
-    //    public static final String IMG_PATH = "?imageView2/1/w/10/h/10/format/webp/q/75|imageslim";
+//    public static final String IMG_PATH = "?imageView2/1/w/10/h/10/format/webp/q/75|imageslim";
     public static final String IMG_PATH = "";
 
     /**
@@ -158,7 +163,7 @@ public class Config {
     public static final String HTTP_CUSTOM = "com.easymi.v5driver.HTTP_CUSTOM";
     public static final String ORDER_REFRESH = "com.easymi.v5driver.ORDER_REFRESH";
 
-    //    public static final int FREE_LOC_TIME = 5000;//闲时定位时间 毫秒
+//    public static final int FREE_LOC_TIME = 5000;//闲时定位时间 毫秒
 //    public static final int BUSY_LOC_TIME = 5000;//忙时定位时间 毫秒
     public static final int NORMAL_LOC_TIME = 5000;//固定定位时间 毫秒
     //是否纠偏

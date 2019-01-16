@@ -12,24 +12,41 @@ import com.easymi.cityline.R;
 
 /**
  *
+ * @author hufeng
  */
 public class ChangePopWindow extends PopupWindow implements View.OnClickListener {
 
     Context context;
     View anchor;
 
-    private int popupGravity = Gravity.NO_GRAVITY;  //在window中无引力
+    /**
+     * 在window中无引力
+     */
+    private int popupGravity = Gravity.NO_GRAVITY;
 
-    private int viewWidth;  //显示view的宽度
+    /**
+     * 显示view的宽度
+     */
+    private int viewWidth;
 
 
     private OnMenuClickListener mOnMenuClickListener;
 
+    /**
+     * 点击listener
+     */
     public interface OnMenuClickListener {
+        /**
+         * 实现菜单子项点击监听
+         * @param view
+         */
         void setMenuOnClickListener(View view);
     }
 
-
+    /**
+     *  设置监听
+     * @param onMenuClickListener
+     */
     public void setOnClickListener(OnMenuClickListener onMenuClickListener) {
         mOnMenuClickListener = onMenuClickListener;
     }
@@ -43,46 +60,54 @@ public class ChangePopWindow extends PopupWindow implements View.OnClickListener
 
     public ChangePopWindow(Context context) {
         this.context = context;
-
-        setFocusable(true);  //设置可以获得焦点
-        setTouchable(true); //设置弹窗内可点击
-        setOutsideTouchable(true);    //设置弹窗外可点击
+        //设置可以获得焦点
+        setFocusable(true);
+        //设置弹窗内可点击
+        setTouchable(true);
+        //设置弹窗外可点击
+        setOutsideTouchable(true);
 
         //设置弹窗的宽度和高度,否则不会正常显示
         setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
 
 //        setBackgroundDrawable(new BitmapDrawable());
-        setBackgroundDrawable(new ColorDrawable()); //设置背景,否则不会消失
+        //设置背景,否则不会消失
+        setBackgroundDrawable(new ColorDrawable());
 
         //设置需要显示的veiw
         View view = View.inflate(context, R.layout.flow_change_pop_layout, null);
         setContentView(view);
 
         //在没有绘制出来前,测量控件的尺寸
-        int w = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);  //设置测量模式
+        //设置测量模式
+        int w = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         int h = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-        view.measure(w, h);  //开始测量
-        viewWidth = view.getMeasuredWidth();    //得到实际的宽度
+        //开始测量
+        view.measure(w, h);
+        //得到实际的宽度
+        viewWidth = view.getMeasuredWidth();
 
         //设置监听
-        accept = view.findViewById(R.id.pop_change_accept);   //取消订单
-        send = view.findViewById(R.id.pop_change_send);    //联系后台
+        //取消订单
+        accept = view.findViewById(R.id.pop_change_accept);
+        //联系后台
+        send = view.findViewById(R.id.pop_change_send);
 
         accept.setOnClickListener(this);
         send.setOnClickListener(this);
 
     }
 
-    //文本点击事件监听
+
     @Override
     public void onClick(View v) {
 
         if (mOnMenuClickListener == null) {
             return;
         }
-
-        mOnMenuClickListener.setMenuOnClickListener(v); //执行回调
+        //执行回调
+        mOnMenuClickListener.setMenuOnClickListener(v);
         dismiss();
 
     }

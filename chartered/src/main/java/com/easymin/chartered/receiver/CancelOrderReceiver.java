@@ -14,6 +14,7 @@ import com.easymin.chartered.R;
  * Date: 2018/12/24 下午5:00
  * Description:
  * History:
+ * @author hufeng
  */
 
 public class CancelOrderReceiver extends BroadcastReceiver {
@@ -42,7 +43,14 @@ public class CancelOrderReceiver extends BroadcastReceiver {
         }
     }
 
+
     public interface OnCancelListener {
+        /**
+         * 取消订单或者收回的监听
+         * @param orderId
+         * @param orderType
+         * @param msg
+         */
         void onCancelOrder(long orderId, String orderType, String msg);
     }
 }

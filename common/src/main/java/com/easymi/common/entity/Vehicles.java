@@ -5,6 +5,10 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+/**
+ * @author hufeng
+ * 已废弃
+ */
 public class Vehicles extends EmResult{
 
     @SerializedName("content")

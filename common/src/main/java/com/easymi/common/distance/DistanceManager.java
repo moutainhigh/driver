@@ -246,7 +246,6 @@ public class DistanceManager {
         if (null != routeSearch) {
             routeSearch = null;
         }
-//        XApp.getPreferencesEditor().putLong(Config.SP_MQTT_LAST_RESPONSE_TIME, 0).apply();
         instance = null;
     }
 

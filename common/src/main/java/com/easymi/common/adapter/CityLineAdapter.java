@@ -19,7 +19,9 @@ import com.easymi.component.utils.ToastUtil;
 import java.util.List;
 
 /**
- * Created by hiwhitley on 2016/10/17.
+ *
+ * @author hiwhitley
+ * @date 2016/10/17
  */
 
 public class CityLineAdapter extends BaseMultiItemQuickAdapter<CityLine, BaseViewHolder> {

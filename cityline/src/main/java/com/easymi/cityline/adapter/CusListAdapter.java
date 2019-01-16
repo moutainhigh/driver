@@ -20,7 +20,9 @@ import com.easymi.component.utils.GlideCircleTransform;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2018/11/15.
+ *
+ * @author liuzihao
+ * @date 2018/11/15
  */
 
 public class CusListAdapter extends RecyclerView.Adapter<CusListAdapter.ViewHolder> {
@@ -30,10 +32,18 @@ public class CusListAdapter extends RecyclerView.Adapter<CusListAdapter.ViewHold
 
     private OrderCustomer lastCustomer;
 
+    /**
+     * 构造器
+     * @param context
+     */
     public CusListAdapter(Context context) {
         this.context = context;
     }
 
+    /**
+     * 设置数据
+     * @param orderCustomers
+     */
     public void setOrderCustomers(List<OrderCustomer> orderCustomers) {
         this.orderCustomers = orderCustomers;
         lastCustomer = null;
@@ -94,7 +104,8 @@ public class CusListAdapter extends RecyclerView.Adapter<CusListAdapter.ViewHold
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView sequenceNum;//序号
+        //序号
+        TextView sequenceNum;
         ImageView cusPhoto;
         TextView cusName;
         TextView status;
