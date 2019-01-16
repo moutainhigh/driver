@@ -230,7 +230,7 @@ util包下大多的工具类能够通过名字来辨识作用，这里重点说�
 
 字段|释义
 --|:--:
-SLD|二级域名
+HOST|域名地址
 MQTT_HOST|长连接地址
 APP_KEY|系统key
 QQ_APP_ID|QQ分享id
