@@ -77,6 +77,10 @@ public class AcceptSendFragment extends RxBaseFragment {
      * 设置bridge
      * @param bridge
      */
+    /**
+     * 设置bridge
+     * @param bridge
+     */
     public void setBridge(ActFraCommBridge bridge) {
         this.bridge = bridge;
     }

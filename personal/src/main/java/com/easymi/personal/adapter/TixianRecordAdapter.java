@@ -16,7 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by developerLzh on 2017/11/10 0010.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ * Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class TixianRecordAdapter extends RecyclerView.Adapter<TixianRecordAdapter.TixianRecordHolder> {

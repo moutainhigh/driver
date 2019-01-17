@@ -6,7 +6,12 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
 /**
- * Created by developerLzh on 2017/12/19 0019.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ * Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class MyWebChomeClient extends WebChromeClient {

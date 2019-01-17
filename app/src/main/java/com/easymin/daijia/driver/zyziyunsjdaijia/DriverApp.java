@@ -21,8 +21,14 @@ import com.marswin89.marsdaemon.DaemonClient;
 import com.marswin89.marsdaemon.DaemonConfigurations;
 
 /**
- * Created by developerLzh on 2017/11/3 0003.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ * Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
+
 
 public class DriverApp extends XApp {
 

@@ -33,7 +33,12 @@ import com.google.gson.Gson;
 import java.util.List;
 
 /**
- * Created by developerLzh on 2017/11/18 0018.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ * Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class LocService extends Service implements AMapLocationListener {

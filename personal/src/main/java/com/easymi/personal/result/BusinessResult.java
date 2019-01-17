@@ -6,8 +6,14 @@ import com.easymi.personal.entity.SubBusiness;
 import java.util.List;
 
 /**
- * Created by developerLzh on 2017/12/15 0015.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ * Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
+
 
 public class BusinessResult extends EmResult {
     public String business;

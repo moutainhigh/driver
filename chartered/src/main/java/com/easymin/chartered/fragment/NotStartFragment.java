@@ -75,9 +75,9 @@ public class NotStartFragment extends RxBaseFragment {
     }
 
     /**
-     * 接人剩余时间
+     * 出发剩余时间
      */
-    long jieRenTimeLeftSec;
+    long startTimeLeftSec;
 
     /**
      * 定时器
@@ -90,26 +90,26 @@ public class NotStartFragment extends RxBaseFragment {
      */
     private void initCountDown() {
         cancelTimer();
-        jieRenTimeLeftSec = (baseOrder.bookTime*1000 - System.currentTimeMillis()) / 1000;//剩余的秒钟数
-        if (jieRenTimeLeftSec < 0) {
-            jieRenTimeLeftSec = 0;
+        startTimeLeftSec = (baseOrder.bookTime*1000 - System.currentTimeMillis()) / 1000;//剩余的秒钟数
+        if (startTimeLeftSec < 0) {
+            startTimeLeftSec = 0;
         }
 
-        setLeftText(jieRenTimeLeftSec);
+        setLeftText(startTimeLeftSec);
 
-        if (jieRenTimeLeftSec > 0) {
+        if (startTimeLeftSec > 0) {
             timer = new Timer();
             timerTask = new TimerTask() {
                 @Override
                 public void run() {
-                    jieRenTimeLeftSec--;
-                    long sec = jieRenTimeLeftSec % (60 * 60 * 24);
+                    startTimeLeftSec--;
+                    long sec = startTimeLeftSec % (60 * 60 * 24);
                     if (sec != 0) {
                         return;//整分才往下走
                     }
                     getActivity().runOnUiThread(() -> {
-                        setLeftText(jieRenTimeLeftSec);
-                        if (jieRenTimeLeftSec <= 0) {
+                        setLeftText(startTimeLeftSec);
+                        if (startTimeLeftSec <= 0) {
                             bridge.countStartOver();
                             timer.cancel();
                             timer = null;

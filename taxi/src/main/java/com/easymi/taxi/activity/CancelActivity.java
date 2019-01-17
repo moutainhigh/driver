@@ -14,7 +14,12 @@ import com.easymi.component.widget.CusToolbar;
 import com.easymi.taxi.R;
 
 /**
- * Created by developerLzh on 2017/11/22 0022.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ * Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class CancelActivity extends RxBaseActivity {

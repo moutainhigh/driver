@@ -1,4 +1,4 @@
-package com.easymin.passengerbus.flowMvp;
+package com.easymin.passengerbus.flowmvp;
 
 import com.easymi.component.result.EmResult2;
 import com.easymi.component.rxmvp.RxManager;

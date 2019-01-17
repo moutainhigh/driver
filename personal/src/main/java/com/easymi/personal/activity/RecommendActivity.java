@@ -15,8 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by developerLzh on 2017/11/9 0009.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ * Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
+
 
 public class RecommendActivity extends RxBaseActivity {
 

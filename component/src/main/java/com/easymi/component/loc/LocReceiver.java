@@ -16,10 +16,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by developerLzh on 2017/11/20 0020.
- * <p>
- * 接收来自其他线程的位置变化广播
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ * Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 接收来自其他线程的位置变化广播
+ * History:
+ * @author hufeng
  */
+
 
 public class LocReceiver extends BroadcastReceiver implements LocSubject {
 
@@ -91,7 +96,8 @@ public class LocReceiver extends BroadcastReceiver implements LocSubject {
                 hasd = true;
             }
         }
-        if (!hasd) {//避免重复添加观察者
+        if (!hasd) {
+            //避免重复添加观察者
             observers.add(obj);
         }
     }

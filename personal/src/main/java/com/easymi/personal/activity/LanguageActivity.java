@@ -16,7 +16,12 @@ import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.R;
 
 /**
- * Created by developerLzh on 2017/11/11 0011.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ * Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class LanguageActivity extends RxBaseActivity implements View.OnClickListener {

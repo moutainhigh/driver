@@ -27,8 +27,14 @@ import com.easymi.personal.adapter.WeatherAdapter;
 import java.util.List;
 
 /**
- * Created by developerLzh on 2017/12/7 0007.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ * Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
+
 
 public class WeatherActivity extends RxBaseActivity implements WeatherSearch.OnWeatherSearchListener {
 

@@ -24,8 +24,8 @@ import com.easymi.component.widget.CustomSlideToUnlockView;
 import com.easymin.passengerbus.R;
 import com.easymin.passengerbus.entity.BusStationResult;
 import com.easymin.passengerbus.entity.BusStationsBean;
-import com.easymin.passengerbus.flowMvp.ActFraCommBridge;
-import com.easymin.passengerbus.flowMvp.BcFlowActivity;
+import com.easymin.passengerbus.flowmvp.ActFraCommBridge;
+import com.easymin.passengerbus.flowmvp.BcFlowActivity;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -63,6 +63,10 @@ public class BcRuningFragment extends RxBaseFragment implements RouteSearch.OnRo
         scheduleId = args.getLong("scheduleId");
     }
 
+    /**
+     * 设置bridge
+     * @param bridge
+     */
     public void setBridge(ActFraCommBridge bridge) {
         this.bridge = bridge;
     }

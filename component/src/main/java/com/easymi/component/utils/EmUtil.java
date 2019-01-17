@@ -17,8 +17,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * Created by developerLzh on 2017/11/30 0030.
- * 封装的一些快捷获取对象方法
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ * Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:  封装的一些快捷获取对象方法
+ * History:
  */
 
 public class EmUtil {

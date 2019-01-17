@@ -10,7 +10,12 @@ import com.easymi.taxi.R;
 import com.easymi.taxi.flowMvp.ActFraCommBridge;
 
 /**
- * Created by developerLzh on 2017/11/13 0013.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ * Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class WaitFragment extends RxBaseFragment {
@@ -18,6 +23,10 @@ public class WaitFragment extends RxBaseFragment {
 
     private ActFraCommBridge bridge;
 
+    /**
+     * 设置bridge
+     * @param bridge
+     */
     public void setBridge(ActFraCommBridge bridge) {
         this.bridge = bridge;
     }
