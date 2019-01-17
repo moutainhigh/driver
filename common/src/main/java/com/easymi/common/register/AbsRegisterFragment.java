@@ -37,6 +37,10 @@ import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
 
+/**
+ * @author hufeng
+ * 已废弃
+ */
 public class AbsRegisterFragment extends Fragment {
 
     protected RxManager mRxManager = new RxManager();

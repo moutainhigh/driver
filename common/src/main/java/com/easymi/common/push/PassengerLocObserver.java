@@ -9,7 +9,12 @@ import com.easymi.common.entity.PassengerLocation;
  * Date: 2018/12/11 下午1:18
  * Description:
  * History:
+ * @author hufeng
  */
 public interface PassengerLocObserver {
+    /**
+     * 乘客位置观察者
+     * @param passengerLocation
+     */
     void plChange(PassengerLocation passengerLocation);
 }

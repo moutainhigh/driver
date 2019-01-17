@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Stack;
 
 /**
- * Created by xyin on 2016/12/14.
+ *
+ * @author xyin
+ * @date 2016/12/14
  * 管理activity,使用内部容器法实现单例模式.
  */
 

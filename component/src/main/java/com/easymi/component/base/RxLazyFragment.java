@@ -17,13 +17,18 @@ import com.trello.rxlifecycle.components.support.RxFragment;
 /**
  * 懒加载fragment
  * 适用于ViewPager中预加载的那种fragment
+ * @author hufeng
  */
 public abstract class RxLazyFragment extends RxFragment {
     private View parentView;
     private FragmentActivity activity;
-    // 标志位 标志已经初始化完成。
+    /**
+     * 标志位 标志已经初始化完成。
+     */
     protected boolean isPrepared;
-    //标志位 fragment是否可见
+    /**
+     * 标志位 fragment是否可见
+     */
     protected boolean isVisible;
 
     protected RxProgressHUD hud;

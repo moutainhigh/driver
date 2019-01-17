@@ -27,7 +27,8 @@ public class SqliteHelper extends SQLiteOpenHelper {
     private Context context;
 
     private SqliteHelper(Context context) {
-        super(context, DB_NAME, null, VERSION);    //创建一个数据库
+        super(context, DB_NAME, null, VERSION);
+        //创建一个数据库
         sqlBuf = new StringBuffer();
         this.context = context;
     }

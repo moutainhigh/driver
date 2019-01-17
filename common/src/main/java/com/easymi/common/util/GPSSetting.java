@@ -7,9 +7,14 @@ import com.easymi.component.app.XApp;
 
 public class GPSSetting {
 
-    //是否上传网络类型的定位点
+    /**
+     *  是否上传网络类型的定位点
+     */
     private boolean netLocEnable;
 
+    /**
+     * 实例化
+     */
     private static class SingletonHolder {
         private static final GPSSetting INSTANCE = new GPSSetting();
     }
@@ -19,6 +24,9 @@ public class GPSSetting {
         return SingletonHolder.INSTANCE;
     }
 
+    /**
+     * gps定位设置
+     */
     private GPSSetting() {
         //没开启过滤功能,netLocEnable为true
         netLocEnable = !XApp.getMyPreferences().getBoolean(Config.SP_GPS_FILTER, false);
@@ -36,8 +44,5 @@ public class GPSSetting {
         editor.apply();
     }
 
-    public boolean getNetEnable() {
-        return netLocEnable;
-    }
 
 }

@@ -21,6 +21,10 @@ import com.easymi.common.R;
 import com.easymi.common.widget.ImvDialog;
 import com.easymi.component.utils.ToastUtil;
 
+/**
+ * @author hufeng
+ * 已废弃
+ */
 public class PersonInfoFragment extends AbsRegisterFragment {
 
     private static final int REQUEST_CARD1 = 1;

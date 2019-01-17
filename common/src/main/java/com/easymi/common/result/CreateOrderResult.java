@@ -10,6 +10,7 @@ import com.easymi.component.result.EmResult;
  * Date: 2018/12/11 下午9:29
  * Description:
  * History:
+ * @author hufeng
  */
 public class CreateOrderResult extends EmResult {
 

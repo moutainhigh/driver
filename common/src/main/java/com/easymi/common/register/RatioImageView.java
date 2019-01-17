@@ -8,6 +8,10 @@ import android.view.View;
 
 import com.easymi.common.R;
 
+/**
+ * @author hufeng
+ * 已废弃
+ */
 public class RatioImageView extends AppCompatImageView {
 
     //ratio = 宽/高

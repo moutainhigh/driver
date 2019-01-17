@@ -37,7 +37,9 @@ import retrofit2.http.Url;
 import rx.Observable;
 
 /**
- * Created by developerLzh on 2017/11/17 0017.
+ *
+ * @author developerLzh
+ * @date 2017/11/17 0017
  */
 
 public interface CommApiService {

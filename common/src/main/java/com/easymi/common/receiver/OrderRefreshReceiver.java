@@ -14,6 +14,7 @@ import com.easymi.component.Config;
  * Date: 2018/12/24 下午8:46
  * Description:
  * History:
+ * @author hufeng
  */
 public class OrderRefreshReceiver extends BroadcastReceiver {
 
@@ -36,6 +37,9 @@ public class OrderRefreshReceiver extends BroadcastReceiver {
     }
 
     public interface OnRefreshOrderListener {
+        /**
+         * 订单刷新接收
+         */
         void onRefreshOrder();
     }
 }

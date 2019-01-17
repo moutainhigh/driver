@@ -59,7 +59,9 @@ public class MqttManager implements LocObserver {
     // 单例
     private static MqttManager mInstance = null;
 
-    // Private instance variables
+    /**
+     * Private instance variables
+     */
     private MqttAndroidClient client;
     private MqttConnectOptions conOpt;
 
@@ -67,17 +69,27 @@ public class MqttManager implements LocObserver {
 
     private boolean isConnecting = false;
 
+    /**
+     * 订阅topic
+     */
     String pullTopic;
     String configTopic;
 
     private RxManager rxManager;
 
+    /**
+     * 初始化
+     */
     private MqttManager() {
         handler = new Handler();
         rxManager = new RxManager();
         LocReceiver.getInstance().addObserver(MqttManager.this);
     }
 
+    /**
+     * 实例化
+     * @return
+     */
     public static MqttManager getInstance() {
         if (null == mInstance) {
             mInstance = new MqttManager();
@@ -109,20 +121,24 @@ public class MqttManager implements LocObserver {
         configTopic = "/driver" + "/" + EmUtil.getAppKey() + "/config";
         pullTopic = "/trip/driver" + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
 
-        if (!XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false)) {//未登陆 不连接
+        if (!XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false)) {
+            //未登陆 不连接
             return false;
         }
 
-        if (isConnecting) { //正在连接，不连接
+        if (isConnecting) {
+            //正在连接，不连接
             return false;
         }
-        if (client != null && client.isConnected()) {//client连接起的  不连接
+        if (client != null && client.isConnected()) {
+            //client连接起的  不连接
             return false;
         }
         String brokerUrl = Config.MQTT_HOST;
         String userName = Config.MQTT_USER_NAME;
         String password = Config.MQTT_PSW;
-        String clientId = "driver-" + EmUtil.getEmployId();//身份唯一码
+        //身份唯一码
+        String clientId = "driver-" + EmUtil.getEmployId();
 
         // Construct the connection options object that contains connection parameters
         // such as cleanSession and LWT
@@ -180,8 +196,10 @@ public class MqttManager implements LocObserver {
         if (StringUtils.isBlank(pushStr)) {
             return false;
         }
-        String topicName = Config.MQTT_PUSH_TOPIC;//上行topic
-        int qos = 1;//与后台约定为1
+        //上行topic
+        String topicName = Config.MQTT_PUSH_TOPIC;
+        //与后台约定为1
+        int qos = 1;
 
         boolean flag = false;
 
@@ -238,6 +256,10 @@ public class MqttManager implements LocObserver {
 
     }
 
+    /**
+     * mqtt是否连接
+     * @return
+     */
     public boolean isConnected() {
         if (client != null && client.isConnected()) {
             return true;
@@ -259,7 +281,9 @@ public class MqttManager implements LocObserver {
 
     private long lastSucTime = 0;
 
-    // MQTT是否连接成功
+    /**
+     * MQTT是否连接成功
+     */
     private IMqttActionListener iMqttActionListener = new IMqttActionListener() {
 
         @Override
@@ -272,7 +296,8 @@ public class MqttManager implements LocObserver {
                     client.subscribe(pullTopic, 1);
                     client.subscribe(configTopic, 1);
                 } else {
-                    if (System.currentTimeMillis() - lastSucTime < 2000) {//小于2秒的回调
+                    if (System.currentTimeMillis() - lastSucTime < 2000) {
+                        //小于2秒的回调
                     } else {
                         client.subscribe(pullTopic, 1);
                         client.subscribe(configTopic, 1);
@@ -308,7 +333,9 @@ public class MqttManager implements LocObserver {
         }
     };
 
-    // 回调
+    /**
+     *  回调
+     */
     private MqttCallback mCallback = new MqttCallback() {
         @Override
         public void connectionLost(Throwable cause) {
@@ -340,12 +367,19 @@ public class MqttManager implements LocObserver {
         pushInternalLoc(data, false);
     }
 
-
-
+    /**
+     *  不限制推送数据
+     * @param data
+     */
     public void pushLocNoLimit(BuildPushData data) {
         pushInternalLoc(data, true);
     }
 
+    /**
+     * 推送司机及其定位信息
+     * @param data
+     * @param noLimit
+     */
     private void pushInternalLoc(BuildPushData data, boolean noLimit) {
         String pushStr = BuildPushUtil.buildPush(data, noLimit);
 
@@ -381,7 +415,8 @@ public class MqttManager implements LocObserver {
 //                }
             }
             creatConnect();
-            gpsPush(pushStr); //更改到断连就http上报
+            //更改到断连就http上报
+            gpsPush(pushStr);
         }
     }
 

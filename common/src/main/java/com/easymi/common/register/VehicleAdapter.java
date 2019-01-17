@@ -13,6 +13,10 @@ import com.easymi.common.entity.Vehicles;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author hufeng
+ * 已废弃
+ */
 public class VehicleAdapter extends RecyclerView.Adapter<VehicleAdapter.VehicleViewHolder> {
 
     private List<Vehicles.Vehicle> vehicleList = new ArrayList<>();
@@ -73,7 +77,7 @@ public class VehicleAdapter extends RecyclerView.Adapter<VehicleAdapter.VehicleV
         this.listener = listener;
     }
 
-    public interface OnVehicleClickListener {
+    interface OnVehicleClickListener {
         void onVehicleClick(Vehicles.Vehicle vehicle);
     }
 

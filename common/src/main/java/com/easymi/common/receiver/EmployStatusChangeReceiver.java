@@ -34,6 +34,10 @@ public class EmployStatusChangeReceiver extends BroadcastReceiver {
     }
 
     public interface OnStatusChangeListener {
+        /**
+         * 司机状态改变接收
+         * @param status
+         */
         void onStatusChange(String status);
     }
 }

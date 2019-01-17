@@ -27,7 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2017/12/22.
+ *
+ * @author liuzihao
+ * @date 2017/12/22
  */
 
 public class BuildPushUtil {

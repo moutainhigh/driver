@@ -1,7 +1,10 @@
 package com.easymi.common.util;
 
 /**
- * Created by developerLzh on 2017/12/25 0025.
+ *
+ * @author developerLzh
+ * @date 2017/12/25 0025
+ * 已废弃
  */
 
 public class AMapNaviPath2DrivePath {

@@ -12,6 +12,7 @@ import java.util.List;
  * Date: 2018/11/14 下午4:39
  * Description:
  * History:
+ * @author hufeng
  */
 public class CityLineResult extends EmResult{
 

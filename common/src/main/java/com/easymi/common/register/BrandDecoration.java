@@ -8,6 +8,10 @@ import android.graphics.Paint;
 import com.easymi.component.decoration.Sticky;
 import com.easymi.component.decoration.StickyDecoration;
 
+/**
+ * @author hufeng
+ * 已废弃
+ */
 public class BrandDecoration extends StickyDecoration {
 
     private final float descent;

@@ -24,6 +24,10 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
+/**
+ * @author hufeng
+ * 已废弃
+ */
 public class RegisterModel {
 
     public static Observable<CompanyList> getCompany() {

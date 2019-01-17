@@ -12,7 +12,9 @@ import com.easymi.component.utils.StringUtils;
 import java.util.Map;
 
 /**
- * Created by liuzihao on 2018/3/7.
+ *
+ * @author liuzihao
+ * @date 2018/3/7
  */
 
 public class AliPushReceiver extends MessageReceiver {

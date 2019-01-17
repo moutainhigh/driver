@@ -14,6 +14,10 @@ import com.easymi.component.widget.wheelview.adapter.AbstractWheelTextAdapter;
 
 import java.util.List;
 
+/**
+ * @author hufeng
+ * 已废弃
+ */
 public class CompanyPicker extends BottomSheetDialog {
 
     private View mView;

@@ -40,7 +40,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Created by developerLzh on 2017/12/7 0007.
+ *
+ * @author developerLzh
+ * @date 2017/12/7 0007
  */
 
 public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AMapNaviViewListener {
@@ -58,6 +60,9 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     private long orderId;
     private String orderType;
+    /**
+     * 导航模式
+     */
     private int naviMode;
 
     LinearLayout simpleFeeCon;
@@ -99,9 +104,15 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     }
 
+    /**
+     * 定时器
+     */
     private Timer timer;
     private TimerTask timerTask;
 
+    /**
+     * 显示费用 已废弃
+     */
     private void showFee() {
         simpleFeeCon = findViewById(R.id.simple_fee_con);
         lcTxt = findViewById(R.id.lc);
@@ -366,14 +377,17 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     @Override
     public void onPlayRing(int i) {
-//        XApp.getInstance().syntheticVoice("叮咚", false);
-        if (i == AMapNaviRingType.RING_CAMERA) {//（导航状态）高速上通过测速电子眼的提示音
+        if (i == AMapNaviRingType.RING_CAMERA) {
+            //（导航状态）高速上通过测速电子眼的提示音
 
-        } else if (i == AMapNaviRingType.RING_EDOG) { // 巡航状态下通过电子狗的提示音
+        } else if (i == AMapNaviRingType.RING_EDOG) {
+            // 巡航状态下通过电子狗的提示音
 
-        } else if (i == AMapNaviRingType.RING_REROUTE) {//偏航重算的提示音L
+        } else if (i == AMapNaviRingType.RING_REROUTE) {
+            //偏航重算的提示音L
 
-        } else if (i == AMapNaviRingType.RING_TURN) { // 马上到达转向路口的提示音
+        } else if (i == AMapNaviRingType.RING_TURN) {
+            // 马上到达转向路口的提示音
 
         }
     }

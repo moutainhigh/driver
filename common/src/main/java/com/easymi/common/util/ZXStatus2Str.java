@@ -11,9 +11,16 @@ import com.easymi.component.app.XApp;
  * Date: 2018/11/22 下午5:03
  * Description:
  * History:
+ * @author hufeng
  */
 public class ZXStatus2Str {
 
+    /**
+     * 根据专线状态获取状态值
+     * @param business
+     * @param status
+     * @return
+     */
     public static String int2Str(String business, int status) {
         switch (status) {
             case ZXOrderStatus.NEW_ORDER:
@@ -36,6 +43,8 @@ public class ZXStatus2Str {
                 return XApp.getInstance().getString(R.string.zx_send_over);
             case ZXOrderStatus.FINISH_TRIP:
                 return XApp.getInstance().getString(R.string.zx_line_over);
+            default:
+                break;
         }
         return "";
     }

@@ -29,6 +29,7 @@ import rx.Observable;
  * Date: 2018/12/19 上午9:58
  * Description:
  * History:
+ * @author hufeng
  */
 public class RegisterListActivity extends RxBaseActivity{
 
@@ -38,7 +39,10 @@ public class RegisterListActivity extends RxBaseActivity{
 
     RegisterTypeAdapter adapter;
 
-    private int type;  //1业务类型 2 机构类型
+    /**
+     * 1业务类型 2 机构类型
+     */
+    private int type;
 
     private List<BusinessType> listType = new ArrayList<>();
 
@@ -100,31 +104,42 @@ public class RegisterListActivity extends RxBaseActivity{
 
     public void getData(){
         listType.clear();
-        BusinessType businessType = new BusinessType();
-        businessType.name = getResources().getString(com.easymi.common.R.string.create_zhuanche);
-        businessType.type = Config.ZHUANCHE;
-        BusinessType businessType1 = new BusinessType();
-        businessType1.name = getResources().getString(com.easymi.common.R.string.create_zhuanxian);
-        businessType1.type = Config.CITY_LINE;
-        BusinessType businessType2 = new BusinessType();
-        businessType2.name = getResources().getString(com.easymi.common.R.string.create_taxi);
-        businessType2.type =  Config.TAXI;
-        listType.add(businessType);
-        listType.add(businessType2);
-        listType.add(businessType1);
-
-        BusinessType businessType3 = new BusinessType();
-        businessType3.name = getResources().getString(com.easymi.common.R.string.create_chartered);
-        businessType3.type = Config.CHARTERED;
-        BusinessType businessType4 = new BusinessType();
-        businessType4.name = getResources().getString(com.easymi.common.R.string.create_rental);
-        businessType4.type = Config.RENTAL;
-        BusinessType businessType5 = new BusinessType();
-        businessType5.name = getResources().getString(com.easymi.common.R.string.create_bus_country);
-        businessType5.type =  Config.COUNTRY;
-        listType.add(businessType3);
-        listType.add(businessType4);
-        listType.add(businessType5);
+        if (Config.KT_ZHUANCHE){
+            BusinessType businessType = new BusinessType();
+            businessType.name = getResources().getString(com.easymi.common.R.string.create_zhuanche);
+            businessType.type = Config.ZHUANCHE;
+            listType.add(businessType);
+        }
+        if (Config.KT_ZHUANXIAN){
+            BusinessType businessType1 = new BusinessType();
+            businessType1.name = getResources().getString(com.easymi.common.R.string.create_zhuanxian);
+            businessType1.type = Config.CITY_LINE;
+            listType.add(businessType1);
+        }
+        if (Config.KT_CHUZUCHE){
+            BusinessType businessType2 = new BusinessType();
+            businessType2.name = getResources().getString(com.easymi.common.R.string.create_taxi);
+            businessType2.type =  Config.TAXI;
+            listType.add(businessType2);
+        }
+        if (Config.KT_BAOCHE){
+            BusinessType businessType3 = new BusinessType();
+            businessType3.name = getResources().getString(com.easymi.common.R.string.create_chartered);
+            businessType3.type = Config.CHARTERED;
+            listType.add(businessType3);
+        }
+        if (Config.KT_ZUCHE){
+            BusinessType businessType4 = new BusinessType();
+            businessType4.name = getResources().getString(com.easymi.common.R.string.create_rental);
+            businessType4.type = Config.RENTAL;
+            listType.add(businessType4);
+        }
+        if (Config.KT_BANCHE){
+            BusinessType businessType5 = new BusinessType();
+            businessType5.name = getResources().getString(com.easymi.common.R.string.create_bus_country);
+            businessType5.type =  Config.COUNTRY;
+            listType.add(businessType5);
+        }
     }
 
     public void findById() {

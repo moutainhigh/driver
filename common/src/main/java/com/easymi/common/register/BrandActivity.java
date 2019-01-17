@@ -32,6 +32,7 @@ import rx.schedulers.Schedulers;
 
 /**
  * @author hufeng
+ * 已废弃
  */
 public class BrandActivity extends RxBaseActivity {
 

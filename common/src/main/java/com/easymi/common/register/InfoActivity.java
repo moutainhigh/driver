@@ -15,6 +15,10 @@ import android.widget.TextView;
 import com.easymi.common.R;
 import com.easymi.component.base.RxBaseActivity;
 
+/**
+ * @author hufeng
+ * 已废弃
+ */
 public class InfoActivity extends RxBaseActivity {
 
     @Override

@@ -15,6 +15,10 @@ import com.easymi.component.decoration.StickyAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author hufeng
+ * 已废弃
+ */
 public class BrandAdapter extends RecyclerView.Adapter<BrandAdapter.BrandViewHolder> implements StickyAdapter {
 
     private List<Brands.Brand> brandList = new ArrayList<>();

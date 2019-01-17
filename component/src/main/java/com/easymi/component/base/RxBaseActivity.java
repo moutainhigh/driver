@@ -50,6 +50,7 @@ import io.reactivex.disposables.Disposable;
  * 100332338@qq.com
  * <p/>
  * Activity基类
+ * @author hufeng
  */
 public abstract class RxBaseActivity extends RxAppCompatActivity implements
         GpsReceiver.OnGpsStatusChangeListener,
@@ -163,7 +164,8 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
     @Override
     protected void onPause() {
         super.onPause();
-        if (SysUtil.isRunningInBackground(this)) {//后台运行时 静音播放音频保活
+        if (SysUtil.isRunningInBackground(this)) {
+            //后台运行时 静音播放音频保活
             XApp.getInstance().playSlientMusic();
         }
     }
@@ -314,6 +316,9 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
 
     }
 
+    /**
+     * 疲劳驾驶接收提示
+     */
     class TiredReceiver extends BroadcastReceiver {
 
         @Override
@@ -340,6 +345,9 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
         }
     }
 
+    /**
+     * http错误码接收提示
+     */
     class HttpCustomReceiver extends BroadcastReceiver {
 //        http状态码：
 //        触发防重：403

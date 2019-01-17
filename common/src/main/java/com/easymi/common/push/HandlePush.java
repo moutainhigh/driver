@@ -57,17 +57,28 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by Administrator on 2017/1/11.
+ *
+ * @author Administrator
+ * @date 2017/1/11
  */
 
 public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
 
     private RxManager rxManager;
-
+    /**
+     * 通知id
+     */
     public static int NOTIFY_ID = 1993;
 
+    /**
+     * 费用信息观察者
+     */
     private static List<FeeChangeObserver> observers;
+    /**
+     * 乘客位置信息观察者
+     */
     private static List<PassengerLocObserver> plObservers;
+
     private static HandlePush instance;
 
     private HandlePush() {
@@ -81,6 +92,10 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
         return instance;
     }
 
+    /**
+     * 推送消息分发
+     * @param jsonStr
+     */
     public void handPush(String jsonStr) {
 
         rxManager = new RxManager();
@@ -88,7 +103,8 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
             JSONObject jb = new JSONObject(jsonStr);
             String msg = jb.optString("msg");
 
-            if (msg.equals("robbing")) { //抢单
+            if (msg.equals("robbing")) {
+                //抢单
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
@@ -96,7 +112,8 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                     loadOrder(order);
                 }
 //                XApp.getInstance().syntheticVoice();
-            } else if (msg.equals("sendorders")) {//派单
+            } else if (msg.equals("sendorders")) {
+                //派单
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
@@ -104,7 +121,8 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                     loadOrder(order);
                 }
                 newShowNotify(XApp.getInstance(), "", XApp.getInstance().getString(R.string.send_order), XApp.getInstance().getString(R.string.send_order_content));
-            } else if (msg.equals("cancel")) {//取消订单
+            } else if (msg.equals("cancel")) {
+                //取消订单
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
@@ -115,7 +133,8 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 bundle.putSerializable("order", order);
                 message.setData(bundle);
                 handler.sendMessage(message);
-            } else if (msg.equals("driver_status")) { //司机状态
+            } else if (msg.equals("driver_status")) {
+                //司机状态
                 String status = jb.optJSONObject("data").optString("status");
 
                 Message message = new Message();
@@ -124,38 +143,40 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 bundle.putSerializable("status", status);
                 message.setData(bundle);
                 handler.sendMessage(message);
-            } else if (msg.equals("notice")) {//通知   （改为公告）
-//                long id = jb.optJSONObject("data").optLong("id");
-//                String data = jb.optString("data");
-//                JSONObject dt = new JSONObject(data);
+            } else if (msg.equals("notice")) {
+                //通知   （改为公告）
                 long id = jb.optLong("data");
 
                 loadAnn(id);
-            } else if (msg.equals("message")) {//公告    （改为通知）
-//                long id = jb.optJSONObject("data").optLong("id");
+            } else if (msg.equals("message")) {
+                //公告    （改为通知）
                 String data = jb.optString("data");
                 JSONObject dt = new JSONObject(data);
 
                 loadNotice(dt.optLong("id"));
-            } else if (msg.equals("thaw")) {//冻结
+            } else if (msg.equals("thaw")) {
+                //冻结
                 XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.freezed));
                 EmUtil.employLogout(XApp.getInstance());
-            } else if (msg.equals("force_offline")) {//强制下线
+            } else if (msg.equals("force_offline")) {
+                //强制下线
                 XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.force_offline));
                 EmUtil.employLogout(XApp.getInstance());
-            } else if (msg.equals("unbunding")) {//解绑
+            } else if (msg.equals("unbunding")) {
+                //解绑
                 XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice("您的账户已被管理员解绑");
-//                XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.unbunding));
                 EmUtil.employLogout(XApp.getInstance());
-            } else if (msg.equals("finish")) { //支付成功
+            } else if (msg.equals("finish")) {
+                //支付成功
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
                 loadOrder(order);
-            } else if (msg.equals("reAssign")) {//订单被改派 （收回）
+            } else if (msg.equals("reAssign")) {
+                //订单被改派 （收回）
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
@@ -168,7 +189,8 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 handler.sendMessage(message);
             } else if (msg.equals("setting_change")) {
                 loadSetting();
-            } else if (msg.equals("http_costInfo")) { //费用信息
+            } else if (msg.equals("http_costInfo")) {
+                //费用信息
                 String data = jb.optString("data");
                 JSONObject jbData = new JSONObject(data.replaceAll("\\\\\\\"", "--"));
                 long orderId = jbData.optLong("OrderId");
@@ -209,7 +231,8 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                     dymOrder.updateFee();
                     notifyObserver(orderId, orderType);
                 }
-            } else if (msg.equals("realFee")) { //费用信息
+            } else if (msg.equals("realFee")) {
+                //费用信息
                 String data = jb.optString("data");
                 JSONObject jbData = new JSONObject(data.replaceAll("\\\\\\\"", "--"));
                 long orderId = jbData.optLong("orderId");
@@ -237,7 +260,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
 
                     if (Config.ZHUANCHE.equals(orderType)) {
                         dymOrder.peakCost = jbData.optDouble("peakFee");
-                        dymOrder.nightPrice = jbData.optDouble("nightMileFee"); //**不祥的预感
+                        dymOrder.nightPrice = jbData.optDouble("nightMileFee");
                         dymOrder.lowSpeedCost = jbData.optDouble("lowSpeedFee");
                         dymOrder.lowSpeedTime = jbData.getInt("lowSpeedTime") / 60;
                         dymOrder.peakMile = jbData.optDouble("peakMile");
@@ -315,6 +338,10 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
         }
     }
 
+    /**
+     * 查询订单信息
+     * @param multipleOrder
+     */
     private void loadOrder(MultipleOrder multipleOrder) {
         if (StringUtils.isNotBlank(multipleOrder.serviceType)) {
             if (multipleOrder.serviceType.equals(Config.DAIJIA)) {
@@ -368,6 +395,11 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
         })));
     }
 
+    /**
+     * 查询代驾订单
+     * @param orderId
+     * @param orderType
+     */
     private void loadDJOrder(long orderId, String orderType) {
         Observable<MultipleOrderResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .queryDJOrder(orderId, EmUtil.getAppKey())
@@ -389,6 +421,11 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
         })));
     }
 
+    /**
+     * 查询专车订单
+     * @param orderId
+     * @param orderType
+     */
     private void loadZCOrder(long orderId, String orderType) {
         Observable<MultipleOrderResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .queryZCOrder(orderId, EmUtil.getAppKey())
@@ -410,6 +447,11 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
         })));
     }
 
+    /**
+     * 查询出租车订单
+     * @param orderId
+     * @param orderType
+     */
     private void loadTaxiOrder(long orderId, String orderType) {
         Observable<MultipleOrderResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .queryTaxiOrder(orderId, EmUtil.getAppKey())
@@ -497,7 +539,13 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
         })));
     }
 
-
+    /**
+     * 新建通知栏
+     * @param context
+     * @param tips
+     * @param title
+     * @param content
+     */
     private void newShowNotify(Context context, String tips, String title,
                                String content) {
         String ns = Context.NOTIFICATION_SERVICE;
@@ -526,21 +574,26 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
         mNotificationManager.notify(NOTIFY_ID, notification);
     }
 
+    /**
+     * 查询订单回调
+     */
     private OnLoadOrderCallback loadOrderCallback = new OnLoadOrderCallback() {
         @Override
         public void callback(MultipleOrderResult multipleOrderResult, String orderType) {
             MultipleOrder order = multipleOrderResult.data;
             if (order != null) {
-                if (order.status == DJOrderStatus.FINISH_ORDER) { //已完成订单
+                if (order.status == DJOrderStatus.FINISH_ORDER) {
+                    //已完成订单
                     String weihao = order.passengerPhone;
                     if (weihao.length() > 4) {
                         weihao = weihao.substring(weihao.length() - 4, weihao.length());
                     }
                     XApp.getInstance().shake();
+                    //语音播报xx客户已完成支付
                     XApp.getInstance().syntheticVoice(
                             XApp.getMyString(R.string.pay_suc_1) +
                                     weihao +
-                                    XApp.getMyString(R.string.pay_suc_2));//语音播报xx客户已完成支付
+                                    XApp.getMyString(R.string.pay_suc_2));
 
                     Intent intent1 = new Intent();
                     intent1.setAction(Config.BROAD_FINISH_ORDER);
@@ -555,19 +608,24 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
 //                order.orderAddressVos = multipleOrderResult.address;
                 String voiceStr = "";
                 if (order.status == DJOrderStatus.NEW_ORDER) {
-                    voiceStr += XApp.getInstance().getString(R.string.grab_order) + ",";//抢单
+                    //抢单
+                    voiceStr += XApp.getInstance().getString(R.string.grab_order) + ",";
                 } else {
-                    voiceStr += XApp.getInstance().getString(R.string.send_order) + ",";//派单
+                    //派单
+                    voiceStr += XApp.getInstance().getString(R.string.send_order) + ",";
                 }
                 if (orderType.equals(Config.DAIJIA)) {
+                    //代驾订单
                     voiceStr += XApp.getInstance().getString(R.string.create_daijia)
-                            + XApp.getInstance().getString(R.string.order) + ",";//代驾订单
+                            + XApp.getInstance().getString(R.string.order) + ",";
                 } else if (orderType.equals(Config.ZHUANCHE)) {
+                    //专车订单
                     voiceStr += XApp.getInstance().getString(R.string.create_zhuanche)
-                            + XApp.getInstance().getString(R.string.order) + ",";//专车订单
+                            + XApp.getInstance().getString(R.string.order) + ",";
                 } else if (orderType.equals(Config.TAXI)) {
+                    //专车订单
                     voiceStr += XApp.getInstance().getString(R.string.create_taxi)
-                            + XApp.getInstance().getString(R.string.order) + ",";//专车订单
+                            + XApp.getInstance().getString(R.string.order) + ",";
                 }
                 String dis = 0 + XApp.getInstance().getString(R.string.meter);
                 if (EmUtil.getLastLoc() != null && order.orderAddressVos != null && order.orderAddressVos.size() != 0) {
@@ -589,18 +647,16 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                     }
                 }
                 voiceStr +=
-//                        order.orderDetailType//酒后代驾
-//                        + ","
-//                        +
-                        XApp.getInstance().getString(R.string.to_you)//距您
-                                + dis //0.5公里
+                        XApp.getInstance().getString(R.string.to_you)
+                                + dis
                                 + ","
-                                + XApp.getInstance().getString(R.string.from)//从
-                                + order.getStartSite().address //xxx
-                                + XApp.getInstance().getString(R.string.out)//出发
+                                + XApp.getInstance().getString(R.string.from)
+                                + order.getStartSite().address
+                                + XApp.getInstance().getString(R.string.out)
                                 + ",";
                 if (StringUtils.isNotBlank(order.destination)) {
-                    voiceStr += XApp.getInstance().getString(R.string.to) + order.destination;//到xxx
+                    //到xxx
+                    voiceStr += XApp.getInstance().getString(R.string.to) + order.destination;
                 }
                 Message message = new Message();
                 message.what = 0;
@@ -645,11 +701,6 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 String status = bundle2.getString("status");
                 Employ employ = EmUtil.getEmployInfo();
                 if (null != employ) {
-//                    if (employ.status != EmployStatus.OFFLINE
-//                            && employ.status != EmployStatus.FROZEN
-//                            && status != employ.status) {
-//                        XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.force_offline));
-//                    }
                     employ.status = Integer.parseInt(status);
                     employ.updateBase();
 
@@ -702,7 +753,8 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 hasd = true;
             }
         }
-        if (!hasd) {//避免重复添加观察者
+        if (!hasd) {
+            //避免重复添加观察者
             observers.add(obj);
         }
     }
@@ -736,7 +788,8 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 hasd = true;
             }
         }
-        if (!hasd) {//避免重复添加观察者
+        if (!hasd) {
+            //避免重复添加观察者
             plObservers.add(obj);
         }
     }
@@ -759,7 +812,15 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
         }
     }
 
+    /**
+     * 加载订单回调接口
+     */
     interface OnLoadOrderCallback {
+        /**
+         * 接口实现
+         * @param multipleOrderResult
+         * @param orderType
+         */
         void callback(MultipleOrderResult multipleOrderResult, String orderType);
     }
 

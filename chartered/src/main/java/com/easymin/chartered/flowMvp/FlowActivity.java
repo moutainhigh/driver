@@ -111,8 +111,6 @@ public class FlowActivity extends RxBaseActivity implements
 
     public static boolean isMapTouched = false;
 
-    private boolean isOrderLoadOk = false;//订单查询是否完成
-
     private long orderId;
 
     private CharteredOrder baseOrder;

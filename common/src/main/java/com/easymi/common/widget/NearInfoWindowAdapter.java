@@ -14,7 +14,9 @@ import com.easymi.component.entity.TaxiSetting;
 import com.easymi.component.utils.PhoneUtil;
 
 /**
- * Created by developerLzh on 2017/12/25 0025.
+ *
+ * @author developerLzh
+ * @date 2017/12/25 0025
  */
 
 public class NearInfoWindowAdapter implements AMap.InfoWindowAdapter {
@@ -29,7 +31,6 @@ public class NearInfoWindowAdapter implements AMap.InfoWindowAdapter {
 
     @Override
     public View getInfoWindow(Marker marker) {
-
         return null;
     }
 

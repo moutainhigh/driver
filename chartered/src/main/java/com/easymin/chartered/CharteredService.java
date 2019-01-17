@@ -18,6 +18,7 @@ import rx.Observable;
  * Date: 2018/12/21 下午5:16
  * Description:
  * History:
+ * @author hufeng
  */
 public interface CharteredService {
 

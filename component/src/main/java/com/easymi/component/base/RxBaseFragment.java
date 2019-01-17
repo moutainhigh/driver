@@ -17,6 +17,7 @@ import com.trello.rxlifecycle.components.support.RxFragment;
 /**
  *
  * 普通fragment
+ * @author hufeng
  */
 public abstract class RxBaseFragment extends RxFragment {
     private View parentView;

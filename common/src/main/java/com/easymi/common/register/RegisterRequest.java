@@ -5,6 +5,10 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * @author hufeng
+ * 已废弃
+ */
 public class RegisterRequest implements Parcelable {
 
     public boolean needCarInfo;

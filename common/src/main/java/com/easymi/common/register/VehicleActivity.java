@@ -22,6 +22,10 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+/**
+ * @author hufeng
+ * 已废弃
+ */
 public class VehicleActivity extends RxBaseActivity {
 
     @Override

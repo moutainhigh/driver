@@ -25,7 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2017/11/27.
+ *
+ * @author liuzihao
+ * @date 2017/11/27
  */
 
 public class PlaceActivity extends RxBaseActivity {

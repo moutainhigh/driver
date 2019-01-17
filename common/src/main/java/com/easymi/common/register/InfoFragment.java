@@ -36,6 +36,10 @@ import java.util.List;
 
 import rx.Observable;
 
+/**
+ * @author hufeng
+ * 已废弃
+ */
 public class InfoFragment extends AbsRegisterFragment {
 
     private static final int REQUEST_HEAD = 1;

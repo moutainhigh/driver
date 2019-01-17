@@ -30,6 +30,7 @@ import rx.schedulers.Schedulers;
 /**
  * 工作时间统计器，需要尽可能长久的工作。目前策略将其生命周期关联到推送服务生命上。
  * 比较没有推送，统计工作时间也没有什么意义。
+ * @author hufeng
  */
 public class WorkTimeCounter {
 
@@ -38,14 +39,27 @@ public class WorkTimeCounter {
 
     private Context context;
 
+    /**
+     * 最后上传时间
+     */
     private long lastUpTime;
+    /**
+     * 总的分钟数
+     */
     private int totalMinute;
 
+    /**
+     * 定时器
+     */
     private final Timer timer;
     private final TimerTask timerTask;
 
     private Subscription mSubscription;
 
+    /**
+     * 初始化定时器
+     * @param context
+     */
     public WorkTimeCounter(Context context) {
         Log.d("WorkTimeCounter", "WorkTimeCounter create");
         this.context = context;
@@ -161,6 +175,9 @@ public class WorkTimeCounter {
         }));
     }
 
+    /**
+     * 销毁定时器
+     */
     public void destroy() {
         if (timer != null) {
             timer.cancel();

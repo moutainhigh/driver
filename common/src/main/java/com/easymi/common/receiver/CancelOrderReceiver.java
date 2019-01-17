@@ -7,7 +7,9 @@ import android.content.Intent;
 import com.easymi.component.Config;
 
 /**
- * Created by developerLzh on 2017/12/19 0019.
+ *
+ * @author developerLzh
+ * @date 2017/12/19 0019
  */
 
 public class CancelOrderReceiver extends BroadcastReceiver {
@@ -33,6 +35,11 @@ public class CancelOrderReceiver extends BroadcastReceiver {
     }
 
     public interface OnCancelListener {
+        /**
+         * 取消订单接收
+         * @param orderId
+         * @param orderType
+         */
         void onCancelOrder(long orderId, String orderType);
     }
 }

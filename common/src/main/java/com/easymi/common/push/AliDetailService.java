@@ -11,7 +11,9 @@ import com.easymi.component.utils.StringUtils;
 import java.util.Map;
 
 /**
- * Created by developerLzh on 2017/11/9 0009.
+ *
+ * @author developerLzh
+ * @date 2017/11/9 0009
  */
 
 public class AliDetailService extends AliyunMessageIntentService {

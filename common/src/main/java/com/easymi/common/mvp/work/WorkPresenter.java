@@ -310,10 +310,6 @@ public class WorkPresenter implements WorkContract.Presenter {
         timeCounter.forceUpload(statues);
     }
 
-    @Override
-    public void onPause() {
-
-    }
 
     //表示司机业务
     private String employType;

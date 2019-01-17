@@ -7,11 +7,15 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 /**
- * Created by developerLzh on 2017/11/28 0028.
+ *
+ * @author developerLzh
+ * @date 2017/11/28 0028
  */
 
 public class NotitfyResult extends EmResult{
+
     public List<AnnAndNotice> employNoticeRecords;
+
     public int total;
 
     public AnnAndNotice data;

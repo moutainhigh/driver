@@ -31,7 +31,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-
+/**
+ * @author hufeng
+ * 已废弃
+ */
 public class CarInfoFragment extends AbsRegisterFragment {
 
     private static final int REQUEST_BRAND = 1;

@@ -6,11 +6,19 @@ import com.easymi.component.DJOrderStatus;
 import com.easymi.component.app.XApp;
 
 /**
- * Created by developerLzh on 2017/11/20 0020.
+ *
+ * @author developerLzh
+ * @date 2017/11/20 0020
  */
 
 public class DJStatus2Str {
 
+    /**
+     * 根据订单状态获取对应文字
+     * @param business
+     * @param status
+     * @return
+     */
     public static String int2Str(String business, int status) {
         switch (status) {
             case DJOrderStatus.NEW_ORDER:

@@ -14,7 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2017/11/27.
+ *
+ * @author liuzihao
+ * @date 2017/11/27
  */
 
 public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.Holder> {
@@ -23,6 +25,10 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.Holder> {
     private Context context;
 
     public interface OnItemClickListener {
+        /**
+         * 列表点击监听
+         * @param item
+         */
         void onItemClick(PoiItem item);
     }
 
@@ -37,6 +43,10 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.Holder> {
         poiList = new ArrayList<>();
     }
 
+    /**
+     * 设置数据
+     * @param poiList
+     */
     public void setPoiList(List<PoiItem> poiList) {
         this.poiList = poiList;
         notifyDataSetChanged();
@@ -51,8 +61,10 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.Holder> {
     @Override
     public void onBindViewHolder(Holder holder, int position) {
         PoiItem poi = poiList.get(position);
-        holder.poiText.setText(poi.getTitle());//商圈
-        holder.addressText.setText(poi.getSnippet());//详细地址
+        //商圈
+        holder.poiText.setText(poi.getTitle());
+        //详细地址
+        holder.addressText.setText(poi.getSnippet());
         if(null != itemClickListener){
             holder.root.setOnClickListener(view -> itemClickListener.onItemClick(poi));
         }

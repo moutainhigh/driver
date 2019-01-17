@@ -51,7 +51,6 @@ import com.easymi.common.receiver.EmployStatusChangeReceiver;
 import com.easymi.common.receiver.NoticeReceiver;
 import com.easymi.common.receiver.OrderRefreshReceiver;
 import com.easymi.common.register.InfoActivity;
-import com.easymi.common.util.CommonUtil;
 import com.easymi.common.widget.NearInfoWindowAdapter;
 import com.easymi.common.widget.RegisterDialog;
 import com.easymi.component.Config;
@@ -615,7 +614,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     protected void onPause() {
         super.onPause();
         isFront = false;
-        presenter.onPause();
         mapView.onPause();
     }
 
