@@ -33,19 +33,17 @@ import rx.schedulers.Schedulers;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName:
+ * FileName:FlowModel
  * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
  */
-
 public class FlowModel implements FlowContract.Model {
 
     @Override
     public Observable<TaxiOrderResult> doAccept(Long orderId) {
         return ApiManager.getInstance().createApi(Config.HOST, TaxiApiService.class)
-//                .takeOrder(orderId, EmUtil.getEmployId(), EmUtil.getAppKey())
                 .takeOrder(EmUtil.getAppKey(),EmUtil.getEmployInfo().companyId,EmUtil.getEmployId(),orderId)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
@@ -55,7 +53,6 @@ public class FlowModel implements FlowContract.Model {
     @Override
     public Observable<TaxiOrderResult> findOne(Long orderId) {
         return ApiManager.getInstance().createApi(Config.HOST, TaxiApiService.class)
-//                .indexOrders(orderId, EmUtil.getAppKey())
                 .queryTaxiOrder(orderId, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())

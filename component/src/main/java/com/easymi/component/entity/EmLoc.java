@@ -5,14 +5,13 @@ import android.location.Location;
 import com.amap.api.location.AMapLocation;
 
 /**
- *
- * @author developerLzh
- * @date 2017/11/18 0018
- * <p>
- * doc:
- * http://amappc.cn-hangzhou.oss-pub.aliyun-inc.com/lbs/static/unzip/Android_Location_Doc/index.html
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午5:00
+ * Description:
+ * History:
  */
-
 public class EmLoc {
 
     /**

@@ -157,7 +157,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     private TaxiOrder taxiOrder;
 
     private FlowPresenter presenter;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
     private TraceReceiver traceReceiver;

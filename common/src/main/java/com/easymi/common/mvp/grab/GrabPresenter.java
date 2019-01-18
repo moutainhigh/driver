@@ -28,9 +28,12 @@ import rx.Observable;
 import static com.easymi.common.mvp.grab.GrabActivity2.GRAB_VALID_TIME;
 
 /**
- *
- * @author developerLzh
- * @date 2017/11/22 0022
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午5:00
+ * Description:
+ * History:
  */
 
 public class GrabPresenter implements GrabContract.Presenter {

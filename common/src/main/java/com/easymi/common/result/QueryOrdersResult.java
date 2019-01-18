@@ -6,9 +6,12 @@ import com.easymi.component.result.EmResult;
 import java.util.List;
 
 /**
- *
- * @author developerLzh
- * @date 2017/11/17 0017
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午5:00
+ * Description:
+ * History:
  */
 
 public class QueryOrdersResult extends EmResult {

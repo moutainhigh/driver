@@ -15,16 +15,28 @@ import java.math.BigDecimal;
  */
 
 public class Coupon implements Serializable{
+    /**
+     * / 1  折扣卷     2  抵扣卷
+     */
     @SerializedName("couponType")
-    public int couponType;// 1  折扣卷     2  抵扣卷
+    public int couponType;
 
-    public double discount;//折扣卷
-
-    public double deductible;//抵扣卷
-    //满减额
+    /**
+     * 折扣卷
+     */
+    public double discount;
+    /**
+     * 抵扣卷
+     */
+    public double deductible;
+    /**
+     * 满减额
+     */
     @SerializedName("couponTypeVoucherSubtractionMoney")
     public double SubtractionMoney;
-    //封顶额
+    /**
+     * 封顶额
+     */
     @SerializedName("couponTypeVoucherTopMoney")
     public double TopMoney;
 

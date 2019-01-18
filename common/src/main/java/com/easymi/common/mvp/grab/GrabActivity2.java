@@ -55,9 +55,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- *
- * @author developerLzh
- * @date 2017/11/2 0002
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午5:00
+ * Description:
+ * History:
  */
 
 public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {

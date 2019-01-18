@@ -22,7 +22,7 @@ import com.easymin.rental.flowMvp.ActFraCommBridge;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: RunningFragment
- *@Author: shine
+ * @Author: shine
  * Date: 2018/12/24 下午5:12
  * Description:
  * History:
@@ -30,7 +30,9 @@ import com.easymin.rental.flowMvp.ActFraCommBridge;
 public class RunningFragment extends RxBaseFragment{
 
     private RentalOrder baseOrder;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
     /**

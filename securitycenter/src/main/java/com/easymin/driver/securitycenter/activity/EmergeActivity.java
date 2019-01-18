@@ -43,7 +43,7 @@ import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: EmergeActivity
- *@Author: shine
+ * @Author: shine
  * Date: 2018/11/26 下午6:47
  * Description:
  * History:

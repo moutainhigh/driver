@@ -36,7 +36,9 @@ import com.easymin.chartered.flowMvp.ActFraCommBridge;
 public class ToStartFragment extends RxBaseFragment {
 
     private CharteredOrder baseOrder;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
     /**
      * 设置bridge

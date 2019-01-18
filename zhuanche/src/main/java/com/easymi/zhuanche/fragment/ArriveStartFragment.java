@@ -22,21 +22,22 @@ import com.easymi.zhuanche.widget.CallPhoneDialog;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: FinishActivity
- *@Author: shine
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 到达预约地
  * History:
  */
 
 public class ArriveStartFragment extends RxBaseFragment {
+    /**
+     * 专车订单
+     */
     private ZCOrder zcOrder;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
-    /**
-     * 设置bridge
-     *  @param bridge
-     */
     /**
      * 设置bridge
      * @param bridge
@@ -50,7 +51,6 @@ public class ArriveStartFragment extends RxBaseFragment {
     TextView startPlaceText;
     TextView endPlaceText;
     FrameLayout callPhoneCon;
-
     ImageView customHead;
     TextView customName;
 
@@ -70,6 +70,9 @@ public class ArriveStartFragment extends RxBaseFragment {
         initView();
     }
 
+    /**
+     * 初始化布局
+     */
     private void initView() {
         startPlaceText = $(R.id.start_place);
         endPlaceText = $(R.id.end_place);
@@ -83,7 +86,6 @@ public class ArriveStartFragment extends RxBaseFragment {
         startPlaceText.setSelected(true);
         endPlaceText.setSelected(true);
 
-        //todo 差客户头像
         customName.setText(zcOrder.passengerName);
 
         if (StringUtils.isNotBlank(zcOrder.avatar)) {

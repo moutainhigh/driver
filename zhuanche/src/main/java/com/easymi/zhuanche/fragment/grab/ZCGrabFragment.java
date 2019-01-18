@@ -35,10 +35,10 @@ import co.lujun.androidtagview.TagContainerLayout;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- *@Author: shine
+ * FileName: ZCGrabFragment
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 专车抢单界面
  * History:
  */
 
@@ -54,7 +54,9 @@ public class ZCGrabFragment extends Fragment {
     private TextView order_time;//预约时间 分秒
     private TextView order_dis;
     private TextView tvMark;
-
+    /**
+     * 订单信息
+     */
     private MultipleOrder zcOrder;
 
     @Nullable
@@ -79,6 +81,9 @@ public class ZCGrabFragment extends Fragment {
         return view;
     }
 
+    /**
+     * 显示基本信息
+     */
     private void showBase() {
         if (TextUtils.isEmpty(zcOrder.orderRemark)) {
             tvMark.setText("无备注");
@@ -136,11 +141,13 @@ public class ZCGrabFragment extends Fragment {
 
     @Override
     public void setArguments(Bundle args) {
-//        zcOrder = (MultipleOrder) args.getSerializable("order");
         zcOrder = (MultipleOrder) args.getSerializable("order");
         Log.e(ZCGrabFragment.class.getName(), zcOrder.toString());
     }
 
+    /**
+     * 路径规划对象
+     */
     RouteSearch routeSearch;
 
     /**
@@ -199,6 +206,10 @@ public class ZCGrabFragment extends Fragment {
         routeSearch.calculateDriveRouteAsyn(query);
     }
 
+    /**
+     * 抢单接单语音配置
+     * @param lineDis
+     */
     public void grabVoice(double lineDis) {
         String voiceStr = "";
         if (zcOrder.status == DJOrderStatus.NEW_ORDER) {
@@ -223,7 +234,6 @@ public class ZCGrabFragment extends Fragment {
             for (Address address : zcOrder.orderAddressVos) {
                 if (address.type == 1) {
                     LatLng start = new LatLng(address.latitude, address.longitude);
-//                    double meter = AMapUtils.calculateLineDistance(my, start);
                     DecimalFormat format;
                     if (lineDis > 1000) {
                         format = new DecimalFormat("#0.0");

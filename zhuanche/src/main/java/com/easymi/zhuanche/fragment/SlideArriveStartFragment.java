@@ -22,16 +22,21 @@ import com.easymi.zhuanche.widget.CallPhoneDialog;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- *@Author: shine
+ * FileName: SlideArriveStartFragment
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 滑动到达预约地
  * History:
  */
 
 public class SlideArriveStartFragment extends RxBaseFragment {
+    /**
+     * 专车订单
+     */
     private ZCOrder zcOrder;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
     /**
@@ -47,7 +52,6 @@ public class SlideArriveStartFragment extends RxBaseFragment {
     TextView endPlaceText;
     LinearLayout changeEndCon;
     FrameLayout callPhoneCon;
-
     ImageView customHead;
     TextView customName;
 
@@ -67,6 +71,9 @@ public class SlideArriveStartFragment extends RxBaseFragment {
         initView();
     }
 
+    /**
+     * 初始化布局
+     */
     private void initView() {
         startPlaceText = $(R.id.start_place);
         endPlaceText = $(R.id.end_place);
@@ -96,17 +103,7 @@ public class SlideArriveStartFragment extends RxBaseFragment {
 
         startPlaceText.setText(zcOrder.getStartSite().addr);
         endPlaceText.setText(zcOrder.getEndSite().addr);
-//        slideView.setmCallBack(new CustomSlideToUnlockView.CallBack() {
-//            @Override
-//            public void onSlide(int distance) {
-//
-//            }
-//
-//            @Override
-//            public void onUnlocked() {
-//                bridge.doArriveStart();
-//            }
-//        });
+
         slideView.setOnClickListener(v -> {
             bridge.doArriveStart();
         });

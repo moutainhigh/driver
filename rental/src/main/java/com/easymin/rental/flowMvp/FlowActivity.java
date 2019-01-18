@@ -91,7 +91,9 @@ public class FlowActivity extends RxBaseActivity implements
     FlowPresenter presenter;
 
     Fragment currentFragment;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
     DymOrder dymOrder;
@@ -234,7 +236,8 @@ public class FlowActivity extends RxBaseActivity implements
                 aMap.clear();
                 smoothMoveMarker = null;
                 initMap();
-                receiveLoc(EmUtil.getLastLoc());//第一时间加上自身位置
+                //第一时间加上自身位置
+                receiveLoc(EmUtil.getLastLoc());
             }
 
             @Override
@@ -514,9 +517,8 @@ public class FlowActivity extends RxBaseActivity implements
                     (int) (DensityUtil.getDisplayWidth(this) / 2),
                     0));
         }
-
-
-        latLngs.remove(lastLatlng);//后续可能会使用这个latLngs 所以移除加入的上次位置
+        //后续可能会使用这个latLngs 所以移除加入的上次位置
+        latLngs.remove(lastLatlng);
     }
 
     /**

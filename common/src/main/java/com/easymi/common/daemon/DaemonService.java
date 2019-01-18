@@ -25,11 +25,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- *
- * @author developerLzh
- * @date 2017/11/9 0009
- * <p>
- * 保活service
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午5:00
+ * Description:
+ * History:
  */
 
 public class DaemonService extends Service {

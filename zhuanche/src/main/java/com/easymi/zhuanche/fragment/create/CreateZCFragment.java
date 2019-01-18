@@ -42,8 +42,12 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 
 /**
- * /** * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd. * FileName:  * @Author: shine * Date: 2018/12/24 下午1:10 * Description: * History: */ 2017/11/16.
- * 反射调用
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: CreateZCFragment
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:  补单
+ * History:
  */
 
 public class CreateZCFragment extends RxLazyFragment implements CreateZCContract.View {
@@ -418,7 +422,6 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
                 Log.e("poi", startPoi.toString());
                 startPlace.setText(startPoi.getTitle());
                 startPlace.setTextColor(getResources().getColor(R.color.text_color_black));
-//                initQueryZCType();
             } else if (requestCode == END_CODE) {
                 endPoi = data.getParcelableExtra("poiItem");
                 endPlace.setText(endPoi.getTitle());

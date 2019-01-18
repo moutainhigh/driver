@@ -9,9 +9,12 @@ import com.easymin.rental.R;
 
 
 /**
- *
- * @author developerLzh
- * @date 2017/12/19 0019
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: CancelOrderReceiver
+ * @Author: shine
+ * Date: 2018/12/24 下午5:00
+ * Description:
+ * History:
  */
 
 public class CancelOrderReceiver extends BroadcastReceiver {

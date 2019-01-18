@@ -29,7 +29,9 @@ public class BcStartFragment extends RxBaseFragment {
 
     private TextView tvLineAddress;
     private LoadingButton tvStart;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
     private long scheduleId;

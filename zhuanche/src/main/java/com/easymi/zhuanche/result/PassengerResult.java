@@ -6,10 +6,10 @@ import com.easymi.zhuanche.entity.PassengerVo;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- *@Author: shine
+ * FileName: PassengerResult
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 乘客实体
  * History:
  */
 

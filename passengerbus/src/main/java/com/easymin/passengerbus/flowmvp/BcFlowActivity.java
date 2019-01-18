@@ -61,7 +61,9 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
     private TextView tvTipLayout;
 
     private CusToolbar toolbar;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
     private FlowPresenter presenter;

@@ -390,10 +390,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
                 false, consumerResult -> view.showConsumer(consumerResult.consumerInfo))));
     }
 
-    @Override
-    public ZCOrderResult orderResult2ZCOrder(ZCOrderResult zcOrderResult) {
-        return zcOrderResult;
-    }
 
     @Override
     public void onInitNaviFailure() {
@@ -409,7 +405,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     @Override
     public void onLocationChange(AMapNaviLocation aMapNaviLocation) {
         Log.e("FlowerPresenter", "onLocationChange()");
-//        routePlanByNavi(aMapNaviLocation.getCoord().getLatitude(),aMapNaviLocation.getCoord().getLongitude());
     }
 
     @Override
@@ -507,9 +502,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
      */
     @Override
     public void onReCalculateRouteForTrafficJam() {
-//        Log.e("FlowerPresenter", "onReCalculateRouteForTrafficJam()");
-//        view.showReCal();
-//        XApp.getInstance().syntheticVoice("为躲避拥堵，正在重新规划路径");
+
     }
 
     @Override
@@ -582,7 +575,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void onGetNavigationText(String s) {
-//        XApp.getInstance().syntheticVoice(s, false);
     }
 
     @Override

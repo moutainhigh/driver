@@ -13,9 +13,9 @@ import com.easymi.taxi.R;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: BaseCenterDialog
- *@Author: shine
+ * @Author: shine
  * Date: 2018/11/16 上午11:23
- * Description:
+ * Description: 中心弹窗
  * History:
  */
 public class BaseCenterDialog extends Dialog{
@@ -32,8 +32,8 @@ public class BaseCenterDialog extends Dialog{
         super.onCreate(savedInstanceState);
     }
 
-
-    private OnMyClickListener onMyClickListener;   //声明监听器接口
+    //声明监听器接口
+    private OnMyClickListener onMyClickListener;
 
     public OnMyClickListener getOnMyClickListener() {
         return onMyClickListener;

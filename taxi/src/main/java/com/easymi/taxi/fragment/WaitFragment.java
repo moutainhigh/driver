@@ -11,16 +11,17 @@ import com.easymi.taxi.flowMvp.ActFraCommBridge;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- *@Author: shine
+ * FileName: WaitFragment
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 等待布局 未使用
  * History:
  */
-
 public class WaitFragment extends RxBaseFragment {
     private DymOrder zcOrder;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
     /**
@@ -52,6 +53,9 @@ public class WaitFragment extends RxBaseFragment {
         initView();
     }
 
+    /**
+     * 初始化布局
+     */
     private void initView() {
         if (zcOrder == null) {
             zcOrder = new DymOrder();
@@ -68,6 +72,10 @@ public class WaitFragment extends RxBaseFragment {
         $(R.id.change_end_con).setOnClickListener(view -> bridge.changeEnd());
     }
 
+    /**
+     * 动态显示费用
+     * @param dymOrder
+     */
     public void showFee(DymOrder dymOrder) {
         this.zcOrder = dymOrder;
         getActivity().runOnUiThread(() -> {

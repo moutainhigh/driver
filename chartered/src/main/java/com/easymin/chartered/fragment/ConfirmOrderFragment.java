@@ -29,7 +29,9 @@ public class ConfirmOrderFragment extends RxBaseFragment {
     LoadingButton complet_order;
 
     private CharteredOrder baseOrder;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
     /**

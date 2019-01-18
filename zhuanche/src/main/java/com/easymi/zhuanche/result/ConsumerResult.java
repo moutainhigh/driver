@@ -6,15 +6,18 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName:
+ * FileName: ConsumerResult
  * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 客户信息实体
  * History:
  */
 
 public class ConsumerResult extends EmResult {
 
+    /**
+     * 客户信息
+     */
     @SerializedName("passengerInfo")
     public ConsumerInfo consumerInfo;
 }

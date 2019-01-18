@@ -10,15 +10,17 @@ import java.util.List;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- *@Author: shine
+ * FileName: TaxiOrderResult
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 出租车订单
  * History:
  */
-
 public class TaxiOrderResult extends EmResult {
 
+    /**
+     * 出租车订单
+     */
     public TaxiOrder data;
 
 }

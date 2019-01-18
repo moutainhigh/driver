@@ -29,6 +29,15 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+/**
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:TransferActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
+ */
+
 public class TransferActivity extends RxBaseActivity {
 
     @Override
@@ -70,6 +79,9 @@ public class TransferActivity extends RxBaseActivity {
         cusToolbar.setTitle(R.string.order_transfer);
     }
 
+    /**
+     * 初始化控件
+     */
     private void bindView() {
         tvNo = findViewById(R.id.order_no);
         tvTime = findViewById(R.id.order_time);
@@ -80,7 +92,9 @@ public class TransferActivity extends RxBaseActivity {
         stateView = findViewById(R.id.state);
     }
 
-
+    /**
+     * 查询转单司机
+     */
     private void getTransferList() {
         Address start = getStartAddr();
         if (start == null) {
@@ -120,6 +134,10 @@ public class TransferActivity extends RxBaseActivity {
         })));
     }
 
+    /**
+     * 获取订单起点
+     * @return
+     */
     private Address getStartAddr() {
         Address startAddress = null;
         if (order != null && order.orderAddressVos != null && order.orderAddressVos.size() != 0) {
@@ -133,6 +151,11 @@ public class TransferActivity extends RxBaseActivity {
         return startAddress;
     }
 
+    /**
+     * 获取订单终点
+     * @param orderId
+     * @param employId
+     */
     private void changeOrder(long orderId,long employId) {
         Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, TaxiApiService.class)
                 .changeOrder(orderId,employId, EmUtil.getAppKey())

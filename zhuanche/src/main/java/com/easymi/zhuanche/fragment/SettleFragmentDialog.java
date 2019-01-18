@@ -29,13 +29,12 @@ import java.text.DecimalFormat;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- *@Author: shine
+ * FileName: SettleFragmentDialog
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
  */
-
 public class SettleFragmentDialog {
 
     ImageView closeFragment;
@@ -47,23 +46,39 @@ public class SettleFragmentDialog {
     EditText remarkEdit;
     TextView dialogTitle;
     TextView addedHint;
-
     LoadingButton confirmBtn;
     LoadingButton payButton;
-
-    ZCOrder zcOrder;
-    DymOrder dymOrder;
-
-    ActFraCommBridge bridge;
-    private Context context;
-    private CusBottomSheetDialog dialog;
-
     TextView feeDetail;
 
+    private Context context;
+    /**
+     * 专车订单
+     */
+    ZCOrder zcOrder;
+    /**
+     * 本地动态订单
+     */
+    DymOrder dymOrder;
+
+    /**
+     * activity和fragment的通信接口
+     */
+    ActFraCommBridge bridge;
+    CusBottomSheetDialog dialog;
+
+    /**
+     * 额外费用
+     */
     private double extraFee = 0.0;
     private double paymentFee = 0.0;
     private String remark = "";
 
+    /**
+     *
+     * @param context 上下文
+     * @param zcOrder 专车订单
+     * @param bridge 通信接口
+     */
     public SettleFragmentDialog(Context context, ZCOrder zcOrder, ActFraCommBridge bridge) {
         this.context = context;
         this.zcOrder = zcOrder;
@@ -99,6 +114,9 @@ public class SettleFragmentDialog {
         dialog.setContentView(view);
     }
 
+    /**
+     * 初始化edittext监听
+     */
     private void initEdit() {
         boolean canChangeFee = ZCSetting.findOne().employChangePrice == 1;
         if (!canChangeFee) {
@@ -148,6 +166,9 @@ public class SettleFragmentDialog {
         addEditWatcher();
     }
 
+    /**
+     * 添加edittext监听回调
+     */
     private void addEditWatcher() {
         DecimalFormat decimalFormat = new DecimalFormat("#0.0");
         decimalFormat.setRoundingMode(RoundingMode.DOWN);
@@ -252,19 +273,32 @@ public class SettleFragmentDialog {
         });
     }
 
+    /**
+     * 显示弹窗
+     */
     public void show() {
         dialog.show();
     }
 
+    /**
+     * 设置代驾订单
+     * @param zcOrder
+     */
     public void setDjOrder(ZCOrder zcOrder) {
         this.zcOrder = zcOrder;
         initView();
     }
 
+    /**
+     * 关闭弹窗
+     */
     public void dismiss() {
         dialog.dismiss();
     }
 
+    /**
+     * 初始化布局
+     */
     private void initView() {
         initEdit();
         if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
@@ -296,7 +330,6 @@ public class SettleFragmentDialog {
         payButton.setOnClickListener(v -> {
             if (null != bridge) {
                 bridge.doPay(dymOrder.orderShouldPay);
-//                bridge.doPay(dymOrder.totalFee);
             }
         });
         closeFragment.setOnClickListener(v -> {
@@ -317,6 +350,9 @@ public class SettleFragmentDialog {
         setText();
     }
 
+    /**
+     * 显示车牌号
+     */
     private void setText() {
         calcMoney();
 
@@ -328,6 +364,10 @@ public class SettleFragmentDialog {
         }
     }
 
+    /**
+     * 更新订单数据
+     * @param dymOrder
+     */
     public void setDymOrder(DymOrder dymOrder) {
         this.dymOrder = dymOrder;
         calcMoney();
@@ -335,6 +375,9 @@ public class SettleFragmentDialog {
 
     DecimalFormat df = new DecimalFormat("#0.00");
 
+    /**
+     * 计算金额
+     */
     private void calcMoney() {
         //到达于目的地后就无需计算了
         if (zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_DESTINATION_ORDER) {
@@ -386,6 +429,10 @@ public class SettleFragmentDialog {
 
     }
 
+    /**
+     * 判断dialog是否显示
+     * @return
+     */
     public boolean isShowing() {
         return dialog.isShowing();
     }

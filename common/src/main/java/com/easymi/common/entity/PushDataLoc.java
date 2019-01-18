@@ -5,13 +5,13 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 /**
- *
- * @author developerLzh
- * @date 2017/12/21 0021
- *
- * 上行数据的位置信息和订单列表
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午5:00
+ * Description:
+ * History:
  */
-
 public class PushDataLoc {
 
     @SerializedName("app_key")

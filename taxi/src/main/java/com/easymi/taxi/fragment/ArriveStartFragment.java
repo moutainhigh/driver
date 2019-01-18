@@ -21,8 +21,8 @@ import com.easymi.taxi.widget.CallPhoneDialog;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- *@Author: shine
+ * FileName: ArriveStartFragment
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -30,7 +30,9 @@ import com.easymi.taxi.widget.CallPhoneDialog;
 
 public class ArriveStartFragment extends RxBaseFragment {
     private TaxiOrder taxiOrder;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
     /**
@@ -66,6 +68,9 @@ public class ArriveStartFragment extends RxBaseFragment {
         initView();
     }
 
+    /**
+     * 初始化布局
+     */
     private void initView() {
         startPlaceText = $(R.id.start_place);
         endPlaceText = $(R.id.end_place);
@@ -75,7 +80,7 @@ public class ArriveStartFragment extends RxBaseFragment {
 
         customHead = $(R.id.iv_head);
         customName = $(R.id.tv_custom_name);
-        //todo 差客户头像
+
         customName.setText(taxiOrder.passengerName);
 
         if (StringUtils.isNotBlank(taxiOrder.avatar)) {

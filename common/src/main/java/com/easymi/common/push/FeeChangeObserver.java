@@ -1,9 +1,12 @@
 package com.easymi.common.push;
 
 /**
- *
- * @author developerLzh
- * @date 2017/12/21 0021
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午5:00
+ * Description:
+ * History:
  */
 
 public interface FeeChangeObserver {

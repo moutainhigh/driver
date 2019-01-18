@@ -36,10 +36,10 @@ import com.easymi.zhuanche.util.PhoneUtil;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName:
+ * FileName: OldRunningActivity
  * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 未使用
  * History:
  */
 
@@ -58,7 +58,9 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
     private long orderId;
 
     private FlowPresenter presenter;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
     private double payMoney;

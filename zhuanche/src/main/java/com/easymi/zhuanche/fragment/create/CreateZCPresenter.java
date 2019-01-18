@@ -23,8 +23,8 @@ import java.util.List;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- *@Author: shine
+ * FileName: CreateZCPresenter
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -63,7 +63,6 @@ public class CreateZCPresenter implements CreateZCContract.Presenter {
     public void queryPassenger(String phone) {
         Employ employ = EmUtil.getEmployInfo();
         view.getManager().add(model.queryPassenger(employ.company_id,
-//                employ.company_name,
                 "company_name",
                 phone).subscribe(new MySubscriber<>(context, true, true, new HaveErrSubscriberListener<PassengerResult>() {
             @Override

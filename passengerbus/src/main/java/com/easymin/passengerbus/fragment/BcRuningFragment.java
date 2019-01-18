@@ -46,11 +46,13 @@ public class BcRuningFragment extends RxBaseFragment implements RouteSearch.OnRo
     private TextView tvLineAddress;
     private TextView tvTip;
     private LinearLayout lin_wait;
-
     private LinearLayout lineLayout;
     private TextView tvWaiteTime;
     private CustomSlideToUnlockView slider;
     private LinearLayout controlCon;
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
     /**
@@ -58,8 +60,14 @@ public class BcRuningFragment extends RxBaseFragment implements RouteSearch.OnRo
      */
     int index;
 
+    /**
+     * 班次id
+     */
     private long scheduleId;
 
+    /**
+     * 站点集合
+     */
     private List<BusStationsBean> listLine = new ArrayList<>();
 
     @Override
@@ -172,26 +180,7 @@ public class BcRuningFragment extends RxBaseFragment implements RouteSearch.OnRo
                     bridge.showEndFragment();
                 }
                 resetView();
-//                if (listLine.size() > 0 && index < listLine.size() - 1) {
-//                    //下标从0开始
-//                    index = index + 1;
-//                    if (listLine.get(index).status == BusStationsBean.ARRIVE_WAIT) {
-//
-//                        bridge.slideToNext(listLine.get(index).id);
-//                        listLine.get(index).status = BusStationsBean.LEAVE_STATION;
-//                        listLine.get(index+1).status = BusStationsBean.TO_STATION;
-//                        listLine.get(index).updateStatus();
-//                    } else if (listLine.get(index).status == BusStationsBean.TO_STATION) {
-//                        bridge.sideToArrived(listLine.get(index).id);
-//
-//                    }
-//                } else if (index == listLine.size() - 1) {
-//                    if (listLine.get(index).status == BusStationsBean.ARRIVE_WAIT) {
-//                        bridge.sideToArrived(listLine.get(index).id);
-//                    }
-//                    bridge.showEndFragment();
-//                }
-//                resetView();
+
             }
         });
     }

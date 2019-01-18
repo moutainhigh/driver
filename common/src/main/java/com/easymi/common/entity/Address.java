@@ -5,11 +5,13 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 /**
- *
- * @author developerLzh
- * @date 2017/11/20 0020
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午5:00
+ * Description:
+ * History:
  */
-
 public class Address implements Serializable{
     public long id;
 

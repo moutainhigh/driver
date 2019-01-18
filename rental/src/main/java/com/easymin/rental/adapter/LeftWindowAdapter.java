@@ -33,7 +33,6 @@ public class LeftWindowAdapter implements AMap.InfoWindowAdapter {
 
     @Override
     public View getInfoWindow(Marker marker) {
-
         return null;
     }
 

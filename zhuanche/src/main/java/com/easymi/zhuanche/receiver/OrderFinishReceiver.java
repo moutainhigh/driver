@@ -35,6 +35,9 @@ public class OrderFinishReceiver extends BroadcastReceiver {
         }
     }
 
+    /**
+     * 完成订单接口
+     */
     public interface OnFinishListener {
         /**
          * 取消订单监听

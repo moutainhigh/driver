@@ -21,13 +21,12 @@ import rx.Observable;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- *@Author: shine
+ * FileName: TaxiApiService
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 出租车接口地址
  * History:
  */
-
 public interface TaxiApiService {
 
     /**
@@ -54,35 +53,6 @@ public interface TaxiApiService {
     Observable<TaxiOrderResult> grabOrder(@Field("order_id") Long orderId,
                                           @Field("driver_id") Long driverId,
                                           @Field("app_key") String appKey);
-
-//    /**
-//     * 接单
-//     *
-//     * @param orderId
-//     * @param driverId
-//     * @param appKey
-//     * @return
-//     */
-//    @FormUrlEncoded
-//    @POST("/driver/api/v1/takeSpecialOrder")
-//    Observable<TaxiOrderResult> takeOrder(@Field("order_id") Long orderId,
-//                                          @Field("driver_id") Long driverId,
-//                                          @Field("app_key") String appKey);
-
-//    /**
-//     * 拒单
-//     *
-//     * @param orderId
-//     * @param driverId
-//     * @param appKey
-//     * @return
-//     */
-//    @FormUrlEncoded
-//    @PUT("driver/api/v1/refuseSpecialOrder")
-//    Observable<EmResult> refuseOrder(@Field("order_id") Long orderId,
-//                                     @Field("driver_id") Long driverId,
-//                                     @Field("app_key") String appKey,
-//                                     @Field("remark") String remark);
 
     /**
      * 司机修改终点
@@ -420,8 +390,6 @@ public interface TaxiApiService {
     @PUT("api/v1/taxi/normal/order/settlement")
     Observable<EmResult> taxiSettlement(@Field("orderId") Long orderId,
                                         @Field("orderNo") String orderNo,
-//                                        @Field("driverId") Long driverId,
-//                                        @Field("companyId") Long companyId,
                                         @Field("longitude") Double longitude,
                                         @Field("latitude") Double latitude,
                                         @Field("detailAddress") String detailAddress,

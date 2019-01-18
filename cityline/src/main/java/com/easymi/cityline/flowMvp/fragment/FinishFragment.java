@@ -20,7 +20,9 @@ import java.util.TimerTask;
  */
 
 public class FinishFragment extends RxBaseFragment {
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
     TextView countDown;

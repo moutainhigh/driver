@@ -10,8 +10,14 @@ package com.easymin.rental;
  */
 public class StaticVal {
 
-    public static final int MARKER_FLAG_START = 20;//起点
-    public static final int MARKER_FLAG_END = 21;//终点
+    /**
+     * 起点
+     */
+    public static final int MARKER_FLAG_START = 20;
+    /**
+     * 终点
+     */
+    public static final int MARKER_FLAG_END = 21;
 
 
 }

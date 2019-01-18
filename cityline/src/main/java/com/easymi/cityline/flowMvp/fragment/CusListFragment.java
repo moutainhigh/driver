@@ -35,7 +35,9 @@ public class CusListFragment extends RxBaseFragment {
     private List<OrderCustomer> orderCustomerList;
 
     private DymOrder dymOrder;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
     private int flag;

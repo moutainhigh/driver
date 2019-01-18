@@ -104,7 +104,9 @@ public class FlowActivity extends RxBaseActivity implements
     FlowPresenter presenter;
 
     Fragment currentFragment;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
     DymOrder dymOrder;

@@ -38,11 +38,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
 /**
- *
- * @author developerLzh
- * @date 2017/12/7 0007
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午5:00
+ * Description:
+ * History:
  */
 
 public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AMapNaviViewListener {

@@ -12,9 +12,9 @@ import com.easymi.taxi.R;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: TaxiSettleDialog
- *@Author: shine
+ * @Author: shine
  * Date: 2018/11/16 上午11:28
- * Description:
+ * Description: 出租车结算弹窗
  * History:
  */
 public class TaxiSettleDialog extends BaseCenterDialog {
@@ -27,9 +27,10 @@ public class TaxiSettleDialog extends BaseCenterDialog {
     TextView tv_sure;
     TextView tv_cancel;
 
-
-    int inpuType; // 0普通文本 1纯数字 2价格
-
+    /**
+     *  0普通文本 1纯数字 2价格
+     */
+    int inpuType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
