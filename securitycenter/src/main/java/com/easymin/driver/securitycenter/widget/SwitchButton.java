@@ -33,7 +33,7 @@ import com.easymin.driver.securitycenter.R;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: SwitchButton
- * Author: shine
+ *@Author: shine
  * Date: 2018/11/27 下午6:37
  * Description:
  * History:

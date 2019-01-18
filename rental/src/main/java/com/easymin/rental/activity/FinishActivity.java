@@ -25,9 +25,15 @@ public class FinishActivity extends RxBaseActivity{
     TextView countDown;
     TextView back;
 
+    /**
+     * 定时器
+     */
     Timer timer;
     TimerTask timerTask;
 
+    /**
+     * 倒计时
+     */
     int time = 5;
 
     @Override
@@ -69,6 +75,9 @@ public class FinishActivity extends RxBaseActivity{
         cusToolbar.setLeftBack(view -> finish());
     }
 
+    /**
+     * 取消倒计时
+     */
     public void cancelTimer() {
         if (timer != null) {
             timer.cancel();

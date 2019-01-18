@@ -34,9 +34,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by liuzihao on 2018/11/2.
- *
- * 公里数管理类,此类只针对于在运营中出现的那种后台收到了mqtt的推送，没收到后台响应的情况.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:  DistanceManager
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 公里数管理类,此类只针对于在运营中出现的那种后台收到了mqtt的推送，没收到后台响应的情况.
+ * History:
  */
 
 public class DistanceManager {

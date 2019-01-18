@@ -26,7 +26,12 @@ import com.easymi.component.widget.RotateImageView;
 import com.easymi.personal.R;
 
 /**
- * Created by liuzihao on 2018/4/19.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: SysCheckActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class SysCheckActivity extends RxBaseActivity implements AMapLocationListener {
@@ -96,6 +101,9 @@ public class SysCheckActivity extends RxBaseActivity implements AMapLocationList
         reCheck.setOnClickListener(view -> startScan());
     }
 
+    /**
+     * 开始扫描
+     */
     private void startScan() {
         reCheck.setVisibility(View.GONE);
         back.setBackgroundColor(getResources().getColor(R.color.green));
@@ -224,6 +232,9 @@ public class SysCheckActivity extends RxBaseActivity implements AMapLocationList
         }).start();
     }
 
+    /**
+     * 显示结果
+     */
     private void showResult() {
         errCountText.setText(errCount + "");
 
@@ -243,6 +254,9 @@ public class SysCheckActivity extends RxBaseActivity implements AMapLocationList
         reCheck.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * 销毁
+     */
     private void desClient() {
         if (locClient != null) {
             locClient.stopLocation();

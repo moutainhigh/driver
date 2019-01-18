@@ -25,11 +25,10 @@ import rx.Observable;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: RegisterListActivity
- * Author: shine
+ * @Author: hufeng
  * Date: 2018/12/19 上午9:58
  * Description:
  * History:
- * @author hufeng
  */
 public class RegisterListActivity extends RxBaseActivity{
 
@@ -102,6 +101,9 @@ public class RegisterListActivity extends RxBaseActivity{
         }
     }
 
+    /**
+     * 初始化注册业务类型
+     */
     public void getData(){
         listType.clear();
         if (Config.KT_ZHUANCHE){
@@ -142,12 +144,18 @@ public class RegisterListActivity extends RxBaseActivity{
         }
     }
 
+    /**
+     * 初始化控件
+     */
     public void findById() {
         toolbar = findViewById(R.id.toolbar);
         button_sure = findViewById(R.id.button_sure);
         recyclerView = findViewById(R.id.recyclerView);
     }
 
+    /**
+     * 初始化适配器
+     */
     public void initAdapter(){
         adapter = new RegisterTypeAdapter(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -166,6 +174,9 @@ public class RegisterListActivity extends RxBaseActivity{
         });
     }
 
+    /**
+     * 获取服务机构数据
+     */
     private void getCompany() {
         Observable<CompanyList> observable = RegisterModel.getCompanys();
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, companyList -> {
@@ -177,6 +188,9 @@ public class RegisterListActivity extends RxBaseActivity{
         })));
     }
 
+    /**
+     * 返回上个界面数据
+     */
     public void setResult(){
         Intent intent = new Intent();
         intent.putExtra("selectType",selectType);

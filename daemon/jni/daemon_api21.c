@@ -1,6 +1,6 @@
 /*
  * File        : daemon_api21.c
- * Author      : Mars Kwok
+ *@Author      : Mars Kwok
  * Date        : Jul. 21, 2015
  * Description : This is used to watch process dead over api 21
  *

@@ -28,8 +28,8 @@ import java.util.List;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- * Author: shine
+ * FileName: WeatherActivity
+ * @author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -83,6 +83,10 @@ public class WeatherActivity extends RxBaseActivity implements WeatherSearch.OnW
         cusToolbar.setTitle(R.string.weather_forecast);
     }
 
+    /**
+     *
+     * 搜索实况天气
+     */
     private void searchLiveWeather() {
         if (null == weatherSearch) {
             weatherSearch = new WeatherSearch(this);
@@ -94,6 +98,9 @@ public class WeatherActivity extends RxBaseActivity implements WeatherSearch.OnW
 
     }
 
+    /**
+     * 搜索预况天气
+     */
     private void searchForecast() {
         if (null == weatherSearch) {
             weatherSearch = new WeatherSearch(this);

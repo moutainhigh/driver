@@ -28,8 +28,8 @@ import rx.schedulers.Schedulers;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- * Author: shine
+ * FileName: MsgActivity
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -68,6 +68,10 @@ public class MsgActivity extends RxBaseActivity {
         toolbar.setTitle(R.string.my_message);
     }
 
+    /**
+     * 推荐文章 未使用
+     * @param view
+     */
     public void tuijian(View view) {
 //        Intent intent = new Intent(MsgActivity.this, ArticleActivity.class);
 //        intent.putExtra("tag", "DriverPromotion");
@@ -75,14 +79,25 @@ public class MsgActivity extends RxBaseActivity {
 //        startActivity(intent);
     }
 
+    /**
+     * 跳转通知
+     * @param view
+     */
     public void toNotice(View view) {
         startActivity(new Intent(MsgActivity.this, NotifityActivity.class));
     }
 
+    /**
+     * 跳转公告
+     * @param view
+     */
     public void toAnnouncement(View view) {
         startActivity(new Intent(MsgActivity.this, AnnouncementActivity.class));
     }
 
+    /**
+     * 查询通知
+     */
     private void queryNotify() {
         Observable<NotifityResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .notices( 1, 10)
@@ -101,6 +116,9 @@ public class MsgActivity extends RxBaseActivity {
         })));
     }
 
+    /**
+     * 查询公告
+     */
     private void queryAnn() {
         Observable<AnnouncementResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .employAffiches(1, 10)

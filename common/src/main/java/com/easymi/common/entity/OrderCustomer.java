@@ -15,9 +15,12 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2018/11/15.
- * <p>
- * 专线订单-->订单客户 一对多的关系 (移动到common便于上传位置信息的时候给专线订单赋值)
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:OrderCustomer
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 专线订单-->订单客户 一对多的关系 (移动到common便于上传位置信息的时候给专线订单赋值)
+ * History:
  */
 
 public class OrderCustomer implements Serializable {

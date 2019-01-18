@@ -25,9 +25,13 @@ import com.easymi.personal.adapter.CheckAdapter;
 import com.easymi.personal.widget.NotScrollViewPager;
 
 /**
- * Created by liuzihao on 2018/4/19.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: SysCheck2Activity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
-
 public class SysCheck2Activity extends RxBaseActivity implements AMapLocationListener {
 
     RelativeLayout checkLayout;
@@ -85,14 +89,19 @@ public class SysCheck2Activity extends RxBaseActivity implements AMapLocationLis
         CheckAdapter adapter = new CheckAdapter(this);
         viewPager.setAdapter(adapter);
 
-        viewPager.setOffscreenPageLimit(3);    //设置缓存个数，至少为3
-        viewPager.setPageMargin(14);       //设置每一页之间的间距
+        //设置缓存个数，至少为3
+        viewPager.setOffscreenPageLimit(3);
+        //设置每一页之间的间距
+        viewPager.setPageMargin(14);
 
         startScan();
 
         reCheck.setOnClickListener(view -> startScan());
     }
 
+    /**
+     * 开始扫描
+     */
     private void startScan() {
 
         rotateImg.startRotate();
@@ -178,6 +187,9 @@ public class SysCheck2Activity extends RxBaseActivity implements AMapLocationLis
         }).start();
     }
 
+    /**
+     * 展示检查结果
+     */
     private void showCheckResult() {
         rotateImg.destroyRotate();
         viewPager.setCurrentItem(0, true);
@@ -228,6 +240,9 @@ public class SysCheck2Activity extends RxBaseActivity implements AMapLocationLis
         noticeState.setTextColor(noticeColor);
     }
 
+    /**
+     * 停止
+     */
     private void desClient() {
         if (locClient != null) {
             locClient.stopLocation();

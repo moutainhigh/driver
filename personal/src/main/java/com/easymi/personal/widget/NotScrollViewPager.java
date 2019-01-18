@@ -7,7 +7,12 @@ import android.view.MotionEvent;
 import android.view.View;
 
 /**
- * Created by Administrator on 2016/5/19. 解决ViewPager和百度地图滑动冲突
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: NotScrollViewPager
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 解决ViewPager和百度地图滑动冲突
+ * History:
  */
 public class NotScrollViewPager extends ViewPager {
 

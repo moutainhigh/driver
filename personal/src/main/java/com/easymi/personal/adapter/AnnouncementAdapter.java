@@ -19,8 +19,8 @@ import java.util.List;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- * Author: shine
+ * FileName: AnnouncementAdapter
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -35,6 +35,10 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
     private OnItemClickListener listener;
 
     public interface OnItemClickListener {
+        /**
+         * 点击监听
+         * @param announcement
+         */
         void onClick(Announcement announcement);
     }
 
@@ -43,6 +47,10 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
         list = new ArrayList<>();
     }
 
+    /**
+     * 设置数据
+     * @param list
+     */
     public void setList(List<Announcement> list) {
         this.list = list;
         notifyDataSetChanged();

@@ -3,7 +3,7 @@ package com.easymin.driver.securitycenter;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: Config
- * Author: shine
+ *@Author: shine
  * Date: 2018/11/28 下午10:43
  * Description:
  * History:

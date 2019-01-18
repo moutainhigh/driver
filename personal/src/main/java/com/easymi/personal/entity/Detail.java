@@ -4,8 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- * Author: shine
+ * FileName: Detail
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -14,7 +14,6 @@ import com.google.gson.annotations.SerializedName;
 public class Detail {
     @SerializedName("time")
     public Long time;
-
 
     //driver_recharge 司机充值
     //PAY_DRIVER_BALANCE 余额支付

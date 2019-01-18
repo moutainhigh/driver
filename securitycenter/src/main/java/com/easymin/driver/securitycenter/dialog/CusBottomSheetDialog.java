@@ -23,7 +23,7 @@ import com.easymin.driver.securitycenter.R;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: CusBottomSheetDialog
- * Author: shine
+ *@Author: shine
  * Date: 2018/11/26 下午7:27
  * Description:
  * History:

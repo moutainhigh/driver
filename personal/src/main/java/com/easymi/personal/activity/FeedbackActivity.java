@@ -25,8 +25,8 @@ import rx.schedulers.Schedulers;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- * Author: shine
+ * FileName: FeedbackActivity
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -81,6 +81,9 @@ public class FeedbackActivity extends RxBaseActivity {
         });
     }
 
+    /**
+     * 意见反馈申请
+     */
     public void apply() {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 

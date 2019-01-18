@@ -34,8 +34,8 @@ import java.util.List;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- * Author: shine
+ * FileName: NearWcActivity
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -141,6 +141,9 @@ public class NearWcActivity extends RxBaseActivity implements AMap.OnMarkerClick
         cusToolbar.setTitle(R.string.near_wc);
     }
 
+    /**
+     * 查询附近厕所
+     */
     private void searchNearBy() {
 
         String keyWord = "厕所|公厕|WC";
@@ -205,6 +208,9 @@ public class NearWcActivity extends RxBaseActivity implements AMap.OnMarkerClick
         search.searchPOIAsyn();
     }
 
+    /**
+     * 移除所有marker
+     */
     private void removeAllMarker() {
         for (Marker marker : markers) {
             marker.remove();

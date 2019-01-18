@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: FinishActivity
- * Author: shine
+ *@Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -16,7 +16,9 @@ import java.util.List;
 
 
 public class LiushuiResult extends EmResult {
-//    public List<Detail> driverPreSaveSerials;
+    /**
+     * 流水数据
+     */
     public List<Detail> data;
     public int total;
 }

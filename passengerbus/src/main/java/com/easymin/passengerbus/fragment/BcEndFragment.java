@@ -17,7 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 行程结束
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FlowModel
+ * @Author: shine
+ * Date: 2018/12/18 下午1:59
+ * Description: 行程结束
+ * History:
  */
 public class BcEndFragment extends RxBaseFragment{
 
@@ -55,6 +60,9 @@ public class BcEndFragment extends RxBaseFragment{
         initView();
     }
 
+    /**
+     * 初始化界面
+     */
     private void initView() {
         listLine = BusStationsBean.findByScheduleId(scheduleId);
 

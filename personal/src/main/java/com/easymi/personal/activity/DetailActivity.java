@@ -31,10 +31,10 @@ import rx.schedulers.Schedulers;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- * Author: shine
+ * FileName: DetailActivity
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 账户明细
  * History:
  */
 
@@ -95,6 +95,9 @@ public class DetailActivity extends RxBaseActivity {
         cusToolbar.setTitle(R.string.pocket_detail);
     }
 
+    /**
+     * 获取流水
+     */
     private void getLiushui() {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 

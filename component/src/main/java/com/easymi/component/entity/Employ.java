@@ -15,9 +15,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2017/11/16.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
-
 public class Employ extends BaseEmploy implements Parcelable {
 
 //    /**

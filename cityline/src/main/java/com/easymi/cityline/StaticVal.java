@@ -1,9 +1,13 @@
 package com.easymi.cityline;
 
 /**
- * Created by liuzihao on 2018/11/15.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
-
 public class StaticVal {
     //起点
     public static final int MARKER_FLAG_START = 20;

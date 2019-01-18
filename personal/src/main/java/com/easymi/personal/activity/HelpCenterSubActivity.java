@@ -26,7 +26,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by liuzihao on 2018/3/1.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: HelpCenterSubActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class HelpCenterSubActivity extends RxBaseActivity {
@@ -64,6 +69,9 @@ public class HelpCenterSubActivity extends RxBaseActivity {
         getMenuData();
     }
 
+    /**
+     * 获取帮助中心数据
+     */
     private void getMenuData() {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 

@@ -40,7 +40,7 @@ import rx.Observable;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: RegisterAcitivty
- * Author: shine
+ * @Author: shine
  * Date: 2018/12/18 下午3:16
  * Description:
  * History:
@@ -59,7 +59,10 @@ public class RegisterAcitivty extends RxBaseActivity {
     ImageView iv_image_code;
     EditText et_img_code;
 
-    private String randomNum;//唯一标示符 图形验证码
+    /**
+     * 唯一标示符 用于获取图形验证码
+     */
+    private String randomNum;
 
 
     @Override
@@ -135,6 +138,9 @@ public class RegisterAcitivty extends RxBaseActivity {
         iv_image_code.setOnClickListener(view -> getImgCode() );
     }
 
+    /**
+     * 初始化控件
+     */
     public void findById() {
         register_button = findViewById(R.id.register_button);
         tv_get_code = findViewById(R.id.tv_get_code);
@@ -148,6 +154,9 @@ public class RegisterAcitivty extends RxBaseActivity {
         et_img_code = findViewById(R.id.et_img_code);
     }
 
+    /**
+     * 设置监听
+     */
     private void initEdit() {
         et_phone.addTextChangedListener(new TextWatcher() {
             @Override
@@ -262,6 +271,10 @@ public class RegisterAcitivty extends RxBaseActivity {
         });
     }
 
+    /**
+     * 设置按钮是否可点击
+     * @param enable
+     */
     private void setLoginBtnEnable(boolean enable) {
         register_button.setEnabled(enable);
         if (enable) {
@@ -271,6 +284,9 @@ public class RegisterAcitivty extends RxBaseActivity {
         }
     }
 
+    /**
+     * 设置服务人员协议跳转
+     */
     private void initBox() {
         text_agreement.setOnClickListener(view -> {
             Intent intent = new Intent(this, WebActivity.class);
@@ -280,8 +296,14 @@ public class RegisterAcitivty extends RxBaseActivity {
         });
     }
 
+    /**
+     * 能否看密码
+     */
     private boolean eyeOn = false;
 
+    /**
+     * 可视密码点击事件
+     */
     private void initEye() {
         eye.setOnClickListener(view -> {
             if (eyeOn) {
@@ -300,6 +322,9 @@ public class RegisterAcitivty extends RxBaseActivity {
         });
     }
 
+    /**
+     * 验证码倒计时
+     */
     public void countDown() {
         et_code.requestFocus();  //申请获取焦点
         //开始倒计时
@@ -320,17 +345,27 @@ public class RegisterAcitivty extends RxBaseActivity {
         }.start();
     }
 
+    /**
+     * 跳转注册
+     * @param employ
+     */
     public void startBase(Employ employ) {
         Intent intent = new Intent(this, RegisterBaseActivity.class);
         intent.putExtra("employ",employ);
         startActivity(intent);
     }
 
+    /**
+     * 获取图形验证码
+     */
     public void getImgCode() {
         randomNum = "" + System.currentTimeMillis() + (int) ((Math.random() * 9 + 1) * 100000);
         Glide.with(this).load(Config.HOST + "api/v1/public/app/captcha/code/" + randomNum).into(iv_image_code);
     }
 
+    /**
+     * 发送验证码
+     */
     private void sendSms() {
         String code_rsa = null;
         String phone_rsa = null;
@@ -356,6 +391,9 @@ public class RegisterAcitivty extends RxBaseActivity {
         })));
     }
 
+    /**
+     * 调用注册接口
+     */
     private void register() {
         String password_rsa = null;
         String phone_rsa = null;

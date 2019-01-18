@@ -3,7 +3,7 @@ package com.easymi.personal.entity;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: BankInfo
- * Author: shine
+ * @Author: shine
  * Date: 2018/11/21 下午1:13
  * Description:
  * History:

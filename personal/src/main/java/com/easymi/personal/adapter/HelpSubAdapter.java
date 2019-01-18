@@ -16,7 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2018/3/1.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: HelpSubAdapter
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class HelpSubAdapter extends RecyclerView.Adapter<HelpSubAdapter.ViewHolder> {

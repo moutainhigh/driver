@@ -32,8 +32,8 @@ import rx.schedulers.Schedulers;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- * Author: shine
+ * FileName: ChangeActivity
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -90,7 +90,9 @@ public class ChangeActivity extends RxBaseActivity {
         });
     }
 
-
+    /**
+     * 修改密码接口
+     */
     private void changePsw() {
         McService mcService = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
@@ -104,12 +106,6 @@ public class ChangeActivity extends RxBaseActivity {
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, btn, emResult -> {
             ToastUtil.showMessage(ChangeActivity.this, getString(R.string.change_psw_suc));
-//            boolean canRemember = XApp.getMyPreferences().getBoolean(Config.SP_REMEMBER_PSW, true);
-//            if (canRemember) {
-//                XApp.getPreferencesEditor().putString(Config.SP_LOGIN_PSW,
-//                        AesUtil.aesEncrypt(editNew.getText().toString(), AesUtil.AAAAA)).apply();
-//            }
-//            finish();
             EmUtil.employLogout(ChangeActivity.this);
         })));
     }
@@ -123,6 +119,9 @@ public class ChangeActivity extends RxBaseActivity {
         cusToolbar.setTitle(R.string.set_change_psw);
     }
 
+    /**
+     * edittext监听
+     */
     class MyTextWatcher implements TextWatcher {
 
         @Override

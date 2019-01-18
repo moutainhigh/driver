@@ -44,8 +44,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- * Author: shine
+ * FileName: TixianActivity
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -68,7 +68,6 @@ public class TixianActivity extends RxBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        getDriverInfo(EmUtil.getEmployId());
     }
 
     @Override
@@ -166,6 +165,11 @@ public class TixianActivity extends RxBaseActivity {
         balanceText.setText(String.valueOf(EmUtil.getEmployInfo().balance));
     }
 
+    /**
+     * 设置提现等级
+     * @param money
+     * @return
+     */
     private boolean moneyLegal(double money) {
         if (null != tixianRule) {
             if (money < tixianRule.withdrawals_min) {
@@ -183,6 +187,9 @@ public class TixianActivity extends RxBaseActivity {
         }
     }
 
+    /**
+     * 提现申请
+     */
     private void apply() {
         double money = 0.0;
         try {
@@ -248,35 +255,14 @@ public class TixianActivity extends RxBaseActivity {
         cusToolbar.setTitle(R.string.tixian_title);
     }
 
-//    private void getDriverInfo(Long driverId) {
-//        Observable<LoginResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-//                .getDriverInfo(driverId, EmUtil.getAppKey())
-//                .filter(new HttpResultFunc<>())
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread());
-//
-//        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, loginResult -> {
-//            Employ employ = loginResult.getEmployInfo();
-//            employ.saveOrUpdate();
-//            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
-//            editor.apply();
-//
-//            balanceText.setText(String.valueOf(employ.balance));
-//
-////            if (StringUtils.isNotBlank(employ.bank_name)) {
-////                bankName.setText(employ.bank_name);
-////            }
-////            if (StringUtils.isNotBlank(employ.bank_card_no)) {
-////                bankNo.setText(employ.bank_card_no);
-////            }
-////            if (StringUtils.isNotBlank(employ.cash_person_name)) {
-////                bankOwner.setText(employ.cash_person_name);
-////            }
-//        })));
-//    }
-
+    /**
+     * 提现规则
+     */
     private TixianRule tixianRule;
 
+    /**
+     * 获取提现规则
+     */
     private void getTixianConfig() {
         Observable<TixianRuleResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .tixianRule()
@@ -300,7 +286,9 @@ public class TixianActivity extends RxBaseActivity {
         return true;
     }
 
-
+    /**
+     * 获取银行信息
+     */
     private void getBankInfo() {
         Observable<BankResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .bankInfo()

@@ -10,7 +10,12 @@ import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.R;
 
 /**
- * Created by liuzihao on 2017/11/16.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: HelpCenterActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class HelpCenterActivity extends RxBaseActivity {
@@ -32,12 +37,19 @@ public class HelpCenterActivity extends RxBaseActivity {
 
     }
 
+    /**
+     * 前往代驾帮助中心
+     * @param view
+     */
     public void toDaijiaHelp(View view) {
         Intent intent = new Intent(HelpCenterActivity.this, HelpCenterSubActivity.class);
         intent.putExtra("cateId", 2L);
         startActivity(intent);
     }
-
+    /**
+     * 前往专车帮助中心
+     * @param view
+     */
     public void toZhuanCheHelp(View view) {
         Intent intent = new Intent(HelpCenterActivity.this, HelpCenterSubActivity.class);
         intent.putExtra("cateId", 4L);

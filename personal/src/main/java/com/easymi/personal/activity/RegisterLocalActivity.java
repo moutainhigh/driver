@@ -29,10 +29,10 @@ import com.easymi.personal.R;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- * Author: shine
+ * FileName: RegisterLocalActivity
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: html注册 未使用
  * History:
  */
 public class RegisterLocalActivity extends RxBaseActivity implements View.OnClickListener {

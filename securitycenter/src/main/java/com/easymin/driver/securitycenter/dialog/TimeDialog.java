@@ -17,7 +17,7 @@ import com.easymin.driver.securitycenter.widget.wheelview.adapter.AbstractWheelT
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: TimeDialog
- * Author: shine
+ *@Author: shine
  * Date: 2018/11/28 下午4:17
  * Description:
  * History:

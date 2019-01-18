@@ -1,6 +1,6 @@
 /*
  * File        : daemon_api21.c
- * Author      : Mars Kwok
+ *@Author      : Mars Kwok
  * Date        : Jul. 21, 2015
  * Description : This is native process to watch parent process.
  *

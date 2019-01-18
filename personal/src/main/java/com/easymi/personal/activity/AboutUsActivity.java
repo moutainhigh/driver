@@ -38,7 +38,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by liuzihao on 2018/2/7.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: AboutUsActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class AboutUsActivity extends RxBaseActivity {
@@ -96,6 +101,9 @@ public class AboutUsActivity extends RxBaseActivity {
         initWeb();
     }
 
+    /**
+     * 初始化webview配置
+     */
     @SuppressLint("SetJavaScriptEnabled")
     public void initWeb() {
         webView.getSettings().setJavaScriptEnabled(true);
@@ -130,19 +138,6 @@ public class AboutUsActivity extends RxBaseActivity {
 
     }
 
-//    private void getArticle(String alias) {
-//        McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
-//
-//        Observable<ArticleResult> observable = api
-//                .getArticle(EmUtil.getAppKey(), alias,
-//                        EmUtil.getEmployInfo() == null ? null : EmUtil.getEmployInfo().company_id)
-//                .filter(new HttpResultFunc<>())
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread());
-//
-//        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
-//                true, emResult -> webView.loadData(emResult.data.content, "text/html;charset=UTF-8", null))));
-//    }
 
     @Override
     public void onResume() {
@@ -166,7 +161,6 @@ public class AboutUsActivity extends RxBaseActivity {
     @Override
     public void onPause() {
         super.onPause();
-//        webView.loadData("about:blank", "text/html", "UTF-8");
         webView.onPause();
     }
 
@@ -182,6 +176,9 @@ public class AboutUsActivity extends RxBaseActivity {
         super.onDestroy();
     }
 
+    /**
+     * 获取文章
+     */
     private void getArticle() {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 

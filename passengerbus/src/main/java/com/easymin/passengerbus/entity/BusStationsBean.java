@@ -13,6 +13,15 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: BusStationsBean
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
+ */
+
 public class BusStationsBean implements Serializable {
     /**
      * "id": 9,
@@ -29,20 +38,29 @@ public class BusStationsBean implements Serializable {
      * "appKey": "1HAcient1kLqfeX7DVTV0dklUkpGEnUC"
      */
 
-    public int growId; //自增长id
-    //只是站点
-    public long id;  //站点id
+    //自增长id
+    public int growId;
+    //站点id
+    public long id;
     public String name;
     public String address;
     public double longitude;
     public double latitude;
 
-    public long scheduleId; //班次id
-    public String orderType;  //业务类型
+    //班次id
+    public long scheduleId;
+    //业务类型
+    public String orderType;
     //自定义字段
-    public int status; //0未到达本站 1前往本站中 2，到达等待 3，已过本站
-    public long waitTime; //当前站点开始等待时间戳
+    //0未到达本站 1前往本站中 2，到达等待 3，已过本站
+    public int status;
+    //当前站点开始等待时间戳
+    public long waitTime;
 
+    /**
+     * 保存数据
+     * @return
+     */
     public boolean save() {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
@@ -188,7 +206,10 @@ public class BusStationsBean implements Serializable {
         return busStations;
     }
 
-
+    /**
+     * 查询所有
+     * @return
+     */
     public static List<BusStationsBean> findAll() {
 
         SqliteHelper helper = SqliteHelper.getInstance();

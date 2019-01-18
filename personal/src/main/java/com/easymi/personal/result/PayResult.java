@@ -1,9 +1,24 @@
 package com.easymi.personal.result;
 
-public class PayResult {
+/**
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: PayResult
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
+ */
 
+public class PayResult {
+    /**
+     * 支付状态
+     */
     public String resultStatus;
+    /**
+     * 支付结果
+     */
     public String result;
+
     public String memo;
 
     public PayResult(String rawResult) {

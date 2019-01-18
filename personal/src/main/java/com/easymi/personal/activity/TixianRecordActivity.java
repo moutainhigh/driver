@@ -29,8 +29,8 @@ import rx.schedulers.Schedulers;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- * Author: shine
+ * FileName: TixianRecordActivity
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -90,6 +90,9 @@ public class TixianRecordActivity extends RxBaseActivity {
         recyclerView.setRefreshing(true);
     }
 
+    /**
+     * 获取提现记录
+     */
     private void queryData() {
         Observable<TixianResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .enchashments(page,limit)

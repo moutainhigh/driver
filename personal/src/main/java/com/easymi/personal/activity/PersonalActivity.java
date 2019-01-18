@@ -37,8 +37,8 @@ import rx.schedulers.Schedulers;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- * Author: shine
+ * FileName: PersonalActivity
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -88,19 +88,12 @@ public class PersonalActivity extends RxBaseActivity {
 
         driverTuiguang.setOnClickListener(v -> {
             Intent intent = new Intent(PersonalActivity.this, ShareActivity.class);
-//            intent.putExtra("tag", "DriverPromotion");
-//            intent.putExtra("title", getString(R.string.person_tuiguang));
             startActivity(intent);
         });
 
         Employ employ = EmUtil.getEmployInfo();
         showBase(employ);
 
-//        if (employ != null && employ.serviceType.contains(Config.ZHUANCHE)) {
-//            rlCarInfo.setVisibility(View.VISIBLE);
-//        } else {
-//            rlCarInfo.setVisibility(View.GONE);
-//        }
     }
 
     @Override
@@ -109,6 +102,10 @@ public class PersonalActivity extends RxBaseActivity {
         getDriverInfo(EmUtil.getEmployId());
     }
 
+    /**
+     * 获取司机信息
+     * @param driverId
+     */
     private void getDriverInfo(Long driverId) {
         Observable<LoginResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .getDriverInfo(driverId, EmUtil.getAppKey())
@@ -128,6 +125,10 @@ public class PersonalActivity extends RxBaseActivity {
         })));
     }
 
+    /**
+     * 展示司机基本信息
+     * @param employ
+     */
     private void showBase(Employ employ) {
         if (employ != null) {
             driverName.setText(employ.realName);
@@ -149,51 +150,78 @@ public class PersonalActivity extends RxBaseActivity {
         }
     }
 
+    /**
+     * 跳转流水
+     * @param view
+     */
     public void toLiushui(View view) {
         ARouter.getInstance()
                 .build("/common/LiushuiActivity")
                 .navigation();
     }
 
+    /**
+     * 跳转我的钱包
+     * @param view
+     */
     public void toPocket(View view) {
         Intent intent = new Intent(this, PocketActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * 跳转推荐
+     * @param view
+     */
     public void toRefer(View view) {
         Intent intent = new Intent(this, RecommendMoneyActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * 跳转评价
+     * @param view
+     */
     public void toEva(View view) {
         Intent intent = new Intent(this, EvaActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * 消息中心
+     * @param view
+     */
     public void toMessage(View view) {
         Intent intent = new Intent(this, MsgActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * 设置
+     * @param view
+     */
     public void toSet(View view) {
         Intent intent = new Intent(this, SetActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * 统计
+     * @param view
+     */
     public void toStats(View view) {
         Intent intent = new Intent(this, StatsActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * 车辆信息
+     * @param view
+     */
     public void toCarInfo(View view) {
         Intent intent = new Intent(this, CarInfoActivity.class);
         startActivity(intent);
     }
-
-//    public void toInfo(View view){
-//        Intent intent = new Intent(this, RegisterBaseActivity.class);
-//        startActivity(intent);
-//    }
 
     @Override
     public boolean isEnableSwipe() {

@@ -6,7 +6,12 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 单个班车站点信息
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: BusStationResult
+ *@Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 单个班车站点信息
+ * History:
  */
 public class BusStationResult extends EmResult implements Serializable{
 

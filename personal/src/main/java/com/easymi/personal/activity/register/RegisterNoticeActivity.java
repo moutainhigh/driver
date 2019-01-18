@@ -23,7 +23,7 @@ import rx.Observable;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: RegisterNoticeActivity
- * Author: shine
+ * @Author: shine
  * Date: 2018/12/19 上午9:57
  * Description:
  * History:
@@ -36,8 +36,10 @@ public class RegisterNoticeActivity extends RxBaseActivity {
     TextView tv_notice;
     TextView tv_amend;
 
-    private int type; //注册状态：1.未注册；2.审核中；3驳回；4通过
-//    private long driverId;
+    /**
+     * 注册状态：1.未注册；2.审核中；3驳回；4通过
+     */
+    private int type;
     private Employ employ;
 
     @Override
@@ -54,7 +56,6 @@ public class RegisterNoticeActivity extends RxBaseActivity {
     public void initViews(Bundle savedInstanceState) {
         findById();
         type = getIntent().getIntExtra("type", 0);
-//        driverId = getIntent().getLongExtra("driverId",0);
         if (type == 2) {
             iv_iamge.setImageResource(R.mipmap.ic_rg_passing);
             tv_title.setText(getResources().getString(R.string.register_checking));
@@ -85,6 +86,9 @@ public class RegisterNoticeActivity extends RxBaseActivity {
         toolbar.setTitle(R.string.register_become);
     }
 
+    /**
+     * 初始化控件
+     */
     public void findById() {
         toolbar = findViewById(R.id.toolbar);
         iv_iamge = findViewById(R.id.iv_iamge);
@@ -93,7 +97,9 @@ public class RegisterNoticeActivity extends RxBaseActivity {
         tv_amend = findViewById(R.id.tv_amend);
     }
 
-
+    /**
+     * 获取司机信息
+     */
     public void getDriverInfo() {
         String id_rsa = RsaUtils.encryptAndEncode(this, employ.id+"");
         Observable<RegisterResult> observable = RegisterModel.getDriverInfo(id_rsa);

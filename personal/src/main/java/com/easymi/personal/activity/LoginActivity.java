@@ -71,10 +71,10 @@ import rx.schedulers.Schedulers;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- * Author: shine
+ * FileName: LoginActivity
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 登陆页面
  * History:
  */
 @Route(path = "/personal/LoginActivity")
@@ -163,6 +163,9 @@ public class LoginActivity extends RxBaseActivity {
         ActManager.getInstance().finishAllActivity();
     }
 
+    /**
+     * 获取企业编码 暂未使用
+     */
     private void initQiye() {
 
         if (!Config.COMM_USE) {
@@ -189,6 +192,9 @@ public class LoginActivity extends RxBaseActivity {
 
     CustomPopWindow mListPopWindow;
 
+    /**
+     * 初始化弹窗 暂未使用
+     */
     private void initPop() {
         View contentView = LayoutInflater.from(this).inflate(R.layout.pop_list, null);
         //处理popWindow 显示内容
@@ -205,6 +211,10 @@ public class LoginActivity extends RxBaseActivity {
         mListPopWindow.getPopupWindow().setOnDismissListener(() -> findViewById(R.id.hide_able_con).setVisibility(View.VISIBLE));
     }
 
+    /**
+     * 企业编码列表 未使用
+     * @param contentView
+     */
     private void handleListView(View contentView) {
         RecyclerView recyclerView = contentView.findViewById(R.id.recyclerView);
         LinearLayoutManager manager = new LinearLayoutManager(this);
@@ -243,6 +253,9 @@ public class LoginActivity extends RxBaseActivity {
         adapter.notifyDataSetChanged();
     }
 
+    /**
+     * 服务协议跳转
+     */
     private void initBox() {
         textAgreement.setOnClickListener(view -> {
             Intent intent = new Intent(LoginActivity.this, WebActivity.class);
@@ -254,6 +267,9 @@ public class LoginActivity extends RxBaseActivity {
 
     private boolean eyeOn = false;
 
+    /**
+     * 可视化密码
+     */
     private void initEye() {
         eye.setOnClickListener(view -> {
             if (eyeOn) {
@@ -273,6 +289,9 @@ public class LoginActivity extends RxBaseActivity {
         });
     }
 
+    /**
+     * 初始化edittext监听
+     */
     private void initEdit() {
         editAccount.addTextChangedListener(new TextWatcher() {
             @Override
@@ -381,6 +400,10 @@ public class LoginActivity extends RxBaseActivity {
         }
     }
 
+    /**
+     * 设置登陆按钮是否可点击
+     * @param enable
+     */
     private void setLoginBtnEnable(boolean enable) {
         loginBtn.setEnabled(enable);
         if (enable) {
@@ -390,6 +413,12 @@ public class LoginActivity extends RxBaseActivity {
         }
     }
 
+    /**
+     * 登陆
+     * @param name
+     * @param psw
+     * @param qiyeCode
+     */
     private void login(String name, String psw, String qiyeCode) {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
@@ -542,6 +571,12 @@ public class LoginActivity extends RxBaseActivity {
     }
 
 
+    /**
+     * 获取配置信息
+     * @param employ
+     * @param name
+     * @param psw
+     */
     private void getSetting(Employ employ, String name, String psw) {
         Observable<com.easymi.common.result.SettingResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .getAppSetting()
@@ -604,11 +639,16 @@ public class LoginActivity extends RxBaseActivity {
 
 //add hf
 
-    //手机唯一识别码
+    /**
+     * 手机唯一识别码
+     */
     String androidID = Settings.Secure.getString(XApp.getInstance().getContentResolver(), Settings.Secure.ANDROID_ID);
     String id = androidID + Build.SERIAL;
 
-    //绑定推送
+    /**
+     * 绑定推送
+     * @param userId
+     */
     private void pushBinding(long userId) {
         Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .pushBinding(userId,

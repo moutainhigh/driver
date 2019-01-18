@@ -40,6 +40,15 @@ import com.easymin.passengerbus.fragment.BcStartFragment;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: BcFlowActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
+ */
+
 @Route(path = "/passengerbus/BcFlowActivity")
 public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchListener, FlowContract.View, LocObserver, AMap.OnMarkerClickListener {
 
@@ -119,6 +128,9 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
         toolbar.setLeftIcon(R.drawable.ic_arrow_back, v -> finish());
     }
 
+    /**
+     * 初始化所有状态的fragment
+     */
     public void initFragment() {
         bcStartFragment = new BcStartFragment();
         Bundle bundle = new Bundle();
@@ -139,6 +151,9 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
         bcEndFragment.setBridge(bridge);
     }
 
+    /**
+     * 获取班车信息
+     */
     private void initPresnter() {
         presenter = new FlowPresenter(this, this);
         if (scheduleId != null && scheduleId != 0) {
@@ -240,6 +255,9 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
         showFragmentByStatus();
     }
 
+    /**
+     * 显示底部状态
+     */
     public void showFragmentByStatus() {
         for (int i = 0; i < listLine.size(); i++) {
             if (listLine.get(0).status != BusStationsBean.LEAVE_STATION) {
@@ -257,6 +275,9 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
 
     ArrayList<Marker> listMarker = new ArrayList<>();
 
+    /**
+     * 显示线路
+     */
     public void showLines() {
         listMarker.clear();
         //第一个未开始加载的地图

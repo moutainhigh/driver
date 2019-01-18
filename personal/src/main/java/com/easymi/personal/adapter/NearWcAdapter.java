@@ -20,7 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2017/12/9.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: NearWcAdapter
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class NearWcAdapter extends RecyclerView.Adapter<NearWcAdapter.Holder> {
@@ -29,6 +34,10 @@ public class NearWcAdapter extends RecyclerView.Adapter<NearWcAdapter.Holder> {
     private List<PoiItem> items;
 
     public interface OnItemClickLis{
+        /**
+         * 点击监听
+         * @param poiItem
+         */
         void onItemClick(PoiItem poiItem);
     }
 
@@ -43,6 +52,10 @@ public class NearWcAdapter extends RecyclerView.Adapter<NearWcAdapter.Holder> {
         items = new ArrayList<>();
     }
 
+    /**
+     * 设置适配器数据
+     * @param items
+     */
     public void setItems(List<PoiItem> items) {
         this.items = items;
         notifyDataSetChanged();

@@ -17,9 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 开始行程
- * @author hufeng
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FlowModel
+ * @Author: shine
+ * Date: 2018/12/18 下午1:59
+ * Description: 开始行程
+ * History:
  */
+
 public class BcStartFragment extends RxBaseFragment {
 
     private TextView tvLineAddress;
@@ -30,7 +35,6 @@ public class BcStartFragment extends RxBaseFragment {
     private long scheduleId;
 
     private List<BusStationsBean> listLine = new ArrayList<>();
-
 
     /**
      * 设置bridge
@@ -58,6 +62,9 @@ public class BcStartFragment extends RxBaseFragment {
         initView();
     }
 
+    /**
+     * 加载布局
+     */
     private void initView() {
         tvLineAddress = $(R.id.tv_line_address);
         tvStart = $(R.id.tv_start);

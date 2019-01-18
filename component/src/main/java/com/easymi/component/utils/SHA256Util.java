@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: SHA256Util
- * Author: shine
+ *@Author: shine
  * Date: 2018/11/13 上午11:38
  * Description:
  * History:

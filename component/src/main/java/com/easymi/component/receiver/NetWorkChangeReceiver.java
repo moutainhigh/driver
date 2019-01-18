@@ -10,10 +10,12 @@ import com.easymi.component.utils.StringUtils;
 
 
 /**
- * Created by liuzihao on 2018/1/11.
- *
- * 网络状态变化广播处理
- *
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: NetWorkChangeReceiver
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 网络状态变化广播处理
+ * History:
  */
 
 public class NetWorkChangeReceiver extends BroadcastReceiver{

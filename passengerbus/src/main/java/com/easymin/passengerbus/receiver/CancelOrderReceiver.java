@@ -9,8 +9,8 @@ import com.easymin.passengerbus.R;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- * Author: shine
+ * FileName: CancelOrderReceiver
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -43,6 +43,12 @@ public class CancelOrderReceiver extends BroadcastReceiver {
     }
 
     public interface OnCancelListener {
+        /**
+         * 取消或者收回监听
+         * @param orderId
+         * @param orderType
+         * @param msg
+         */
         void onCancelOrder(long orderId, String orderType, String msg);
     }
 }

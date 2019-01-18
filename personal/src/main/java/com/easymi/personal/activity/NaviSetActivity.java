@@ -10,16 +10,24 @@ import com.easymi.component.widget.switchButton.SwitchButton;
 import com.easymi.personal.R;
 
 /**
- * Created by liuzihao on 2017/12/7.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: NaviSetActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class NaviSetActivity extends RxBaseActivity {
     CusToolbar cusToolbar;
-
-    SwitchButton congestion;//躲避拥堵
-    SwitchButton avoidhightspeed;//不走高速
-    SwitchButton cost;//避免收费
-    SwitchButton hightspeed;//高速优先
+    //躲避拥堵
+    SwitchButton congestion;
+    //不走高速
+    SwitchButton avoidhightspeed;
+    //避免收费
+    SwitchButton cost;
+    //高速优先
+    SwitchButton hightspeed;
 
     @Override
     public int getLayoutId() {

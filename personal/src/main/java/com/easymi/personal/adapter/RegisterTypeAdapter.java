@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: RegisterTypeAdapter
- * Author: shine
+ * @Author: shine
  * Date: 2018/12/19 上午11:05
  * Description:
  * History:

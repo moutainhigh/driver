@@ -24,7 +24,7 @@ import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: LineShareDialog
- * Author: shine
+ *@Author: shine
  * Date: 2018/11/27 下午1:21
  * Description:
  * History:

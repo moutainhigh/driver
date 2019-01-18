@@ -1,14 +1,13 @@
 package com.easymi.component.widget;
 
-/**
- * Created by liuzihao on 2018/4/23.
- */
 
 /**
- * 使用单例模式来管理listView条目的打开与关闭
- * Created by ssyijiu on 2016/8/16.
- * Github: ssyijiu
- * E-mail: lxmyijiu@163.com
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 public class SwipeLayoutManager {
 

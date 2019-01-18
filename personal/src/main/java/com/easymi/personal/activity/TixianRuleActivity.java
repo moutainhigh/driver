@@ -23,8 +23,8 @@ import rx.schedulers.Schedulers;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- * Author: shine
+ * FileName: TixianRuleActivity
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -61,6 +61,10 @@ public class TixianRuleActivity extends RxBaseActivity {
         getArticle("driverPutForward");
     }
 
+    /**
+     * 获取提现规则文章
+     * @param alias
+     */
     private void getArticle(String alias) {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 

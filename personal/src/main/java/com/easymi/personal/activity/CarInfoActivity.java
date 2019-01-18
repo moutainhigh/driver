@@ -27,8 +27,16 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class CarInfoActivity extends RxBaseActivity {
+/**
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: CarInfoActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 暂未使用
+ * History:
+ */
 
+public class CarInfoActivity extends RxBaseActivity {
 
     private TextView carNo;
     private TextView carColor;
@@ -69,7 +77,9 @@ public class CarInfoActivity extends RxBaseActivity {
         toolbar.setTitle(R.string.p_car_info);
     }
 
-
+    /**
+     * 获取车辆信息
+     */
     private void getCarInfo() {
         Observable<CarInfo> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .getCarInfo(EmUtil.getEmployId(), EmUtil.getAppKey())
@@ -86,7 +96,10 @@ public class CarInfoActivity extends RxBaseActivity {
 
     }
 
-
+    /**
+     * 暂时车辆信息
+     * @param carInfo
+     */
     private void showCarInfo(CarInfo carInfo) {
         if (carInfo == null) {
             return;

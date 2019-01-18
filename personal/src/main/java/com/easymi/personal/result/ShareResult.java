@@ -4,7 +4,12 @@ import com.easymi.component.result.EmResult;
 import com.easymi.personal.entity.ShareInfo;
 
 /**
- * Created by liuzihao on 2018/2/7.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class ShareResult extends EmResult {

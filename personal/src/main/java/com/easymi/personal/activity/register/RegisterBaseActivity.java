@@ -59,8 +59,8 @@ import rx.Observable;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- * Author: shine
+ * FileName: RegisterBaseActivity
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -83,6 +83,9 @@ public class RegisterBaseActivity extends RxBaseActivity {
     TextView tv_time_start;
     TextView tv_time_end;
 
+    /**
+     * 图片加载配置
+     */
     RequestOptions options = new RequestOptions()
             .centerCrop()
             .placeholder(R.mipmap.register_photo)
@@ -90,14 +93,25 @@ public class RegisterBaseActivity extends RxBaseActivity {
             .optionalTransform(new GlideCircleTransform());
 
     private boolean photoHintShowed = false;
-
-    private String imgPath;  //头像地址
-    private BusinessType selecType; //选中业务
-    private CompanyList.Company company; //选中公司
+    /**
+     * 头像地址
+     */
+    private String imgPath;
+    /**
+     *  选中业务
+     */
+    private BusinessType selecType;
+    /**
+     * 选中公司
+     */
+    private CompanyList.Company company;
     private long startTime;
     private long endTime;
 
-    Calendar calendar = Calendar.getInstance(Locale.CHINA);//获取日期格式器对象
+    /**
+     * 获取日期格式器对象
+     */
+    Calendar calendar = Calendar.getInstance(Locale.CHINA);
 
     private Employ employ;
 
@@ -183,6 +197,9 @@ public class RegisterBaseActivity extends RxBaseActivity {
         toolbar.setTitle(R.string.register_become);
     }
 
+    /**
+     * 初始化控件
+     */
     public void findById() {
         toolbar = findViewById(R.id.toolbar);
         cusImgHint = findViewById(R.id.cus_hint);
@@ -200,6 +217,9 @@ public class RegisterBaseActivity extends RxBaseActivity {
         tv_time_end = findViewById(R.id.tv_time_end);
     }
 
+    /**
+     * 初始化点击监听
+     */
     public void initLisenter() {
         /**
          * 业务类型选择
@@ -416,6 +436,10 @@ public class RegisterBaseActivity extends RxBaseActivity {
         startActivity(intent);
     }
 
+    /**
+     * 获取七牛云token
+     * @param imagPath
+     */
     public void getQiniuToken(String imagPath) {
         Observable<QiNiuToken> observable = RegisterModel.getQiniuToken();
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, qiNiuToken -> {
@@ -428,6 +452,11 @@ public class RegisterBaseActivity extends RxBaseActivity {
         })));
     }
 
+    /**
+     * 上传图片
+     * @param file
+     * @param token
+     */
     public void updateImage(File file, String token) {
         Observable<Pic> observable = RegisterModel.putPic(file, token);
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, pic -> {

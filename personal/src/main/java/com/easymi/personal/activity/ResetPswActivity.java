@@ -40,10 +40,10 @@ import rx.schedulers.Schedulers;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- * Author: shine
+ * FileName: ResetPswActivity
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 重置密码
  * History:
  */
 
@@ -190,6 +190,9 @@ public class ResetPswActivity extends RxBaseActivity {
 
     }
 
+    /**
+     * 重置密码
+     */
     private void resetPsw() {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
         Observable<EmResult> observable = api
@@ -207,14 +210,27 @@ public class ResetPswActivity extends RxBaseActivity {
         })));
     }
 
+    /**
+     * 返回结束本页面
+     * @param view
+     */
     public void backAction(View view) {
         finish();
     }
 
+    /**
+     * 定时器
+     */
     private Timer timer;
     private TimerTask timerTask;
+    /**
+     * 验证码60秒倒计时
+     */
     private int time = 60;
 
+    /**
+     * 初始化倒计时
+     */
     private void initSecView() {
         phoneNumber.setText(phone);
         if (null != timer) {

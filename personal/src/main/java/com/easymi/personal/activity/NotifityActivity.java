@@ -33,8 +33,8 @@ import rx.schedulers.Schedulers;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- * Author: shine
+ * FileName: NotifityActivity
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -98,6 +98,9 @@ public class NotifityActivity extends RxBaseActivity {
         recyclerView.setRefreshing(true);
     }
 
+    /**
+     * 查询通知数据
+     */
     private void queryData() {
         Observable<NotifityResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .notices(page, 10)
@@ -139,6 +142,11 @@ public class NotifityActivity extends RxBaseActivity {
         })));
     }
 
+    /**
+     * 单个已读
+     * @param id
+     * @param position
+     */
     private void readOne(long id, int position) {
         Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .readNotice(id)
@@ -153,6 +161,9 @@ public class NotifityActivity extends RxBaseActivity {
         })));
     }
 
+    /**
+     * 已读全部
+     */
     private void readAll() {
         if (TextUtils.isEmpty(getIds())){
             ToastUtil.showMessage(this,getResources().getString(R.string.com_no_read));
@@ -171,6 +182,10 @@ public class NotifityActivity extends RxBaseActivity {
         })));
     }
 
+    /**
+     * 获取未读id集合
+     * @return
+     */
     public String getIds() {
         String ids = null;
         for (Notifity notifity : notifities) {

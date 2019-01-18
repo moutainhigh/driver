@@ -21,7 +21,7 @@ import rx.Observable;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: ComService
- * Author: shine
+ *@Author: shine
  * Date: 2018/11/26 下午6:44
  * Description:
  * History:
@@ -197,7 +197,7 @@ public interface ComService {
      */
     @FormUrlEncoded
     @POST("api/v1/safe/authorize")
-    Observable<EmResult> authorize(@Field("passengerId") long passengerId,
+    Observable<EmResult>@Authorize(@Field("passengerId") long passengerId,
                                    @Field("appKey") String appKey);
 
     /**

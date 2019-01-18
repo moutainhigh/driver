@@ -1,10 +1,12 @@
 package com.easymi.common.push;
 
 /**
- * Created by liuzihao on 2017/12/13.
- *
- * 位置变化的主题
- *
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public interface FeeChangeSubject {

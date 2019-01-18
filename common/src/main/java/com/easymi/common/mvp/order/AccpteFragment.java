@@ -35,7 +35,7 @@ import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: AccpteFragment
- * Author: shine
+ *@Author: shine
  * Date: 2018/11/15 下午4:05
  * Description:
  * History:

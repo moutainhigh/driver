@@ -35,8 +35,8 @@ import rx.schedulers.Schedulers;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- * Author: shine
+ * FileName: SetActivity
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -80,6 +80,9 @@ public class SetActivity extends RxBaseActivity {
 
     }
 
+    /**
+     * 初始化各个开关监听
+     */
     private void initSwitch() {
         voiceAble.setOnCheckedChangeListener((buttonView, isChecked) -> {
             SharedPreferences.Editor editor = XApp.getPreferencesEditor();
@@ -119,40 +122,67 @@ public class SetActivity extends RxBaseActivity {
         cusToolbar.setTitle(R.string.person_set);
     }
 
+    /**
+     * 修改密码
+     * @param view
+     */
     public void changePsw(View view) {
         Intent intent = new Intent(this, ChangeActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * 选择本地语言
+     * @param view
+     */
     public void choiceLanguage(View view) {
         Intent intent = new Intent(this, LanguageActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * 跳转统计
+     * @param view
+     */
     public void toStats(View view) {
         Intent intent = new Intent(this, StatsActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * 关于我们
+     * @param view
+     */
     public void helpCenter(View view) {
-//        Intent intent = new Intent(SetActivity.this, HelpCenterActivity.class);
-//        startActivity(intent);
         Intent intent = new Intent(this, WebActivity.class);
         intent.putExtra("url", "http://h5.xiaokakj.com/#/protocol?articleName=driverHelp&appKey="+Config.APP_KEY);
         intent.putExtra("title", getString(R.string.set_about_us));
         startActivity(intent);
     }
 
+    /**
+     * 意见反馈
+     * @param view
+     */
     public void feedBack(View view) {
         Intent intent = new Intent(this, FeedbackActivity.class);
         startActivity(intent);
     }
 
+    /**
+     *
+     * 导航设置
+     * @param view
+     */
     public void naviPrefence(View view) {
         Intent intent = new Intent(this, NaviSetActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * 通知帮助
+     * @param view
+     */
     public void notifyHelp(View view) {
         Intent intent = new Intent();
         intent.setAction("android.intent.action.VIEW");
@@ -161,6 +191,10 @@ public class SetActivity extends RxBaseActivity {
         startActivity(intent);
     }
 
+    /**
+     * 联系我们
+     * @param view
+     */
     public void contractUs(View view) {
 //        Intent intent = new Intent(SetActivity.this, ArticleActivity.class);
 //        intent.putExtra("tag", "ContactUs");
@@ -170,6 +204,10 @@ public class SetActivity extends RxBaseActivity {
         PhoneUtil.call(SetActivity.this,"11111111");
     }
 
+    /**
+     * 关于我们
+     * @param view
+     */
     public void aboutUs(View view) {
         Intent intent = new Intent(this, WebActivity.class);
         intent.putExtra("url", "http://h5.xiaokakj.com/#/protocol?articleName=driverAboutUs&appKey="+Config.APP_KEY);
@@ -177,6 +215,10 @@ public class SetActivity extends RxBaseActivity {
         startActivity(intent);
     }
 
+    /**
+     * 退出登陆
+     * @param view
+     */
     public void logOut(View view) {
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.set_hint))
@@ -189,7 +231,9 @@ public class SetActivity extends RxBaseActivity {
         dialog.show();
     }
 
-    //注销
+    /**
+     * 注销接口
+     */
     private void doLogOut() {
         if (null != WorkPresenter.timeCounter) {
             WorkPresenter.timeCounter.forceUpload(-1);

@@ -26,7 +26,7 @@ import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: LuyinActivity
- * Author: shine
+ *@Author: shine
  * Date: 2018/11/28 下午3:09
  * Description:
  * History:

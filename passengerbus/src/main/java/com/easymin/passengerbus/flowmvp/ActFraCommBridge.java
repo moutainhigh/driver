@@ -9,13 +9,17 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: ActFraCommBridge
- * Author: shine
+ * @Author: shine
  * Date: 2018/12/18 下午2:00
  * Description:
  * History:
  */
 public interface ActFraCommBridge {
 
+    /**
+     * 改标题
+     * @param flag
+     */
     void changeToolbar(int flag);
 
     /**
@@ -39,6 +43,9 @@ public interface ActFraCommBridge {
     void sideToArrived(int index);
 
 
+    /**
+     * 展示结束界面
+     */
     void showEndFragment();
 
 

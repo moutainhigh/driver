@@ -17,8 +17,8 @@ import java.util.List;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- * Author: shine
+ * FileName: NotifityAdapter
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -33,6 +33,11 @@ public class NotifityAdapter extends RecyclerView.Adapter<NotifityAdapter.Notifi
     private OnItemClickListener listener;
 
     public interface OnItemClickListener {
+        /**
+         * 点击监听
+         * @param id
+         * @param position
+         */
         void onClick(long id, int position);
     }
 
@@ -41,6 +46,10 @@ public class NotifityAdapter extends RecyclerView.Adapter<NotifityAdapter.Notifi
         list = new ArrayList<>();
     }
 
+    /**
+     * 设置数据
+     * @param list
+     */
     public void setList(List<Notifity> list) {
         this.list = list;
         notifyDataSetChanged();

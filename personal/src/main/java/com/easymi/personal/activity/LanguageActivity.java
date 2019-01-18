@@ -17,8 +17,8 @@ import com.easymi.personal.R;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- * Author: shine
+ * FileName: LanguageActivity
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -36,6 +36,9 @@ public class LanguageActivity extends RxBaseActivity implements View.OnClickList
     ImageView img3;
     ImageView img4;
 
+    /**
+     * 当前语言
+     */
     private int currentLanguage = Config.SP_LANGUAGE_AUTO;
 
     @Override
@@ -82,7 +85,8 @@ public class LanguageActivity extends RxBaseActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        SharedPreferences.Editor editor = XApp.getMyPreferences().edit();   //获取偏好设置编辑器
+        //获取偏好设置编辑器
+        SharedPreferences.Editor editor = XApp.getMyPreferences().edit();
         currentLanguage = Config.SP_LANGUAGE_AUTO;
         if (id == R.id.flow_system) {
             currentLanguage = Config.SP_LANGUAGE_AUTO;
@@ -105,8 +109,9 @@ public class LanguageActivity extends RxBaseActivity implements View.OnClickList
         //需要重启Activity才会刷新
         ActManager.getInstance().finishAllActivity();
 
+        //重启应用
         ARouter.getInstance().build("/common/SplashActivity")
-                .withFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK).navigation();//重启应用
+                .withFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK).navigation();
     }
 
     @Override

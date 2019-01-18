@@ -6,7 +6,12 @@ import android.os.Message;
 import com.easymi.component.widget.LoadingButton;
 
 /**
- * Created by liuzihao on 2017/12/11.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class LoadingBtnHandler extends Handler {

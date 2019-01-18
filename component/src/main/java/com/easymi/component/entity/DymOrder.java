@@ -12,9 +12,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2017/12/20.
- * <p>
- * 本地保存的费用信息字段 保存到数据库的
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class DymOrder implements Serializable {

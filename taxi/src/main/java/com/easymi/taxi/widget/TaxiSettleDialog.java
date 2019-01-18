@@ -12,7 +12,7 @@ import com.easymi.taxi.R;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: TaxiSettleDialog
- * Author: shine
+ *@Author: shine
  * Date: 2018/11/16 上午11:28
  * Description:
  * History:

@@ -14,16 +14,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2018/4/19.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: CheckAdapter
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
-
 public class CheckAdapter extends PagerAdapter {
 
 
     private List<String> strings;
     private Context context;
-
-    private List<View> mViewList = new ArrayList<>();   //View重用缓存列表
+    /**
+     * View重用缓存列表
+     */
+    private List<View> mViewList = new ArrayList<>();
 
     public CheckAdapter(Context context) {
         this.context = context;
@@ -54,7 +60,8 @@ public class CheckAdapter extends PagerAdapter {
             view.setTag(holder);
         } else {
             //存在可重用的视图
-            view = mViewList.remove(0); //获取可重用的视图，并从缓存中移除
+            //获取可重用的视图，并从缓存中移除
+            view = mViewList.remove(0);
             holder = (ViewHolder) view.getTag();
         }
 

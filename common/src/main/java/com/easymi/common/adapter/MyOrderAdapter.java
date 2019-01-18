@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: MyOrderAdapter
- * Author: shine
+ *@Author: shine
  * Date: 2018/11/15 下午6:33
  * Description:
  * History:

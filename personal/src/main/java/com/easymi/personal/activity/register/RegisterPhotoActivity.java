@@ -42,8 +42,8 @@ import rx.Subscription;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- * Author: shine
+ * FileName: RegisterPhotoActivity
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -63,23 +63,44 @@ public class RegisterPhotoActivity extends RxBaseActivity {
 
     Button applyBtn;
 
+    /**
+     * 各个图片的第一次加载提示图
+     */
     private boolean frontHintShowed = false;
     private boolean backHintShowed = false;
     private boolean drivingHintShowed = false;
 
+    /**
+     * 选择的图片控件
+     */
     private ImageView currentImg;
 
+    /**
+     * 图片本地地址集合
+     */
     private String[] imgPaths = new String[3];
 
+    /**
+     * 注册请求数据
+     */
     private RegisterRequest registerRequest;
+    /**
+     * 提交资料回显数据
+     */
     private RegisterRequest registerInfo;
 
+    /**
+     * 图片配置
+     */
     RequestOptions options = new RequestOptions()
             .centerCrop()
             .placeholder(R.mipmap.register_photo)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .transform(new GlideRoundTransform());
 
+    /**
+     * 七牛云token
+     */
     private String qiniuToken;
 
     @Override
@@ -94,6 +115,9 @@ public class RegisterPhotoActivity extends RxBaseActivity {
         toolbar.setTitle(R.string.register_become);
     }
 
+    /**
+     * 初始化控件
+     */
     public void findById() {
         toolbar = findViewById(R.id.toolbar);
         frontImg = findViewById(R.id.front_img);
@@ -138,6 +162,9 @@ public class RegisterPhotoActivity extends RxBaseActivity {
         }
     }
 
+    /**
+     * 初始化监听
+     */
     public void initLisenter() {
         applyBtn.setOnClickListener(v -> {
             next();
@@ -262,6 +289,9 @@ public class RegisterPhotoActivity extends RxBaseActivity {
         mRxManager.add(d);
     }
 
+    /**
+     * 下一步
+     */
     private void next() {
         //check
         if (registerInfo != null) {
@@ -312,6 +342,9 @@ public class RegisterPhotoActivity extends RxBaseActivity {
         })));
     }
 
+    /**
+     * 获取七牛云token
+     */
     public void getQiniuToken() {
         Observable<QiNiuToken> observable = RegisterModel.getQiniuToken();
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, qiNiuToken -> {
@@ -324,6 +357,11 @@ public class RegisterPhotoActivity extends RxBaseActivity {
         })));
     }
 
+    /**
+     * 更新上传图片地址为七牛云hashcode
+     * @param type
+     * @param file
+     */
     public void updateImage(int type, File file) {
         Observable<Pic> observable = RegisterModel.putPic(file, qiniuToken);
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, pic -> {
@@ -337,9 +375,14 @@ public class RegisterPhotoActivity extends RxBaseActivity {
         })));
     }
 
-    //加载pud
+    /**
+     * 加载框
+     */
     private RxProgressHUD progressHUD;
 
+    /**
+     * 显示加载框
+     */
     protected void showDialog() {
         if (progressHUD == null) {
             progressHUD = new RxProgressHUD.Builder(this)
@@ -353,6 +396,9 @@ public class RegisterPhotoActivity extends RxBaseActivity {
         }
     }
 
+    /**
+     * 关闭加载框
+     */
     protected void dismissDialog() {
         if (progressHUD.isShowing()) {
             progressHUD.dismiss();
