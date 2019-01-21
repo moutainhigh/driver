@@ -161,8 +161,20 @@ public class CreateOrderActivity extends RxBaseActivity {
             }
             Intent intent = new Intent(CreateOrderActivity.this, SelectPlaceOnMapActivity.class);
             intent.putExtra("select_place_type", 3);
-            intent.putParcelableArrayListExtra("pos_list",
-                    (ArrayList<? extends Parcelable>) stationResult.endStationVo.coordinate);
+            if (stationResult.endStationVo.coordinate.size() == 0){
+                List<MapPositionModel> list = new ArrayList<>();
+                MapPositionModel model = new MapPositionModel();
+                model.setLatitude(zxOrder.endLat);
+                model.setLongitude(zxOrder.endLng);
+                list.add(model);
+
+                intent.putParcelableArrayListExtra("pos_list",
+                        (ArrayList<? extends Parcelable>) list);
+            }else {
+                intent.putParcelableArrayListExtra("pos_list",
+                        (ArrayList<? extends Parcelable>) stationResult.endStationVo.coordinate);
+            }
+
             startActivityForResult(intent, 3);
         });
 

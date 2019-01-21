@@ -31,11 +31,9 @@ import rx.schedulers.Schedulers;
  * FileName: PocketActivity
  * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 我的钱包界面
  * History:
  */
-
-
 public class PocketActivity extends RxBaseActivity {
 
     TextView balanceText;

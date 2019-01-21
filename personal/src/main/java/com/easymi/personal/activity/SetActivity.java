@@ -38,7 +38,7 @@ import rx.schedulers.Schedulers;
  * FileName: SetActivity
  * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 设置界面
  * History:
  */
 @Route(path = "/personal/SetActivity")

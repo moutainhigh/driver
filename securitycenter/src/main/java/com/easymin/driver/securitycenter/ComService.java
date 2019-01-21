@@ -197,7 +197,7 @@ public interface ComService {
      */
     @FormUrlEncoded
     @POST("api/v1/safe/authorize")
-    Observable<EmResult>@Authorize(@Field("passengerId") long passengerId,
+    Observable<EmResult> authorize(@Field("passengerId") long passengerId,
                                    @Field("appKey") String appKey);
 
     /**

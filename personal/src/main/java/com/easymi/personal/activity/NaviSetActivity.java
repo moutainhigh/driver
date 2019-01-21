@@ -14,19 +14,27 @@ import com.easymi.personal.R;
  * FileName: NaviSetActivity
  * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 导航设置界面
  * History:
  */
 
 public class NaviSetActivity extends RxBaseActivity {
     CusToolbar cusToolbar;
-    //躲避拥堵
+    /**
+     * 躲避拥堵
+     */
     SwitchButton congestion;
-    //不走高速
+    /**
+     * 不走高速
+     */
     SwitchButton avoidhightspeed;
-    //避免收费
+    /**
+     * 避免收费
+     */
     SwitchButton cost;
-    //高速优先
+    /**
+     * 高速优先
+     */
     SwitchButton hightspeed;
 
     @Override

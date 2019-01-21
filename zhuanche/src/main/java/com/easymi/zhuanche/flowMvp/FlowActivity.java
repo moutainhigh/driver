@@ -137,7 +137,8 @@ import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: FinishActivity
- *@Author: shine
+ *
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -150,8 +151,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         PassengerLocObserver,
         CancelOrderReceiver.OnCancelListener,
         AMap.OnMapTouchListener,
-        OrderFinishReceiver.OnFinishListener
-{
+        OrderFinishReceiver.OnFinishListener {
     public static final int CANCEL_ORDER = 0X01;
     public static final int CHANGE_END = 0X02;
     public static final int CHANGE_ORDER = 0X03;
@@ -163,11 +163,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     TextView orderTypeText;
     TagContainerLayout tagContainerLayout;
     LinearLayout drawerFrame;
-     MapView mapView;
-     TextView tvMark;
+    MapView mapView;
+    TextView tvMark;
     ExpandableLayout expandableLayout;
     FlowPopWindow popWindow;
-
 
     /**
      * 未接单top
@@ -1032,6 +1031,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     /**
      * 获取起点
+     *
      * @return
      */
     private Address getStartAddr() {
@@ -1049,6 +1049,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     /**
      * 获取终点
+     *
      * @return
      */
     private Address getEndAddr() {
@@ -1335,7 +1336,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         mapView.onDestroy();
         presenter.stopNavi();
 
-        if (mPlocation!= null){
+        if (mPlocation != null) {
             mPlocation = null;
         }
 
@@ -1507,7 +1508,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                     mPlocation = plocation;
                     addPlMaker();
                 }
-            }else {
+            } else {
                 if (plMaker != null) {
                     plMaker.remove();
                 }
@@ -1619,6 +1620,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     /**
      * 获取乘客位置
+     *
      * @param orderId
      */
     public void passengerLoc(long orderId) {

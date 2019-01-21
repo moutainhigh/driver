@@ -36,14 +36,9 @@ public class BusStationResult extends EmResult implements Serializable{
      "totalMoney":0,
      "scheduleStatusVos":null,
      */
-
-//    public String startStation;
-//    public String endStation;
     public long id;
 
     public long lineId;
-
-
 
     public List<BusStationsBean> stationVos;
 

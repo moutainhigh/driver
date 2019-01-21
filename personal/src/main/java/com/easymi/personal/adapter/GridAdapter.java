@@ -17,7 +17,6 @@ import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.personal.R;
 import com.easymi.personal.activity.ArticleActivity;
-import com.easymi.personal.activity.HelpCenterActivity;
 import com.easymi.personal.activity.LoginActivity;
 import com.easymi.personal.activity.NearWcActivity;
 import com.easymi.personal.activity.SetActivity;

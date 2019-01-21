@@ -21,18 +21,6 @@ import rx.Observable;
  */
 public interface BusApiService {
 
-//    /**
-//     * 查询单个订单
-//     * @param id
-//     * @return
-//     */
-//    @GET("api/v1/bus/country/passenger/line/{id}")
-//    Observable<SettingResult> getAppSetting(@Path("id") long id);
-
-
-//    @GET("api/v1/bus/country/driver/line/{id}")
-//    Observable<EmResult2<BusStationResult>> findBusInfoById(@Path("id") long id);
-
     /**
      * 开始班次
      * @param scheduleId

@@ -36,23 +36,37 @@ import rx.schedulers.Schedulers;
  * FileName: NotifityActivity
  * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 通知列表
  * History:
  */
 
 @Route(path = "/personal/NotifityActivity")
 public class NotifityActivity extends RxBaseActivity {
 
+    /**
+     * 自定义标题栏
+     */
     CusToolbar toolbar;
 
+    /**
+     * 自定义可刷新列表控件
+     */
     SwipeRecyclerView recyclerView;
-
+    /**
+     * 通知适配器
+     */
     NotifityAdapter adapter;
 
     private int page = 1;
 
+    /**
+     * 通知数据集
+     */
     private List<Notifity> notifities;
 
+    /**
+     * 错误空布局
+     */
     CusErrLayout errLayout;
 
     @Override

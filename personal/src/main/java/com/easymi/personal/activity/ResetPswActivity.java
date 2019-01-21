@@ -43,7 +43,7 @@ import rx.schedulers.Schedulers;
  * FileName: ResetPswActivity
  * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description: 重置密码
+ * Description: 重置密码 未使用
  * History:
  */
 

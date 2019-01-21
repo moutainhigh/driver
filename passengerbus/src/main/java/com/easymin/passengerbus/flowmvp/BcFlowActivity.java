@@ -71,10 +71,8 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
     /**
      * 地图相关
      */
-    //路径相关
     private List<BusStationsBean> listLine = new ArrayList<>();
     private MarkerOptions markerOption;
-
 
     /**
      * 行程状态
@@ -83,17 +81,32 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
     public static final int RUNNING = 2;
     public static final int ENDRUNING = 3;
 
+
     LatLng mylocation;
 
-
+    /**
+     * 当前加载的fragment
+     */
     Fragment currentFragment;
 
+    /**
+     * 行程未开始fragment
+     */
     BcStartFragment bcStartFragment;
 
+    /**
+     * 行程中fragment
+     */
     BcRuningFragment bcRuningFragment;
 
+    /**
+     * 行程结束fragment
+     */
     BcEndFragment bcEndFragment;
 
+    /**
+     * 班次id
+     */
     private Long scheduleId;
 
     @Override
@@ -373,14 +386,16 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
     @Override
     protected void onStart() {
         super.onStart();
-        LocReceiver.getInstance().addObserver(this);//添加位置订阅
+        //添加位置订阅
+        LocReceiver.getInstance().addObserver(this);
     }
 
     @Override
     protected void onStop() {
         mRxManager.clear();
         super.onStop();
-        LocReceiver.getInstance().deleteObserver(this);//取消位置订阅
+        //取消位置订阅
+        LocReceiver.getInstance().deleteObserver(this);
     }
 
     /**
@@ -439,7 +454,7 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
 //                .period(10);
 //        aMap.addMarker(markerOption);
 //        aMap.addMarker(new MarkerOptions());
-
+//
 //        moveToShowStationName(mylocation);
     }
 
@@ -447,7 +462,6 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
      * 显示移动后 到达站点的名字
      */
     private void moveToShowStationName(LatLng mylocation) {
-
         if (listLine == null) {
             return;
         }

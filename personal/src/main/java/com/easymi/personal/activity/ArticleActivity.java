@@ -39,20 +39,29 @@ import rx.schedulers.Schedulers;
  * FileName: ArticleActivity
  * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 文章相关的展示界面
  * History:
  */
 
 @Route(path = "/personal/ArticleActivity")
 public class ArticleActivity extends RxBaseActivity implements View.OnClickListener {
+    /**
+     * 浏览器加载控件
+     */
     WebView webView;
-
+    /**
+     * 标题
+     */
     TextView title;
-
+    /**
+     * 关闭按钮
+     */
     TextView closeAll;
 
+    /**
+     * 加载进度条
+     */
     private ProgressBar myProgressBar;
-
 
     @Override
     public int getLayoutId() {

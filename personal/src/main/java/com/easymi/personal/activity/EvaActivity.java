@@ -82,7 +82,6 @@ public class EvaActivity extends RxBaseActivity {
         star_four_number = findViewById(R.id.star_four_number);
         star_five_number = findViewById(R.id.star_five_number);
 
-//        getEva();
         getStar();
         getTag();
     }
@@ -115,8 +114,6 @@ public class EvaActivity extends RxBaseActivity {
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
                 false, result -> {
             if (null != result.data) {
-//                rate_text.setText(String.valueOf(result.data.rate == 0 ? 5 : result.data.rate));
-//                ratingBar.setStarMark(result.data.rate == 0 ? 5 : result.data.rate);
 
                 rate_text.setText(String.valueOf(EmUtil.getEmployInfo().star == 0 ? 5 : EmUtil.getEmployInfo().star));
                 ratingBar.setStarMark(EmUtil.getEmployInfo().star == 0 ? 5 : (float) EmUtil.getEmployInfo().star);

@@ -17,14 +17,20 @@ import java.util.List;
  * FileName: MoreActivity
  * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 更多功能界面
  * History:
  */
 @Route(path = "/personal/MoreActivity")
 public class MoreActivity extends RxBaseActivity {
 
+    /**
+     * 自定义标题
+     */
     CusToolbar cusToolbar;
 
+    /**
+     * 网格布局控件
+     */
     GridView gridView;
 
     @Override

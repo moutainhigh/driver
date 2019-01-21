@@ -31,7 +31,7 @@ import rx.schedulers.Schedulers;
  * FileName: MsgActivity
  * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 消息通知界面
  * History:
  */
 

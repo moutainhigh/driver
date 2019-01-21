@@ -35,18 +35,29 @@ import rx.schedulers.Schedulers;
  * FileName: ChangeActivity
  * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 修改密码界面
  * History:
  */
 
 public class ChangeActivity extends RxBaseActivity {
 
+    /**
+     * 旧密码
+     */
     EditText editOld;
+    /**
+     * 新密码
+     */
     EditText editNew;
+    /**
+     * 确认新密码
+     */
     EditText editConfirm;
 
+    /**
+     * 修改按钮
+     */
     LoadingButton btn;
-
 
     @Override
     public int getLayoutId() {
@@ -70,11 +81,6 @@ public class ChangeActivity extends RxBaseActivity {
             String confirmPsw = editConfirm.getText().toString();
 
             String oldPswSave = AesUtil.aesDecrypt(XApp.getMyPreferences().getString(Config.SP_LOGIN_PSW, ""), AesUtil.AAAAA);
-
-//            if (DymOrder.findAll().size() != 0) {
-//                ToastUtil.showMessage(ChangeActivity.this, getString(R.string.be_busy));
-//                return;
-//            }
             if (!oldPsw.equals(oldPswSave)) {
                 ToastUtil.showMessage(ChangeActivity.this, getString(R.string.not_same_old));
                 return;

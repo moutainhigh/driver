@@ -38,8 +38,14 @@ public class HelpCenterSubActivity extends RxBaseActivity {
 
     private RecyclerView recyclerView;
 
+    /**
+     * 适配器
+     */
     private HelpSubAdapter adapter;
 
+    /**
+     * 帮助中心业务数据集
+     */
     private List<HelpMenu> helpMenuList;
     private Long cateId;
 

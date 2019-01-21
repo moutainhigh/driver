@@ -14,10 +14,10 @@ import rx.Observable;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
+ * FileName: CreateZCContract
  * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 创建订单mvp契合接口
  * History:
  */
 

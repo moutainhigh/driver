@@ -20,10 +20,10 @@ import rx.Observable;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName:
+ * FileName: CLService
  * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 专线接口地址参数
  * History:
  */
 public interface CLService {

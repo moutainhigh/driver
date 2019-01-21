@@ -2,10 +2,10 @@ package com.easymi.common.push;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName:
+ * FileName: FeeChangeObserver
  * @Author: shine
  * Date: 2018/12/24 下午5:00
- * Description:
+ * Description: 专车费用信息观察者
  * History:
  */
 

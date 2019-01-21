@@ -21,7 +21,7 @@ public interface ActFraCommBridge {
     void doAccept(LoadingButton btn);
 
     /**
-     * 拒单
+     * 出租车拒单
      */
     void doRefuse();
 

@@ -12,7 +12,7 @@ import com.easymi.taxi.R;
  * FileName: CancelOrderReceiver
  * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 取消订单或者收回广播接收者
  * History:
  */
 
@@ -37,7 +37,6 @@ public class CancelOrderReceiver extends BroadcastReceiver {
                     } else {
                         cancelListener.onCancelOrder(orderId, orderType,context.getString(R.string.backed_order));
                     }
-
                 }
             }
         }

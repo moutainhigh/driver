@@ -40,7 +40,7 @@ import rx.schedulers.Schedulers;
  * FileName: PersonalActivity
  * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 个人中心接 main
  * History:
  */
 @Route(path = "/personal/PersonalActivity")
@@ -53,11 +53,9 @@ public class PersonalActivity extends RxBaseActivity {
     ImageView driverPhoto;
     ImageView driverTuiguang;
 
-    private RatingBar ratingBar;
-
+    RatingBar ratingBar;
     ImageView back;
 
-    private View rlCarInfo;
 
     @Override
     public int getLayoutId() {
@@ -83,8 +81,6 @@ public class PersonalActivity extends RxBaseActivity {
         driverTuiguang = findViewById(R.id.driver_tuiguang);
 
         driverBalance = findViewById(R.id.driver_balance);
-
-        rlCarInfo = findViewById(R.id.rlCarInfo);
 
         driverTuiguang.setOnClickListener(v -> {
             Intent intent = new Intent(PersonalActivity.this, ShareActivity.class);

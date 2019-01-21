@@ -15,39 +15,29 @@ import java.util.List;
  * History:
  */
 public interface ActFraCommBridge {
-
     /**
      * 改标题
      * @param flag
      */
     void changeToolbar(int flag);
-
     /**
      * 出发
      */
     void arriveStart(LoadingButton button);
-
     /**
      * 到达终点
      */
     void arriveEnd(LoadingButton button);
-
     /**
      * 滑动到达下一站
      */
     void slideToNext(int index);
-
     /**
      * 滑动到达站点
      */
     void sideToArrived(int index);
-
-
     /**
      * 展示结束界面
      */
     void showEndFragment();
-
-
-
 }

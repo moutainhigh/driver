@@ -5,7 +5,7 @@ package com.easymi.common.push;
  * FileName:
  * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 费用信息监听分发接口
  * History:
  */
 

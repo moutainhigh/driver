@@ -37,7 +37,7 @@ import java.util.List;
  * FileName: NearWcActivity
  * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 附近厕所
  * History:
  */
 
@@ -48,16 +48,30 @@ public class NearWcActivity extends RxBaseActivity implements AMap.OnMarkerClick
     CusErrLayout cusErrLayout;
 
     AMap aMap;
-
+    /**
+     * 经纬度逆地理编码对象
+     */
     PoiSearch search;
 
+    /**
+     * 图片
+     */
     BitmapDescriptor bitmapDescriptor;
 
     private int page = 0;
 
+    /**
+     * 厕所点数据集
+     */
     private List<PoiItem> items;
+    /**
+     * maker数据集
+     */
     private List<Marker> markers;
 
+    /**
+     * 附近厕所适配器
+     */
     private NearWcAdapter adapter;
 
     LinearLayoutManager layoutManager;

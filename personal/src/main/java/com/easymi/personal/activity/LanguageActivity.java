@@ -20,7 +20,7 @@ import com.easymi.personal.R;
  * FileName: LanguageActivity
  * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 语言设置
  * History:
  */
 

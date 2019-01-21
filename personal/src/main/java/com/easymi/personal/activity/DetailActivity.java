@@ -37,21 +37,33 @@ import rx.schedulers.Schedulers;
  * Description: 账户明细
  * History:
  */
-
 public class DetailActivity extends RxBaseActivity {
 
+    /**
+     * 列表控件
+     */
     SwipeRecyclerView recyclerView;
-
+    /**
+     * 明细适配器
+     */
     DetailAdapter adapter;
-
+    /**
+     * 余额
+     */
     TextView balanceText;
-
+    /**
+     * 自定义标题栏
+     */
     CusToolbar cusToolbar;
-
+    /**
+     * 错误布局
+     */
     CusErrLayout errLayout;
 
     private int page = 1;
-
+    /**
+     * 明细数据集
+     */
     private List<Detail> details = new ArrayList<>();
 
     @Override
