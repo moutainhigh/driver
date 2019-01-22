@@ -34,9 +34,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- *
- * @author liuzihao
- * @date 2018/11/16
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: AcceptSendFragment
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description: 接送客户界面
+ * History:
  */
 
 public class AcceptSendFragment extends RxBaseFragment {
@@ -51,32 +54,39 @@ public class AcceptSendFragment extends RxBaseFragment {
     TextView countHint;
     TextView countTime;
     CustomSlideToUnlockView slider;
-
     LinearLayout sliderCon;
-
     LinearLayout chaoshiCon;
     Button jumpBtn;
     Button acceptedBtn;
-
     ImageView refreshImg;
-
     TextView back;
 
+    /**
+     * 订单id，类型
+     */
     long orderId;
     String orderType;
 
+    /**
+     * 专线订单集
+     */
     List<OrderCustomer> orderCustomers;
 
+    /**
+     * 本地数据库动态订单信息
+     */
     DymOrder dymOrder;
 
+    /**
+     * 通信桥
+     */
     ActFraCommBridge bridge;
 
+    /**
+     * 当前order
+     */
     private OrderCustomer current;
 
-    /**
-     * 设置bridge
-     * @param bridge
-     */
     /**
      * 设置bridge
      * @param bridge

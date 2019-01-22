@@ -73,11 +73,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- *
- * @author liuzihao
- * @date 2018/11/15
- * <p>
- * 订单执行流程
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FlowActivity
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description: 订单执行流程
+ * History:
  */
 @Route(path = "/cityline/FlowActivity")
 public class FlowActivity extends RxBaseActivity implements
@@ -93,23 +94,45 @@ public class FlowActivity extends RxBaseActivity implements
 
     AMap aMap;
 
+    /**
+     * 司机位置
+     */
     private LatLng lastLatlng;
+    /**
+     * 首次进入司机marker
+     */
     private Marker myFirstMarker;
+
 
     FlowPresenter presenter;
 
-    private ZXOrder zxOrder;
+    /**
+     * 专线班次
+     */
+    ZXOrder zxOrder;
+    /**
+     * 当前加载fragment
+     */
     Fragment currentFragment;
     /**
      * activity和fragment的通信接口
      */
     private ActFraCommBridge bridge;
 
+    /**
+     * 本地数据库班次信息
+     */
     DymOrder dymOrder;
 
+    /**
+     * 是否是手动操作地图
+     */
     public static boolean isMapTouched = false;
 
-    private boolean isOrderLoadOk = false;//订单查询是否完成
+    /**
+     * 订单查询是否完成
+     */
+    private boolean isOrderLoadOk = false;
 
     @Override
     public boolean isEnableSwipe() {
@@ -146,6 +169,10 @@ public class FlowActivity extends RxBaseActivity implements
 
     }
 
+    /**
+     * 查询专线班次的详细订单
+     * @param zxOrder
+     */
     private void getCustomers(ZXOrder zxOrder) {
         Observable<EmResult2<List<OrderCustomer>>> observable = ApiManager.getInstance().createApi(Config.HOST, CLService.class)
                 .getOrderCustomers(zxOrder.orderId, "5,10,15,20")
@@ -221,6 +248,10 @@ public class FlowActivity extends RxBaseActivity implements
         })));
     }
 
+    /**
+     * 基本数据转专线班次
+     * @param baseOrder
+     */
     public void baseToZX(BaseOrder baseOrder) {
         zxOrder = new ZXOrder();
 
@@ -430,7 +461,6 @@ public class FlowActivity extends RxBaseActivity implements
         finishFragment = new FinishFragment();
         finishFragment.setBridge(bridge);
 
-//        switchFragment(cusListFragment).commit();
     }
 
     @Override

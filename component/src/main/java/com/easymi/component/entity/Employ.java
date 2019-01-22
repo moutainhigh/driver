@@ -341,7 +341,7 @@ public class Employ extends BaseEmploy implements Parcelable {
     public long taxiModelId;
 
     /**
-     * 注册状态：1.未注册；2.审核中；3驳回；4通过
+     * 注册状态：1.未提交资料；2.审核中；3驳回；4通过
      */
     public int registerStatus;
 

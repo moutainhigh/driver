@@ -366,7 +366,11 @@ public class RsaUtils {
         System.out.println("解密：" + new String(ming, "UTF-8"));
     }
 
-
+    /**
+     * 获取16位随机字符串
+     * @param length
+     * @return
+     */
     public static String getRandomString(int length) { //length表示生成字符串的长度
         String base = "abcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();
@@ -378,13 +382,18 @@ public class RsaUtils {
         return sb.toString();
     }
 
-    //hf
+    /**
+     * 加密解密
+     * @param context
+     * @param content
+     * @return
+     */
     public static String encryptAndEncode(Context context ,String content){
         String str = "";
         try {
-            Log.e("hufeng/content",content);
+//            Log.e("hufeng/content",content);
             str = Base64Utils.encode(RsaUtils.encryptByPublicKey(content.getBytes("UTF-8"), context.getResources().getString(R.string.rsa_public_key)));
-            Log.e("hufeng/str",str);
+//            Log.e("hufeng/str",str);
         } catch (Exception e) {
             e.printStackTrace();
         }

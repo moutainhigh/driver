@@ -26,14 +26,20 @@ import rx.schedulers.Schedulers;
  * FileName: TixianRuleActivity
  * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 提现规则
  * History:
  */
 
 public class TixianRuleActivity extends RxBaseActivity {
 
+    /**
+     * 自定义标题栏
+     */
     CusToolbar cusToolbar;
 
+    /**
+     * webview
+     */
     WebView tixianRule;
 
     @Override

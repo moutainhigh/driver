@@ -80,23 +80,19 @@ import rx.schedulers.Schedulers;
 @Route(path = "/personal/LoginActivity")
 public class LoginActivity extends RxBaseActivity {
 
+    /**
+     * 布局控件
+     */
     LoadingButton loginBtn;
-
     TextView registerText;
-
     TextView resetPsw;
-
     EditText editAccount;
     EditText editPsw;
     EditText editQiye;
-
     ImageView xiala;
-
     ImageView eye;
-
     CheckBox checkboxAgreement;
     CheckBox checkboxRemember;
-
     TextView textAgreement;
 
     @Override
@@ -529,7 +525,6 @@ public class LoginActivity extends RxBaseActivity {
         }
         Observable<LoginResult> observable = api
                 .loginByPW(name_rsa, pws_rsa, randomStr_rsa)
-//                .loginByPW(name, SHA256Util.getSHA256StrJava(psw))
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -538,7 +533,7 @@ public class LoginActivity extends RxBaseActivity {
             Employ employ = loginResult.getEmployInfo();
             XApp.getPreferencesEditor().putLong(Config.SP_DRIVERID, employ.id).apply();
             employ.saveOrUpdate();
-            //1.未注册；2.审核中；3驳回；4通过
+            //1.未提交资料；2.审核中；3驳回；4通过
             if (employ.registerStatus == 4){
                 SharedPreferences.Editor editor = XApp.getPreferencesEditor();
                 editor.putString(Config.SP_TOKEN, employ.token);

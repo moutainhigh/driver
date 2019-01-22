@@ -31,13 +31,14 @@ import java.util.List;
  * FileName: WeatherActivity
  * @author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 天气预报
  * History:
  */
-
-
 public class WeatherActivity extends RxBaseActivity implements WeatherSearch.OnWeatherSearchListener {
 
+    /**
+     * 天气搜索对象
+     */
     private WeatherSearch weatherSearch;
 
     private ImageView todayPic;
@@ -45,9 +46,7 @@ public class WeatherActivity extends RxBaseActivity implements WeatherSearch.OnW
     private TextView weatherCity;
     private TextView todayType;
     private TextView reportTime;
-
     private LinearLayout wetherBg;
-
     private RecyclerView weatherRecycler;
     private WeatherAdapter adapter;
 

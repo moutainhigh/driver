@@ -32,23 +32,27 @@ import rx.schedulers.Schedulers;
  * FileName: TixianRecordActivity
  * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 提现记录
  * History:
  */
 
 public class TixianRecordActivity extends RxBaseActivity {
 
     SwipeRecyclerView recyclerView;
-
     CusErrLayout errLayout;
-
-    TixianRecordAdapter adapter;
-
     CusToolbar toolbar;
+
+    /**
+     * 适配器
+     */
+    TixianRecordAdapter adapter;
 
     private int page = 1;
     private int limit = 10;
 
+    /**
+     * 提现记录数据集
+     */
     private List<TixianRecord> recordList = new ArrayList<>();
 
     @Override

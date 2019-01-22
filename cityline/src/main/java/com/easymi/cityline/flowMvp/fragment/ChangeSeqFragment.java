@@ -30,13 +30,19 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- *
- * @author liuzihao
- * @date 2018/11/15
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: ChangeSeqFragment
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description: 接送排序界面
+ * History:
  */
 
 public class ChangeSeqFragment extends RxBaseFragment {
 
+    /**
+     * 订单id，类型
+     */
     long orderId;
     String orderType;
 
@@ -44,12 +50,23 @@ public class ChangeSeqFragment extends RxBaseFragment {
     RecyclerView recyclerView;
     TextView bottomBtn;
 
+    /**
+     * 本地数据库动态订单
+     */
     DymOrder dymOrder;
 
+    /**
+     * 订单数据集
+     */
     List<OrderCustomer> orderCustomers;
+    /**
+     * 排序适配器
+     */
     SequenceAdapter adapter;
+    /**
+     * 拖动帮助类
+     */
     ItemTouchHelper itemTouchHelper;
-
     /**
      * 可排序的最小值
      */
@@ -59,14 +76,24 @@ public class ChangeSeqFragment extends RxBaseFragment {
      */
     private int max = -1;
 
+    /**
+     * 通信接口
+     */
     ActFraCommBridge bridge;
 
     /**
      * 规划接人或者送人
      */
     private int flag;
+    /**
+     * 倒计时结束
+     */
     private boolean countStratOver = false;
 
+    /**
+     * 倒计时结束操作
+     * @param countStratOver
+     */
     public void setCountStratOver(boolean countStratOver) {
         this.countStratOver = countStratOver;
         changeUi();

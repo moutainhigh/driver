@@ -47,7 +47,7 @@ import rx.schedulers.Schedulers;
  * FileName: TixianActivity
  * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 余额提现
  * History:
  */
 
