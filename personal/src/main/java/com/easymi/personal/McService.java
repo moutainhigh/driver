@@ -468,7 +468,15 @@ public interface McService {
     @POST("api/v1/public/driver/login")
     Observable<LoginResult> loginByPW(@Field("phone") String phone,
                                       @Field("password") String password,
-                                      @Field("randomStr") String randomStr
+                                      @Field("randomStr") String randomStr,
+//                                      @Field("ip") String ip,
+//                                      @Field("port") String port,
+                                      @Field("mac") String mac,
+                                      @Field("imei") String imei,
+                                      @Field("imsi") String imsi,
+                                      @Field("loginType") String loginType,
+                                      @Field("latitude") String latitude,
+                                      @Field("longitude") String longitude
     );
 
     /**

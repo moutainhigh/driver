@@ -12,7 +12,9 @@ import android.text.TextUtils;
 import java.util.List;
 import java.util.regex.Pattern;
 
-@SuppressWarnings("AlibabaAvoidPatternCompileInMethod")
+/**
+ * @author hufeng
+ */
 public class PhoneFunc {
 
     private static TelephonyManager sTelManager;
@@ -104,8 +106,7 @@ public class PhoneFunc {
     }
 
     public static String checkIMEI(String paramString) {
-        if (TextUtils.isEmpty(paramString))
-            ;
+        if (TextUtils.isEmpty(paramString)) ;
 
         do {
 
