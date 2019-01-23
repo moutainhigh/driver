@@ -1,12 +1,16 @@
 package com.easymi.component.utils;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 
 import java.util.List;
 
@@ -48,22 +52,32 @@ public class GPSUtils {
 
         String locationProvider = null;
         locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-        //获取所有可用的位置提供器
-        List<String> providers = locationManager.getProviders(true);
 
-        if (providers.contains(LocationManager.GPS_PROVIDER)) {
-            //如果是GPS
-            locationProvider = LocationManager.GPS_PROVIDER;
-        } else if (providers.contains(LocationManager.NETWORK_PROVIDER)) {
-            //如果是Network
-            locationProvider = LocationManager.NETWORK_PROVIDER;
-        } else {
-            Intent i = new Intent();
-            i.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            mContext.startActivity(i);
-            return null;
-        }
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_COARSE);//低精度，如果设置为高精度，依然获取不了location。
+        criteria.setAltitudeRequired(false);//不要求海拔
+        criteria.setBearingRequired(false);//不要求方位
+        criteria.setCostAllowed(true);//允许有花费
+        criteria.setPowerRequirement(Criteria.POWER_LOW);//低功耗
 
+        //从可用的位置提供器中，匹配以上标准的最佳提供器
+        locationProvider = locationManager.getBestProvider(criteria, true);
+
+//        //获取所有可用的位置提供器
+//        List<String> providers = locationManager.getProviders(true);
+//
+//        if (providers.contains(LocationManager.GPS_PROVIDER)) {
+//            //如果是GPS
+//            locationProvider = LocationManager.GPS_PROVIDER;
+//        } else if (providers.contains(LocationManager.NETWORK_PROVIDER)) {
+//            //如果是Network
+//            locationProvider = LocationManager.NETWORK_PROVIDER;
+//        } else {
+//            Intent i = new Intent();
+//            i.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+//            mContext.startActivity(i);
+//            return null;
+//        }
         //获取Location
         Location location = locationManager.getLastKnownLocation(locationProvider);
         if (location != null) {

@@ -22,17 +22,17 @@ public class Config {
 //    public static final String HOST = "http://10.10.2.43:10001/";  //杰克
 //    public static final String HOST = "http://10.10.2.35:10001/";//兵哥的
 //    public static final String HOST = "http://47.94.204.67:10022/";//外网
-    public static final String HOST = "http://10.10.2.23:10001/";//俊俏
+//    public static final String HOST = "http://10.10.2.23:10001/";//俊俏
 //    public static final String HOST = "http://10.10.2.130:10001/";//130测试地址 （内网）
 //    public static final String HOST = "http://47.94.204.67:20001/";//130测试地址（外网）
 //    public static final String HOST = "http://api.xiaokakj.com/";//线上地址
-//    public static final String HOST = "http://api.xiaokakj.cn/";//预发
+    public static final String HOST = "http://api.xiaokakj.cn/";//预发
     /**
      * MQTT配置
      */
-//    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//预发地址
+    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//预发地址
 //    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn";//线上地址
-    public static final String MQTT_HOST = "tcp://10.10.4.12:1883";//本地地址
+//    public static final String MQTT_HOST = "tcp://10.10.4.12:1883";//本地地址
     /**
      * APP_KEY
      */
@@ -43,6 +43,7 @@ public class Config {
 //    public static final String APP_KEY = "VC9NFbO9LnaxiFRi5HDQspvp45p8uP6w";  // 哈喽
 //    public static final String APP_KEY = "4ji3EvuwNziPKF8QXqXMTukGqPmlwOFJ";  //v6rvakva
 //    public static final String APP_KEY = "E0RzxsO1n9hZyKxOr5VvozmDsgU3EuSH";  //小鹏
+    public static final String APP_KEY = "kQLGYQIx34408QOOv6Ed1OQRWM6Idt5w";  //小鹏预发
 
     /**
      * 上传图片地址.
@@ -77,11 +78,11 @@ public class Config {
      * MQTT
      */
     //线上和预发
-//    public static final String MQTT_USER_NAME = "xiaoka";
-//    public static final String MQTT_PSW = "&mv7dHapB5J!95BJ";
+    public static final String MQTT_USER_NAME = "xiaoka";
+    public static final String MQTT_PSW = "&mv7dHapB5J!95BJ";
 //    //本地
-    public static final String MQTT_USER_NAME = "admin";
-    public static final String MQTT_PSW = "public";
+//    public static final String MQTT_USER_NAME = "admin";
+//    public static final String MQTT_PSW = "public";
 
     public static final String MQTT_PUSH_TOPIC = "/driver/gps";
 
