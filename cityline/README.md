@@ -64,120 +64,54 @@
 ### 专线执行流程图
 ![专线执行流程图](./cityline.jpg)
 
-## module结构注意点
-### 专线补单
+## 专线补单
 * 在common公共业务模块中的CreateActivity补单界面中加载对应业务的补单fragment实现不同业务不同补单界面和接口调用。
+### 专线补单流程图
+![专线补单流程图](./zx_create.jpg)
 
+### 专线补单注意点
+* 补单界面获取到选择的专线班次，如果站点没有设置电子围栏。默认加载起点或者终点的经纬度作为上车点和下车点。
+```java
+if (stationResult.startStationVo.coordinate.size() == 0) {
+     List<MapPositionModel> list = new ArrayList<>();
+     MapPositionModel model = new MapPositionModel();
+     model.setLatitude(zxOrder.startLat);
+     model.setLongitude(zxOrder.startLng);
+     list.add(model);
+
+     intent.putParcelableArrayListExtra("pos_list",
+            (ArrayList<? extends Parcelable>) list);
+} else {
+    intent.putParcelableArrayListExtra("pos_list",
+            (ArrayList<? extends Parcelable>) stationResult.startStationVo.coordinate);
+     }
+```
+
+## module结构注意点
 ### Activity与fragemnt之间ActFragmentBridge接口实现通信
 * Activity中对ActFragmentBridge进行初始化和对应方法实现。在fragment的创建时传入ActFragmentBridge的实现对象。
 在fragment中进行ActFragmentBridge的对应方法调用。达到fragment中的操作更改activity中的数据。
 ```java
     /**
-     * 专车接单
-     * @param btn
+     * 规划线路点
+     * @param latLngs
      */
-    void doAccept(LoadingButton btn);
+    void showBounds(List<LatLng> latLngs);
+
     /**
-     * 专车拒单
+     * 添加marker到地图
+     * @param latLng
+     * @param flag
      */
-    void doRefuse();
+    void addMarker(LatLng latLng, int flag);
     .
     .
     .
     /**
-     * 显示费用详情
-     */
-    void toFeeDetail();    
-```
-## 特殊功能实现
-### 跑单费用实时动态更改
-```java
-/**
-* 费用信息监听分发接口
-*/
-public interface FeeChangeSubject {
-    /**
-     * 添加观察者
-     * @param obj
-     */
-    void addObserver(FeeChangeObserver obj);
-
-    /**
-     * 移除观察者
-     * @param obj
-     */
-    void deleteObserver(FeeChangeObserver obj);
-
-    /**
-     * 当主题方法改变时,这个方法被调用,通知所有的观察
-     * @param orderId
-     * @param orderType
-     */
-    void notifyObserver(long orderId,String orderType);
-}
-/**
-* 专车费用信息观察者
-*/
-public interface FeeChangeObserver {
-    /**
-     * 专车费用信息观察者
-     * @param orderId
-     * @param orderType
-     */
-    void feeChanged(long orderId, String orderType);
-}
-```
-   实现步骤：
-   * 在Handlepush中实现FeeChangeSubject ，费用推送信息来了后先更改本地数据库中对应订单的费用信息。再调用notifyObserver通知所有实现FeeChangeObserver接口的界面
-```java
-    @Override
-    public void notifyObserver(long orderId, String orderType) {
-        if (null == observers) {
-            return;
-        }
-        for (FeeChangeObserver observer : observers) {
-            observer.feeChanged(orderId, orderType);
-        }
-    }   
-```
-* 在FlowActivity中实现FeeChangeObserver，当触发其实现方法feeChanged后将对应费用信息传递到对应fragment进行费用信息更新展示。
-```java
-    @Override
-    public void feeChanged(long orderId, String orderType) {
-        if (zcOrder == null) {
-            return;
-        }
-        if (orderId == zcOrder.orderId && orderType.equals(Config.ZHUANCHE)) {
-            DymOrder dyo = DymOrder.findByIDType(orderId, orderType);
-            if (null != waitFragment && waitFragment.isVisible()) {
-                waitFragment.showFee(dyo);
-            } else if (null != runningFragment && runningFragment.isVisible()) {
-                runningFragment.showFee(dyo);
-            }
-            if (null != settleFragmentDialog && settleFragmentDialog.isShowing()) {
-                settleFragmentDialog.setDymOrder(dyo);
-            }
-        }
-    }
-```
-### 乘客实时位置点 
-* 实现方式基本同动态费用信息一样，只是在在刚进入界面的时候去调用了一次获取乘客位置的接口。
-```java
-    /**
-     * 获取乘客位置
-     *
+     * 开始导航
+     * @param latLng
      * @param orderId
      */
-    public void passengerLoc(long orderId) {
-        Observable<PassengerLcResult> observable = ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
-                .passengerLoc(orderId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        observable.subscribe(new MySubscriber<>(this, false, false, passengerLcResult -> {
-            if (passengerLcResult.getCode() == 1) {
-                plChange(passengerLcResult.data);
-            }
-        }));
-    }
+    void navi(LatLng latLng, Long orderId);
 ```
+

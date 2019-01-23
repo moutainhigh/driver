@@ -1,5 +1,5 @@
 # 专车
-## 业务流程介绍：
+## 订单业务流程介绍：
 * 订单主流程为同一个单一Activity，采用了MVP的设计模式。由不同的fragment来展示不同的订单状态。
 * AcceptFragment为接单拒单界面，主要展示订单基本信息和执行接单拒单操作，只有新单派单后没有在抢单派单界面未接单，订单状态为5的时候才会展示。
 * ToStartFragment为前往预约地界面。主要是展示订单信息和到预约地的导航路径，可操作到达预约地。
@@ -55,12 +55,15 @@
 ### 订单执行流程图
 ![专车订单执行流程图](./zhuanche.jpg)
 
+## 补单模块create
+* 在common公共业务模块中的CreateActivity补单界面中加载对应业务的补单fragment实现不同业务不同补单界面和接口调用。
+### 补单流程
+* 专车补单流程图
+![专车补单流程图](./zc_creat.jpg)
+
 ## module结构注意点
 ### 专车抢单接单ZCGrabFragment
 * 在common 公共业务层模块中的GrabActivity抢单接单界面加载对应业务的fragment实现不同业务不同的抢单界面。
-
-### 补单模块create
-* 在common公共业务模块中的CreateActivity补单界面中加载对应业务的补单fragment实现不同业务不同补单界面和接口调用。
 
 ### Activity与fragemnt之间ActFragmentBridge接口实现通信
 * Activity中对ActFragmentBridge进行初始化和对应方法实现。在fragment的创建时传入ActFragmentBridge的实现对象。

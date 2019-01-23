@@ -44,7 +44,8 @@ import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: FinishActivity
- *@Author: shine
+ *
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description: 专线补单
  * History:
@@ -145,8 +146,19 @@ public class CreateOrderActivity extends RxBaseActivity {
             }
             Intent intent = new Intent(CreateOrderActivity.this, SelectPlaceOnMapActivity.class);
             intent.putExtra("select_place_type", 1);
-            intent.putParcelableArrayListExtra("pos_list",
-                    (ArrayList<? extends Parcelable>) stationResult.startStationVo.coordinate);
+            if (stationResult.startStationVo.coordinate.size() == 0) {
+                List<MapPositionModel> list = new ArrayList<>();
+                MapPositionModel model = new MapPositionModel();
+                model.setLatitude(zxOrder.startLat);
+                model.setLongitude(zxOrder.startLng);
+                list.add(model);
+
+                intent.putParcelableArrayListExtra("pos_list",
+                        (ArrayList<? extends Parcelable>) list);
+            } else {
+                intent.putParcelableArrayListExtra("pos_list",
+                        (ArrayList<? extends Parcelable>) stationResult.startStationVo.coordinate);
+            }
             startActivityForResult(intent, 1);
         });
         end_place.setOnClickListener(view -> {
@@ -161,7 +173,7 @@ public class CreateOrderActivity extends RxBaseActivity {
             }
             Intent intent = new Intent(CreateOrderActivity.this, SelectPlaceOnMapActivity.class);
             intent.putExtra("select_place_type", 3);
-            if (stationResult.endStationVo.coordinate.size() == 0){
+            if (stationResult.endStationVo.coordinate.size() == 0) {
                 List<MapPositionModel> list = new ArrayList<>();
                 MapPositionModel model = new MapPositionModel();
                 model.setLatitude(zxOrder.endLat);
@@ -170,7 +182,7 @@ public class CreateOrderActivity extends RxBaseActivity {
 
                 intent.putParcelableArrayListExtra("pos_list",
                         (ArrayList<? extends Parcelable>) list);
-            }else {
+            } else {
                 intent.putParcelableArrayListExtra("pos_list",
                         (ArrayList<? extends Parcelable>) stationResult.endStationVo.coordinate);
             }
@@ -409,7 +421,7 @@ public class CreateOrderActivity extends RxBaseActivity {
         String orderAddress = new Gson().toJson(models);
         Observable<Object> observable = ApiManager.getInstance().createApi(Config.HOST, CLService.class)
                 .createOrder(
-                        System.currentTimeMillis()/1000,
+                        System.currentTimeMillis() / 1000,
                         "driver",
                         stationResult.endStationVo.id,
                         orderAddress,

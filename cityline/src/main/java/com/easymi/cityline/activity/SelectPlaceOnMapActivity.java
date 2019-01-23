@@ -57,9 +57,12 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * 在地图上选择详细上下车地址
- *
- * @author hufeng
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: SelectPlaceOnMapActivity
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description: 在地图上选择详细上下车地址
+ * History:
  */
 public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFenceListener,
         GeocodeSearch.OnGeocodeSearchListener,
@@ -68,11 +71,21 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
         View.OnClickListener {
     private TextView mInputEt;
     private Button mConfirmPosBtn;
-    private List<MapPositionModel> mMapPosList = new ArrayList<>();
-    private AMapLocationClient mlocationClient;
-    private LocationSource.OnLocationChangedListener mListener;
     private MapView mMapView;
     private AMap mAMap;
+
+    /**
+     * 起点或者终点电子围栏点集合
+     */
+    private List<MapPositionModel> mMapPosList = new ArrayList<>();
+    /**
+     * 地图定位对象
+     */
+    private AMapLocationClient mlocationClient;
+    /**
+     * 定位监听
+     */
+    private LocationSource.OnLocationChangedListener mListener;
     /**
      * 多边形围栏的边界点
      */
@@ -91,9 +104,21 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
      * 记录已经添加成功的围栏
      */
     private HashMap<String, GeoFence> fenceMap = new HashMap<>();
+    /**
+     * 逆地理编码
+     */
     private GeocodeSearch mGeocodeSearch;
+    /**
+     * 当前城市
+     */
     private String mNowCity;
+    /**
+     * 当前位置经纬度
+     */
     private float mLongitude, mLatitude;
+    /**
+     * 是否是第一次加载
+     */
     private boolean mIsFirstIn = true;
 
     @Override

@@ -46,7 +46,7 @@ import static android.app.Activity.RESULT_OK;
  * FileName: CreateZCFragment
  * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:  补单
+ * Description:  专车补单
  * History:
  */
 
@@ -61,27 +61,50 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
     TextView about;
     TextView unit;
 
-    private View llTime;
-    private View llTimeLine;
+    View llTime;
+    View llTimeLine;
 
     Button createOrder;
     TabLayout tabLayout;
-
     LinearLayout esMoneyCon;
 
+    /**
+     * 选中的专车车型
+     */
     private ZCType selectedZCType = null;
+    /**
+     * 乘客信息
+     */
     private Passenger passenger = null;
 
+    /**
+     * 起点信息
+     */
     private PoiItem startPoi = null;
+    /**
+     * 终点信息
+     */
     private PoiItem endPoi = null;
 
-    private Double distance;//单位千米
-    private Integer duration;//单位分钟
+    /**
+     * 规划距离 单位千米
+     */
+    private Double distance;
+    /**
+     * 规划时间/单位分钟
+     */
+    private Integer duration;
 
-    private Budget budget;//预估价格
+    /**
+     * //预估价格
+     */
+    private Budget budget;
 
     private CreateZCPresenter presenter;
 
+    /**
+     * 起点终点跳转标签
+     */
     private static final int START_CODE = 0X00;
     private static final int END_CODE = 0X01;
 
@@ -112,9 +135,9 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
         }
 
         init();
-
+        //查询专车子类型
         presenter.queryZCType(EmUtil.getLastLoc().adCode, EmUtil.getLastLoc().cityCode,
-                (int) EmUtil.getEmployInfo().modelId, EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);//查询专车子类型
+                (int) EmUtil.getEmployInfo().modelId, EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
     }
 
 //    public void initQueryZCType(){
