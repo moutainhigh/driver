@@ -131,24 +131,6 @@ public interface ZCApiService {
     Observable<ZCOrderResult> indexOrders(@Path("id") Long id,
                                           @Query("appKey") String appKey);
 
-
-    /**
-     * 专车 --> 抢单
-     *
-     * @param driverId
-     * @param driverName
-     * @param driverPhone
-     * @param id          订单id
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("api/v1/taxi_online/order/grab")
-    Observable<ZCOrderResult> grabOrder(@Field("driverId") Long driverId,
-                                        @Field("driverName") String driverName,
-                                        @Field("driverPhone") String driverPhone,
-                                        @Field("id") Long id,
-                                        @Field("version") Long version);
-
     /**
      * 专车 -->接单
      *
@@ -164,7 +146,9 @@ public interface ZCApiService {
                                         @Field("driverName") String driverName,
                                         @Field("driverPhone") String driverPhone,
                                         @Field("id") Long id,
-                                        @Field("version") Long version);
+                                        @Field("version") Long version,
+                                        @Field("receiptLongitude") String receiptLongitude,
+                                        @Field("receiptLatitude") String receiptLatitude);
 
     /**
      * 前往预约地

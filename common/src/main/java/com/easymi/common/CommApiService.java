@@ -338,7 +338,9 @@ public interface CommApiService {
                                                 @Field("driverName") String driverName,
                                                 @Field("driverPhone") String driverPhone,
                                                 @Field("id") Long id,
-                                                @Field("version") Long version);
+                                                @Field("version") Long version,
+                                                @Field("receiptLongitude") String receiptLongitude,
+                                                @Field("receiptLatitude") String receiptLatitude);
 
     /**
      * 专车 -->接单
@@ -355,7 +357,9 @@ public interface CommApiService {
                                                 @Field("driverName") String driverName,
                                                 @Field("driverPhone") String driverPhone,
                                                 @Field("id") Long id,
-                                                @Field("version") Long version);
+                                                @Field("version") Long version,
+                                                @Field("receiptLongitude") String receiptLongitude,
+                                                @Field("receiptLatitude") String receiptLatitude);
 
     /**
      * 出租车 --> 查询单个订单

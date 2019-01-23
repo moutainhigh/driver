@@ -36,7 +36,9 @@ public class MyOrderModel implements MyOrderContract.Model {
     @Override
     public Observable<MultipleOrderResult> grabZCOrder(Long orderId, Long version) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .grabZCOrder(EmUtil.getEmployId(),EmUtil.getEmployInfo().realName,EmUtil.getEmployInfo().phone,orderId,version)
+                .grabZCOrder(EmUtil.getEmployId(),EmUtil.getEmployInfo().realName,EmUtil.getEmployInfo().phone,orderId,version
+                        ,EmUtil.getLastLoc().longitude+""
+                        ,EmUtil.getLastLoc().longitude+"")
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -45,7 +47,9 @@ public class MyOrderModel implements MyOrderContract.Model {
     @Override
     public Observable<MultipleOrderResult> takeZCOrder(Long orderId, Long version) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .takeZCOrder(EmUtil.getEmployId(),EmUtil.getEmployInfo().realName,EmUtil.getEmployInfo().phone,orderId,version)
+                .takeZCOrder(EmUtil.getEmployId(),EmUtil.getEmployInfo().realName,EmUtil.getEmployInfo().phone,orderId,version
+                        ,EmUtil.getLastLoc().longitude+""
+                        ,EmUtil.getLastLoc().longitude+"")
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

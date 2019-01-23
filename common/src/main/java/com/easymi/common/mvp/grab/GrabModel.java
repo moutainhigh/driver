@@ -62,7 +62,9 @@ public class GrabModel implements GrabContract.Model {
     @Override
     public Observable<MultipleOrderResult> grabZCOrder(Long orderId, Long version) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .grabZCOrder(EmUtil.getEmployId(), EmUtil.getEmployInfo().realName, EmUtil.getEmployInfo().phone, orderId, version)
+                .grabZCOrder(EmUtil.getEmployId(), EmUtil.getEmployInfo().realName, EmUtil.getEmployInfo().phone, orderId, version
+                        ,EmUtil.getLastLoc().longitude+""
+                        ,EmUtil.getLastLoc().longitude+"")
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -75,7 +77,9 @@ public class GrabModel implements GrabContract.Model {
             realName = EmUtil.getEmployInfo().realName;
         }
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .takeZCOrder(EmUtil.getEmployId(), realName, EmUtil.getEmployInfo().phone, orderId, version)
+                .takeZCOrder(EmUtil.getEmployId(), realName, EmUtil.getEmployInfo().phone, orderId, version
+                        ,EmUtil.getLastLoc().longitude+""
+                        ,EmUtil.getLastLoc().longitude+"")
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
