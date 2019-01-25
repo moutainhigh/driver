@@ -25,13 +25,13 @@ public class Config {
 //    public static final String HOST = "http://10.10.2.23:10001/";//俊俏
 //    public static final String HOST = "http://10.10.2.130:10001/";//130测试地址 （内网）
 //    public static final String HOST = "http://47.94.204.67:20001/";//130测试地址（外网）
-//    public static final String HOST = "http://api.xiaokakj.com/";//线上地址
-    public static final String HOST = "http://api.xiaokakj.cn/";//预发
+    public static final String HOST = "http://api.xiaokakj.com/";//线上地址
+//    public static final String HOST = "http://api.xiaokakj.cn/";//预发
     /**
      * MQTT配置
      */
-    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//预发地址
-//    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn";//线上地址
+//    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//预发地址
+    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn";//线上地址
 //    public static final String MQTT_HOST = "tcp://10.10.4.12:1883";//本地地址
     /**
      * APP_KEY
@@ -41,9 +41,9 @@ public class Config {
 //    public static final String APP_KEY = "SsCMJL77sZMI0iudBi5XZeNjzmILOjih";  // 林凯
 //    public static final String APP_KEY = "eubACO3wp3rjz1OBcDSa4LeS4qM4586o";  // 麒策
 //    public static final String APP_KEY = "VC9NFbO9LnaxiFRi5HDQspvp45p8uP6w";  // 哈喽
-//    public static final String APP_KEY = "4ji3EvuwNziPKF8QXqXMTukGqPmlwOFJ";  //v6rvakva
+    public static final String APP_KEY = "4ji3EvuwNziPKF8QXqXMTukGqPmlwOFJ";  //v6rvakva
 //    public static final String APP_KEY = "E0RzxsO1n9hZyKxOr5VvozmDsgU3EuSH";  //小鹏
-    public static final String APP_KEY = "kQLGYQIx34408QOOv6Ed1OQRWM6Idt5w";  //小鹏预发
+//    public static final String APP_KEY = "kQLGYQIx34408QOOv6Ed1OQRWM6Idt5w";  //小鹏预发
 
     /**
      * 上传图片地址.
@@ -59,11 +59,11 @@ public class Config {
     /**
      * QQ分享id
      */
-    public static final String QQ_APP_ID = "1107818477";
+    public static final String QQ_APP_ID = "1108138294";
     /**
      * 微信分享id
      */
-    public static final String WX_APP_ID = "wxe2bbe0ee7fa51624"; //微信app id
+    public static final String WX_APP_ID = "wx9c57a31a9ee6baa2";
 
     /**
      * 图片服务器地址
@@ -191,15 +191,15 @@ public class Config {
     //开通专车业务
     public static final boolean KT_ZHUANCHE = true;
     //开通专线业务
-    public static final boolean KT_ZHUANXIAN = false;
+    public static final boolean KT_ZHUANXIAN = true;
     //开通出租车业务
-    public static final boolean KT_CHUZUCHE = false;
+    public static final boolean KT_CHUZUCHE = true;
     //开通包车业务
-    public static final boolean KT_BAOCHE = false;
+    public static final boolean KT_BAOCHE = true;
     //开通租车业务
-    public static final boolean KT_ZUCHE = false;
+    public static final boolean KT_ZUCHE = true;
     //开通班车业务
-    public static final boolean KT_BANCHE = false;
+    public static final boolean KT_BANCHE = true;
     //开通公务车业务
     public static final boolean KT_GONGWU = false;
 }

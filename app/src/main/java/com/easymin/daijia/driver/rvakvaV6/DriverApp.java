@@ -1,4 +1,4 @@
-package com.easymin.daijia.driver.zyziyunsjdaijia;
+package com.easymin.daijia.driver.rvakvaV6;
 
 import android.content.Context;
 
@@ -7,7 +7,6 @@ import com.alibaba.sdk.android.push.register.MiPushRegister;
 import com.easymi.component.Config;
 import com.easymi.component.utils.Log;
 
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.sdk.android.push.CloudPushService;
 import com.alibaba.sdk.android.push.CommonCallback;
 import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
@@ -22,20 +21,19 @@ import com.marswin89.marsdaemon.DaemonConfigurations;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: FinishActivity
- *@Author: shine
+ * FileName: DriverApp
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description:  Application实现类
  * History:
  */
-
-
 public class DriverApp extends XApp {
 
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        DaemonClient daemonClient = new DaemonClient(getDaemonConfigurations());//保活client
+        //保活client
+        DaemonClient daemonClient = new DaemonClient(getDaemonConfigurations());
         daemonClient.onAttachBaseContext(base);
     }
 
@@ -43,7 +41,8 @@ public class DriverApp extends XApp {
     public void onCreate() {
         super.onCreate();
         initCloudChannel();
-        if (!isAppProcess()) {//防止多次调用onCreate()
+        if (!isAppProcess()) {
+            //防止多次调用onCreate()
             return;
         }
     }
@@ -58,7 +57,8 @@ public class DriverApp extends XApp {
             @Override
             public void onSuccess(String response) {
                 Log.d("DriverApp", "init cloudchannel success");
-                PushServiceFactory.getCloudPushService().turnOnPushChannel(null);//打开推送通道
+                //打开推送通道
+                PushServiceFactory.getCloudPushService().turnOnPushChannel(null);
                 PushServiceFactory.getCloudPushService().setPushIntentService(AliDetailService.class);
 
             }

@@ -38,9 +38,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- *
- * @author liuzihao
- * @date 2017/11/14
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 @Route(path = "/common/LiushuiActivity")
 public class LiushuiActivity extends RxBaseActivity {

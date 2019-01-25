@@ -15,7 +15,7 @@ import java.util.TimerTask;
  * FileName: FinishActivity
  * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 定制包车订单完成结束界面
  * History:
  */
 public class FinishActivity extends RxBaseActivity{

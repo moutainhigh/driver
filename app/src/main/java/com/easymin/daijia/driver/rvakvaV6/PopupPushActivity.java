@@ -1,4 +1,4 @@
-package com.easymin.daijia.driver.zyziyunsjdaijia;
+package com.easymin.daijia.driver.rvakvaV6;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,14 +9,12 @@ import com.easymi.component.utils.Log;
 import java.util.Map;
 
 /**
- * Copyright (C) , 2012-2018 , 四川小咖科技有限公司
- *
- * 辅助弹窗Activity
- *
- * @author Lzh
- * @version 5.0.0.000
- * @date 2018/5/19
- * @since 5.0.0.000
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: PopupPushActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:  辅助弹窗Activity
+ * History:
  */
 public class PopupPushActivity extends AndroidPopupActivity {
 

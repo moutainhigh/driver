@@ -4,9 +4,12 @@ import com.easymi.cityline.entity.Station;
 import com.easymi.component.result.EmResult;
 
 /**
- *
- * @author liuzihao
- * @date 2018/11/21
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class StationResult extends EmResult {

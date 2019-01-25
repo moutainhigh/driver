@@ -12,11 +12,12 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- *
- * @author liuzihao
- * @date 2017/11/15
- * <p>
- * 复合型订单，包含了所有业务订单的字段
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class MultipleOrder extends BaseOrder implements Serializable, MultiItemEntity {

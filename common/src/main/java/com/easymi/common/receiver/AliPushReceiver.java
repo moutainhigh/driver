@@ -12,9 +12,12 @@ import com.easymi.component.utils.StringUtils;
 import java.util.Map;
 
 /**
- *
- * @author liuzihao
- * @date 2018/3/7
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class AliPushReceiver extends MessageReceiver {
