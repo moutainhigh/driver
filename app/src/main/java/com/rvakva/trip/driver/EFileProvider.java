@@ -1,4 +1,4 @@
-package com.easymin.daijia.driver.rvakvaV6;
+package com.rvakva.trip.driver;
 
 import android.support.v4.content.FileProvider;
 /**
