@@ -59,11 +59,11 @@ public class Config {
     /**
      * QQ分享id
      */
-    public static final String QQ_APP_ID = "1108138294";
+    public static final String QQ_APP_ID = "1107818477";
     /**
      * 微信分享id
      */
-    public static final String WX_APP_ID = "wx9c57a31a9ee6baa2";
+    public static final String WX_APP_ID = "wxe2bbe0ee7fa51624";
 
     /**
      * 图片服务器地址

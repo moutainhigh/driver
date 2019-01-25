@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.easymin.daijia.driver.rvakvaV6"
+        applicationId "com.easymin.daijia.driver.zyziyunsjdaijia"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 9000
@@ -17,17 +17,17 @@ android {
     }
     signingConfigs {
         debug {
-            keyAlias 'v6软咖司机端'
+            keyAlias '资运司机端'
             keyPassword 'easymin'
-            storeFile file('v6软咖.jks')
+            storeFile file('emdriver.keystore')
             storePassword 'easymin'
             v1SigningEnabled true
             v2SigningEnabled true
         }
         release {
-            keyAlias 'v6软咖司机端'
+            keyAlias '资运司机端'
             keyPassword 'easymin'
-            storeFile file('v6软咖.jks')
+            storeFile file('emdriver.keystore')
             storePassword 'easymin'
             v1SigningEnabled true
             v2SigningEnabled true
