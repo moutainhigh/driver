@@ -1,8 +1,8 @@
 <resources>
     <!--<string name="app_name">资运司机端</string>-->
-    <string name="app_name">软咖司机V6</string>
+    <!--<string name="app_name">软咖司机V6</string>-->
     <!--<string name="app_name">麒策司机端</string>-->
     <!--<string name="app_name">哈喽司机端</string>-->
-    <!--<string name="app_name">v6司机端</string>-->
+    <string name="app_name">v6司机端</string>
     <!--<string name="app_name">有鹏司机</string>-->
 </resources>
