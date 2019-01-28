@@ -30,10 +30,10 @@ public interface FlowContract {
          */
         void initToolbar();
 
-        /**
-         * 初始化右上角弹窗
-         */
-        void initPop();
+//        /**
+//         * 初始化右上角弹窗
+//         */
+//        void initPop();
 
         /**
          * 显示顶部布局

@@ -152,11 +152,6 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
     }
 
     @Override
-    public void initPop() {
-
-    }
-
-    @Override
     public void showTopView() {
 
     }
@@ -186,6 +181,7 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
 
             @Override
             public void doToStart(LoadingButton btn) {
+
             }
 
             @Override

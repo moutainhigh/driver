@@ -69,10 +69,6 @@ public class OldWaitActivity extends RxBaseActivity implements FlowContract.View
 
     }
 
-    @Override
-    public void initPop() {
-
-    }
 
     @Override
     public void showTopView() {

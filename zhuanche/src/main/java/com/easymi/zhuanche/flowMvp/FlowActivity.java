@@ -166,7 +166,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     MapView mapView;
     TextView tvMark;
     ExpandableLayout expandableLayout;
-    FlowPopWindow popWindow;
+//    FlowPopWindow popWindow;
 
     /**
      * 未接单top
@@ -309,7 +309,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         mapView = findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
 
-        initPop();
+//        initPop();
         initToolbar();
 
     }
@@ -317,36 +317,39 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     @Override
     public void initToolbar() {
         toolbar.setLeftIcon(R.drawable.ic_arrow_back, v -> finish());
-        toolbar.setRightIcon(R.drawable.ic_more_horiz_white_24dp, v -> {
-            if (popWindow.isShowing()) {
-                popWindow.dismiss();
-            } else {
-                ZCSetting setting = ZCSetting.findOne();
-                boolean notCancel = setting.canCancelOrder != 1;
-                if (notCancel || zcOrder.orderStatus == ZCOrderStatus.NEW_ORDER || zcOrder.orderStatus == ZCOrderStatus.PAIDAN_ORDER || zcOrder.orderStatus >= ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-                    popWindow.hideCancel();
-                } else {
-                    popWindow.showCancel();
-                }
-                popWindow.show(v);
-            }
+        toolbar.setRightText(R.string.cancel_order,v -> {
+
         });
+//        toolbar.setRightIcon(R.drawable.ic_more_horiz_white_24dp, v -> {
+//            if (popWindow.isShowing()) {
+//                popWindow.dismiss();
+//            } else {
+//                ZCSetting setting = ZCSetting.findOne();
+//                boolean notCancel = setting.canCancelOrder != 1;
+//                if (notCancel || zcOrder.orderStatus == ZCOrderStatus.NEW_ORDER || zcOrder.orderStatus == ZCOrderStatus.PAIDAN_ORDER || zcOrder.orderStatus >= ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+//                    popWindow.hideCancel();
+//                } else {
+//                    popWindow.showCancel();
+//                }
+//                popWindow.show(v);
+//            }
+//        });
     }
 
-    @Override
-    public void initPop() {
-        popWindow = new FlowPopWindow(this);
-        popWindow.setOnClickListener(view -> {
-            int i = view.getId();
-            if (i == R.id.pop_cancel_order) {
-                Intent intent = new Intent(FlowActivity.this, CancelActivity.class);
-                startActivityForResult(intent, CANCEL_ORDER);
-            } else if (i == R.id.pop_contract_service) {
-                String phone = zcOrder.companyPhone;
-                PhoneUtil.call(FlowActivity.this, phone);
-            }
-        });
-    }
+//    @Override
+//    public void initPop() {
+//        popWindow = new FlowPopWindow(this);
+//        popWindow.setOnClickListener(view -> {
+//            int i = view.getId();
+//            if (i == R.id.pop_cancel_order) {
+//                Intent intent = new Intent(FlowActivity.this, CancelActivity.class);
+//                startActivityForResult(intent, CANCEL_ORDER);
+//            } else if (i == R.id.pop_contract_service) {
+//                String phone = zcOrder.companyPhone;
+//                PhoneUtil.call(FlowActivity.this, phone);
+//            }
+//        });
+//    }
 
     @Override
     public void showTopView() {
