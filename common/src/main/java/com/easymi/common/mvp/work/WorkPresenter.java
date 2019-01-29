@@ -233,12 +233,12 @@ public class WorkPresenter implements WorkContract.Presenter {
         long driverId = EmUtil.getEmployId();
         Observable<EmResult> observable = model.online(driverId, EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, btn, emResult -> {
-            //一键报警 上线 //todo 一键报警
-//            CenterUtil centerUtil = new CenterUtil(context,Config.APP_KEY,
-//                    XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
-//                    XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
-//            centerUtil.driverUp(driverId,EmUtil.getEmployInfo().companyId,EmUtil.getEmployInfo().userName,EmUtil.getEmployInfo().realName,
-//                    EmUtil.getEmployInfo().phone,System.currentTimeMillis()/1000,EmUtil.getEmployInfo().serviceType);
+            //一键报警 上线
+            CenterUtil centerUtil = new CenterUtil(context,Config.APP_KEY,
+                    XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
+                    XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
+            centerUtil.driverUp(driverId,EmUtil.getEmployInfo().companyId,EmUtil.getEmployInfo().userName,EmUtil.getEmployInfo().realName,
+                    EmUtil.getEmployInfo().phone,System.currentTimeMillis()/1000,EmUtil.getEmployInfo().serviceType);
 
             view.onlineSuc();
             XApp.getPreferencesEditor().putLong(Config.ONLINE_TIME, System.currentTimeMillis()).apply();
@@ -253,12 +253,12 @@ public class WorkPresenter implements WorkContract.Presenter {
         Observable<EmResult> observable = model.offline(driverId, EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, true,
                 true, emResult -> {
-            //一键报警  下线  //todo 一键报警
-//            CenterUtil centerUtil = new CenterUtil(context,Config.APP_KEY,
-//                    XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
-//                    XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
-//            centerUtil.driverDown(driverId,EmUtil.getEmployInfo().companyId,EmUtil.getEmployInfo().userName,EmUtil.getEmployInfo().realName,
-//                    EmUtil.getEmployInfo().phone,System.currentTimeMillis()/1000,EmUtil.getEmployInfo().serviceType);
+            //一键报警  下线
+            CenterUtil centerUtil = new CenterUtil(context,Config.APP_KEY,
+                    XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
+                    XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
+            centerUtil.driverDown(driverId,EmUtil.getEmployInfo().companyId,EmUtil.getEmployInfo().userName,EmUtil.getEmployInfo().realName,
+                    EmUtil.getEmployInfo().phone,System.currentTimeMillis()/1000,EmUtil.getEmployInfo().serviceType);
 
             view.offlineSuc();
             XApp.getPreferencesEditor().putLong(Config.ONLINE_TIME, 0).apply();

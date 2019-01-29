@@ -6,11 +6,10 @@ import com.easymi.component.result.EmResult;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: CreateOrderResult
- *@Author: shine
+ * @Author: shine
  * Date: 2018/12/11 下午9:29
  * Description:
  * History:
- * @author hufeng
  */
 public class CreateOrderResult extends EmResult {
 

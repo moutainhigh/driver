@@ -22,8 +22,12 @@ import com.easymi.common.widget.ImvDialog;
 import com.easymi.component.utils.ToastUtil;
 
 /**
- * @author hufeng
- * 已废弃
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 public class PersonInfoFragment extends AbsRegisterFragment {
 

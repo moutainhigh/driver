@@ -21,7 +21,6 @@ import java.util.TimerTask;
  * Date: 2018/12/22 下午1:30
  * Description:
  * History:
- * @author hufeng
  */
 public class NotStartFragment extends RxBaseFragment {
 

@@ -12,9 +12,8 @@ import java.util.List;
  * FileName: CharteredOrder
  * @Author: shine
  * Date: 2018/12/24 下午1:53
- * Description:
+ * Description: 定制包车订单实体
  * History:
- * @author hufeng
  */
 public class CharteredOrder extends BaseOrder implements Serializable {
 

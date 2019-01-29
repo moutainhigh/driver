@@ -98,6 +98,7 @@ import com.easymi.component.widget.overlay.DrivingRouteOverlay;
 import com.easymi.zhuanche.R;
 import com.easymi.zhuanche.ZCApiService;
 import com.easymi.zhuanche.activity.CancelActivity;
+import com.easymi.zhuanche.activity.CancelNewActivity;
 import com.easymi.zhuanche.activity.ConsumerInfoActivity;
 import com.easymi.zhuanche.activity.SameOrderActivity;
 import com.easymi.zhuanche.activity.TransferActivity;
@@ -318,7 +319,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     public void initToolbar() {
         toolbar.setLeftIcon(R.drawable.ic_arrow_back, v -> finish());
         toolbar.setRightText(R.string.cancel_order,v -> {
-
+            Intent intent = new Intent(this, CancelNewActivity.class);
+            startActivity(intent);
         });
 //        toolbar.setRightIcon(R.drawable.ic_more_horiz_white_24dp, v -> {
 //            if (popWindow.isShowing()) {
@@ -1142,8 +1144,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             }
 
             @Override
-            public void doStartDrive(LoadingButton btn) {
-                presenter.startDrive(zcOrder.orderId, zcOrder.version, btn);
+            public void doStartDrive() {
+                presenter.startDrive(zcOrder.orderId, zcOrder.version);
             }
 
             @Override

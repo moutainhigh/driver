@@ -102,7 +102,7 @@ public class OldWaitActivity extends RxBaseActivity implements FlowContract.View
             return;
         }
         this.zcOrder = zcOrder;
-        start_drive.setOnClickListener(view -> presenter.startDrive(orderId,zcOrder.version, start_drive));
+        start_drive.setOnClickListener(view -> presenter.startDrive(orderId,zcOrder.version));
         if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
             Intent intent = new Intent(OldWaitActivity.this, OldRunningActivity.class);
             intent.putExtra("orderId", orderId);

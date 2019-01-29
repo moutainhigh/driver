@@ -20,11 +20,10 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: OrderActivity
- *@Author: shine
+ * @Author: shine
  * Date: 2018/11/14 下午7:26
  * Description:
  * History:
- * @author hufeng
  */
 public class OrderActivity extends RxBaseActivity {
 

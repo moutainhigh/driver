@@ -28,9 +28,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * 工作时间统计器，需要尽可能长久的工作。目前策略将其生命周期关联到推送服务生命上。
- * 比较没有推送，统计工作时间也没有什么意义。
- * @author hufeng
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:WorkTimeCounter
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description: 工作时间统计器，需要尽可能长久的工作。目前策略将其生命周期关联到推送服务生命上。比较没有推送，统计工作时间也没有什么意义。
+ * History:
  */
 public class WorkTimeCounter {
 

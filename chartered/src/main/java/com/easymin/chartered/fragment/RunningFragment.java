@@ -21,11 +21,10 @@ import com.easymin.chartered.flowMvp.ActFraCommBridge;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: RunningFragment
- *@Author: shine
+ * @Author: shine
  * Date: 2018/12/24 下午5:12
  * Description:
  * History:
- * @author hufeng
  */
 public class RunningFragment extends RxBaseFragment{
 

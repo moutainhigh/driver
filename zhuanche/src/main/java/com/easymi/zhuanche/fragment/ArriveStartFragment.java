@@ -13,6 +13,7 @@ import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.utils.GlideCircleTransform;
 import com.easymi.component.utils.StringUtils;
+import com.easymi.component.widget.CustomSlideToUnlockView;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.zhuanche.R;
 import com.easymi.zhuanche.entity.ZCOrder;
@@ -46,13 +47,14 @@ public class ArriveStartFragment extends RxBaseFragment {
         this.bridge = bridge;
     }
 
-    LoadingButton startDrive;
-    LinearLayout startWait;
+//    LoadingButton startDrive;
+//    LinearLayout startWait;
     TextView startPlaceText;
     TextView endPlaceText;
     FrameLayout callPhoneCon;
     ImageView customHead;
     TextView customName;
+    CustomSlideToUnlockView slider;
 
     @Override
     public void setArguments(Bundle args) {
@@ -76,9 +78,10 @@ public class ArriveStartFragment extends RxBaseFragment {
     private void initView() {
         startPlaceText = $(R.id.start_place);
         endPlaceText = $(R.id.end_place);
-        startDrive = $(R.id.start_drive);
-        startWait = $(R.id.start_wait);
+//        startDrive = $(R.id.start_drive);
+//        startWait = $(R.id.start_wait);
         callPhoneCon = $(R.id.call_phone_con);
+        slider = $(R.id.slider);
 
         customHead = $(R.id.iv_head);
         customName = $(R.id.tv_custom_name);
@@ -87,6 +90,7 @@ public class ArriveStartFragment extends RxBaseFragment {
         endPlaceText.setSelected(true);
 
         customName.setText(zcOrder.passengerName);
+        slider.setHint("滑动到达预约地");
 
         if (StringUtils.isNotBlank(zcOrder.avatar)) {
             RequestOptions options = new RequestOptions()
@@ -102,9 +106,21 @@ public class ArriveStartFragment extends RxBaseFragment {
 
         startPlaceText.setText(zcOrder.getStartSite().addr);
         endPlaceText.setText(zcOrder.getEndSite().addr);
-        startDrive.setOnClickListener(view -> bridge.doStartDrive(startDrive));
-        startWait.setOnClickListener(view -> bridge.doStartWait());
+//        startDrive.setOnClickListener(view -> bridge.doStartDrive(startDrive));
+//        startWait.setOnClickListener(view -> bridge.doStartWait());
         callPhoneCon.setOnClickListener(view -> CallPhoneDialog.callDialog(getActivity(), zcOrder));
         $(R.id.change_end_con).setOnClickListener(view -> bridge.changeEnd());
+
+        slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
+            @Override
+            public void onSlide(int distance) {
+
+            }
+
+            @Override
+            public void onUnlocked() {
+                bridge.doStartDrive();
+            }
+        });
     }
 }

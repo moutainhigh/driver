@@ -16,11 +16,10 @@ import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: MyOrderModel
- *@Author: shine
+ * @Author: shine
  * Date: 2018/11/23 上午11:37
  * Description:
  * History:
- * @author hufeng
  */
 public class MyOrderModel implements MyOrderContract.Model {
 

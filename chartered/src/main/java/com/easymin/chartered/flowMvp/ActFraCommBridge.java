@@ -12,7 +12,7 @@ import java.util.List;
  * FileName: ActFraCommBridge
  * @Author: shine
  * Date: 2018/12/18 下午2:00
- * Description:
+ * Description: activity和fragment通信接口
  * History:
  */
 public interface ActFraCommBridge {

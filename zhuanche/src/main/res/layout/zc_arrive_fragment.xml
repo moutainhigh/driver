@@ -2,54 +2,72 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:SlideToUnlockView="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/control_con"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/btn_height"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_margin="10dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
-        <com.easymi.component.widget.LoadingButton
-            android:id="@+id/start_drive"
-            android:layout_width="0.0dp"
+        <com.easymi.component.widget.CustomSlideToUnlockView
+            android:id="@+id/slider"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
             android:elevation="0.5dp"
-            android:layout_height="match_parent"
-            android:layout_weight="8"
-            android:background="@drawable/corners_button_bg"
-            android:gravity="center"
-            android:text="@string/start_drive"
-            android:textColor="@color/white" />
-
-        <LinearLayout
-            android:id="@+id/start_wait"
-            android:layout_width="0.0dp"
-            android:layout_height="@dimen/btn_height"
-            android:elevation="0.5dp"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="2"
-            android:background="@drawable/corners_404456"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <ImageView
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:src="@mipmap/time_icon"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="@string/start_wait"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
-        </LinearLayout>
+            android:layout_gravity="center_horizontal|bottom"
+            SlideToUnlockView:sliderTextSize="25" />
 
     </LinearLayout>
+    <!--<LinearLayout-->
+        <!--android:id="@+id/control_con"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="@dimen/btn_height"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_margin="10dp"-->
+        <!--android:orientation="horizontal">-->
+
+        <!--<com.easymi.component.widget.LoadingButton-->
+            <!--android:id="@+id/start_drive"-->
+            <!--android:layout_width="0.0dp"-->
+            <!--android:elevation="0.5dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="8"-->
+            <!--android:background="@drawable/corners_button_bg"-->
+            <!--android:gravity="center"-->
+            <!--android:text="@string/start_drive"-->
+            <!--android:textColor="@color/white" />-->
+
+        <!--<LinearLayout-->
+            <!--android:id="@+id/start_wait"-->
+            <!--android:layout_width="0.0dp"-->
+            <!--android:layout_height="@dimen/btn_height"-->
+            <!--android:elevation="0.5dp"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:layout_weight="2"-->
+            <!--android:background="@drawable/corners_404456"-->
+            <!--android:gravity="center"-->
+            <!--android:orientation="vertical"-->
+            <!--android:visibility="gone">-->
+
+            <!--<ImageView-->
+                <!--android:layout_width="18dp"-->
+                <!--android:layout_height="18dp"-->
+                <!--android:src="@mipmap/time_icon"/>-->
+
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="2dp"-->
+                <!--android:text="@string/start_wait"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:textSize="12sp" />-->
+        <!--</LinearLayout>-->
+
+    <!--</LinearLayout>-->
 
 
     <LinearLayout
@@ -93,8 +111,7 @@
             <ImageView
                 android:layout_width="8dp"
                 android:layout_height="8dp"
-                android:src="@drawable/circle_accent"
-                />
+                android:src="@drawable/circle_accent" />
 
             <View
                 android:layout_width="0.1dp"

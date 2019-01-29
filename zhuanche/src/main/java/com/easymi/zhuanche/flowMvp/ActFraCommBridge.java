@@ -50,7 +50,7 @@ public interface ActFraCommBridge {
      * 开始出发
      * @param btn
      */
-    void doStartDrive(LoadingButton btn);
+    void doStartDrive();
 
     /**
      * 确认费用

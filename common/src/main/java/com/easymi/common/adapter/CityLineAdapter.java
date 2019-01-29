@@ -19,9 +19,12 @@ import com.easymi.component.utils.ToastUtil;
 import java.util.List;
 
 /**
- *
- * @author hiwhitley
- * @date 2016/10/17
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class CityLineAdapter extends BaseMultiItemQuickAdapter<CityLine, BaseViewHolder> {

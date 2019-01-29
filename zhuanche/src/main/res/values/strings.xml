@@ -224,4 +224,7 @@
     <string name="bo_budget_hint">起点距离终点太近，无法预算费用</string>
 
     <string name="order_finish">该订单已完成</string>
+
+    <string name="order_cacnel">销单须知</string>
+    <string name="reason_cacnel">销单原因</string>
 </resources>

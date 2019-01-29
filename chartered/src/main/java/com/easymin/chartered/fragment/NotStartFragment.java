@@ -23,11 +23,10 @@ import java.util.TimerTask;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: NotStartFragment
- *@Author: shine
+ * @Author: shine
  * Date: 2018/12/22 下午1:30
  * Description:
  * History:
- * @author hufeng
  */
 public class NotStartFragment extends RxBaseFragment {
 

@@ -35,7 +35,6 @@ public class RunningFragment extends RxBaseFragment {
      * activity和fragment的通信接口
      */
     private ActFraCommBridge bridge;
-
     /**
      * 设置bridge
      * @param bridge
@@ -144,7 +143,6 @@ public class RunningFragment extends RxBaseFragment {
             driveTimeText.setText(zcOrder.travelTime + "");
             waitTimeText.setText(zcOrder.waitTime + "");
         });
-
     }
 
     /**
