@@ -60,7 +60,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailHold
         if (TextUtils.equals(detail.purpose, "DRIVER_RECHARGE")) {
             holder.detailPurpose.setText("司机充值");
         } else if (TextUtils.equals(detail.purpose, "PAY_DRIVER_BALANCE")) {
-            holder.detailPurpose.setText("余额支付");
+            holder.detailPurpose.setText("司机代付");
         } else if (TextUtils.equals(detail.purpose, "ADMIN_DRIVER_RECHARGE")) {
             holder.detailPurpose.setText("后台充值");
         } else if (TextUtils.equals(detail.purpose, "ALIPAY_DRIVER_RECHARGE")) {
@@ -75,6 +75,8 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailHold
             holder.detailPurpose.setText("提现拒絕");
         }else if (TextUtils.equals(detail.purpose, "ACCEPT_PUT_FORWARD")) {
             holder.detailPurpose.setText("提现通过");
+        } else if (TextUtils.equals(detail.purpose, "PAY_PASSENGER_BALANCE")) {
+            holder.detailPurpose.setText("乘客支付");
         }else {
             holder.detailPurpose.setText("其他");
         }

@@ -16,7 +16,7 @@ public class Detail {
     public Long time;
 
     //driver_recharge 司机充值
-    //PAY_DRIVER_BALANCE 余额支付
+    //PAY_DRIVER_BALANCE 司机代付
     //ADMIN_DRIVER_RECHARGE 后台充值
     //ALIPAY_DRIVER_RECHARGE  支付宝充值
     //WECHAT_DRIVER_RECHARGE  微信充值
@@ -24,6 +24,7 @@ public class Detail {
     //DRIVER_PUT_FORWARD  提现申請
     //REJECT_PUT_FORWARD 提现拒絕
     //ACCEPT_PUT_FORWARD 提现同意
+    //PAY_PASSENGER_BALANCE 客户余额支付
     @SerializedName("type")
     public String purpose;
 
