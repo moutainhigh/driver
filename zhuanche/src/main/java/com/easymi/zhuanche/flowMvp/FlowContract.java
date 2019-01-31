@@ -30,10 +30,6 @@ public interface FlowContract {
          */
         void initToolbar();
 
-//        /**
-//         * 初始化右上角弹窗
-//         */
-//        void initPop();
 
         /**
          * 显示顶部布局
@@ -136,11 +132,6 @@ public interface FlowContract {
          * @param consumerInfo
          */
         void showConsumer(ConsumerInfo consumerInfo);
-
-        /**
-         * 隐藏顶部布局
-         */
-        void hideTops();
 
         /**
          * 获取 RxManager

@@ -351,10 +351,6 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
         showPayType(payMoney, consumerInfo);
     }
 
-    @Override
-    public void hideTops() {
-
-    }
 
     @Override
     public RxManager getManager() {

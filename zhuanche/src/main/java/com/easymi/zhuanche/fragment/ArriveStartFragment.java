@@ -47,14 +47,11 @@ public class ArriveStartFragment extends RxBaseFragment {
         this.bridge = bridge;
     }
 
-//    LoadingButton startDrive;
-//    LinearLayout startWait;
     TextView startPlaceText;
     TextView endPlaceText;
-    FrameLayout callPhoneCon;
-    ImageView customHead;
-    TextView customName;
+    ImageView callPhoneCon;
     CustomSlideToUnlockView slider;
+    TextView tv_phone;
 
     @Override
     public void setArguments(Bundle args) {
@@ -78,36 +75,26 @@ public class ArriveStartFragment extends RxBaseFragment {
     private void initView() {
         startPlaceText = $(R.id.start_place);
         endPlaceText = $(R.id.end_place);
-//        startDrive = $(R.id.start_drive);
-//        startWait = $(R.id.start_wait);
         callPhoneCon = $(R.id.call_phone_con);
         slider = $(R.id.slider);
 
-        customHead = $(R.id.iv_head);
-        customName = $(R.id.tv_custom_name);
+        tv_phone = $(R.id.tv_phone);
+
+        String weihao;
+        if (zcOrder.passengerPhone != null && zcOrder.passengerPhone.length() > 4) {
+            weihao = zcOrder.passengerPhone.substring(zcOrder.passengerPhone.length() - 4, zcOrder.passengerPhone.length());
+        } else {
+            weihao = zcOrder.passengerPhone;
+        }
+        tv_phone.setText(weihao+"");
 
         startPlaceText.setSelected(true);
         endPlaceText.setSelected(true);
 
-        customName.setText(zcOrder.passengerName);
-        slider.setHint("滑动到达预约地");
-
-        if (StringUtils.isNotBlank(zcOrder.avatar)) {
-            RequestOptions options = new RequestOptions()
-                    .centerCrop()
-                    .transform(new GlideCircleTransform())
-                    .placeholder(R.mipmap.ic_customer_head)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL);
-            Glide.with(this)
-                    .load(Config.IMG_SERVER + zcOrder.avatar + Config.IMG_PATH)
-                    .apply(options)
-                    .into(customHead);
-        }
+        slider.setHint("滑动确认上车");
 
         startPlaceText.setText(zcOrder.getStartSite().addr);
         endPlaceText.setText(zcOrder.getEndSite().addr);
-//        startDrive.setOnClickListener(view -> bridge.doStartDrive(startDrive));
-//        startWait.setOnClickListener(view -> bridge.doStartWait());
         callPhoneCon.setOnClickListener(view -> CallPhoneDialog.callDialog(getActivity(), zcOrder));
         $(R.id.change_end_con).setOnClickListener(view -> bridge.changeEnd());
 

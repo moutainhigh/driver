@@ -32,6 +32,7 @@
             android:textColor="@color/color_666666"
             android:lineSpacingExtra="2dp"/>
         <TextView
+            android:id="@+id/tv_two"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2. 司机到达乘客上车地点后，等候时间超过10分钟，司机可 以无责取消订单。"
@@ -58,17 +59,20 @@
                 android:orientation="horizontal"
                 android:weightSum="3">
                 <Button
+                    android:id="@+id/btn_1"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
                     android:text="车辆故障"
                     android:gravity="center"
-                    android:textColor="@color/color_333333"
-                    android:background="@drawable/cancel_order_btn_bg"/>
+                    android:textColor="@color/white"
+                    android:background="@color/color_3c98e3"
+                    />
                 <LinearLayout
                     android:layout_width="5dp"
                     android:layout_height="wrap_content"/>
                 <Button
+                    android:id="@+id/btn_2"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
@@ -81,6 +85,7 @@
                     android:layout_width="5dp"
                     android:layout_height="wrap_content"/>
                 <Button
+                    android:id="@+id/btn_3"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
@@ -97,6 +102,7 @@
                 android:weightSum="3"
                 android:layout_marginTop="5dp">
                 <Button
+                    android:id="@+id/btn_4"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
@@ -109,6 +115,7 @@
                     android:layout_width="5dp"
                     android:layout_height="wrap_content"/>
                 <Button
+                    android:id="@+id/btn_5"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
@@ -121,6 +128,7 @@
                     android:layout_width="5dp"
                     android:layout_height="wrap_content"/>
                 <Button
+                    android:id="@+id/btn_6"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
@@ -167,7 +175,8 @@
                 android:layout_weight="1"
                 android:background="@drawable/corner_3c98e3_4dp_line"
                 android:text="取消"
-                android:textColor="@color/color_3c98e3" />
+                android:textColor="@color/color_3c98e3"
+                android:onClick="cancel_cancel"/>
 
             <Button
                 android:id="@+id/cancel_apply"
@@ -177,7 +186,8 @@
                 android:layout_weight="1"
                 android:background="@drawable/shape_3c98e3_4dp_bg"
                 android:text="提交"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:onClick="cancel_order"/>
 
         </LinearLayout>
     </LinearLayout>
