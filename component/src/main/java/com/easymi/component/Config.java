@@ -165,9 +165,8 @@ public class Config {
     public static final String HTTP_CUSTOM = "com.easymi.v5driver.HTTP_CUSTOM";
     public static final String ORDER_REFRESH = "com.easymi.v5driver.ORDER_REFRESH";
 
-//    public static final int FREE_LOC_TIME = 5000;//闲时定位时间 毫秒
-//    public static final int BUSY_LOC_TIME = 5000;//忙时定位时间 毫秒
-    public static final int NORMAL_LOC_TIME = 5000;//固定定位时间 毫秒
+    //固定定位时间 毫秒
+    public static final int NORMAL_LOC_TIME = 5000;
     //是否纠偏
     public static final boolean NEED_TRACE = false;
     //是否保存位置信息

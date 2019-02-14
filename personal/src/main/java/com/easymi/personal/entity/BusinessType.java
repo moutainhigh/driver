@@ -1,5 +1,7 @@
 package com.easymi.personal.entity;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -12,7 +14,9 @@ import java.io.Serializable;
  */
 public class BusinessType implements Serializable{
 
+    @SerializedName("label")
     public String name;
-
+    @SerializedName("value")
     public String type;
+
 }

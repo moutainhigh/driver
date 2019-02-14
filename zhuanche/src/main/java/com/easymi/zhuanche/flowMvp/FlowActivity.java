@@ -155,6 +155,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         CancelOrderReceiver.OnCancelListener,
         AMap.OnMapTouchListener,
         OrderFinishReceiver.OnFinishListener {
+
     public static final int CANCEL_ORDER = 0X01;
     public static final int CHANGE_END = 0X02;
     public static final int CHANGE_ORDER = 0X03;
@@ -260,7 +261,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
 
         orderId = getIntent().getLongExtra("orderId", -1);
-        isToFeeDetail = getIntent().getBooleanExtra("showSettle", false);//是否是从计价器过来的
+        //是否是从计价器过来的
+        isToFeeDetail = getIntent().getBooleanExtra("showSettle", false);
         if (orderId == -1) {
             finish();
             return;
@@ -695,11 +697,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             // 设置圆形的填充颜色
             myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));
 
-//            if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-//                myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);
-//            } else {
-//                myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER);
-//            }
             myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                     .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
             aMap.setMyLocationStyle(myLocationStyle);

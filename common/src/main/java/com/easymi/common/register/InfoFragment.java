@@ -195,7 +195,7 @@ public class InfoFragment extends AbsRegisterFragment {
 
         //个人信息参数
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.driverId = employ.id;
+        registerRequest.id = employ.id;
         registerRequest.idCard = idCard.getText().toString();
         registerRequest.emergency = emergency.getText().toString();
         registerRequest.emergencyPhone = emergencyPhone.getText().toString();

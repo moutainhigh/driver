@@ -128,7 +128,7 @@ public interface FlowContract {
         void showToEndFragment();
 
         /**
-         * 显示乘客星系
+         * 显示乘客信息
          * @param consumerInfo
          */
         void showConsumer(ConsumerInfo consumerInfo);

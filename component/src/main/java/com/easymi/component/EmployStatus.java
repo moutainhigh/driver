@@ -18,7 +18,6 @@ public class EmployStatus {
      * 在线(登录未听单)
      */
     public static final String ONLINE = String.valueOf(2);
-
     /**
      * 空闲（登录后听单中）
      */

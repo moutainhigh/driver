@@ -33,6 +33,7 @@ import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.personal.R;
 import com.easymi.personal.activity.LoginActivity;
+import com.easymi.personal.entity.Register;
 import com.easymi.personal.result.LoginResult;
 
 import rx.Observable;
@@ -347,11 +348,12 @@ public class RegisterAcitivty extends RxBaseActivity {
 
     /**
      * 跳转注册
-     * @param employ
+     * @param id 注册返回id
      */
-    public void startBase(Employ employ) {
+    public void startBase(Long id) {
         Intent intent = new Intent(this, RegisterBaseActivity.class);
-        intent.putExtra("employ",employ);
+        intent.putExtra("id",id);
+        intent.putExtra("phone",et_phone.getText().toString());
         startActivity(intent);
     }
 
@@ -391,6 +393,22 @@ public class RegisterAcitivty extends RxBaseActivity {
         })));
     }
 
+
+    /**
+     * 申请中
+     */
+    int APPLYING = 50009;
+
+    /**
+     * 申请已经通过
+     */
+    int APPLY_PASS = 50010;
+
+    /**
+     * 申请拒绝
+     */
+    int APPLY_REJECT = 50011;
+
     /**
      * 调用注册接口
      */
@@ -406,11 +424,21 @@ public class RegisterAcitivty extends RxBaseActivity {
             e.printStackTrace();
         }
 
-        Observable<LoginResult> observable = RegisterModel.register(password_rsa, phone_rsa, smsCode_rsa);
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this,register_button, emResult -> {
-            if (emResult.getCode() == 1) {
-                //todo
-                startBase(emResult.getEmployInfo());
+        Observable<Register> observable = RegisterModel.register(password_rsa, phone_rsa, smsCode_rsa);
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this,register_button, register -> {
+            if (register.getCode() == 1) {
+                startBase(register.data);
+            }else if (register.getCode() == APPLYING){
+                Intent intent = new Intent(this, RegisterNoticeActivity.class);
+                intent.putExtra("type", 2);
+                startActivity(intent);
+            }else if (register.getCode() == APPLY_PASS){
+                ToastUtil.showMessage(this,"申请已经通过");
+            }else if (register.getCode() == APPLY_REJECT){
+                Intent intent = new Intent(this, RegisterNoticeActivity.class);
+                intent.putExtra("type", 3);
+                intent.putExtra("phone", et_phone.getText().toString());
+                startActivity(intent);
             }
         })));
     }

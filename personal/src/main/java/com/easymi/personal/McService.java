@@ -7,6 +7,7 @@ import com.easymi.common.entity.RegisterRes;
 import com.easymi.common.result.SettingResult;
 import com.easymi.component.result.EmResult;
 import com.easymi.personal.entity.CarInfo;
+import com.easymi.personal.entity.Register;
 import com.easymi.personal.result.AnnouncementResult;
 import com.easymi.personal.result.ArticleResult;
 import com.easymi.personal.result.BankResult;
@@ -146,19 +147,6 @@ public interface McService {
                                          @Query("app_key") String appKey
     );
 
-    /**
-     * 根据公司id业务类型获取子类型
-     *
-     * @param companyId
-     * @param business
-     * @param app_key
-     * @return
-     */
-    @GET("/driver/api/v1/getBusiness")
-    Observable<BusinessResult> getBusiness(@Query("company_id") Long companyId,
-                                           @Query("business") String business,
-                                           @Query("app_key") String app_key
-    );
 
     /**
      * 分享地址
@@ -491,7 +479,6 @@ public interface McService {
 
 
     //注册相关
-
     /**
      * 公司表列表查询
      *
@@ -499,6 +486,14 @@ public interface McService {
      */
     @GET("api/v1/public/system/app/companys")
     Observable<CompanyList> qureyCompanys();
+
+    /**
+     * 公司表列表查询
+     *
+     * @return
+     */
+    @GET("/api/v1/public/system/app/company/{id}")
+    Observable<BusinessResult> getBusinessType(@Path("id") long id);
 
     /**
      * 发送短信登录接口
@@ -528,17 +523,39 @@ public interface McService {
      */
     @FormUrlEncoded
     @POST("api/v1/public/driver/register/save")
-    Observable<LoginResult> register(@Field("password") String password,
-                                     @Field("phone") String phone,
-                                     @Field("smsCode") String smsCode);
+    Observable<Register> register(@Field("password") String password,
+                                  @Field("phone") String phone,
+                                  @Field("smsCode") String smsCode);
 
-
+    /**
+     * 获取七牛云token
+     * @return
+     */
     @GET("api/v1/public/app/qny_token")
     Observable<QiNiuToken> getToken();
 
+    /**
+     * 注册提交申请资料
+     * @param id
+     * @param realName
+     * @param phone
+     * @param idCard
+     * @param emergency
+     * @param emergencyPhone
+     * @param companyId
+     * @param serviceType
+     * @param startTime
+     * @param endTime
+     * @param introducer
+     * @param portraitPath
+     * @param idCardPath
+     * @param idCardBackPath
+     * @param driveLicensePath
+     * @return
+     */
     @FormUrlEncoded
     @POST("api/v1/public/driver/register/apply/app/save")
-    Observable<RegisterRes> applyDriver(@Field("driverId") String driverId,
+    Observable<RegisterRes> applyDriver(@Field("id") String id,
                                         @Field("realName") String realName,
                                         @Field("phone") String phone,
                                         @Field("idCard") String idCard,
@@ -550,31 +567,22 @@ public interface McService {
                                         @Field("driveLicenceEnd") String endTime,
                                         @Field("introducer") String introducer,
                                         @Field("portraitPath") String portraitPath,
-                                        @Field("idCardHeadPath") String idCardHeadPath,
-                                        @Field("idCardBackPath") String idCardBackPath,
-                                        @Field("driveLicensePath") String driveLicensePath);
-
-    @FormUrlEncoded
-    @POST("api/v1/public/driver/register/apply/app/update")
-    Observable<RegisterRes> applyUpdate(@Field("driverId") String driverId,
-                                        @Field("realName") String realName,
-                                        @Field("phone") String phone,
-                                        @Field("idCard") String idCard,
-                                        @Field("emergency") String emergency,
-                                        @Field("emergencyPhone") String emergencyPhone,
-                                        @Field("companyId") String companyId,
-                                        @Field("serviceType") String serviceType,
-                                        @Field("driveLicenceStart") String startTime,
-                                        @Field("driveLicenceEnd") String endTime,
-                                        @Field("introducer") String introducer,
-                                        @Field("portraitPath") String portraitPath,
-                                        @Field("idCardHeadPath") String idCardHeadPath,
+                                        @Field("idCardPath") String idCardPath,
                                         @Field("idCardBackPath") String idCardBackPath,
                                         @Field("driveLicensePath") String driveLicensePath,
-                                        @Field("version") String version);
+
+                                        @Field("netCarQualificationsStart") String netCarQualificationsStart,
+                                        @Field("netCarQualificationsEnd") String netCarQualificationsEnd,
+                                        @Field("practitionersPhoto") String practitionersPhoto
+                                        );
 
 
+    /**
+     * 获取司机注册信息
+     * @param phone
+     * @return
+     */
     @GET("api/v1/public/driver/register/get")
-    Observable<RegisterResult> getDriverInfo(@Query("driverId") String driverId);
+    Observable<RegisterResult> getDriverInfo(@Query("phone") String phone);
 
 }

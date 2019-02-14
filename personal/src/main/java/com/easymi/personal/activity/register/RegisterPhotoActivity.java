@@ -55,9 +55,11 @@ public class RegisterPhotoActivity extends RxBaseActivity {
     ImageView frontImg;
     ImageView backImg;
     ImageView drivingImg;
+    ImageView zigeImg;
     FrameLayout frontCon;
     FrameLayout backCon;
     FrameLayout drivingCon;
+    FrameLayout zigeCon;
 
     CusImgHint cusImgHint;
 
@@ -69,6 +71,7 @@ public class RegisterPhotoActivity extends RxBaseActivity {
     private boolean frontHintShowed = false;
     private boolean backHintShowed = false;
     private boolean drivingHintShowed = false;
+    private boolean zigeHintShowed = false;
 
     /**
      * 选择的图片控件
@@ -78,7 +81,7 @@ public class RegisterPhotoActivity extends RxBaseActivity {
     /**
      * 图片本地地址集合
      */
-    private String[] imgPaths = new String[3];
+    private String[] imgPaths = new String[4];
 
     /**
      * 注册请求数据
@@ -94,7 +97,6 @@ public class RegisterPhotoActivity extends RxBaseActivity {
      */
     RequestOptions options = new RequestOptions()
             .centerCrop()
-            .placeholder(R.mipmap.register_photo)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .transform(new GlideRoundTransform());
 
@@ -123,9 +125,11 @@ public class RegisterPhotoActivity extends RxBaseActivity {
         frontImg = findViewById(R.id.front_img);
         backImg = findViewById(R.id.back_img);
         drivingImg = findViewById(R.id.driving_img);
+        zigeImg = findViewById(R.id.zige_img);
         frontCon = findViewById(R.id.front_con);
         backCon = findViewById(R.id.back_con);
         drivingCon = findViewById(R.id.driving_con);
+        zigeCon = findViewById(R.id.zige_con);
         cusImgHint = findViewById(R.id.cus_hint);
         applyBtn = findViewById(R.id.apply);
     }
@@ -139,9 +143,17 @@ public class RegisterPhotoActivity extends RxBaseActivity {
         if (getIntent().getParcelableExtra("registerInfo") != null) {
             registerInfo = getIntent().getParcelableExtra("registerInfo");
 
+            registerRequest.id = registerInfo.id;
+
             frontHintShowed = true;
             backHintShowed = true;
             drivingHintShowed = true;
+            zigeHintShowed = true;
+
+            frontImg.setVisibility(View.VISIBLE);
+            backImg.setVisibility(View.VISIBLE);
+            drivingImg.setVisibility(View.VISIBLE);
+            zigeImg.setVisibility(View.VISIBLE);
 
             Glide.with(RegisterPhotoActivity.this)
                     .load(Config.IMG_SERVER + registerInfo.idCardPath + Config.IMG_PATH)
@@ -158,6 +170,10 @@ public class RegisterPhotoActivity extends RxBaseActivity {
                     .apply(options)
                     .into(drivingImg);
 
+            Glide.with(RegisterPhotoActivity.this)
+                    .load(Config.IMG_SERVER + registerInfo.practitionersPhoto + Config.IMG_PATH)
+                    .apply(options)
+                    .into(zigeImg);
             getQiniuToken();
         }
     }
@@ -205,6 +221,18 @@ public class RegisterPhotoActivity extends RxBaseActivity {
                 choicePic(8, 3);
             }
         });
+
+        zigeCon.setOnClickListener(v -> {
+            if (!zigeHintShowed) {
+                zigeHintShowed = true;
+                cusImgHint.setVisibility(View.VISIBLE);
+                cusImgHint.setImageResource(R.mipmap.img_driving);
+                cusImgHint.setText(R.string.register_hint_driving);
+            } else {
+                currentImg = zigeImg;
+                choicePic(8, 3);
+            }
+        });
     }
 
     @Override
@@ -240,6 +268,13 @@ public class RegisterPhotoActivity extends RxBaseActivity {
                             updateImage(2,new File(imgPaths[2]));
                         }else {
                             registerRequest.driveLicensePath = imgPaths[2];
+                        }
+                    }else if (i == R.id.zige_img) {
+                        imgPaths[3] = images.get(0).getCutPath();
+                        if (registerInfo != null) {
+                            updateImage(3,new File(imgPaths[3]));
+                        }else {
+                            registerRequest.practitionersPhoto = imgPaths[3];
                         }
                     }
                 }
@@ -299,6 +334,7 @@ public class RegisterPhotoActivity extends RxBaseActivity {
             registerRequest.idCardPath = registerInfo.idCardPath;
             registerRequest.idCardBackPath = registerInfo.idCardBackPath;
             registerRequest.driveLicensePath = registerInfo.driveLicensePath;
+            registerRequest.practitionersPhoto = registerInfo.practitionersPhoto;
             uploadAllPicsAndUpdate(registerRequest);
         } else {
             if (registerRequest == null) {
@@ -320,6 +356,12 @@ public class RegisterPhotoActivity extends RxBaseActivity {
             if (registerRequest.driveLicensePath == null) {
                 if (registerInfo == null) {
                     ToastUtil.showMessage(this, "未上传驾驶证");
+                    return;
+                }
+            }
+            if (registerRequest.practitionersPhoto == null) {
+                if (registerInfo == null) {
+                    ToastUtil.showMessage(this, "未上传网约车从业资格证");
                     return;
                 }
             }
@@ -364,13 +406,15 @@ public class RegisterPhotoActivity extends RxBaseActivity {
      */
     public void updateImage(int type, File file) {
         Observable<Pic> observable = RegisterModel.putPic(file, qiniuToken);
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, pic -> {
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, pic -> {
             if (type == 0){
                 registerInfo.idCardPath = pic.hashCode;
             }else if (type == 1){
                 registerInfo.idCardBackPath = pic.hashCode;
             }else if (type == 2){
                 registerInfo.driveLicensePath = pic.hashCode;
+            }else if (type == 3){
+                registerInfo.practitionersPhoto = pic.hashCode;
             }
         })));
     }
