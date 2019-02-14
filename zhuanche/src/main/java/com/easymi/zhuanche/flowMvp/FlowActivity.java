@@ -447,12 +447,20 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             lin_navi.setVisibility(View.VISIBLE);
         } else if (zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER) {
             go_text.setText("已到");
-            lin_time.setVisibility(View.VISIBLE);
-            setWaitTime();
+            if ((ZCSetting.findOne().arriveCancel == 1)) {
+                lin_time.setVisibility(View.VISIBLE);
+                setWaitTime();
+            }else {
+                lin_time.setVisibility(View.GONE);
+            }
         } else if (zcOrder.orderStatus == ZCOrderStatus.START_WAIT_ORDER) {
             go_text.setText("已到");
-            lin_time.setVisibility(View.VISIBLE);
-            setWaitTime();
+            if ((ZCSetting.findOne().arriveCancel == 1)) {
+                lin_time.setVisibility(View.VISIBLE);
+                setWaitTime();
+            }else {
+                lin_time.setVisibility(View.GONE);
+            }
         } else {
             if (XApp.getMyPreferences().getLong("" + zcOrder.orderId, 0) != 0) {
                 XApp.getMyPreferences().edit().remove("" + zcOrder);
@@ -572,12 +580,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 //            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);//动态设置为遵循传感器
             toolbar.setTitle(R.string.wait_consumer);
             if ((ZCSetting.findOne().arriveCancel == 1)) {
-                toolbar.setRightText("", null);
-            } else {
                 toolbar.setRightText(R.string.cancel_order, v -> {
                     Intent intent = new Intent(this, CancelNewActivity.class);
                     startActivityForResult(intent, CANCEL_ORDER);
                 });
+            } else {
+                toolbar.setRightText("", null);
             }
             waitFragment = new WaitFragment();
             Bundle bundle = new Bundle();

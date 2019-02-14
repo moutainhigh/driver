@@ -3,11 +3,11 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.rvakva.trip.driver"
+        applicationId "com.easymin.daijia.driver.zyziyunsjdaijia"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 9001
-        versionName "V6.1.0.1"
+        versionCode 9002
+        versionName "V6.1.0.2"
         multiDexEnabled true
 
         ndk {

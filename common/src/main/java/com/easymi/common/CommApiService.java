@@ -540,4 +540,12 @@ public interface CommApiService {
      */
     @GET("api/v1/public/driver/vehicle")
     Observable<VehicleResult> driverehicle();
+
+    /**
+     * 获取APP配置
+     *
+     * @return
+     */
+    @GET("api/v1/public/driver/app")
+    Observable<SettingResult> getAppSetting();
 }

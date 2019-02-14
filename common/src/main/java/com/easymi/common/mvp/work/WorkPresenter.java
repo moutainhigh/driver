@@ -114,13 +114,11 @@ public class WorkPresenter implements WorkContract.Presenter {
     @Override
     public void indexOrders() {
         view.showOrders(null);
-        Log.e("hufeng/8", TimeUtil.getTime("HH:mm:ss:SSS",System.currentTimeMillis()));
         Observable<QueryOrdersResult> observable = model.indexOrders(EmUtil.getEmployId(), EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false, false, new HaveErrSubscriberListener<QueryOrdersResult>() {
             @Override
             public void onNext(QueryOrdersResult emResult) {
                 view.stopRefresh();
-                Log.e("hufeng/1", TimeUtil.getTime("HH:mm:ss:SSS",System.currentTimeMillis()));
                 List<MultipleOrder> orders = new ArrayList<>();
                 MultipleOrder header = new MultipleOrder(MultipleOrder.ITEM_HEADER);
                 orders.add(header);
@@ -205,7 +203,6 @@ public class WorkPresenter implements WorkContract.Presenter {
                     }
                     startLocService();//重启定位更改定位周期
                     view.showOrders(orders);
-                    Log.e("hufeng/2", TimeUtil.getTime("HH:mm:ss:SSS",System.currentTimeMillis()));
                 } else {
                     DymOrder.deleteAll();
                     startLocService();//重启定位更改定位周期
@@ -321,7 +318,6 @@ public class WorkPresenter implements WorkContract.Presenter {
 
     @Override
     public void loadEmploy(long id) {
-        Log.e("hufeng/3", TimeUtil.getTime("HH:mm:ss:SSS",System.currentTimeMillis()));
         Observable<LoginResult> observable = model.getEmploy(id, EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
                 true, new HaveErrSubscriberListener<LoginResult>() {
@@ -361,7 +357,6 @@ public class WorkPresenter implements WorkContract.Presenter {
     }
 
     public void driverehicle(Employ employ) {
-        Log.e("hufeng/4", TimeUtil.getTime("HH:mm:ss:SSS",System.currentTimeMillis()));
         CommApiService api = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class);
 
         Observable<VehicleResult> observable = api

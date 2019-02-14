@@ -2,6 +2,7 @@ package com.easymi.common.mvp.work;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
@@ -32,6 +33,7 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
+import com.easymi.common.CommApiService;
 import com.easymi.common.R;
 import com.easymi.common.activity.CreateActivity;
 import com.easymi.common.activity.ModelSetActivity;
@@ -50,6 +52,7 @@ import com.easymi.common.receiver.EmployStatusChangeReceiver;
 import com.easymi.common.receiver.NoticeReceiver;
 import com.easymi.common.receiver.OrderRefreshReceiver;
 import com.easymi.common.register.InfoActivity;
+import com.easymi.common.result.SettingResult;
 import com.easymi.common.widget.NearInfoWindowAdapter;
 import com.easymi.common.widget.RegisterDialog;
 import com.easymi.component.Config;
@@ -58,9 +61,15 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
+import com.easymi.component.entity.TaxiSetting;
+import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
+import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HttpResultFunc;
+import com.easymi.component.network.MySubscriber;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.AesUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MapUtil;
@@ -81,6 +90,10 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 /**
@@ -351,6 +364,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         pinnedHeaderDecoration.registerTypePinnedHeader(MultipleOrder.ITEM_DESC, (parent, adapterPosition) -> true);
         recyclerView.addItemDecoration(pinnedHeaderDecoration);
 
+        getSetting();
     }
 
     private void setHeaderView(RecyclerView view) {
@@ -826,5 +840,45 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     public void onRefreshOrder() {
         swipeRefreshLayout.setRefreshing(true);
         presenter.indexOrders();
+    }
+
+
+    /**
+     * 获取配置信息
+     *
+     */
+    private void getSetting() {
+        Observable<SettingResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .getAppSetting()
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        observable.subscribe(new MySubscriber<>(this, false, false, settingResult -> {
+            if (settingResult.data != null) {
+                for (ZCSetting sub : settingResult.data) {
+                    if (sub.serviceType.equals(Config.ZHUANCHE)) {
+                        ZCSetting.deleteAll();
+                        sub.save();
+                    } else if (sub.serviceType.equals(Config.TAXI)) {
+                        TaxiSetting.deleteAll();
+                        TaxiSetting taxiSetting = new TaxiSetting();
+                        taxiSetting.isPaid = sub.isPaid;
+                        taxiSetting.isExpenses = sub.isExpenses;
+                        taxiSetting.canCancelOrder = sub.canCancelOrder;
+                        taxiSetting.isAddPrice = sub.isAddPrice;
+                        taxiSetting.employChangePrice = sub.employChangePrice;
+                        taxiSetting.employChangeOrder = sub.employChangeOrder;
+                        taxiSetting.driverRepLowBalance = sub.driverRepLowBalance;
+                        taxiSetting.passengerDistance = sub.passengerDistance;
+                        taxiSetting.version = sub.version;
+                        taxiSetting.grabOrder = sub.grabOrder;
+                        taxiSetting.distributeOrder = sub.distributeOrder;
+                        taxiSetting.serviceType = sub.serviceType;
+                        taxiSetting.save();
+                    }
+                }
+            }
+        }));
     }
 }
