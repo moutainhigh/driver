@@ -64,6 +64,9 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
     private FlowContract.View view;
     private FlowContract.Model model;
 
+    /**
+     * 导航对象
+     */
     AMapNavi mAMapNavi;
 
     public FlowPresenter(Context context, FlowContract.View view) {

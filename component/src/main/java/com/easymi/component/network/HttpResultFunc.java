@@ -30,7 +30,8 @@ public class HttpResultFunc<T extends EmResult> implements Func1<T, Boolean> {
     public Boolean call(T t) {
         if (t.getCode() != 1) {
             String msg = t.getMessage();
-            Configuration config = XApp.getInstance().getResources().getConfiguration();   //获取默认配置
+            //获取默认配置
+            Configuration config = XApp.getInstance().getResources().getConfiguration();
             if(config.locale == Locale.TAIWAN || config.locale == Locale.TRADITIONAL_CHINESE){
                 for (ErrCodeTran errCode : ErrCodeTran.values()) {
                     if (t.getCode() == errCode.getCode()) {

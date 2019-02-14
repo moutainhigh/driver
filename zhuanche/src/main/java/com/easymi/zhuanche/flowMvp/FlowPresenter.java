@@ -143,12 +143,12 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     //前往目的地
     @Override
-    public void startDrive(Long orderId, Long version, LoadingButton btn) {
+    public void startDrive(Long orderId, Long version) {
         if (!PhoneUtil.checkGps(context)) {
             return;
         }
         Observable<ZCOrderResult> observable = model.startDrive(orderId, version);
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, zcOrderResult -> {
+        view.getManager().add(observable.subscribe(new MySubscriber<ZCOrderResult>(context,false,false,  zcOrderResult -> {
             updateDymOrder(zcOrderResult.data);
             view.showOrder(zcOrderResult.data);
         })));

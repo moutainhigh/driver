@@ -30,10 +30,6 @@ public interface FlowContract {
          */
         void initToolbar();
 
-        /**
-         * 初始化右上角弹窗
-         */
-        void initPop();
 
         /**
          * 显示顶部布局
@@ -132,15 +128,10 @@ public interface FlowContract {
         void showToEndFragment();
 
         /**
-         * 显示乘客星系
+         * 显示乘客信息
          * @param consumerInfo
          */
         void showConsumer(ConsumerInfo consumerInfo);
-
-        /**
-         * 隐藏顶部布局
-         */
-        void hideTops();
 
         /**
          * 获取 RxManager
@@ -203,9 +194,8 @@ public interface FlowContract {
          * 开始出发
          * @param orderId
          * @param version
-         * @param btn
          */
-        void startDrive(Long orderId,Long version, LoadingButton btn);
+        void startDrive(Long orderId,Long version);
 
         /**
          * 到达目的地

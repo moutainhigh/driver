@@ -471,25 +471,6 @@ public class LoginActivity extends RxBaseActivity {
         }
         String netType = NetWorkUtil.getNetWorkTypeName(this);
 
-        Log.e("hufeng", "buildModel-->" + Build.MODEL);
-        Log.e("hufeng", "buildHOST-->" + Build.HOST);
-        Log.e("hufeng", "version-->" + version);
-        Log.e("hufeng", "systemVersion-->" + systemVersion);
-        Log.e("hufeng", "operatorName-->" + operatorName);
-        Log.e("hufeng", "netType-->" + netType);
-
-        Log.e("hufeng", "IMEI-->" + MobileInfoUtil.getIMEI(this));
-        Log.e("hufeng", "IMSI-->" + MobileInfoUtil.getIMSI(this));
-
-        Log.e("hufeng", "ip-->" + MacUtils.getLocalInetAddress().getHostAddress());
-        Log.e("hufeng", "mac-->" + MacUtils.getMobileMAC(this));
-        Log.e("hufeng", "macFromIp-->" + MacUtils.getLocalMacAddressFromIp());
-        Log.e("hufeng", "ip port-->" + MacUtils.getLocalInetAddress());
-
-        Log.e("hufeng", "lat-->" + mlocation.getLatitude() + "");
-        Log.e("hufeng", "lng-->" + mlocation.getLongitude() + "");
-
-
         XApp.getPreferencesEditor().putString(Config.SP_TOKEN, "").apply();
 
         String randomStr = RsaUtils.getRandomString(16);
@@ -527,40 +508,83 @@ public class LoginActivity extends RxBaseActivity {
                 .loginByPW(name_rsa, pws_rsa, randomStr_rsa,
                         mac_rsa,imei_rsa,imsi_rsa,loginType_rsa,
                         longitude_rsa,latitude_rsa)
-                .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, loginBtn, loginResult -> {
-            Employ employ = loginResult.getEmployInfo();
-            XApp.getPreferencesEditor().putLong(Config.SP_DRIVERID, employ.id).apply();
-            employ.saveOrUpdate();
-            //1.未提交资料；2.审核中；3驳回；4通过
-            if (employ.registerStatus == 4) {
+//            Employ employ = loginResult.getEmployInfo();
+//            XApp.getPreferencesEditor().putLong(Config.SP_DRIVERID, employ.id).apply();
+//            employ.saveOrUpdate();
+//            //1.未提交资料；2.审核中；3驳回；4通过
+//            if (employ.registerStatus == 4) {
+//                SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+//                editor.putString(Config.SP_TOKEN, employ.token);
+//                editor.apply();
+//                getSetting(employ, name, psw);
+//            } else if (employ.registerStatus == 3) {
+//                Intent intent = new Intent(this, RegisterNoticeActivity.class);
+//                intent.putExtra("type", 3);
+//                startActivity(intent);
+//            } else if (employ.registerStatus == 2) {
+//                Intent intent = new Intent(this, RegisterNoticeActivity.class);
+//                intent.putExtra("type", 2);
+//                startActivity(intent);
+//            } else if (employ.registerStatus == 1) {
+//                Intent intent = new Intent(this, RegisterBaseActivity.class);
+//                intent.putExtra("employ", employ);
+//                startActivity(intent);
+//            } else {
+//                SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+//                editor.putString(Config.SP_TOKEN, employ.token);
+//                editor.apply();
+//                getSetting(employ, name, psw);
+//            }
+
+            if (loginResult.getCode() == 1) {
+                Employ employ = loginResult.getEmployInfo();
+                XApp.getPreferencesEditor().putLong(Config.SP_DRIVERID, employ.id).apply();
+                employ.saveOrUpdate();
+
                 SharedPreferences.Editor editor = XApp.getPreferencesEditor();
                 editor.putString(Config.SP_TOKEN, employ.token);
                 editor.apply();
                 getSetting(employ, name, psw);
-            } else if (employ.registerStatus == 3) {
-                Intent intent = new Intent(this, RegisterNoticeActivity.class);
-                intent.putExtra("type", 3);
-                startActivity(intent);
-            } else if (employ.registerStatus == 2) {
+            }else if (loginResult.getCode() == APPLYING){
                 Intent intent = new Intent(this, RegisterNoticeActivity.class);
                 intent.putExtra("type", 2);
                 startActivity(intent);
-            } else if (employ.registerStatus == 1) {
-                Intent intent = new Intent(this, RegisterBaseActivity.class);
-                intent.putExtra("employ", employ);
-                startActivity(intent);
-            } else {
+            }else if (loginResult.getCode() == APPLY_PASS){
+                Employ employ = loginResult.getEmployInfo();
+                XApp.getPreferencesEditor().putLong(Config.SP_DRIVERID, employ.id).apply();
+                employ.saveOrUpdate();
+
                 SharedPreferences.Editor editor = XApp.getPreferencesEditor();
                 editor.putString(Config.SP_TOKEN, employ.token);
                 editor.apply();
                 getSetting(employ, name, psw);
+            }else if (loginResult.getCode() == APPLY_REJECT){
+                Intent intent = new Intent(this, RegisterNoticeActivity.class);
+                intent.putExtra("type", 3);
+                intent.putExtra("phone", name);
+                startActivity(intent);
             }
         })));
     }
+
+    /**
+     * 申请中
+     */
+    int APPLYING = 50009;
+
+    /**
+     * 申请已经通过
+     */
+    int APPLY_PASS = 50010;
+
+    /**
+     * 申请拒绝
+     */
+    int APPLY_REJECT = 50011;
 
     @Override
     public boolean isEnableSwipe() {

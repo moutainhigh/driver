@@ -19,6 +19,8 @@ import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.RsaUtils;
 import com.easymi.personal.McService;
+import com.easymi.personal.entity.Register;
+import com.easymi.personal.result.BusinessResult;
 import com.easymi.personal.result.LoginResult;
 import com.easymi.personal.result.RegisterResult;
 
@@ -75,6 +77,18 @@ public class RegisterModel {
     }
 
     /**
+     * 根据服务机构获取对应业务
+     * @return
+     */
+    public static Observable<BusinessResult> getBusinessType(long id) {
+        return ApiManager.getInstance().createApi(Config.HOST, McService.class)
+                .getBusinessType(id)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
      * 上传图片到七牛云
      * @param file
      * @param token
@@ -85,7 +99,9 @@ public class RegisterModel {
         RequestBody tokenBody = RequestBody.create(MediaType.parse("multipart/form-data"), token);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), photoRequestBody);
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .uploadPic(Config.HOST_UP_PIC, tokenBody, body);
+                .uploadPic(Config.HOST_UP_PIC, tokenBody, body)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 
@@ -103,15 +119,11 @@ public class RegisterModel {
         String idCardBackPath = pics.get(2);
         String driveLicensePath = pics.get(3);
 
-//        Log.e("hufeng",GsonUtil.toJson(request));
-//        Log.e("hufeng/portraitPath",portraitPath);
-//        Log.e("hufeng/idCardPath",idCardPath);
-//        Log.e("hufeng/idCardBackPath",idCardBackPath);
-//        Log.e("hufeng/driveLicensePath",driveLicensePath);
+        String practitionersPhoto = pics.get(4);
 
         return ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .applyDriver(
-                        RsaUtils.encryptAndEncode(context, request.driverId + ""),
+                        RsaUtils.encryptAndEncode(context, request.id + ""),
                         RsaUtils.encryptAndEncode(context, request.driverName + ""),
                         RsaUtils.encryptAndEncode(context, request.driverPhone + ""),
                         RsaUtils.encryptAndEncode(context, request.idCard + ""),
@@ -125,7 +137,12 @@ public class RegisterModel {
                         RsaUtils.encryptAndEncode(context, portraitPath + ""),
                         RsaUtils.encryptAndEncode(context, idCardPath + ""),
                         RsaUtils.encryptAndEncode(context, idCardBackPath + ""),
-                        RsaUtils.encryptAndEncode(context, driveLicensePath + ""))
+                        RsaUtils.encryptAndEncode(context, driveLicensePath + ""),
+
+                        RsaUtils.encryptAndEncode(context, request.netCarQualificationsStart + ""),
+                        RsaUtils.encryptAndEncode(context, request.netCarQualificationsEnd + ""),
+                        RsaUtils.encryptAndEncode(context, practitionersPhoto + "")
+                )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -149,6 +166,7 @@ public class RegisterModel {
                     Observable<Pic> idCardPic = null;
                     Observable<Pic> idCardBackPic = null;
                     Observable<Pic> driveLicensePic = null;
+                    Observable<Pic> zigeLicensePic = null;
 
 //                    List<Observable<Pic>> lsit = new ArrayList<>();
                     //必传图片
@@ -169,15 +187,11 @@ public class RegisterModel {
 //                        lsit.add(driveLicensePic);
 //                    }
 //
+                    zigeLicensePic = putPic(new File(request.practitionersPhoto), token);
+
                     Observable<Pic> pics;
-////                    //todo 为空能加入不并不知道
-////                    for (int i = 0;i<lsit.size();i++){
-////
-////                    }
-//                    if (portraitPic == null ){
-//
-//                    }
-                    pics = Observable.concat(portraitPic, idCardPic, idCardBackPic, driveLicensePic);
+
+                    pics = Observable.concat(portraitPic, idCardPic, idCardBackPic, driveLicensePic,zigeLicensePic);
 
                     return pics.subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread());
@@ -191,22 +205,21 @@ public class RegisterModel {
      * @param smsCode
      * @return
      */
-    public static Observable<LoginResult> register(String password, String phone, String smsCode) {
+    public static Observable<Register> register(String password, String phone, String smsCode) {
         return ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .register(password, phone, smsCode)
-                .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
     /**
      * 获取司机之前的注册信息
-     * @param driverId
+     * @param phone
      * @return
      */
-    public static Observable<RegisterResult> getDriverInfo(String driverId) {
+    public static Observable<RegisterResult> getDriverInfo(String phone) {
         return ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .getDriverInfo(driverId)
+                .getDriverInfo(phone)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -238,10 +251,11 @@ public class RegisterModel {
         String idCardPath = request.idCardPath;
         String idCardBackPath = request.idCardBackPath;
         String driveLicensePath = request.driveLicensePath;
+        String practitionersPhoto = request.practitionersPhoto;
 
         return ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .applyUpdate(
-                        RsaUtils.encryptAndEncode(context, request.driverId + ""),
+                .applyDriver(
+                        RsaUtils.encryptAndEncode(context, request.id + ""),
                         RsaUtils.encryptAndEncode(context, request.driverName + ""),
                         RsaUtils.encryptAndEncode(context, request.driverPhone + ""),
                         RsaUtils.encryptAndEncode(context, request.idCard + ""),
@@ -256,7 +270,10 @@ public class RegisterModel {
                         RsaUtils.encryptAndEncode(context, idCardPath + ""),
                         RsaUtils.encryptAndEncode(context, idCardBackPath + ""),
                         RsaUtils.encryptAndEncode(context, driveLicensePath + ""),
-                        RsaUtils.encryptAndEncode(context, request.version + ""))
+
+                        RsaUtils.encryptAndEncode(context, request.netCarQualificationsStart + ""),
+                        RsaUtils.encryptAndEncode(context, request.netCarQualificationsEnd + ""),
+                        RsaUtils.encryptAndEncode(context, practitionersPhoto + ""))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

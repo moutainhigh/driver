@@ -70,7 +70,7 @@ public class WaitFragment extends RxBaseFragment {
         waitFeeText.setText(zcOrder.waitTimeFee + "");
         waitTimeText.setText(zcOrder.waitTime + "");
 
-        startDrive.setOnClickListener(view -> bridge.doStartDrive(startDrive));
+        startDrive.setOnClickListener(view -> bridge.doStartDrive());
 
         $(R.id.change_end_con).setOnClickListener(view -> bridge.changeEnd());
     }

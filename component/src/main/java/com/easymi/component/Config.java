@@ -25,14 +25,14 @@ public class Config {
 //    public static final String HOST = "http://10.10.2.23:10001/";//俊俏
 //    public static final String HOST = "http://10.10.2.130:10001/";//130测试地址 （内网）
 //    public static final String HOST = "http://47.94.204.67:20001/";//130测试地址（外网）
-    public static final String HOST = "http://api.xiaokakj.com/";//线上地址
-//    public static final String HOST = "http://api.xiaokakj.cn/";//预发
+//    public static final String HOST = "http://api.xiaokakj.com/";//线上地址
+    public static final String HOST = "http://api.xiaokakj.cn/";//预发
     /**
      * MQTT配置
      */
-//    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//预发地址
-    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn";//线上地址
-//    public static final String MQTT_HOST = "tcp://10.10.4.12:1883";//本地地址
+    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//预发地址
+//    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn";//线上地址
+//    public static final String MQTT_HOST = "tcp://10.10.4.6:1883";//本地地址
     /**
      * APP_KEY
      */
@@ -59,11 +59,11 @@ public class Config {
     /**
      * QQ分享id
      */
-    public static final String QQ_APP_ID = "1107818477";
+    public static final String QQ_APP_ID = "1108138294";
     /**
      * 微信分享id
      */
-    public static final String WX_APP_ID = "wxe2bbe0ee7fa51624";
+    public static final String WX_APP_ID = "wx9c57a31a9ee6baa2";
 
     /**
      * 图片服务器地址
@@ -165,9 +165,8 @@ public class Config {
     public static final String HTTP_CUSTOM = "com.easymi.v5driver.HTTP_CUSTOM";
     public static final String ORDER_REFRESH = "com.easymi.v5driver.ORDER_REFRESH";
 
-//    public static final int FREE_LOC_TIME = 5000;//闲时定位时间 毫秒
-//    public static final int BUSY_LOC_TIME = 5000;//忙时定位时间 毫秒
-    public static final int NORMAL_LOC_TIME = 5000;//固定定位时间 毫秒
+    //固定定位时间 毫秒
+    public static final int NORMAL_LOC_TIME = 5000;
     //是否纠偏
     public static final boolean NEED_TRACE = false;
     //是否保存位置信息

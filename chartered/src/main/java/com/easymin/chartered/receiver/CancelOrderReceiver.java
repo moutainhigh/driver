@@ -10,11 +10,10 @@ import com.easymin.chartered.R;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: CancelOrderReceiver
- *@Author: shine
+ * @Author: shine
  * Date: 2018/12/24 下午5:00
  * Description:
  * History:
- * @author hufeng
  */
 
 public class CancelOrderReceiver extends BroadcastReceiver {

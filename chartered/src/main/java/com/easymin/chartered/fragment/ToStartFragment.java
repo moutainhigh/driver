@@ -27,11 +27,10 @@ import com.easymin.chartered.flowMvp.ActFraCommBridge;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: ToStartFragment
- *@Author: shine
+ * @Author: shine
  * Date: 2018/12/22 下午3:43
  * Description:
  * History:
- * @author hufeng
  */
 public class ToStartFragment extends RxBaseFragment {
 

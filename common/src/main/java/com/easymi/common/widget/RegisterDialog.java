@@ -21,7 +21,12 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.utils.EmUtil;
 
 /**
- * @author hufeng
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 public class RegisterDialog extends DialogFragment {
 

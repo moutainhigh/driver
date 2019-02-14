@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">customBus</string>
+    <string name="cb_arrived">已到</string>
+    <string name="cb_destance">距离</string>
+    <string name="cb_km">公里</string>
+    <string name="cb_minutes">分钟</string>
+    <string name="cb_wait_countdown">等待倒计时</string>
+    <string name="cb_no_start">行程未开始</string>
+    <string name="cb_day">天</string>
+    <string name="cb_hour">时</string>
+    <string name="cb_fen">分</string>
+    <string name="cb_start_countdown">行程开始倒计时</string>
+    <string name="cb_slider_start">滑动开始行程</string>
+    <string name="cb_check_ticket">验票</string>
+    <string name="cb_slider_go_next">滑动前往下一站</string>
+    <string name="cb_wait_timeout">等待已超时</string>
+    <string name="cb_passenger_info">乘客信息</string>
+    <string name="cb_already_get_on">已上车</string>
+    <string name="cb_input_ticket_code">请输入车票码</string>
+    <string name="cb_name">姓名</string>
+    <string name="cb_start_site">起点</string>
+    <string name="cb_end_site">终点</string>
+    <string name="cb_person_num">人数</string>
+    <string name="cb_remark">备注</string>
+    <string name="cb_confirm_get_on">确认上车</string>
+    <string name="cb_go_to">去</string>
+    <string name="cb_finish">滑动结束行程</string>
+</resources>

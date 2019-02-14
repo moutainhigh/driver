@@ -46,11 +46,12 @@ import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 import io.reactivex.disposables.Disposable;
 
 /**
- * Created by hcc on 16/8/7 21:18
- * 100332338@qq.com
- * <p/>
- * Activity基类
- * @author hufeng
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: RxBaseActivity
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:Activity基类
+ * History:
  */
 public abstract class RxBaseActivity extends RxAppCompatActivity implements
         GpsReceiver.OnGpsStatusChangeListener,

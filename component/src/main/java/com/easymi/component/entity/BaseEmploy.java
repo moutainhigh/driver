@@ -21,7 +21,7 @@ import com.google.gson.annotations.SerializedName;
 public class BaseEmploy {
     public long id;
 
-//   司机状态 1离线 2上线未听单 3上线听单中 5派单 10接单 15前往预约地 20到达预约地 25前往目的地 28中途等待 45冻结   再次修改后的
+//   司机状态 1离线 2登陆未听单 3上线听单中（空闲） 5派单 10接单 15前往预约地 20到达预约地 25前往目的地 28中途等待 45冻结   再次修改后的
     public int status;
 
 //    public String real_name;//真实姓名

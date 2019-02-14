@@ -13,11 +13,13 @@ import android.view.ViewGroup;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.widget.RxProgressHUD;
 import com.trello.rxlifecycle.components.support.RxFragment;
-
 /**
- * 懒加载fragment
- * 适用于ViewPager中预加载的那种fragment
- * @author hufeng
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:RxLazyFragment
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description: 懒加载fragment 适用于ViewPager中预加载的那种fragment
+ * History:
  */
 public abstract class RxLazyFragment extends RxFragment {
     private View parentView;

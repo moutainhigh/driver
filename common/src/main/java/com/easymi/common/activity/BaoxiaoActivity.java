@@ -29,7 +29,7 @@ import rx.schedulers.Schedulers;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName:
+ * FileName:BaoxiaoActivity
  * @Author: hufeng
  * Date: 2018/12/24 下午1:10
  * Description:

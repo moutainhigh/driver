@@ -13,21 +13,23 @@ import com.easymin.chartered.R;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName:
+ * FileName: LeftWindowAdapter
  * @Author: shine
  * Date: 2018/12/24 下午5:00
- * Description:
+ * Description: 剩余时间公里数的气泡maker
  * History:
  */
 
 public class LeftWindowAdapter implements AMap.InfoWindowAdapter {
 
     private Context context;
-    private TaxiSetting taxiSetting;
 
+    /**
+     * 构造器
+     * @param context 上下文
+     */
     public LeftWindowAdapter(Context context) {
         this.context = context;
-        taxiSetting = TaxiSetting.findOne();
     }
 
     @Override

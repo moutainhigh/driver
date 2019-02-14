@@ -18,11 +18,10 @@ import rx.Observable;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: MyOrderPresenter
- *@Author: shine
+ * @Author: shine
  * Date: 2018/11/23 上午11:34
  * Description:
  * History:
- * @author hufeng
  */
 public class MyOrderPresenter implements MyOrderContract.Presenter {
     private Context context;

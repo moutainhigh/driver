@@ -11,8 +11,12 @@ import android.widget.TextView;
 import com.easymi.cityline.R;
 
 /**
- *
- * @author hufeng
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 public class ChangePopWindow extends PopupWindow implements View.OnClickListener {
 

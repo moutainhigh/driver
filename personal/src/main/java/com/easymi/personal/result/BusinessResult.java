@@ -1,6 +1,7 @@
 package com.easymi.personal.result;
 
 import com.easymi.component.result.EmResult;
+import com.easymi.personal.entity.BusinessType;
 import com.easymi.personal.entity.SubBusiness;
 
 import java.util.List;
@@ -16,6 +17,6 @@ import java.util.List;
 
 
 public class BusinessResult extends EmResult {
-    public String business;
-    public List<SubBusiness> categories;
+
+    public List<BusinessType> data;
 }

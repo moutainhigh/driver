@@ -31,9 +31,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- *
- * @author hiwhitley
- * @date 2016/10/17
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseViewHolder> {
@@ -74,6 +77,9 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
                         ARouter.getInstance()
                                 .build("/zhuanche/FlowActivity")
                                 .withLong("orderId", baseOrder.orderId).navigation();
+//                        ARouter.getInstance()
+//                                .build("/zhuanche/AMapNaviActivity")
+//                                .withLong("orderId", baseOrder.orderId).navigation();
                     } else if (baseOrder.serviceType.equals(Config.TAXI)) {
                         ARouter.getInstance()
                                 .build("/taxi/FlowActivity")

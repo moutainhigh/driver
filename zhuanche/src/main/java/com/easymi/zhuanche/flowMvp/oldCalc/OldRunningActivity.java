@@ -152,11 +152,6 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
     }
 
     @Override
-    public void initPop() {
-
-    }
-
-    @Override
     public void showTopView() {
 
     }
@@ -186,6 +181,7 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
 
             @Override
             public void doToStart(LoadingButton btn) {
+
             }
 
             @Override
@@ -204,7 +200,7 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
             }
 
             @Override
-            public void doStartDrive(LoadingButton btn) {
+            public void doStartDrive() {
 
             }
 
@@ -355,10 +351,6 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
         showPayType(payMoney, consumerInfo);
     }
 
-    @Override
-    public void hideTops() {
-
-    }
 
     @Override
     public RxManager getManager() {

@@ -40,7 +40,10 @@ public class RegisterNoticeActivity extends RxBaseActivity {
      * 注册状态：1.未注册；2.审核中；3驳回；4通过
      */
     private int type;
-    private Employ employ;
+
+    private String phone;
+
+    private long id;
 
     @Override
     public boolean isEnableSwipe() {
@@ -68,13 +71,15 @@ public class RegisterNoticeActivity extends RxBaseActivity {
 
             tv_amend.setVisibility(View.VISIBLE);
 
-            employ = EmUtil.getEmployInfo();
+            phone = getIntent().getStringExtra("phone");
+//            employ = EmUtil.getEmployInfo();
             getDriverInfo();
         }
 
         tv_amend.setOnClickListener(v -> {
             Intent intent = new Intent(this, RegisterBaseActivity.class);
-            intent.putExtra("employ",employ);
+            intent.putExtra("id",id);
+            intent.putExtra("phone",phone);
             startActivity(intent);
         });
     }
@@ -101,10 +106,11 @@ public class RegisterNoticeActivity extends RxBaseActivity {
      * 获取司机信息
      */
     public void getDriverInfo() {
-        String id_rsa = RsaUtils.encryptAndEncode(this, employ.id+"");
+        String id_rsa = RsaUtils.encryptAndEncode(this, phone);
         Observable<RegisterResult> observable = RegisterModel.getDriverInfo(id_rsa);
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, emResult -> {
             if (emResult.getCode() == 1) {
+                id = emResult.data.id;
                 tv_notice.setText(emResult.data.remark);
             }
         })));

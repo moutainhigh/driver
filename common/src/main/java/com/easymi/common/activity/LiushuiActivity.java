@@ -39,7 +39,7 @@ import rx.schedulers.Schedulers;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName:
+ * FileName:LiushuiActivity
  * @Author: hufeng
  * Date: 2018/12/24 下午1:10
  * Description:
@@ -49,14 +49,13 @@ import rx.schedulers.Schedulers;
 public class LiushuiActivity extends RxBaseActivity {
 
     SwipeRecyclerView recyclerView;
-
-    LiuShuiAdapter adapter;
-
     CusToolbar toolbar;
-
     CusErrLayout errLayout;
 
-    private String business;
+    /**
+     * 流水适配器
+     */
+    LiuShuiAdapter adapter;
 
     /**
      * 流水筛选开始时间结束时间

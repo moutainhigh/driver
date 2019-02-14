@@ -29,11 +29,10 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: MakeOrderPopWindow
- *@Author: shine
+ * @Author: shine
  * Date: 2018/11/19 上午10:04
  * Description:
  * History:
- * @author hufeng
  */
 public class MakeOrderPopWindow extends PopupWindow implements View.OnClickListener{
 

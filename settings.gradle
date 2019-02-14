@@ -1,1 +1,1 @@
-include ':app', ':personal', ':common', ':component', ':daemon', ':zhuanche', ':taxi', ':cityline', ':securitycenter', ':passengerbus', ':chartered', ':rental'
+include ':app', ':personal', ':common', ':component', ':daemon', ':zhuanche', ':taxi', ':cityline', ':securitycenter', ':passengerbus', ':chartered', ':rental', ':custombus'

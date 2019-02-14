@@ -47,13 +47,12 @@ public class SlideArriveStartFragment extends RxBaseFragment {
         this.bridge = bridge;
     }
 
-    LoadingButton slideView;
+    CustomSlideToUnlockView slideView;
     TextView startPlaceText;
     TextView endPlaceText;
     LinearLayout changeEndCon;
-    FrameLayout callPhoneCon;
-    ImageView customHead;
-    TextView customName;
+    ImageView callPhoneCon;
+    TextView tv_phone;
 
     @Override
     public void setArguments(Bundle args) {
@@ -81,32 +80,35 @@ public class SlideArriveStartFragment extends RxBaseFragment {
         changeEndCon = $(R.id.change_end_con);
         callPhoneCon = $(R.id.call_phone_con);
 
-        customHead = $(R.id.iv_head);
-        customName = $(R.id.tv_custom_name);
+        tv_phone = $(R.id.tv_phone);
+
+        String weihao;
+        if (zcOrder.passengerPhone != null && zcOrder.passengerPhone.length() > 4) {
+            weihao = zcOrder.passengerPhone.substring(zcOrder.passengerPhone.length() - 4, zcOrder.passengerPhone.length());
+        } else {
+            weihao = zcOrder.passengerPhone;
+        }
+        tv_phone.setText(weihao+"");
 
         startPlaceText.setSelected(true);
         endPlaceText.setSelected(true);
 
-
-        customName.setText(zcOrder.passengerName);
-        if (StringUtils.isNotBlank(zcOrder.avatar)) {
-            RequestOptions options = new RequestOptions()
-                    .centerCrop()
-                    .transform(new GlideCircleTransform())
-                    .placeholder(R.mipmap.ic_customer_head)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL);
-            Glide.with(this)
-                    .load(Config.IMG_SERVER + zcOrder.avatar + Config.IMG_PATH)
-                    .apply(options)
-                    .into(customHead);
-        }
-
         startPlaceText.setText(zcOrder.getStartSite().addr);
         endPlaceText.setText(zcOrder.getEndSite().addr);
 
-        slideView.setOnClickListener(v -> {
-            bridge.doArriveStart();
+        slideView.setHint("滑动到达预约地");
+        slideView.setmCallBack(new CustomSlideToUnlockView.CallBack() {
+            @Override
+            public void onSlide(int distance) {
+
+            }
+
+            @Override
+            public void onUnlocked() {
+                bridge.doArriveStart();
+            }
         });
+
         callPhoneCon.setOnClickListener(view -> CallPhoneDialog.callDialog(getActivity(),zcOrder));
         changeEndCon.setOnClickListener(view -> bridge.changeEnd());
     }

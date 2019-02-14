@@ -35,7 +35,6 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.easymi.common.R;
 import com.easymi.common.activity.CreateActivity;
 import com.easymi.common.activity.ModelSetActivity;
-import com.easymi.common.adapter.CityLineAdapter;
 import com.easymi.common.adapter.OrderAdapter;
 import com.easymi.common.entity.AnnAndNotice;
 import com.easymi.common.entity.BuildPushData;
@@ -525,9 +524,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     @Override
     public void showDriverStatus() {
         Employ employ = EmUtil.getEmployInfo();
-        if (String.valueOf(employ.status).equals(EmployStatus.FROZEN)) {
+        if (String.valueOf(employ.status).equals(EmployStatus.FROZEN) || employ.status == 1) {
             EmUtil.employLogout(this);
-        } else if (String.valueOf(employ.status).equals(EmployStatus.ONLINE) || employ.status == 1 || employ.status == 0) {
+        } else if (String.valueOf(employ.status).equals(EmployStatus.ONLINE) ) {
             showOffline();//非听单状态
             presenter.initDaemon();
         } else {

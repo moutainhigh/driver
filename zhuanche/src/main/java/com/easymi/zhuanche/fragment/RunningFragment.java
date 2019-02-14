@@ -1,6 +1,7 @@
 package com.easymi.zhuanche.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,7 +36,6 @@ public class RunningFragment extends RxBaseFragment {
      * activity和fragment的通信接口
      */
     private ActFraCommBridge bridge;
-
     /**
      * 设置bridge
      * @param bridge
@@ -49,7 +49,7 @@ public class RunningFragment extends RxBaseFragment {
     TextView distanceText;
     TextView driveTimeText;
     TextView waitTimeText;
-    LoadingButton slideView;
+    CustomSlideToUnlockView slideView;
     LinearLayout quanlanCon;
     ImageView quanlanImg;
     TextView quanlanText;
@@ -97,8 +97,17 @@ public class RunningFragment extends RxBaseFragment {
         driveTimeText.setText(zcOrder.travelTime + "");
         waitTimeText.setText(zcOrder.waitTime + "");
 
-        slideView.setOnClickListener(v -> {
-            bridge.showSettleDialog();
+        slideView.setmCallBack(new CustomSlideToUnlockView.CallBack() {
+            @Override
+            public void onSlide(int distance) {
+
+            }
+
+            @Override
+            public void onUnlocked() {
+                bridge.showSettleDialog();
+                resetView();
+            }
         });
 
         refreshImg.setOnClickListener(v -> {
@@ -144,7 +153,6 @@ public class RunningFragment extends RxBaseFragment {
             driveTimeText.setText(zcOrder.travelTime + "");
             waitTimeText.setText(zcOrder.waitTime + "");
         });
-
     }
 
     /**
@@ -152,5 +160,23 @@ public class RunningFragment extends RxBaseFragment {
      */
     public void mapStatusChanged() {
         refreshImg.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * 滑动重置handler
+     */
+    Handler handler = new Handler();
+
+    /**
+     * 重置slider
+     */
+    private void resetView() {
+        slideView.setVisibility(View.GONE);
+
+        handler.postDelayed(() -> getActivity().runOnUiThread(() -> {
+            slideView.resetView();
+            slideView.setVisibility(View.VISIBLE);
+        }), 1000);
+        //防止卡顿
     }
 }

@@ -25,8 +25,12 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
- * @author hufeng
- * 已废弃
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 public class RegisterModel {
 
@@ -72,7 +76,7 @@ public class RegisterModel {
         }
 
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .register(EmUtil.getAppKey(), request.driverId, request.idCard, request.emergency, request.emergencyPhone, request.introducer,
+                .register(EmUtil.getAppKey(), request.id, request.idCard, request.emergency, request.emergencyPhone, request.introducer,
                         request.companyId, request.serviceType, request.portraitPath, request.idCardPath, request.idCardBackPath, request.driveLicensePath,
                         request.fullBodyPath, request.carPhoto, request.brand, request.model, request.plateColor, request.vehicleNo, request.vehicleType, request.seats,
                         request.mileage, request.useProperty, request.vin, request.fuelType, request.buyDate, request.certifyDate, request.drivingLicensePhoto, request.nextFixDate,
@@ -84,7 +88,7 @@ public class RegisterModel {
 
     public static Observable<Pic> uploadPics(RegisterRequest request) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .getToken(EmUtil.getAppKey(), request.driverId)
+                .getToken(EmUtil.getAppKey(), request.id)
                 .subscribeOn(Schedulers.io())
                 .flatMap((Func1<QiNiuToken, Observable<Pic>>) qiNiuToken -> {
                     String token = qiNiuToken.qiNiu;

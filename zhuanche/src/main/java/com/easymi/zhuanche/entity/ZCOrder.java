@@ -187,6 +187,10 @@ public class ZCOrder implements Serializable {
      */
     public String avatar;
 
+//    /**
+//     * 等待倒计时时间戳
+//     */
+//    public long startWaitTime;
 
     public List<Address> orderAddressVos;
     /**

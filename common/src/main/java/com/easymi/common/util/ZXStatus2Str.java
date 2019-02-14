@@ -7,11 +7,10 @@ import com.easymi.component.app.XApp;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: ZXStatus2Str
- *@Author: shine
+ * @Author: shine
  * Date: 2018/11/22 下午5:03
  * Description:
  * History:
- * @author hufeng
  */
 public class ZXStatus2Str {
 
