@@ -388,6 +388,19 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 tv_time.setTextColor(getResources().getColor(R.color.color_3c98e3));
                 tv_time_hint.setTextColor(getResources().getColor(R.color.color_999999));
             }
+
+            if ((ZCSetting.findOne().arriveCancel == 1)) {
+                if (timeSeq < 0) {
+                    toolbar.setRightText(R.string.cancel_order, v -> {
+                        Intent intent = new Intent(this, CancelNewActivity.class);
+                        startActivityForResult(intent, CANCEL_ORDER);
+                    });
+                }else {
+                    toolbar.setRightText("", null);
+                }
+            } else {
+                toolbar.setRightText("", null);
+            }
         });
     }
 
