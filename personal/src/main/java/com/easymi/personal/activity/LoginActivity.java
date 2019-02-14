@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
@@ -39,6 +40,8 @@ import com.easymi.component.entity.NetWorkUtil;
 import com.easymi.component.entity.TaxiSetting;
 import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.ErrCode;
+import com.easymi.component.network.ErrCodeTran;
 import com.easymi.component.network.GsonUtil;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
@@ -68,6 +71,7 @@ import com.easymi.personal.result.LoginResult;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -567,6 +571,26 @@ public class LoginActivity extends RxBaseActivity {
                 intent.putExtra("type", 3);
                 intent.putExtra("phone", name);
                 startActivity(intent);
+            }else {
+                String msg = loginResult.getMessage();
+                //获取默认配置
+                Configuration config = XApp.getInstance().getResources().getConfiguration();
+                if(config.locale == Locale.TAIWAN || config.locale == Locale.TRADITIONAL_CHINESE){
+                    for (ErrCodeTran errCode : ErrCodeTran.values()) {
+                        if (loginResult.getCode() == errCode.getCode()) {
+                            msg = errCode.getShowMsg();
+                            break;
+                        }
+                    }
+                } else {
+                    for (ErrCode errCode : ErrCode.values()) {
+                        if (loginResult.getCode() == errCode.getCode()) {
+                            msg = errCode.getShowMsg();
+                            break;
+                        }
+                    }
+                }
+                ToastUtil.showMessage(this,msg);
             }
         })));
     }
