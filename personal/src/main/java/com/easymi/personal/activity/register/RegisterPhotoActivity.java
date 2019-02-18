@@ -3,6 +3,7 @@ package com.easymi.personal.activity.register;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,9 +20,11 @@ import com.easymi.common.register.RegisterRequest;
 import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.utils.AlexStatusBarUtils;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.GlideRoundTransform;
 import com.easymi.component.utils.ToastUtil;
+import com.easymi.component.utils.UIStatusBarHelper;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.RxProgressHUD;
 import com.easymi.personal.R;
@@ -107,6 +110,8 @@ public class RegisterPhotoActivity extends RxBaseActivity {
 
     @Override
     public int getLayoutId() {
+        UIStatusBarHelper.setStatusBarLightMode(this);
+        AlexStatusBarUtils.setStatusColor(this, Color.WHITE);
         return R.layout.activity_register_photo;
     }
 
@@ -330,7 +335,6 @@ public class RegisterPhotoActivity extends RxBaseActivity {
     private void next() {
         //check
         if (registerInfo != null) {
-//            registerRequest.portraitPath = registerInfo.portraitPath;
             registerRequest.idCardPath = registerInfo.idCardPath;
             registerRequest.idCardBackPath = registerInfo.idCardBackPath;
             registerRequest.driveLicensePath = registerInfo.driveLicensePath;

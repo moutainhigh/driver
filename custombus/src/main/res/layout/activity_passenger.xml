@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_20212C"
@@ -12,15 +13,18 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="100dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="60dp">
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -28,14 +32,16 @@
 
             </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:orientation="horizontal"
-            android:background="@drawable/corners_4dp_white_bg"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="12dp">
+            android:layout_marginTop="12dp"
+            android:background="@drawable/corners_4dp_white_bg"
+            android:elevation="5dp"
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -49,13 +55,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@mipmap/cb_station_large"/>
+                        android:src="@mipmap/cb_station_large" />
 
                     <TextView
                         android:id="@+id/tv_station_name"
@@ -63,9 +69,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:text="锦州汽车站"
-                        android:textStyle="bold"
+                        android:textColor="@color/color_333333"
                         android:textSize="18sp"
-                        android:textColor="@color/color_333333" />
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <TextView
@@ -79,11 +85,13 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/lin_time"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginRight="10dp"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/tv_countdown"
@@ -92,7 +100,7 @@
                     android:text="09:24"
                     android:textColor="@color/color_089A55"
                     android:textSize="24sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_countdown_hint"
@@ -104,20 +112,22 @@
             </LinearLayout>
         </LinearLayout>
     </FrameLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/color_f2f2f2">
+        android:background="@color/color_f2f2f2"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:orientation="vertical"
-            android:layout_weight="1"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:background="@drawable/shape_top_white_4dp_bg">
+            android:layout_weight="1"
+            android:background="@drawable/shape_top_white_4dp_bg"
+            android:orientation="vertical">
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
@@ -126,34 +136,77 @@
 
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>
+
         <LinearLayout
-            android:id="@+id/lin_bottom"
             android:layout_width="match_parent"
-            android:layout_height="68dp"
-            android:orientation="vertical"
+            android:layout_height="wrap_content"
             android:background="@color/white"
-            android:elevation="5dp">
-            <TextView
-                android:id="@+id/tv_no_check"
+            android:elevation="5dp"
+            android:orientation="vertical">
+
+            <net.cachapa.expandablelayout.ExpandableLayout
+                android:id="@+id/expand"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="12dp"
-                android:background="@drawable/f2f2f2_4dp_edit_bg"
-                android:text="@string/cb_code_hint"
-                android:gravity="center"
-                android:textColor="@color/color_cccccc"
-                android:visibility="visible"/>
-            <com.easymi.component.widget.LoadingButton
-                android:id="@+id/btn_go_next"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                app:el_expanded="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="38dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="等待超时后可跳过验票"
+                        android:textColor="@color/color_999999"
+                        android:textSize="12sp" />
+                    <TextView
+                        android:id="@+id/tv_go_next"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="前往下一站>"
+                        android:textColor="@color/color_3C98E3"
+                        android:textSize="12sp"
+                        android:layout_marginLeft="5dp"/>
+                </LinearLayout>
+            </net.cachapa.expandablelayout.ExpandableLayout>
+
+            <LinearLayout
+                android:id="@+id/lin_bottom"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/corners_button_bg"
-                android:elevation="0.5dp"
-                android:gravity="center"
-                android:text="@string/cb_go_next"
-                android:textColor="@color/white"
-                android:layout_margin="12dp"
-                android:visibility="gone"/>
+                android:layout_height="68dp"
+                android:background="@color/white"
+                android:elevation="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_no_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="12dp"
+                    android:background="@drawable/f2f2f2_4dp_edit_bg"
+                    android:gravity="center"
+                    android:text="@string/cb_code_hint"
+                    android:textColor="@color/color_cccccc"
+                    android:visibility="visible" />
+
+                <com.easymi.component.widget.LoadingButton
+                    android:id="@+id/btn_go_next"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="12dp"
+                    android:background="@drawable/corners_button_bg"
+                    android:elevation="0.5dp"
+                    android:gravity="center"
+                    android:text="@string/cb_go_next"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 

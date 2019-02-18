@@ -28,4 +28,11 @@
     <string name="cb_cancel">取消</string>
     <string name="cb_code_hint">请输入车票码开始验票</string>
     <string name="cb_code">请输入车票码</string>
+    <string name="cb_slider_check">滑动开始验票</string>
+    <string name="cb_slider_arrive">滑动到达站点</string>
+    <string name="cb_please_check">请开始验票</string>
+    <string name="cb_running">行程中</string>
+    <string name="cb_arrive_station">到达站点</string>
+    <string name="cb_alredy_check">已验票</string>
+    <string name="cb_alredy_jump">已跳过</string>
 </resources>

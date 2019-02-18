@@ -1,6 +1,7 @@
 package com.easymi.personal.activity.register;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +12,9 @@ import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
+import com.easymi.component.utils.AlexStatusBarUtils;
 import com.easymi.component.utils.ToastUtil;
+import com.easymi.component.utils.UIStatusBarHelper;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.personal.R;
@@ -64,6 +67,8 @@ public class RegisterListActivity extends RxBaseActivity{
 
     @Override
     public int getLayoutId() {
+        UIStatusBarHelper.setStatusBarLightMode(this);
+        AlexStatusBarUtils.setStatusColor(this, Color.WHITE);
         return R.layout.activity_register_list;
     }
 

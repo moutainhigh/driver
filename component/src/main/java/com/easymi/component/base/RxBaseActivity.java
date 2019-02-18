@@ -28,6 +28,7 @@ import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.SysUtil;
+import com.easymi.component.utils.UIStatusBarHelper;
 import com.easymi.component.widget.swipeback.ikew.SwipeBackActivityBase;
 import com.easymi.component.widget.swipeback.ikew.SwipeBackActivityHelper;
 import com.easymi.component.widget.swipeback.ikew.Utils;
@@ -74,7 +75,6 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 //        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 
         mRxManager = new RxManager();

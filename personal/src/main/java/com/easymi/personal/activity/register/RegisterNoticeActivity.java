@@ -1,6 +1,7 @@
 package com.easymi.personal.activity.register;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,9 +12,11 @@ import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
+import com.easymi.component.utils.AlexStatusBarUtils;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.RsaUtils;
 import com.easymi.component.utils.ToastUtil;
+import com.easymi.component.utils.UIStatusBarHelper;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.R;
 import com.easymi.personal.result.RegisterResult;
@@ -52,6 +55,8 @@ public class RegisterNoticeActivity extends RxBaseActivity {
 
     @Override
     public int getLayoutId() {
+        UIStatusBarHelper.setStatusBarLightMode(this);
+        AlexStatusBarUtils.setStatusColor(this, Color.WHITE);
         return R.layout.activity_register_notice;
     }
 

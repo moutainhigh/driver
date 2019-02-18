@@ -2,6 +2,7 @@ package com.easymi.personal.activity.register;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -25,6 +26,7 @@ import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.network.GsonUtil;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.utils.AlexStatusBarUtils;
 import com.easymi.component.utils.CommonUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.GlideCircleTransform;
@@ -34,6 +36,7 @@ import com.easymi.component.utils.RsaUtils;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
+import com.easymi.component.utils.UIStatusBarHelper;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.TimeDialog;
 import com.easymi.personal.R;
@@ -137,6 +140,8 @@ public class RegisterBaseActivity extends RxBaseActivity {
 
     @Override
     public int getLayoutId() {
+        UIStatusBarHelper.setStatusBarLightMode(this);
+        AlexStatusBarUtils.setStatusColor(this, Color.WHITE);
         return R.layout.activity_register_base;
     }
 

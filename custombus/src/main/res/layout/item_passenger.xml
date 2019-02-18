@@ -53,7 +53,7 @@
             android:id="@+id/tv_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="已验票"
+            android:text=""
             android:textColor="@color/color_089A55"
             android:visibility="gone"/>
     </LinearLayout>

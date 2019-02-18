@@ -1,6 +1,7 @@
 package com.easymi.personal.activity.register;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
@@ -23,6 +24,7 @@ import com.easymi.component.entity.Employ;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.AesUtil;
+import com.easymi.component.utils.AlexStatusBarUtils;
 import com.easymi.component.utils.Base64Utils;
 import com.easymi.component.utils.CommonUtil;
 import com.easymi.component.utils.PhoneUtil;
@@ -30,6 +32,7 @@ import com.easymi.component.utils.RsaUtils;
 import com.easymi.component.utils.SHA256Util;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
+import com.easymi.component.utils.UIStatusBarHelper;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.personal.R;
 import com.easymi.personal.activity.LoginActivity;
@@ -73,8 +76,10 @@ public class RegisterAcitivty extends RxBaseActivity {
 
     @Override
     public int getLayoutId() {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        UIStatusBarHelper.setStatusBarLightMode(this);
+        AlexStatusBarUtils.setStatusColor(this, Color.WHITE);
         return R.layout.activity_register;
     }
 

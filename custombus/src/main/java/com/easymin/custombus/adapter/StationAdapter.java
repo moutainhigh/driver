@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.easymin.custombus.R;
+import com.easymin.custombus.entity.Station;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.Holder>{
 
     private Context context;
 
-    private List<String> listStation;
+    private List<Station> listStation;
 
     /**
      * 构造器
@@ -43,11 +44,10 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.Holder>{
      * 加载数据
      * @param listStation
      */
-    public void setDatas(List<String> listStation) {
+    public void setDatas(List<Station> listStation) {
         this.listStation = listStation;
         notifyDataSetChanged();
     }
-
 
     @NonNull
     @Override
@@ -81,11 +81,35 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.Holder>{
             holder.iv_station.setImageResource(R.mipmap.cb_station_nomal);
         }
 
-        if (position == 2){
+        Station station = listStation.get(position);
+        if (station.status == 2){
+            if (position == 0 || position == listStation.size()-1){
+                holder.iv_station.setImageResource(R.mipmap.cb_station_check);
+            }else {
+                holder.iv_station.setImageResource(R.mipmap.cb_station_nomal);
+            }
             holder.iv_car.setVisibility(View.VISIBLE);
+        }else if (station.status == 3){
+            holder.iv_station.setImageResource(R.mipmap.cb_car);
+            holder.iv_car.setVisibility(View.GONE);
         }else {
             holder.iv_car.setVisibility(View.GONE);
+            if (position == 0 || position == listStation.size()-1){
+                holder.iv_station.setImageResource(R.mipmap.cb_station_check);
+            }else {
+                holder.iv_station.setImageResource(R.mipmap.cb_station_nomal);
+            }
         }
+
+        holder.tv_station_name.setText(station.name);
+        holder.tv_station_addr.setText(station.address);
+        holder.tv_pass_number.setText(station.number+"");
+
+        holder.tv_pass_number.setOnClickListener(v -> {
+            if (onItemClickListener !=null){
+                onItemClickListener.onClick(position);
+            }
+        });
     }
 
     @Override
@@ -111,6 +135,7 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.Holder>{
         ImageView iv_car;
         ImageView iv_car_bottom;
         LinearLayout lin_foot;
+        TextView tv_chcke_status;
 
         View rootView;
 
@@ -130,6 +155,27 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.Holder>{
             iv_car = itemView.findViewById(R.id.iv_car);
             iv_car_bottom = itemView.findViewById(R.id.iv_car_bottom);
             lin_foot = itemView.findViewById(R.id.lin_foot);
+            tv_chcke_status= itemView.findViewById(R.id.tv_chcke_status);
         }
+    }
+
+    OnItemClickListener onItemClickListener;
+
+    /**
+     * 设置列表点击监听
+     * @param onItemClickListener
+     */
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    /**
+     * 子项点击接口
+     */
+    public interface OnItemClickListener {
+        /**
+         * 单击监听方法
+         */
+        void onClick(int position);
     }
 }

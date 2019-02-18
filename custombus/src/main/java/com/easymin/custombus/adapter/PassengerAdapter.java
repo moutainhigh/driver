@@ -1,6 +1,8 @@
 package com.easymin.custombus.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,7 +17,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.easymi.component.Config;
 import com.easymi.component.utils.GlideCircleTransform;
+import com.easymi.component.utils.PhoneUtil;
 import com.easymin.custombus.R;
+import com.easymin.custombus.entity.Customer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +37,7 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
 
     private Context context;
 
-    private List<String> listPassenger;
+    private List<Customer> listPassenger;
 
     RequestOptions options = new RequestOptions()
             .centerCrop()
@@ -54,7 +58,7 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
      * 加载数据
      * @param listPassenger
      */
-    public void setDatas(List<String> listPassenger) {
+    public void setDatas(List<Customer> listPassenger) {
         this.listPassenger = listPassenger;
         notifyDataSetChanged();
     }
@@ -68,15 +72,37 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
 
     @Override
     public void onBindViewHolder(PassengerAdapter.Holder holder, int position) {
+        Customer customer = listPassenger.get(position);
+
+        if (customer.status == 1){
+            holder.iv_call_phone.setVisibility(View.VISIBLE);
+            holder.tv_status.setVisibility(View.GONE);
+        }else if (customer.status == 2){
+            holder.iv_call_phone.setVisibility(View.VISIBLE);
+            holder.tv_status.setVisibility(View.GONE);
+            holder.tv_status.setText(context.getResources().getString(R.string.cb_alredy_check));
+        }else {
+            holder.iv_call_phone.setVisibility(View.VISIBLE);
+            holder.tv_status.setVisibility(View.GONE);
+            holder.tv_status.setText(context.getResources().getString(R.string.cb_alredy_jump));
+        }
         Glide.with(context)
-//                .load(Config.IMG_SERVER + baseOrder.avatar + Config.IMG_PATH)
-                .load("http://img1.3lian.com/img013/v5/21/d/84.jpg")
+//                .load(Config.IMG_SERVER + customer.pic + Config.IMG_PATH)
+                .load(customer.pic)
                 .apply(options)
                 .into(holder.iv_head);
+        holder.tv_pass_name.setText(customer.name);
+        holder.tv_pass_number.setText(customer.tickets+"");
 
         if (position == listPassenger.size()-1){
             holder.iv_line.setVisibility(View.GONE);
         }
+
+        holder.iv_call_phone.setOnClickListener(v -> {
+            //跳转到拨号界面，同时传递电话号码
+            Intent dialIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + customer.phone));
+            context.startActivity(dialIntent);
+        });
     }
 
     @Override
