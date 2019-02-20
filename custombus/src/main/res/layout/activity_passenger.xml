@@ -149,7 +149,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                app:el_expanded="true">
+                app:el_expanded="false">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -172,7 +172,8 @@
                         android:text="前往下一站>"
                         android:textColor="@color/color_3C98E3"
                         android:textSize="12sp"
-                        android:layout_marginLeft="5dp"/>
+                        android:layout_marginLeft="5dp"
+                        />
                 </LinearLayout>
             </net.cachapa.expandablelayout.ExpandableLayout>
 
@@ -181,7 +182,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
                 android:background="@color/white"
-                android:elevation="5dp"
                 android:orientation="vertical">
 
                 <TextView

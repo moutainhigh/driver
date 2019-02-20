@@ -35,4 +35,7 @@
     <string name="cb_arrive_station">到达站点</string>
     <string name="cb_alredy_check">已验票</string>
     <string name="cb_alredy_jump">已跳过</string>
+
+    <string name="canceled_order">当前订单已被取消:)</string>
+    <string name="backed_order">当前订单已被收回:)</string>
 </resources>

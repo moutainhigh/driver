@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:gravity="center_vertical"
+    android:layout_marginTop="10dp"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/sequence_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1"
+        android:layout_marginLeft="10dp"
+        android:textSize="25sp"/>
+
+    <ImageView
+        android:id="@+id/cus_photo"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_margin="10dp"
+        android:src="@mipmap/photo_default"/>
+
+    <TextView
+        android:id="@+id/cus_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="刘子豪"
+        android:textColor="@color/black"
+        android:layout_marginLeft="10dp"
+        android:textSize="16sp"/>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/status_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="未送"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/corners_accent_8dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:textColor="@color/white"
+        android:layout_marginLeft="10dp"
+        android:textSize="16sp"/>
+
+</LinearLayout>

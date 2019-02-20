@@ -30,6 +30,7 @@ import com.easymi.component.update.UpdateHelper;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.NetUtil;
 import com.easymi.component.utils.StringUtils;
+import com.easymi.component.utils.ToastUtil;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -252,10 +253,37 @@ public class SplashActivity extends RxBaseActivity {
      * 显示加载框
      */
     private void showDialog() {
+//        AlertDialog dialog = new AlertDialog.Builder(this)
+//                .setTitle(getString(R.string.hint))
+//                .setMessage(getString(R.string.message))
+//                .setPositiveButton(getString(R.string.sure), (dialog1, which) -> requestPer())
+//                .setCancelable(false)
+//                .create();
+//        dialog.show();
+
+
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.hint))
-                .setMessage(getString(R.string.message))
-                .setPositiveButton(getString(R.string.sure), (dialog1, which) -> requestPer())
+                .setTitle("温馨提示")
+                .setMessage("亲爱的司机师傅，为了您能正常使用软件，我们需要下列权限:\n"
+                        + "获取位置权限-->方便管理人员根据位置为您派单\n"
+                        + "读取手机状态权限-->司机与手机完成绑定防止他人登录\n"
+                        + "读写外部存储权限-->存放一些资源在外部存储\n"
+                        + "拨打电话权限-->联系客户与附近司机")
+                .setPositiveButton("好", (dialog1, which) -> {
+                    rxPermissions.request(Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.READ_PHONE_STATE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.CALL_PHONE)
+                            .subscribe(granted -> {
+                                if (granted) {
+                                    checkForUpdate();
+                                } else {
+                                    ToastUtil.showMessage(this, "未能获得必要权限，即将退出..");
+                                    delayExit();
+                                }
+                            });
+                    dialog1.dismiss();
+                })
                 .setCancelable(false)
                 .create();
         dialog.show();

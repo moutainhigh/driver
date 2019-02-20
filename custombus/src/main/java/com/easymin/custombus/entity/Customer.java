@@ -12,7 +12,7 @@ public class Customer {
 
     public long id;
     /**
-     * 站点名字
+     * 客户名字
      */
     public String name;
     /**
@@ -31,5 +31,17 @@ public class Customer {
      * t头像
      */
     public String pic;
+    /**
+     * 起点
+     */
+    public String startAddr;
+    /**
+     * 终点
+     */
+    public String endAddr;
+    /**
+     * 备注
+     */
+    public String remark;
 
 }

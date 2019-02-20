@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.easymi.component.Config;
+import com.easymi.component.network.GsonUtil;
 import com.easymi.component.utils.GlideCircleTransform;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymin.custombus.R;
@@ -135,4 +136,7 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
             tv_status = itemView.findViewById(R.id.tv_status);
         }
     }
+
+
+
 }

@@ -15,6 +15,7 @@ import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.util.DJStatus2Str;
 import com.easymi.component.BusOrderStatus;
 import com.easymi.component.Config;
+import com.easymi.component.DJOrderStatus;
 import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.utils.TimeUtil;
 
@@ -77,7 +78,11 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Holder> 
         } else if (TextUtils.equals(baseOrder.serviceType, Config.COUNTRY)) {
             holder.order_status.setText(BusOrderStatus.status2Str(baseOrder.status) + " >");
         }else {
-            holder.order_status.setText(DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status) + " >");
+            if (baseOrder.status < DJOrderStatus.ARRIVAL_DESTINATION_ORDER){
+                holder.order_status.setText(DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status) + " >");
+            }else {
+                holder.order_status.setText(DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status));
+            }
         }
 
         if (mType == 1){

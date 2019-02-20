@@ -52,7 +52,7 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.Holder>{
     @NonNull
     @Override
     public StationAdapter.Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_station, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_station, parent,false);
         return new Holder(view);
     }
 
@@ -62,7 +62,7 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.Holder>{
             holder.lin_head.setVisibility(View.VISIBLE);
             holder.lin_foot.setVisibility(View.GONE);
             holder.lin_car.setVisibility(View.VISIBLE);
-            holder.iv_station_top.setVisibility(View.GONE);
+            holder.iv_station_top.setVisibility(View.INVISIBLE);
             holder.iv_station_bottom.setVisibility(View.VISIBLE);
             holder.iv_station.setImageResource(R.mipmap.cb_station_check);
         }else if (position == listStation.size()-1){
@@ -70,7 +70,7 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.Holder>{
             holder.lin_foot.setVisibility(View.VISIBLE);
             holder.lin_car.setVisibility(View.GONE);
             holder.iv_station_top.setVisibility(View.VISIBLE);
-            holder.iv_station_bottom.setVisibility(View.GONE);
+            holder.iv_station_bottom.setVisibility(View.INVISIBLE);
             holder.iv_station.setImageResource(R.mipmap.cb_station_check);
         }else {
             holder.lin_head.setVisibility(View.GONE);

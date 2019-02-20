@@ -315,7 +315,7 @@ public class BaseOrder implements Serializable {
         } else if (scheduleStatus == SCHEDULE_STATUS_FINISH) {
             return "已完成";
         } else {
-            return "";
+            return "已完成";
         }
     }
 

@@ -37,7 +37,9 @@ android {
 
     buildTypes {
         release {
+            buildConfigField "boolean", "LOG_DEBUG", "false" //不显示log
             minifyEnabled false
+//            shrinkResources true
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -70,4 +72,6 @@ dependencies {
     implementation project(path: ':chartered')
     implementation project(path: ':rental')
     implementation project(path: ':custombus')
+    implementation project(path: ':carpooling')
+
 }

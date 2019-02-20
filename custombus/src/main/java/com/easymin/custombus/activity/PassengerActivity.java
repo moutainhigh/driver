@@ -113,7 +113,6 @@ public class PassengerActivity extends RxBaseActivity {
         adapter = new PassengerAdapter(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
-
     }
 
     /**

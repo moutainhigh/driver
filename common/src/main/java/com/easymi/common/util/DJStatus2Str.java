@@ -47,8 +47,6 @@ public class DJStatus2Str {
             case DJOrderStatus.RATED_ORDER:
                 return XApp.getInstance().getString(R.string.rate_order);
         }
-//        if (business.equals(Config.DAIJIA)) {
-//        }
         return "";
     }
 }

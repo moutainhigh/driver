@@ -107,7 +107,7 @@ public class AccpteFragment extends RxBaseFragment implements MyOrderContract.Vi
 
         adapter.setItemClickListener((view, baseOrder) -> {
             if (view.getId() == R.id.root && StringUtils.isNotBlank(baseOrder.serviceType)) {
-                if (baseOrder.status < 35) {
+                if (baseOrder.status < 30) {
                     if (baseOrder.serviceType.equals(Config.ZHUANCHE)) {
                         ARouter.getInstance()
                                 .build("/zhuanche/FlowActivity")
