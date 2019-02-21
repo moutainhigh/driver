@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +26,7 @@ import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
+import com.easymi.component.widget.MoneyWatcher;
 import com.easymi.zhuanche.R;
 import com.easymi.zhuanche.entity.Budget;
 import com.easymi.zhuanche.entity.ZCType;
@@ -36,6 +38,7 @@ import com.easymi.zhuanche.result.ZCTypeResult;
 import com.easymi.zhuanche.result.PassengerResult;
 import com.easymi.zhuanche.widget.TimePicker2;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +47,7 @@ import static android.app.Activity.RESULT_OK;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: CreateZCFragment
+ *
  * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:  专车补单
@@ -67,6 +71,7 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
     Button createOrder;
     TabLayout tabLayout;
     LinearLayout esMoneyCon;
+    EditText et_money;
 
     /**
      * 选中的专车车型
@@ -99,6 +104,15 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
      * //预估价格
      */
     private Budget budget;
+
+    /**
+     * 是否是订单一口价
+     */
+    public boolean onePrice;
+    /**
+     * 订单一口价金额
+     */
+    public Double totalPrice;
 
     private CreateZCPresenter presenter;
 
@@ -162,6 +176,7 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
         unit = $(R.id.zc_unit);
         llTime = $(R.id.llTime);
         llTimeLine = $(R.id.llTimeLine);
+        et_money = $(R.id.et_money);
     }
 
     @Override
@@ -256,9 +271,20 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
                 }
             }
 
+            /**
+             * 判断司机是否输入一口价
+             */
+            if (!TextUtils.isEmpty(et_money.getText().toString())) {
+                totalPrice = Double.parseDouble(et_money.getText().toString().trim());
+                onePrice = true;
+            } else {
+                totalPrice = budget.total;
+                onePrice = false;
+            }
+
             presenter.createOrder(
                     orderTime == null ? System.currentTimeMillis() / 1000 : orderTime / 1000,
-                    budget == null ? null : budget.total,
+                    totalPrice,
                     selectedZCType.id,
                     "driver",
                     EmUtil.getEmployInfo().companyId,
@@ -270,8 +296,11 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
                     passenger.id,
                     passenger.name,
                     passenger.phone,
-                    Config.ZHUANCHE);
+                    Config.ZHUANCHE,
+                    onePrice);
         });
+
+        et_money.addTextChangedListener(new MoneyWatcher(et_money).setLimit(2).setMaxMoney(9999));
     }
 
     public String getAddressJson() {
@@ -311,14 +340,14 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
                 orderTime = null;
                 selectedZCType = (ZCType) tab.getTag();
                 if (selectedZCType != null) {
-                    if (selectedZCType.isBook == 1) {
-                        preMin = selectedZCType.minBookTime;
-                        llTime.setVisibility(View.VISIBLE);
-                        llTimeLine.setVisibility(View.VISIBLE);
-                    } else {
-                        llTime.setVisibility(View.GONE);
-                        llTimeLine.setVisibility(View.GONE);
-                    }
+//                    if (selectedZCType.isBook == 1) {
+//                        preMin = selectedZCType.minBookTime;
+//                        llTime.setVisibility(View.VISIBLE);
+//                        llTimeLine.setVisibility(View.VISIBLE);
+//                    } else {
+                    llTime.setVisibility(View.GONE);
+                    llTimeLine.setVisibility(View.GONE);
+//                    }
                 }
                 getBudget();
             }
@@ -361,9 +390,9 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
     @Override
     public void showPassenger(PassengerResult result) {
 //        if (result.data.isExist) {
-            passenger = result.data;
-            nameText.setText(passenger.name);
-            getBudget();
+        passenger = result.data;
+        nameText.setText(passenger.name);
+        getBudget();
 //        } else {
 //            ToastUtil.showMessage(getContext(), getContext().getResources().getString(R.string.no_passenger));
 //        }
@@ -414,8 +443,8 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
     public void showDisAndTime(float mile, float sec) {
         distance = (double) (mile / 1000);
         duration = (int) sec / 60;
-        if (distance == 0 || duration == 0){
-            ToastUtil.showMessage(getContext(),getContext().getResources().getString(R.string.bo_budget_hint));
+        if (distance == 0 || duration == 0) {
+            ToastUtil.showMessage(getContext(), getContext().getResources().getString(R.string.bo_budget_hint));
             return;
         }
         getBudget();

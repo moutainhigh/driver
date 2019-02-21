@@ -393,34 +393,28 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void onInitNaviFailure() {
-        Log.e("FlowerPresenter", "onInitNaviFailure()");
         view.reRout();
     }
 
     @Override
     public void onInitNaviSuccess() {
-        Log.e("FlowerPresenter", "onInitNaviSuccess()");
     }
 
     @Override
     public void onLocationChange(AMapNaviLocation aMapNaviLocation) {
-        Log.e("FlowerPresenter", "onLocationChange()");
     }
 
     @Override
     public void onGetNavigationText(int i, String s) {
-        Log.e("FlowerPresenter", s);
     }
 
     @Override
     public void onArriveDestination(boolean b) {
-        Log.e("FlowerPresenter", "onArriveDestination()");
         XApp.getInstance().syntheticVoice("即将到达目的地");
     }
 
     @Override
     public void onStartNavi(int i) {
-        Log.e("FlowerPresenter", "onStartNavi()");
     }
 
     @Override

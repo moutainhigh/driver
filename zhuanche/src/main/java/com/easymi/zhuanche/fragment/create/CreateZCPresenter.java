@@ -24,6 +24,7 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: CreateZCPresenter
+ *
  * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
@@ -44,19 +45,19 @@ public class CreateZCPresenter implements CreateZCContract.Presenter {
     }
 
     @Override
-    public void queryZCType(String adcode,String citycode,int carModel,double lat,double lng) {
-        view.getManager().add(model.queryZCType( adcode, citycode, carModel, lat, lng)
+    public void queryZCType(String adcode, String citycode, int carModel, double lat, double lng) {
+        view.getManager().add(model.queryZCType(adcode, citycode, carModel, lat, lng)
                 .subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<ZCTypeResult>() {
-            @Override
-            public void onNext(ZCTypeResult zcTypeResult) {
-                view.showTypeTab(zcTypeResult);
-            }
+                    @Override
+                    public void onNext(ZCTypeResult zcTypeResult) {
+                        view.showTypeTab(zcTypeResult);
+                    }
 
-            @Override
-            public void onError(int code) {
-                view.showQueryTypeErr(code);
-            }
-        })));
+                    @Override
+                    public void onError(int code) {
+                        view.showQueryTypeErr(code);
+                    }
+                })));
     }
 
     @Override
@@ -78,7 +79,7 @@ public class CreateZCPresenter implements CreateZCContract.Presenter {
     }
 
     @Override
-    public void queryBudget(Long businessId, Long companyId, Double distance,Integer time, Long modelId) {
+    public void queryBudget(Long businessId, Long companyId, Double distance, Integer time, Long modelId) {
         view.getManager().add(model.getBudgetPrice(businessId, companyId,
                 distance == null ? 0.0 : distance, time == null ? 0 : time, modelId)
                 .subscribe(new MySubscriber<>(context, false,
@@ -154,21 +155,23 @@ public class CreateZCPresenter implements CreateZCContract.Presenter {
                             Long passengerId,
                             String passengerName,
                             String passengerPhone,
-                            String serviceType) {
-        view.getManager().add(model.createOrder( bookTime,
-                 budgetFee,
-                 businessId,
-                 channelAlias,
-                 companyId,
-                 driverId,
-                 driverName,
-                 driverPhone,
-                 modelId,
-                 orderAddress,
-                 passengerId,
-                 passengerName,
-                 passengerPhone,
-                 serviceType).subscribe(
+                            String serviceType,
+                            boolean onePrice) {
+        view.getManager().add(model.createOrder(bookTime,
+                budgetFee,
+                businessId,
+                channelAlias,
+                companyId,
+                driverId,
+                driverName,
+                driverPhone,
+                modelId,
+                orderAddress,
+                passengerId,
+                passengerName,
+                passengerPhone,
+                serviceType,
+                onePrice).subscribe(
                 new MySubscriber<>(context, true, false, createOrderResult -> view.createSuc(createOrderResult))
         ));
     }

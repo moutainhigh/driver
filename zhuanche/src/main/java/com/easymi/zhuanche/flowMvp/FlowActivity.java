@@ -241,6 +241,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     private boolean isToFeeDetail = true;
 
     /**
+     * 是否是极速指派订单
+     */
+    private boolean flashAssign;
+
+    /**
      * 屏幕切换监听
      */
     private AlbumOrientationEventListener mAlbumOrientationEventListener;
@@ -261,6 +266,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
 
         orderId = getIntent().getLongExtra("orderId", -1);
+
+        flashAssign = getIntent().getBooleanExtra("flashAssign",false);
+
         //是否是从计价器过来的
         isToFeeDetail = getIntent().getBooleanExtra("showSettle", false);
         if (orderId == -1) {
@@ -652,13 +660,16 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 finish();
             }
             ZCSetting zcSetting = ZCSetting.findOne();
-            if (zcSetting.isPaid == 2) {
+            if (zcSetting.isPaid == 2 || (zcOrder.prepayment && zcOrder.paid)) {
                 if (zcOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {
                     finish();
                 }
             }
             this.zcOrder = zcOrder;
 //            initMap();
+            if (flashAssign && zcOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER){
+                flashAssign();
+            }
             showTopView();
             initBridge();
             showBottomFragment(zcOrder);
@@ -681,6 +692,13 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 }
             }
         }
+    }
+
+    /**
+     * 极速指派订单语音播报
+     */
+    public void flashAssign(){
+        XApp.getInstance().syntheticVoice("您有快速指派订单需要处理，客户起点为"+zcOrder.getStartSite().addr+",终点为"+zcOrder.getEndSite().addr);
     }
 
     /**
@@ -829,7 +847,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         RouteOverlayOptions options = new RouteOverlayOptions();
         options.setSmoothTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_green));
-        options.setUnknownTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_no));
+        options.setUnknownTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_green));
+//        options.setUnknownTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_no));
         options.setSlowTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_slow));
         options.setJamTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_bad));
         options.setVeryJamTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_grayred));

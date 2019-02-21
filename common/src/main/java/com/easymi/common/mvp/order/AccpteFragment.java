@@ -15,6 +15,7 @@ import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.entity.BaseOrder;
+import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
@@ -22,6 +23,7 @@ import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.StringUtils;
+import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusErrLayout;
 import com.easymi.component.widget.SwipeRecyclerView;
 
@@ -107,11 +109,15 @@ public class AccpteFragment extends RxBaseFragment implements MyOrderContract.Vi
 
         adapter.setItemClickListener((view, baseOrder) -> {
             if (view.getId() == R.id.root && StringUtils.isNotBlank(baseOrder.serviceType)) {
-                if (baseOrder.status < 30) {
+                if (baseOrder.status < 35) {
                     if (baseOrder.serviceType.equals(Config.ZHUANCHE)) {
-                        ARouter.getInstance()
-                                .build("/zhuanche/FlowActivity")
-                                .withLong("orderId", baseOrder.id).navigation();
+                        if (ZCSetting.findOne().isPaid == 1){
+                            ARouter.getInstance()
+                                    .build("/zhuanche/FlowActivity")
+                                    .withLong("orderId", baseOrder.id).navigation();
+                        }else {
+                            ToastUtil.showMessage(getContext(),"未开启司机代付");
+                        }
                     } else if (baseOrder.serviceType.equals(Config.TAXI)) {
                         ARouter.getInstance()
                                 .build("/taxi/FlowActivity")

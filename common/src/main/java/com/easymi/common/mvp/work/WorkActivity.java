@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -141,6 +142,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     LinearLayout bottomBtnCon;
     LinearLayout guideFrame;
     ImageView gotoSet;
+    Button btn_create;
 
     /**
      * 取消订单
@@ -302,6 +304,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         gotoSet = findViewById(R.id.guide_go_to_set);
 
         bottomBtnCon = findViewById(R.id.bottom_btn_con);
+        btn_create = findViewById(R.id.btn_create);
 
         Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1));
         Log.e("employ", "" + employ);
@@ -354,6 +357,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         } else {
             orders.addAll(MultipleOrders);
             hideEmpty();
+            recyclerView.setVisibility(View.VISIBLE);
         }
 
         adapter = new OrderAdapter(orders, this);
@@ -414,8 +418,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         MqttManager.getInstance().pushLocNoLimit(new BuildPushData(EmUtil.getLastLoc()));
         presenter.indexOrders();
         swipeRefreshLayout.setRefreshing(true);
-        hideEmpty();
         recyclerView.setVisibility(View.VISIBLE);
+        hideEmpty();
         presenter.loadEmploy(EmUtil.getEmployId());
     }
 
@@ -426,8 +430,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         rippleBackground.stopRippleAnimation();
         bottomBtnCon.setVisibility(View.VISIBLE);
         swipeRefreshLayout.setRefreshing(false);
-        showEmpty(0);
         recyclerView.setVisibility(View.GONE);
+        showEmpty(0);
         presenter.loadEmploy(EmUtil.getEmployId());
     }
 
@@ -529,6 +533,14 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         rippleBackground.stopRippleAnimation();
         bottomBtnCon.setVisibility(View.VISIBLE);
         swipeRefreshLayout.setRefreshing(false);
+        /**
+         * 专车补单在下线状态
+         */
+        if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)){
+            btn_create.setVisibility(View.VISIBLE);
+        }else {
+            btn_create.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -818,7 +830,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     }
 
     public void modelSet(View view) {
-        Intent intent = new Intent(WorkActivity.this, ModelSetActivity.class);
+        Intent intent = new Intent(WorkActivity.this, CreateActivity.class);
+        intent.putExtra("type",EmUtil.getEmployInfo().serviceType);
         startActivity(intent);
     }
 

@@ -67,7 +67,8 @@ public class CreateZCModel implements CreateZCContract.Model {
                                                      Long passengerId,
                                                      String passengerName,
                                                      String passengerPhone,
-                                                     String serviceType) {
+                                                     String serviceType,
+                                                     boolean onePrice) {
         return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
                 .createOrder(bookTime,
                         budgetFee,
@@ -82,7 +83,8 @@ public class CreateZCModel implements CreateZCContract.Model {
                         passengerId,
                         passengerName,
                         passengerPhone,
-                        serviceType
+                        serviceType,
+                        onePrice
                 )
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())

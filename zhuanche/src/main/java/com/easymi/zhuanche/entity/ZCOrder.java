@@ -187,10 +187,20 @@ public class ZCOrder implements Serializable {
      */
     public String avatar;
 
-//    /**
-//     * 等待倒计时时间戳
-//     */
-//    public long startWaitTime;
+    /**
+     * 是否是大额支付
+     */
+    public boolean prepayment;
+
+    /**
+     * 是否已经支付
+     */
+    public boolean paid;
+
+    /**
+     * 订单一口价
+     */
+    public boolean onePrice;
 
     public List<Address> orderAddressVos;
     /**
