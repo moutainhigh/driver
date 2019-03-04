@@ -147,27 +147,33 @@ public class DymOrder implements Serializable {
     /**
      *预算金额
      */
-    private Double budgetFee;
+    public Double budgetFee;
     /**
      *定价金额
      */
-    private Double fixedPrice;
+    public Double fixedPrice;
     /**
      *信息费
      */
-    private Double messagePrice;
+    public Double messagePrice;
     /**
      *实际付款
      */
-    private Double realPay;
+    public Double realPay;
     /**
      *insurance_price
      */
-    private Double insurancePrice;
+    public Double insurancePrice;
     /**
      *支付类型
      */
-    private String payType;
+    public String payType;
+
+    /**
+     * 阶梯费
+     */
+    public String stageArrays;
+
 
     public DymOrder(long orderId, String orderType, long passengerId, int orderStatus) {
         this.orderId = orderId;
@@ -221,6 +227,8 @@ public class DymOrder implements Serializable {
         values.put("nightTime", nightTime);
         values.put("nightMile", nightMile);
         values.put("nightTimePrice", nightTimePrice);
+
+        values.put("stageArrays", stageArrays);
 
         boolean flag = db.insert("t_dyminfo", null, values) != -1;
         return flag;
@@ -364,6 +372,8 @@ public class DymOrder implements Serializable {
         orderInfo.nightTimePrice = cursor.getDouble(cursor.getColumnIndex("nightTimePrice"));
         orderInfo.passengerId = cursor.getLong(cursor.getColumnIndex("passengerId"));
 
+        orderInfo.stageArrays = cursor.getString(cursor.getColumnIndex("stageArrays"));
+
         return orderInfo;
     }
 
@@ -415,6 +425,7 @@ public class DymOrder implements Serializable {
         values.put("nightMile", nightMile);
         values.put("nightTimePrice", nightTimePrice);
 
+        values.put("stageArrays", stageArrays);
 
 //        values.put("addedKm", addedKm);
 //        values.put("addedFee", addedFee);
@@ -450,6 +461,8 @@ public class DymOrder implements Serializable {
         values.put("nightTime", nightTime);
         values.put("nightMile", nightMile);
         values.put("nightTimePrice", nightTimePrice);
+
+        values.put("stageArrays", stageArrays);
 
 //        values.put("addedKm", addedKm);
 //        values.put("addedFee", addedFee);

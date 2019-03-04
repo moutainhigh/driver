@@ -227,4 +227,7 @@
 
     <string name="order_cacnel">销单须知</string>
     <string name="reason_cacnel">销单原因</string>
+
+
+    <string name="zc_jietifei">阶梯费</string>
 </resources>
