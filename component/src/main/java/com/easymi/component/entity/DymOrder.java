@@ -222,11 +222,6 @@ public class DymOrder implements Serializable {
         values.put("nightMile", nightMile);
         values.put("nightTimePrice", nightTimePrice);
 
-//        values.put("addedKm", addedKm);
-//        values.put("addedFee", addedFee);
-        /*
-         * values.put("age", age); values.put("jialing", jialing);
-         */
         boolean flag = db.insert("t_dyminfo", null, values) != -1;
         return flag;
     }

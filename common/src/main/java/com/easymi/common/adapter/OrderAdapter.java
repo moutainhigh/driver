@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.easymi.common.CommApiService;
 import com.easymi.common.R;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.mvp.order.OrderActivity;
@@ -16,10 +17,12 @@ import com.easymi.component.BusOrderStatus;
 import com.easymi.component.Config;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.network.HttpResultFunc3;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult2;
+import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
@@ -62,8 +65,9 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
             baseViewHolder.setText(R.id.order_type, "" + baseOrder.getOrderType());
             baseViewHolder.setText(R.id.order_start_place, "" + baseOrder.bookAddress);
             baseViewHolder.setText(R.id.order_end_place, baseOrder.destination);
-            if (TextUtils.equals(baseOrder.serviceType, Config.CITY_LINE)) {
-                //专线
+            if (TextUtils.equals(baseOrder.serviceType, Config.CITY_LINE)
+                || TextUtils.equals(baseOrder.serviceType, Config.CARPOOL)) {
+                //专线(定制拼车)
                 baseViewHolder.setText(R.id.order_status, "" + baseOrder.getZXOrderStatusStr() + " >");
             } else if (TextUtils.equals(baseOrder.serviceType, Config.COUNTRY)) {
                 baseViewHolder.setText(R.id.order_status, "" + BusOrderStatus.status2Str(baseOrder.scheduleStatus) + " >");
@@ -101,6 +105,16 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
                                 .build("/passengerbus/BcFlowActivity")
                                 .withLong("orderId", baseOrder.orderId)
                                 .withLong("scheduleId", baseOrder.scheduleId).navigation();
+                    }else if (baseOrder.serviceType.equals(Config.CARPOOL)){
+                        ARouter.getInstance()
+                                .build("/carpooling/FlowActivity")
+                                .withSerializable("baseOrder", baseOrder).navigation();
+//                        cancelOrder(baseOrder.scheduleId);
+                    }else if (baseOrder.serviceType.equals(Config.CUSTOMBUS)){
+                        ARouter.getInstance()
+                                .build("/custombus/CbRunActivity")
+                                .withLong("orderId", baseOrder.orderId)
+                                .withLong("scheduleId", baseOrder.scheduleId).navigation();
                     }
                 }
             });
@@ -108,4 +122,23 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
     }
 
 
+//    /**
+//     * 取消订单bug专用接口
+//     * @param scheduleId
+//     */
+//    public void cancelOrder(long scheduleId){
+//        Observable<Object> observable =  ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+//                .finishTask(scheduleId)
+//                .map(new HttpResultFunc2<>())
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread());
+//       new RxManager().add(observable.subscribe(new MySubscriber<>(context,
+//                true,
+//                true, new NoErrSubscriberListener<Object>() {
+//           @Override
+//           public void onNext(Object o) {
+//
+//           }
+//       })));
+//    }
 }

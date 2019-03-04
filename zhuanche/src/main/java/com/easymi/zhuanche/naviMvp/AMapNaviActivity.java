@@ -2,7 +2,10 @@ package com.easymi.zhuanche.naviMvp;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Html;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -11,6 +14,7 @@ import com.amap.api.navi.AMapNaviListener;
 import com.amap.api.navi.AMapNaviView;
 import com.amap.api.navi.AMapNaviViewListener;
 import com.amap.api.navi.enums.AMapNaviRingType;
+import com.amap.api.navi.enums.IconType;
 import com.amap.api.navi.enums.NaviType;
 import com.amap.api.navi.model.AMapLaneInfo;
 import com.amap.api.navi.model.AMapModelCross;
@@ -32,6 +36,7 @@ import com.easymi.component.DJOrderStatus;
 import com.easymi.component.ZCOrderStatus;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.entity.DymOrder;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
@@ -42,6 +47,7 @@ import com.easymi.zhuanche.entity.ZCOrder;
 import com.easymi.zhuanche.flowMvp.FlowContract;
 import com.easymi.zhuanche.flowMvp.FlowPresenter;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +60,7 @@ import java.util.List;
  * @History:
  */
 @Route(path = "/zhuanche/AMapNaviActivity")
-public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener, AMapNaviViewListener , FlowContract.View{
+public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener, AMapNaviViewListener, FlowContract.View {
 
     /**
      * 导航基础界面
@@ -73,7 +79,17 @@ public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener
      */
     private CustomSlideToUnlockView slider;
 
+    TextView tv_destance;
+    ImageView iv_close;
+    TextView tv_next_site;
+    TextView tv_total_destance;
+    TextView tv_total_time;
+    TextView tv_arrive;
+    TextView tv_turn;
+
     private FlowPresenter presenter;
+
+    ZCOrder zcOrder;
 
     protected final List<NaviLatLng> sList = new ArrayList<>();
     protected final List<NaviLatLng> eList = new ArrayList<>();
@@ -95,7 +111,7 @@ public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener
             finish();
             return;
         }
-
+        findview();
         mAMapNaviView = findViewById(R.id.navi_view);
         mAMapNaviView.onCreate(savedInstanceState);
 
@@ -103,6 +119,20 @@ public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener
 
         presenter = new FlowPresenter(this, this);
         presenter.findOne(orderId);
+    }
+
+    public void findview() {
+        tv_destance = findViewById(R.id.tv_destance);
+        iv_close = findViewById(R.id.iv_close);
+        tv_next_site = findViewById(R.id.tv_next_site);
+        tv_total_destance = findViewById(R.id.tv_total_destance);
+        tv_total_time = findViewById(R.id.tv_total_time);
+        tv_arrive = findViewById(R.id.tv_arrive);
+        tv_turn = findViewById(R.id.tv_turn);
+    }
+
+    public void initListener() {
+
     }
 
 
@@ -235,7 +265,30 @@ public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener
 
     @Override
     public void onNaviInfoUpdate(NaviInfo naviInfo) {
+        showLeft(naviInfo.getPathRetainDistance(), naviInfo.getPathRetainTime());
+        naviInfo.getIconType();
+        naviInfo.getCurStepRetainDistance();
 
+        tv_destance.setText(naviInfo.getCurStepRetainDistance() + "米后");
+        tv_next_site.setText(naviInfo.getNextRoadName());
+
+        if (naviInfo.getIconType() == IconType.LEFT){
+            tv_turn.setText("左转");
+        }else if (naviInfo.getIconType() == IconType.RIGHT){
+            tv_turn.setText("右转");
+        }else if (naviInfo.getIconType() == IconType.LEFT_FRONT){
+            tv_turn.setText("左前方行驶");
+        }else if (naviInfo.getIconType() == IconType.RIGHT_FRONT){
+            tv_turn.setText("右前方行驶");
+        }else if (naviInfo.getIconType() == IconType.LEFT_BACK){
+            tv_turn.setText("左后方行驶");
+        }else if (naviInfo.getIconType() == IconType.RIGHT_BACK){
+            tv_turn.setText("右后方行驶");
+        }else if (naviInfo.getIconType() == IconType.LEFT_TURN_AROUND){
+            tv_turn.setText("左转掉头");
+        }else if (naviInfo.getIconType() == IconType.STRAIGHT){
+            tv_turn.setText("直行");
+        }
     }
 
     @Override
@@ -285,7 +338,7 @@ public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener
 
     @Override
     public void onCalculateRouteSuccess(int[] ints) {
-        XApp.getInstance().syntheticVoice("路径规划成功");
+
         //驾车导航
         mAMapNavi.startNavi(NaviType.GPS);
     }
@@ -419,15 +472,15 @@ public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener
 
     @Override
     public void showOrder(ZCOrder zcOrder) {
-        if (zcOrder == null){
+        if (zcOrder == null) {
             finish();
         }
+        this.zcOrder = zcOrder;
         NaviLatLng start = null;
         NaviLatLng end = null;
         if (zcOrder.orderStatus == ZCOrderStatus.NEW_ORDER
                 || zcOrder.orderStatus == ZCOrderStatus.PAIDAN_ORDER
-                || zcOrder.orderStatus == ZCOrderStatus.TAKE_ORDER
-                ) {
+                || zcOrder.orderStatus == ZCOrderStatus.TAKE_ORDER) {
             if (null != zcOrder.getStartSite()) {
                 start = new NaviLatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
                 end = new NaviLatLng(zcOrder.getStartSite().lat, zcOrder.getStartSite().lng);
@@ -446,6 +499,8 @@ public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener
                 start = new NaviLatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
                 end = new NaviLatLng(zcOrder.getEndSite().lat, zcOrder.getEndSite().lng);
             }
+        } else {
+            finish();
         }
 
         sList.add(start);
@@ -467,6 +522,8 @@ public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener
                 false);
 
         mAMapNavi.calculateDriveRoute(sList, eList, null, strateFlag);
+
+        setSliderText(zcOrder);
     }
 
     @Override
@@ -511,7 +568,77 @@ public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener
 
     @Override
     public void showLeft(int dis, int time) {
+        if (zcOrder.orderStatus == ZCOrderStatus.NEW_ORDER) {
+//            String disStr = getString(R.string.to_start_about);
+//            int km = dis / 1000;
+//            if (km >= 1) {
+//                String disKm = new DecimalFormat("#0.0").format((double) dis / 1000);
+//                disStr += "<font color='blue'><b><tt>" +
+//                        disKm + "</tt></b></font>" + getString(R.string.km);
+//            } else {
+//                disStr += getString(R.string.left) +
+//                        "<font color='blue'><b><tt>" +
+//                        dis + "</tt></b></font>"
+//                        + getString(R.string.meter);
+//            }
+//
+//            String timeStr;
+//            int hour = time / 60 / 60;
+//            int minute = time / 60;
+//            if (hour > 0) {
+//                timeStr = "<font color='blue'><b><tt>" +
+//                        hour +
+//                        "</tt></b></font>"
+//                        + getString(R.string.hour_) +
+//                        "<font color='black'><b><tt>" +
+//                        time / 60 % 60 +
+//                        "</tt></b></font>" +
+//                        getString(R.string.minute_);
+//            } else {
+//                timeStr = "<font color='blue'><b><tt>" +
+//                        minute +
+//                        "</tt></b></font>" +
+//                        getString(R.string.minute_);
+//            }
+//            left_time.setText(Html.fromHtml(disStr + timeStr));
+        } else {
+            String disStr;
+            int km = dis / 1000;
+            if (km >= 1) {
+                String disKm = new DecimalFormat("#0.0").format((double) dis / 1000);
+                disStr = getString(R.string.left) +
+                        "<font color='white'><b><tt>" +
+                        disKm + "</tt></b></font>" + getString(R.string.km);
+            } else {
+                disStr = getString(R.string.left) +
+                        "<font color='white'><b><tt>" +
+                        dis + "</tt></b></font>"
+                        + getString(R.string.meter);
+            }
+            tv_total_destance.setText(Html.fromHtml(disStr));
 
+            String timeStr;
+            int hour = time / 60 / 60;
+            int minute = time / 60;
+            if (hour > 0) {
+                timeStr = getString(R.string.about_) +
+                        "<font color='white'><b><tt>" +
+                        hour +
+                        "</tt></b></font>"
+                        + getString(R.string.hour_) +
+                        "<font color='white'><b><tt>" +
+                        time / 60 % 60 +
+                        "</tt></b></font>" +
+                        getString(R.string.minute_);
+            } else {
+                timeStr = getString(R.string.about_) +
+                        "<font color='white'><b><tt>" +
+                        minute +
+                        "</tt></b></font>" +
+                        getString(R.string.minute_);
+            }
+            tv_total_time.setText(Html.fromHtml(timeStr));
+        }
     }
 
     @Override
@@ -543,10 +670,18 @@ public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener
     /**
      * 设置滑动按钮文字及其监听
      */
-    public void setSliderText(ZCOrder zcOrder){
+    public void setSliderText(ZCOrder zcOrder) {
         if (zcOrder.orderStatus == DJOrderStatus.NEW_ORDER ||
-            zcOrder.orderStatus == DJOrderStatus.PAIDAN_ORDER  ){
-
+                zcOrder.orderStatus == DJOrderStatus.PAIDAN_ORDER) {
+            slider.setHint("滑动接单");
+        } else if (zcOrder.orderStatus == DJOrderStatus.TAKE_ORDER) {
+            slider.setHint("滑动前往预约地");
+        } else if (zcOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) {
+            slider.setHint("滑动到达预约地");
+        } else if (zcOrder.orderStatus == DJOrderStatus.ARRIVAL_BOOKPLACE_ORDER) {
+            slider.setHint("滑动出发");
+        } else if (zcOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
+            slider.setHint("滑动到达目的地");
         }
 
         slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
@@ -557,7 +692,19 @@ public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener
 
             @Override
             public void onUnlocked() {
-
+                if (zcOrder.orderStatus == DJOrderStatus.NEW_ORDER ||
+                        zcOrder.orderStatus == DJOrderStatus.PAIDAN_ORDER) {
+                    presenter.acceptOrder(zcOrder.orderId, zcOrder.version, null);
+                } else if (zcOrder.orderStatus == DJOrderStatus.TAKE_ORDER) {
+                    presenter.toStart(zcOrder.orderId, zcOrder.version, null);
+                } else if (zcOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) {
+                    presenter.arriveStart(zcOrder.orderId, zcOrder.version);
+                } else if (zcOrder.orderStatus == DJOrderStatus.ARRIVAL_BOOKPLACE_ORDER) {
+                    presenter.startDrive(zcOrder.orderId, zcOrder.version);
+                } else if (zcOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
+                    presenter.arriveDes(zcOrder, zcOrder.version, null, DymOrder.findByIDType(zcOrder.orderId, zcOrder.orderType));
+                }
+                resetView();
             }
         });
     }
@@ -571,12 +718,11 @@ public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener
      * 重置slider
      */
     private void resetView() {
-        slider.setVisibility(View.GONE);
-
         handler.postDelayed(() -> runOnUiThread(() -> {
             slider.resetView();
             slider.setVisibility(View.VISIBLE);
         }), 1000);
         //防止卡顿
     }
+
 }

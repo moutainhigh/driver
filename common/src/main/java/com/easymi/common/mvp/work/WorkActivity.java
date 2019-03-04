@@ -323,9 +323,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
             ARouter.getInstance()
                     .build("/personal/MoreActivity")
                     .navigation();
-//            ARouter.getInstance()
-//                    .build("/custombus/CbRunActivity")
-//                    .navigation();
         });
     }
 
@@ -855,7 +852,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         swipeRefreshLayout.setRefreshing(true);
         presenter.indexOrders();
     }
-
 
     /**
      * 获取配置信息

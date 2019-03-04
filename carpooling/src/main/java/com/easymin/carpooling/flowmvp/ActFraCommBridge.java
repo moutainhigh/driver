@@ -2,6 +2,7 @@ package com.easymin.carpooling.flowmvp;
 
 
 import com.amap.api.maps.model.LatLng;
+import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.common.entity.OrderCustomer;
 
 import java.util.List;
@@ -101,34 +102,40 @@ public interface ActFraCommBridge {
     void startOutSet();
 
     /**
-     * 到达预约地
-     * @param orderCustomer
+     * 前往预约地
+     * @param carpoolOrder
      */
-    void arriveStart(OrderCustomer orderCustomer);
+    void gotoStart(CarpoolOrder carpoolOrder);
+
+    /**
+     * 到达预约地
+     * @param carpoolOrder
+     */
+    void arriveStart(CarpoolOrder carpoolOrder);
 
     /**
      * 接到客户
-     * @param orderCustomer
+     * @param carpoolOrder
      */
-    void acceptCustomer(OrderCustomer orderCustomer);
+    void acceptCustomer(CarpoolOrder carpoolOrder);
 
     /**
      * 跳过接客户
-     * @param orderCustomer
+     * @param carpoolOrder
      */
-    void jumpAccept(OrderCustomer orderCustomer);
+    void jumpAccept(CarpoolOrder carpoolOrder);
 
     /**
      * 到达终点
-     * @param orderCustomer
+     * @param carpoolOrder
      */
-    void arriveEnd(OrderCustomer orderCustomer);
+    void arriveEnd(CarpoolOrder carpoolOrder);
 
     /**
      * 跳过送客户
-     * @param orderCustomer
+     * @param carpoolOrder
      */
-    void jumpSend(OrderCustomer orderCustomer);
+    void jumpSend(CarpoolOrder carpoolOrder);
 
     /**
      * 刷新地图，定位当前位置

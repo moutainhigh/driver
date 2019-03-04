@@ -32,7 +32,6 @@ android {
             v1SigningEnabled true
             v2SigningEnabled true
         }
-
     }
 
     buildTypes {
@@ -60,7 +59,6 @@ dependencies {
     implementation rootProject.ext.appcompat
     implementation rootProject.ext.design
     implementation project(path: ':personal')
-//    implementation project(path: ':daijia')
     implementation project(path: ':zhuanche')
     implementation project(path: ':daemon')
     implementation project(path: ':component')

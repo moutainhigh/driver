@@ -12,6 +12,7 @@ import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.TimeUtil;
 import com.easymin.carpooling.R;
 import com.easymin.carpooling.StaticVal;
+import com.easymin.carpooling.entity.PincheOrder;
 import com.easymin.carpooling.flowmvp.ActFraCommBridge;
 
 import java.util.ArrayList;
@@ -35,10 +36,10 @@ public class NotStartFragment extends RxBaseFragment {
     TextView startJierenTime;
     TextView timeCountDown;
     Button bottomBtn;
-//    /**
-//     * 专线班次
-//     */
-//    ZXOrder zxOrder;
+    /**
+     * 专线班次
+     */
+    PincheOrder pincheOrder;
 
     /**
      * 通信接口
@@ -56,7 +57,7 @@ public class NotStartFragment extends RxBaseFragment {
     @Override
     public void setArguments(Bundle args) {
         super.setArguments(args);
-//        zxOrder = (ZXOrder) args.getSerializable("zxOrder");
+        pincheOrder = (PincheOrder) args.getSerializable("pincheOrder");
     }
 
     @Override
@@ -73,10 +74,10 @@ public class NotStartFragment extends RxBaseFragment {
         timeCountDown = $(R.id.time_count_down);
         bottomBtn = $(R.id.bottom_btn);
 
-//        startSite.setText(zxOrder.startSite);
-//        endSite.setText(zxOrder.endSite);
-//        startOutTime.setText(TimeUtil.getTime("yyyy年MM月dd日 HH:mm", zxOrder.startOutTime) + "出发");
-//        startJierenTime.setText(TimeUtil.getTime("HH:mm", zxOrder.startJierenTime) + "开始接人");
+        startSite.setText(pincheOrder.startAddress);
+        endSite.setText(pincheOrder.endAddress);
+        startOutTime.setText(TimeUtil.getTime("yyyy年MM月dd日 HH:mm", pincheOrder.bookTime) + "出发");
+        startJierenTime.setText(TimeUtil.getTime("HH:mm", pincheOrder.startJierenTime) + "开始接人");
         initCountDown();
 
         onHiddenChanged(false);
@@ -85,23 +86,23 @@ public class NotStartFragment extends RxBaseFragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-//        if (!hidden) {
-//            bridge.clearMap();
-//            LatLng startLatlng = new LatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
-//            LatLng middle = new LatLng(zxOrder.startLat, zxOrder.startLng);
-//            LatLng endLatlng = new LatLng(zxOrder.endLat, zxOrder.endLng);
-//            bridge.addMarker(startLatlng, StaticVal.MARKER_FLAG_START);
-//            bridge.addMarker(endLatlng, StaticVal.MARKER_FLAG_END);
-//            List<LatLng> latLngs = new ArrayList<>();
-//            latLngs.add(middle);
-//            bridge.routePath(startLatlng, latLngs, endLatlng);
-//            latLngs.add(startLatlng);
-//            latLngs.add(endLatlng);
-//
-//            bridge.showBounds(latLngs);
-//            bridge.changeToolbar(StaticVal.TOOLBAR_NOT_START);
-//
-//        }
+        if (!hidden) {
+            bridge.clearMap();
+            LatLng startLatlng = new LatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
+            LatLng middle = new LatLng(pincheOrder.startLatitude, pincheOrder.startLongitude);
+            LatLng endLatlng = new LatLng(pincheOrder.endLatitude, pincheOrder.endLongitude);
+            bridge.addMarker(middle, StaticVal.MARKER_FLAG_START);
+            bridge.addMarker(endLatlng, StaticVal.MARKER_FLAG_END);
+            List<LatLng> latLngs = new ArrayList<>();
+            latLngs.add(middle);
+            bridge.routePath(startLatlng, latLngs, endLatlng);
+            latLngs.add(startLatlng);
+            latLngs.add(endLatlng);
+
+            bridge.showBounds(latLngs);
+            bridge.changeToolbar(StaticVal.TOOLBAR_NOT_START);
+
+        }
     }
 
     long jieRenTimeLeftSec;
@@ -118,38 +119,38 @@ public class NotStartFragment extends RxBaseFragment {
     private void initCountDown() {
         cancelTimer();
         //剩余的秒钟数
-//        jieRenTimeLeftSec = (zxOrder.startJierenTime - System.currentTimeMillis()) / 1000;
-//        if (jieRenTimeLeftSec < 0) {
-//            jieRenTimeLeftSec = 0;
-//        }
-//
-//        setLeftText(jieRenTimeLeftSec);
-//
-//        if (jieRenTimeLeftSec > 0) {
-//            timer = new Timer();
-//            timerTask = new TimerTask() {
-//                @Override
-//                public void run() {
-//                    jieRenTimeLeftSec--;
-//                    long sec = jieRenTimeLeftSec % (60 * 60 * 24);
-//                    if (sec != 0) {
-//                        return;//整分才往下走
-//                    }
-//                    getActivity().runOnUiThread(() -> {
-//                        setLeftText(jieRenTimeLeftSec);
-//                        if (jieRenTimeLeftSec <= 0) {
-//                            bridge.countStartOver();
-//                            timer.cancel();
-//                            timer = null;
-//                            timerTask.cancel();
-//                            timerTask = null;
-//                        }
-//                    });
-//
-//                }
-//            };
-//            timer.schedule(timerTask, 0, 1000);
-//        }
+        jieRenTimeLeftSec = (pincheOrder.startJierenTime - System.currentTimeMillis()) / 1000;
+        if (jieRenTimeLeftSec < 0) {
+            jieRenTimeLeftSec = 0;
+        }
+
+        setLeftText(jieRenTimeLeftSec);
+
+        if (jieRenTimeLeftSec > 0) {
+            timer = new Timer();
+            timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    jieRenTimeLeftSec--;
+                    long sec = jieRenTimeLeftSec % (60 * 60 * 24);
+                    if (sec != 0) {
+                        return;//整分才往下走
+                    }
+                    getActivity().runOnUiThread(() -> {
+                        setLeftText(jieRenTimeLeftSec);
+                        if (jieRenTimeLeftSec <= 0) {
+                            bridge.countStartOver();
+                            timer.cancel();
+                            timer = null;
+                            timerTask.cancel();
+                            timerTask = null;
+                        }
+                    });
+
+                }
+            };
+            timer.schedule(timerTask, 0, 1000);
+        }
     }
 
     /**
@@ -208,14 +209,14 @@ public class NotStartFragment extends RxBaseFragment {
             bottomBtn.setOnClickListener(view -> bridge.toChangeSeq(StaticVal.PLAN_ACCEPT));
         } else {
             bottomBtn.setText("行程规划");
-//            bottomBtn.setOnClickListener(view -> {
-//                DymOrder dymOrder = DymOrder.findByIDType(zxOrder.orderId, zxOrder.orderType);
-//                if (null != dymOrder) {
-//                    dymOrder.orderStatus = ZXOrderStatus.ACCEPT_PLAN;
-//                    dymOrder.updateStatus();
-//                }
-//                bridge.toChangeSeq(StaticVal.PLAN_ACCEPT);
-//            });
+            bottomBtn.setOnClickListener(view -> {
+                DymOrder dymOrder = DymOrder.findByIDType(pincheOrder.orderId, pincheOrder.orderType);
+                if (null != dymOrder) {
+                    dymOrder.orderStatus = ZXOrderStatus.ACCEPT_PLAN;
+                    dymOrder.updateStatus();
+                }
+                bridge.toChangeSeq(StaticVal.PLAN_ACCEPT);
+            });
         }
     }
 }

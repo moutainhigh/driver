@@ -18,29 +18,38 @@
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:paddingTop="15dp"
-            android:paddingLeft="15dp">
+            android:paddingLeft="15dp"
+            android:weightSum="2">
 
             <TextView
                 android:id="@+id/start_site"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="安岳站"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:gravity="center"
                 android:textSize="18sp"
                 android:textColor="@color/black"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/ic_zx_right_cheft"
+                android:src="@mipmap/ic_cp_right_cheft"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"/>
 
             <TextView
                 android:id="@+id/end_site"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="绵阳北站"
+                android:gravity="center"
+                android:singleLine="true"
+                android:ellipsize="marquee"
                 android:textSize="18sp"
                 android:textColor="@color/black"
                 android:textStyle="bold"/>

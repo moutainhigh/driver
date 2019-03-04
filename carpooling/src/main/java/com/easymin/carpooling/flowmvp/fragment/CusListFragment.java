@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Button;
 
+import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.common.entity.OrderCustomer;
 import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.entity.DymOrder;
@@ -41,7 +42,7 @@ public class CusListFragment extends RxBaseFragment {
     /**
      * 客户数据集
      */
-    private List<OrderCustomer> orderCustomerList;
+    private List<CarpoolOrder> carpoolOrderList;
 
     /**
      * 本地数据库订单数据
@@ -126,10 +127,10 @@ public class CusListFragment extends RxBaseFragment {
      */
     private void showList() {
         if (flag == StaticVal.PLAN_ACCEPT) {
-            orderCustomerList = OrderCustomer.findByIDTypeOrderByAcceptSeq(orderId, orderType);
+            carpoolOrderList = CarpoolOrder.findByIDTypeOrderByAcceptSeq(orderId, orderType);
         } else {
-            orderCustomerList = OrderCustomer.findByIDTypeOrderBySendSeq(orderId, orderType);
+            carpoolOrderList = CarpoolOrder.findByIDTypeOrderBySendSeq(orderId, orderType);
         }
-        cusListAdapter.setOrderCustomers(orderCustomerList);
+        cusListAdapter.setOrderCustomers(carpoolOrderList);
     }
 }

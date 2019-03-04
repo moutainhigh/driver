@@ -80,7 +80,8 @@ public class OrderActivity extends RxBaseActivity {
     private void initTabLayout() {
         fragments = new ArrayList<>();
         fragments.add(new AccpteFragment());
-        if (!EmUtil.getEmployInfo().serviceType.equals(Config.CITY_LINE)){
+        if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)
+                ||EmUtil.getEmployInfo().serviceType.equals(Config.TAXI)){
             fragments.add(new AssignFragment());
         }
 
@@ -98,7 +99,8 @@ public class OrderActivity extends RxBaseActivity {
 //            tabLayout.getTabAt(1).setText(getString(R.string.com_assign_order));
 //            tabLayout.getTabAt(2).setText(getString(R.string.com_grab_order));
 //        }else {
-        if (!EmUtil.getEmployInfo().serviceType.equals(Config.CITY_LINE)){
+        if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)
+                ||EmUtil.getEmployInfo().serviceType.equals(Config.TAXI)){
             tabLayout.getTabAt(1).setText(getString(R.string.com_assign_order));
         }
 //        }

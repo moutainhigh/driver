@@ -231,11 +231,13 @@ public class FlowActivity extends RxBaseActivity implements
                 orderCustomer.orderType = zxOrder.orderType;
 
                 for (OrderCustomer.OrderAddressVo orderAddressVo : orderCustomer.orderAddressVos) {
-                    if (orderAddressVo.type == 1) { //起点
+                    if (orderAddressVo.type == 1) {
+                        //起点
                         orderCustomer.startAddr = orderAddressVo.address;
                         orderCustomer.startLat = orderAddressVo.latitude;
                         orderCustomer.startLng = orderAddressVo.longitude;
-                    } else { //终点
+                    } else {
+                        //终点
                         orderCustomer.endAddr = orderAddressVo.address;
                         orderCustomer.endLat = orderAddressVo.latitude;
                         orderCustomer.endLng = orderAddressVo.longitude;

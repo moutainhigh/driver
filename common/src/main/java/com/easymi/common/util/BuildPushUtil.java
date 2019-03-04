@@ -1,6 +1,7 @@
 package com.easymi.common.util;
 
 import com.easymi.common.entity.BuildPushData;
+import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.common.entity.OrderCustomer;
 import com.easymi.common.entity.PushBean;
 import com.easymi.common.entity.PushData;
@@ -100,6 +101,19 @@ public class BuildPushUtil {
 
                         dataOrder.business = orderCustomer.orderType;
                         dataOrder.passengerId = orderCustomer.customerId;
+                    }
+                    orderList.add(dataOrder);
+                }
+            }else if (dymOrder.orderType.equals(Config.CARPOOL)){
+                if (dymOrder.orderStatus >= 10 && dymOrder.orderStatus <= 30){
+                    for (CarpoolOrder carpoolOrder : CarpoolOrder.findByIDTypeOrderByAcceptSeq(dymOrder.orderId, dymOrder.orderType)) {
+                        dataOrder.orderId = carpoolOrder.id;
+                        dataOrder.orderType = carpoolOrder.orderType;
+
+                        dataOrder.business = carpoolOrder.orderType;
+                        dataOrder.passengerId = carpoolOrder.passengerId;
+
+                        dataOrder.status = carpoolOrder.status;
                     }
                     orderList.add(dataOrder);
                 }

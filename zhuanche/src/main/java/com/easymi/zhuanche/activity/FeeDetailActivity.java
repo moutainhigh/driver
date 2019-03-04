@@ -135,7 +135,7 @@ public class FeeDetailActivity extends RxBaseActivity {
         }
 
 
-        height_fee_title.setText("高峰费(" + dymOrder.peakMile + "公里)");
+        height_fee_title.setText("高峰费(" + new DecimalFormat("#0.00").format(dymOrder.peakMile/1000) + "公里)");
         height_pay_fee.setText(dymOrder.peakCost + getString(R.string.yuan));
 
         night_fee_title.setText("夜间里程费(" + dymOrder.nightMile + "公里)");

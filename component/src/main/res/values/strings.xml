@@ -88,4 +88,18 @@
     <string name="unknown_site">未知位置</string>
 
     <string name="rsa_public_key">MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCCaYfJgPjUXWXoifblGGZSFPsP1JYe758iLuRYUNS06MyAwuM+nlM6lC5QbnCOkj5khslbcMvT0+MtoSpe+neGI+oEKU/p203ENqD+I2PxjfTu7AZc+C2Ccw48PlTNVqH/juyhg4Cch7eETPclCdR4XPqO5lI9voDgjvTR/FhJXwIDAQAB</string>
+
+
+    <!--城际拼车状态-->
+    <string name="carpool_status_pay">未支付</string>
+    <string name="carpool_status_new">未指派</string>
+    <string name="carpool_status_assign">已指派</string>
+    <string name="carpool_status_start">前往预约地</string>
+    <string name="carpool_status_arrived">到达预约地</string>
+    <string name="carpool_status_running">行程中</string>
+    <string name="carpool_status_finish">到达目的地</string>
+    <string name="carpool_status_skip">已跳过</string>
+    <string name="carpool_status_review">已评价</string>
+    <string name="carpool_status_cancel">已取消</string>
+
 </resources>

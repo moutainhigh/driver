@@ -61,7 +61,8 @@ import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: FinishActivity
- *@Author: shine
+ *
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -146,11 +147,12 @@ public class WorkPresenter implements WorkContract.Presenter {
                                     dymOrder.id = order.id;
                                     dymOrder.saveOrUpdate();
                                 }
-                            } else if (TextUtils.equals(order.serviceType, Config.CITY_LINE)) {
+                            } else if (TextUtils.equals(order.serviceType, Config.CITY_LINE)
+                                       || TextUtils.equals(order.serviceType, Config.CARPOOL)) {
                                 if (DymOrder.exists(order.scheduleId, order.serviceType)) {
                                     //专线 本地有 状态同步
                                     dymOrder = DymOrder.findByIDType(order.scheduleId, order.serviceType);
-                                    if (order.scheduleStatus <= BaseOrder.SCHEDULE_STATUS_PREPARE) {
+                                    if (order.scheduleStatus <= BaseOrder.SCHEDULE_STATUS_NEW) {
                                         dymOrder.orderStatus = ZXOrderStatus.WAIT_START;
                                     } else if (order.scheduleStatus == BaseOrder.SCHEDULE_STATUS_TAKE) {
                                         dymOrder.orderStatus = ZXOrderStatus.ACCEPT_ING;
@@ -178,7 +180,8 @@ public class WorkPresenter implements WorkContract.Presenter {
                         for (DymOrder dymOrder : allDym) {
                             boolean isExist = false;
                             for (MultipleOrder order : orders) {
-                                if (dymOrder.orderType.equals(Config.CITY_LINE)) {
+                                if (dymOrder.orderType.equals(Config.CITY_LINE)
+                                     ||dymOrder.orderType.equals(Config.CARPOOL)) {
                                     if ((dymOrder.orderId == order.scheduleId)) {
                                         isExist = true;
                                         break;
@@ -231,11 +234,11 @@ public class WorkPresenter implements WorkContract.Presenter {
         Observable<EmResult> observable = model.online(driverId, EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, btn, emResult -> {
             //一键报警 上线
-            CenterUtil centerUtil = new CenterUtil(context,Config.APP_KEY,
+            CenterUtil centerUtil = new CenterUtil(context, Config.APP_KEY,
                     XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
                     XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
-            centerUtil.driverUp(driverId,EmUtil.getEmployInfo().companyId,EmUtil.getEmployInfo().userName,EmUtil.getEmployInfo().realName,
-                    EmUtil.getEmployInfo().phone,System.currentTimeMillis()/1000,EmUtil.getEmployInfo().serviceType);
+            centerUtil.driverUp(driverId, EmUtil.getEmployInfo().companyId, EmUtil.getEmployInfo().userName, EmUtil.getEmployInfo().realName,
+                    EmUtil.getEmployInfo().phone, System.currentTimeMillis() / 1000, EmUtil.getEmployInfo().serviceType);
 
             view.onlineSuc();
             XApp.getPreferencesEditor().putLong(Config.ONLINE_TIME, System.currentTimeMillis()).apply();
@@ -251,11 +254,11 @@ public class WorkPresenter implements WorkContract.Presenter {
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, true,
                 true, emResult -> {
             //一键报警  下线
-            CenterUtil centerUtil = new CenterUtil(context,Config.APP_KEY,
+            CenterUtil centerUtil = new CenterUtil(context, Config.APP_KEY,
                     XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
                     XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
-            centerUtil.driverDown(driverId,EmUtil.getEmployInfo().companyId,EmUtil.getEmployInfo().userName,EmUtil.getEmployInfo().realName,
-                    EmUtil.getEmployInfo().phone,System.currentTimeMillis()/1000,EmUtil.getEmployInfo().serviceType);
+            centerUtil.driverDown(driverId, EmUtil.getEmployInfo().companyId, EmUtil.getEmployInfo().userName, EmUtil.getEmployInfo().realName,
+                    EmUtil.getEmployInfo().phone, System.currentTimeMillis() / 1000, EmUtil.getEmployInfo().serviceType);
 
             view.offlineSuc();
             XApp.getPreferencesEditor().putLong(Config.ONLINE_TIME, 0).apply();

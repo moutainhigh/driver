@@ -21,6 +21,7 @@ import com.easymi.common.result.SystemResult;
 import com.easymi.common.result.VehicleResult;
 import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.result.EmResult;
+import com.easymi.component.result.EmResult2;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -548,4 +549,16 @@ public interface CommApiService {
      */
     @GET("api/v1/public/driver/app")
     Observable<SettingResult> getAppSetting();
+
+
+    /**
+     * 班次结束
+     *
+     * @param scheduleId
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/api/v1/carpool/driver/schedule/finishSchedule")
+    Observable<EmResult2<Object>> finishTask(
+            @Field("scheduleId") long scheduleId);
 }

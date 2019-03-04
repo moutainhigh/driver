@@ -31,6 +31,8 @@
     <string name="create_chartered">定制包车</string>
     <string name="create_rental">包车租车</string>
     <string name="create_bus_country">客运班车</string>
+    <string name="create_custombus">定制班车</string>
+    <string name="create_carpool">城际拼车</string>
 
     <string name="hint">提示</string>
     <string name="sure">确定</string>
@@ -216,4 +218,7 @@
 
     <string name="empty_text"></string>
     <string name="com_no_read">全部都已读了哦</string>
+
+
+
 </resources>

@@ -38,7 +38,7 @@ public class BaseOrder implements Serializable {
     public int status;
 
     /**
-     * 班次id  专线特有
+     * 班次id  专线、拼车特有
      */
     public long scheduleId;
 
@@ -226,11 +226,6 @@ public class BaseOrder implements Serializable {
      */
     public double endLongitude;
 
-//    /**
-//     * 班次ID
-//     */
-//    private Long scheduleId;
-
     /**
      * 线路ID
      */
@@ -276,37 +271,26 @@ public class BaseOrder implements Serializable {
      */
     public String avatar;
 
-//    /**
-//     * 班次状态
-//     */
-//    private Integer scheduleStatus;
 
-    /**
-     * 售票中
-     */
-    public static final int SCHEDULE_STATUS_SALE = 1;
     /**
      * 等待行程开始
      */
-    public static final int SCHEDULE_STATUS_PREPARE = 5;
+    public static final int SCHEDULE_STATUS_NEW = 1;
     /**
      * 司机接人
      */
-    public static final int SCHEDULE_STATUS_TAKE = 10;
+    public static final int SCHEDULE_STATUS_TAKE = 5;
     /**
      * 司机送人
      */
-    public static final int SCHEDULE_STATUS_RUN = 15;
+    public static final int SCHEDULE_STATUS_RUN = 10;
     /**
      * 已结束
      */
-    public static final int SCHEDULE_STATUS_FINISH = 20;
-
+    public static final int SCHEDULE_STATUS_FINISH = 15;
 
     public String getZXOrderStatusStr() {
-        if (scheduleStatus == SCHEDULE_STATUS_SALE) {
-            return "售票中";
-        } else if (scheduleStatus == SCHEDULE_STATUS_PREPARE) {
+        if (scheduleStatus == SCHEDULE_STATUS_NEW) {
             return "未开始";
         } else if (scheduleStatus == SCHEDULE_STATUS_TAKE) {
             return "正在接人";

@@ -14,6 +14,7 @@ import com.amap.api.maps.model.LatLng;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.common.entity.OrderCustomer;
 import com.easymi.component.Config;
 import com.easymi.component.ZXOrderStatus;
@@ -69,7 +70,7 @@ public class AcceptSendFragment extends RxBaseFragment {
     /**
      * 专线订单集
      */
-    List<OrderCustomer> orderCustomers;
+    List<CarpoolOrder> carpoolOrders;
 
     /**
      * 本地数据库动态订单信息
@@ -84,7 +85,7 @@ public class AcceptSendFragment extends RxBaseFragment {
     /**
      * 当前order
      */
-    private OrderCustomer current;
+    private CarpoolOrder current;
 
     /**
      * 设置bridge
@@ -173,26 +174,45 @@ public class AcceptSendFragment extends RxBaseFragment {
         dymOrder = DymOrder.findByIDType(orderId, orderType);
 
         if (dymOrder.orderStatus == ZXOrderStatus.ACCEPT_ING) {
-            orderCustomers = OrderCustomer.findByIDTypeOrderByAcceptSeq(orderId, orderType);
+            carpoolOrders = CarpoolOrder.findByIDTypeOrderByAcceptSeq(orderId, orderType);
         } else {
-            orderCustomers = OrderCustomer.findByIDTypeOrderBySendSeq(orderId, orderType);
+            carpoolOrders = CarpoolOrder.findByIDTypeOrderBySendSeq(orderId, orderType);
         }
-        Iterator iterator = orderCustomers.iterator();
+        Iterator iterator = carpoolOrders.iterator();
         while (iterator.hasNext()) {
-            OrderCustomer orderCustomer = (OrderCustomer) iterator.next();
-            if (orderCustomer.status != 0
+            CarpoolOrder carpoolOrder = (CarpoolOrder) iterator.next();
+            if (carpoolOrder.customeStatus != 0
                     && dymOrder.orderStatus == ZXOrderStatus.ACCEPT_ING) {//还在接人时，移除所有非0
                 iterator.remove();
-            } else if (orderCustomer.status != 3
+            } else if (carpoolOrder.customeStatus != 3
                     && dymOrder.orderStatus == ZXOrderStatus.SEND_ING) { //还在送人时，移除所有非3
                 iterator.remove();
             }
         }
-        if (orderCustomers.size() != 0) {
-            current = orderCustomers.get(0);
-            if (current.status == 0) {
+        if (carpoolOrders.size() != 0) {
+            current = carpoolOrders.get(0);
+            if (current.customeStatus == 0) {
                 //未接
                 if (current.subStatus == 0) {
+                    countTimeCon.setVisibility(View.GONE);
+                    sliderCon.setVisibility(View.VISIBLE);
+                    chaoshiCon.setVisibility(View.GONE);
+                    back.setVisibility(View.GONE);
+                    slider.setHint("滑动前往预约地");
+                    slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
+                        @Override
+                        public void onSlide(int distance) {
+
+                        }
+
+                        @Override
+                        public void onUnlocked() {
+                            bridge.gotoStart(current);
+                            resetView();
+                        }
+                    });
+
+                }else if (current.subStatus == 1) {
                     //未到达预约地
                     countTimeCon.setVisibility(View.GONE);
                     sliderCon.setVisibility(View.VISIBLE);
@@ -211,7 +231,7 @@ public class AcceptSendFragment extends RxBaseFragment {
                             resetView();
                         }
                     });
-                } else {
+                } else if (current.subStatus == 2){
                     countTimeCon.setVisibility(View.VISIBLE);
                     sliderCon.setVisibility(View.GONE);
                     chaoshiCon.setVisibility(View.GONE);
@@ -231,8 +251,8 @@ public class AcceptSendFragment extends RxBaseFragment {
                     });
                     initTimer(current);
                 }
-                showInMap(new LatLng(current.startLat, current.startLng), StaticVal.MARKER_FLAG_START);
-            } else if (current.status == 3) {
+                showInMap(new LatLng(current.startLat, current.startLng), StaticVal.MARKER_FLAG_END);
+            } else if (current.customeStatus == 3) {
                 countTimeCon.setVisibility(View.GONE);
                 sliderCon.setVisibility(View.VISIBLE);
                 chaoshiCon.setVisibility(View.GONE);
@@ -259,28 +279,28 @@ public class AcceptSendFragment extends RxBaseFragment {
                     .placeholder(R.mipmap.photo_default)
                     .diskCacheStrategy(DiskCacheStrategy.ALL);
             Glide.with(getActivity())
-                    .load(Config.IMG_SERVER + current.photo + Config.IMG_PATH)
+                    .load(Config.IMG_SERVER + current.avatar + Config.IMG_PATH)
                     .apply(options)
                     .into(customerPhoto);
 
-            callPhone.setOnClickListener(view -> PhoneUtil.call(getActivity(), current.phone));
+            callPhone.setOnClickListener(view -> PhoneUtil.call(getActivity(), current.passengerPhone));
 
-            customerName.setText(current.name);
+            customerName.setText(current.passengerName);
             String weihao;
-            if (current.phone != null && current.phone.length() > 4) {
-                weihao = current.phone.substring(current.phone.length() - 4, current.phone.length());
+            if (current.passengerPhone != null && current.passengerPhone.length() > 4) {
+                weihao = current.passengerPhone.substring(current.passengerPhone.length() - 4, current.passengerPhone.length());
             } else {
-                weihao = current.phone;
+                weihao = current.passengerPhone;
             }
             customerPhone.setText("手机尾号：" + weihao);
 
-            toPlace.setText(current.status < 3 ? current.startAddr : current.endAddr);
+            toPlace.setText(current.customeStatus < 3 ? current.startAddr : current.endAddr);
         }
 
         bridge.changeToolbar(StaticVal.TOOLBAR_FLOW);
 
         naviBtn.setOnClickListener(view -> {
-            if (current.status == 0) {
+            if (current.customeStatus == 0) {
                 bridge.navi(new LatLng(current.startLat, current.startLng), orderId);
             } else {
                 bridge.navi(new LatLng(current.endLat, current.endLng), orderId);
@@ -315,9 +335,9 @@ public class AcceptSendFragment extends RxBaseFragment {
 
     /**
      * 根据订单信息设置等待倒计时
-     * @param orderCustomer
+     * @param carpoolOrder
      */
-    private void initTimer(OrderCustomer orderCustomer) {
+    private void initTimer(CarpoolOrder carpoolOrder) {
         if (null != timer) {
             timer.cancel();
             timer = null;
@@ -326,7 +346,7 @@ public class AcceptSendFragment extends RxBaseFragment {
             timerTask.cancel();
             timerTask = null;
         }
-        long appoint = orderCustomer.appointTime;
+        long appoint = carpoolOrder.bookTime;
         timeSeq = (appoint - System.currentTimeMillis()) / 1000;
         timer = new Timer();
         timerTask = new TimerTask() {
@@ -424,7 +444,7 @@ public class AcceptSendFragment extends RxBaseFragment {
      * 获取当前的订单
      * @return
      */
-    public OrderCustomer getCurrent() {
+    public CarpoolOrder getCurrent() {
         return current;
     }
 
@@ -440,10 +460,10 @@ public class AcceptSendFragment extends RxBaseFragment {
     public void showLeft(int dis) {
         if (!speakedHint && dis < 200) {
             //小于200米
-            if (current.status == 0) {
+            if (current.customeStatus == 0) {
                 XApp.getInstance().syntheticVoice("距离上车点还有" + dis + "米");
                 XApp.getInstance().shake();
-            } else if (current.status == 3) {
+            } else if (current.customeStatus == 3) {
                 XApp.getInstance().syntheticVoice("距离下车点还有" + dis + "米");
                 XApp.getInstance().shake();
             }

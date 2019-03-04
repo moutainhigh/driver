@@ -83,7 +83,7 @@ public class ZXOrder implements Serializable {
 
     //线路Id
     public long lineId;
-    //线路Id
+    //线路
     public String lineName;
 
     //剩余票数

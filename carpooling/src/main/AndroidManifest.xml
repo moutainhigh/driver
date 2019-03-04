@@ -1,2 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.easymin.carpooling" />
+    package="com.easymin.carpooling" >
+
+    <application>
+
+        <activity
+            android:name=".flowmvp.FlowActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSwipeBack" />
+
+    </application>
+</manifest>

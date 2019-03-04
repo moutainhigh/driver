@@ -33,13 +33,17 @@ public class LoadingBtnHandler extends Handler {
         super.handleMessage(msg);
         switch (msg.what) {
             case SHOW_BTN_LOADING:
-                loadingButton.setClickable(false);
-                loadingButton.setStatus(LoadingButton.STATUS_LOADING);
+                if (loadingButton != null){
+                    loadingButton.setClickable(false);
+                    loadingButton.setStatus(LoadingButton.STATUS_LOADING);
+                }
                 break;
 
             case HIDE_BTN_LOADING:
-                loadingButton.setClickable(true);
-                loadingButton.setStatus(LoadingButton.STATUS_NORMAL);
+                if (loadingButton != null){
+                    loadingButton.setClickable(true);
+                    loadingButton.setStatus(LoadingButton.STATUS_NORMAL);
+                }
                 if (null != progressDismissListener) {
                     progressDismissListener.onProgressDismiss();
                 }

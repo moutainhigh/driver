@@ -9,7 +9,7 @@ import android.view.MotionEvent;
 import android.widget.TextView;
 
 import com.amap.api.maps.model.LatLng;
-import com.easymi.common.entity.OrderCustomer;
+import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.component.ZXOrderStatus;
 import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.entity.DymOrder;
@@ -55,7 +55,7 @@ public class ChangeSeqFragment extends RxBaseFragment {
     /**
      * 订单数据集
      */
-    List<OrderCustomer> orderCustomers;
+    List<CarpoolOrder> carpoolOrders;
     /**
      * 排序适配器
      */
@@ -215,14 +215,14 @@ public class ChangeSeqFragment extends RxBaseFragment {
                 if (sequence.type != 1) {
                     iterator.remove();//移除图片和出城
                 } else {
-                    for (OrderCustomer orderCustomer : orderCustomers) {
-                        if (orderCustomer.num == sequence.num) {
+                    for (CarpoolOrder carpoolOrder : carpoolOrders) {
+                        if (carpoolOrder.num == sequence.num) {
                             if (flag == StaticVal.PLAN_ACCEPT) {
-                                orderCustomer.acceptSequence = i;
-                                orderCustomer.updateAcceptSequence();
+                                carpoolOrder.acceptSequence = i;
+                                carpoolOrder.updateAcceptSequence();
                             } else {
-                                orderCustomer.sendSequence = i;
-                                orderCustomer.updateSendSequence();
+                                carpoolOrder.sendSequence = i;
+                                carpoolOrder.updateSendSequence();
                             }
 
                         }
@@ -232,7 +232,7 @@ public class ChangeSeqFragment extends RxBaseFragment {
             }
             if (flag == StaticVal.PLAN_ACCEPT) {
                 //根据acceptSequence排序
-                Collections.sort(orderCustomers, (o1, o2) -> {
+                Collections.sort(carpoolOrders, (o1, o2) -> {
                     if (o1.acceptSequence < o2.acceptSequence) {
                         return -1;
                     } else if (o1.acceptSequence > o2.acceptSequence) {
@@ -243,7 +243,7 @@ public class ChangeSeqFragment extends RxBaseFragment {
                 });
             } else {
                 //根据acceptSequence排序
-                Collections.sort(orderCustomers, (o1, o2) -> {
+                Collections.sort(carpoolOrders, (o1, o2) -> {
                     if (o1.sendSequence < o2.sendSequence) {
                         return -1;
                     } else if (o1.sendSequence > o2.sendSequence) {
@@ -274,28 +274,28 @@ public class ChangeSeqFragment extends RxBaseFragment {
 
         min = 0;
         if (flag == StaticVal.PLAN_ACCEPT) {
-            orderCustomers = OrderCustomer.findByIDTypeOrderByAcceptSeq(orderId, orderType);
-            for (int i = 0; i < orderCustomers.size(); i++) {
-                OrderCustomer customer = orderCustomers.get(i);
+            carpoolOrders = CarpoolOrder.findByIDTypeOrderByAcceptSeq(orderId, orderType);
+            for (int i = 0; i < carpoolOrders.size(); i++) {
+                CarpoolOrder customer = carpoolOrders.get(i);
                 Sequence sequence = new Sequence();
                 sequence.num = customer.num;
                 sequence.type = 1;
                 sequence.text = "";
                 sequences.add(sequence);
-                if (customer.status != 0) {
+                if (customer.customeStatus != 0) {
                     min = i+1;
                 }
             }
         } else {
-            orderCustomers = OrderCustomer.findByIDTypeOrderBySendSeq(orderId, orderType);
-            for (int i = 0; i < orderCustomers.size(); i++) {
-                OrderCustomer customer = orderCustomers.get(i);
+            carpoolOrders = CarpoolOrder.findByIDTypeOrderBySendSeq(orderId, orderType);
+            for (int i = 0; i < carpoolOrders.size(); i++) {
+                CarpoolOrder customer = carpoolOrders.get(i);
                 Sequence sequence = new Sequence();
                 sequence.num = customer.num;
                 sequence.type = 1;
                 sequence.text = "";
                 sequences.add(sequence);
-                if (customer.status > 3) {
+                if (customer.customeStatus > 3) {
                     min = i+1;
                 }
             }
@@ -326,18 +326,18 @@ public class ChangeSeqFragment extends RxBaseFragment {
         }
         bridge.clearMap();
         List<LatLng> latLngs = new ArrayList<>();
-        for (OrderCustomer orderCustomer : orderCustomers) {
+        for (CarpoolOrder carpoolOrder : carpoolOrders) {
             LatLng latLng;
             if (flag == StaticVal.PLAN_ACCEPT) {
-                latLng = new LatLng(orderCustomer.startLat, orderCustomer.startLng);
+                latLng = new LatLng(carpoolOrder.startLat, carpoolOrder.startLng);
             } else {
-                latLng = new LatLng(orderCustomer.endLat, orderCustomer.endLng);
+                latLng = new LatLng(carpoolOrder.endLat, carpoolOrder.endLng);
             }
-            if (orderCustomer.status == 0 || orderCustomer.status == 3) {
-                bridge.addMarker(latLng, StaticVal.MARKER_FLAG_PASS_ENABLE, orderCustomer.num);
+            if (carpoolOrder.customeStatus == 0 || carpoolOrder.customeStatus == 3) {
+                bridge.addMarker(latLng, StaticVal.MARKER_FLAG_PASS_ENABLE, carpoolOrder.num);
                 latLngs.add(latLng);
             } else {
-                bridge.addMarker(latLng, StaticVal.MARKER_FLAG_PASS_DISABLE, orderCustomer.num);
+                bridge.addMarker(latLng, StaticVal.MARKER_FLAG_PASS_DISABLE, carpoolOrder.num);
             }
         }
         bridge.showBounds(latLngs);

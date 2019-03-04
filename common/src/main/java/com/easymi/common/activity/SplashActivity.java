@@ -252,13 +252,6 @@ public class SplashActivity extends RxBaseActivity {
      * 显示加载框
      */
     private void showDialog() {
-//        AlertDialog dialog = new AlertDialog.Builder(this)
-//                .setTitle(getString(R.string.hint))
-//                .setMessage(getString(R.string.message))
-//                .setPositiveButton(getString(R.string.sure), (dialog1, which) -> requestPer())
-//                .setCancelable(false)
-//                .create();
-//        dialog.show();
 
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("温馨提示")
