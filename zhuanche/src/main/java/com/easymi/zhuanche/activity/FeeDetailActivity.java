@@ -12,6 +12,7 @@ import com.easymi.component.widget.CusToolbar;
 import com.easymi.zhuanche.R;
 import com.easymi.zhuanche.entity.ZCOrder;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 /**
@@ -134,11 +135,10 @@ public class FeeDetailActivity extends RxBaseActivity {
             minestFeeText.setText(String.valueOf(dymOrder.minestMoney) + getString(R.string.yuan));
         }
 
-
         height_fee_title.setText("高峰费(" + new DecimalFormat("#0.00").format(dymOrder.peakMile/1000) + "公里)");
         height_pay_fee.setText(dymOrder.peakCost + getString(R.string.yuan));
 
-        night_fee_title.setText("夜间里程费(" + dymOrder.nightMile + "公里)");
+        night_fee_title.setText("夜间里程费(" +  new DecimalFormat("#0.00").format(dymOrder.nightMile/1000)+ "公里)");
         night_pay_fee.setText(dymOrder.nightMileFee + getString(R.string.yuan));
 
         night_time_fee_title.setText("夜间时间费(" + dymOrder.nightTime + "分钟)");

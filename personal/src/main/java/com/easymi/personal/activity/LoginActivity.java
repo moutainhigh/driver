@@ -29,7 +29,6 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.easymi.common.CommApiService;
 import com.easymi.component.Config;
 import com.easymi.component.activity.WebActivity;

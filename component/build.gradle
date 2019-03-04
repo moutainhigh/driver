@@ -42,8 +42,8 @@ dependencies {
     api rootProject.ext.viewanimator
     api rootProject.ext.BaseRecyclerViewAdapterHelper
     api rootProject.ext.androidProcesses
-    api rootProject.ext.aliPush
-    api rootProject.ext.aliThirdPush
+//    api rootProject.ext.aliPush
+//    api rootProject.ext.aliThirdPush
     api rootProject.ext.mqtt
     api rootProject.ext.mqttService
     api rootProject.ext.pictureSelector
