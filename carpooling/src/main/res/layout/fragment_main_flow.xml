@@ -64,7 +64,6 @@
                 android:layout_marginRight="15dp"
                 android:background="@mipmap/ic_zx_phone"/>
 
-
         </LinearLayout>
 
         <LinearLayout

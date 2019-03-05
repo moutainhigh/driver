@@ -32,27 +32,6 @@ public class PincheOrder implements Serializable {
      */
     public static final int SCHEDULE_STATUS_FINISH = 15;
 
-//    /**
-//     * 售票中
-//     */
-//    public static final int SCHEDULE_STATUS_SALE = 1;
-//    /**
-//     * 等待行程开始
-//     */
-//    public static final int SCHEDULE_STATUS_PREPARE = 5;
-//    /**
-//     * 司机接人
-//     */
-//    public static final int SCHEDULE_STATUS_TAKE = 10;
-//    /**
-//     * 司机送人
-//     */
-//    public static final int SCHEDULE_STATUS_RUN = 15;
-//    /**
-//     * 已结束
-//     */
-//    public static final int SCHEDULE_STATUS_FINISH = 20;
-
     /**
      * 根据班次状态获取状态文字
      * @return
