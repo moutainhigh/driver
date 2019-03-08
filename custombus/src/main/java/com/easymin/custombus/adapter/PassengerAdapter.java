@@ -75,25 +75,24 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
     public void onBindViewHolder(PassengerAdapter.Holder holder, int position) {
         Customer customer = listPassenger.get(position);
 
-        if (customer.status == 1){
+        if (customer.status <= Customer.CITY_COUNTRY_STATUS_ARRIVED){
             holder.iv_call_phone.setVisibility(View.VISIBLE);
             holder.tv_status.setVisibility(View.GONE);
-        }else if (customer.status == 2){
-            holder.iv_call_phone.setVisibility(View.VISIBLE);
-            holder.tv_status.setVisibility(View.GONE);
+        }else if (customer.status > Customer.CITY_COUNTRY_STATUS_ARRIVED && customer.status != Customer.CITY_COUNTRY_STATUS_INVALID){
+            holder.iv_call_phone.setVisibility(View.GONE);
+            holder.tv_status.setVisibility(View.VISIBLE);
             holder.tv_status.setText(context.getResources().getString(R.string.cb_alredy_check));
-        }else {
-            holder.iv_call_phone.setVisibility(View.VISIBLE);
-            holder.tv_status.setVisibility(View.GONE);
+        }else if (customer.status == Customer.CITY_COUNTRY_STATUS_INVALID){
+            holder.iv_call_phone.setVisibility(View.GONE);
+            holder.tv_status.setVisibility(View.VISIBLE);
             holder.tv_status.setText(context.getResources().getString(R.string.cb_alredy_jump));
         }
         Glide.with(context)
-//                .load(Config.IMG_SERVER + customer.pic + Config.IMG_PATH)
-                .load(customer.pic)
+                .load(Config.IMG_SERVER + customer.avatar + Config.IMG_PATH)
                 .apply(options)
                 .into(holder.iv_head);
-        holder.tv_pass_name.setText(customer.name);
-        holder.tv_pass_number.setText(customer.tickets+"");
+        holder.tv_pass_name.setText(customer.passengerName);
+        holder.tv_pass_number.setText(customer.ticketNumber+"");
 
         if (position == listPassenger.size()-1){
             holder.iv_line.setVisibility(View.GONE);
@@ -101,7 +100,7 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
 
         holder.iv_call_phone.setOnClickListener(v -> {
             //跳转到拨号界面，同时传递电话号码
-            Intent dialIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + customer.phone));
+            Intent dialIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + customer.passengerPhone));
             context.startActivity(dialIntent);
         });
     }

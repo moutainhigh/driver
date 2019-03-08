@@ -44,14 +44,15 @@ public class CountDownUtils {
      */
     private void initCountDown() {
         cancelTimer();
-        LeftSec = (time - System.currentTimeMillis()) / 1000;//剩余的秒钟数
+        //剩余的秒钟数
+        LeftSec = (time - System.currentTimeMillis()) / 1000;
         if (LeftSec < 0) {
             LeftSec = 0;
         }
 
         setLeftText(LeftSec);
 
-        if (LeftSec > 0) {
+        if (LeftSec >= 0) {
             timer = new Timer();
             timerTask = new TimerTask() {
                 @Override

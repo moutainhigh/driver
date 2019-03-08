@@ -87,7 +87,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="12dp"
                         android:layout_marginLeft="16dp"
-                        android:text="无敌小丸子"
+                        android:text=""
                         android:textColor="@color/color_333333"/>
                 </LinearLayout>
                 <LinearLayout
@@ -107,7 +107,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="12dp"
                         android:layout_marginLeft="16dp"
-                        android:text="晋州汽车站"
+                        android:text=""
                         android:textColor="@color/color_333333"/>
                 </LinearLayout>
                 <LinearLayout
@@ -127,7 +127,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="12dp"
                         android:layout_marginLeft="16dp"
-                        android:text="省二院东院"
+                        android:text=""
                         android:textColor="@color/color_333333"/>
                 </LinearLayout>
                 <LinearLayout
@@ -147,7 +147,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="12dp"
                         android:layout_marginLeft="16dp"
-                        android:text="1"
+                        android:text="0"
                         android:textColor="@color/color_333333"/>
                 </LinearLayout>
                 <LinearLayout
@@ -168,7 +168,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="12dp"
                         android:layout_marginLeft="16dp"
-                        android:text="师傅我有一个大行李箱哦"
+                        android:text=""
                         android:textColor="@color/color_333333"/>
                 </LinearLayout>
             </LinearLayout>

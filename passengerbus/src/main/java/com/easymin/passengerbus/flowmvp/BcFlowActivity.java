@@ -259,8 +259,6 @@ public class BcFlowActivity extends RxBaseActivity implements AMap.OnMapTouchLis
 
         Log.e("hufeng", GsonUtil.toJson(listLine));
 
-//        aMap.clear();// 清理地图上的所有覆盖物
-
         //显示正在行驶的路线
         tvTipLayout.setText("行程：" + busStationResult.stationVos.get(0).address
                 + "到" + busStationResult.stationVos.get(listLine.size() - 1).address);

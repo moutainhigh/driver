@@ -12,12 +12,17 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.network.GsonUtil;
+import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.CustomSlideToUnlockView;
 import com.easymi.component.widget.LoadingButton;
 import com.easymin.custombus.R;
 import com.easymin.custombus.adapter.PassengerAdapter;
+import com.easymin.custombus.entity.CbBusOrder;
 import com.easymin.custombus.entity.Customer;
+import com.easymin.custombus.entity.Station;
+import com.easymin.custombus.mvp.FlowContract;
+import com.easymin.custombus.mvp.FlowPresenter;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
@@ -34,7 +39,7 @@ import java.util.TimerTask;
  * @Description:
  * @History:
  */
-public class PassengerActivity extends RxBaseActivity {
+public class PassengerActivity extends RxBaseActivity implements FlowContract.View {
     /**
      * 界面控件
      */
@@ -47,7 +52,7 @@ public class PassengerActivity extends RxBaseActivity {
     LinearLayout lin_bottom;
     TextView tv_no_check;
     LoadingButton btn_go_next;
-    LinearLayout lin_time;
+    LinearLayout lin_time_countdown;
     ExpandableLayout expand;
     TextView tv_go_next;
     /**
@@ -56,11 +61,21 @@ public class PassengerActivity extends RxBaseActivity {
     public PassengerAdapter adapter;
 
     /**
-     * 乘客数据源
+     * 开始验票时间戳
      */
-    public List<Customer> passList = new ArrayList<>();
-
     private long booktime;
+
+    private FlowPresenter presenter;
+
+    /**
+     * 站点信息
+     */
+    private CbBusOrder cbBusOrder;
+
+    /**
+     * 当前站点下标
+     */
+    private int position;
 
     @Override
     public boolean isEnableSwipe() {
@@ -74,17 +89,35 @@ public class PassengerActivity extends RxBaseActivity {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
-        booktime = getIntent().getLongExtra("booktime", 0);
+        cbBusOrder = (CbBusOrder) getIntent().getSerializableExtra("cbBusOrder");
+        booktime = getIntent().getLongExtra("time", 0);
+        position = getIntent().getIntExtra("position", 0);
+        presenter = new FlowPresenter(this, this);
         findById();
         initAdapter();
         initListener();
         getData();
+        setData();
+        if (booktime != 0) {
+            setWaitTime();
+            lin_bottom.setVisibility(View.VISIBLE);
+        }else {
+            lin_bottom.setVisibility(View.GONE);
+        }
+    }
+
+    public void setData() {
+        tv_station_name.setText(cbBusOrder.driverStationVos.get(position).name);
+
     }
 
     @Override
     public void initToolBar() {
         super.initToolBar();
-        cus_toolbar.setLeftIcon(R.drawable.ic_arrow_back, v -> finish());
+        cus_toolbar.setLeftIcon(R.drawable.ic_arrow_back, v -> {
+            setResult(RESULT_OK);
+            finish();
+        });
         cus_toolbar.setTitle(R.string.cb_passenger_info);
     }
 
@@ -101,7 +134,7 @@ public class PassengerActivity extends RxBaseActivity {
         lin_bottom = findViewById(R.id.lin_bottom);
         tv_no_check = findViewById(R.id.tv_no_check);
         btn_go_next = findViewById(R.id.btn_go_next);
-        lin_time = findViewById(R.id.lin_time);
+        lin_time_countdown = findViewById(R.id.lin_time_countdown);
         expand = findViewById(R.id.expand);
         tv_go_next = findViewById(R.id.tv_go_next);
     }
@@ -121,7 +154,13 @@ public class PassengerActivity extends RxBaseActivity {
     public void initListener() {
         tv_no_check.setOnClickListener(v -> {
             Intent intent = new Intent(this, CheckTicketActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, 0x00);
+        });
+        tv_go_next.setOnClickListener(v -> {
+            presenter.toNextStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position+1).stationId);
+        });
+        btn_go_next.setOnClickListener(v -> {
+            presenter.toNextStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position+1).stationId);
         });
     }
 
@@ -154,7 +193,7 @@ public class PassengerActivity extends RxBaseActivity {
      * 等待倒计时
      */
     public void setWaitTime() {
-        lin_time.setVisibility(View.VISIBLE);
+        lin_time_countdown.setVisibility(View.VISIBLE);
 
         if (null != timer) {
             timer.cancel();
@@ -165,7 +204,7 @@ public class PassengerActivity extends RxBaseActivity {
             timerTask = null;
         }
 
-        timeSeq = (booktime * 1000 - System.currentTimeMillis()) / 1000;
+        timeSeq = ((booktime + cbBusOrder.reciprocalMinute * 60) * 1000 - System.currentTimeMillis()) / 1000;
         timer = new Timer();
         timerTask = new TimerTask() {
             @Override
@@ -196,16 +235,22 @@ public class PassengerActivity extends RxBaseActivity {
             sb.append(sec);
             if (timeSeq < 0) {
                 //超时
-                tv_countdown_hint.setText(getResources().getString(R.string.cb_wait_countdown));
+                tv_countdown_hint.setText(getResources().getString(R.string.cb_wait_timeout));
                 tv_countdown.setText(sb.toString());
                 tv_countdown.setTextColor(getResources().getColor(R.color.color_FF485E));
                 tv_countdown_hint.setTextColor(getResources().getColor(R.color.color_FF485E));
+                if (tv_no_check.getVisibility() == View.VISIBLE){
+                    expand.expand();
+                }else {
+                    expand.collapse();
+                }
             } else {
                 //正常计时
-                tv_countdown_hint.setText(getResources().getString(R.string.cb_wait_timeout));
+                tv_countdown_hint.setText(getResources().getString(R.string.cb_wait_countdown));
                 tv_countdown.setText(sb.toString());
                 tv_countdown.setTextColor(getResources().getColor(R.color.color_089A55));
                 tv_countdown_hint.setTextColor(getResources().getColor(R.color.color_999999));
+                expand.collapse();
             }
         });
     }
@@ -216,51 +261,100 @@ public class PassengerActivity extends RxBaseActivity {
         cancelTimer();
     }
 
-    public void getData(){
-        passList = GsonUtil.parseToArrayList(json, Customer.class);
-        adapter.setDatas(passList);
-        if (booktime != 0){
-            setWaitTime();
-        }else {
+    public void getData() {
+        presenter.queryOrders(cbBusOrder.id, cbBusOrder.driverStationVos.get(position).stationId);
+    }
 
+    @Override
+    public void showLeft(int dis, int time) {
+
+    }
+
+    @Override
+    public void showBusLineInfo(CbBusOrder cbBusOrder) {
+
+    }
+
+    @Override
+    public void showcheckTime(long time) {
+
+    }
+
+    @Override
+    public void showOrders(List<Customer> customers) {
+        adapter.setDatas(customers);
+        checkNumber(customers);
+    }
+
+    @Override
+    public void dealSuccese() {
+        setMyResult();
+    }
+
+    @Override
+    public void succeseOrder(Customer customer) {
+
+    }
+
+    @Override
+    public void finishActivity() {
+
+    }
+
+    @Override
+    public RxManager getManager() {
+        return mRxManager;
+    }
+
+    /**
+     * 检查当前订单列表的验票情况
+     * @param customers
+     */
+    public void checkNumber(List<Customer> customers) {
+        int check = 0;
+        int uncheck = 0;
+        for (int i = 0; i < customers.size(); i++) {
+            if (customers.get(i).status <= Customer.CITY_COUNTRY_STATUS_ARRIVED  ||  customers.get(i).status == Customer.CITY_COUNTRY_STATUS_INVALID) {
+                uncheck = uncheck + customers.get(i).ticketNumber;
+            } else if (customers.get(i).status > Customer.CITY_COUNTRY_STATUS_ARRIVED &&  customers.get(i).status != Customer.CITY_COUNTRY_STATUS_INVALID){
+                check = check + customers.get(i).ticketNumber;
+            }
+        }
+        tv_ticket_status.setText(getResources().getString(R.string.cb_alredy_check) + " " + check
+                + getResources().getString(R.string.cb_no_check) + " " + uncheck);
+
+        /**
+         * 根据未验票数显示布局
+         */
+        if (uncheck == 0) {
+            tv_no_check.setVisibility(View.GONE);
+            btn_go_next.setVisibility(View.VISIBLE);
+        } else {
+            tv_no_check.setVisibility(View.VISIBLE);
+            btn_go_next.setVisibility(View.GONE);
         }
     }
 
-
-    public String json = "[\n" +
-            "{\n" +
-            "            \"id\":1,\n" +
-            "            \"name\":\"珠江国际\",\n" +
-            "            \"status\":1,\n" +
-            "            \"tickets\":1,\n" +
-            "            \"phone\":\"18180635910\",\n" +
-            "            \"pic\":\"http://img1.3lian.com/img013/v5/21/d/84.jpg\"      \n" +
-            "        },\n" +
-            "{\n" +
-            "          \"id\":2,\n" +
-            "            \"name\":\"胡峰\",\n" +
-            "            \"status\":1,\n" +
-            "            \"tickets\":2,\n" +
-            "            \"phone\":\"18180635911\",\n" +
-            "            \"pic\":\"http://img1.3lian.com/img013/v5/21/d/84.jpg\"         \n" +
-            "        },\n" +
-            "{\n" +
-            "           \"id\":3,\n" +
-            "            \"name\":\"胡大大\",\n" +
-            "            \"status\":1,\n" +
-            "            \"tickets\":3,\n" +
-            "            \"phone\":\"18180635912\",\n" +
-            "            \"pic\":\"http://img1.3lian.com/img013/v5/21/d/84.jpg\"   \n" +
-            "        },\n" +
-            "{\n" +
-            "           \"id\":3,\n" +
-            "            \"name\":\"胡小小\",\n" +
-            "            \"status\":1,\n" +
-            "            \"tickets\":4,\n" +
-            "            \"phone\":\"18180635913\",\n" +
-            "            \"pic\":\"http://img1.3lian.com/img013/v5/21/d/84.jpg\"   \n" +
-            "        }\n" +
-            "]";
+    public void setMyResult() {
+        Intent intent = new Intent();
+        intent.putExtra("type",2);
+        setResult(RESULT_OK,intent);
+        finish();
+    }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            getData();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        setResult(RESULT_OK);
+        finish();
+    }
 }

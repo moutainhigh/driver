@@ -1,7 +1,6 @@
 package com.easymin.custombus.activity;
 
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -10,12 +9,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.easymi.component.base.RxBaseActivity;
-import com.easymi.component.network.GsonUtil;
-import com.easymi.component.widget.CusToolbar;
-import com.easymi.component.widget.CustomSlideToUnlockView;
+import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.widget.LoadingButton;
 import com.easymin.custombus.R;
+import com.easymin.custombus.entity.CbBusOrder;
 import com.easymin.custombus.entity.Customer;
+import com.easymin.custombus.mvp.FlowContract;
+import com.easymin.custombus.mvp.FlowPresenter;
+
+import java.util.List;
 
 /**
  * @Copyright (C), 2012-2019, Sichuan Xiaoka Technology Co., Ltd.
@@ -25,7 +27,7 @@ import com.easymin.custombus.entity.Customer;
  * @Description:
  * @History:
  */
-public class CheckTicketActivity extends RxBaseActivity {
+public class CheckTicketActivity extends RxBaseActivity implements FlowContract.View{
     /**
      * 界面控件
      */
@@ -38,6 +40,8 @@ public class CheckTicketActivity extends RxBaseActivity {
     TextView tv_remark;
     LoadingButton btn_get_on;
     LinearLayout lin_ticket;
+
+    private FlowPresenter presenter;
 
     @Override
     public boolean isEnableSwipe() {
@@ -53,7 +57,7 @@ public class CheckTicketActivity extends RxBaseActivity {
     public void initViews(Bundle savedInstanceState) {
         findById();
         initListener();
-
+        presenter = new FlowPresenter(this,this);
     }
 
     /**
@@ -84,10 +88,10 @@ public class CheckTicketActivity extends RxBaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().length() == 0){
+                if (s.toString().length() != 6){
                     lin_ticket.setVisibility(View.GONE);
                 }else {
-                    getData(s.toString());
+                    presenter.queryByRideCode(s.toString());
                 }
             }
 
@@ -98,35 +102,74 @@ public class CheckTicketActivity extends RxBaseActivity {
         });
 
         btn_get_on.setOnClickListener(v -> {
-            finish();
+            presenter.checkRideCode(et_ticket.getText().toString().trim(),btn_get_on);
         });
     }
 
-    private Customer customer;
-
-    public void getData(String keyword){
-        customer = GsonUtil.parseJson(json, Customer.class);
-
+    public void setData(Customer customer){
         lin_ticket.setVisibility(View.VISIBLE);
-        tv_name.setText(customer.name);
-        tv_start.setText(customer.startAddr);
-        tv_end.setText(customer.endAddr);
-        tv_number.setText(customer.tickets+"");
-        tv_remark.setText(customer.remark);
 
+        tv_name.setText(customer.passengerName);
+        tv_start.setText(customer.startStationName);
+        tv_end.setText(customer.endStationName);
+        tv_number.setText(customer.ticketNumber+"");
+        tv_remark.setText(customer.orderRemark);
+
+        if (customer.status <= Customer.CITY_COUNTRY_STATUS_ARRIVED){
+            btn_get_on.setVisibility(View.VISIBLE);
+            btn_get_on.setClickable(true);
+            btn_get_on.setBackgroundResource(R.drawable.corners_button_bg);
+            btn_get_on.setText(getResources().getString(R.string.cb_confirm_get_on));
+        }else {
+            btn_get_on.setBackgroundResource(R.drawable.cormers_btn_grey_bg);
+            btn_get_on.setClickable(false);
+            btn_get_on.setText(getResources().getString(R.string.cb_already_get_on));
+        }
     }
 
 
-    public String json = "{\n" +
-            "            \"id\":1,\n" +
-            "            \"name\":\"珠江国际\",\n" +
-            "            \"status\":1,\n" +
-            "            \"tickets\":1,\n" +
-            "            \"phone\":\"18180635910\",\n" +
-            "            \"pic\":\"http://img1.3lian.com/img013/v5/21/d/84.jpg\",\n" +
-            "            \"startAddr\":\"珠江国际写字楼\",\n" +
-            "            \"endAddr\":\"时代金悦\",\n" +
-            "            \"remark\":\"要小哥哥接\"\n" +
-            "        }";
+    @Override
+    public void showLeft(int dis, int time) {
 
+    }
+
+    @Override
+    public void showBusLineInfo(CbBusOrder cbBusOrder) {
+
+    }
+
+    @Override
+    public void showcheckTime(long time) {
+
+    }
+
+    @Override
+    public void showOrders(List<Customer> customers) {
+
+    }
+
+    @Override
+    public void dealSuccese() {
+        setMyResult();
+    }
+
+    @Override
+    public void succeseOrder(Customer customer) {
+        setData(customer);
+    }
+
+    @Override
+    public void finishActivity() {
+
+    }
+
+    @Override
+    public RxManager getManager() {
+        return mRxManager;
+    }
+
+    public void setMyResult(){
+        setResult(RESULT_OK);
+        finish();
+    }
 }

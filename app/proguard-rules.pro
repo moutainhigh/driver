@@ -87,6 +87,8 @@
 -keepclasseswithmembernames class * {
     native <methods>;
 }
+#声明在处理过程中输出更多信息。添加这项配置之后，如果处理过程中出现异常，会输出整个StackTrace而不是一条简单的异常说明。
+-verbose
 
 #-------------------------默认保留的区域----------------------------------------
 
@@ -175,19 +177,34 @@ public static ** valueOf(java.lang.String);
 }
 
 #---------------------------------webview------------------------------------
--keepclassmembers class fqcn.of.javascript.interface.for.Webview {
-   public *;
+# webView处理，项目中没有使用到webView忽略即可  替换成自己你自己定义的那个类名
+#关于我们
+-keepclassmembers class com.easymi.personal.activity.AboutUsActivity {
+    public *;
 }
+#安全中心webview使用类
+-keepclassmembers class com.easymin.driver.securitycenter.activity.WebActivity {
+    public *;
+}
+#公共webview使用类
+-keepclassmembers class com.easymi.component.activity.WebActivity {
+    public *;
+}
+#文章相关
+-keepclassmembers class com.easymi.personal.activity.ArticleActivity {
+    public *;
+}
+
+-keepattributes *Annotation*
+-keepattributes *JavascriptInterface*
+
 -keepclassmembers class * extends android.webkit.WebViewClient {
     public void *(android.webkit.WebView, java.lang.String, android.graphics.Bitmap);
     public boolean *(android.webkit.WebView, java.lang.String);
 }
 -keepclassmembers class * extends android.webkit.WebViewClient {
-    public void *(android.webkit.WebView, jav.lang.String);
+    public void *(android.webkit.WebView, java.lang.String);
 }
-
-
-
 
 
 
@@ -204,9 +221,6 @@ public static ** valueOf(java.lang.String);
 -keep public class com.easymin.driver.securitycenter.entity.**{*;}
 -keep public class com.easymi.taxi.entity.**{*;}
 -keep public class com.easymi.zhuanche.entity.**{*;}
-
-
-
 
 
 
@@ -331,16 +345,17 @@ public static ** valueOf(java.lang.String);
 
 #glide
 -keep public class * implements com.bumptech.glide.module.GlideModule
--keep public class * extends com.bumptech.glide.AppGlideModule
--keep public class com.bumptech.glide.load.**{*;}
--dontwarn com.bumptech.glide.load.**
--keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+-keep public class * extends com.bumptech.glide.module.AppGlideModule
+-keep public enum com.bumptech.glide.load.ImageHeaderParser$** {
   **[] $VALUES;
   public *;
 }
+-dontwarn com.bumptech.glide.load.resource.bitmap.VideoDecoder
 
 
-
+#科大讯飞语音
+-keep class com.iflytek.**{*;}
+-keepattributes Signature
 
 
 

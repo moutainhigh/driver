@@ -4,28 +4,24 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.RotateAnimation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.easymi.component.ZCOrderStatus;
+import com.easymi.component.BusOrderStatus;
+import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
-import com.easymi.component.network.GsonUtil;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.CountDownUtils;
-import com.easymi.component.utils.DensityUtil;
-import com.easymi.component.utils.DropDownAnim;
+import com.easymi.component.utils.Log;
 import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.CustomSlideToUnlockView;
 import com.easymin.custombus.R;
 import com.easymin.custombus.adapter.StationAdapter;
 import com.easymin.custombus.entity.CbBusOrder;
+import com.easymin.custombus.entity.Customer;
 import com.easymin.custombus.mvp.FlowContract;
 import com.easymin.custombus.mvp.FlowPresenter;
 
@@ -34,8 +30,6 @@ import net.cachapa.expandablelayout.ExpandableLayout;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * @Copyright (C), 2012-2019, Sichuan Xiaoka Technology Co., Ltd.
@@ -67,25 +61,39 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View {
     CustomSlideToUnlockView slider;
     ExpandableLayout expand;
     TextView tv_left;
+    LinearLayout control_con;
 
     /**
      * 倒计时工具类
      */
     public CountDownUtils countDownUtils;
-
     /**
      * 站点适配器
      */
     public StationAdapter stationAdapter;
 
-    /**
-     * 站点数据源
-     */
-    private List<String> listStation = new ArrayList<>();
+//    /**
+//     * 站点数据源
+//     */
+//    private List<String> listStation = new ArrayList<>();
     /**
      * 班次详情
      */
     CbBusOrder cbBusOrder;
+    /**
+     * 班次id
+     */
+    private Long scheduleId;
+
+    /**
+     * 当前处理站点序号
+     */
+    private int position;
+
+    /**
+     * 滑动类型(语音类型)
+     */
+    public int type;
 
 
     private FlowPresenter presenter;
@@ -104,8 +112,8 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View {
     public void initViews(Bundle savedInstanceState) {
         findById();
         presenter = new FlowPresenter(this, this);
-        initListenner();
         initAdapter();
+        scheduleId = getIntent().getLongExtra("scheduleId", 0);
         getData();
     }
 
@@ -113,6 +121,21 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View {
     public void initToolBar() {
         super.initToolBar();
         cus_toolbar.setLeftIcon(R.drawable.ic_arrow_back, v -> finish());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        getData();
+    }
+
+    /**
+     * 获取班次信息
+     */
+    public void getData() {
+        if (scheduleId != null && scheduleId != 0) {
+            presenter.findBusOrderById(scheduleId);
+        }
     }
 
     /**
@@ -135,6 +158,7 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View {
         slider = findViewById(R.id.slider);
         expand = findViewById(R.id.expand);
         tv_left = findViewById(R.id.tv_left);
+        control_con = findViewById(R.id.control_con);
     }
 
     /**
@@ -144,8 +168,16 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View {
         stationAdapter = new StationAdapter(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(stationAdapter);
-        stationAdapter.setOnItemClickListener(position -> {
-            toPassenger(0);
+        stationAdapter.setOnItemClickListener(item -> {
+            if (item == position) {
+                if (cbBusOrder.arrivedTime == 0) {
+                    toPassenger(0,position);
+                } else {
+                    toPassenger(cbBusOrder.arrivedTime,position);
+                }
+            } else {
+                toPassenger(0,item);
+            }
         });
     }
 
@@ -154,10 +186,13 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View {
      */
     public void initListenner() {
         //开始行程倒计时
-        countDownUtils = new CountDownUtils(this, System.currentTimeMillis() + 1 * 60 * 1000, (day, hour, minute) -> {
+        countDownUtils = new CountDownUtils(this, (cbBusOrder.time + 60) * 1000, (day, hour, minute) -> {
             tv_day.setText("" + day);
             tv_hour.setText("" + hour);
             tv_fen.setText("" + minute);
+            if (day == 0 && hour == 0 && minute == 0) {
+                control_con.setVisibility(View.VISIBLE);
+            }
         });
 
         slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
@@ -168,90 +203,130 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View {
 
             @Override
             public void onUnlocked() {
-                if (cbBusOrder.status == 2) {
-                    toPassenger(1);
-                } else if (cbBusOrder.status == 1) {
+                if (cbBusOrder.status == BusOrderStatus.SCHEDULE_STATUS_RUNNING) {
+                    if (cbBusOrder.driverStationVos.get(position).status == 2) {
+                        /**
+                         *  到达站点
+                         */
+                        if (position != cbBusOrder.driverStationVos.size() - 1){
+                            type = 3;
+                        }else {
+                            type = 4;
+                        }
+                        presenter.arriveStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position).stationId);
+                    } else if (cbBusOrder.driverStationVos.get(position).status == 3) {
+                        if (position == cbBusOrder.driverStationVos.size() - 1) {
+                            /**
+                             * 终点站结束行程
+                             */
+                            presenter.endStation(cbBusOrder.id, null);
+                        } else {
+                            if ((cbBusOrder.driverStationVos.get(position).checkNumber + cbBusOrder.driverStationVos.get(position).unCheckNumber) == 0) {
+                                /**
+                                 * 本站没有票
+                                 */
+                                presenter.toNextStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position + 1).stationId);
+                                type = 2;
+                            } else {
+                                /**
+                                 * 验票
+                                 */
+                                if (cbBusOrder.arrivedTime == 0) {
+                                    presenter.chechTickets(cbBusOrder.id);
+                                } else {
+                                    toPassenger(cbBusOrder.arrivedTime,position);
+                                }
+                            }
+                        }
+                    }
+                } else if (cbBusOrder.status == BusOrderStatus.SCHEDULE_STATUS_NEW) {
+                    /**
+                     * 未开始状态（开始行程）
+                     */
                     expand.collapse();
+                    presenter.startStation(cbBusOrder.id, null);
+                    type = 1;
                 }
                 slider.resetView();
-
-                cbBusOrder.status = 2;
-                cbBusOrder.siteList.get(0).status = 3;
-
-                setData();
             }
         });
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        countDownUtils.cancelTimer();
+        if (countDownUtils != null) {
+            countDownUtils.cancelTimer();
+        }
     }
 
     /**
      * 跳转乘客信息列表
      */
-    public void toPassenger(int type) {
+    public void toPassenger(long time,int item) {
         Intent intent = new Intent(this, PassengerActivity.class);
-        if (type == 1){
-            intent.putExtra("booktime",cbBusOrder.booktime);
-        }
-        startActivity(intent);
-    }
-
-    public void getData() {
-        cbBusOrder = GsonUtil.parseJson(json, CbBusOrder.class);
-        setData();
+        intent.putExtra("cbBusOrder", cbBusOrder);
+        intent.putExtra("time", time);
+        intent.putExtra("position", item);
+        startActivityForResult(intent, 0x00);
     }
 
     /**
      * 加载数据到布局
      */
     public void setData() {
-        if (cbBusOrder.status == 1) {
+        if (cbBusOrder.status == BusOrderStatus.SCHEDULE_STATUS_NEW) {
             lin_no_start.setVisibility(View.VISIBLE);
-            tv_start_site.setText(cbBusOrder.startAddr);
-            tv_end_site.setText(cbBusOrder.endAddr);
-            tv_go_time.setText(TimeUtil.getTime("yyyy年MM月dd日 HH:mm", cbBusOrder.booktime * 1000) + "出发");
+            tv_start_site.setText(cbBusOrder.getStartSite().name);
+            tv_end_site.setText(cbBusOrder.getEndSite().name);
+            tv_go_time.setText(TimeUtil.getTime("yyyy年MM月dd日 HH:mm", cbBusOrder.time * 1000) + "出发");
             lin_running.setVisibility(View.GONE);
             lin_start_countdown.setVisibility(View.VISIBLE);
             cus_toolbar.setTitle(R.string.cb_no_start);
-        } else if (cbBusOrder.status == 2) {
+//            if (System.currentTimeMillis() < cbBusOrder.time * 1000) {
+//                control_con.setVisibility(View.GONE);
+//            }
+        } else if (cbBusOrder.status == BusOrderStatus.SCHEDULE_STATUS_RUNNING) {
             lin_no_start.setVisibility(View.GONE);
             lin_running.setVisibility(View.VISIBLE);
             lin_start_countdown.setVisibility(View.GONE);
-        } else if (cbBusOrder.status == 3) {
-            lin_no_start.setVisibility(View.GONE);
-            lin_running.setVisibility(View.VISIBLE);
-            lin_start_countdown.setVisibility(View.GONE);
-
-            tv_stauts.setText(getResources().getString(R.string.cb_go_to));
-            tv_station_name.setText(cbBusOrder.endAddr);
         }
         changeTop();
-        stationAdapter.setDatas(cbBusOrder.siteList);
+        stationAdapter.setDatas(cbBusOrder.driverStationVos);
+        if (cbBusOrder.arrivedTime != 0) {
+            stationAdapter.setCheckStatus(true);
+        }else {
+            stationAdapter.setCheckStatus(false);
+        }
     }
 
     /**
      * 根据站点状态显示顶部布局和文字
      */
     public void changeTop() {
-        for (int i = 0; i < cbBusOrder.siteList.size(); i++) {
-            if (cbBusOrder.siteList.get(i).status == 2) {
-                tv_stauts.setText(getResources().getString(R.string.cb_go_to));
-                tv_station_name.setText(cbBusOrder.siteList.get(i).name);
-                slider.setHint(getResources().getString(R.string.cb_slider_arrive));
-                presenter.routePlanByNavi(cbBusOrder.siteList.get(i).lat, cbBusOrder.siteList.get(i).lng);
-                cus_toolbar.setTitle(R.string.cb_running);
-            } else if (cbBusOrder.siteList.get(i).status == 3) {
-                tv_stauts.setText(getResources().getString(R.string.cb_arrived));
-                tv_station_name.setText(cbBusOrder.siteList.get(i).name);
-                tv_left.setText(getResources().getString(R.string.cb_please_check));
-                slider.setHint(getResources().getString(R.string.cb_slider_check));
-                cus_toolbar.setTitle(R.string.cb_arrive_station);
+        if (cbBusOrder.driverStationVos.get(position).status == 2) {
+            tv_stauts.setText(getResources().getString(R.string.cb_go_to));
+            tv_station_name.setText(cbBusOrder.driverStationVos.get(position).name);
+            slider.setHint(getResources().getString(R.string.cb_slider_arrive));
+            presenter.routePlanByNavi(cbBusOrder.driverStationVos.get(position).latitude, cbBusOrder.driverStationVos.get(position).longitude);
+            cus_toolbar.setTitle(R.string.cb_running);
+        } else if (cbBusOrder.driverStationVos.get(position).status == 3) {
+            tv_stauts.setText(getResources().getString(R.string.cb_arrived));
+            tv_station_name.setText(cbBusOrder.driverStationVos.get(position).name);
+
+            if (position == cbBusOrder.driverStationVos.size() - 1) {
+                tv_left.setText(getResources().getString(R.string.cb_arrive_end_station));
+                slider.setHint(getResources().getString(R.string.cb_finish));
+            } else {
+                if ((cbBusOrder.driverStationVos.get(position).checkNumber + cbBusOrder.driverStationVos.get(position).unCheckNumber) == 0) {
+                    tv_left.setText(getResources().getString(R.string.cb_not_check));
+                    slider.setHint(getResources().getString(R.string.cb_slider_go_next));
+                } else {
+                    tv_left.setText(getResources().getString(R.string.cb_please_check));
+                    slider.setHint(getResources().getString(R.string.cb_slider_check));
+                }
             }
+            cus_toolbar.setTitle(R.string.cb_arrive_station);
         }
     }
 
@@ -267,8 +342,86 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View {
 
         tv_left.setText(getResources().getString(R.string.cb_destance)
                 + disKm
-                + "  " + (time/60)
+                + "  " + (time / 60)
                 + getResources().getString(R.string.cb_minutes));
+        Log.e("hufeng", "dis:" + dis + "/time" + time);
+    }
+
+    @Override
+    public void showBusLineInfo(CbBusOrder cbBusOrder) {
+        this.cbBusOrder = cbBusOrder;
+        dealData();
+        setData();
+        initListenner();
+    }
+
+    @Override
+    public void showcheckTime(long time) {
+        toPassenger(time,position);
+    }
+
+    @Override
+    public void showOrders(List<Customer> customers) {
+
+    }
+
+    @Override
+    public void dealSuccese() {
+//        speekVoice(type);
+        getData();
+    }
+
+    @Override
+    public void succeseOrder(Customer customer) {
+
+    }
+
+    @Override
+    public void finishActivity() {
+        finish();
+    }
+
+    /**
+     * 本地处理站点状态
+     */
+    public void dealData() {
+        if (cbBusOrder.currentStationId == 0) {
+            /**
+             * 未开始行程的时候当前站点是空
+             */
+            for (int i = 0; i < cbBusOrder.driverStationVos.size(); i++) {
+                position = 0;
+                cbBusOrder.driverStationVos.get(i).status = 1;
+            }
+        } else {
+            /**
+             *  after 是否是当前站点之前的站点
+             */
+            boolean after = false;
+            for (int i = 0; i < cbBusOrder.driverStationVos.size(); i++) {
+                if (cbBusOrder.currentStationId == cbBusOrder.driverStationVos.get(i).stationId) {
+                    /**
+                     * 当前站点
+                     */
+                    if (cbBusOrder.currentStationStatus == 1) {
+                        cbBusOrder.driverStationVos.get(i).status = 2;
+                    } else if (cbBusOrder.currentStationStatus == 2) {
+                        cbBusOrder.driverStationVos.get(i).status = 3;
+                    }
+                    after = true;
+                    position = i;
+                } else {
+                    /**
+                     * 非当前站点
+                     */
+                    if (!after) {
+                        cbBusOrder.driverStationVos.get(i).status = 4;
+                    } else {
+                        cbBusOrder.driverStationVos.get(i).status = 1;
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -276,53 +429,38 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View {
         return mRxManager;
     }
 
-    public String json = "{\"status\":1,\n" +
-            "\"startAddr\":\"珠江国际\",\n" +
-            "\"endAddr\":\"时代金悦\",\n" +
-            "\"siteList\":[\n" +
-            "{\n" +
-            "            \"id\":1,\n" +
-            "            \"name\":\"珠江国际\",\n" +
-            "            \"status\":1,\n" +
-            "            \"bookTime\":1550166000,\n" +
-            "            \"address\":\"珠江国际中心写字楼\",\n" +
-            "            \"lat\":30.456789,\n" +
-            "            \"lng\":104.456789,\n" +
-            "            \"number\":10        \n" +
-            "        },\n" +
-            "{\n" +
-            "            \"id\":2,\n" +
-            "            \"name\":\"丽景港\",\n" +
-            "            \"status\":1,\n" +
-            "            \"bookTime\":1550166000,\n" +
-            "            \"address\":\"燎原路111号\",\n" +
-            "            \"lat\":30.456790,\n" +
-            "            \"lng\":104.456790,\n" +
-            "            \"number\":11        \n" +
-            "        },\n" +
-            "{\n" +
-            "            \"id\":3,\n" +
-            "            \"name\":\"天来国际\",\n" +
-            "            \"status\":1,\n" +
-            "            \"bookTime\":1550166000,\n" +
-            "            \"address\":\"光华大道天来国际\",\n" +
-            "            \"lat\":30.456791,\n" +
-            "            \"lng\":104.456791,\n" +
-            "            \"number\":12        \n" +
-            "        },\n" +
-            "{\n" +
-            "            \"id\":4,\n" +
-            "            \"name\":\"时代金悦\",\n" +
-            "            \"status\":1,\n" +
-            "            \"bookTime\":1550166000,\n" +
-            "            \"address\":\"金恒德时代\",\n" +
-            "            \"lat\":30.456792,\n" +
-            "            \"lng\":104.456792,\n" +
-            "            \"number\":10        \n" +
-            "        }\n" +
-            "],\n" +
-            "\"booktime\":1550470105\n" +
-            "}";
+    public void speekVoice(int type) {
+        if (type == 1) {
+            /**
+             * 开始行程
+             */
+            XApp.getInstance().syntheticVoice("开始行程,本次起点站为" + cbBusOrder.driverStationVos.get(0).name + ",站点乘客" + cbBusOrder.driverStationVos.get(0).unCheckNumber + "位");
+        } else if (type == 2) {
+            /**
+             * 前往站点
+             */
+            XApp.getInstance().syntheticVoice("前往站点" + cbBusOrder.driverStationVos.get(position + 1).name + ",站点乘客" + cbBusOrder.driverStationVos.get(position + 1).unCheckNumber + "位");
+        } else if (type == 3) {
+            /**
+             * 到达站点
+             */
+            XApp.getInstance().syntheticVoice("车辆到达" + cbBusOrder.driverStationVos.get(position).name + ",本站乘客" + cbBusOrder.driverStationVos.get(position).unCheckNumber + "位");
+        } else {
+            /**
+             * 终点站
+             */
+            XApp.getInstance().syntheticVoice("本次终点站" + cbBusOrder.driverStationVos.get(position).name + "已到达");
+        }
+    }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (data != null && data.getIntExtra("type",0) != 0){
+                type = data.getIntExtra("type",0);
+            }
+            getData();
+        }
+    }
 }

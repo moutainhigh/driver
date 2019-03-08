@@ -1,7 +1,6 @@
 package com.easymin.custombus.adapter;
 
 import android.content.Context;
-import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -31,6 +30,7 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.Holder>{
 
     private List<Station> listStation;
 
+    private boolean checkStatus;
     /**
      * 构造器
      * @param context
@@ -49,6 +49,10 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.Holder>{
         notifyDataSetChanged();
     }
 
+    public void setCheckStatus(boolean checkStatus){
+        this.checkStatus = checkStatus;
+    }
+
     @NonNull
     @Override
     public StationAdapter.Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -61,14 +65,14 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.Holder>{
         if (position == 0){
             holder.lin_head.setVisibility(View.VISIBLE);
             holder.lin_foot.setVisibility(View.GONE);
-            holder.lin_car.setVisibility(View.VISIBLE);
+            holder.lin_car.setVisibility(View.GONE);
             holder.iv_station_top.setVisibility(View.INVISIBLE);
             holder.iv_station_bottom.setVisibility(View.VISIBLE);
             holder.iv_station.setImageResource(R.mipmap.cb_station_check);
         }else if (position == listStation.size()-1){
             holder.lin_head.setVisibility(View.GONE);
             holder.lin_foot.setVisibility(View.VISIBLE);
-            holder.lin_car.setVisibility(View.GONE);
+            holder.lin_car.setVisibility(View.VISIBLE);
             holder.iv_station_top.setVisibility(View.VISIBLE);
             holder.iv_station_bottom.setVisibility(View.INVISIBLE);
             holder.iv_station.setImageResource(R.mipmap.cb_station_check);
@@ -103,13 +107,47 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.Holder>{
 
         holder.tv_station_name.setText(station.name);
         holder.tv_station_addr.setText(station.address);
-        holder.tv_pass_number.setText(station.number+"");
 
-        holder.tv_pass_number.setOnClickListener(v -> {
-            if (onItemClickListener !=null){
-                onItemClickListener.onClick(position);
+        if ((station.checkNumber + station.unCheckNumber) == 0){
+            holder.tv_pass_number.setVisibility(View.GONE);
+            holder.tv_chcke_status.setVisibility(View.GONE);
+        }else {
+            if (station.status == 1){
+                holder.tv_pass_number.setText((station.checkNumber + station.unCheckNumber) +"");
+                holder.tv_pass_number.setVisibility(View.VISIBLE);
+                holder.tv_chcke_status.setVisibility(View.GONE);
+            }else if (station.status == 4){
+                holder.tv_pass_number.setVisibility(View.GONE);
+                holder.tv_chcke_status.setText(context.getResources().getString(R.string.cb_alredy_check) +"  "+ station.checkNumber +
+                        context.getResources().getString(R.string.cb_no_check) +"  "+ station.unCheckNumber);
+                holder.tv_chcke_status.setVisibility(View.VISIBLE);
+            }else if (station.status == 2){
+                holder.tv_pass_number.setText((station.checkNumber + station.unCheckNumber) +"");
+                holder.tv_pass_number.setVisibility(View.VISIBLE);
+                holder.tv_chcke_status.setVisibility(View.GONE);
+            }else if (station.status == 3){
+                if (checkStatus){
+                    holder.tv_pass_number.setVisibility(View.GONE);
+                    holder.tv_chcke_status.setVisibility(View.VISIBLE);
+                    holder.tv_chcke_status.setText(context.getResources().getString(R.string.cb_alredy_check) +"  "+ station.checkNumber +
+                            context.getResources().getString(R.string.cb_no_check) +"  "+ station.unCheckNumber);
+                }else {
+                    holder.tv_pass_number.setText((station.checkNumber + station.unCheckNumber) +"");
+                    holder.tv_pass_number.setVisibility(View.VISIBLE);
+                    holder.tv_chcke_status.setVisibility(View.GONE);
+                }
             }
-        });
+            holder.tv_pass_number.setOnClickListener(v -> {
+                if (onItemClickListener !=null){
+                    onItemClickListener.onClick(position);
+                }
+            });
+            holder.tv_chcke_status.setOnClickListener(v -> {
+                if (onItemClickListener !=null){
+                    onItemClickListener.onClick(position);
+                }
+            });
+        }
     }
 
     @Override

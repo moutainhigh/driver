@@ -311,7 +311,6 @@ public class MqttManager implements LocObserver {
             } catch (Exception e) {
 
             }
-
         }
 
         @Override

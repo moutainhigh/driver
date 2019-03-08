@@ -1,47 +1,53 @@
 package com.easymin.custombus.entity;
 
+import java.io.Serializable;
+
 /**
  * @Copyright (C), 2012-2019, Sichuan Xiaoka Technology Co., Ltd.
  * @FileName: Station
  * @Author: hufeng
  * @Date: 2019/2/18 下午2:26
- * @Description:
+ * @Description: 站点信息
  * @History:
  */
-public class Station {
+public class Station implements Serializable{
 
-    public long id;
     /**
-     * 站点名字
+     * 站点ID
+     */
+    public long stationId;
+
+    /**
+     * 站点名称
      */
     public String name;
+
     /**
-     * 站点状态 1 未前往 2 前往中 3 已到达 4 已离开
-     */
-    public int status;
-    /**
-     * 预估到达时间
-     */
-    public long bookTime;
-    /**
-     * 详细地址
+     * 站点地址
      */
     public String address;
+
     /**
-     * 总人数
+     * 经度
      */
-    public int number;
-    /**
-     * 已验票人数
-     */
-    public int checkNumber;
+    public double longitude;
 
     /**
      * 纬度
      */
-    public double lat;
+    public double latitude;
+
     /**
-     * 经度
+     * 验票数(真实乘车的人数)
      */
-    public double lng;
+    public long checkNumber;
+    /**
+     * 未验票数(真实乘车的人数)
+     */
+    public long unCheckNumber;
+
+    /**
+     * 站点状态 1 未前往 2 前往中 3 已到达 4 已离开
+     */
+    public int status;
 }

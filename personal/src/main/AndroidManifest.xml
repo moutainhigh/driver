@@ -45,11 +45,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/ThemeSwipeBack" />
         <activity
-            android:name=".activity.RegisterLocalActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack" />
-        <activity
             android:name=".activity.MoreActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"

@@ -21,14 +21,14 @@ public class Config {
 //    public static final String HOST = "http://10.10.2.23:10001/";//俊俏
 //    public static final String HOST = "http://10.10.2.130:10001/";//130测试地址 （内网）
 //    public static final String HOST = "http://47.94.204.67:20001/";//130测试地址（外网）　　
-    public static final String HOST = "http://api.xiaokakj.com/";//线上地址
-//    public static final String HOST = "http://api.xiaokakj.cn/";//预发
+//    public static final String HOST = "http://api.xiaokakj.com/";//线上地址
+    public static final String HOST = "http://api.xiaokakj.cn/";//预发
     /**
      * MQTT配置
      */
-//    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//预发地址
-    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn";//线上地址
-//    public static final String MQTT_HOST = "tcp://10.10.4.5:1883";//本地地址
+    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//预发地址
+//    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn";//线上地址
+//    public static final String MQTT_HOST = "tcp://10.10.2.35:1883";//本地地址
     /**
      * APP_KEY
      */
@@ -40,7 +40,7 @@ public class Config {
 //    public static final String APP_KEY = "4ji3EvuwNziPKF8QXqXMTukGqPmlwOFJ";  //v6rvakva
 //    public static final String APP_KEY = "E0RzxsO1n9hZyKxOr5VvozmDsgU3EuSH";  //小鹏
 //    public static final String APP_KEY = "kQLGYQIx34408QOOv6Ed1OQRWM6Idt5w";  //小鹏预发
-
+//    public static final String APP_KEY = "G0UMEhNEBt0q0HDO1ecomWNUKP6wzcje";  //v6test
     /**
      * 上传图片地址.
      */
@@ -144,9 +144,9 @@ public class Config {
     public static final String RENTAL = "rental";
     //客运班车
     public static final String COUNTRY = "country";
-    //酷狗定制班车
+    //哈罗定制班车
     public static final String CUSTOMBUS = "custombus";
-    //酷狗定制拼车
+    //哈罗城际拼车
     public static final String CARPOOL = "carpool";
 
     //需要导航的模式

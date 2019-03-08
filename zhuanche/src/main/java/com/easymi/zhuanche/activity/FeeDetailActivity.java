@@ -164,16 +164,17 @@ public class FeeDetailActivity extends RxBaseActivity {
 
         stages = GsonUtil.parseToArrayList(dymOrder.stageArrays, StageArrays.class);
 
-        for (StageArrays arrays : stages){
-            View view = LayoutInflater.from(this).inflate(R.layout.item_stages,null);
-            TextView distance = view.findViewById(R.id.tv_distance);
-            TextView money = view.findViewById(R.id.tv_money);
+        if (stages != null && stages.size() != 0){
+            for (StageArrays arrays : stages){
+                View view = LayoutInflater.from(this).inflate(R.layout.item_stages,null);
+                TextView distance = view.findViewById(R.id.tv_distance);
+                TextView money = view.findViewById(R.id.tv_money);
 
-            distance.setText(getResources().getString(R.string.zc_jietifei)+arrays.num+"("+arrays.longRange+")"+getResources().getString(R.string.km));
-            money.setText(new DecimalFormat("#0.00").format(arrays.rangePrice)+getResources().getString(R.string.yuan));
-            lin_jieti.addView(view);
+                distance.setText(getResources().getString(R.string.zc_jietifei)+arrays.num+"("+arrays.longRange+")"+getResources().getString(R.string.km));
+                money.setText(new DecimalFormat("#0.00").format(arrays.rangePrice)+getResources().getString(R.string.yuan));
+                lin_jieti.addView(view);
+            }
         }
-
     }
 
     @Override

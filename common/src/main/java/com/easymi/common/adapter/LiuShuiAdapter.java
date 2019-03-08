@@ -83,7 +83,7 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
             holder.orderStatus.setText(DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status));
         }else if (baseOrder.serviceType.equals(Config.COUNTRY)){
             typeStr = context.getResources().getString(R.string.create_bus_country);
-            holder.orderStatus.setText(BusOrderStatus.status2Str(baseOrder.status));
+            holder.orderStatus.setText(BusOrderStatus.orderStatus2Str(baseOrder.status));
         }else if (baseOrder.serviceType.equals(Config.CARPOOL)){
             typeStr = context.getResources().getString(R.string.create_carpool);
             holder.orderStatus.setText(PCOrderStatus.status2Str(baseOrder.status));

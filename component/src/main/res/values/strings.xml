@@ -102,4 +102,17 @@
     <string name="carpool_status_review">已评价</string>
     <string name="carpool_status_cancel">已取消</string>
 
+
+    <!--定制班车状态-->
+    <string name="cb_status_pay">未支付</string>
+    <string name="cb_status_no_start">未开始</string>
+    <string name="cb_status_wait">等待上车</string>
+    <string name="cb_status_check">验票中</string>
+    <string name="cb_status_arrived">到达预约地</string>
+    <string name="cb_status_running">行程中</string>
+    <string name="cb_status_finish">已到达</string>
+    <string name="cb_status_skip">已跳过</string>
+    <string name="cb_status_review">已评价</string>
+    <string name="cb_status_cancel">已取消</string>
+
 </resources>

@@ -79,8 +79,6 @@ public class RegisterListActivity extends RxBaseActivity{
         initAdapter();
 
         if (type == 1){
-//            getData();
-//            adapter.setList(listType);
             id = getIntent().getLongExtra("id",0);
             getBusinessType(id);
         }else if (type == 2){
@@ -114,49 +112,6 @@ public class RegisterListActivity extends RxBaseActivity{
             toolbar.setTitle(R.string.register_compney);
         }
     }
-
-//    /**
-//     * 初始化注册业务类型
-//     */
-//    public void getData(){
-//        listType.clear();
-//        if (Config.KT_ZHUANCHE){
-//            BusinessType businessType = new BusinessType();
-//            businessType.name = getResources().getString(com.easymi.common.R.string.create_zhuanche);
-//            businessType.type = Config.ZHUANCHE;
-//            listType.add(businessType);
-//        }
-//        if (Config.KT_ZHUANXIAN){
-//            BusinessType businessType1 = new BusinessType();
-//            businessType1.name = getResources().getString(com.easymi.common.R.string.create_zhuanxian);
-//            businessType1.type = Config.CITY_LINE;
-//            listType.add(businessType1);
-//        }
-//        if (Config.KT_CHUZUCHE){
-//            BusinessType businessType2 = new BusinessType();
-//            businessType2.name = getResources().getString(com.easymi.common.R.string.create_taxi);
-//            businessType2.type =  Config.TAXI;
-//            listType.add(businessType2);
-//        }
-//        if (Config.KT_BAOCHE){
-//            BusinessType businessType3 = new BusinessType();
-//            businessType3.name = getResources().getString(com.easymi.common.R.string.create_chartered);
-//            businessType3.type = Config.CHARTERED;
-//            listType.add(businessType3);
-//        }
-//        if (Config.KT_ZUCHE){
-//            BusinessType businessType4 = new BusinessType();
-//            businessType4.name = getResources().getString(com.easymi.common.R.string.create_rental);
-//            businessType4.type = Config.RENTAL;
-//            listType.add(businessType4);
-//        }
-//        if (Config.KT_BANCHE){
-//            BusinessType businessType5 = new BusinessType();
-//            businessType5.name = getResources().getString(com.easymi.common.R.string.create_bus_country);
-//            businessType5.type =  Config.COUNTRY;
-//            listType.add(businessType5);
-//        }
-//    }
 
     /**
      * 获取业务类型

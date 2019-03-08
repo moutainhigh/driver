@@ -54,13 +54,6 @@
         </activity>
 
         <activity
-            android:name="com.easymin.daijia.driver.zyziyunsjdaijia.PopupPushActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack" />
-
-        <activity
             android:name="com.easymin.daijia.driver.zyziyunsjdaijia.PushActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:exported="true"

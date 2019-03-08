@@ -81,9 +81,13 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
                         ARouter.getInstance()
                                 .build("/zhuanche/FlowActivity")
                                 .withLong("orderId", baseOrder.orderId).navigation();
+
 //                        ARouter.getInstance()
 //                                .build("/zhuanche/AMapNaviActivity")
 //                                .withLong("orderId", baseOrder.orderId).navigation();
+
+//                        ARouter.getInstance()
+//                                .build("/custombus/CbRunActivity").navigation();
                     } else if (baseOrder.serviceType.equals(Config.TAXI)) {
                         ARouter.getInstance()
                                 .build("/taxi/FlowActivity")
@@ -102,43 +106,42 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
                                 .withLong("orderId", baseOrder.orderId).navigation();
                     } else if (baseOrder.serviceType.equals(Config.COUNTRY)) {
                         ARouter.getInstance()
-                                .build("/passengerbus/BcFlowActivity")
-                                .withLong("orderId", baseOrder.orderId)
+                                .build("/custombus/CbRunActivity")
                                 .withLong("scheduleId", baseOrder.scheduleId).navigation();
                     }else if (baseOrder.serviceType.equals(Config.CARPOOL)){
                         ARouter.getInstance()
                                 .build("/carpooling/FlowActivity")
                                 .withSerializable("baseOrder", baseOrder).navigation();
-//                        cancelOrder(baseOrder.scheduleId);
-                    }else if (baseOrder.serviceType.equals(Config.CUSTOMBUS)){
-                        ARouter.getInstance()
-                                .build("/custombus/CbRunActivity")
-                                .withLong("orderId", baseOrder.orderId)
-                                .withLong("scheduleId", baseOrder.scheduleId).navigation();
                     }
+//                    else if (baseOrder.serviceType.equals(Config.CUSTOMBUS)){
+//                        ARouter.getInstance()
+//                                .build("/custombus/CbRunActivity")
+//                                .withLong("orderId", baseOrder.orderId)
+//                                .withLong("scheduleId", baseOrder.scheduleId).navigation();
+//                    }
                 }
             });
         }
     }
 
 
-//    /**
-//     * 取消订单bug专用接口
-//     * @param scheduleId
-//     */
-//    public void cancelOrder(long scheduleId){
-//        Observable<Object> observable =  ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-//                .finishTask(scheduleId)
-//                .map(new HttpResultFunc2<>())
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread());
-//       new RxManager().add(observable.subscribe(new MySubscriber<>(context,
-//                true,
-//                true, new NoErrSubscriberListener<Object>() {
-//           @Override
-//           public void onNext(Object o) {
-//
-//           }
-//       })));
-//    }
+    /**
+     * 拼车取消订单bug专用接口
+     * @param scheduleId
+     */
+    public void cancelOrder(long scheduleId){
+        Observable<Object> observable =  ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .finishTask(scheduleId)
+                .map(new HttpResultFunc2<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+       new RxManager().add(observable.subscribe(new MySubscriber<>(context,
+                true,
+                true, new NoErrSubscriberListener<Object>() {
+           @Override
+           public void onNext(Object o) {
+
+           }
+       })));
+    }
 }

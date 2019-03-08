@@ -45,13 +45,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <com.xiaoka.client.lib.widget.wheelView.wheel.WheelView
+        <com.easymi.component.widget.wheelview.WheelView
             android:id="@+id/day"
             android:layout_width="0dp"
             android:layout_height="160dp"
             android:layout_weight="1" />
 
-        <com.xiaoka.client.lib.widget.wheelView.wheel.WheelView
+        <com.easymi.component.widget.wheelview.WheelView
             android:id="@+id/hour"
             android:layout_width="0dp"
             android:layout_height="160dp"

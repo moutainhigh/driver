@@ -145,10 +145,13 @@ public class MultipleOrder extends BaseOrder implements Serializable, MultiItemE
         }else if (serviceType.equals(Config.RENTAL)){
             orderType = XApp.getInstance().getResources().getString(R.string.create_rental);
         } else if (serviceType.equals(Config.COUNTRY)) {
-            orderType = XApp.getInstance().getResources().getString(R.string.create_bus_country);
-        }else if (serviceType.equals(Config.CUSTOMBUS)) {
+//            orderType = XApp.getInstance().getResources().getString(R.string.create_bus_country);
             orderType = XApp.getInstance().getResources().getString(R.string.create_custombus);
-        }else if (serviceType.equals(Config.CARPOOL)) {
+        }
+//        else if (serviceType.equals(Config.CUSTOMBUS)) {
+//            orderType = XApp.getInstance().getResources().getString(R.string.create_custombus);
+//        }
+        else if (serviceType.equals(Config.CARPOOL)) {
             orderType = XApp.getInstance().getResources().getString(R.string.create_carpool);
         }
         return orderType;

@@ -199,7 +199,8 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
     private void setUpMap() {
         // 设置定位监听
         mAMap.setLocationSource(this);
-        mAMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
+        // 设置默认定位按钮是否显示
+        mAMap.getUiSettings().setMyLocationButtonEnabled(true);
         MyLocationStyle myLocationStyle = new MyLocationStyle();
         // 自定义定位蓝点图标
         myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromResource(R.mipmap.navi_map_gps_locked));
@@ -211,7 +212,8 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
         myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));
         // 将自定义的 myLocationStyle 对象添加到地图上
         mAMap.setMyLocationStyle(myLocationStyle);
-        mAMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
+        // 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
+        mAMap.setMyLocationEnabled(true);
         // 设置定位的类型为定位模式 ，可以由定位、跟随或地图根据面向方向旋转几种
         mAMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
     }
@@ -656,11 +658,13 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
             result.setLongitude(mLongitude);
             result.setLatitude(mLatitude);
             switch (getIntent().getIntExtra("select_place_type", -1)) {
-                case 1://起点
+                case 1:
+                    //起点
                     result.setSort(0);
                     result.setType(1);
                     break;
-                case 3://终点
+                case 3:
+                    //终点
                     result.setSort(1);
                     result.setType(3);
                     break;
