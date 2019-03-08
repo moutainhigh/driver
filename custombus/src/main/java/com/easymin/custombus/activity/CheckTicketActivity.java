@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.LoadingButton;
 import com.easymin.custombus.R;
 import com.easymin.custombus.entity.CbBusOrder;
@@ -155,7 +156,11 @@ public class CheckTicketActivity extends RxBaseActivity implements FlowContract.
 
     @Override
     public void succeseOrder(Customer customer) {
-        setData(customer);
+        if (customer != null){
+            setData(customer);
+        }else {
+            ToastUtil.showMessage(this,"亲，乘车码不对哦");
+        }
     }
 
     @Override

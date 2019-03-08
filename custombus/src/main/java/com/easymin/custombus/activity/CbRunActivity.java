@@ -283,9 +283,9 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View {
             lin_running.setVisibility(View.GONE);
             lin_start_countdown.setVisibility(View.VISIBLE);
             cus_toolbar.setTitle(R.string.cb_no_start);
-//            if (System.currentTimeMillis() < cbBusOrder.time * 1000) {
-//                control_con.setVisibility(View.GONE);
-//            }
+            if (System.currentTimeMillis() < (cbBusOrder.time + 60) * 1000) {
+                control_con.setVisibility(View.GONE);
+            }
         } else if (cbBusOrder.status == BusOrderStatus.SCHEDULE_STATUS_RUNNING) {
             lin_no_start.setVisibility(View.GONE);
             lin_running.setVisibility(View.VISIBLE);
@@ -344,7 +344,6 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View {
                 + disKm
                 + "  " + (time / 60)
                 + getResources().getString(R.string.cb_minutes));
-        Log.e("hufeng", "dis:" + dis + "/time" + time);
     }
 
     @Override
@@ -367,7 +366,7 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View {
 
     @Override
     public void dealSuccese() {
-//        speekVoice(type);
+        speekVoice(type);
         getData();
     }
 
