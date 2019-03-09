@@ -1,6 +1,7 @@
 package com.easymin.custombus.activity;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.easymi.component.BusOrderStatus;
+import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.rxmvp.RxManager;
@@ -24,6 +26,7 @@ import com.easymin.custombus.entity.CbBusOrder;
 import com.easymin.custombus.entity.Customer;
 import com.easymin.custombus.mvp.FlowContract;
 import com.easymin.custombus.mvp.FlowPresenter;
+import com.easymin.custombus.receiver.CancelOrderReceiver;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
@@ -40,7 +43,7 @@ import java.util.List;
  * @History:
  */
 @Route(path = "/custombus/CbRunActivity")
-public class CbRunActivity extends RxBaseActivity implements FlowContract.View {
+public class CbRunActivity extends RxBaseActivity implements FlowContract.View, CancelOrderReceiver.OnCancelListener {
 
     /**
      * 界面控件
@@ -95,6 +98,10 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View {
      */
     public int type;
 
+    /**
+     * 取消订单广播接收者
+     */
+    private CancelOrderReceiver cancelOrderReceiver;
 
     private FlowPresenter presenter;
 
@@ -127,6 +134,18 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View {
     protected void onResume() {
         super.onResume();
 //        getData();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        cancelOrderReceiver = new CancelOrderReceiver(this);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Config.BROAD_CANCEL_ORDER);
+        filter.addAction(Config.BROAD_BACK_ORDER);
+        registerReceiver(cancelOrderReceiver, filter);
+
     }
 
     /**
@@ -171,12 +190,12 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View {
         stationAdapter.setOnItemClickListener(item -> {
             if (item == position) {
                 if (cbBusOrder.arrivedTime == 0) {
-                    toPassenger(0,position);
+                    toPassenger(0, position);
                 } else {
-                    toPassenger(cbBusOrder.arrivedTime,position);
+                    toPassenger(cbBusOrder.arrivedTime, position);
                 }
             } else {
-                toPassenger(0,item);
+                toPassenger(0, item);
             }
         });
     }
@@ -208,9 +227,9 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View {
                         /**
                          *  到达站点
                          */
-                        if (position != cbBusOrder.driverStationVos.size() - 1){
+                        if (position != cbBusOrder.driverStationVos.size() - 1) {
                             type = 3;
-                        }else {
+                        } else {
                             type = 4;
                         }
                         presenter.arriveStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position).stationId);
@@ -234,7 +253,7 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View {
                                 if (cbBusOrder.arrivedTime == 0) {
                                     presenter.chechTickets(cbBusOrder.id);
                                 } else {
-                                    toPassenger(cbBusOrder.arrivedTime,position);
+                                    toPassenger(cbBusOrder.arrivedTime, position);
                                 }
                             }
                         }
@@ -263,7 +282,7 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View {
     /**
      * 跳转乘客信息列表
      */
-    public void toPassenger(long time,int item) {
+    public void toPassenger(long time, int item) {
         Intent intent = new Intent(this, PassengerActivity.class);
         intent.putExtra("cbBusOrder", cbBusOrder);
         intent.putExtra("time", time);
@@ -295,7 +314,7 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View {
         stationAdapter.setDatas(cbBusOrder.driverStationVos);
         if (cbBusOrder.arrivedTime != 0) {
             stationAdapter.setCheckStatus(true);
-        }else {
+        } else {
             stationAdapter.setCheckStatus(false);
         }
     }
@@ -347,6 +366,12 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(cancelOrderReceiver);
+    }
+
+    @Override
     public void showBusLineInfo(CbBusOrder cbBusOrder) {
         this.cbBusOrder = cbBusOrder;
         dealData();
@@ -356,7 +381,7 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View {
 
     @Override
     public void showcheckTime(long time) {
-        toPassenger(time,position);
+        toPassenger(time, position);
     }
 
     @Override
@@ -456,10 +481,15 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (data != null && data.getIntExtra("type",0) != 0){
-                type = data.getIntExtra("type",0);
+            if (data != null && data.getIntExtra("type", 0) != 0) {
+                type = data.getIntExtra("type", 0);
             }
             getData();
         }
+    }
+
+    @Override
+    public void onCancelOrder(long orderId, String orderType, String msg) {
+        getData();
     }
 }

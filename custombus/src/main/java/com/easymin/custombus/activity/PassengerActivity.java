@@ -1,6 +1,7 @@
 package com.easymin.custombus.activity;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.ZCSetting;
@@ -23,6 +25,7 @@ import com.easymin.custombus.entity.Customer;
 import com.easymin.custombus.entity.Station;
 import com.easymin.custombus.mvp.FlowContract;
 import com.easymin.custombus.mvp.FlowPresenter;
+import com.easymin.custombus.receiver.CancelOrderReceiver;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
@@ -39,7 +42,7 @@ import java.util.TimerTask;
  * @Description:
  * @History:
  */
-public class PassengerActivity extends RxBaseActivity implements FlowContract.View {
+public class PassengerActivity extends RxBaseActivity implements FlowContract.View , CancelOrderReceiver.OnCancelListener{
     /**
      * 界面控件
      */
@@ -76,6 +79,11 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
      * 当前站点下标
      */
     private int position;
+
+    /**
+     * 取消订单广播接收者
+     */
+    private CancelOrderReceiver cancelOrderReceiver;
 
     @Override
     public boolean isEnableSwipe() {
@@ -353,8 +361,28 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        setResult(RESULT_OK);
-        finish();
+        cus_toolbar.leftIcon.callOnClick();
+    }
+
+    @Override
+    public void onCancelOrder(long orderId, String orderType, String msg) {
+        getData();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        cancelOrderReceiver = new CancelOrderReceiver(this);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Config.BROAD_CANCEL_ORDER);
+        filter.addAction(Config.BROAD_BACK_ORDER);
+        registerReceiver(cancelOrderReceiver, filter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(cancelOrderReceiver);
     }
 }

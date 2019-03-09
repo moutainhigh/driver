@@ -1,5 +1,6 @@
 package com.easymin.custombus.activity;
 
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -8,6 +9,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.ToastUtil;
@@ -17,6 +19,7 @@ import com.easymin.custombus.entity.CbBusOrder;
 import com.easymin.custombus.entity.Customer;
 import com.easymin.custombus.mvp.FlowContract;
 import com.easymin.custombus.mvp.FlowPresenter;
+import com.easymin.custombus.receiver.CancelOrderReceiver;
 
 import java.util.List;
 
@@ -43,6 +46,7 @@ public class CheckTicketActivity extends RxBaseActivity implements FlowContract.
     LinearLayout lin_ticket;
 
     private FlowPresenter presenter;
+
 
     @Override
     public boolean isEnableSwipe() {
@@ -76,6 +80,9 @@ public class CheckTicketActivity extends RxBaseActivity implements FlowContract.
         lin_ticket = findViewById(R.id.lin_ticket);
     }
 
+    /**
+     * 初始化监听
+     */
     public void initListener() {
         tv_cancel.setOnClickListener(v -> {
             finish();
@@ -177,4 +184,8 @@ public class CheckTicketActivity extends RxBaseActivity implements FlowContract.
         setResult(RESULT_OK);
         finish();
     }
+
+
+
+
 }
