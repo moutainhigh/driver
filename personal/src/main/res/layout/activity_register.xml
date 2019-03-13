@@ -94,7 +94,6 @@
                     android:gravity="center_vertical"
                     android:hint="@string/rg_iamge_code"
                     android:textColorHint="@color/color_cccccc"
-                    android:inputType="textPassword"
                     android:paddingBottom="10dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"

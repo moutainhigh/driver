@@ -37,10 +37,12 @@ public class CustomScrollView extends ScrollView {
                 case CODE_TO_START:
                     //重置标志“滑动到顶部”时的标志位
                     isScrollToStart = false;
+                    slideTop = false;
                     break;
                 case CODE_TO_END:
                     //重置标志“滑动到底部”时的标志位
                     isScrollToEnd = false;
+                    slidebottom = false;
                     break;
                 default:
                     break;
@@ -61,16 +63,24 @@ public class CustomScrollView extends ScrollView {
     }
 
 
+    //hf
+    boolean slideTop;
+    boolean slidebottom;
+
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
+
+        int scrollY = (t - oldt);
+
         if (mOnScrollChangeListener != null) {
             Log.i("CustomScrollView", "scrollY:" + getScrollY());
             //滚动到顶部，ScrollView存在回弹效果效应（这里只会调用两次，如果用<=0,会多次触发）
             if (getScrollY() == 0) {
                 //过滤操作，优化为一次调用
-                if (!isScrollToStart) {
+                if (!isScrollToStart && scrollY < 0) {
                     isScrollToStart = true;
+                    slideTop = true;
                     mHandler.sendEmptyMessageDelayed(CODE_TO_START, 200);
                     Log.e("CustomScrollView", "toStart");
                     mOnScrollChangeListener.onScrollToStart();
@@ -80,8 +90,9 @@ public class CustomScrollView extends ScrollView {
                 if (contentView != null && contentView.getMeasuredHeight() == (getScrollY() + getHeight())) {
                     //滚动到底部，ScrollView存在回弹效果效应
                     //优化，只过滤第一次
-                    if (!isScrollToEnd) {
+                    if (!isScrollToEnd && scrollY > 0) {
                         isScrollToEnd = true;
+                        slidebottom = true;
                         mHandler.sendEmptyMessageDelayed(CODE_TO_END, 200);
                         Log.e("CustomScrollView", "toEnd,scrollY:" + getScrollY());
                         mOnScrollChangeListener.onScrollToEnd();
@@ -90,7 +101,6 @@ public class CustomScrollView extends ScrollView {
                 }
             }
         }
-
     }
 
     //滑动监听接口
@@ -111,21 +121,23 @@ public class CustomScrollView extends ScrollView {
     public boolean dispatchTouchEvent(MotionEvent ev) {
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                Log.e("hufeng","ACTION_DOWN");
+                Log.e("hufeng", "ACTION_DOWN");
                 break;
             case MotionEvent.ACTION_MOVE:
-                Log.e("hufeng","ACTION_MOVE");
-                if(isScrollToStart || isScrollToEnd){
-                    getParent().requestDisallowInterceptTouchEvent(true);
-                    Log.e("hufeng","getParent");
+                if (ev.getAction() == MotionEvent.ACTION_MOVE){
+                    if (slidebottom || slideTop){
+                        Log.e("hufeng", "true");
+                        return true;
+                    }
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                Log.e("hufeng","ACTION_MOVE");
+                Log.e("hufeng", "ACTION_MOVE");
                 break;
             default:
                 break;
-            }
+        }
         return super.dispatchTouchEvent(ev);
     }
+
 }
