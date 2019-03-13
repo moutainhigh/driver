@@ -50,4 +50,8 @@ public class Station implements Serializable{
      * 站点状态 1 未前往 2 前往中 3 已到达 4 已离开
      */
     public int status;
+
+
+
+
 }
