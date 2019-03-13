@@ -447,37 +447,34 @@ public class LoginActivity extends RxBaseActivity {
     private void login(String name, String psw) {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
-        String udid = PhoneUtil.getUDID(this);
-
-        Log.e("hufeng", "udid-->" + udid);
-        String version = "";
-        try {
-            version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        /**
-         * 系统版本
-         */
-        String systemVersion = Build.VERSION.RELEASE;
-
-        String model = Build.MODEL;
-
-        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-
-        String operatorName = "未知";
-        String operator = tm.getSimOperator();
-        if (operator != null) {
-            if (operator.equals("46000") || operator.equals("46002")) {
-                operatorName = "中国移动";
-            } else if (operator.equals("46001")) {
-                operatorName = "中国联通";
-            } else if (operator.equals("46003")) {
-                operatorName = "中国电信";
-            }
-        }
-        String netType = NetWorkUtil.getNetWorkTypeName(this);
+//        String udid = PhoneUtil.getUDID(this);
+//        String version = "";
+//        try {
+//            version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+//        } catch (PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        /**
+//         * 系统版本
+//         */
+//        String systemVersion = Build.VERSION.RELEASE;
+//
+//        String model = Build.MODEL;
+//
+//        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+//
+//        String operatorName = "未知";
+//        String operator = tm.getSimOperator();
+//        if (operator != null) {
+//            if (operator.equals("46000") || operator.equals("46002")) {
+//                operatorName = "中国移动";
+//            } else if (operator.equals("46001")) {
+//                operatorName = "中国联通";
+//            } else if (operator.equals("46003")) {
+//                operatorName = "中国电信";
+//            }
+//        }
+//        String netType = NetWorkUtil.getNetWorkTypeName(this);
 
         XApp.getPreferencesEditor().putString(Config.SP_TOKEN, "").apply();
 
@@ -489,8 +486,6 @@ public class LoginActivity extends RxBaseActivity {
         String pws_rsa = null;
         String randomStr_rsa = null;
 
-//        String ip_rsa;
-//        String port_rsa;
         String mac_rsa = null;
         String imei_rsa = null;
         String imsi_rsa = null;
@@ -506,16 +501,16 @@ public class LoginActivity extends RxBaseActivity {
             imei_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey(MobileInfoUtil.getIMEI(this).getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
             imsi_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey(MobileInfoUtil.getIMSI(this).getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
             loginType_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey(Build.MODEL.getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
-            longitude_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey((mlocation.getLatitude()+"").getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
-            latitude_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey((mlocation.getLongitude()+"").getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
+            longitude_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey((mlocation.getLatitude() + "").getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
+            latitude_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey((mlocation.getLongitude() + "").getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         Observable<LoginResult> observable = api
                 .loginByPW(name_rsa, pws_rsa, randomStr_rsa,
-                        mac_rsa,imei_rsa,imsi_rsa,loginType_rsa,
-                        longitude_rsa,latitude_rsa)
+                        mac_rsa, imei_rsa, imsi_rsa, loginType_rsa,
+                        longitude_rsa, latitude_rsa)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
@@ -557,11 +552,11 @@ public class LoginActivity extends RxBaseActivity {
                 editor.putString(Config.SP_TOKEN, employ.token);
                 editor.apply();
                 getSetting(employ, name, psw);
-            }else if (loginResult.getCode() == APPLYING){
+            } else if (loginResult.getCode() == APPLYING) {
                 Intent intent = new Intent(this, RegisterNoticeActivity.class);
                 intent.putExtra("type", 2);
                 startActivity(intent);
-            }else if (loginResult.getCode() == APPLY_PASS){
+            } else if (loginResult.getCode() == APPLY_PASS) {
                 Employ employ = loginResult.getEmployInfo();
                 XApp.getPreferencesEditor().putLong(Config.SP_DRIVERID, employ.id).apply();
                 employ.saveOrUpdate();
@@ -570,16 +565,16 @@ public class LoginActivity extends RxBaseActivity {
                 editor.putString(Config.SP_TOKEN, employ.token);
                 editor.apply();
                 getSetting(employ, name, psw);
-            }else if (loginResult.getCode() == APPLY_REJECT){
+            } else if (loginResult.getCode() == APPLY_REJECT) {
                 Intent intent = new Intent(this, RegisterNoticeActivity.class);
                 intent.putExtra("type", 3);
                 intent.putExtra("phone", name);
                 startActivity(intent);
-            }else {
+            } else {
                 String msg = loginResult.getMessage();
                 //获取默认配置
                 Configuration config = XApp.getInstance().getResources().getConfiguration();
-                if(config.locale == Locale.TAIWAN || config.locale == Locale.TRADITIONAL_CHINESE){
+                if (config.locale == Locale.TAIWAN || config.locale == Locale.TRADITIONAL_CHINESE) {
                     for (ErrCodeTran errCode : ErrCodeTran.values()) {
                         if (loginResult.getCode() == errCode.getCode()) {
                             msg = errCode.getShowMsg();
@@ -594,7 +589,7 @@ public class LoginActivity extends RxBaseActivity {
                         }
                     }
                 }
-                ToastUtil.showMessage(this,msg);
+                ToastUtil.showMessage(this, msg);
             }
         })));
     }
@@ -686,8 +681,6 @@ public class LoginActivity extends RxBaseActivity {
     private void selectedQiye() {
         initPop();
     }
-
-//add hf
 
     /**
      * 手机唯一识别码

@@ -209,9 +209,9 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View, 
             tv_day.setText("" + day);
             tv_hour.setText("" + hour);
             tv_fen.setText("" + minute);
-            if (day == 0 && hour == 0 && minute == 0) {
-                control_con.setVisibility(View.VISIBLE);
-            }
+//            if (day == 0 && hour == 0 && minute == 0) {
+//                control_con.setVisibility(View.VISIBLE);
+//            }
         });
 
         slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
@@ -302,9 +302,9 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View, 
             lin_running.setVisibility(View.GONE);
             lin_start_countdown.setVisibility(View.VISIBLE);
             cus_toolbar.setTitle(R.string.cb_no_start);
-            if (System.currentTimeMillis() < (cbBusOrder.time + 60) * 1000) {
-                control_con.setVisibility(View.GONE);
-            }
+//            if (System.currentTimeMillis() < (cbBusOrder.time + 60) * 1000) {
+//                control_con.setVisibility(View.GONE);
+//            }
         } else if (cbBusOrder.status == BusOrderStatus.SCHEDULE_STATUS_RUNNING) {
             lin_no_start.setVisibility(View.GONE);
             lin_running.setVisibility(View.VISIBLE);

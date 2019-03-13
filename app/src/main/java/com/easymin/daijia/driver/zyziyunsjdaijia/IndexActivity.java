@@ -22,9 +22,6 @@ public class IndexActivity extends RxBaseActivity {
         super.onCreate(savedInstanceState);
         Intent intent = new Intent(this, SplashActivity.class);
         startActivity(intent);
-//        ARouter.getInstance()
-//                .build("/carpooling/FlowActivity")
-//                .navigation();
     }
 
     @Override

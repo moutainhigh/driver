@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">component</string>
 
+    <string name="common_tips">提示~</string>
+
     <string name="lib_no_more_data">没有更多数据了哦~</string>
     <string name="lib_again_up">失败了呢,上滑再试试?(⊙﹏⊙)</string>
     <string name="lib_loading">努力加载中…</string>

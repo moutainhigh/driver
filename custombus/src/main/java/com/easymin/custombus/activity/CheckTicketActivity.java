@@ -28,7 +28,7 @@ import java.util.List;
  * @FileName: CheckTicketActivity
  * @Author: hufeng
  * @Date: 2019/2/15 下午1:25
- * @Description:
+ * @Description:  验票界面
  * @History:
  */
 public class CheckTicketActivity extends RxBaseActivity implements FlowContract.View{
@@ -114,6 +114,10 @@ public class CheckTicketActivity extends RxBaseActivity implements FlowContract.
         });
     }
 
+    /**
+     * 显示数据
+     * @param customer
+     */
     public void setData(Customer customer){
         lin_ticket.setVisibility(View.VISIBLE);
 

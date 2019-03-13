@@ -29,8 +29,11 @@ import com.easymi.component.permission.RxPermissions;
 import com.easymi.component.update.UpdateHelper;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.NetUtil;
+import com.easymi.component.utils.RootUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
+import com.easymi.component.utils.emulator.EmulatorCheckUtil;
+import com.easymi.component.utils.safeutils.Cat;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -41,6 +44,7 @@ import pl.droidsonroids.gif.GifImageView;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName:SplashActivity
+ *
  * @Author: shine
  * Date: 2018/12/24 下午5:00
  * Description:
@@ -65,10 +69,6 @@ public class SplashActivity extends RxBaseActivity {
      */
     RxPermissions rxPermissions;
 
-    GifDrawable gifFromAssets;
-
-    TextView jumpOver;
-
     private int leftTime;
 
     private static final String TAG = "SplashActivity";
@@ -80,7 +80,6 @@ public class SplashActivity extends RxBaseActivity {
                 case 0:
                     if (leftTime > 0) {
                         leftTime--;
-                        jumpOver.setText(getString(R.string.jump_gif) + "(" + leftTime + getString(R.string.sec) + ")");
                         handler.sendEmptyMessageDelayed(0, 1000);
                     }
                     break;
@@ -111,14 +110,10 @@ public class SplashActivity extends RxBaseActivity {
         }
     }
 
-
     private boolean animateStarted = false;
 
     @Override
     public void initViews(Bundle savedInstanceState) {
-        Log.e(TAG, "initViews");
-        jumpOver = findViewById(R.id.jump_over);
-
         rxPermissions = new RxPermissions(this);
 
         loadLanguage();
@@ -136,61 +131,13 @@ public class SplashActivity extends RxBaseActivity {
     }
 
     /**
-     * 延时跳转
-     */
-    private void delayIn() {
-        if (needShowAnimate()) {
-            XApp.getPreferencesEditor().putLong(Config.SP_LAST_SPLASH_TIME, System.currentTimeMillis()).apply();
-            if (null != gifFromAssets) {
-                Log.e(TAG, "null != gifFromAssets");
-                leftTime = gifFromAssets.getDuration() / 1000;
-                jumpOver.setText(getString(R.string.jump_gif) + "(" + leftTime + getString(R.string.sec) + ")");
-                gifFromAssets.start();
-                animateStarted = true;
-                gifFromAssets.addAnimationListener(loopNumber -> jump());
-                handler.sendEmptyMessageDelayed(0, 1000);
-            } else {
-                Log.e(TAG, "null == gifFromAssets");
-                handler.postDelayed(this::jump, 2000);
-            }
-        } else {
-            Log.e(TAG, "! needShowAnimate");
-            jump();
-        }
-    }
-
-    /**
-     * 是否显示首页动画
-     *
-     * @return
-     */
-    private boolean needShowAnimate() {
-        long lastShowAnimaTime = XApp.getMyPreferences().getLong(Config.SP_LAST_SPLASH_TIME, 0);
-        if (lastShowAnimaTime == 0) {
-            return true;
-        } else {
-            if (System.currentTimeMillis() - lastShowAnimaTime > 24 * 60 * 60 * 1000) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-    }
-
-    /**
-     * @param view
-     */
-    public void jumpOver(View view) {
-        jump();
-    }
-
-    /**
      * 检查更新
      */
     private void checkForUpdate() {
-
-        if (NetUtil.getNetWorkState(this) != NetUtil.NETWORK_NONE) { //判定用户是否单独关闭了该应用的网络
-            if (!NetUtil.ping()) {//通过ping baidu的方式来判断网络是否可用
+        //判定用户是否单独关闭了该应用的网络
+        if (NetUtil.getNetWorkState(this) != NetUtil.NETWORK_NONE) {
+            if (!NetUtil.ping()) {
+                //通过ping baidu的方式来判断网络是否可用
                 AlertDialog dialog = new AlertDialog.Builder(this)
                         .setTitle(getString(R.string.hint))
                         .setMessage(getString(R.string.reject_net))
@@ -201,25 +148,74 @@ public class SplashActivity extends RxBaseActivity {
                             Uri uri = Uri.fromParts("package", getPackageName(), null);
                             intent.setData(uri);
                             startActivity(intent);
-                            jumpOver.setEnabled(false);
                         })
                         .create();
                 dialog.show();
                 return;
             }
         }
+        //二次打包应用
+//        if (!new Cat(this).check()) {
+//            AlertDialog dialog = new AlertDialog.Builder(this)
+//                    .setTitle(R.string.common_tips)
+//                    .setMessage("非法应用")
+//                    .setPositiveButton(R.string.ok, (dialog1, which) -> {
+//                        finish();
+//                    })
+//                    .create();
+//            dialog.setCancelable(false);
+//            dialog.show();
+//            return;
+//        }
 
+        //检测模拟器
+        boolean isEmulator = EmulatorCheckUtil.getSingleInstance().readSysProperty();
+        if (isEmulator) {
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle(R.string.common_tips)
+                    .setMessage("检测到当前运行环境为模拟器，不能正常运行")
+                    .setPositiveButton(R.string.ok, (dialog1, which) -> {
+                        finish();
+                    })
+                    .create();
+            dialog.setCancelable(false);
+            dialog.show();
+            return;
+        }
+
+        //检测是否root
+        boolean isXposedExists = RootUtil.isXposedExists();
+        boolean isRoot = RootUtil.isRoot();
+        if (isRoot || isXposedExists) {
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle(R.string.common_tips)
+                    .setMessage("检测到您的手机已取得root权限或安装了xposed\n可能会存在账户安全问题,是否继续？")
+                    .setPositiveButton("我已清楚问题，继续运行", (dialog1, which) -> {
+                        update();
+                    })
+                    .setNegativeButton("退出应用", (dialog1, which) -> {
+                        ActManager.getInstance().finishAllActivity();
+                    })
+                    .create();
+            dialog.setCancelable(false);
+            dialog.show();
+            return;
+        }
+        update();
+    }
+
+    private void update() {
         new UpdateHelper(this, new UpdateHelper.OnNextListener() {
             @Override
             public void onNext() {
                 Log.e(TAG, "onNext");
-                runOnUiThread(() -> delayIn());
+                runOnUiThread(() -> jump());
             }
 
             @Override
             public void onNoVersion() {
                 Log.e(TAG, "onNoVersion");
-                runOnUiThread(() -> delayIn());
+                runOnUiThread(() -> jump());
             }
         });
     }
@@ -279,24 +275,6 @@ public class SplashActivity extends RxBaseActivity {
                 .setCancelable(false)
                 .create();
         dialog.show();
-    }
-
-    /**
-     * 请求权限
-     */
-    private void requestPer() {
-        rxPermissions.request(Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.READ_PHONE_STATE,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .subscribe(granted -> {
-                    if (granted) {
-                        checkForUpdate();
-                    } else {
-                        Toast.makeText(SplashActivity.this, getString(R.string.exit), Toast.LENGTH_SHORT).show();
-                        delayExit();
-                    }
-                });
     }
 
     /**

@@ -98,18 +98,25 @@
 -keep public class * extends android.app.Fragment
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application
+-keep public class * extends android.support.multidex.MultiDexApplication
 -keep public class * extends android.app.Service
 -keep public class * extends android.content.BroadcastReceiver
 -keep public class * extends android.content.ContentProvider
 -keep public class * extends android.app.backup.BackupAgentHelper
 -keep public class * extends android.preference.Preference
 -keep public class * extends android.view.View
-
+-keep public class com.android.vending.licensing.ILicensingService
 # 如果有引用android-support-v4.jar包，可以添加下面这行
 -keep public class * extends android.support.v4.app.Fragment
+-keep class android.support.** {*;}## 保留support下的所有类及其内部类
 
 ##如果引用了v4或者v7包
 -dontwarn android.support.**
+# 保留继承的
+-keep public class * extends android.support.v4.**
+-keep public class * extends android.support.v7.**
+-keep public class * extends android.support.annotation.**
+
 
 # 保留在Activity中的方法参数是view的方法，
 # 从而我们在layout里面编写onClick就不会被影响
@@ -145,6 +152,12 @@ public static ** valueOf(java.lang.String);
     private void readObject(java.io.ObjectInputStream);
     java.lang.Object writeReplace();
     java.lang.Object readResolve();
+}
+
+# 对于带有回调函数的onXXEvent、**On*Listener的，不能被混淆
+-keepclassmembers class * {
+    void *(**On*Event);
+    void *(**On*Listener);
 }
 
 # 对于R（资源）下的所有类及其方法，都不能被混淆
@@ -210,6 +223,7 @@ public static ** valueOf(java.lang.String);
 
 #---------------------------------本app内的混淆-------------------------------
 -keep public class com.easymi.component.entity.**{*;}
+-keep class com.easymi.componen.widget.**{*;}
 -keep public class com.easymi.common.entity.**{*;}
 -keep public class com.easymin.carpooling.entity.**{*;}
 -keep public class com.easymin.chartered.entity.**{*;}
@@ -222,7 +236,8 @@ public static ** valueOf(java.lang.String);
 -keep public class com.easymi.taxi.entity.**{*;}
 -keep public class com.easymi.zhuanche.entity.**{*;}
 
-
+-keep public class com.easymi.component.app.**{*;}
+-keep public class com.easymi.component.db.**{*;}
 
 
 #---------------------------------三方jar-------------------------------
@@ -239,6 +254,7 @@ public static ** valueOf(java.lang.String);
     <fields>;
     <methods>;
 }
+-keep class com.alipay.a.**{*;}
 -keep class com.alipay.sdk.sys.**{*;}
 -keep class com.alipay.android.phone.mrpc.core.** { *; }
 -keep class com.alipay.apmobilesecuritysdk.** { *; }

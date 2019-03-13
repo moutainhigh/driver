@@ -5,8 +5,10 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.easymi.component.Config;
@@ -15,9 +17,12 @@ import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.network.GsonUtil;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
+import com.easymi.component.widget.CustomScrollView;
 import com.easymi.component.widget.CustomSlideToUnlockView;
 import com.easymi.component.widget.LoadingButton;
+import com.easymi.component.widget.slidinguppanel.SlidingUpPanelLayout;
 import com.easymin.custombus.R;
 import com.easymin.custombus.adapter.PassengerAdapter;
 import com.easymin.custombus.entity.CbBusOrder;
@@ -48,7 +53,8 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
      */
     CusToolbar cus_toolbar;
     TextView tv_station_name;
-    TextView tv_ticket_status;
+    TextView tv_status_yes;
+    TextView tv_status_no;
     TextView tv_countdown;
     TextView tv_countdown_hint;
     RecyclerView recyclerView;
@@ -58,6 +64,9 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
     LinearLayout lin_time_countdown;
     ExpandableLayout expand;
     TextView tv_go_next;
+    SlidingUpPanelLayout sliding;
+    CustomScrollView scrollview;
+
     /**
      * 适配器
      */
@@ -108,9 +117,13 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
         setData();
         if (booktime != 0) {
             setWaitTime();
-            lin_bottom.setVisibility(View.VISIBLE);
+//            lin_bottom.setVisibility(View.VISIBLE);
+//            sliding.setTouchEnabled(true);
+            sliding.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
         }else {
-            lin_bottom.setVisibility(View.GONE);
+//            lin_bottom.setVisibility(View.GONE);
+//            sliding.setTouchEnabled(false);
+            sliding.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
         }
     }
 
@@ -135,7 +148,8 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
     public void findById() {
         cus_toolbar = findViewById(R.id.cus_toolbar);
         tv_station_name = findViewById(R.id.tv_station_name);
-        tv_ticket_status = findViewById(R.id.tv_ticket_status);
+        tv_status_yes = findViewById(R.id.tv_status_yes);
+        tv_status_no = findViewById(R.id.tv_status_no);
         tv_countdown = findViewById(R.id.tv_countdown);
         tv_countdown_hint = findViewById(R.id.tv_countdown_hint);
         recyclerView = findViewById(R.id.recyclerView);
@@ -145,6 +159,8 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
         lin_time_countdown = findViewById(R.id.lin_time_countdown);
         expand = findViewById(R.id.expand);
         tv_go_next = findViewById(R.id.tv_go_next);
+        sliding = findViewById(R.id.sliding_layout);
+        scrollview = findViewById(R.id.scrollview);
     }
 
     /**
@@ -154,6 +170,7 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
         adapter = new PassengerAdapter(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
+        recyclerView.setNestedScrollingEnabled(false);//禁止滑动
     }
 
     /**
@@ -169,6 +186,17 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
         });
         btn_go_next.setOnClickListener(v -> {
             presenter.toNextStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position+1).stationId);
+        });
+        scrollview.setScrollChangeListener(new CustomScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollToStart() {
+                ToastUtil.showMessage(PassengerActivity.this,"top");
+            }
+
+            @Override
+            public void onScrollToEnd() {
+                ToastUtil.showMessage(PassengerActivity.this,"end");
+            }
         });
     }
 
@@ -328,8 +356,8 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
                 check = check + customers.get(i).ticketNumber;
             }
         }
-        tv_ticket_status.setText(getResources().getString(R.string.cb_alredy_check) + " " + check
-                + getResources().getString(R.string.cb_no_check) + " " + uncheck);
+        tv_status_yes.setText(getResources().getString(R.string.cb_alredy_check) + " " + check);
+        tv_status_no.setText(getResources().getString(R.string.cb_no_check) + " " + uncheck);
 
         /**
          * 根据未验票数显示布局
@@ -385,4 +413,7 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
         super.onStop();
         unregisterReceiver(cancelOrderReceiver);
     }
+
+
+
 }
