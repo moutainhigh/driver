@@ -5,36 +5,26 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.easymi.component.Config;
-import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
-import com.easymi.component.entity.ZCSetting;
-import com.easymi.component.network.GsonUtil;
 import com.easymi.component.rxmvp.RxManager;
-import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
-import com.easymi.component.widget.CustomScrollView;
-import com.easymi.component.widget.CustomSlideToUnlockView;
 import com.easymi.component.widget.LoadingButton;
-import com.easymi.component.widget.slidinguppanel.SlidingUpPanelLayout;
+import com.easymin.custombus.MyScrollVIew;
 import com.easymin.custombus.R;
 import com.easymin.custombus.adapter.PassengerAdapter;
 import com.easymin.custombus.entity.CbBusOrder;
 import com.easymin.custombus.entity.Customer;
-import com.easymin.custombus.entity.Station;
 import com.easymin.custombus.mvp.FlowContract;
 import com.easymin.custombus.mvp.FlowPresenter;
 import com.easymin.custombus.receiver.CancelOrderReceiver;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -64,8 +54,7 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
     LinearLayout lin_time_countdown;
     ExpandableLayout expand;
     TextView tv_go_next;
-    SlidingUpPanelLayout sliding;
-    CustomScrollView scrollview;
+    MyScrollVIew scrollview;
 
     /**
      * 适配器
@@ -93,6 +82,7 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
      * 取消订单广播接收者
      */
     private CancelOrderReceiver cancelOrderReceiver;
+    private LinearLayout passenger_ll_top;
 
     @Override
     public boolean isEnableSwipe() {
@@ -119,11 +109,9 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
             setWaitTime();
 //            lin_bottom.setVisibility(View.VISIBLE);
 //            sliding.setTouchEnabled(true);
-            sliding.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
         }else {
 //            lin_bottom.setVisibility(View.GONE);
 //            sliding.setTouchEnabled(false);
-            sliding.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
         }
     }
 
@@ -159,8 +147,8 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
         lin_time_countdown = findViewById(R.id.lin_time_countdown);
         expand = findViewById(R.id.expand);
         tv_go_next = findViewById(R.id.tv_go_next);
-        sliding = findViewById(R.id.sliding_layout);
         scrollview = findViewById(R.id.scrollview);
+        passenger_ll_top = findViewById(R.id.passenger_ll_top);
     }
 
     /**
@@ -187,15 +175,10 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
         btn_go_next.setOnClickListener(v -> {
             presenter.toNextStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position+1).stationId);
         });
-        scrollview.setScrollChangeListener(new CustomScrollView.OnScrollChangeListener() {
+        scrollview.setScrollListener(new MyScrollVIew.OnScrollListener() {
             @Override
-            public void onScrollToStart() {
-                ToastUtil.showMessage(PassengerActivity.this,"top");
-            }
-
-            @Override
-            public void onScrollToEnd() {
-                ToastUtil.showMessage(PassengerActivity.this,"end");
+            public void onScroll(int scrollY) {
+                passenger_ll_top.setTranslationY(-(float) (scrollY*0.7));
             }
         });
     }
