@@ -525,7 +525,10 @@ public interface McService {
     @POST("api/v1/public/driver/register/save")
     Observable<Register> register(@Field("password") String password,
                                   @Field("phone") String phone,
-                                  @Field("smsCode") String smsCode);
+                                  @Field("smsCode") String smsCode,
+//                                  @Field("randomStr") String randomStr,
+//                                  @Field("code") String code,
+                                  @Field("random") String random);
 
     /**
      * 获取七牛云token

@@ -21,13 +21,13 @@ public class Config {
 //    public static final String HOST = "http://10.10.2.23:10001/";//俊俏
 //    public static final String HOST = "http://10.10.2.130:10001/";//130测试地址 （内网）
 //    public static final String HOST = "http://47.94.204.67:20001/";//130测试地址（外网）　　
-//    public static final String HOST = "http://api.xiaokakj.com/";//线上地址
-    public static final String HOST = "http://api.xiaokakj.cn/";//预发
+    public static final String HOST = "http://api.xiaokakj.com/";//线上地址
+//    public static final String HOST = "http://api.xiaokakj.cn/";//预发
     /**
      * MQTT配置
      */
-    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//预发地址
-//    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn";//线上地址
+//    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//预发地址
+    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn";//线上地址
 //    public static final String MQTT_HOST = "tcp://10.10.2.35:1883";//本地地址
     /**
      * APP_KEY
@@ -172,9 +172,6 @@ public class Config {
     public static final boolean NEED_TRACE = false;
     //是否保存位置信息
     public static final boolean SAVE_LOGO = false;
-
-    public static final String MI_APPID = "2882303761517793325";
-    public static final String MI_APPKEY = "5891779394325";
 
     public static final String SP_TOKEN = "sp_token";
 

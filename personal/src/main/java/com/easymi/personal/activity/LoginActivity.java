@@ -515,36 +515,9 @@ public class LoginActivity extends RxBaseActivity {
                 .observeOn(AndroidSchedulers.mainThread());
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, loginBtn, loginResult -> {
-//            Employ employ = loginResult.getEmployInfo();
-//            XApp.getPreferencesEditor().putLong(Config.SP_DRIVERID, employ.id).apply();
-//            employ.saveOrUpdate();
-//            //1.未提交资料；2.审核中；3驳回；4通过
-//            if (employ.registerStatus == 4) {
-//                SharedPreferences.Editor editor = XApp.getPreferencesEditor();
-//                editor.putString(Config.SP_TOKEN, employ.token);
-//                editor.apply();
-//                getSetting(employ, name, psw);
-//            } else if (employ.registerStatus == 3) {
-//                Intent intent = new Intent(this, RegisterNoticeActivity.class);
-//                intent.putExtra("type", 3);
-//                startActivity(intent);
-//            } else if (employ.registerStatus == 2) {
-//                Intent intent = new Intent(this, RegisterNoticeActivity.class);
-//                intent.putExtra("type", 2);
-//                startActivity(intent);
-//            } else if (employ.registerStatus == 1) {
-//                Intent intent = new Intent(this, RegisterBaseActivity.class);
-//                intent.putExtra("employ", employ);
-//                startActivity(intent);
-//            } else {
-//                SharedPreferences.Editor editor = XApp.getPreferencesEditor();
-//                editor.putString(Config.SP_TOKEN, employ.token);
-//                editor.apply();
-//                getSetting(employ, name, psw);
-//            }
-
             if (loginResult.getCode() == 1) {
-                Employ employ = loginResult.getEmployInfo();
+                Log.e("hufeng/data",loginResult.data+"");
+                Employ employ = loginResult.data;
                 XApp.getPreferencesEditor().putLong(Config.SP_DRIVERID, employ.id).apply();
                 employ.saveOrUpdate();
 
@@ -557,7 +530,7 @@ public class LoginActivity extends RxBaseActivity {
                 intent.putExtra("type", 2);
                 startActivity(intent);
             } else if (loginResult.getCode() == APPLY_PASS) {
-                Employ employ = loginResult.getEmployInfo();
+                Employ employ = loginResult.data;
                 XApp.getPreferencesEditor().putLong(Config.SP_DRIVERID, employ.id).apply();
                 employ.saveOrUpdate();
 

@@ -2,11 +2,11 @@ package com.easymi.taxi.widget;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.easymi.component.widget.BaseCenterDialog;
 import com.easymi.taxi.R;
 
 /**

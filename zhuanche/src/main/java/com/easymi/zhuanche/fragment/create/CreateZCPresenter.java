@@ -63,7 +63,7 @@ public class CreateZCPresenter implements CreateZCContract.Presenter {
     @Override
     public void queryPassenger(String phone) {
         Employ employ = EmUtil.getEmployInfo();
-        view.getManager().add(model.queryPassenger(employ.company_id,
+        view.getManager().add(model.queryPassenger(employ.companyId,
                 "company_name",
                 phone).subscribe(new MySubscriber<>(context, true, true, new HaveErrSubscriberListener<PassengerResult>() {
             @Override

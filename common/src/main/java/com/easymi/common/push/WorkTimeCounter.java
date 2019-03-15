@@ -143,7 +143,7 @@ public class WorkTimeCounter {
 //        }
         long driverId = employ.id;
         String driverNo = employ.userName;
-        long companyId = employ.company_id;
+        long companyId = employ.companyId;
 
         int driverStatus;
         if (statues <= 0) {

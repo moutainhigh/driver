@@ -183,13 +183,18 @@ public class RegisterBaseActivity extends RxBaseActivity {
         tv_type.setText(registerInfo.serviceName);
 
         tv_compney.setText(registerInfo.companyName);
-
-        tv_time_start.setText(TimeUtil.getTime(TimeUtil.YMD_4_CN, registerInfo.startTime * 1000));
-        tv_time_end.setText(TimeUtil.getTime(TimeUtil.YMD_4_CN, registerInfo.endTime * 1000));
-
-        tv_start.setText(TimeUtil.getTime(TimeUtil.YMD_4_CN, registerInfo.netCarQualificationsStart * 1000));
-        tv_end.setText(TimeUtil.getTime(TimeUtil.YMD_4_CN, registerInfo.netCarQualificationsEnd * 1000));
-
+        if (registerInfo.startTime != 0){
+            tv_time_start.setText(TimeUtil.getTime(TimeUtil.YMD_4_CN, registerInfo.startTime * 1000));
+        }
+        if (registerInfo.endTime != 0){
+            tv_time_end.setText(TimeUtil.getTime(TimeUtil.YMD_4_CN, registerInfo.endTime * 1000));
+        }
+        if (registerInfo.netCarQualificationsStart != 0){
+            tv_start.setText(TimeUtil.getTime(TimeUtil.YMD_4_CN, registerInfo.netCarQualificationsStart * 1000));
+        }
+        if (registerInfo.netCarQualificationsEnd != 0){
+            tv_end.setText(TimeUtil.getTime(TimeUtil.YMD_4_CN, registerInfo.netCarQualificationsEnd * 1000));
+        }
         et_work_number.setText(registerInfo.introducer);
     }
 
@@ -396,7 +401,11 @@ public class RegisterBaseActivity extends RxBaseActivity {
             ToastUtil.showMessage(this, getString(R.string.register_cheack_phone));
             return true;
         }
-        if (et_idcard.getText().toString().length() != 18 && et_idcard.getText().toString().length() != 15) {
+        if (et_idcard.getText().toString().length() == 0) {
+            ToastUtil.showMessage(this, "请输入身份证号码");
+            return true;
+        }
+        if (et_idcard.getText().toString().length() != 18 || et_idcard.getText().toString().length() != 15) {
             ToastUtil.showMessage(this, "身份证号码错误");
             return true;
         }
@@ -574,6 +583,7 @@ public class RegisterBaseActivity extends RxBaseActivity {
         Observable<RegisterResult> observable = RegisterModel.getDriverInfo(id_rsa);
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, emResult -> {
             if (emResult.getCode() == 1) {
+                Log.e("hufeng/data",emResult.data+"");
                 initData(emResult.data);
             }
         })));

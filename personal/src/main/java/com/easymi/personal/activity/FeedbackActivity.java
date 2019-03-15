@@ -90,7 +90,7 @@ public class FeedbackActivity extends RxBaseActivity {
         Observable<EmResult> observable = api
                 .feedback(EmUtil.getEmployId(),
                         EmUtil.getEmployInfo().userName,
-                        EmUtil.getEmployInfo().company_id,
+                        EmUtil.getEmployInfo().companyId,
                         EmUtil.getAppKey(),
                         editText.getText().toString(),
                         2,

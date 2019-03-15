@@ -143,6 +143,12 @@ public static ** valueOf(java.lang.String);
 -keep class * implements android.os.Parcelable {
     public static final android.os.Parcelable$Creator *;
 }
+#Parcelable实现类除了不能混淆本身之外，为了确保类成员也能够被访问，类成员也不能被混淆
+-keepclassmembers class * implements android.os.Parcelable {
+ public <fields>;
+ private <fields>;
+}
+
 
 # 保留Serializable序列化的类不被混淆
 -keepclassmembers class * implements java.io.Serializable {
@@ -184,6 +190,10 @@ public static ** valueOf(java.lang.String);
     public static *** e(...);
 }
 
+#但是如果使用Gson进行数据解析的时候要注意Gson自身的混淆
+-keep class com.google.gson.stream.** { *; }
+-keep class com.google.gson.examples.android.model.** { *; }
+
 #使用GSON、fastjson等框架时，所写的JSON对象类不混淆，否则无法将JSON解析成对应的对象
 -keepclassmembers class * {
     public <init>(org.json.JSONObject);
@@ -219,26 +229,58 @@ public static ** valueOf(java.lang.String);
     public void *(android.webkit.WebView, java.lang.String);
 }
 
-
-
 #---------------------------------本app内的混淆-------------------------------
 -keep public class com.easymi.component.entity.**{*;}
--keep class com.easymi.componen.widget.**{*;}
+-keep public class com.easymi.component.widget.**{*;}
+-keep public class com.easymi.component.result.**{*;}
+
 -keep public class com.easymi.common.entity.**{*;}
+-keep public class com.easymi.common.result.**{*;}
+
 -keep public class com.easymin.carpooling.entity.**{*;}
+-keep public class com.easymin.carpooling.result.**{*;}
+
 -keep public class com.easymin.chartered.entity.**{*;}
+-keep public class com.easymin.chartered.result.**{*;}
+
 -keep public class com.easymi.cityline.entity.**{*;}
+-keep public class com.easymi.common.result.**{*;}
+
 -keep public class com.easymin.custombus.entity.**{*;}
+-keep public class com.easymin.custombus.result.**{*;}
+
 -keep public class com.easymin.passengerbus.entity.**{*;}
+-keep public class com.easymin.passengerbus.result.**{*;}
+
 -keep public class com.easymi.personal.entity.**{*;}
+-keep public class com.easymi.personal.result.**{*;}
+
 -keep public class com.easymin.rental.entity.**{*;}
+-keep public class com.easymin.rental.result.**{*;}
+
 -keep public class com.easymin.driver.securitycenter.entity.**{*;}
+-keep public class com.easymin.driver.securitycenter.result.**{*;}
+
 -keep public class com.easymi.taxi.entity.**{*;}
+-keep public class com.easymi.taxi.result.**{*;}
+
 -keep public class com.easymi.zhuanche.entity.**{*;}
+-keep public class com.easymi.zhuanche.result.**{*;}
 
 -keep public class com.easymi.component.app.**{*;}
 -keep public class com.easymi.component.db.**{*;}
 
+#不混淆所以的接口的某个字段：
+-keep class com._65.sdk.Constants{
+        int PLUGIN_TYPE_USER;
+        int PLUGIN_TYPE_PAY;
+      }
+
+#不混淆所以的接口：
+-keep interface *{
+         <methods>;
+          <fields>;
+     }
 
 #---------------------------------三方jar-------------------------------
 #支付宝

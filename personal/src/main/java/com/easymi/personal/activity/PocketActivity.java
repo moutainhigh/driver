@@ -85,7 +85,7 @@ public class PocketActivity extends RxBaseActivity {
                 .observeOn(AndroidSchedulers.mainThread());
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, loginResult -> {
-            Employ employ = loginResult.getEmployInfo();
+            Employ employ = loginResult.data;
             Log.e("okhttp", employ.toString());
             employ.saveOrUpdate();
             SharedPreferences.Editor editor = XApp.getPreferencesEditor();

@@ -205,9 +205,9 @@ public class RegisterModel {
      * @param smsCode
      * @return
      */
-    public static Observable<Register> register(String password, String phone, String smsCode) {
+    public static Observable<Register> register(String password, String phone, String smsCode,String random) {
         return ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .register(password, phone, smsCode)
+                .register(password, phone, smsCode,random)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

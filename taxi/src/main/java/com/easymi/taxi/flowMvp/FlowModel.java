@@ -8,7 +8,7 @@ import com.easymi.common.entity.PushFeeOrder;
 import com.easymi.common.push.HandlePush;
 import com.easymi.component.Config;
 import com.easymi.component.ZCOrderStatus;
-import com.easymi.component.entity.BaseEmploy;
+import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
@@ -111,22 +111,17 @@ public class FlowModel implements FlowContract.Model {
         PushFee pushData = new PushFee();
 
         //司机的信息
-        BaseEmploy employ1 = new BaseEmploy().employ2This();
+        Employ employ1 = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID,0));
         PushFeeEmploy pe = null;
         if (employ1 != null && employ1 instanceof Employ) {
             Employ employ = (Employ) employ1;
             pe = new PushFeeEmploy();
-            pe.childType = employ.child_type;
             pe.id = employ.id;
             pe.status = employ.status;
             pe.realName = employ.realName;
             pe.companyId = employ.companyId;
             pe.phone = employ.phone;
-            pe.childType = employ.child_type;
             pe.business = employ.serviceType;
-//            if (employ.vehicle != null) {
-//                pe.modelId = employ.vehicle.serviceType;
-//            }
         }
         pushData.employ = pe;
 

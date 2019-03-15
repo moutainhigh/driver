@@ -331,7 +331,7 @@ public class ResetPswActivity extends RxBaseActivity {
      */
     private void getSmsCode() {
         Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .smsCode(phone, EmUtil.getAppKey(), "中国", EmUtil.getEmployInfo().company_id)
+                .smsCode(phone, EmUtil.getAppKey(), "中国", EmUtil.getEmployInfo().companyId)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

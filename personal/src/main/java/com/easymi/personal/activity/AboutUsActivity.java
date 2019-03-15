@@ -184,7 +184,7 @@ public class AboutUsActivity extends RxBaseActivity {
 
         Observable<ArticleResult> observable = api
                 .getArticle(EmUtil.getAppKey(), "DriverAboutUs",
-                        EmUtil.getEmployInfo() == null ? null : EmUtil.getEmployInfo().company_id)
+                        EmUtil.getEmployInfo() == null ? null : EmUtil.getEmployInfo().companyId)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

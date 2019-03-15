@@ -10,7 +10,7 @@ import com.easymi.common.entity.PushDataOrder;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
 import com.easymi.component.ZCOrderStatus;
-import com.easymi.component.entity.BaseEmploy;
+import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
@@ -49,7 +49,7 @@ public class BuildPushUtil {
         PushData pushData = new PushData();
 
         //转换一下
-        BaseEmploy employ1 = new BaseEmploy().employ2This();
+        Employ employ1 = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID,0));
         PushEmploy pe;
         if (employ1 != null && employ1 instanceof Employ) {
             Employ employ = (Employ) employ1;
@@ -59,7 +59,6 @@ public class BuildPushUtil {
             pe.status = employ.status;
             pe.companyId = employ.companyId;
             pe.phone = employ.phone;
-            pe.child_type = employ.child_type;
             pe.business = employ.serviceType;
             pe.modelId = employ.modelId;
         } else {
@@ -69,7 +68,7 @@ public class BuildPushUtil {
 
         pushData.driver = pe;
         pushData.appKey = EmUtil.getAppKey();
-        pushData.serviceType = ((Employ) employ1).serviceType;
+        pushData.serviceType = employ1.serviceType;
 
         pushData.location = new PushDataLoc();
         pushData.location.latitude = emLoc.latitude;

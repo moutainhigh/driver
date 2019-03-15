@@ -17,17 +17,15 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName:
+ *
  * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
  */
-public class Employ extends BaseEmploy implements Parcelable {
+public class Employ implements Parcelable {
 
-//    /**
-//     * id
-//     */
-//    public long id;
+    public long id;
 
     /**
      * 工号
@@ -64,10 +62,10 @@ public class Employ extends BaseEmploy implements Parcelable {
      */
     public long birthDate;
 
-//    /**
-//     * 手机号
-//     */
-//    public String phone;
+    /**
+     * 手机号
+     */
+    public String phone;
 
     /**
      * 头像照片地址
@@ -114,11 +112,12 @@ public class Employ extends BaseEmploy implements Parcelable {
      */
     public long dutyTime;
 
-//    /**
-//     * 司机状态（0离线 5在线 10空闲 15派单 20接单 25前往预约地 30到达预约地 35前往目的地 40中途等待  45冻结）
-//     */司机状态 1离线 2空闲 5派单 10接单 15前往预约地 20到达预约地 25前往目的地 28中途等待 45冻结   修改后的
-//    */司机状态 1离线 2登陆未听单 3上线听单中（空闲） 5派单 10接单 15前往预约地 20到达预约地 25前往目的地 28中途等待 45冻结   再次修改后的
-//    public int status;
+    /**
+     * 司机状态（0离线 5在线 10空闲 15派单 20接单 25前往预约地 30到达预约地 35前往目的地 40中途等待  45冻结）
+     * 司机状态 1离线 2空闲 5派单 10接单 15前往预约地 20到达预约地 25前往目的地 28中途等待 45冻结   修改后的
+     * 司机状态 1离线 2登陆未听单 3上线听单中（空闲） 5派单 10接单 15前往预约地 20到达预约地 25前往目的地 28中途等待 45冻结   再次修改后的
+     **/
+    public int status;
 
     /**
      * 推荐人
@@ -412,6 +411,7 @@ public class Employ extends BaseEmploy implements Parcelable {
         registerStatus = in.readInt();
     }
 
+
     public static final Creator<Employ> CREATOR = new Creator<Employ>() {
         @Override
         public Employ createFromParcel(Parcel in) {
@@ -489,12 +489,12 @@ public class Employ extends BaseEmploy implements Parcelable {
         values.put("mobileOperators", mobileOperators);
         values.put("isFulltimeDriver", isFulltimeDriver);
         values.put("householdRegistrationName", householdRegistrationName);
-        values.put("token",token);
-        values.put("refreshToken",refreshToken);
-        values.put("balance",balance);
-        values.put("modelId",modelId);
-        values.put("taxiModelId",taxiModelId);
-        values.put("registerStatus",registerStatus);
+        values.put("token", token);
+        values.put("refreshToken", refreshToken);
+        values.put("balance", balance);
+        values.put("modelId", modelId);
+        values.put("taxiModelId", taxiModelId);
+        values.put("registerStatus", registerStatus);
         /*
          * values.put("age", age); values.put("jialing", jialing);
          */
@@ -905,13 +905,13 @@ public class Employ extends BaseEmploy implements Parcelable {
         values.put("mobileOperators", mobileOperators);
         values.put("isFulltimeDriver", isFulltimeDriver);
         values.put("householdRegistrationName", householdRegistrationName);
-        values.put("token",token);
-        values.put("refreshToken",refreshToken);
-        values.put("balance",balance);
-        values.put("modelId",modelId);
-        values.put("taxiModelId",taxiModelId);
+        values.put("token", token);
+        values.put("refreshToken", refreshToken);
+        values.put("balance", balance);
+        values.put("modelId", modelId);
+        values.put("taxiModelId", taxiModelId);
 
-        values.put("registerStatus",registerStatus);
+        values.put("registerStatus", registerStatus);
 
         boolean flag = db.update("t_driverinfo", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
@@ -919,9 +919,6 @@ public class Employ extends BaseEmploy implements Parcelable {
     }
 
     public boolean saveOrUpdate() {
-//        if (null != vehicle) { //保存或更新车辆信息
-//            vehicle.saveOrUpdate(id);
-//        }
         if (exists(this.id)) {
             return this.updateAll();
         } else {
@@ -932,6 +929,7 @@ public class Employ extends BaseEmploy implements Parcelable {
     public Employ() {
 
     }
+
 
     @Override
     public int describeContents() {
@@ -1000,8 +998,11 @@ public class Employ extends BaseEmploy implements Parcelable {
         dest.writeString(token);
         dest.writeString(refreshToken);
         dest.writeDouble(balance);
+        dest.writeDouble(star);
         dest.writeLong(modelId);
         dest.writeLong(taxiModelId);
         dest.writeInt(registerStatus);
     }
+
+
 }

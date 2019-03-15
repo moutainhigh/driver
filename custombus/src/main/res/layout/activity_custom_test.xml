@@ -1,54 +1,280 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_20212C"
+    android:orientation="vertical"
     android:clickable="true">
 
+
     <LinearLayout
+        android:id="@+id/passenger_ll_top"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/tv_btn"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="@color/color_red"/>
-    </LinearLayout>
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="none"
-        android:fillViewport="true">
+        android:layout_height="280dp"
+        android:layout_below="@+id/cus_toolbar"
+        android:background="@color/color_20212C"
+        android:orientation="vertical"
+        android:visibility="visible">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
             android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/lin_check_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/cb_check_bg"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iv_ticket"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/cb_check_large" />
+
+                <TextView
+                    android:id="@+id/tv_check_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/cb_check_ticket"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:gravity="center"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lin_time_countdown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/tv_countdown"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="09:24"
+                    android:textColor="@color/color_089A55"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_countdown_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cb_wait_countdown"
+                    android:textColor="@color/color_999999"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lin_go_next"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            android:background="#08ffffff">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="等待超时后可跳过验票"
+                android:textColor="@color/color_999999"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_go_next"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
+                android:text="前往下一站>"
+                android:textColor="@color/color_3C98E3"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.easymin.custombus.MyScrollVIew
+        android:id="@+id/scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="40dp"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/lin_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <View
+                android:id="@+id/passenger_v"
+                android:layout_width="match_parent"
+                android:layout_height="280dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+            </View>
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp">
+                android:layout_height="50dp"
+                android:background="@color/color_f2f2f2"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/cb_station_large" />
+
+                <TextView
+                    android:id="@+id/tv_station_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:text="锦州汽车站"
+                    android:textColor="@color/color_333333"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_status_yes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="已检票 0"
+                    android:textColor="@color/color_999999" />
+
+                <ImageView
+                    android:layout_width="1px"
+                    android:layout_height="20dp"
+                    android:src="@color/color_cccccc" />
+
+                <TextView
+                    android:id="@+id/tv_status_no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="已检票 0"
+                    android:textColor="@color/color_089A55" />
 
             </LinearLayout>
-            <TextView
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="@color/color_3C98E3"/>
-            <TextView
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/white"
+                    android:scrollbars="none" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/lin_space"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="@color/color_333333"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="@color/color_666666"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="@color/color_999999"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="@color/color_cccccc"/>
+                android:layout_height="0dp"
+                android:orientation="vertical">
+
+            </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+    </com.easymin.custombus.MyScrollVIew>
+
+    <com.easymi.component.widget.CusToolbar
+        android:id="@+id/cus_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="45dp" />
+
+    <LinearLayout
+        android:id="@+id/lin_head"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginTop="40dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:elevation="4dp">
+
+        <TextView
+            android:id="@+id/tv_check_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/corners_btn_4dp_bg"
+            android:drawableLeft="@mipmap/cb_check_smart"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="验票"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/tv_go_next_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/line_btn_4dp_3c98e3"
+            android:gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="前往下一站"
+            android:textColor="@color/color_3C98E3"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lin_time_countdown1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/tv_countdown1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="09:24"
+                android:textColor="@color/color_089A55"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_countdown_hint1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cb_wait_countdown"
+                android:textColor="@color/color_999999"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
 </RelativeLayout>

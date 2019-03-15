@@ -150,14 +150,12 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("name").append(" ").append("TEXT").append(",")
                 .append("real_name").append(" ").append("TEXT").append(",")
                 .append("phone").append(" ").append("TEXT").append(",")
-//                .append("sex").append(" ").append("TEXT").append(",")
                 .append("company_name").append(" ").append("TEXT").append(",")
                 .append("portrait_path").append(" ").append("TEXT").append(",")
                 .append("score").append(" ").append("DOUBLE").append(",")
 
                 .append("balance").append(" ").append("DOUBLE").append(",")
                 .append("service_type").append(" ").append("TEXT").append(",")
-                .append("child_type").append(" ").append("TEXT").append(",")
                 .append("bank_name").append(" ").append("TEXT").append(",")
                 .append("bank_card_no").append(" ").append("TEXT").append(",")
                 .append("cash_person_name").append(" ").append("TEXT").append(",")
@@ -165,15 +163,12 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("company_phone").append(" ").append("TEXT").append(",")
                 .append("auditType").append(" ").append("INTEGER").append(",")
 
-//              .append("id").append(" ").append("LONG").append(",")
                 .append("userName").append(" ").append("TEXT").append(",")
-//              .append("password").append(" ").append("TEXT").append(",")
                 .append("nickName").append(" ").append("TEXT").append(",")
                 .append("realName").append(" ").append("TEXT").append(",")
                 .append("idCard").append(" ").append("TEXT").append(",")
                 .append("sex").append(" ").append("INTEGER").append(",")
                 .append("birthDate").append(" ").append("INTEGER").append(",")
-//              .append("phone").append(" ").append("TEXT").append(",")
                 .append("portraitPath").append(" ").append("TEXT").append(",")
                 .append("serviceType").append(" ").append("TEXT").append(",")
                 .append("emergency").append(" ").append("TEXT").append(",")
@@ -183,7 +178,6 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("driveLicenceEnd").append(" ").append("INTEGER").append(",")
                 .append("level").append(" ").append("LONG").append(",")
                 .append("dutyTime").append(" ").append("INTEGER").append(",")
-//              .append("status").append(" ").append("TEXT").append(",")
                 .append("introducer").append(" ").append("TEXT").append(",")
                 .append("companyId").append(" ").append("LONG").append(",")
                 .append("created").append(" ").append("LONG").append(",")
@@ -226,9 +220,8 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("refreshToken").append(" ").append("TEXT").append(",")
                 .append("modelId").append(" ").append("LONG").append(",")
                 .append("taxiModelId").append(" ").append("LONG").append(",")
-                .append("registerStatus").append(" ").append("INTEGER").append(",")
+                .append("registerStatus").append(" ").append("INTEGER")
 
-                .append("company_id").append(" ").append("LONG")
                 .append(");");
         execCreateTableSQL(db);
     }

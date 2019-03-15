@@ -450,7 +450,7 @@ public class WorkPresenter implements WorkContract.Presenter {
         if (null == employ) {
             return;
         }
-        Observable<AnnouncementResult> annObservable = model.loadAnn(employ.company_id);
+        Observable<AnnouncementResult> annObservable = model.loadAnn(employ.companyId);
         Observable<NotitfyResult> notObservable = model.loadNotice(employ.id);
 
         Observable.zip(annObservable, notObservable, (announcementResult, notitfyResult) -> {

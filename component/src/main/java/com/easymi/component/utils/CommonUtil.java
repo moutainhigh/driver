@@ -134,7 +134,7 @@ public class CommonUtil {
 //        // TODO: 2017/1/3 随着号码增加,验证也需要跟进
 ////        String telRegex = "[1][35789]\\d{9}";//"[1]"代表第1位为数字1，"[358]"代表第二位可以为3、5、8中的一个，"\\d{9}"代表后面是可以是0～9的数字，有9位。
 ////        return !TextUtils.isEmpty(mobiles) && mobiles.matches(telRegex);
-        return (mobiles.trim().length() == 13);
+        return (mobiles.trim().length() == 11);
     }
 
     /**

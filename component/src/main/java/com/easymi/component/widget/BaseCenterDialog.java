@@ -1,4 +1,4 @@
-package com.easymi.taxi.widget;
+package com.easymi.component.widget;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -8,7 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
-import com.easymi.taxi.R;
+import com.easymi.component.R;
+
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.

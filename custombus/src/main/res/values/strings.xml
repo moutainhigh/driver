@@ -41,6 +41,11 @@
     <string name="cb_slider_go_next">滑动前往下一站</string>
     <string name="cb_arrive_end_station">到达终点站</string>
 
+    <string name="cb_go_next_station">前往\n下一站</string>
+    <string name="cb_dialog_title">是否前往下一站</string>
+    <string name="cb_dialog_hint">前往下一站后，未验票乘客将不能再验票</string>
+
+
     <string name="canceled_order">当前订单已被取消:)</string>
     <string name="backed_order">当前订单已被收回:)</string>
 

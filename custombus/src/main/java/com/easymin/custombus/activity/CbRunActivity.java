@@ -133,7 +133,6 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View, 
     @Override
     protected void onResume() {
         super.onResume();
-//        getData();
     }
 
     @Override
@@ -288,6 +287,10 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View, 
         intent.putExtra("time", time);
         intent.putExtra("position", item);
         startActivityForResult(intent, 0x00);
+
+
+//        Intent intent1 = new Intent(this, TestActivity.class);
+//        startActivity(intent1);
     }
 
     /**
@@ -483,6 +486,7 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View, 
         if (resultCode == RESULT_OK) {
             if (data != null && data.getIntExtra("type", 0) != 0) {
                 type = data.getIntExtra("type", 0);
+                speekVoice(type);
             }
             getData();
         }
