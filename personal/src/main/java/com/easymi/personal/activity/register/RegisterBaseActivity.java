@@ -388,7 +388,7 @@ public class RegisterBaseActivity extends RxBaseActivity {
      */
     private boolean check() {
         if (TextUtils.isEmpty(imgPath)) {
-            if (registerInfo == null) {
+            if (TextUtils.isEmpty(registerInfo.portraitPath)) {
                 ToastUtil.showMessage(this, "未上传头像");
                 return true;
             }
@@ -405,7 +405,7 @@ public class RegisterBaseActivity extends RxBaseActivity {
             ToastUtil.showMessage(this, "请输入身份证号码");
             return true;
         }
-        if (et_idcard.getText().toString().length() != 18 || et_idcard.getText().toString().length() != 15) {
+        if (et_idcard.getText().toString().length() != 18 ) {
             ToastUtil.showMessage(this, "身份证号码错误");
             return true;
         }
@@ -418,13 +418,13 @@ public class RegisterBaseActivity extends RxBaseActivity {
             return true;
         }
         if (company == null) {
-            if (registerInfo == null) {
+            if (registerInfo.companyId == 0) {
                 ToastUtil.showMessage(this, "请选择所属分公司");
                 return true;
             }
         }
         if (selecType == null) {
-            if (registerInfo == null) {
+            if (TextUtils.isEmpty(registerInfo.serviceType)) {
                 ToastUtil.showMessage(this, "请选择业务类型");
                 return true;
             }
@@ -525,7 +525,7 @@ public class RegisterBaseActivity extends RxBaseActivity {
         if (TextUtils.isEmpty(imgPath)) {
             registerRequest.portraitPath = registerInfo.portraitPath;
         } else {
-            if (registerInfo != null) {
+            if (!TextUtils.isEmpty(registerInfo.portraitPath)) {
                 registerRequest.portraitPath = registerInfo.portraitPath;
             } else {
                 registerRequest.portraitPath = imgPath;
@@ -583,7 +583,6 @@ public class RegisterBaseActivity extends RxBaseActivity {
         Observable<RegisterResult> observable = RegisterModel.getDriverInfo(id_rsa);
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, emResult -> {
             if (emResult.getCode() == 1) {
-                Log.e("hufeng/data",emResult.data+"");
                 initData(emResult.data);
             }
         })));

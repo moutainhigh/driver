@@ -39,7 +39,7 @@ import rx.schedulers.Schedulers;
  * FileName: AccpteFragment
  * @Author: shine
  * Date: 2018/11/15 下午4:05
- * Description:
+ * Description:  接单列表界面
  * History:
  */
 public class AccpteFragment extends RxBaseFragment implements MyOrderContract.View {
@@ -122,6 +122,10 @@ public class AccpteFragment extends RxBaseFragment implements MyOrderContract.Vi
                         ARouter.getInstance()
                                 .build("/taxi/FlowActivity")
                                 .withLong("orderId", baseOrder.id).navigation();
+                    }else if (baseOrder.serviceType.equals(Config.CARPOOL)){
+                        ARouter.getInstance()
+                                .build("/carpooling/FlowActivity")
+                                .withSerializable("baseOrder", baseOrder).navigation();
                     }
                 }
             }

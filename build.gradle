@@ -32,13 +32,13 @@ task clean(type: Delete) {
 
 ext {
     supportLibraryVersion = '27.1.1'    //support库的版本
-    compileSdkVersion = 26
+    compileSdkVersion = 27
     minSdkVersion = 17
     targetSdkVersion = 27
 
     appcompat = "com.android.support:appcompat-v7:$supportLibraryVersion"
     design = "com.android.support:design:$supportLibraryVersion"
-    multidex = 'com.android.support:multidex:1.0.1'
+    multidex = 'com.android.support:multidex:1.0.2'
     constraintLayout = 'com.android.support.constraint:constraint-layout:1.0.2'
 
     //liveData&viewModel
@@ -53,7 +53,7 @@ ext {
     aroutercompiler = 'com.alibaba:arouter-compiler:1.1.4'
 
     rxandroid =  'io.reactivex.rxjava2:rxandroid:2.0.1'
-    rxjava =  'io.reactivex.rxjava2:rxjava:2.1.5'
+    rxjava =  'io.reactivex.rxjava2:rxjava:2.1.16'
     adapterRxjava =  'com.squareup.retrofit2:adapter-rxjava:2.3.0'
     retrofit =  'com.squareup.retrofit2:retrofit:2.3.0'
     converterGson = 'com.squareup.retrofit2:converter-gson:2.3.0'

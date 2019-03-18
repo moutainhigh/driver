@@ -124,7 +124,8 @@
                         android:textColor="@color/color_333333"
                         android:hint="@string/register_please_phone"
                         android:textSize="14sp"
-                        android:inputType="number"/>
+                        android:inputType="number"
+                        android:maxLength="11"/>
 
                 </LinearLayout>
 
@@ -156,7 +157,8 @@
                         android:textColor="@color/color_333333"
                         android:hint="@string/register_please_id_card"
                         android:textSize="14sp"
-                        android:digits="1234567890xX"/>
+                        android:digits="1234567890xX"
+                        android:maxLength="18"/>
 
                 </LinearLayout>
 
@@ -219,7 +221,8 @@
                         android:textColor="@color/color_333333"
                         android:hint="@string/register_contract_hint"
                         android:textSize="14sp"
-                        android:inputType="number"/>
+                        android:inputType="number"
+                        android:maxLength="11"/>
 
                 </LinearLayout>
 

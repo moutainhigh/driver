@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -46,6 +47,7 @@ import rx.Subscription;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: RegisterPhotoActivity
+ *
  * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
@@ -255,30 +257,30 @@ public class RegisterPhotoActivity extends RxBaseActivity {
                     int i = currentImg.getId();
                     if (i == R.id.front_img) {
                         imgPaths[0] = images.get(0).getCutPath();
-                        if (registerInfo != null) {
-                            updateImage(0,new File(imgPaths[0]));
-                        }else {
+                        if (TextUtils.isEmpty(registerInfo.idCardPath)) {
+                            updateImage(0, new File(imgPaths[0]));
+                        } else {
                             registerRequest.idCardPath = imgPaths[0];
                         }
                     } else if (i == R.id.back_img) {
                         imgPaths[1] = images.get(0).getCutPath();
-                        if (registerInfo != null) {
-                            updateImage(1,new File(imgPaths[1]));
-                        }else {
+                        if (TextUtils.isEmpty(registerInfo.idCardBackPath)) {
+                            updateImage(1, new File(imgPaths[1]));
+                        } else {
                             registerRequest.idCardBackPath = imgPaths[1];
                         }
                     } else if (i == R.id.driving_img) {
                         imgPaths[2] = images.get(0).getCutPath();
-                        if (registerInfo != null) {
-                            updateImage(2,new File(imgPaths[2]));
-                        }else {
+                        if (TextUtils.isEmpty(registerInfo.driveLicensePath)) {
+                            updateImage(2, new File(imgPaths[2]));
+                        } else {
                             registerRequest.driveLicensePath = imgPaths[2];
                         }
-                    }else if (i == R.id.zige_img) {
+                    } else if (i == R.id.zige_img) {
                         imgPaths[3] = images.get(0).getCutPath();
-                        if (registerInfo != null) {
-                            updateImage(3,new File(imgPaths[3]));
-                        }else {
+                        if (TextUtils.isEmpty(registerInfo.practitionersPhoto)) {
+                            updateImage(3, new File(imgPaths[3]));
+                        } else {
                             registerRequest.practitionersPhoto = imgPaths[3];
                         }
                     }
@@ -333,45 +335,41 @@ public class RegisterPhotoActivity extends RxBaseActivity {
      * 下一步
      */
     private void next() {
-        //check
-        if (registerInfo != null) {
-            registerRequest.idCardPath = registerInfo.idCardPath;
-            registerRequest.idCardBackPath = registerInfo.idCardBackPath;
-            registerRequest.driveLicensePath = registerInfo.driveLicensePath;
-            registerRequest.practitionersPhoto = registerInfo.practitionersPhoto;
-            uploadAllPicsAndUpdate(registerRequest);
-        } else {
-            if (registerRequest == null) {
-                ToastUtil.showMessage(this, "参数异常");
+        if (TextUtils.isEmpty(registerInfo.idCardPath)) {
+            if ((TextUtils.isEmpty(registerRequest.idCardPath))) {
+                ToastUtil.showMessage(this, "未上传身份证正面");
                 return;
             }
-            if (registerRequest.idCardPath == null) {
-                if (registerInfo == null) {
-                    ToastUtil.showMessage(this, "未上传身份证正面");
-                    return;
-                }
-            }
-            if (registerRequest.idCardBackPath == null) {
-                if (registerInfo == null) {
-                    ToastUtil.showMessage(this, "未上传身份证反面");
-                    return;
-                }
-            }
-            if (registerRequest.driveLicensePath == null) {
-                if (registerInfo == null) {
-                    ToastUtil.showMessage(this, "未上传驾驶证");
-                    return;
-                }
-            }
-            if (registerRequest.practitionersPhoto == null) {
-                if (registerInfo == null) {
-                    ToastUtil.showMessage(this, "未上传网约车从业资格证");
-                    return;
-                }
-            }
-
-            uploadAllPicsAndCommit(registerRequest);
+        } else {
+            registerRequest.idCardPath = registerInfo.idCardPath;
         }
+        if (TextUtils.isEmpty(registerInfo.idCardBackPath)) {
+            if (TextUtils.isEmpty(registerRequest.idCardBackPath)) {
+                ToastUtil.showMessage(this, "未上传身份证反面");
+                return;
+            }
+        } else {
+            registerRequest.idCardBackPath = registerInfo.idCardBackPath;
+        }
+        if (TextUtils.isEmpty(registerInfo.driveLicensePath)) {
+            if (TextUtils.isEmpty(registerRequest.driveLicensePath)) {
+                ToastUtil.showMessage(this, "未上传驾驶证");
+                return;
+            }
+        } else {
+            registerRequest.driveLicensePath = registerInfo.driveLicensePath;
+        }
+        if (TextUtils.isEmpty(registerInfo.practitionersPhoto)) {
+            if (TextUtils.isEmpty(registerRequest.practitionersPhoto)) {
+                ToastUtil.showMessage(this, "未上传网约车从业资格证");
+                return;
+            }
+        } else {
+            registerRequest.practitionersPhoto = registerInfo.practitionersPhoto;
+        }
+//        uploadAllPicsAndCommit(registerRequest);
+      uploadAllPicsAndUpdate(registerRequest);
+
     }
 
     /**
@@ -405,19 +403,20 @@ public class RegisterPhotoActivity extends RxBaseActivity {
 
     /**
      * 更新上传图片地址为七牛云hashcode
+     *
      * @param type
      * @param file
      */
     public void updateImage(int type, File file) {
         Observable<Pic> observable = RegisterModel.putPic(file, qiniuToken);
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, pic -> {
-            if (type == 0){
+            if (type == 0) {
                 registerInfo.idCardPath = pic.hashCode;
-            }else if (type == 1){
+            } else if (type == 1) {
                 registerInfo.idCardBackPath = pic.hashCode;
-            }else if (type == 2){
+            } else if (type == 2) {
                 registerInfo.driveLicensePath = pic.hashCode;
-            }else if (type == 3){
+            } else if (type == 3) {
                 registerInfo.practitionersPhoto = pic.hashCode;
             }
         })));

@@ -49,11 +49,6 @@ dependencies {
     api rootProject.ext.pictureSelector
     api rootProject.ext.bugly
     api rootProject.ext.buglyNativecrashreport
-    //    api rootProject.ext.glide
-    //    api rootProject.ext.matisse
-    //    api(rootProject.ext.ucrop){
-    //        exclude group: 'com.github.bumptech.glide'
-    //    }
     api rootProject.ext.rxpermissions
     implementation files('libs/fundebug.0.1.0.min.jar')
 }
