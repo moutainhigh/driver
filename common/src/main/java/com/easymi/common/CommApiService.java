@@ -15,6 +15,7 @@ import com.easymi.common.result.MultipleOrderResult;
 import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.GetFeeResult;
+import com.easymi.common.result.PCOrderResult;
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.common.result.SettingResult;
 import com.easymi.common.result.SystemResult;
@@ -525,14 +526,29 @@ public interface CommApiService {
     Observable<PushAnnouncement> employAfficheById(@Path("id") Long noticeId,
                                                    @Query("app_key") String appKey);
 
+//    /**
+//     * 我的订单接口
+//     */
+//    @GET("api/v1/public/orders")
+//    Observable<QueryOrdersResult> queryMyOrders(@Query("page") int page,
+//                                                @Query("size") int size,
+//                                                @Query("status") String status,
+//                                                @Query("serviceType") String serviceType);
+
     /**
-     * 我的订单接口
+     * 我的订单接口 （新的）
      */
-    @GET("api/v1/public/orders")
+    @GET("api/v1/public/driver/myOrders")
     Observable<QueryOrdersResult> queryMyOrders(@Query("page") int page,
                                                 @Query("size") int size,
                                                 @Query("status") String status,
                                                 @Query("serviceType") String serviceType);
+    /**
+     * 拼车完成订单详情查询
+     */
+    @GET("api/v1/carpool/driver/order/queryOrderDetail")
+    Observable<PCOrderResult> queryOrderDetail(@Query("orderId") long page);
+
 
     /**
      * 获取专车出租车的车型

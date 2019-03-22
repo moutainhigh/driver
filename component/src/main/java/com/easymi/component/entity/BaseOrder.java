@@ -28,12 +28,12 @@ public class BaseOrder implements Serializable {
      */
     public long id;
     /**
-     * 班次状态  专线特有
+     * 班次状态
      */
     public int scheduleStatus;
 
     /**
-     *订单状态 专线没有此值
+     *订单状态
      */
     public int status;
 
@@ -247,7 +247,7 @@ public class BaseOrder implements Serializable {
     public int ticket;
 
     /**
-     * 分钟数
+     * 提前接人分钟数
      */
     public int minute;
           
@@ -270,6 +270,18 @@ public class BaseOrder implements Serializable {
      * 客户头像
      */
     public String avatar;
+
+    /**
+     * 订单类型
+     */
+    public String orderType;
+
+
+    /**
+     * 是否是转单 1 == 转单
+     */
+    public int orderChange;
+
 
 
     /**

@@ -16,6 +16,7 @@ import com.easymi.component.Config;
  */
 
 public class OrderFinishReceiver extends BroadcastReceiver {
+
     private OnFinishListener finishListener;
 
     public OrderFinishReceiver(OnFinishListener finishListener) {
@@ -31,6 +32,10 @@ public class OrderFinishReceiver extends BroadcastReceiver {
                     Long orderId = intent.getLongExtra("orderId", -1);
                     String orderType = intent.getStringExtra("orderType");
                     finishListener.onFinishOrder(orderId, orderType);
+                }
+            }else if (action.equals(Config.AUTO_FINISH)){
+                if (null != finishListener) {
+                    finishListener.onFinishOrder(0, "");
                 }
             }
         }

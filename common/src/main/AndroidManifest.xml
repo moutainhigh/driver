@@ -84,6 +84,12 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".mvp.order.OrderDetailActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait" />
+
+
     </application>
 
 </manifest>

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -27,6 +28,8 @@ import com.easymin.custombus.entity.Customer;
 import com.easymin.custombus.mvp.FlowContract;
 import com.easymin.custombus.mvp.FlowPresenter;
 import com.easymin.custombus.receiver.CancelOrderReceiver;
+import com.easymin.custombus.receiver.OrderFinishReceiver;
+import com.easymin.custombus.receiver.ScheduleTurnReceiver;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
@@ -43,7 +46,9 @@ import java.util.List;
  * @History:
  */
 @Route(path = "/custombus/CbRunActivity")
-public class CbRunActivity extends RxBaseActivity implements FlowContract.View, CancelOrderReceiver.OnCancelListener {
+public class CbRunActivity extends RxBaseActivity implements FlowContract.View,
+        CancelOrderReceiver.OnCancelListener ,
+        ScheduleTurnReceiver.OnTurnListener{
 
     /**
      * 界面控件
@@ -103,6 +108,11 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View, 
      */
     private CancelOrderReceiver cancelOrderReceiver;
 
+    /**
+     * 自动完成订单
+     */
+    private ScheduleTurnReceiver scheduleTurnReceiver;
+
     private FlowPresenter presenter;
 
     @Override
@@ -117,6 +127,7 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View, 
 
     @Override
     public void initViews(Bundle savedInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         findById();
         presenter = new FlowPresenter(this, this);
         initAdapter();
@@ -145,6 +156,10 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View, 
         filter.addAction(Config.BROAD_BACK_ORDER);
         registerReceiver(cancelOrderReceiver, filter);
 
+        scheduleTurnReceiver = new ScheduleTurnReceiver(this);
+        IntentFilter filter1 = new IntentFilter();
+        filter1.addAction(Config.SCHEDULE_FINISH);
+        registerReceiver(scheduleTurnReceiver, filter1);
     }
 
     /**
@@ -372,6 +387,7 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View, 
     protected void onStop() {
         super.onStop();
         unregisterReceiver(cancelOrderReceiver);
+        unregisterReceiver(scheduleTurnReceiver);
     }
 
     @Override
@@ -495,5 +511,12 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View, 
     @Override
     public void onCancelOrder(long orderId, String orderType, String msg) {
         getData();
+    }
+
+    @Override
+    public void onTurnOrder(long id, String orderType, String msg) {
+        if (id == scheduleId){
+            finish();
+        }
     }
 }

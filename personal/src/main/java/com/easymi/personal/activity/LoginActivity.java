@@ -58,6 +58,7 @@ import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.RsaUtils;
 import com.easymi.component.utils.SHA256Util;
 import com.easymi.component.utils.StringUtils;
+import com.easymi.component.utils.SysUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.utils.UIStatusBarHelper;
 import com.easymi.component.widget.CustomPopWindow;
@@ -445,8 +446,6 @@ public class LoginActivity extends RxBaseActivity {
      * @param psw
      */
     private void login(String name, String psw) {
-        McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
-
 //        String udid = PhoneUtil.getUDID(this);
 //        String version = "";
 //        try {
@@ -460,26 +459,26 @@ public class LoginActivity extends RxBaseActivity {
 //        String systemVersion = Build.VERSION.RELEASE;
 //
 //        String model = Build.MODEL;
-//
-//        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-//
-//        String operatorName = "未知";
-//        String operator = tm.getSimOperator();
-//        if (operator != null) {
-//            if (operator.equals("46000") || operator.equals("46002")) {
-//                operatorName = "中国移动";
-//            } else if (operator.equals("46001")) {
-//                operatorName = "中国联通";
-//            } else if (operator.equals("46003")) {
-//                operatorName = "中国电信";
-//            }
-//        }
+
+        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        String operatorName = "其他";
+        String operator = tm.getSimOperator();
+        if (operator != null) {
+            if (operator.equals("46000") || operator.equals("46002")) {
+                operatorName = "中国移动";
+            } else if (operator.equals("46001")) {
+                operatorName = "中国联通";
+            } else if (operator.equals("46003")) {
+                operatorName = "中国电信";
+            }
+        }
 //        String netType = NetWorkUtil.getNetWorkTypeName(this);
+
+        McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
         XApp.getPreferencesEditor().putString(Config.SP_TOKEN, "").apply();
 
         String randomStr = RsaUtils.getRandomString(16);
-        Log.e("hufeng/randomStr", randomStr);
         XApp.getPreferencesEditor().putString(Config.AES_PASSWORD, randomStr).apply();
 
         String name_rsa = null;
@@ -492,6 +491,10 @@ public class LoginActivity extends RxBaseActivity {
         String loginType_rsa = null;
         String longitude_rsa = null;
         String latitude_rsa = null;
+
+        String mobileOperators_rsa = null;
+        String appVersion_rsa = null;
+        String mapType_rsa = null;
         try {
             name_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey(name.getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
             pws_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey(SHA256Util.getSHA256StrJava(psw).getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
@@ -504,19 +507,22 @@ public class LoginActivity extends RxBaseActivity {
             longitude_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey((mlocation.getLatitude() + "").getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
             latitude_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey((mlocation.getLongitude() + "").getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
 
+            appVersion_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey(SysUtil.getVersionName(this).getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
+            mobileOperators_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey(operatorName.getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
+            mapType_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey("2".getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
+
         } catch (Exception e) {
             e.printStackTrace();
         }
         Observable<LoginResult> observable = api
                 .loginByPW(name_rsa, pws_rsa, randomStr_rsa,
                         mac_rsa, imei_rsa, imsi_rsa, loginType_rsa,
-                        longitude_rsa, latitude_rsa)
+                        longitude_rsa, latitude_rsa, appVersion_rsa, mobileOperators_rsa, mapType_rsa)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, loginBtn, loginResult -> {
             if (loginResult.getCode() == 1) {
-                Log.e("hufeng/data",loginResult.data+"");
                 Employ employ = loginResult.data;
                 XApp.getPreferencesEditor().putLong(Config.SP_DRIVERID, employ.id).apply();
                 employ.saveOrUpdate();

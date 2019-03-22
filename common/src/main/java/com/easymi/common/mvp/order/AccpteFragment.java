@@ -10,6 +10,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.easymi.common.CommApiService;
 import com.easymi.common.R;
 import com.easymi.common.adapter.MyOrderAdapter;
+import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.component.Config;
@@ -79,7 +80,13 @@ public class AccpteFragment extends RxBaseFragment implements MyOrderContract.Vi
      * 请求数据
      */
     public void setRefresh() {
-        presenter.indexOrders(page, size, "10,15,20,25,28,30,35,40");
+        if (EmUtil.getEmployInfo().serviceType.equals(Config.CARPOOL)){
+            presenter.indexOrders(page, size, "10,15,20,25,30,35,40,45");
+        }else if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)  || EmUtil.getEmployInfo().serviceType.equals(Config.TAXI)){
+            presenter.indexOrders(page, size, "10,15,20,25,28,30,35,40");
+        }else {
+            presenter.indexOrders(page, size, "10,15,20,25,28,30,35,40");
+        }
     }
 
     /**
@@ -109,25 +116,31 @@ public class AccpteFragment extends RxBaseFragment implements MyOrderContract.Vi
 
         adapter.setItemClickListener((view, baseOrder) -> {
             if (view.getId() == R.id.root && StringUtils.isNotBlank(baseOrder.serviceType)) {
-                if (baseOrder.status < 35) {
                     if (baseOrder.serviceType.equals(Config.ZHUANCHE)) {
-                        if (ZCSetting.findOne().isPaid == 1){
-                            ARouter.getInstance()
-                                    .build("/zhuanche/FlowActivity")
-                                    .withLong("orderId", baseOrder.id).navigation();
-                        } else {
-                            ToastUtil.showMessage(getContext(),"未开启司机代付");
+                        if (baseOrder.status < 35) {
+                            if (ZCSetting.findOne().isPaid == 1){
+                                ARouter.getInstance()
+                                        .build("/zhuanche/FlowActivity")
+                                        .withLong("orderId", baseOrder.id).navigation();
+                            } else {
+                                ToastUtil.showMessage(getContext(),"未开启司机代付");
+                            }
                         }
                     } else if (baseOrder.serviceType.equals(Config.TAXI)) {
-                        ARouter.getInstance()
-                                .build("/taxi/FlowActivity")
-                                .withLong("orderId", baseOrder.id).navigation();
+                        if (baseOrder.status < 35) {
+                            ARouter.getInstance()
+                                    .build("/taxi/FlowActivity")
+                                    .withLong("orderId", baseOrder.id).navigation();
+                        }
                     }else if (baseOrder.serviceType.equals(Config.CARPOOL)){
-                        ARouter.getInstance()
-                                .build("/carpooling/FlowActivity")
-                                .withSerializable("baseOrder", baseOrder).navigation();
+                        if (baseOrder.status < CarpoolOrder.CARPOOL_STATUS_FINISH){
+                            ARouter.getInstance()
+                                    .build("/carpooling/FlowActivity")
+                                    .withSerializable("baseOrder", baseOrder).navigation();
+                        }else {
+                            startActivity(new Intent(getContext(), OrderDetailActivity.class).putExtra("orderId",baseOrder.orderId));
+                        }
                     }
-                }
             }
         });
     }

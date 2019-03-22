@@ -30,6 +30,8 @@ import com.easymin.custombus.entity.Customer;
 import com.easymin.custombus.mvp.FlowContract;
 import com.easymin.custombus.mvp.FlowPresenter;
 import com.easymin.custombus.receiver.CancelOrderReceiver;
+import com.easymin.custombus.receiver.OrderFinishReceiver;
+import com.easymin.custombus.receiver.ScheduleTurnReceiver;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
@@ -45,7 +47,9 @@ import java.util.TimerTask;
  * @Description:
  * @History:
  */
-public class PassengerActivity extends RxBaseActivity implements FlowContract.View, CancelOrderReceiver.OnCancelListener {
+public class PassengerActivity extends RxBaseActivity implements FlowContract.View,
+        CancelOrderReceiver.OnCancelListener,
+        ScheduleTurnReceiver.OnTurnListener {
     /**
      * 界面控件
      */
@@ -105,6 +109,11 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
      */
     private CancelOrderReceiver cancelOrderReceiver;
     private LinearLayout passenger_ll_top;
+
+    /**
+     * 自动完成订单
+     */
+    private ScheduleTurnReceiver scheduleTurnReceiver;
 
     @Override
     public boolean isEnableSwipe() {
@@ -531,13 +540,22 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
         filter.addAction(Config.BROAD_CANCEL_ORDER);
         filter.addAction(Config.BROAD_BACK_ORDER);
         registerReceiver(cancelOrderReceiver, filter);
+
+        scheduleTurnReceiver = new ScheduleTurnReceiver(this);
+        IntentFilter filter1 = new IntentFilter();
+        filter1.addAction(Config.SCHEDULE_FINISH);
+        registerReceiver(scheduleTurnReceiver, filter1);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         unregisterReceiver(cancelOrderReceiver);
+        unregisterReceiver(scheduleTurnReceiver);
     }
 
-
+    @Override
+    public void onTurnOrder(long id, String orderType, String msg) {
+        finish();
+    }
 }

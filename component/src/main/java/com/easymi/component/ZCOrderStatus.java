@@ -19,7 +19,6 @@ public class ZCOrderStatus {
      * 已派单
      */
     public static final int PAIDAN_ORDER = 5;
-
     /**
      * 已接单
      */

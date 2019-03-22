@@ -31,7 +31,7 @@ import java.util.List;
  * @Description:  验票界面
  * @History:
  */
-public class CheckTicketActivity extends RxBaseActivity implements FlowContract.View{
+public class CheckTicketActivity extends RxBaseActivity implements FlowContract.View {
     /**
      * 界面控件
      */

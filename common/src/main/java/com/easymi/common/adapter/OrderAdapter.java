@@ -3,6 +3,7 @@ package com.easymi.common.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
@@ -67,12 +68,18 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
             baseViewHolder.setText(R.id.order_end_place, baseOrder.destination);
             if (TextUtils.equals(baseOrder.serviceType, Config.CITY_LINE)
                 || TextUtils.equals(baseOrder.serviceType, Config.CARPOOL)) {
-                //专线(定制拼车)
+                //专线(城际拼车)
                 baseViewHolder.setText(R.id.order_status, "" + baseOrder.getZXOrderStatusStr() + " >");
             } else if (TextUtils.equals(baseOrder.serviceType, Config.COUNTRY)) {
                 baseViewHolder.setText(R.id.order_status, "" + BusOrderStatus.status2Str(baseOrder.scheduleStatus) + " >");
             } else {
                 baseViewHolder.setText(R.id.order_status, "" + DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status) + " >");
+            }
+
+            if (TextUtils.equals(baseOrder.serviceType, Config.CARPOOL) && baseOrder.orderChange == 1){
+                baseViewHolder.getView(R.id.tv_turn).setVisibility(View.VISIBLE);
+            }else {
+                baseViewHolder.getView(R.id.tv_turn).setVisibility(View.GONE);
             }
 
             baseViewHolder.itemView.setOnClickListener(v -> {

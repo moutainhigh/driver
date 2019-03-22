@@ -13,6 +13,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.easymi.common.R;
 import com.easymi.common.activity.BaoxiaoActivity;
 import com.easymi.common.activity.LiushuiActivity;
+import com.easymi.common.mvp.order.OrderDetailActivity;
 import com.easymi.common.util.ZXStatus2Str;
 import com.easymi.common.util.DJStatus2Str;
 import com.easymi.component.BusOrderStatus;

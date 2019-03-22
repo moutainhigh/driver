@@ -296,8 +296,6 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 order.passengerPhone = jb.optJSONObject("data").optString("userPhone");
 
                 XApp.getInstance().shake();
-
-
                 //一键报警 //todo 一键报警
 //                CenterUtil centerUtil = new CenterUtil(XApp.getInstance(),Config.APP_KEY,
 //                        XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
@@ -347,6 +345,49 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 Intent intent = new Intent();
                 intent.setAction(Config.ORDER_REFRESH);
                 XApp.getInstance().sendBroadcast(intent);
+            }else if (msg.equals("schedule_auto_finish")){
+                XApp.getInstance().shake();
+//                XApp.getInstance().syntheticVoice("班次超时，系统已自动结束");
+
+                Intent intent = new Intent();
+                intent.setAction(Config.ORDER_REFRESH);
+                XApp.getInstance().sendBroadcast(intent);
+
+                MultipleOrder order = new MultipleOrder();
+                order.scheduleId = jb.optJSONObject("data").optLong("scheduleId");
+                order.serviceType = jb.optJSONObject("data").optString("serviceType");
+
+                Message message = new Message();
+                message.what = 4;
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("order", order);
+                message.setData(bundle);
+                handler.sendMessage(message);
+            }else if (msg.equals("order_change")){
+                XApp.getInstance().shake();
+                XApp.getInstance().syntheticVoice("您有新的转单");
+
+                Intent intent = new Intent();
+                intent.setAction(Config.ORDER_REFRESH);
+                XApp.getInstance().sendBroadcast(intent);
+            }else if (msg.equals("order_transferred")){
+                XApp.getInstance().shake();
+                XApp.getInstance().syntheticVoice("您有班次被转单了");
+
+                Intent intent = new Intent();
+                intent.setAction(Config.ORDER_REFRESH);
+                XApp.getInstance().sendBroadcast(intent);
+
+                MultipleOrder order = new MultipleOrder();
+                order.scheduleId = jb.optJSONObject("data").optLong("scheduleId");
+                order.serviceType = jb.optJSONObject("data").optString("serviceType");
+
+                Message message = new Message();
+                message.what = 4;
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("order", order);
+                message.setData(bundle);
+                handler.sendMessage(message);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -752,6 +793,17 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 newShowNotify(XApp.getInstance(), "", XApp.getInstance().getString(R.string.back_order)
                         , XApp.getInstance().getString(R.string.you_have_order_back));
 
+                break;
+            case 4:
+                Bundle bundle4 = msg.getData();
+                MultipleOrder order4 = (MultipleOrder) bundle4.getSerializable("order");
+                if (order4 != null) {
+                    Intent intent3 = new Intent();
+                    intent3.setAction(Config.SCHEDULE_FINISH);
+                    intent3.putExtra("scheduleId", order4.scheduleId);
+                    intent3.putExtra("orderType", order4.serviceType);
+                    XApp.getInstance().sendBroadcast(intent3);
+                }
                 break;
         }
         return true;

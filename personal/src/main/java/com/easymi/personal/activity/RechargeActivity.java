@@ -42,6 +42,7 @@ import com.easymi.personal.result.ConfigResult;
 import com.easymi.personal.result.LoginResult;
 import com.easymi.personal.result.PayResult;
 import com.easymi.personal.result.RechargeResult;
+import com.easymi.personal.result.RechargeTypeResult;
 import com.ffcs.inapppaylib.bean.Constants;
 import com.ffcs.inapppaylib.bean.response.BaseResponse;
 import com.google.gson.JsonElement;
@@ -102,6 +103,8 @@ public class RechargeActivity extends RxBaseActivity {
 
         getConfigure();
 
+        configPayment();
+
         payWx.setOnClickListener(view -> {
             double money = getMoney();
             if (money == 0.0) {
@@ -145,33 +148,36 @@ public class RechargeActivity extends RxBaseActivity {
     }
 
     /**
+     * 获取充值方式配置
+     */
+    private void configPayment() {
+        Observable<RechargeTypeResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
+                .configPayment()
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, emResult -> {
+            //todo 未找到后台配置的地方，目前全是false。故不展示
+//            if (emResult.getCode() == 1){
+//                if (emResult.data.weChatApp){
+//                    payWx.setVisibility(View.VISIBLE);
+//                }else {
+//                    payWx.setVisibility(View.GONE);
+//                }
+//                if (emResult.data.aliPayApp){
+//                    payZfb.setVisibility(View.VISIBLE);
+//                }else {
+//                    payZfb.setVisibility(View.GONE);
+//                }
+//            }
+        })));
+    }
+
+    /**
      * 显示重置配置
      */
     private void showWhatByConfig() {
-//        config = SystemConfig.findOne();
-//        if (null != config) {
-//            if (StringUtils.isBlank(config.payType)) {
-//                payWx.setVisibility(View.GONE);
-//                payZfb.setVisibility(View.GONE);
-//                payUnion.setVisibility(View.GONE);
-//            } else {
-//                if (!config.payType.contains(PayType.CHANNEL_APP_WECHAT.getPayType())) {
-//                    payWx.setVisibility(View.GONE);
-//                }
-//                if (!config.payType.contains(PayType.CHANNEL_APP_ALI.getPayType())) {
-//                    payZfb.setVisibility(View.GONE);
-//                }
-//                if (!config.payType.contains(PayType.CHANNEL_APP_UNION.getPayType())) {
-//                    payUnion.setVisibility(View.GONE);
-//                }
-//            }
-//
-//            pay50.setText(getString(R.string.renminbi) + config.payMoney1);
-//            pay100.setText(getString(R.string.renminbi) + config.payMoney2);
-//            pay200.setText(getString(R.string.renminbi) + config.payMoney3);
-//
-//            limitMoney = config.payMoney1;
-//        }
         if (moneyConfig == null) {
             moneyConfig = new MoneyConfig();
             moneyConfig.one = 50;

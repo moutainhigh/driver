@@ -219,6 +219,17 @@
     <string name="empty_text"></string>
     <string name="com_no_read">全部都已读了哦</string>
 
+    <string name="com_order_type">类型</string>
+    <string name="com_order_line">线路</string>
+    <string name="com_order_service_time">服务时段</string>
 
+    <string name="com_order_name">姓名</string>
+    <string name="com_order_number">乘车人数</string>
+    <string name="com_order_start">上车地址</string>
+    <string name="com_order_end">下车地址</string>
+    <string name="com_order_remark">备注</string>
+    <string name="com_order_call_me">联系客服</string>
+
+    <string name="com_turn_order">转单</string>
 
 </resources>

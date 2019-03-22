@@ -112,7 +112,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         EmployStatusChangeReceiver.OnStatusChangeListener,
         AMap.OnMarkerClickListener, AMap.OnMapClickListener,
         NoticeReceiver.OnReceiveNotice,
-        AnnReceiver.OnReceiveAnn, OrderRefreshReceiver.OnRefreshOrderListener {
+        AnnReceiver.OnReceiveAnn,
+        OrderRefreshReceiver.OnRefreshOrderListener {
 
     LinearLayout bottomBar;
     MapView mapView;
@@ -436,7 +437,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     public void showNotify(AnnAndNotice notifity) {
         notifityCon.setVisibility(View.VISIBLE);
         notifityContent.setText(getString(R.string.new_notify) + notifity.noticeContent);
-        XApp.getInstance().syntheticVoice(getString(R.string.new_notify) + notifity.noticeContent, true);
+//        XApp.getInstance().syntheticVoice(getString(R.string.new_notify) + notifity.noticeContent, true);
         notifityCon.setOnClickListener(v -> {
             notifityCon.setVisibility(View.GONE);
             ARouter.getInstance().build("/personal/NotifityActivity")

@@ -22,6 +22,7 @@ import com.easymi.personal.result.NotifityResult;
 import com.easymi.personal.result.PicCodeResult;
 import com.easymi.personal.result.RateResult;
 import com.easymi.personal.result.RechargeResult;
+import com.easymi.personal.result.RechargeTypeResult;
 import com.easymi.personal.result.RegisterResult;
 import com.easymi.personal.result.ShareResult;
 import com.easymi.personal.result.StatisResult;
@@ -257,14 +258,17 @@ public interface McService {
     Observable<LoginResult> loginByPW(@Field("phone") String phone,
                                       @Field("password") String password,
                                       @Field("randomStr") String randomStr,
-//                                      @Field("ip") String ip,
-//                                      @Field("port") String port,
                                       @Field("mac") String mac,
                                       @Field("imei") String imei,
                                       @Field("imsi") String imsi,
                                       @Field("loginType") String loginType,
                                       @Field("latitude") String latitude,
-                                      @Field("longitude") String longitude
+                                      @Field("longitude") String longitude,
+
+                                      @Field("appVersion") String appVersion,
+                                      @Field("mobileOperators") String mobileOperators,
+                                      @Field("mapType") String mapType
+
     );
 
     /**
@@ -384,6 +388,15 @@ public interface McService {
      */
     @GET("api/v1/public/driver/recharge_configure")
     Observable<ConfigResult> rechargeConfigure();
+
+
+    /**
+     * 获取司机充值配置
+     *
+     * @return
+     */
+    @GET("/api/v1/public/system/config/payment")
+    Observable<RechargeTypeResult> configPayment();
 
 
     /**

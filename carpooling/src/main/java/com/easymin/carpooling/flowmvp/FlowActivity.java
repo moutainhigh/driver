@@ -62,6 +62,7 @@ import com.easymin.carpooling.flowmvp.fragment.FinishFragment;
 import com.easymin.carpooling.flowmvp.fragment.NotStartFragment;
 import com.easymin.carpooling.receiver.CancelOrderReceiver;
 import com.easymin.carpooling.receiver.OrderFinishReceiver;
+import com.easymin.carpooling.receiver.ScheduleTurnReceiver;
 import com.easymin.carpooling.widget.ChangePopWindow;
 import com.google.gson.Gson;
 
@@ -87,10 +88,11 @@ public class FlowActivity extends RxBaseActivity implements
         FlowContract.View,
         LocObserver,
         CancelOrderReceiver.OnCancelListener,
+        ScheduleTurnReceiver.OnTurnListener,
         AMap.OnMapTouchListener,
         OrderFinishReceiver.OnFinishListener,
         AMap.OnMarkerClickListener,
-        AMap.OnMapClickListener{
+        AMap.OnMapClickListener {
 
     CusToolbar cusToolbar;
     MapView mapView;
@@ -140,6 +142,11 @@ public class FlowActivity extends RxBaseActivity implements
      * 取消订单
      */
     private CancelOrderReceiver cancelOrderReceiver;
+
+    /**
+     * 转单
+     */
+    private ScheduleTurnReceiver scheduleTurnReceiver;
 
     @Override
     public boolean isEnableSwipe() {
@@ -1005,6 +1012,11 @@ public class FlowActivity extends RxBaseActivity implements
         filter.addAction(Config.BROAD_CANCEL_ORDER);
         filter.addAction(Config.BROAD_BACK_ORDER);
         registerReceiver(cancelOrderReceiver, filter);
+
+        scheduleTurnReceiver = new ScheduleTurnReceiver(this);
+        IntentFilter filter1 = new IntentFilter();
+        filter1.addAction(Config.SCHEDULE_FINISH);
+        registerReceiver(scheduleTurnReceiver, filter1);
     }
 
     @Override
@@ -1014,6 +1026,7 @@ public class FlowActivity extends RxBaseActivity implements
         LocReceiver.getInstance().deleteObserver(this);
 
         unregisterReceiver(cancelOrderReceiver);
+        unregisterReceiver(scheduleTurnReceiver);
     }
 
     @Override
@@ -1178,5 +1191,12 @@ public class FlowActivity extends RxBaseActivity implements
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
         mapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onTurnOrder(long scheduleId, String orderType, String msg) {
+        if (scheduleId == pincheOrder.scheduleId){
+            finish();
+        }
     }
 }

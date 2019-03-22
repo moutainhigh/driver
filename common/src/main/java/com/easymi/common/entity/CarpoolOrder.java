@@ -144,6 +144,53 @@ public class CarpoolOrder implements Serializable {
      */
     public int waitMinute;
 
+
+    //没存数据库的字段
+    /**
+     * 订单类型
+     */
+    public String serviceType;
+
+    /**
+     * 订单备注
+     */
+    public String orderRemark;
+
+    /**
+     * 起点
+     */
+    public String startAddress;
+
+    /**
+     * 终点
+     */
+    public String endAddress;
+    /**
+     * 服务时间天
+     */
+    public String day;
+
+    /**
+     * 起点站
+     */
+    public String startStationName;
+
+    /**
+     * 终点站
+     */
+    public String  endStationName;
+
+    /**
+     * 公司电话
+     */
+    public String companyPhone;
+
+    /**
+     * 是否转单  1-转单
+     */
+    public int orderChange;
+
+
     public boolean save() {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();

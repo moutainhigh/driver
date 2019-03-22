@@ -24,8 +24,7 @@
             android:layout_marginTop="10dp">
             <TextView
                 android:id="@+id/order_type"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:paddingBottom="2dp"
@@ -36,6 +35,24 @@
                 android:text=""
                 android:textSize="16sp"
                 android:textColor="@color/white"/>
+
+            <TextView
+                android:id="@+id/tv_turn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:text="@string/com_turn_order"
+                android:textSize="12sp"
+                android:textColor="@color/yellow"
+                android:background="@drawable/corner_turn_order_tag"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:visibility="gone"/>
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
 
             <TextView
                 android:id="@+id/order_status"

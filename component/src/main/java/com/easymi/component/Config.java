@@ -22,7 +22,7 @@ public class Config {
 //    public static final String HOST = "http://10.10.2.130:10001/";//130测试地址 （内网）
 //    public static final String HOST = "http://47.94.204.67:20001/";//130测试地址（外网）　　
     public static final String HOST = "http://api.xiaokakj.com/";//线上地址
-//    public static final String HOST = "http://api.xiaokakj.cn/";//预发
+//    public static final String HOST = "http://api.xiaokakj.cn/";//预发/
     /**
      * MQTT配置
      */
@@ -165,6 +165,8 @@ public class Config {
     public static final String TIRED_NOTICE = "com.easymi.v5driver.TIRED_NOTICE";
     public static final String HTTP_CUSTOM = "com.easymi.v5driver.HTTP_CUSTOM";
     public static final String ORDER_REFRESH = "com.easymi.v5driver.ORDER_REFRESH";
+    public static final String AUTO_FINISH = "com.easymi.v5driver.AUTO_FINISH";
+    public static final String SCHEDULE_FINISH = "com.easymi.v5driver.SCHEDULE_FINISH";
 
     //固定定位时间 毫秒
     public static final int NORMAL_LOC_TIME = 5000;
