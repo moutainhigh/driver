@@ -35,6 +35,8 @@ public class Base64Utils {
         return new String(Base64.encode(bytes));
     }
 
+
+
     public static String encodeToString(byte[] toByteArray) {
         return new String(toByteArray);
     }

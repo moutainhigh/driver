@@ -36,6 +36,7 @@ import com.easymi.component.DJOrderStatus;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
@@ -617,7 +618,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
      * 判断是否震动手机
      */
     private void shake() {
-        boolean shakeAble = XApp.getMyPreferences().getBoolean(Config.SP_SHAKE_ABLE, true);
+        boolean shakeAble = new CsSharedPreferences().getBoolean(Config.SP_SHAKE_ABLE, true);
         if (shakeAble) {
             //震动
             PhoneUtil.vibrate(XApp.getInstance(), false);

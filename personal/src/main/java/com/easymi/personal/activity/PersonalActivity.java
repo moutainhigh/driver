@@ -20,6 +20,7 @@ import com.easymi.component.entity.Employ;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.utils.CsEditor;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.GlideCircleTransform;
 import com.easymi.component.utils.Log;
@@ -113,7 +114,7 @@ public class PersonalActivity extends RxBaseActivity {
             Employ employ = loginResult.data;
             Log.e("okhttp", employ.toString());
             employ.saveOrUpdate();
-            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+            CsEditor editor =  new CsEditor();
             editor.putLong(Config.SP_DRIVERID, employ.id);
             editor.apply();
 

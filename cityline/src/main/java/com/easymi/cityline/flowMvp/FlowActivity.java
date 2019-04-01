@@ -55,6 +55,7 @@ import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult2;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
@@ -494,7 +495,7 @@ public class FlowActivity extends RxBaseActivity implements
 
         aMap.setInfoWindowAdapter(new LeftWindowAdapter(this));
 
-        String locStr = XApp.getMyPreferences().getString(Config.SP_LAST_LOC, "");
+        String locStr = new CsSharedPreferences().getString(Config.SP_LAST_LOC, "");
         EmLoc emLoc = new Gson().fromJson(locStr, EmLoc.class);
         if (null != emLoc) {
             lastLatlng = new LatLng(emLoc.latitude, emLoc.longitude);

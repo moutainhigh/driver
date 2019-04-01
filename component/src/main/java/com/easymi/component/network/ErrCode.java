@@ -570,6 +570,11 @@ public enum ErrCode {
      */
     PASSENGER_IN_BLACK_LIST(40181, "乘客账号异常，请联系管理员处理"),
 
+    /**
+     * 评论包含敏感词
+     */
+     MOMO_SENSITIVE_ERROR(40205,"评论包含敏感词"),
+
 //old
     /**
      * 数据不匹配

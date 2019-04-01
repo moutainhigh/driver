@@ -42,6 +42,7 @@ import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.ToastUtil;
@@ -131,10 +132,10 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
         }
 
         int strategy = mAMapNavi.strategyConvert(
-                XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, true),
-                XApp.getMyPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
-                XApp.getMyPreferences().getBoolean(Config.SP_COST, true),
-                XApp.getMyPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
+                new CsSharedPreferences().getBoolean(Config.SP_CONGESTION, true),
+                new CsSharedPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
+                new CsSharedPreferences().getBoolean(Config.SP_COST, true),
+                new CsSharedPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
                 false);
 
         List<NaviLatLng> startLs = new ArrayList<>();
@@ -322,7 +323,7 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
         }
         if (path != null) {
             view.showPath(ints, path);
-            if (XApp.getMyPreferences().getBoolean(Config.SP_DEFAULT_NAVI, true)) {
+            if (new CsSharedPreferences().getBoolean(Config.SP_DEFAULT_NAVI, true)) {
                 mAMapNavi.startNavi(NaviType.GPS);
                 view.showLeft(path.getAllLength(), path.getAllTime());
             }

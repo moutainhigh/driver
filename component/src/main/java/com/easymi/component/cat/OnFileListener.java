@@ -1,4 +1,4 @@
-package com.easymi.component.utils.safeutils;
+package com.easymi.component.cat;
 
 import android.support.annotation.Nullable;
 

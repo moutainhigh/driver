@@ -19,6 +19,8 @@ import java.util.List;
  */
 
 public class ZCOrder implements Serializable {
+
+
     /**
      * 是否是预约单 1是预约单 2是即时单
      */

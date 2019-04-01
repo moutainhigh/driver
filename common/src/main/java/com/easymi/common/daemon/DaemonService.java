@@ -18,6 +18,7 @@ import android.support.annotation.Nullable;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.loc.LocService;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 
@@ -69,7 +70,7 @@ public class DaemonService extends Service {
             @Override
             public void run() {
                 Log.e("DaemonService", "start daemon,check service is alive?");
-                boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
+                boolean isLogin = new CsSharedPreferences().getBoolean(Config.SP_ISLOGIN, false);
                 Log.e("DaemonService", "isLogin-->" + isLogin);
                 if (isLogin) {
                     if (!PhoneUtil.isServiceRunning(LocService.class.getName(), DaemonService.this)) {

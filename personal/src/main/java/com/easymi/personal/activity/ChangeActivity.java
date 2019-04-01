@@ -16,6 +16,8 @@ import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.AesUtil;
+import com.easymi.component.utils.CsEditor;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.SHA256Util;
@@ -80,7 +82,7 @@ public class ChangeActivity extends RxBaseActivity {
             String newPsw = editNew.getText().toString();
             String confirmPsw = editConfirm.getText().toString();
 
-            String oldPswSave = AesUtil.aesDecrypt(XApp.getMyPreferences().getString(Config.SP_LOGIN_PSW, ""), AesUtil.AAAAA);
+            String oldPswSave = new CsSharedPreferences().getString(Config.SP_LOGIN_PSW, "");
             if (!oldPsw.equals(oldPswSave)) {
                 ToastUtil.showMessage(ChangeActivity.this, getString(R.string.not_same_old));
                 return;

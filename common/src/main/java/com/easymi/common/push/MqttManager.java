@@ -20,6 +20,8 @@ import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.CsEditor;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.FileUtil;
 import com.easymi.component.utils.Log;
@@ -121,7 +123,7 @@ public class MqttManager implements LocObserver {
         configTopic = "/driver" + "/" + EmUtil.getAppKey() + "/config";
         pullTopic = "/trip/driver" + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
 
-        if (!XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false)) {
+        if (!new CsSharedPreferences().getBoolean(Config.SP_ISLOGIN, false)) {
             //未登陆 不连接
             return false;
         }
@@ -429,9 +431,9 @@ public class MqttManager implements LocObserver {
 //        if (DymOrder.findAll().size() == 0) {
 //            return;
 //        }
-        long lastPushTime = XApp.getMyPreferences().getLong(Config.SP_LAST_GPS_PUSH_TIME, 0);
+        long lastPushTime = new CsSharedPreferences().getLong(Config.SP_LAST_GPS_PUSH_TIME, 0);
         if (System.currentTimeMillis() - lastPushTime > 5 * 1000) {
-            XApp.getPreferencesEditor().putLong(Config.SP_LAST_GPS_PUSH_TIME, System.currentTimeMillis()).apply();
+            new CsEditor().putLong(Config.SP_LAST_GPS_PUSH_TIME, System.currentTimeMillis()).apply();
 
             Observable<GetFeeResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                     .gpsPush(Config.APP_KEY, pushStr)

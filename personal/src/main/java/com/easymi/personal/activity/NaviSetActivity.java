@@ -5,6 +5,7 @@ import android.os.Bundle;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.utils.CsEditor;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.switchButton.SwitchButton;
 import com.easymi.personal.R;
@@ -55,13 +56,13 @@ public class NaviSetActivity extends RxBaseActivity {
         hightspeed.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_HIGHT_SPEED, false));
 
         congestion.setOnCheckedChangeListener((compoundButton, b) ->
-                XApp.getMyPreferences().edit().putBoolean(Config.SP_CONGESTION, b).apply());
+                new CsEditor().putBoolean(Config.SP_CONGESTION, b).apply());
         avoidhightspeed.setOnCheckedChangeListener((compoundButton, b) ->
-                XApp.getMyPreferences().edit().putBoolean(Config.SP_AVOID_HIGH_SPEED, b).apply());
+                new CsEditor().putBoolean(Config.SP_AVOID_HIGH_SPEED, b).apply());
         cost.setOnCheckedChangeListener((compoundButton, b) ->
-                XApp.getMyPreferences().edit().putBoolean(Config.SP_COST, b).apply());
+                new CsEditor().putBoolean(Config.SP_COST, b).apply());
         hightspeed.setOnCheckedChangeListener((compoundButton, b) ->
-                XApp.getMyPreferences().edit().putBoolean(Config.SP_HIGHT_SPEED, b).apply());
+                new CsEditor().putBoolean(Config.SP_HIGHT_SPEED, b).apply());
     }
 
     @Override

@@ -22,6 +22,7 @@ import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.GsonUtil;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.result.EmResult;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.zhuanche.ZCApiService;
@@ -121,7 +122,7 @@ public class FlowModel implements FlowContract.Model {
         PushFee pushData = new PushFee();
 
         //司机的信息
-        Employ employ1 = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID,0));
+        Employ employ1 = Employ.findByID(new CsSharedPreferences().getLong(Config.SP_DRIVERID,0));
         PushFeeEmploy pe = null;
         if (employ1 != null && employ1 instanceof Employ) {
             Employ employ = (Employ) employ1;

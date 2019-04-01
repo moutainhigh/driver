@@ -25,15 +25,16 @@ import com.easymi.component.Config;
 import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.cat.Cat;
 import com.easymi.component.permission.RxPermissions;
 import com.easymi.component.update.UpdateHelper;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.NetUtil;
 import com.easymi.component.utils.RootUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.utils.emulator.EmulatorCheckUtil;
-import com.easymi.component.utils.safeutils.Cat;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -155,21 +156,21 @@ public class SplashActivity extends RxBaseActivity {
             }
         }
         //二次打包应用
-//        if (!new Cat(this).check()) {
-//            AlertDialog dialog = new AlertDialog.Builder(this)
-//                    .setTitle(R.string.common_tips)
-//                    .setMessage("非法应用")
-//                    .setPositiveButton(R.string.ok, (dialog1, which) -> {
-//                        finish();
-//                    })
-//                    .create();
-//            dialog.setCancelable(false);
-//            dialog.show();
-//            return;
-//        }
+        if (!new Cat(this).check()) {
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle(R.string.common_tips)
+                    .setMessage("非法应用")
+                    .setPositiveButton(R.string.ok, (dialog1, which) -> {
+                        finish();
+                    })
+                    .create();
+            dialog.setCancelable(false);
+            dialog.show();
+            return;
+        }
 
         //检测模拟器
-        boolean isEmulator = EmulatorCheckUtil.getSingleInstance().readSysProperty();
+        boolean isEmulator = EmulatorCheckUtil.getSingleInstance().isEmulator(this);
         if (isEmulator) {
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setTitle(R.string.common_tips)
@@ -224,7 +225,7 @@ public class SplashActivity extends RxBaseActivity {
      * 跳转方法
      */
     private void jump() {
-        boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
+        boolean isLogin = new CsSharedPreferences().getBoolean(Config.SP_ISLOGIN, false);
         if (isLogin) {
             startActivity(new Intent(SplashActivity.this, WorkActivity.class));
         } else {
@@ -314,7 +315,6 @@ public class SplashActivity extends RxBaseActivity {
                     }
                 }
                 break;
-
             case Config.SP_ENGLISH:
                 //获取默认区域
                 config.locale = Locale.ENGLISH;

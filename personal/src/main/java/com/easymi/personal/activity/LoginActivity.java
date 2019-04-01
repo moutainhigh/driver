@@ -3,7 +3,6 @@ package com.easymi.personal.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.location.Location;
@@ -11,17 +10,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -36,20 +28,20 @@ import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.Employ;
-import com.easymi.component.entity.NetWorkUtil;
 import com.easymi.component.entity.TaxiSetting;
 import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.ErrCode;
 import com.easymi.component.network.ErrCodeTran;
-import com.easymi.component.network.GsonUtil;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.AesUtil;
 import com.easymi.component.utils.AlexStatusBarUtils;
-import com.easymi.component.utils.Base64Utils;
+import com.easymi.component.utils.CsEditor;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.EncApi;
 import com.easymi.component.utils.GPSUtils;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MacUtils;
@@ -61,18 +53,14 @@ import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.SysUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.utils.UIStatusBarHelper;
-import com.easymi.component.widget.CustomPopWindow;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
 import com.easymi.personal.activity.register.RegisterAcitivty;
-import com.easymi.personal.activity.register.RegisterBaseActivity;
 import com.easymi.personal.activity.register.RegisterNoticeActivity;
-import com.easymi.personal.adapter.PopAdapter;
 import com.easymi.personal.result.LoginResult;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -100,8 +88,6 @@ public class LoginActivity extends RxBaseActivity {
     TextView resetPsw;
     EditText editAccount;
     EditText editPsw;
-    EditText editQiye;
-    ImageView xiala;
     ImageView eye;
     CheckBox checkboxAgreement;
     CheckBox checkboxRemember;
@@ -158,16 +144,11 @@ public class LoginActivity extends RxBaseActivity {
         checkboxRemember = findViewById(R.id.checkbox_remember);
         textAgreement = findViewById(R.id.text_agreement);
 
-        editQiye = findViewById(R.id.edit_qiye);
-        xiala = findViewById(R.id.xiala);
-
         initEdit();
 
         initEye();
 
         initBox();
-
-        initQiye();
 
         //该activity不加入Activity栈
         ActManager.getInstance().removeActivity(this);
@@ -185,97 +166,6 @@ public class LoginActivity extends RxBaseActivity {
                 mlocation = location;
             }
         });
-    }
-
-    /**
-     * 获取企业编码 暂未使用
-     */
-    private void initQiye() {
-
-        if (!Config.COMM_USE) {
-            findViewById(R.id.qiye_con).setVisibility(View.GONE);
-            findViewById(R.id.qiye_line).setVisibility(View.GONE);
-        }
-
-        String saveStr = XApp.getMyPreferences().getString(Config.SP_QIYE_CODE, "");
-        if (StringUtils.isBlank(saveStr)) {
-            xiala.setVisibility(View.GONE);
-        } else {
-            xiala.setVisibility(View.VISIBLE);
-        }
-        xiala.setOnClickListener(view -> selectedQiye());
-
-        strList.clear();
-
-        if (saveStr.contains(",")) {
-            strList = new ArrayList<>(Arrays.asList(saveStr.split(",")));
-        } else {
-            strList.add(saveStr);
-        }
-    }
-
-    CustomPopWindow mListPopWindow;
-
-    /**
-     * 初始化弹窗 暂未使用
-     */
-    private void initPop() {
-        View contentView = LayoutInflater.from(this).inflate(R.layout.pop_list, null);
-        //处理popWindow 显示内容
-        handleListView(contentView);
-        //创建并显示popWindow
-        mListPopWindow = new CustomPopWindow.PopupWindowBuilder(this)
-                .setView(contentView)
-                .size(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                .create()
-                .showAsDropDown(editQiye, 0, 0);
-
-        findViewById(R.id.hide_able_con).setVisibility(View.INVISIBLE);
-
-        mListPopWindow.getPopupWindow().setOnDismissListener(() -> findViewById(R.id.hide_able_con).setVisibility(View.VISIBLE));
-    }
-
-    /**
-     * 企业编码列表 未使用
-     *
-     * @param contentView
-     */
-    private void handleListView(View contentView) {
-        RecyclerView recyclerView = contentView.findViewById(R.id.recyclerView);
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        manager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(manager);
-        PopAdapter adapter = new PopAdapter();
-        adapter.setData(strList, editQiye.getText().toString());
-        adapter.setOnItemClick(new PopAdapter.OnItemClick() {
-            @Override
-            public void onItemClick(String qiye) {
-                editQiye.setText(qiye);
-                editQiye.setSelection(qiye.length());
-                mListPopWindow.dissmiss();
-            }
-
-            @Override
-            public void onDataDelete(String qiye, int position) {
-                strList.remove(position);
-                adapter.setData(strList, editQiye.getText().toString());
-                if (strList.size() > 0) {
-                    StringBuilder sp = new StringBuilder();
-                    for (int i = 0; i < strList.size(); i++) {
-                        sp.append(strList.get(i));
-                        if (i != strList.size() - 1) {
-                            sp.append(",");
-                        }
-                    }
-                    XApp.getPreferencesEditor().putString(Config.SP_QIYE_CODE, sp.toString()).apply();
-                } else {
-                    XApp.getPreferencesEditor().putString(Config.SP_QIYE_CODE, "").apply();
-                    xiala.setVisibility(View.GONE);
-                }
-            }
-        });
-        recyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
     }
 
     /**
@@ -333,15 +223,7 @@ public class LoginActivity extends RxBaseActivity {
             public void afterTextChanged(Editable editable) {
                 if (null != editable && StringUtils.isNotBlank(editable.toString())) {
                     if (StringUtils.isNotBlank(editPsw.getText().toString())) {
-                        if (Config.COMM_USE) {
-                            if (StringUtils.isNotBlank(editQiye.getText().toString())) {
-                                setLoginBtnEnable(true);
-                            } else {
-                                setLoginBtnEnable(false);
-                            }
-                        } else {
-                            setLoginBtnEnable(true);
-                        }
+                        setLoginBtnEnable(true);
                     } else {
                         setLoginBtnEnable(false);
                     }
@@ -366,40 +248,6 @@ public class LoginActivity extends RxBaseActivity {
             public void afterTextChanged(Editable editable) {
                 if (null != editable && StringUtils.isNotBlank(editable.toString())) {
                     if (StringUtils.isNotBlank(editAccount.getText().toString())) {
-                        if (Config.COMM_USE) {
-                            if (StringUtils.isNotBlank(editQiye.getText().toString())) {
-                                setLoginBtnEnable(true);
-                            } else {
-                                setLoginBtnEnable(false);
-                            }
-                        } else {
-                            setLoginBtnEnable(true);
-                        }
-                    } else {
-                        setLoginBtnEnable(false);
-                    }
-                } else {
-                    setLoginBtnEnable(false);
-                }
-            }
-        });
-
-        editQiye.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (null != editable && StringUtils.isNotBlank(editable.toString())) {
-                    if (StringUtils.isNotBlank(editAccount.getText().toString())
-                            && StringUtils.isNotBlank(editPsw.getText().toString())) {
                         setLoginBtnEnable(true);
                     } else {
                         setLoginBtnEnable(false);
@@ -410,17 +258,15 @@ public class LoginActivity extends RxBaseActivity {
             }
         });
 
-        editQiye.setText(XApp.getMyPreferences().getString(Config.SP_LAT_QIYE_CODE, ""));
-
-        checkboxRemember.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_REMEMBER_PSW, false));
-        if (XApp.getMyPreferences().getBoolean(Config.SP_REMEMBER_PSW, false)) {
-            String enAcc = XApp.getMyPreferences().getString(Config.SP_LOGIN_ACCOUNT, "");
-            String enPsw = XApp.getMyPreferences().getString(Config.SP_LOGIN_PSW, "");
+        checkboxRemember.setChecked(new CsSharedPreferences().getBoolean(Config.SP_REMEMBER_PSW, false));
+        if (new CsSharedPreferences().getBoolean(Config.SP_REMEMBER_PSW, false)) {
+            String enAcc = new CsSharedPreferences().getString(Config.SP_LOGIN_ACCOUNT, "");
+            String enPsw = new CsSharedPreferences().getString(Config.SP_LOGIN_PSW, "");
             if (StringUtils.isNotBlank(enAcc) && StringUtils.isNotBlank(enPsw)) {
-                String acc = AesUtil.aesDecrypt(enAcc, AesUtil.AAAAA);
-                String psw = AesUtil.aesDecrypt(enPsw, AesUtil.AAAAA);
-                editAccount.setText(acc);
-                editPsw.setText(psw);
+//                String acc = AesUtil.aesDecrypt(enAcc, AesUtil.AAAAA);
+//                String psw = AesUtil.aesDecrypt(enPsw, AesUtil.AAAAA);
+                editAccount.setText(enAcc);
+                editPsw.setText(enPsw);
             }
         }
     }
@@ -476,10 +322,10 @@ public class LoginActivity extends RxBaseActivity {
 
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
-        XApp.getPreferencesEditor().putString(Config.SP_TOKEN, "").apply();
+        new CsEditor().putString(Config.SP_TOKEN, "").apply();
 
         String randomStr = RsaUtils.getRandomString(16);
-        XApp.getPreferencesEditor().putString(Config.AES_PASSWORD, randomStr).apply();
+        new CsEditor().putString(Config.AES_PASSWORD, randomStr).apply();
 
         String name_rsa = null;
         String pws_rsa = null;
@@ -496,20 +342,20 @@ public class LoginActivity extends RxBaseActivity {
         String appVersion_rsa = null;
         String mapType_rsa = null;
         try {
-            name_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey(name.getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
-            pws_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey(SHA256Util.getSHA256StrJava(psw).getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
-            randomStr_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey(randomStr.getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
+            name_rsa = RsaUtils.rsaEncode(name);
+            pws_rsa = RsaUtils.rsaEncode(SHA256Util.getSHA256StrJava(psw));
+            randomStr_rsa = RsaUtils.rsaEncode(randomStr);
 
-            mac_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey(MacUtils.getMobileMAC(this).getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
-            imei_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey(MobileInfoUtil.getIMEI(this).getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
-            imsi_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey(MobileInfoUtil.getIMSI(this).getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
-            loginType_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey(Build.MODEL.getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
-            longitude_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey((mlocation.getLatitude() + "").getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
-            latitude_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey((mlocation.getLongitude() + "").getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
+            mac_rsa = RsaUtils.rsaEncode(MacUtils.getMobileMAC(this));
+            imei_rsa = RsaUtils.rsaEncode(MobileInfoUtil.getIMEI(this));
+            imsi_rsa = RsaUtils.rsaEncode(MobileInfoUtil.getIMSI(this));
+            loginType_rsa = RsaUtils.rsaEncode(Build.MODEL);
+            longitude_rsa = RsaUtils.rsaEncode((mlocation.getLatitude() + ""));
+            latitude_rsa = RsaUtils.rsaEncode((mlocation.getLongitude() + ""));
 
-            appVersion_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey(SysUtil.getVersionName(this).getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
-            mobileOperators_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey(operatorName.getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
-            mapType_rsa = Base64Utils.encode(RsaUtils.encryptByPublicKey("2".getBytes("UTF-8"), getResources().getString(R.string.rsa_public_key)));
+            appVersion_rsa = RsaUtils.rsaEncode(SysUtil.getVersionName(this));
+            mobileOperators_rsa = RsaUtils.rsaEncode(operatorName);
+            mapType_rsa = RsaUtils.rsaEncode("2");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -524,12 +370,10 @@ public class LoginActivity extends RxBaseActivity {
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, loginBtn, loginResult -> {
             if (loginResult.getCode() == 1) {
                 Employ employ = loginResult.data;
-                XApp.getPreferencesEditor().putLong(Config.SP_DRIVERID, employ.id).apply();
+                new CsEditor().putLong(Config.SP_DRIVERID, employ.id).apply();
                 employ.saveOrUpdate();
 
-                SharedPreferences.Editor editor = XApp.getPreferencesEditor();
-                editor.putString(Config.SP_TOKEN, employ.token);
-                editor.apply();
+                new CsEditor().putString(Config.SP_TOKEN, employ.token).apply();
                 getSetting(employ, name, psw);
             } else if (loginResult.getCode() == APPLYING) {
                 Intent intent = new Intent(this, RegisterNoticeActivity.class);
@@ -537,12 +381,10 @@ public class LoginActivity extends RxBaseActivity {
                 startActivity(intent);
             } else if (loginResult.getCode() == APPLY_PASS) {
                 Employ employ = loginResult.data;
-                XApp.getPreferencesEditor().putLong(Config.SP_DRIVERID, employ.id).apply();
+                new CsEditor().putLong(Config.SP_DRIVERID, employ.id).apply();
                 employ.saveOrUpdate();
 
-                SharedPreferences.Editor editor = XApp.getPreferencesEditor();
-                editor.putString(Config.SP_TOKEN, employ.token);
-                editor.apply();
+                new CsEditor().putString(Config.SP_TOKEN, employ.token).apply();
                 getSetting(employ, name, psw);
             } else if (loginResult.getCode() == APPLY_REJECT) {
                 Intent intent = new Intent(this, RegisterNoticeActivity.class);
@@ -609,12 +451,14 @@ public class LoginActivity extends RxBaseActivity {
                 .observeOn(AndroidSchedulers.mainThread());
 
         observable.subscribe(new MySubscriber<>(this, false, false, settingResult -> {
-            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+
+            CsEditor editor = new CsEditor();
+
             editor.putBoolean(Config.SP_ISLOGIN, true);
-            editor.putString(Config.SP_LOGIN_ACCOUNT, AesUtil.aesEncrypt(name, AesUtil.AAAAA));
+            editor.putString(Config.SP_LOGIN_ACCOUNT, name);
             editor.putBoolean(Config.SP_REMEMBER_PSW, checkboxRemember.isChecked());
             if (checkboxRemember.isChecked()) {
-                editor.putString(Config.SP_LOGIN_PSW, AesUtil.aesEncrypt(psw, AesUtil.AAAAA));
+                editor.putString(Config.SP_LOGIN_PSW, psw);
             } else {
                 editor.putString(Config.SP_LOGIN_PSW, "");
             }
@@ -657,9 +501,9 @@ public class LoginActivity extends RxBaseActivity {
 
     List<String> strList = new ArrayList<>();
 
-    private void selectedQiye() {
-        initPop();
-    }
+//    private void selectedQiye() {
+//        initPop();
+//    }
 
     /**
      * 手机唯一识别码

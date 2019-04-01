@@ -12,8 +12,6 @@
     <string name="start_drive">点击出发</string>
     <string name="start_wait">等待</string>
 
-    <!--<string name="slider_destance">滑动到达目的地</string>-->
-
     <string name="huadongdaoda">滑动到达预约地</string>
     <string name="slider_destance">滑动到达目的地</string>
 
@@ -215,7 +213,6 @@
 
     <string name="to_start_about">去乘客起点约</string>
     <string name="please_start_at">请在</string>
-    <string name="arrive_start">点击到达预约地</string>
 
     <string name="no_car">暂无车辆，不能创建专车订单，请联系管理员</string>
 

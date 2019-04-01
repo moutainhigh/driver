@@ -112,7 +112,7 @@ public class DistanceManager {
                     public void onDriveRouteSearched(DriveRouteResult driveRouteResult, int code) {
 
 //                        latLngs.clear();
-//                        XApp.getPreferencesEditor().putLong(Config.SP_MQTT_LAST_RESPONSE_TIME, 0).apply();
+//                        new CsEditor().putLong(Config.SP_MQTT_LAST_RESPONSE_TIME, 0).apply();
 
                         double distance = 0;
                         if (code == 1000) {

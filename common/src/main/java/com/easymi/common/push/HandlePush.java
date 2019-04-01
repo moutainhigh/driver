@@ -117,10 +117,17 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
-                if (!DymOrder.exists(order.orderId, order.serviceType)) {
-                    loadOrder(order);
+                if (order.serviceType.equals(Config.GOV)){
+                    XApp.getInstance().shake();
+                    XApp.getInstance().syntheticVoice("你有公务用车订单需要执行");
+
+                    refreshWork();
+                }else {
+                    if (!DymOrder.exists(order.orderId, order.serviceType)) {
+                        loadOrder(order);
+                    }
+                    newShowNotify(XApp.getInstance(), "", XApp.getInstance().getString(R.string.send_order), XApp.getInstance().getString(R.string.send_order_content));
                 }
-                newShowNotify(XApp.getInstance(), "", XApp.getInstance().getString(R.string.send_order), XApp.getInstance().getString(R.string.send_order_content));
             } else if (msg.equals("cancel")) {
                 //取消订单
                 MultipleOrder order = new MultipleOrder();
@@ -258,7 +265,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                     dymOrder.addFee = jbData.optDouble("addFee");
 
 
-                    if (Config.ZHUANCHE.equals(orderType)) {
+                    if (Config.ZHUANCHE.equals(orderType) || Config.GOV.equals(orderType)) {
                         dymOrder.peakCost = jbData.optDouble("peakFee");
                         dymOrder.nightPrice = jbData.optDouble("nightMileFee");
                         dymOrder.lowSpeedCost = jbData.optDouble("lowSpeedFee");
@@ -298,8 +305,8 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 XApp.getInstance().shake();
                 //一键报警 //todo 一键报警
 //                CenterUtil centerUtil = new CenterUtil(XApp.getInstance(),Config.APP_KEY,
-//                        XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
-//                        XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
+//                        new CsSharedPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
+//                        new CsSharedPreferences().getString(Config.SP_TOKEN, ""));
 
                 if (StringUtils.isNotBlank(order.serviceType)) {
                     if (order.serviceType.equals(Config.ZHUANCHE)) {
@@ -321,37 +328,27 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice("您有定制包车订单需要处理");
 
-                Intent intent = new Intent();
-                intent.setAction(Config.ORDER_REFRESH);
-                XApp.getInstance().sendBroadcast(intent);
+                refreshWork();
             }else if (msg.equals("rental")){
                 XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice("您有包车租车订单需要处理");
 
-                Intent intent = new Intent();
-                intent.setAction(Config.ORDER_REFRESH);
-                XApp.getInstance().sendBroadcast(intent);
+                refreshWork();
             }else if (msg.equals("order_hot_create")){
                 XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice("您有城际拼车订单需要处理");
 
-                Intent intent = new Intent();
-                intent.setAction(Config.ORDER_REFRESH);
-                XApp.getInstance().sendBroadcast(intent);
+                refreshWork();
             }else if (msg.equals("country") || msg.equals("custombus")){
                 XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice("您有班车订单需要处理");
 
-                Intent intent = new Intent();
-                intent.setAction(Config.ORDER_REFRESH);
-                XApp.getInstance().sendBroadcast(intent);
+                refreshWork();
             }else if (msg.equals("schedule_auto_finish")){
                 XApp.getInstance().shake();
 //                XApp.getInstance().syntheticVoice("班次超时，系统已自动结束");
 
-                Intent intent = new Intent();
-                intent.setAction(Config.ORDER_REFRESH);
-                XApp.getInstance().sendBroadcast(intent);
+                refreshWork();
 
                 MultipleOrder order = new MultipleOrder();
                 order.scheduleId = jb.optJSONObject("data").optLong("scheduleId");
@@ -367,16 +364,12 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice("您有新的转单");
 
-                Intent intent = new Intent();
-                intent.setAction(Config.ORDER_REFRESH);
-                XApp.getInstance().sendBroadcast(intent);
+                refreshWork();
             }else if (msg.equals("order_transferred")){
                 XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice("您有班次被转单了");
 
-                Intent intent = new Intent();
-                intent.setAction(Config.ORDER_REFRESH);
-                XApp.getInstance().sendBroadcast(intent);
+                refreshWork();
 
                 MultipleOrder order = new MultipleOrder();
                 order.scheduleId = jb.optJSONObject("data").optLong("scheduleId");
@@ -392,6 +385,12 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void refreshWork(){
+        Intent intent = new Intent();
+        intent.setAction(Config.ORDER_REFRESH);
+        XApp.getInstance().sendBroadcast(intent);
     }
 
     /**

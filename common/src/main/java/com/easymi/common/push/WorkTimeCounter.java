@@ -12,6 +12,7 @@ import com.easymi.component.entity.Employ;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
@@ -128,8 +129,8 @@ public class WorkTimeCounter {
         /**
          * 根据本地缓存的上班时间戳进行计算听单时长 start
          */
-        if ( employ.status > 1 && XApp.getMyPreferences().getLong(Config.ONLINE_TIME,0) != 0){
-            totalMinute = (int) ((System.currentTimeMillis() - XApp.getMyPreferences().getLong(Config.ONLINE_TIME,0))/(1000 * 60));
+        if ( employ.status > 1 && new CsSharedPreferences().getLong(Config.ONLINE_TIME,0) != 0){
+            totalMinute = (int) ((System.currentTimeMillis() - new CsSharedPreferences().getLong(Config.ONLINE_TIME,0))/(1000 * 60));
         }else {
             totalMinute = 0;
         }

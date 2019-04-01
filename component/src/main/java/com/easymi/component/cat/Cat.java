@@ -1,4 +1,4 @@
-package com.easymi.component.utils.safeutils;
+package com.easymi.component.cat;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,16 +6,14 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.text.TextUtils;
 
-import com.easymi.component.utils.SysUtil;
+import com.easymi.component.utils.CommonUtil;
+import com.easymi.component.utils.Log;
 
 /**
- * @Copyright (C), 2012-2019, Sichuan Xiaoka Technology Co., Ltd.
- * @FileName: Cat
- * @Author: hufeng
- * @Date: 2019/3/12 下午3:06
- * @Description: 安全验证
- * @History:
+ * Created by yinxin on 2018/2/26.
+ * 安全验证.
  */
+
 public class Cat {
 
     private String md5String;
@@ -40,6 +38,7 @@ public class Cat {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         watching(context);
     }
 
@@ -53,6 +52,7 @@ public class Cat {
         context.startService(intent);
     }
 
+
     /**
      * 检测签名MD5是否一致.
      *
@@ -61,8 +61,9 @@ public class Cat {
     public boolean check() {
         //获取应用签名MD5
         byte[] signByte = getSignByte();
-        String md5 = SysUtil.md5(signByte);
-        return !TextUtils.isEmpty(md5String) && md5String.equalsIgnoreCase(md5);
+        String md5 = CommonUtil.md5(signByte);
+        boolean isRight = !TextUtils.isEmpty(md5String) && md5String.equalsIgnoreCase(md5);
+        return isRight;
     }
 
     public native byte[] getSignByte();

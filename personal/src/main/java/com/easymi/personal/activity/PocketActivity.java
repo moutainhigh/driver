@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.easymi.component.Config;
+import com.easymi.component.utils.CsEditor;
 import com.easymi.component.utils.Log;
 
 import android.widget.RelativeLayout;
@@ -88,7 +89,7 @@ public class PocketActivity extends RxBaseActivity {
             Employ employ = loginResult.data;
             Log.e("okhttp", employ.toString());
             employ.saveOrUpdate();
-            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+            CsEditor editor = new CsEditor();
             editor.putLong(Config.SP_DRIVERID, employ.id);
             editor.apply();
 

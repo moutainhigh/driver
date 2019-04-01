@@ -10,6 +10,7 @@ import com.easymi.component.R;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
+
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -68,7 +69,6 @@ public class RsaUtils {
      * 生成公钥和私钥
      *
      * @param rsaKeySize key size
-     *
      * @return 公钥和私钥
      */
     public static Pair<RSAPublicKey, RSAPrivateKey> genKeyPair(int rsaKeySize) {
@@ -80,7 +80,7 @@ public class RsaUtils {
             RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
             return Pair.of(publicKey, privateKey);
         } catch (NoSuchAlgorithmException e) {
-            Log.e("getKeys ex ", e.getMessage() );
+            Log.e("getKeys ex ", e.getMessage());
         }
         return null;
     }
@@ -175,7 +175,7 @@ public class RsaUtils {
             RSAPublicKeySpec keySpec = new RSAPublicKeySpec(b1, b2);
             return (RSAPublicKey) keyFactory.generatePublic(keySpec);
         } catch (Exception e) {
-            Log.e("getPublicKey ex","modulus="+modulus+",exponent="+exponent+","+e);
+            Log.e("getPublicKey ex", "modulus=" + modulus + ",exponent=" + exponent + "," + e);
             throw new CryptoException("Get PublicKey ex", e);
         }
     }
@@ -198,7 +198,7 @@ public class RsaUtils {
             RSAPrivateKeySpec keySpec = new RSAPrivateKeySpec(b1, b2);
             return (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
         } catch (Exception e) {
-            Log.e("getPublicKey ex","modulus="+modulus+",exponent="+exponent+","+e);
+            Log.e("getPublicKey ex", "modulus=" + modulus + ",exponent=" + exponent + "," + e);
             throw new CryptoException("Get PrivateKey ex", e);
         }
     }
@@ -220,7 +220,7 @@ public class RsaUtils {
             //如果明文长度大于模长-11则要分组加密
             return doFinal(cipher, data, keyLen - 11);
         } catch (Exception e) {
-            Log.e("encryptByPublicKey ex",e.toString());
+            Log.e("encryptByPublicKey ex", e.toString());
             throw new CryptoException("RSA encrypt ex", e);
         }
     }
@@ -241,7 +241,7 @@ public class RsaUtils {
             //如果密文长度大于模长则要分组解密
             return doFinal(cipher, data, keyLen);
         } catch (Exception e) {
-            Log.e("decryptByPrivateKey ex",e.toString());
+            Log.e("decryptByPrivateKey ex", e.toString());
             throw new CryptoException("RSA decrypt ex", e);
         }
     }
@@ -368,6 +368,7 @@ public class RsaUtils {
 
     /**
      * 获取16位随机字符串
+     *
      * @param length
      * @return
      */
@@ -383,17 +384,31 @@ public class RsaUtils {
     }
 
     /**
-     * 加密解密
-     * @param context
+     * RSA加密
+     *
      * @param content
      * @return
      */
-    public static String encryptAndEncode(Context context ,String content){
+    public static String rsaEncode( String content) {
         String str = "";
         try {
-//            Log.e("hufeng/content",content);
-            str = Base64Utils.encode(RsaUtils.encryptByPublicKey(content.getBytes("UTF-8"), context.getResources().getString(R.string.rsa_public_key)));
-//            Log.e("hufeng/str",str);
+            str = Base64Utils.encode(encryptByPublicKey(content.getBytes("UTF-8"), new Loader().getRsaPs()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
+
+    /**
+     * RSA解密
+     *
+     * @param content
+     * @return
+     */
+    public static String rsaDecode(String content) {
+        String str = "";
+        try {
+            str = Base64Utils.encode(decryptByPublicKey(content.getBytes("UTF-8"), new Loader().getRsaPs()));
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -61,10 +61,14 @@ public class CountDownUtils {
                     activity.runOnUiThread(() -> {
                         setLeftText(LeftSec);
                         if (LeftSec <= 0) {
-                            timer.cancel();
-                            timer = null;
-                            timerTask.cancel();
-                            timerTask = null;
+                            if (timer != null) {
+                                timer.cancel();
+                                timer = null;
+                            }
+                            if (timerTask != null) {
+                                timerTask.cancel();
+                                timerTask = null;
+                            }
                         }
                     });
                 }

@@ -1,10 +1,13 @@
 package com.easymi.component.utils.emulator;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 /**
@@ -151,5 +154,21 @@ public class EmulatorCheckUtil {
                 .append("\nPRODUCT-")
                 .append(android.os.Build.PRODUCT);
         return sb.toString();
+    }
+
+
+    public boolean isEmulator(Context context) {
+        try {
+            TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            @SuppressLint("MissingPermission")
+            String imei = tm.getDeviceId();
+            if (imei != null && imei.equals("000000000000000")) {
+                return true;
+            }
+            return (Build.MODEL.equals("sdk")) || (Build.MODEL.equals("google_sdk"));
+        } catch (Exception ioe) {
+
+        }
+        return false;
     }
 }

@@ -1,12 +1,13 @@
-package com.easymi.component.utils.safeutils;
+package com.easymi.component.cat;
 
-import android.app.ActivityManager;
 import android.app.Service;
 import android.content.Intent;
 import android.os.FileObserver;
 import android.os.IBinder;
 import android.os.Process;
 import android.support.annotation.Nullable;
+import android.util.Log;
+import android.widget.Toast;
 
 
 import com.easymi.component.app.ActManager;

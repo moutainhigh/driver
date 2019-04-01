@@ -40,6 +40,8 @@ import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.AesUtil;
+import com.easymi.component.utils.CsEditor;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
@@ -132,7 +134,9 @@ public class WorkPresenter implements WorkContract.Presenter {
                                     || TextUtils.equals(order.serviceType, Config.TAXI)
                                     || TextUtils.equals(order.serviceType, Config.CHARTERED)
                                     || TextUtils.equals(order.serviceType, Config.RENTAL)
-                                    ) {
+                                    || TextUtils.equals(order.serviceType, Config.GOV)
+                                    || TextUtils.equals(order.serviceType, Config.COUNTRY)
+                                    || TextUtils.equals(order.serviceType, Config.CUSTOMBUS)) {
                                 if (DymOrder.exists(order.orderId, order.serviceType)) {
                                     //非专线 本地有
                                     dymOrder = DymOrder.findByIDType(order.orderId, order.serviceType);
@@ -190,7 +194,9 @@ public class WorkPresenter implements WorkContract.Presenter {
                                         || dymOrder.orderType.equals(Config.TAXI)
                                         || TextUtils.equals(order.serviceType, Config.CHARTERED)
                                         || TextUtils.equals(order.serviceType, Config.RENTAL)
-                                        ) {
+                                        || TextUtils.equals(order.serviceType, Config.GOV)
+                                        || TextUtils.equals(order.serviceType, Config.COUNTRY)
+                                        || TextUtils.equals(order.serviceType, Config.CUSTOMBUS)) {
                                     if (dymOrder.orderId == order.orderId) {
                                         isExist = true;
                                         break;
@@ -235,13 +241,13 @@ public class WorkPresenter implements WorkContract.Presenter {
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, btn, emResult -> {
             //一键报警 上线
             CenterUtil centerUtil = new CenterUtil(context, Config.APP_KEY,
-                    XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
-                    XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
+                    new CsSharedPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
+                    new CsSharedPreferences().getString(Config.SP_TOKEN, ""));
             centerUtil.driverUp(driverId, EmUtil.getEmployInfo().companyId, EmUtil.getEmployInfo().userName, EmUtil.getEmployInfo().realName,
                     EmUtil.getEmployInfo().phone, System.currentTimeMillis() / 1000, EmUtil.getEmployInfo().serviceType);
 
             view.onlineSuc();
-            XApp.getPreferencesEditor().putLong(Config.ONLINE_TIME, System.currentTimeMillis()).apply();
+            new CsEditor().putLong(Config.ONLINE_TIME, System.currentTimeMillis()).apply();
             uploadTime(2);
 
         })));
@@ -255,13 +261,13 @@ public class WorkPresenter implements WorkContract.Presenter {
                 true, emResult -> {
             //一键报警  下线
             CenterUtil centerUtil = new CenterUtil(context, Config.APP_KEY,
-                    XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
-                    XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
+                    new CsSharedPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
+                    new CsSharedPreferences().getString(Config.SP_TOKEN, ""));
             centerUtil.driverDown(driverId, EmUtil.getEmployInfo().companyId, EmUtil.getEmployInfo().userName, EmUtil.getEmployInfo().realName,
                     EmUtil.getEmployInfo().phone, System.currentTimeMillis() / 1000, EmUtil.getEmployInfo().serviceType);
 
             view.offlineSuc();
-            XApp.getPreferencesEditor().putLong(Config.ONLINE_TIME, 0).apply();
+            new CsEditor().putLong(Config.ONLINE_TIME, 0).apply();
             uploadTime(1);
 
         })));
@@ -329,7 +335,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                 Employ employ = result.getEmployInfo();
 
                 employType = employ.serviceType;
-                String udid = XApp.getMyPreferences().getString(Config.SP_UDID, "");
+                String udid = new CsSharedPreferences().getString(Config.SP_UDID, "");
                 if (StringUtils.isNotBlank(employ.deviceNo)
                         && StringUtils.isNotBlank(udid)) {
                     if (!employ.deviceNo.equals(udid)) {
@@ -339,7 +345,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                     }
                 }
                 employ.saveOrUpdate();
-                SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+                CsEditor editor =  new CsEditor();
                 editor.putLong(Config.SP_DRIVERID, employ.id);
                 editor.apply();
                 view.showDriverStatus();

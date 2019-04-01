@@ -83,6 +83,8 @@ import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.AesUtil;
+import com.easymi.component.utils.CsEditor;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
@@ -152,8 +154,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         TraceInterface,
         FeeChangeObserver,
         PassengerLocObserver,
-        CancelOrderReceiver.OnCancelListener,
         AMap.OnMapTouchListener,
+        CancelOrderReceiver.OnCancelListener,
         OrderFinishReceiver.OnFinishListener {
 
     public static final int CANCEL_ORDER = 0X01;
@@ -340,8 +342,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         lin_time.setVisibility(View.VISIBLE);
         lin_navi.setVisibility(View.GONE);
 
-        if (XApp.getMyPreferences().getLong("" + zcOrder.orderId, 0) == 0) {
-            XApp.getMyPreferences().edit().putLong("" + zcOrder.orderId, System.currentTimeMillis() + ZCSetting.findOne().arriveTime * 60 * 1000).apply();
+        if (new CsSharedPreferences().getLong("" + zcOrder.orderId, 0) == 0) {
+            new CsEditor().putLong("" + zcOrder.orderId, System.currentTimeMillis() + ZCSetting.findOne().arriveTime * 60 * 1000).apply();
         }
 
         if (null != timer) {
@@ -353,7 +355,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             timerTask = null;
         }
 
-        long appoint = XApp.getMyPreferences().getLong("" + zcOrder.orderId, 0);
+        long appoint = new CsSharedPreferences().getLong("" + zcOrder.orderId, 0);
         timeSeq = (appoint - System.currentTimeMillis()) / 1000;
         timer = new Timer();
         timerTask = new TimerTask() {
@@ -470,8 +472,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 lin_time.setVisibility(View.GONE);
             }
         } else {
-            if (XApp.getMyPreferences().getLong("" + zcOrder.orderId, 0) != 0) {
-                XApp.getMyPreferences().edit().remove("" + zcOrder);
+            if (new CsSharedPreferences().getLong("" + zcOrder.orderId, 0) != 0) {
+                new CsEditor().remove("" + zcOrder);
             }
             go_text.setText("去");
             lin_time.setVisibility(View.GONE);
@@ -721,7 +723,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         // 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false
         aMap.setMyLocationEnabled(true);
 
-        String locStr = XApp.getMyPreferences().getString(Config.SP_LAST_LOC, "");
+        String locStr = new CsSharedPreferences().getString(Config.SP_LAST_LOC, "");
         EmLoc emLoc = new Gson().fromJson(locStr, EmLoc.class);
         if (null != emLoc) {
             lastLatlng = new LatLng(emLoc.latitude, emLoc.longitude);
@@ -1205,8 +1207,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 presenter.acceptOrder(zcOrder.orderId, zcOrder.version, btn);
                 //todo 一键报警
 //                CenterUtil centerUtil = new CenterUtil(FlowActivity.this,Config.APP_KEY,
-//                        XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
-//                        XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
+//                        new CsSharedPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
+//                        new CsSharedPreferences().getString(Config.SP_TOKEN, ""));
 //                centerUtil.smsShareAuto( zcOrder.orderId, EmUtil.getEmployInfo().companyId,  zcOrder.passengerId,  zcOrder.passengerPhone,  zcOrder.orderType);
 //                centerUtil.checkingAuth( zcOrder.passengerId);
             }
@@ -1486,7 +1488,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             if (aMap != null) {
                 aMap.setMyLocationStyle(myLocationStyle);
             }
-            if ((System.currentTimeMillis() - XApp.getMyPreferences().getLong(Config.DOWN_TIME, 0)) / 1000 > 5) {
+            if ((System.currentTimeMillis() - new CsSharedPreferences().getLong(Config.DOWN_TIME, 0)) / 1000 > 5) {
                 isMapTouched = false;
             }
         }
@@ -1668,7 +1670,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             Log.e("mapTouch", "-----map onTouched-----");
             if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
                 isMapTouched = true;
-                XApp.getPreferencesEditor().putLong(Config.DOWN_TIME, System.currentTimeMillis()).apply();
+                new CsEditor().putLong(Config.DOWN_TIME, System.currentTimeMillis()).apply();
             }
             if (null != runningFragment) {
                 runningFragment.mapStatusChanged();

@@ -12,9 +12,15 @@ android {
 
         ndk {
             //只兼容下面的型号
-            abiFilters "armeabi", "armeabi-v7a"
+            abiFilters  "armeabi-v7a"
         }
+
+        manifestPlaceholders = [
+                //打包证书的md5值，该值在配置阶段会清除空格和‘:’,并反转
+                XK_MD5          : "B0:3A:DF:FE:43:9D:F5:82:22:BA:40:E2:06:A6:54:AF",
+        ]
     }
+
     signingConfigs {
         debug {
             keyAlias '资运司机端'
@@ -37,7 +43,7 @@ android {
     buildTypes {
         release {
             buildConfigField "boolean", "LOG_DEBUG", "false" //不显示log
-            minifyEnabled false
+            minifyEnabled true
 //            shrinkResources true
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -52,6 +58,14 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+}
+
+task handleMd5 {
+    String md5Str = project.android.defaultConfig.manifestPlaceholders.get("XK_MD5")
+    println "原始md5：" + md5Str
+    md5Str = md5Str.trim().replace(":", "")
+    project.android.defaultConfig.manifestPlaceholders.put("XK_MD5", md5Str.reverse())
+    println "修改后md5：" + project.android.defaultConfig.manifestPlaceholders.get("XK_MD5")
 }
 
 dependencies {
@@ -71,5 +85,5 @@ dependencies {
     implementation project(path: ':rental')
     implementation project(path: ':custombus')
     implementation project(path: ':carpooling')
-
+    implementation project(path: ':official')
 }

@@ -155,7 +155,7 @@
 ```java
    //1.未提交资料；2.审核中；3驳回；4通过
    if (employ.registerStatus == 4){
-      SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+      CsEditor editor =  new CsEditor();
       editor.putString(Config.SP_TOKEN, employ.token);
       editor.apply();
       getSetting(employ, name, psw);
@@ -172,7 +172,7 @@
       intent.putExtra("employ",employ);
       startActivity(intent);
    }else {
-      SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+      CsEditor editor = new CsEditor();
       editor.putString(Config.SP_TOKEN, employ.token);
       editor.apply();
       getSetting(employ, name, psw);

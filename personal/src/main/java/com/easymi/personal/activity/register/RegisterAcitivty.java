@@ -8,8 +8,6 @@ import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,26 +19,20 @@ import com.easymi.component.Config;
 import com.easymi.component.activity.WebActivity;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
-import com.easymi.component.entity.Employ;
 import com.easymi.component.network.ErrCode;
 import com.easymi.component.network.ErrCodeTran;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
-import com.easymi.component.utils.AesUtil;
 import com.easymi.component.utils.AlexStatusBarUtils;
-import com.easymi.component.utils.Base64Utils;
 import com.easymi.component.utils.CommonUtil;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.RsaUtils;
-import com.easymi.component.utils.SHA256Util;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.utils.UIStatusBarHelper;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.personal.R;
-import com.easymi.personal.activity.LoginActivity;
 import com.easymi.personal.entity.Register;
-import com.easymi.personal.result.LoginResult;
 
 import java.util.Locale;
 
@@ -388,11 +380,11 @@ public class RegisterAcitivty extends RxBaseActivity {
         String type_rsa = null;
         String userType_rsa = null;
         try {
-            code_rsa = RsaUtils.encryptAndEncode(this, et_img_code.getText().toString());
-            phone_rsa = RsaUtils.encryptAndEncode(this, et_phone.getText().toString());
-            randomNum_rsa = RsaUtils.encryptAndEncode(this, randomNum);
-            type_rsa = RsaUtils.encryptAndEncode(this, "PASSENGER_LOGIN_CODE");
-            userType_rsa = RsaUtils.encryptAndEncode(this, "2");
+            code_rsa = RsaUtils.rsaEncode( et_img_code.getText().toString());
+            phone_rsa = RsaUtils.rsaEncode( et_phone.getText().toString());
+            randomNum_rsa = RsaUtils.rsaEncode( randomNum);
+            type_rsa = RsaUtils.rsaEncode( "PASSENGER_LOGIN_CODE");
+            userType_rsa = RsaUtils.rsaEncode( "2");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -429,16 +421,12 @@ public class RegisterAcitivty extends RxBaseActivity {
         String password_rsa = null;
         String phone_rsa = null;
         String smsCode_rsa = null;
-//        String randomStr_rsa = null;
-//        String code_rsa = null;
         String random_rsa = null;
         try {
-            password_rsa = RsaUtils.encryptAndEncode(this, et_password.getText().toString());
-            phone_rsa = RsaUtils.encryptAndEncode(this, et_phone.getText().toString());
-            smsCode_rsa = RsaUtils.encryptAndEncode(this, et_code.getText().toString());
-//            randomStr_rsa = RsaUtils.encryptAndEncode(this, getResources().getString(com.easymi.component.R.string.rsa_public_key));
-//            code_rsa = RsaUtils.encryptAndEncode(this, et_img_code.getText().toString());
-            random_rsa = RsaUtils.encryptAndEncode(this, randomNum);
+            password_rsa = RsaUtils.rsaEncode( et_password.getText().toString());
+            phone_rsa = RsaUtils.rsaEncode( et_phone.getText().toString());
+            smsCode_rsa = RsaUtils.rsaEncode( et_code.getText().toString());
+            random_rsa = RsaUtils.rsaEncode( randomNum);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -101,9 +101,11 @@ public class XApp extends MultiDexApplication {
 
         CrashReport.initCrashReport(getApplicationContext(), "28ff5239b4", true);
 
-        int lastVersion = XApp.getMyPreferences().getInt(Config.SP_LAST_VERSION, 0);
+        int lastVersion = getMyPreferences().getInt(Config.SP_LAST_VERSION, 0);
         int current = SysUtil.getVersionCode(this);
         if (current > lastVersion) {
+            getPreferencesEditor().clear().commit();
+
             SharedPreferences.Editor editor = getPreferencesEditor();
             editor.putLong(Config.SP_DRIVERID, -1);
             editor.putBoolean(Config.SP_ISLOGIN, false);

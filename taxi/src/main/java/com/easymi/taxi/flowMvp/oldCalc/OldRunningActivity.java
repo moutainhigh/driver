@@ -24,6 +24,7 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.taxi.R;
 import com.easymi.taxi.entity.ConsumerInfo;
@@ -105,7 +106,7 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
 
         orderId = getIntent().getLongExtra("orderId", -1);
 
-        forceOre = XApp.getMyPreferences().getBoolean(Config.SP_ALWAYS_OREN, false);
+        forceOre = new CsSharedPreferences().getBoolean(Config.SP_ALWAYS_OREN, false);
         if (forceOre) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);//动态设置为横屏
         }

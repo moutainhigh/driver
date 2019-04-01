@@ -16,6 +16,7 @@ import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.entity.PushEmploy;
 import com.easymi.component.network.GsonUtil;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.FileUtil;
 import com.easymi.component.utils.Log;
@@ -30,6 +31,7 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName:
+ *
  * @Author: hufeng
  * Date: 2018/12/24 下午1:10
  * Description:
@@ -49,7 +51,7 @@ public class BuildPushUtil {
         PushData pushData = new PushData();
 
         //转换一下
-        Employ employ1 = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID,0));
+        Employ employ1 = Employ.findByID(new CsSharedPreferences().getLong(Config.SP_DRIVERID, 0));
         PushEmploy pe;
         if (employ1 != null && employ1 instanceof Employ) {
             Employ employ = (Employ) employ1;
@@ -93,7 +95,7 @@ public class BuildPushUtil {
         for (DymOrder dymOrder : DymOrder.findAll()) {
             PushDataOrder dataOrder = new PushDataOrder();
             if (dymOrder.orderType.equals(Config.CITY_LINE)) {
-                if (dymOrder.orderStatus == 30 || dymOrder.orderStatus == 35){
+                if (dymOrder.orderStatus == 30 || dymOrder.orderStatus == 35) {
                     for (OrderCustomer orderCustomer : OrderCustomer.findByIDTypeOrderByAcceptSeq(dymOrder.orderId, dymOrder.orderType)) {
                         dataOrder.orderId = orderCustomer.orderId;
                         dataOrder.orderType = orderCustomer.orderType;
@@ -103,8 +105,8 @@ public class BuildPushUtil {
                     }
                     orderList.add(dataOrder);
                 }
-            }else if (dymOrder.orderType.equals(Config.CARPOOL)){
-                if (dymOrder.orderStatus >= 10 && dymOrder.orderStatus <= 30){
+            } else if (dymOrder.orderType.equals(Config.CARPOOL)) {
+                if (dymOrder.orderStatus >= 10 && dymOrder.orderStatus <= 30) {
                     for (CarpoolOrder carpoolOrder : CarpoolOrder.findByIDTypeOrderByAcceptSeq(dymOrder.orderId, dymOrder.orderType)) {
                         dataOrder.orderId = carpoolOrder.id;
                         dataOrder.orderType = carpoolOrder.orderType;
@@ -129,7 +131,8 @@ public class BuildPushUtil {
                 if (dymOrder.orderType.equals(Config.DAIJIA)) {
 
                 } else if (dymOrder.orderType.equals(Config.ZHUANCHE)
-                        || dymOrder.orderType.equals(Config.TAXI)) {
+                        || dymOrder.orderType.equals(Config.TAXI)
+                        || dymOrder.orderType.equals(Config.GOV)) {
 
                     dataOrder.status = dymOrder.orderStatus;
 

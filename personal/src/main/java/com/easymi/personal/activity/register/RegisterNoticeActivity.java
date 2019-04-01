@@ -6,16 +6,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 import com.easymi.component.base.RxBaseActivity;
-import com.easymi.component.entity.Employ;
 import com.easymi.component.network.MySubscriber;
-import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.AlexStatusBarUtils;
-import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.RsaUtils;
-import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.utils.UIStatusBarHelper;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.R;
@@ -111,7 +106,7 @@ public class RegisterNoticeActivity extends RxBaseActivity {
      * 获取司机信息
      */
     public void getDriverInfo() {
-        String id_rsa = RsaUtils.encryptAndEncode(this, phone);
+        String id_rsa = RsaUtils.rsaEncode( phone);
         Observable<RegisterResult> observable = RegisterModel.getDriverInfo(id_rsa);
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, emResult -> {
             if (emResult.getCode() == 1) {

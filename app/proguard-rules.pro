@@ -270,7 +270,11 @@ public static ** valueOf(java.lang.String);
 -keep public class com.easymi.component.app.**{*;}
 -keep public class com.easymi.component.db.**{*;}
 
-#不混淆所以的接口的某个字段：
+-keep public class com.easymi.component.utils.AesUtil{*;}
+-keep public class com.easymi.component.cat.Cat{*;}
+
+
+#不混淆所有的接口的某个字段：
 -keep class com._65.sdk.Constants{
         int PLUGIN_TYPE_USER;
         int PLUGIN_TYPE_PAY;

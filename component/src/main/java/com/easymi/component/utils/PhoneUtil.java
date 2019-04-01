@@ -246,7 +246,7 @@ public class PhoneUtil {
 
     public static void vibrate(Context paramContext, boolean isRepeat) {
 
-        if (XApp.getMyPreferences().getBoolean(Config.SP_SHAKE_ABLE, true)) {
+        if (new CsSharedPreferences().getBoolean(Config.SP_SHAKE_ABLE, true)) {
             if (vib == null) {
                 vib = (Vibrator) paramContext
                         .getSystemService(Context.VIBRATOR_SERVICE);
@@ -291,7 +291,7 @@ public class PhoneUtil {
                 throw new RuntimeException(e);
             }
         }
-        XApp.getPreferencesEditor().putString(Config.SP_UDID, udid).apply();
+        new CsEditor().putString(Config.SP_UDID, udid).apply();
         return udid;
     }
 

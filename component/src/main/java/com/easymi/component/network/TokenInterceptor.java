@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
+import com.easymi.component.utils.CsSharedPreferences;
 
 import java.io.IOException;
 
@@ -18,7 +19,7 @@ public class TokenInterceptor implements Interceptor {
 
     @Override
     public Response intercept(Chain chain) throws IOException {
-        String sToken = XApp.getMyPreferences().getString(Config.SP_TOKEN, "");
+        String sToken = new CsSharedPreferences().getString(Config.SP_TOKEN, "");
         Request.Builder builder = chain.request().newBuilder();
         builder.addHeader("token", sToken);
         builder.addHeader("appKey", Config.APP_KEY);

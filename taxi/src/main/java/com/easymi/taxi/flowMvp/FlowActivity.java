@@ -65,6 +65,7 @@ import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.loc.LocService;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.AesUtil;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
@@ -529,7 +530,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         aMap.setOnMapTouchListener(this);
 
-        String locStr = XApp.getMyPreferences().getString(Config.SP_LAST_LOC, "");
+        String locStr = new CsSharedPreferences().getString(Config.SP_LAST_LOC, "");
         EmLoc emLoc = new Gson().fromJson(locStr, EmLoc.class);
         if (null != emLoc) {
             lastLatlng = new LatLng(emLoc.latitude, emLoc.longitude);

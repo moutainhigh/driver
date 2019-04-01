@@ -11,4 +11,5 @@ include ':app',
         ':chartered',
         ':rental',
         ':custombus',
-        ':carpooling'
+        ':carpooling',
+        ':official'

@@ -247,13 +247,13 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
                 ToastUtil.showMessage(getActivity(), getString(R.string.no_start));
                 return;
             }
-            if (budget == null) {
-                ToastUtil.showMessage(getActivity(), getString(R.string.no_budget));
-                return;
-            }
 
             if (endPoi == null) {
                 ToastUtil.showMessage(getActivity(), getString(R.string.please_end));
+                return;
+            }
+            if (budget == null) {
+                ToastUtil.showMessage(getActivity(), getString(R.string.no_budget));
                 return;
             }
 

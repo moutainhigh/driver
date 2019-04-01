@@ -67,7 +67,7 @@ public class AesUtil {
      * @return 
      */  
   
-    public static String aesEncrypt(String content, String password) {
+    public static String aesEncrypt(String password,String content ) {
         try {  
             IvParameterSpec zeroIv = new IvParameterSpec(password.getBytes());
             SecretKeySpec key = new SecretKeySpec(password.getBytes(), "AES");
@@ -103,14 +103,14 @@ public class AesUtil {
      * @return 
      */  
   
-    public static String aesDecrypt(String content, String password) {
+    public static String aesDecrypt(String password,String content) {
         try {  
             byte[] byteMi = Base64.decode(content);
             IvParameterSpec zeroIv = new IvParameterSpec(password.getBytes());
             SecretKeySpec key = new SecretKeySpec(password.getBytes(), "AES");
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, key);
-            byte[] decryptedData = cipher.doFinal(byteMi);  
+            byte[] decryptedData = cipher.doFinal(byteMi);
             return new String(decryptedData, "utf-8");
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();  

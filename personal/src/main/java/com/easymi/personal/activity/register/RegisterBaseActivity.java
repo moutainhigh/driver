@@ -3,13 +3,9 @@ package com.easymi.personal.activity.register;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,14 +19,10 @@ import com.easymi.common.entity.QiNiuToken;
 import com.easymi.common.register.RegisterRequest;
 import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
-import com.easymi.component.entity.Employ;
-import com.easymi.component.network.GsonUtil;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.AlexStatusBarUtils;
 import com.easymi.component.utils.CommonUtil;
-import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.GlideCircleTransform;
-import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.RsaUtils;
 import com.easymi.component.utils.StringUtils;
@@ -38,7 +30,6 @@ import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.utils.UIStatusBarHelper;
 import com.easymi.component.widget.CusToolbar;
-import com.easymi.component.widget.TimeDialog;
 import com.easymi.personal.R;
 import com.easymi.personal.entity.BusinessType;
 import com.easymi.personal.result.RegisterResult;
@@ -47,13 +38,9 @@ import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.entity.LocalMedia;
 //import com.yalantis.ucrop.UCrop;
 //import com.zhihu.matisse.Matisse;
-import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
-import com.luck.picture.lib.entity.LocalMedia;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -367,7 +354,7 @@ public class RegisterBaseActivity extends RxBaseActivity {
                 cusImgHint.setText(R.string.register_hint_photo);
                 PhoneUtil.hideKeyboard(RegisterBaseActivity.this);
             } else {
-                choicePic(1, 1);
+                choicePic(1, 1,1);
             }
         });
 
@@ -579,7 +566,7 @@ public class RegisterBaseActivity extends RxBaseActivity {
      * 获取司机提交过的注册资料
      */
     public void getDriverInfo() {
-        String id_rsa = RsaUtils.encryptAndEncode(this, phone);
+        String id_rsa = RsaUtils.rsaEncode(phone);
         Observable<RegisterResult> observable = RegisterModel.getDriverInfo(id_rsa);
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, emResult -> {
             if (emResult.getCode() == 1) {

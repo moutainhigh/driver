@@ -31,6 +31,7 @@ import com.easymi.component.R;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.DymOrder;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
 
@@ -218,10 +219,10 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
             try {
                 //再次强调，最后一个参数为true时代表多路径，否则代表单路径
                 strategy = mAMapNavi.strategyConvert(
-                        XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, false),
-                        XApp.getMyPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
-                        XApp.getMyPreferences().getBoolean(Config.SP_COST, false),
-                        XApp.getMyPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
+                        new CsSharedPreferences().getBoolean(Config.SP_CONGESTION, false),
+                        new CsSharedPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
+                        new CsSharedPreferences().getBoolean(Config.SP_COST, false),
+                        new CsSharedPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
                         false);
             } catch (Exception e) {
                 e.printStackTrace();

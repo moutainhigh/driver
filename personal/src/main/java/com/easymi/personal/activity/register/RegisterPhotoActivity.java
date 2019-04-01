@@ -201,7 +201,7 @@ public class RegisterPhotoActivity extends RxBaseActivity {
                 cusImgHint.setText(R.string.register_hint_id_card);
             } else {
                 currentImg = frontImg;
-                choicePic(4, 3);
+                choicePic(4, 3,1);
             }
         });
 
@@ -213,7 +213,7 @@ public class RegisterPhotoActivity extends RxBaseActivity {
                 cusImgHint.setText(R.string.register_hint_id_card);
             } else {
                 currentImg = backImg;
-                choicePic(4, 3);
+                choicePic(4, 3,1);
             }
         });
 
@@ -225,7 +225,7 @@ public class RegisterPhotoActivity extends RxBaseActivity {
                 cusImgHint.setText(R.string.register_hint_driving);
             } else {
                 currentImg = drivingImg;
-                choicePic(8, 3);
+                choicePic(8, 3,1);
             }
         });
 
@@ -237,7 +237,7 @@ public class RegisterPhotoActivity extends RxBaseActivity {
                 cusImgHint.setText(R.string.register_hint_driving);
             } else {
                 currentImg = zigeImg;
-                choicePic(8, 3);
+                choicePic(8, 3,1);
             }
         });
     }

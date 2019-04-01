@@ -22,6 +22,7 @@ import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
+import com.easymi.component.utils.CsEditor;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.widget.CusToolbar;
@@ -85,27 +86,27 @@ public class SetActivity extends RxBaseActivity {
      */
     private void initSwitch() {
         voiceAble.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+            CsEditor editor = new CsEditor();
             editor.putBoolean(Config.SP_VOICE_ABLE, isChecked);
             editor.apply();
         });
         shakeAble.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+            CsEditor editor =  new CsEditor();
             editor.putBoolean(Config.SP_SHAKE_ABLE, isChecked);
             editor.apply();
         });
         alwaysOren.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+            CsEditor editor = new CsEditor();
             editor.putBoolean(Config.SP_ALWAYS_OREN, isChecked);
             editor.apply();
         });
         defaultNavi.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+            CsEditor editor = new CsEditor();
             editor.putBoolean(Config.SP_DEFAULT_NAVI, isChecked);
             editor.apply();
         });
         backRun.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+            CsEditor editor = new CsEditor();
             editor.putBoolean(Config.SP_PLAY_CLIENT_MUSIC, isChecked);
             editor.apply();
         });
@@ -254,7 +255,7 @@ public class SetActivity extends RxBaseActivity {
 
             @Override
             public void onError(int code) {
-                EmUtil.employLogout(SetActivity.this);
+
             }
         })));
     }

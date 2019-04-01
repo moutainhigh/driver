@@ -121,7 +121,7 @@ public class AccpteFragment extends RxBaseFragment implements MyOrderContract.Vi
                             if (ZCSetting.findOne().isPaid == 1){
                                 ARouter.getInstance()
                                         .build("/zhuanche/FlowActivity")
-                                        .withLong("orderId", baseOrder.id).navigation();
+                                        .withLong("orderId", baseOrder.orderId).navigation();
                             } else {
                                 ToastUtil.showMessage(getContext(),"未开启司机代付");
                             }
