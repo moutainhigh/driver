@@ -101,9 +101,9 @@ import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName:
- * @Author: shine
- * Date: 2018/12/24 下午5:00
- * Description:
+ * @Author: hufeng
+ * Date: 2018/9/24 下午5:00
+ * Description: 工作台主界面
  * History:
  */
 

@@ -16,7 +16,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.amap.api.maps.AMap;
-import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
@@ -39,7 +38,6 @@ import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.PhoneUtil;
-import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.HLoadView;
 import com.easymi.component.widget.RotateImageView;
 import com.easymi.component.widget.overlay.DrivingRouteOverlay;
@@ -49,7 +47,6 @@ import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
 import net.lucode.hackware.magicindicator.buildins.circlenavigator.CircleNavigator;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -58,8 +55,8 @@ import java.util.TimerTask;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName:
- * @Author: shine
- * Date: 2018/12/24 下午5:00
+ * @Author: hufeng
+ * Date: 2018/9/24 下午5:00
  * Description:
  * History:
  */
@@ -220,15 +217,12 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
                 haveSame = true;
             }
         }
-        if (haveSame) { //推送任务中有相同订单时就不再新增进去
-//            adapter.notifyDataSetChanged();
+        //推送任务中有相同订单时就不再新增进去
+        if (haveSame) {
             return;
         }
 
         shake();
-//        String voiceStr = getIntent().getStringExtra("voiceStr");
-//        XApp.getInstance().syntheticVoice(voiceStr);
-//        XApp.getInstance().shake();
 
         multipleOrders.add(newOrder);
         //添加一个fragment

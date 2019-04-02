@@ -119,7 +119,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
                 if (order.serviceType.equals(Config.GOV)){
                     XApp.getInstance().shake();
-                    XApp.getInstance().syntheticVoice("你有公务用车订单需要执行");
+                    XApp.getInstance().syntheticVoice("你有新的公务用车订单");
 
                     refreshWork();
                 }else {
@@ -381,6 +381,9 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 bundle.putSerializable("order", order);
                 message.setData(bundle);
                 handler.sendMessage(message);
+            }else if (msg.equals("book_order")){
+                XApp.getInstance().shake();
+                XApp.getInstance().syntheticVoice("你有公务用车订单需要执行");
             }
         } catch (JSONException e) {
             e.printStackTrace();

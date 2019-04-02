@@ -122,4 +122,17 @@
     <string name="common_photo">相册</string>
     <string name="common_cancel">取消</string>
 
+    <!--公务用车-->
+    <string name="gw_new_order">新单</string>
+    <string name="gw_sended_order">已派单</string>
+    <string name="gw_accepted_order">已接单</string>
+    <string name="gw_to_start">前往预约地</string>
+    <string name="gw_arrive_start">到达预约地</string>
+    <string name="gw_to_end">前往目的地</string>
+    <string name="gw_middle_wait">中途等待</string>
+    <string name="gw_arrive_end">到达目的地</string>
+    <string name="gw_settled">已结算</string>
+    <string name="gw_exculated">已评价</string>
+    <string name="gw_canceled">已消单</string>
+
 </resources>

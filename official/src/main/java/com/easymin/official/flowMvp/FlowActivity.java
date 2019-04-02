@@ -109,8 +109,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         FeeChangeObserver,
         CancelOrderReceiver.OnCancelListener{
 
+    /**
+     * 取消订单常量
+     */
     public static final int CANCEL_ORDER = 0X01;
-    public static final int CHANGE_ORDER = 0X02;
 
     private FlowPresenter presenter;
     /**
@@ -217,6 +219,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         presenter.findOne(orderId);
     }
 
+    /**
+     * 初始化控件
+     */
     public void findById() {
         toolbar = findViewById(R.id.toolbar);
         map_view = findViewById(R.id.map_view);
@@ -550,8 +555,13 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 latLngs.add(new LatLng(govOrder.getStartSite().lat, govOrder.getStartSite().lng));
                 presenter.routePlanByNavi(govOrder.getStartSite().lat, govOrder.getStartSite().lng);
             }
+            latLngs.add(new LatLng(lastLatlng.latitude, lastLatlng.longitude));
             LatLngBounds bounds = MapUtil.getBounds(latLngs);
-            aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, DensityUtil.dp2px(this, 50)));
+            aMap.moveCamera(CameraUpdateFactory.newLatLngBoundsRect(bounds,
+                    DensityUtil.dp2px(this, 50),
+                    DensityUtil.dp2px(this, 50),
+                    DensityUtil.dp2px(this, 130),
+                    DensityUtil.dp2px(this, 180)));
         } else if (govOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
             if (null != govOrder.getStartSite()) {
                 latLngs.add(new LatLng(govOrder.getStartSite().lat, govOrder.getStartSite().lng));
@@ -560,8 +570,13 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 presenter.stopNavi();
                 left_time.setText("");
             }
+            latLngs.add(new LatLng(lastLatlng.latitude, lastLatlng.longitude));
             LatLngBounds bounds = MapUtil.getBounds(latLngs);
-            aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds,  DensityUtil.dp2px(this, 50)));
+            aMap.moveCamera(CameraUpdateFactory.newLatLngBoundsRect(bounds,
+                    DensityUtil.dp2px(this, 50),
+                    DensityUtil.dp2px(this, 50),
+                    DensityUtil.dp2px(this, 130),
+                    DensityUtil.dp2px(this, 180)));
         } else if (govOrder.orderStatus == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER
                 || govOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER
                 ) {
@@ -569,8 +584,13 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 latLngs.add(new LatLng(govOrder.getEndSite().lat, govOrder.getEndSite().lng));
                 presenter.routePlanByNavi(govOrder.getEndSite().lat, govOrder.getEndSite().lng);
             }
+            latLngs.add(new LatLng(lastLatlng.latitude, lastLatlng.longitude));
             LatLngBounds bounds = MapUtil.getBounds(latLngs);
-            aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds,  DensityUtil.dp2px(this, 50)));
+            aMap.moveCamera(CameraUpdateFactory.newLatLngBoundsRect(bounds,
+                    DensityUtil.dp2px(this, 50),
+                    DensityUtil.dp2px(this, 50),
+                    DensityUtil.dp2px(this, 130),
+                    DensityUtil.dp2px(this, 180)));
         }
         if (govOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER || govOrder.orderStatus == ZCOrderStatus.TAKE_ORDER) {
             if (endMarker!=null){
@@ -707,14 +727,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             if (requestCode == CANCEL_ORDER) {
                 String reason = data.getStringExtra("reason");
                 presenter.cancelOrder(govOrder.orderId, reason);
-            } else if (requestCode == CHANGE_ORDER) {
-//                DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);
-//                if (null != dymOrder) {
-//                    dymOrder.delete();
-//                }
-                ToastUtil.showMessage(this, "转单成功");
-                finish();
-            } else if (requestCode == PictureConfig.CHOOSE_REQUEST) {
+            }else if (requestCode == PictureConfig.CHOOSE_REQUEST) {
                 if (confirmFragment != null) {
                     confirmFragment.onActivityResult(requestCode, resultCode, data);
                 }
@@ -860,13 +873,17 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                         || govOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER){
                     latLngs.add(new LatLng(govOrder.getStartSite().lat, govOrder.getStartSite().lng));
                 }else if (govOrder.orderStatus == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER
-                        || govOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER ){
+                        || govOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER ){
                     latLngs.add(new LatLng(govOrder.getEndSite().lat, govOrder.getEndSite().lng));
                 }
 
                 latLngs.add(new LatLng(lastLatlng.latitude, lastLatlng.longitude));
                 LatLngBounds bounds = MapUtil.getBounds(latLngs);
-                aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds,DensityUtil.dp2px(this, 50)));
+                aMap.moveCamera(CameraUpdateFactory.newLatLngBoundsRect(bounds,
+                        DensityUtil.dp2px(this, 50),
+                        DensityUtil.dp2px(this, 50),
+                        DensityUtil.dp2px(this, 130),
+                        DensityUtil.dp2px(this, 180)));
             }
         } else {
             if (aMap != null) {

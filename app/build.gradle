@@ -40,6 +40,22 @@ android {
         }
     }
 
+    //V6（系统）.prepare（环境）.20190330（日期）.driver（端）.01（序号）
+    android.applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                //这里修改apk文件名
+                def fileName = "v6_${variant.productFlavors[0].name}-${defaultConfig.versionCode}-${defaultConfig.versionName}-${releaseTime()}.apk"
+                //def fileName = outputFile.name.replace("app", "${rootProject.ext.appName}-${releaseTime()}-${defaultConfig.versionCode}-${defaultConfig.versionName}")
+
+                output.outputFile = new File(outputFile.parent, fileName)
+            }
+        }
+    }
+
+
+
     buildTypes {
         release {
             buildConfigField "boolean", "LOG_DEBUG", "false" //不显示log

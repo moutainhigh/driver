@@ -5,19 +5,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.hardware.Sensor;
 import android.hardware.SensorManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.text.Html;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.OrientationEventListener;
@@ -27,18 +22,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.amap.api.location.AMapLocation;
-import com.amap.api.location.AMapLocationClient;
-import com.amap.api.location.AMapLocationClientOption;
-import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
-import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
-import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
@@ -48,9 +36,6 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
-import com.amap.api.maps.utils.overlay.SmoothMoveMarker;
-import com.amap.api.navi.AMapNaviView;
-import com.amap.api.navi.AMapNaviViewListener;
 import com.amap.api.navi.model.AMapNaviPath;
 import com.amap.api.navi.model.RouteOverlayOptions;
 import com.amap.api.navi.view.RouteOverLay;
@@ -60,10 +45,8 @@ import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.entity.PassengerLocation;
 import com.easymi.common.push.FeeChangeObserver;
 import com.easymi.common.push.HandlePush;
-//import com.easymi.common.push.MQTTService;
 import com.easymi.common.push.MqttManager;
 import com.easymi.common.push.PassengerLocObserver;
-import com.easymi.common.result.SettingResult;
 import com.easymi.common.trace.TraceInterface;
 import com.easymi.common.trace.TraceReceiver;
 import com.easymi.component.Config;
@@ -79,19 +62,15 @@ import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.loc.LocService;
 import com.easymi.component.network.ApiManager;
-import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.rxmvp.RxManager;
-import com.easymi.component.utils.AesUtil;
 import com.easymi.component.utils.CsEditor;
 import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MapUtil;
-import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
-import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusBottomSheetDialog;
 import com.easymi.component.widget.CusToolbar;
@@ -99,16 +78,10 @@ import com.easymi.component.widget.LoadingButton;
 import com.easymi.component.widget.overlay.DrivingRouteOverlay;
 import com.easymi.zhuanche.R;
 import com.easymi.zhuanche.ZCApiService;
-import com.easymi.zhuanche.activity.CancelActivity;
 import com.easymi.zhuanche.activity.CancelNewActivity;
-import com.easymi.zhuanche.activity.ConsumerInfoActivity;
-import com.easymi.zhuanche.activity.SameOrderActivity;
-import com.easymi.zhuanche.activity.TransferActivity;
 import com.easymi.zhuanche.entity.Address;
 import com.easymi.zhuanche.entity.ConsumerInfo;
 import com.easymi.zhuanche.entity.ZCOrder;
-import com.easymi.zhuanche.flowMvp.oldCalc.OldRunningActivity;
-import com.easymi.zhuanche.flowMvp.oldCalc.OldWaitActivity;
 import com.easymi.zhuanche.fragment.AcceptFragment;
 import com.easymi.zhuanche.fragment.ArriveStartFragment;
 import com.easymi.zhuanche.fragment.RunningFragment;
@@ -119,10 +92,7 @@ import com.easymi.zhuanche.fragment.WaitFragment;
 import com.easymi.zhuanche.receiver.CancelOrderReceiver;
 import com.easymi.zhuanche.receiver.OrderFinishReceiver;
 import com.easymi.zhuanche.result.PassengerLcResult;
-import com.easymi.zhuanche.widget.FlowPopWindow;
 import com.easymi.zhuanche.widget.RefuseOrderDialog;
-import com.easymin.driver.securitycenter.utils.AudioUtil;
-import com.easymin.driver.securitycenter.utils.CenterUtil;
 import com.google.gson.Gson;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
@@ -142,9 +112,8 @@ import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: FinishActivity
- *
- * @Author: shine
- * Date: 2018/12/24 下午1:10
+ * @Author: hufeng
+ * Date: 2018/10/24 下午1:10
  * Description:
  * History:
  */
@@ -587,7 +556,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.replace(R.id.flow_frame, fragment);
             transaction.commit();
         } else if (zcOrder.orderStatus == ZCOrderStatus.START_WAIT_ORDER) {
-//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);//动态设置为遵循传感器
             toolbar.setTitle(R.string.wait_consumer);
             if ((ZCSetting.findOne().arriveCancel == 1)) {
                 toolbar.setRightText(R.string.cancel_order, v -> {
@@ -668,7 +636,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 }
             }
             this.zcOrder = zcOrder;
-//            initMap();
             if (flashAssign && zcOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER){
                 flashAssign();
             }
@@ -1296,19 +1263,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void showCheating() {
-//                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//动态设置为竖屏
-//                toolbar.setTitle(R.string.zc_status_to_end);
-//                CheatingFragment cheatingFragment = new CheatingFragment();
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("zcOrder", DymOrder.findByIDType(orderId, Config.ZHUANCHE));
-//                cheatingFragment.setArguments(bundle);
-//                cheatingFragment.setBridge(bridge);
-//
-//                FragmentManager manager = getSupportFragmentManager();
-//                FragmentTransaction transaction = manager.beginTransaction();
-//                transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
-//                transaction.replace(R.id.flow_frame, cheatingFragment);
-//                transaction.commit();
+
             }
 
             @Override
@@ -1452,8 +1407,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         unregisterReceiver(cancelOrderReceiver);
         unregisterReceiver(orderFinishReceiver);
     }
-
-//    SmoothMoveMarker smoothMoveMarker;
 
     private LatLng lastLatlng;
 
@@ -1707,18 +1660,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         @Override
         public void onOrientationChanged(int orientation) {
-//            if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
-//                //已经显示结算对话框不显示
-//                return;
-//            }
-//
-//            if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN || !canGoOld) {
-//                return;
-//            }
-//            android.util.Log.e("TAG", "orientation = " + orientation);
-//            if ((orientation > 70 && orientation < 110) || (orientation > 250 && orientation < 290)) {
-//                toWhatOldByOrder(zcOrder);
-//            }
+
         }
     }
 

@@ -59,27 +59,27 @@ public class GWOrderStatus {
     public static String status2Str(int status) {
         switch (status) {
             case NEW_ORDER:
-                return XApp.getInstance().getString(R.string.new_order);
+                return XApp.getInstance().getString(R.string.gw_new_order);
             case PAIDAN_ORDER:
-                return XApp.getInstance().getString(R.string.sended_order);
+                return XApp.getInstance().getString(R.string.gw_sended_order);
             case TAKE_ORDER:
-                return XApp.getInstance().getString(R.string.accepted_order);
+                return XApp.getInstance().getString(R.string.gw_accepted_order);
             case GOTO_BOOKPALCE_ORDER:
-                return XApp.getInstance().getString(R.string.to_start);
+                return XApp.getInstance().getString(R.string.gw_to_start);
             case ARRIVAL_BOOKPLACE_ORDER:
-                return XApp.getInstance().getString(R.string.arrive_start);
+                return XApp.getInstance().getString(R.string.gw_arrive_start);
             case GOTO_DESTINATION_ORDER:
-                return XApp.getInstance().getString(R.string.to_end);
+                return XApp.getInstance().getString(R.string.gw_to_end);
             case START_WAIT_ORDER:
-                return XApp.getInstance().getString(R.string.middle_wait);
+                return XApp.getInstance().getString(R.string.gw_middle_wait);
             case ARRIVAL_DESTINATION_ORDER:
-                return XApp.getInstance().getString(R.string.arrive_end);
+                return XApp.getInstance().getString(R.string.gw_arrive_end);
             case FINISH_ORDER:
-                return XApp.getInstance().getString(R.string.settled);
+                return XApp.getInstance().getString(R.string.gw_settled);
             case RATED_ORDER:
-                return XApp.getInstance().getString(R.string.exculated);
+                return XApp.getInstance().getString(R.string.gw_exculated);
             case CANCEL_ORDER:
-                return XApp.getInstance().getString(R.string.canceled);
+                return XApp.getInstance().getString(R.string.gw_canceled);
             default:
                 return "";
         }

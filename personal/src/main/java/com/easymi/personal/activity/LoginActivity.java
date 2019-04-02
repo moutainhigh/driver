@@ -2,7 +2,6 @@ package com.easymi.personal.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.location.Location;
@@ -36,12 +35,10 @@ import com.easymi.component.network.ErrCodeTran;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
-import com.easymi.component.utils.AesUtil;
 import com.easymi.component.utils.AlexStatusBarUtils;
 import com.easymi.component.utils.CsEditor;
 import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.EncApi;
 import com.easymi.component.utils.GPSUtils;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MacUtils;
@@ -59,11 +56,7 @@ import com.easymi.personal.R;
 import com.easymi.personal.activity.register.RegisterAcitivty;
 import com.easymi.personal.activity.register.RegisterNoticeActivity;
 import com.easymi.personal.result.LoginResult;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
-
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -71,9 +64,8 @@ import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: LoginActivity
- *
- * @Author: shine
- * Date: 2018/12/24 下午1:10
+ * @Author: hufeng
+ * Date: 2018/9/20 下午1:10
  * Description: 登陆页面
  * History:
  */
@@ -263,8 +255,6 @@ public class LoginActivity extends RxBaseActivity {
             String enAcc = new CsSharedPreferences().getString(Config.SP_LOGIN_ACCOUNT, "");
             String enPsw = new CsSharedPreferences().getString(Config.SP_LOGIN_PSW, "");
             if (StringUtils.isNotBlank(enAcc) && StringUtils.isNotBlank(enPsw)) {
-//                String acc = AesUtil.aesDecrypt(enAcc, AesUtil.AAAAA);
-//                String psw = AesUtil.aesDecrypt(enPsw, AesUtil.AAAAA);
                 editAccount.setText(enAcc);
                 editPsw.setText(enPsw);
             }
@@ -292,20 +282,6 @@ public class LoginActivity extends RxBaseActivity {
      * @param psw
      */
     private void login(String name, String psw) {
-//        String udid = PhoneUtil.getUDID(this);
-//        String version = "";
-//        try {
-//            version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-//        } catch (PackageManager.NameNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        /**
-//         * 系统版本
-//         */
-//        String systemVersion = Build.VERSION.RELEASE;
-//
-//        String model = Build.MODEL;
-
         TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         String operatorName = "其他";
         String operator = tm.getSimOperator();
@@ -318,7 +294,6 @@ public class LoginActivity extends RxBaseActivity {
                 operatorName = "中国电信";
             }
         }
-//        String netType = NetWorkUtil.getNetWorkTypeName(this);
 
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
@@ -497,13 +472,6 @@ public class LoginActivity extends RxBaseActivity {
             finish();
         }));
     }
-
-
-    List<String> strList = new ArrayList<>();
-
-//    private void selectedQiye() {
-//        initPop();
-//    }
 
     /**
      * 手机唯一识别码
