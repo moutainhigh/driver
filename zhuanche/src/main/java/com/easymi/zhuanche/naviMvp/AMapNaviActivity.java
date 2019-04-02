@@ -241,7 +241,7 @@ public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener
 
     @Override
     public void onCalculateRouteFailure(int i) {
-        Toast.makeText(this, "路线规划失败", Toast.LENGTH_LONG).show();
+
     }
 
     @Override

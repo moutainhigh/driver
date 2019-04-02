@@ -26,7 +26,7 @@ public class MyOrderModel implements MyOrderContract.Model {
     @Override
     public Observable<QueryOrdersResult> indexOrders(int page,int size,String status) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .queryMyOrders( page, size,status,EmUtil.getEmployInfo().serviceType)
+                .queryMyOrders( page, size,status)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

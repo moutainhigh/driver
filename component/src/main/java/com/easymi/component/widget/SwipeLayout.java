@@ -128,7 +128,7 @@ public class SwipeLayout extends FrameLayout {
         /** 确定需要触摸的View */
         @Override
         public boolean tryCaptureView(View child, int pointerId) {
-            //Toast.makeText(getContext(), "事件捕获", Toast.LENGTH_SHORT).show();
+            //ToastUtil.showMessage(getContext(), "事件捕获", Toast.LENGTH_SHORT);
             return child == contentView || child == deleteView;
         }
 

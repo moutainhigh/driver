@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.easymi.component.utils.ToastUtil;
 import com.easymi.personal.R;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -82,7 +83,7 @@ public class QrCodeUtil {
         Log.e("saveBitmap", "保存图片");
         if (!hasSdcard()) {
             //如果存在存储卡，将数据照片保存到本地
-            Toast.makeText(context, "未找到存储卡", Toast.LENGTH_SHORT).show();
+            ToastUtil.showMessage(context, "未找到存储卡", Toast.LENGTH_SHORT);
             return;
         }
 

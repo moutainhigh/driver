@@ -14,6 +14,8 @@ import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.component.Config;
+import com.easymi.component.GWOrderStatus;
+import com.easymi.component.ZCOrderStatus;
 import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.entity.ZCSetting;
@@ -139,6 +141,12 @@ public class AccpteFragment extends RxBaseFragment implements MyOrderContract.Vi
                                     .withSerializable("baseOrder", baseOrder).navigation();
                         }else {
                             startActivity(new Intent(getContext(), OrderDetailActivity.class).putExtra("orderId",baseOrder.orderId));
+                        }
+                    }else if (baseOrder.serviceType.equals(Config.GOV)){
+                        if (baseOrder.status < GWOrderStatus.FINISH_ORDER){
+                            ARouter.getInstance()
+                                    .build("/official/FlowActivity")
+                                    .withLong("orderId", baseOrder.orderId).navigation();
                         }
                     }
             }

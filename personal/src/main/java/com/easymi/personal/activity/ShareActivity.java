@@ -298,18 +298,18 @@ public class ShareActivity extends RxBaseActivity {
 
         @Override
         public void onComplete(Object o) {
-            Toast.makeText(ShareActivity.this, getString(R.string.share_succeed), Toast.LENGTH_SHORT).show();
+            ToastUtil.showMessage(ShareActivity.this, getString(R.string.share_succeed), Toast.LENGTH_SHORT);
         }
 
         @Override
         public void onError(UiError uiError) {
             Log.e("UiError", uiError.errorMessage + " " + uiError.errorDetail + " " + uiError.errorCode);
-            Toast.makeText(ShareActivity.this, getString(R.string.share_error), Toast.LENGTH_SHORT).show();
+            ToastUtil.showMessage(ShareActivity.this, getString(R.string.share_error), Toast.LENGTH_SHORT);
         }
 
         @Override
         public void onCancel() {
-            Toast.makeText(ShareActivity.this, getString(R.string.cancel_share), Toast.LENGTH_SHORT).show();
+            ToastUtil.showMessage(ShareActivity.this, getString(R.string.cancel_share), Toast.LENGTH_SHORT);
         }
     }
 

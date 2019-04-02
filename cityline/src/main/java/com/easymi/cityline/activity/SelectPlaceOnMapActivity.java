@@ -50,6 +50,7 @@ import com.amap.api.services.geocoder.RegeocodeResult;
 import com.easymi.cityline.R;
 import com.easymi.cityline.entity.MapPositionModel;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
 
 import java.util.ArrayList;
@@ -485,7 +486,7 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
      */
     private void addPolygonFence() {
         if (null == polygonPoints || polygonPoints.size() < 3) {
-            Toast.makeText(getApplicationContext(), "参数不全", Toast.LENGTH_SHORT).show();
+            ToastUtil.showMessage(getApplicationContext(), "参数不全", Toast.LENGTH_SHORT);
             return;
         }
         List<DPoint> pointList = new ArrayList<>();

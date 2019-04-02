@@ -34,6 +34,7 @@ import com.easymi.component.entity.DymOrder;
 import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
+import com.easymi.component.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -269,7 +270,7 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     @Override
     public void onCalculateRouteFailure(int i) {
-        Toast.makeText(this, "路线规划失败", Toast.LENGTH_LONG).show();
+        ToastUtil.showMessage(this, "路线规划失败", Toast.LENGTH_LONG);
     }
 
     @Override

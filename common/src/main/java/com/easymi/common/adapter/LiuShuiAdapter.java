@@ -19,6 +19,7 @@ import com.easymi.common.util.DJStatus2Str;
 import com.easymi.component.BusOrderStatus;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
+import com.easymi.component.GWOrderStatus;
 import com.easymi.component.PCOrderStatus;
 import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.entity.ZCSetting;
@@ -88,6 +89,9 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
         }else if (baseOrder.serviceType.equals(Config.CARPOOL)){
             typeStr = context.getResources().getString(R.string.create_carpool);
             holder.orderStatus.setText(PCOrderStatus.status2Str(baseOrder.status));
+        }else if(baseOrder.serviceType.equals(Config.GOV)){
+            typeStr = context.getResources().getString(R.string.create_gov);
+            holder.orderStatus.setText(GWOrderStatus.status2Str(baseOrder.status));
         }
         holder.orderType.setText(typeStr);
         holder.orderEndPlace.setText(baseOrder.destination);

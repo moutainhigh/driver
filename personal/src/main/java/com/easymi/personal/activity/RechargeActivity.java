@@ -499,36 +499,36 @@ public class RechargeActivity extends RxBaseActivity {
                 Context context = RechargeActivity.this;
                 PayResult result = new PayResult((String) msg.obj);
                 if (result.resultStatus.equals("9000")) {
-                    Toast.makeText(context, getString(R.string.alipay_success),
-                            Toast.LENGTH_SHORT).show();
+                    ToastUtil.showMessage(context, getString(R.string.alipay_success),
+                            Toast.LENGTH_SHORT);
                 } else {
-                    Toast.makeText(context, getString(R.string.alipay_failed),
-                            Toast.LENGTH_SHORT).show();
+                    ToastUtil.showMessage(context, getString(R.string.alipay_failed),
+                            Toast.LENGTH_SHORT);
                 }
                 break;
             /**翼支付回调**/
             case Constants.RESULT_VALIDATE_FAILURE:
                 // 合法性验证失败
                 BaseResponse resp = (BaseResponse) msg.obj;
-                Toast.makeText(RechargeActivity.this,
+                ToastUtil.showMessage(RechargeActivity.this,
                         resp.getRes_code() + ":" + resp.getRes_message(),
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT);
                 break;
 
             case Constants.RESULT_PAY_SUCCESS:
                 // 支付成功
                 resp = (BaseResponse) msg.obj;
-                Toast.makeText(RechargeActivity.this,
+                ToastUtil.showMessage(RechargeActivity.this,
                         resp.getRes_code() + ":" + resp.getRes_message(),
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT);
                 break;
 
             case Constants.RESULT_PAY_FAILURE:
                 // 支付失败
                 resp = (BaseResponse) msg.obj;
-                Toast.makeText(RechargeActivity.this,
+                ToastUtil.showMessage(RechargeActivity.this,
                         resp.getRes_code() + ":" + resp.getRes_message(),
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT);
                 break;
             /**翼支付回调**/
         }

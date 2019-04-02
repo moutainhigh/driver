@@ -411,7 +411,7 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
                         .scaleEnabled(true)// 裁剪是否可放大缩小图片 true or false
                         .forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
             } else {
-                Toast.makeText(this, "请开启应用权限", Toast.LENGTH_SHORT).show();
+                ToastUtil.showMessage(this, "请开启应用权限", Toast.LENGTH_SHORT);
             }
         });
     }

@@ -49,6 +49,7 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.utils.StringUtils;
+import com.easymi.component.utils.ToastUtil;
 import com.easymi.zhuanche.R;
 
 import java.text.SimpleDateFormat;
@@ -245,7 +246,7 @@ public class TestActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     @Override
     public void onCalculateRouteFailure(int i) {
-        Toast.makeText(this, "路线规划失败", Toast.LENGTH_LONG).show();
+        ToastUtil.showMessage(this, "路线规划失败", Toast.LENGTH_LONG);
     }
 
     @Override

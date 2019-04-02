@@ -19,6 +19,7 @@ import android.view.accessibility.AccessibilityEvent;
 import android.widget.Toast;
 
 import com.easymi.component.utils.Log;
+import com.easymi.component.utils.ToastUtil;
 
 /**
  * Created by VK on 2017/2/14.<br/>
@@ -72,20 +73,11 @@ public class PinnedSectionRecyclerView extends RecyclerView {
         initView();
     }
 
-    Toast mToast;
-
     private void showToast(String text) {
         boolean ret = true;
         if (ret)
             return;
-        if (mToast == null) {
-            mToast = Toast.makeText(getContext().getApplicationContext(), text, Toast.LENGTH_SHORT);
-        } else {
-            mToast.setText(text);
-        }
-
-        mToast.show();
-
+        ToastUtil.showMessage(getContext().getApplicationContext(), text, Toast.LENGTH_SHORT);
     }
 
     private void initView() {

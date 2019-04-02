@@ -23,6 +23,8 @@ import com.easymin.driver.securitycenter.network.HttpResultFunc;
 import com.easymin.driver.securitycenter.network.MySubscriber;
 import com.easymin.driver.securitycenter.result.EmResult;
 import com.easymin.driver.securitycenter.rxmvp.RxManager;
+import com.easymin.driver.securitycenter.utils.ToastUtil;
+
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -156,7 +158,7 @@ public class MainDialog {
                 }
                 dialog.show();
             }else {
-                Toast.makeText(mContext,emResult.getMessage(),Toast.LENGTH_LONG);
+                ToastUtil.showMessage(mContext,emResult.getMessage(),Toast.LENGTH_LONG);
             }
         })));
     }

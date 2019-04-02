@@ -16,6 +16,7 @@ import com.easymi.common.util.DJStatus2Str;
 import com.easymi.component.BusOrderStatus;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
+import com.easymi.component.GWOrderStatus;
 import com.easymi.component.PCOrderStatus;
 import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.utils.TimeUtil;
@@ -84,6 +85,12 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Holder> 
             holder.order_status.setText(BusOrderStatus.orderStatus2Str(baseOrder.status));
         } else if (TextUtils.equals(baseOrder.serviceType, Config.CARPOOL)){
             holder.order_status.setText(PCOrderStatus.status2Str(baseOrder.status) + " >");
+        }else if (TextUtils.equals(baseOrder.serviceType, Config.GOV)){
+            if (baseOrder.status < DJOrderStatus.ARRIVAL_DESTINATION_ORDER){
+                holder.order_status.setText(GWOrderStatus.status2Str(baseOrder.status) + " >");
+            }else {
+                holder.order_status.setText(GWOrderStatus.status2Str(baseOrder.status));
+            }
         } else {
             if (baseOrder.status < DJOrderStatus.ARRIVAL_DESTINATION_ORDER){
                 holder.order_status.setText(DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status) + " >");

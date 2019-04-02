@@ -541,8 +541,7 @@ public interface CommApiService {
     @GET("api/v1/public/driver/myOrders")
     Observable<QueryOrdersResult> queryMyOrders(@Query("page") int page,
                                                 @Query("size") int size,
-                                                @Query("status") String status,
-                                                @Query("serviceType") String serviceType);
+                                                @Query("status") String status);
     /**
      * 拼车完成订单详情查询
      */

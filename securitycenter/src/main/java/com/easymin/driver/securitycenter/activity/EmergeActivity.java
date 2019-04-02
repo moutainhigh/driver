@@ -255,7 +255,7 @@ public class EmergeActivity extends CheckPermissionsActivity {
                     showFirst();
                 }
             } else {
-                Toast.makeText(this, emResult.getMessage(), Toast.LENGTH_LONG);
+                ToastUtil.showMessage(this, emResult.getMessage(), Toast.LENGTH_LONG);
             }
         })));
     }
@@ -274,7 +274,7 @@ public class EmergeActivity extends CheckPermissionsActivity {
             if (emResult.getCode() == 1) {
                 getContactList();
             } else {
-                Toast.makeText(this, emResult.getMessage(), Toast.LENGTH_LONG);
+                ToastUtil.showMessage(this, emResult.getMessage(), Toast.LENGTH_LONG);
             }
         })));
     }
