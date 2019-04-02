@@ -22,7 +22,7 @@ public class Config {
 //    public static final String HOST = "http://10.10.2.130:10001/";//130测试地址 （内网）
 //    public static final String HOST = "http://47.94.204.67:20001/";//130测试地址（外网）　　
 //    public static final String HOST = "http://api.xiaokakj.com/";//线上地址
-    public static final String HOST = "http://api.xiaokakj.cn/";//预发
+    public static final String HOST = "http://api.xiaokakj.cn/";//预发/
 //    public static final String HOST = "http://10.10.4.16:81/";//本地
     /**
      * MQTT配置
@@ -152,6 +152,7 @@ public class Config {
     //公务用车
     public static final String GOV = "gov";
 
+
     //需要导航的模式
     public static final String NAVI_MODE = "navi_mode";
     public static final int DRIVE_TYPE = 1;
@@ -183,6 +184,7 @@ public class Config {
     public static final String ONLINE_TIME = "online_time";
 
     public static final String DOWN_TIME = "down_time";
+
 
     /**
      * 注册开通业务配置

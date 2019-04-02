@@ -10,7 +10,6 @@ import com.easymi.common.adapter.VpAdapter;
 import com.easymi.common.widget.MakeOrderPopWindow;
 import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
-import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.widget.CusToolbar;
 
