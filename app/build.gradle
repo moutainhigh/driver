@@ -9,7 +9,7 @@ android {
         versionCode 9005
         versionName "V6.1.0.5"
         multiDexEnabled true
-
+        flavorDimensions "App" //同在App这个名字维度
         ndk {
             //只兼容下面的型号
             abiFilters  "armeabi-v7a"
@@ -40,22 +40,6 @@ android {
         }
     }
 
-    //V6（系统）.prepare（环境）.20190330（日期）.driver（端）.01（序号）
-    android.applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            def outputFile = output.outputFile
-            if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                //这里修改apk文件名
-                def fileName = "v6_${variant.productFlavors[0].name}-${defaultConfig.versionCode}-${defaultConfig.versionName}-${releaseTime()}.apk"
-                //def fileName = outputFile.name.replace("app", "${rootProject.ext.appName}-${releaseTime()}-${defaultConfig.versionCode}-${defaultConfig.versionName}")
-
-                output.outputFile = new File(outputFile.parent, fileName)
-            }
-        }
-    }
-
-
-
     buildTypes {
         release {
             buildConfigField "boolean", "LOG_DEBUG", "false" //不显示log
@@ -74,6 +58,37 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+
+    //V6（系统）.prepare（环境）.20190330（日期）.driver（端）.01（序号）
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "V6.${variant.productFlavors[0].name}.${releaseDate()}.driver.${releaseTime()}.apk"
+        }
+    }
+
+    productFlavors {
+        //预发环境
+        prepare {
+            dimension "App"//同在App这个名字维度
+        }
+        //局域网环境
+        local {
+            dimension "App"//同在App这个名字维度
+        }
+        //生产环境
+        product {
+            dimension "App"//同在App这个名字维
+        }
+    }
+}
+
+static def releaseTime() {
+    return new Date().format("HHmm")
+}
+
+static def releaseDate() {
+    return new Date().format("yyyyMMdd")
 }
 
 task handleMd5 {
