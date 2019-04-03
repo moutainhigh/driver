@@ -366,9 +366,7 @@ public class WorkPresenter implements WorkContract.Presenter {
     }
 
     public void driverehicle(Employ employ) {
-        CommApiService api = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class);
-
-        Observable<VehicleResult> observable = api
+        Observable<VehicleResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .driverehicle()
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())

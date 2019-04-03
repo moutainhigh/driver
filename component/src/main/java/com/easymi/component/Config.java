@@ -21,15 +21,15 @@ public class Config {
 //    public static final String HOST = "http://10.10.2.23:10001/";//俊俏
 //    public static final String HOST = "http://10.10.2.130:10001/";//130测试地址 （内网）
 //    public static final String HOST = "http://47.94.204.67:20001/";//130测试地址（外网）　　
-//    public static final String HOST = "http://api.xiaokakj.com/";//线上地址
-    public static final String HOST = "http://api.xiaokakj.cn/";//预发/
+    public static final String HOST = "http://api.xiaokakj.com/";//线上地址
+//    public static final String HOST = "http://api.xiaokakj.cn/";//预发/
 //    public static final String HOST = "http://10.10.4.16:81/";//本地
     /**
      * MQTT配置
      */
     public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//预发地址
 //    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn";//线上地址
-//    public static final String MQTT_HOST = "tcp://10.10.4.12:1883";//本地地址
+//    public static final String MQTT_HOST = "tcp://10.10.4.6:1883";//本地地址
     /**
      * APP_KEY
      */
@@ -45,16 +45,22 @@ public class Config {
 //    public static final String APP_KEY = "8SbWnW3uYIfaEagACmHiLtADkLcmOyCm";  //锋动
 
     /**
+     * MQTT
+     */
+    //线上和预发
+    public static final String MQTT_USER_NAME = "xiaoka";
+    public static final String MQTT_PSW = "&mv7dHapB5J!95BJ";
+//    //本地
+//    public static final String MQTT_USER_NAME = "admin";
+//    public static final String MQTT_PSW = "public";
+
+    /**
      * 上传图片地址.
      */
     public static final String HOST_UP_PIC = "http://up-z2.qiniu.com";
     //是否是通用司机端
     public static final boolean COMM_USE = false;
 
-    /**
-     * 司机注册地址
-     */
-    public static final String REGISTER_URL = "http://register.xiaokayun.cn/employ/registerOne/";
     /**
      * QQ分享id
      */
@@ -65,22 +71,10 @@ public class Config {
     public static final String WX_APP_ID = "wxe2bbe0ee7fa51624";
 
     /**
-     * 图片服务器地址
+     * 图片服务器地址  线上
      */
-//    public static final String IMG_SERVER = "https://assets.xiaokayun.cn/";
-//    public static final String IMG_SERVER = "http://pimkcibsb.bkt.clouddn.com/";  //本地
-    public static final String IMG_SERVER = "http://assets.xiaokakj.com/";  //线上
+    public static final String IMG_SERVER = "http://assets.xiaokakj.com/";
     public static final String IMG_PATH = "";
-
-    /**
-     * MQTT
-     */
-    //线上和预发
-    public static final String MQTT_USER_NAME = "xiaoka";
-    public static final String MQTT_PSW = "&mv7dHapB5J!95BJ";
-//    //本地
-//    public static final String MQTT_USER_NAME = "admin";
-//    public static final String MQTT_PSW = "public";
 
     public static final String MQTT_PUSH_TOPIC = "/driver/gps";
 
@@ -135,6 +129,9 @@ public class Config {
     //是否只上传GPS类型点
     public static final String SP_GPS_FILTER = "sp_gps_filter";
 
+    /**
+     * 业务类型
+     */
     public static final String DAIJIA = "daijia";
     public static final String ZHUANCHE = "special";
     public static final String TAXI = "taxi";
@@ -151,7 +148,6 @@ public class Config {
     public static final String CARPOOL = "carpool";
     //公务用车
     public static final String GOV = "gov";
-
 
     //需要导航的模式
     public static final String NAVI_MODE = "navi_mode";

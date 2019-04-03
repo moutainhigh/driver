@@ -267,6 +267,9 @@ public static ** valueOf(java.lang.String);
 -keep public class com.easymi.zhuanche.entity.**{*;}
 -keep public class com.easymi.zhuanche.result.**{*;}
 
+-keep public class com.easymin.official.entity.**{*;}
+-keep public class com.easymin.official.result.**{*;}
+
 -keep public class com.easymi.component.app.**{*;}
 -keep public class com.easymi.component.db.**{*;}
 
