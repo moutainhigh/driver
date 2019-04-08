@@ -965,7 +965,6 @@ public class FlowActivity extends RxBaseActivity implements
     protected void onStop() {
         super.onStop();
         LocReceiver.getInstance().deleteObserver(this);//取消位置订阅
-        Log.e("hufeng/onStop", TimeUtil.getTime("HH:mm:ss:SSS",System.currentTimeMillis()));
     }
 
     @Override
@@ -975,7 +974,6 @@ public class FlowActivity extends RxBaseActivity implements
         notStartFragment.cancelTimer();
         finishFragment.cancelTimer();
         acceptSendFragment.cancelTimer();
-        Log.e("hufeng/onPause", TimeUtil.getTime("HH:mm:ss:SSS",System.currentTimeMillis()));
     }
 
     @Override
@@ -983,7 +981,6 @@ public class FlowActivity extends RxBaseActivity implements
         super.onDestroy();
         mapView.onDestroy();
         presenter.stopNavi();
-        Log.e("hufeng/onDestroy", TimeUtil.getTime("HH:mm:ss:SSS",System.currentTimeMillis()));
     }
 
     @Override

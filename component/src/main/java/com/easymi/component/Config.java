@@ -21,8 +21,8 @@ public class Config {
 //    public static final String HOST = "http://10.10.2.23:10001/";//俊俏
 //    public static final String HOST = "http://10.10.2.130:10001/";//130测试地址 （内网）
 //    public static final String HOST = "http://47.94.204.67:20001/";//130测试地址（外网）　　
-    public static final String HOST = "http://api.xiaokakj.com/";//线上地址
-//    public static final String HOST = "http://api.xiaokakj.cn/";//预发/
+//    public static final String HOST = "http://api.xiaokakj.com/";//线上地址
+    public static final String HOST = "http://api.xiaokakj.cn/";//预发/
 //    public static final String HOST = "http://10.10.4.16:81/";//本地
     /**
      * MQTT配置
@@ -43,6 +43,8 @@ public class Config {
 //    public static final String APP_KEY = "kQLGYQIx34408QOOv6Ed1OQRWM6Idt5w";  //小鹏预发
 //    public static final String APP_KEY = "G0UMEhNEBt0q0HDO1ecomWNUKP6wzcje";  //v6test
 //    public static final String APP_KEY = "8SbWnW3uYIfaEagACmHiLtADkLcmOyCm";  //锋动
+//public static final String APP_KEY = "vkv15FSFieLhCYmmlHXESzfKCUjLiNNM";//七彩筋斗云
+
 
     /**
      * MQTT
