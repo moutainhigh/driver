@@ -107,7 +107,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         AMap.OnMapTouchListener,
         LocObserver,
         FeeChangeObserver,
-        CancelOrderReceiver.OnCancelListener{
+        CancelOrderReceiver.OnCancelListener {
 
     /**
      * 取消订单常量
@@ -340,8 +340,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             lin_start_countdown.setVisibility(View.GONE);
             //经过确认写死 10分钟
 //            if ((ZCSetting.findOne().arriveCancel == 1)) {
-                lin_time.setVisibility(View.VISIBLE);
-                setWaitTime();
+            lin_time.setVisibility(View.VISIBLE);
+            setWaitTime();
 //            } else {
 //                lin_time.setVisibility(View.GONE);
 //            }
@@ -444,10 +444,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         } else if (govOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
             toolbar.setTitle(R.string.gw_to_start);
 //            if ((ZCSetting.findOne().goToCancel == 1)) {
-                toolbar.setRightText(R.string.cancel_order, v -> {
-                    Intent intent = new Intent(this, CancelNewActivity.class);
-                    startActivityForResult(intent, CANCEL_ORDER);
-                });
+            toolbar.setRightText(R.string.cancel_order, v -> {
+                Intent intent = new Intent(this, CancelNewActivity.class);
+                startActivityForResult(intent, CANCEL_ORDER);
+            });
 //            } else {
 //                toolbar.setRightText("", null);
 //            }
@@ -467,10 +467,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             toolbar.setTitle(R.string.gw_up_car);
 
 //            if ((ZCSetting.findOne().arriveCancel == 1)) {
-                toolbar.setRightText(R.string.cancel_order, v -> {
-                    Intent intent = new Intent(this, CancelNewActivity.class);
-                    startActivityForResult(intent, CANCEL_ORDER);
-                });
+            toolbar.setRightText(R.string.cancel_order, v -> {
+                Intent intent = new Intent(this, CancelNewActivity.class);
+                startActivityForResult(intent, CANCEL_ORDER);
+            });
 //            } else {
 //                toolbar.setRightText("", null);
 //            }
@@ -593,7 +593,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                     DensityUtil.dp2px(this, 180)));
         }
         if (govOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER || govOrder.orderStatus == ZCOrderStatus.TAKE_ORDER) {
-            if (endMarker!=null){
+            if (endMarker != null) {
                 endMarker.remove();
             }
             if (null == startMarker) {
@@ -610,7 +610,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             }
         }
         if (govOrder.orderStatus == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER || govOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-            if (startMarker!=null){
+            if (startMarker != null) {
                 startMarker.remove();
             }
             if (null == endMarker) {
@@ -727,7 +727,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             if (requestCode == CANCEL_ORDER) {
                 String reason = data.getStringExtra("reason");
                 presenter.cancelOrder(govOrder.orderId, reason);
-            }else if (requestCode == PictureConfig.CHOOSE_REQUEST) {
+            } else if (requestCode == PictureConfig.CHOOSE_REQUEST) {
                 if (confirmFragment != null) {
                     confirmFragment.onActivityResult(requestCode, resultCode, data);
                 }
@@ -823,6 +823,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             }
 
 //            if ((ZCSetting.findOne().arriveCancel == 1)) {
+            if (govOrder.orderStatus == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER) {
                 if (timeSeq < 0) {
                     toolbar.setRightText(R.string.cancel_order, v -> {
                         Intent intent = new Intent(this, CancelNewActivity.class);
@@ -831,6 +832,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 } else {
                     toolbar.setRightText("", null);
                 }
+            }
 //            } else {
 //                toolbar.setRightText("", null);
 //            }
@@ -870,10 +872,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             }
             if (govOrder != null) {
                 if (govOrder.orderStatus == ZCOrderStatus.TAKE_ORDER
-                        || govOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER){
+                        || govOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
                     latLngs.add(new LatLng(govOrder.getStartSite().lat, govOrder.getStartSite().lng));
-                }else if (govOrder.orderStatus == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER
-                        || govOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER ){
+                } else if (govOrder.orderStatus == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER
+                        || govOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
                     latLngs.add(new LatLng(govOrder.getEndSite().lat, govOrder.getEndSite().lng));
                 }
 
@@ -972,6 +974,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
      * 签字单凭证
      */
     private String voucher;
+
     /**
      * 获取七牛云token
      */
@@ -985,7 +988,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             if (qiNiuToken.getCode() == 1) {
                 if (qiNiuToken.qiNiu == null) {
                     throw new IllegalArgumentException("token无效");
-                }else {
+                } else {
                     qiniuToken = qiNiuToken.qiNiu;
                 }
                 updataIndex = 0;
@@ -1001,6 +1004,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     /**
      * 上传图片到七牛云
+     *
      * @param file
      * @param token
      * @return
@@ -1010,17 +1014,17 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         RequestBody tokenBody = RequestBody.create(MediaType.parse("multipart/form-data"), token);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), photoRequestBody);
 
-        Observable<Pic> observable =  ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+        Observable<Pic> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .uploadPic(Config.HOST_UP_PIC, tokenBody, body)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        observable.subscribe(new MySubscriber<>(FlowActivity.this, true, true, pic -> {
+        observable.subscribe(new MySubscriber<>(FlowActivity.this, true, false, pic -> {
             updataIndex++;
-            if (TextUtils.isEmpty(voucher)){
+            if (TextUtils.isEmpty(voucher)) {
                 voucher = pic.hashCode;
-            }else {
-                voucher = voucher+","+pic.hashCode;
+            } else {
+                voucher = voucher + "," + pic.hashCode;
             }
             putPics();
         }));
@@ -1029,11 +1033,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     /**
      * 递归上传图片
      */
-    public void putPics(){
-        if (updataIndex < images.size()){
-            putPic(new File(images.get(updataIndex)),qiniuToken);
-        }else {
-            presenter.confirmOrder(govOrder.orderId,govOrder.version,voucher);
+    public void putPics() {
+        if (updataIndex < images.size()) {
+            putPic(new File(images.get(updataIndex)), qiniuToken);
+        } else {
+            presenter.confirmOrder(govOrder.orderId, govOrder.version, voucher);
         }
     }
 
@@ -1062,5 +1066,4 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             }
         }
     }
-
 }
