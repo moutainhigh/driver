@@ -1,17 +1,16 @@
 package com.easymi.component;
 
 /**
- * Created by developerLzh on 2017/11/3 0003.
- * <p>
- * 配置文件
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午5:00
+ * Description:
+ * History:
  */
 
 public class Config {
 
-    //TODO 通用版需要将app名字换位Rvakva服务端,非通用版名字为心归服务
-    //TODO 换HOST(线上有Https) 换MQTT 换AppKey 换COMM_USE
-    //TODO 通用版需要将名字换位Rvakva服务端
-    //TODO 非通用版名字为心归服务
     /**
      * 主机地址
      */
@@ -21,51 +20,29 @@ public class Config {
 //    public static final String HOST = "http://47.94.204.67:10022/";//外网
 //    public static final String HOST = "http://10.10.2.23:10001/";//俊俏
 //    public static final String HOST = "http://10.10.2.130:10001/";//130测试地址 （内网）
-//    public static final String HOST = "http://47.94.204.67:20001/";//130测试地址（外网）
+//    public static final String HOST = "http://47.94.204.67:20001/";//130测试地址（外网）　　
     public static final String HOST = "http://api.xiaokakj.com/";//线上地址
-//    public static final String HOST = "http://api.xiaokakj.cn/";//预发
+//    public static final String HOST = "http://api.xiaokakj.cn/";//预发/
+//    public static final String HOST = "http://10.10.4.16:81/";//本地
     /**
      * MQTT配置
      */
-//    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//预发地址
-    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn";//线上地址
-//    public static final String MQTT_HOST = "tcp://10.10.4.12:1883";//本地地址
+    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//预发地址
+//    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn";//线上地址
+//    public static final String MQTT_HOST = "tcp://10.10.4.6:1883";//本地地址
     /**
      * APP_KEY
      */
-//    public static final String APP_KEY = "1HAcient1kLqfeX7DVTV0dklUkpGEnUC";//资运
+    public static final String APP_KEY = "1HAcient1kLqfeX7DVTV0dklUkpGEnUC";//资运
 //    public static final String APP_KEY = "xoRfvofrZw25b95ZBZY2venOYlSwWFOV";//v6
 //    public static final String APP_KEY = "SsCMJL77sZMI0iudBi5XZeNjzmILOjih";  // 林凯
-    public static final String APP_KEY = "eubACO3wp3rjz1OBcDSa4LeS4qM4586o";  // 麒策
+//    public static final String APP_KEY = "eubACO3wp3rjz1OBcDSa4LeS4qM4586o";  // 麒策
 //    public static final String APP_KEY = "VC9NFbO9LnaxiFRi5HDQspvp45p8uP6w";  // 哈喽
-    /**
-     * 上传图片地址.
-     */
-    public static final String HOST_UP_PIC = "http://up-z2.qiniu.com";
-    //是否是通用司机端
-    public static final boolean COMM_USE = false;
-
-    /**
-     * 司机注册地址
-     */
-    public static final String REGISTER_URL = "http://register.xiaokayun.cn/employ/registerOne/";
-    /**
-     * QQ分享id
-     */
-    public static final String QQ_APP_ID = "1107818477";
-    /**
-     * 微信分享id
-     */
-    public static final String WX_APP_ID = "wxe2bbe0ee7fa51624"; //微信app id
-
-    /**
-     * 图片服务器地址
-     */
-//    public static final String IMG_SERVER = "https://assets.xiaokayun.cn/";
-//    public static final String IMG_SERVER = "http://pimkcibsb.bkt.clouddn.com/";  //本地
-    public static final String IMG_SERVER = "http://assets.xiaokakj.com/";  //线上
-    //    public static final String IMG_PATH = "?imageView2/1/w/10/h/10/format/webp/q/75|imageslim";
-    public static final String IMG_PATH = "";
+//    public static final String APP_KEY = "4ji3EvuwNziPKF8QXqXMTukGqPmlwOFJ";  //v6rvakva
+//    public static final String APP_KEY = "E0RzxsO1n9hZyKxOr5VvozmDsgU3EuSH";  //小鹏
+//    public static final String APP_KEY = "kQLGYQIx34408QOOv6Ed1OQRWM6Idt5w";  //小鹏预发
+//    public static final String APP_KEY = "G0UMEhNEBt0q0HDO1ecomWNUKP6wzcje";  //v6test
+//    public static final String APP_KEY = "8SbWnW3uYIfaEagACmHiLtADkLcmOyCm";  //锋动
 
     /**
      * MQTT
@@ -76,6 +53,28 @@ public class Config {
 //    //本地
 //    public static final String MQTT_USER_NAME = "admin";
 //    public static final String MQTT_PSW = "public";
+
+    /**
+     * 上传图片地址.
+     */
+    public static final String HOST_UP_PIC = "http://up-z2.qiniu.com";
+    //是否是通用司机端
+    public static final boolean COMM_USE = false;
+
+    /**
+     * QQ分享id
+     */
+    public static final String QQ_APP_ID = "1107818477";
+    /**
+     * 微信分享id
+     */
+    public static final String WX_APP_ID = "wxe2bbe0ee7fa51624";
+
+    /**
+     * 图片服务器地址  线上
+     */
+    public static final String IMG_SERVER = "http://assets.xiaokakj.com/";
+    public static final String IMG_PATH = "";
 
     public static final String MQTT_PUSH_TOPIC = "/driver/gps";
 
@@ -117,8 +116,6 @@ public class Config {
 
     public static final String SP_UDID = "udid";//密码
 
-    public static final String SP_LAST_SPLASH_TIME = "last_splash_animate";//上次显示动画的时间
-
     public static final String SP_DAIJIA_LISTEN_ORDER = "daijia_listen_order";//代驾是否听单
     public static final String SP_ZHUANCHE_LISTEN_ORDER = "zhuanche_listen_order";//专车是否听单
 
@@ -132,16 +129,25 @@ public class Config {
     //是否只上传GPS类型点
     public static final String SP_GPS_FILTER = "sp_gps_filter";
 
+    /**
+     * 业务类型
+     */
     public static final String DAIJIA = "daijia";
     public static final String ZHUANCHE = "special";
     public static final String TAXI = "taxi";
     public static final String CITY_LINE = "cityline";
     //定制包车
     public static final String CHARTERED = "chartered";
-    //租车
+    //定制租车
     public static final String RENTAL = "rental";
-    //班车
+    //客运班车
     public static final String COUNTRY = "country";
+    //哈罗定制班车
+    public static final String CUSTOMBUS = "custombus";
+    //哈罗城际拼车
+    public static final String CARPOOL = "carpool";
+    //公务用车
+    public static final String GOV = "gov";
 
     //需要导航的模式
     public static final String NAVI_MODE = "navi_mode";
@@ -157,17 +163,15 @@ public class Config {
     public static final String TIRED_NOTICE = "com.easymi.v5driver.TIRED_NOTICE";
     public static final String HTTP_CUSTOM = "com.easymi.v5driver.HTTP_CUSTOM";
     public static final String ORDER_REFRESH = "com.easymi.v5driver.ORDER_REFRESH";
+    public static final String AUTO_FINISH = "com.easymi.v5driver.AUTO_FINISH";
+    public static final String SCHEDULE_FINISH = "com.easymi.v5driver.SCHEDULE_FINISH";
 
-    //    public static final int FREE_LOC_TIME = 5000;//闲时定位时间 毫秒
-//    public static final int BUSY_LOC_TIME = 5000;//忙时定位时间 毫秒
-    public static final int NORMAL_LOC_TIME = 5000;//固定定位时间 毫秒
+    //固定定位时间 毫秒
+    public static final int NORMAL_LOC_TIME = 5000;
     //是否纠偏
     public static final boolean NEED_TRACE = false;
     //是否保存位置信息
     public static final boolean SAVE_LOGO = false;
-
-    public static final String MI_APPID = "2882303761517793325";
-    public static final String MI_APPKEY = "5891779394325";
 
     public static final String SP_TOKEN = "sp_token";
 
@@ -176,4 +180,23 @@ public class Config {
     public static final String ONLINE_TIME = "online_time";
 
     public static final String DOWN_TIME = "down_time";
+
+
+    /**
+     * 注册开通业务配置
+     */
+    //开通专车业务
+    public static final boolean KT_ZHUANCHE = true;
+    //开通专线业务
+    public static final boolean KT_ZHUANXIAN = true;
+    //开通出租车业务
+    public static final boolean KT_CHUZUCHE = true;
+    //开通包车业务
+    public static final boolean KT_BAOCHE = true;
+    //开通租车业务
+    public static final boolean KT_ZUCHE = true;
+    //开通班车业务
+    public static final boolean KT_BANCHE = true;
+    //开通公务车业务
+    public static final boolean KT_GONGWU = false;
 }

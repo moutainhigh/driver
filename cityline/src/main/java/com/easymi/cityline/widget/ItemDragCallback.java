@@ -4,7 +4,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
 /**
- * Created by liuzihao on 2018/11/14.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class ItemDragCallback extends ItemTouchHelper.Callback{
@@ -17,7 +22,9 @@ public class ItemDragCallback extends ItemTouchHelper.Callback{
 
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-        final int swipeFlags = 0;//禁止侧滑
+
+        //禁止侧滑
+        final int swipeFlags = 0;
         final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
         //其实只有UP、DOWN即可完成排序，加上LEFT、RIGHT只是为了滑动更飘逸
         return makeMovementFlags(dragFlags,swipeFlags);

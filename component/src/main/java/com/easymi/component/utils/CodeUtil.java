@@ -1,7 +1,12 @@
 package com.easymi.component.utils;
 
 /**
- * Created by developerLzh on 2017/11/21 0021.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ *@Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 import android.graphics.Bitmap;

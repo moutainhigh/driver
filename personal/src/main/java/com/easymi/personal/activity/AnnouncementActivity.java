@@ -31,21 +31,44 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by developerLzh on 2017/11/11 0011.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: AnnouncementActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 公告列表
+ * History:
  */
+
 @Route(path = "/personal/AnnouncementActivity")
 public class AnnouncementActivity extends RxBaseActivity {
 
+    /**
+     * 自定义标题栏
+     */
     CusToolbar toolbar;
 
+    /**
+     * 列表控件
+     */
     SwipeRecyclerView recyclerView;
 
+    /**
+     * 公告适配器
+     */
     AnnouncementAdapter adapter;
 
+    /**
+     * 分页
+     */
     private int page = 1;
-
+    /**
+     * 公告数据集合
+     */
     private List<Announcement> notifities;
 
+    /**
+     * 错误显示布局
+     */
     CusErrLayout errLayout;
 
     @Override
@@ -94,6 +117,9 @@ public class AnnouncementActivity extends RxBaseActivity {
         recyclerView.setRefreshing(true);
     }
 
+    /**
+     * 查询公告列表
+     */
     private void queryData() {
         Observable<AnnouncementResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .employAffiches(page, 10)
@@ -148,6 +174,9 @@ public class AnnouncementActivity extends RxBaseActivity {
         });
     }
 
+    /**
+     * 隐藏错误布局
+     */
     private void hideErr() {
         errLayout.setVisibility(View.GONE);
     }

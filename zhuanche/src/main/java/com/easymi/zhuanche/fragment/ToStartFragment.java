@@ -21,14 +21,28 @@ import com.easymi.zhuanche.flowMvp.ActFraCommBridge;
 import com.easymi.zhuanche.widget.CallPhoneDialog;
 
 /**
- * Created by developerLzh on 2017/11/13 0013.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: ToStartFragment
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 前往预约地
+ * History:
  */
 
 public class ToStartFragment extends RxBaseFragment {
+    /**
+     * 专车订单哪
+     */
     private ZCOrder zcOrder;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
+    /**
+     * 设置bridge
+     * @param bridge
+     */
     public void setBridge(ActFraCommBridge bridge) {
         this.bridge = bridge;
     }
@@ -57,6 +71,9 @@ public class ToStartFragment extends RxBaseFragment {
         initView();
     }
 
+    /**
+     * 初始化布局
+     */
     private void initView() {
         startPlaceText = $(R.id.start_place);
         endPlaceText = $(R.id.end_place);
@@ -70,7 +87,6 @@ public class ToStartFragment extends RxBaseFragment {
         startPlaceText.setSelected(true);
         endPlaceText.setSelected(true);
 
-        //todo 差客户头像
         customName.setText(zcOrder.passengerName);
 
         if (StringUtils.isNotBlank(zcOrder.avatar)) {

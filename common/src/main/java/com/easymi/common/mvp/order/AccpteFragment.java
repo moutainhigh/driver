@@ -10,11 +10,15 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.easymi.common.CommApiService;
 import com.easymi.common.R;
 import com.easymi.common.adapter.MyOrderAdapter;
+import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.component.Config;
+import com.easymi.component.GWOrderStatus;
+import com.easymi.component.ZCOrderStatus;
 import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.entity.BaseOrder;
+import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
@@ -22,6 +26,7 @@ import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.StringUtils;
+import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusErrLayout;
 import com.easymi.component.widget.SwipeRecyclerView;
 
@@ -35,9 +40,9 @@ import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: AccpteFragment
- * Author: shine
+ * @Author: shine
  * Date: 2018/11/15 下午4:05
- * Description:
+ * Description:  接单列表界面
  * History:
  */
 public class AccpteFragment extends RxBaseFragment implements MyOrderContract.View {
@@ -63,18 +68,32 @@ public class AccpteFragment extends RxBaseFragment implements MyOrderContract.Vi
 
         initAdapter();
         initPresenter();
-
     }
 
+    /**
+     * 初始化presenter 请求数据
+     */
     public void initPresenter() {
         presenter = new MyOrderPresenter(getContext(), this);
         setRefresh();
     }
 
+    /**
+     * 请求数据
+     */
     public void setRefresh() {
-        presenter.indexOrders(page, size, "10,15,20,25,28,30,35,40");
+        if (EmUtil.getEmployInfo().serviceType.equals(Config.CARPOOL)){
+            presenter.indexOrders(page, size, "10,15,20,25,30,35,40,45");
+        }else if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)  || EmUtil.getEmployInfo().serviceType.equals(Config.TAXI)){
+            presenter.indexOrders(page, size, "10,15,20,25,28,30,35,40");
+        }else {
+            presenter.indexOrders(page, size, "10,15,20,25,28,30,35,40");
+        }
     }
 
+    /**
+     * 加载adapter
+     */
     public void initAdapter() {
         adapter = new MyOrderAdapter(getContext(), 1);
 
@@ -99,20 +118,37 @@ public class AccpteFragment extends RxBaseFragment implements MyOrderContract.Vi
 
         adapter.setItemClickListener((view, baseOrder) -> {
             if (view.getId() == R.id.root && StringUtils.isNotBlank(baseOrder.serviceType)) {
-                if (baseOrder.status < 35) {
                     if (baseOrder.serviceType.equals(Config.ZHUANCHE)) {
-                        ARouter.getInstance()
-                                .build("/zhuanche/FlowActivity")
-                                .withLong("orderId", baseOrder.id).navigation();
+                        if (baseOrder.status < 35) {
+                            if (ZCSetting.findOne().isPaid == 1){
+                                ARouter.getInstance()
+                                        .build("/zhuanche/FlowActivity")
+                                        .withLong("orderId", baseOrder.orderId).navigation();
+                            } else {
+                                ToastUtil.showMessage(getContext(),"未开启司机代付");
+                            }
+                        }
                     } else if (baseOrder.serviceType.equals(Config.TAXI)) {
-                        ARouter.getInstance()
-                                .build("/taxi/FlowActivity")
-                                .withLong("orderId", baseOrder.id).navigation();
+                        if (baseOrder.status < 35) {
+                            ARouter.getInstance()
+                                    .build("/taxi/FlowActivity")
+                                    .withLong("orderId", baseOrder.id).navigation();
+                        }
+                    }else if (baseOrder.serviceType.equals(Config.CARPOOL)){
+                        if (baseOrder.status < CarpoolOrder.CARPOOL_STATUS_FINISH){
+                            ARouter.getInstance()
+                                    .build("/carpooling/FlowActivity")
+                                    .withSerializable("baseOrder", baseOrder).navigation();
+                        }else {
+                            startActivity(new Intent(getContext(), OrderDetailActivity.class).putExtra("orderId",baseOrder.orderId));
+                        }
+                    }else if (baseOrder.serviceType.equals(Config.GOV)){
+                        if (baseOrder.status < GWOrderStatus.FINISH_ORDER){
+                            ARouter.getInstance()
+                                    .build("/official/FlowActivity")
+                                    .withLong("orderId", baseOrder.orderId).navigation();
+                        }
                     }
-                }
-//                else if (baseOrder.serviceType.equals(Config.CITY_LINE)) {
-//                    ARouter.getInstance().build("/cityline/FlowActivity").withSerializable("baseOrder",baseOrder).navigation();
-//                }
             }
         });
     }

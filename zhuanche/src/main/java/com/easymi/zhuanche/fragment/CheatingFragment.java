@@ -22,12 +22,19 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 /**
- * Created by developerLzh on 2017/11/13 0013.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: CheatingFragment
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 未使用 手动调节计价器
+ * History:
  */
 
 public class CheatingFragment extends RxBaseFragment {
     private DymOrder zcOrder;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
     private TextView currentMileageTxt;
@@ -42,12 +49,21 @@ public class CheatingFragment extends RxBaseFragment {
     private EditText feeEdit;
     private LinearLayout changeEndCon;
 
+    /**
+     * 添加公里数和费用
+     */
     private int addedKm;
     private double addedFee;
 
+    /**
+     * 显示数据格式化
+     */
     DecimalFormat decimalFormat = new DecimalFormat("#0.0");
 
-
+    /**
+     * 设置bridge
+     * @param bridge
+     */
     public void setBridge(ActFraCommBridge bridge) {
         this.bridge = bridge;
     }
@@ -68,10 +84,11 @@ public class CheatingFragment extends RxBaseFragment {
         initView();
     }
 
+    /**
+     * 初始化布局
+     */
     private void initView() {
-
         decimalFormat.setRoundingMode(RoundingMode.DOWN);
-
         currentMileageTxt = $(R.id.current_mileage);
         currentFeeTxt = $(R.id.current_fee);
         mileageSubBtn = $(R.id.mileage_sub);
@@ -114,6 +131,9 @@ public class CheatingFragment extends RxBaseFragment {
         changeEndCon.setOnClickListener(view -> bridge.changeEnd());
     }
 
+    /**
+     * 初始化费用
+     */
     private void initFee() {
         feeSubBtn.setOnClickListener(view -> {
             getaddedKm();
@@ -172,6 +192,9 @@ public class CheatingFragment extends RxBaseFragment {
         });
     }
 
+    /**
+     * 加载里程
+     */
     private void initMileage() {
         mileageSubBtn.setOnClickListener(view -> {
             getaddedKm();

@@ -33,7 +33,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by developerLzh on 2017/12/7 0007.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: NearWcActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 附近厕所
+ * History:
  */
 
 public class NearWcActivity extends RxBaseActivity implements AMap.OnMarkerClickListener {
@@ -43,16 +48,30 @@ public class NearWcActivity extends RxBaseActivity implements AMap.OnMarkerClick
     CusErrLayout cusErrLayout;
 
     AMap aMap;
-
+    /**
+     * 经纬度逆地理编码对象
+     */
     PoiSearch search;
 
+    /**
+     * 图片
+     */
     BitmapDescriptor bitmapDescriptor;
 
     private int page = 0;
 
+    /**
+     * 厕所点数据集
+     */
     private List<PoiItem> items;
+    /**
+     * maker数据集
+     */
     private List<Marker> markers;
 
+    /**
+     * 附近厕所适配器
+     */
     private NearWcAdapter adapter;
 
     LinearLayoutManager layoutManager;
@@ -136,6 +155,9 @@ public class NearWcActivity extends RxBaseActivity implements AMap.OnMarkerClick
         cusToolbar.setTitle(R.string.near_wc);
     }
 
+    /**
+     * 查询附近厕所
+     */
     private void searchNearBy() {
 
         String keyWord = "厕所|公厕|WC";
@@ -200,6 +222,9 @@ public class NearWcActivity extends RxBaseActivity implements AMap.OnMarkerClick
         search.searchPOIAsyn();
     }
 
+    /**
+     * 移除所有marker
+     */
     private void removeAllMarker() {
         for (Marker marker : markers) {
             marker.remove();

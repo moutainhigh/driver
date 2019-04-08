@@ -1,19 +1,17 @@
 package com.easymi.personal.activity.register;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 import com.easymi.component.base.RxBaseActivity;
-import com.easymi.component.entity.Employ;
 import com.easymi.component.network.MySubscriber;
-import com.easymi.component.result.EmResult;
-import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.AlexStatusBarUtils;
 import com.easymi.component.utils.RsaUtils;
-import com.easymi.component.utils.ToastUtil;
+import com.easymi.component.utils.UIStatusBarHelper;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.R;
 import com.easymi.personal.result.RegisterResult;
@@ -23,7 +21,7 @@ import rx.Observable;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: RegisterNoticeActivity
- * Author: shine
+ * @Author: shine
  * Date: 2018/12/19 上午9:57
  * Description:
  * History:
@@ -36,9 +34,14 @@ public class RegisterNoticeActivity extends RxBaseActivity {
     TextView tv_notice;
     TextView tv_amend;
 
-    private int type; //注册状态：1.未注册；2.审核中；3驳回；4通过
-//    private long driverId;
-    private Employ employ;
+    /**
+     * 注册状态：1.未注册；2.审核中；3驳回；4通过
+     */
+    private int type;
+
+    private String phone;
+
+    private long id;
 
     @Override
     public boolean isEnableSwipe() {
@@ -47,6 +50,8 @@ public class RegisterNoticeActivity extends RxBaseActivity {
 
     @Override
     public int getLayoutId() {
+        UIStatusBarHelper.setStatusBarLightMode(this);
+        AlexStatusBarUtils.setStatusColor(this, Color.WHITE);
         return R.layout.activity_register_notice;
     }
 
@@ -54,7 +59,6 @@ public class RegisterNoticeActivity extends RxBaseActivity {
     public void initViews(Bundle savedInstanceState) {
         findById();
         type = getIntent().getIntExtra("type", 0);
-//        driverId = getIntent().getLongExtra("driverId",0);
         if (type == 2) {
             iv_iamge.setImageResource(R.mipmap.ic_rg_passing);
             tv_title.setText(getResources().getString(R.string.register_checking));
@@ -67,13 +71,15 @@ public class RegisterNoticeActivity extends RxBaseActivity {
 
             tv_amend.setVisibility(View.VISIBLE);
 
-            employ = EmUtil.getEmployInfo();
+            phone = getIntent().getStringExtra("phone");
+//            employ = EmUtil.getEmployInfo();
             getDriverInfo();
         }
 
         tv_amend.setOnClickListener(v -> {
             Intent intent = new Intent(this, RegisterBaseActivity.class);
-            intent.putExtra("employ",employ);
+            intent.putExtra("id",id);
+            intent.putExtra("phone",phone);
             startActivity(intent);
         });
     }
@@ -85,6 +91,9 @@ public class RegisterNoticeActivity extends RxBaseActivity {
         toolbar.setTitle(R.string.register_become);
     }
 
+    /**
+     * 初始化控件
+     */
     public void findById() {
         toolbar = findViewById(R.id.toolbar);
         iv_iamge = findViewById(R.id.iv_iamge);
@@ -93,12 +102,15 @@ public class RegisterNoticeActivity extends RxBaseActivity {
         tv_amend = findViewById(R.id.tv_amend);
     }
 
-
+    /**
+     * 获取司机信息
+     */
     public void getDriverInfo() {
-        String id_rsa = RsaUtils.encryptAndEncode(this, employ.id+"");
+        String id_rsa = RsaUtils.rsaEncode( phone);
         Observable<RegisterResult> observable = RegisterModel.getDriverInfo(id_rsa);
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, emResult -> {
             if (emResult.getCode() == 1) {
+                id = emResult.data.id;
                 tv_notice.setText(emResult.data.remark);
             }
         })));

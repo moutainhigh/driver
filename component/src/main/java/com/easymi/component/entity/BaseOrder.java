@@ -5,8 +5,12 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 /**
- * Created by developerLzh on 2017/11/3 0003.
- * 热订单详情
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ *@Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 public class BaseOrder implements Serializable {
 
@@ -24,17 +28,17 @@ public class BaseOrder implements Serializable {
      */
     public long id;
     /**
-     * 班次状态  专线特有
+     * 班次状态
      */
     public int scheduleStatus;
 
     /**
-     *订单状态 专线没有此值
+     *订单状态
      */
     public int status;
 
     /**
-     * 班次id  专线特有
+     * 班次id  专线、拼车特有
      */
     public long scheduleId;
 
@@ -222,11 +226,6 @@ public class BaseOrder implements Serializable {
      */
     public double endLongitude;
 
-//    /**
-//     * 班次ID
-//     */
-//    private Long scheduleId;
-
     /**
      * 线路ID
      */
@@ -248,7 +247,7 @@ public class BaseOrder implements Serializable {
     public int ticket;
 
     /**
-     * 分钟数
+     * 提前接人分钟数
      */
     public int minute;
           
@@ -272,37 +271,38 @@ public class BaseOrder implements Serializable {
      */
     public String avatar;
 
-//    /**
-//     * 班次状态
-//     */
-//    private Integer scheduleStatus;
+    /**
+     * 订单类型
+     */
+    public String orderType;
+
 
     /**
-     * 售票中
+     * 是否是转单 1 == 转单
      */
-    public static final int SCHEDULE_STATUS_SALE = 1;
+    public int orderChange;
+
+
+
     /**
      * 等待行程开始
      */
-    public static final int SCHEDULE_STATUS_PREPARE = 5;
+    public static final int SCHEDULE_STATUS_NEW = 1;
     /**
      * 司机接人
      */
-    public static final int SCHEDULE_STATUS_TAKE = 10;
+    public static final int SCHEDULE_STATUS_TAKE = 5;
     /**
      * 司机送人
      */
-    public static final int SCHEDULE_STATUS_RUN = 15;
+    public static final int SCHEDULE_STATUS_RUN = 10;
     /**
      * 已结束
      */
-    public static final int SCHEDULE_STATUS_FINISH = 20;
-
+    public static final int SCHEDULE_STATUS_FINISH = 15;
 
     public String getZXOrderStatusStr() {
-        if (scheduleStatus == SCHEDULE_STATUS_SALE) {
-            return "售票中";
-        } else if (scheduleStatus == SCHEDULE_STATUS_PREPARE) {
+        if (scheduleStatus == SCHEDULE_STATUS_NEW) {
             return "未开始";
         } else if (scheduleStatus == SCHEDULE_STATUS_TAKE) {
             return "正在接人";
@@ -311,7 +311,7 @@ public class BaseOrder implements Serializable {
         } else if (scheduleStatus == SCHEDULE_STATUS_FINISH) {
             return "已完成";
         } else {
-            return "";
+            return "已完成";
         }
     }
 

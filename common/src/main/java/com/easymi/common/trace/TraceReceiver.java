@@ -9,13 +9,22 @@ import com.easymi.component.loc.LocService;
 import com.google.gson.Gson;
 
 /**
- * Created by developerLzh on 2017/11/24 0024.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午5:00
+ * Description:
+ * History:
  */
 
 public class TraceReceiver extends BroadcastReceiver {
 
     TraceInterface traceInterface;
 
+    /**
+     * 构造器
+     * @param traceInterface
+     */
     public TraceReceiver(TraceInterface traceInterface) {
         this.traceInterface = traceInterface;
     }

@@ -12,9 +12,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2017/12/20.
- * <p>
- * 本地保存的费用信息字段 保存到数据库的
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class DymOrder implements Serializable {
@@ -144,27 +147,33 @@ public class DymOrder implements Serializable {
     /**
      *预算金额
      */
-    private Double budgetFee;
+    public Double budgetFee;
     /**
      *定价金额
      */
-    private Double fixedPrice;
+    public Double fixedPrice;
     /**
      *信息费
      */
-    private Double messagePrice;
+    public Double messagePrice;
     /**
      *实际付款
      */
-    private Double realPay;
+    public Double realPay;
     /**
      *insurance_price
      */
-    private Double insurancePrice;
+    public Double insurancePrice;
     /**
      *支付类型
      */
-    private String payType;
+    public String payType;
+
+    /**
+     * 阶梯费
+     */
+    public String stageArrays;
+
 
     public DymOrder(long orderId, String orderType, long passengerId, int orderStatus) {
         this.orderId = orderId;
@@ -219,11 +228,8 @@ public class DymOrder implements Serializable {
         values.put("nightMile", nightMile);
         values.put("nightTimePrice", nightTimePrice);
 
-//        values.put("addedKm", addedKm);
-//        values.put("addedFee", addedFee);
-        /*
-         * values.put("age", age); values.put("jialing", jialing);
-         */
+        values.put("stageArrays", stageArrays);
+
         boolean flag = db.insert("t_dyminfo", null, values) != -1;
         return flag;
     }
@@ -366,6 +372,8 @@ public class DymOrder implements Serializable {
         orderInfo.nightTimePrice = cursor.getDouble(cursor.getColumnIndex("nightTimePrice"));
         orderInfo.passengerId = cursor.getLong(cursor.getColumnIndex("passengerId"));
 
+        orderInfo.stageArrays = cursor.getString(cursor.getColumnIndex("stageArrays"));
+
         return orderInfo;
     }
 
@@ -417,6 +425,7 @@ public class DymOrder implements Serializable {
         values.put("nightMile", nightMile);
         values.put("nightTimePrice", nightTimePrice);
 
+        values.put("stageArrays", stageArrays);
 
 //        values.put("addedKm", addedKm);
 //        values.put("addedFee", addedFee);
@@ -452,6 +461,8 @@ public class DymOrder implements Serializable {
         values.put("nightTime", nightTime);
         values.put("nightMile", nightMile);
         values.put("nightTimePrice", nightTimePrice);
+
+        values.put("stageArrays", stageArrays);
 
 //        values.put("addedKm", addedKm);
 //        values.put("addedFee", addedFee);

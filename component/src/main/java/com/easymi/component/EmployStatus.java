@@ -1,7 +1,12 @@
 package com.easymi.component;
 
 /**
- * Created by liuzihao on 2017/12/22.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class EmployStatus {
@@ -13,7 +18,6 @@ public class EmployStatus {
      * 在线(登录未听单)
      */
     public static final String ONLINE = String.valueOf(2);
-
     /**
      * 空闲（登录后听单中）
      */

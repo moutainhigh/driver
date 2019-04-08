@@ -24,8 +24,8 @@ import com.easymi.component.widget.CustomSlideToUnlockView;
 import com.easymin.passengerbus.R;
 import com.easymin.passengerbus.entity.BusStationResult;
 import com.easymin.passengerbus.entity.BusStationsBean;
-import com.easymin.passengerbus.flowMvp.ActFraCommBridge;
-import com.easymin.passengerbus.flowMvp.BcFlowActivity;
+import com.easymin.passengerbus.flowmvp.ActFraCommBridge;
+import com.easymin.passengerbus.flowmvp.BcFlowActivity;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -34,18 +34,25 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * 行程中
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FlowModel
+ * @Author: shine
+ * Date: 2018/12/18 下午1:59
+ * Description: 行程中
+ * History:
  */
 public class BcRuningFragment extends RxBaseFragment implements RouteSearch.OnRouteSearchListener{
 
     private TextView tvLineAddress;
     private TextView tvTip;
     private LinearLayout lin_wait;
-
     private LinearLayout lineLayout;
     private TextView tvWaiteTime;
     private CustomSlideToUnlockView slider;
     private LinearLayout controlCon;
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
     /**
@@ -53,8 +60,14 @@ public class BcRuningFragment extends RxBaseFragment implements RouteSearch.OnRo
      */
     int index;
 
+    /**
+     * 班次id
+     */
     private long scheduleId;
 
+    /**
+     * 站点集合
+     */
     private List<BusStationsBean> listLine = new ArrayList<>();
 
     @Override
@@ -63,6 +76,10 @@ public class BcRuningFragment extends RxBaseFragment implements RouteSearch.OnRo
         scheduleId = args.getLong("scheduleId");
     }
 
+    /**
+     * 设置bridge
+     * @param bridge
+     */
     public void setBridge(ActFraCommBridge bridge) {
         this.bridge = bridge;
     }
@@ -79,6 +96,9 @@ public class BcRuningFragment extends RxBaseFragment implements RouteSearch.OnRo
 
     }
 
+    /**
+     * 初始化布局 加载对应信息
+     */
     private void initView() {
         tvLineAddress = $(R.id.tv_line_address);
         tvTip = $(R.id.tv_tip);
@@ -160,32 +180,16 @@ public class BcRuningFragment extends RxBaseFragment implements RouteSearch.OnRo
                     bridge.showEndFragment();
                 }
                 resetView();
-//                if (listLine.size() > 0 && index < listLine.size() - 1) {
-//                    //下标从0开始
-//                    index = index + 1;
-//                    if (listLine.get(index).status == BusStationsBean.ARRIVE_WAIT) {
-//
-//                        bridge.slideToNext(listLine.get(index).id);
-//                        listLine.get(index).status = BusStationsBean.LEAVE_STATION;
-//                        listLine.get(index+1).status = BusStationsBean.TO_STATION;
-//                        listLine.get(index).updateStatus();
-//                    } else if (listLine.get(index).status == BusStationsBean.TO_STATION) {
-//                        bridge.sideToArrived(listLine.get(index).id);
-//
-//                    }
-//                } else if (index == listLine.size() - 1) {
-//                    if (listLine.get(index).status == BusStationsBean.ARRIVE_WAIT) {
-//                        bridge.sideToArrived(listLine.get(index).id);
-//                    }
-//                    bridge.showEndFragment();
-//                }
-//                resetView();
+
             }
         });
     }
 
     Handler handler = new Handler();
 
+    /**
+     * 重置滑动按钮
+     */
     private void resetView() {
         if (listLine.get(index).status == BusStationsBean.TO_STATION) {
             slider.setHint("滑动到达站点");
@@ -209,11 +213,19 @@ public class BcRuningFragment extends RxBaseFragment implements RouteSearch.OnRo
         //防止卡顿
     }
 
+    /**
+     * 等待倒计时
+     */
     private long timeSeq = 0;
-
+    /**
+     * 定时器
+     */
     private Timer timer;
     private TimerTask timerTask;
 
+    /**
+     * 取消定时器
+     */
     public void cancelTimer() {
         if (timer != null) {
             timer.cancel();
@@ -225,6 +237,10 @@ public class BcRuningFragment extends RxBaseFragment implements RouteSearch.OnRo
         }
     }
 
+    /**
+     * 初始化定时器
+     * @param busStationsBean
+     */
     private void initTimer(BusStationsBean busStationsBean) {
         if (null != timer) {
             timer.cancel();
@@ -248,6 +264,9 @@ public class BcRuningFragment extends RxBaseFragment implements RouteSearch.OnRo
         setTimeText();
     }
 
+    /**
+     * 显示倒计时
+     */
     private void setTimeText() {
         if (getActivity() != null){
             getActivity().runOnUiThread(() -> {
@@ -263,7 +282,8 @@ public class BcRuningFragment extends RxBaseFragment implements RouteSearch.OnRo
                     sb.append("0");
                 }
                 sb.append(sec).append("");
-                if (timeSeq < 0) { //超时
+                if (timeSeq < 0) {
+                    //超时
                     tvWaiteTime.setText("00:00");
                 } else { //正常计时
                     tvWaiteTime.setText(sb.toString());
@@ -316,6 +336,11 @@ public class BcRuningFragment extends RxBaseFragment implements RouteSearch.OnRo
         }
     }
 
+    /**
+     * 显示导航信息
+     * @param dis
+     * @param time
+     */
     public void showLeft(int dis, int time) {
 //        距离2.5公里，预计5分钟到达
 

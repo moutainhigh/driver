@@ -20,19 +20,34 @@ import com.easymi.zhuanche.R;
 import com.easymi.zhuanche.entity.ZCOrder;
 
 /**
- * Created by liuzihao on 2018/3/13.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: CallPhoneDialog
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 拨打电话弹窗
+ * History:
  */
-
 public class CallPhoneDialog extends Dialog {
 
     public CallPhoneDialog(@NonNull Context context) {
         super(context);
     }
 
+    /**
+     *
+     * @param context
+     * @param themeResId
+     */
     public CallPhoneDialog(@NonNull Context context, int themeResId) {
         super(context, themeResId);
     }
 
+    /**
+     *
+     * @param context
+     * @param cancelable 能否取消
+     * @param cancelListener 取消dialog监听接口
+     */
     protected CallPhoneDialog(@NonNull Context context, boolean cancelable, @Nullable OnCancelListener cancelListener) {
         super(context, cancelable, cancelListener);
     }
@@ -40,19 +55,22 @@ public class CallPhoneDialog extends Dialog {
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        getWindow().setGravity(Gravity.CENTER); //
+        getWindow().setGravity(Gravity.CENTER);
 
         WindowManager m = getWindow().getWindowManager();
         Display d = m.getDefaultDisplay();
         WindowManager.LayoutParams p = getWindow().getAttributes();
-        p.width = d.getWidth(); //设置dialog的宽度为当前手机屏幕的宽度
+        //设置dialog的宽度为当前手机屏幕的宽度
+        p.width = d.getWidth();
         getWindow().setAttributes(p);
     }
 
+    /**
+     * 构建dialog
+     */
     public static class Builder {
 
         private Context context;
-
         private CallPhoneDialog dialog;
 
         private ImageButton callUser;
@@ -89,7 +107,11 @@ public class CallPhoneDialog extends Dialog {
         }
     }
 
-
+    /**
+     * 判断是否显示弹窗 和跳转拨号界面
+     * @param context
+     * @param zcOrder
+     */
     public static void callDialog(Activity context, ZCOrder zcOrder) {
         if (StringUtils.isNotBlank(zcOrder.userPhone)) {
             CallPhoneDialog dialog = new CallPhoneDialog.Builder(context, zcOrder).create();

@@ -65,7 +65,8 @@
         <activity
             android:name=".activity.SplashActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.ImgFullScreen"/>
 
         <activity
             android:name=".register.InfoActivity"
@@ -83,59 +84,11 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait" />
 
-        <!--<service-->
-            <!--android:name="com.easymi.common.daemon.DaemonService"-->
-            <!--android:process=":process1" />-->
+        <activity
+            android:name=".mvp.order.OrderDetailActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait" />
 
-        <!--<receiver-->
-            <!--android:name="com.easymi.common.daemon.PuppetReceiver1"-->
-            <!--android:process=":process1" />-->
-
-        <!--<service-->
-            <!--android:name="com.easymi.common.daemon.PuppetService"-->
-            <!--android:process=":process2" />-->
-        <!--<receiver-->
-            <!--android:name="com.easymi.common.daemon.PuppetReceiver2"-->
-            <!--android:process=":process2" />-->
-
-        <!--<service-->
-            <!--android:name=".daemon.JobKeepLiveService"-->
-            <!--android:exported="true"-->
-            <!--android:permission="android.permission.BIND_JOB_SERVICE" />-->
-
-        <!--消息接收监听器-->
-        <receiver android:name="com.easymi.common.receiver.AliPushReceiver">
-            <intent-filter>
-                <action android:name="com.alibaba.push2.action.NOTIFICATION_OPENED" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="com.alibaba.push2.action.NOTIFICATION_REMOVED" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="com.taobao.accs.intent.action.COMMAND" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="com.taobao.taobao.intent.action.COMMAND" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="com.alibaba.sdk.android.push.RECEIVE" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.USER_PRESENT" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED" />
-                <data android:scheme="package" />
-            </intent-filter>
-        </receiver>
-
-        <!--<service android:name="com.easymi.common.push.MQTTService" />-->
 
     </application>
 

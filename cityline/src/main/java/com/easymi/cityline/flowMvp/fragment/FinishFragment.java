@@ -14,21 +14,38 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Created by liuzihao on 2018/11/16.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishFragment
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description: 完成订单界面
+ * History:
  */
 
 public class FinishFragment extends RxBaseFragment {
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
     TextView countDown;
     TextView back;
 
+    /**
+     * 倒计时定时器
+     */
     Timer timer;
     TimerTask timerTask;
 
+    /**
+     * 倒计时5s
+     */
     int time = 5;
 
+    /**
+     * 设置bridge
+     * @param bridge
+     */
     public void setBridge(ActFraCommBridge bridge) {
         this.bridge = bridge;
     }
@@ -65,6 +82,9 @@ public class FinishFragment extends RxBaseFragment {
         back.setOnClickListener(view -> bridge.toOrderList());
     }
 
+    /**
+     * 取消定时器
+     */
     public void cancelTimer() {
         if (timer != null) {
             timer.cancel();

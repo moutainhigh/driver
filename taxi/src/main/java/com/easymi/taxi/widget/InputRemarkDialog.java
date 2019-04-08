@@ -13,7 +13,14 @@ import android.widget.LinearLayout;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.taxi.R;
-
+/**
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: InputRemarkDialog
+ * @Author: shine
+ * Date: 2018/11/16 上午11:23
+ * Description: 备注输入框
+ * History:
+ */
 public class InputRemarkDialog extends Dialog {
 
     public InputRemarkDialog(Context context) {
@@ -24,6 +31,9 @@ public class InputRemarkDialog extends Dialog {
         super(context, theme);
     }
 
+    /**
+     * 构建弹窗
+     */
     public static class Builder {
         private Context context;
         private String title;

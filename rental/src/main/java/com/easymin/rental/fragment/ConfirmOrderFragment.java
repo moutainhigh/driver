@@ -14,7 +14,7 @@ import com.easymin.rental.flowMvp.ActFraCommBridge;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: ConfirmOrderFragment
- * Author: shine
+ * @Author: shine
  * Date: 2018/12/24 下午5:29
  * Description:
  * History:
@@ -30,9 +30,15 @@ public class ConfirmOrderFragment extends RxBaseFragment {
     LoadingButton complet_order;
 
     private RentalOrder baseOrder;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
+    /**
+     * 设置bridge
+     * @param bridge
+     */
     public void setBridge(ActFraCommBridge bridge) {
         this.bridge = bridge;
     }
@@ -58,6 +64,9 @@ public class ConfirmOrderFragment extends RxBaseFragment {
         });
     }
 
+    /**
+     * 初始化控件
+     */
     public void findById(){
         tv_name = getActivity().findViewById(R.id.tv_name);
         tv_phone = getActivity().findViewById(R.id.tv_phone);
@@ -68,6 +77,9 @@ public class ConfirmOrderFragment extends RxBaseFragment {
         complet_order = getActivity().findViewById(R.id.complet_order);
     }
 
+    /**
+     * 显示数据
+     */
     public void initData(){
         tv_name.setText(baseOrder.passengerName);
         tv_phone.setText(baseOrder.passengerPhone);

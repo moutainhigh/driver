@@ -13,13 +13,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by developerLzh on 2017/12/7 0007.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: MoreActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 更多功能界面
+ * History:
  */
 @Route(path = "/personal/MoreActivity")
 public class MoreActivity extends RxBaseActivity {
 
+    /**
+     * 自定义标题
+     */
     CusToolbar cusToolbar;
 
+    /**
+     * 网格布局控件
+     */
     GridView gridView;
 
     @Override

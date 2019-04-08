@@ -15,12 +15,14 @@ import com.easymi.common.result.MultipleOrderResult;
 import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.GetFeeResult;
+import com.easymi.common.result.PCOrderResult;
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.common.result.SettingResult;
 import com.easymi.common.result.SystemResult;
 import com.easymi.common.result.VehicleResult;
 import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.result.EmResult;
+import com.easymi.component.result.EmResult2;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -37,7 +39,12 @@ import retrofit2.http.Url;
 import rx.Observable;
 
 /**
- * Created by developerLzh on 2017/11/17 0017.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午5:00
+ * Description:
+ * History:
  */
 
 public interface CommApiService {
@@ -333,7 +340,9 @@ public interface CommApiService {
                                                 @Field("driverName") String driverName,
                                                 @Field("driverPhone") String driverPhone,
                                                 @Field("id") Long id,
-                                                @Field("version") Long version);
+                                                @Field("version") Long version,
+                                                @Field("receiptLongitude") String receiptLongitude,
+                                                @Field("receiptLatitude") String receiptLatitude);
 
     /**
      * 专车 -->接单
@@ -350,7 +359,9 @@ public interface CommApiService {
                                                 @Field("driverName") String driverName,
                                                 @Field("driverPhone") String driverPhone,
                                                 @Field("id") Long id,
-                                                @Field("version") Long version);
+                                                @Field("version") Long version,
+                                                @Field("receiptLongitude") String receiptLongitude,
+                                                @Field("receiptLatitude") String receiptLatitude);
 
     /**
      * 出租车 --> 查询单个订单
@@ -515,14 +526,28 @@ public interface CommApiService {
     Observable<PushAnnouncement> employAfficheById(@Path("id") Long noticeId,
                                                    @Query("app_key") String appKey);
 
+//    /**
+//     * 我的订单接口
+//     */
+//    @GET("api/v1/public/orders")
+//    Observable<QueryOrdersResult> queryMyOrders(@Query("page") int page,
+//                                                @Query("size") int size,
+//                                                @Query("status") String status,
+//                                                @Query("serviceType") String serviceType);
+
     /**
-     * 我的订单接口
+     * 我的订单接口 （新的）
      */
-    @GET("api/v1/public/orders")
+    @GET("api/v1/public/driver/myOrders")
     Observable<QueryOrdersResult> queryMyOrders(@Query("page") int page,
                                                 @Query("size") int size,
-                                                @Query("status") String status,
-                                                @Query("serviceType") String serviceType);
+                                                @Query("status") String status);
+    /**
+     * 拼车完成订单详情查询
+     */
+    @GET("api/v1/carpool/driver/order/queryOrderDetail")
+    Observable<PCOrderResult> queryOrderDetail(@Query("orderId") long page);
+
 
     /**
      * 获取专车出租车的车型
@@ -531,4 +556,24 @@ public interface CommApiService {
      */
     @GET("api/v1/public/driver/vehicle")
     Observable<VehicleResult> driverehicle();
+
+    /**
+     * 获取APP配置
+     *
+     * @return
+     */
+    @GET("api/v1/public/driver/app")
+    Observable<SettingResult> getAppSetting();
+
+
+    /**
+     * 班次结束
+     *
+     * @param scheduleId
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/api/v1/carpool/driver/schedule/finishSchedule")
+    Observable<EmResult2<Object>> finishTask(
+            @Field("scheduleId") long scheduleId);
 }

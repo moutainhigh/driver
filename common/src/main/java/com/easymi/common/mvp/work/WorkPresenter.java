@@ -40,10 +40,13 @@ import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.AesUtil;
+import com.easymi.component.utils.CsEditor;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
+import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.LoadingButton;
 import com.easymin.driver.securitycenter.utils.CenterUtil;
@@ -58,7 +61,13 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by developerLzh on 2017/11/17 0017.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ *
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class WorkPresenter implements WorkContract.Presenter {
@@ -108,13 +117,11 @@ public class WorkPresenter implements WorkContract.Presenter {
     @Override
     public void indexOrders() {
         view.showOrders(null);
-
         Observable<QueryOrdersResult> observable = model.indexOrders(EmUtil.getEmployId(), EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false, false, new HaveErrSubscriberListener<QueryOrdersResult>() {
             @Override
             public void onNext(QueryOrdersResult emResult) {
                 view.stopRefresh();
-
                 List<MultipleOrder> orders = new ArrayList<>();
                 MultipleOrder header = new MultipleOrder(MultipleOrder.ITEM_HEADER);
                 orders.add(header);
@@ -127,7 +134,9 @@ public class WorkPresenter implements WorkContract.Presenter {
                                     || TextUtils.equals(order.serviceType, Config.TAXI)
                                     || TextUtils.equals(order.serviceType, Config.CHARTERED)
                                     || TextUtils.equals(order.serviceType, Config.RENTAL)
-                                    ) {
+                                    || TextUtils.equals(order.serviceType, Config.GOV)
+                                    || TextUtils.equals(order.serviceType, Config.COUNTRY)
+                                    || TextUtils.equals(order.serviceType, Config.CUSTOMBUS)) {
                                 if (DymOrder.exists(order.orderId, order.serviceType)) {
                                     //非专线 本地有
                                     dymOrder = DymOrder.findByIDType(order.orderId, order.serviceType);
@@ -142,11 +151,12 @@ public class WorkPresenter implements WorkContract.Presenter {
                                     dymOrder.id = order.id;
                                     dymOrder.saveOrUpdate();
                                 }
-                            } else if (TextUtils.equals(order.serviceType, Config.CITY_LINE)) {
+                            } else if (TextUtils.equals(order.serviceType, Config.CITY_LINE)
+                                       || TextUtils.equals(order.serviceType, Config.CARPOOL)) {
                                 if (DymOrder.exists(order.scheduleId, order.serviceType)) {
                                     //专线 本地有 状态同步
                                     dymOrder = DymOrder.findByIDType(order.scheduleId, order.serviceType);
-                                    if (order.scheduleStatus <= BaseOrder.SCHEDULE_STATUS_PREPARE) {
+                                    if (order.scheduleStatus <= BaseOrder.SCHEDULE_STATUS_NEW) {
                                         dymOrder.orderStatus = ZXOrderStatus.WAIT_START;
                                     } else if (order.scheduleStatus == BaseOrder.SCHEDULE_STATUS_TAKE) {
                                         dymOrder.orderStatus = ZXOrderStatus.ACCEPT_ING;
@@ -174,7 +184,8 @@ public class WorkPresenter implements WorkContract.Presenter {
                         for (DymOrder dymOrder : allDym) {
                             boolean isExist = false;
                             for (MultipleOrder order : orders) {
-                                if (dymOrder.orderType.equals(Config.CITY_LINE)) {
+                                if (dymOrder.orderType.equals(Config.CITY_LINE)
+                                     ||dymOrder.orderType.equals(Config.CARPOOL)) {
                                     if ((dymOrder.orderId == order.scheduleId)) {
                                         isExist = true;
                                         break;
@@ -183,7 +194,9 @@ public class WorkPresenter implements WorkContract.Presenter {
                                         || dymOrder.orderType.equals(Config.TAXI)
                                         || TextUtils.equals(order.serviceType, Config.CHARTERED)
                                         || TextUtils.equals(order.serviceType, Config.RENTAL)
-                                        ) {
+                                        || TextUtils.equals(order.serviceType, Config.GOV)
+                                        || TextUtils.equals(order.serviceType, Config.COUNTRY)
+                                        || TextUtils.equals(order.serviceType, Config.CUSTOMBUS)) {
                                     if (dymOrder.orderId == order.orderId) {
                                         isExist = true;
                                         break;
@@ -226,15 +239,15 @@ public class WorkPresenter implements WorkContract.Presenter {
         long driverId = EmUtil.getEmployId();
         Observable<EmResult> observable = model.online(driverId, EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, btn, emResult -> {
-            //一键报警 上线 //todo 一键报警
-//            CenterUtil centerUtil = new CenterUtil(context,Config.APP_KEY,
-//                    XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
-//                    XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
-//            centerUtil.driverUp(driverId,EmUtil.getEmployInfo().companyId,EmUtil.getEmployInfo().userName,EmUtil.getEmployInfo().realName,
-//                    EmUtil.getEmployInfo().phone,System.currentTimeMillis()/1000,EmUtil.getEmployInfo().serviceType);
+            //一键报警 上线
+            CenterUtil centerUtil = new CenterUtil(context, Config.APP_KEY,
+                    new CsSharedPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
+                    new CsSharedPreferences().getString(Config.SP_TOKEN, ""));
+            centerUtil.driverUp(driverId, EmUtil.getEmployInfo().companyId, EmUtil.getEmployInfo().userName, EmUtil.getEmployInfo().realName,
+                    EmUtil.getEmployInfo().phone, System.currentTimeMillis() / 1000, EmUtil.getEmployInfo().serviceType);
 
             view.onlineSuc();
-            XApp.getPreferencesEditor().putLong(Config.ONLINE_TIME, System.currentTimeMillis()).apply();
+            new CsEditor().putLong(Config.ONLINE_TIME, System.currentTimeMillis()).apply();
             uploadTime(2);
 
         })));
@@ -246,15 +259,15 @@ public class WorkPresenter implements WorkContract.Presenter {
         Observable<EmResult> observable = model.offline(driverId, EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, true,
                 true, emResult -> {
-            //一键报警  下线  //todo 一键报警
-//            CenterUtil centerUtil = new CenterUtil(context,Config.APP_KEY,
-//                    XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
-//                    XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
-//            centerUtil.driverDown(driverId,EmUtil.getEmployInfo().companyId,EmUtil.getEmployInfo().userName,EmUtil.getEmployInfo().realName,
-//                    EmUtil.getEmployInfo().phone,System.currentTimeMillis()/1000,EmUtil.getEmployInfo().serviceType);
+            //一键报警  下线
+            CenterUtil centerUtil = new CenterUtil(context, Config.APP_KEY,
+                    new CsSharedPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
+                    new CsSharedPreferences().getString(Config.SP_TOKEN, ""));
+            centerUtil.driverDown(driverId, EmUtil.getEmployInfo().companyId, EmUtil.getEmployInfo().userName, EmUtil.getEmployInfo().realName,
+                    EmUtil.getEmployInfo().phone, System.currentTimeMillis() / 1000, EmUtil.getEmployInfo().serviceType);
 
             view.offlineSuc();
-            XApp.getPreferencesEditor().putLong(Config.ONLINE_TIME, 0).apply();
+            new CsEditor().putLong(Config.ONLINE_TIME, 0).apply();
             uploadTime(1);
 
         })));
@@ -308,10 +321,6 @@ public class WorkPresenter implements WorkContract.Presenter {
         timeCounter.forceUpload(statues);
     }
 
-    @Override
-    public void onPause() {
-
-    }
 
     //表示司机业务
     private String employType;
@@ -326,7 +335,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                 Employ employ = result.getEmployInfo();
 
                 employType = employ.serviceType;
-                String udid = XApp.getMyPreferences().getString(Config.SP_UDID, "");
+                String udid = new CsSharedPreferences().getString(Config.SP_UDID, "");
                 if (StringUtils.isNotBlank(employ.deviceNo)
                         && StringUtils.isNotBlank(udid)) {
                     if (!employ.deviceNo.equals(udid)) {
@@ -336,7 +345,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                     }
                 }
                 employ.saveOrUpdate();
-                SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+                CsEditor editor =  new CsEditor();
                 editor.putLong(Config.SP_DRIVERID, employ.id);
                 editor.apply();
                 view.showDriverStatus();
@@ -357,9 +366,7 @@ public class WorkPresenter implements WorkContract.Presenter {
     }
 
     public void driverehicle(Employ employ) {
-        CommApiService api = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class);
-
-        Observable<VehicleResult> observable = api
+        Observable<VehicleResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .driverehicle()
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
@@ -447,7 +454,7 @@ public class WorkPresenter implements WorkContract.Presenter {
         if (null == employ) {
             return;
         }
-        Observable<AnnouncementResult> annObservable = model.loadAnn(employ.company_id);
+        Observable<AnnouncementResult> annObservable = model.loadAnn(employ.companyId);
         Observable<NotitfyResult> notObservable = model.loadNotice(employ.id);
 
         Observable.zip(annObservable, notObservable, (announcementResult, notitfyResult) -> {

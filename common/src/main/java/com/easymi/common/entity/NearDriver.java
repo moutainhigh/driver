@@ -1,14 +1,17 @@
 package com.easymi.common.entity;
 
 /**
- * Created by developerLzh on 2017/11/28 0028.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午5:00
+ * Description:
+ * History:
  */
-
 public class NearDriver {
     public long id;
     public String name;
     public String phone;
-    public long employ_company_id;
     public double distance;
     public double latitude;
     public double longitude;

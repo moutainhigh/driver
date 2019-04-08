@@ -22,6 +22,7 @@ import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
+import com.easymi.component.utils.CsEditor;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.widget.CusToolbar;
@@ -34,7 +35,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by developerLzh on 2017/11/6 0006.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: SetActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 设置界面
+ * History:
  */
 @Route(path = "/personal/SetActivity")
 public class SetActivity extends RxBaseActivity {
@@ -75,29 +81,32 @@ public class SetActivity extends RxBaseActivity {
 
     }
 
+    /**
+     * 初始化各个开关监听
+     */
     private void initSwitch() {
         voiceAble.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+            CsEditor editor = new CsEditor();
             editor.putBoolean(Config.SP_VOICE_ABLE, isChecked);
             editor.apply();
         });
         shakeAble.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+            CsEditor editor =  new CsEditor();
             editor.putBoolean(Config.SP_SHAKE_ABLE, isChecked);
             editor.apply();
         });
         alwaysOren.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+            CsEditor editor = new CsEditor();
             editor.putBoolean(Config.SP_ALWAYS_OREN, isChecked);
             editor.apply();
         });
         defaultNavi.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+            CsEditor editor = new CsEditor();
             editor.putBoolean(Config.SP_DEFAULT_NAVI, isChecked);
             editor.apply();
         });
         backRun.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+            CsEditor editor = new CsEditor();
             editor.putBoolean(Config.SP_PLAY_CLIENT_MUSIC, isChecked);
             editor.apply();
         });
@@ -114,40 +123,67 @@ public class SetActivity extends RxBaseActivity {
         cusToolbar.setTitle(R.string.person_set);
     }
 
+    /**
+     * 修改密码
+     * @param view
+     */
     public void changePsw(View view) {
         Intent intent = new Intent(this, ChangeActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * 选择本地语言
+     * @param view
+     */
     public void choiceLanguage(View view) {
         Intent intent = new Intent(this, LanguageActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * 跳转统计
+     * @param view
+     */
     public void toStats(View view) {
         Intent intent = new Intent(this, StatsActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * 关于我们
+     * @param view
+     */
     public void helpCenter(View view) {
-//        Intent intent = new Intent(SetActivity.this, HelpCenterActivity.class);
-//        startActivity(intent);
         Intent intent = new Intent(this, WebActivity.class);
         intent.putExtra("url", "http://h5.xiaokakj.com/#/protocol?articleName=driverHelp&appKey="+Config.APP_KEY);
         intent.putExtra("title", getString(R.string.set_about_us));
         startActivity(intent);
     }
 
+    /**
+     * 意见反馈
+     * @param view
+     */
     public void feedBack(View view) {
         Intent intent = new Intent(this, FeedbackActivity.class);
         startActivity(intent);
     }
 
+    /**
+     *
+     * 导航设置
+     * @param view
+     */
     public void naviPrefence(View view) {
         Intent intent = new Intent(this, NaviSetActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * 通知帮助
+     * @param view
+     */
     public void notifyHelp(View view) {
         Intent intent = new Intent();
         intent.setAction("android.intent.action.VIEW");
@@ -156,6 +192,10 @@ public class SetActivity extends RxBaseActivity {
         startActivity(intent);
     }
 
+    /**
+     * 联系我们
+     * @param view
+     */
     public void contractUs(View view) {
 //        Intent intent = new Intent(SetActivity.this, ArticleActivity.class);
 //        intent.putExtra("tag", "ContactUs");
@@ -165,6 +205,10 @@ public class SetActivity extends RxBaseActivity {
         PhoneUtil.call(SetActivity.this,"11111111");
     }
 
+    /**
+     * 关于我们
+     * @param view
+     */
     public void aboutUs(View view) {
         Intent intent = new Intent(this, WebActivity.class);
         intent.putExtra("url", "http://h5.xiaokakj.com/#/protocol?articleName=driverAboutUs&appKey="+Config.APP_KEY);
@@ -172,6 +216,10 @@ public class SetActivity extends RxBaseActivity {
         startActivity(intent);
     }
 
+    /**
+     * 退出登陆
+     * @param view
+     */
     public void logOut(View view) {
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.set_hint))
@@ -184,7 +232,9 @@ public class SetActivity extends RxBaseActivity {
         dialog.show();
     }
 
-    //注销
+    /**
+     * 注销接口
+     */
     private void doLogOut() {
         if (null != WorkPresenter.timeCounter) {
             WorkPresenter.timeCounter.forceUpload(-1);
@@ -205,7 +255,7 @@ public class SetActivity extends RxBaseActivity {
 
             @Override
             public void onError(int code) {
-                EmUtil.employLogout(SetActivity.this);
+
             }
         })));
     }

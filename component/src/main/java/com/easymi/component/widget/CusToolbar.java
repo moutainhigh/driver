@@ -12,7 +12,12 @@ import android.widget.TextView;
 import com.easymi.component.R;
 
 /**
- * Created by developerLzh on 2017/10/28 0028.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ *@Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class CusToolbar extends RelativeLayout {

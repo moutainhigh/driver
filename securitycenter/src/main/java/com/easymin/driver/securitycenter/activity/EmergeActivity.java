@@ -43,7 +43,7 @@ import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: EmergeActivity
- * Author: shine
+ * @Author: shine
  * Date: 2018/11/26 下午6:47
  * Description:
  * History:
@@ -255,7 +255,7 @@ public class EmergeActivity extends CheckPermissionsActivity {
                     showFirst();
                 }
             } else {
-                Toast.makeText(this, emResult.getMessage(), Toast.LENGTH_LONG);
+                ToastUtil.showMessage(this, emResult.getMessage(), Toast.LENGTH_LONG);
             }
         })));
     }
@@ -274,7 +274,7 @@ public class EmergeActivity extends CheckPermissionsActivity {
             if (emResult.getCode() == 1) {
                 getContactList();
             } else {
-                Toast.makeText(this, emResult.getMessage(), Toast.LENGTH_LONG);
+                ToastUtil.showMessage(this, emResult.getMessage(), Toast.LENGTH_LONG);
             }
         })));
     }

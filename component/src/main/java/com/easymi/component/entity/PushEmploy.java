@@ -1,12 +1,10 @@
 package com.easymi.component.entity;
 
 public class PushEmploy {
-//    public long id;
+
     public int status;
-//    public String real_name;//真实姓名
-//    public long company_id;
-//    public String phone;
-    public String child_type;//服务子类型
+    //服务子类型
+    public String child_type;
     //daijia,zhuanche
     public String business;
     //车型id

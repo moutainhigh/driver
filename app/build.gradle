@@ -6,15 +6,21 @@ android {
         applicationId "com.easymin.daijia.driver.zyziyunsjdaijia"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 9000
-        versionName "V6.1.0.0"
+        versionCode 9005
+        versionName "V6.1.0.5"
         multiDexEnabled true
-
+//        flavorDimensions "App" //同在App这个名字维度
         ndk {
             //只兼容下面的型号
-            abiFilters "armeabi", "armeabi-v7a"
+            abiFilters  "armeabi-v7a"
         }
+
+        manifestPlaceholders = [
+                //打包证书的md5值，该值在配置阶段会清除空格和‘:’,并反转
+                XK_MD5          : "B0:3A:DF:FE:43:9D:F5:82:22:BA:40:E2:06:A6:54:AF",
+        ]
     }
+
     signingConfigs {
         debug {
             keyAlias '资运司机端'
@@ -36,7 +42,9 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            buildConfigField "boolean", "LOG_DEBUG", "false" //不显示log
+            minifyEnabled true
+//            shrinkResources true
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -50,6 +58,45 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+
+//    //V6（系统）.prepare（环境）.20190330（日期）.driver（端）.01（序号）
+//    applicationVariants.all { variant ->
+//        variant.outputs.all {
+//            outputFileName = "V6.${variant.productFlavors[0].name}.${releaseDate()}.driver.${releaseTime()}.apk"
+//        }
+//    }
+//
+//    productFlavors {
+//        //预发环境
+//        prepare {
+//            dimension "App"//同在App这个名字维度
+//        }
+//        //局域网环境
+//        local {
+//            dimension "App"//同在App这个名字维度
+//        }
+//        //生产环境
+//        product {
+//            dimension "App"//同在App这个名字维
+//        }
+//    }
+}
+
+static def releaseTime() {
+    return new Date().format("HHmm")
+}
+
+static def releaseDate() {
+    return new Date().format("yyyyMMdd")
+}
+
+task handleMd5 {
+    String md5Str = project.android.defaultConfig.manifestPlaceholders.get("XK_MD5")
+    println "原始md5：" + md5Str
+    md5Str = md5Str.trim().replace(":", "")
+    project.android.defaultConfig.manifestPlaceholders.put("XK_MD5", md5Str.reverse())
+    println "修改后md5：" + project.android.defaultConfig.manifestPlaceholders.get("XK_MD5")
 }
 
 dependencies {
@@ -57,7 +104,6 @@ dependencies {
     implementation rootProject.ext.appcompat
     implementation rootProject.ext.design
     implementation project(path: ':personal')
-//    implementation project(path: ':daijia')
     implementation project(path: ':zhuanche')
     implementation project(path: ':daemon')
     implementation project(path: ':component')
@@ -68,4 +114,7 @@ dependencies {
     implementation project(path: ':passengerbus')
     implementation project(path: ':chartered')
     implementation project(path: ':rental')
+    implementation project(path: ':custombus')
+    implementation project(path: ':carpooling')
+    implementation project(path: ':official')
 }

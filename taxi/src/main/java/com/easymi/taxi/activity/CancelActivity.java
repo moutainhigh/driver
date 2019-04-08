@@ -14,7 +14,12 @@ import com.easymi.component.widget.CusToolbar;
 import com.easymi.taxi.R;
 
 /**
- * Created by developerLzh on 2017/11/22 0022.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: CancelActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class CancelActivity extends RxBaseActivity {
@@ -66,6 +71,9 @@ public class CancelActivity extends RxBaseActivity {
         checkBox5.setOnCheckedChangeListener(new MyCheckChange(5));
     }
 
+    /**
+     * 选择框监听
+     */
     class MyCheckChange implements CheckBox.OnCheckedChangeListener {
 
         int id;
@@ -99,6 +107,10 @@ public class CancelActivity extends RxBaseActivity {
         finish();
     }
 
+    /**
+     * 取消订单
+     * @param view
+     */
     public void cancel_order(View view) {
         Intent intent = new Intent();
         String reason = "";

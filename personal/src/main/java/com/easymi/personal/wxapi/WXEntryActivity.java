@@ -14,8 +14,19 @@ import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
+/**
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: WXEntryActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
+ */
+
 public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHandler {
-    // IWXAPI 是第三方app和微信通信的openapi接口
+    /**
+     * IWXAPI 是第三方app和微信通信的openapi接口
+     */
     private IWXAPI api;
 
     @Override

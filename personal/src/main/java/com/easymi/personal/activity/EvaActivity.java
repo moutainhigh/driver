@@ -29,7 +29,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by developerLzh on 2017/11/15 0015.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: EvaActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 乘客评价
+ * History:
  */
 
 public class EvaActivity extends RxBaseActivity {
@@ -77,7 +82,6 @@ public class EvaActivity extends RxBaseActivity {
         star_four_number = findViewById(R.id.star_four_number);
         star_five_number = findViewById(R.id.star_five_number);
 
-//        getEva();
         getStar();
         getTag();
     }
@@ -89,60 +93,15 @@ public class EvaActivity extends RxBaseActivity {
         cusToolbar.setLeftBack(view -> onBackPressed());
     }
 
-    @SuppressLint("SetTextI18n")
-    private void getEva() {
-//        Employ employ = EmUtil.getEmployInfo();
-//
-//        McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
-//
-//        Observable<EvaResult> observable = api
-//                .driverRate(employ.id, EmUtil.getAppKey())
-//                .filter(new HttpResultFunc<>())
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread());
-//
-//        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
-//                false, result -> {
-//            if (null != result.driverRate) {
-//                rate_text.setText(String.valueOf(result.driverRate.rate == 0 ? 5 : result.driverRate.rate));
-//                ratingBar.setStarMark(result.driverRate.rate == 0 ? 5 : result.driverRate.rate);
-//                total_number.setText(String.valueOf(result.driverRate.total_finish_count));
-//
-//                star_one_number.setText(String.valueOf(result.driverRate.star_one) + getString(R.string.number));
-//                star_two_number.setText(String.valueOf(result.driverRate.star_two) + getString(R.string.number));
-//                star_three_number.setText(String.valueOf(result.driverRate.star_three) + getString(R.string.number));
-//                star_four_number.setText(String.valueOf(result.driverRate.star_four) + getString(R.string.number));
-//                star_five_number.setText(String.valueOf(result.driverRate.star_five) + getString(R.string.number));
-//
-//                double onePercent = (double) result.driverRate.star_one / (double) result.driverRate.total_finish_count;
-//                one_star_progress.setProgress((int) (onePercent * 100));
-//
-//                double twoPercent = (double) result.driverRate.star_two / (double) result.driverRate.total_finish_count;
-//                two_star_progress.setProgress((int) (twoPercent * 100));
-//
-//                double threePercent = (double) result.driverRate.star_three / (double) result.driverRate.total_finish_count;
-//                three_star_progress.setProgress((int) (threePercent * 100));
-//
-//                double fourPercent = (double) result.driverRate.star_four / (double) result.driverRate.total_finish_count;
-//                four_star_progress.setProgress((int) (fourPercent * 100));
-//
-//                double fivePercent = (double) result.driverRate.star_five / (double) result.driverRate.total_finish_count;
-//                five_star_progress.setProgress((int) (fivePercent * 100));
-//            }
-//            if (null != result.rateInfos && result.rateInfos.size() != 0) {
-//                for (RateInfo rateInfo : result.rateInfos) {
-//                    tagContainerLayout.addTag(rateInfo.rate + "  " + rateInfo.count);
-//                }
-//            }
-//        })));
-    }
 
     @Override
     public boolean isEnableSwipe() {
         return true;
     }
 
-
+    /**
+     * 获取星级
+     */
     public void getStar() {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
@@ -155,8 +114,6 @@ public class EvaActivity extends RxBaseActivity {
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
                 false, result -> {
             if (null != result.data) {
-//                rate_text.setText(String.valueOf(result.data.rate == 0 ? 5 : result.data.rate));
-//                ratingBar.setStarMark(result.data.rate == 0 ? 5 : result.data.rate);
 
                 rate_text.setText(String.valueOf(EmUtil.getEmployInfo().star == 0 ? 5 : EmUtil.getEmployInfo().star));
                 ratingBar.setStarMark(EmUtil.getEmployInfo().star == 0 ? 5 : (float) EmUtil.getEmployInfo().star);
@@ -187,6 +144,9 @@ public class EvaActivity extends RxBaseActivity {
         })));
     }
 
+    /**
+     * 获取标签
+     */
     public void getTag() {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 

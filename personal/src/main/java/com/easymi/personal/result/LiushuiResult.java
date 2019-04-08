@@ -6,11 +6,19 @@ import com.easymi.personal.entity.Detail;
 import java.util.List;
 
 /**
- * Created by developerLzh on 2017/12/1 0001.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ *@Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
+
 public class LiushuiResult extends EmResult {
-//    public List<Detail> driverPreSaveSerials;
+    /**
+     * 流水数据
+     */
     public List<Detail> data;
     public int total;
 }

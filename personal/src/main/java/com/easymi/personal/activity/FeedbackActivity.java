@@ -24,7 +24,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by developerLzh on 2017/11/11 0011.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FeedbackActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 意见反馈
+ * History:
  */
 
 public class FeedbackActivity extends RxBaseActivity {
@@ -76,13 +81,16 @@ public class FeedbackActivity extends RxBaseActivity {
         });
     }
 
+    /**
+     * 意见反馈申请
+     */
     public void apply() {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
         Observable<EmResult> observable = api
                 .feedback(EmUtil.getEmployId(),
                         EmUtil.getEmployInfo().userName,
-                        EmUtil.getEmployInfo().company_id,
+                        EmUtil.getEmployInfo().companyId,
                         EmUtil.getAppKey(),
                         editText.getText().toString(),
                         2,

@@ -17,10 +17,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.easymi.common.R;
-import com.easymi.common.util.CommonUtil;
 import com.easymi.component.app.XApp;
 import com.easymi.component.utils.EmUtil;
 
+/**
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
+ */
 public class RegisterDialog extends DialogFragment {
 
     public static RegisterDialog newInstance(String title, String content, String btnTxt, boolean showClose) {
@@ -98,11 +105,18 @@ public class RegisterDialog extends DialogFragment {
         return view;
     }
 
+    /**
+     * 显示弹窗
+     * @return
+     */
     public boolean isShow() {
         return getDialog() != null && getDialog().isShowing();
     }
 
     public interface OnClickListener {
+        /**
+         * 点击事件监听
+         */
         void onClick();
     }
 

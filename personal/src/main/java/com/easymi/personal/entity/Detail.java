@@ -3,16 +3,20 @@ package com.easymi.personal.entity;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by developerLzh on 2017/11/11 0011.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: Detail
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class Detail {
     @SerializedName("time")
     public Long time;
 
-
     //driver_recharge 司机充值
-    //PAY_DRIVER_BALANCE 余额支付
+    //PAY_DRIVER_BALANCE 司机代付
     //ADMIN_DRIVER_RECHARGE 后台充值
     //ALIPAY_DRIVER_RECHARGE  支付宝充值
     //WECHAT_DRIVER_RECHARGE  微信充值
@@ -20,6 +24,7 @@ public class Detail {
     //DRIVER_PUT_FORWARD  提现申請
     //REJECT_PUT_FORWARD 提现拒絕
     //ACCEPT_PUT_FORWARD 提现同意
+    //PAY_PASSENGER_BALANCE 客户余额支付
     @SerializedName("type")
     public String purpose;
 

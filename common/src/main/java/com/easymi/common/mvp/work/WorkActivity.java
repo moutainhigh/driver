@@ -2,6 +2,7 @@ package com.easymi.common.mvp.work;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,10 +34,10 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
+import com.easymi.common.CommApiService;
 import com.easymi.common.R;
 import com.easymi.common.activity.CreateActivity;
 import com.easymi.common.activity.ModelSetActivity;
-import com.easymi.common.adapter.CityLineAdapter;
 import com.easymi.common.adapter.OrderAdapter;
 import com.easymi.common.entity.AnnAndNotice;
 import com.easymi.common.entity.BuildPushData;
@@ -51,7 +53,7 @@ import com.easymi.common.receiver.EmployStatusChangeReceiver;
 import com.easymi.common.receiver.NoticeReceiver;
 import com.easymi.common.receiver.OrderRefreshReceiver;
 import com.easymi.common.register.InfoActivity;
-import com.easymi.common.util.CommonUtil;
+import com.easymi.common.result.SettingResult;
 import com.easymi.common.widget.NearInfoWindowAdapter;
 import com.easymi.common.widget.RegisterDialog;
 import com.easymi.component.Config;
@@ -60,14 +62,22 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
+import com.easymi.component.entity.TaxiSetting;
+import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
+import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HttpResultFunc;
+import com.easymi.component.network.MySubscriber;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.AesUtil;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MapUtil;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
+import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.component.widget.pinned.PinnedHeaderDecoration;
@@ -83,9 +93,18 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 
 /**
- * Created by developerLzh on 2017/11/3 0003.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: hufeng
+ * Date: 2018/9/24 下午5:00
+ * Description: 工作台主界面
+ * History:
  */
 
 @Route(path = "/common/WorkActivity")
@@ -94,59 +113,59 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         EmployStatusChangeReceiver.OnStatusChangeListener,
         AMap.OnMarkerClickListener, AMap.OnMapClickListener,
         NoticeReceiver.OnReceiveNotice,
-        AnnReceiver.OnReceiveAnn, OrderRefreshReceiver.OnRefreshOrderListener {
+        AnnReceiver.OnReceiveAnn,
+        OrderRefreshReceiver.OnRefreshOrderListener {
 
     LinearLayout bottomBar;
-
     MapView mapView;
-
     RippleBackground rippleBackground;
-
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
-
     CusToolbar toolbar;
-
     LinearLayout createOrder;
-
     ImageView pullIcon;
     LinearLayout peek_con;
-
     ImageView refreshImg;
     FrameLayout loadingFrame;
     ImageView loadingImg;
-
     LinearLayout offlineCon;
-
     LoadingButton onLineBtn;
-
     RelativeLayout listenOrderCon;
-
     RelativeLayout notifityCon;
     TextView notifityContent;
     ImageView notifityClose;
-
     TextView currentPlace;
-
     ExpandableLayout expandableLayout;
-
     TextView finishNo;
     TextView onLineHour;
     TextView onLineMonute;
     TextView todayIncome;
-
     TextView noOrderText;
-
     LinearLayout bottomBtnCon;
-
     LinearLayout guideFrame;
     ImageView gotoSet;
+    Button btn_create;
 
+    /**
+     * 取消订单
+     */
     private CancelOrderReceiver cancelOrderReceiver;
+    /**
+     * 司机状态
+     */
     private EmployStatusChangeReceiver employStatusChangeReceiver;
 
+    /**
+     * 通知
+     */
     private NoticeReceiver noticeReceiver;
+    /**
+     * 公告
+     */
     private AnnReceiver annReceiver;
+    /**
+     * 刷新订单
+     */
     private OrderRefreshReceiver orderRefreshReceiver;
 
     private WorkPresenter presenter;
@@ -167,7 +186,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
 
         findById();
 
-//        initGuide();
         initMap();
         initNotifity();
 
@@ -186,7 +204,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
             onLineBtn.setStatus(LoadingButton.STATUS_LOADING);
             presenter.online(onLineBtn);
         });
-//        offlineCon.setOnClickListener(v -> presenter.offline());
         listenOrderCon.setOnClickListener(v -> {
             presenter.offline();
         });
@@ -245,28 +262,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         }
     }
 
-    private void initGuide() {
-        boolean showGuide = XApp.getMyPreferences().getBoolean(Config.SP_SHOW_GUIDE, true);
-        if (showGuide) {
-            guideFrame.setVisibility(View.VISIBLE);
-            gotoSet.setOnClickListener(v -> {
-                guideFrame.setVisibility(View.GONE);
-                XApp.getPreferencesEditor().putBoolean(Config.SP_SHOW_GUIDE, false).apply();
-                try {
-                    Intent intent = new Intent();
-                    intent.setAction("android.intent.action.VIEW");
-                    Uri content_url = Uri.parse("http://help.xiaokayun.cn");
-                    intent.setData(content_url);
-                    startActivity(intent);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            });
-        } else {
-            guideFrame.setVisibility(View.GONE);
-        }
-    }
-
     private void initNotifity() {
         notifityClose.setOnClickListener(v -> notifityCon.setVisibility(View.GONE));
     }
@@ -311,8 +306,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         gotoSet = findViewById(R.id.guide_go_to_set);
 
         bottomBtnCon = findViewById(R.id.bottom_btn_con);
+        btn_create = findViewById(R.id.btn_create);
 
-        Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1));
+        Employ employ = Employ.findByID(new CsSharedPreferences().getLong(Config.SP_DRIVERID, -1));
         Log.e("employ", "" + employ);
     }
 
@@ -326,15 +322,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         });
         toolbar.setTitle(R.string.work_title);
         toolbar.setRightIcon(R.drawable.ic_more_icon, view -> {
-
             ARouter.getInstance()
                     .build("/personal/MoreActivity")
                     .navigation();
-
-//            CrashReport.testJavaCrash();
-//            ARouter.getInstance()
-//                    .build("/passengerbus/BcFlowActivity")
-//                    .navigation();
         });
     }
 
@@ -353,18 +343,20 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         swipeRefreshLayout.setRefreshing(true);
     }
 
-    //全业务订单列表
+    /**
+     * 全业务订单列表
+     */
     List<MultipleOrder> orders = new ArrayList<>();
 
     @Override
     public void showOrders(List<MultipleOrder> MultipleOrders) {
         orders.clear();
-
         if (MultipleOrders == null || MultipleOrders.size() == 0) {
             showEmpty(0);
         } else {
             orders.addAll(MultipleOrders);
             hideEmpty();
+            recyclerView.setVisibility(View.VISIBLE);
         }
 
         adapter = new OrderAdapter(orders, this);
@@ -376,11 +368,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         pinnedHeaderDecoration.registerTypePinnedHeader(MultipleOrder.ITEM_DESC, (parent, adapterPosition) -> true);
         recyclerView.addItemDecoration(pinnedHeaderDecoration);
 
-//        if (orders.size() == 0) {
-//            setHeaderView(recyclerView);
-//        } else {
-//            setHeaderView(null);
-//        }
+        getSetting();
     }
 
     private void setHeaderView(RecyclerView view) {
@@ -429,8 +417,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         MqttManager.getInstance().pushLocNoLimit(new BuildPushData(EmUtil.getLastLoc()));
         presenter.indexOrders();
         swipeRefreshLayout.setRefreshing(true);
-        hideEmpty();
         recyclerView.setVisibility(View.VISIBLE);
+        hideEmpty();
         presenter.loadEmploy(EmUtil.getEmployId());
     }
 
@@ -441,8 +429,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         rippleBackground.stopRippleAnimation();
         bottomBtnCon.setVisibility(View.VISIBLE);
         swipeRefreshLayout.setRefreshing(false);
-        showEmpty(0);
         recyclerView.setVisibility(View.GONE);
+        showEmpty(0);
         presenter.loadEmploy(EmUtil.getEmployId());
     }
 
@@ -450,7 +438,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     public void showNotify(AnnAndNotice notifity) {
         notifityCon.setVisibility(View.VISIBLE);
         notifityContent.setText(getString(R.string.new_notify) + notifity.noticeContent);
-        XApp.getInstance().syntheticVoice(getString(R.string.new_notify) + notifity.noticeContent, true);
+//        XApp.getInstance().syntheticVoice(getString(R.string.new_notify) + notifity.noticeContent, true);
         notifityCon.setOnClickListener(v -> {
             notifityCon.setVisibility(View.GONE);
             ARouter.getInstance().build("/personal/NotifityActivity")
@@ -469,9 +457,10 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         markers.clear();
         this.drivers = drivers;
         MarkerOptions options = new MarkerOptions();
-        options.draggable(false);//设置Marker可拖动
+        //设置Marker可拖动
+        options.draggable(false);
         // 将Marker设置为贴地显示，可以双指下拉地图查看效果
-        options.setFlat(true);//设置marker平贴地图效果
+        options.setFlat(true);
         List<LatLng> latLngs = new ArrayList<>();
 
 
@@ -499,7 +488,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     public void showAnn(AnnAndNotice announcement) {
         notifityCon.setVisibility(View.VISIBLE);
         notifityContent.setText(getString(R.string.new_ann) + announcement.annMessage);
-//        XApp.getInstance().syntheticVoice(getString(R.string.new_ann) + announcement.message, true);
         notifityCon.setOnClickListener(v -> {
             notifityCon.setVisibility(View.GONE);
             ARouter.getInstance().build("/personal/AnnouncementActivity")
@@ -544,6 +532,14 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         rippleBackground.stopRippleAnimation();
         bottomBtnCon.setVisibility(View.VISIBLE);
         swipeRefreshLayout.setRefreshing(false);
+        /**
+         * 专车补单在下线状态
+         */
+        if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)){
+            btn_create.setVisibility(View.VISIBLE);
+        }else {
+            btn_create.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -554,15 +550,17 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     @Override
     public void showDriverStatus() {
         Employ employ = EmUtil.getEmployInfo();
-        if (String.valueOf(employ.status).equals(EmployStatus.FROZEN)) {
+        if (String.valueOf(employ.status).equals(EmployStatus.FROZEN) || employ.status == 1) {
             EmUtil.employLogout(this);
-        } else if (String.valueOf(employ.status).equals(EmployStatus.ONLINE) || employ.status == 1 || employ.status == 0) {
+        } else if (String.valueOf(employ.status).equals(EmployStatus.ONLINE) ) {
             showOffline();//非听单状态
             presenter.initDaemon();
         } else {
             showOnline();//听单状态
-            presenter.indexOrders();
-            presenter.initDaemon();
+            if (presenter !=null){
+                presenter.indexOrders();
+                presenter.initDaemon();
+            }
         }
     }
 
@@ -621,14 +619,16 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     @Override
     protected void onResume() {
         super.onResume();
+        mapView.onResume();
         isFront = true;
-        boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
+        boolean isLogin = new CsSharedPreferences().getBoolean(Config.SP_ISLOGIN, false);
         if (!isLogin) {
-            ARouter.getInstance().build("/personal/LoginActivity")/*.withFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)*/.navigation();
+            ARouter.getInstance().build("/personal/LoginActivity").navigation();
             finish();
         }
-        mapView.onResume();
-        presenter.loadDataOnResume();
+        if (presenter!=null){
+            presenter.loadDataOnResume();
+        }
         MqttManager.getInstance().pushLocNoLimit(new BuildPushData(EmUtil.getLastLoc()));
     }
 
@@ -642,7 +642,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     protected void onPause() {
         super.onPause();
         isFront = false;
-        presenter.onPause();
         mapView.onPause();
     }
 
@@ -717,6 +716,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
 
     private EmLoc location;
 
+    /**
+     * 当前司机位置marker
+     */
     private Marker myLocMarker;
 
     @Override
@@ -827,13 +829,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     }
 
     public void modelSet(View view) {
-        Intent intent = new Intent(WorkActivity.this, ModelSetActivity.class);
+        Intent intent = new Intent(WorkActivity.this, CreateActivity.class);
+        intent.putExtra("type",EmUtil.getEmployInfo().serviceType);
         startActivity(intent);
-    }
-
-    public void tongji(View view) {
-        ARouter.getInstance().build("/personal/StatsActivity")
-                .navigation();
     }
 
     private View getMarkerView(NearDriver driver) {
@@ -855,5 +853,44 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     public void onRefreshOrder() {
         swipeRefreshLayout.setRefreshing(true);
         presenter.indexOrders();
+    }
+
+    /**
+     * 获取配置信息
+     *
+     */
+    private void getSetting() {
+        Observable<SettingResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .getAppSetting()
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        observable.subscribe(new MySubscriber<>(this, false, false, settingResult -> {
+            if (settingResult.data != null) {
+                for (ZCSetting sub : settingResult.data) {
+                    if (sub.serviceType.equals(Config.ZHUANCHE)) {
+                        ZCSetting.deleteAll();
+                        sub.save();
+                    } else if (sub.serviceType.equals(Config.TAXI)) {
+                        TaxiSetting.deleteAll();
+                        TaxiSetting taxiSetting = new TaxiSetting();
+                        taxiSetting.isPaid = sub.isPaid;
+                        taxiSetting.isExpenses = sub.isExpenses;
+                        taxiSetting.canCancelOrder = sub.canCancelOrder;
+                        taxiSetting.isAddPrice = sub.isAddPrice;
+                        taxiSetting.employChangePrice = sub.employChangePrice;
+                        taxiSetting.employChangeOrder = sub.employChangeOrder;
+                        taxiSetting.driverRepLowBalance = sub.driverRepLowBalance;
+                        taxiSetting.passengerDistance = sub.passengerDistance;
+                        taxiSetting.version = sub.version;
+                        taxiSetting.grabOrder = sub.grabOrder;
+                        taxiSetting.distributeOrder = sub.distributeOrder;
+                        taxiSetting.serviceType = sub.serviceType;
+                        taxiSetting.save();
+                    }
+                }
+            }
+        }));
     }
 }

@@ -13,7 +13,12 @@ import com.easymin.rental.R;
 
 
 /**
- * Created by developerLzh on 2017/12/25 0025.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ *@Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class LeftWindowAdapter implements AMap.InfoWindowAdapter {
@@ -28,7 +33,6 @@ public class LeftWindowAdapter implements AMap.InfoWindowAdapter {
 
     @Override
     public View getInfoWindow(Marker marker) {
-
         return null;
     }
 

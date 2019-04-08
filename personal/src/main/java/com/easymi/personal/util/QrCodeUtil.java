@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.easymi.component.utils.ToastUtil;
 import com.easymi.personal.R;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -22,7 +23,12 @@ import java.io.IOException;
 import java.util.Hashtable;
 
 /**
- * Created by liuzihao on 2018/2/7.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:QrCodeUtil
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class QrCodeUtil {
@@ -30,6 +36,13 @@ public class QrCodeUtil {
     public static final String QR_NAME = "v5DriverCode.png";
     public static final String QR_FULL_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/EmDjTemp/" + QR_NAME;
 
+    /**
+     * 创建二维码
+     * @param url
+     * @param QR_WIDTH
+     * @param QR_HEIGHT
+     * @return
+     */
     public static Bitmap createQRImage(String url, int QR_WIDTH, int QR_HEIGHT) {
         try {
             //判断URL合法性
@@ -70,7 +83,7 @@ public class QrCodeUtil {
         Log.e("saveBitmap", "保存图片");
         if (!hasSdcard()) {
             //如果存在存储卡，将数据照片保存到本地
-            Toast.makeText(context, "未找到存储卡", Toast.LENGTH_SHORT).show();
+            ToastUtil.showMessage(context, "未找到存储卡", Toast.LENGTH_SHORT);
             return;
         }
 
@@ -97,17 +110,12 @@ public class QrCodeUtil {
         }
     }
 
+    /**
+     * sd卡是否存在
+     * @return
+     */
     public static boolean hasSdcard() {
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
-    }
-
-    public static boolean qrCodeExist() {
-        File file = new File(QR_FULL_PATH);
-        if (file.exists()) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public static byte[] bmpToByteArray(final Bitmap bmp, final boolean needRecycle) {

@@ -13,11 +13,14 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.easymi.common.R;
 import com.easymi.common.activity.BaoxiaoActivity;
 import com.easymi.common.activity.LiushuiActivity;
+import com.easymi.common.mvp.order.OrderDetailActivity;
 import com.easymi.common.util.ZXStatus2Str;
 import com.easymi.common.util.DJStatus2Str;
 import com.easymi.component.BusOrderStatus;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
+import com.easymi.component.GWOrderStatus;
+import com.easymi.component.PCOrderStatus;
 import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.utils.TimeUtil;
@@ -26,13 +29,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2017/11/14.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> {
 
-//    private final boolean canBaoxiaoDJ;
-//    private final boolean canBaoxiaoZC;
     private Context context;
 
     private List<BaseOrder> baseOrders;
@@ -40,10 +46,12 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
     public LiuShuiAdapter(Context context) {
         this.context = context;
         baseOrders = new ArrayList<>();
-//        canBaoxiaoDJ = TaxiSetting.findOne().isExpenses == 1;
-//        canBaoxiaoZC = ZCSetting.findOne().isExpenses == 1;
     }
 
+    /**
+     * 设置数据
+     * @param baseOrders
+     */
     public void setBaseOrders(List<BaseOrder> baseOrders) {
         this.baseOrders = baseOrders;
         notifyDataSetChanged();
@@ -77,7 +85,13 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
             holder.orderStatus.setText(DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status));
         }else if (baseOrder.serviceType.equals(Config.COUNTRY)){
             typeStr = context.getResources().getString(R.string.create_bus_country);
-            holder.orderStatus.setText(BusOrderStatus.status2Str(baseOrder.status));
+            holder.orderStatus.setText(BusOrderStatus.orderStatus2Str(baseOrder.status));
+        }else if (baseOrder.serviceType.equals(Config.CARPOOL)){
+            typeStr = context.getResources().getString(R.string.create_carpool);
+            holder.orderStatus.setText(PCOrderStatus.status2Str(baseOrder.status));
+        }else if(baseOrder.serviceType.equals(Config.GOV)){
+            typeStr = context.getResources().getString(R.string.create_gov);
+            holder.orderStatus.setText(GWOrderStatus.status2Str(baseOrder.status));
         }
         holder.orderType.setText(typeStr);
         holder.orderEndPlace.setText(baseOrder.destination);

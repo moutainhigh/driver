@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">carpooling</string>
+
+    <string name="canceled_order">当前订单已被取消:)</string>
+    <string name="backed_order">当前订单已被收回:)</string>
+
+    <string name="left">剩余</string>
+    <string name="meter">米</string>
+    <string name="about_">大约</string>
+    <string name="hour_">时</string>
+    <string name="minute_">分钟</string>
+
+    <string name="pay_money">支付</string>
+
+    <string name="finished_order">该订单已完成支付</string>
+
+    <string name="user_phone">使用人</string>
+    <string name="passenger_phone">下单人</string>
+
+    <string name="middle_wait_text">已出发，中途等待乘客</string>
+
+    <string name="arrive_start_wait_text">已到达乘客起点，正等候乘客上车</string>
+
+    <string name="to_start_about">去乘客起点约</string>
+    <string name="please_start_at">请在</string>
+
+    <string name="no_car">暂无车辆，不能创建专车订单，请联系管理员</string>
+
+    <string name="wait_consumer">等待乘客</string>
+    <string name="change_sequence">修改顺序</string>
+    <string name="look_rule">查看规划</string>
+    <string name="km">公里</string>
+</resources>

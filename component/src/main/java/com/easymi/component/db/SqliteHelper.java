@@ -16,7 +16,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "data.db";
 
-    private static final int VERSION = 72;
+    private static final int VERSION = 75;
 
     private StringBuffer sqlBuf;
 
@@ -27,7 +27,8 @@ public class SqliteHelper extends SQLiteOpenHelper {
     private Context context;
 
     private SqliteHelper(Context context) {
-        super(context, DB_NAME, null, VERSION);    //创建一个数据库
+        super(context, DB_NAME, null, VERSION);
+        //创建一个数据库
         sqlBuf = new StringBuffer();
         this.context = context;
     }
@@ -74,6 +75,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
         createOrderCustomer(db);
 
         createBusStation(db);
+        createCPOrderCustomer(db);
     }
 
     @Override
@@ -101,6 +103,43 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
         db.execSQL("DROP TABLE IF EXISTS " + "t_bus_order_station");
         createBusStation(db);
+
+        db.execSQL("DROP TABLE IF EXISTS " + "t_cp_order_customer");
+        createCPOrderCustomer(db);
+    }
+
+    private void createCPOrderCustomer(SQLiteDatabase db) {
+        sqlBuf.append("CREATE TABLE ").append("t_cp_order_customer").append(" (")
+                .append("id").append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
+                .append("orderId").append(" ").append("LONG").append(",")
+                .append("bookTime").append(" ").append("LONG").append(",")
+                .append("passengerId").append(" ").append("LONG").append(",")
+                .append("orderType").append(" ").append("TEXT").append(",")
+                .append("passengerName").append(" ").append("TEXT").append(",")
+                .append("passengerPhone").append(" ").append("TEXT").append(",")
+                .append("avatar").append(" ").append("TEXT").append(",")
+                .append("startAddr").append(" ").append("TEXT").append(",")
+                .append("endAddr").append(" ").append("TEXT").append(",")
+                .append("startLat").append(" ").append("DOUBLE").append(",")
+                .append("startLng").append(" ").append("DOUBLE").append(",")
+                .append("endLat").append(" ").append("DOUBLE").append(",")
+                .append("endLng").append(" ").append("DOUBLE").append(",")
+                .append("acceptSequence").append(" ").append("INTEGER").append(",")
+                .append("sendSequence").append(" ").append("INTEGER").append(",")
+                .append("num").append(" ").append("INTEGER").append(",")
+                .append("customeStatus").append(" ").append("INTEGER").append(",")
+                .append("created").append(" ").append("LONG").append(",")
+                .append("lineName").append(" ").append("TEXT").append(",")
+                .append("lineType").append(" ").append("INTEGER").append(",")
+                .append("ticketNumber").append(" ").append("INTEGER").append(",")
+                .append("timeSlot").append(" ").append("TEXT").append(",")
+                .append("status").append(" ").append("INTEGER").append(",")
+                .append("scheduleId").append(" ").append("LONG").append(",")
+                .append("waitMinute").append(" ").append("INTEGER").append(",")
+
+                .append("subStatus").append(" ").append("INTEGER")
+                .append(");");
+        execCreateTableSQL(db);
     }
 
     private void createDriverInfoTable(SQLiteDatabase db) {
@@ -111,14 +150,12 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("name").append(" ").append("TEXT").append(",")
                 .append("real_name").append(" ").append("TEXT").append(",")
                 .append("phone").append(" ").append("TEXT").append(",")
-//                .append("sex").append(" ").append("TEXT").append(",")
                 .append("company_name").append(" ").append("TEXT").append(",")
                 .append("portrait_path").append(" ").append("TEXT").append(",")
                 .append("score").append(" ").append("DOUBLE").append(",")
 
                 .append("balance").append(" ").append("DOUBLE").append(",")
                 .append("service_type").append(" ").append("TEXT").append(",")
-                .append("child_type").append(" ").append("TEXT").append(",")
                 .append("bank_name").append(" ").append("TEXT").append(",")
                 .append("bank_card_no").append(" ").append("TEXT").append(",")
                 .append("cash_person_name").append(" ").append("TEXT").append(",")
@@ -126,15 +163,12 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("company_phone").append(" ").append("TEXT").append(",")
                 .append("auditType").append(" ").append("INTEGER").append(",")
 
-//              .append("id").append(" ").append("LONG").append(",")
                 .append("userName").append(" ").append("TEXT").append(",")
-//              .append("password").append(" ").append("TEXT").append(",")
                 .append("nickName").append(" ").append("TEXT").append(",")
                 .append("realName").append(" ").append("TEXT").append(",")
                 .append("idCard").append(" ").append("TEXT").append(",")
                 .append("sex").append(" ").append("INTEGER").append(",")
                 .append("birthDate").append(" ").append("INTEGER").append(",")
-//              .append("phone").append(" ").append("TEXT").append(",")
                 .append("portraitPath").append(" ").append("TEXT").append(",")
                 .append("serviceType").append(" ").append("TEXT").append(",")
                 .append("emergency").append(" ").append("TEXT").append(",")
@@ -144,7 +178,6 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("driveLicenceEnd").append(" ").append("INTEGER").append(",")
                 .append("level").append(" ").append("LONG").append(",")
                 .append("dutyTime").append(" ").append("INTEGER").append(",")
-//              .append("status").append(" ").append("TEXT").append(",")
                 .append("introducer").append(" ").append("TEXT").append(",")
                 .append("companyId").append(" ").append("LONG").append(",")
                 .append("created").append(" ").append("LONG").append(",")
@@ -187,9 +220,8 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("refreshToken").append(" ").append("TEXT").append(",")
                 .append("modelId").append(" ").append("LONG").append(",")
                 .append("taxiModelId").append(" ").append("LONG").append(",")
-                .append("registerStatus").append(" ").append("INTEGER").append(",")
+                .append("registerStatus").append(" ").append("INTEGER")
 
-                .append("company_id").append(" ").append("LONG")
                 .append(");");
         execCreateTableSQL(db);
     }
@@ -231,6 +263,8 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("nightTime").append(" ").append("INTEGER").append(",")
                 .append("nightMile").append(" ").append("DOUBLE").append(",")
                 .append("nightTimePrice").append(" ").append("DOUBLE").append(",")
+
+                .append("stageArrays").append(" ").append("TEXT").append(",")
 
                 .append("orderStatus").append(" ").append("INTEGER")
                 .append(");");
@@ -282,6 +316,11 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("grabOrder").append(" ").append("INTEGER").append(",")
                 .append("distributeOrder").append(" ").append("INTEGER").append(",")
                 .append("serviceType").append(" ").append("TEXT").append(",")
+
+                .append("unStartCancel").append(" ").append("INTEGER").append(",")
+                .append("goToCancel").append(" ").append("INTEGER").append(",")
+                .append("arriveCancel").append(" ").append("INTEGER").append(",")
+                .append("arriveTime").append(" ").append("LONG").append(",")
 
                 .append("employChangeOrder").append(" ").append("employChangeOrder")
                 .append(");");

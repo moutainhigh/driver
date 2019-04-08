@@ -22,20 +22,25 @@ import com.easymi.component.utils.ToastUtil;
 import com.easymi.taxi.R;
 
 /**
- * Created by liuzihao on 2018/2/12.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:RefuseOrderDialog
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 拒单弹窗
+ * History:
  */
-
 public class RefuseOrderDialog extends Dialog {
 
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        getWindow().setGravity(Gravity.CENTER); //
+        getWindow().setGravity(Gravity.CENTER);
 
         WindowManager m = getWindow().getWindowManager();
         Display d = m.getDefaultDisplay();
         WindowManager.LayoutParams p = getWindow().getAttributes();
-        p.width = d.getWidth(); //设置dialog的宽度为当前手机屏幕的宽度
+        //设置dialog的宽度为当前手机屏幕的宽度
+        p.width = d.getWidth();
         getWindow().setAttributes(p);
     }
 
@@ -51,6 +56,9 @@ public class RefuseOrderDialog extends Dialog {
         super(context, cancelable, cancelListener);
     }
 
+    /**
+     * 构建弹窗
+     */
     public static class Builder {
 
         private Context context;
@@ -76,6 +84,10 @@ public class RefuseOrderDialog extends Dialog {
             this.context = context;
         }
 
+        /**
+         * 开始创建
+         * @return
+         */
         public RefuseOrderDialog create() {
             dialog = new RefuseOrderDialog(context, R.style.Dialog);
             View view = LayoutInflater.from(context).inflate(R.layout.taxi_refuse_dialog, null, true);
@@ -151,14 +163,20 @@ public class RefuseOrderDialog extends Dialog {
             public void onClick(View view) {
                 resetAllCheck();
                 checkBox.setChecked(true);
-//                edit_reason.clearFocus();
                 reason = checkBox.getText().toString();
 //                PhoneUtil.hideKeyboard((Activity) context);
             }
         }
     }
 
+    /**
+     * 将拒绝理由传递给对应activity
+     */
     public interface OnApplyClick {
+        /**
+         * 提交拒绝
+         * @param reason
+         */
         void onApplyClick(String reason);
     }
 

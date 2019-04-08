@@ -8,10 +8,19 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 /**
- * Created by developerLzh on 2017/12/1 0001.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ *@Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
+
 public class TixianResult extends EmResult {
+    /**
+     * 提现记录
+     */
     @SerializedName("data")
     public List<TixianRecord> tixianRecords;
     public int total;

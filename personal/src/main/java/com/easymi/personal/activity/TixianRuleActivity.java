@@ -22,13 +22,24 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by developerLzh on 2017/11/11 0011.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: TixianRuleActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 提现规则
+ * History:
  */
 
 public class TixianRuleActivity extends RxBaseActivity {
 
+    /**
+     * 自定义标题栏
+     */
     CusToolbar cusToolbar;
 
+    /**
+     * webview
+     */
     WebView tixianRule;
 
     @Override
@@ -56,6 +67,10 @@ public class TixianRuleActivity extends RxBaseActivity {
         getArticle("driverPutForward");
     }
 
+    /**
+     * 获取提现规则文章
+     * @param alias
+     */
     private void getArticle(String alias) {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 

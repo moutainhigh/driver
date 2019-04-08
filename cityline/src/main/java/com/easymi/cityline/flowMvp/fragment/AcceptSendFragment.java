@@ -34,7 +34,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Created by liuzihao on 2018/11/16.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: AcceptSendFragment
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description: 接送客户界面
+ * History:
  */
 
 public class AcceptSendFragment extends RxBaseFragment {
@@ -49,28 +54,43 @@ public class AcceptSendFragment extends RxBaseFragment {
     TextView countHint;
     TextView countTime;
     CustomSlideToUnlockView slider;
-
     LinearLayout sliderCon;
-
     LinearLayout chaoshiCon;
     Button jumpBtn;
     Button acceptedBtn;
-
     ImageView refreshImg;
-
     TextView back;
 
+    /**
+     * 订单id，类型
+     */
     long orderId;
     String orderType;
 
+    /**
+     * 专线订单集
+     */
     List<OrderCustomer> orderCustomers;
 
+    /**
+     * 本地数据库动态订单信息
+     */
     DymOrder dymOrder;
 
+    /**
+     * 通信桥
+     */
     ActFraCommBridge bridge;
 
+    /**
+     * 当前order
+     */
     private OrderCustomer current;
 
+    /**
+     * 设置bridge
+     * @param bridge
+     */
     public void setBridge(ActFraCommBridge bridge) {
         this.bridge = bridge;
     }
@@ -125,9 +145,15 @@ public class AcceptSendFragment extends RxBaseFragment {
         showWhatByStatus();
     }
 
+    /**
+     * 等待计时器
+     */
     private Timer timer;
     private TimerTask timerTask;
 
+    /**
+     * 取消计时器
+     */
     public void cancelTimer() {
         if (timer != null) {
             timer.cancel();
@@ -139,6 +165,9 @@ public class AcceptSendFragment extends RxBaseFragment {
         }
     }
 
+    /**
+     * 根据订单状态显示对应数据
+     */
     public void showWhatByStatus() {
         cancelTimer();
 
@@ -162,8 +191,10 @@ public class AcceptSendFragment extends RxBaseFragment {
         }
         if (orderCustomers.size() != 0) {
             current = orderCustomers.get(0);
-            if (current.status == 0) { //未接
-                if (current.subStatus == 0) { //未到达预约地
+            if (current.status == 0) {
+                //未接
+                if (current.subStatus == 0) {
+                    //未到达预约地
                     countTimeCon.setVisibility(View.GONE);
                     sliderCon.setVisibility(View.VISIBLE);
                     chaoshiCon.setVisibility(View.GONE);
@@ -258,6 +289,11 @@ public class AcceptSendFragment extends RxBaseFragment {
         });
     }
 
+    /**
+     * 添加marker和路线到地图
+     * @param toLatlng
+     * @param flag
+     */
     private void showInMap(LatLng toLatlng, int flag) {
 
         bridge.clearMap();
@@ -266,12 +302,22 @@ public class AcceptSendFragment extends RxBaseFragment {
 
     }
 
+    /**
+     * 手动触摸过地图显示定位小按钮
+     */
     public void mapStatusChanged() {
         refreshImg.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * 等待时间
+     */
     private long timeSeq = 0;
 
+    /**
+     * 根据订单信息设置等待倒计时
+     * @param orderCustomer
+     */
     private void initTimer(OrderCustomer orderCustomer) {
         if (null != timer) {
             timer.cancel();
@@ -295,6 +341,9 @@ public class AcceptSendFragment extends RxBaseFragment {
         setTimeText();
     }
 
+    /**
+     * 显示对应格式等待时间
+     */
     private void setTimeText() {
         getActivity().runOnUiThread(() -> {
 
@@ -309,7 +358,8 @@ public class AcceptSendFragment extends RxBaseFragment {
                 sb.append("0");
             }
             sb.append(sec).append("秒");
-            if (timeSeq < 0) { //超时
+            if (timeSeq < 0) {
+                //超时
                 countHint.setText("等候已超时：");
                 countTime.setText(sb.toString());
                 countTime.setTextColor(getResources().getColor(R.color.color_red));
@@ -317,7 +367,8 @@ public class AcceptSendFragment extends RxBaseFragment {
                 chaoshiCon.setVisibility(View.VISIBLE);
                 jumpBtn.setOnClickListener(view -> showConfirmFlag(true));
                 acceptedBtn.setOnClickListener(view -> showConfirmFlag(false));
-            } else { //正常计时
+            } else {
+                //正常计时
                 countHint.setText("等候倒计时：");
                 countTime.setText(sb.toString());
                 countTime.setTextColor(getResources().getColor(R.color.color_orange));
@@ -328,6 +379,10 @@ public class AcceptSendFragment extends RxBaseFragment {
         });
     }
 
+    /**
+     * 判断是正常接到乘客还是跳过乘客
+     * @param jump
+     */
     private void showConfirmFlag(boolean jump) {
         cancelTimer();
         sliderCon.setVisibility(View.VISIBLE);
@@ -366,14 +421,26 @@ public class AcceptSendFragment extends RxBaseFragment {
         }
     }
 
+    /**
+     * 获取当前的订单
+     * @return
+     */
     public OrderCustomer getCurrent() {
         return current;
     }
 
+    /**
+     * 是否能语音播报
+     */
     private boolean speakedHint = false;
 
+    /**
+     * 判断距离是否在200内。进行语音播报
+     * @param dis
+     */
     public void showLeft(int dis) {
-        if (!speakedHint && dis < 200) { //小于200米
+        if (!speakedHint && dis < 200) {
+            //小于200米
             if (current.status == 0) {
                 XApp.getInstance().syntheticVoice("距离上车点还有" + dis + "米");
                 XApp.getInstance().shake();
@@ -385,12 +452,21 @@ public class AcceptSendFragment extends RxBaseFragment {
         }
     }
 
+    /**
+     * 重置语音播报状态
+     */
     public void resetSpeakedHint() {
         speakedHint = false;
     }
 
+    /**
+     * 滑动重置handler
+     */
     Handler handler = new Handler();
 
+    /**
+     * 重置slider
+     */
     private void resetView() {
         slider.setVisibility(View.GONE);
 

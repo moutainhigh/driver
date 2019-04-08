@@ -34,7 +34,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by xyin on 2016/9/30.
+ *
+ * @author xyin
+ * @date 2016/9/30
  * application 注:每启动一个新的进程就会调用application的onCreate方法(需要注意某些方法是否允许多次初始化).
  */
 
@@ -53,9 +55,15 @@ public class XApp extends MultiDexApplication {
      * 提示音标志位--end
      */
 
-    private static final String SHARED_PREFERENCES_NAME = "em"; //SharedPreferences 文件名
+    /**
+     * SharedPreferences 文件名
+     */
+    private static final String SHARED_PREFERENCES_NAME = "em";
 
-    private static XApp instance;    //实例化对象
+    /**
+     *  实例化对象
+     */
+    private static XApp instance;
 
     public static SpeechSynthesizer iflytekSpe;
 
@@ -65,7 +73,10 @@ public class XApp extends MultiDexApplication {
 
     private AudioManager.OnAudioFocusChangeListener mFocusChangeListener;
 
-    private boolean haveFoucs = false;//是否拥有焦点 通过此变量来判断player是否在正常播放
+    /**
+     *  是否拥有焦点 通过此变量来判断player是否在正常播放
+     */
+    private boolean haveFoucs = false;
 
     @Override
     public void onCreate() {
@@ -90,9 +101,11 @@ public class XApp extends MultiDexApplication {
 
         CrashReport.initCrashReport(getApplicationContext(), "28ff5239b4", true);
 
-        int lastVersion = XApp.getMyPreferences().getInt(Config.SP_LAST_VERSION, 0);
+        int lastVersion = getMyPreferences().getInt(Config.SP_LAST_VERSION, 0);
         int current = SysUtil.getVersionCode(this);
         if (current > lastVersion) {
+            getPreferencesEditor().clear().commit();
+
             SharedPreferences.Editor editor = getPreferencesEditor();
             editor.putLong(Config.SP_DRIVERID, -1);
             editor.putBoolean(Config.SP_ISLOGIN, false);
@@ -288,8 +301,8 @@ public class XApp extends MultiDexApplication {
 //        if (!getMyPreferences().getBoolean(Config.SP_PLAY_CLIENT_MUSIC, true)) {
 //            return;
 //        }
-
-        if (haveFoucs) {//有焦点时说明在正常播放音频
+        //有焦点时说明在正常播放音频
+        if (haveFoucs) {
             return;
         }
 
@@ -300,14 +313,16 @@ public class XApp extends MultiDexApplication {
         if (player != null && player.isPlaying()) {
             player.stop();
             player.release();
-            player = null;//release时必须将其置位null，不然isPlaying（）会抛异常
+            //release时必须将其置位null，不然isPlaying（）会抛异常
+            player = null;
         }
         player = MediaPlayer.create(this, R.raw.silent);
         if (null != player) {
             player.setOnCompletionListener(mediaPlayer -> {
                 if (null != player) {
                     player.release();
-                    player = null;//release时必须将其置位null，不然isPlaying（）会抛异常
+                    //release时必须将其置位null，不然isPlaying（）会抛异常
+                    player = null;
                 }
                 Log.e("AudioFocus", "播放静音音频完成，循环播放中..");
                 playSlientMusic();
@@ -328,7 +343,8 @@ public class XApp extends MultiDexApplication {
         if (player != null && player.isPlaying()) {
             player.stop();
             player.release();
-            player = null;//release时必须将其置位null，不然isPlaying（）会抛异常
+            //release时必须将其置位null，不然isPlaying（）会抛异常
+            player = null;
             Log.e("AudioFocus", "停止播放静音音频");
         }
     }
@@ -352,6 +368,10 @@ public class XApp extends MultiDexApplication {
         }
     }
 
+    /**
+     * 播放语音
+     * @param msg
+     */
     public void syntheticVoice(String msg) {
         Log.e("syntheticVoice", msg);
         boolean voiceAble = getMyPreferences().getBoolean(Config.SP_VOICE_ABLE, true);
@@ -408,6 +428,9 @@ public class XApp extends MultiDexApplication {
         }
     }
 
+    /**
+     * 停止播放
+     */
     public void stopVoice() {
         if (null != iflytekSpe) {
             if (iflytekSpe.isSpeaking()) {
@@ -417,15 +440,21 @@ public class XApp extends MultiDexApplication {
         abandonFocus();
     }
 
+    /**
+     * 清理播放列表
+     */
     public void clearVoiceList() {
         if (null != voiceList) {
             voiceList.clear();
         }
     }
 
+    /**
+     * 震动
+     */
     public void shake() {
         boolean shakeAble = XApp.getMyPreferences().getBoolean(Config.SP_SHAKE_ABLE, true);
-        if (shakeAble) {//震动
+        if (shakeAble) {
             PhoneUtil.vibrate(XApp.getInstance(), false);
         }
     }

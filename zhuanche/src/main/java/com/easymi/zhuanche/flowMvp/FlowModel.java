@@ -13,7 +13,7 @@ import com.easymi.common.result.GetFeeResult;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
 import com.easymi.component.ZCOrderStatus;
-import com.easymi.component.entity.BaseEmploy;
+import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
@@ -22,6 +22,7 @@ import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.GsonUtil;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.result.EmResult;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.zhuanche.ZCApiService;
@@ -40,7 +41,12 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by liuzihao on 2017/11/15.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FlowModel
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class FlowModel implements FlowContract.Model {
@@ -48,8 +54,9 @@ public class FlowModel implements FlowContract.Model {
     @Override
     public Observable<ZCOrderResult> doAccept(Long orderId, Long version) {
         return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
-//                .takeOrder(orderId, EmUtil.getEmployId(), EmUtil.getAppKey())
-                .takeOrder(EmUtil.getEmployId(), EmUtil.getEmployInfo().realName, EmUtil.getEmployInfo().phone, orderId, version)
+                .takeOrder(EmUtil.getEmployId(), EmUtil.getEmployInfo().realName, EmUtil.getEmployInfo().phone, orderId, version
+                        ,EmUtil.getLastLoc().longitude+""
+                        ,EmUtil.getLastLoc().longitude+"")
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -115,22 +122,17 @@ public class FlowModel implements FlowContract.Model {
         PushFee pushData = new PushFee();
 
         //司机的信息
-        BaseEmploy employ1 = new BaseEmploy().employ2This();
+        Employ employ1 = Employ.findByID(new CsSharedPreferences().getLong(Config.SP_DRIVERID,0));
         PushFeeEmploy pe = null;
         if (employ1 != null && employ1 instanceof Employ) {
             Employ employ = (Employ) employ1;
             pe = new PushFeeEmploy();
-            pe.childType = employ.child_type;
             pe.id = employ.id;
             pe.status = employ.status;
             pe.realName = employ.realName;
             pe.companyId = employ.companyId;
             pe.phone = employ.phone;
-            pe.childType = employ.child_type;
             pe.business = employ.serviceType;
-//            if (employ.vehicle != null) {
-//                pe.modelId = employ.vehicle.serviceType;
-//            }
         }
         pushData.employ = pe;
 

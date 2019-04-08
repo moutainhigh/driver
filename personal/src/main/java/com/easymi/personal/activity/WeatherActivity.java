@@ -27,11 +27,18 @@ import com.easymi.personal.adapter.WeatherAdapter;
 import java.util.List;
 
 /**
- * Created by developerLzh on 2017/12/7 0007.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: WeatherActivity
+ * @author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 天气预报
+ * History:
  */
-
 public class WeatherActivity extends RxBaseActivity implements WeatherSearch.OnWeatherSearchListener {
 
+    /**
+     * 天气搜索对象
+     */
     private WeatherSearch weatherSearch;
 
     private ImageView todayPic;
@@ -39,9 +46,7 @@ public class WeatherActivity extends RxBaseActivity implements WeatherSearch.OnW
     private TextView weatherCity;
     private TextView todayType;
     private TextView reportTime;
-
     private LinearLayout wetherBg;
-
     private RecyclerView weatherRecycler;
     private WeatherAdapter adapter;
 
@@ -77,6 +82,10 @@ public class WeatherActivity extends RxBaseActivity implements WeatherSearch.OnW
         cusToolbar.setTitle(R.string.weather_forecast);
     }
 
+    /**
+     *
+     * 搜索实况天气
+     */
     private void searchLiveWeather() {
         if (null == weatherSearch) {
             weatherSearch = new WeatherSearch(this);
@@ -88,6 +97,9 @@ public class WeatherActivity extends RxBaseActivity implements WeatherSearch.OnW
 
     }
 
+    /**
+     * 搜索预况天气
+     */
     private void searchForecast() {
         if (null == weatherSearch) {
             weatherSearch = new WeatherSearch(this);

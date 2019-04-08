@@ -6,7 +6,7 @@ import com.easymi.common.R;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: CityLine
- * Author: shine
+ * @Author: shine
  * Date: 2018/11/14 下午4:26
  * Description:
  * History:

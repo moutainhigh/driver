@@ -8,7 +8,12 @@ import com.easymi.component.Config;
 import com.easymi.taxi.R;
 
 /**
- * Created by developerLzh on 2017/12/19 0019.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: CancelOrderReceiver
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 取消订单或者收回广播接收者
+ * History:
  */
 
 public class CancelOrderReceiver extends BroadcastReceiver {
@@ -32,13 +37,21 @@ public class CancelOrderReceiver extends BroadcastReceiver {
                     } else {
                         cancelListener.onCancelOrder(orderId, orderType,context.getString(R.string.backed_order));
                     }
-
                 }
             }
         }
     }
 
+    /**
+     * 用于分发广播消息
+     */
     public interface OnCancelListener {
+        /**
+         * 取消收回监听
+         * @param orderId
+         * @param orderType
+         * @param msg
+         */
         void onCancelOrder(long orderId, String orderType, String msg);
     }
 }

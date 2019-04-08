@@ -65,6 +65,7 @@ import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.loc.LocService;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.AesUtil;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
@@ -106,7 +107,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by developerLzh on 2017/11/13 0013.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ *@Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 @Route(path = "/taxi/FlowActivity")
 public class FlowActivity extends RxBaseActivity implements FlowContract.View,
@@ -152,7 +158,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     private TaxiOrder taxiOrder;
 
     private FlowPresenter presenter;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
     private TraceReceiver traceReceiver;
@@ -522,7 +530,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         aMap.setOnMapTouchListener(this);
 
-        String locStr = XApp.getMyPreferences().getString(Config.SP_LAST_LOC, "");
+        String locStr = new CsSharedPreferences().getString(Config.SP_LAST_LOC, "");
         EmLoc emLoc = new Gson().fromJson(locStr, EmLoc.class);
         if (null != emLoc) {
             lastLatlng = new LatLng(emLoc.latitude, emLoc.longitude);

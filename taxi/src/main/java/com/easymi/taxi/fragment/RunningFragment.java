@@ -16,37 +16,39 @@ import com.easymi.taxi.flowMvp.ActFraCommBridge;
 import com.easymi.taxi.flowMvp.FlowActivity;
 
 /**
- * Created by developerLzh on 2017/11/13 0013.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: RunningFragment
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class RunningFragment extends RxBaseFragment {
     private DymOrder zcOrder;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
+    /**
+     * 设置bridge
+     * @param bridge
+     */
     public void setBridge(ActFraCommBridge bridge) {
         this.bridge = bridge;
     }
 
     LinearLayout feeCon;
-
     TextView serviceMoneyText;
     TextView distanceText;
-
     TextView driveTimeText;
     TextView waitTimeText;
-
-//    LoadingButton startWaitBtn;
-//    LinearLayout settleBtn;
     CustomSlideToUnlockView slideView;
-
     LinearLayout quanlanCon;
     ImageView quanlanImg;
     TextView quanlanText;
-
     ImageView refreshImg;
-
-
 
     @Override
     public void setArguments(Bundle args) {
@@ -72,8 +74,6 @@ public class RunningFragment extends RxBaseFragment {
         distanceText = $(R.id.distance);
         driveTimeText = $(R.id.drive_time);
         waitTimeText = $(R.id.wait_time);
-//        startWaitBtn = $(R.id.start_wait);
-//        settleBtn = $(R.id.settle);
         slideView = $(R.id.slider);
 
         quanlanCon = $(R.id.quanlan_con);
@@ -89,8 +89,6 @@ public class RunningFragment extends RxBaseFragment {
         driveTimeText.setText(zcOrder.travelTime + "");
         waitTimeText.setText(zcOrder.waitTime + "");
 
-//        startWaitBtn.setOnClickListener(view -> bridge.doStartWait(startWaitBtn));
-//        settleBtn.setOnClickListener(view -> bridge.showSettleDialog());
         slideView.setmCallBack(new CustomSlideToUnlockView.CallBack() {
             @Override
             public void onSlide(int distance) {
@@ -137,6 +135,10 @@ public class RunningFragment extends RxBaseFragment {
         });
     }
 
+    /**
+     * 动态显示费用信息
+     * @param dymOrder
+     */
     public void showFee(DymOrder dymOrder) {
         getActivity().runOnUiThread(() -> {
             RunningFragment.this.zcOrder = dymOrder;
@@ -147,6 +149,9 @@ public class RunningFragment extends RxBaseFragment {
 
     }
 
+    /**
+     * 地图状态改变
+     */
     public void mapStatusChanged() {
         refreshImg.setVisibility(View.VISIBLE);
     }

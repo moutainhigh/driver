@@ -22,6 +22,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: TimePicker2
+ * @Author: shine
+ * Date: 2018/11/16 上午11:28
+ * Description: 时间选择弹窗
+ * History:
+ */
 public class TimePicker2 extends BottomSheetDialog {
 
     //可选天数
@@ -50,6 +58,10 @@ public class TimePicker2 extends BottomSheetDialog {
         initView(context);
     }
 
+    /**
+     * 初始化布局
+     * @param context
+     */
     @SuppressLint("InflateParams")
     private void initView(Context context) {
         mView = LayoutInflater.from(context).inflate(R.layout.taxi_layout_time_picker, null);
@@ -75,6 +87,9 @@ public class TimePicker2 extends BottomSheetDialog {
         setContentView(mView);
     }
 
+    /**
+     * 显示
+     */
     @Override
     public void show() {
         View v = (View) mView.getParent();
@@ -84,9 +99,15 @@ public class TimePicker2 extends BottomSheetDialog {
         super.show();
     }
 
+    /**
+     * 设置小时时间
+     * @param oldValue
+     * @param newValue
+     */
     private void setHourView(int oldValue, int newValue) {
         int hourIndex = hourWheelView.getCurrentItem();
-        String lastHour = hourList.get(hourIndex);  //滑动前的值
+        //滑动前的值
+        String lastHour = hourList.get(hourIndex);
         if (newValue == 0) {
             updateHour(false);
         } else if (oldValue == 0 && newValue >= 1) {
@@ -103,6 +124,9 @@ public class TimePicker2 extends BottomSheetDialog {
         hourWheelView.setCurrentItem(index);
     }
 
+    /**
+     * 设置分钟时间
+     */
     private void setMinuteView() {
         int dayIndex = dayWheelView.getCurrentItem();
         int hourIndex = hourWheelView.getCurrentItem();
@@ -121,6 +145,9 @@ public class TimePicker2 extends BottomSheetDialog {
         minuteWheelView.setCurrentItem(index);
     }
 
+    /**
+     * 确定
+     */
     private void ensure() {
         dismiss();
         int dayIndex = dayWheelView.getCurrentItem();
@@ -135,7 +162,9 @@ public class TimePicker2 extends BottomSheetDialog {
         }
     }
 
-
+    /**
+     * 初始化时间
+     */
     private void initTimeData() {
         //初始天时间
         mCalendar = Calendar.getInstance();
@@ -186,6 +215,10 @@ public class TimePicker2 extends BottomSheetDialog {
 
     }
 
+    /**
+     * 更新分钟
+     * @param all
+     */
     private void updateMinute(boolean all) {
         minuteList.clear();
         mCalendar.setTimeInMillis(startMillis);
@@ -202,6 +235,10 @@ public class TimePicker2 extends BottomSheetDialog {
         }
     }
 
+    /**
+     * 更新小时
+     * @param all
+     */
     private void updateHour(boolean all) {
         hourList.clear();
         if (all) {
@@ -217,6 +254,11 @@ public class TimePicker2 extends BottomSheetDialog {
         }
     }
 
+    /**
+     * 设置适配器
+     * @param wheelView
+     * @param datas
+     */
     private void initWheelView(WheelView wheelView, List<String> datas) {
         TimeWheelAdapter adapter = new TimeWheelAdapter(datas, wheelView.getContext());
         adapter.setItemResource(R.layout.taxi_item_picker);
@@ -245,10 +287,19 @@ public class TimePicker2 extends BottomSheetDialog {
         return this;
     }
 
+
     public interface OnSelectListener {
+        /**
+         * 选择监听
+         * @param time
+         * @param timeStr
+         */
         void onSelect(long time, String timeStr);
     }
 
+    /**
+     * 滑动监听
+     */
     private class TimeWheelAdapter extends AbstractWheelTextAdapter {
 
         private List<String> datas;

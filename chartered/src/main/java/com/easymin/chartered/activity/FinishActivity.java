@@ -13,9 +13,9 @@ import java.util.TimerTask;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: FinishActivity
- * Author: shine
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
- * Description:
+ * Description: 定制包车订单完成结束界面
  * History:
  */
 public class FinishActivity extends RxBaseActivity{

@@ -38,6 +38,7 @@ import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.ToastUtil;
@@ -53,7 +54,7 @@ import rx.Observable;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: FlowPresenter
- * Author: shine
+ *@Author: shine
  * Date: 2018/12/18 下午1:59
  * Description:
  * History:
@@ -64,6 +65,9 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
     private FlowContract.View view;
     private FlowContract.Model model;
 
+    /**
+     * 导航对象
+     */
     AMapNavi mAMapNavi;
 
     public FlowPresenter(Context context, FlowContract.View view) {
@@ -80,10 +84,10 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
         }
 
         int strateFlag = mAMapNavi.strategyConvert(
-                XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, false),
-                XApp.getMyPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
-                XApp.getMyPreferences().getBoolean(Config.SP_COST, false),
-                XApp.getMyPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
+                new CsSharedPreferences().getBoolean(Config.SP_CONGESTION, false),
+                new CsSharedPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
+                new CsSharedPreferences().getBoolean(Config.SP_COST, false),
+                new CsSharedPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
                 false);
 
         NaviLatLng start = new NaviLatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
@@ -271,7 +275,7 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
         }
         if (path != null) {
             view.showPath(ints, path);
-            if (XApp.getMyPreferences().getBoolean(Config.SP_DEFAULT_NAVI, true)) {
+            if (new CsSharedPreferences().getBoolean(Config.SP_DEFAULT_NAVI, true)) {
                 mAMapNavi.startNavi(NaviType.GPS);
                 view.showLeft(path.getAllLength(), path.getAllTime());
             }

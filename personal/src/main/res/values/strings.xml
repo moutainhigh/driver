@@ -79,7 +79,8 @@
     <string name="register_time_end">驾驶证有效截止时间</string>
     <string name="register_time_start">驾驶证有效开始时间</string>
     <string name="register_time_hint">请选择有效时间</string>
-
+    <string name="register_time2_end">网约车从业资格证截止时间</string>
+    <string name="register_time2_start">网约车从业资格证开始时间</string>
 
     <string name="register_become">成为司机</string>
     <string name="register_checking">信息正在审核中</string>
@@ -107,6 +108,7 @@
 
     <string name="register_upload_card">上传身份证</string>
     <string name="register_upload_driving">上传驾驶证</string>
+    <string name="register_upload_zige">上传网约车从业资格证</string>
     <string name="register_front">正面</string>
     <string name="register_back">反面</string>
 

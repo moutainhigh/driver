@@ -10,9 +10,9 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: ActFraCommBridge
- * Author: shine
+ * @Author: shine
  * Date: 2018/12/18 下午2:00
- * Description:
+ * Description: activity和fragment通信接口
  * History:
  */
 public interface ActFraCommBridge {

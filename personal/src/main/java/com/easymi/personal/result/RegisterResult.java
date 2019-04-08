@@ -5,8 +5,8 @@ import com.easymi.component.result.EmResult;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
- * FileName: RegisterResult
- * Author: shine
+ * FileName: Register
+ *@Author: shine
  * Date: 2018/12/21 下午8:43
  * Description:
  * History:

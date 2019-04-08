@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: Contact
- * Author: shine
+ *@Author: shine
  * Date: 2018/12/5 下午1:15
  * Description:
  * History:

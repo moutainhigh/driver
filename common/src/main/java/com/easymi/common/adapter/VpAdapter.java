@@ -1,8 +1,14 @@
 package com.easymi.common.adapter;
 
 /**
- * Created by developerLzh on 2017/11/16 0016.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
+
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,9 +16,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.List;
 
-/**
- * view pager adapter
- */
+
 public class VpAdapter extends FragmentPagerAdapter {
     private List<Fragment> data;
 

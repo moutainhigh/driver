@@ -51,8 +51,9 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:gravity="center_vertical"
-            android:visibility="visible"
-            android:orientation="horizontal">
+            android:visibility="gone"
+            android:orientation="horizontal"
+            >
 
             <ImageView
                 android:layout_width="15dp"
@@ -232,7 +233,7 @@
         android:id="@+id/zc_es_money_con"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/zc_create_order"
+        android:layout_above="@+id/lin_input_money"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
         android:visibility="gone">
@@ -259,6 +260,26 @@
             android:layout_height="wrap_content"
             android:text="@string/yuan" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lin_input_money"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_above="@+id/zc_create_order">
+        <EditText
+            android:id="@+id/et_money"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/edittext_bg"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:hint="输入后则按输入价格收费"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textColor="@color/color_333333"
+            android:inputType="numberDecimal"/>
     </LinearLayout>
 
 </RelativeLayout>

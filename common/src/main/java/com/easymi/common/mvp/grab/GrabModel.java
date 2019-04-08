@@ -14,7 +14,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by developerLzh on 2017/11/22 0022.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午5:00
+ * Description:
+ * History:
  */
 
 public class GrabModel implements GrabContract.Model {
@@ -57,7 +62,9 @@ public class GrabModel implements GrabContract.Model {
     @Override
     public Observable<MultipleOrderResult> grabZCOrder(Long orderId, Long version) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .grabZCOrder(EmUtil.getEmployId(), EmUtil.getEmployInfo().realName, EmUtil.getEmployInfo().phone, orderId, version)
+                .grabZCOrder(EmUtil.getEmployId(), EmUtil.getEmployInfo().realName, EmUtil.getEmployInfo().phone, orderId, version
+                        ,EmUtil.getLastLoc().longitude+""
+                        ,EmUtil.getLastLoc().longitude+"")
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -70,7 +77,9 @@ public class GrabModel implements GrabContract.Model {
             realName = EmUtil.getEmployInfo().realName;
         }
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .takeZCOrder(EmUtil.getEmployId(), realName, EmUtil.getEmployInfo().phone, orderId, version)
+                .takeZCOrder(EmUtil.getEmployId(), realName, EmUtil.getEmployInfo().phone, orderId, version
+                        ,EmUtil.getLastLoc().longitude+""
+                        ,EmUtil.getLastLoc().longitude+"")
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

@@ -11,6 +11,7 @@ import com.easymi.component.Config;
 import com.easymi.component.entity.SystemConfig;
 import com.easymi.component.pay.PayType;
 import com.easymi.component.result.EmResult;
+import com.easymi.component.utils.CsEditor;
 import com.easymi.component.utils.Log;
 
 import android.view.View;
@@ -19,6 +20,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +43,7 @@ import com.easymi.personal.result.ConfigResult;
 import com.easymi.personal.result.LoginResult;
 import com.easymi.personal.result.PayResult;
 import com.easymi.personal.result.RechargeResult;
+import com.easymi.personal.result.RechargeTypeResult;
 import com.ffcs.inapppaylib.bean.Constants;
 import com.ffcs.inapppaylib.bean.response.BaseResponse;
 import com.google.gson.JsonElement;
@@ -57,24 +60,31 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by developerLzh on 2017/11/9 0009.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: RechargeActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:  充值界面
+ * History:
  */
-
 public class RechargeActivity extends RxBaseActivity {
 
     CheckBox pay50;
     CheckBox pay100;
     CheckBox pay200;
     EditText payCus;
-
     TextView balanceText;
-
     CusToolbar cusToolbar;
-
     RelativeLayout payWx;
     RelativeLayout payZfb;
     RelativeLayout payUnion;
+    Space id_space1;
+    Space id_space2;
+    LinearLayout lin_check_box;
 
+    /**
+     * 最低充值金额
+     */
     private double limitMoney = 0;
 
     @Override
@@ -93,10 +103,8 @@ public class RechargeActivity extends RxBaseActivity {
         showWhatByConfig();
 
         getConfigure();
-//        if (Config.COMM_USE) {
-//            payWx.setVisibility(View.GONE);
-//            payUnion.setVisibility(View.GONE);
-//        }
+
+        configPayment();
 
         payWx.setOnClickListener(view -> {
             double money = getMoney();
@@ -118,20 +126,13 @@ public class RechargeActivity extends RxBaseActivity {
                 payZfb(money);
             }
         });
-//        payUnion.setOnClickListener(view -> {
-//            double money = getMoney();
-//            if (money == 0.0) {
-//                ToastUtil.showMessage(RechargeActivity.this, getString(R.string.recharge_0_money));
-//            } else if (money < limitMoney) {
-//                ToastUtil.showMessage(RechargeActivity.this, "最低充值" + limitMoney);
-//            } else {
-//                payUnion(money);
-//            }
-//        });
     }
 
     MoneyConfig moneyConfig;
 
+    /**
+     * 获取充值配置
+     */
     private void getConfigure() {
         Observable<ConfigResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .rechargeConfigure()
@@ -147,41 +148,74 @@ public class RechargeActivity extends RxBaseActivity {
         })));
     }
 
+    /**
+     * 获取充值方式配置
+     */
+    private void configPayment() {
+        Observable<RechargeTypeResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
+                .configPayment()
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
 
-//    SystemConfig config;
-
-    private void showWhatByConfig() {
-//        config = SystemConfig.findOne();
-//        if (null != config) {
-//            if (StringUtils.isBlank(config.payType)) {
-//                payWx.setVisibility(View.GONE);
-//                payZfb.setVisibility(View.GONE);
-//                payUnion.setVisibility(View.GONE);
-//            } else {
-//                if (!config.payType.contains(PayType.CHANNEL_APP_WECHAT.getPayType())) {
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, emResult -> {
+            //todo 未找到后台配置的地方，目前全是false。故不展示
+//            if (emResult.getCode() == 1){
+//                if (emResult.data.weChatApp){
+//                    payWx.setVisibility(View.VISIBLE);
+//                }else {
 //                    payWx.setVisibility(View.GONE);
 //                }
-//                if (!config.payType.contains(PayType.CHANNEL_APP_ALI.getPayType())) {
+//                if (emResult.data.aliPayApp){
+//                    payZfb.setVisibility(View.VISIBLE);
+//                }else {
 //                    payZfb.setVisibility(View.GONE);
 //                }
-//                if (!config.payType.contains(PayType.CHANNEL_APP_UNION.getPayType())) {
-//                    payUnion.setVisibility(View.GONE);
-//                }
 //            }
-//
-//            pay50.setText(getString(R.string.renminbi) + config.payMoney1);
-//            pay100.setText(getString(R.string.renminbi) + config.payMoney2);
-//            pay200.setText(getString(R.string.renminbi) + config.payMoney3);
-//
-//            limitMoney = config.payMoney1;
-//        }
-        if (moneyConfig == null ){
+        })));
+    }
+
+    /**
+     * 显示重置配置
+     */
+    private void showWhatByConfig() {
+        if (moneyConfig == null) {
             moneyConfig = new MoneyConfig();
             moneyConfig.one = 50;
             moneyConfig.two = 100;
             moneyConfig.three = 200;
-        }else {
-            if (moneyConfig.one == 0 || moneyConfig.two == 0 || moneyConfig.three == 0) {
+        } else {
+            if (moneyConfig.one == 0) {
+                pay50.setVisibility(View.GONE);
+            } else {
+                pay50.setChecked(true);
+                pay50.setVisibility(View.VISIBLE);
+            }
+
+            if (moneyConfig.two == 0) {
+                pay100.setVisibility(View.GONE);
+                id_space1.setVisibility(View.GONE);
+            } else {
+                if (moneyConfig.one == 0) {
+                    pay100.setChecked(true);
+                }
+            }
+
+            if (moneyConfig.three == 0) {
+                pay200.setVisibility(View.GONE);
+                id_space2.setVisibility(View.GONE);
+            } else {
+                if (moneyConfig.one == 0 && moneyConfig.two == 0) {
+                    pay200.setChecked(true);
+                }
+            }
+            if (moneyConfig.one == 0 && moneyConfig.two == 0 && moneyConfig.three == 0) {
+                pay50.setVisibility(View.VISIBLE);
+                pay100.setVisibility(View.VISIBLE);
+                pay200.setVisibility(View.VISIBLE);
+                id_space1.setVisibility(View.VISIBLE);
+                id_space2.setVisibility(View.VISIBLE);
+                lin_check_box.setVisibility(View.VISIBLE);
                 moneyConfig.one = 50;
                 moneyConfig.two = 100;
                 moneyConfig.three = 200;
@@ -213,10 +247,9 @@ public class RechargeActivity extends RxBaseActivity {
         recharge("CHANNEL_APP_ALI", money);
     }
 
-//    private void payUnion(double money) {
-//        recharge("unionpay", money);
-//    }
-
+    /**
+     * 单选框监听
+     */
     private void initEdit() {
         payCus.setOnFocusChangeListener((view, b) -> {
             if (b) {
@@ -227,12 +260,18 @@ public class RechargeActivity extends RxBaseActivity {
         });
     }
 
+    /**
+     * 设置监听
+     */
     private void initCheck() {
         pay50.setOnCheckedChangeListener(new MyCheckChangeLis(0));
         pay100.setOnCheckedChangeListener(new MyCheckChangeLis(1));
         pay200.setOnCheckedChangeListener(new MyCheckChangeLis(2));
     }
 
+    /**
+     * 初始化控件
+     */
     private void findById() {
         pay50 = findViewById(R.id.pay_50yuan);
         pay100 = findViewById(R.id.pay_100yuan);
@@ -248,8 +287,14 @@ public class RechargeActivity extends RxBaseActivity {
 
         balanceText = findViewById(R.id.balance_text);
 
+        lin_check_box = findViewById(R.id.lin_check_box);
+        id_space1 = findViewById(R.id.id_space1);
+        id_space2 = findViewById(R.id.id_space2);
     }
 
+    /**
+     * 选择框监听
+     */
     class MyCheckChangeLis implements CompoundButton.OnCheckedChangeListener {
 
         private int tag = 0;
@@ -272,6 +317,11 @@ public class RechargeActivity extends RxBaseActivity {
         }
     }
 
+    /**
+     * 重置其他的选择框状态
+     *
+     * @param tag
+     */
     private void resetOtherCheck(int tag) {
         if (tag == 0) {
             pay100.setChecked(false);
@@ -288,6 +338,11 @@ public class RechargeActivity extends RxBaseActivity {
         PhoneUtil.hideKeyboard(this);
     }
 
+    /**
+     * 获取充值金额
+     *
+     * @return
+     */
     private double getMoney() {
         double money = 0.0;
         if (pay50.isChecked()) {
@@ -323,6 +378,11 @@ public class RechargeActivity extends RxBaseActivity {
         return money;
     }
 
+    /**
+     * 获取司机信息
+     *
+     * @param driverId
+     */
     private void getDriverInfo(Long driverId) {
         Observable<LoginResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .getDriverInfo(driverId, EmUtil.getAppKey())
@@ -331,10 +391,10 @@ public class RechargeActivity extends RxBaseActivity {
                 .observeOn(AndroidSchedulers.mainThread());
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, loginResult -> {
-            Employ employ = loginResult.getEmployInfo();
+            Employ employ = loginResult.data;
             Log.e("okhttp", employ.toString());
             employ.saveOrUpdate();
-            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+            CsEditor editor = new CsEditor();
             editor.putLong(Config.SP_DRIVERID, employ.id);
             editor.apply();
 
@@ -342,6 +402,12 @@ public class RechargeActivity extends RxBaseActivity {
         })));
     }
 
+    /**
+     * 充值
+     *
+     * @param payType
+     * @param money
+     */
     private void recharge(String payType, Double money) {
         Observable<RechargeResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .recharge(payType, money)
@@ -353,21 +419,22 @@ public class RechargeActivity extends RxBaseActivity {
             if (payType.equals("CHANNEL_APP_WECHAT")) {
                 launchWeixin(rechargeResult.data);
             } else if (payType.equals("CHANNEL_APP_ALI")) {
-//                launchZfb(rechargeResult.aliPayResult.payUrl);
                 String url = null;
                 try {
-                     url = new JSONObject(rechargeResult.data.toString()).getString("ali_app_url");
+                    url = new JSONObject(rechargeResult.data.toString()).getString("ali_app_url");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 launchZfb(url);
             }
-//            else if (payType.equals("unionpay")) {
-//                launchYiPay(rechargeResult.unionResult.data);
-//            }
         })));
     }
 
+    /**
+     * 加载充值微信配置信息
+     *
+     * @param data
+     */
     private void launchWeixin(JsonElement data) {
         JSONObject json;
         try {
@@ -392,6 +459,11 @@ public class RechargeActivity extends RxBaseActivity {
         }
     }
 
+    /**
+     * 调用支付包充值
+     *
+     * @param data
+     */
     private void launchZfb(String data) {
         new Thread() {
             public void run() {
@@ -408,47 +480,55 @@ public class RechargeActivity extends RxBaseActivity {
         }.start();
     }
 
+    /**
+     * 翼支付
+     *
+     * @param data
+     */
     private void launchYiPay(String data) {
         String serverMode = "01";//00测试环境 01真实环境
         UPPayAssistEx.startPay(RechargeActivity.this, null, null, data, serverMode);
     }
 
+    /**
+     * 各种支付回调处理
+     */
     Handler handler = new Handler(msg -> {
         switch (msg.what) {
             case 0:
                 Context context = RechargeActivity.this;
                 PayResult result = new PayResult((String) msg.obj);
                 if (result.resultStatus.equals("9000")) {
-                    Toast.makeText(context, getString(R.string.alipay_success),
-                            Toast.LENGTH_SHORT).show();
+                    ToastUtil.showMessage(context, getString(R.string.alipay_success),
+                            Toast.LENGTH_SHORT);
                 } else {
-                    Toast.makeText(context, getString(R.string.alipay_failed),
-                            Toast.LENGTH_SHORT).show();
+                    ToastUtil.showMessage(context, getString(R.string.alipay_failed),
+                            Toast.LENGTH_SHORT);
                 }
                 break;
             /**翼支付回调**/
             case Constants.RESULT_VALIDATE_FAILURE:
                 // 合法性验证失败
                 BaseResponse resp = (BaseResponse) msg.obj;
-                Toast.makeText(RechargeActivity.this,
+                ToastUtil.showMessage(RechargeActivity.this,
                         resp.getRes_code() + ":" + resp.getRes_message(),
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT);
                 break;
 
             case Constants.RESULT_PAY_SUCCESS:
                 // 支付成功
                 resp = (BaseResponse) msg.obj;
-                Toast.makeText(RechargeActivity.this,
+                ToastUtil.showMessage(RechargeActivity.this,
                         resp.getRes_code() + ":" + resp.getRes_message(),
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT);
                 break;
 
             case Constants.RESULT_PAY_FAILURE:
                 // 支付失败
                 resp = (BaseResponse) msg.obj;
-                Toast.makeText(RechargeActivity.this,
+                ToastUtil.showMessage(RechargeActivity.this,
                         resp.getRes_code() + ":" + resp.getRes_message(),
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT);
                 break;
             /**翼支付回调**/
         }
@@ -465,7 +545,7 @@ public class RechargeActivity extends RxBaseActivity {
 
             ToastUtil.showMessage(RechargeActivity.this, "支付成功");
 
-// 结果result_data为成功时，去商户后台查询一下再展示成功
+            // 结果result_data为成功时，去商户后台查询一下再展示成功
         } else if (str.equalsIgnoreCase("fail")) {
             ToastUtil.showMessage(RechargeActivity.this, "支付失败！");
         } else if (str.equalsIgnoreCase("cancel")) {

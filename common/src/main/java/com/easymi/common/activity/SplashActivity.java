@@ -12,6 +12,7 @@ import android.os.Message;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,11 +25,16 @@ import com.easymi.component.Config;
 import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.cat.Cat;
 import com.easymi.component.permission.RxPermissions;
 import com.easymi.component.update.UpdateHelper;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.NetUtil;
+import com.easymi.component.utils.RootUtil;
 import com.easymi.component.utils.StringUtils;
+import com.easymi.component.utils.ToastUtil;
+import com.easymi.component.utils.emulator.EmulatorCheckUtil;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -37,7 +43,13 @@ import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
 /**
- * Created by developerLzh on 2017/11/3 0003.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:SplashActivity
+ *
+ * @Author: shine
+ * Date: 2018/12/24 下午5:00
+ * Description:
+ * History:
  */
 @Route(path = "/common/SplashActivity")
 public class SplashActivity extends RxBaseActivity {
@@ -48,16 +60,15 @@ public class SplashActivity extends RxBaseActivity {
 
     @Override
     public int getLayoutId() {
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         return R.layout.activity_splash;
     }
 
+    /**
+     * 权限管理
+     */
     RxPermissions rxPermissions;
-
-    GifDrawable gifFromAssets;
-
-    TextView jumpOver;
 
     private int leftTime;
 
@@ -70,7 +81,6 @@ public class SplashActivity extends RxBaseActivity {
                 case 0:
                     if (leftTime > 0) {
                         leftTime--;
-                        jumpOver.setText(getString(R.string.jump_gif) + "(" + leftTime + getString(R.string.sec) + ")");
                         handler.sendEmptyMessageDelayed(0, 1000);
                     }
                     break;
@@ -101,23 +111,18 @@ public class SplashActivity extends RxBaseActivity {
         }
     }
 
-
     private boolean animateStarted = false;
 
     @Override
     public void initViews(Bundle savedInstanceState) {
-        Log.e(TAG, "initViews");
-        jumpOver = findViewById(R.id.jump_over);
-
         rxPermissions = new RxPermissions(this);
 
         loadLanguage();
 
-        if (!rxPermissions.isGranted(Manifest.permission.ACCESS_COARSE_LOCATION)
-                || !rxPermissions.isGranted(Manifest.permission.READ_PHONE_STATE)
+        if (!rxPermissions.isGranted(Manifest.permission.READ_PHONE_STATE)
                 || !rxPermissions.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 || !rxPermissions.isGranted(Manifest.permission.ACCESS_FINE_LOCATION)
-                ) {
+                || !rxPermissions.isGranted(Manifest.permission.ACCESS_COARSE_LOCATION)) {
             Log.e(TAG, "showDialog");
             showDialog();
         } else {
@@ -127,61 +132,13 @@ public class SplashActivity extends RxBaseActivity {
     }
 
     /**
-     * 延时跳转
-     */
-    private void delayIn() {
-        if (needShowAnimate()) {
-            XApp.getPreferencesEditor().putLong(Config.SP_LAST_SPLASH_TIME, System.currentTimeMillis()).apply();
-            if (null != gifFromAssets) {
-                Log.e(TAG, "null != gifFromAssets");
-                leftTime = gifFromAssets.getDuration() / 1000;
-                jumpOver.setText(getString(R.string.jump_gif) + "(" + leftTime + getString(R.string.sec) + ")");
-                gifFromAssets.start();
-                animateStarted = true;
-                gifFromAssets.addAnimationListener(loopNumber -> jump());
-                handler.sendEmptyMessageDelayed(0, 1000);
-            } else {
-                Log.e(TAG, "null == gifFromAssets");
-                handler.postDelayed(this::jump, 2000);
-            }
-        } else {
-            Log.e(TAG, "! needShowAnimate");
-            jump();
-        }
-    }
-
-    /**
-     * 是否显示首页动画
-     *
-     * @return
-     */
-    private boolean needShowAnimate() {
-        long lastShowAnimaTime = XApp.getMyPreferences().getLong(Config.SP_LAST_SPLASH_TIME, 0);
-        if (lastShowAnimaTime == 0) {
-            return true;
-        } else {
-            if (System.currentTimeMillis() - lastShowAnimaTime > 24 * 60 * 60 * 1000) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-    }
-
-    /**
-     * @param view
-     */
-    public void jumpOver(View view) {
-        jump();
-    }
-
-    /**
      * 检查更新
      */
     private void checkForUpdate() {
-
-        if (NetUtil.getNetWorkState(this) != NetUtil.NETWORK_NONE) { //判定用户是否单独关闭了该应用的网络
-            if (!NetUtil.ping()) {//通过ping baidu的方式来判断网络是否可用
+        //判定用户是否单独关闭了该应用的网络
+        if (NetUtil.getNetWorkState(this) != NetUtil.NETWORK_NONE) {
+            if (!NetUtil.ping()) {
+                //通过ping baidu的方式来判断网络是否可用
                 AlertDialog dialog = new AlertDialog.Builder(this)
                         .setTitle(getString(R.string.hint))
                         .setMessage(getString(R.string.reject_net))
@@ -192,25 +149,74 @@ public class SplashActivity extends RxBaseActivity {
                             Uri uri = Uri.fromParts("package", getPackageName(), null);
                             intent.setData(uri);
                             startActivity(intent);
-                            jumpOver.setEnabled(false);
                         })
                         .create();
                 dialog.show();
                 return;
             }
         }
+        //二次打包应用
+//        if (!new Cat(this).check()) {
+////            AlertDialog dialog = new AlertDialog.Builder(this)
+////                    .setTitle(R.string.common_tips)
+////                    .setMessage("非法应用")
+////                    .setPositiveButton(R.string.ok, (dialog1, which) -> {
+////                        finish();
+////                    })
+////                    .create();
+////            dialog.setCancelable(false);
+////            dialog.show();
+////            return;
+////        }
 
+        //检测模拟器
+        boolean isEmulator = EmulatorCheckUtil.getSingleInstance().isEmulator(this);
+        if (isEmulator) {
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle(R.string.common_tips)
+                    .setMessage("检测到当前运行环境为模拟器，不能正常运行")
+                    .setPositiveButton(R.string.ok, (dialog1, which) -> {
+                        finish();
+                    })
+                    .create();
+            dialog.setCancelable(false);
+            dialog.show();
+            return;
+        }
+
+        //检测是否root
+        boolean isXposedExists = RootUtil.isXposedExists();
+        boolean isRoot = RootUtil.isRoot();
+        if (isRoot || isXposedExists) {
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle(R.string.common_tips)
+                    .setMessage("检测到您的手机已取得root权限或安装了xposed\n可能会存在账户安全问题,是否继续？")
+                    .setPositiveButton("我已清楚问题，继续运行", (dialog1, which) -> {
+                        update();
+                    })
+                    .setNegativeButton("退出应用", (dialog1, which) -> {
+                        ActManager.getInstance().finishAllActivity();
+                    })
+                    .create();
+            dialog.setCancelable(false);
+            dialog.show();
+            return;
+        }
+        update();
+    }
+
+    private void update() {
         new UpdateHelper(this, new UpdateHelper.OnNextListener() {
             @Override
             public void onNext() {
                 Log.e(TAG, "onNext");
-                runOnUiThread(() -> delayIn());
+                runOnUiThread(() -> jump());
             }
 
             @Override
             public void onNoVersion() {
                 Log.e(TAG, "onNoVersion");
-                runOnUiThread(() -> delayIn());
+                runOnUiThread(() -> jump());
             }
         });
     }
@@ -219,7 +225,7 @@ public class SplashActivity extends RxBaseActivity {
      * 跳转方法
      */
     private void jump() {
-        boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
+        boolean isLogin = new CsSharedPreferences().getBoolean(Config.SP_ISLOGIN, false);
         if (isLogin) {
             startActivity(new Intent(SplashActivity.this, WorkActivity.class));
         } else {
@@ -243,31 +249,33 @@ public class SplashActivity extends RxBaseActivity {
      * 显示加载框
      */
     private void showDialog() {
+
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.hint))
-                .setMessage(getString(R.string.message))
-                .setPositiveButton(getString(R.string.sure), (dialog1, which) -> requestPer())
+                .setTitle("温馨提示")
+                .setMessage("亲爱的司机师傅，为了您能正常使用软件，我们需要下列权限:\n"
+                        + "获取位置权限-->方便管理人员根据位置为您派单\n"
+                        + "读取手机状态权限-->司机与手机完成绑定防止他人登录\n"
+                        + "读写外部存储权限-->存放一些资源在外部存储\n"
+                        + "拨打电话权限-->联系客户与附近司机")
+                .setPositiveButton("好", (dialog1, which) -> {
+                    rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.READ_PHONE_STATE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.CALL_PHONE)
+                            .subscribe(granted -> {
+                                if (granted) {
+                                    checkForUpdate();
+                                } else {
+                                    ToastUtil.showMessage(this, "未能获得必要权限，即将退出..");
+                                    delayExit();
+                                }
+                            });
+                    dialog1.dismiss();
+                })
                 .setCancelable(false)
                 .create();
         dialog.show();
-    }
-
-    /**
-     * 请求权限
-     */
-    private void requestPer() {
-        rxPermissions.request(Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.READ_PHONE_STATE,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .subscribe(granted -> {
-                    if (granted) {
-                        checkForUpdate();
-                    } else {
-                        Toast.makeText(SplashActivity.this, getString(R.string.exit), Toast.LENGTH_SHORT).show();
-                        delayExit();
-                    }
-                });
     }
 
     /**
@@ -277,15 +285,18 @@ public class SplashActivity extends RxBaseActivity {
         Log.e(TAG, "loadLanguage");
         SharedPreferences preferences = XApp.getMyPreferences();
 
-        Configuration config = getResources().getConfiguration();   //获取默认配置
+        //获取默认配置
+        Configuration config = getResources().getConfiguration();
         int language = preferences.getInt(Config.SP_USER_LANGUAGE, Config.SP_LANGUAGE_AUTO);
         switch (language) {
             case Config.SP_SIMPLIFIED_CHINESE:
-                config.locale = Locale.SIMPLIFIED_CHINESE;  //加载简体中文
+                //加载简体中文
+                config.locale = Locale.SIMPLIFIED_CHINESE;
                 break;
 
             case Config.SP_TRADITIONAL_CHINESE:
-                config.locale = Locale.TRADITIONAL_CHINESE;  //加载台湾繁体
+                //加载台湾繁体
+                config.locale = Locale.TRADITIONAL_CHINESE;
                 break;
 
             case Config.SP_LANGUAGE_AUTO:
@@ -304,11 +315,14 @@ public class SplashActivity extends RxBaseActivity {
                     }
                 }
                 break;
-
             case Config.SP_ENGLISH:
-                config.locale = Locale.ENGLISH;    //获取默认区域
+                //获取默认区域
+                config.locale = Locale.ENGLISH;
+                break;
+            default:
                 break;
         }
-        getBaseContext().getResources().updateConfiguration(config, null);   //更新配置文件
+        //更新配置文件
+        getBaseContext().getResources().updateConfiguration(config, null);
     }
 }

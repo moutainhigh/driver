@@ -9,11 +9,18 @@ import com.easymi.taxi.entity.TaxiOrder;
 import java.util.List;
 
 /**
- * Created by developerLzh on 2017/11/17 0017.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: TaxiOrderResult
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 出租车订单
+ * History:
  */
-
 public class TaxiOrderResult extends EmResult {
 
+    /**
+     * 出租车订单
+     */
     public TaxiOrder data;
 
 }

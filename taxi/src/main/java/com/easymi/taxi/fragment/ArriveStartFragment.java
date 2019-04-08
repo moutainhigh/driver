@@ -20,14 +20,25 @@ import com.easymi.taxi.flowMvp.ActFraCommBridge;
 import com.easymi.taxi.widget.CallPhoneDialog;
 
 /**
- * Created by developerLzh on 2017/11/13 0013.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: ArriveStartFragment
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class ArriveStartFragment extends RxBaseFragment {
     private TaxiOrder taxiOrder;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
+    /**
+     * 设置bridge
+     * @param bridge
+     */
     public void setBridge(ActFraCommBridge bridge) {
         this.bridge = bridge;
     }
@@ -57,6 +68,9 @@ public class ArriveStartFragment extends RxBaseFragment {
         initView();
     }
 
+    /**
+     * 初始化布局
+     */
     private void initView() {
         startPlaceText = $(R.id.start_place);
         endPlaceText = $(R.id.end_place);
@@ -66,7 +80,7 @@ public class ArriveStartFragment extends RxBaseFragment {
 
         customHead = $(R.id.iv_head);
         customName = $(R.id.tv_custom_name);
-        //todo 差客户头像
+
         customName.setText(taxiOrder.passengerName);
 
         if (StringUtils.isNotBlank(taxiOrder.avatar)) {

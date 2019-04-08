@@ -49,7 +49,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by developerLzh on 2017/11/11 0011.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: ShareActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class ShareActivity extends RxBaseActivity {
@@ -157,13 +162,16 @@ public class ShareActivity extends RxBaseActivity {
 
     }
 
+    /**
+     * 分享
+     */
     private void getShare() {
         Employ employ = EmUtil.getEmployInfo();
 
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
         Observable<ShareResult> observable = api
-                .shareLink(employ.id, employ.company_id, EmUtil.getAppKey(), 1)
+                .shareLink(employ.id, employ.companyId, EmUtil.getAppKey(), 1)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -194,6 +202,9 @@ public class ShareActivity extends RxBaseActivity {
         mTencent = Tencent.createInstance(Config.QQ_APP_ID, this.getApplicationContext());
     }
 
+    /**
+     * 分享到qq
+     */
     void share2QQ() {
         //分享到QQ好友
         if (bitmap == null) {
@@ -214,8 +225,11 @@ public class ShareActivity extends RxBaseActivity {
         mTencent.shareToQQ(ShareActivity.this, params, listener);
     }
 
+    /**
+     * 分享到QQ空间
+     */
     void share2Qzone() {
-        //分享到QQ空间
+        //
         if (bitmap == null) {
             ToastUtil.showMessage(ShareActivity.this, getString(R.string.loading_qr_code));
             return;
@@ -266,31 +280,36 @@ public class ShareActivity extends RxBaseActivity {
 
         //构造一个Req
         SendMessageToWX.Req req = new SendMessageToWX.Req();
-        req.transaction = String.valueOf(System.currentTimeMillis());   //该字段用于唯一标识一个请求
+        //该字段用于唯一标识一个请求
+        req.transaction = String.valueOf(System.currentTimeMillis());
         req.message = msg;
-        req.scene = scene; //设置分享到的位置
+        //设置分享到的位置
+        req.scene = scene;
 
         // 调用api接口发送数据到微信
         iwxapi.sendReq(req);
     }
 
 
+    /**
+     * 分享回调
+     */
     private class BaseUiListener implements IUiListener {
 
         @Override
         public void onComplete(Object o) {
-            Toast.makeText(ShareActivity.this, getString(R.string.share_succeed), Toast.LENGTH_SHORT).show();
+            ToastUtil.showMessage(ShareActivity.this, getString(R.string.share_succeed), Toast.LENGTH_SHORT);
         }
 
         @Override
         public void onError(UiError uiError) {
             Log.e("UiError", uiError.errorMessage + " " + uiError.errorDetail + " " + uiError.errorCode);
-            Toast.makeText(ShareActivity.this, getString(R.string.share_error), Toast.LENGTH_SHORT).show();
+            ToastUtil.showMessage(ShareActivity.this, getString(R.string.share_error), Toast.LENGTH_SHORT);
         }
 
         @Override
         public void onCancel() {
-            Toast.makeText(ShareActivity.this, getString(R.string.cancel_share), Toast.LENGTH_SHORT).show();
+            ToastUtil.showMessage(ShareActivity.this, getString(R.string.cancel_share), Toast.LENGTH_SHORT);
         }
     }
 

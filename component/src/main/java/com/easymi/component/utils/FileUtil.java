@@ -267,7 +267,7 @@ public class FileUtil {
 
     /**
      * @param uri The Uri to check.
-     * @return Whether the Uri authority is ExternalStorageProvider.
+     * @return Whether the Uri@Authority is ExternalStorageProvider.
      */
     public static boolean isExternalStorageDocument(Uri uri) {
         return "com.android.externalstorage.documents".equals(uri.getAuthority());
@@ -275,7 +275,7 @@ public class FileUtil {
 
     /**
      * @param uri The Uri to check.
-     * @return Whether the Uri authority is DownloadsProvider.
+     * @return Whether the Uri@Authority is DownloadsProvider.
      */
     public static boolean isDownloadsDocument(Uri uri) {
         return "com.android.providers.downloads.documents".equals(uri.getAuthority());
@@ -283,7 +283,7 @@ public class FileUtil {
 
     /**
      * @param uri The Uri to check.
-     * @return Whether the Uri authority is MediaProvider.
+     * @return Whether the Uri@Authority is MediaProvider.
      */
     public static boolean isMediaDocument(Uri uri) {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
@@ -291,7 +291,7 @@ public class FileUtil {
 
     /**
      * @param uri The Uri to check.
-     * @return Whether the Uri authority is Google Photos.
+     * @return Whether the Uri@Authority is Google Photos.
      */
     public static boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());

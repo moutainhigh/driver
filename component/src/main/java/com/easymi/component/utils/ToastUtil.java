@@ -19,7 +19,8 @@ public class ToastUtil {
             if (sToast != null) {
                 sToast.cancel();
             }
-            sToast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
+            sToast = Toast.makeText(context, null, Toast.LENGTH_SHORT);
+            sToast.setText(msg);
             sToast.show();
         } catch (Exception e) {
         }
@@ -30,7 +31,8 @@ public class ToastUtil {
             if (sToast != null) {
                 sToast.cancel();
             }
-            sToast = Toast.makeText(context, msg, len);
+            sToast = Toast.makeText(context, null, len);
+            sToast.setText(msg);
             sToast.show();
         } catch (Exception e) {
         }

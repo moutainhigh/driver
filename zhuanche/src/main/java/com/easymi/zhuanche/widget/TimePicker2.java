@@ -22,15 +22,35 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+
+/**
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:TimePicker2
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 时间选择器
+ * History:
+ */
 public class TimePicker2 extends BottomSheetDialog {
 
     //可选天数
     private static final int PASS_DAY = 7;
-
+    /**
+     * 预约提前时间
+     */
     private int preMinute;
+    /**
+     * 开始时间
+     */
     private long startMillis;
+    /**
+     * 日历控件
+     */
     private Calendar mCalendar;
 
+    /**
+     * 选择控件
+     */
     private View mView;
     private WheelView dayWheelView;
     private WheelView hourWheelView;
@@ -42,14 +62,26 @@ public class TimePicker2 extends BottomSheetDialog {
     private List<String> hourList = new ArrayList<>();
     private List<String> minuteList = new ArrayList<>();
 
+    /**
+     * 选择接口
+     */
     private OnSelectListener onSelectListener;
 
+    /**
+     *
+     * @param context
+     * @param preMinute 预约提前时间
+     */
     public TimePicker2(@NonNull Context context, int preMinute) {
         super(context);
         this.preMinute = preMinute;
         initView(context);
     }
 
+    /**
+     * 初始化布局
+     * @param context
+     */
     @SuppressLint("InflateParams")
     private void initView(Context context) {
         mView = LayoutInflater.from(context).inflate(R.layout.zc_layout_time_picker, null);
@@ -84,6 +116,11 @@ public class TimePicker2 extends BottomSheetDialog {
         super.show();
     }
 
+    /**
+     * 设置小时布局
+     * @param oldValue
+     * @param newValue
+     */
     private void setHourView(int oldValue, int newValue) {
         int hourIndex = hourWheelView.getCurrentItem();
         String lastHour = hourList.get(hourIndex);  //滑动前的值
@@ -103,6 +140,9 @@ public class TimePicker2 extends BottomSheetDialog {
         hourWheelView.setCurrentItem(index);
     }
 
+    /**
+     * 设置分钟布局
+     */
     private void setMinuteView() {
         int dayIndex = dayWheelView.getCurrentItem();
         int hourIndex = hourWheelView.getCurrentItem();
@@ -121,6 +161,9 @@ public class TimePicker2 extends BottomSheetDialog {
         minuteWheelView.setCurrentItem(index);
     }
 
+    /**
+     * 确定
+     */
     private void ensure() {
         dismiss();
         int dayIndex = dayWheelView.getCurrentItem();
@@ -135,7 +178,9 @@ public class TimePicker2 extends BottomSheetDialog {
         }
     }
 
-
+    /**
+     * 初始化时间数据
+     */
     private void initTimeData() {
         //初始天时间
         mCalendar = Calendar.getInstance();
@@ -186,6 +231,10 @@ public class TimePicker2 extends BottomSheetDialog {
 
     }
 
+    /**
+     * 更新分钟数据
+     * @param all
+     */
     private void updateMinute(boolean all) {
         minuteList.clear();
         mCalendar.setTimeInMillis(startMillis);
@@ -202,6 +251,10 @@ public class TimePicker2 extends BottomSheetDialog {
         }
     }
 
+    /**
+     * 更新小时数据
+     * @param all
+     */
     private void updateHour(boolean all) {
         hourList.clear();
         if (all) {
@@ -217,6 +270,11 @@ public class TimePicker2 extends BottomSheetDialog {
         }
     }
 
+    /**
+     * 加载适配器
+     * @param wheelView
+     * @param datas
+     */
     private void initWheelView(WheelView wheelView, List<String> datas) {
         TimeWheelAdapter adapter = new TimeWheelAdapter(datas, wheelView.getContext());
         adapter.setItemResource(R.layout.zc_item_picker);
@@ -245,10 +303,21 @@ public class TimePicker2 extends BottomSheetDialog {
         return this;
     }
 
+    /**
+     * 选择接口
+     */
     public interface OnSelectListener {
+        /**
+         * 确定选择监听
+         * @param time
+         * @param timeStr
+         */
         void onSelect(long time, String timeStr);
     }
 
+    /**
+     * 时间适配器
+     */
     private class TimeWheelAdapter extends AbstractWheelTextAdapter {
 
         private List<String> datas;

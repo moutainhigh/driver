@@ -17,10 +17,8 @@ import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.personal.R;
 import com.easymi.personal.activity.ArticleActivity;
-import com.easymi.personal.activity.HelpCenterActivity;
 import com.easymi.personal.activity.LoginActivity;
 import com.easymi.personal.activity.NearWcActivity;
-import com.easymi.personal.activity.ReliActivity;
 import com.easymi.personal.activity.SetActivity;
 import com.easymi.personal.activity.SysCheck2Activity;
 import com.easymi.personal.activity.SysCheckActivity;
@@ -30,7 +28,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Administrator on 2016/9/1.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: GridAdapter
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 public class GridAdapter extends BaseAdapter {
 
@@ -43,6 +46,10 @@ public class GridAdapter extends BaseAdapter {
         stringList = new ArrayList<>();
     }
 
+    /**
+     * 设置数据
+     * @param stringList
+     */
     public void setStringList(List<String> stringList) {
         this.stringList = stringList;
         notifyDataSetChanged();

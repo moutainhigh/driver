@@ -35,19 +35,33 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by developerLzh on 2017/5/4.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: ArticleActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 文章相关的展示界面
+ * History:
  */
 
 @Route(path = "/personal/ArticleActivity")
 public class ArticleActivity extends RxBaseActivity implements View.OnClickListener {
+    /**
+     * 浏览器加载控件
+     */
     WebView webView;
-
+    /**
+     * 标题
+     */
     TextView title;
-
+    /**
+     * 关闭按钮
+     */
     TextView closeAll;
 
+    /**
+     * 加载进度条
+     */
     private ProgressBar myProgressBar;
-
 
     @Override
     public int getLayoutId() {
@@ -96,8 +110,14 @@ public class ArticleActivity extends RxBaseActivity implements View.OnClickListe
 
     private String tag;
     private Long articleId;
-    private Long annId;//是否是公告
+    /**
+     * 公告id
+     */
+    private Long annId;
 
+    /**
+     * 初始化数据和加载文章
+     */
     public void init() {
 
         Intent localIntent = getIntent();
@@ -132,6 +152,10 @@ public class ArticleActivity extends RxBaseActivity implements View.OnClickListe
         getArticle(tag);
     }
 
+    /**
+     * 获取公告信息
+     * @param annId
+     */
     private void getAnn(long annId) {
         Observable<PushAnnouncement> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .employAfficheById(annId, EmUtil.getAppKey())
@@ -164,6 +188,10 @@ public class ArticleActivity extends RxBaseActivity implements View.OnClickListe
         })));
     }
 
+    /**
+     * 获取文章信息 通过文章id
+     * @param articleId
+     */
     private void getArticle(long articleId) {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
@@ -196,7 +224,10 @@ public class ArticleActivity extends RxBaseActivity implements View.OnClickListe
             webView.loadData(html, "text/html; charset=UTF-8", null);
         })));
     }
-
+    /**
+     * 获取文章信息 通过文章类型
+     * @param alias
+     */
     private void getArticle(String alias) {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
@@ -231,6 +262,9 @@ public class ArticleActivity extends RxBaseActivity implements View.OnClickListe
         })));
     }
 
+    /**
+     * 显示关闭按钮
+     */
     Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -247,6 +281,9 @@ public class ArticleActivity extends RxBaseActivity implements View.OnClickListe
         }
     });
 
+    /**
+     * 初始化webview
+     */
     @SuppressLint("SetJavaScriptEnabled")
     public void initWeb() {
         webView.getSettings().setJavaScriptEnabled(true);
@@ -307,7 +344,6 @@ public class ArticleActivity extends RxBaseActivity implements View.OnClickListe
     }
 
     public void backAction(View view) {
-//		super.backAction(view);
         if (webView.canGoBack()) {
             webView.goBack();
         } else {

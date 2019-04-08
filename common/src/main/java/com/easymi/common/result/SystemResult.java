@@ -14,8 +14,13 @@ import com.google.gson.annotations.SerializedName;
  */
 public class SystemResult extends EmResult {
 
+    /**
+     * 系统配置
+     */
     public SystemConfig system;
-
+    /**
+     * 支付渠道
+     */
     @SerializedName("driver_pay_channel")
     public String driverPayType;
 

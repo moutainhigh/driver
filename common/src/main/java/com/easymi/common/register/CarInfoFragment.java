@@ -31,7 +31,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-
+/**
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
+ */
 public class CarInfoFragment extends AbsRegisterFragment {
 
     private static final int REQUEST_BRAND = 1;

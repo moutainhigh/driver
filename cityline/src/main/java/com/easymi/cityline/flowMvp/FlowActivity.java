@@ -2,6 +2,7 @@ package com.easymi.cityline.flowMvp;
 
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -54,9 +55,12 @@ import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult2;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
+import com.easymi.component.utils.TimeUtil;
+import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.overlay.DrivingRouteOverlay;
 import com.google.gson.Gson;
@@ -70,9 +74,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by liuzihao on 2018/11/15.
- * <p>
- * 订单执行流程
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FlowActivity
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description: 订单执行流程
+ * History:
  */
 @Route(path = "/cityline/FlowActivity")
 public class FlowActivity extends RxBaseActivity implements
@@ -88,21 +95,45 @@ public class FlowActivity extends RxBaseActivity implements
 
     AMap aMap;
 
+    /**
+     * 司机位置
+     */
     private LatLng lastLatlng;
+    /**
+     * 首次进入司机marker
+     */
     private Marker myFirstMarker;
+
 
     FlowPresenter presenter;
 
-    private ZXOrder zxOrder;
+    /**
+     * 专线班次
+     */
+    ZXOrder zxOrder;
+    /**
+     * 当前加载fragment
+     */
     Fragment currentFragment;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
+    /**
+     * 本地数据库班次信息
+     */
     DymOrder dymOrder;
 
+    /**
+     * 是否是手动操作地图
+     */
     public static boolean isMapTouched = false;
 
-    private boolean isOrderLoadOk = false;//订单查询是否完成
+    /**
+     * 订单查询是否完成
+     */
+    private boolean isOrderLoadOk = false;
 
     @Override
     public boolean isEnableSwipe() {
@@ -139,6 +170,10 @@ public class FlowActivity extends RxBaseActivity implements
 
     }
 
+    /**
+     * 查询专线班次的详细订单
+     * @param zxOrder
+     */
     private void getCustomers(ZXOrder zxOrder) {
         Observable<EmResult2<List<OrderCustomer>>> observable = ApiManager.getInstance().createApi(Config.HOST, CLService.class)
                 .getOrderCustomers(zxOrder.orderId, "5,10,15,20")
@@ -147,6 +182,10 @@ public class FlowActivity extends RxBaseActivity implements
                 .observeOn(AndroidSchedulers.mainThread());
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, false, result2 -> {
+            if (result2.getData() == null || result2.getData().size() == 0){
+                ToastUtil.showMessage(this,"当前班次没有任何乘客");
+                finish();
+            }
             isOrderLoadOk = true;
             List<OrderCustomer> orderCustomers = result2.getData();
 
@@ -193,11 +232,13 @@ public class FlowActivity extends RxBaseActivity implements
                 orderCustomer.orderType = zxOrder.orderType;
 
                 for (OrderCustomer.OrderAddressVo orderAddressVo : orderCustomer.orderAddressVos) {
-                    if (orderAddressVo.type == 1) { //起点
+                    if (orderAddressVo.type == 1) {
+                        //起点
                         orderCustomer.startAddr = orderAddressVo.address;
                         orderCustomer.startLat = orderAddressVo.latitude;
                         orderCustomer.startLng = orderAddressVo.longitude;
-                    } else { //终点
+                    } else {
+                        //终点
                         orderCustomer.endAddr = orderAddressVo.address;
                         orderCustomer.endLat = orderAddressVo.latitude;
                         orderCustomer.endLng = orderAddressVo.longitude;
@@ -210,6 +251,10 @@ public class FlowActivity extends RxBaseActivity implements
         })));
     }
 
+    /**
+     * 基本数据转专线班次
+     * @param baseOrder
+     */
     public void baseToZX(BaseOrder baseOrder) {
         zxOrder = new ZXOrder();
 
@@ -348,11 +393,14 @@ public class FlowActivity extends RxBaseActivity implements
             dymOrder.updateStatus();
         }
         List<OrderCustomer> customers = OrderCustomer.findByIDTypeOrderBySendSeq(zxOrder.orderId, zxOrder.orderType);
-        for (OrderCustomer customer : customers) { //接完后把所有的订单置为未送
-            if (customer.status == 1) {  //只有已接的才置为未送状态
+        for (OrderCustomer customer : customers) {
+            //接完后把所有的订单置为未送
+            if (customer.status == 1) {
+                //只有已接的才置为未送状态
                 customer.status = 3;
                 customer.updateStatus();
-            } else { //跳过接的直接置为跳过送状态
+            } else {
+                //跳过接的直接置为跳过送状态
                 customer.status = 5;
                 customer.updateStatus();
             }
@@ -416,7 +464,6 @@ public class FlowActivity extends RxBaseActivity implements
         finishFragment = new FinishFragment();
         finishFragment.setBridge(bridge);
 
-//        switchFragment(cusListFragment).commit();
     }
 
     @Override
@@ -426,6 +473,7 @@ public class FlowActivity extends RxBaseActivity implements
         if (isOrderLoadOk) {
             showFragmentByStatus();
         }
+        Log.e("hufeng/onResume", TimeUtil.getTime("HH:mm:ss:SSS",System.currentTimeMillis()));
     }
 
     /**
@@ -447,7 +495,7 @@ public class FlowActivity extends RxBaseActivity implements
 
         aMap.setInfoWindowAdapter(new LeftWindowAdapter(this));
 
-        String locStr = XApp.getMyPreferences().getString(Config.SP_LAST_LOC, "");
+        String locStr = new CsSharedPreferences().getString(Config.SP_LAST_LOC, "");
         EmLoc emLoc = new Gson().fromJson(locStr, EmLoc.class);
         if (null != emLoc) {
             lastLatlng = new LatLng(emLoc.latitude, emLoc.longitude);
@@ -917,6 +965,7 @@ public class FlowActivity extends RxBaseActivity implements
     protected void onStop() {
         super.onStop();
         LocReceiver.getInstance().deleteObserver(this);//取消位置订阅
+        Log.e("hufeng/onStop", TimeUtil.getTime("HH:mm:ss:SSS",System.currentTimeMillis()));
     }
 
     @Override
@@ -926,13 +975,15 @@ public class FlowActivity extends RxBaseActivity implements
         notStartFragment.cancelTimer();
         finishFragment.cancelTimer();
         acceptSendFragment.cancelTimer();
+        Log.e("hufeng/onPause", TimeUtil.getTime("HH:mm:ss:SSS",System.currentTimeMillis()));
     }
 
     @Override
     protected void onDestroy() {
+        super.onDestroy();
         mapView.onDestroy();
         presenter.stopNavi();
-        super.onDestroy();
+        Log.e("hufeng/onDestroy", TimeUtil.getTime("HH:mm:ss:SSS",System.currentTimeMillis()));
     }
 
     @Override
@@ -959,7 +1010,8 @@ public class FlowActivity extends RxBaseActivity implements
         Log.e("locPos", "bearing 2 >>>>" + location.bearing);
         LatLng latLng = new LatLng(location.latitude, location.longitude);
 
-        if (null == smoothMoveMarker) {//首次进入
+        if (null == smoothMoveMarker) {
+            //首次进入
             smoothMoveMarker = new SmoothMoveMarker(aMap);
             smoothMoveMarker.setDescriptor(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                     .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
@@ -967,7 +1019,8 @@ public class FlowActivity extends RxBaseActivity implements
             smoothMoveMarker.setRotate(location.bearing);
 //            smoothMoveMarker.getMarker().
         } else {
-            if (null != myFirstMarker) {//去除掉首次的位置marker
+            //去除掉首次的位置marker
+            if (null != myFirstMarker) {
                 myFirstMarker.remove();
             }
             List<LatLng> latLngs = new ArrayList<>();
@@ -1068,5 +1121,11 @@ public class FlowActivity extends RxBaseActivity implements
     @Override
     public void onBackPressed() {
         cusToolbar.leftIcon.callOnClick();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        mapView.onSaveInstanceState(outState);
     }
 }

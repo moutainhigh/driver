@@ -47,6 +47,7 @@ import com.easymi.component.network.HttpResultFunc3;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult2;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
@@ -79,9 +80,9 @@ import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: FlowActivity
- * Author: shine
+ * @Author: shine
  * Date: 2018/12/18 下午1:52
- * Description:
+ * Description: 跑单界面
  * History:
  */
 @Route(path = "/chartered/FlowActivity")
@@ -104,14 +105,14 @@ public class FlowActivity extends RxBaseActivity implements
     FlowPresenter presenter;
 
     Fragment currentFragment;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
     DymOrder dymOrder;
 
     public static boolean isMapTouched = false;
-
-    private boolean isOrderLoadOk = false;//订单查询是否完成
 
     private long orderId;
 
@@ -210,7 +211,7 @@ public class FlowActivity extends RxBaseActivity implements
 
         aMap.setInfoWindowAdapter(new LeftWindowAdapter(this));
 
-        String locStr = XApp.getMyPreferences().getString(Config.SP_LAST_LOC, "");
+        String locStr = new CsSharedPreferences().getString(Config.SP_LAST_LOC, "");
         EmLoc emLoc = new Gson().fromJson(locStr, EmLoc.class);
         if (null != emLoc) {
             lastLatlng = new LatLng(emLoc.latitude, emLoc.longitude);

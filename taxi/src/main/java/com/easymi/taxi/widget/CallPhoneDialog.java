@@ -19,9 +19,13 @@ import com.easymi.taxi.R;
 import com.easymi.taxi.entity.TaxiOrder;
 
 /**
- * Created by liuzihao on 2018/3/13.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: CallPhoneDialog
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 打电话弹窗
+ * History:
  */
-
 public class CallPhoneDialog extends Dialog {
 
     public CallPhoneDialog(@NonNull Context context) {
@@ -48,6 +52,9 @@ public class CallPhoneDialog extends Dialog {
         getWindow().setAttributes(p);
     }
 
+    /**
+     * 构建dialog
+     */
     public static class Builder {
 
         private Context context;
@@ -88,7 +95,11 @@ public class CallPhoneDialog extends Dialog {
         }
     }
 
-
+    /**
+     * 拨打电话
+     * @param context
+     * @param taxiOrder
+     */
     public static void callDialog(Activity context, TaxiOrder taxiOrder) {
 //        if (StringUtils.isNotBlank(taxiOrder.userPhone)) {
 //            CallPhoneDialog dialog = new CallPhoneDialog.Builder(context, taxiOrder).create();

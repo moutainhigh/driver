@@ -3,6 +3,14 @@ package com.easymi.cityline.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
+ */
 public class MapPositionModel implements Parcelable {
     private String address;
     private double latitude;//纬度
@@ -10,9 +18,11 @@ public class MapPositionModel implements Parcelable {
     private int sort;//顺序
     private int type;//类型1代表出发地，3代表目的地
 
+
     public MapPositionModel() {
         super();
     }
+
 
     public MapPositionModel(String address, double latitude, double longitude, int sort, int type) {
         super();

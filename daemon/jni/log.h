@@ -1,6 +1,6 @@
 /*
  * File        : daemon_below20.c
- * Author      : Guoyang3
+ *@Author      : Guoyang3
  * Date        : Aug. 14, 2015
  * Description : for easy log.
  */

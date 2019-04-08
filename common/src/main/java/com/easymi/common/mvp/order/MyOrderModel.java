@@ -16,7 +16,7 @@ import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: MyOrderModel
- * Author: shine
+ * @Author: shine
  * Date: 2018/11/23 上午11:37
  * Description:
  * History:
@@ -26,7 +26,7 @@ public class MyOrderModel implements MyOrderContract.Model {
     @Override
     public Observable<QueryOrdersResult> indexOrders(int page,int size,String status) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .queryMyOrders( page, size,status,EmUtil.getEmployInfo().serviceType)
+                .queryMyOrders( page, size,status)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -35,7 +35,9 @@ public class MyOrderModel implements MyOrderContract.Model {
     @Override
     public Observable<MultipleOrderResult> grabZCOrder(Long orderId, Long version) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .grabZCOrder(EmUtil.getEmployId(),EmUtil.getEmployInfo().realName,EmUtil.getEmployInfo().phone,orderId,version)
+                .grabZCOrder(EmUtil.getEmployId(),EmUtil.getEmployInfo().realName,EmUtil.getEmployInfo().phone,orderId,version
+                        ,EmUtil.getLastLoc().longitude+""
+                        ,EmUtil.getLastLoc().longitude+"")
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -44,7 +46,9 @@ public class MyOrderModel implements MyOrderContract.Model {
     @Override
     public Observable<MultipleOrderResult> takeZCOrder(Long orderId, Long version) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .takeZCOrder(EmUtil.getEmployId(),EmUtil.getEmployInfo().realName,EmUtil.getEmployInfo().phone,orderId,version)
+                .takeZCOrder(EmUtil.getEmployId(),EmUtil.getEmployInfo().realName,EmUtil.getEmployInfo().phone,orderId,version
+                        ,EmUtil.getLastLoc().longitude+""
+                        ,EmUtil.getLastLoc().longitude+"")
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

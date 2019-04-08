@@ -15,7 +15,7 @@ import retrofit2.Retrofit;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: KeyGsonConverterFactory
- * Author: shine
+ *@Author: shine
  * Date: 2018/11/25 下午3:48
  * Description:
  * History:

@@ -17,23 +17,40 @@ import com.easymi.component.entity.DymOrder;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2018/11/15.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: CusListFragment
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description: 客户列表界面
+ * History:
  */
-
 public class CusListFragment extends RxBaseFragment {
 
     Button button;
     RecyclerView recyclerView;
-
+    /**
+     * 订单id，类型
+     */
     private long orderId;
     private String orderType;
 
+    /**
+     * 客户适配器
+     */
     private CusListAdapter cusListAdapter;
 
+    /**
+     * 客户数据集
+     */
     private List<OrderCustomer> orderCustomerList;
 
+    /**
+     * 本地数据库订单数据
+     */
     private DymOrder dymOrder;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
     private int flag;
@@ -50,6 +67,9 @@ public class CusListFragment extends RxBaseFragment {
         changeUi();
     }
 
+    /**
+     * 显示ui
+     */
     private void changeUi() {
         if (button == null) {
             return;
@@ -102,6 +122,9 @@ public class CusListFragment extends RxBaseFragment {
         }
     }
 
+    /**
+     * 添加数据到适配器
+     */
     private void showList() {
         if (flag == StaticVal.PLAN_ACCEPT) {
             orderCustomerList = OrderCustomer.findByIDTypeOrderByAcceptSeq(orderId, orderType);

@@ -50,6 +50,7 @@ import com.amap.api.services.geocoder.RegeocodeResult;
 import com.easymi.cityline.R;
 import com.easymi.cityline.entity.MapPositionModel;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
 
 import java.util.ArrayList;
@@ -57,7 +58,12 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * 在地图上选择详细上下车地址
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: SelectPlaceOnMapActivity
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description: 在地图上选择详细上下车地址
+ * History:
  */
 public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFenceListener,
         GeocodeSearch.OnGeocodeSearchListener,
@@ -66,25 +72,54 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
         View.OnClickListener {
     private TextView mInputEt;
     private Button mConfirmPosBtn;
-    private List<MapPositionModel> mMapPosList = new ArrayList<>();
-    private AMapLocationClient mlocationClient;
-    private LocationSource.OnLocationChangedListener mListener;
     private MapView mMapView;
     private AMap mAMap;
-    // 多边形围栏的边界点
+
+    /**
+     * 起点或者终点电子围栏点集合
+     */
+    private List<MapPositionModel> mMapPosList = new ArrayList<>();
+    /**
+     * 地图定位对象
+     */
+    private AMapLocationClient mlocationClient;
+    /**
+     * 定位监听
+     */
+    private LocationSource.OnLocationChangedListener mListener;
+    /**
+     * 多边形围栏的边界点
+     */
     private List<LatLng> polygonPoints = new ArrayList<>();
+
     // 当前的坐标点集合，主要用于进行地图的可视区域的缩放
     private LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
     // 地理围栏客户端
     private GeoFenceClient fenceClient = null;
-    // 触发地理围栏的行为，默认为进入提醒
-    // 地理围栏的广播action
+    /**
+     * 触发地理围栏的行为，默认为进入提醒
+     * 地理围栏的广播action
+     */
     private static final String GEOFENCE_BROADCAST_ACTION = "com.easymi.cityline.GEOFENCE_BROADCAST_ACTION";
-    // 记录已经添加成功的围栏
+    /**
+     * 记录已经添加成功的围栏
+     */
     private HashMap<String, GeoFence> fenceMap = new HashMap<>();
+    /**
+     * 逆地理编码
+     */
     private GeocodeSearch mGeocodeSearch;
+    /**
+     * 当前城市
+     */
     private String mNowCity;
+    /**
+     * 当前位置经纬度
+     */
     private float mLongitude, mLatitude;
+    /**
+     * 是否是第一次加载
+     */
     private boolean mIsFirstIn = true;
 
     @Override
@@ -94,6 +129,9 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
         cusToolbar.setTitle(typeText);
     }
 
+    /**
+     * 标题内容
+     */
     String typeText;
 
     @Override
@@ -105,44 +143,31 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
         mConfirmPosBtn.setOnClickListener(this);
         mMapView.onCreate(savedInstanceState);
         init();
+
         createMarker();
+
         mInputEt = findViewById(R.id.input_place_et);
         typeText = "";
         switch (getIntent().getIntExtra("select_place_type", -1)) {
-            case 1://上车点
+            case 1:
+                //上车点
                 typeText = getString(R.string.select_aboard_place);
                 mInputEt.setHint(R.string.input_detail_on_address);
                 break;
-            case 3://下车点
+            case 3:
+                //下车点
                 typeText = getString(R.string.select_debus_place);
                 mInputEt.setHint(R.string.input_detail_off_address);
                 break;
+            default:
+                break;
         }
 
-//        mInputEt.setOnFocusChangeListener((v, hasFocus) -> {
-//            if (hasFocus && !TextUtils.isEmpty(((EditText) v).getText().toString())) {
-//                ((EditText) v).setText("");
-//                mConfirmPosBtn.setEnabled(false);
-//                mConfirmPosBtn.setBackgroundResource(R.drawable.shape_button_gray);
-//            }
-//        });
-//        mInputEt.setOnEditorActionListener((v, actionId, event) -> {
-//            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-//                InputMethodManager imm = (InputMethodManager) SelectPlaceOnMapActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
-//                if (imm != null) {
-//                    if (imm.isActive() && SelectPlaceOnMapActivity.this.getCurrentFocus() != null) {
-//                        if (SelectPlaceOnMapActivity.this.getCurrentFocus().getWindowToken() != null) {
-//                            imm.hideSoftInputFromWindow(SelectPlaceOnMapActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-//                        }
-//                    }
-//                }
-//                moveToPosByText(v.getText().toString());
-//                return true;
-//            }
-//            return false;
-//        });
     }
 
+    /**
+     * 地图初始化
+     */
     private void init() {
         if (mAMap == null) {
             mAMap = mMapView.getMap();
@@ -173,8 +198,10 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
      * 设置一些amap的属性
      */
     private void setUpMap() {
-        mAMap.setLocationSource(this);// 设置定位监听
-        mAMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
+        // 设置定位监听
+        mAMap.setLocationSource(this);
+        // 设置默认定位按钮是否显示
+        mAMap.getUiSettings().setMyLocationButtonEnabled(true);
         MyLocationStyle myLocationStyle = new MyLocationStyle();
         // 自定义定位蓝点图标
         myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromResource(R.mipmap.navi_map_gps_locked));
@@ -186,7 +213,8 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
         myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));
         // 将自定义的 myLocationStyle 对象添加到地图上
         mAMap.setMyLocationStyle(myLocationStyle);
-        mAMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
+        // 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
+        mAMap.setMyLocationEnabled(true);
         // 设置定位的类型为定位模式 ，可以由定位、跟随或地图根据面向方向旋转几种
         mAMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
     }
@@ -244,6 +272,11 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
         }
     }
 
+    /**
+     * 根据类型显示围栏路径
+     *
+     * @param fence
+     */
     private void drawFence(GeoFence fence) {
         switch (fence.getType()) {
             case GeoFence.TYPE_POLYGON:
@@ -257,6 +290,11 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
         polygonPoints.clear();
     }
 
+    /**
+     * 添加围栏线条颜色等
+     *
+     * @param fence
+     */
     private void drawPolygon(GeoFence fence) {
         final List<List<DPoint>> pointList = fence.getPointList();
         if (null == pointList || pointList.isEmpty()) {
@@ -277,6 +315,9 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
 
     final Object lock = new Object();
 
+    /**
+     * 将围栏添加到地图上
+     */
     void drawFence2Map() {
         new Thread() {
             @Override
@@ -316,10 +357,15 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
                     String statusStr = (String) msg.obj;
                     Log.e("tagGeo", statusStr);
                     break;
+                default:
+                    break;
             }
         }
     };
 
+    /**
+     * 围栏点集合
+     */
     List<GeoFence> fenceList = new ArrayList<>();
 
     @Override
@@ -366,6 +412,8 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
                     case GeoFence.STATUS_STAYED:
                         sb.append("停留在围栏内 ");
                         break;
+                    default:
+                        break;
                 }
                 if (status != GeoFence.STATUS_LOCFAIL) {
                     if (!TextUtils.isEmpty(customId)) {
@@ -390,7 +438,8 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
         if (mListener != null && amapLocation != null) {
             if (amapLocation.getErrorCode() == 0) {
                 mNowCity = amapLocation.getCity();
-                mListener.onLocationChanged(amapLocation);// 显示系统小蓝点
+                // 显示系统小蓝点
+                mListener.onLocationChanged(amapLocation);
             } else {
                 String errText = "定位失败," + amapLocation.getErrorCode() + ": " + amapLocation.getErrorInfo();
                 Log.e("tagPos", errText);
@@ -437,7 +486,7 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
      */
     private void addPolygonFence() {
         if (null == polygonPoints || polygonPoints.size() < 3) {
-            Toast.makeText(getApplicationContext(), "参数不全", Toast.LENGTH_SHORT).show();
+            ToastUtil.showMessage(getApplicationContext(), "参数不全", Toast.LENGTH_SHORT);
             return;
         }
         List<DPoint> pointList = new ArrayList<>();
@@ -447,16 +496,23 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
         fenceClient.addGeoFence(pointList, "333333");
     }
 
-
+    /**
+     * 创建地图marker
+     */
     public void createMarker() {
         //map  地图添加   监听mark     必须的
         mAMap.setOnMapLoadedListener(() -> {
-            for (MapPositionModel model : mMapPosList) {
-                polygonPoints.add(new LatLng(model.getLatitude(), model.getLongitude()));
+            if (mMapPosList.size() == 1) {
+                addMarkersToMap();
+                mAMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mMapPosList.get(0).getLatitude(), mMapPosList.get(0).getLongitude()), 16));
+            } else {
+                for (MapPositionModel model : mMapPosList) {
+                    polygonPoints.add(new LatLng(model.getLatitude(), model.getLongitude()));
+                }
+                addPolygonFence();
+                addMarkersToMap();
+                Log.e("tagTest", "地图加载完成");
             }
-            addPolygonFence();
-            addMarkersToMap();
-            Log.e("tagTest", "地图加载完成");
         });
         //拖动地图  获取地图位置设置地图状态的监听接口。
         mAMap.setOnCameraChangeListener(new AMap.OnCameraChangeListener() {
@@ -467,20 +523,28 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
 
             @Override
             public void onCameraChangeFinish(CameraPosition cameraPosition) {
-                List<LatLng> points = new ArrayList<>();
-                for (MapPositionModel model : mMapPosList) {
-                    points.add(new LatLng(model.getLatitude(), model.getLongitude()));
-                }
-                boolean isIn = isInGeoArea(mAMap, points, cameraPosition.target);
-                Log.e("tagTest", "是否在围栏内？=====" + isIn);
-                if (isIn) {
+                if (mMapPosList.size() != 1){
+                    List<LatLng> points = new ArrayList<>();
+                    for (MapPositionModel model : mMapPosList) {
+                        points.add(new LatLng(model.getLatitude(), model.getLongitude()));
+                    }
+                    boolean isIn = isInGeoArea(mAMap, points, cameraPosition.target);
+                    Log.e("tagTest", "是否在围栏内？=====" + isIn);
+                    if (isIn) {
+                        mConfirmPosBtn.setEnabled(true);
+                        mConfirmPosBtn.setBackgroundResource(R.drawable.shape_button_blue);
+                    } else {
+                        mConfirmPosBtn.setEnabled(false);
+                        mConfirmPosBtn.setBackgroundResource(R.drawable.shape_button_gray);
+                    }
+                    getAddressByLatlng(cameraPosition.target);
+                }else {
                     mConfirmPosBtn.setEnabled(true);
                     mConfirmPosBtn.setBackgroundResource(R.drawable.shape_button_blue);
-                } else {
-                    mConfirmPosBtn.setEnabled(false);
-                    mConfirmPosBtn.setBackgroundResource(R.drawable.shape_button_gray);
+
+                    getAddressByLatlng(cameraPosition.target);
                 }
-                getAddressByLatlng(cameraPosition.target);
+
             }
         });// 对amap添加移动地图事件监听器
     }
@@ -513,6 +577,11 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
         return contains;
     }
 
+    /**
+     * 逆地理编码
+     *
+     * @param latLng
+     */
     private void getAddressByLatlng(LatLng latLng) {
         //逆地理编码查询条件：逆地理编码查询的地理坐标点、查询范围、坐标类型。
         LatLonPoint latLonPoint = new LatLonPoint(latLng.latitude, latLng.longitude);
@@ -536,7 +605,8 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
      * getCameraPosition（）  和   aMap.setOnCameraChangeListener(new AMap.OnCameraChangeListener() {} CameraPosition  一致
      */
     private void addMarkersToMap() {
-        LatLng latLng = mAMap.getCameraPosition().target;//  目的地（target）         缩放级别（zoom）       方向（bearing）        倾斜角度（tilt）
+        //  目的地（target）         缩放级别（zoom）       方向（bearing）        倾斜角度（tilt）
+        LatLng latLng = mAMap.getCameraPosition().target;
         Point screenPosition = mAMap.getProjection().toScreenLocation(latLng);
         Marker screenMarker = mAMap.addMarker(new MarkerOptions().title("")
                 .anchor(0.5f, 1f)
@@ -589,11 +659,13 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
             result.setLongitude(mLongitude);
             result.setLatitude(mLatitude);
             switch (getIntent().getIntExtra("select_place_type", -1)) {
-                case 1://起点
+                case 1:
+                    //起点
                     result.setSort(0);
                     result.setType(1);
                     break;
-                case 3://终点
+                case 3:
+                    //终点
                     result.setSort(1);
                     result.setType(3);
                     break;

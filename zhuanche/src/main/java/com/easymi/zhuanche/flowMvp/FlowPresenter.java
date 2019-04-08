@@ -58,9 +58,13 @@ import java.util.List;
 import rx.Observable;
 
 /**
- * Created by liuzihao on 2017/11/15.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
-
 public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback, AMapNaviListener {
 
     private Context context;
@@ -139,12 +143,12 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     //前往目的地
     @Override
-    public void startDrive(Long orderId, Long version, LoadingButton btn) {
+    public void startDrive(Long orderId, Long version) {
         if (!PhoneUtil.checkGps(context)) {
             return;
         }
         Observable<ZCOrderResult> observable = model.startDrive(orderId, version);
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, zcOrderResult -> {
+        view.getManager().add(observable.subscribe(new MySubscriber<ZCOrderResult>(context,false,false,  zcOrderResult -> {
             updateDymOrder(zcOrderResult.data);
             view.showOrder(zcOrderResult.data);
         })));
@@ -386,42 +390,31 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
                 false, consumerResult -> view.showConsumer(consumerResult.consumerInfo))));
     }
 
-    @Override
-    public ZCOrderResult orderResult2ZCOrder(ZCOrderResult zcOrderResult) {
-        return zcOrderResult;
-    }
 
     @Override
     public void onInitNaviFailure() {
-        Log.e("FlowerPresenter", "onInitNaviFailure()");
         view.reRout();
     }
 
     @Override
     public void onInitNaviSuccess() {
-        Log.e("FlowerPresenter", "onInitNaviSuccess()");
     }
 
     @Override
     public void onLocationChange(AMapNaviLocation aMapNaviLocation) {
-        Log.e("FlowerPresenter", "onLocationChange()");
-//        routePlanByNavi(aMapNaviLocation.getCoord().getLatitude(),aMapNaviLocation.getCoord().getLongitude());
     }
 
     @Override
     public void onGetNavigationText(int i, String s) {
-        Log.e("FlowerPresenter", s);
     }
 
     @Override
     public void onArriveDestination(boolean b) {
-        Log.e("FlowerPresenter", "onArriveDestination()");
         XApp.getInstance().syntheticVoice("即将到达目的地");
     }
 
     @Override
     public void onStartNavi(int i) {
-        Log.e("FlowerPresenter", "onStartNavi()");
     }
 
     @Override
@@ -503,9 +496,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
      */
     @Override
     public void onReCalculateRouteForTrafficJam() {
-//        Log.e("FlowerPresenter", "onReCalculateRouteForTrafficJam()");
-//        view.showReCal();
-//        XApp.getInstance().syntheticVoice("为躲避拥堵，正在重新规划路径");
+
     }
 
     @Override
@@ -578,7 +569,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void onGetNavigationText(String s) {
-//        XApp.getInstance().syntheticVoice(s, false);
     }
 
     @Override

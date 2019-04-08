@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: CityLineResult
- * Author: shine
+ * @Author: shine
  * Date: 2018/11/14 下午4:39
  * Description:
  * History:

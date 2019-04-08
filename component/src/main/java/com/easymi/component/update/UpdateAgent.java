@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easymi.component.R;
+import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.UpdateProgressDialog;
 
 import java.io.File;
@@ -359,7 +360,7 @@ public class UpdateAgent implements ICheckAgent, IUpdateAgent, IDownloadAgent {
         @Override
         public void onFailure(UpdateError error) {
             UpdateUtil.log(error.toString());
-            Toast.makeText(mContext, error.toString(), Toast.LENGTH_LONG).show();
+            ToastUtil.showMessage(mContext, error.toString(), Toast.LENGTH_LONG);
         }
     }
 

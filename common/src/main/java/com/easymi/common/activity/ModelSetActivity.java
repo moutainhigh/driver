@@ -10,13 +10,20 @@ import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.Employ;
+import com.easymi.component.utils.CsEditor;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.switchButton.SwitchButton;
 
 /**
- * Created by liuzihao on 2018/4/25.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:ModelSetActivity
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description: 听单模式 未使用
+ * History:
  */
 
 public class ModelSetActivity extends RxBaseActivity {
@@ -63,8 +70,8 @@ public class ModelSetActivity extends RxBaseActivity {
             zhuancheCon.setVisibility(View.GONE);
         }
 
-        daijiaSwitch.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_DAIJIA_LISTEN_ORDER, true));
-        zhuancheSwitch.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_ZHUANCHE_LISTEN_ORDER, true));
+        daijiaSwitch.setChecked(new CsSharedPreferences().getBoolean(Config.SP_DAIJIA_LISTEN_ORDER, true));
+        zhuancheSwitch.setChecked(new CsSharedPreferences().getBoolean(Config.SP_ZHUANCHE_LISTEN_ORDER, true));
 
         daijiaSwitch.setOnCheckedChangeListener((compoundButton, b) -> {
             if (!b) {
@@ -88,7 +95,7 @@ public class ModelSetActivity extends RxBaseActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+        CsEditor editor =  new CsEditor();
         editor.putBoolean(Config.SP_DAIJIA_LISTEN_ORDER, daijiaSwitch.isChecked());
         editor.putBoolean(Config.SP_ZHUANCHE_LISTEN_ORDER, zhuancheSwitch.isChecked());
         editor.apply();

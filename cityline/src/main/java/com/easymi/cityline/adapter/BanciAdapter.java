@@ -17,30 +17,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2017/11/14.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class BanciAdapter extends RecyclerView.Adapter<BanciAdapter.Holder> {
 
-    private final boolean canBaoxiaoDJ;
-    private final boolean canBaoxiaoZC;
     private Context context;
 
     private List<ZXOrder> baseOrders;
 
     OnItemClickListener onItemClickListener;
 
+    /**
+     * 设置列表点击监听
+     * @param onItemClickListener
+     */
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
+    /**
+     * 构造器
+     * @param context
+     */
     public BanciAdapter(Context context) {
         this.context = context;
         baseOrders = new ArrayList<>();
-        canBaoxiaoDJ = TaxiSetting.findOne().isExpenses == 1;
-        canBaoxiaoZC = ZCSetting.findOne().isExpenses == 1;
     }
 
+    /**
+     * 加载数据
+     * @param baseOrders
+     */
     public void setBaseOrders(List<ZXOrder> baseOrders) {
         this.baseOrders = baseOrders;
         notifyDataSetChanged();
@@ -71,6 +84,9 @@ public class BanciAdapter extends RecyclerView.Adapter<BanciAdapter.Holder> {
         return baseOrders.size();
     }
 
+    /**
+     * ViewHolder
+     */
     class Holder extends RecyclerView.ViewHolder {
 
         TextView orderTime;
@@ -88,11 +104,17 @@ public class BanciAdapter extends RecyclerView.Adapter<BanciAdapter.Holder> {
             orderStartPlace = itemView.findViewById(R.id.order_start_place);
             orderEndPlace = itemView.findViewById(R.id.order_end_place);
             orderType = itemView.findViewById(R.id.order_type);
-
         }
     }
 
+    /**
+     * 子项点击接口
+     */
     public interface OnItemClickListener {
+        /**
+         * 单击监听方法
+         * @param zxOrder
+         */
         void onClick(ZXOrder zxOrder);
     }
 }

@@ -1,7 +1,12 @@
 package com.easymi.common.entity;
 
 /**
- * Created by liuzihao on 2018/11/2.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class PullFeeEntity {

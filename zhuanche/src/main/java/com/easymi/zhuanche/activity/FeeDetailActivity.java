@@ -2,22 +2,34 @@ package com.easymi.zhuanche.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.DymOrder;
+import com.easymi.component.network.GsonUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.zhuanche.R;
 import com.easymi.zhuanche.entity.ZCOrder;
+import com.easymi.zhuanche.entity.StageArrays;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Created by developerLzh on 2017/11/28 0028.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FeeDetailActivity
+ *
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:  专车费用详情
+ * History:
  */
-
 public class FeeDetailActivity extends RxBaseActivity {
 
     TextView startFee;
@@ -46,6 +58,10 @@ public class FeeDetailActivity extends RxBaseActivity {
 
     private DymOrder dymOrder;
     private ZCOrder zcOrder;
+
+    LinearLayout lin_jieti;
+
+    List<StageArrays> stages = new ArrayList<>();
 
     @Override
     public int getLayoutId() {
@@ -95,6 +111,8 @@ public class FeeDetailActivity extends RxBaseActivity {
         TextView low_fee_title = findViewById(R.id.low_fee_title);
         TextView low_pay_fee = findViewById(R.id.low_pay_fee);
 
+        lin_jieti = findViewById(R.id.lin_jieti);
+
 
         dymOrder = (DymOrder) getIntent().getSerializableExtra("dymOrder");
         zcOrder = (ZCOrder) getIntent().getSerializableExtra("zcOrder");
@@ -130,11 +148,10 @@ public class FeeDetailActivity extends RxBaseActivity {
             minestFeeText.setText(String.valueOf(dymOrder.minestMoney) + getString(R.string.yuan));
         }
 
-
-        height_fee_title.setText("高峰费(" + dymOrder.peakMile + "公里)");
+        height_fee_title.setText("高峰费(" + new DecimalFormat("#0.00").format(dymOrder.peakMile / 1000) + "公里)");
         height_pay_fee.setText(dymOrder.peakCost + getString(R.string.yuan));
 
-        night_fee_title.setText("夜间里程费(" + dymOrder.nightMile + "公里)");
+        night_fee_title.setText("夜间里程费(" + new DecimalFormat("#0.00").format(dymOrder.nightMile / 1000) + "公里)");
         night_pay_fee.setText(dymOrder.nightMileFee + getString(R.string.yuan));
 
         night_time_fee_title.setText("夜间时间费(" + dymOrder.nightTime + "分钟)");
@@ -145,6 +162,19 @@ public class FeeDetailActivity extends RxBaseActivity {
 
         totalFee.setText(getString(R.string.money_sign) + dymOrder.orderShouldPay);
 
+        stages = GsonUtil.parseToArrayList(dymOrder.stageArrays, StageArrays.class);
+
+        if (stages != null && stages.size() != 0){
+            for (StageArrays arrays : stages){
+                View view = LayoutInflater.from(this).inflate(R.layout.item_stages,null);
+                TextView distance = view.findViewById(R.id.tv_distance);
+                TextView money = view.findViewById(R.id.tv_money);
+
+                distance.setText(getResources().getString(R.string.zc_jietifei)+arrays.num+"("+arrays.longRange+")"+getResources().getString(R.string.km));
+                money.setText(new DecimalFormat("#0.00").format(arrays.rangePrice)+getResources().getString(R.string.yuan));
+                lin_jieti.addView(view);
+            }
+        }
     }
 
     @Override

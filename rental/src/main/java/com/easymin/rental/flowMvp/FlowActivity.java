@@ -38,6 +38,7 @@ import com.easymi.component.entity.EmLoc;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
@@ -66,7 +67,7 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: FlowActivity
- * Author: shine
+ *@Author: shine
  * Date: 2018/12/18 下午1:52
  * Description:
  * History:
@@ -91,7 +92,9 @@ public class FlowActivity extends RxBaseActivity implements
     FlowPresenter presenter;
 
     Fragment currentFragment;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
     DymOrder dymOrder;
@@ -199,7 +202,7 @@ public class FlowActivity extends RxBaseActivity implements
 
         aMap.setInfoWindowAdapter(new LeftWindowAdapter(this));
 
-        String locStr = XApp.getMyPreferences().getString(Config.SP_LAST_LOC, "");
+        String locStr = new CsSharedPreferences().getString(Config.SP_LAST_LOC, "");
         EmLoc emLoc = new Gson().fromJson(locStr, EmLoc.class);
         if (null != emLoc) {
             lastLatlng = new LatLng(emLoc.latitude, emLoc.longitude);
@@ -234,7 +237,8 @@ public class FlowActivity extends RxBaseActivity implements
                 aMap.clear();
                 smoothMoveMarker = null;
                 initMap();
-                receiveLoc(EmUtil.getLastLoc());//第一时间加上自身位置
+                //第一时间加上自身位置
+                receiveLoc(EmUtil.getLastLoc());
             }
 
             @Override
@@ -514,9 +518,8 @@ public class FlowActivity extends RxBaseActivity implements
                     (int) (DensityUtil.getDisplayWidth(this) / 2),
                     0));
         }
-
-
-        latLngs.remove(lastLatlng);//后续可能会使用这个latLngs 所以移除加入的上次位置
+        //后续可能会使用这个latLngs 所以移除加入的上次位置
+        latLngs.remove(lastLatlng);
     }
 
     /**

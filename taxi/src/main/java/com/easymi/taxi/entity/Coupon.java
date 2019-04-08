@@ -5,14 +5,28 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 /**
- * Created by liuzihao on 2018/4/4.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: Coupon
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class Coupon implements Serializable{
+    /**
+     *  1  折扣卷     2  抵扣卷
+     */
     @SerializedName("coupon_type")
-    public int couponType;// 1  折扣卷     2  抵扣卷
+    public int couponType;
 
-    public double discount;//折扣卷
+    /**
+     * //折扣卷
+     */
+    public double discount;
 
-    public double deductible;//抵扣卷
+    /**
+     * //抵扣卷
+     */
+    public double deductible;
 }

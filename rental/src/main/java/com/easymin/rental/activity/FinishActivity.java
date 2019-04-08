@@ -14,7 +14,7 @@ import java.util.TimerTask;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: FinishActivity
- * Author: shine
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -25,9 +25,15 @@ public class FinishActivity extends RxBaseActivity{
     TextView countDown;
     TextView back;
 
+    /**
+     * 定时器
+     */
     Timer timer;
     TimerTask timerTask;
 
+    /**
+     * 倒计时
+     */
     int time = 5;
 
     @Override
@@ -69,6 +75,9 @@ public class FinishActivity extends RxBaseActivity{
         cusToolbar.setLeftBack(view -> finish());
     }
 
+    /**
+     * 取消倒计时
+     */
     public void cancelTimer() {
         if (timer != null) {
             timer.cancel();

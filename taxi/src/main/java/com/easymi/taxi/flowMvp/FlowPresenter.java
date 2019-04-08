@@ -53,7 +53,12 @@ import java.util.List;
 import rx.Observable;
 
 /**
- * Created by liuzihao on 2017/11/15.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FlowPresenter
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback, AMapNaviListener {
@@ -74,9 +79,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         Observable<TaxiOrderResult> observable = model.doAccept(orderId);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, zcOrderResult -> {
-//            zcOrderResult = orderResult2ZCOrder(zcOrderResult);
-//            updateDymOrder(zcOrderResult.data);
-//            view.showOrder(zcOrderResult.data);
             findOne(orderId);
         })));
     }
@@ -161,7 +163,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         Observable<TaxiOrderResult> observable = model.arriveDes(taxiOrder, dymOrder);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, zcOrderResult -> {
-//            dymOrder.updateConfirm(); #该逻辑移动到arrivalDistination接口里面
             zcOrderResult = orderResult2ZCOrder(zcOrderResult);
             updateDymOrder(zcOrderResult.data);
             view.showOrder(zcOrderResult.data);
@@ -197,7 +198,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<TaxiOrderResult>() {
             @Override
             public void onNext(TaxiOrderResult taxiOrderResult) {
-//                taxiOrderResult = orderResult2ZCOrder(taxiOrderResult);
                 updateDymOrder(taxiOrderResult.data);
                 view.showOrder(taxiOrderResult.data);
             }
@@ -267,20 +267,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             mAMapNavi = AMapNavi.getInstance(context);
             mAMapNavi.addAMapNaviListener(this);
         }
-//        /**
-//         * congestion - 是否躲避拥堵
-//         avoidspeed - 不走高速
-//         cost - 避免收费
-//         hightspeed - 高速优先
-//         multipleRoute - 单路径or多路径
-//         */
-//        boolean congestion = true;
-//        boolean avoidspeed = false;
-//        boolean cost = false;
-//        boolean hightspeed = true;
-//        boolean multipleRoute = true;
-//        int strateFlag = mAMapNavi.strategyConvert(congestion, cost, avoidspeed, hightspeed, multipleRoute);
-
         int strateFlag = mAMapNavi.strategyConvert(
                 XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, false),
                 XApp.getMyPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),

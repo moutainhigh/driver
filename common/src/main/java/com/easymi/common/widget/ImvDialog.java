@@ -16,8 +16,21 @@ import android.widget.ImageView;
 
 import com.easymi.common.R;
 
+/**
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
+ */
 public class ImvDialog extends DialogFragment{
 
+    /**
+     * 实例化
+     * @param imvId
+     * @return
+     */
     public static ImvDialog newInstance(int imvId) {
         ImvDialog dialog = new ImvDialog();
         Bundle arguments = new Bundle();

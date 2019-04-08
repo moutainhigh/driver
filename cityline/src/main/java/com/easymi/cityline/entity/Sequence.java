@@ -3,11 +3,26 @@ package com.easymi.cityline.entity;
 import java.io.Serializable;
 
 /**
- * Created by liuzihao on 2018/11/14.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class Sequence implements Serializable{
-    public int type;//1 数字 2 文字 3 图片
-    public int num;//数字编号
-    public String text;//文字内容
+    /**
+     * 1 数字 2 文字 3 图片
+     */
+    public int type;
+
+    /**
+     * 数字编号
+     */
+    public int num;
+    /**
+     * 文字内容
+     */
+    public String text;
 }

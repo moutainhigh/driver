@@ -12,9 +12,13 @@ import com.easymi.zhuanche.entity.ZCOrder;
 import com.easymi.zhuanche.flowMvp.ActFraCommBridge;
 
 /**
- * Created by developerLzh on 2017/11/13 0013.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: AcceptFragment
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
-
 public class AcceptFragment extends RxBaseFragment {
 
     LoadingButton acceptBtn;
@@ -22,12 +26,20 @@ public class AcceptFragment extends RxBaseFragment {
     TextView startPlaceText;
     TextView endPlaceText;
 
+    /**
+     * 订单信息
+     */
     private ZCOrder zcOrder;
 
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
-    private Fragment createFragment;
-
+    /**
+     * 设置bridge
+     * @param bridge
+     */
     public void setBridge(ActFraCommBridge bridge){
         this.bridge = bridge;
     }
@@ -48,6 +60,9 @@ public class AcceptFragment extends RxBaseFragment {
         initView();
     }
 
+    /**
+     * 初始化布局
+     */
     private void initView() {
         acceptBtn = $(R.id.accept_btn);
         refuseCon = $(R.id.refuse_con);

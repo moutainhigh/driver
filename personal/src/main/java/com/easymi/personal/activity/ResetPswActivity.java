@@ -39,7 +39,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by developerLzh on 2017/11/7 0007.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: ResetPswActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 重置密码 未使用
+ * History:
  */
 
 public class ResetPswActivity extends RxBaseActivity {
@@ -185,6 +190,9 @@ public class ResetPswActivity extends RxBaseActivity {
 
     }
 
+    /**
+     * 重置密码
+     */
     private void resetPsw() {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
         Observable<EmResult> observable = api
@@ -202,14 +210,27 @@ public class ResetPswActivity extends RxBaseActivity {
         })));
     }
 
+    /**
+     * 返回结束本页面
+     * @param view
+     */
     public void backAction(View view) {
         finish();
     }
 
+    /**
+     * 定时器
+     */
     private Timer timer;
     private TimerTask timerTask;
+    /**
+     * 验证码60秒倒计时
+     */
     private int time = 60;
 
+    /**
+     * 初始化倒计时
+     */
     private void initSecView() {
         phoneNumber.setText(phone);
         if (null != timer) {
@@ -310,7 +331,7 @@ public class ResetPswActivity extends RxBaseActivity {
      */
     private void getSmsCode() {
         Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .smsCode(phone, EmUtil.getAppKey(), "中国", EmUtil.getEmployInfo().company_id)
+                .smsCode(phone, EmUtil.getAppKey(), "中国", EmUtil.getEmployInfo().companyId)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

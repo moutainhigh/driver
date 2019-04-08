@@ -19,9 +19,13 @@ import retrofit2.http.Query;
 import rx.Observable;
 
 /**
- * Created by liuzihao on 2018/11/14.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: CLService
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 专线接口地址参数
+ * History:
  */
-
 public interface CLService {
     /**
      * 查询班次

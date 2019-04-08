@@ -1,7 +1,12 @@
 package com.easymi.component.widget;
 
 /**
- * Created by liuzihao on 2018/4/23.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 import android.content.Context;
@@ -123,7 +128,7 @@ public class SwipeLayout extends FrameLayout {
         /** 确定需要触摸的View */
         @Override
         public boolean tryCaptureView(View child, int pointerId) {
-            //Toast.makeText(getContext(), "事件捕获", Toast.LENGTH_SHORT).show();
+            //ToastUtil.showMessage(getContext(), "事件捕获", Toast.LENGTH_SHORT);
             return child == contentView || child == deleteView;
         }
 

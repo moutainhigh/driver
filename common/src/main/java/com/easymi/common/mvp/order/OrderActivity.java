@@ -10,7 +10,6 @@ import com.easymi.common.adapter.VpAdapter;
 import com.easymi.common.widget.MakeOrderPopWindow;
 import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
-import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.widget.CusToolbar;
 
@@ -20,7 +19,7 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: OrderActivity
- * Author: shine
+ * @Author: shine
  * Date: 2018/11/14 下午7:26
  * Description:
  * History:
@@ -31,8 +30,13 @@ public class OrderActivity extends RxBaseActivity {
     CusToolbar toolbar;
     ViewPager viewPager;
     List<Fragment> fragments;
+    /**
+     * fragment适配器
+     */
     VpAdapter adapter;
-    //补单弹窗
+    /**
+     * 补单弹窗
+     */
     MakeOrderPopWindow popWindow;
 
     @Override
@@ -40,7 +44,7 @@ public class OrderActivity extends RxBaseActivity {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.com_my_order);
         toolbar.setLeftIcon(R.drawable.ic_arrow_back, v -> finish());
-        if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE) || EmUtil.getEmployInfo().serviceType.equals(Config.CITY_LINE)){
+        if (EmUtil.getEmployInfo().serviceType.equals(Config.CITY_LINE)){
             toolbar.setRightText(R.string.com_make_order, v -> {
                 if (popWindow.isShowing()) {
                     popWindow.dismiss();
@@ -67,7 +71,6 @@ public class OrderActivity extends RxBaseActivity {
         viewPager = findViewById(R.id.view_pager);
 
         popWindow = new MakeOrderPopWindow(this);
-//        popWindow.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.popwindow_background));
 
         initTabLayout();
     }
@@ -76,7 +79,8 @@ public class OrderActivity extends RxBaseActivity {
     private void initTabLayout() {
         fragments = new ArrayList<>();
         fragments.add(new AccpteFragment());
-        if (!EmUtil.getEmployInfo().serviceType.equals(Config.CITY_LINE)){
+        if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)
+                ||EmUtil.getEmployInfo().serviceType.equals(Config.TAXI)){
             fragments.add(new AssignFragment());
         }
 
@@ -94,7 +98,8 @@ public class OrderActivity extends RxBaseActivity {
 //            tabLayout.getTabAt(1).setText(getString(R.string.com_assign_order));
 //            tabLayout.getTabAt(2).setText(getString(R.string.com_grab_order));
 //        }else {
-        if (!EmUtil.getEmployInfo().serviceType.equals(Config.CITY_LINE)){
+        if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)
+                ||EmUtil.getEmployInfo().serviceType.equals(Config.TAXI)){
             tabLayout.getTabAt(1).setText(getString(R.string.com_assign_order));
         }
 //        }

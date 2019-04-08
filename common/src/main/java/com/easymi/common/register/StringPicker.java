@@ -13,6 +13,14 @@ import com.easymi.component.widget.wheelview.adapter.AbstractWheelTextAdapter;
 
 import java.util.List;
 
+/**
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
+ */
 public class StringPicker extends BottomSheetDialog {
 
     private View mView;

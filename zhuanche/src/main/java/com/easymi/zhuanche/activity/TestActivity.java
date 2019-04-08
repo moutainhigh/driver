@@ -49,6 +49,7 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.utils.StringUtils;
+import com.easymi.component.utils.ToastUtil;
 import com.easymi.zhuanche.R;
 
 import java.text.SimpleDateFormat;
@@ -58,6 +59,14 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: TestActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 测试类
+ * History:
+ */
 public class TestActivity extends RxBaseActivity implements AMapNaviListener, AMapNaviViewListener {
 
     AMapNaviView mAMapNaviView;
@@ -237,7 +246,7 @@ public class TestActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     @Override
     public void onCalculateRouteFailure(int i) {
-        Toast.makeText(this, "路线规划失败", Toast.LENGTH_LONG).show();
+        ToastUtil.showMessage(this, "路线规划失败", Toast.LENGTH_LONG);
     }
 
     @Override

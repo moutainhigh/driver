@@ -12,9 +12,12 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2017/11/15.
- * <p>
- * 复合型订单，包含了所有业务订单的字段
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class MultipleOrder extends BaseOrder implements Serializable, MultiItemEntity {
@@ -142,7 +145,11 @@ public class MultipleOrder extends BaseOrder implements Serializable, MultiItemE
         }else if (serviceType.equals(Config.RENTAL)){
             orderType = XApp.getInstance().getResources().getString(R.string.create_rental);
         } else if (serviceType.equals(Config.COUNTRY)) {
-            orderType = XApp.getInstance().getResources().getString(R.string.create_bus_country);
+            orderType = XApp.getInstance().getResources().getString(R.string.create_custombus);
+        } else if (serviceType.equals(Config.GOV)) {
+            orderType = XApp.getInstance().getResources().getString(R.string.create_gov);
+        } else if (serviceType.equals(Config.CARPOOL)) {
+            orderType = XApp.getInstance().getResources().getString(R.string.create_carpool);
         }
         return orderType;
     }

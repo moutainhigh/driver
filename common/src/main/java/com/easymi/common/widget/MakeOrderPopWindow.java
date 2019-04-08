@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: MakeOrderPopWindow
- * Author: shine
+ * @Author: shine
  * Date: 2018/11/19 上午10:04
  * Description:
  * History:
@@ -39,16 +39,28 @@ public class MakeOrderPopWindow extends PopupWindow implements View.OnClickListe
     Context context;
     View anchor;
 
-    private int popupGravity = Gravity.NO_GRAVITY;  //在window中无引力
+    /**
+     * 在window中无引力
+     */
+    private int popupGravity = Gravity.NO_GRAVITY;
 
-    private int viewWidth;  //显示view的宽度
+    /**
+     *  显示view的宽度
+     */
+    private int viewWidth;
 
-    //创建数据
+    /**
+     *  创建数据
+     */
     List<HashMap<String,Object>> listdata = new ArrayList<HashMap<String,Object>>();
 
     private OnMenuClickListener mOnMenuClickListener;
 
     public interface OnMenuClickListener {
+        /**
+         * 按钮点击监听
+         * @param view
+         */
         void setMenuOnClickListener(View view);
     }
 
@@ -58,29 +70,37 @@ public class MakeOrderPopWindow extends PopupWindow implements View.OnClickListe
 
     ListView listview;
 
+    /**
+     *  设置弹窗信息
+     * @param context
+     */
     public MakeOrderPopWindow(Context context) {
         this.context = context;
-
-        setFocusable(true);  //设置可以获得焦点
-        setTouchable(true); //设置弹窗内可点击
-        setOutsideTouchable(true);    //设置弹窗外可点击
+        //设置可以获得焦点
+        setFocusable(true);
+        //设置弹窗内可点击
+        setTouchable(true);
+        //设置弹窗外可点击
+        setOutsideTouchable(true);
 
         //设置弹窗的宽度和高度,否则不会正常显示
         setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
 
-//        setBackgroundDrawable(new BitmapDrawable());
-        setBackgroundDrawable(new ColorDrawable()); //设置背景,否则不会消失
+        //设置背景,否则不会消失
+        setBackgroundDrawable(new ColorDrawable());
 
         //设置需要显示的veiw
         View view = View.inflate(context, R.layout.make_order_popwindow, null);
         setContentView(view);
 
-        //在没有绘制出来前,测量控件的尺寸
-        int w = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);  //设置测量模式
+        //在没有绘制出来前,测量控件的尺寸 //设置测量模式
+        int w = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         int h = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-        view.measure(w, h);  //开始测量
-        viewWidth = view.getMeasuredWidth();    //得到实际的宽度
+        //开始测量
+        view.measure(w, h);
+        //得到实际的宽度
+        viewWidth = view.getMeasuredWidth();
 
         //设置监听
         listview = view.findViewById(R.id.listview);
@@ -89,9 +109,11 @@ public class MakeOrderPopWindow extends PopupWindow implements View.OnClickListe
         initAdapter();
     }
 
+    /**
+     * 设置数据
+     */
     public void initData(){
         String orderType = EmUtil.getEmployInfo().serviceType;
-//        String orderType = "taxi,special,cityline";
         String[] types = orderType.split(",");
         for (int i = 0;i<types.length;i++){
             HashMap<String,Object> map = new HashMap<String,Object>();
@@ -108,6 +130,9 @@ public class MakeOrderPopWindow extends PopupWindow implements View.OnClickListe
         }
     }
 
+    /**
+     * 设置适配器
+     */
     public void initAdapter(){
         SimpleAdapter adapter=new SimpleAdapter(context,
                 listdata,
@@ -120,6 +145,10 @@ public class MakeOrderPopWindow extends PopupWindow implements View.OnClickListe
         //设置监听器
         listview.setOnItemClickListener(new mItemClick());
     }
+
+    /**
+     * 点击事件回调监听
+     */
     class mItemClick implements AdapterView.OnItemClickListener
     {
         @Override
@@ -135,13 +164,14 @@ public class MakeOrderPopWindow extends PopupWindow implements View.OnClickListe
         }
     }
 
-    //文本点击事件监听
+
     @Override
     public void onClick(View v) {
         if (mOnMenuClickListener == null) {
             return;
         }
-        mOnMenuClickListener.setMenuOnClickListener(v); //执行回调
+        //执行回调
+        mOnMenuClickListener.setMenuOnClickListener(v);
         dismiss();
     }
     /**
@@ -152,21 +182,24 @@ public class MakeOrderPopWindow extends PopupWindow implements View.OnClickListe
     public void show(View anchor) {
 
         this.anchor = anchor;
-
-        int[] mLocation = new int[2];   //存放位置坐标
-
-        anchor.getLocationInWindow(mLocation);  //将anchor右上角坐标存放在mlocation数组中
+        //存放位置坐标
+        int[] mLocation = new int[2];
+        //将anchor右上角坐标存放在mlocation数组中
+        anchor.getLocationInWindow(mLocation);
 
         //获取anchor左右padding
         int leftPadding = anchor.getPaddingLeft();
         int rightPadding = anchor.getPaddingRight();
-        int w = anchor.getWidth() - leftPadding - rightPadding; //anchor内容宽度
+        //anchor内容宽度
+        int w = anchor.getWidth() - leftPadding - rightPadding;
 
         //无引力设置,设置显示PopupWindow的位置
         showAtLocation(anchor, popupGravity, mLocation[0] + anchor.getWidth() - viewWidth, mLocation[1] + anchor.getHeight());
     }
 
-    //消失时候调用该方法
+    /**
+     * 消失时候调用该方法
+     */
     @Override
     public void dismiss() {
         super.dismiss();

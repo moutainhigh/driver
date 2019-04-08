@@ -1,13 +1,13 @@
 package com.easymi.personal.activity.register;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -19,28 +19,30 @@ import com.easymi.component.Config;
 import com.easymi.component.activity.WebActivity;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
-import com.easymi.component.entity.Employ;
+import com.easymi.component.network.ErrCode;
+import com.easymi.component.network.ErrCodeTran;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
-import com.easymi.component.utils.AesUtil;
-import com.easymi.component.utils.Base64Utils;
+import com.easymi.component.utils.AlexStatusBarUtils;
 import com.easymi.component.utils.CommonUtil;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.RsaUtils;
-import com.easymi.component.utils.SHA256Util;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
+import com.easymi.component.utils.UIStatusBarHelper;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.personal.R;
-import com.easymi.personal.activity.LoginActivity;
-import com.easymi.personal.result.LoginResult;
+import com.easymi.personal.entity.Register;
+
+import java.util.Locale;
 
 import rx.Observable;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: RegisterAcitivty
- * Author: shine
+ *
+ * @Author: shine
  * Date: 2018/12/18 下午3:16
  * Description:
  * History:
@@ -59,7 +61,10 @@ public class RegisterAcitivty extends RxBaseActivity {
     ImageView iv_image_code;
     EditText et_img_code;
 
-    private String randomNum;//唯一标示符 图形验证码
+    /**
+     * 唯一标示符 用于获取图形验证码
+     */
+    private String randomNum;
 
 
     @Override
@@ -69,8 +74,10 @@ public class RegisterAcitivty extends RxBaseActivity {
 
     @Override
     public int getLayoutId() {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        UIStatusBarHelper.setStatusBarLightMode(this);
+        AlexStatusBarUtils.setStatusColor(this, Color.WHITE);
         return R.layout.activity_register;
     }
 
@@ -132,9 +139,12 @@ public class RegisterAcitivty extends RxBaseActivity {
             sendSms();
         });
 
-        iv_image_code.setOnClickListener(view -> getImgCode() );
+        iv_image_code.setOnClickListener(view -> getImgCode());
     }
 
+    /**
+     * 初始化控件
+     */
     public void findById() {
         register_button = findViewById(R.id.register_button);
         tv_get_code = findViewById(R.id.tv_get_code);
@@ -148,6 +158,9 @@ public class RegisterAcitivty extends RxBaseActivity {
         et_img_code = findViewById(R.id.et_img_code);
     }
 
+    /**
+     * 设置监听
+     */
     private void initEdit() {
         et_phone.addTextChangedListener(new TextWatcher() {
             @Override
@@ -262,6 +275,11 @@ public class RegisterAcitivty extends RxBaseActivity {
         });
     }
 
+    /**
+     * 设置按钮是否可点击
+     *
+     * @param enable
+     */
     private void setLoginBtnEnable(boolean enable) {
         register_button.setEnabled(enable);
         if (enable) {
@@ -271,6 +289,9 @@ public class RegisterAcitivty extends RxBaseActivity {
         }
     }
 
+    /**
+     * 设置服务人员协议跳转
+     */
     private void initBox() {
         text_agreement.setOnClickListener(view -> {
             Intent intent = new Intent(this, WebActivity.class);
@@ -280,8 +301,14 @@ public class RegisterAcitivty extends RxBaseActivity {
         });
     }
 
+    /**
+     * 能否看密码
+     */
     private boolean eyeOn = false;
 
+    /**
+     * 可视密码点击事件
+     */
     private void initEye() {
         eye.setOnClickListener(view -> {
             if (eyeOn) {
@@ -300,6 +327,9 @@ public class RegisterAcitivty extends RxBaseActivity {
         });
     }
 
+    /**
+     * 验证码倒计时
+     */
     public void countDown() {
         et_code.requestFocus();  //申请获取焦点
         //开始倒计时
@@ -320,17 +350,29 @@ public class RegisterAcitivty extends RxBaseActivity {
         }.start();
     }
 
-    public void startBase(Employ employ) {
+    /**
+     * 跳转注册
+     *
+     * @param id 注册返回id
+     */
+    public void startBase(Long id) {
         Intent intent = new Intent(this, RegisterBaseActivity.class);
-        intent.putExtra("employ",employ);
+        intent.putExtra("id", id);
+        intent.putExtra("phone", et_phone.getText().toString());
         startActivity(intent);
     }
 
+    /**
+     * 获取图形验证码
+     */
     public void getImgCode() {
         randomNum = "" + System.currentTimeMillis() + (int) ((Math.random() * 9 + 1) * 100000);
         Glide.with(this).load(Config.HOST + "api/v1/public/app/captcha/code/" + randomNum).into(iv_image_code);
     }
 
+    /**
+     * 发送验证码
+     */
     private void sendSms() {
         String code_rsa = null;
         String phone_rsa = null;
@@ -338,11 +380,11 @@ public class RegisterAcitivty extends RxBaseActivity {
         String type_rsa = null;
         String userType_rsa = null;
         try {
-            code_rsa = RsaUtils.encryptAndEncode(this, et_img_code.getText().toString());
-            phone_rsa = RsaUtils.encryptAndEncode(this, et_phone.getText().toString());
-            randomNum_rsa = RsaUtils.encryptAndEncode(this, randomNum);
-            type_rsa = RsaUtils.encryptAndEncode(this, "PASSENGER_LOGIN_CODE");
-            userType_rsa = RsaUtils.encryptAndEncode(this, "2");
+            code_rsa = RsaUtils.rsaEncode( et_img_code.getText().toString());
+            phone_rsa = RsaUtils.rsaEncode( et_phone.getText().toString());
+            randomNum_rsa = RsaUtils.rsaEncode( randomNum);
+            type_rsa = RsaUtils.rsaEncode( "PASSENGER_LOGIN_CODE");
+            userType_rsa = RsaUtils.rsaEncode( "2");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -350,29 +392,80 @@ public class RegisterAcitivty extends RxBaseActivity {
         Observable<EmResult> observable = RegisterModel.getSms(code_rsa, phone_rsa, randomNum_rsa, type_rsa, userType_rsa);
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, emResult -> {
             if (emResult.getCode() == 1) {
-                ToastUtil.showMessage(this,getResources().getString(R.string.register_send_succed));
+                ToastUtil.showMessage(this, getResources().getString(R.string.register_send_succed));
                 countDown();
             }
         })));
     }
 
+
+    /**
+     * 申请中
+     */
+    int APPLYING = 50009;
+
+    /**
+     * 申请已经通过
+     */
+    int APPLY_PASS = 50010;
+
+    /**
+     * 申请拒绝
+     */
+    int APPLY_REJECT = 50011;
+
+    /**
+     * 调用注册接口
+     */
     private void register() {
         String password_rsa = null;
         String phone_rsa = null;
         String smsCode_rsa = null;
+        String random_rsa = null;
         try {
-            password_rsa = RsaUtils.encryptAndEncode(this, et_password.getText().toString());
-            phone_rsa = RsaUtils.encryptAndEncode(this, et_phone.getText().toString());
-            smsCode_rsa = RsaUtils.encryptAndEncode(this, et_code.getText().toString());
+            password_rsa = RsaUtils.rsaEncode( et_password.getText().toString());
+            phone_rsa = RsaUtils.rsaEncode( et_phone.getText().toString());
+            smsCode_rsa = RsaUtils.rsaEncode( et_code.getText().toString());
+            random_rsa = RsaUtils.rsaEncode( randomNum);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        Observable<LoginResult> observable = RegisterModel.register(password_rsa, phone_rsa, smsCode_rsa);
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this,register_button, emResult -> {
-            if (emResult.getCode() == 1) {
-                //todo
-                startBase(emResult.getEmployInfo());
+        Observable<Register> observable = RegisterModel.register(password_rsa, phone_rsa, smsCode_rsa,random_rsa);
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, register_button, register -> {
+            if (register.getCode() == 1) {
+                startBase(register.data);
+            } else if (register.getCode() == APPLYING) {
+                Intent intent = new Intent(this, RegisterNoticeActivity.class);
+                intent.putExtra("type", 2);
+                startActivity(intent);
+            } else if (register.getCode() == APPLY_PASS) {
+                ToastUtil.showMessage(this, "申请已经通过");
+            } else if (register.getCode() == APPLY_REJECT) {
+                Intent intent = new Intent(this, RegisterNoticeActivity.class);
+                intent.putExtra("type", 3);
+                intent.putExtra("phone", et_phone.getText().toString());
+                startActivity(intent);
+            }else {
+                String msg = register.getMessage();
+                //获取默认配置
+                Configuration config = XApp.getInstance().getResources().getConfiguration();
+                if (config.locale == Locale.TAIWAN || config.locale == Locale.TRADITIONAL_CHINESE) {
+                    for (ErrCodeTran errCode : ErrCodeTran.values()) {
+                        if (register.getCode() == errCode.getCode()) {
+                            msg = errCode.getShowMsg();
+                            break;
+                        }
+                    }
+                } else {
+                    for (ErrCode errCode : ErrCode.values()) {
+                        if (register.getCode() == errCode.getCode()) {
+                            msg = errCode.getShowMsg();
+                            break;
+                        }
+                    }
+                }
+                ToastUtil.showMessage(this, msg);
             }
         })));
     }

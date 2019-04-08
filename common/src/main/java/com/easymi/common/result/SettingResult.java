@@ -7,19 +7,17 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2018/3/6.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class SettingResult extends EmResult {
 
-//    @SerializedName("daijiaApp")
-//    public TaxiSetting setting;
-
-//    @SerializedName("app_settings")
-//    public String appSetting;
-
     public List<ZCSetting> data;
 
-    public ZCSetting zcSetting;
 
 }

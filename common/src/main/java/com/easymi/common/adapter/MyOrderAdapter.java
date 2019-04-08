@@ -15,6 +15,9 @@ import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.util.DJStatus2Str;
 import com.easymi.component.BusOrderStatus;
 import com.easymi.component.Config;
+import com.easymi.component.DJOrderStatus;
+import com.easymi.component.GWOrderStatus;
+import com.easymi.component.PCOrderStatus;
 import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.utils.TimeUtil;
 
@@ -24,7 +27,7 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: MyOrderAdapter
- * Author: shine
+ * @Author: shine
  * Date: 2018/11/15 下午6:33
  * Description:
  * History:
@@ -46,6 +49,10 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Holder> 
         list = new ArrayList<>();
     }
 
+    /**
+     * 设置数据
+     * @param orders
+     */
     public void setBaseOrders(List<MultipleOrder> orders) {
         this.list = orders;
         notifyDataSetChanged();
@@ -65,15 +72,31 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Holder> 
 
         holder.order_type.setText("" + baseOrder.getOrderType());
         holder.order_time.setText(TimeUtil.getTime(context.getString(R.string.time_five_format), baseOrder.bookTime * 1000));
-        holder.order_start_place.setText(baseOrder.getStartSite().address);
-        holder.order_end_place.setText(baseOrder.getEndSite().address);
+
+        holder.order_start_place.setText(baseOrder.bookAddress);
+        holder.order_end_place.setText(baseOrder.destination);
+
+//        holder.order_start_place.setText(baseOrder.getStartSite().address);
+//        holder.order_end_place.setText(baseOrder.getEndSite().address);
 
         if (TextUtils.equals(baseOrder.serviceType, Config.CITY_LINE)) {
-            holder.order_status.setText("" + baseOrder.getZXOrderStatusStr() + " >");
+            holder.order_status.setText("" + baseOrder.getZXOrderStatusStr());
         } else if (TextUtils.equals(baseOrder.serviceType, Config.COUNTRY)) {
-            holder.order_status.setText(BusOrderStatus.status2Str(baseOrder.status) + " >");
-        }else {
-            holder.order_status.setText(DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status) + " >");
+            holder.order_status.setText(BusOrderStatus.orderStatus2Str(baseOrder.status));
+        } else if (TextUtils.equals(baseOrder.serviceType, Config.CARPOOL)){
+            holder.order_status.setText(PCOrderStatus.status2Str(baseOrder.status) + " >");
+        }else if (TextUtils.equals(baseOrder.serviceType, Config.GOV)){
+            if (baseOrder.status < DJOrderStatus.ARRIVAL_DESTINATION_ORDER){
+                holder.order_status.setText(GWOrderStatus.status2Str(baseOrder.status) + " >");
+            }else {
+                holder.order_status.setText(GWOrderStatus.status2Str(baseOrder.status));
+            }
+        } else {
+            if (baseOrder.status < DJOrderStatus.ARRIVAL_DESTINATION_ORDER){
+                holder.order_status.setText(DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status) + " >");
+            }else {
+                holder.order_status.setText(DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status));
+            }
         }
 
         if (mType == 1){
@@ -146,6 +169,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Holder> 
     }
 
 
+
     private ItemClickListener itemClickListener;
 
     public void setItemClickListener(ItemClickListener listener) {
@@ -153,6 +177,11 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Holder> 
     }
 
     public interface ItemClickListener {
+        /**
+         * 列表单击监听
+         * @param view
+         * @param baseOrder
+         */
         void itemClick(View view,BaseOrder baseOrder);
     }
 

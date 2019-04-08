@@ -7,15 +7,18 @@
         <activity
             android:name=".activity.LoginActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".activity.register.RegisterBaseActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".activity.register.RegisterPhotoActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".activity.ResetPswActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
@@ -38,11 +41,6 @@
             android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.AboutUsActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack" />
-        <activity
-            android:name=".activity.RegisterLocalActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeSwipeBack" />
@@ -236,7 +234,7 @@
             android:name=".activity.register.RegisterAcitivty"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack" />
+             />
         <!--<activity-->
             <!--android:name=".activity.register.RegisterBaseActivity"-->
             <!--android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"-->

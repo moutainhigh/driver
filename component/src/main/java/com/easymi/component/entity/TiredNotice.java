@@ -3,7 +3,7 @@ package com.easymi.component.entity;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: TiredNotice
- * Author: shine
+ *@Author: shine
  * Date: 2018/11/22 下午1:44
  * Description:
  * History:

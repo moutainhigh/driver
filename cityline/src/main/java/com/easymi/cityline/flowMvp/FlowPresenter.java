@@ -42,6 +42,7 @@ import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.ToastUtil;
@@ -51,7 +52,12 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2018/11/15.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
@@ -60,9 +66,12 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
     private FlowContract.View view;
     private FlowContract.Model model;
 
+    /**
+     * 导航
+     */
     AMapNavi mAMapNavi;
 
-    private long driverId = 43;
+    RouteSearch routeSearch;
 
     public FlowPresenter(Context context, FlowContract.View view) {
         this.context = context;
@@ -123,10 +132,10 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
         }
 
         int strategy = mAMapNavi.strategyConvert(
-                XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, true),
-                XApp.getMyPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
-                XApp.getMyPreferences().getBoolean(Config.SP_COST, true),
-                XApp.getMyPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
+                new CsSharedPreferences().getBoolean(Config.SP_CONGESTION, true),
+                new CsSharedPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
+                new CsSharedPreferences().getBoolean(Config.SP_COST, true),
+                new CsSharedPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
                 false);
 
         List<NaviLatLng> startLs = new ArrayList<>();
@@ -136,8 +145,6 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
         endLs.add(endNavi);
         mAMapNavi.calculateDriveRoute(startLs, endLs, naviLatLngs, strategy);
     }
-
-    RouteSearch routeSearch;
 
     @Override
     public void routePlanByRouteSearch(LatLng start, List<LatLng> latLngs, LatLng end) {
@@ -190,8 +197,10 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
     public void stopNavi() {
         //since 1.6.0 不再在naviview destroy的时候自动执行AMapNavi.stopNavi();请自行执行
         if (null != mAMapNavi) {
-            mAMapNavi.stopNavi();
-            mAMapNavi.destroy();
+            new Thread(() -> { //
+                mAMapNavi.stopNavi();
+                mAMapNavi.destroy();
+            }).start();
         }
     }
 
@@ -314,7 +323,7 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
         }
         if (path != null) {
             view.showPath(ints, path);
-            if (XApp.getMyPreferences().getBoolean(Config.SP_DEFAULT_NAVI, true)) {
+            if (new CsSharedPreferences().getBoolean(Config.SP_DEFAULT_NAVI, true)) {
                 mAMapNavi.startNavi(NaviType.GPS);
                 view.showLeft(path.getAllLength(), path.getAllTime());
             }

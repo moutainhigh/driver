@@ -5,6 +5,8 @@ import android.util.Log;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.utils.AesUtil;
+import com.easymi.component.utils.CsSharedPreferences;
+import com.easymi.component.utils.EncApi;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 
@@ -17,7 +19,7 @@ import retrofit2.Converter;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: KeyGsonResponseBodyConverter
- * Author: shine
+ *@Author: shine
  * Date: 2018/11/25 下午3:55
  * Description:
  * History:
@@ -36,7 +38,7 @@ public class KeyGsonResponseBodyConverter<T> implements Converter<ResponseBody, 
         try {
             String str = value.string();
             if (!str.contains("{")){
-                String jsonStr = AesUtil.aesDecrypt(str, XApp.getMyPreferences().getString(Config.AES_PASSWORD,AesUtil.AAAAA));
+                String jsonStr = EncApi.getInstance().dec(new CsSharedPreferences().getString(Config.AES_PASSWORD,AesUtil.AAAAA),str);
                 String urlString = URLDecoder.decode(jsonStr);
                 Log.e("responseJson", urlString);
                 return adapter.fromJson(urlString);

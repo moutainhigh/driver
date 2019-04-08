@@ -5,19 +5,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.hardware.Sensor;
 import android.hardware.SensorManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.text.Html;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.OrientationEventListener;
@@ -27,18 +22,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.amap.api.location.AMapLocation;
-import com.amap.api.location.AMapLocationClient;
-import com.amap.api.location.AMapLocationClientOption;
-import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
-import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
-import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
@@ -48,9 +36,6 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
-import com.amap.api.maps.utils.overlay.SmoothMoveMarker;
-import com.amap.api.navi.AMapNaviView;
-import com.amap.api.navi.AMapNaviViewListener;
 import com.amap.api.navi.model.AMapNaviPath;
 import com.amap.api.navi.model.RouteOverlayOptions;
 import com.amap.api.navi.view.RouteOverLay;
@@ -60,10 +45,8 @@ import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.entity.PassengerLocation;
 import com.easymi.common.push.FeeChangeObserver;
 import com.easymi.common.push.HandlePush;
-//import com.easymi.common.push.MQTTService;
 import com.easymi.common.push.MqttManager;
 import com.easymi.common.push.PassengerLocObserver;
-import com.easymi.common.result.SettingResult;
 import com.easymi.common.trace.TraceInterface;
 import com.easymi.common.trace.TraceReceiver;
 import com.easymi.component.Config;
@@ -79,17 +62,15 @@ import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.loc.LocService;
 import com.easymi.component.network.ApiManager;
-import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.rxmvp.RxManager;
-import com.easymi.component.utils.AesUtil;
+import com.easymi.component.utils.CsEditor;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MapUtil;
-import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
-import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusBottomSheetDialog;
 import com.easymi.component.widget.CusToolbar;
@@ -97,15 +78,10 @@ import com.easymi.component.widget.LoadingButton;
 import com.easymi.component.widget.overlay.DrivingRouteOverlay;
 import com.easymi.zhuanche.R;
 import com.easymi.zhuanche.ZCApiService;
-import com.easymi.zhuanche.activity.CancelActivity;
-import com.easymi.zhuanche.activity.ConsumerInfoActivity;
-import com.easymi.zhuanche.activity.SameOrderActivity;
-import com.easymi.zhuanche.activity.TransferActivity;
+import com.easymi.zhuanche.activity.CancelNewActivity;
 import com.easymi.zhuanche.entity.Address;
 import com.easymi.zhuanche.entity.ConsumerInfo;
 import com.easymi.zhuanche.entity.ZCOrder;
-import com.easymi.zhuanche.flowMvp.oldCalc.OldRunningActivity;
-import com.easymi.zhuanche.flowMvp.oldCalc.OldWaitActivity;
 import com.easymi.zhuanche.fragment.AcceptFragment;
 import com.easymi.zhuanche.fragment.ArriveStartFragment;
 import com.easymi.zhuanche.fragment.RunningFragment;
@@ -116,10 +92,7 @@ import com.easymi.zhuanche.fragment.WaitFragment;
 import com.easymi.zhuanche.receiver.CancelOrderReceiver;
 import com.easymi.zhuanche.receiver.OrderFinishReceiver;
 import com.easymi.zhuanche.result.PassengerLcResult;
-import com.easymi.zhuanche.widget.FlowPopWindow;
 import com.easymi.zhuanche.widget.RefuseOrderDialog;
-import com.easymin.driver.securitycenter.utils.AudioUtil;
-import com.easymin.driver.securitycenter.utils.CenterUtil;
 import com.google.gson.Gson;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
@@ -127,6 +100,8 @@ import net.cachapa.expandablelayout.ExpandableLayout;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import co.lujun.androidtagview.TagContainerLayout;
 import co.lujun.androidtagview.TagView;
@@ -135,7 +110,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by developerLzh on 2017/11/13 0013.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ * @Author: hufeng
+ * Date: 2018/10/24 下午1:10
+ * Description:
+ * History:
  */
 @Route(path = "/zhuanche/FlowActivity")
 public class FlowActivity extends RxBaseActivity implements FlowContract.View,
@@ -143,79 +123,102 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         TraceInterface,
         FeeChangeObserver,
         PassengerLocObserver,
-        CancelOrderReceiver.OnCancelListener,
         AMap.OnMapTouchListener,
-        OrderFinishReceiver.OnFinishListener
-//        , AMapLocationListener
-{
+        CancelOrderReceiver.OnCancelListener,
+        OrderFinishReceiver.OnFinishListener {
+
     public static final int CANCEL_ORDER = 0X01;
     public static final int CHANGE_END = 0X02;
     public static final int CHANGE_ORDER = 0X03;
 
     CusToolbar toolbar;
-    TextView nextPlace;
-    TextView leftTimeText;
     TextView orderNumberText;
     TextView orderTypeText;
     TagContainerLayout tagContainerLayout;
     LinearLayout drawerFrame;
-    private MapView mapView;
-    private TextView tvMark;
-
+    MapView mapView;
+    TextView tvMark;
     ExpandableLayout expandableLayout;
-
-    FlowPopWindow popWindow;
-
+    /**
+     * 顶部布局
+     */
+    LinearLayout top_layout;
 
     /**
-     * 未接单top
+     * 地点状态
      */
-    RelativeLayout not_accept_layout;
-    TextView left_time_dis;
-    LinearLayout to_appoint_navi_con_1;
+    TextView go_text;
 
     /**
-     * 已接单top
+     * 前往地点
      */
-    RelativeLayout to_appoint_layout;
-    TextView to_appoint_time;
-    TextView to_appoint_left_time;
-    LinearLayout to_appoint_navi_con;
+    TextView next_place;
 
     /**
-     * 到达预约地top
+     * 剩余时间里程
      */
-    RelativeLayout arrive_start_layout;
-
+    TextView left_time;
     /**
-     * 前往终点top
+     * 导航
      */
-    RelativeLayout go_layout;
-    LinearLayout naviCon;
-
+    LinearLayout lin_navi;
     /**
-     * 中途等待top
+     * 等待时间
      */
-    RelativeLayout middle_wait_layout;
+    LinearLayout lin_time;
+    /**
+     * 等待计时
+     */
+    TextView tv_time;
+    /**
+     * 等待状态提示
+     */
+    TextView tv_time_hint;
 
     private ZCOrder zcOrder;
 
     private FlowPresenter presenter;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
+    /**
+     * 疲劳驾驶接收器
+     */
     private TraceReceiver traceReceiver;
+    /**
+     * 取消订单
+     */
     private CancelOrderReceiver cancelOrderReceiver;
+    /**
+     * 订单结束
+     */
     private OrderFinishReceiver orderFinishReceiver;
 
     private AMap aMap;
 
+    /**
+     * 订单id
+     */
     private long orderId;
 
+    /**
+     * 支付费用
+     */
     private double payMoney;
 
-    private boolean isToFeeDetail = true;//是否是前往过费用详情界面
+    //是否是前往过费用详情界面
+    private boolean isToFeeDetail = true;
 
+    /**
+     * 是否是极速指派订单
+     */
+    private boolean flashAssign;
+
+    /**
+     * 屏幕切换监听
+     */
     private AlbumOrientationEventListener mAlbumOrientationEventListener;
 
     @Override
@@ -233,9 +236,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             mAlbumOrientationEventListener.enable();
         }
 
-
         orderId = getIntent().getLongExtra("orderId", -1);
-        isToFeeDetail = getIntent().getBooleanExtra("showSettle", false);//是否是从计价器过来的
+
+        flashAssign = getIntent().getBooleanExtra("flashAssign",false);
+
+        //是否是从计价器过来的
+        isToFeeDetail = getIntent().getBooleanExtra("showSettle", false);
         if (orderId == -1) {
             finish();
             return;
@@ -244,8 +250,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         presenter = new FlowPresenter(this, this);
 
         toolbar = findViewById(R.id.toolbar);
-        nextPlace = findViewById(R.id.next_place);
-        leftTimeText = findViewById(R.id.left_time);
         orderNumberText = findViewById(R.id.order_number_text);
         orderTypeText = findViewById(R.id.order_type);
         tagContainerLayout = findViewById(R.id.tag_container);
@@ -253,75 +257,128 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         expandableLayout = findViewById(R.id.expandable_layout);
         tvMark = findViewById(R.id.tvMark);
 
-        /**
-         * 未接单top
-         */
-        not_accept_layout = findViewById(R.id.not_accept_layout);
-        left_time_dis = findViewById(R.id.left_time_dis);
-        to_appoint_navi_con_1 = findViewById(R.id.to_appoint_navi_con_1);
-
-        /**
-         * 已接单top
-         */
-        to_appoint_layout = findViewById(R.id.to_appoint_layout);
-        to_appoint_time = findViewById(R.id.to_appoint_time);
-        to_appoint_left_time = findViewById(R.id.to_appoint_left_time);
-        to_appoint_navi_con = findViewById(R.id.to_appoint_navi_con);
-
-        /**
-         * 到达预约地top
-         */
-        arrive_start_layout = findViewById(R.id.arrive_start_layout);
-
-        /**
-         * 前往终点top
-         */
-        go_layout = findViewById(R.id.go_layout);
-        naviCon = findViewById(R.id.navi_con);
-
-        /**
-         * 中途等待top
-         */
-        middle_wait_layout = findViewById(R.id.middle_wait_layout);
+        top_layout = findViewById(R.id.top_layout);
+        go_text = findViewById(R.id.go_text);
+        next_place = findViewById(R.id.next_place);
+        left_time = findViewById(R.id.left_time);
+        lin_navi = findViewById(R.id.lin_navi);
+        lin_time = findViewById(R.id.lin_time);
+        tv_time = findViewById(R.id.tv_time);
+        tv_time_hint = findViewById(R.id.tv_time_hint);
 
         mapView = findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
 
-        initPop();
         initToolbar();
+        initMap();
 
     }
 
     @Override
     public void initToolbar() {
         toolbar.setLeftIcon(R.drawable.ic_arrow_back, v -> finish());
-        toolbar.setRightIcon(R.drawable.ic_more_horiz_white_24dp, v -> {
-            if (popWindow.isShowing()) {
-                popWindow.dismiss();
-            } else {
-                ZCSetting setting = ZCSetting.findOne();
-                boolean notCancel = setting.canCancelOrder != 1;
-                if (notCancel || zcOrder.orderStatus == ZCOrderStatus.NEW_ORDER || zcOrder.orderStatus == ZCOrderStatus.PAIDAN_ORDER || zcOrder.orderStatus >= ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-                    popWindow.hideCancel();
-                } else {
-                    popWindow.showCancel();
-                }
-                popWindow.show(v);
-            }
-        });
     }
 
-    @Override
-    public void initPop() {
-        popWindow = new FlowPopWindow(this);
-        popWindow.setOnClickListener(view -> {
-            int i = view.getId();
-            if (i == R.id.pop_cancel_order) {
-                Intent intent = new Intent(FlowActivity.this, CancelActivity.class);
-                startActivityForResult(intent, CANCEL_ORDER);
-            } else if (i == R.id.pop_contract_service) {
-                String phone = zcOrder.companyPhone;
-                PhoneUtil.call(FlowActivity.this, phone);
+    /**
+     * 倒计时计时器
+     */
+    Timer timer;
+    TimerTask timerTask;
+
+    /**
+     * 取消定时器
+     */
+    public void cancelTimer() {
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+        if (timerTask != null) {
+            timerTask.cancel();
+            timerTask = null;
+        }
+    }
+
+    /**
+     * 等待时间
+     */
+    private long timeSeq = 0;
+
+    /**
+     * 等待倒计时
+     */
+    public void setWaitTime() {
+        lin_time.setVisibility(View.VISIBLE);
+        lin_navi.setVisibility(View.GONE);
+
+        if (new CsSharedPreferences().getLong("" + zcOrder.orderId, 0) == 0) {
+            new CsEditor().putLong("" + zcOrder.orderId, System.currentTimeMillis() + ZCSetting.findOne().arriveTime * 60 * 1000).apply();
+        }
+
+        if (null != timer) {
+            timer.cancel();
+            timer = null;
+        }
+        if (null != timerTask) {
+            timerTask.cancel();
+            timerTask = null;
+        }
+
+        long appoint = new CsSharedPreferences().getLong("" + zcOrder.orderId, 0);
+        timeSeq = (appoint - System.currentTimeMillis()) / 1000;
+        timer = new Timer();
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                timeSeq--;
+                setTimeText();
+            }
+        };
+        timer.schedule(timerTask, 0, 1000);
+        setTimeText();
+    }
+
+    /**
+     * 显示对应格式等待时间
+     */
+    private void setTimeText() {
+        runOnUiThread(() -> {
+            StringBuilder sb = new StringBuilder();
+            int minute = (int) (Math.abs(timeSeq) / 60);
+            int sec = (int) (Math.abs(timeSeq) % 60);
+            if (minute < 10) {
+                sb.append("0");
+            }
+            sb.append(minute).append(":");
+            if (sec < 10) {
+                sb.append("0");
+            }
+            sb.append(sec);
+            if (timeSeq < 0) {
+                //超时
+                tv_time_hint.setText("等待已超时");
+                tv_time.setText(sb.toString());
+                tv_time.setTextColor(getResources().getColor(R.color.color_red));
+                tv_time_hint.setTextColor(getResources().getColor(R.color.color_red));
+            } else {
+                //正常计时
+                tv_time_hint.setText("等待倒计时");
+                tv_time.setText(sb.toString());
+                tv_time.setTextColor(getResources().getColor(R.color.color_3c98e3));
+                tv_time_hint.setTextColor(getResources().getColor(R.color.color_999999));
+            }
+
+            if ((ZCSetting.findOne().arriveCancel == 1)) {
+                if (timeSeq < 0) {
+                    toolbar.setRightText(R.string.cancel_order, v -> {
+                        Intent intent = new Intent(this, CancelNewActivity.class);
+                        startActivityForResult(intent, CANCEL_ORDER);
+                    });
+                }else {
+                    toolbar.setRightText("", null);
+                }
+            } else {
+                toolbar.setRightText("", null);
             }
         });
     }
@@ -355,37 +412,42 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         });
 
         if (zcOrder.orderStatus == ZCOrderStatus.NEW_ORDER) {
-            hideTops();
-            not_accept_layout.setVisibility(View.VISIBLE);
-            to_appoint_navi_con_1.setOnClickListener(view ->
+            lin_navi.setOnClickListener(view ->
                     presenter.navi(new LatLng(getStartAddr().lat, getStartAddr().lng), getStartAddr().poi, orderId));
+            go_text.setText("去");
+            lin_time.setVisibility(View.GONE);
+            lin_navi.setVisibility(View.VISIBLE);
         } else if (zcOrder.orderStatus == ZCOrderStatus.TAKE_ORDER
                 || zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
-            hideTops();
-            to_appoint_layout.setVisibility(View.VISIBLE);
-            to_appoint_navi_con.setOnClickListener(view ->
+            lin_navi.setOnClickListener(view ->
                     presenter.navi(new LatLng(getStartAddr().lat, getStartAddr().lng), getStartAddr().poi, orderId));
-
-            String time = getString(R.string.please_start_at)
-                    + TimeUtil.getTime("HH:mm", zcOrder.bookTime * 1000)
-                    + getString(R.string.arrive_start);
-
-            SpannableString ss = new SpannableString(time);
-            ForegroundColorSpan colorSpan = new ForegroundColorSpan(Color.parseColor("#3c98e3"));
-            int startIndex = 2;
-            int endIndex = ss.length() - 7;
-            ss.setSpan(colorSpan, startIndex, endIndex, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-            to_appoint_time.setText(ss);
+            go_text.setText("去");
+            lin_time.setVisibility(View.GONE);
+            lin_navi.setVisibility(View.VISIBLE);
         } else if (zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER) {
-            hideTops();
-            arrive_start_layout.setVisibility(View.VISIBLE);
+            go_text.setText("已到");
+            if ((ZCSetting.findOne().arriveCancel == 1)) {
+                lin_time.setVisibility(View.VISIBLE);
+                setWaitTime();
+            }else {
+                lin_time.setVisibility(View.GONE);
+            }
         } else if (zcOrder.orderStatus == ZCOrderStatus.START_WAIT_ORDER) {
-            hideTops();
-            middle_wait_layout.setVisibility(View.VISIBLE);
+            go_text.setText("已到");
+            if ((ZCSetting.findOne().arriveCancel == 1)) {
+                lin_time.setVisibility(View.VISIBLE);
+                setWaitTime();
+            }else {
+                lin_time.setVisibility(View.GONE);
+            }
         } else {
-            hideTops();
-            go_layout.setVisibility(View.VISIBLE);
-            naviCon.setOnClickListener(view -> {
+            if (new CsSharedPreferences().getLong("" + zcOrder.orderId, 0) != 0) {
+                new CsEditor().remove("" + zcOrder);
+            }
+            go_text.setText("去");
+            lin_time.setVisibility(View.GONE);
+            lin_navi.setVisibility(View.VISIBLE);
+            lin_navi.setOnClickListener(view -> {
                 if (null != getEndAddr()) {
                     presenter.navi(new LatLng(getEndAddr().lat, getEndAddr().lng), getEndAddr().poi, orderId);
                 } else {
@@ -412,9 +474,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         });
 
         if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-            nextPlace.setText(zcOrder.getEndSite().addr);
+            next_place.setText(zcOrder.getEndSite().addr);
         } else {
-            nextPlace.setText(zcOrder.getStartSite().addr);
+            next_place.setText(zcOrder.getStartSite().addr);
         }
     }
 
@@ -424,9 +486,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void showBottomFragment(ZCOrder zcOrder) {
-
-//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//动态设置为竖屏
-
+        toolbar.setRightText("", null);
         if (zcOrder.orderStatus == ZCOrderStatus.PAIDAN_ORDER || zcOrder.orderStatus == ZCOrderStatus.NEW_ORDER) {
             toolbar.setTitle(R.string.status_pai);
             AcceptFragment acceptFragment = new AcceptFragment();
@@ -455,6 +515,14 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.commit();
         } else if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
             toolbar.setTitle(R.string.status_to_start);
+            if ((ZCSetting.findOne().goToCancel == 1)) {
+                toolbar.setRightText(R.string.cancel_order, v -> {
+                    Intent intent = new Intent(this, CancelNewActivity.class);
+                    startActivityForResult(intent, CANCEL_ORDER);
+                });
+            } else {
+                toolbar.setRightText("", null);
+            }
             SlideArriveStartFragment fragment = new SlideArriveStartFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("zcOrder", zcOrder);
@@ -468,6 +536,14 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.commit();
         } else if (zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER) {
             toolbar.setTitle(R.string.status_arrive_start);
+            if ((ZCSetting.findOne().arriveCancel == 1)) {
+                toolbar.setRightText(R.string.cancel_order, v -> {
+                    Intent intent = new Intent(this, CancelNewActivity.class);
+                    startActivityForResult(intent, CANCEL_ORDER);
+                });
+            } else {
+                toolbar.setRightText("", null);
+            }
             ArriveStartFragment fragment = new ArriveStartFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("zcOrder", zcOrder);
@@ -480,8 +556,15 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.replace(R.id.flow_frame, fragment);
             transaction.commit();
         } else if (zcOrder.orderStatus == ZCOrderStatus.START_WAIT_ORDER) {
-//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);//动态设置为遵循传感器
             toolbar.setTitle(R.string.wait_consumer);
+            if ((ZCSetting.findOne().arriveCancel == 1)) {
+                toolbar.setRightText(R.string.cancel_order, v -> {
+                    Intent intent = new Intent(this, CancelNewActivity.class);
+                    startActivityForResult(intent, CANCEL_ORDER);
+                });
+            } else {
+                toolbar.setRightText("", null);
+            }
             waitFragment = new WaitFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("zcOrder", DymOrder.findByIDType(orderId, Config.ZHUANCHE));
@@ -520,8 +603,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             if (settleFragmentDialog != null && settleFragmentDialog.isShowing() && !isToFeeDetail) {
                 settleFragmentDialog.setDjOrder(zcOrder);
-
-                DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.ZHUANCHE);//确认费用后直接弹出支付页面
+                //确认费用后直接弹出支付页面
+                DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.ZHUANCHE);
                 if (null != dymOrder) {
                     bridge.doPay(dymOrder.totalFee);
                 }
@@ -535,7 +618,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 isToFeeDetail = false;
             }
         }
-
     }
 
     @Override
@@ -548,17 +630,26 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 finish();
             }
             ZCSetting zcSetting = ZCSetting.findOne();
-            if (zcSetting.isPaid == 2) {
+            if (zcSetting.isPaid == 2 || (zcOrder.prepayment && zcOrder.paid)) {
                 if (zcOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {
                     finish();
                 }
             }
             this.zcOrder = zcOrder;
-            initMap();
+            if (flashAssign && zcOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER){
+                flashAssign();
+            }
             showTopView();
             initBridge();
             showBottomFragment(zcOrder);
             showMapBounds();
+            if (myLocationStyle != null){
+                if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+                    myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);
+                } else {
+                    myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER);
+                }
+            }
 
             if (zcOrder.orderStatus < ZCOrderStatus.GOTO_DESTINATION_ORDER) {
                 if (mPlocation == null) {
@@ -572,6 +663,16 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
     }
 
+    /**
+     * 极速指派订单语音播报
+     */
+    public void flashAssign(){
+        XApp.getInstance().syntheticVoice("您有快速指派订单需要处理，客户起点为"+zcOrder.getStartSite().addr+",终点为"+zcOrder.getEndSite().addr);
+    }
+
+    /**
+     * 定位小蓝点
+     */
     MyLocationStyle myLocationStyle;
 
     @Override
@@ -589,81 +690,33 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         // 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false
         aMap.setMyLocationEnabled(true);
 
-        String locStr = XApp.getMyPreferences().getString(Config.SP_LAST_LOC, "");
+        String locStr = new CsSharedPreferences().getString(Config.SP_LAST_LOC, "");
         EmLoc emLoc = new Gson().fromJson(locStr, EmLoc.class);
         if (null != emLoc) {
             lastLatlng = new LatLng(emLoc.latitude, emLoc.longitude);
-            receiveLoc(emLoc);//手动调用上次位置 减少从北京跳过来的时间
-            aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLatlng, 17));//移动镜头，首次镜头快速跳到指定位置
+            //手动调用上次位置 减少从北京跳过来的时间
+            receiveLoc(emLoc);
+            //移动镜头，首次镜头快速跳到指定位置
+            aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLatlng, 17));
 
             myLocationStyle = new MyLocationStyle();
+            // 设置圆形的边框颜色
+            myLocationStyle.strokeColor(Color.argb(0, 0, 0, 0));
+            // 设置圆形的填充颜色
+            myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));
 
-            myLocationStyle.strokeColor(Color.argb(0, 0, 0, 0));// 设置圆形的边框颜色
-            myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));// 设置圆形的填充颜色
-
-            if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-                myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);
-            } else {
-                myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER);
-            }
             myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                     .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
             aMap.setMyLocationStyle(myLocationStyle);
-
-//        location();
         }
     }
 
-//    //声明AMapLocationClient类对象，定位发起端
-//    private AMapLocationClient mLocationClient = null;
-//    //声明mLocationOption对象，定位参数
-//    public AMapLocationClientOption mLocationOption = null;
-//
-//    private void location() {
-//        //初始化定位
-//        mLocationClient = new AMapLocationClient(getApplicationContext());
-//        //设置定位回调监听
-//        mLocationClient.setLocationListener(this);
-//        //初始化定位参数
-//        mLocationOption = new AMapLocationClientOption();
-//        //设置定位模式为Hight_Accuracy高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
-//        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-//        //设置是否返回地址信息（默认返回地址信息）
-//        mLocationOption.setNeedAddress(true);
-//        //设置是否只定位一次,默认为false
-//        mLocationOption.setOnceLocation(false);
-//        //设置是否允许模拟位置,默认为false，不允许模拟位置  true方法开启允许位置模拟
-//        mLocationOption.setMockEnable(true);
-//        //设置定位间隔,单位毫秒,默认为2000ms
-//        mLocationOption.setInterval(2000);
-//        //给定位客户端对象设置定位参数
-//        mLocationClient.setLocationOption(mLocationOption);
-//        //启动定位
-//        mLocationClient.startLocation();
-//    }
-
-//    @Override
-//    public void onLocationChanged(AMapLocation aMapLocation) {
-//        if (!isMapTouched) {
-//            myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);
-//            aMap.setMyLocationStyle(myLocationStyle);
-//            if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-//                aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
-//            }
-//        } else {
-//            //todo 地图滑动第二次才生效的问题
-//            myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER);
-//            aMap.setMyLocationStyle(myLocationStyle);
-//            if ((System.currentTimeMillis() - XApp.getMyPreferences().getLong(Config.DOWN_TIME, 0)) / 1000 > 5) {
-//                isMapTouched = false;
-//            }
-//        }
-//    }
-
+    /**
+     * 起点终点marker
+     */
     private Marker startMarker;
     private Marker endMarker;
 
-//    private Marker myFirstMarker;//首次进入时默认位置的marker
 
     @Override
     public void showMapBounds() {
@@ -676,9 +729,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 latLngs.add(new LatLng(getStartAddr().lat, getStartAddr().lng));
                 presenter.routePlanByNavi(getStartAddr().lat, getStartAddr().lng);
             }
-//            if (null != getEndAddr()) {
-//                latLngs.add(new LatLng(getEndAddr().lat, getEndAddr().lng));
-//            }
             LatLngBounds bounds = MapUtil.getBounds(latLngs, lastLatlng);
             aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(this) / 1.5), (int) (DensityUtil.getDisplayWidth(this) / 1.5), 0));
         } else if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
@@ -687,7 +737,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 presenter.routePlanByNavi(getStartAddr().lat, getStartAddr().lng);
             } else {
                 presenter.stopNavi();
-                leftTimeText.setText("");
+                left_time.setText("");
             }
             LatLngBounds bounds = MapUtil.getBounds(latLngs, lastLatlng);
             aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(this) / 1.5), (int) (DensityUtil.getDisplayWidth(this) / 1.5), 0));
@@ -758,11 +808,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
      */
     @Override
     public void showPath(int[] ints, AMapNaviPath path) {
-//        if (null != routeOverLay) {
-//            routeOverLay.removeFromMap();
-//        }
-//        aMap.moveCamera(CameraUpdateFactory.changeTilt(0));
-
         RouteOverLay routeOverLay = new RouteOverLay(aMap, path, this);
 
         routeOverLay.setStartPointBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.yellow_dot_small));
@@ -771,7 +816,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         RouteOverlayOptions options = new RouteOverlayOptions();
         options.setSmoothTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_green));
-        options.setUnknownTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_no));
+        options.setUnknownTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_green));
+//        options.setUnknownTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_no));
         options.setSlowTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_slow));
         options.setJamTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_bad));
         options.setVeryJamTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_grayred));
@@ -786,6 +832,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         this.routeOverLay = routeOverLay;
     }
 
+    /**
+     * 驾车路径覆盖物
+     */
     private DrivingRouteOverlay drivingRouteOverlay;
 
     @Override
@@ -812,7 +861,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     }
 
-    private CusBottomSheetDialog bottomSheetDialog;//支付弹窗
+    /**
+     * /支付弹窗
+     */
+    private CusBottomSheetDialog bottomSheetDialog;
 
     @Override
     public void showPayType(double money, ConsumerInfo consumerInfo) {
@@ -995,7 +1047,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                         "</tt></b></font>" +
                         getString(R.string.minute_);
             }
-            left_time_dis.setText(Html.fromHtml(disStr + timeStr));
+            left_time.setText(Html.fromHtml(disStr + timeStr));
         } else {
             String disStr;
             int km = dis / 1000;
@@ -1031,8 +1083,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                         "</tt></b></font>" +
                         getString(R.string.minute_);
             }
-            to_appoint_left_time.setText(Html.fromHtml(disStr + timeStr));
-            leftTimeText.setText(Html.fromHtml(disStr + timeStr));
+            left_time.setText(Html.fromHtml(disStr + timeStr));
         }
     }
 
@@ -1051,6 +1102,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
     }
 
+    /**
+     * 获取起点
+     *
+     * @return
+     */
     private Address getStartAddr() {
         Address startAddress = null;
         if (zcOrder != null && zcOrder.orderAddressVos != null && zcOrder.orderAddressVos.size() != 0) {
@@ -1064,6 +1120,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         return startAddress;
     }
 
+    /**
+     * 获取终点
+     *
+     * @return
+     */
     private Address getEndAddr() {
         Address endAddr = null;
         if (zcOrder != null && zcOrder.orderAddressVos != null && zcOrder.orderAddressVos.size() != 0) {
@@ -1097,12 +1158,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void showToPlace(String toPlace) {
-        nextPlace.setText(toPlace);
+        next_place.setText(toPlace);
     }
 
     @Override
     public void showLeftTime(String leftTime) {
-        leftTimeText.setText(leftTime);
+        left_time.setText(leftTime);
     }
 
     @Override
@@ -1113,8 +1174,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 presenter.acceptOrder(zcOrder.orderId, zcOrder.version, btn);
                 //todo 一键报警
 //                CenterUtil centerUtil = new CenterUtil(FlowActivity.this,Config.APP_KEY,
-//                        XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
-//                        XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
+//                        new CsSharedPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
+//                        new CsSharedPreferences().getString(Config.SP_TOKEN, ""));
 //                centerUtil.smsShareAuto( zcOrder.orderId, EmUtil.getEmployInfo().companyId,  zcOrder.passengerId,  zcOrder.passengerPhone,  zcOrder.orderType);
 //                centerUtil.checkingAuth( zcOrder.passengerId);
             }
@@ -1151,8 +1212,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             }
 
             @Override
-            public void doStartDrive(LoadingButton btn) {
-                presenter.startDrive(zcOrder.orderId, zcOrder.version, btn);
+            public void doStartDrive() {
+                presenter.startDrive(zcOrder.orderId, zcOrder.version);
             }
 
             @Override
@@ -1202,19 +1263,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void showCheating() {
-//                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//动态设置为竖屏
-//                toolbar.setTitle(R.string.zc_status_to_end);
-//                CheatingFragment cheatingFragment = new CheatingFragment();
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("zcOrder", DymOrder.findByIDType(orderId, Config.ZHUANCHE));
-//                cheatingFragment.setArguments(bundle);
-//                cheatingFragment.setBridge(bridge);
-//
-//                FragmentManager manager = getSupportFragmentManager();
-//                FragmentTransaction transaction = manager.beginTransaction();
-//                transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
-//                transaction.replace(R.id.flow_frame, cheatingFragment);
-//                transaction.commit();
+
             }
 
             @Override
@@ -1234,7 +1283,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 if (canDaifu) {
                     showPayType(payMoney, null);
                 } else {
-//                    ToastUtil.showMessage(FlowActivity.this,"费用信息已发送到客户");
                     if (settleFragmentDialog != null) {
                         settleFragmentDialog.dismiss();
                     }
@@ -1253,7 +1301,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     @Override
     public void showToEndFragment() {
         DymOrder order = DymOrder.findByIDType(orderId, Config.ZHUANCHE);
-//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);//动态设置为遵循传感器
         toolbar.setTitle(R.string.zc_status_to_end);
         runningFragment = new RunningFragment();
         Bundle bundle = new Bundle();
@@ -1274,7 +1321,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         if (canDaifu) {
             showPayType(payMoney, consumerInfo);
         } else {
-//            ToastUtil.showMessage(this,"费用信息已发送到客户");
             if (settleFragmentDialog != null) {
                 settleFragmentDialog.dismiss();
             }
@@ -1282,19 +1328,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
     }
 
-    @Override
-    public void hideTops() {
-        not_accept_layout.setVisibility(View.GONE);
-        arrive_start_layout.setVisibility(View.GONE);
-        to_appoint_layout.setVisibility(View.GONE);
-        go_layout.setVisibility(View.GONE);
-        middle_wait_layout.setVisibility(View.GONE);
-    }
-
-//    @Override
-//    public ZCOrder getOrder() {
-//        return zcOrder;
-//    }
 
     @Override
     protected void onStart() {
@@ -1347,6 +1380,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         canGoOld = false;
         super.onPause();
         mapView.onPause();
+        cancelTimer();
     }
 
     @Override
@@ -1355,15 +1389,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         mapView.onDestroy();
         presenter.stopNavi();
 
-        if (mPlocation!= null){
+        if (mPlocation != null) {
             mPlocation = null;
         }
 
-//        //add
-//        if (mLocationClient != null) {
-//            mLocationClient.stopLocation();//停止定位
-//            mLocationClient.onDestroy();//销毁定位客户端。
-//        }
         super.onDestroy();
     }
 
@@ -1379,8 +1408,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         unregisterReceiver(orderFinishReceiver);
     }
 
-//    SmoothMoveMarker smoothMoveMarker;
-
     private LatLng lastLatlng;
 
     @Override
@@ -1393,9 +1420,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         if (myLocationStyle == null) {
             myLocationStyle = new MyLocationStyle();
-
-            myLocationStyle.strokeColor(Color.argb(0, 0, 0, 0));// 设置圆形的边框颜色
-            myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));// 设置圆形的填充颜色
+            // 设置圆形的边框颜色
+            myLocationStyle.strokeColor(Color.argb(0, 0, 0, 0));
+            // 设置圆形的填充颜色
+            myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));
         }
         if (!isMapTouched) {
             if (zcOrder != null) {
@@ -1413,7 +1441,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             if (aMap != null) {
                 aMap.setMyLocationStyle(myLocationStyle);
             }
-            if ((System.currentTimeMillis() - XApp.getMyPreferences().getLong(Config.DOWN_TIME, 0)) / 1000 > 5) {
+            if ((System.currentTimeMillis() - new CsSharedPreferences().getLong(Config.DOWN_TIME, 0)) / 1000 > 5) {
                 isMapTouched = false;
             }
         }
@@ -1432,55 +1460,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         lastLatlng = latLng;
 
-//        if (null == smoothMoveMarker) {//首次进入
-//            smoothMoveMarker = new SmoothMoveMarker(aMap);
-//            smoothMoveMarker.setDescriptor(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-//                    .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
-//            smoothMoveMarker.setPosition(lastLatlng);
-//            smoothMoveMarker.setRotate(location.bearing);
-//        } else {
-//            if (null != myFirstMarker) {//去除掉首次的位置marker
-//                myFirstMarker.remove();
-//            }
-//            List<LatLng> latLngs = new ArrayList<>();
-//            latLngs.add(lastLatlng);
-//            latLngs.add(latLng);
-//            smoothMoveMarker.setPosition(lastLatlng);
-//            smoothMoveMarker.setPoints(latLngs);
-//
-//            smoothMoveMarker.setTotalDuration(Config.NORMAL_LOC_TIME / 1000);
-//
-//            smoothMoveMarker.setRotate(location.bearing);
-//            smoothMoveMarker.startSmoothMove();
-//            Marker marker = smoothMoveMarker.getMarker();
-//            if (null != marker) {
-//                marker.setDraggable(false);
-//                marker.setClickable(false);
-//                marker.setAnchor(0.5f, 0.5f);
-//            }
-//        }
-
-//        if (zcOrder != null) {
-//            if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-//                if (null != getEndAddr()) {
-//                    presenter.routePlanByNavi(getEndAddr().lat, getEndAddr().lng);
-//                }
-//            } else if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
-//                if (null != getEndAddr()) {
-//                    presenter.routePlanByNavi(getStartAddr().lat, getStartAddr().lng);
-//                }
-//            }
-//        }
-//
-//        if (null != zcOrder) {
-//            if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER
-//                    || zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
-//                if (!isMapTouched) {
-//                    aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17), Config.NORMAL_LOC_TIME, null);
-//                }
-//            }
-//        }
-//        lastLatlng = latLng;
     }
 
     @Override
@@ -1504,9 +1483,13 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
     }
 
+    /**
+     * 纠偏路线
+     */
     private Polyline tracePolyLine;
-    private Polyline orignialPolyLine;
-
+    /**
+     * 纠偏点集合
+     */
     private List<LatLng> traceLatlngs = new ArrayList<>();
 
     @Override
@@ -1522,6 +1505,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
     }
 
+    /**
+     * 取消订单弹窗
+     */
     private AlertDialog cancelDialog;
 
     @Override
@@ -1548,14 +1534,20 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
     }
 
+    /**
+     * 乘客位置marker
+     */
     private Marker plMaker;
     private PassengerLocation mPlocation;
 
     @Override
     public void plChange(PassengerLocation plocation) {
+        //订单只有在前往目的地前显示
         if (zcOrder != null && zcOrder.orderStatus < ZCOrderStatus.GOTO_DESTINATION_ORDER) {
             if (plocation != null) {
+                //推送位置存在
                 if (null != mPlocation) {
+                    //本地位置也存在，对比两个点的订单id是否相同。相同加载，不相同移除。
                     if (zcOrder.orderId == plocation.orderId) {
                         if (plocation.latitude != mPlocation.latitude && plocation.longitude != mPlocation.longitude) {
                             mPlocation = plocation;
@@ -1567,21 +1559,27 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                         }
                     }
                 } else {
+                    //第一次来，乘客位置有，本地没有。同步并加载maker。
                     mPlocation = plocation;
                     addPlMaker();
                 }
-            }else {
+            } else {
+                //推送来的点是空的也清理掉，预防加载的还是之前的。乘客位置偏差。
                 if (plMaker != null) {
                     plMaker.remove();
                 }
             }
         } else {
+            //到达目的地后就清理掉
             if (plMaker != null) {
                 plMaker.remove();
             }
         }
     }
 
+    /**
+     * 添加乘客位置marker
+     */
     public void addPlMaker() {
         if (plMaker != null) {
             plMaker.remove();
@@ -1614,6 +1612,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
     }
 
+    /**
+     * 设置地图是否触摸拖动
+     */
     public static boolean isMapTouched = false;
 
     @Override
@@ -1622,7 +1623,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             Log.e("mapTouch", "-----map onTouched-----");
             if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
                 isMapTouched = true;
-                XApp.getPreferencesEditor().putLong(Config.DOWN_TIME, System.currentTimeMillis()).apply();
+                new CsEditor().putLong(Config.DOWN_TIME, System.currentTimeMillis()).apply();
             }
             if (null != runningFragment) {
                 runningFragment.mapStatusChanged();
@@ -1647,7 +1648,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         return false;
     }
 
-
+    /**
+     * 屏幕切换监听
+     */
     private class AlbumOrientationEventListener extends OrientationEventListener {
         private int mOrientation;
 
@@ -1657,21 +1660,15 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         @Override
         public void onOrientationChanged(int orientation) {
-//            if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
-//                //已经显示结算对话框不显示
-//                return;
-//            }
-//
-//            if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN || !canGoOld) {
-//                return;
-//            }
-//            android.util.Log.e("TAG", "orientation = " + orientation);
-//            if ((orientation > 70 && orientation < 110) || (orientation > 250 && orientation < 290)) {
-//                toWhatOldByOrder(zcOrder);
-//            }
+
         }
     }
 
+    /**
+     * 获取乘客位置
+     *
+     * @param orderId
+     */
     public void passengerLoc(long orderId) {
         Observable<PassengerLcResult> observable = ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
                 .passengerLoc(orderId)
@@ -1682,9 +1679,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             if (passengerLcResult.getCode() == 1) {
                 plChange(passengerLcResult.data);
             }
-//            else if (passengerLcResult.getCode() == 40005) {
-//                ToastUtil.showMessage(this, "客户退出app或微信下单，未获取到客户位置");
-//            }
         }));
     }
 

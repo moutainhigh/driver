@@ -22,12 +22,19 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 /**
- * Created by developerLzh on 2017/11/13 0013.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: CheatingFragment
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 未使用 手动调价器
+ * History:
  */
 
 public class CheatingFragment extends RxBaseFragment {
     private DymOrder zcOrder;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
     private TextView currentMileageTxt;
@@ -48,6 +55,10 @@ public class CheatingFragment extends RxBaseFragment {
     DecimalFormat decimalFormat = new DecimalFormat("#0.0");
 
 
+    /**
+     * 设置bridge
+     * @param bridge
+     */
     public void setBridge(ActFraCommBridge bridge) {
         this.bridge = bridge;
     }

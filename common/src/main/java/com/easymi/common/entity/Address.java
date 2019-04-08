@@ -5,30 +5,35 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 /**
- * Created by developerLzh on 2017/11/20 0020.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午5:00
+ * Description:
+ * History:
  */
-
 public class Address implements Serializable{
     public long id;
-//    public String addr;
-//    public double lat;
-//    public double lng;
-//
-//    @SerializedName("addr_type")
-//    public double addrType;//地址类型 1代表起点 2代表途经点 3代表终点
-//
-//    public String poi;
-//    public int seq;//地址排序 从小到大
 
-    //hf
+ //hf
+
     public String address;
     public double latitude;
     public double longitude;
 
-    public double type;//地址类型 1代表起点 2代表途经点 3代表终点
+    /**
+     * 地址类型 1代表起点 2代表途经点 3代表终点
+     */
+    public double type;
 
     public String poi;
-    public int sort;//地址排序 从小到大
-    public long orderId;//订单id
+    /**
+     * 地址排序 从小到大
+     */
+    public int sort;
+    /**
+     * 订单id
+     */
+    public long orderId;
     public long created;
 }

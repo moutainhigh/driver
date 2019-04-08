@@ -32,21 +32,41 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by developerLzh on 2017/11/11 0011.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: NotifityActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 通知列表
+ * History:
  */
+
 @Route(path = "/personal/NotifityActivity")
 public class NotifityActivity extends RxBaseActivity {
 
+    /**
+     * 自定义标题栏
+     */
     CusToolbar toolbar;
 
+    /**
+     * 自定义可刷新列表控件
+     */
     SwipeRecyclerView recyclerView;
-
+    /**
+     * 通知适配器
+     */
     NotifityAdapter adapter;
 
     private int page = 1;
 
+    /**
+     * 通知数据集
+     */
     private List<Notifity> notifities;
 
+    /**
+     * 错误空布局
+     */
     CusErrLayout errLayout;
 
     @Override
@@ -92,6 +112,9 @@ public class NotifityActivity extends RxBaseActivity {
         recyclerView.setRefreshing(true);
     }
 
+    /**
+     * 查询通知数据
+     */
     private void queryData() {
         Observable<NotifityResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .notices(page, 10)
@@ -133,6 +156,11 @@ public class NotifityActivity extends RxBaseActivity {
         })));
     }
 
+    /**
+     * 单个已读
+     * @param id
+     * @param position
+     */
     private void readOne(long id, int position) {
         Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .readNotice(id)
@@ -147,6 +175,9 @@ public class NotifityActivity extends RxBaseActivity {
         })));
     }
 
+    /**
+     * 已读全部
+     */
     private void readAll() {
         if (TextUtils.isEmpty(getIds())){
             ToastUtil.showMessage(this,getResources().getString(R.string.com_no_read));
@@ -165,6 +196,10 @@ public class NotifityActivity extends RxBaseActivity {
         })));
     }
 
+    /**
+     * 获取未读id集合
+     * @return
+     */
     public String getIds() {
         String ids = null;
         for (Notifity notifity : notifities) {

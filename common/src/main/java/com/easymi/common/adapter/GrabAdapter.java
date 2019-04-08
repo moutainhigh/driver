@@ -16,7 +16,12 @@ import co.lujun.androidtagview.ColorFactory;
 import co.lujun.androidtagview.TagContainerLayout;
 
 /**
- * Created by developerLzh on 2017/11/3 0003.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午5:00
+ * Description:
+ * History:
  */
 
 public class GrabAdapter extends PagerAdapter {
@@ -24,7 +29,10 @@ public class GrabAdapter extends PagerAdapter {
     private List<MultipleOrder> baseOrderList;
     private Context context;
 
-    private List<View> mViewList = new ArrayList<>();   //View重用缓存列表
+    /**
+     * View重用缓存列表
+     */
+    private List<View> mViewList = new ArrayList<>();
 
     public GrabAdapter(Context context) {
         this.context = context;
@@ -63,7 +71,8 @@ public class GrabAdapter extends PagerAdapter {
             view.setTag(holder);
         } else {
             //存在可重用的视图
-            view = mViewList.remove(0); //获取可重用的视图，并从缓存中移除
+            //获取可重用的视图，并从缓存中移除
+            view = mViewList.remove(0);
             holder = (Holder) view.getTag();
         }
 
@@ -86,8 +95,10 @@ public class GrabAdapter extends PagerAdapter {
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         View view = (View) object;
-        container.removeView(view); //从ViewPager中移除view
-        mViewList.add(view);    //移除的view添加到回收缓存列表
+        //从ViewPager中移除view
+        container.removeView(view);
+        //移除的view添加到回收缓存列表
+        mViewList.add(view);
     }
 
     @Override

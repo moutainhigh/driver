@@ -8,7 +8,12 @@ import com.easymi.component.Config;
 import com.easymi.zhuanche.R;
 
 /**
- * Created by developerLzh on 2017/12/19 0019.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: CancelOrderReceiver
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 取消或收回订单广播接收器
+ * History:
  */
 
 public class CancelOrderReceiver extends BroadcastReceiver {
@@ -38,7 +43,16 @@ public class CancelOrderReceiver extends BroadcastReceiver {
         }
     }
 
+    /**
+     * 取消订单接口
+     */
     public interface OnCancelListener {
+        /**
+         * 取消收回订单监听
+         * @param orderId
+         * @param orderType 订单类型
+         * @param msg 对应提示文字
+         */
         void onCancelOrder(long orderId, String orderType, String msg);
     }
 }

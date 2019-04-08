@@ -231,6 +231,7 @@
             android:padding="10dp">
 
             <Button
+                android:id="@+id/btn_create"
                 android:onClick="modelSet"
                 android:layout_width="0.0dp"
                 android:layout_height="@dimen/btn_height"
@@ -238,7 +239,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_weight="3"
                 android:background="@drawable/corners_button_bg_2"
-                android:text="@string/listen_order_set"
+                android:text="司机补单"
                 android:textColor="@color/white" />
 
             <com.easymi.component.widget.LoadingButton

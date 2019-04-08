@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: GrabFragment
- * Author: shine
+ *@Author: shine
  * Date: 2018/11/15 下午4:06
  * Description:
  * History:
@@ -52,16 +52,22 @@ public class GrabFragment extends RxBaseFragment implements MyOrderContract.View
         initAdapter();
         initPresenter();
     }
-
+    /**
+     * 初始化presenter 请求数据
+     */
     public void initPresenter(){
         presenter = new MyOrderPresenter(getContext(),this);
         setRefresh();
     }
-
+    /**
+     * 请求数据
+     */
     public void setRefresh(){
         presenter.indexOrders(page,size,"1");
     }
-
+    /**
+     * 加载adapter
+     */
     public void initAdapter(){
         adapter = new MyOrderAdapter(getContext(),2);
 

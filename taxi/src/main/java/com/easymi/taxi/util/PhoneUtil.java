@@ -5,10 +5,18 @@ import android.view.View;
 import android.view.Window;
 
 /**
- * Created by liuzihao on 2018/1/30.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: PhoneUtil
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
-
 public class PhoneUtil {
+    /**
+     * 隐藏系统布局
+     * @param window
+     */
     public static void setHideVirtualKey(Window window) {
         //保持布局状态
         int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE |

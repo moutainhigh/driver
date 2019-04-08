@@ -19,7 +19,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by liuzihao on 2018/2/12.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: ConsumerInfoActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class ConsumerInfoActivity extends RxBaseActivity {
@@ -58,6 +63,9 @@ public class ConsumerInfoActivity extends RxBaseActivity {
         getConsumerInfo();
     }
 
+    /**
+     * 获取客户星系
+     */
     private void getConsumerInfo() {
         Observable<ConsumerResult> observable = ApiManager.getInstance().createApi(Config.HOST, TaxiApiService.class)
                 .getConsumer(orderId, EmUtil.getAppKey())

@@ -11,6 +11,8 @@ import android.view.View;
 import com.google.gson.Gson;
 
 import java.math.BigDecimal;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -131,9 +133,10 @@ public class CommonUtil {
 	    新增：17开头的电话号码，如170、177
 	    总结起来就是第一位必定为1，第二位必定为3或5或8，其他位置的可以为0-9
 	    */
-        // TODO: 2017/1/3 随着号码增加,验证也需要跟进
-        String telRegex = "[1][3578]\\d{9}";//"[1]"代表第1位为数字1，"[358]"代表第二位可以为3、5、8中的一个，"\\d{9}"代表后面是可以是0～9的数字，有9位。
-        return !TextUtils.isEmpty(mobiles) && mobiles.matches(telRegex);
+//        // TODO: 2017/1/3 随着号码增加,验证也需要跟进
+////        String telRegex = "[1][35789]\\d{9}";//"[1]"代表第1位为数字1，"[358]"代表第二位可以为3、5、8中的一个，"\\d{9}"代表后面是可以是0～9的数字，有9位。
+////        return !TextUtils.isEmpty(mobiles) && mobiles.matches(telRegex);
+        return (mobiles.trim().length() == 11);
     }
 
     /**
@@ -195,5 +198,21 @@ public class CommonUtil {
         return Arrays.asList(array);
     }
 
-
+    /**
+     * md5值编码.
+     */
+    public static String md5(byte[] byteStr) {
+        byte[] hash;
+        try {
+            hash = MessageDigest.getInstance("MD5").digest(byteStr);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Huh, MD5 should be supported?", e);
+        }
+        StringBuilder hex = new StringBuilder(hash.length * 2);
+        for (byte b : hash) {
+            if ((b & 0xFF) < 0x10) hex.append("0");
+            hex.append(Integer.toHexString(b & 0xFF));
+        }
+        return hex.toString();
+    }
 }

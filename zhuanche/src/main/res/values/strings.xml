@@ -12,8 +12,6 @@
     <string name="start_drive">点击出发</string>
     <string name="start_wait">等待</string>
 
-    <!--<string name="slider_destance">滑动到达目的地</string>-->
-
     <string name="huadongdaoda">滑动到达预约地</string>
     <string name="slider_destance">滑动到达目的地</string>
 
@@ -113,7 +111,7 @@
     <string name="status_pai">已派单</string>
     <string name="status_jie">已接单</string>
     <string name="status_to_start">前往预约地</string>
-    <string name="status_arrive_start">已到达预约地</string>
+    <string name="status_arrive_start">等待上车</string>
     <string name="status_wait">等待中</string>
     <string name="zc_status_to_end">执行中</string>
     <string name="status_cheating">作弊器</string>
@@ -215,7 +213,6 @@
 
     <string name="to_start_about">去乘客起点约</string>
     <string name="please_start_at">请在</string>
-    <string name="arrive_start">点击到达预约地</string>
 
     <string name="no_car">暂无车辆，不能创建专车订单，请联系管理员</string>
 
@@ -224,4 +221,10 @@
     <string name="bo_budget_hint">起点距离终点太近，无法预算费用</string>
 
     <string name="order_finish">该订单已完成</string>
+
+    <string name="order_cacnel">销单须知</string>
+    <string name="reason_cacnel">销单原因</string>
+
+
+    <string name="zc_jietifei">阶梯费</string>
 </resources>

@@ -1,17 +1,31 @@
 package com.easymi.common.push;
 
 /**
- * Created by liuzihao on 2017/12/13.
- *
- * 位置变化的主题
- *
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 费用信息监听分发接口
+ * History:
  */
 
 public interface FeeChangeSubject {
-    //添加观察者
+    /**
+     * 添加观察者
+     * @param obj
+     */
     void addObserver(FeeChangeObserver obj);
-    //移除观察者
+
+    /**
+     * 移除观察者
+     * @param obj
+     */
     void deleteObserver(FeeChangeObserver obj);
-    //当主题方法改变时,这个方法被调用,通知所有的观察
+
+    /**
+     * 当主题方法改变时,这个方法被调用,通知所有的观察
+     * @param orderId
+     * @param orderType
+     */
     void notifyObserver(long orderId,String orderType);
 }

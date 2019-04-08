@@ -30,23 +30,40 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by developerLzh on 2017/11/11 0011.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: DetailActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 账户明细
+ * History:
  */
-
 public class DetailActivity extends RxBaseActivity {
 
+    /**
+     * 列表控件
+     */
     SwipeRecyclerView recyclerView;
-
+    /**
+     * 明细适配器
+     */
     DetailAdapter adapter;
-
+    /**
+     * 余额
+     */
     TextView balanceText;
-
+    /**
+     * 自定义标题栏
+     */
     CusToolbar cusToolbar;
-
+    /**
+     * 错误布局
+     */
     CusErrLayout errLayout;
 
     private int page = 1;
-
+    /**
+     * 明细数据集
+     */
     private List<Detail> details = new ArrayList<>();
 
     @Override
@@ -90,6 +107,9 @@ public class DetailActivity extends RxBaseActivity {
         cusToolbar.setTitle(R.string.pocket_detail);
     }
 
+    /**
+     * 获取流水
+     */
     private void getLiushui() {
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 

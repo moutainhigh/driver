@@ -15,9 +15,12 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2018/11/15.
- * <p>
- * 专线订单-->订单客户 一对多的关系 (移动到common便于上传位置信息的时候给专线订单赋值)
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:OrderCustomer
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 专线订单-->订单客户 一对多的关系 (移动到common便于上传位置信息的时候给专线订单赋值)
+ * History:
  */
 
 public class OrderCustomer implements Serializable {
@@ -54,47 +57,99 @@ public class OrderCustomer implements Serializable {
      */
     public static final int CITY_LINE_STATUS_CANCEL = 35;
 
-    public long id;//主键
+    /**
+     * 主键
+     */
+    public long id;
 
+    /**
+     * 用户Id
+     */
     @SerializedName("passengerId")
-    public long customerId;//用户Id
+    public long customerId;
 
-    public long orderId;//订单Id 外键
+    /**
+     * 订单Id 外键
+     */
+    public long orderId;
 
-    public String orderType;//订单类型
+    /**
+     * 订单类型
+     */
+    public String orderType;
 
+    /**
+     * 客户姓名
+     */
     @SerializedName("passengerName")
-    public String name;//客户姓名
+    public String name;
 
+    /**
+     * 客户电话
+     */
     @SerializedName("passengerPhone")
-    public String phone;//客户电话
+    public String phone;
 
+    /**
+     * 客户头像
+     */
     @SerializedName("avatar")
-    public String photo;//客户头像
+    public String photo;
 
-    public List<OrderAddressVo> orderAddressVos;//位置信息集合
+    /**
+     * 位置信息集合
+     */
+    public List<OrderAddressVo> orderAddressVos;
 
-    public String startAddr;//起点
+    /**
+     * 起点
+     */
+    public String startAddr;
 
-    public String endAddr;//终点
+    /**
+     * 终点
+     */
+    public String endAddr;
 
     public double startLat;
     public double startLng;
     public double endLat;
     public double endLng;
 
+    /**
+     * 预约时间
+     */
     @SerializedName("bookTime")
-    public long appointTime;//预约时间
+    public long appointTime;
 
-    public int acceptSequence;//接的顺序(这个是位置顺序，可以拖动排序的)
-    public int sendSequence;//送的顺序(这个是位置顺序，可以拖动排序的)
-    public int num;//序号(这个是序号，一开始确定后就不会再变了)
+    /**
+     * 接的顺序(这个是位置顺序，可以拖动排序的)
+     */
+    public int acceptSequence;
+    /**
+     * 送的顺序(这个是位置顺序，可以拖动排序的)
+     */
+    public int sendSequence;
+    /**
+     * 序号(这个是序号，一开始确定后就不会再变了)
+     */
+    public int num;
 
     //在第一次保存时，sequence是和num一致的
 
-    public int status;// 0 未接 1 已接 2 跳过接 3 未送 4 已送 5 跳过送
-    public int subStatus;//(接客户时的子状态) 0未到达预约地 1等待客户上车中
+    /**
+     * 0 未接 1 已接 2 跳过接 3 未送 4 已送 5 跳过送
+     */
+    public int status;
+    /**
+     * (接客户时的子状态) 0未到达预约地 1等待客户上车中
+     */
+    public int subStatus;
 
+    /**
+     * 获取客户状态
+     * @return
+     */
     public String getOrderStatus() {
         if (status == 0) {
             return "未接";
@@ -117,6 +172,10 @@ public class OrderCustomer implements Serializable {
         return "";
     }
 
+    /**
+     * 保存到数据库
+     * @return
+     */
     public boolean save() {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
@@ -401,9 +460,6 @@ public class OrderCustomer implements Serializable {
         values.put("subStatus", subStatus);
         values.put("orderId",orderId);
         values.put("orderType", orderType);
-//        values.put("acceptSequence", acceptSequence);
-//        values.put("sendSequence", sendSequence);
-//        values.put("num", num);
 
         boolean flag = db.update("t_zx_order_customer", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
@@ -411,21 +467,4 @@ public class OrderCustomer implements Serializable {
     }
 
 
-
-//    /**
-//     * 更新接人时间
-//     *
-//     * @return
-//     */
-//    public boolean updateBookTime() {
-//        SqliteHelper helper = SqliteHelper.getInstance();
-//        SQLiteDatabase db = helper.openSqliteDatabase();
-//        ContentValues values = new ContentValues();
-//
-//        values.put("appointTime", appointTime);
-//
-//        boolean flag = db.update("t_zx_order_customer", values, " id = ? ",
-//                new String[]{String.valueOf(id)}) == 1;
-//        return flag;
-//    }
 }

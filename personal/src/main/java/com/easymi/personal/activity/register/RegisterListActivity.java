@@ -1,6 +1,7 @@
 package com.easymi.personal.activity.register;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,12 +11,16 @@ import com.easymi.common.entity.CompanyList;
 import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.result.EmResult;
+import com.easymi.component.utils.AlexStatusBarUtils;
 import com.easymi.component.utils.ToastUtil;
+import com.easymi.component.utils.UIStatusBarHelper;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.personal.R;
 import com.easymi.personal.adapter.RegisterTypeAdapter;
 import com.easymi.personal.entity.BusinessType;
+import com.easymi.personal.result.BusinessResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +30,7 @@ import rx.Observable;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: RegisterListActivity
- * Author: shine
+ * @Author: hufeng
  * Date: 2018/12/19 上午9:58
  * Description:
  * History:
@@ -38,7 +43,15 @@ public class RegisterListActivity extends RxBaseActivity{
 
     RegisterTypeAdapter adapter;
 
-    private int type;  //1业务类型 2 机构类型
+    /**
+     * 1业务类型 2 机构类型
+     */
+    private int type;
+
+    /**
+     * 公司id
+     */
+    private long id;
 
     private List<BusinessType> listType = new ArrayList<>();
 
@@ -54,6 +67,8 @@ public class RegisterListActivity extends RxBaseActivity{
 
     @Override
     public int getLayoutId() {
+        UIStatusBarHelper.setStatusBarLightMode(this);
+        AlexStatusBarUtils.setStatusColor(this, Color.WHITE);
         return R.layout.activity_register_list;
     }
 
@@ -64,8 +79,8 @@ public class RegisterListActivity extends RxBaseActivity{
         initAdapter();
 
         if (type == 1){
-            getData();
-            adapter.setList(listType);
+            id = getIntent().getLongExtra("id",0);
+            getBusinessType(id);
         }else if (type == 2){
             getCompany();
         }
@@ -98,41 +113,31 @@ public class RegisterListActivity extends RxBaseActivity{
         }
     }
 
-    public void getData(){
-        listType.clear();
-        BusinessType businessType = new BusinessType();
-        businessType.name = getResources().getString(com.easymi.common.R.string.create_zhuanche);
-        businessType.type = Config.ZHUANCHE;
-        BusinessType businessType1 = new BusinessType();
-        businessType1.name = getResources().getString(com.easymi.common.R.string.create_zhuanxian);
-        businessType1.type = Config.CITY_LINE;
-        BusinessType businessType2 = new BusinessType();
-        businessType2.name = getResources().getString(com.easymi.common.R.string.create_taxi);
-        businessType2.type =  Config.TAXI;
-        listType.add(businessType);
-        listType.add(businessType2);
-        listType.add(businessType1);
-
-        BusinessType businessType3 = new BusinessType();
-        businessType3.name = getResources().getString(com.easymi.common.R.string.create_chartered);
-        businessType3.type = Config.CHARTERED;
-        BusinessType businessType4 = new BusinessType();
-        businessType4.name = getResources().getString(com.easymi.common.R.string.create_rental);
-        businessType4.type = Config.RENTAL;
-        BusinessType businessType5 = new BusinessType();
-        businessType5.name = getResources().getString(com.easymi.common.R.string.create_bus_country);
-        businessType5.type =  Config.COUNTRY;
-        listType.add(businessType3);
-        listType.add(businessType4);
-        listType.add(businessType5);
+    /**
+     * 获取业务类型
+     */
+    public void getBusinessType(long id){
+        Observable<BusinessResult> observable = RegisterModel.getBusinessType(id);
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, emResult -> {
+            if (emResult.getCode() == 1){
+                listType = emResult.data;
+                adapter.setList(listType);
+            }
+        })));
     }
 
+    /**
+     * 初始化控件
+     */
     public void findById() {
         toolbar = findViewById(R.id.toolbar);
         button_sure = findViewById(R.id.button_sure);
         recyclerView = findViewById(R.id.recyclerView);
     }
 
+    /**
+     * 初始化适配器
+     */
     public void initAdapter(){
         adapter = new RegisterTypeAdapter(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -151,6 +156,9 @@ public class RegisterListActivity extends RxBaseActivity{
         });
     }
 
+    /**
+     * 获取服务机构数据
+     */
     private void getCompany() {
         Observable<CompanyList> observable = RegisterModel.getCompanys();
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, companyList -> {
@@ -162,6 +170,9 @@ public class RegisterListActivity extends RxBaseActivity{
         })));
     }
 
+    /**
+     * 返回上个界面数据
+     */
     public void setResult(){
         Intent intent = new Intent();
         intent.putExtra("selectType",selectType);

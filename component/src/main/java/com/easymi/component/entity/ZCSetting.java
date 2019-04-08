@@ -43,6 +43,27 @@ public class ZCSetting {
     public int distributeOrder; //派单开关
     public String serviceType; //业务类型
 
+    /**
+     * 行程未开始销单
+     */
+    public int unStartCancel;
+
+    /**
+     *前往预约地销单
+     */
+    public int goToCancel;
+
+    /**
+     * 到达预约地销单
+     */
+    public int arriveCancel;
+
+    /**
+     * 到达预约地销单时间
+     */
+    public long arriveTime;
+
+
     public static void deleteAll() {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
@@ -69,6 +90,11 @@ public class ZCSetting {
         values.put("distributeOrder", distributeOrder);
         values.put("serviceType", serviceType);
 
+        values.put("unStartCancel", unStartCancel);
+        values.put("goToCancel", goToCancel);
+        values.put("arriveCancel", arriveCancel);
+        values.put("arriveTime", arriveTime);
+
         db.insert("t_zc_settinginfo", null, values);
     }
 
@@ -93,6 +119,11 @@ public class ZCSetting {
                 settingInfo.grabOrder = cursor.getInt(cursor.getColumnIndex("grabOrder"));
                 settingInfo.distributeOrder = cursor.getInt(cursor.getColumnIndex("distributeOrder"));
                 settingInfo.serviceType = cursor.getString(cursor.getColumnIndex("serviceType"));
+
+                settingInfo.unStartCancel = cursor.getInt(cursor.getColumnIndex("unStartCancel"));
+                settingInfo.goToCancel = cursor.getInt(cursor.getColumnIndex("goToCancel"));
+                settingInfo.arriveCancel = cursor.getInt(cursor.getColumnIndex("arriveCancel"));
+                settingInfo.arriveTime = cursor.getLong(cursor.getColumnIndex("arriveTime"));
             }
         } finally {
             cursor.close();

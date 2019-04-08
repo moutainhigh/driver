@@ -29,9 +29,13 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by developerLzh on 2017/11/10 0010.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: StatsActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
-
 @Route(path = "/personal/StatsActivity")
 public class StatsActivity extends RxBaseActivity {
 
@@ -99,7 +103,9 @@ public class StatsActivity extends RxBaseActivity {
         cusToolbar.setTitle(R.string.set_statistics);
     }
 
-
+    /**
+     * 获取统计信息
+     */
     private void getStatis() {
         getTimeZone();
         Employ employ = EmUtil.getEmployInfo();
@@ -127,6 +133,9 @@ public class StatsActivity extends RxBaseActivity {
         })));
     }
 
+    /**
+     * 设置查询
+     */
     private void getTimeZone() {
         if (timeType.equals("all")) {
             startTime = null;

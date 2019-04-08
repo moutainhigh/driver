@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">component</string>
 
+    <string name="common_tips">提示~</string>
+
     <string name="lib_no_more_data">没有更多数据了哦~</string>
     <string name="lib_again_up">失败了呢,上滑再试试?(⊙﹏⊙)</string>
     <string name="lib_loading">努力加载中…</string>
@@ -88,4 +90,49 @@
     <string name="unknown_site">未知位置</string>
 
     <string name="rsa_public_key">MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCCaYfJgPjUXWXoifblGGZSFPsP1JYe758iLuRYUNS06MyAwuM+nlM6lC5QbnCOkj5khslbcMvT0+MtoSpe+neGI+oEKU/p203ENqD+I2PxjfTu7AZc+C2Ccw48PlTNVqH/juyhg4Cch7eETPclCdR4XPqO5lI9voDgjvTR/FhJXwIDAQAB</string>
+
+
+    <!--城际拼车状态-->
+    <string name="carpool_status_pay">未支付</string>
+    <string name="carpool_status_new">未指派</string>
+    <string name="carpool_status_assign">已指派</string>
+    <string name="carpool_status_start">前往预约地</string>
+    <string name="carpool_status_arrived">到达预约地</string>
+    <string name="carpool_status_running">行程中</string>
+    <string name="carpool_status_finish">到达目的地</string>
+    <string name="carpool_status_skip">已跳过</string>
+    <string name="carpool_status_review">已评价</string>
+    <string name="carpool_status_cancel">已取消</string>
+
+
+    <!--定制班车状态-->
+    <string name="cb_status_pay">未支付</string>
+    <string name="cb_status_no_start">未开始</string>
+    <string name="cb_status_wait">等待上车</string>
+    <string name="cb_status_check">验票中</string>
+    <string name="cb_status_arrived">到达预约地</string>
+    <string name="cb_status_running">行程中</string>
+    <string name="cb_status_finish">已到达</string>
+    <string name="cb_status_skip">已跳过</string>
+    <string name="cb_status_review">已评价</string>
+    <string name="cb_status_cancel">已取消</string>
+
+    <!--公共-->
+    <string name="common_camera">拍照</string>
+    <string name="common_photo">相册</string>
+    <string name="common_cancel">取消</string>
+
+    <!--公务用车-->
+    <string name="gw_new_order">新单</string>
+    <string name="gw_sended_order">已派单</string>
+    <string name="gw_accepted_order">已接单</string>
+    <string name="gw_to_start">前往预约地</string>
+    <string name="gw_arrive_start">到达预约地</string>
+    <string name="gw_to_end">前往目的地</string>
+    <string name="gw_middle_wait">中途等待</string>
+    <string name="gw_arrive_end">到达目的地</string>
+    <string name="gw_settled">已结算</string>
+    <string name="gw_exculated">已评价</string>
+    <string name="gw_canceled">已消单</string>
+
 </resources>

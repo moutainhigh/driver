@@ -14,7 +14,7 @@ import com.easymin.driver.securitycenter.R;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: CusToolbar
- * Author: shine
+ *@Author: shine
  * Date: 2018/11/27 下午5:28
  * Description:
  * History:

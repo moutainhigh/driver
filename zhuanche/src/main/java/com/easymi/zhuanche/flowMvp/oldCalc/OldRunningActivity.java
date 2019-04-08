@@ -35,7 +35,12 @@ import com.easymi.zhuanche.flowMvp.FlowPresenter;
 import com.easymi.zhuanche.util.PhoneUtil;
 
 /**
- * Created by liuzihao on 2018/1/30.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: OldRunningActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 未使用
+ * History:
  */
 
 public class OldRunningActivity extends RxBaseActivity implements FlowContract.View, FeeChangeObserver {
@@ -53,7 +58,9 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
     private long orderId;
 
     private FlowPresenter presenter;
-
+    /**
+     * activity和fragment的通信接口
+     */
     private ActFraCommBridge bridge;
 
     private double payMoney;
@@ -145,11 +152,6 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
     }
 
     @Override
-    public void initPop() {
-
-    }
-
-    @Override
     public void showTopView() {
 
     }
@@ -179,6 +181,7 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
 
             @Override
             public void doToStart(LoadingButton btn) {
+
             }
 
             @Override
@@ -197,7 +200,7 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
             }
 
             @Override
-            public void doStartDrive(LoadingButton btn) {
+            public void doStartDrive() {
 
             }
 
@@ -348,10 +351,6 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
         showPayType(payMoney, consumerInfo);
     }
 
-    @Override
-    public void hideTops() {
-
-    }
 
     @Override
     public RxManager getManager() {

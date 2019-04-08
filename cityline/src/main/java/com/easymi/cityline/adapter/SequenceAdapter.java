@@ -26,8 +26,12 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2018/11/14.
- * 排序adapter
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:SequenceAdapter
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class SequenceAdapter extends RecyclerView.Adapter<SequenceAdapter.ViewHolder> implements OnItemTouchListener {
@@ -39,24 +43,43 @@ public class SequenceAdapter extends RecyclerView.Adapter<SequenceAdapter.ViewHo
 
     private ItemTouchHelper itemTouchHelper;
 
+    /**
+     * 最大最小位置
+     */
     private int minPos = -1;
     private int maxPos = -1;
 
-
+    /**
+     * 构造器
+     * @param context
+     */
     public SequenceAdapter(Context context) {
         this.context = context;
         lists = new ArrayList<>();
     }
 
+    /**
+     * 设置排序列表
+     * @param sequences
+     */
     public void setSequences(List<Sequence> sequences) {
         this.lists = sequences;
         notifyDataSetChanged();
     }
 
+    /**
+     * 拖动排序帮助类
+     * @param itemTouchHelper
+     */
     public void setItemTouchHelper(ItemTouchHelper itemTouchHelper) {
         this.itemTouchHelper = itemTouchHelper;
     }
 
+    /**
+     * 设置最小最大数
+     * @param min
+     * @param max
+     */
     public void setMinAndMax(int min, int max) {
 
 //        if (min > lists.size() - 1
@@ -190,6 +213,10 @@ public class SequenceAdapter extends RecyclerView.Adapter<SequenceAdapter.ViewHo
         }
     }
 
+    /**
+     * 获取当前排序列表
+     * @return
+     */
     public List<Sequence> getLists(){
         return lists;
     }

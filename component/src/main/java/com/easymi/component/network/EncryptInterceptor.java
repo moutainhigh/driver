@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.utils.AesUtil;
+import com.easymi.component.utils.CsSharedPreferences;
+import com.easymi.component.utils.EncApi;
 import com.easymi.component.utils.Log;
 
 import java.io.IOException;
@@ -18,11 +20,15 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-/**
- * Created by Administrator on 2017/11/15 0015.
- * 拦截请求添加sign.
- */
 
+/**
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: EncryptInterceptor
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description: 拦截请求添加sign
+ * History:
+ */
 public class EncryptInterceptor implements Interceptor {
 
     @Override
@@ -30,12 +36,7 @@ public class EncryptInterceptor implements Interceptor {
 
         Request originRequest = chain.request();
 
-        EncryptSet encryptSet = hookRequest(originRequest);
-
-        if (encryptSet == null || encryptSet.request == null) {
-            return chain.proceed(originRequest);
-        }
-        //排除登录接口，其余接口使用拦截器进行aes加密。
+        //排除登录及其之前接口，其余接口使用拦截器进行aes加密。
         String url = chain.request().url().toString();
         if (url.contains("api/v1/public/driver/login")
                 || url.contains("api/v1/public/driver/register/save")
@@ -45,6 +46,12 @@ public class EncryptInterceptor implements Interceptor {
                 || url.contains("api/v1/public/driver/register/apply/app/save")
                 || url.contains("api/v1/public/driver/register/apply/app/update")
         ) {
+            return chain.proceed(originRequest);
+        }
+
+        EncryptSet encryptSet = hookRequest(originRequest);
+
+        if (encryptSet == null || encryptSet.request == null) {
             return chain.proceed(originRequest);
         }
 
@@ -68,6 +75,12 @@ public class EncryptInterceptor implements Interceptor {
         return null;
     }
 
+    /**
+     * post方法处理
+     * @param originRequest
+     * @param originBody
+     * @return
+     */
     private EncryptSet handlePost(@NonNull Request originRequest, FormBody originBody) {
 
         EncryptSet encryptSet = new EncryptSet();
@@ -88,6 +101,11 @@ public class EncryptInterceptor implements Interceptor {
 
     }
 
+    /**
+     * get方式处理
+     * @param originRequest
+     * @return
+     */
     private EncryptSet handleGet(@NonNull Request originRequest) {
         String originUrl = "" + originRequest.url();
 
@@ -115,30 +133,27 @@ public class EncryptInterceptor implements Interceptor {
         return encryptSet;
     }
 
-    /**
-     * AES 解密
-     *
-     * @param content 密文
-     * @return
-     */
-
-    public static String aesDecrypt(String content) {
-        return AesUtil.aesDecrypt(content, "");
-    }
+//    /**
+//     * AES 解密
+//     *
+//     * @param content 密文
+//     * @return
+//     */
+//
+//    public static String aesDecrypt(String content) {
+//        return AesUtil.aesDecrypt(content, "");
+//    }
 
     /**
      * 加密.
      */
     private String encrypt(String content) {
         String value = content;
-//        Log.e("hufeng/value",value);
         try {
             //将默认的url编码还原后加密在url编码
             String decoderStr = URLDecoder.decode(content, "utf-8");
-            value = AesUtil.aesEncrypt(decoderStr, XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA));
-//            Log.e("hufeng/aesvalue",value);
+            value = EncApi.getInstance().en(new CsSharedPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),decoderStr);
             value = URLEncoder.encode(value, "utf-8");
-//            Log.e("hufeng/encode",value);
         } catch (Exception e) {
             e.printStackTrace();
         }

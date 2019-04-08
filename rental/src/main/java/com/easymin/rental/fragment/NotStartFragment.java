@@ -17,7 +17,7 @@ import java.util.TimerTask;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: NotStartFragment
- * Author: shine
+ * @Author: shine
  * Date: 2018/12/22 下午1:30
  * Description:
  * History:
@@ -34,6 +34,10 @@ public class NotStartFragment extends RxBaseFragment {
 
     ActFraCommBridge bridge;
 
+    /**
+     * 设置bridge
+     * @param bridge
+     */
     public void setBridge(ActFraCommBridge bridge) {
         this.bridge = bridge;
     }
@@ -64,34 +68,43 @@ public class NotStartFragment extends RxBaseFragment {
 
     }
 
+    /**
+     * 预约时间倒计时
+     */
+    long startTimeLeftSec;
 
-    long jieRenTimeLeftSec;
-
+    /**
+     * 定时器
+     */
     private Timer timer;
     private TimerTask timerTask;
 
+    /**
+     * 初始化倒计时
+     */
     private void initCountDown() {
         cancelTimer();
-        jieRenTimeLeftSec = (baseOrder.bookTime*1000 - System.currentTimeMillis()) / 1000;//剩余的秒钟数
-        if (jieRenTimeLeftSec < 0) {
-            jieRenTimeLeftSec = 0;
+        //剩余的秒钟数
+        startTimeLeftSec = (baseOrder.bookTime*1000 - System.currentTimeMillis()) / 1000;
+        if (startTimeLeftSec < 0) {
+            startTimeLeftSec = 0;
         }
 
-        setLeftText(jieRenTimeLeftSec);
+        setLeftText(startTimeLeftSec);
 
-        if (jieRenTimeLeftSec > 0) {
+        if (startTimeLeftSec > 0) {
             timer = new Timer();
             timerTask = new TimerTask() {
                 @Override
                 public void run() {
-                    jieRenTimeLeftSec--;
-                    long sec = jieRenTimeLeftSec % (60 * 60 * 24);
+                    startTimeLeftSec--;
+                    long sec = startTimeLeftSec % (60 * 60 * 24);
                     if (sec != 0) {
                         return;//整分才往下走
                     }
                     getActivity().runOnUiThread(() -> {
-                        setLeftText(jieRenTimeLeftSec);
-                        if (jieRenTimeLeftSec <= 0) {
+                        setLeftText(startTimeLeftSec);
+                        if (startTimeLeftSec <= 0) {
                             bridge.countStartOver();
                             timer.cancel();
                             timer = null;
@@ -99,13 +112,15 @@ public class NotStartFragment extends RxBaseFragment {
                             timerTask = null;
                         }
                     });
-
                 }
             };
             timer.schedule(timerTask, 0, 1000);
         }
     }
 
+    /**
+     * 取消定时器
+     */
     public void cancelTimer() {
         if (timer != null) {
             timer.cancel();
@@ -117,6 +132,10 @@ public class NotStartFragment extends RxBaseFragment {
         }
     }
 
+    /**
+     * 显示剩余时间
+     * @param leftSec
+     */
     private void setLeftText(long leftSec) {
         long day = leftSec / 60 / 60 / 24;
         long hour = (leftSec / 60 / 60) % 24;

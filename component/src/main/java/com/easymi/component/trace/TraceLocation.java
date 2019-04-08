@@ -1,7 +1,12 @@
 package com.easymi.component.trace;
 
 /**
- * Created by developerLzh on 2018/1/3 0003.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ *@Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class TraceLocation {

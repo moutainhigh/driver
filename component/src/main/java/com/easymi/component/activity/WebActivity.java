@@ -22,7 +22,12 @@ import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.utils.Log;
 
 /**
- * Created by developerLzh on 2017/5/4.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午5:00
+ * Description:
+ * History:
  */
 @Route(path = "/component/WebActivity")
 public class WebActivity extends RxBaseActivity implements View.OnClickListener {
@@ -34,8 +39,10 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
 
     TextView closeAll;
 
+    /**
+     * 进度条
+     */
     private ProgressBar myProgressBar;
-
 
     @Override
     public int getLayoutId() {
@@ -87,6 +94,9 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
         super.onDestroy();
     }
 
+    /**
+     * 初始化
+     */
     public void init() {
 
         Intent localIntent = getIntent();
@@ -104,6 +114,9 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
 
     }
 
+    /**
+     * webview加载完成与否显示关闭按钮
+     */
     Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -120,6 +133,9 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
         }
     });
 
+    /**
+     * 初始化webview的设置
+     */
     @SuppressLint("SetJavaScriptEnabled")
     public void initWeb() {
         webView.getSettings().setJavaScriptEnabled(true);
@@ -183,8 +199,11 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
         }
     }
 
+    /**
+     * 设置返回键事件
+     * @param view
+     */
     public void backAction(View view) {
-//		super.backAction(view);
         if (webView.canGoBack()) {
             webView.goBack();
         } else {

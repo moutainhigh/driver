@@ -3,7 +3,7 @@ package com.easymin.driver.securitycenter.activity;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: CheckPermissionsActivity
- * Author: shine
+ *@Author: shine
  * Date: 2018/12/5 上午10:42
  * Description:
  * History:

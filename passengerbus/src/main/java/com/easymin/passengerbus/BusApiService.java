@@ -14,24 +14,12 @@ import rx.Observable;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: BusApiService
- * Author: shine
+ * @Author: shine
  * Date: 2018/12/18 下午1:30
  * Description:
  * History:
  */
 public interface BusApiService {
-
-//    /**
-//     * 查询单个订单
-//     * @param id
-//     * @return
-//     */
-//    @GET("api/v1/bus/country/passenger/line/{id}")
-//    Observable<SettingResult> getAppSetting(@Path("id") long id);
-
-
-//    @GET("api/v1/bus/country/driver/line/{id}")
-//    Observable<EmResult2<BusStationResult>> findBusInfoById(@Path("id") long id);
 
     /**
      * 开始班次
@@ -75,9 +63,7 @@ public interface BusApiService {
 
     /**
      * 查询班次完整信息(包含站点)
-     api/v1/bus/country/driver/schedule/班次ID
      */
-
     @GET("api/v1/bus/country/driver/schedule/{scheduleId}")
     Observable<EmResult2<BusStationResult>> findBusInfoById(@Path("scheduleId") long scheduleId);
 

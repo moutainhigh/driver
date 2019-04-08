@@ -36,6 +36,14 @@ import java.util.List;
 
 import rx.Observable;
 
+/**
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
+ */
 public class InfoFragment extends AbsRegisterFragment {
 
     private static final int REQUEST_HEAD = 1;
@@ -187,7 +195,7 @@ public class InfoFragment extends AbsRegisterFragment {
 
         //个人信息参数
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.driverId = employ.id;
+        registerRequest.id = employ.id;
         registerRequest.idCard = idCard.getText().toString();
         registerRequest.emergency = emergency.getText().toString();
         registerRequest.emergencyPhone = emergencyPhone.getText().toString();

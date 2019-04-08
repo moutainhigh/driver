@@ -18,17 +18,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2017/11/16.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:CreateActivity
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description: 创建订单界面
+ * History:
  */
 @Route(path = "/common/CreateActivity")
 public class CreateActivity extends RxBaseActivity {
 
-    //    TabLayout tabLayout;
+
     ViewPager viewPager;
 
+    /**
+     * 自定义标题栏
+     */
     CusToolbar toolbar;
 
+    /**
+     * fragment适配器
+     */
     private VpAdapter adapter;
+    /**
+     * 订单类型
+     */
     private String orderType;
 
     @Override
@@ -43,7 +57,6 @@ public class CreateActivity extends RxBaseActivity {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
-//        tabLayout = findViewById(R.id.create_tab_layout);
         viewPager = findViewById(R.id.create_view_pager);
 
         orderType = getIntent().getStringExtra("type");
@@ -90,14 +103,6 @@ public class CreateActivity extends RxBaseActivity {
         adapter = new VpAdapter(getSupportFragmentManager(), fragments);
         viewPager.setAdapter(adapter);
 
-//        tabLayout.setupWithViewPager(viewPager);
-
-//        if (fragments.size() != 0) {
-//            String[] types = EmUtil.getEmployInfo().serviceType.split(",");
-//            for (int i = 0; i < fragments.size(); i++) {
-//                tabLayout.getTabAt(i).setText(pin2Hanzi(types[i]));
-//            }
-//        }
     }
 
     private int pin2Hanzi(String type) {

@@ -26,6 +26,7 @@ import com.easymi.component.db.SqliteHelper;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.trace.TraceUtil;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.google.gson.Gson;
@@ -33,7 +34,12 @@ import com.google.gson.Gson;
 import java.util.List;
 
 /**
- * Created by developerLzh on 2017/11/18 0018.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ *@Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class LocService extends Service implements AMapLocationListener {
@@ -209,7 +215,7 @@ public class LocService extends Service implements AMapLocationListener {
     }
 
     private Notification buildNotification() {
-        boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
+        boolean isLogin = new CsSharedPreferences().getBoolean(Config.SP_ISLOGIN, false);
         Intent intent = new Intent();
 
         if (isLogin) {

@@ -1,6 +1,7 @@
 package com.easymi.common.util;
 
 import com.easymi.common.entity.BuildPushData;
+import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.common.entity.OrderCustomer;
 import com.easymi.common.entity.PushBean;
 import com.easymi.common.entity.PushData;
@@ -9,12 +10,13 @@ import com.easymi.common.entity.PushDataOrder;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
 import com.easymi.component.ZCOrderStatus;
-import com.easymi.component.entity.BaseEmploy;
+import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.entity.PushEmploy;
 import com.easymi.component.network.GsonUtil;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.FileUtil;
 import com.easymi.component.utils.Log;
@@ -27,7 +29,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by liuzihao on 2017/12/22.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ *
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class BuildPushUtil {
@@ -43,7 +51,7 @@ public class BuildPushUtil {
         PushData pushData = new PushData();
 
         //转换一下
-        BaseEmploy employ1 = new BaseEmploy().employ2This();
+        Employ employ1 = Employ.findByID(new CsSharedPreferences().getLong(Config.SP_DRIVERID, 0));
         PushEmploy pe;
         if (employ1 != null && employ1 instanceof Employ) {
             Employ employ = (Employ) employ1;
@@ -53,7 +61,6 @@ public class BuildPushUtil {
             pe.status = employ.status;
             pe.companyId = employ.companyId;
             pe.phone = employ.phone;
-            pe.child_type = employ.child_type;
             pe.business = employ.serviceType;
             pe.modelId = employ.modelId;
         } else {
@@ -63,7 +70,7 @@ public class BuildPushUtil {
 
         pushData.driver = pe;
         pushData.appKey = EmUtil.getAppKey();
-        pushData.serviceType = ((Employ) employ1).serviceType;
+        pushData.serviceType = employ1.serviceType;
 
         pushData.location = new PushDataLoc();
         pushData.location.latitude = emLoc.latitude;
@@ -88,13 +95,26 @@ public class BuildPushUtil {
         for (DymOrder dymOrder : DymOrder.findAll()) {
             PushDataOrder dataOrder = new PushDataOrder();
             if (dymOrder.orderType.equals(Config.CITY_LINE)) {
-                if (dymOrder.orderStatus == 30 || dymOrder.orderStatus == 35){
+                if (dymOrder.orderStatus == 30 || dymOrder.orderStatus == 35) {
                     for (OrderCustomer orderCustomer : OrderCustomer.findByIDTypeOrderByAcceptSeq(dymOrder.orderId, dymOrder.orderType)) {
                         dataOrder.orderId = orderCustomer.orderId;
                         dataOrder.orderType = orderCustomer.orderType;
 
                         dataOrder.business = orderCustomer.orderType;
                         dataOrder.passengerId = orderCustomer.customerId;
+                    }
+                    orderList.add(dataOrder);
+                }
+            } else if (dymOrder.orderType.equals(Config.CARPOOL)) {
+                if (dymOrder.orderStatus >= 10 && dymOrder.orderStatus <= 30) {
+                    for (CarpoolOrder carpoolOrder : CarpoolOrder.findByIDTypeOrderByAcceptSeq(dymOrder.orderId, dymOrder.orderType)) {
+                        dataOrder.orderId = carpoolOrder.id;
+                        dataOrder.orderType = carpoolOrder.orderType;
+
+                        dataOrder.business = carpoolOrder.orderType;
+                        dataOrder.passengerId = carpoolOrder.passengerId;
+
+                        dataOrder.status = carpoolOrder.status;
                     }
                     orderList.add(dataOrder);
                 }
@@ -111,7 +131,8 @@ public class BuildPushUtil {
                 if (dymOrder.orderType.equals(Config.DAIJIA)) {
 
                 } else if (dymOrder.orderType.equals(Config.ZHUANCHE)
-                        || dymOrder.orderType.equals(Config.TAXI)) {
+                        || dymOrder.orderType.equals(Config.TAXI)
+                        || dymOrder.orderType.equals(Config.GOV)) {
 
                     dataOrder.status = dymOrder.orderStatus;
 

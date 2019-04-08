@@ -19,6 +19,7 @@ public class TokenInterceptor implements Interceptor {
         String sToken = CenterConfig.TOKEN;
         Request.Builder builder = chain.request().newBuilder();
         builder.addHeader("token", sToken);
+        builder.addHeader("appKey", CenterConfig.APPKEY);
         return chain.proceed(builder.build());
     }
 }

@@ -14,6 +14,14 @@ import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.zhuanche.R;
 
+/**
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: InputRemarkDialog
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 输入备注弹窗  未使用
+ * History:
+ */
 public class InputRemarkDialog extends Dialog {
 
     public InputRemarkDialog(Context context) {
@@ -31,8 +39,10 @@ public class InputRemarkDialog extends Dialog {
         private String positiveButtonText;
         private String negativeButtonText;
         private View contentView;
+        /**
+         * 确定监听
+         */
         private OnClickListener positiveButtonClickListener;
-        private OnClickListener negativeButtonClickListener;
         private EditText editText;
         private String editStr;
 
@@ -98,21 +108,6 @@ public class InputRemarkDialog extends Dialog {
             return this;
         }
 
-        public Builder setNegativeButton(int negativeButtonText,
-                                         OnClickListener listener) {
-            this.negativeButtonText = (String) context
-                    .getText(negativeButtonText);
-            this.negativeButtonClickListener = listener;
-            return this;
-        }
-
-        public Builder setNegativeButton(String negativeButtonText,
-                                         OnClickListener listener) {
-            this.negativeButtonText = negativeButtonText;
-            this.negativeButtonClickListener = listener;
-            return this;
-        }
-
         public InputRemarkDialog create() {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -126,43 +121,13 @@ public class InputRemarkDialog extends Dialog {
             if (positiveButtonText != null) {
                 ((Button) layout.findViewById(R.id.positiveButton))
                         .setText(positiveButtonText);
-                if (positiveButtonClickListener != null) {
-                    ((Button) layout.findViewById(R.id.positiveButton))
-                            .setOnClickListener(new View.OnClickListener() {
-                                public void onClick(View v) {
-                                    if (StringUtils.isBlank(getEditStr())) {
-                                        ToastUtil.showMessage(context, context.getResources().getString(R.string.refuse_reason));
-                                        return;
-                                    }
-                                    positiveButtonClickListener.onClick(dialog,
-                                            DialogInterface.BUTTON_POSITIVE);
-                                }
-                            });
-                }
+
             } else {
                 // if no confirm button just set the visibility to GONE
                 layout.findViewById(R.id.positiveButton).setVisibility(
                         View.GONE);
             }
-            // set the cancel button
-//            if (negativeButtonText != null) {
-//                ((Button) layout.findViewById(R.id.negativeButton))
-//                        .setText(negativeButtonText);
-//                if (negativeButtonClickListener != null) {
-//                    ((Button) layout.findViewById(R.id.negativeButton))
-//                            .setOnClickListener(new View.OnClickListener() {
-//                                public void onClick(View v) {
-//                                    negativeButtonClickListener.onClick(dialog,
-//                                            DialogInterface.BUTTON_NEGATIVE);
-//                                }
-//                            });
-//                }
-//            } else {
-//                // if no confirm button just set the visibility to GONE
-//                layout.findViewById(R.id.negativeButton).setVisibility(
-//                        View.GONE);
-//            }
-            // set the content message
+
             if (message != null) {
                 editText.setHint(message);
             } else if (contentView != null) {

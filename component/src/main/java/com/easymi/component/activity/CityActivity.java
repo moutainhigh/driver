@@ -26,6 +26,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
+/**
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
+ */
 public class CityActivity extends RxBaseActivity {
     /**
      * 搜索栏
@@ -90,8 +98,10 @@ public class CityActivity extends RxBaseActivity {
         initData();
     }
 
+    /**
+     * 初始化控件监听
+     */
     private void initView() {
-
         // 输入监听
         edit_search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -199,6 +209,9 @@ public class CityActivity extends RxBaseActivity {
         // listView.setShadowVisible(true);
     }
 
+    /**
+     * 加载数据
+     */
     protected void initData() {
         list_all = new ArrayList<>();
         list_show = new ArrayList<>();
@@ -217,6 +230,9 @@ public class CityActivity extends RxBaseActivity {
         }
     };
 
+    /**
+     * 初始化数据
+     */
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
@@ -234,7 +250,8 @@ public class CityActivity extends RxBaseActivity {
             // 初始化数据，顺便放入把标题放入map集合
             for (int i = 0; i < list_all.size(); i++) {
                 PhoneBean cityBean = list_all.get(i);
-                if (!map_IsHead.containsKey(cityBean.getHeadChar())) {// 如果不包含就添加一个标题
+                if (!map_IsHead.containsKey(cityBean.getHeadChar())) {
+                    // 如果不包含就添加一个标题
                     PhoneBean cityBean1 = new PhoneBean();
                     // 设置名字
                     cityBean1.setName(cityBean.getName());
@@ -252,6 +269,9 @@ public class CityActivity extends RxBaseActivity {
         }
     };
 
+    /**
+     * 排序
+     */
     public class MemberSortUtil implements Comparator<PhoneBean> {
         /**
          * 按拼音排序

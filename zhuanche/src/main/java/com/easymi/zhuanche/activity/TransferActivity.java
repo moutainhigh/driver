@@ -29,6 +29,14 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+/**
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: TransferActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 转单 未使用
+ * History:
+ */
 public class TransferActivity extends RxBaseActivity {
 
     @Override
@@ -80,7 +88,9 @@ public class TransferActivity extends RxBaseActivity {
         stateView = findViewById(R.id.state);
     }
 
-
+    /**
+     * 获取转单信息
+     */
     private void getTransferList() {
         Address start = getStartAddr();
         if (start == null) {
@@ -120,6 +130,10 @@ public class TransferActivity extends RxBaseActivity {
         })));
     }
 
+    /**
+     * 起点
+     * @return
+     */
     private Address getStartAddr() {
         Address startAddress = null;
         if (order != null && order.orderAddressVos != null && order.orderAddressVos.size() != 0) {
@@ -133,6 +147,11 @@ public class TransferActivity extends RxBaseActivity {
         return startAddress;
     }
 
+    /**
+     * 终点
+     * @param orderId
+     * @param employId
+     */
     private void changeOrder(long orderId,long employId) {
         Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
                 .changeOrder(orderId,employId, EmUtil.getAppKey())

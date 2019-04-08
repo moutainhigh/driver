@@ -31,16 +31,22 @@ import com.easymi.component.R;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.DymOrder;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
+import com.easymi.component.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
 /**
- * Created by developerLzh on 2017/12/7 0007.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午5:00
+ * Description:
+ * History:
  */
 
 public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AMapNaviViewListener {
@@ -58,6 +64,9 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     private long orderId;
     private String orderType;
+    /**
+     * 导航模式
+     */
     private int naviMode;
 
     LinearLayout simpleFeeCon;
@@ -99,9 +108,15 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     }
 
+    /**
+     * 定时器
+     */
     private Timer timer;
     private TimerTask timerTask;
 
+    /**
+     * 显示费用 已废弃
+     */
     private void showFee() {
         simpleFeeCon = findViewById(R.id.simple_fee_con);
         lcTxt = findViewById(R.id.lc);
@@ -205,10 +220,10 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
             try {
                 //再次强调，最后一个参数为true时代表多路径，否则代表单路径
                 strategy = mAMapNavi.strategyConvert(
-                        XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, false),
-                        XApp.getMyPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
-                        XApp.getMyPreferences().getBoolean(Config.SP_COST, false),
-                        XApp.getMyPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
+                        new CsSharedPreferences().getBoolean(Config.SP_CONGESTION, false),
+                        new CsSharedPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
+                        new CsSharedPreferences().getBoolean(Config.SP_COST, false),
+                        new CsSharedPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
                         false);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -255,7 +270,7 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     @Override
     public void onCalculateRouteFailure(int i) {
-        Toast.makeText(this, "路线规划失败", Toast.LENGTH_LONG).show();
+        ToastUtil.showMessage(this, "路线规划失败", Toast.LENGTH_LONG);
     }
 
     @Override
@@ -366,14 +381,17 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     @Override
     public void onPlayRing(int i) {
-//        XApp.getInstance().syntheticVoice("叮咚", false);
-        if (i == AMapNaviRingType.RING_CAMERA) {//（导航状态）高速上通过测速电子眼的提示音
+        if (i == AMapNaviRingType.RING_CAMERA) {
+            //（导航状态）高速上通过测速电子眼的提示音
 
-        } else if (i == AMapNaviRingType.RING_EDOG) { // 巡航状态下通过电子狗的提示音
+        } else if (i == AMapNaviRingType.RING_EDOG) {
+            // 巡航状态下通过电子狗的提示音
 
-        } else if (i == AMapNaviRingType.RING_REROUTE) {//偏航重算的提示音L
+        } else if (i == AMapNaviRingType.RING_REROUTE) {
+            //偏航重算的提示音L
 
-        } else if (i == AMapNaviRingType.RING_TURN) { // 马上到达转向路口的提示音
+        } else if (i == AMapNaviRingType.RING_TURN) {
+            // 马上到达转向路口的提示音
 
         }
     }

@@ -6,11 +6,22 @@ import com.easymi.component.DJOrderStatus;
 import com.easymi.component.app.XApp;
 
 /**
- * Created by developerLzh on 2017/11/20 0020.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午5:00
+ * Description:
+ * History:
  */
 
 public class DJStatus2Str {
 
+    /**
+     * 根据订单状态获取对应文字
+     * @param business
+     * @param status
+     * @return
+     */
     public static String int2Str(String business, int status) {
         switch (status) {
             case DJOrderStatus.NEW_ORDER:
@@ -36,8 +47,6 @@ public class DJStatus2Str {
             case DJOrderStatus.RATED_ORDER:
                 return XApp.getInstance().getString(R.string.rate_order);
         }
-//        if (business.equals(Config.DAIJIA)) {
-//        }
         return "";
     }
 }

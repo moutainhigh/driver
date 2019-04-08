@@ -17,21 +17,25 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * Created by developerLzh on 2017/11/30 0030.
- * 封装的一些快捷获取对象方法
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ *@Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:  封装的一些快捷获取对象方法
+ * History:
  */
 
 public class EmUtil {
 
     public static Long getEmployId() {
-        return XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1);
+        return new CsSharedPreferences().getLong(Config.SP_DRIVERID, -1);
     }
 
     public static String getAppKey() {
         if (!Config.COMM_USE) {
             return Config.APP_KEY;
         } else {
-            return XApp.getMyPreferences().getString(Config.SP_APP_KEY, "");
+            return new CsSharedPreferences().getString(Config.SP_APP_KEY, "");
         }
     }
 
@@ -41,7 +45,7 @@ public class EmUtil {
     }
 
     public static EmLoc getLastLoc() {
-        EmLoc emLoc = new Gson().fromJson(XApp.getMyPreferences().getString(Config.SP_LAST_LOC, ""), EmLoc.class);
+        EmLoc emLoc = new Gson().fromJson(new CsSharedPreferences().getString(Config.SP_LAST_LOC, ""), EmLoc.class);
         if (null == emLoc) {
             emLoc = new EmLoc();
             emLoc.poiName = "未知";
@@ -50,7 +54,7 @@ public class EmUtil {
     }
 
     public static void employLogout(Context context) {
-        SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+        CsEditor editor = new CsEditor();
         editor.putBoolean(Config.SP_ISLOGIN, false);
         editor.putString(Config.APP_KEY, "");//重置APPKEY
         editor.putString(Config.SP_TOKEN, "");

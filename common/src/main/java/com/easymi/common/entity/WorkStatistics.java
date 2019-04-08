@@ -5,20 +5,33 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 /**
- * Created by developerLzh on 2017/12/15 0015.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FinishActivity
+ *@Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
  */
 
 public class WorkStatistics implements Serializable{
 
-//    @SerializedName("finish_count")
+    /**
+     * 完成单量
+     */
     @SerializedName("orderCount")
     public int finishCount;
 
     @SerializedName("total_amount")
     public double totalAmount;
 
+    /**
+     * 今日收益
+     */
     @SerializedName("orderProfit")
     public double income;
 
-    public int minute;//在线时长
+    /**
+     * 在线时长
+     */
+    public int minute;
 }

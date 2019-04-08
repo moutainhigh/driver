@@ -16,6 +16,8 @@ import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.AesUtil;
+import com.easymi.component.utils.CsEditor;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.SHA256Util;
@@ -31,17 +33,33 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by developerLzh on 2017/11/11 0011.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: ChangeActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 修改密码界面
+ * History:
  */
 
 public class ChangeActivity extends RxBaseActivity {
 
+    /**
+     * 旧密码
+     */
     EditText editOld;
+    /**
+     * 新密码
+     */
     EditText editNew;
+    /**
+     * 确认新密码
+     */
     EditText editConfirm;
 
+    /**
+     * 修改按钮
+     */
     LoadingButton btn;
-
 
     @Override
     public int getLayoutId() {
@@ -64,12 +82,7 @@ public class ChangeActivity extends RxBaseActivity {
             String newPsw = editNew.getText().toString();
             String confirmPsw = editConfirm.getText().toString();
 
-            String oldPswSave = AesUtil.aesDecrypt(XApp.getMyPreferences().getString(Config.SP_LOGIN_PSW, ""), AesUtil.AAAAA);
-
-//            if (DymOrder.findAll().size() != 0) {
-//                ToastUtil.showMessage(ChangeActivity.this, getString(R.string.be_busy));
-//                return;
-//            }
+            String oldPswSave = new CsSharedPreferences().getString(Config.SP_LOGIN_PSW, "");
             if (!oldPsw.equals(oldPswSave)) {
                 ToastUtil.showMessage(ChangeActivity.this, getString(R.string.not_same_old));
                 return;
@@ -85,7 +98,9 @@ public class ChangeActivity extends RxBaseActivity {
         });
     }
 
-
+    /**
+     * 修改密码接口
+     */
     private void changePsw() {
         McService mcService = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
@@ -99,12 +114,6 @@ public class ChangeActivity extends RxBaseActivity {
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, btn, emResult -> {
             ToastUtil.showMessage(ChangeActivity.this, getString(R.string.change_psw_suc));
-//            boolean canRemember = XApp.getMyPreferences().getBoolean(Config.SP_REMEMBER_PSW, true);
-//            if (canRemember) {
-//                XApp.getPreferencesEditor().putString(Config.SP_LOGIN_PSW,
-//                        AesUtil.aesEncrypt(editNew.getText().toString(), AesUtil.AAAAA)).apply();
-//            }
-//            finish();
             EmUtil.employLogout(ChangeActivity.this);
         })));
     }
@@ -118,6 +127,9 @@ public class ChangeActivity extends RxBaseActivity {
         cusToolbar.setTitle(R.string.set_change_psw);
     }
 
+    /**
+     * edittext监听
+     */
     class MyTextWatcher implements TextWatcher {
 
         @Override

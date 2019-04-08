@@ -5,6 +5,14 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description:
+ * History:
+ */
 public class RegisterRequest implements Parcelable {
 
     public boolean needCarInfo;
@@ -34,7 +42,6 @@ public class RegisterRequest implements Parcelable {
     //头像图片
     public String portraitPath;
     //身份证图片
-    @SerializedName("idCardHeadPath")
     public String idCardPath;
     //身份证背面图片
     public String idCardBackPath;
@@ -42,6 +49,20 @@ public class RegisterRequest implements Parcelable {
     public String driveLicensePath;
     //全身照
     public String fullBodyPath;
+
+    //网约车从业资格证起始时间
+    public long netCarQualificationsStart;
+    //网约车从业资格证到期时间
+    public long netCarQualificationsEnd;
+    //网约车从业资格证照片
+    public String practitionersPhoto;
+
+    //注册id
+    public long id;
+    //服务类型（用于回显）
+    public String serviceName;
+
+
 
     //有车注册需要传
     //车辆照片
@@ -124,6 +145,12 @@ public class RegisterRequest implements Parcelable {
         }
         transPhoto = in.readString();
         vehicleColor = in.readString();
+
+        netCarQualificationsStart = in.readLong();
+        netCarQualificationsEnd = in.readLong();
+        practitionersPhoto = in.readString();
+        id = in.readLong();
+
     }
 
     public static final Creator<RegisterRequest> CREATOR = new Creator<RegisterRequest>() {
@@ -204,5 +231,11 @@ public class RegisterRequest implements Parcelable {
         }
         dest.writeString(transPhoto);
         dest.writeString(vehicleColor);
+
+        dest.writeLong(netCarQualificationsStart);
+        dest.writeLong(netCarQualificationsEnd);
+        dest.writeString(practitionersPhoto);
+        dest.writeLong(id);
+
     }
 }

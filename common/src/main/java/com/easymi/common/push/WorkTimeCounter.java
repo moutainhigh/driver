@@ -12,6 +12,7 @@ import com.easymi.component.entity.Employ;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
@@ -28,8 +29,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * 工作时间统计器，需要尽可能长久的工作。目前策略将其生命周期关联到推送服务生命上。
- * 比较没有推送，统计工作时间也没有什么意义。
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:WorkTimeCounter
+ * @Author: hufeng
+ * Date: 2018/12/24 下午1:10
+ * Description: 工作时间统计器，需要尽可能长久的工作。目前策略将其生命周期关联到推送服务生命上。比较没有推送，统计工作时间也没有什么意义。
+ * History:
  */
 public class WorkTimeCounter {
 
@@ -38,14 +43,27 @@ public class WorkTimeCounter {
 
     private Context context;
 
+    /**
+     * 最后上传时间
+     */
     private long lastUpTime;
+    /**
+     * 总的分钟数
+     */
     private int totalMinute;
 
+    /**
+     * 定时器
+     */
     private final Timer timer;
     private final TimerTask timerTask;
 
     private Subscription mSubscription;
 
+    /**
+     * 初始化定时器
+     * @param context
+     */
     public WorkTimeCounter(Context context) {
         Log.d("WorkTimeCounter", "WorkTimeCounter create");
         this.context = context;
@@ -71,7 +89,7 @@ public class WorkTimeCounter {
         if (employ == null || StringUtils.isBlank(String.valueOf(employ.status))) {
             return;
         }
-        if (String.valueOf(employ.status).equals(EmployStatus.WORK)) {
+        if (employ.status >= 3) {
             totalMinute++;
             long current = SystemClock.uptimeMillis();
             if (current - lastUpTime >= TIME_OFFSET) {
@@ -111,8 +129,8 @@ public class WorkTimeCounter {
         /**
          * 根据本地缓存的上班时间戳进行计算听单时长 start
          */
-        if ( employ.status > 1 && XApp.getMyPreferences().getLong(Config.ONLINE_TIME,0) != 0){
-            totalMinute = (int) ((System.currentTimeMillis() - XApp.getMyPreferences().getLong(Config.ONLINE_TIME,0))/(1000 * 60));
+        if ( employ.status > 1 && new CsSharedPreferences().getLong(Config.ONLINE_TIME,0) != 0){
+            totalMinute = (int) ((System.currentTimeMillis() - new CsSharedPreferences().getLong(Config.ONLINE_TIME,0))/(1000 * 60));
         }else {
             totalMinute = 0;
         }
@@ -126,7 +144,7 @@ public class WorkTimeCounter {
 //        }
         long driverId = employ.id;
         String driverNo = employ.userName;
-        long companyId = employ.company_id;
+        long companyId = employ.companyId;
 
         int driverStatus;
         if (statues <= 0) {
@@ -161,6 +179,9 @@ public class WorkTimeCounter {
         }));
     }
 
+    /**
+     * 销毁定时器
+     */
     public void destroy() {
         if (timer != null) {
             timer.cancel();

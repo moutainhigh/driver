@@ -9,16 +9,19 @@ import com.easymi.zhuanche.entity.ZCOrder;
 import java.util.List;
 
 /**
- * Created by developerLzh on 2017/11/17 0017.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: ZCOrderResult
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 专车订单实体
+ * History:
  */
 
 public class ZCOrderResult extends EmResult {
 
+    /**
+     * 专车订单
+     */
     public ZCOrder data;
 
-//    public List<Address> address;
-//
-//    public DymOrder orderFee;
-//
-//    public Coupon coupon;
 }

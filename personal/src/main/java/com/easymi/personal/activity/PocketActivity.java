@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.easymi.component.Config;
+import com.easymi.component.utils.CsEditor;
 import com.easymi.component.utils.Log;
 
 import android.widget.RelativeLayout;
@@ -27,9 +28,13 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by developerLzh on 2017/11/9 0009.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: PocketActivity
+ * @Author: shine
+ * Date: 2018/12/24 下午1:10
+ * Description: 我的钱包界面
+ * History:
  */
-
 public class PocketActivity extends RxBaseActivity {
 
     TextView balanceText;
@@ -69,6 +74,10 @@ public class PocketActivity extends RxBaseActivity {
         getDriverInfo(EmUtil.getEmployId());
     }
 
+    /**
+     * 获取司机信息
+     * @param driverId
+     */
     private void getDriverInfo(Long driverId) {
         Observable<LoginResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .getDriverInfo(driverId, EmUtil.getAppKey())
@@ -77,10 +86,10 @@ public class PocketActivity extends RxBaseActivity {
                 .observeOn(AndroidSchedulers.mainThread());
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, loginResult -> {
-            Employ employ = loginResult.getEmployInfo();
+            Employ employ = loginResult.data;
             Log.e("okhttp", employ.toString());
             employ.saveOrUpdate();
-            SharedPreferences.Editor editor = XApp.getPreferencesEditor();
+            CsEditor editor = new CsEditor();
             editor.putLong(Config.SP_DRIVERID, employ.id);
             editor.apply();
 

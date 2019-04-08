@@ -7,7 +7,12 @@ import android.content.Intent;
 import com.easymi.component.Config;
 
 /**
- * Created by developerLzh on 2017/12/19 0019.
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName:
+ * @Author: shine
+ * Date: 2018/12/24 下午5:00
+ * Description:
+ * History:
  */
 
 public class AnnReceiver extends BroadcastReceiver {
@@ -32,6 +37,10 @@ public class AnnReceiver extends BroadcastReceiver {
     }
 
     public interface OnReceiveAnn {
+        /**
+         * 公告接收
+         * @param message
+         */
         void onReceiveAnn(String message);
     }
 }
