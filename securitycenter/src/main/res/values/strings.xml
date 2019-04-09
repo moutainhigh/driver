@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name">securityCenter</string>
 
     <string name="wait">加载中..</string>
     <string name="response_error">请求无响应，错误编码：</string>
