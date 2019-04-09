@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">chartered</string>
+
 
     <string name="canceled_order">当前订单已被取消:)</string>
     <string name="backed_order">当前订单已被收回:)</string>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">passengerbus</string>
+
 
     <string name="canceled_order">當前訂單已被取消:)</string>
     <string name="backed_order">當前訂單已被收回:)</string>

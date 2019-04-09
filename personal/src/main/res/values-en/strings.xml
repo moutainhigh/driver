@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">base</string>
+
 
     <!-- login interface str-->
     <string name="login_title"> server login </string>

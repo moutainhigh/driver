@@ -1,5 +1,5 @@
 <resources>
-        <string name="app_name">v5driver</string>
+      
 
         <!-- Workbench interface str-->
         <string name="work_fin_order">Complete orders</string>

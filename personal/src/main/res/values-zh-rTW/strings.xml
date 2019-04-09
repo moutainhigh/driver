@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">personal</string>
+
 
     <!-- 登錄界面str-->
     <string name="login_title">服務端登錄</string>
