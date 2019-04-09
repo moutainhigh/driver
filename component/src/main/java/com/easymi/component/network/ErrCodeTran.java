@@ -563,6 +563,11 @@ public enum ErrCodeTran {
      */
     PASSENGER_IN_BLACK_LIST(40181, "乘客賬號異常，請聯系管理員處理"),
 
+    /**
+     * 申請中
+     */
+    APPLYING(50009,"申請中"),
+
 //old
     /**
      * 數據不匹配
