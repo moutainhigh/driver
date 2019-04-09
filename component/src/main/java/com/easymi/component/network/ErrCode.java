@@ -575,6 +575,11 @@ public enum ErrCode {
      */
      MOMO_SENSITIVE_ERROR(40205,"评论包含敏感词"),
 
+    /**
+     * 申请中
+     */
+    APPLYING(50009,"申请中"),
+
 //old
     /**
      * 数据不匹配

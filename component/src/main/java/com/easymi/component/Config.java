@@ -43,7 +43,7 @@ public class Config {
 //    public static final String APP_KEY = "kQLGYQIx34408QOOv6Ed1OQRWM6Idt5w";  //小鹏预发
 //    public static final String APP_KEY = "G0UMEhNEBt0q0HDO1ecomWNUKP6wzcje";  //v6test
 //    public static final String APP_KEY = "8SbWnW3uYIfaEagACmHiLtADkLcmOyCm";  //锋动
-//public static final String APP_KEY = "vkv15FSFieLhCYmmlHXESzfKCUjLiNNM";//七彩筋斗云
+//    public static final String APP_KEY = "vkv15FSFieLhCYmmlHXESzfKCUjLiNNM";//七彩筋斗云
 
 
     /**

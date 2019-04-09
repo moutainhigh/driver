@@ -19,6 +19,7 @@ import com.easymi.common.entity.QiNiuToken;
 import com.easymi.common.entity.RegisterRes;
 import com.easymi.common.register.RegisterRequest;
 import com.easymi.component.Config;
+import com.easymi.component.app.ActManager;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.AlexStatusBarUtils;
@@ -381,6 +382,7 @@ public class RegisterPhotoActivity extends RxBaseActivity {
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, RegisterRes -> {
             if (RegisterRes.getCode() == 1) {
                 ToastUtil.showMessage(RegisterPhotoActivity.this, "资料提交成功");
+                ActManager.getInstance().finishAllActivity();
                 EmUtil.employLogout(RegisterPhotoActivity.this);
             }
         })));

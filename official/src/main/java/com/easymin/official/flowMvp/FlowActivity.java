@@ -525,12 +525,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 ToastUtil.showMessage(this, getResources().getString(R.string.order_finish));
                 finish();
             }
-            ZCSetting zcSetting = ZCSetting.findOne();
-            if (zcSetting.isPaid == 2 || (govOrder.prepayment && govOrder.paid)) {
-                if (govOrder.orderStatus == GWOrderStatus.ARRIVAL_DESTINATION_ORDER) {
-                    finish();
-                }
-            }
             this.govOrder = govOrder;
             showTopView();
             initBridge();

@@ -967,7 +967,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void doStartWait() {
-                presenter.startWait(taxiOrder.id);
+//                presenter.startWait(taxiOrder.id);
+                presenter.changeOrderStatus(EmUtil.getEmployInfo().companyId, EmUtil.getLastLoc().address, EmUtil.getEmployId(), EmUtil.getLastLoc().latitude,
+                        EmUtil.getLastLoc().longitude, taxiOrder.id, 28, null);
             }
 
             @Override
