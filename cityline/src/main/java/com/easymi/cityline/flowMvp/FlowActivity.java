@@ -390,7 +390,6 @@ public class FlowActivity extends RxBaseActivity implements
             cusToolbar.setTitle("行程结束");
             cusToolbar.setRightGone();
         }
-
     }
 
     @Override

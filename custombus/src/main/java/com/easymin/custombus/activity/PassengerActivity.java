@@ -213,7 +213,7 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
 
         //跳转验票
         tv_check_btn.setOnClickListener(v -> {
-            Intent intent = new Intent(this, NewCheckTicketActivity.class);
+            Intent intent = new Intent(this, CheckTicketActivity.class);
             startActivityForResult(intent, 0x00);
         });
         //前往下一站
@@ -500,7 +500,7 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
             tv_check_btn.setBackground(getResources().getDrawable(R.drawable.corners_btn_4dp_bg));
 
             lin_check_top.setOnClickListener(v -> {
-                Intent intent = new Intent(this, NewCheckTicketActivity.class);
+                Intent intent = new Intent(this, CheckTicketActivity.class);
                 startActivityForResult(intent, 0x00);
             });
         }

@@ -182,11 +182,11 @@ public class AcceptSendFragment extends RxBaseFragment {
 
         boolean isSend = true;
 
-        while (iterator.hasNext()) {
-            OrderCustomer orderCustomer = (OrderCustomer) iterator.next();
-            if (orderCustomer.status == 0
+        for (OrderCustomer customer : orderCustomers) {
+            if (customer.status == 0
                     && dymOrder.orderStatus == ZXOrderStatus.ACCEPT_ING) {//还在接人时，移除所有非0
                 isSend = false;
+                break;
             }
         }
 
