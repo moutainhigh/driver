@@ -151,7 +151,7 @@ public class SetActivity extends RxBaseActivity {
     }
 
     /**
-     * 关于我们
+     * 帮助中心
      * @param view
      */
     public void helpCenter(View view) {
@@ -210,9 +210,12 @@ public class SetActivity extends RxBaseActivity {
      * @param view
      */
     public void aboutUs(View view) {
-        Intent intent = new Intent(this, WebActivity.class);
-        intent.putExtra("url", "http://h5.xiaokakj.com/#/protocol?articleName=driverAboutUs&appKey="+Config.APP_KEY);
-        intent.putExtra("title", getString(R.string.set_about_us));
+//        Intent intent = new Intent(this, WebActivity.class);
+//        intent.putExtra("url", "http://h5.xiaokakj.com/#/protocol?articleName=driverAboutUs&appKey="+Config.APP_KEY);
+//        intent.putExtra("title", getString(R.string.set_about_us));
+//        startActivity(intent);
+
+        Intent intent = new Intent(this, AboutUsActivity.class);
         startActivity(intent);
     }
 

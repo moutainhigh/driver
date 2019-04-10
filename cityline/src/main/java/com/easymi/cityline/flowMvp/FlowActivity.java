@@ -176,7 +176,7 @@ public class FlowActivity extends RxBaseActivity implements
      */
     private void getCustomers(ZXOrder zxOrder) {
         Observable<EmResult2<List<OrderCustomer>>> observable = ApiManager.getInstance().createApi(Config.HOST, CLService.class)
-                .getOrderCustomers(zxOrder.orderId, "5,10,15,20")
+                .getOrderCustomers(zxOrder.orderId, "5,10,15,20","`id` ASC")
                 .filter(new HttpResultFunc3<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -188,6 +188,25 @@ public class FlowActivity extends RxBaseActivity implements
             }
             isOrderLoadOk = true;
             List<OrderCustomer> orderCustomers = result2.getData();
+
+            /**
+             * 删除退票订单
+             */
+            List<OrderCustomer> allCus = OrderCustomer.findByIDTypeOrderByAcceptSeq(zxOrder.orderId, zxOrder.orderType);
+            for (OrderCustomer cusOrder : allCus) {
+                boolean isExist = false;
+                for (int i = 0; i < orderCustomers.size(); i++) {
+                    OrderCustomer orderCustomer1 = orderCustomers.get(i);
+
+                    if ((cusOrder.id == orderCustomer1.id)) {
+                        isExist = true;
+                        break;
+                    }
+                }
+                if (!isExist){
+                    OrderCustomer.delete(cusOrder.id);
+                }
+            }
 
             for (int i = 0; i < orderCustomers.size(); i++) {
                 OrderCustomer orderCustomer = orderCustomers.get(i);
@@ -205,6 +224,7 @@ public class FlowActivity extends RxBaseActivity implements
 //                        cusOrder.delete(cusOrder.id);
 //                    }
 //                }
+
 
                 orderCustomer.appointTime = orderCustomer.appointTime * 1000;
                 orderCustomer.num = i + 1;
@@ -870,7 +890,8 @@ public class FlowActivity extends RxBaseActivity implements
         List<OrderCustomer> customers = OrderCustomer.findByIDTypeOrderByAcceptSeq(zxOrder.orderId, zxOrder.orderType);
         orderCustomer.status = 1;
         orderCustomer.updateStatus();
-        if (orderCustomer.acceptSequence == customers.size() - 1) { //接完最后一个更新订单状态
+        if (orderCustomer.acceptSequence == customers.size() - 1) {
+            //接完最后一个更新订单状态
             presenter.startSend(zxOrder.orderId);
         } else {
             acceptSendFragment.showWhatByStatus();

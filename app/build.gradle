@@ -9,7 +9,7 @@ android {
         versionCode 9006
         versionName "V6.1.0.6"
         multiDexEnabled true
-//        flavorDimensions "App" //同在App这个名字维度
+        flavorDimensions "App" //同在App这个名字维度
         ndk {
             //只兼容下面的型号
             abiFilters  "armeabi-v7a"
@@ -60,27 +60,27 @@ android {
     }
 
 
-//    //V6（系统）.prepare（环境）.20190330（日期）.driver（端）.01（序号）
-//    applicationVariants.all { variant ->
-//        variant.outputs.all {
-//            outputFileName = "V6.${variant.productFlavors[0].name}.${releaseDate()}.driver.${releaseTime()}.apk"
-//        }
-//    }
-//
-//    productFlavors {
-//        //预发环境
-//        prepare {
-//            dimension "App"//同在App这个名字维度
-//        }
-//        //局域网环境
-//        local {
-//            dimension "App"//同在App这个名字维度
-//        }
-//        //生产环境
-//        product {
-//            dimension "App"//同在App这个名字维
-//        }
-//    }
+    //V6（系统）.prepare（环境）.20190330（日期）.driver（端）.01（序号）
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "V6.${variant.productFlavors[0].name}.${releaseDate()}.driver.${releaseTime()}.apk"
+        }
+    }
+
+    productFlavors {
+        //预发环境
+        prepare {
+            dimension "App"//同在App这个名字维度
+        }
+        //局域网环境
+        local {
+            dimension "App"//同在App这个名字维度
+        }
+        //生产环境
+        product {
+            dimension "App"//同在App这个名字维
+        }
+    }
 }
 
 static def releaseTime() {

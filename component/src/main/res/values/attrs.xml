@@ -162,4 +162,17 @@
         <attr name="umanoScrollInterpolator" format="reference" />
     </declare-styleable>
 
+    <!--验证码输入框-->
+    <declare-styleable name="CodeInput">
+        <attr name="ci_boxSpace" format="dimension" />
+        <attr name="ci_boxWidth" format="dimension" />
+        <attr name="ci_boxHeight" format="dimension" />
+        <attr name="ci_boxCount" format="integer" />
+        <attr name="ci_textSize" format="dimension" />
+        <attr name="ci_textColor" format="color|reference" />
+        <attr name="ci_themeColor" format="color|reference" />
+        <attr name="ci_background" format="reference" />
+        <attr name="ci_showCursor" format="boolean" />
+    </declare-styleable>
+
 </resources>

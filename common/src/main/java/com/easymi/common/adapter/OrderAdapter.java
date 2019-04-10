@@ -67,10 +67,12 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
             baseViewHolder.setText(R.id.order_type, "" + baseOrder.getOrderType());
             baseViewHolder.setText(R.id.order_start_place, "" + baseOrder.bookAddress);
             baseViewHolder.setText(R.id.order_end_place, baseOrder.destination);
-            if (TextUtils.equals(baseOrder.serviceType, Config.CITY_LINE)
-                || TextUtils.equals(baseOrder.serviceType, Config.CARPOOL)) {
-                //专线(城际拼车)
+            if (TextUtils.equals(baseOrder.serviceType, Config.CITY_LINE)){
+                //专线
                 baseViewHolder.setText(R.id.order_status, "" + baseOrder.getZXOrderStatusStr() + " >");
+            }else if (TextUtils.equals(baseOrder.serviceType, Config.CARPOOL)) {
+                //城际拼车
+                baseViewHolder.setText(R.id.order_status, "" + baseOrder.getPCOrderStatusStr() + " >");
             } else if (TextUtils.equals(baseOrder.serviceType, Config.COUNTRY)) {
                 baseViewHolder.setText(R.id.order_status, "" + BusOrderStatus.status2Str(baseOrder.scheduleStatus) + " >");
             }else if (TextUtils.equals(baseOrder.serviceType, Config.GOV)){

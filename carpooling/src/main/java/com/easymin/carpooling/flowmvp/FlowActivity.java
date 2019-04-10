@@ -961,7 +961,8 @@ public class FlowActivity extends RxBaseActivity implements
         carpoolOrder.customeStatus = 4;
         carpoolOrder.updateStatus();
         List<CarpoolOrder> customers = CarpoolOrder.findByIDTypeOrderBySendSeq(pincheOrder.orderId, pincheOrder.orderType);
-        if (carpoolOrder.id == customers.get(customers.size() - 1).id) { //送完最后一个更新订单状态
+        if (carpoolOrder.id == customers.get(customers.size() - 1).id) {
+            //送完最后一个更新订单状态
             presenter.finishTask(pincheOrder.orderId);
         } else {
             acceptSendFragment.showWhatByStatus();
@@ -1125,22 +1126,25 @@ public class FlowActivity extends RxBaseActivity implements
     /**
      * 取消订单弹窗
      */
-    private AlertDialog cancelDialog;
+//    private AlertDialog cancelDialog;
     @Override
     public void onCancelOrder(long orderId, String orderType, String msg) {
         if (orderType.equals(Config.CARPOOL)) {
-            if (cancelDialog == null) {
-                cancelDialog = new AlertDialog.Builder(this)
-                        .setMessage(msg)
-                        .setPositiveButton(R.string.ok, (dialog1, which) -> {
-                            dialog1.dismiss();
-                            presenter.deleteDb(orderId, orderType);
-                            finish();
-                        })
-                        .setOnDismissListener(dialog12 -> finish())
-                        .create();
-                cancelDialog.show();
-            }
+//            if (cancelDialog == null) {
+//                cancelDialog = new AlertDialog.Builder(this)
+//                        .setMessage(msg)
+//                        .setPositiveButton(R.string.ok, (dialog1, which) -> {
+//                            dialog1.dismiss();
+//                            presenter.deleteDb(orderId, orderType);
+//                            finish();
+//                        })
+//                        .setOnDismissListener(dialog12 -> finish())
+//                        .create();
+//                cancelDialog.show();
+//            }
+            XApp.getInstance().syntheticVoice("您有订单被取消或者收回");
+            presenter.deleteDb(orderId, orderType);
+            finish();
         }
     }
 

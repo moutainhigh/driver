@@ -487,13 +487,13 @@ public class AcceptSendFragment extends RxBaseFragment {
      * 重置slider
      */
     private void resetView() {
+        //防止卡顿
         slider.setVisibility(View.GONE);
 
         handler.postDelayed(() -> getActivity().runOnUiThread(() -> {
             slider.resetView();
             slider.setVisibility(View.VISIBLE);
         }), 1000);
-        //防止卡顿
     }
 
 }

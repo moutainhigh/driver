@@ -57,6 +57,8 @@ public class AboutUsActivity extends RxBaseActivity {
 
     private ImageView logo;
 
+    public String  url;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_about_us;
@@ -78,7 +80,7 @@ public class AboutUsActivity extends RxBaseActivity {
         versionText = findViewById(R.id.version);
 
         logo = findViewById(R.id.image_view_logo);
-        getArticle();
+
         try {
             versionText.setText(getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
         } catch (PackageManager.NameNotFoundException e) {
@@ -98,6 +100,9 @@ public class AboutUsActivity extends RxBaseActivity {
                 startActivity(intent);
             }
         });
+
+        url = "http://h5.xiaokakj.com/#/protocol?articleName=driverAboutUs&appKey="+Config.APP_KEY;
+
         initWeb();
     }
 
@@ -111,12 +116,14 @@ public class AboutUsActivity extends RxBaseActivity {
         webView.getSettings().setLoadWithOverviewMode(true);
 
         webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
-
+        //解决部分H5中的一些控件标签可能使用后android中不支持 造成的白屏不显示问题
+        webView.getSettings().setDomStorageEnabled(true);
 
         webView.setWebViewClient(new WebViewClient() {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                view.loadUrl(url);
                 return true;
             }
 
@@ -135,7 +142,7 @@ public class AboutUsActivity extends RxBaseActivity {
                 super.onReceivedError(view, request, error);
             }
         });
-
+        webView.loadUrl(url);
     }
 
 
@@ -176,55 +183,55 @@ public class AboutUsActivity extends RxBaseActivity {
         super.onDestroy();
     }
 
-    /**
-     * 获取文章
-     */
-    private void getArticle() {
-        McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
-
-        Observable<ArticleResult> observable = api
-                .getArticle(EmUtil.getAppKey(), "DriverAboutUs",
-                        EmUtil.getEmployInfo() == null ? null : EmUtil.getEmployInfo().companyId)
-                .filter(new HttpResultFunc<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
-                true, articleResult -> {
-            String html = articleResult.data.content;
-
-            String css = "<style type=\"text/css\"> img {" +
-                    "width:auto;" +//限定图片宽度填充屏幕
-                    "height:auto;" +//限定图片高度自动
-                    "}" +
-                    "body {" +
-                    "margin-right:15px;" +//限定网页中的文字右边距为15px(可根据实际需要进行行管屏幕适配操作)
-                    "margin-left:15px;" +//限定网页中的文字左边距为15px(可根据实际需要进行行管屏幕适配操作)
-                    "margin-top:15px;" +//限定网页中的文字上边距为15px(可根据实际需要进行行管屏幕适配操作)
-                    "font-size:40px;" +//限定网页中文字的大小为40px,请务必根据各种屏幕分辨率进行适配更改
-                    "word-wrap:break-word;" +//允许自动换行(汉字网页应该不需要这一属性,这个用来强制英文单词换行,类似于word/wps中的西文换行)
-                    "}" +
-                    "</style>";
-
-            html = "<html><header>" + css + "</header>" + html + "</html>";
-
-            webView.loadData(html, "text/html; charset=UTF-8", null);
-
-            phoneText.setText(articleResult.data.phone);
-            webSiteText.setText(articleResult.data.url);
-
-            if (StringUtils.isNotBlank(articleResult.data.logo)) {
-                if (StringUtils.isNotBlank(articleResult.data.logo)) {
-                    RequestOptions options = new RequestOptions()
-                            .placeholder(R.mipmap.ic_launcher)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL);
-                    Glide.with(AboutUsActivity.this)
-                            .load(Config.IMG_SERVER + articleResult.data.logo + Config.IMG_PATH)
-                            .apply(options)
-                            .into(logo);
-                }
-            }
-        }
-        )));
-    }
+//    /**
+//     * 获取文章
+//     */
+//    private void getArticle() {
+//        McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
+//
+//        Observable<ArticleResult> observable = api
+//                .getArticle(EmUtil.getAppKey(), "DriverAboutUs",
+//                        EmUtil.getEmployInfo() == null ? null : EmUtil.getEmployInfo().companyId)
+//                .filter(new HttpResultFunc<>())
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread());
+//
+//        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
+//                true, articleResult -> {
+//            String html = articleResult.data.content;
+//
+//            String css = "<style type=\"text/css\"> img {" +
+//                    "width:auto;" +//限定图片宽度填充屏幕
+//                    "height:auto;" +//限定图片高度自动
+//                    "}" +
+//                    "body {" +
+//                    "margin-right:15px;" +//限定网页中的文字右边距为15px(可根据实际需要进行行管屏幕适配操作)
+//                    "margin-left:15px;" +//限定网页中的文字左边距为15px(可根据实际需要进行行管屏幕适配操作)
+//                    "margin-top:15px;" +//限定网页中的文字上边距为15px(可根据实际需要进行行管屏幕适配操作)
+//                    "font-size:40px;" +//限定网页中文字的大小为40px,请务必根据各种屏幕分辨率进行适配更改
+//                    "word-wrap:break-word;" +//允许自动换行(汉字网页应该不需要这一属性,这个用来强制英文单词换行,类似于word/wps中的西文换行)
+//                    "}" +
+//                    "</style>";
+//
+//            html = "<html><header>" + css + "</header>" + html + "</html>";
+//
+//            webView.loadData(html, "text/html; charset=UTF-8", null);
+//
+//            phoneText.setText(articleResult.data.phone);
+//            webSiteText.setText(articleResult.data.url);
+//
+//            if (StringUtils.isNotBlank(articleResult.data.logo)) {
+//                if (StringUtils.isNotBlank(articleResult.data.logo)) {
+//                    RequestOptions options = new RequestOptions()
+//                            .placeholder(R.mipmap.ic_launcher)
+//                            .diskCacheStrategy(DiskCacheStrategy.ALL);
+//                    Glide.with(AboutUsActivity.this)
+//                            .load(Config.IMG_SERVER + articleResult.data.logo + Config.IMG_PATH)
+//                            .apply(options)
+//                            .into(logo);
+//                }
+//            }
+//        }
+//        )));
+//    }
 }

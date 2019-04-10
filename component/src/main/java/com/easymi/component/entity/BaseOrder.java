@@ -7,7 +7,8 @@ import java.io.Serializable;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: FinishActivity
- *@Author: shine
+ *
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -33,7 +34,7 @@ public class BaseOrder implements Serializable {
     public int scheduleStatus;
 
     /**
-     *订单状态
+     * 订单状态
      */
     public int status;
 
@@ -48,7 +49,7 @@ public class BaseOrder implements Serializable {
     public long orderId;
 
     /**
-     *订单编号
+     * 订单编号
      */
     public String orderNo;
 
@@ -166,7 +167,7 @@ public class BaseOrder implements Serializable {
     public String orderAddress;
 
     /**
-     *乐观锁
+     * 乐观锁
      */
     public long version;
 
@@ -234,7 +235,7 @@ public class BaseOrder implements Serializable {
     /**
      * 线路名称
      */
-    public String  lineName;
+    public String lineName;
 
 //    /**
 //     * 班次出发时间
@@ -250,7 +251,7 @@ public class BaseOrder implements Serializable {
      * 提前接人分钟数
      */
     public int minute;
-          
+
     /**
      * 停止售票时间
      */
@@ -283,36 +284,79 @@ public class BaseOrder implements Serializable {
     public int orderChange;
 
 
-
     /**
      * 等待行程开始
      */
-    public static final int SCHEDULE_STATUS_NEW = 1;
+    public static final int PC_SCHEDULE_STATUS_NEW = 1;
     /**
      * 司机接人
      */
-    public static final int SCHEDULE_STATUS_TAKE = 5;
+    public static final int PC_SCHEDULE_STATUS_TAKE = 5;
     /**
      * 司机送人
      */
-    public static final int SCHEDULE_STATUS_RUN = 10;
+    public static final int PC_SCHEDULE_STATUS_RUN = 10;
     /**
      * 已结束
      */
-    public static final int SCHEDULE_STATUS_FINISH = 15;
+    public static final int PC_SCHEDULE_STATUS_FINISH = 15;
 
-    public String getZXOrderStatusStr() {
-        if (scheduleStatus == SCHEDULE_STATUS_NEW) {
+
+    public String getPCOrderStatusStr() {
+        if (scheduleStatus == PC_SCHEDULE_STATUS_NEW) {
             return "未开始";
-        } else if (scheduleStatus == SCHEDULE_STATUS_TAKE) {
+        } else if (scheduleStatus == PC_SCHEDULE_STATUS_TAKE) {
             return "正在接人";
-        } else if (scheduleStatus == SCHEDULE_STATUS_RUN) {
+        } else if (scheduleStatus == PC_SCHEDULE_STATUS_RUN) {
             return "正在送人";
-        } else if (scheduleStatus == SCHEDULE_STATUS_FINISH) {
+        } else if (scheduleStatus == PC_SCHEDULE_STATUS_FINISH) {
             return "已完成";
         } else {
             return "已完成";
         }
     }
+
+
+    /**
+     * 售票中
+     */
+    public static final int ZX_SCHEDULE_STATUS_SALE = 1;
+    /**
+     * 等待行程开始
+     */
+    public static final int ZX_SCHEDULE_STATUS_PREPARE = 5;
+    /**
+     * 司机接人
+     */
+    public static final int ZX_SCHEDULE_STATUS_TAKE = 10;
+    /**
+     * 司机送人
+     */
+    public static final int ZX_SCHEDULE_STATUS_RUN = 15;
+    /**
+     * 已结束
+     */
+    public static final int ZX_SCHEDULE_STATUS_FINISH = 20;
+
+    /**
+     * 更具班次状态获取状态文字
+     * @return
+     */
+    public String getZXOrderStatusStr() {
+        if (scheduleStatus == ZX_SCHEDULE_STATUS_SALE) {
+            return "售票中";
+        } else if (scheduleStatus == ZX_SCHEDULE_STATUS_PREPARE) {
+            return "未开始";
+        } else if (scheduleStatus == ZX_SCHEDULE_STATUS_TAKE) {
+            return "正在接人";
+        } else if (scheduleStatus == ZX_SCHEDULE_STATUS_RUN) {
+            return "正在送人";
+        } else if (scheduleStatus == ZX_SCHEDULE_STATUS_FINISH) {
+            return "已完成";
+        } else {
+            return "";
+        }
+    }
+
 
 }

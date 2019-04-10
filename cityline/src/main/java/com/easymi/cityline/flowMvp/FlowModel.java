@@ -105,7 +105,7 @@ public class FlowModel implements FlowContract.Model {
     @Override
     public Observable<EmResult2<List<OrderCustomer>>> geOrderCustomers(long orderId) {
         return ApiManager.getInstance().createApi(Config.HOST, CLService.class)
-                .getOrderCustomers(orderId,"5,10,15,20")
+                .getOrderCustomers(orderId,"5,10,15,20","`id` ASC")
                 .filter(new HttpResultFunc3<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

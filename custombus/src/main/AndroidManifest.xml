@@ -12,8 +12,9 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeSwipeBack" />
+
         <activity
-            android:name=".activity.CheckTicketActivity"
+            android:name=".activity.NewCheckTicketActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeSwipeBack" />

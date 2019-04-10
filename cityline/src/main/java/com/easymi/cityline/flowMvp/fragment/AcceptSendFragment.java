@@ -179,6 +179,21 @@ public class AcceptSendFragment extends RxBaseFragment {
             orderCustomers = OrderCustomer.findByIDTypeOrderBySendSeq(orderId, orderType);
         }
         Iterator iterator = orderCustomers.iterator();
+
+        boolean isSend = true;
+
+        while (iterator.hasNext()) {
+            OrderCustomer orderCustomer = (OrderCustomer) iterator.next();
+            if (orderCustomer.status == 0
+                    && dymOrder.orderStatus == ZXOrderStatus.ACCEPT_ING) {//还在接人时，移除所有非0
+                isSend = false;
+            }
+        }
+
+        if (isSend){
+            dymOrder.orderStatus = ZXOrderStatus.SEND_ING;
+        }
+
         while (iterator.hasNext()) {
             OrderCustomer orderCustomer = (OrderCustomer) iterator.next();
             if (orderCustomer.status != 0
@@ -189,6 +204,7 @@ public class AcceptSendFragment extends RxBaseFragment {
                 iterator.remove();
             }
         }
+
         if (orderCustomers.size() != 0) {
             current = orderCustomers.get(0);
             if (current.status == 0) {

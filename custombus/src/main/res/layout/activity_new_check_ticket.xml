@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="center_horizontal">
+
+    <com.easymi.component.widget.CusToolbar
+        android:id="@+id/cus_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.easymi.component.widget.CodeInput
+        android:id="@+id/input_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
+        app:ci_background="@drawable/login_code_bg"
+        app:ci_boxCount="6"
+        app:ci_boxHeight="50dp"
+        app:ci_boxSpace="8dp"
+        app:ci_boxWidth="50dp"
+        app:ci_textColor="@color/color_333333"
+        app:ci_textSize="32sp"
+        app:ci_themeColor="@color/color_333333" />
+</LinearLayout>

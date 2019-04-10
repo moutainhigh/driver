@@ -66,7 +66,8 @@ public interface CLService {
     @GET("/api/v1/bus/city/order/list")
     Observable<EmResult2<List<OrderCustomer>>> getOrderCustomers(
             @Query("scheduleId") long scheduleId,
-            @Query("status") String status);
+            @Query("status") String status,
+            @Query("orderBy") String orderBy);
 
     /**
      * 班次结束
