@@ -461,6 +461,10 @@ public class OrderCustomer implements Serializable {
         values.put("orderId",orderId);
         values.put("orderType", orderType);
 
+        values.put("acceptSequence", acceptSequence);
+        values.put("sendSequence", sendSequence);
+        values.put("num", num);
+
         boolean flag = db.update("t_zx_order_customer", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
         return flag;
