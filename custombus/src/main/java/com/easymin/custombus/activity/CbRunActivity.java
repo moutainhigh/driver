@@ -79,11 +79,6 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View,
      * 站点适配器
      */
     public StationAdapter stationAdapter;
-
-//    /**
-//     * 站点数据源
-//     */
-//    private List<String> listStation = new ArrayList<>();
     /**
      * 班次详情
      */
@@ -303,7 +298,6 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View,
         intent.putExtra("position", item);
         startActivityForResult(intent, 0x00);
 
-
 //        Intent intent1 = new Intent(this, TestActivity.class);
 //        startActivity(intent1);
     }
@@ -374,7 +368,7 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View,
         if (km >= 1) {
             disKm = new DecimalFormat("#0.0").format((double) dis / 1000) + getResources().getString(R.string.cb_km);
         } else {
-            disKm = dis + "米";
+            disKm = dis + getResources().getString(R.string.cb_mi);
         }
 
         tv_left.setText(getResources().getString(R.string.cb_destance)

@@ -40,7 +40,7 @@ public class ScheduleTurnReceiver extends BroadcastReceiver {
 
     public interface OnTurnListener {
         /**
-         * 取消订单和收回监听
+         * 转单监听
          * @param scheduleId
          * @param orderType
          * @param msg

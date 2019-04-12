@@ -1,5 +1,6 @@
 package com.easymi.cityline.flowMvp;
 
+import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -134,6 +135,11 @@ public class FlowActivity extends RxBaseActivity implements
      * 订单查询是否完成
      */
     private boolean isOrderLoadOk = false;
+
+    /**
+     * 取消订单广播接收者
+     */
+    private CancelOrderReceiver cancelOrderReceiver;
 
     @Override
     public boolean isEnableSwipe() {
@@ -978,13 +984,23 @@ public class FlowActivity extends RxBaseActivity implements
     @Override
     protected void onStart() {
         super.onStart();
-        LocReceiver.getInstance().addObserver(this);//添加位置订阅
+        //添加位置订阅
+        LocReceiver.getInstance().addObserver(this);
+
+        cancelOrderReceiver = new CancelOrderReceiver(this);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Config.BROAD_CANCEL_ORDER);
+        filter.addAction(Config.BROAD_BACK_ORDER);
+        registerReceiver(cancelOrderReceiver, filter);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        LocReceiver.getInstance().deleteObserver(this);//取消位置订阅
+        //取消位置订阅
+        LocReceiver.getInstance().deleteObserver(this);
+
+        unregisterReceiver(cancelOrderReceiver);
     }
 
     @Override
@@ -1093,7 +1109,8 @@ public class FlowActivity extends RxBaseActivity implements
     @Override
     public void onCancelOrder(long orderId, String orderType, String msg) {
         presenter.deleteDb(orderId, orderType);
-        finish();
+//        finish();
+        getCustomers(zxOrder);
     }
 
     /**

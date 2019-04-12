@@ -19,6 +19,7 @@ import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.Log;
+import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.LoadingButton;
 import com.easymin.custombus.MyScrollVIew;
@@ -213,7 +214,8 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
 
         //跳转验票
         tv_check_btn.setOnClickListener(v -> {
-            Intent intent = new Intent(this, CheckTicketActivity.class);
+            Intent intent = new Intent(this, NewCheckTicketActivity.class);
+            intent.putExtra("isUnCheck", uncheck);
             startActivityForResult(intent, 0x00);
         });
         //前往下一站
@@ -295,7 +297,7 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
     }
 
     /**
-     * 等待时间
+     * 等待时间k
      */
     private long timeSeq = 0;
 
@@ -425,8 +427,12 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
 
     @Override
     public void showOrders(List<Customer> customers) {
-        adapter.setDatas(customers);
-        checkNumber(customers);
+        if (customers != null && customers.size() != 0) {
+            adapter.setDatas(customers);
+            checkNumber(customers);
+        } else {
+            setMyResult();
+        }
     }
 
     @Override
@@ -500,7 +506,8 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
             tv_check_btn.setBackground(getResources().getDrawable(R.drawable.corners_btn_4dp_bg));
 
             lin_check_top.setOnClickListener(v -> {
-                Intent intent = new Intent(this, CheckTicketActivity.class);
+                Intent intent = new Intent(this, NewCheckTicketActivity.class);
+                intent.putExtra("isUnCheck", uncheck);
                 startActivityForResult(intent, 0x00);
             });
         }
