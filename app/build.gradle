@@ -80,6 +80,10 @@ android {
 //        product {
 //            dimension "App"//同在App这个名字维
 //        }
+//        //生产环境
+//        dev {
+//            dimension "App"//同在App这个名字维
+//        }
 //    }
 }
 
