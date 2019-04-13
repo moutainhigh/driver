@@ -3,6 +3,7 @@
     <string name="cb_arrived">已到</string>
     <string name="cb_destance">距离</string>
     <string name="cb_km">公里</string>
+    <string name="cb_mi">米</string>
     <string name="cb_minutes">分钟</string>
     <string name="cb_wait_countdown">等待倒计时</string>
     <string name="cb_no_start">行程未开始</string>

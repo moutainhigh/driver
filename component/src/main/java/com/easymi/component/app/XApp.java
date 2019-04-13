@@ -99,7 +99,7 @@ public class XApp extends MultiDexApplication {
 
         initDataBase();
 
-        CrashReport.initCrashReport(getApplicationContext(), "28ff5239b4", true);
+        CrashReport.initCrashReport(getApplicationContext(), "28ff5239b4",true);
 
         int lastVersion = getMyPreferences().getInt(Config.SP_LAST_VERSION, 0);
         int current = SysUtil.getVersionCode(this);

@@ -1201,7 +1201,8 @@ public class FlowActivity extends RxBaseActivity implements
     @Override
     public void onTurnOrder(long scheduleId, String orderType, String msg) {
         if (scheduleId == pincheOrder.scheduleId){
-            finish();
+            getCustomers(pincheOrder.scheduleId);
+//            finish();
         }
     }
 }

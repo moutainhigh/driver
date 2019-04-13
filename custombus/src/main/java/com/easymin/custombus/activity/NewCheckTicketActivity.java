@@ -36,6 +36,8 @@ public class NewCheckTicketActivity extends RxBaseActivity implements FlowContra
 
     private String imagecode;
 
+    private int isUnCheck;
+
     @Override
     public void initToolBar() {
         super.initToolBar();
@@ -75,6 +77,8 @@ public class NewCheckTicketActivity extends RxBaseActivity implements FlowContra
             presenter.queryByRideCode(imagecode);
             return Unit.INSTANCE;
         });
+
+        isUnCheck = getIntent().getIntExtra("isUnCheck",0);
     }
 
     @Override
@@ -99,8 +103,13 @@ public class NewCheckTicketActivity extends RxBaseActivity implements FlowContra
 
     @Override
     public void dealSuccese() {
-        codeInput.setCode("");
-        ToastUtil.showMessage(this, "验票成功");
+        if (isUnCheck != 0){
+            codeInput.setCode("");
+            ToastUtil.showMessage(this, "验票成功");
+            isUnCheck--;
+        }else {
+            setMyResult();
+        }
     }
 
     @Override
