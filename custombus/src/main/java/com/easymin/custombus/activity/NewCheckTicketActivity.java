@@ -103,10 +103,10 @@ public class NewCheckTicketActivity extends RxBaseActivity implements FlowContra
 
     @Override
     public void dealSuccese() {
+        isUnCheck--;
         if (isUnCheck != 0){
             codeInput.setCode("");
             ToastUtil.showMessage(this, "验票成功");
-            isUnCheck--;
         }else {
             setMyResult();
         }

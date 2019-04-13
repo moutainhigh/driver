@@ -242,7 +242,8 @@ public class FlowActivity extends RxBaseActivity implements
                     } else if (carpoolOrder.status == CarpoolOrder.CARPOOL_STATUS_SKIP) {
                         carpoolOrder.customeStatus = 5;
                         carpoolOrder.subStatus = 2;
-                    } else if (carpoolOrder.status == CarpoolOrder.CARPOOL_STATUS_FINISH) {
+                    } else if (carpoolOrder.status == CarpoolOrder.CARPOOL_STATUS_FINISH ||
+                            carpoolOrder.status == CarpoolOrder.CARPOOL_STATUS_REVIEW) {
                         carpoolOrder.customeStatus = 4;
                         carpoolOrder.subStatus = 2;
                     }
