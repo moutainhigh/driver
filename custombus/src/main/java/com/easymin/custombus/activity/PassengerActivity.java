@@ -451,6 +451,11 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
     }
 
     @Override
+    public void errorCode() {
+
+    }
+
+    @Override
     public RxManager getManager() {
         return mRxManager;
     }

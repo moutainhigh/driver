@@ -133,6 +133,12 @@ public class NewCheckTicketActivity extends RxBaseActivity implements FlowContra
     }
 
     @Override
+    public void errorCode() {
+        ToastUtil.showMessage(this, "乘车码错误");
+        codeInput.setCode("");
+    }
+
+    @Override
     public RxManager getManager() {
         return mRxManager;
     }
