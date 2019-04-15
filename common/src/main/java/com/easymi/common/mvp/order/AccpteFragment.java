@@ -84,8 +84,15 @@ public class AccpteFragment extends RxBaseFragment implements MyOrderContract.Vi
     public void setRefresh() {
         if (EmUtil.getEmployInfo().serviceType.equals(Config.CARPOOL)){
             presenter.indexOrders(page, size, "10,15,20,25,30,35,40,45");
-        }else if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)  || EmUtil.getEmployInfo().serviceType.equals(Config.TAXI)){
+
+        }else if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)  ||
+                EmUtil.getEmployInfo().serviceType.equals(Config.TAXI)){
+
             presenter.indexOrders(page, size, "10,15,20,25,28,30,35,40");
+        }else if(EmUtil.getEmployInfo().serviceType.equals(Config.CUSTOMBUS) ||
+                EmUtil.getEmployInfo().serviceType.equals(Config.COUNTRY) ){
+
+            presenter.indexOrders(page, size, "5,10,15,20,25,28,30,35,40");
         }else {
             presenter.indexOrders(page, size, "10,15,20,25,28,30,35,40");
         }
