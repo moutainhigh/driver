@@ -180,6 +180,11 @@ public class CheckTicketActivity extends RxBaseActivity implements FlowContract.
     }
 
     @Override
+    public void errorCode() {
+
+    }
+
+    @Override
     public RxManager getManager() {
         return mRxManager;
     }

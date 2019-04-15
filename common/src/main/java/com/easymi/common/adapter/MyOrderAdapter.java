@@ -81,7 +81,8 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Holder> 
 
         if (TextUtils.equals(baseOrder.serviceType, Config.CITY_LINE)) {
             holder.order_status.setText("" + baseOrder.getZXOrderStatusStr());
-        } else if (TextUtils.equals(baseOrder.serviceType, Config.COUNTRY)) {
+        } else if (TextUtils.equals(baseOrder.serviceType, Config.COUNTRY) ||
+                TextUtils.equals(baseOrder.serviceType, Config.CUSTOMBUS)) {
             holder.order_status.setText(BusOrderStatus.orderStatus2Str(baseOrder.status));
         } else if (TextUtils.equals(baseOrder.serviceType, Config.CARPOOL)){
             holder.order_status.setText(PCOrderStatus.status2Str(baseOrder.status) + " >");

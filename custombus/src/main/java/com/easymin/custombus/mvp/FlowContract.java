@@ -68,6 +68,11 @@ public interface FlowContract {
         void finishActivity();
 
         /**
+         * 验票码订单状态错误
+         */
+        void errorCode();
+
+        /**
          * 获取 RxManager
          * @return
          */

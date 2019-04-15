@@ -12,12 +12,12 @@ android {
 //        flavorDimensions "App" //同在App这个名字维度
         ndk {
             //只兼容下面的型号
-            abiFilters  "armeabi-v7a"
+            abiFilters "armeabi-v7a"
         }
 
         manifestPlaceholders = [
                 //打包证书的md5值，该值在配置阶段会清除空格和‘:’,并反转
-                XK_MD5          : "B0:3A:DF:FE:43:9D:F5:82:22:BA:40:E2:06:A6:54:AF",
+                XK_MD5: "B0:3A:DF:FE:43:9D:F5:82:22:BA:40:E2:06:A6:54:AF",
         ]
     }
 
@@ -59,7 +59,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-
 //    //V6（系统）.prepare（环境）.20190330（日期）.driver（端）.01（序号）
 //    applicationVariants.all { variant ->
 //        variant.outputs.all {
@@ -68,20 +67,16 @@ android {
 //    }
 //
 //    productFlavors {
-//        //预发环境
-//        prepare {
-//            dimension "App"//同在App这个名字维度
-//        }
 //        //局域网环境
 //        local {
 //            dimension "App"//同在App这个名字维度
 //        }
-//        //生产环境
-//        product {
+//        //自测环境
+//        dev {
 //            dimension "App"//同在App这个名字维
 //        }
-//        //生产环境
-//        dev {
+//        //测试环境
+//        newTest {
 //            dimension "App"//同在App这个名字维
 //        }
 //    }

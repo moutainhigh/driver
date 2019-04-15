@@ -474,7 +474,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
                     @Override
                     public void onError(int code) {
-
+                        view.succeseOrder(null);
                     }
                 })));
     }
@@ -494,7 +494,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
                     @Override
                     public void onError(int code) {
-
+                        view.errorCode();
                     }
                 })));
     }

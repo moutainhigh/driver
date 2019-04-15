@@ -418,6 +418,11 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View,
         finish();
     }
 
+    @Override
+    public void errorCode() {
+
+    }
+
     /**
      * 本地处理站点状态
      */
