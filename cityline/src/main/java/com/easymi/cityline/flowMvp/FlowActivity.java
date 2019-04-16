@@ -190,7 +190,8 @@ public class FlowActivity extends RxBaseActivity implements
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, false, result2 -> {
             if (result2.getData() == null || result2.getData().size() == 0){
                 ToastUtil.showMessage(this,"当前班次没有任何乘客");
-                finish();
+                presenter.finishTask(zxOrder.orderId);
+                return;
             }
             isOrderLoadOk = true;
             List<OrderCustomer> orderCustomers = result2.getData();
@@ -940,7 +941,8 @@ public class FlowActivity extends RxBaseActivity implements
         orderCustomer.status = 4;
         orderCustomer.updateStatus();
         List<OrderCustomer> customers = OrderCustomer.findByIDTypeOrderBySendSeq(zxOrder.orderId, zxOrder.orderType);
-        if (orderCustomer.id == customers.get(customers.size() - 1).id) { //送完最后一个更新订单状态
+        if (orderCustomer.id == customers.get(customers.size() - 1).id) {
+            //送完最后一个更新订单状态
             presenter.finishTask(zxOrder.orderId);
         } else {
             acceptSendFragment.showWhatByStatus();
@@ -976,7 +978,7 @@ public class FlowActivity extends RxBaseActivity implements
                     || dymOrder.orderStatus == ZXOrderStatus.SEND_ING) {
                 bridge.toAcSend();
             } else if (dymOrder.orderStatus == ZXOrderStatus.SEND_OVER) {
-
+                presenter.finishTask(zxOrder.orderId);
             }
         }
     }
