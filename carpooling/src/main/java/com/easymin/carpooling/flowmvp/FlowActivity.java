@@ -194,7 +194,8 @@ public class FlowActivity extends RxBaseActivity implements
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, false, result2 -> {
             if (result2.getData() == null || result2.getData().size() == 0) {
                 ToastUtil.showMessage(this, "当前班次没有任何乘客");
-                finish();
+                presenter.finishTask(pincheOrder.orderId);
+                return;
             } else {
                 isOrderLoadOk = true;
                 List<CarpoolOrder> carpoolOrders = result2.getData();
@@ -999,7 +1000,7 @@ public class FlowActivity extends RxBaseActivity implements
                     || dymOrder.orderStatus == ZXOrderStatus.SEND_ING) {
                 bridge.toAcSend();
             } else if (dymOrder.orderStatus == ZXOrderStatus.SEND_OVER) {
-
+                presenter.finishTask(pincheOrder.orderId);
             }
         }
     }
