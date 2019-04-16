@@ -7,7 +7,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 9007
-        versionName "V6.1.0.7"
+        versionName "V6.0.8.00"
         multiDexEnabled true
 //        flavorDimensions "App" //同在App这个名字维度
         ndk {
@@ -77,6 +77,10 @@ android {
 //        }
 //        //测试环境
 //        newTest {
+//            dimension "App"//同在App这个名字维
+//        }
+//        //预发环境
+//        prepare {
 //            dimension "App"//同在App这个名字维
 //        }
 //    }
