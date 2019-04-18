@@ -155,18 +155,18 @@ public class SplashActivity extends RxBaseActivity {
             }
         }
         //二次打包应用
-//        if (!new Cat(this).check()) {
-////            AlertDialog dialog = new AlertDialog.Builder(this)
-////                    .setTitle(R.string.common_tips)
-////                    .setMessage("非法应用")
-////                    .setPositiveButton(R.string.ok, (dialog1, which) -> {
-////                        finish();
-////                    })
-////                    .create();
-////            dialog.setCancelable(false);
-////            dialog.show();
-////            return;
-////        }
+        if (!new Cat(this).check()) {
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle(R.string.common_tips)
+                    .setMessage("非法应用")
+                    .setPositiveButton(R.string.ok, (dialog1, which) -> {
+                        finish();
+                    })
+                    .create();
+            dialog.setCancelable(false);
+            dialog.show();
+            return;
+        }
 
         //检测模拟器
         boolean isEmulator = EmulatorCheckUtil.getSingleInstance().isEmulator(this);

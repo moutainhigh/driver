@@ -303,10 +303,6 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 order.passengerPhone = jb.optJSONObject("data").optString("userPhone");
 
                 XApp.getInstance().shake();
-                //一键报警 //todo 一键报警
-//                CenterUtil centerUtil = new CenterUtil(XApp.getInstance(),Config.APP_KEY,
-//                        new CsSharedPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
-//                        new CsSharedPreferences().getString(Config.SP_TOKEN, ""));
 
                 if (StringUtils.isNotBlank(order.serviceType)) {
                     if (order.serviceType.equals(Config.ZHUANCHE)) {
@@ -314,14 +310,12 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                                 .build("/zhuanche/FlowActivity")
                                 .withBoolean("flashAssign",true)
                                 .withLong("orderId", order.orderId).navigation();
-//                        centerUtil.smsShareAuto(order.orderId, EmUtil.getEmployInfo().companyId, order.passengerId, order.passengerPhone, order.serviceType);
-//                        centerUtil.checkingAuth(order.passengerId);
                     } else if (order.serviceType.equals(Config.TAXI)) {
                         ARouter.getInstance()
                                 .build("/taxi/FlowActivity")
                                 .withLong("orderId", order.orderId).navigation();
-//                        centerUtil.smsShareAuto(order.orderId, EmUtil.getEmployInfo().companyId, order.passengerId, order.passengerPhone, order.serviceType);
-//                        centerUtil.checkingAuth(order.passengerId);
+                    }else if (order.serviceType.equals(Config.GOV)){
+
                     }
                 }
             }else if (msg.equals("chartered")){
