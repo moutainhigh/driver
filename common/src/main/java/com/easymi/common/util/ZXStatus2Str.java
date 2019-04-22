@@ -1,6 +1,7 @@
 package com.easymi.common.util;
 
 import com.easymi.common.R;
+import com.easymi.common.entity.OrderCustomer;
 import com.easymi.component.ZXOrderStatus;
 import com.easymi.component.app.XApp;
 
@@ -22,26 +23,22 @@ public class ZXStatus2Str {
      */
     public static String int2Str(String business, int status) {
         switch (status) {
-            case ZXOrderStatus.NEW_ORDER:
-                return XApp.getInstance().getString(R.string.zx_new_order);
-            case ZXOrderStatus.PAIDAN_ORDER:
-                return XApp.getInstance().getString(R.string.zx_pai_order);
-            case ZXOrderStatus.TAKE_ORDER:
-                return XApp.getInstance().getString(R.string.zx_accept_order);
-            case ZXOrderStatus.WAIT_START:
-                return XApp.getInstance().getString(R.string.zx_wait_start);
-            case ZXOrderStatus.ACCEPT_PLAN:
-                return XApp.getInstance().getString(R.string.zx_accept_plan);
-            case ZXOrderStatus.SEND_PLAN:
-                return XApp.getInstance().getString(R.string.zx_send_plan);
-            case ZXOrderStatus.ACCEPT_ING:
-                return XApp.getInstance().getString(R.string.zx_accepting);
-            case ZXOrderStatus.SEND_ING:
-                return XApp.getInstance().getString(R.string.zx_sending);
-            case ZXOrderStatus.SEND_OVER:
-                return XApp.getInstance().getString(R.string.zx_send_over);
-            case ZXOrderStatus.FINISH_TRIP:
-                return XApp.getInstance().getString(R.string.zx_line_over);
+            case OrderCustomer.CITY_LINE_STATUS_PAY:
+                return XApp.getInstance().getString(R.string.zx_no_pay);
+            case OrderCustomer.CITY_LINE_STATUS_NEW:
+                return XApp.getInstance().getString(R.string.zx_pay);
+            case OrderCustomer.CITY_LINE_STATUS_TAKE:
+                return XApp.getInstance().getString(R.string.zx_accpet);
+            case OrderCustomer.CITY_LINE_STATUS_RUN:
+                return XApp.getInstance().getString(R.string.zx_running);
+            case OrderCustomer.CITY_LINE_STATUS_SKIP:
+                return XApp.getInstance().getString(R.string.zx_skip);
+            case OrderCustomer.CITY_LINE_STATUS_FINISH:
+                return XApp.getInstance().getString(R.string.zx_arrive);
+            case OrderCustomer.CITY_LINE_STATUS_REVIEW:
+                return XApp.getInstance().getString(R.string.zx_evaluate);
+            case OrderCustomer.CITY_LINE_STATUS_CANCEL:
+                return XApp.getInstance().getString(R.string.zx_back);
             default:
                 break;
         }

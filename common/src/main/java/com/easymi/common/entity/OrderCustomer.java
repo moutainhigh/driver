@@ -25,35 +25,35 @@ import java.util.List;
 
 public class OrderCustomer implements Serializable {
     /**
-     * 专线订单未支付
+     * 未支付
      */
     public static final int CITY_LINE_STATUS_PAY = 1;
     /**
-     * 专线订单已支付
+     * 已支付
      */
     public static final int CITY_LINE_STATUS_NEW = 5;
     /**
-     * 专线订单等待接人
+     * 接人中
      */
     public static final int CITY_LINE_STATUS_TAKE = 10;
     /**
-     * 专线订单接人后出发
+     * 已出发
      */
     public static final int CITY_LINE_STATUS_RUN = 15;
     /**
-     * 专线订单跳过执行
+     * 已跳过
      */
     public static final int CITY_LINE_STATUS_SKIP = 20;
     /**
-     * 专线订单已到达终点站
+     * 已到达
      */
     public static final int CITY_LINE_STATUS_FINISH = 25;
     /**
-     * 专线订单已评价
+     * 已评价
      */
     public static final int CITY_LINE_STATUS_REVIEW = 30;
     /**
-     * 专线订单已退票
+     * 已退票
      */
     public static final int CITY_LINE_STATUS_CANCEL = 35;
 

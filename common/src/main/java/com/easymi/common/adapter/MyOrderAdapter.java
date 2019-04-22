@@ -13,11 +13,13 @@ import android.widget.TextView;
 import com.easymi.common.R;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.util.DJStatus2Str;
+import com.easymi.common.util.ZXStatus2Str;
 import com.easymi.component.BusOrderStatus;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
 import com.easymi.component.GWOrderStatus;
 import com.easymi.component.PCOrderStatus;
+import com.easymi.component.ZXOrderStatus;
 import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.utils.TimeUtil;
 
@@ -80,7 +82,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Holder> 
 //        holder.order_end_place.setText(baseOrder.getEndSite().address);
 
         if (TextUtils.equals(baseOrder.serviceType, Config.CITY_LINE)) {
-            holder.order_status.setText("" + baseOrder.getZXOrderStatusStr());
+            holder.order_status.setText("" + ZXStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status));
         } else if (TextUtils.equals(baseOrder.serviceType, Config.COUNTRY) ||
                 TextUtils.equals(baseOrder.serviceType, Config.CUSTOMBUS)) {
             holder.order_status.setText(BusOrderStatus.orderStatus2Str(baseOrder.status));
