@@ -443,7 +443,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void notifyParallelRoad(int i) {
-        Log.e("FlowerPresenter", "notifyParallelRoad()");
+
     }
 
     @Override

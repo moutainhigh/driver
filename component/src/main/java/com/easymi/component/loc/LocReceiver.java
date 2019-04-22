@@ -55,9 +55,11 @@ public class LocReceiver extends BroadcastReceiver implements LocSubject {
             //上次的定位信息
             String lastLocJson = new CsSharedPreferences().getString(Config.SP_LAST_LOC, "");
 
-            if (StringUtils.isNotBlank(lastLocJson)) { //相当于在没有poi时只保存了位置的经纬度，poi检索没变
+            if (StringUtils.isNotBlank(lastLocJson)) {
+                //相当于在没有poi时只保存了位置的经纬度，poi检索没变
                 EmLoc lastLoc = new Gson().fromJson(lastLocJson, EmLoc.class);
-                if (StringUtils.isBlank(emLoc.poiName)) {//此次定位的poi为空时 只更新一些基础位置信息
+                if (StringUtils.isBlank(emLoc.poiName)) {
+                    //此次定位的poi为空时 只更新一些基础位置信息
                     lastLoc.latitude = emLoc.latitude;
                     lastLoc.longitude = emLoc.longitude;
                     lastLoc.accuracy = emLoc.accuracy;

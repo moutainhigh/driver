@@ -28,4 +28,6 @@ public class PushBean {
                 ", data='" + data + '\'' +
                 '}';
     }
+
+
 }

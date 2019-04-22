@@ -393,7 +393,7 @@ public class MqttManager implements LocObserver {
                 }
                 publish(pushStr);
                 //上传后删除本地的缓存
-                FileUtil.delete("v5driver", "pushCache.txt");
+                FileUtil.delete("v6driver", "pushCache.txt");
             }
         } else {
             if (data != null) {
@@ -458,7 +458,7 @@ public class MqttManager implements LocObserver {
 
                         }
                     })));
-            FileUtil.delete("v5driver", "pushCache.txt");
+            FileUtil.delete("v6driver", "pushCache.txt");
         }
     }
 

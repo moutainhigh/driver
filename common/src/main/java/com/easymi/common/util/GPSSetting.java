@@ -46,5 +46,9 @@ public class GPSSetting {
         editor.apply();
     }
 
+    public boolean getNetEnable() {
+        return netLocEnable;
+    }
+
 
 }

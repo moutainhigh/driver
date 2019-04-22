@@ -401,17 +401,7 @@ public class FileUtil {
 
     public static boolean savePushCache(Context context, String content) {
         try {
-            FileUtil.write(context, "v5driver", "pushCache.txt", content, false);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
-    public static boolean saveLog(Context context, String content) {
-        try {
-            FileUtil.write(context, "v5driver", "Log.txt", content, true);
+            FileUtil.write(context, "v6driver", "pushCache.txt", content, false);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -422,7 +412,7 @@ public class FileUtil {
     public static String readPushCache() {
         try {
             File rootDire = Environment.getExternalStorageDirectory();
-            File directory = new File(rootDire, "v5driver");
+            File directory = new File(rootDire, "v6driver");
             if (directory.exists()) {
                 File file = new File(directory, "pushCache.txt");
                 return readFile(file);

@@ -179,6 +179,21 @@ public class AcceptSendFragment extends RxBaseFragment {
             carpoolOrders = CarpoolOrder.findByIDTypeOrderBySendSeq(orderId, orderType);
         }
         Iterator iterator = carpoolOrders.iterator();
+
+        boolean isSend = true;
+
+        for (CarpoolOrder carpoolOrder : carpoolOrders) {
+            if (carpoolOrder.status == 0
+                    && dymOrder.orderStatus == ZXOrderStatus.ACCEPT_ING) {//还在接人时，移除所有非0
+                isSend = false;
+                break;
+            }
+        }
+
+        if (isSend){
+            dymOrder.orderStatus = ZXOrderStatus.SEND_ING;
+        }
+
         while (iterator.hasNext()) {
             CarpoolOrder carpoolOrder = (CarpoolOrder) iterator.next();
             if (carpoolOrder.customeStatus != 0

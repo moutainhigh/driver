@@ -218,21 +218,6 @@ public class FlowActivity extends RxBaseActivity implements
             for (int i = 0; i < orderCustomers.size(); i++) {
                 OrderCustomer orderCustomer = orderCustomers.get(i);
 
-//                List<OrderCustomer> allCus = OrderCustomer.findByIDTypeOrderByAcceptSeq(zxOrder.orderId, zxOrder.orderType);
-//                for (OrderCustomer cusOrder : allCus) {
-//                    boolean isExist = false;
-//
-//                    if ((cusOrder.id == orderCustomer.id)) {
-//                        isExist = true;
-//                        break;
-//                    }
-//
-//                    if (!isExist) {
-//                        cusOrder.delete(cusOrder.id);
-//                    }
-//                }
-
-
                 orderCustomer.appointTime = orderCustomer.appointTime * 1000;
                 orderCustomer.num = i + 1;
                 orderCustomer.acceptSequence = i;
