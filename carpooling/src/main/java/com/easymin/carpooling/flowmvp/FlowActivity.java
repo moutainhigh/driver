@@ -1144,9 +1144,10 @@ public class FlowActivity extends RxBaseActivity implements
 //                        .create();
 //                cancelDialog.show();
 //            }
-            XApp.getInstance().syntheticVoice("您有订单被取消或者收回");
-            presenter.deleteDb(orderId, orderType);
-            finish();
+//            XApp.getInstance().syntheticVoice("您有订单被取消或者收回");
+//            presenter.deleteDb(orderId, orderType);
+//            finish();
+            getCustomers(pincheOrder.scheduleId);
         }
     }
 
