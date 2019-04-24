@@ -183,7 +183,7 @@ public class AcceptSendFragment extends RxBaseFragment {
         boolean isSend = true;
 
         for (CarpoolOrder carpoolOrder : carpoolOrders) {
-            if (carpoolOrder.status == 0
+            if (carpoolOrder.customeStatus == 0
                     && dymOrder.orderStatus == ZXOrderStatus.ACCEPT_ING) {//还在接人时，移除所有非0
                 isSend = false;
                 break;
