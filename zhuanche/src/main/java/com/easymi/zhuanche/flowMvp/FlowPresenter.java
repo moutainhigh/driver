@@ -333,6 +333,8 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
                 dymOrder.distance = new BigDecimal(zcOrder.orderFee.distance / 1000).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
                 dymOrder.lowSpeedTime = zcOrder.orderFee.lowSpeedTime / 60;
                 dymOrder.nightTime = zcOrder.orderFee.nightTime / 60;
+
+                dymOrder.orderNo = zcOrder.orderNumber;
             } else {
                 dymOrder = new DymOrder(zcOrder.orderId, zcOrder.orderType,
                         zcOrder.passengerId, zcOrder.orderStatus);
@@ -354,6 +356,8 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
                 dymOrder.distance = new BigDecimal(zcOrder.orderFee.distance / 1000).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
                 dymOrder.lowSpeedTime = zcOrder.orderFee.lowSpeedTime / 60;
                 dymOrder.nightTime = zcOrder.orderFee.nightTime / 60;
+
+                dymOrder.orderNo = zcOrder.orderNumber;
             }
             dymOrder.orderStatus = zcOrder.orderStatus;
             dymOrder.updateAll();

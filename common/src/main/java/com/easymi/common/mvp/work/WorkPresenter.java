@@ -143,12 +143,18 @@ public class WorkPresenter implements WorkContract.Presenter {
                                     dymOrder.orderId = order.orderId;
                                     dymOrder.passengerId = order.passengerId;
                                     dymOrder.orderStatus = order.status;
+
+                                    dymOrder.orderNo = order.orderNo;
+
                                     dymOrder.updateAll();
                                 } else {
                                     //非专线  本地没有
                                     dymOrder = new DymOrder(order.orderId, order.serviceType,
                                             order.passengerId, order.status);
                                     dymOrder.id = order.id;
+
+                                    dymOrder.orderNo = order.orderNo;
+
                                     dymOrder.saveOrUpdate();
                                 }
                             } else if (TextUtils.equals(order.serviceType, Config.CITY_LINE)) {

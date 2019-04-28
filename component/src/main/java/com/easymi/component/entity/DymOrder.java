@@ -174,6 +174,11 @@ public class DymOrder implements Serializable {
      */
     public String stageArrays;
 
+    /**
+     * 订单编号
+     */
+    public String orderNo;
+
 
     public DymOrder(long orderId, String orderType, long passengerId, int orderStatus) {
         this.orderId = orderId;
@@ -229,6 +234,7 @@ public class DymOrder implements Serializable {
         values.put("nightTimePrice", nightTimePrice);
 
         values.put("stageArrays", stageArrays);
+        values.put("orderNo",orderNo);
 
         boolean flag = db.insert("t_dyminfo", null, values) != -1;
         return flag;
@@ -374,6 +380,8 @@ public class DymOrder implements Serializable {
 
         orderInfo.stageArrays = cursor.getString(cursor.getColumnIndex("stageArrays"));
 
+        orderInfo.orderNo = cursor.getString(cursor.getColumnIndex("orderNo"));
+
         return orderInfo;
     }
 
@@ -427,6 +435,8 @@ public class DymOrder implements Serializable {
 
         values.put("stageArrays", stageArrays);
 
+        values.put("orderNo",orderNo);
+
 //        values.put("addedKm", addedKm);
 //        values.put("addedFee", addedFee);
         /*
@@ -463,6 +473,8 @@ public class DymOrder implements Serializable {
         values.put("nightTimePrice", nightTimePrice);
 
         values.put("stageArrays", stageArrays);
+
+        values.put("orderNo",orderNo);
 
 //        values.put("addedKm", addedKm);
 //        values.put("addedFee", addedFee);

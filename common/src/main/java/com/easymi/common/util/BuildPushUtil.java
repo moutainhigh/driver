@@ -140,6 +140,8 @@ public class BuildPushUtil {
                     dataOrder.nightTime = dymOrder.nightTime;
                     dataOrder.nightMile = dymOrder.nightMile;
                     dataOrder.nightTimePrice = dymOrder.nightTimePrice;
+
+                    dataOrder.orderNo = dymOrder.orderNo;
                 }
                 if (dataOrder.status != 0) {
                     orderList.add(dataOrder);

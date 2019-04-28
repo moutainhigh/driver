@@ -57,4 +57,9 @@ public class PushDataOrder {
      */
     public long passengerId;
 
+    /**
+     * 订单编号
+     */
+    public String orderNo;
+
 }
