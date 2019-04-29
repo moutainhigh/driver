@@ -66,6 +66,7 @@ public class CusListAdapter extends RecyclerView.Adapter<CusListAdapter.ViewHold
         holder.sequenceNum.setText(String.valueOf(orderCustomer.num));
         holder.cusName.setText(orderCustomer.name);
         holder.status.setText(orderCustomer.getOrderStatus());
+        holder.tv_number.setText("车票："+orderCustomer.ticketNumber);
 
         if (orderCustomer.status == 0 || orderCustomer.status == 3) {
             holder.status.setBackgroundResource(R.drawable.corners_accent_8dp);
@@ -112,6 +113,7 @@ public class CusListAdapter extends RecyclerView.Adapter<CusListAdapter.ViewHold
         ImageView cusPhoto;
         TextView cusName;
         TextView status;
+        TextView tv_number;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -119,6 +121,7 @@ public class CusListAdapter extends RecyclerView.Adapter<CusListAdapter.ViewHold
             cusPhoto = itemView.findViewById(R.id.cus_photo);
             cusName = itemView.findViewById(R.id.cus_name);
             status = itemView.findViewById(R.id.status_text);
+            tv_number = itemView.findViewById(R.id.tv_number);
         }
     }
 }

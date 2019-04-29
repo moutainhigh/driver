@@ -6,25 +6,44 @@
     android:gravity="center">
 
 
-    <TextView
-        android:id="@+id/seq_num"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1"
-        android:gravity="center"
-        android:textSize="18sp"
-        android:textColor="@color/white"
-        android:background="@drawable/circle_accent"/>
+    <!--<TextView-->
+        <!--android:id="@+id/seq_num"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="1"-->
+        <!--android:gravity="center"-->
+        <!--android:textSize="18sp"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:background="@drawable/circle_accent"/>-->
+    <RelativeLayout
+        android:id="@+id/rl_person"
+        android:layout_width="35dp"
+        android:layout_height="35dp">
+        <ImageView
+            android:id="@+id/iv_avater"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@mipmap/photo_default"/>
+        <TextView
+            android:id="@+id/tv_get"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已接"
+            android:gravity="center"
+            android:textSize="10sp"
+            android:textColor="@color/white"
+            android:background="@drawable/circle_dark"/>
+    </RelativeLayout>
 
-    <TextView
-        android:id="@+id/seq_num_gray"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1"
-        android:gravity="center"
-        android:textSize="18sp"
-        android:textColor="@color/white"
-        android:background="@drawable/circle_gray"/>
+    <!--<TextView-->
+        <!--android:id="@+id/seq_num_gray"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="1"-->
+        <!--android:gravity="center"-->
+        <!--android:textSize="18sp"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:background="@drawable/circle_gray"/>-->
 
     <ImageView
         android:id="@+id/seq_car_img"

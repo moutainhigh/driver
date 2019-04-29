@@ -2,6 +2,7 @@ package com.easymi.cityline.flowMvp;
 
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -27,6 +29,9 @@ import com.amap.api.navi.model.AMapNaviPath;
 import com.amap.api.navi.model.RouteOverlayOptions;
 import com.amap.api.navi.view.RouteOverLay;
 import com.amap.api.services.route.DriveRouteResult;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.easymi.cityline.CLService;
 import com.easymi.cityline.R;
 import com.easymi.cityline.StaticVal;
@@ -59,6 +64,7 @@ import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.GlideCircleTransform;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
@@ -77,6 +83,7 @@ import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: FlowActivity
+ *
  * @Author: hufeng
  * Date: 2018/12/24 下午1:10
  * Description: 订单执行流程
@@ -141,6 +148,15 @@ public class FlowActivity extends RxBaseActivity implements
      */
     private CancelOrderReceiver cancelOrderReceiver;
 
+    /**
+     * 加载圆形头像
+     */
+    RequestOptions options = new RequestOptions()
+            .centerCrop()
+            .transform(new GlideCircleTransform())
+            .placeholder(R.mipmap.photo_default)
+            .diskCacheStrategy(DiskCacheStrategy.ALL);
+
     @Override
     public boolean isEnableSwipe() {
         return false;
@@ -178,18 +194,19 @@ public class FlowActivity extends RxBaseActivity implements
 
     /**
      * 查询专线班次的详细订单
+     *
      * @param zxOrder
      */
     private void getCustomers(ZXOrder zxOrder) {
         Observable<EmResult2<List<OrderCustomer>>> observable = ApiManager.getInstance().createApi(Config.HOST, CLService.class)
-                .getOrderCustomers(zxOrder.orderId, "5,10,15,20","`id` ASC")
+                .getOrderCustomers(zxOrder.orderId, "5,10,15,20", "`id` ASC")
                 .filter(new HttpResultFunc3<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, false, result2 -> {
-            if (result2.getData() == null || result2.getData().size() == 0){
-                ToastUtil.showMessage(this,"当前班次没有任何乘客");
+            if (result2.getData() == null || result2.getData().size() == 0) {
+                ToastUtil.showMessage(this, "当前班次没有任何乘客");
                 presenter.finishTask(zxOrder.orderId);
                 return;
             }
@@ -210,7 +227,7 @@ public class FlowActivity extends RxBaseActivity implements
                         break;
                     }
                 }
-                if (!isExist){
+                if (!isExist) {
                     OrderCustomer.delete(cusOrder.id);
                 }
             }
@@ -265,6 +282,7 @@ public class FlowActivity extends RxBaseActivity implements
 
     /**
      * 基本数据转专线班次
+     *
      * @param baseOrder
      */
     public void baseToZX(BaseOrder baseOrder) {
@@ -484,7 +502,7 @@ public class FlowActivity extends RxBaseActivity implements
         if (isOrderLoadOk) {
             showFragmentByStatus();
         }
-        Log.e("hufeng/onResume", TimeUtil.getTime("HH:mm:ss:SSS",System.currentTimeMillis()));
+        Log.e("hufeng/onResume", TimeUtil.getTime("HH:mm:ss:SSS", System.currentTimeMillis()));
     }
 
     /**
@@ -542,8 +560,8 @@ public class FlowActivity extends RxBaseActivity implements
             }
 
             @Override
-            public void addMarker(LatLng latLng, int flag, int num) {
-                FlowActivity.this.addMarker(latLng, flag, num);
+            public void addMarker(LatLng latLng, int flag, int num, int ticketNumber,String photo) {
+                FlowActivity.this.addMarker(latLng, flag, num, ticketNumber,photo);
             }
 
             @Override
@@ -690,24 +708,26 @@ public class FlowActivity extends RxBaseActivity implements
      * @param flag
      */
     @Override
-    public void addMarker(LatLng latLng, int flag, int num) {
+    public void addMarker(LatLng latLng, int flag, int num, int ticketNumber,String photo) {
         MarkerOptions markerOption = new MarkerOptions();
         markerOption.position(latLng);
         markerOption.draggable(false);//设置Marker可拖动
 
-
         View view = LayoutInflater.from(this).inflate(R.layout.sequence_marker, null);
+
         TextView tv = view.findViewById(R.id.seq_num);
-        tv.setText(String.valueOf(num));
-        if (flag == StaticVal.MARKER_FLAG_PASS_ENABLE) {
-            tv.setBackgroundResource(R.drawable.circle_accent);
-        } else {
-            tv.setBackgroundResource(R.drawable.circle_gray);
-        }
+        ImageView avater = view.findViewById(R.id.iv_avater_marker);
+
+        tv.setText("车票:" + ticketNumber);
+        Glide.with(this)
+                .load(Config.IMG_SERVER + photo)
+                .apply(options)
+                .into(avater);
+
         markerOption.icon(BitmapDescriptorFactory.fromView(view));
 
         // 将Marker设置为贴地显示，可以双指下拉地图查看效果
-        markerOption.setFlat(true);//设置marker平贴地图效果
+        markerOption.setFlat(true);
         aMap.addMarker(markerOption);
 
     }

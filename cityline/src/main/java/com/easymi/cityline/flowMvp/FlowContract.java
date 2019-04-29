@@ -54,7 +54,7 @@ public interface FlowContract {
          * @param flag
          * @param num
          */
-        void addMarker(LatLng latLng, int flag, int num);
+        void addMarker(LatLng latLng, int flag, int num,int ticketNumber,String photo);
 
         /**
          * 线路缩放

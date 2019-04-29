@@ -284,6 +284,10 @@ public class ChangeSeqFragment extends RxBaseFragment {
                 sequence.num = customer.num;
                 sequence.type = 1;
                 sequence.text = "";
+                sequence.photo = customer.photo;
+                sequence.ticketNumber = customer.ticketNumber;
+                sequence.status = customer.status;
+
                 sequences.add(sequence);
                 if (customer.status != 0) {
                     min = i+1;
@@ -297,6 +301,10 @@ public class ChangeSeqFragment extends RxBaseFragment {
                 sequence.num = customer.num;
                 sequence.type = 1;
                 sequence.text = "";
+                sequence.photo = customer.photo;
+                sequence.ticketNumber = customer.ticketNumber;
+                sequence.status = customer.status;
+
                 sequences.add(sequence);
                 if (customer.status > 3) {
                     min = i+1;
@@ -337,10 +345,10 @@ public class ChangeSeqFragment extends RxBaseFragment {
                 latLng = new LatLng(orderCustomer.endLat, orderCustomer.endLng);
             }
             if (orderCustomer.status == 0 || orderCustomer.status == 3) {
-                bridge.addMarker(latLng, StaticVal.MARKER_FLAG_PASS_ENABLE, orderCustomer.num);
+                bridge.addMarker(latLng, StaticVal.MARKER_FLAG_PASS_ENABLE, orderCustomer.num,orderCustomer.ticketNumber,orderCustomer.photo);
                 latLngs.add(latLng);
             } else {
-                bridge.addMarker(latLng, StaticVal.MARKER_FLAG_PASS_DISABLE, orderCustomer.num);
+                bridge.addMarker(latLng, StaticVal.MARKER_FLAG_PASS_DISABLE, orderCustomer.num,orderCustomer.ticketNumber,orderCustomer.photo);
             }
         }
         bridge.showBounds(latLngs);

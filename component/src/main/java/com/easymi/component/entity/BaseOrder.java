@@ -283,6 +283,10 @@ public class BaseOrder implements Serializable {
      */
     public int orderChange;
 
+    /**
+     * 班次结束时间
+     */
+    public long endTime;
 
     /**
      * 等待行程开始

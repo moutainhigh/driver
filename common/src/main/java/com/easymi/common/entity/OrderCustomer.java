@@ -147,6 +147,11 @@ public class OrderCustomer implements Serializable {
     public int subStatus;
 
     /**
+     * 订单中有几个人
+     */
+    public int ticketNumber;
+
+    /**
      * 获取客户状态
      * @return
      */
@@ -199,6 +204,7 @@ public class OrderCustomer implements Serializable {
         values.put("status", status);
         values.put("photo", photo);
         values.put("subStatus", subStatus);
+        values.put("ticketNumber",ticketNumber);
 
         boolean flag = db.insert("t_zx_order_customer", null, values) != -1;
         return flag;
@@ -387,6 +393,7 @@ public class OrderCustomer implements Serializable {
         orderCustomer.status = cursor.getInt(cursor.getColumnIndex("status"));
         orderCustomer.photo = cursor.getString(cursor.getColumnIndex("photo"));
         orderCustomer.subStatus = cursor.getInt(cursor.getColumnIndex("subStatus"));
+        orderCustomer.ticketNumber = cursor.getInt(cursor.getColumnIndex("ticketNumber"));
 
         return orderCustomer;
     }
@@ -464,6 +471,7 @@ public class OrderCustomer implements Serializable {
         values.put("acceptSequence", acceptSequence);
         values.put("sendSequence", sendSequence);
         values.put("num", num);
+        values.put("ticketNumber",ticketNumber);
 
         boolean flag = db.update("t_zx_order_customer", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;

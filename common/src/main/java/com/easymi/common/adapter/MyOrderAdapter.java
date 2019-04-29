@@ -73,13 +73,21 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Holder> 
         MultipleOrder baseOrder = list.get(position);
 
         holder.order_type.setText("" + baseOrder.getOrderType());
-        holder.order_time.setText(TimeUtil.getTime(context.getString(R.string.time_five_format), baseOrder.bookTime * 1000));
+
+        //时间处理（专线需要班次结束时间）
+        if (TextUtils.equals(baseOrder.serviceType, Config.CITY_LINE)) {
+            if (baseOrder.endTime == 0){
+                holder.order_time.setText(TimeUtil.getTime(context.getString(R.string.time_five_format), baseOrder.bookTime * 1000));
+            }else {
+                holder.order_time.setText(TimeUtil.getTime(context.getString(R.string.time_five_format), baseOrder.bookTime * 1000)
+                        +"-"+ TimeUtil.getTime("HH:mm", baseOrder.endTime * 1000));
+            }
+        }else {
+            holder.order_time.setText(TimeUtil.getTime(context.getString(R.string.time_five_format), baseOrder.bookTime * 1000));
+        }
 
         holder.order_start_place.setText(baseOrder.bookAddress);
         holder.order_end_place.setText(baseOrder.destination);
-
-//        holder.order_start_place.setText(baseOrder.getStartSite().address);
-//        holder.order_end_place.setText(baseOrder.getEndSite().address);
 
         if (TextUtils.equals(baseOrder.serviceType, Config.CITY_LINE)) {
             holder.order_status.setText("" + ZXStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status));

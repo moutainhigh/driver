@@ -36,7 +36,7 @@ public interface ActFraCommBridge {
      * @param flag
      * @param num
      */
-    void addMarker(LatLng latLng, int flag, int num);
+    void addMarker(LatLng latLng, int flag, int num,int ticketNumber,String photo);
 
     /**
      * 自定义排序

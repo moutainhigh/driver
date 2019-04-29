@@ -289,7 +289,7 @@ public class AcceptSendFragment extends RxBaseFragment {
             } else {
                 weihao = current.phone;
             }
-            customerPhone.setText("手机尾号：" + weihao);
+            customerPhone.setText("手机尾号：" + weihao + "   购票数："+current.ticketNumber);
 
             toPlace.setText(current.status < 3 ? current.startAddr : current.endAddr);
         }

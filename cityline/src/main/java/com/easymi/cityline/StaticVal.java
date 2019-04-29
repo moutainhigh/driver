@@ -20,7 +20,7 @@ public class StaticVal {
 
     //规划送人
     public static final int PLAN_SEND = 0x17;
-    //规划接人
+    //规划接人dda
     public static final int PLAN_ACCEPT = 0x16;
 
     public static final int TOOLBAR_NOT_START = 0x15;
