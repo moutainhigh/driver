@@ -412,6 +412,8 @@ public class FlowActivity extends RxBaseActivity implements
         }
         bridge.toAcSend();
 
+        //开始接人后同步下订单数量
+        getCustomers(zxOrder);
     }
 
     @Override

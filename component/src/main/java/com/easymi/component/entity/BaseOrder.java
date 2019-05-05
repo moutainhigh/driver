@@ -286,7 +286,7 @@ public class BaseOrder implements Serializable {
     /**
      * 班次结束时间
      */
-    public long endTime;
+    public long scheduleFinishTime;
 
     /**
      * 等待行程开始

@@ -94,7 +94,7 @@ public class AccpteFragment extends RxBaseFragment implements MyOrderContract.Vi
 
             presenter.indexOrders(page, size, "5,10,15,20,25,28,30,35,40");
         }else {
-            presenter.indexOrders(page, size, "10,15,20,25,28,30,35,40");
+            presenter.indexOrders(page, size, "5,10,15,20,25,28,30,35,40");
         }
     }
 

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,7 +30,6 @@ import com.amap.api.services.route.DriveRouteResult;
 import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.component.Config;
 import com.easymi.component.ZXOrderStatus;
-import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.entity.DymOrder;
@@ -47,7 +45,6 @@ import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
-import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.overlay.DrivingRouteOverlay;
@@ -725,7 +722,7 @@ public class FlowActivity extends RxBaseActivity implements
         //设置Marker可拖动
         markerOption.draggable(false);
 
-        View view = LayoutInflater.from(this).inflate(R.layout.sequence_marker, null);
+        View view = LayoutInflater.from(this).inflate(R.layout.carpool_sequence_marker, null);
         TextView tv = view.findViewById(R.id.seq_num);
         tv.setText(String.valueOf(num));
         if (flag == StaticVal.MARKER_FLAG_PASS_ENABLE) {

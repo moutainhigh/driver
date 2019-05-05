@@ -98,7 +98,7 @@ public class SequenceAdapter extends RecyclerView.Adapter<SequenceAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.sequence_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.carpool_sequence_item, parent, false);
         FrameLayout frameLayout = new FrameLayout(context);
         int width = (DensityUtil.getDisplayWidth(context) - DensityUtil.dp2px(context, 40)) / 8;
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, FrameLayout.LayoutParams.WRAP_CONTENT);

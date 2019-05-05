@@ -102,7 +102,7 @@
     <string name="dh_fee">等候费用</string>
     <string name="coupon_text">优惠券</string>
     <string name="prepay_text">预付金额</string>
-    <string name="no_coupon">暂无优惠券</string>
+    <string name="no_coupon">未使用优惠券</string>
 
     <string name="route_failed">路径规划失败</string>
 

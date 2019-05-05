@@ -76,11 +76,11 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Holder> 
 
         //时间处理（专线需要班次结束时间）
         if (TextUtils.equals(baseOrder.serviceType, Config.CITY_LINE)) {
-            if (baseOrder.endTime == 0){
+            if (baseOrder.scheduleFinishTime == 0){
                 holder.order_time.setText(TimeUtil.getTime(context.getString(R.string.time_five_format), baseOrder.bookTime * 1000));
             }else {
                 holder.order_time.setText(TimeUtil.getTime(context.getString(R.string.time_five_format), baseOrder.bookTime * 1000)
-                        +"-"+ TimeUtil.getTime("HH:mm", baseOrder.endTime * 1000));
+                        +"-"+ TimeUtil.getTime("HH:mm", baseOrder.scheduleFinishTime * 1000));
             }
         }else {
             holder.order_time.setText(TimeUtil.getTime(context.getString(R.string.time_five_format), baseOrder.bookTime * 1000));
