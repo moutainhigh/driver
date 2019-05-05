@@ -323,7 +323,9 @@ public interface ZCApiService {
                                               @Field("passengerName") String passengerName,
                                               @Field("passengerPhone") String passengerPhone,
                                               @Field("serviceType") String serviceType,
-                                              @Field("onePrice") boolean onePrice);
+                                              @Field("onePrice") boolean onePrice,
+                                              @Field("time") Integer time,
+                                              @Field("distance") Double distance);
 
 
 

@@ -36,4 +36,9 @@ public class Address implements Serializable{
      */
     public long orderId;
     public long created;
+
+    /**
+     * 城市名字
+     */
+    public String city;
 }

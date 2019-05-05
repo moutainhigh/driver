@@ -101,7 +101,7 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
     private Integer duration;
 
     /**
-     * //预估价格
+     * 预估价格
      */
     private Budget budget;
 
@@ -297,7 +297,9 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
                     passenger.name,
                     passenger.phone,
                     Config.ZHUANCHE,
-                    onePrice);
+                    onePrice,
+                    duration,
+                    distance);
         });
 
         et_money.addTextChangedListener(new MoneyWatcher(et_money).setLimit(2).setMaxMoney(9999));
@@ -311,12 +313,16 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
         start.longitude = startPoi.getLatLonPoint().getLongitude();
         start.type = 1;
         start.sort = 1;
+        start.city = startPoi.getCityName();
+
         Address end = new Address();
         end.address = endPoi.getTitle();
         end.latitude = endPoi.getLatLonPoint().getLatitude();
         end.longitude = endPoi.getLatLonPoint().getLongitude();
         end.type = 3;
         end.sort = 2;
+        end.city = endPoi.getCityName();
+
         listJson.add(start);
         listJson.add(end);
         return GsonUtil.toJson(listJson);

@@ -193,7 +193,9 @@ public interface CreateZCContract {
                          String passengerName,
                          String passengerPhone,
                          String serviceType,
-                         boolean onePrice);
+                         boolean onePrice,
+                         Integer time,
+                         Double distance);
     }
 
     interface Model {
@@ -263,7 +265,9 @@ public interface CreateZCContract {
                                                   String passengerName,
                                                   String passengerPhone,
                                                   String serviceType,
-                                                  boolean onePrice);
+                                                  boolean onePrice,
+                                                  Integer time,
+                                                  Double distance);
 
     }
 }

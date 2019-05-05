@@ -156,7 +156,9 @@ public class CreateZCPresenter implements CreateZCContract.Presenter {
                             String passengerName,
                             String passengerPhone,
                             String serviceType,
-                            boolean onePrice) {
+                            boolean onePrice,
+                            Integer time,
+                            Double distance) {
         view.getManager().add(model.createOrder(bookTime,
                 budgetFee,
                 businessId,
@@ -171,7 +173,9 @@ public class CreateZCPresenter implements CreateZCContract.Presenter {
                 passengerName,
                 passengerPhone,
                 serviceType,
-                onePrice).subscribe(
+                onePrice,
+                time,
+                distance).subscribe(
                 new MySubscriber<>(context, true, false, createOrderResult -> view.createSuc(createOrderResult))
         ));
     }
