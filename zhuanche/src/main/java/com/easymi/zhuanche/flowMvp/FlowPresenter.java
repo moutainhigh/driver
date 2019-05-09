@@ -484,7 +484,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void onCalculateRouteFailure(int i) {
-
+        view.showReCal();
     }
 
     /**
