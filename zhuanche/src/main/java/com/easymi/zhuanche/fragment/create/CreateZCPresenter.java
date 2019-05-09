@@ -136,8 +136,9 @@ public class CreateZCPresenter implements CreateZCContract.Presenter {
             }
         });
         RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(start, end);
+        //只考虑距离最短 不考虑是否拥堵等
         RouteSearch.DriveRouteQuery query = new RouteSearch.DriveRouteQuery(fromAndTo,
-                RouteSearch.DRIVING_MULTI_STRATEGY_FASTEST_SHORTEST, null, null, "");
+                RouteSearch.DRIVING_SINGLE_SHORTEST, null, null, "");
         routeSearch.calculateDriveRouteAsyn(query);
     }
 

@@ -416,6 +416,10 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
                 })));
     }
 
+    /**
+     *
+     * @param id  班次id
+     */
     @Override
     public void chechTickets(long id) {
         view.getManager().add(model.chechTickets(id).subscribe(new MySubscriber<>(context,
