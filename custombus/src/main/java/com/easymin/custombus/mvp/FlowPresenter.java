@@ -357,8 +357,8 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     @Override
     public void findBusOrderById(long id) {
         view.getManager().add(model.findBusOrderById(id).subscribe(new MySubscriber<>(context,
-                false,
-                false,
+                true,
+                true,
                 new HaveErrSubscriberListener<StationResult>() {
 
                     @Override

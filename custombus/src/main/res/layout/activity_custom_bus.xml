@@ -40,7 +40,7 @@
                     android:ellipsize="marquee"
                     android:gravity="right"
                     android:singleLine="true"
-                    android:text="古桥村"
+                    android:text=""
                     android:textColor="@color/white"
                     android:textSize="18dp"
                     android:textStyle="bold" />
@@ -60,7 +60,7 @@
                     android:ellipsize="marquee"
                     android:gravity="left"
                     android:singleLine="true"
-                    android:text="邯郸城"
+                    android:text=""
                     android:textColor="@color/white"
                     android:textSize="18dp"
                     android:textStyle="bold" />
@@ -71,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="2019年2月12日 06:30出发"
+                android:text=""
                 android:textColor="@color/white" />
         </LinearLayout>
 
