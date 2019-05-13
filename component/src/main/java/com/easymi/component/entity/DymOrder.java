@@ -233,6 +233,9 @@ public class DymOrder implements Serializable {
         values.put("nightMile", nightMile);
         values.put("nightTimePrice", nightTimePrice);
 
+        values.put("nightMileFee", nightMileFee);
+
+
         values.put("stageArrays", stageArrays);
         values.put("orderNo",orderNo);
 
@@ -376,6 +379,8 @@ public class DymOrder implements Serializable {
         orderInfo.nightTime = cursor.getInt(cursor.getColumnIndex("nightTime"));
         orderInfo.nightMile = cursor.getDouble(cursor.getColumnIndex("nightMile"));
         orderInfo.nightTimePrice = cursor.getDouble(cursor.getColumnIndex("nightTimePrice"));
+        orderInfo.nightMileFee = cursor.getDouble(cursor.getColumnIndex("nightMileFee"));
+
         orderInfo.passengerId = cursor.getLong(cursor.getColumnIndex("passengerId"));
 
         orderInfo.stageArrays = cursor.getString(cursor.getColumnIndex("stageArrays"));
@@ -432,6 +437,8 @@ public class DymOrder implements Serializable {
         values.put("nightTime", nightTime);
         values.put("nightMile", nightMile);
         values.put("nightTimePrice", nightTimePrice);
+        values.put("nightMileFee", nightMileFee);
+
 
         values.put("stageArrays", stageArrays);
 
@@ -471,6 +478,7 @@ public class DymOrder implements Serializable {
         values.put("nightTime", nightTime);
         values.put("nightMile", nightMile);
         values.put("nightTimePrice", nightTimePrice);
+        values.put("nightMileFee", nightMileFee);
 
         values.put("stageArrays", stageArrays);
 
