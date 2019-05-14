@@ -15,6 +15,7 @@ import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.entity.PushEmploy;
+import com.easymi.component.entity.Vehicle;
 import com.easymi.component.network.GsonUtil;
 import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
@@ -63,6 +64,12 @@ public class BuildPushUtil {
             pe.phone = employ.phone;
             pe.business = employ.serviceType;
             pe.modelId = employ.modelId;
+            if (Vehicle.exists(employ.id)){
+                Vehicle vehicle = Vehicle.findByEmployId(employ.id);
+                pe.vehicleNo = vehicle.vehicleNo;
+            }else {
+                pe.vehicleNo = "";
+            }
         } else {
             //司机信息异常不处理
             return null;

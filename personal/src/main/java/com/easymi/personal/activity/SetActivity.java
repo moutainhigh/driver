@@ -9,9 +9,7 @@ import android.view.View;
 import android.widget.ScrollView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-//import com.easymi.common.push.MQTTService;
 import com.easymi.common.mvp.work.WorkPresenter;
-import com.easymi.common.push.WorkTimeCounter;
 import com.easymi.common.util.GPSSetting;
 import com.easymi.component.Config;
 import com.easymi.component.activity.WebActivity;

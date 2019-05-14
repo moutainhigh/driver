@@ -29,4 +29,9 @@ public class PushEmploy {
      * 姓名
      */
     public String name;
+
+    /**
+     * 绑定车牌号
+     */
+    public String vehicleNo;
 }

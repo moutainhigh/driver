@@ -333,7 +333,6 @@ public class WorkPresenter implements WorkContract.Presenter {
     public void loadDataOnResume() {
         long driverId = EmUtil.getEmployId();
         loadEmploy(driverId);
-//        getAppSetting(driverId);//获取配置信息
         uploadTime(-1);
         PhoneUtil.checkGps(context);
         workStatistics();
@@ -409,6 +408,9 @@ public class WorkPresenter implements WorkContract.Presenter {
                 if (result.data != null && result.data.size() > 0) {
                     for (Vehicle vehicle : result.data) {
                         if (vehicle.serviceType.contains(driverService)) {
+
+                            vehicle.saveOrUpdate(employ.id);
+
                             employ.modelId = vehicle.vehicleModel;
                             employ.updateAll();
                         }
@@ -552,8 +554,7 @@ public class WorkPresenter implements WorkContract.Presenter {
         new RxManager().add(observable.subscribe(new MySubscriber<>(context, false,
                 true, result -> {
             if (result != null && result.workStatistics != null) {
-                //值已后台返回为准
-//                totalMinute = result.workStatistics.minute;
+
                 CountEvent event = new CountEvent();
                 event.finishCount = result.workStatistics.finishCount;
                 event.income = result.workStatistics.income;

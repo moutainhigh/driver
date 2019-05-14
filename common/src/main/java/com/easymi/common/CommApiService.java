@@ -15,6 +15,7 @@ import com.easymi.common.result.MultipleOrderResult;
 import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.GetFeeResult;
+import com.easymi.common.result.OnLineTimeResult;
 import com.easymi.common.result.PCOrderResult;
 import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.common.result.SettingResult;
@@ -576,4 +577,28 @@ public interface CommApiService {
     @POST("/api/v1/carpool/driver/schedule/finishSchedule")
     Observable<EmResult2<Object>> finishTask(
             @Field("scheduleId") long scheduleId);
+
+
+
+
+
+
+////////工作台工作时长统计
+
+
+    /**
+     * 获取司机在线时长
+     */
+    @GET("/api/v1/public/driver/driver_online_time")
+    Observable<OnLineTimeResult> getOnlineTime();
+
+
+    /**
+     * 上传司机在线时长接口
+     */
+    @FormUrlEncoded
+    @POST("/api/v1/public/driver/online_time")
+    Observable<EmResult> upLoadOnlineTime (@Field("time") long time);
+
+
 }
