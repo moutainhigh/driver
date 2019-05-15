@@ -90,7 +90,7 @@ public class WorkTimeCounter {
 
         observable.subscribe(new MySubscriber<>(context, false,
                 true, result -> {
-            if (result != null && result.object != 0) {
+            if (result != null ) {
 
                 totalMinute = (int) result.object;
 
