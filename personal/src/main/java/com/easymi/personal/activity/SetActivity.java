@@ -251,6 +251,7 @@ public class SetActivity extends RxBaseActivity {
                 true, new HaveErrSubscriberListener<EmResult>() {
             @Override
             public void onNext(EmResult emResult) {
+
                 EmUtil.employLogout(SetActivity.this);
             }
 
