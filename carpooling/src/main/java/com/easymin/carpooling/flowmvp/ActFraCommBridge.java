@@ -37,7 +37,7 @@ public interface ActFraCommBridge {
      * @param flag
      * @param num
      */
-    void addMarker(LatLng latLng, int flag, int num);
+    void addMarker(LatLng latLng, int flag, int num,int ticketNumber,String photo);
 
     /**
      * 自定义排序
@@ -153,4 +153,9 @@ public interface ActFraCommBridge {
      * @param orderId
      */
     void navi(LatLng latLng, Long orderId);
+
+    /**
+     * 购票乘客页面(不用CusListFragment是因为他们是两个不同的页面状态，顶部toolbar的事件都不一样)
+     */
+    void toPasTickets();
 }

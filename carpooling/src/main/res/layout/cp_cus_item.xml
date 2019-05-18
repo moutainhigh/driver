@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:gravity="center_vertical"
+    android:layout_marginTop="10dp"
+    android:layout_marginLeft="12dp"
+    android:layout_marginRight="12dp"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/sequence_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1"
+        android:textColor="#999999"
+        android:layout_marginLeft="18dp"
+        android:textSize="20sp"/>
+
+    <ImageView
+        android:id="@+id/cus_photo"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_margin="10dp"
+        android:src="@mipmap/photo_default"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/cus_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="刘子豪"
+            android:textColor="@color/black"
+            android:textSize="15sp"/>
+
+
+        <TextView
+            android:id="@+id/cp_ticket_num"
+            android:layout_below="@+id/cus_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="车票:1"
+            android:layout_marginTop="3dp"
+            android:textColor="#999999"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/status_text"
+            android:layout_toRightOf="@+id/cus_name"
+            android:layout_marginLeft="9dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/corner_status_called"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:text="已联系"/>
+    </RelativeLayout>
+
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_weight="1"/>
+
+    <ImageView
+        android:id="@+id/call_phone"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="18dp"
+        android:src="@mipmap/ic_zx_phone"/>
+
+</LinearLayout>

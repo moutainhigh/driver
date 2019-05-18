@@ -6,15 +6,15 @@
     android:background="#f7f7f7"
     android:clickable="true">
 
-    <Button
+    <TextView
         android:id="@+id/bottom_btn"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/btn_height"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_margin="10dp"
-        android:background="@drawable/corners_button_selector"
-        android:text="行程开始"
-        android:textColor="@color/white" />
+        android:text="正在接xxx"
+        android:textColor="#999999" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
