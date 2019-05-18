@@ -254,14 +254,12 @@ public class SplashActivity extends RxBaseActivity {
                 .setMessage("亲爱的司机师傅，为了您能正常使用软件，我们需要下列权限:\n"
                         + "获取位置权限-->方便管理人员根据位置为您派单\n"
                         + "读取手机状态权限-->司机与手机完成绑定防止他人登录\n"
-                        + "读写外部存储权限-->存放一些资源在外部存储\n"
-                        + "拨打电话权限-->联系客户与附近司机")
+                        + "读写外部存储权限-->存放一些资源在外部存储")
                 .setPositiveButton("好", (dialog1, which) -> {
                     rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION,
                             Manifest.permission.ACCESS_COARSE_LOCATION,
                             Manifest.permission.READ_PHONE_STATE,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            Manifest.permission.CALL_PHONE)
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
                             .subscribe(granted -> {
                                 if (granted) {
                                     checkForUpdate();

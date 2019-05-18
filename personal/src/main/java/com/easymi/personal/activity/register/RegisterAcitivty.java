@@ -8,9 +8,11 @@ import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -31,7 +33,9 @@ import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.utils.UIStatusBarHelper;
 import com.easymi.component.widget.LoadingButton;
+import com.easymi.component.widget.keyboard.SafeKeyboard;
 import com.easymi.personal.R;
+import com.easymi.personal.activity.LoginActivity;
 import com.easymi.personal.entity.Register;
 
 import java.util.Locale;
@@ -66,6 +70,7 @@ public class RegisterAcitivty extends RxBaseActivity {
      */
     private String randomNum;
 
+    SafeKeyboard safeKeyboard;
 
     @Override
     public boolean isEnableSwipe() {
@@ -81,8 +86,22 @@ public class RegisterAcitivty extends RxBaseActivity {
         return R.layout.activity_register;
     }
 
+    private void initKeyBoard() {
+        LinearLayout keyboardContainer = findViewById(R.id.keyboardViewPlace);
+
+
+        safeKeyboard = new SafeKeyboard(
+                RegisterAcitivty.this,
+                keyboardContainer, et_password);
+        safeKeyboard.setDelDrawable(RegisterAcitivty.this.getResources().getDrawable(R.drawable.icon_del));
+        safeKeyboard.setLowDrawable(RegisterAcitivty.this.getResources().getDrawable(R.drawable.icon_capital_default));
+        safeKeyboard.setUpDrawable(RegisterAcitivty.this.getResources().getDrawable(R.drawable.icon_capital_selected));
+
+    }
+
     @Override
     public void initViews(Bundle savedInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);//禁止截屏
         findById();
 
         initEdit();
@@ -90,6 +109,8 @@ public class RegisterAcitivty extends RxBaseActivity {
         initBox();
 
         getImgCode();
+
+        initKeyBoard();
 
         setLoginBtnEnable(false);
 

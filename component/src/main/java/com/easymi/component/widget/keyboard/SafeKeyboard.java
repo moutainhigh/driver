@@ -65,12 +65,12 @@ public class SafeKeyboard {
     private long lastTouchTime;
     private EditText mEditText;
 
-    public SafeKeyboard(Context mContext, LinearLayout layout, EditText mEditText, int id, int keyId) {
+    public SafeKeyboard(Context mContext, LinearLayout layout, EditText mEditText) {
         this.mContext = mContext;
         this.layout = layout;
         this.mEditText = mEditText;
-        this.keyboardContainerResId = id;
-        this.keyboardResId = keyId;
+        this.keyboardContainerResId = R.layout.layout_keyboard_containor;
+        this.keyboardResId = R.id.safeKeyboardLetter;
 
         initKeyboard();
         initAnimation();

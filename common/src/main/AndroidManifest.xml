@@ -2,8 +2,6 @@
     package="com.easymi.common">
 
     <!--阿里移动推送相关权限-->
-    <!--Android 6.0版本可去除，用于选举信息（通道复用）的同步-->
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <!--进行网络访问和网络状态监控相关的权限声明-->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -17,13 +15,8 @@
     <!--选举使用，当应用有删除或者更新时需要重新选举，复用推送通道-->
     <uses-permission android:name="android.permission.BROADCAST_PACKAGE_CHANGED" />
     <uses-permission android:name="android.permission.BROADCAST_PACKAGE_REPLACED" />
-    <uses-permission android:name="android.permission.RESTART_PACKAGES" />
     <!--补偿通道小米PUSH使用，不用可去除-->
     <uses-permission android:name="android.permission.GET_TASKS" />
-    <!--补偿通道GCM使用，不使用可去除-->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <!--允许监听启动完成事件-->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <!--允许访问震动器-->
     <uses-permission android:name="android.permission.VIBRATE" />
     <!-- 允许task重排序 -->
