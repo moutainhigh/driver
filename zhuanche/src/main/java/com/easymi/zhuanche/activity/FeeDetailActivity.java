@@ -2,7 +2,6 @@ package com.easymi.zhuanche.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -14,8 +13,8 @@ import com.easymi.component.entity.DymOrder;
 import com.easymi.component.network.GsonUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.zhuanche.R;
-import com.easymi.zhuanche.entity.ZCOrder;
 import com.easymi.zhuanche.entity.StageArrays;
+import com.easymi.zhuanche.entity.ZCOrder;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -40,8 +39,6 @@ public class FeeDetailActivity extends RxBaseActivity {
     TextView waitTime;
     TextView waitFee;
     TextView couponFee;
-
-    TextView couponType;
 
     TextView totalFee;
 
@@ -88,7 +85,6 @@ public class FeeDetailActivity extends RxBaseActivity {
         couponFee = findViewById(R.id.coupon_fee);
         totalFee = findViewById(R.id.total_fee);
         prepayFee = findViewById(R.id.prepay_fee);
-        couponType = findViewById(R.id.coupon_type);
 
         couponFeeCon = findViewById(R.id.coupon_con);
 
@@ -133,13 +129,17 @@ public class FeeDetailActivity extends RxBaseActivity {
         extraFee.setText(dymOrder.extraFee + getString(R.string.yuan));
         paymentFee.setText(dymOrder.paymentFee + getString(R.string.yuan));
 
-        if (zcOrder.coupon != null && (zcOrder.coupon.couponType == 1 || zcOrder.coupon.couponType == 2)) {
-            if (zcOrder.coupon.couponType == 2) {
-                couponType.setText("（" + zcOrder.coupon.deductible + getString(R.string.xianjin_coupon) + "）");
-            } else {
-                DecimalFormat df = new DecimalFormat("#0.0");
-                couponType.setText("（" + df.format(zcOrder.coupon.discount / 10) + getString(R.string.zhekou_coupon) + "）");
-            }
+//        if (zcOrder.coupon != null && (zcOrder.coupon.couponType == 1 || zcOrder.coupon.couponType == 2)) {
+//            if (zcOrder.coupon.couponType == 2) {
+//                couponType.setText("（" + zcOrder.coupon.deductible + getString(R.string.xianjin_coupon) + "）");
+//            } else {
+//                DecimalFormat df = new DecimalFormat("#0.0");
+//                couponType.setText("（" + df.format(zcOrder.coupon.discount / 10) + getString(R.string.zhekou_coupon) + "）");
+//            }
+//            couponFee.setText(dymOrder.couponFee + getString(R.string.yuan));
+//        }
+
+        if (dymOrder.couponFee != 0) {
             couponFee.setText(dymOrder.couponFee + getString(R.string.yuan));
         }
 

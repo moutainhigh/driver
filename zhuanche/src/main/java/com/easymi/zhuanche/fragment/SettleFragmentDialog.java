@@ -399,22 +399,23 @@ public class SettleFragmentDialog {
         if (canCouponMoney < dymOrder.minestMoney) {
             canCouponMoney = dymOrder.minestMoney;
         }
-        if (zcOrder.coupon != null) {
-            if (zcOrder.coupon.couponType == 2) {
-                dymOrder.couponFee = zcOrder.coupon.deductible;
-            } else if (zcOrder.coupon.couponType == 1) {
-                if ((canCouponMoney * (100 - zcOrder.coupon.discount) / 100) >= zcOrder.coupon.TopMoney){
-                    dymOrder.couponFee = zcOrder.coupon.TopMoney;
-                }else {
-                    dymOrder.couponFee = Double.parseDouble(df.format(canCouponMoney * (100 - zcOrder.coupon.discount) / 100));
-                }
-            }
-        }
-        double exls = Double.parseDouble(df.format(canCouponMoney - dymOrder.couponFee));//打折抵扣后应付的钱
-        if (exls < 0) {
-            exls = 0;//优惠券不退钱
-        }
-        dymOrder.orderShouldPay = Double.parseDouble(df.format(exls + paymentFee - dymOrder.prepay));
+//        if (zcOrder.coupon != null) {
+//            if (zcOrder.coupon.couponType == 2) {
+//                dymOrder.couponFee = zcOrder.coupon.deductible;
+//            } else if (zcOrder.coupon.couponType == 1) {
+//                if ((canCouponMoney * (100 - zcOrder.coupon.discount) / 100) >= zcOrder.coupon.TopMoney){
+//                    dymOrder.couponFee = zcOrder.coupon.TopMoney;
+//                }else {
+//                    dymOrder.couponFee = Double.parseDouble(df.format(canCouponMoney * (100 - zcOrder.coupon.discount) / 100));
+//                }
+//            }
+
+//        }
+//        double exls = Double.parseDouble(df.format(canCouponMoney - dymOrder.couponFee));//打折抵扣后应付的钱
+//        if (exls < 0) {
+//            exls = 0;//优惠券不退钱
+//        }
+//        dymOrder.orderShouldPay = Double.parseDouble(df.format(exls + paymentFee - dymOrder.prepay));
 
         if (context instanceof Activity) {
             ((Activity) context).runOnUiThread(new Runnable() {
