@@ -50,6 +50,7 @@ import com.amap.api.services.geocoder.RegeocodeResult;
 import com.easymi.cityline.R;
 import com.easymi.cityline.entity.MapPositionModel;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
 
@@ -182,7 +183,7 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
         }
         IntentFilter filter = new IntentFilter();
         filter.addAction(GEOFENCE_BROADCAST_ACTION);
-        registerReceiver(mGeoFenceReceiver, filter);
+        registerReceiver(mGeoFenceReceiver, filter, EmUtil.getBroadCastPermission(),null);
         /*
          * 创建pendingIntent
          */

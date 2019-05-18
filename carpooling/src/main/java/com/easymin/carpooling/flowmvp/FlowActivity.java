@@ -1012,12 +1012,12 @@ public class FlowActivity extends RxBaseActivity implements
         IntentFilter filter = new IntentFilter();
         filter.addAction(Config.BROAD_CANCEL_ORDER);
         filter.addAction(Config.BROAD_BACK_ORDER);
-        registerReceiver(cancelOrderReceiver, filter);
+        registerReceiver(cancelOrderReceiver, filter,EmUtil.getBroadCastPermission(),null);
 
         scheduleTurnReceiver = new ScheduleTurnReceiver(this);
         IntentFilter filter1 = new IntentFilter();
         filter1.addAction(Config.SCHEDULE_FINISH);
-        registerReceiver(scheduleTurnReceiver, filter1);
+        registerReceiver(scheduleTurnReceiver, filter1,EmUtil.getBroadCastPermission(),null);
     }
 
     @Override

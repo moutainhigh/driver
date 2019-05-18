@@ -141,6 +141,8 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setUseWideViewPort(true);
         webView.getSettings().setLoadWithOverviewMode(true);
+        webView.getSettings().setAllowFileAccess(false);
+        webView.getSettings().setSavePassword(false);
 
         //解决部分H5中的一些控件标签可能使用后android中不支持 造成的白屏不显示问题
         webView.getSettings().setDomStorageEnabled(true);

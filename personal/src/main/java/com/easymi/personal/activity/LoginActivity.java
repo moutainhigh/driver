@@ -13,9 +13,12 @@ import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -51,6 +54,7 @@ import com.easymi.component.utils.SysUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.utils.UIStatusBarHelper;
 import com.easymi.component.widget.LoadingButton;
+import com.easymi.component.widget.keyboard.SafeKeyboard;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
 import com.easymi.personal.activity.register.RegisterAcitivty;
@@ -86,7 +90,7 @@ public class LoginActivity extends RxBaseActivity {
     TextView textAgreement;
 
     private Location mlocation;
-
+    private SafeKeyboard safeKeyboard;
     @Override
     public int getLayoutId() {
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -98,6 +102,7 @@ public class LoginActivity extends RxBaseActivity {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
+
 
         Intent intent222 = new Intent(Intent.ACTION_VIEW, Uri.parse("customscheme://com.rvakva.travel.publicdriver/local_push?title=华为测试"));
         intent222.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -158,6 +163,18 @@ public class LoginActivity extends RxBaseActivity {
                 mlocation = location;
             }
         });
+
+        LinearLayout keyboardContainer = findViewById(R.id.keyboardViewPlace);
+        View view = getLayoutInflater().inflate(R.layout.layout_keyboard_containor, null);
+
+        safeKeyboard = new SafeKeyboard(
+                this,
+                keyboardContainer, editPsw ,
+                R.layout.layout_keyboard_containor,
+                view.findViewById(R.id.safeKeyboardLetter).getId());
+        safeKeyboard.setDelDrawable(this.getResources().getDrawable(R.drawable.icon_del));
+        safeKeyboard.setLowDrawable(this.getResources().getDrawable(R.drawable.icon_capital_default));
+        safeKeyboard.setUpDrawable(this.getResources().getDrawable(R.drawable.icon_capital_selected));
     }
 
     /**

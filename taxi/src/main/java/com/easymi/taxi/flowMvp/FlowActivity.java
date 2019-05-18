@@ -1102,16 +1102,16 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         traceReceiver = new TraceReceiver(this);
         IntentFilter filter2 = new IntentFilter();
         filter2.addAction(LocService.BROAD_TRACE_SUC);
-        registerReceiver(traceReceiver, filter2);
+        registerReceiver(traceReceiver, filter2,EmUtil.getBroadCastPermission(),null);
 
         cancelOrderReceiver = new CancelOrderReceiver(this);
         IntentFilter filter = new IntentFilter();
         filter.addAction(Config.BROAD_CANCEL_ORDER);
         filter.addAction(Config.BROAD_BACK_ORDER);
-        registerReceiver(cancelOrderReceiver, filter);
+        registerReceiver(cancelOrderReceiver, filter,EmUtil.getBroadCastPermission(),null);
 
         orderFinishReceiver = new OrderFinishReceiver(this);
-        registerReceiver(orderFinishReceiver, new IntentFilter(Config.BROAD_FINISH_ORDER));
+        registerReceiver(orderFinishReceiver, new IntentFilter(Config.BROAD_FINISH_ORDER),EmUtil.getBroadCastPermission(),null);
     }
 
     boolean canGoOld = false;

@@ -1000,7 +1000,7 @@ public class FlowActivity extends RxBaseActivity implements
         IntentFilter filter = new IntentFilter();
         filter.addAction(Config.BROAD_CANCEL_ORDER);
         filter.addAction(Config.BROAD_BACK_ORDER);
-        registerReceiver(cancelOrderReceiver, filter);
+        registerReceiver(cancelOrderReceiver, filter,EmUtil.getBroadCastPermission(),null);
     }
 
     @Override

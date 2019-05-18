@@ -17,6 +17,7 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.CountDownUtils;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.widget.CusToolbar;
@@ -149,12 +150,12 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View,
         IntentFilter filter = new IntentFilter();
         filter.addAction(Config.BROAD_CANCEL_ORDER);
         filter.addAction(Config.BROAD_BACK_ORDER);
-        registerReceiver(cancelOrderReceiver, filter);
+        registerReceiver(cancelOrderReceiver, filter, EmUtil.getBroadCastPermission(),null);
 
         scheduleTurnReceiver = new ScheduleTurnReceiver(this);
         IntentFilter filter1 = new IntentFilter();
         filter1.addAction(Config.SCHEDULE_FINISH);
-        registerReceiver(scheduleTurnReceiver, filter1);
+        registerReceiver(scheduleTurnReceiver, filter1,EmUtil.getBroadCastPermission(),null);
     }
 
     /**

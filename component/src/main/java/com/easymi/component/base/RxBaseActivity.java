@@ -138,21 +138,21 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
         gpsReceiver = new GpsReceiver();
         gpsReceiver.setListener(this);
         IntentFilter intentFilter = new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION);
-        registerReceiver(gpsReceiver, intentFilter);
+        registerReceiver(gpsReceiver, intentFilter,EmUtil.getBroadCastPermission(),null);
 
         netChangeReceiver = new NetWorkChangeReceiver();
         netChangeReceiver.setEvent(this);
         IntentFilter netFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(netChangeReceiver, netFilter);
+        registerReceiver(netChangeReceiver, netFilter,EmUtil.getBroadCastPermission(),null);
 
 
         tiredReceiver = new TiredReceiver();
         IntentFilter tiredFilter = new IntentFilter(Config.TIRED_NOTICE);
-        registerReceiver(tiredReceiver, tiredFilter);
+        registerReceiver(tiredReceiver, tiredFilter,EmUtil.getBroadCastPermission(),null);
 
         customReceiver = new HttpCustomReceiver();
         IntentFilter customFilter = new IntentFilter(Config.HTTP_CUSTOM);
-        registerReceiver(customReceiver, customFilter);
+        registerReceiver(customReceiver, customFilter,EmUtil.getBroadCastPermission(),null);
     }
 
     @Override

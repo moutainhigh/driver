@@ -131,4 +131,10 @@ public class EmUtil {
 //            e.printStackTrace();
 //        }
     }
+
+    public static String getBroadCastPermission(){
+        String s = XApp.getInstance().getPackageName()+".broadcast.permission";//与app模块下的permission一致
+        Log.e("permission",s);
+        return s;
+    }
 }
