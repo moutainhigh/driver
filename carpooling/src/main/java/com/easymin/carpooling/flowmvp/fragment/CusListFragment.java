@@ -142,12 +142,7 @@ public class CusListFragment extends RxBaseFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
         cusListAdapter = new CusListAdapter(getActivity(), 1);
-        cusListAdapter.setOnCallClickListener(new CusListAdapter.OnCallClickListener() {
-            @Override
-            public void onCallClick(CarpoolOrder order, int position) {
-                PhoneUtil.call(getActivity(), order.passengerPhone);
-            }
-        });
+        cusListAdapter.setOnCallClickListener((order, position) -> PhoneUtil.call(getActivity(), order.passengerPhone));
         recyclerView.setAdapter(cusListAdapter);
 
         changeUi();

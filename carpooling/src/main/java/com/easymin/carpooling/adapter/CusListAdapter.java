@@ -77,7 +77,7 @@ public class CusListAdapter extends RecyclerView.Adapter<CusListAdapter.ViewHold
         CarpoolOrder carpoolOrder = carpoolOrders.get(position);
         holder.sequenceNum.setText(String.valueOf(carpoolOrder.num));
         holder.cusName.setText(carpoolOrder.passengerName);
-        holder.ticketNum.setText("车票:"+carpoolOrder.ticketNumber);
+        holder.ticketNum.setText("车票:" + carpoolOrder.ticketNumber);
         if (flag == 0) {//PasTickets
             if (carpoolOrder.isContract == 1) {
                 holder.status.setVisibility(View.VISIBLE);
@@ -91,14 +91,16 @@ public class CusListAdapter extends RecyclerView.Adapter<CusListAdapter.ViewHold
         } else if (flag == 1) { //CusList
             holder.status.setVisibility(View.VISIBLE);
             holder.status.setText(carpoolOrder.getOrderStatus());
-            holder.callPhone.setVisibility(View.VISIBLE);
+            holder.callPhone.setVisibility(View.GONE);
             if (carpoolOrder.customeStatus == 0 || carpoolOrder.customeStatus == 3) {
                 holder.status.setBackgroundResource(R.drawable.corner_status_not_accept);
                 holder.status.setTextColor(Color.parseColor("#FFFFFF"));
+                if (carpoolOrder.customeStatus == 0) {
+                    holder.callPhone.setVisibility(View.VISIBLE);
+                }
             } else if (carpoolOrder.customeStatus == 1 || carpoolOrder.customeStatus == 4) {
                 holder.status.setBackgroundResource(R.drawable.corner_status_called);
                 holder.status.setTextColor(Color.parseColor("#999999"));
-                holder.callPhone.setVisibility(View.GONE);//已接、已送隐藏拨打电话
             } else if (carpoolOrder.customeStatus == 2 || carpoolOrder.customeStatus == 5) {
                 holder.status.setBackgroundResource(R.drawable.corner_status_jumped);
                 holder.status.setTextColor(Color.parseColor("#FFFFFF"));
@@ -132,10 +134,8 @@ public class CusListAdapter extends RecyclerView.Adapter<CusListAdapter.ViewHold
                 .into(holder.cusPhoto);
 
         holder.callPhone.setOnClickListener(v -> {
-            if (flag == 0) {
-                if(null != onCallClickListener){
-                    onCallClickListener.onCallClick(carpoolOrder,position);
-                }
+            if (null != onCallClickListener) {
+                onCallClickListener.onCallClick(carpoolOrder, position);
             }
         });
 
@@ -169,8 +169,8 @@ public class CusListAdapter extends RecyclerView.Adapter<CusListAdapter.ViewHold
         }
     }
 
-    public interface OnCallClickListener{
-        void onCallClick(CarpoolOrder order,int position);
+    public interface OnCallClickListener {
+        void onCallClick(CarpoolOrder order, int position);
     }
 
 }
