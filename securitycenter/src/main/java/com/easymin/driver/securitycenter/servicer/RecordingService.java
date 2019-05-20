@@ -6,15 +6,11 @@ import android.media.MediaRecorder;
 import android.os.Environment;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
-import android.util.Log;
 
 import com.easymin.driver.securitycenter.R;
 
 import java.io.File;
 import java.io.IOException;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
@@ -73,7 +69,6 @@ public class RecordingService extends Service {
             mRecorder.start();
             mStartingTimeMillis = System.currentTimeMillis();
         } catch (IOException e) {
-            Log.e(TAG, "prepare() failed");
         }
     }
 

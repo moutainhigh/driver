@@ -1354,7 +1354,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
 //    @Override
 //    public void onConfigurationChanged(Configuration newConfig) {
-//        android.util.Log.e("lifecycle", "onConfigurationChanged()");
+//        com.easymi.component.utils.Log.e("lifecycle", "onConfigurationChanged()");
 //        super.onConfigurationChanged(newConfig);
 //        if (System.currentTimeMillis() - lastChangeTime > 1000) {
 //            lastChangeTime = System.currentTimeMillis();
@@ -1420,7 +1420,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 //            if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN || !canGoOld) {
 //                return;
 //            }
-//            android.util.Log.e("TAG", "orientation = " + orientation);
+//            com.easymi.component.utils.Log.e("TAG", "orientation = " + orientation);
 //            if ((orientation > 70 && orientation < 110) || (orientation > 250 && orientation < 290)) {
 //                toWhatOldByOrder(taxiOrder);
 //            }

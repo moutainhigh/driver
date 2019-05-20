@@ -34,6 +34,7 @@ import com.easymi.component.utils.NetUtil;
 import com.easymi.component.utils.RootUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
+import com.easymi.component.utils.WifiProxyUtil;
 import com.easymi.component.utils.emulator.EmulatorCheckUtil;
 
 import java.io.IOException;
@@ -195,6 +196,18 @@ public class SplashActivity extends RxBaseActivity {
                     })
                     .setNegativeButton("退出应用", (dialog1, which) -> {
                         ActManager.getInstance().finishAllActivity();
+                    })
+                    .create();
+            dialog.setCancelable(false);
+            dialog.show();
+            return;
+        }
+        if (WifiProxyUtil.isWifiProxy(this)) {
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle("提示")
+                    .setMessage("请关闭代理后再使用该程序")
+                    .setPositiveButton(R.string.ok, (dialog1, which) -> {
+                        finish();
                     })
                     .create();
             dialog.setCancelable(false);

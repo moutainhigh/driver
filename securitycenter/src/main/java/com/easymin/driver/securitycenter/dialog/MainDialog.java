@@ -2,14 +2,12 @@ package com.easymin.driver.securitycenter.dialog;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.easymin.driver.securitycenter.CenterConfig;
 import com.easymin.driver.securitycenter.ComService;

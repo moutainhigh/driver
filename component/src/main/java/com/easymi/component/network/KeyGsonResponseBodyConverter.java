@@ -1,6 +1,6 @@
 package com.easymi.component.network;
 
-import android.util.Log;
+import com.easymi.component.utils.Log;
 
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;

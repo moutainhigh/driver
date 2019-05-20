@@ -3,27 +3,12 @@ package com.easymin.driver.securitycenter.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
-import android.os.SystemClock;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import com.easymin.driver.securitycenter.CenterConfig;
-import com.easymin.driver.securitycenter.ComService;
-import com.easymin.driver.securitycenter.R;
-import com.easymin.driver.securitycenter.network.ApiManager;
-import com.easymin.driver.securitycenter.network.HttpResultFunc;
-import com.easymin.driver.securitycenter.network.MySubscriber;
-import com.easymin.driver.securitycenter.result.EmResult;
-import com.easymin.driver.securitycenter.rxmvp.RxManager;
 import com.easymin.driver.securitycenter.servicer.RecordingService;
 
 import java.io.File;
-
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -49,7 +34,7 @@ public class AudioUtil {
             context.stopService(intent);
 
             String filePaht = context.getSharedPreferences("sp_name_audio", MODE_PRIVATE).getString("audio_path", "");
-            Log.e("hufeng",filePaht);
+
 
             if (!TextUtils.isEmpty(filePaht)){
                 CenterUtil centerUtil = new CenterUtil(context);

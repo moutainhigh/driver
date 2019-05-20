@@ -2,7 +2,7 @@
 package com.easymi.component.utils;
 
 import android.content.Context;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 
 
 import com.easymi.component.R;

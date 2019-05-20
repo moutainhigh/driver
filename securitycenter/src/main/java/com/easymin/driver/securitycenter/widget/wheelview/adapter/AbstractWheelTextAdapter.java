@@ -17,7 +17,6 @@ package com.easymin.driver.securitycenter.widget.wheelview.adapter;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -278,7 +277,6 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
                 text = (TextView) view.findViewById(textResource);
             }
         } catch (ClassCastException e) {
-            Log.e("AbstractWheelAdapter", "You must supply a resource ID for a TextView");
             throw new IllegalStateException("AbstractWheelAdapter requires the resource ID to be a TextView", e);
         }
 

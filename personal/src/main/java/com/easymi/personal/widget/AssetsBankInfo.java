@@ -10,7 +10,7 @@ package com.easymi.personal.widget;
  */
 
 import android.content.Context;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
