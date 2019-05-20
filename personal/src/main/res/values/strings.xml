@@ -28,6 +28,8 @@
     <string name="my_message">我的消息</string>
     <string name="person_set">设置</string>
     <string name="person_tuiguang">推广</string>
+    <string name="person_card">我的名片</string>
+    <string name="person_center">个人中心</string>
 
     <!-- 设置str -->
     <string name="set_change_psw">修改密码</string>

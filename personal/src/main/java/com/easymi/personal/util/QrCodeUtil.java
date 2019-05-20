@@ -44,6 +44,7 @@ public class QrCodeUtil {
      * @return
      */
     public static Bitmap createQRImage(String url, int QR_WIDTH, int QR_HEIGHT) {
+        Log.e("hufeng",QR_WIDTH+","+QR_HEIGHT);
         try {
             //判断URL合法性
             if (url == null || "".equals(url) || url.length() < 1) {

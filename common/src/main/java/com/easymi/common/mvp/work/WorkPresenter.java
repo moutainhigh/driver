@@ -402,7 +402,7 @@ public class WorkPresenter implements WorkContract.Presenter {
         new RxManager().add(observable.subscribe(new MySubscriber<>(context, false,
                 true, result -> {
             if (result == null || result.getCode() != 1) {
-                ToastUtil.showMessage(context, "未绑定车辆车型，不能接单");
+                ToastUtil.showMessage(context, "未绑定该业务车辆，不能接单");
             } else {
                 String driverService = EmUtil.getEmployInfo().serviceType;
                 if (result.data != null && result.data.size() > 0) {
@@ -420,7 +420,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                             || employ.serviceType.contains(Config.TAXI)
 //                            || employ.serviceType.contains(Config.CITY_LINE)
                             )
-                        ToastUtil.showMessage(context, "未绑定车辆车型，不能接单");
+                        ToastUtil.showMessage(context, "未绑定该业务车辆，不能接单");
                 }
             }
         })));

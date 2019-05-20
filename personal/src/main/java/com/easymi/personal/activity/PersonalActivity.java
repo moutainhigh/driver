@@ -17,6 +17,7 @@ import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.Employ;
+import com.easymi.component.entity.Vehicle;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
@@ -39,6 +40,7 @@ import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: PersonalActivity
+ *
  * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description: 个人中心接 main
@@ -49,25 +51,33 @@ public class PersonalActivity extends RxBaseActivity {
 
     TextView driverName;
     TextView userName;
-    TextView driverBalance;
 
     ImageView driverPhoto;
-    ImageView driverTuiguang;
 
-    RatingBar ratingBar;
-    ImageView back;
-
+    /**
+     * 自定义标题栏
+     */
+    CusToolbar cusToolbar;
+    /**
+     * 司机星级
+     */
+    TextView tv_star;
+    /**
+     * 司机车辆信息
+     */
+    TextView tv_car_info;
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_personal;
+        return R.layout.activity_person_center;
     }
 
     @Override
     public void initToolBar() {
         super.initToolBar();
-        back = findViewById(R.id.left_icon);
-        back.setOnClickListener(view -> finish());
+
+        cusToolbar.setLeftBack(view -> finish());
+        cusToolbar.setTitle(R.string.person_center);
     }
 
     @Override
@@ -75,22 +85,15 @@ public class PersonalActivity extends RxBaseActivity {
         driverName = findViewById(R.id.real_name);
         userName = findViewById(R.id.user_name);
 
-        ratingBar = findViewById(R.id.rating_bar);
+
+        cusToolbar = findViewById(R.id.cus_toolbar);
+        tv_star = findViewById(R.id.tv_star);
+        tv_car_info = findViewById(R.id.tv_car_info);
 
         driverPhoto = findViewById(R.id.driver_photo);
 
-        driverTuiguang = findViewById(R.id.driver_tuiguang);
-
-        driverBalance = findViewById(R.id.driver_balance);
-
-        driverTuiguang.setOnClickListener(v -> {
-            Intent intent = new Intent(PersonalActivity.this, ShareActivity.class);
-            startActivity(intent);
-        });
-
         Employ employ = EmUtil.getEmployInfo();
         showBase(employ);
-
     }
 
     @Override
@@ -101,6 +104,7 @@ public class PersonalActivity extends RxBaseActivity {
 
     /**
      * 获取司机信息
+     *
      * @param driverId
      */
     private void getDriverInfo(Long driverId) {
@@ -112,9 +116,8 @@ public class PersonalActivity extends RxBaseActivity {
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, true, loginResult -> {
             Employ employ = loginResult.data;
-            Log.e("okhttp", employ.toString());
             employ.saveOrUpdate();
-            CsEditor editor =  new CsEditor();
+            CsEditor editor = new CsEditor();
             editor.putLong(Config.SP_DRIVERID, employ.id);
             editor.apply();
 
@@ -124,14 +127,21 @@ public class PersonalActivity extends RxBaseActivity {
 
     /**
      * 展示司机基本信息
+     *
      * @param employ
      */
     private void showBase(Employ employ) {
         if (employ != null) {
             driverName.setText(employ.realName);
-            userName.setText("("+employ.userName+")");
-            ratingBar.setStarMark((float) (employ.star == 0 ? 5.0 : employ.star));
-            driverBalance.setText(String.valueOf(employ.balance));
+            userName.setText( employ.userName );
+            tv_star.setText((employ.star == 0 ? 5.0 : employ.star)+"");
+
+            if (Vehicle.exists(employ.id)){
+                Vehicle vehicle = Vehicle.findByEmployId(employ.id);
+                tv_car_info.setText(vehicle.brand+" "+vehicle.plateColor+" "+vehicle.vehicleNo);
+            }else {
+                tv_car_info.setText("未绑定改业务车辆");
+            }
 
             if (StringUtils.isNotBlank(employ.portraitPath)) {
                 RequestOptions options = new RequestOptions()
@@ -149,6 +159,7 @@ public class PersonalActivity extends RxBaseActivity {
 
     /**
      * 跳转流水
+     *
      * @param view
      */
     public void toLiushui(View view) {
@@ -159,6 +170,7 @@ public class PersonalActivity extends RxBaseActivity {
 
     /**
      * 跳转我的钱包
+     *
      * @param view
      */
     public void toPocket(View view) {
@@ -167,16 +179,8 @@ public class PersonalActivity extends RxBaseActivity {
     }
 
     /**
-     * 跳转推荐
-     * @param view
-     */
-    public void toRefer(View view) {
-        Intent intent = new Intent(this, RecommendMoneyActivity.class);
-        startActivity(intent);
-    }
-
-    /**
      * 跳转评价
+     *
      * @param view
      */
     public void toEva(View view) {
@@ -186,6 +190,7 @@ public class PersonalActivity extends RxBaseActivity {
 
     /**
      * 消息中心
+     *
      * @param view
      */
     public void toMessage(View view) {
@@ -195,6 +200,7 @@ public class PersonalActivity extends RxBaseActivity {
 
     /**
      * 设置
+     *
      * @param view
      */
     public void toSet(View view) {
@@ -203,20 +209,12 @@ public class PersonalActivity extends RxBaseActivity {
     }
 
     /**
-     * 统计
+     * 我的名片
+     *
      * @param view
      */
-    public void toStats(View view) {
-        Intent intent = new Intent(this, StatsActivity.class);
-        startActivity(intent);
-    }
-
-    /**
-     * 车辆信息
-     * @param view
-     */
-    public void toCarInfo(View view) {
-        Intent intent = new Intent(this, CarInfoActivity.class);
+    public void toCard(View view) {
+        Intent intent = new Intent(this, MyCardActivity.class);
         startActivity(intent);
     }
 
