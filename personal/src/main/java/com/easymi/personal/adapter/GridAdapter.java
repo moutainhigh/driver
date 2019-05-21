@@ -12,15 +12,10 @@ import android.widget.TextView;
 
 import com.easymi.component.Config;
 import com.easymi.component.activity.WebActivity;
-import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.personal.R;
-import com.easymi.personal.activity.ArticleActivity;
-import com.easymi.personal.activity.LoginActivity;
 import com.easymi.personal.activity.NearWcActivity;
-import com.easymi.personal.activity.SetActivity;
-import com.easymi.personal.activity.SysCheck2Activity;
 import com.easymi.personal.activity.SysCheckActivity;
 import com.easymi.personal.activity.WeatherActivity;
 

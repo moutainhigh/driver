@@ -1,19 +1,11 @@
 package com.easymi.common.mvp.work;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 
-import com.baidu.tts.client.SpeechError;
-import com.baidu.tts.client.SpeechSynthesizer;
-import com.baidu.tts.client.SpeechSynthesizerListener;
-import com.baidu.tts.client.TtsMode;
 import com.easymi.common.CommApiService;
 import com.easymi.common.R;
 import com.easymi.common.entity.AnnAndNotice;
-import com.easymi.common.entity.CityLine;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.push.CountEvent;
@@ -49,22 +41,16 @@ import com.easymi.component.utils.AesUtil;
 import com.easymi.component.utils.CsEditor;
 import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
-import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
-import com.easymi.component.utils.baidu_tts.AutoCheck;
-import com.easymi.component.utils.baidu_tts.InitConfig;
 import com.easymi.component.widget.LoadingButton;
 import com.easymin.driver.securitycenter.utils.CenterUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -93,57 +79,6 @@ public class WorkPresenter implements WorkContract.Presenter {
         this.context = context;
         this.view = view;
         model = new WorkModel();
-        Map<String,String> map = new HashMap<>();
-        map.put(SpeechSynthesizer.PARAM_SPEAKER, "0");
-        map.put(SpeechSynthesizer.PARAM_VOLUME, "9");
-        map.put(SpeechSynthesizer.PARAM_PITCH, "5");
-        map.put(SpeechSynthesizer.PARAM_SPEED, "6");
-        map.put(SpeechSynthesizer.PARAM_AUDIO_RATE, SpeechSynthesizer.AUDIO_BITRATE_AMR_15K85);
-        map.put(SpeechSynthesizer.PARAM_AUDIO_ENCODE, SpeechSynthesizer.AUDIO_ENCODE_AMR);
-        InitConfig initConfig = new InitConfig(Config.TTS_APP_ID, Config.TTS_APP_KEY, Config.TTS_APP_SECRET, TtsMode.ONLINE, map, new SpeechSynthesizerListener() {
-            @Override
-            public void onSynthesizeStart(String s) {
-
-            }
-
-            @Override
-            public void onSynthesizeDataArrived(String s, byte[] bytes, int i) {
-
-            }
-
-            @Override
-            public void onSynthesizeFinish(String s) {
-
-            }
-
-            @Override
-            public void onSpeechStart(String s) {
-
-            }
-
-            @Override
-            public void onSpeechProgressChanged(String s, int i) {
-
-            }
-
-            @Override
-            public void onSpeechFinish(String s) {
-
-            }
-
-            @Override
-            public void onError(String s, SpeechError speechError) {
-
-            }
-        });
-        AutoCheck.getInstance(context).check(initConfig,new Handler(new Handler.Callback() {
-            @Override
-            public boolean handleMessage(Message msg) {
-                AutoCheck autoCheck = (AutoCheck) msg.obj;
-                Log.e("error",autoCheck.obtainAllMessage());
-                return false;
-            }
-        }));
     }
 
     /**

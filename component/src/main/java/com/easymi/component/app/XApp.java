@@ -10,7 +10,6 @@ import android.support.annotation.StringRes;
 import android.support.multidex.MultiDexApplication;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.baidu.tts.auth.AuthInfo;
 import com.baidu.tts.client.SpeechError;
 import com.baidu.tts.client.SpeechSynthesizer;
 import com.baidu.tts.client.SpeechSynthesizerListener;
@@ -20,16 +19,19 @@ import com.easymi.component.Config;
 import com.easymi.component.R;
 import com.easymi.component.db.SqliteHelper;
 import com.easymi.component.loc.LocService;
+import com.easymi.component.tts.InitConfig;
+import com.easymi.component.tts.NonBlockSyntherizer;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.SysUtil;
-import com.easymi.component.utils.ToastUtil;
 import com.jaredrummler.android.processes.AndroidProcesses;
 import com.tencent.bugly.crashreport.CrashReport;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author xyin
@@ -62,9 +64,7 @@ public class XApp extends MultiDexApplication {
      */
     private static XApp instance;
 
-    private static boolean isSpeaking = false;//是否正在播放语音
-
-    public static SpeechSynthesizer mSpeechSynthesizer;
+    public NonBlockSyntherizer mSpeechSynthesizer;
 
     AudioManager audioManager;
 
@@ -76,6 +76,7 @@ public class XApp extends MultiDexApplication {
      * 是否拥有焦点 通过此变量来判断player是否在正常播放
      */
     private boolean haveFoucs = false;
+    private boolean isSpeeching;
 
     @Override
     public void onCreate() {
@@ -93,7 +94,7 @@ public class XApp extends MultiDexApplication {
         ARouter.init(this);
         SqliteHelper.init(this);
 
-        initBaiduTTs(false, "");
+        initBaiduTTs();
 
         initDataBase();
 
@@ -158,17 +159,72 @@ public class XApp extends MultiDexApplication {
         return str;
     }
 
+    private Map<String, String> getParams() {
+        Map<String, String> params = new HashMap<String, String>();
+        // 以下参数均为选填
+        // 设置在线发声音人： 0 普通女声（默认） 1 普通男声 2 特别男声 3 情感男声<度逍遥> 4 情感儿童声<度丫丫>
+        params.put(SpeechSynthesizer.PARAM_SPEAKER, "0");
+        // 设置合成的音量，0-9 ，默认 5
+        params.put(SpeechSynthesizer.PARAM_VOLUME, "9");
+        // 设置合成的语速，0-9 ，默认 5
+        params.put(SpeechSynthesizer.PARAM_SPEED, "5");
+        // 设置合成的语调，0-9 ，默认 5
+        params.put(SpeechSynthesizer.PARAM_PITCH, "5");
+        return params;
+    }
+
     /**
      * 初始化讯飞语音
      */
-    private void initBaiduTTs(boolean speakNow, String msg) {
-        mSpeechSynthesizer = SpeechSynthesizer.getInstance();
-        mSpeechSynthesizer.setContext(this); // this 是Context的之类，如Activity
+    private void initBaiduTTs() {
+        // 设置初始化参数
+        // 此处可以改为 含有您业务逻辑的SpeechSynthesizerListener的实现类
+        SpeechSynthesizerListener listener = new SpeechSynthesizerListener() {
+            @Override
+            public void onSynthesizeStart(String s) {
 
+            }
 
-        if (setTtsParam() && speakNow) {
-            syntheticVoice(msg);
-        }
+            @Override
+            public void onSynthesizeDataArrived(String s, byte[] bytes, int i) {
+
+            }
+
+            @Override
+            public void onSynthesizeFinish(String s) {
+
+            }
+
+            @Override
+            public void onSpeechStart(String s) {
+                isSpeeching = true;
+            }
+
+            @Override
+            public void onSpeechProgressChanged(String s, int i) {
+
+            }
+
+            @Override
+            public void onSpeechFinish(String s) {
+                isSpeeching = false;
+                if (voiceList != null && !voiceList.isEmpty()) {
+                    syntheticVoice(voiceList.removeFirst());
+                }
+                abandonFocus();
+            }
+
+            @Override
+            public void onError(String s, SpeechError speechError) {
+
+            }
+        };
+
+        Map<String, String> params = getParams();
+
+        InitConfig initConfig = new InitConfig(Config.TTS_APP_ID, Config.TTS_APP_KEY, Config.TTS_APP_SECRET, TtsMode.ONLINE, params, listener);
+
+        mSpeechSynthesizer = new NonBlockSyntherizer(this, initConfig, null); // 此处可以改为MySyntherizer 了解调用过程
 
 
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -215,78 +271,6 @@ public class XApp extends MultiDexApplication {
                     audioManager.abandonAudioFocus(mFocusChangeListener);
         }
         return false;
-    }
-
-    private boolean setTtsParam() {
-        if (null == mSpeechSynthesizer) {
-            return false;
-        }
-
-        // 请替换为语音开发者平台上注册应用得到的App ID (离线授权)
-        mSpeechSynthesizer.setAppId(Config.TTS_APP_ID);
-        // 请替换为语音开发者平台注册应用得到的apikey和secretkey (在线授权)
-        mSpeechSynthesizer.setApiKey(Config.TTS_APP_KEY,
-                Config.TTS_APP_SECRET);
-        // 发音人（在线引擎），可用参数为0,1,2,3。。。（服务器端会动态增加，各值含义参考文档，以文档说明为准。0--普通女声，1--普通男声，2--特别男声，3--情感男声。。。）
-        mSpeechSynthesizer.setParam(SpeechSynthesizer.PARAM_SPEAKER, "0");
-        mSpeechSynthesizer.setParam(SpeechSynthesizer.PARAM_VOLUME, "9");
-        mSpeechSynthesizer.setParam(SpeechSynthesizer.PARAM_PITCH, "5");
-        mSpeechSynthesizer.setParam(SpeechSynthesizer.PARAM_SPEED, "6");
-        mSpeechSynthesizer.setStereoVolume(1.0f, 1.0f);
-        // 授权检测接口(可以不使用，只是验证授权是否成功)
-        AuthInfo authInfo = mSpeechSynthesizer.auth(TtsMode.ONLINE);
-        if (authInfo.isSuccess()) {
-            mSpeechSynthesizer.initTts(TtsMode.ONLINE);
-            mSpeechSynthesizer.setSpeechSynthesizerListener(new SpeechSynthesizerListener() {
-                @Override
-                public void onSynthesizeStart(String s) {
-
-                }
-
-                @Override
-                public void onSynthesizeDataArrived(String s, byte[] bytes, int i) {
-
-                }
-
-                @Override
-                public void onSynthesizeFinish(String s) {
-
-                }
-
-                @Override
-                public void onSpeechStart(String s) {
-                    isSpeaking = true;
-                }
-
-                @Override
-                public void onSpeechProgressChanged(String s, int i) {
-
-                }
-
-                @Override
-                public void onSpeechFinish(String s) {
-                    isSpeaking = false;
-                    if (voiceList != null && voiceList.size() != 0) {
-                        syntheticVoice(voiceList.removeFirst());
-                    }
-                    abandonFocus();
-                }
-
-                @Override
-                public void onError(String s, SpeechError speechError) {
-                    isSpeaking = false;
-                    if (voiceList != null && voiceList.size() != 0) {
-                        syntheticVoice(voiceList.removeFirst());
-                    }
-                    abandonFocus();
-                }
-            });
-            return true;
-        } else {
-            String errorMsg = authInfo.getTtsError().getDetailMessage();
-            ToastUtil.showMessage(this, errorMsg);
-            return false;
-        }
     }
 
     private LinkedList<String> voiceList;
@@ -404,7 +388,7 @@ public class XApp extends MultiDexApplication {
         }
         if (isQueue) {
             voiceList.add(text);
-            if (!isSpeaking) {
+            if (!isSpeeching) {
                 syntheticVoice(voiceList.removeFirst());
             }
         } else {
@@ -425,13 +409,11 @@ public class XApp extends MultiDexApplication {
             return;
         }
         if (mSpeechSynthesizer == null) {
-            Log.e("syntheticVoice", "iflytekSpe == null");
-            initBaiduTTs(true, msg);
+            initBaiduTTs();
             return;
         }
         if (requestFocus() && null != mSpeechSynthesizer) {
             int code = mSpeechSynthesizer.speak(msg);
-            Log.e("code",""+code);
         }
     }
 
@@ -440,7 +422,9 @@ public class XApp extends MultiDexApplication {
      */
     public void stopVoice() {
         if (null != mSpeechSynthesizer) {
-            mSpeechSynthesizer.stop();
+            if (isSpeeching) {
+                mSpeechSynthesizer.stop();
+            }
         }
         abandonFocus();
     }

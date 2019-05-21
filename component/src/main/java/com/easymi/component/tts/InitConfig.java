@@ -1,4 +1,4 @@
-package com.easymi.component.utils.baidu_tts;
+package com.easymi.component.tts;
 
 import com.baidu.tts.client.SpeechSynthesizerListener;
 import com.baidu.tts.client.TtsMode;
