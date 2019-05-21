@@ -1,4 +1,4 @@
-package com.easymin.official.activity;
+package com.easymi.zhuanche.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -12,21 +12,22 @@ import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.network.GsonUtil;
 import com.easymi.component.widget.CusToolbar;
-import com.easymin.official.R;
-import com.easymin.official.entity.GovOrder;
-import com.easymin.official.entity.StageArrays;
+import com.easymi.zhuanche.R;
+import com.easymi.zhuanche.entity.StageArrays;
+import com.easymi.zhuanche.entity.ZCOrder;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Copyright (C), 2012-2019, Sichuan Xiaoka Technology Co., Ltd.
- * @FileName: FeeDetailActivity
+ * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
+ * FileName: FeeDetailActivity
+ *
  * @Author: hufeng
- * @Date: 2019/3/29 上午11:25
- * @Description:
- * @History:
+ * Date: 2018/12/24 下午1:10
+ * Description:  专车费用详情
+ * History:
  */
 public class FeeDetailActivity extends RxBaseActivity {
 
@@ -38,8 +39,6 @@ public class FeeDetailActivity extends RxBaseActivity {
     TextView waitTime;
     TextView waitFee;
     TextView couponFee;
-
-    TextView couponType;
 
     TextView totalFee;
 
@@ -55,7 +54,7 @@ public class FeeDetailActivity extends RxBaseActivity {
     CusToolbar cusToolbar;
 
     private DymOrder dymOrder;
-    private GovOrder govOrder;
+    private ZCOrder zcOrder;
 
     LinearLayout lin_jieti;
 
@@ -63,7 +62,7 @@ public class FeeDetailActivity extends RxBaseActivity {
 
     @Override
     public int getLayoutId() {
-        return R.layout.gw_activity_fee_detail;
+        return R.layout.zc_activity_fee_detail;
     }
 
     @Override
@@ -86,7 +85,6 @@ public class FeeDetailActivity extends RxBaseActivity {
         couponFee = findViewById(R.id.coupon_fee);
         totalFee = findViewById(R.id.total_fee);
         prepayFee = findViewById(R.id.prepay_fee);
-        couponType = findViewById(R.id.coupon_type);
 
         couponFeeCon = findViewById(R.id.coupon_con);
 
@@ -113,8 +111,8 @@ public class FeeDetailActivity extends RxBaseActivity {
 
 
         dymOrder = (DymOrder) getIntent().getSerializableExtra("dymOrder");
-        govOrder = (GovOrder) getIntent().getSerializableExtra("govOrder");
-        if (dymOrder == null || govOrder == null) {
+        zcOrder = (ZCOrder) getIntent().getSerializableExtra("zcOrder");
+        if (dymOrder == null || zcOrder == null) {
             finish();
             return;
         }
@@ -131,13 +129,17 @@ public class FeeDetailActivity extends RxBaseActivity {
         extraFee.setText(dymOrder.extraFee + getString(R.string.yuan));
         paymentFee.setText(dymOrder.paymentFee + getString(R.string.yuan));
 
-        if (govOrder.coupon != null && (govOrder.coupon.couponType == 1 || govOrder.coupon.couponType == 2)) {
-            if (govOrder.coupon.couponType == 2) {
-                couponType.setText("（" + govOrder.coupon.deductible + getString(R.string.xianjin_coupon) + "）");
-            } else {
-                DecimalFormat df = new DecimalFormat("#0.0");
-                couponType.setText("（" + df.format(govOrder.coupon.discount / 10) + getString(R.string.zhekou_coupon) + "）");
-            }
+//        if (zcOrder.coupon != null && (zcOrder.coupon.couponType == 1 || zcOrder.coupon.couponType == 2)) {
+//            if (zcOrder.coupon.couponType == 2) {
+//                couponType.setText("（" + zcOrder.coupon.deductible + getString(R.string.xianjin_coupon) + "）");
+//            } else {
+//                DecimalFormat df = new DecimalFormat("#0.0");
+//                couponType.setText("（" + df.format(zcOrder.coupon.discount / 10) + getString(R.string.zhekou_coupon) + "）");
+//            }
+//            couponFee.setText(dymOrder.couponFee + getString(R.string.yuan));
+//        }
+
+        if (dymOrder.couponFee != 0) {
             couponFee.setText(dymOrder.couponFee + getString(R.string.yuan));
         }
 
@@ -158,13 +160,13 @@ public class FeeDetailActivity extends RxBaseActivity {
         low_fee_title.setText("低速费(" + dymOrder.lowSpeedTime + "分钟)");
         low_pay_fee.setText(dymOrder.lowSpeedCost + getString(R.string.yuan));
 
-        totalFee.setText(getString(R.string.money_sign) + dymOrder.totalFee);
+        totalFee.setText(getString(R.string.money_sign) + dymOrder.orderShouldPay);
 
         stages = GsonUtil.parseToArrayList(dymOrder.stageArrays, StageArrays.class);
 
         if (stages != null && stages.size() != 0){
             for (StageArrays arrays : stages){
-                View view = LayoutInflater.from(this).inflate(R.layout.gw_item_stages,null);
+                View view = LayoutInflater.from(this).inflate(R.layout.item_stages,null);
                 TextView distance = view.findViewById(R.id.tv_distance);
                 TextView money = view.findViewById(R.id.tv_money);
 
