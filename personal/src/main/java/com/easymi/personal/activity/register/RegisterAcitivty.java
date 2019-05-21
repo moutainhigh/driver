@@ -316,7 +316,7 @@ public class RegisterAcitivty extends RxBaseActivity {
     private void initBox() {
         text_agreement.setOnClickListener(view -> {
             Intent intent = new Intent(this, WebActivity.class);
-            intent.putExtra("url", "http://h5.xiaokakj.com/#/protocol?articleName=driverLogin&appKey=" + Config.APP_KEY);
+            intent.putExtra("url", Config.H5_HOST+"#/protocol?articleName=driverLogin&appKey=" + Config.APP_KEY);
             intent.putExtra("title", getString(R.string.login_agreement));
             startActivity(intent);
         });

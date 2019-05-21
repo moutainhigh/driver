@@ -124,7 +124,7 @@ public class GridAdapter extends BaseAdapter {
 //                intent.putExtra("title", context.getString(R.string.set_help));
 //                context.startActivity(intent);
                 Intent intent = new Intent(context, WebActivity.class);
-                intent.putExtra("url", "http://h5.xiaokakj.com/#/protocol?articleName=driverHelp&appKey="+ Config.APP_KEY);
+                intent.putExtra("url", Config.H5_HOST+"#/protocol?articleName=driverHelp&appKey="+ Config.APP_KEY);
                 intent.putExtra("title", context.getString(R.string.set_help));
                 context.startActivity(intent);
             });

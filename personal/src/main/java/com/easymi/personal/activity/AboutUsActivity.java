@@ -101,7 +101,7 @@ public class AboutUsActivity extends RxBaseActivity {
             }
         });
 
-        url = "http://h5.xiaokakj.com/#/protocol?articleName=driverAboutUs&appKey="+Config.APP_KEY;
+        url = Config.H5_HOST+"#/protocol?articleName=driverAboutUs&appKey="+Config.APP_KEY;
 
         initWeb();
     }

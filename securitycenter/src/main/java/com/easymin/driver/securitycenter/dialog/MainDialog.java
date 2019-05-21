@@ -116,7 +116,7 @@ public class MainDialog {
         //安全中心描述
         lin_decript.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, WebActivity.class);
-            intent.putExtra("url", "http://h5.xiaokakj.com/#/protocol?articleName=passengerSafetyCenter&appKey="+CenterConfig.APPKEY);
+            intent.putExtra("url", CenterConfig.H5_HOST+"#/protocol?articleName=passengerSafetyCenter&appKey="+CenterConfig.APPKEY);
             intent.putExtra("title", "安全中心说明");
             mContext.startActivity(intent);
             dialog.dismiss();
