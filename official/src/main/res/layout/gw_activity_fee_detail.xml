@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="#f7f7f7"
     android:orientation="vertical">
 
@@ -16,8 +16,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:text=""
         android:textColor="@color/yellow"
         android:textSize="30sp" />
@@ -25,13 +25,15 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:scrollbars="none">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="20dp"
+            android:orientation="vertical">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -292,15 +294,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/prepay_text"
-                    android:textColor="@color/yellow"/>
+                    android:textColor="@color/yellow" />
 
                 <TextView
                     android:id="@+id/prepay_fee"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:textColor="@color/yellow"
-                    android:text="0元" />
+                    android:text="0元"
+                    android:textColor="@color/yellow" />
 
             </RelativeLayout>
 
@@ -316,24 +318,24 @@
                     android:id="@+id/coupon_type_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/yellow"
-                    android:text="@string/coupon_text" />
+                    android:text="@string/coupon_text"
+                    android:textColor="@color/yellow" />
 
                 <TextView
                     android:id="@+id/coupon_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/coupon_type_text"
-                    android:textColor="@color/yellow"
-                    android:text="" />
+                    android:text=""
+                    android:textColor="@color/yellow" />
 
                 <TextView
                     android:id="@+id/coupon_fee"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/yellow"
                     android:layout_alignParentRight="true"
-                    android:text="@string/no_coupon" />
+                    android:text="@string/no_coupon"
+                    android:textColor="@color/yellow" />
 
             </RelativeLayout>
 

@@ -317,15 +317,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/yellow"
-                    android:text="@string/coupon_text" />
-
-                <TextView
-                    android:id="@+id/coupon_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/coupon_type_text"
-                    android:textColor="@color/yellow"
-                    android:text="" />
+                    android:text="优惠券抵扣" />
 
                 <TextView
                     android:id="@+id/coupon_fee"
