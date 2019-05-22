@@ -606,7 +606,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 //确认费用后直接弹出支付页面
                 DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.ZHUANCHE);
                 if (null != dymOrder) {
-                    bridge.doPay(dymOrder.totalFee);
+                    bridge.doPay(dymOrder.orderShouldPay);
                 }
             } else {
                 if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {

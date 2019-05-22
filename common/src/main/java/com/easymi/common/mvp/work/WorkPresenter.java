@@ -180,7 +180,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                                     dymOrder.orderType = order.serviceType;
                                     dymOrder.saveOrUpdate();
                                 }
-                            }else if (TextUtils.equals(order.serviceType, Config.CARPOOL)) {
+                            } else if (TextUtils.equals(order.serviceType, Config.CARPOOL)) {
                                 if (DymOrder.exists(order.scheduleId, order.serviceType)) {
                                     //专线 本地有 状态同步
                                     dymOrder = DymOrder.findByIDType(order.scheduleId, order.serviceType);
@@ -213,7 +213,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                             boolean isExist = false;
                             for (MultipleOrder order : orders) {
                                 if (dymOrder.orderType.equals(Config.CITY_LINE)
-                                     ||dymOrder.orderType.equals(Config.CARPOOL)) {
+                                        || dymOrder.orderType.equals(Config.CARPOOL)) {
                                     if ((dymOrder.orderId == order.scheduleId)) {
                                         isExist = true;
                                         break;
@@ -372,7 +372,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                     }
                 }
                 employ.saveOrUpdate();
-                CsEditor editor =  new CsEditor();
+                CsEditor editor = new CsEditor();
                 editor.putLong(Config.SP_DRIVERID, employ.id);
                 editor.apply();
                 view.showDriverStatus();
@@ -419,7 +419,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                     if (employ.serviceType.contains(Config.ZHUANCHE)
                             || employ.serviceType.contains(Config.TAXI)
 //                            || employ.serviceType.contains(Config.CITY_LINE)
-                            )
+                    )
                         ToastUtil.showMessage(context, "未绑定车辆车型，不能接单");
                 }
             }

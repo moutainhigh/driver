@@ -71,8 +71,8 @@ public class WorkTimeCounter {
             uploadTime(statues, totalMinute);
         } else if (statues == 2) {
             getOnlinTime();
-        }else {
-            if (timer == null || timerTask == null){
+        } else {
+            if (timer == null || timerTask == null) {
                 getOnlinTime();
             }
         }
@@ -90,14 +90,14 @@ public class WorkTimeCounter {
 
         observable.subscribe(new MySubscriber<>(context, false,
                 true, result -> {
-            if (result != null ) {
+            if (result != null) {
 
                 totalMinute = (int) result.object;
 
                 CountEvent event = new CountEvent();
                 event.finishCount = -1;
                 event.income = -1;
-                event.minute = totalMinute/60;
+                event.minute = totalMinute / 60;
                 EventBus.getDefault().post(event);
 
                 startCount();
@@ -120,17 +120,16 @@ public class WorkTimeCounter {
      * 初始化定时器，开始记时
      */
     public void startCount() {
-        timer = new Timer();
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                count();
-            }
-        };
-        //一分钟计时一次，延迟60s执行
-        timer.schedule(timerTask, 1000, 1000);
-        //初始化从服务器拉一次。
-//        uploadTime(-1, totalMinute);
+            destroy();
+            timer = new Timer();
+            timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    count();
+                }
+            };
+            //一分钟计时一次，延迟60s执行
+            timer.schedule(timerTask, 1000, 1000);
     }
 
     /**
@@ -142,16 +141,14 @@ public class WorkTimeCounter {
             return;
         }
         if (employ.status >= 3) {
-
             int bofore = totalMinute / 60;
             totalMinute++;
             int after = totalMinute / 60;
             if (after > bofore) {
-
                 CountEvent event = new CountEvent();
                 event.finishCount = -1;
                 event.income = -1;
-                event.minute = totalMinute/60;
+                event.minute = totalMinute / 60;
                 EventBus.getDefault().post(event);
 
                 uploadTime(-1, totalMinute);
