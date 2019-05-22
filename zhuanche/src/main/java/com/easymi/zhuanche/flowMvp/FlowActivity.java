@@ -112,6 +112,7 @@ import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: FinishActivity
+ *
  * @Author: hufeng
  * Date: 2018/10/24 下午1:10
  * Description:
@@ -238,7 +239,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         orderId = getIntent().getLongExtra("orderId", -1);
 
-        flashAssign = getIntent().getBooleanExtra("flashAssign",false);
+        flashAssign = getIntent().getBooleanExtra("flashAssign", false);
 
         //是否是从计价器过来的
         isToFeeDetail = getIntent().getBooleanExtra("showSettle", false);
@@ -374,7 +375,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                         Intent intent = new Intent(this, CancelNewActivity.class);
                         startActivityForResult(intent, CANCEL_ORDER);
                     });
-                }else {
+                } else {
                     toolbar.setRightText("", null);
                 }
             } else {
@@ -429,7 +430,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             if ((ZCSetting.findOne().arriveCancel == 1)) {
                 lin_time.setVisibility(View.VISIBLE);
                 setWaitTime();
-            }else {
+            } else {
                 lin_time.setVisibility(View.GONE);
             }
         } else if (zcOrder.orderStatus == ZCOrderStatus.START_WAIT_ORDER) {
@@ -437,7 +438,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             if ((ZCSetting.findOne().arriveCancel == 1)) {
                 lin_time.setVisibility(View.VISIBLE);
                 setWaitTime();
-            }else {
+            } else {
                 lin_time.setVisibility(View.GONE);
             }
         } else {
@@ -636,14 +637,14 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 }
             }
             this.zcOrder = zcOrder;
-            if (flashAssign && zcOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER){
+            if (flashAssign && zcOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) {
                 flashAssign();
             }
             showTopView();
             initBridge();
             showBottomFragment(zcOrder);
             showMapBounds();
-            if (myLocationStyle != null){
+            if (myLocationStyle != null) {
                 if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
                     myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);
                 } else {
@@ -666,8 +667,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     /**
      * 极速指派订单语音播报
      */
-    public void flashAssign(){
-        XApp.getInstance().syntheticVoice("您有快速指派订单需要处理，客户起点为"+zcOrder.getStartSite().addr+",终点为"+zcOrder.getEndSite().addr);
+    public void flashAssign() {
+        XApp.getInstance().syntheticVoice("您有快速指派订单需要处理，客户起点为" + zcOrder.getStartSite().addr + ",终点为" + zcOrder.getEndSite().addr);
     }
 
     /**
@@ -724,7 +725,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         if (zcOrder.orderStatus == ZCOrderStatus.NEW_ORDER
                 || zcOrder.orderStatus == ZCOrderStatus.PAIDAN_ORDER
                 || zcOrder.orderStatus == ZCOrderStatus.TAKE_ORDER
-                ) {
+        ) {
             if (null != getStartAddr()) {
                 latLngs.add(new LatLng(getStartAddr().lat, getStartAddr().lng));
                 presenter.routePlanByNavi(getStartAddr().lat, getStartAddr().lng);
@@ -745,7 +746,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 || zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER
                 || zcOrder.orderStatus == ZCOrderStatus.START_WAIT_ORDER
                 || zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_DESTINATION_ORDER
-                ) {
+        ) {
             if (null != getEndAddr()) {
                 latLngs.add(new LatLng(getEndAddr().lat, getEndAddr().lng));
                 presenter.routePlanByNavi(getEndAddr().lat, getEndAddr().lng);
