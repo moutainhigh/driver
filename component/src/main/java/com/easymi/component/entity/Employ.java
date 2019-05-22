@@ -344,6 +344,11 @@ public class Employ implements Parcelable {
      */
     public int registerStatus;
 
+    /**
+     * 司机名片地址host
+     */
+    public String qrCodeUrl;
+
 
     protected Employ(Parcel in) {
         id = in.readLong();
@@ -409,6 +414,7 @@ public class Employ implements Parcelable {
         modelId = in.readLong();
         taxiModelId = in.readLong();
         registerStatus = in.readInt();
+        qrCodeUrl = in.readString();
     }
 
 
@@ -495,6 +501,7 @@ public class Employ implements Parcelable {
         values.put("modelId", modelId);
         values.put("taxiModelId", taxiModelId);
         values.put("registerStatus", registerStatus);
+        values.put("qrCodeUrl",qrCodeUrl);
         /*
          * values.put("age", age); values.put("jialing", jialing);
          */
@@ -655,6 +662,8 @@ public class Employ implements Parcelable {
                 driverInfo.taxiModelId = cursor.getLong(cursor.getColumnIndex("taxiModelId"));
 
                 driverInfo.registerStatus = cursor.getInt(cursor.getColumnIndex("registerStatus"));
+
+                driverInfo.qrCodeUrl = cursor.getString(cursor.getColumnIndex("qrCodeUrl"));
             }
         } catch (Exception e) {
 //			CrashReport.setUserSceneTag();
@@ -836,6 +845,8 @@ public class Employ implements Parcelable {
                 .getColumnIndex("modelId"));
         driverInfo.taxiModelId = cursor.getLong(cursor.getColumnIndex("taxiModelId"));
 
+        driverInfo.qrCodeUrl = cursor.getString(cursor.getColumnIndex("qrCodeUrl"));
+
         driverInfo.registerStatus = cursor.getInt(cursor.getColumnIndex("registerStatus"));
         return driverInfo;
     }
@@ -912,6 +923,7 @@ public class Employ implements Parcelable {
         values.put("taxiModelId", taxiModelId);
 
         values.put("registerStatus", registerStatus);
+        values.put("qrCodeUrl",qrCodeUrl);
 
         boolean flag = db.update("t_driverinfo", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
@@ -1002,6 +1014,7 @@ public class Employ implements Parcelable {
         dest.writeLong(modelId);
         dest.writeLong(taxiModelId);
         dest.writeInt(registerStatus);
+        dest.writeString(qrCodeUrl);
     }
 
 

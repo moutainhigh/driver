@@ -1,15 +1,21 @@
 package com.easymi.common.mvp.order;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.easymi.common.R;
+import com.easymi.common.activity.CreateActivity;
 import com.easymi.common.adapter.VpAdapter;
+import com.easymi.common.result.SettingResult;
+import com.easymi.common.widget.CreatOrderDialog;
 import com.easymi.common.widget.MakeOrderPopWindow;
 import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.widget.CusToolbar;
 
@@ -19,6 +25,7 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: OrderActivity
+ *
  * @Author: shine
  * Date: 2018/11/14 下午7:26
  * Description:
@@ -34,24 +41,52 @@ public class OrderActivity extends RxBaseActivity {
      * fragment适配器
      */
     VpAdapter adapter;
+//    /**
+//     * 补单弹窗
+//     */
+//    MakeOrderPopWindow popWindow;
+
     /**
      * 补单弹窗
      */
-    MakeOrderPopWindow popWindow;
+    CreatOrderDialog creatOrderDialog;
 
     @Override
     public void initToolBar() {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.com_my_order);
         toolbar.setLeftIcon(R.drawable.ic_arrow_back, v -> finish());
-        if (EmUtil.getEmployInfo().serviceType.equals(Config.CITY_LINE)){
+        if (EmUtil.getEmployInfo().serviceType.equals(Config.CITY_LINE)) {
             toolbar.setRightText(R.string.com_make_order, v -> {
-                if (popWindow.isShowing()) {
-                    popWindow.dismiss();
-                } else {
-                    popWindow.show(v);
-                }
+                creatOrderDialog = new CreatOrderDialog(this);
+                creatOrderDialog.setOnMyClickListener(view -> {
+                    ARouter.getInstance().build("/cityline/CreateOrderActivity").navigation();
+                    creatOrderDialog.dismiss();
+                });
+                creatOrderDialog.show();
             });
+        }else if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)){
+            toolbar.setRightText(R.string.com_make_order, v -> {
+                creatOrderDialog = new CreatOrderDialog(this);
+                creatOrderDialog.setOnMyClickListener(view -> {
+                    Intent intent = new Intent(this, CreateActivity.class);
+                    intent.putExtra("type",Config.ZHUANCHE);
+                    startActivity(intent);
+                    creatOrderDialog.dismiss();
+                });
+                creatOrderDialog.show();
+            });
+        }else if (EmUtil.getEmployInfo().serviceType.equals(Config.CARPOOL)){
+//            if (ZCSetting.findOne().isRepairOrder == 1){
+                toolbar.setRightText(R.string.com_make_order, v -> {
+                    creatOrderDialog = new CreatOrderDialog(this);
+                    creatOrderDialog.setOnMyClickListener(view -> {
+                        ARouter.getInstance().build("/carpooling/CreateOrderActivity").navigation();
+                        creatOrderDialog.dismiss();
+                    });
+                    creatOrderDialog.show();
+                });
+//            }
         }
     }
 
@@ -70,7 +105,7 @@ public class OrderActivity extends RxBaseActivity {
         tabLayout = findViewById(R.id.tab_layout);
         viewPager = findViewById(R.id.view_pager);
 
-        popWindow = new MakeOrderPopWindow(this);
+//        popWindow = new MakeOrderPopWindow(this);
 
         initTabLayout();
     }
@@ -80,7 +115,7 @@ public class OrderActivity extends RxBaseActivity {
         fragments = new ArrayList<>();
         fragments.add(new AccpteFragment());
         if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)
-                ||EmUtil.getEmployInfo().serviceType.equals(Config.TAXI)){
+                || EmUtil.getEmployInfo().serviceType.equals(Config.TAXI)) {
             fragments.add(new AssignFragment());
         }
 
@@ -99,7 +134,7 @@ public class OrderActivity extends RxBaseActivity {
 //            tabLayout.getTabAt(2).setText(getString(R.string.com_grab_order));
 //        }else {
         if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)
-                ||EmUtil.getEmployInfo().serviceType.equals(Config.TAXI)){
+                || EmUtil.getEmployInfo().serviceType.equals(Config.TAXI)) {
             tabLayout.getTabAt(1).setText(getString(R.string.com_assign_order));
         }
 //        }
@@ -121,11 +156,11 @@ public class OrderActivity extends RxBaseActivity {
 //                        ((GrabFragment)fragments.get(position)).setRefresh();
 //                    }
 //                }else {
-                    if (position == 0){
-                        ((AccpteFragment)fragments.get(position)).setRefresh();
-                    }else if (position == 1){
-                        ((AssignFragment)fragments.get(position)).setRefresh();
-                    }
+                if (position == 0) {
+                    ((AccpteFragment) fragments.get(position)).setRefresh();
+                } else if (position == 1) {
+                    ((AssignFragment) fragments.get(position)).setRefresh();
+                }
 //                }
             }
 

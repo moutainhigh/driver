@@ -1,4 +1,4 @@
-package com.easymi.cityline.adapter;
+package com.easymin.carpooling.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -7,9 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.easymi.cityline.R;
-import com.easymi.cityline.entity.ZXOrder;
 import com.easymi.component.utils.TimeUtil;
+import com.easymin.carpooling.R;
+import com.easymin.carpooling.entity.PincheOrder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +17,7 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName:
+ *
  * @Author: hufeng
  * Date: 2018/12/24 下午1:10
  * Description:
@@ -27,12 +28,13 @@ public class BanciAdapter extends RecyclerView.Adapter<BanciAdapter.Holder> {
 
     private Context context;
 
-    private List<ZXOrder> baseOrders;
+    private List<PincheOrder> baseOrders;
 
     OnItemClickListener onItemClickListener;
 
     /**
      * 设置列表点击监听
+     *
      * @param onItemClickListener
      */
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -41,6 +43,7 @@ public class BanciAdapter extends RecyclerView.Adapter<BanciAdapter.Holder> {
 
     /**
      * 构造器
+     *
      * @param context
      */
     public BanciAdapter(Context context) {
@@ -50,30 +53,37 @@ public class BanciAdapter extends RecyclerView.Adapter<BanciAdapter.Holder> {
 
     /**
      * 加载数据
+     *
      * @param baseOrders
      */
-    public void setBaseOrders(List<ZXOrder> baseOrders) {
+    public void setBaseOrders(List<PincheOrder> baseOrders) {
         this.baseOrders = baseOrders;
         notifyDataSetChanged();
     }
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.banci_item, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.pc_banci_item, null);
 
         return new Holder(view);
     }
 
     @Override
     public void onBindViewHolder(Holder holder, int position) {
-        ZXOrder zxOrder = baseOrders.get(position);
-        holder.orderType.setText("城际专线");
-        holder.orderTime.setText(TimeUtil.getTime("yyyy-MM-dd HH:mm", zxOrder.startOutTime * 1000));
-        holder.orderStartPlace.setText(zxOrder.startSite);
-        holder.orderEndPlace.setText(zxOrder.endSite);
-        holder.orderStatus.setText(zxOrder.getOrderStatusStr());
-        if(null != onItemClickListener){
-            holder.itemView.setOnClickListener(view -> onItemClickListener.onClick(zxOrder));
+        PincheOrder pincheOrder = baseOrders.get(position);
+        holder.orderType.setText(context.getResources().getString(R.string.create_carpool));
+        holder.orderTime.setText(TimeUtil.getTime("yyyy年MM月dd日", pincheOrder.time * 1000) + " " + pincheOrder.timeSlot);
+        holder.orderStartPlace.setText(pincheOrder.startStation);
+        holder.orderEndPlace.setText(pincheOrder.endStation);
+
+        if (pincheOrder.status == 1 && System.currentTimeMillis() < pincheOrder.time * 1000) {
+            holder.orderStatus.setText("售票中");
+        } else {
+            holder.orderStatus.setText(pincheOrder.getOrderStatusStr());
+        }
+
+        if (null != onItemClickListener) {
+            holder.itemView.setOnClickListener(view -> onItemClickListener.onClick(pincheOrder));
         }
     }
 
@@ -111,8 +121,9 @@ public class BanciAdapter extends RecyclerView.Adapter<BanciAdapter.Holder> {
     public interface OnItemClickListener {
         /**
          * 单击监听方法
-         * @param zxOrder
+         *
+         * @param pincheOrder
          */
-        void onClick(ZXOrder zxOrder);
+        void onClick(PincheOrder pincheOrder);
     }
 }

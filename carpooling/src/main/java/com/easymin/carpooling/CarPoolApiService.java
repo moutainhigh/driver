@@ -121,4 +121,13 @@ public interface CarPoolApiService {
     @POST("/api/v1/carpool/driver/order/finishOrder")
     Observable<EmResult2<Object>> sendCustomer(
             @Field("orderId") long orderId);
+
+
+    /**
+     * 查询司机关联班次
+     *
+     * @return
+     */
+    @GET("/api/v1/carpool/driver/schedule/getDriverSchedule")
+    Observable<EmResult2<List<PincheOrder>>> queryDriverSchedule(@Query("id") long driverId);
 }

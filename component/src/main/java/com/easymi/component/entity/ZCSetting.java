@@ -63,6 +63,11 @@ public class ZCSetting {
      */
     public long arriveTime;
 
+    /**
+     * 拼车补单开关 1是开启 2是关闭 默认关闭
+     */
+    public int isRepairOrder;
+
 
     public static void deleteAll() {
         SqliteHelper helper = SqliteHelper.getInstance();
@@ -94,6 +99,7 @@ public class ZCSetting {
         values.put("goToCancel", goToCancel);
         values.put("arriveCancel", arriveCancel);
         values.put("arriveTime", arriveTime);
+        values.put("isRepairOrder",isRepairOrder);
 
         db.insert("t_zc_settinginfo", null, values);
     }
@@ -124,6 +130,7 @@ public class ZCSetting {
                 settingInfo.goToCancel = cursor.getInt(cursor.getColumnIndex("goToCancel"));
                 settingInfo.arriveCancel = cursor.getInt(cursor.getColumnIndex("arriveCancel"));
                 settingInfo.arriveTime = cursor.getLong(cursor.getColumnIndex("arriveTime"));
+                settingInfo.isRepairOrder = cursor.getInt(cursor.getColumnIndex("isRepairOrder"));
             }
         } finally {
             cursor.close();

@@ -16,7 +16,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "data.db";
 
-    private static final int VERSION = 78;
+    private static final int VERSION = 80;
 
     private StringBuffer sqlBuf;
 
@@ -220,6 +220,8 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("refreshToken").append(" ").append("TEXT").append(",")
                 .append("modelId").append(" ").append("LONG").append(",")
                 .append("taxiModelId").append(" ").append("LONG").append(",")
+                .append("qrCodeUrl").append(" ").append("TEXT").append(",")
+
                 .append("registerStatus").append(" ").append("INTEGER")
 
                 .append(");");
@@ -324,6 +326,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("goToCancel").append(" ").append("INTEGER").append(",")
                 .append("arriveCancel").append(" ").append("INTEGER").append(",")
                 .append("arriveTime").append(" ").append("LONG").append(",")
+                .append("isRepairOrder").append(" ").append("INTEGER").append(",")
 
                 .append("employChangeOrder").append(" ").append("employChangeOrder")
                 .append(");");

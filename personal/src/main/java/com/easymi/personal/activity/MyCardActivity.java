@@ -30,6 +30,8 @@ import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
 import com.easymi.personal.entity.ShareInfo;
+import com.easymi.personal.result.CardHostResult;
+import com.easymi.personal.result.LoginResult;
 import com.easymi.personal.result.ShareResult;
 import com.easymi.personal.util.QrCodeUtil;
 import com.easymi.personal.widget.SaveCardDialog;
@@ -96,7 +98,7 @@ public class MyCardActivity extends RxBaseActivity {
         super.initToolBar();
         cusToolbar.setLeftBack(view -> finish());
         cusToolbar.setTitle(R.string.person_card);
-        cusToolbar.setRightIcon(R.mipmap.ic_my_car_save,view -> {
+        cusToolbar.setRightIcon(R.mipmap.ic_my_car_save, view -> {
             SaveCardDialog dialog = new SaveCardDialog(this);
             dialog.setOnMyClickListener(view1 -> {
                 dialog.dismiss();
@@ -139,25 +141,22 @@ public class MyCardActivity extends RxBaseActivity {
     /**
      * 查询二维码地址
      */
-    public void queryQrImg(){
-        Employ employ = EmUtil.getEmployInfo();
-//
-//        McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
-//
-//        Observable<ShareResult> observable = api
-//                .shareLink(employ.id, employ.companyId, EmUtil.getAppKey(), 1)
-//                .filter(new HttpResultFunc<>())
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread());
-//
-//        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false,
-//                false, shareResult -> {
-//            String qrcode = "https://m.xiaokakj.com/?app_key="+Config.APP_KEY+"#/home?dirverId="+employ.id;
-//            initQrImg(qrcode);
-//        })));
+    public void queryQrImg() {
 
-        String qrcode = "https://m.xiaokakj.com/?app_key="+Config.APP_KEY+"#/home?dirverId="+employ.id;
-        initQrImg(qrcode);
+        McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
+
+        Observable<LoginResult> observable = api
+                .queryCardHost(EmUtil.getEmployId() + "")
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false,
+                false, result -> {
+
+            String qrcode = result.data.qrCodeUrl + "/?app_key=" + Config.APP_KEY + "#/home?dirverId=" + EmUtil.getEmployId()+"&serviceType="+result.data.serviceType;
+            initQrImg(qrcode);
+        })));
     }
 
 
@@ -193,7 +192,7 @@ public class MyCardActivity extends RxBaseActivity {
     }
 
 
-    public void cutCard(){
+    public void cutCard() {
 
         lin_card.setDrawingCacheEnabled(true);
         lin_card.buildDrawingCache();
@@ -204,7 +203,7 @@ public class MyCardActivity extends RxBaseActivity {
                 // 获取内置SD卡路径
                 String sdCardPath = Environment.getExternalStorageDirectory().getPath();
                 // 图片文件路径
-                String filePath = sdCardPath + File.separator ;
+                String filePath = sdCardPath + File.separator;
 
                 File appDir = new File(filePath);
 
@@ -225,7 +224,7 @@ public class MyCardActivity extends RxBaseActivity {
                 sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
 
                 Log.e("hufeng", "存储完成");
-                ToastUtil.showMessage(this,"保存完成");
+                ToastUtil.showMessage(this, "保存完成");
             } catch (Exception e) {
             }
         }

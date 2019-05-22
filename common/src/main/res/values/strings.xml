@@ -160,7 +160,7 @@
     <string name="listen_order_set">模式设置</string>
     <string name="listen_order_set_2">听单设置</string>
     <string name="listen_order_more_one">至少选择一种听单业务</string>
-    
+
     <string name="com_perfect_info">亲爱的师傅您好：\n&#160;&#160;&#160;&#160;您的资料还未完善，请尽快完善提交资料，管理员审核通过之后您就可以开启接单旅程了。</string>
     <string name="com_perfect">完善资料</string>
     <string name="com_perfect2">信息完善</string>
@@ -240,5 +240,13 @@
     <string name="com_order_call_me">联系客服</string>
 
     <string name="com_turn_order">转单</string>
+
+    <!--支付dialog-->
+    <string name="com_pay_wechat">微信</string>
+    <string name="com_pay_zfb">支付宝</string>
+    <string name="com_pay_balance">余额</string>
+
+    <string name="com_alipay_success">支付宝支付成功</string>
+    <string name="com_alipay_failed">支付宝支付失败</string>
 
 </resources>

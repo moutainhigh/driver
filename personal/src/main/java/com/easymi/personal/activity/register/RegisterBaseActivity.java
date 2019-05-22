@@ -127,8 +127,8 @@ public class RegisterBaseActivity extends RxBaseActivity {
 
     @Override
     public int getLayoutId() {
-        UIStatusBarHelper.setStatusBarLightMode(this);
-        AlexStatusBarUtils.setStatusColor(this, Color.WHITE);
+//        UIStatusBarHelper.setStatusBarLightMode(this);
+//        AlexStatusBarUtils.setStatusColor(this, Color.WHITE);
         return R.layout.activity_register_base;
     }
 

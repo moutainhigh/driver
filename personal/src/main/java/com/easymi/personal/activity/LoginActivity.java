@@ -56,7 +56,9 @@ import com.easymi.personal.R;
 import com.easymi.personal.activity.register.RegisterAcitivty;
 import com.easymi.personal.activity.register.RegisterNoticeActivity;
 import com.easymi.personal.result.LoginResult;
+
 import java.util.Locale;
+
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -64,6 +66,7 @@ import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: LoginActivity
+ *
  * @Author: hufeng
  * Date: 2018/9/20 下午1:10
  * Description: 登陆页面
@@ -441,7 +444,8 @@ public class LoginActivity extends RxBaseActivity {
 
             if (settingResult.data != null) {
                 for (ZCSetting sub : settingResult.data) {
-                    if (sub.serviceType.equals(Config.ZHUANCHE)) {
+                    if (sub.serviceType.equals(Config.ZHUANCHE) ||
+                            sub.serviceType.equals(Config.CARPOOL)) {
                         ZCSetting.deleteAll();
                         sub.save();
                     } else if (sub.serviceType.equals(Config.TAXI)) {

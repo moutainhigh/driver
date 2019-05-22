@@ -23,14 +23,14 @@ public class Config {
 //    public static final String HOST = "http://10.10.2.130:10001/";//130测试地址 （内网）
 //    public static final String HOST = "http://47.94.204.67:20001/";//130测试地址（外网）
 //    public static final String HOST = "http://api.xiaokakj.com/";//线上地址
-    public static final String HOST = "http://api.xiaokakj.cn/";//预发/
-//    public static final String HOST = "http://10.10.2.12:10001/";//本地
+//    public static final String HOST = "http://api.xiaokakj.cn/";//预发/
+    public static final String HOST = "http://10.10.2.41:10001/";//本地
     /**
      * MQTT配置
      */
-    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//预发地址
+//    public static final String MQTT_HOST = "tcp://118.190.131.49:1883";//预发地址
 //    public static final String MQTT_HOST = "tcp://ws.xiaokayun.cn";//线上地址
-//    public static final String MQTT_HOST = "tcp://10.10.4.5:1883";//本地地址
+    public static final String MQTT_HOST = "tcp://10.10.4.5:1883";//本地地址
 //    public static final String MQTT_HOST = "tcp://10.10.4.22:1883";//test
     /**
      * APP_KEY
@@ -52,11 +52,11 @@ public class Config {
      * MQTT
      */
     //线上和预发
-    public static final String MQTT_USER_NAME = "xiaoka";
-    public static final String MQTT_PSW = "&mv7dHapB5J!95BJ";
+//    public static final String MQTT_USER_NAME = "xiaoka";
+//    public static final String MQTT_PSW = "&mv7dHapB5J!95BJ";
 //    //本地地址
-//    public static final String MQTT_USER_NAME = "admin";
-//    public static final String MQTT_PSW = "public";
+    public static final String MQTT_USER_NAME = "admin";
+    public static final String MQTT_PSW = "public";
 
     /**
      * 上传图片地址.

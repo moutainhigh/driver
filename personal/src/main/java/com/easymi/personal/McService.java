@@ -12,6 +12,7 @@ import com.easymi.personal.result.AnnouncementResult;
 import com.easymi.personal.result.ArticleResult;
 import com.easymi.personal.result.BankResult;
 import com.easymi.personal.result.BusinessResult;
+import com.easymi.personal.result.CardHostResult;
 import com.easymi.personal.result.CompanyResult;
 import com.easymi.personal.result.ConfigResult;
 import com.easymi.personal.result.EvaResult;
@@ -41,6 +42,7 @@ import rx.Observable;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName:
+ *
  * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
@@ -492,6 +494,7 @@ public interface McService {
 
 
     //注册相关
+
     /**
      * 公司表列表查询
      *
@@ -545,6 +548,7 @@ public interface McService {
 
     /**
      * 获取七牛云token
+     *
      * @return
      */
     @GET("api/v1/public/app/qny_token")
@@ -552,6 +556,7 @@ public interface McService {
 
     /**
      * 注册提交申请资料
+     *
      * @param id
      * @param realName
      * @param phone
@@ -590,15 +595,27 @@ public interface McService {
                                         @Field("netCarQualificationsStart") String netCarQualificationsStart,
                                         @Field("netCarQualificationsEnd") String netCarQualificationsEnd,
                                         @Field("practitionersPhoto") String practitionersPhoto
-                                        );
+    );
 
 
     /**
      * 获取司机注册信息
+     *
      * @param phone
      * @return
      */
     @GET("api/v1/public/driver/register/get")
     Observable<RegisterResult> getDriverInfo(@Query("phone") String phone);
+
+
+    /**
+     * 获取当前司机名片地址
+     *
+     * @param driverId 司机id
+     * @return
+     */
+    @GET("/api/v1/public/driver/card")
+    Observable<LoginResult> queryCardHost(@Query("driverId") String driverId);
+
 
 }

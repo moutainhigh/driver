@@ -2,15 +2,11 @@ package com.easymi.personal.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
 import com.easymi.component.Config;
-import com.easymi.component.entity.SystemConfig;
-import com.easymi.component.pay.PayType;
-import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.CsEditor;
 import com.easymi.component.utils.Log;
 
@@ -25,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
-import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.network.ApiManager;
@@ -41,7 +36,7 @@ import com.easymi.personal.R;
 import com.easymi.personal.entity.MoneyConfig;
 import com.easymi.personal.result.ConfigResult;
 import com.easymi.personal.result.LoginResult;
-import com.easymi.personal.result.PayResult;
+import com.easymi.common.result.PayResult;
 import com.easymi.personal.result.RechargeResult;
 import com.easymi.personal.result.RechargeTypeResult;
 import com.ffcs.inapppaylib.bean.Constants;

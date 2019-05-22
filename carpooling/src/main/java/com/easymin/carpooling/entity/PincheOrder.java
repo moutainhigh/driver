@@ -173,10 +173,35 @@ public class PincheOrder implements Serializable {
      */
     public int status;
 
+//补单添加字端
+    /**
+     * 班次开始时间
+     */
+    public long time;
+
+    /**
+     * 起点站名字
+     */
+    public String startStation;
+
+    /**
+     * 终点站名字
+     */
+    public String endStation;
+
+    /**
+     * 班次服务时间段
+     */
+    public String timeSlot;
+
+    /**
+     * 本班次票价
+     */
+    public double money;
+
+
 
     public PincheOrder() {
 
     }
-
-
 }

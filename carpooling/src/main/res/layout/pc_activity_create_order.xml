@@ -72,7 +72,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="8dp"
-                                android:src="@mipmap/ic_zx_right_row" />
+                                android:src="@mipmap/ic_pc_right_row" />
 
                         </LinearLayout>
 
@@ -110,7 +110,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="8dp"
-                                android:src="@mipmap/ic_zx_right_row" />
+                                android:src="@mipmap/ic_pc_right_row" />
 
                         </LinearLayout>
 
@@ -148,7 +148,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="8dp"
-                                android:src="@mipmap/ic_zx_right_row" />
+                                android:src="@mipmap/ic_pc_right_row" />
 
                         </LinearLayout>
 
@@ -190,7 +190,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="8dp"
-                                android:src="@mipmap/ic_zx_right_row" />
+                                android:src="@mipmap/ic_pc_right_row"
+                                android:visibility="invisible"/>
 
                         </LinearLayout>
 
@@ -232,7 +233,7 @@
                                 android:id="@+id/sub"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/sub_selector"
+                                android:background="@drawable/pc_sub_selector"
                                 android:enabled="false" />
 
                             <TextView
@@ -247,7 +248,7 @@
                                 android:id="@+id/add"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/add_selector"
+                                android:background="@drawable/pc_add_selector"
                                 android:enabled="false" />
 
                         </LinearLayout>
@@ -332,9 +333,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/btn_height"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/corners_button_press_bg"
+                    android:background="@drawable/pc_btn_unpress_999999_bg"
                     android:enabled="false"
-                    android:text="发送给乘客"
+                    android:text="代乘客支付"
                     android:textColor="@color/white" />
 
             </LinearLayout>

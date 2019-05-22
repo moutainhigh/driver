@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -67,6 +68,11 @@ public class PersonalActivity extends RxBaseActivity {
      */
     TextView tv_car_info;
 
+    /**
+     * 我的名片
+     */
+    LinearLayout lin_card;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_person_center;
@@ -92,7 +98,17 @@ public class PersonalActivity extends RxBaseActivity {
 
         driverPhoto = findViewById(R.id.driver_photo);
 
+        lin_card = findViewById(R.id.lin_card);
+
         Employ employ = EmUtil.getEmployInfo();
+
+        if (employ.serviceType.equals(Config.CUSTOMBUS) ||
+                employ.serviceType.equals(Config.COUNTRY)){
+            lin_card.setVisibility(View.VISIBLE);
+        }else {
+            lin_card.setVisibility(View.GONE);
+        }
+
         showBase(employ);
     }
 
