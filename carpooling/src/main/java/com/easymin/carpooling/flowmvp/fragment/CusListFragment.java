@@ -3,12 +3,13 @@ package com.easymin.carpooling.flowmvp.fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Button;
+import android.view.View;
+import android.widget.TextView;
 
 import com.easymi.common.entity.CarpoolOrder;
-import com.easymi.common.entity.OrderCustomer;
 import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.entity.DymOrder;
+import com.easymi.component.utils.PhoneUtil;
 import com.easymin.carpooling.R;
 import com.easymin.carpooling.StaticVal;
 import com.easymin.carpooling.adapter.CusListAdapter;
@@ -19,6 +20,7 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: CusListFragment
+ *
  * @Author: hufeng
  * Date: 2018/12/24 下午1:10
  * Description: 客户列表界面
@@ -26,7 +28,7 @@ import java.util.List;
  */
 public class CusListFragment extends RxBaseFragment {
 
-    Button button;
+    TextView button;
     RecyclerView recyclerView;
     /**
      * 订单id，类型
@@ -74,16 +76,47 @@ public class CusListFragment extends RxBaseFragment {
         if (button == null) {
             return;
         }
-        if (flag == StaticVal.PLAN_ACCEPT) {
-            button.setText("开始接人");
-            button.setOnClickListener(view -> bridge.toAcSend());
-            bridge.changeToolbar(StaticVal.TOOLBAR_ACCEPT_ING);
-        } else if (flag == StaticVal.PLAN_SEND) {
-            button.setText("行程开始");
-            button.setOnClickListener(view -> bridge.toAcSend());
-            bridge.changeToolbar(StaticVal.TOOLBAR_SEND_ING);
-        }
         showList();
+        CarpoolOrder current = null;
+        for (int i = 0; i < carpoolOrderList.size(); i++) {
+            CarpoolOrder carpoolOrder = carpoolOrderList.get(i);
+            if (current == null) {
+                if (carpoolOrder.customeStatus == 0 || carpoolOrder.customeStatus == 3) {
+                    current = carpoolOrder;
+                    break;
+                }
+            } else {
+                if (current.customeStatus != 0 && current.customeStatus != 3) {
+                    if (carpoolOrder.customeStatus == 0 || carpoolOrder.customeStatus == 3) {
+                        current = carpoolOrder;
+                        break;
+                    }
+                }
+            }
+            current = carpoolOrder;
+            if (i == carpoolOrderList.size() - 1) {
+                current = null;
+            }
+        }
+        boolean isJie = false;
+        if (flag == StaticVal.PLAN_ACCEPT) {
+            bridge.changeToolbar(StaticVal.TOOLBAR_ACCEPT_ING);
+            isJie = true;
+        } else if (flag == StaticVal.PLAN_SEND) {
+            bridge.changeToolbar(StaticVal.TOOLBAR_SEND_ING);
+            isJie = false;
+        }
+        if (current != null) {
+            button.setVisibility(View.VISIBLE);
+            button.setText("正在"
+                    + (isJie ? "接 " : "送 ")
+                    + current.passengerName
+                    + " "
+                    + current.passengerPhone.replaceAll("(\\d{3})\\d{4}(\\d{4})",
+                    "$1****$2"));
+        } else {
+            button.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -99,7 +132,7 @@ public class CusListFragment extends RxBaseFragment {
 
     @Override
     public int getLayoutResId() {
-        return R.layout.fragment_cus_list;
+        return R.layout.cp_fragment_cus_list;
     }
 
     @Override
@@ -108,7 +141,8 @@ public class CusListFragment extends RxBaseFragment {
         recyclerView = $(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
-        cusListAdapter = new CusListAdapter(getActivity());
+        cusListAdapter = new CusListAdapter(getActivity(), 1);
+        cusListAdapter.setOnCallClickListener((order, position) -> PhoneUtil.call(getActivity(), order.passengerPhone));
         recyclerView.setAdapter(cusListAdapter);
 
         changeUi();

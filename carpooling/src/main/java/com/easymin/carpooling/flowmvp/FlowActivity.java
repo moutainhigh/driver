@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -27,6 +28,9 @@ import com.amap.api.navi.model.AMapNaviPath;
 import com.amap.api.navi.model.RouteOverlayOptions;
 import com.amap.api.navi.view.RouteOverLay;
 import com.amap.api.services.route.DriveRouteResult;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.component.Config;
 import com.easymi.component.ZXOrderStatus;
@@ -44,6 +48,7 @@ import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.GlideCircleTransform;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
@@ -58,6 +63,7 @@ import com.easymin.carpooling.flowmvp.fragment.ChangeSeqFragment;
 import com.easymin.carpooling.flowmvp.fragment.CusListFragment;
 import com.easymin.carpooling.flowmvp.fragment.FinishFragment;
 import com.easymin.carpooling.flowmvp.fragment.NotStartFragment;
+import com.easymin.carpooling.flowmvp.fragment.PasTicketsFragment;
 import com.easymin.carpooling.receiver.CancelOrderReceiver;
 import com.easymin.carpooling.receiver.OrderFinishReceiver;
 import com.easymin.carpooling.receiver.ScheduleTurnReceiver;
@@ -206,12 +212,12 @@ public class FlowActivity extends RxBaseActivity implements
                     for (int i = 0; i < carpoolOrders.size(); i++) {
                         CarpoolOrder carpoolOrder = carpoolOrders.get(i);
 
-                        if ((cusOrder.id == carpoolOrder.id)) {
+                        if ((cusOrder.id == carpoolOrder.orderId)) {
                             isExist = true;
                             break;
                         }
                     }
-                    if (!isExist){
+                    if (!isExist) {
                         CarpoolOrder.delete(cusOrder.id);
                     }
                 }
@@ -305,7 +311,12 @@ public class FlowActivity extends RxBaseActivity implements
         if (flag == StaticVal.TOOLBAR_NOT_START) {
             cusToolbar.setLeftBack(view -> finish());
             cusToolbar.setTitle("行程未开始");
-            cusToolbar.setRightGone();
+            cusToolbar.setRightText("购票乘客", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    bridge.toPasTickets();
+                }
+            });
         } else if (flag == StaticVal.TOOLBAR_CHANGE_ACCEPT) {
             cusToolbar.setLeftBack(view -> {
                 if (dymOrder.orderStatus <= ZXOrderStatus.WAIT_START) {
@@ -395,6 +406,10 @@ public class FlowActivity extends RxBaseActivity implements
             cusToolbar.setLeftBack(view -> finish());
             cusToolbar.setTitle("行程结束");
             cusToolbar.setRightGone();
+        } else if (flag == StaticVal.TOOLBAR_PAS_TICKET) {
+            cusToolbar.setLeftBack(view -> bridge.toNotStart());
+            cusToolbar.setTitle("乘客列表");
+            cusToolbar.setRightGone();
         }
 
     }
@@ -420,13 +435,9 @@ public class FlowActivity extends RxBaseActivity implements
         List<CarpoolOrder> customers = CarpoolOrder.findByIDTypeOrderBySendSeq(pincheOrder.orderId, pincheOrder.orderType);
         for (CarpoolOrder customer : customers) {
             //接完后把所有的订单置为未送
-            if (customer.status == 1) {
-                //只有已接的才置为未送状态
-                customer.status = 3;
-                customer.updateStatus();
-            } else {
+            if (customer.customeStatus == 2) {
                 //跳过接的直接置为跳过送状态
-                customer.status = 5;
+                customer.customeStatus = 5;
                 customer.updateStatus();
             }
         }
@@ -461,6 +472,7 @@ public class FlowActivity extends RxBaseActivity implements
     NotStartFragment notStartFragment;
     AcceptSendFragment acceptSendFragment;
     FinishFragment finishFragment;
+    PasTicketsFragment pasTicketsFragment;
 
     /**
      * 初始化fragment
@@ -472,6 +484,9 @@ public class FlowActivity extends RxBaseActivity implements
         bundle.putLong("orderId", pincheOrder.orderId);
         bundle.putString("orderType", pincheOrder.orderType);
         cusListFragment.setArguments(bundle);
+
+        pasTicketsFragment = new PasTicketsFragment();
+        pasTicketsFragment.setArguments(bundle);
 
         changeSeqFragment = new ChangeSeqFragment();
         changeSeqFragment.setArguments(bundle);
@@ -495,9 +510,9 @@ public class FlowActivity extends RxBaseActivity implements
     protected void onResume() {
         super.onResume();
         mapView.onResume();
-        if (isOrderLoadOk) {
-            showFragmentByStatus();
-        }
+//        if (isOrderLoadOk) {
+//            showFragmentByStatus();
+//        }
     }
 
     /**
@@ -559,9 +574,10 @@ public class FlowActivity extends RxBaseActivity implements
             }
 
             @Override
-            public void addMarker(LatLng latLng, int flag, int num) {
-                FlowActivity.this.addMarker(latLng, flag, num);
+            public void addMarker(LatLng latLng, int flag, int num, int ticketNumber, String photo) {
+                FlowActivity.this.addMarker(latLng, flag, num, ticketNumber, photo);
             }
+
 
             @Override
             public void toCusList(int flag) {
@@ -634,31 +650,31 @@ public class FlowActivity extends RxBaseActivity implements
 
             @Override
             public void arriveStart(CarpoolOrder carpoolOrder) {
-                //TODO 到达预约地
+
                 presenter.arriveStart(carpoolOrder);
             }
 
             @Override
             public void acceptCustomer(CarpoolOrder carpoolOrder) {
-                //TODO 接到客户
+
                 presenter.acceptCustomer(carpoolOrder);
             }
 
             @Override
             public void jumpAccept(CarpoolOrder carpoolOrder) {
-                //TODO 跳过接
+
                 presenter.jumpAccept(carpoolOrder);
             }
 
             @Override
             public void arriveEnd(CarpoolOrder carpoolOrder) {
-                //TODO 到达目的地
+
                 presenter.arriveEnd(carpoolOrder);
             }
 
             @Override
             public void jumpSend(CarpoolOrder carpoolOrder) {
-                //TODO 跳过送
+
                 presenter.jumpSend(carpoolOrder);
             }
 
@@ -678,6 +694,12 @@ public class FlowActivity extends RxBaseActivity implements
             @Override
             public void navi(LatLng latLng, Long orderId) {
                 presenter.navi(latLng, orderId);
+            }
+
+            @Override
+            public void toPasTickets() {
+                pasTicketsFragment.setParam(bridge);
+                switchFragment(pasTicketsFragment).commit();
             }
         };
     }
@@ -710,30 +732,40 @@ public class FlowActivity extends RxBaseActivity implements
     }
 
     /**
+     * 加载圆形头像
+     */
+    RequestOptions options = new RequestOptions()
+            .centerCrop()
+            .transform(new GlideCircleTransform())
+            .placeholder(R.mipmap.photo_default)
+            .diskCacheStrategy(DiskCacheStrategy.ALL);
+
+    /**
      * 添加数字标号种类的marker
      *
      * @param latLng
      * @param flag
      */
     @Override
-    public void addMarker(LatLng latLng, int flag, int num) {
+    public void addMarker(LatLng latLng, int flag, int num, int ticketNumber, String photo) {
         MarkerOptions markerOption = new MarkerOptions();
         markerOption.position(latLng);
-        //设置Marker可拖动
-        markerOption.draggable(false);
+        markerOption.draggable(false);//设置Marker可拖动
 
-        View view = LayoutInflater.from(this).inflate(R.layout.carpool_sequence_marker, null);
+        View view = LayoutInflater.from(this).inflate(R.layout.sequence_marker, null);
+
         TextView tv = view.findViewById(R.id.seq_num);
-        tv.setText(String.valueOf(num));
-        if (flag == StaticVal.MARKER_FLAG_PASS_ENABLE) {
-            tv.setBackgroundResource(R.drawable.circle_accent);
-        } else {
-            tv.setBackgroundResource(R.drawable.circle_gray);
-        }
+        ImageView avater = view.findViewById(R.id.iv_avater_marker);
+
+        tv.setText("车票:" + ticketNumber);
+        Glide.with(this)
+                .load(Config.IMG_SERVER + photo)
+                .apply(options)
+                .into(avater);
+
         markerOption.icon(BitmapDescriptorFactory.fromView(view));
 
         // 将Marker设置为贴地显示，可以双指下拉地图查看效果
-        //设置marker平贴地图效果
         markerOption.setFlat(true);
         aMap.addMarker(markerOption);
 
@@ -939,7 +971,7 @@ public class FlowActivity extends RxBaseActivity implements
                 //多个客户全部跳过问题
                 boolean isAllJump = true;
                 for (int i = 0; i < (customers.size() - 1); i++) {
-                    if (customers.get(i).status != 2) {
+                    if (customers.get(i).customeStatus != 2) {
                         isAllJump = false;
                     }
                 }
@@ -1200,7 +1232,7 @@ public class FlowActivity extends RxBaseActivity implements
 
     @Override
     public void onTurnOrder(long scheduleId, String orderType, String msg) {
-        if (scheduleId == pincheOrder.scheduleId){
+        if (scheduleId == pincheOrder.scheduleId) {
             getCustomers(pincheOrder.scheduleId);
 //            finish();
         }

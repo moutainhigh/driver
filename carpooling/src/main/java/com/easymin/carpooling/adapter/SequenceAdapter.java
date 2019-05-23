@@ -11,9 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.easymi.component.Config;
 import com.easymi.component.utils.DensityUtil;
+import com.easymi.component.utils.GlideCircleTransform;
 import com.easymi.component.utils.Log;
 import com.easymin.carpooling.R;
 import com.easymin.carpooling.entity.Sequence;
@@ -40,6 +46,12 @@ public class SequenceAdapter extends RecyclerView.Adapter<SequenceAdapter.ViewHo
     private Context context;
 
     private ItemTouchHelper itemTouchHelper;
+
+    RequestOptions options = new RequestOptions()
+            .centerCrop()
+            .transform(new GlideCircleTransform())
+            .placeholder(R.mipmap.photo_default)
+            .diskCacheStrategy(DiskCacheStrategy.ALL);
 
     /**
      * 最大最小位置
@@ -98,7 +110,7 @@ public class SequenceAdapter extends RecyclerView.Adapter<SequenceAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.carpool_sequence_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cp_sequence_item, parent, false);
         FrameLayout frameLayout = new FrameLayout(context);
         int width = (DensityUtil.getDisplayWidth(context) - DensityUtil.dp2px(context, 40)) / 8;
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, FrameLayout.LayoutParams.WRAP_CONTENT);
@@ -112,39 +124,55 @@ public class SequenceAdapter extends RecyclerView.Adapter<SequenceAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Sequence sequence = lists.get(position);
 
-        holder.seqNum.setOnTouchListener((v, event) -> {
+        holder.rl_person.setOnTouchListener((v, event) -> {
             Log.e(TAG,"----"+event.getAction()+"\n-----"+event.getActionMasked());
-            if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
-                itemTouchHelper.startDrag(holder);
+
+            if (position > minPos) {
+                if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+                    itemTouchHelper.startDrag(holder);
+                }
             }
             return false;
         });
 
         if (sequence.type == 1) {
+            holder.rl_person.setVisibility(View.VISIBLE);
+            holder.iv_avater.setVisibility(View.VISIBLE);
+
+            Glide.with(context)
+                    .load(Config.IMG_SERVER + sequence.photo)
+                    .apply(options)
+                    .into(holder.iv_avater);
+
             if (position > minPos) {
                 holder.seqTxt.setVisibility(View.GONE);
                 holder.seqImg.setVisibility(View.GONE);
-                holder.seqNum.setVisibility(View.VISIBLE);
-                holder.seqNumGray.setVisibility(View.GONE);
-                holder.seqNum.setText(String.valueOf(sequence.num));
+                holder.tv_get.setVisibility(View.GONE);
             } else {
                 holder.seqTxt.setVisibility(View.GONE);
                 holder.seqImg.setVisibility(View.GONE);
-                holder.seqNum.setVisibility(View.GONE);
-                holder.seqNumGray.setVisibility(View.VISIBLE);
-                holder.seqNumGray.setText(String.valueOf(sequence.num));
+                holder.tv_get.setVisibility(View.VISIBLE);
+
+                // 0 未接 1 已接 2 跳过接 3 未送 4 已送 5 跳过送
+                if (sequence.status == 1){
+                    holder.tv_get.setText("已接");
+                }else if (sequence.status == 2){
+                    holder.tv_get.setText("已跳过");
+                }else if (sequence.status == 4){
+                    holder.tv_get.setText("已送");
+                }else if (sequence.status == 5){
+                    holder.tv_get.setText("跳过送");
+                }
             }
         } else if (sequence.type == 2) {
             holder.seqTxt.setVisibility(View.VISIBLE);
             holder.seqImg.setVisibility(View.GONE);
-            holder.seqNum.setVisibility(View.GONE);
-            holder.seqNumGray.setVisibility(View.GONE);
+            holder.rl_person.setVisibility(View.GONE);
             holder.seqTxt.setText(sequence.text);
         } else {
             holder.seqTxt.setVisibility(View.GONE);
             holder.seqImg.setVisibility(View.VISIBLE);
-            holder.seqNum.setVisibility(View.GONE);
-            holder.seqNumGray.setVisibility(View.GONE);
+            holder.rl_person.setVisibility(View.GONE);
         }
     }
 
@@ -196,18 +224,22 @@ public class SequenceAdapter extends RecyclerView.Adapter<SequenceAdapter.ViewHo
     class ViewHolder extends RecyclerView.ViewHolder {
 
         View itemView;
-        TextView seqNum;
         TextView seqTxt;
-        TextView seqNumGray;
         ImageView seqImg;
+
+        RelativeLayout rl_person;
+        ImageView iv_avater;
+        TextView tv_get;
 
         public ViewHolder(View itemView) {
             super(itemView);
             this.itemView = itemView;
             seqImg = itemView.findViewById(R.id.seq_car_img);
-            seqNum = itemView.findViewById(R.id.seq_num);
             seqTxt = itemView.findViewById(R.id.seq_text);
-            seqNumGray = itemView.findViewById(R.id.seq_num_gray);
+
+            rl_person = itemView.findViewById(R.id.rl_person);
+            iv_avater = itemView.findViewById(R.id.iv_avater);
+            tv_get = itemView.findViewById(R.id.tv_get);
         }
     }
 

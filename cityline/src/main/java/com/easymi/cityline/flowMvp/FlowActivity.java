@@ -222,7 +222,7 @@ public class FlowActivity extends RxBaseActivity implements
                 for (int i = 0; i < orderCustomers.size(); i++) {
                     OrderCustomer orderCustomer1 = orderCustomers.get(i);
 
-                    if ((cusOrder.id == orderCustomer1.id)) {
+                    if ((cusOrder.id == orderCustomer1.orderId)) {
                         isExist = true;
                         break;
                     }
