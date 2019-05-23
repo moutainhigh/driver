@@ -24,6 +24,8 @@ import com.easymi.component.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -74,6 +76,8 @@ public class WorkTimeCounter {
         } else {
             if (timer == null || timerTask == null) {
                 getOnlinTime();
+            }else {
+                startCount();
             }
         }
     }
@@ -167,34 +171,6 @@ public class WorkTimeCounter {
             mSubscription.unsubscribe();
         }
 
-//        Employ employ = EmUtil.getEmployInfo();
-//        if (employ == null) {
-//            return;
-//        }
-//        /**
-//         * 根据本地缓存的上班时间戳进行计算听单时长 start
-//         */
-//        if (employ.status > 1 && new CsSharedPreferences().getLong(Config.ONLINE_TIME, 0) != 0) {
-//            totalMinute = (int) ((System.currentTimeMillis() - new CsSharedPreferences().getLong(Config.ONLINE_TIME, 0)) / (1000 * 60));
-//        } else {
-//            totalMinute = 0;
-//        }
-//        long driverId = employ.id;
-//        String driverNo = employ.userName;
-//        long companyId = employ.companyId;
-//
-//        int driverStatus;
-//        if (statues <= 0) {
-//            driverStatus = 3;
-//            if (EmUtil.getEmployInfo() != null && String.valueOf(EmUtil.getEmployInfo().status).equals(EmployStatus.ONLINE)) {
-//                driverStatus = 2;
-//            }
-//        } else {
-//            driverStatus = statues;
-//        }
-//
-//        String nowDate = TimeUtil.getTime("yyyy-MM-dd", System.currentTimeMillis());
-
         Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .upLoadOnlineTime(minute)
                 .filter(new HttpResultFunc())
@@ -213,7 +189,18 @@ public class WorkTimeCounter {
                     event.minute = 0;
                     EventBus.getDefault().post(event);
                 } else {
-                    Log.e("hufeng/time", minute + "");
+
+                    //判断是否隔天
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(new Date());
+                    calendar.set(Calendar.HOUR_OF_DAY, 24);
+                    calendar.set(Calendar.MINUTE, 0);
+                    calendar.set(Calendar.SECOND, 0);
+                    Date start = calendar.getTime();
+
+                    if ((start.getTime()-System.currentTimeMillis())/1000 < 60){
+                        totalMinute = 0;
+                    }
                 }
             } else {
                 ToastUtil.showMessage(context, result.getMessage());
