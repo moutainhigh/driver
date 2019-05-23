@@ -32,7 +32,7 @@
     <string name="km">公里</string>
 
     <string name="pc_select_place_map_hint_1">请选择地图中有色块的区域范围</string>
-    <string name="pc_select_place_map_hint_2">请尽量选择车辆方便停靠的位置</string>
+    <string name="pc_select_place_map_hint_2">您可以拖动地图快速选择地址，也可以</string>
 
     <string name="pc_input_detail_on_address">请输入详细的上车地址</string>
     <string name="pc_input_detail_off_address">请输入详细的下车地址</string>

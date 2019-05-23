@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#f3f3f3"
     android:orientation="vertical"
-    android:paddingTop="10dp">
+    android:paddingBottom="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@drawable/corners_white_4dp_bg"
         android:orientation="horizontal"
+        android:paddingBottom="15dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp">
+        android:paddingTop="15dp">
 
         <LinearLayout
             android:layout_width="0.0dp"
@@ -121,19 +120,16 @@
 
                 </LinearLayout>
             </LinearLayout>
-
         </LinearLayout>
 
-
-
-            <TextView
-                android:id="@+id/order_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="未支付 >"
-                android:textSize="16sp" />
-
+        <TextView
+            android:id="@+id/order_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="未支付 >"
+            android:textSize="16sp" />
 
     </LinearLayout>
-</RelativeLayout>
+
+</LinearLayout>

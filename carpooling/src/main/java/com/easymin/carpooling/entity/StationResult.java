@@ -2,6 +2,8 @@ package com.easymin.carpooling.entity;
 
 import com.easymi.component.result.EmResult;
 
+import java.util.List;
+
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName:
@@ -12,12 +14,15 @@ import com.easymi.component.result.EmResult;
  */
 
 public class StationResult extends EmResult {
-    /**
-     * 起点站点
-     */
-    public Station startStationVo;
-    /**
-     * 终点站点
-     */
-    public Station endStationVo;
+//    /**
+//     * 起点站点
+//     */
+//    public Station startStationVo;
+//    /**
+//     * 终点站点
+//     */
+//    public Station endStationVo;
+
+    public List<Station> data;
+
 }

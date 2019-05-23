@@ -221,6 +221,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("modelId").append(" ").append("LONG").append(",")
                 .append("taxiModelId").append(" ").append("LONG").append(",")
                 .append("qrCodeUrl").append(" ").append("TEXT").append(",")
+                .append("serviceTel").append(" ").append("TEXT").append(",")
 
                 .append("registerStatus").append(" ").append("INTEGER")
 

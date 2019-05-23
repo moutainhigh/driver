@@ -24,6 +24,8 @@ import com.easymi.component.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -72,13 +74,10 @@ public class WorkTimeCounter {
         } else if (statues == 2) {
             getOnlinTime();
         } else {
-            Log.e("hufeng","-1");
             if (timer == null || timerTask == null) {
-                Log.e("hufeng","timerTask == null");
                 getOnlinTime();
             }else {
                 startCount();
-                Log.e("hufeng","timerTask == run");
             }
         }
     }
@@ -98,7 +97,6 @@ public class WorkTimeCounter {
             if (result != null) {
 
                 totalMinute = (int) result.object;
-                Log.e("hufeng/totalMinute",totalMinute+"");
 
                 CountEvent event = new CountEvent();
                 event.finishCount = -1;
@@ -219,9 +217,16 @@ public class WorkTimeCounter {
                     event.minute = 0;
                     EventBus.getDefault().post(event);
                 } else {
-                    Log.e("hufeng/time", minute + "");
-                    if ((minute/60) % 3 == 2){
-                        timerTask.cancel();
+                    //判断是否隔天
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(new Date());
+                    calendar.set(Calendar.HOUR_OF_DAY, 24);
+                    calendar.set(Calendar.MINUTE, 0);
+                    calendar.set(Calendar.SECOND, 0);
+                    Date start = calendar.getTime();
+
+                    if ((start.getTime()-System.currentTimeMillis())/1000 < 60){
+                        totalMinute = 0;
                     }
                 }
             } else {

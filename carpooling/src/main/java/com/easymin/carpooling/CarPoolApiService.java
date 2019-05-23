@@ -2,6 +2,7 @@ package com.easymin.carpooling;
 
 import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.common.entity.OrderCustomer;
+import com.easymi.component.result.EmResult;
 import com.easymi.component.result.EmResult2;
 import com.easymin.carpooling.entity.PincheOrder;
 import com.easymin.carpooling.entity.PriceResult;
@@ -134,7 +135,6 @@ public interface CarPoolApiService {
     Observable<EmResult2<List<PincheOrder>>> queryDriverSchedule(@Query("id") long driverId);
 
 
-
     /**
      * 根据班次查询电子围栏
      *
@@ -152,8 +152,46 @@ public interface CarPoolApiService {
      * @param startStationId
      * @return
      */
-    @GET("/api/v1/bus/city/order/price")
-    Observable<EmResult2<PriceResult>> getPrice(@Query("endStationId") long endStationId,
-                                                @Query("lineId") long lineId,
-                                                @Query("startStationId") long startStationId);
+    @GET("/api/v1/carpool/passenger/order/price")
+    Observable<PriceResult> getPrice(@Query("endStationId") long endStationId,
+                                     @Query("lineId") long lineId,
+                                     @Query("startStationId") long startStationId);
+
+    /**
+     * 拼车下单接口
+     *
+     * @param companyId      公司ID
+     * @param startStationId 起点站ID
+     * @param endStationId   终点站ID
+     * @param scheduleId     班次ID
+     * @param ticketNumber   票数(人数)
+     * @param passengerPhone 乘客电话
+     * @param channelAlias   订单渠道
+     * @param timeSlotId     服务时间段ID
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/api/v1/carpool/driver/order/create")
+    Observable<EmResult2<Object>> createOrder(@Field("companyId") long companyId,
+                                              @Field("startStationId") long startStationId,
+                                              @Field("endStationId") long endStationId,
+                                              @Field("scheduleId") long scheduleId,
+                                              @Field("ticketNumber") int ticketNumber,
+                                              @Field("passengerPhone") String passengerPhone,
+                                              @Field("channelAlias") String channelAlias,
+                                              @Field("timeSlotId") long timeSlotId);
+
+
+    /**
+     * 指派订单
+     *
+     * @param orderId
+     * @param driverId
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/api/v1/carpool/driver/order/assign")
+    Observable<EmResult2<Object>> assginOrder(@Field("orderId") long orderId,
+                                              @Field("driverId") long driverId);
+
 }

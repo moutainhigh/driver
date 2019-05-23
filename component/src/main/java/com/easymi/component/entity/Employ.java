@@ -349,6 +349,11 @@ public class Employ implements Parcelable {
      */
     public String qrCodeUrl;
 
+    /**
+     * 客服电话
+     */
+    public String serviceTel;
+
 
     protected Employ(Parcel in) {
         id = in.readLong();
@@ -415,6 +420,7 @@ public class Employ implements Parcelable {
         taxiModelId = in.readLong();
         registerStatus = in.readInt();
         qrCodeUrl = in.readString();
+        serviceTel = in.readString();
     }
 
 
@@ -502,6 +508,7 @@ public class Employ implements Parcelable {
         values.put("taxiModelId", taxiModelId);
         values.put("registerStatus", registerStatus);
         values.put("qrCodeUrl",qrCodeUrl);
+        values.put("serviceTel",serviceTel);
         /*
          * values.put("age", age); values.put("jialing", jialing);
          */
@@ -664,6 +671,8 @@ public class Employ implements Parcelable {
                 driverInfo.registerStatus = cursor.getInt(cursor.getColumnIndex("registerStatus"));
 
                 driverInfo.qrCodeUrl = cursor.getString(cursor.getColumnIndex("qrCodeUrl"));
+
+                driverInfo.serviceTel = cursor.getString(cursor.getColumnIndex("serviceTel"));
             }
         } catch (Exception e) {
 //			CrashReport.setUserSceneTag();
@@ -847,6 +856,8 @@ public class Employ implements Parcelable {
 
         driverInfo.qrCodeUrl = cursor.getString(cursor.getColumnIndex("qrCodeUrl"));
 
+        driverInfo.serviceTel = cursor.getString(cursor.getColumnIndex("serviceTel"));
+
         driverInfo.registerStatus = cursor.getInt(cursor.getColumnIndex("registerStatus"));
         return driverInfo;
     }
@@ -921,6 +932,7 @@ public class Employ implements Parcelable {
         values.put("balance", balance);
         values.put("modelId", modelId);
         values.put("taxiModelId", taxiModelId);
+        values.put("serviceTel",serviceTel);
 
         values.put("registerStatus", registerStatus);
         values.put("qrCodeUrl",qrCodeUrl);
@@ -1015,6 +1027,7 @@ public class Employ implements Parcelable {
         dest.writeLong(taxiModelId);
         dest.writeInt(registerStatus);
         dest.writeString(qrCodeUrl);
+        dest.writeString(serviceTel);
     }
 
 

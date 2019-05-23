@@ -63,7 +63,7 @@ public class BanciAdapter extends RecyclerView.Adapter<BanciAdapter.Holder> {
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.pc_banci_item, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.pc_banci_item, parent,false);
 
         return new Holder(view);
     }
@@ -77,9 +77,9 @@ public class BanciAdapter extends RecyclerView.Adapter<BanciAdapter.Holder> {
         holder.orderEndPlace.setText(pincheOrder.endStation);
 
         if (pincheOrder.status == 1 && System.currentTimeMillis() < pincheOrder.time * 1000) {
-            holder.orderStatus.setText("售票中");
+            holder.orderStatus.setText("售票中 >");
         } else {
-            holder.orderStatus.setText(pincheOrder.getOrderStatusStr());
+            holder.orderStatus.setText(pincheOrder.getOrderStatusStr()+" >");
         }
 
         if (null != onItemClickListener) {

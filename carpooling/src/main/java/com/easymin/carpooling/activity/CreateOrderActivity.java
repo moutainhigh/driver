@@ -26,6 +26,8 @@ import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.result.EmResult2;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
@@ -46,6 +48,7 @@ import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -136,7 +139,6 @@ public class CreateOrderActivity extends RxBaseActivity {
         btn.setOnClickListener(view -> finish());
 
         banci_select.setOnClickListener(view -> {
-
             Intent intent = new Intent(CreateOrderActivity.this, BanciSelectActivity.class);
             startActivityForResult(intent, 0);
         });
@@ -146,24 +148,24 @@ public class CreateOrderActivity extends RxBaseActivity {
                 ToastUtil.showMessage(CreateOrderActivity.this, "请先选择班次");
                 return;
             }
-            if (stationResult == null || stationResult.startStationVo == null) {
+            if (stationResult == null || stationResult.data == null || stationResult.data.size() != 2) {
                 ToastUtil.showMessage(CreateOrderActivity.this, "未查询到站点信息");
                 return;
             }
             Intent intent = new Intent(CreateOrderActivity.this, SelectPlaceOnMapActivity.class);
             intent.putExtra("select_place_type", 1);
-            if (stationResult.startStationVo.coordinate.size() == 0) {
+            if (stationResult.data.get(0).coordinate.size() == 0) {
                 List<MapPositionModel> list = new ArrayList<>();
                 MapPositionModel model = new MapPositionModel();
-                model.setLatitude(stationResult.startStationVo.latitude);
-                model.setLongitude(stationResult.startStationVo.longitude);
+                model.setLatitude(stationResult.data.get(0).latitude);
+                model.setLongitude(stationResult.data.get(0).longitude);
                 list.add(model);
 
                 intent.putParcelableArrayListExtra("pos_list",
                         (ArrayList<? extends Parcelable>) list);
             } else {
                 intent.putParcelableArrayListExtra("pos_list",
-                        (ArrayList<? extends Parcelable>) stationResult.startStationVo.coordinate);
+                        (ArrayList<? extends Parcelable>) stationResult.data.get(0).coordinate);
             }
             startActivityForResult(intent, 1);
         });
@@ -173,24 +175,24 @@ public class CreateOrderActivity extends RxBaseActivity {
                 ToastUtil.showMessage(CreateOrderActivity.this, "请先选择班次");
                 return;
             }
-            if (stationResult == null || stationResult.endStationVo == null) {
+            if (stationResult == null || stationResult.data.get(1) == null) {
                 ToastUtil.showMessage(CreateOrderActivity.this, "未查询到站点信息");
                 return;
             }
             Intent intent = new Intent(CreateOrderActivity.this, SelectPlaceOnMapActivity.class);
             intent.putExtra("select_place_type", 3);
-            if (stationResult.endStationVo.coordinate.size() == 0) {
+            if (stationResult.data.get(1).coordinate.size() == 0) {
                 List<MapPositionModel> list = new ArrayList<>();
                 MapPositionModel model = new MapPositionModel();
-                model.setLatitude(stationResult.endStationVo.latitude);
-                model.setLongitude(stationResult.endStationVo.longitude);
+                model.setLatitude(stationResult.data.get(1).latitude);
+                model.setLongitude(stationResult.data.get(1).longitude);
                 list.add(model);
 
                 intent.putParcelableArrayListExtra("pos_list",
                         (ArrayList<? extends Parcelable>) list);
             } else {
                 intent.putParcelableArrayListExtra("pos_list",
-                        (ArrayList<? extends Parcelable>) stationResult.endStationVo.coordinate);
+                        (ArrayList<? extends Parcelable>) stationResult.data.get(1).coordinate);
             }
 
             startActivityForResult(intent, 3);
@@ -247,11 +249,11 @@ public class CreateOrderActivity extends RxBaseActivity {
     private void calcPrice() {
         double money = 0;
         if (null != priceResult) {
-            money = priceResult.money * seatNo;
+            money = priceResult.data.money * seatNo;
         } else {
             money = 0;
         }
-        this.money.setText("" + money);
+        this.money.setText("" +new DecimalFormat("######0.00").format(money));
         if (money != 0) {
             money_con.setVisibility(View.VISIBLE);
         } else {
@@ -274,7 +276,7 @@ public class CreateOrderActivity extends RxBaseActivity {
                 //班次
                 PincheOrder newPcOrder = (PincheOrder) data.getSerializableExtra("pincheOrder");
                 if (null != pcOrder) {
-                    if (pcOrder.orderId != newPcOrder.orderId) {
+                    if (pcOrder.id != newPcOrder.id) {
                         //班次变化后  重新键入
                         pcOrder = newPcOrder;
                         initViewByPcOrder();
@@ -295,7 +297,7 @@ public class CreateOrderActivity extends RxBaseActivity {
                 endSite = data.getParcelableExtra("pos_model");
                 end_place.setText(endSite.getAddress());
                 setBtnEnable();
-            }else {
+            } else {
                 if (data == null) {
                     return;
                 }
@@ -334,28 +336,28 @@ public class CreateOrderActivity extends RxBaseActivity {
 
         money_con.setVisibility(View.GONE);
 
-        queryStation(pcOrder.orderId);
+        queryStation(pcOrder.id);
     }
 
     /**
      * 设置按钮能否点击
      */
     private void setBtnEnable() {
-//        if (pcOrder != null
-//                && stationResult != null
-//                && stationResult.startStationVo != null
-//                && stationResult.endStationVo != null
-//                && startSite != null
-//                && endSite != null
-//                && StringUtils.isNotBlank(edit_phone.getText().toString())
-//                && edit_phone.getText().toString().length() == 11
-//                && seatNo > 0) {
-//            create_order.setEnabled(true);
-//            create_order.setBackgroundResource(R.drawable.corners_button_selector);
-//        } else {
-//            create_order.setEnabled(false);
-//            create_order.setBackgroundResource(R.drawable.pc_btn_unpress_999999_bg);
-//        }
+        if (pcOrder != null
+                && stationResult != null
+                && stationResult.data.get(0) != null
+                && stationResult.data.get(1) != null
+                && startSite != null
+                && endSite != null
+                && StringUtils.isNotBlank(edit_phone.getText().toString())
+                && edit_phone.getText().toString().length() == 11
+                && seatNo > 0) {
+            create_order.setEnabled(true);
+            create_order.setBackgroundResource(R.drawable.corners_button_selector);
+        } else {
+            create_order.setEnabled(false);
+            create_order.setBackgroundResource(R.drawable.pc_btn_unpress_999999_bg);
+        }
         if (seatNo == 0) {
             sub.setEnabled(false);
         } else {
@@ -388,7 +390,7 @@ public class CreateOrderActivity extends RxBaseActivity {
                     @Override
                     public void onNext(StationResult stationResult) {
                         CreateOrderActivity.this.stationResult = stationResult;
-                        queryPrice(pcOrder.lineId, stationResult.startStationVo.id, stationResult.endStationVo.id);
+                        queryPrice(pcOrder.lineId, stationResult.data.get(0).id, stationResult.data.get(1).id);
                     }
 
                     @Override
@@ -409,7 +411,7 @@ public class CreateOrderActivity extends RxBaseActivity {
     private void queryPrice(long lineId, long startStationId, long endStationId) {
         Observable<PriceResult> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
                 .getPrice(endStationId, lineId, startStationId)
-                .map(new HttpResultFunc2<>())
+                .filter(new HttpResultFunc<>())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());
 
@@ -434,42 +436,51 @@ public class CreateOrderActivity extends RxBaseActivity {
      * 创建订单
      */
     private void createOrder() {
-//        List<MapPositionModel> models = new ArrayList<>();
-//        models.add(startSite);
-//        models.add(endSite);
-//        String orderAddress = new Gson().toJson(models);
-//        Observable<Object> observable = ApiManager.getInstance().createApi(Config.HOST, CLService.class)
-//                .createOrder(
-//                        System.currentTimeMillis() / 1000,
-//                        "driver",
-//                        stationResult.endStationVo.id,
-//                        orderAddress,
-//                        edit_phone.getText().toString(),
-//                        pcOrder.orderId,
-//                        stationResult.startStationVo.id,
-//                        seatNo)
-//                .map(new HttpResultFunc2<>())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io());
-//
-//        mRxManager.add(observable.subscribe(new MySubscriber<Object>(this,
-//                true,
-//                true,
-//                o -> create_suc_con.setVisibility(View.VISIBLE))));
+        List<MapPositionModel> models = new ArrayList<>();
+        models.add(startSite);
+        models.add(endSite);
+        String orderAddress = new Gson().toJson(models);
+        Observable<Object> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
+                .createOrder(
+                        EmUtil.getEmployInfo().companyId,
+                        stationResult.data.get(0).id,
+                        stationResult.data.get(1).id,
+                        pcOrder.id,
+                        seatNo,
+                        edit_phone.getText().toString(),
+                        "driver",
+                        pcOrder.timeSlotId
+                        )
+                .map(new HttpResultFunc2<>())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
 
+        mRxManager.add(observable.subscribe(new MySubscriber<Object>(this,
+                true,
+                true, new HaveErrSubscriberListener<Object>() {
+            @Override
+            public void onNext(Object o) {
+                //todo
 
-        ComPayDialog comPayDialog = new ComPayDialog(this);
-        comPayDialog.setOnMyClickListener(view -> {
-            comPayDialog.dismiss();
-            if (view.getId() == R.id.pay_wenXin){
-                toPay("CHANNEL_APP_WECHAT",1d);
-            }else if (view.getId() == R.id.pay_zfb){
-                toPay("CHANNEL_APP_ALI",10d);
-            }else if (view.getId() == R.id.pay_balance){
-                toPay("CHANNEL_APP_BALANCE",100d);
+                ComPayDialog comPayDialog = new ComPayDialog(CreateOrderActivity.this);
+                comPayDialog.setOnMyClickListener(view -> {
+                    comPayDialog.dismiss();
+                    if (view.getId() == R.id.pay_wenXin) {
+//                        toPay("CHANNEL_APP_WECHAT", 1d);
+                    } else if (view.getId() == R.id.pay_zfb) {
+//                        toPay("CHANNEL_APP_ALI", 10d);
+                    } else if (view.getId() == R.id.pay_balance) {
+//                        toPay("CHANNEL_APP_BALANCE", 100d);
+                    }
+                });
+                comPayDialog.show();
             }
-        });
-        comPayDialog.show();
+
+            @Override
+            public void onError(int code) {
+
+            }
+        })));
     }
 
 
@@ -479,7 +490,7 @@ public class CreateOrderActivity extends RxBaseActivity {
      * @param payType
      * @param money
      */
-    private void toPay(String payType, Double money) {
+    private void toPay(String payType, Double money,long orderId) {
 //        Observable<RechargeResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
 //                .recharge(payType, money)
 //                .filter(new HttpResultFunc<>())
@@ -575,5 +586,17 @@ public class CreateOrderActivity extends RxBaseActivity {
         }
         return true;
     });
+
+    public void AssginOrder(long orderId){
+        Observable<Object> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
+                .assginOrder(orderId, EmUtil.getEmployId())
+                .map(new HttpResultFunc2<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, object -> {
+            finish();
+        })));
+    }
 
 }
