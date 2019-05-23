@@ -156,7 +156,7 @@ public class PersonalActivity extends RxBaseActivity {
                 Vehicle vehicle = Vehicle.findByEmployId(employ.id);
                 tv_car_info.setText(vehicle.brand+" "+vehicle.plateColor+" "+vehicle.vehicleNo);
             }else {
-                tv_car_info.setText("未绑定改业务车辆");
+                tv_car_info.setText("未绑定该业务车辆");
             }
 
             if (StringUtils.isNotBlank(employ.portraitPath)) {

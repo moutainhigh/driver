@@ -4,6 +4,8 @@ import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.common.entity.OrderCustomer;
 import com.easymi.component.result.EmResult2;
 import com.easymin.carpooling.entity.PincheOrder;
+import com.easymin.carpooling.entity.PriceResult;
+import com.easymin.carpooling.entity.StationResult;
 
 import java.util.List;
 
@@ -130,4 +132,28 @@ public interface CarPoolApiService {
      */
     @GET("/api/v1/carpool/driver/schedule/getDriverSchedule")
     Observable<EmResult2<List<PincheOrder>>> queryDriverSchedule(@Query("id") long driverId);
+
+
+
+    /**
+     * 根据班次查询电子围栏
+     *
+     * @param scheduleId
+     * @return
+     */
+    @GET("/api/v1/carpool/driver/schedule/getStation")
+    Observable<StationResult> getStationResult(@Query("scheduleId") long scheduleId);
+
+    /**
+     * 获取单价
+     *
+     * @param endStationId
+     * @param lineId
+     * @param startStationId
+     * @return
+     */
+    @GET("/api/v1/bus/city/order/price")
+    Observable<EmResult2<PriceResult>> getPrice(@Query("endStationId") long endStationId,
+                                                @Query("lineId") long lineId,
+                                                @Query("startStationId") long startStationId);
 }

@@ -72,8 +72,13 @@ public class WorkTimeCounter {
         } else if (statues == 2) {
             getOnlinTime();
         } else {
+            Log.e("hufeng","-1");
             if (timer == null || timerTask == null) {
+                Log.e("hufeng","timerTask == null");
                 getOnlinTime();
+            }else {
+                startCount();
+                Log.e("hufeng","timerTask == run");
             }
         }
     }
@@ -93,6 +98,7 @@ public class WorkTimeCounter {
             if (result != null) {
 
                 totalMinute = (int) result.object;
+                Log.e("hufeng/totalMinute",totalMinute+"");
 
                 CountEvent event = new CountEvent();
                 event.finishCount = -1;
@@ -120,16 +126,16 @@ public class WorkTimeCounter {
      * 初始化定时器，开始记时
      */
     public void startCount() {
-            destroy();
-            timer = new Timer();
-            timerTask = new TimerTask() {
-                @Override
-                public void run() {
-                    count();
-                }
-            };
-            //一分钟计时一次，延迟60s执行
-            timer.schedule(timerTask, 1000, 1000);
+        destroy();
+        timer = new Timer();
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                count();
+            }
+        };
+        //一分钟计时一次，延迟60s执行
+        timer.schedule(timerTask, 1000, 1000);
     }
 
     /**
@@ -214,6 +220,9 @@ public class WorkTimeCounter {
                     EventBus.getDefault().post(event);
                 } else {
                     Log.e("hufeng/time", minute + "");
+                    if ((minute/60) % 3 == 2){
+                        timerTask.cancel();
+                    }
                 }
             } else {
                 ToastUtil.showMessage(context, result.getMessage());

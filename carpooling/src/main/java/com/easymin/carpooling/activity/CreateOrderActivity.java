@@ -31,9 +31,11 @@ import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
+import com.easymin.carpooling.CarPoolApiService;
 import com.easymin.carpooling.R;
 import com.easymin.carpooling.entity.MapPositionModel;
 import com.easymin.carpooling.entity.PincheOrder;
+import com.easymin.carpooling.entity.PriceResult;
 import com.easymin.carpooling.entity.StationResult;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -92,10 +94,10 @@ public class CreateOrderActivity extends RxBaseActivity {
      * 终点信息
      */
     private MapPositionModel endSite = null;
-//    /**
-//     * 费用信息
-//     */
-//    private PriceResult priceResult = null;
+    /**
+     * 费用信息
+     */
+    private PriceResult priceResult = null;
 
     /**
      * 座位数
@@ -244,8 +246,8 @@ public class CreateOrderActivity extends RxBaseActivity {
      */
     private void calcPrice() {
         double money = 0;
-        if (0 != pcOrder.money) {
-            money = pcOrder.money * seatNo;
+        if (null != priceResult) {
+            money = priceResult.money * seatNo;
         } else {
             money = 0;
         }
@@ -373,60 +375,60 @@ public class CreateOrderActivity extends RxBaseActivity {
      * @param scheduleId
      */
     private void queryStation(long scheduleId) {
-//        Observable<StationResult> observable = ApiManager.getInstance().createApi(Config.HOST, CLService.class)
-//                .getStationResult(scheduleId)
-//                .filter(new HttpResultFunc<>())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io());
-//
-//        mRxManager.add(observable.subscribe(new MySubscriber<>(CreateOrderActivity.this,
-//                true,
-//                false,
-//                new HaveErrSubscriberListener<StationResult>() {
-//                    @Override
-//                    public void onNext(StationResult stationResult) {
-//                        CreateOrderActivity.this.stationResult = stationResult;
-//                        queryPrice(pcOrder.lineId, stationResult.startStationVo.id, stationResult.endStationVo.id);
-//                    }
-//
-//                    @Override
-//                    public void onError(int code) {
-//                        stationResult = null;
-//                        setBtnEnable();
-//                    }
-//                })));
+        Observable<StationResult> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
+                .getStationResult(scheduleId)
+                .filter(new HttpResultFunc<>())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(CreateOrderActivity.this,
+                true,
+                false,
+                new HaveErrSubscriberListener<StationResult>() {
+                    @Override
+                    public void onNext(StationResult stationResult) {
+                        CreateOrderActivity.this.stationResult = stationResult;
+                        queryPrice(pcOrder.lineId, stationResult.startStationVo.id, stationResult.endStationVo.id);
+                    }
+
+                    @Override
+                    public void onError(int code) {
+                        stationResult = null;
+                        setBtnEnable();
+                    }
+                })));
     }
 
-//    /**
-//     * 查询单价
-//     *
-//     * @param lineId
-//     * @param startStationId
-//     * @param endStationId
-//     */
-//    private void queryPrice(long lineId, long startStationId, long endStationId) {
-//        Observable<PriceResult> observable = ApiManager.getInstance().createApi(Config.HOST, CLService.class)
-//                .getPrice(endStationId, lineId, startStationId)
-//                .map(new HttpResultFunc2<>())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io());
-//
-//        mRxManager.add(observable.subscribe(new MySubscriber<>(this,
-//                false,
-//                false,
-//                new HaveErrSubscriberListener<PriceResult>() {
-//                    @Override
-//                    public void onNext(PriceResult priceResult) {
-//                        CreateOrderActivity.this.priceResult = priceResult;
-//                    }
-//
-//                    @Override
-//                    public void onError(int code) {
-//                        priceResult = null;
-//                        setBtnEnable();
-//                    }
-//                })));
-//    }
+    /**
+     * 查询单价
+     *
+     * @param lineId
+     * @param startStationId
+     * @param endStationId
+     */
+    private void queryPrice(long lineId, long startStationId, long endStationId) {
+        Observable<PriceResult> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
+                .getPrice(endStationId, lineId, startStationId)
+                .map(new HttpResultFunc2<>())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this,
+                false,
+                false,
+                new HaveErrSubscriberListener<PriceResult>() {
+                    @Override
+                    public void onNext(PriceResult priceResult) {
+                        CreateOrderActivity.this.priceResult = priceResult;
+                    }
+
+                    @Override
+                    public void onError(int code) {
+                        priceResult = null;
+                        setBtnEnable();
+                    }
+                })));
+    }
 
     /**
      * 创建订单

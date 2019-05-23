@@ -139,7 +139,7 @@ public class BanciSelectActivity extends RxBaseActivity {
                         recyclerView.complete();
                         orders.clear();
                         orders.addAll(result2.getData() == null ? new ArrayList<>() : result2.getData());
-                        adapter.setBaseOrders(result2.getData());
+                        adapter.setBaseOrders(orders);
 
                         recyclerView.setLoadMoreEnable(false);
 
