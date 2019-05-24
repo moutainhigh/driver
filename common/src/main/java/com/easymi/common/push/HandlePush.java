@@ -644,7 +644,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                     //语音播报xx客户已完成支付
                     XApp.getInstance().syntheticVoice(
                             XApp.getMyString(R.string.pay_suc_1) +
-                                    weihao +
+                                    "\""+weihao +"\""+
                                     XApp.getMyString(R.string.pay_suc_2));
 
                     Intent intent1 = new Intent();
