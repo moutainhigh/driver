@@ -7,6 +7,7 @@ import com.easymi.component.result.EmResult2;
 import com.easymin.carpooling.entity.PincheOrder;
 import com.easymin.carpooling.entity.PriceResult;
 import com.easymin.carpooling.entity.StationResult;
+import com.google.gson.JsonElement;
 
 import java.util.List;
 
@@ -172,7 +173,7 @@ public interface CarPoolApiService {
      */
     @FormUrlEncoded
     @POST("/api/v1/carpool/driver/order/create")
-    Observable<EmResult2<Object>> createOrder(@Field("companyId") long companyId,
+    Observable<EmResult2<Long>> createOrder(@Field("companyId") long companyId,
                                               @Field("startStationId") long startStationId,
                                               @Field("endStationId") long endStationId,
                                               @Field("scheduleId") long scheduleId,
@@ -193,5 +194,16 @@ public interface CarPoolApiService {
     @POST("/api/v1/carpool/driver/order/assign")
     Observable<EmResult2<Object>> assginOrder(@Field("orderId") long orderId,
                                               @Field("driverId") long driverId);
+
+    /**
+     *  订单支付接口（公共接口）
+     * @param orderId
+     * @param channel
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/api/v1/public/pay/order")
+    Observable<EmResult2<JsonElement>> payOrder(@Field("id") Long orderId,
+                                                @Field("channel") String channel);
 
 }

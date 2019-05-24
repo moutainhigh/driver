@@ -26,6 +26,7 @@ import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.result.EmResult;
 import com.easymi.component.result.EmResult2;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
@@ -106,6 +107,11 @@ public class CreateOrderActivity extends RxBaseActivity {
      * 座位数
      */
     private int seatNo = 0;
+
+    /**
+     * 生成的未支付订单id
+     */
+    private long orderId;
 
     @Override
     public boolean isEnableSwipe() {
@@ -440,7 +446,7 @@ public class CreateOrderActivity extends RxBaseActivity {
         models.add(startSite);
         models.add(endSite);
         String orderAddress = new Gson().toJson(models);
-        Observable<Object> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
+        Observable<Long> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
                 .createOrder(
                         EmUtil.getEmployInfo().companyId,
                         stationResult.data.get(0).id,
@@ -455,22 +461,23 @@ public class CreateOrderActivity extends RxBaseActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());
 
-        mRxManager.add(observable.subscribe(new MySubscriber<Object>(this,
+        mRxManager.add(observable.subscribe(new MySubscriber<Long>(this,
                 true,
-                true, new HaveErrSubscriberListener<Object>() {
+                true, new HaveErrSubscriberListener<Long>() {
             @Override
-            public void onNext(Object o) {
+            public void onNext(Long orderId) {
                 //todo
+                Log.e("hufeng/orderId",orderId+"");
 
                 ComPayDialog comPayDialog = new ComPayDialog(CreateOrderActivity.this);
                 comPayDialog.setOnMyClickListener(view -> {
                     comPayDialog.dismiss();
                     if (view.getId() == R.id.pay_wenXin) {
-//                        toPay("CHANNEL_APP_WECHAT", 1d);
+                        toPay("CHANNEL_APP_WECHAT", orderId);
                     } else if (view.getId() == R.id.pay_zfb) {
-//                        toPay("CHANNEL_APP_ALI", 10d);
+                        toPay("CHANNEL_APP_ALI", orderId);
                     } else if (view.getId() == R.id.pay_balance) {
-//                        toPay("CHANNEL_APP_BALANCE", 100d);
+                        toPay("PAY_DRIVER_BALANCE", orderId);
                     }
                 });
                 comPayDialog.show();
@@ -488,30 +495,31 @@ public class CreateOrderActivity extends RxBaseActivity {
      * 支付
      *
      * @param payType
-     * @param money
      */
-    private void toPay(String payType, Double money,long orderId) {
-//        Observable<RechargeResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-//                .recharge(payType, money)
-//                .filter(new HttpResultFunc<>())
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread());
-//
-//        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, rechargeResult -> {
-//            if (payType.equals("CHANNEL_APP_WECHAT")) {
-//                launchWeixin(rechargeResult.data);
-//            } else if (payType.equals("CHANNEL_APP_ALI")) {
-//                String url = null;
-//                try {
-//                    url = new JSONObject(rechargeResult.data.toString()).getString("ali_app_url");
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//                launchZfb(url);
-//            }else if (payType.equals("CHANNEL_APP_BALANCE")){
-//                //todo 余额支付
-//            }
-//        })));
+    private void toPay(String payType,long orderId) {
+        Observable<JsonElement> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
+                .payOrder(orderId, payType)
+                .map(new HttpResultFunc2<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, jsonElement -> {
+
+            if (payType.equals("CHANNEL_APP_WECHAT")) {
+                launchWeixin(jsonElement);
+            } else if (payType.equals("CHANNEL_APP_ALI")) {
+                String url = null;
+                try {
+                    url = new JSONObject(jsonElement.toString()).getString("ali_app_url");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                launchZfb(url);
+            }else if (payType.equals("PAY_DRIVER_BALANCE")){
+                //todo 司机代付
+
+            }
+        })));
     }
 
 
@@ -586,6 +594,8 @@ public class CreateOrderActivity extends RxBaseActivity {
         }
         return true;
     });
+
+
 
     public void AssginOrder(long orderId){
         Observable<Object> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)

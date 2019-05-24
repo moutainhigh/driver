@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
+import android.widget.TextView;
 
 import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
@@ -47,6 +48,8 @@ public class BanciSelectActivity extends RxBaseActivity {
     CusToolbar toolbar;
 
     CusErrLayout errLayout;
+
+    TextView tv_hint;
 
     private List<PincheOrder> orders;
 
@@ -167,6 +170,7 @@ public class BanciSelectActivity extends RxBaseActivity {
             errLayout.setErrImg();
         }
         errLayout.setVisibility(View.VISIBLE);
+        tv_hint.setVisibility(View.GONE);
         errLayout.setOnClickListener(v -> {
             hideErr();
             recyclerView.setRefreshing(true);
@@ -178,5 +182,6 @@ public class BanciSelectActivity extends RxBaseActivity {
      */
     private void hideErr() {
         errLayout.setVisibility(View.GONE);
+        tv_hint.setVisibility(View.VISIBLE);
     }
 }
