@@ -39,6 +39,7 @@ import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.AesUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
+import com.easymi.component.utils.NumberToHanzi;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.EmployStatus;
 import com.easymin.driver.securitycenter.utils.CenterUtil;
@@ -57,7 +58,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- *
  * @author Administrator
  * @date 2017/1/11
  */
@@ -94,6 +94,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
 
     /**
      * 推送消息分发
+     *
      * @param jsonStr
      */
     public void handPush(String jsonStr) {
@@ -117,12 +118,12 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
-                if (order.serviceType.equals(Config.GOV)){
+                if (order.serviceType.equals(Config.GOV)) {
                     XApp.getInstance().shake();
                     XApp.getInstance().syntheticVoice("你有新的公务用车订单");
 
                     refreshWork();
-                }else {
+                } else {
                     if (!DymOrder.exists(order.orderId, order.serviceType)) {
                         loadOrder(order);
                     }
@@ -308,37 +309,37 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                     if (order.serviceType.equals(Config.ZHUANCHE)) {
                         ARouter.getInstance()
                                 .build("/zhuanche/FlowActivity")
-                                .withBoolean("flashAssign",true)
+                                .withBoolean("flashAssign", true)
                                 .withLong("orderId", order.orderId).navigation();
                     } else if (order.serviceType.equals(Config.TAXI)) {
                         ARouter.getInstance()
                                 .build("/taxi/FlowActivity")
                                 .withLong("orderId", order.orderId).navigation();
-                    }else if (order.serviceType.equals(Config.GOV)){
+                    } else if (order.serviceType.equals(Config.GOV)) {
 
                     }
                 }
-            }else if (msg.equals("chartered")){
+            } else if (msg.equals("chartered")) {
                 XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice("您有定制包车订单需要处理");
 
                 refreshWork();
-            }else if (msg.equals("rental")){
+            } else if (msg.equals("rental")) {
                 XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice("您有包车租车订单需要处理");
 
                 refreshWork();
-            }else if (msg.equals("order_hot_create")){
+            } else if (msg.equals("order_hot_create")) {
                 XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice("您有城际拼车订单需要处理");
 
                 refreshWork();
-            }else if (msg.equals("country") || msg.equals("custombus")){
+            } else if (msg.equals("country") || msg.equals("custombus")) {
                 XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice("您有班车订单需要处理");
 
                 refreshWork();
-            }else if (msg.equals("schedule_auto_finish")){
+            } else if (msg.equals("schedule_auto_finish")) {
                 XApp.getInstance().shake();
 //                XApp.getInstance().syntheticVoice("班次超时，系统已自动结束");
 
@@ -354,12 +355,12 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 bundle.putSerializable("order", order);
                 message.setData(bundle);
                 handler.sendMessage(message);
-            }else if (msg.equals("order_change")){
+            } else if (msg.equals("order_change")) {
                 XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice("您有新的转单");
 
                 refreshWork();
-            }else if (msg.equals("order_transferred")){
+            } else if (msg.equals("order_transferred")) {
                 XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice("您有班次被转单了");
 
@@ -375,7 +376,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 bundle.putSerializable("order", order);
                 message.setData(bundle);
                 handler.sendMessage(message);
-            }else if (msg.equals("book_order")){
+            } else if (msg.equals("book_order")) {
                 XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice("你有公务用车订单需要执行");
             }
@@ -384,7 +385,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
         }
     }
 
-    public void refreshWork(){
+    public void refreshWork() {
         Intent intent = new Intent();
         intent.setAction(Config.ORDER_REFRESH);
         XApp.getInstance().sendBroadcast(intent);
@@ -392,6 +393,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
 
     /**
      * 查询订单信息
+     *
      * @param multipleOrder
      */
     private void loadOrder(MultipleOrder multipleOrder) {
@@ -449,6 +451,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
 
     /**
      * 查询代驾订单
+     *
      * @param orderId
      * @param orderType
      */
@@ -475,6 +478,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
 
     /**
      * 查询专车订单
+     *
      * @param orderId
      * @param orderType
      */
@@ -501,6 +505,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
 
     /**
      * 查询出租车订单
+     *
      * @param orderId
      * @param orderType
      */
@@ -593,6 +598,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
 
     /**
      * 新建通知栏
+     *
      * @param context
      * @param tips
      * @param title
@@ -644,7 +650,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                     //语音播报xx客户已完成支付
                     XApp.getInstance().syntheticVoice(
                             XApp.getMyString(R.string.pay_suc_1) +
-                                    "\""+weihao +"\""+
+                                    NumberToHanzi.number2hanzi(weihao) +
                                     XApp.getMyString(R.string.pay_suc_2));
 
                     Intent intent1 = new Intent();
@@ -881,6 +887,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
     interface OnLoadOrderCallback {
         /**
          * 接口实现
+         *
          * @param multipleOrderResult
          * @param orderType
          */

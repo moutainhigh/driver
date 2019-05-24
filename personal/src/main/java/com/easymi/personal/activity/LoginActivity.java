@@ -48,6 +48,7 @@ import com.easymi.component.utils.GPSUtils;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MacUtils;
 import com.easymi.component.utils.MobileInfoUtil;
+import com.easymi.component.utils.NumberToHanzi;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.RsaUtils;
 import com.easymi.component.utils.SHA256Util;
@@ -194,7 +195,7 @@ public class LoginActivity extends RxBaseActivity {
     private void initBox() {
         textAgreement.setOnClickListener(view -> {
             Intent intent = new Intent(LoginActivity.this, WebActivity.class);
-            intent.putExtra("url", Config.H5_HOST+"#/protocol?articleName=driverLogin&appKey=" + Config.APP_KEY);
+            intent.putExtra("url", Config.H5_HOST + "#/protocol?articleName=driverLogin&appKey=" + Config.APP_KEY);
             intent.putExtra("title", getString(R.string.login_agreement));
             startActivity(intent);
         });
