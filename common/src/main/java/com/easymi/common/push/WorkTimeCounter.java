@@ -24,6 +24,8 @@ import com.easymi.component.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -71,9 +73,11 @@ public class WorkTimeCounter {
             uploadTime(statues, totalMinute);
         } else if (statues == 2) {
             getOnlinTime();
-        }else {
-            if (timer == null || timerTask == null){
+        } else {
+            if (timer == null || timerTask == null) {
                 getOnlinTime();
+            }else {
+                startCount();
             }
         }
     }
@@ -90,14 +94,14 @@ public class WorkTimeCounter {
 
         observable.subscribe(new MySubscriber<>(context, false,
                 true, result -> {
-            if (result != null ) {
+            if (result != null) {
 
                 totalMinute = (int) result.object;
 
                 CountEvent event = new CountEvent();
                 event.finishCount = -1;
                 event.income = -1;
-                event.minute = totalMinute/60;
+                event.minute = totalMinute / 60;
                 EventBus.getDefault().post(event);
 
                 startCount();
@@ -120,6 +124,7 @@ public class WorkTimeCounter {
      * 初始化定时器，开始记时
      */
     public void startCount() {
+        destroy();
         timer = new Timer();
         timerTask = new TimerTask() {
             @Override
@@ -129,8 +134,6 @@ public class WorkTimeCounter {
         };
         //一分钟计时一次，延迟60s执行
         timer.schedule(timerTask, 1000, 1000);
-        //初始化从服务器拉一次。
-//        uploadTime(-1, totalMinute);
     }
 
     /**
@@ -142,16 +145,14 @@ public class WorkTimeCounter {
             return;
         }
         if (employ.status >= 3) {
-
             int bofore = totalMinute / 60;
             totalMinute++;
             int after = totalMinute / 60;
             if (after > bofore) {
-
                 CountEvent event = new CountEvent();
                 event.finishCount = -1;
                 event.income = -1;
-                event.minute = totalMinute/60;
+                event.minute = totalMinute / 60;
                 EventBus.getDefault().post(event);
 
                 uploadTime(-1, totalMinute);
@@ -169,34 +170,6 @@ public class WorkTimeCounter {
         if (mSubscription != null && !mSubscription.isUnsubscribed()) {
             mSubscription.unsubscribe();
         }
-
-//        Employ employ = EmUtil.getEmployInfo();
-//        if (employ == null) {
-//            return;
-//        }
-//        /**
-//         * 根据本地缓存的上班时间戳进行计算听单时长 start
-//         */
-//        if (employ.status > 1 && new CsSharedPreferences().getLong(Config.ONLINE_TIME, 0) != 0) {
-//            totalMinute = (int) ((System.currentTimeMillis() - new CsSharedPreferences().getLong(Config.ONLINE_TIME, 0)) / (1000 * 60));
-//        } else {
-//            totalMinute = 0;
-//        }
-//        long driverId = employ.id;
-//        String driverNo = employ.userName;
-//        long companyId = employ.companyId;
-//
-//        int driverStatus;
-//        if (statues <= 0) {
-//            driverStatus = 3;
-//            if (EmUtil.getEmployInfo() != null && String.valueOf(EmUtil.getEmployInfo().status).equals(EmployStatus.ONLINE)) {
-//                driverStatus = 2;
-//            }
-//        } else {
-//            driverStatus = statues;
-//        }
-//
-//        String nowDate = TimeUtil.getTime("yyyy-MM-dd", System.currentTimeMillis());
 
         Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .upLoadOnlineTime(minute)
@@ -216,7 +189,17 @@ public class WorkTimeCounter {
                     event.minute = 0;
                     EventBus.getDefault().post(event);
                 } else {
-                    Log.e("hufeng/time", minute + "");
+                    //判断是否隔天
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(new Date());
+                    calendar.set(Calendar.HOUR_OF_DAY, 24);
+                    calendar.set(Calendar.MINUTE, 0);
+                    calendar.set(Calendar.SECOND, 0);
+                    Date start = calendar.getTime();
+
+                    if ((start.getTime()-System.currentTimeMillis())/1000 < 60){
+                        totalMinute = 0;
+                    }
                 }
             } else {
                 ToastUtil.showMessage(context, result.getMessage());
