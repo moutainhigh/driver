@@ -598,15 +598,15 @@ public class CreateOrderActivity extends RxBaseActivity {
 
 
     public void AssginOrder(long orderId){
-        Observable<Object> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
-                .assginOrder(orderId, EmUtil.getEmployId())
-                .map(new HttpResultFunc2<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, object -> {
-            finish();
-        })));
+//        Observable<Object> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
+//                .assginOrder(orderId, EmUtil.getEmployId())
+//                .map(new HttpResultFunc2<>())
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread());
+//
+//        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, object -> {
+//            finish();
+//        })));
     }
 
 }

@@ -67,7 +67,7 @@ public class BanciSelectActivity extends RxBaseActivity {
     public void initViews(Bundle savedInstanceState) {
         recyclerView = findViewById(R.id.recyclerView);
         errLayout = findViewById(R.id.cus_err_layout);
-
+        tv_hint = findViewById(R.id.tv_hint);
         orders = new ArrayList<>();
 
         initToolBar();

@@ -174,29 +174,18 @@ public interface CarPoolApiService {
     @FormUrlEncoded
     @POST("/api/v1/carpool/driver/order/create")
     Observable<EmResult2<Long>> createOrder(@Field("companyId") long companyId,
-                                              @Field("startStationId") long startStationId,
-                                              @Field("endStationId") long endStationId,
-                                              @Field("scheduleId") long scheduleId,
-                                              @Field("ticketNumber") int ticketNumber,
-                                              @Field("passengerPhone") String passengerPhone,
-                                              @Field("channelAlias") String channelAlias,
-                                              @Field("timeSlotId") long timeSlotId);
+                                            @Field("startStationId") long startStationId,
+                                            @Field("endStationId") long endStationId,
+                                            @Field("scheduleId") long scheduleId,
+                                            @Field("ticketNumber") int ticketNumber,
+                                            @Field("passengerPhone") String passengerPhone,
+                                            @Field("channelAlias") String channelAlias,
+                                            @Field("timeSlotId") long timeSlotId);
 
 
     /**
-     * 指派订单
+     * 订单支付接口（公共接口）
      *
-     * @param orderId
-     * @param driverId
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("/api/v1/carpool/driver/order/assign")
-    Observable<EmResult2<Object>> assginOrder(@Field("orderId") long orderId,
-                                              @Field("driverId") long driverId);
-
-    /**
-     *  订单支付接口（公共接口）
      * @param orderId
      * @param channel
      * @return
@@ -205,5 +194,30 @@ public interface CarPoolApiService {
     @POST("/api/v1/public/pay/order")
     Observable<EmResult2<JsonElement>> payOrder(@Field("id") Long orderId,
                                                 @Field("channel") String channel);
+
+    /**
+     * 指派订单
+     *
+     * @param orderIds   订单ID
+     * @param timeSlotId 服务时间段ID
+     * @param vehicleId  车辆ID
+     * @param driverId   司机ID
+     * @param seats      座位数
+     * @param totalMoney 订单总金额
+     * @param saleSeat   已售票数
+     * @param source     已有运力1 空闲运力2   补单2
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/api/v1/carpool/driver/order/assign")
+    Observable<EmResult2<Object>> assginOrder(@Field("orderIds") long orderIds,
+                                              @Field("timeSlotId") long timeSlotId,
+                                              @Field("vehicleId") long vehicleId,
+                                              @Field("driverId") long driverId,
+                                              @Field("seats") long seats,
+                                              @Field("totalMoney") long totalMoney,
+                                              @Field("saleSeat") long saleSeat,
+                                              @Field("source") long source);
+
 
 }
