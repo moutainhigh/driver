@@ -55,7 +55,7 @@ public class ChangeSeqFragment extends RxBaseFragment {
     /**
      * 订单数据集
      */
-    List<CarpoolOrder> carpoolOrders;
+    List<CarpoolOrder> orderCustomers;
     /**
      * 排序适配器
      */
@@ -215,14 +215,14 @@ public class ChangeSeqFragment extends RxBaseFragment {
                 if (sequence.type != 1) {
                     iterator.remove();//移除图片和出城
                 } else {
-                    for (CarpoolOrder carpoolOrder : carpoolOrders) {
-                        if (carpoolOrder.num == sequence.num) {
+                    for (CarpoolOrder orderCustomer : orderCustomers) {
+                        if (orderCustomer.num == sequence.num) {
                             if (flag == StaticVal.PLAN_ACCEPT) {
-                                carpoolOrder.acceptSequence = i;
-                                carpoolOrder.updateAcceptSequence();
+                                orderCustomer.acceptSequence = i;
+                                orderCustomer.updateAcceptSequence();
                             } else {
-                                carpoolOrder.sendSequence = i;
-                                carpoolOrder.updateSendSequence();
+                                orderCustomer.sendSequence = i;
+                                orderCustomer.updateSendSequence();
                             }
 
                         }
@@ -232,7 +232,7 @@ public class ChangeSeqFragment extends RxBaseFragment {
             }
             if (flag == StaticVal.PLAN_ACCEPT) {
                 //根据acceptSequence排序
-                Collections.sort(carpoolOrders, (o1, o2) -> {
+                Collections.sort(orderCustomers, (o1, o2) -> {
                     if (o1.acceptSequence < o2.acceptSequence) {
                         return -1;
                     } else if (o1.acceptSequence > o2.acceptSequence) {
@@ -243,7 +243,7 @@ public class ChangeSeqFragment extends RxBaseFragment {
                 });
             } else {
                 //根据acceptSequence排序
-                Collections.sort(carpoolOrders, (o1, o2) -> {
+                Collections.sort(orderCustomers, (o1, o2) -> {
                     if (o1.sendSequence < o2.sendSequence) {
                         return -1;
                     } else if (o1.sendSequence > o2.sendSequence) {
@@ -274,26 +274,34 @@ public class ChangeSeqFragment extends RxBaseFragment {
 
         min = 0;
         if (flag == StaticVal.PLAN_ACCEPT) {
-            carpoolOrders = CarpoolOrder.findByIDTypeOrderByAcceptSeq(orderId, orderType);
-            for (int i = 0; i < carpoolOrders.size(); i++) {
-                CarpoolOrder customer = carpoolOrders.get(i);
+            orderCustomers = CarpoolOrder.findByIDTypeOrderByAcceptSeq(orderId, orderType);
+            for (int i = 0; i < orderCustomers.size(); i++) {
+                CarpoolOrder customer = orderCustomers.get(i);
                 Sequence sequence = new Sequence();
                 sequence.num = customer.num;
                 sequence.type = 1;
                 sequence.text = "";
+                sequence.photo = customer.avatar ;
+                sequence.ticketNumber = customer.ticketNumber;
+                sequence.status = customer.customeStatus;
+
                 sequences.add(sequence);
                 if (customer.customeStatus != 0) {
                     min = i+1;
                 }
             }
         } else {
-            carpoolOrders = CarpoolOrder.findByIDTypeOrderBySendSeq(orderId, orderType);
-            for (int i = 0; i < carpoolOrders.size(); i++) {
-                CarpoolOrder customer = carpoolOrders.get(i);
+            orderCustomers = CarpoolOrder.findByIDTypeOrderBySendSeq(orderId, orderType);
+            for (int i = 0; i < orderCustomers.size(); i++) {
+                CarpoolOrder customer = orderCustomers.get(i);
                 Sequence sequence = new Sequence();
                 sequence.num = customer.num;
                 sequence.type = 1;
                 sequence.text = "";
+                sequence.photo = customer.avatar ;
+                sequence.ticketNumber = customer.ticketNumber;
+                sequence.status = customer.customeStatus;
+
                 sequences.add(sequence);
                 if (customer.customeStatus > 3) {
                     min = i+1;
@@ -326,18 +334,18 @@ public class ChangeSeqFragment extends RxBaseFragment {
         }
         bridge.clearMap();
         List<LatLng> latLngs = new ArrayList<>();
-        for (CarpoolOrder carpoolOrder : carpoolOrders) {
+        for (CarpoolOrder orderCustomer : orderCustomers) {
             LatLng latLng;
             if (flag == StaticVal.PLAN_ACCEPT) {
-                latLng = new LatLng(carpoolOrder.startLat, carpoolOrder.startLng);
+                latLng = new LatLng(orderCustomer.startLat, orderCustomer.startLng);
             } else {
-                latLng = new LatLng(carpoolOrder.endLat, carpoolOrder.endLng);
+                latLng = new LatLng(orderCustomer.endLat, orderCustomer.endLng);
             }
-            if (carpoolOrder.customeStatus == 0 || carpoolOrder.customeStatus == 3) {
-                bridge.addMarker(latLng, StaticVal.MARKER_FLAG_PASS_ENABLE, carpoolOrder.num);
+            if (orderCustomer.customeStatus == 0 || orderCustomer.customeStatus == 3) {
+                bridge.addMarker(latLng, StaticVal.MARKER_FLAG_PASS_ENABLE, orderCustomer.num,orderCustomer.ticketNumber,orderCustomer.avatar);
                 latLngs.add(latLng);
             } else {
-                bridge.addMarker(latLng, StaticVal.MARKER_FLAG_PASS_DISABLE, carpoolOrder.num);
+                bridge.addMarker(latLng, StaticVal.MARKER_FLAG_PASS_DISABLE, orderCustomer.num,orderCustomer.ticketNumber,orderCustomer.avatar);
             }
         }
         bridge.showBounds(latLngs);

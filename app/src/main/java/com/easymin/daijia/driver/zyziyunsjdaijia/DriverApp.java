@@ -10,6 +10,7 @@ import com.easymi.common.daemon.PuppetReceiver1;
 import com.easymi.common.daemon.PuppetReceiver2;
 import com.easymi.common.daemon.PuppetService;
 import com.easymi.component.app.XApp;
+import com.easymin.daijia.driver.zyziyunsjdaijia.config.MainConfig;
 import com.marswin89.marsdaemon.DaemonClient;
 import com.marswin89.marsdaemon.DaemonConfigurations;
 
@@ -26,6 +27,7 @@ public class DriverApp extends XApp {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
+        new MainConfig(this);
         //保活client
         DaemonClient daemonClient = new DaemonClient(getDaemonConfigurations());
         daemonClient.onAttachBaseContext(base);

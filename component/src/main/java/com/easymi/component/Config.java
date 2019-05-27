@@ -25,6 +25,8 @@ public class Config {
 //    public static final String HOST = "http://api.xiaokakj.com/";//线上地址
     public static final String HOST = "http://api.xiaokakj.cn/";//预发/
 //    public static final String HOST = "http://10.10.2.12:10001/";//本地
+
+    public static String H5_HOST = "https://h5.xiaokakj.com/";//h5页面地址
     /**
      * MQTT配置
      */
@@ -35,12 +37,12 @@ public class Config {
     /**
      * APP_KEY
      */
-    public static final String APP_KEY = "1HAcient1kLqfeX7DVTV0dklUkpGEnUC";//资运
+    public static  String APP_KEY = "1HAcient1kLqfeX7DVTV0dklUkpGEnUC";//资运
 //    public static final String APP_KEY = "xoRfvofrZw25b95ZBZY2venOYlSwWFOV";//v6
 //    public static final String APP_KEY = "SsCMJL77sZMI0iudBi5XZeNjzmILOjih";  // 林凯
 //    public static final String APP_KEY = "eubACO3wp3rjz1OBcDSa4LeS4qM4586o";  // 麒策
 //    public static final String APP_KEY = "VC9NFbO9LnaxiFRi5HDQspvp45p8uP6w";  // 哈喽
-//    public static final String APP_KEY = "4ji3EvuwNziPKF8QXqXMTukGqPmlwOFJ";  //v6rvakva
+//    public static  String APP_KEY = "4ji3EvuwNziPKF8QXqXMTukGqPmlwOFJ";  //v6rvakva
 //    public static final String APP_KEY = "E0RzxsO1n9hZyKxOr5VvozmDsgU3EuSH";  //小鹏
 //    public static final String APP_KEY = "kQLGYQIx34408QOOv6Ed1OQRWM6Idt5w";  //小鹏预发
 //    public static final String APP_KEY = "G0UMEhNEBt0q0HDO1ecomWNUKP6wzcje";  //v6test
@@ -52,8 +54,8 @@ public class Config {
      * MQTT
      */
     //线上和预发
-    public static final String MQTT_USER_NAME = "xiaoka";
-    public static final String MQTT_PSW = "&mv7dHapB5J!95BJ";
+    public static  String MQTT_USER_NAME = "xiaoka";
+    public static  String MQTT_PSW = "&mv7dHapB5J!95BJ";
 //    //本地地址
 //    public static final String MQTT_USER_NAME = "admin";
 //    public static final String MQTT_PSW = "public";
@@ -61,24 +63,38 @@ public class Config {
     /**
      * 上传图片地址.
      */
-    public static final String HOST_UP_PIC = "http://up-z2.qiniu.com";
+    public static  String HOST_UP_PIC = "http://up-z2.qiniu.com";
     //是否是通用司机端
     public static final boolean COMM_USE = false;
 
     /**
      * QQ分享id
      */
-    public static final String QQ_APP_ID = "1107818477";
+    public static  String QQ_APP_ID = "1107818477";
     /**
      * 微信分享id
      */
-    public static final String WX_APP_ID = "wxe2bbe0ee7fa51624";
+    public static  String WX_APP_ID = "wxe2bbe0ee7fa51624";
+
+    /**
+     * 百度TTS_ID
+     */
+    public static String TTS_APP_ID="";
+    /**
+     * 百度TTS_KEY
+     */
+    public static String TTS_APP_KEY="";
+    /**
+     * 百度TTS_SECRET
+     */
+    public static String TTS_APP_SECRET="";
 
     /**
      * 图片服务器地址  线上
      */
-    public static final String IMG_SERVER = "http://assets.xiaokakj.com/";
+    public static  String IMG_SERVER = "http://assets.xiaokakj.com/";
     public static final String IMG_PATH = "";
+    public static String VERSION_NAME;
 
     public static final String MQTT_PUSH_TOPIC = "/driver/gps";
 

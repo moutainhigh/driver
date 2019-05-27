@@ -23,6 +23,7 @@ public class StaticVal {
     //规划接人
     public static final int PLAN_ACCEPT = 0x16;
 
+    public static final int TOOLBAR_PAS_TICKET = 0x21;
     public static final int TOOLBAR_NOT_START = 0x15;
     public static final int TOOLBAR_CHANGE_ACCEPT = 0x14;
     public static final int TOOLBAR_CHANGE_SEND = 0x13;

@@ -1,6 +1,6 @@
 package com.easymi.component.network;
 
-import android.util.Log;
+import com.easymi.component.utils.Log;
 
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
@@ -40,11 +40,11 @@ public class KeyGsonResponseBodyConverter<T> implements Converter<ResponseBody, 
             if (!str.contains("{")){
                 String jsonStr = EncApi.getInstance().dec(new CsSharedPreferences().getString(Config.AES_PASSWORD,AesUtil.AAAAA),str);
                 String urlString = URLDecoder.decode(jsonStr);
-                Log.e("responseJson", urlString);
+                Log.d("okhttp", urlString);
                 return adapter.fromJson(urlString);
             }else {
                 String urlString = URLDecoder.decode(str);
-                Log.e("responseJson", urlString);
+                Log.e("okhttp", urlString);
                 return adapter.fromJson(urlString);
             }
         } finally {

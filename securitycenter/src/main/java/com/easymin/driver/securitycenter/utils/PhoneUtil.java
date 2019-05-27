@@ -11,7 +11,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
-import android.os.DeadSystemException;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.provider.ContactsContract;
@@ -21,7 +20,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.View;
@@ -29,11 +27,11 @@ import android.view.ViewConfiguration;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.easymin.driver.securitycenter.R;
+
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.UUID;
-
-import com.easymin.driver.securitycenter.R;
 
 /**
  * Created by xyin on 2017/4/10.
@@ -81,7 +79,6 @@ public class PhoneUtil {
      */
     public static UserPhone handleResult(Context context, int resultCode, Intent data) {
         if (resultCode != Activity.RESULT_OK || data == null || context == null) {
-            Log.e(TAG, "getContacts fail, context is null or intent data is null");
             return null;
         }
 

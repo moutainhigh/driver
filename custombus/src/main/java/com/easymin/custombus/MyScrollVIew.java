@@ -2,7 +2,7 @@ package com.easymin.custombus;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 import android.widget.ScrollView;
 
 public class MyScrollVIew extends ScrollView {

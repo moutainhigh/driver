@@ -55,7 +55,7 @@ public class CallPoliceActivity extends AppCompatActivity {
         toolbar.setTitle("一键报警");
         toolbar.setRightText("功能说明",v -> {
             Intent intent = new Intent(this, WebActivity.class);
-            intent.putExtra("url", "http://h5.xiaokakj.com/#/protocol?articleName=passengerSafetyFunction&appKey="+CenterConfig.APPKEY);
+            intent.putExtra("url", CenterConfig.H5_HOST+"#/protocol?articleName=passengerSafetyFunction&appKey="+CenterConfig.APPKEY);
             intent.putExtra("title", "功能说明");
             startActivity(intent);
         });

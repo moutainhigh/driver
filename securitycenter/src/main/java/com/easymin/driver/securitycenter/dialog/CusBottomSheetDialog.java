@@ -9,16 +9,15 @@ import android.support.annotation.StyleRes;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatDialog;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
 
-import java.lang.reflect.Field;
-
 import com.easymin.driver.securitycenter.R;
+
+import java.lang.reflect.Field;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
@@ -164,9 +163,7 @@ public class CusBottomSheetDialog extends AppCompatDialog {
             field.setAccessible(true);
             field.setInt(bottomSheetBehavior, BottomSheetBehavior.STATE_EXPANDED);
         } catch (NoSuchFieldException e) {
-            Log.e("BottomSheetBehavior", "Error setting BottomSheetBehavior initial state (1)", e);
         } catch (IllegalAccessException e) {
-            Log.e("BottomSheetBehavior", "Error setting BottomSheetBehavior initial state (2)", e);
         }
     }
 }

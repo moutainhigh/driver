@@ -6,8 +6,8 @@ android {
         applicationId "com.easymin.daijia.driver.zyziyunsjdaijia"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 9009
-        versionName "V6.0.8.04"
+        versionCode 9012
+        versionName "V6.0.9.01"
         multiDexEnabled true
         flavorDimensions "App" //同在App这个名字维度
         ndk {
@@ -42,9 +42,7 @@ android {
 
     buildTypes {
         release {
-            buildConfigField "boolean", "LOG_DEBUG", "false" //不显示log
             minifyEnabled true
-//            shrinkResources true
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -67,25 +65,57 @@ android {
     }
 
     productFlavors {
+        //预发环境
+        prepare {
+            dimension "App"//同在App这个名字维度
+            buildConfigField "String", "HOST", '"http://api.xiaokakj.cn/"'
+            buildConfigField "String", "H5_HOST", '"http://h5.xiaokakj.cn/"'
+            buildConfigField "String", "MQTT_HOST", '"tcp://118.190.131.49:1883"'
+            buildConfigField "String", "MQTT_USER_NAME", '"xiaoka"'
+            buildConfigField "String", "MQTT_PSW", '"&mv7dHapB5J!95BJ"'
+            buildConfigField "String", "IMG_SERVER", '"https://assets.xiaokakj.com/"'
+        }
         //局域网环境
         local {
             dimension "App"//同在App这个名字维度
-        }
-        //自测环境
-        dev {
-            dimension "App"//同在App这个名字维
-        }
-        //测试环境
-        newTest {
-            dimension "App"//同在App这个名字维
-        }
-        //预发环境
-        prepare {
-            dimension "App"//同在App这个名字维
+            buildConfigField "String", "HOST", '"http://10.10.2.40:10001/"'
+            buildConfigField "String", "H5_HOST", '"http://h5.xiaokakj.cn/"'
+            buildConfigField "String", "MQTT_HOST", '"tcp://10.10.4.6:1883"'
+            buildConfigField "String", "MQTT_USER_NAME", '"admin"'
+            buildConfigField "String", "MQTT_PSW", '"public"'
+            buildConfigField "String", "IMG_SERVER", '"https://assets.xiaokakj.com/"'
         }
         //生产环境
         product {
-            dimension "App"//同在App这个名字维
+            dimension "App"//同在App这个名字维度
+            buildConfigField "String", "HOST", '"http://api.xiaokakj.com/"'
+            buildConfigField "String", "H5_HOST", '"https://h5.xiaokakj.com/"'
+            buildConfigField "String", "MQTT_HOST", '"tcp://ws.xiaokayun.cn"'
+            buildConfigField "String", "MQTT_USER_NAME", '"xiaoka"'
+            buildConfigField "String", "MQTT_PSW", '"&mv7dHapB5J!95BJ"'
+            buildConfigField "String", "IMG_SERVER", '"https://assets.xiaokakj.com/"'
+        }
+
+        //dev环境
+        dev {
+            dimension "App"//同在App这个名字维度
+            buildConfigField "String", "HOST", '"http://10.10.4.3:10001/"'
+            buildConfigField "String", "H5_HOST", '"http://10.10.4.3/h5/"'
+            buildConfigField "String", "MQTT_HOST", '"tcp://10.10.4.5:1883"'
+            buildConfigField "String", "MQTT_USER_NAME", '"admin"'
+            buildConfigField "String", "MQTT_PSW", '"public"'
+            buildConfigField "String", "IMG_SERVER", '"https://assets.xiaokakj.com/"'
+        }
+
+        //test环境
+        xtest {
+            dimension "App"//同在App这个名字维度
+            buildConfigField "String", "HOST", '"http://10.10.4.16:10001/"'
+            buildConfigField "String", "H5_HOST", '"http://10.10.4.16"'
+            buildConfigField "String", "MQTT_HOST", '"tcp://10.10.4.6:1883"'
+            buildConfigField "String", "MQTT_USER_NAME", '"admin"'
+            buildConfigField "String", "MQTT_PSW", '"public"'
+            buildConfigField "String", "IMG_SERVER", '"https://assets.xiaokakj.com/"'
         }
     }
 }

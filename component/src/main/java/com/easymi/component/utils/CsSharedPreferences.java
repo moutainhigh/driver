@@ -1,7 +1,7 @@
 package com.easymi.component.utils;
 
 import android.text.TextUtils;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;

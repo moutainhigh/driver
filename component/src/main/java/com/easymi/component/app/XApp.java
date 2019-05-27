@@ -6,35 +6,34 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.multidex.MultiDexApplication;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.amap.api.navi.AMapNavi;
+import com.baidu.tts.client.SpeechError;
+import com.baidu.tts.client.SpeechSynthesizer;
+import com.baidu.tts.client.SpeechSynthesizerListener;
+import com.baidu.tts.client.TtsMode;
 import com.easymi.component.BuildConfig;
 import com.easymi.component.Config;
 import com.easymi.component.R;
 import com.easymi.component.db.SqliteHelper;
 import com.easymi.component.loc.LocService;
+import com.easymi.component.tts.InitConfig;
+import com.easymi.component.tts.NonBlockSyntherizer;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.SysUtil;
-import com.iflytek.cloud.ErrorCode;
-import com.iflytek.cloud.SpeechConstant;
-import com.iflytek.cloud.SpeechError;
-import com.iflytek.cloud.SpeechSynthesizer;
-import com.iflytek.cloud.SpeechUtility;
-import com.iflytek.cloud.SynthesizerListener;
 import com.jaredrummler.android.processes.AndroidProcesses;
 import com.tencent.bugly.crashreport.CrashReport;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
- *
  * @author xyin
  * @date 2016/9/30
  * application 注:每启动一个新的进程就会调用application的onCreate方法(需要注意某些方法是否允许多次初始化).
@@ -61,11 +60,11 @@ public class XApp extends MultiDexApplication {
     private static final String SHARED_PREFERENCES_NAME = "em";
 
     /**
-     *  实例化对象
+     * 实例化对象
      */
     private static XApp instance;
 
-    public static SpeechSynthesizer iflytekSpe;
+    public NonBlockSyntherizer mSpeechSynthesizer;
 
     AudioManager audioManager;
 
@@ -74,9 +73,10 @@ public class XApp extends MultiDexApplication {
     private AudioManager.OnAudioFocusChangeListener mFocusChangeListener;
 
     /**
-     *  是否拥有焦点 通过此变量来判断player是否在正常播放
+     * 是否拥有焦点 通过此变量来判断player是否在正常播放
      */
     private boolean haveFoucs = false;
+    private boolean isSpeeching;
 
     @Override
     public void onCreate() {
@@ -94,12 +94,11 @@ public class XApp extends MultiDexApplication {
         ARouter.init(this);
         SqliteHelper.init(this);
 
-        SpeechUtility.createUtility(XApp.this, "appid=" + "5bceac22");
-        initIflytekTTS(false, "");
+        initBaiduTTs();
 
         initDataBase();
 
-        CrashReport.initCrashReport(getApplicationContext(), "28ff5239b4",true);
+        CrashReport.initCrashReport(getApplicationContext(), "28ff5239b4", true);
 
         int lastVersion = getMyPreferences().getInt(Config.SP_LAST_VERSION, 0);
         int current = SysUtil.getVersionCode(this);
@@ -113,7 +112,6 @@ public class XApp extends MultiDexApplication {
             editor.apply();
         }
     }
-
 
 
     private void initDataBase() {
@@ -161,21 +159,73 @@ public class XApp extends MultiDexApplication {
         return str;
     }
 
+    private Map<String, String> getParams() {
+        Map<String, String> params = new HashMap<String, String>();
+        // 以下参数均为选填
+        // 设置在线发声音人： 0 普通女声（默认） 1 普通男声 2 特别男声 3 情感男声<度逍遥> 4 情感儿童声<度丫丫>
+        params.put(SpeechSynthesizer.PARAM_SPEAKER, "0");
+        // 设置合成的音量，0-9 ，默认 5
+        params.put(SpeechSynthesizer.PARAM_VOLUME, "9");
+        // 设置合成的语速，0-9 ，默认 5
+        params.put(SpeechSynthesizer.PARAM_SPEED, "5");
+        // 设置合成的语调，0-9 ，默认 5
+        params.put(SpeechSynthesizer.PARAM_PITCH, "5");
+        return params;
+    }
+
     /**
      * 初始化讯飞语音
      */
-    private void initIflytekTTS(boolean speakNow, String msg) {
-        iflytekSpe = SpeechSynthesizer.createSynthesizer(this, code -> {
-            Log.d("TAG", "InitListener init() code = " + code);
-            if (code != ErrorCode.SUCCESS) {
-                Log.e("initIflytekTTS", "初始化失败,错误码：" + code);
-            } else {
-                setTtsParam();
-                if (speakNow) {
-                    syntheticVoice(msg);
-                }
+    private void initBaiduTTs() {
+        // 设置初始化参数
+        // 此处可以改为 含有您业务逻辑的SpeechSynthesizerListener的实现类
+        SpeechSynthesizerListener listener = new SpeechSynthesizerListener() {
+            @Override
+            public void onSynthesizeStart(String s) {
+
             }
-        });
+
+            @Override
+            public void onSynthesizeDataArrived(String s, byte[] bytes, int i) {
+
+            }
+
+            @Override
+            public void onSynthesizeFinish(String s) {
+
+            }
+
+            @Override
+            public void onSpeechStart(String s) {
+                isSpeeching = true;
+            }
+
+            @Override
+            public void onSpeechProgressChanged(String s, int i) {
+
+            }
+
+            @Override
+            public void onSpeechFinish(String s) {
+                isSpeeching = false;
+                if (voiceList != null && !voiceList.isEmpty()) {
+                    syntheticVoice(voiceList.removeFirst());
+                }
+                abandonFocus();
+            }
+
+            @Override
+            public void onError(String s, SpeechError speechError) {
+
+            }
+        };
+
+        Map<String, String> params = getParams();
+
+        InitConfig initConfig = new InitConfig(Config.TTS_APP_ID, Config.TTS_APP_KEY, Config.TTS_APP_SECRET, TtsMode.ONLINE, params, listener);
+
+        mSpeechSynthesizer = new NonBlockSyntherizer(this, initConfig, null); // 此处可以改为MySyntherizer 了解调用过程
+
 
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
@@ -221,27 +271,6 @@ public class XApp extends MultiDexApplication {
                     audioManager.abandonAudioFocus(mFocusChangeListener);
         }
         return false;
-    }
-
-    private void setTtsParam() {
-        iflytekSpe.setParameter(SpeechConstant.PARAMS, null);
-        // 清空参数
-        iflytekSpe.setParameter(SpeechConstant.PARAMS, null);
-        // 根据合成引擎设置相应参数
-        iflytekSpe.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD);
-        // 设置在线合成发音人
-        iflytekSpe.setParameter(SpeechConstant.VOICE_NAME, "xiaoyan");
-        //设置合成语速
-        iflytekSpe.setParameter(SpeechConstant.SPEED, "60");
-        //设置合成音调
-        iflytekSpe.setParameter(SpeechConstant.PITCH, "50");
-        //设置合成音量
-        iflytekSpe.setParameter(SpeechConstant.VOLUME, "100");
-        //设置播放器音频流类型
-        iflytekSpe.setParameter(SpeechConstant.STREAM_TYPE, String.valueOf(AudioManager.STREAM_MUSIC));
-        // 设置播放合成音频打断音乐播放，默认为true
-        iflytekSpe.setParameter(SpeechConstant.KEY_REQUEST_FOCUS, "false");
-
     }
 
     private LinkedList<String> voiceList;
@@ -359,7 +388,7 @@ public class XApp extends MultiDexApplication {
         }
         if (isQueue) {
             voiceList.add(text);
-            if (!iflytekSpe.isSpeaking()) {
+            if (!isSpeeching) {
                 syntheticVoice(voiceList.removeFirst());
             }
         } else {
@@ -370,6 +399,7 @@ public class XApp extends MultiDexApplication {
 
     /**
      * 播放语音
+     *
      * @param msg
      */
     public void syntheticVoice(String msg) {
@@ -378,53 +408,12 @@ public class XApp extends MultiDexApplication {
         if (!voiceAble) {
             return;
         }
-        if (iflytekSpe == null) {
-            Log.e("syntheticVoice", "iflytekSpe == null");
-            initIflytekTTS(true, msg);
+        if (mSpeechSynthesizer == null) {
+            initBaiduTTs();
             return;
         }
-        if (requestFocus() && null != iflytekSpe) {
-            int code = iflytekSpe.startSpeaking(msg, new SynthesizerListener() {
-                @Override
-                public void onSpeakBegin() {
-                    AMapNavi.setTtsPlaying(true);
-                }
-
-                @Override
-                public void onBufferProgress(int i, int i1, int i2, String s) {
-
-                }
-
-                @Override
-                public void onSpeakPaused() {
-
-                }
-
-                @Override
-                public void onSpeakResumed() {
-
-                }
-
-                @Override
-                public void onSpeakProgress(int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onCompleted(SpeechError speechError) {
-                    AMapNavi.setTtsPlaying(false);
-                    if (voiceList != null && voiceList.size() != 0) {
-                        syntheticVoice(voiceList.removeFirst());
-                    }
-                    abandonFocus();
-                }
-
-                @Override
-                public void onEvent(int i, int i1, int i2, Bundle bundle) {
-
-                }
-            });
-            Log.e("speechCode", code + "");
+        if (requestFocus() && null != mSpeechSynthesizer) {
+            int code = mSpeechSynthesizer.speak(msg);
         }
     }
 
@@ -432,9 +421,9 @@ public class XApp extends MultiDexApplication {
      * 停止播放
      */
     public void stopVoice() {
-        if (null != iflytekSpe) {
-            if (iflytekSpe.isSpeaking()) {
-                iflytekSpe.stopSpeaking();
+        if (null != mSpeechSynthesizer) {
+            if (isSpeeching) {
+                mSpeechSynthesizer.stop();
             }
         }
         abandonFocus();
@@ -463,8 +452,8 @@ public class XApp extends MultiDexApplication {
     @Override
     public void onTerminate() {
         super.onTerminate();
-        if (null != iflytekSpe) {
-            iflytekSpe.destroy();
+        if (null != mSpeechSynthesizer) {
+            mSpeechSynthesizer.release();
         }
     }
 

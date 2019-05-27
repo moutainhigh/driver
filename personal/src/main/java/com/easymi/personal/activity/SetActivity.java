@@ -154,7 +154,7 @@ public class SetActivity extends RxBaseActivity {
      */
     public void helpCenter(View view) {
         Intent intent = new Intent(this, WebActivity.class);
-        intent.putExtra("url", "http://h5.xiaokakj.com/#/protocol?articleName=driverHelp&appKey="+Config.APP_KEY);
+        intent.putExtra("url", Config.H5_HOST+"#/protocol?articleName=driverHelp&appKey="+Config.APP_KEY);
         intent.putExtra("title", getString(R.string.help_center));
         startActivity(intent);
     }

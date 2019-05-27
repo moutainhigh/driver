@@ -85,7 +85,7 @@ public class LuyinActivity extends AppCompatActivity{
         });
         tv_xieyi.setOnClickListener(v -> {
             Intent intent = new Intent(this, WebActivity.class);
-            intent.putExtra("url", "http://h5.xiaokakj.com/#/protocol?articleName=passengerSafetyRecord&appKey="+CenterConfig.APPKEY);
+            intent.putExtra("url", CenterConfig.H5_HOST+"#/protocol?articleName=passengerSafetyRecord&appKey="+CenterConfig.APPKEY);
             intent.putExtra("title", "录音保护协议");
             startActivity(intent);
         });

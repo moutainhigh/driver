@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.os.Environment;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 import android.widget.Toast;
 
 import com.easymi.component.utils.ToastUtil;

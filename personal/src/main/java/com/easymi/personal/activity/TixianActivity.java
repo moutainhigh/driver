@@ -90,7 +90,7 @@ public class TixianActivity extends RxBaseActivity {
         tixianRuleText.setOnClickListener(view -> {
                     //                startActivity(new Intent(TixianActivity.this, TixianRuleActivity.class))
                     Intent intent = new Intent(this, WebActivity.class);
-                    intent.putExtra("url", "http://h5.xiaokakj.com/#/protocol?articleName=driverPutForward&appKey=" + Config.APP_KEY);
+                    intent.putExtra("url", Config.H5_HOST+"#/protocol?articleName=driverPutForward&appKey=" + Config.APP_KEY);
                     intent.putExtra("title", getString(R.string.tixian_rule));
                     startActivity(intent);
                 }
