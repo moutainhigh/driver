@@ -200,7 +200,6 @@ public interface CarPoolApiService {
      *
      * @param orderIds   订单ID
      * @param timeSlotId 服务时间段ID
-     * @param vehicleId  车辆ID
      * @param driverId   司机ID
      * @param seats      座位数
      * @param totalMoney 订单总金额
@@ -210,14 +209,14 @@ public interface CarPoolApiService {
      */
     @FormUrlEncoded
     @POST("/api/v1/carpool/driver/order/assign")
-    Observable<EmResult2<Object>> assginOrder(@Field("orderIds") long orderIds,
+    Observable<EmResult> assginOrder(@Field("orderIds") long orderIds,
                                               @Field("timeSlotId") long timeSlotId,
-                                              @Field("vehicleId") long vehicleId,
                                               @Field("driverId") long driverId,
                                               @Field("seats") long seats,
-                                              @Field("totalMoney") long totalMoney,
+                                              @Field("totalMoney") double totalMoney,
                                               @Field("saleSeat") long saleSeat,
-                                              @Field("source") long source);
+                                              @Field("source") long source,
+                                              @Field("appKey") String appKey);
 
 
 }

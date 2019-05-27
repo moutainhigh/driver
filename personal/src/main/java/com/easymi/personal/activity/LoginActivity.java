@@ -423,7 +423,7 @@ public class LoginActivity extends RxBaseActivity {
      */
     private void getSetting(Employ employ, String name, String psw) {
         Observable<com.easymi.common.result.SettingResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .getAppSetting()
+                .getAppSetting(EmUtil.getEmployInfo().companyId)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

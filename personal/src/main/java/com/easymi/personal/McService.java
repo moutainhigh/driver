@@ -279,7 +279,7 @@ public interface McService {
      * @return
      */
     @GET("api/v1/public/driver/app")
-    Observable<SettingResult> getAppSetting();
+    Observable<SettingResult> getAppSetting(@Query("companyId") long companyId);
 
 
     /**

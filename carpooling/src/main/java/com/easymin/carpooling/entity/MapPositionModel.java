@@ -12,53 +12,21 @@ import android.os.Parcelable;
  * History:
  */
 public class MapPositionModel implements Parcelable {
+
+    private long id;
     private String address;
     private double latitude;//纬度
     private double longitude;//经度
     private int sort;//顺序
     private int type;//类型1代表出发地，3代表目的地
 
-
-    public MapPositionModel() {
-        super();
+    public long getId() {
+        return id;
     }
 
-
-    public MapPositionModel(String address, double latitude, double longitude, int sort, int type) {
-        super();
-        this.address = address;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.sort = sort;
-        this.type=type;
+    public void setId(long id) {
+        this.id = id;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(address);
-        dest.writeDouble(latitude);
-        dest.writeDouble(longitude);
-        dest.writeInt(sort);
-        dest.writeInt(type);
-    }
-
-    public static final Creator<MapPositionModel> CREATOR = new Creator<MapPositionModel>() {
-
-        @Override
-        public MapPositionModel[] newArray(int size) {
-            return new MapPositionModel[size];
-        }
-
-        @Override
-        public MapPositionModel createFromParcel(Parcel source) {
-            return new MapPositionModel(source.readString(), source.readDouble(), source.readDouble(), source.readInt(),source.readInt());
-        }
-    };
 
     public String getAddress() {
         return address;
@@ -98,5 +66,45 @@ public class MapPositionModel implements Parcelable {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public MapPositionModel() {
+        super();
+    }
+
+    protected MapPositionModel(Parcel in) {
+        id = in.readLong();
+        address = in.readString();
+        latitude = in.readDouble();
+        longitude = in.readDouble();
+        sort = in.readInt();
+        type = in.readInt();
+    }
+
+    public static final Creator<MapPositionModel> CREATOR = new Creator<MapPositionModel>() {
+        @Override
+        public MapPositionModel createFromParcel(Parcel in) {
+            return new MapPositionModel(in);
+        }
+
+        @Override
+        public MapPositionModel[] newArray(int size) {
+            return new MapPositionModel[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(id);
+        parcel.writeString(address);
+        parcel.writeDouble(latitude);
+        parcel.writeDouble(longitude);
+        parcel.writeInt(sort);
+        parcel.writeInt(type);
     }
 }

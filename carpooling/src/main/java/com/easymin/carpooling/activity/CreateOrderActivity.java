@@ -154,25 +154,29 @@ public class CreateOrderActivity extends RxBaseActivity {
                 ToastUtil.showMessage(CreateOrderActivity.this, "请先选择班次");
                 return;
             }
-            if (stationResult == null || stationResult.data == null || stationResult.data.size() != 2) {
+            if (stationResult == null || stationResult.data == null || stationResult.data.size() < 2) {
                 ToastUtil.showMessage(CreateOrderActivity.this, "未查询到站点信息");
                 return;
             }
+
+
             Intent intent = new Intent(CreateOrderActivity.this, SelectPlaceOnMapActivity.class);
             intent.putExtra("select_place_type", 1);
-            if (stationResult.data.get(0).coordinate.size() == 0) {
-                List<MapPositionModel> list = new ArrayList<>();
-                MapPositionModel model = new MapPositionModel();
-                model.setLatitude(stationResult.data.get(0).latitude);
-                model.setLongitude(stationResult.data.get(0).longitude);
-                list.add(model);
+//            if (stationResult.data.size() == 0) {
+//                List<MapPositionModel> list = new ArrayList<>();
+//                MapPositionModel model = new MapPositionModel();
+//                model.setLatitude(stationResult.data.get(0).latitude);
+//                model.setLongitude(stationResult.data.get(0).longitude);
+//                list.add(model);
+
 
                 intent.putParcelableArrayListExtra("pos_list",
-                        (ArrayList<? extends Parcelable>) list);
-            } else {
-                intent.putParcelableArrayListExtra("pos_list",
-                        (ArrayList<? extends Parcelable>) stationResult.data.get(0).coordinate);
-            }
+                        (ArrayList<? extends Parcelable>) stationResult.data);
+//            }
+//            else {
+//                intent.putParcelableArrayListExtra("pos_list",
+//                        (ArrayList<? extends Parcelable>) stationResult.data.get(0).coordinate);
+//            }
             startActivityForResult(intent, 1);
         });
         end_place.setOnClickListener(view -> {
@@ -187,19 +191,19 @@ public class CreateOrderActivity extends RxBaseActivity {
             }
             Intent intent = new Intent(CreateOrderActivity.this, SelectPlaceOnMapActivity.class);
             intent.putExtra("select_place_type", 3);
-            if (stationResult.data.get(1).coordinate.size() == 0) {
-                List<MapPositionModel> list = new ArrayList<>();
-                MapPositionModel model = new MapPositionModel();
-                model.setLatitude(stationResult.data.get(1).latitude);
-                model.setLongitude(stationResult.data.get(1).longitude);
-                list.add(model);
-
+//            if (stationResult.data.size() == 0) {
+//                List<MapPositionModel> list = new ArrayList<>();
+//                MapPositionModel model = new MapPositionModel();
+//                model.setLatitude(stationResult.data.get(1).latitude);
+//                model.setLongitude(stationResult.data.get(1).longitude);
+//                list.add(model);
+//
+//                intent.putParcelableArrayListExtra("pos_list",
+//                        (ArrayList<? extends Parcelable>) list);
+//            } else {
                 intent.putParcelableArrayListExtra("pos_list",
-                        (ArrayList<? extends Parcelable>) list);
-            } else {
-                intent.putParcelableArrayListExtra("pos_list",
-                        (ArrayList<? extends Parcelable>) stationResult.data.get(1).coordinate);
-            }
+                        (ArrayList<? extends Parcelable>) stationResult.data);
+//            }
 
             startActivityForResult(intent, 3);
         });
@@ -298,20 +302,26 @@ public class CreateOrderActivity extends RxBaseActivity {
                 startSite = data.getParcelableExtra("pos_model");
                 start_place.setText(startSite.getAddress());
                 setBtnEnable();
+                if (endSite!=null){
+                    queryPrice(pcOrder.lineId, startSite.getId(), endSite.getId());
+                }
             } else if (requestCode == 3) {
                 //终点
                 endSite = data.getParcelableExtra("pos_model");
                 end_place.setText(endSite.getAddress());
                 setBtnEnable();
+                if (startSite!=null){
+                    queryPrice(pcOrder.lineId, startSite.getId(), endSite.getId());
+                }
             } else {
                 if (data == null) {
                     return;
                 }
                 String str = data.getExtras().getString("pay_result");
                 if (str.equalsIgnoreCase("success")) {
+                    //支付成功，指派订单
+                    assginOrder();
 
-                    ToastUtil.showMessage(CreateOrderActivity.this, "支付成功");
-                    //todo  指派订单
                     // 结果result_data为成功时，去商户后台查询一下再展示成功
                 } else if (str.equalsIgnoreCase("fail")) {
                     ToastUtil.showMessage(CreateOrderActivity.this, "支付失败！");
@@ -351,8 +361,8 @@ public class CreateOrderActivity extends RxBaseActivity {
     private void setBtnEnable() {
         if (pcOrder != null
                 && stationResult != null
-                && stationResult.data.get(0) != null
-                && stationResult.data.get(1) != null
+                && stationResult.data != null
+                && stationResult.data.size() >= 2
                 && startSite != null
                 && endSite != null
                 && StringUtils.isNotBlank(edit_phone.getText().toString())
@@ -396,7 +406,6 @@ public class CreateOrderActivity extends RxBaseActivity {
                     @Override
                     public void onNext(StationResult stationResult) {
                         CreateOrderActivity.this.stationResult = stationResult;
-                        queryPrice(pcOrder.lineId, stationResult.data.get(0).id, stationResult.data.get(1).id);
                     }
 
                     @Override
@@ -442,52 +451,59 @@ public class CreateOrderActivity extends RxBaseActivity {
      * 创建订单
      */
     private void createOrder() {
-        List<MapPositionModel> models = new ArrayList<>();
-        models.add(startSite);
-        models.add(endSite);
-        String orderAddress = new Gson().toJson(models);
-        Observable<Long> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
-                .createOrder(
-                        EmUtil.getEmployInfo().companyId,
-                        stationResult.data.get(0).id,
-                        stationResult.data.get(1).id,
-                        pcOrder.id,
-                        seatNo,
-                        edit_phone.getText().toString(),
-                        "driver",
-                        pcOrder.timeSlotId
-                        )
-                .map(new HttpResultFunc2<>())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io());
+        if (orderId == 0){
+            List<MapPositionModel> models = new ArrayList<>();
+            models.add(startSite);
+            models.add(endSite);
+            String orderAddress = new Gson().toJson(models);
+            Observable<Long> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
+                    .createOrder(
+                            EmUtil.getEmployInfo().companyId,
+                            startSite.getId(),
+                            endSite.getId(),
 
-        mRxManager.add(observable.subscribe(new MySubscriber<Long>(this,
-                true,
-                true, new HaveErrSubscriberListener<Long>() {
-            @Override
-            public void onNext(Long orderId) {
-                //todo
-                Log.e("hufeng/orderId",orderId+"");
+                            pcOrder.id,
+                            seatNo,
+                            edit_phone.getText().toString(),
+                            "driver",
+                            pcOrder.timeSlotId
+                    )
+                    .map(new HttpResultFunc2<>())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io());
 
-                ComPayDialog comPayDialog = new ComPayDialog(CreateOrderActivity.this);
-                comPayDialog.setOnMyClickListener(view -> {
-                    comPayDialog.dismiss();
-                    if (view.getId() == R.id.pay_wenXin) {
-                        toPay("CHANNEL_APP_WECHAT", orderId);
-                    } else if (view.getId() == R.id.pay_zfb) {
-                        toPay("CHANNEL_APP_ALI", orderId);
-                    } else if (view.getId() == R.id.pay_balance) {
-                        toPay("PAY_DRIVER_BALANCE", orderId);
-                    }
-                });
-                comPayDialog.show();
+            mRxManager.add(observable.subscribe(new MySubscriber<Long>(this,
+                    true,
+                    true, new HaveErrSubscriberListener<Long>() {
+                @Override
+                public void onNext(Long id) {
+                    orderId = id;
+                    showDialog(orderId);
+                }
+
+                @Override
+                public void onError(int code) {
+
+                }
+            })));
+        }else {
+            showDialog(orderId);
+        }
+    }
+
+    public void showDialog(long orderId){
+        ComPayDialog comPayDialog = new ComPayDialog(CreateOrderActivity.this);
+        comPayDialog.setOnMyClickListener(view -> {
+            comPayDialog.dismiss();
+            if (view.getId() == R.id.pay_wenXin) {
+                toPay("CHANNEL_APP_WECHAT", orderId);
+            } else if (view.getId() == R.id.pay_zfb) {
+                toPay("CHANNEL_APP_ALI", orderId);
+            } else if (view.getId() == R.id.pay_balance) {
+                toPay("PAY_DRIVER_BALANCE", orderId);
             }
-
-            @Override
-            public void onError(int code) {
-
-            }
-        })));
+        });
+        comPayDialog.show();
     }
 
 
@@ -517,7 +533,7 @@ public class CreateOrderActivity extends RxBaseActivity {
                 launchZfb(url);
             }else if (payType.equals("PAY_DRIVER_BALANCE")){
                 //todo 司机代付
-
+                assginOrder();
             }
         })));
     }
@@ -585,7 +601,7 @@ public class CreateOrderActivity extends RxBaseActivity {
                 if (result.resultStatus.equals("9000")) {
                     ToastUtil.showMessage(context, getString(R.string.com_alipay_success),
                             Toast.LENGTH_SHORT);
-                    //todo  指派订单
+                    assginOrder();
                 } else {
                     ToastUtil.showMessage(context, getString(R.string.com_alipay_failed),
                             Toast.LENGTH_SHORT);
@@ -597,16 +613,21 @@ public class CreateOrderActivity extends RxBaseActivity {
 
 
 
-    public void AssginOrder(long orderId){
-//        Observable<Object> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
-//                .assginOrder(orderId, EmUtil.getEmployId())
-//                .map(new HttpResultFunc2<>())
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread());
-//
-//        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, object -> {
-//            finish();
-//        })));
+    public void assginOrder(){
+        Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
+                .assginOrder(orderId, pcOrder.timeSlotId,EmUtil.getEmployId(),pcOrder.seats,priceResult.data.money * seatNo,pcOrder.saleSeat,1,EmUtil.getAppKey())
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, emResult -> {
+            if (emResult.getCode() == 1){
+                ToastUtil.showMessage(this,"补单成功");
+            }else {
+                ToastUtil.showMessage(this,"指派订单失败，请联系客服重新指派");
+            }
+            finish();
+        })));
     }
 
 }

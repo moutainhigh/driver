@@ -861,7 +861,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
      */
     private void getSetting() {
         Observable<SettingResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .getAppSetting()
+                .getAppSetting(EmUtil.getEmployInfo().companyId)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

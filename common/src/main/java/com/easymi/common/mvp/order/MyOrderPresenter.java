@@ -65,7 +65,7 @@ public class MyOrderPresenter implements MyOrderContract.Presenter {
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, true, false, new HaveErrSubscriberListener<EmResult>() {
             @Override
             public void onNext(EmResult result) {
-                if (result.getCode() == 0){
+                if (result.getCode() == 1){
                     view.doSuccesd();
                 }
             }

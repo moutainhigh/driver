@@ -77,7 +77,7 @@ public class OrderActivity extends RxBaseActivity {
                 creatOrderDialog.show();
             });
         }else if (EmUtil.getEmployInfo().serviceType.equals(Config.CARPOOL)){
-//            if (ZCSetting.findOne().isRepairOrder == 1){
+            if (ZCSetting.findOne().isRepairOrder == 1){
                 toolbar.setRightText(R.string.com_make_order, v -> {
                     creatOrderDialog = new CreatOrderDialog(this);
                     creatOrderDialog.setOnMyClickListener(view -> {
@@ -86,7 +86,7 @@ public class OrderActivity extends RxBaseActivity {
                     });
                     creatOrderDialog.show();
                 });
-//            }
+            }
         }
     }
 
