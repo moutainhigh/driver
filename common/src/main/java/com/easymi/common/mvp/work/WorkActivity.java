@@ -869,7 +869,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         observable.subscribe(new MySubscriber<>(this, false, false, settingResult -> {
             if (settingResult.data != null) {
                 for (ZCSetting sub : settingResult.data) {
-                    if (sub.serviceType.equals(Config.ZHUANCHE)) {
+                    if (sub.serviceType.equals(Config.ZHUANCHE) ||
+                            sub.serviceType.equals(Config.CARPOOL)) {
                         ZCSetting.deleteAll();
                         sub.save();
                     } else if (sub.serviceType.equals(Config.TAXI)) {
