@@ -106,7 +106,7 @@ public class CreateOrderActivity extends RxBaseActivity {
     /**
      * 座位数
      */
-    private int seatNo = 0;
+    private int seatNo = 1;
 
     /**
      * 生成的未支付订单id
@@ -343,7 +343,7 @@ public class CreateOrderActivity extends RxBaseActivity {
         end_place.setText(null);
         endSite = null;
 
-        seatNo = 0;
+        seatNo = 1;
         num.setText("" + seatNo);
         sub.setEnabled(false);
         if (pcOrder.seats > seatNo) {
@@ -374,7 +374,7 @@ public class CreateOrderActivity extends RxBaseActivity {
             create_order.setEnabled(false);
             create_order.setBackgroundResource(R.drawable.pc_btn_unpress_999999_bg);
         }
-        if (seatNo == 0) {
+        if (seatNo == 1) {
             sub.setEnabled(false);
         } else {
             sub.setEnabled(true);

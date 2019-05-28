@@ -138,7 +138,7 @@ public class ShareActivity extends RxBaseActivity {
 
         new Thread(() -> {
             int radius = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources().getDisplayMetrics());
-            bitmap = QrCodeUtil.createQRImage(shareInfo.shareUrl, radius, radius);
+            bitmap = QrCodeUtil.createQRImage(shareInfo.shareUrl, radius, radius,BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
             runOnUiThread(() -> {
                 QrCodeUtil.saveBitmap(ShareActivity.this, QrCodeUtil.QR_NAME, bitmap);
                 RequestOptions options = new RequestOptions()

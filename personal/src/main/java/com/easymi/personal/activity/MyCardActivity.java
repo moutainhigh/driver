@@ -2,6 +2,7 @@ package com.easymi.personal.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
@@ -154,20 +155,20 @@ public class MyCardActivity extends RxBaseActivity {
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false,
                 false, result -> {
 
-            String qrcode = result.data.qrCodeUrl + "/?app_key=" + Config.APP_KEY + "#/home?dirverId=" + EmUtil.getEmployId()+"&serviceType="+result.data.serviceType;
+            String qrcode = result.data.qrCodeUrl + "/?app_key=" + Config.APP_KEY + "#/home?driverId=" + EmUtil.getEmployId()+"&serviceType="+result.data.serviceType;
             initQrImg(qrcode);
         })));
     }
 
 
     /**
-     * 加载二维码图片  https://m.xiaokakj.com/?app_key=对应的系统 appkey#/home?dirverId=司机 id
+     * 加载二维码图片  https://m.xiaokakj.com/?app_key=对应的系统 appkey#/home?driverId=司机 id
      */
     private void initQrImg(String qrcode) {
 
         new Thread(() -> {
             int radius = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 216, getResources().getDisplayMetrics());
-            bitmap = QrCodeUtil.createQRImage(qrcode, radius, radius);
+            bitmap = QrCodeUtil.createQRCodeWithLogo(qrcode, radius, BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
             runOnUiThread(() -> {
                 QrCodeUtil.saveBitmap(MyCardActivity.this, QrCodeUtil.QR_NAME, bitmap);
                 RequestOptions options = new RequestOptions()
