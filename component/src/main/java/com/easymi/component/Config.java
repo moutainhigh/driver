@@ -89,9 +89,7 @@ public class Config {
     public static final String SP_ISLOGIN = "isLogin";
     public static final String SP_LAST_LOC = "lastLoc";
 
-    public static final String SP_QIYE_CODE = "qiye_code"; //企业编码
     public static final String SP_APP_KEY = "app_key"; //app_key
-    public static final String SP_LAT_QIYE_CODE = "last_qiye_code"; //上次的企业编码
 
 
     public static final String SP_CONGESTION = "congestion";//躲避拥堵
