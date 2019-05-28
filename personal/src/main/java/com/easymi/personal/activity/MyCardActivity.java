@@ -36,6 +36,7 @@ import com.easymi.personal.result.LoginResult;
 import com.easymi.personal.result.ShareResult;
 import com.easymi.personal.util.QrCodeUtil;
 import com.easymi.personal.widget.SaveCardDialog;
+import com.google.zxing.WriterException;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -168,7 +169,11 @@ public class MyCardActivity extends RxBaseActivity {
 
         new Thread(() -> {
             int radius = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 216, getResources().getDisplayMetrics());
-            bitmap = QrCodeUtil.createQRCodeWithLogo(qrcode, radius, BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+            try {
+                bitmap = QrCodeUtil.createCode(qrcode,  BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher),30);
+            } catch (WriterException e) {
+                e.printStackTrace();
+            }
             runOnUiThread(() -> {
                 QrCodeUtil.saveBitmap(MyCardActivity.this, QrCodeUtil.QR_NAME, bitmap);
                 RequestOptions options = new RequestOptions()

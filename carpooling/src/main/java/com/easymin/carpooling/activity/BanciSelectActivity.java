@@ -86,10 +86,7 @@ public class BanciSelectActivity extends RxBaseActivity {
     private void initRecycler() {
         adapter = new BanciAdapter(this);
         adapter.setOnItemClickListener(pincheOrder -> {
-            if (pincheOrder.status == PincheOrder.SCHEDULE_STATUS_RUN) {
-                ToastUtil.showMessage(BanciSelectActivity.this, "该次已出发，无法选择");
-                return;
-            }
+
             if (pincheOrder.status == PincheOrder.SCHEDULE_STATUS_FINISH) {
                 ToastUtil.showMessage(BanciSelectActivity.this, "该次已完成，无法选择");
                 return;
