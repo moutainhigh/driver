@@ -124,6 +124,7 @@ public class WorkTimeCounter {
      * 初始化定时器，开始记时
      */
     public void startCount() {
+        destroy();
         timer = new Timer();
         timerTask = new TimerTask() {
             @Override
@@ -133,8 +134,6 @@ public class WorkTimeCounter {
         };
         //一分钟计时一次，延迟60s执行
         timer.schedule(timerTask, 1000, 1000);
-        //初始化从服务器拉一次。
-//        uploadTime(-1, totalMinute);
     }
 
     /**
