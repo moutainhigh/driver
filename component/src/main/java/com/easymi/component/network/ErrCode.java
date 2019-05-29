@@ -546,6 +546,11 @@ public enum ErrCode {
     ROLE_OCCUPATION_ERR(40130, "提示该角色正在使用，不能删除"),
 
     /**
+     * 班次已经停售
+     */
+    SCHEDULE_STOPPED_SELLING(40132, "班次已经停售"),
+
+    /**
      * 提示该角色正在使用，不能删除
      */
     IS_COMMON_VEHICLE_ERR(40133, "同车司机正在线上不能登录"),
