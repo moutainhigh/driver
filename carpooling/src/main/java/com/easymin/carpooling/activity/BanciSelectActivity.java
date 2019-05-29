@@ -91,6 +91,12 @@ public class BanciSelectActivity extends RxBaseActivity {
                 ToastUtil.showMessage(BanciSelectActivity.this, "该次已完成，无法选择");
                 return;
             }
+
+            if (pincheOrder.seats == 0){
+                ToastUtil.showMessage(BanciSelectActivity.this, "该班次没有余票，不能补单");
+                return;
+            }
+
             Intent intent = new Intent();
             intent.putExtra("pincheOrder", pincheOrder);
             setResult(RESULT_OK, intent);

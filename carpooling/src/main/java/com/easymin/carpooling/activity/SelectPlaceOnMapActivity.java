@@ -745,6 +745,7 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
             result.setAddress(mInputEt.getText().toString());
             result.setLongitude(mLongitude);
             result.setLatitude(mLatitude);
+            result.setSequence(mMapPosList.get((int)id).sequence);
             switch (getIntent().getIntExtra("select_place_type", -1)) {
                 case 1:
                     //起点

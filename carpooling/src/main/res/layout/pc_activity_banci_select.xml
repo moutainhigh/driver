@@ -16,7 +16,7 @@
             android:id="@+id/tv_hint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="已出发及余票为0的班次不可补票"
+            android:text="余票为0的班次不可补票"
             android:textSize="14sp"
             android:textColor="@color/color_999999"
             android:layout_marginLeft="12dp"

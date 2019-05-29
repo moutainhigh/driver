@@ -20,6 +20,11 @@ public class MapPositionModel implements Parcelable {
     private int sort;//顺序
     private int type;//类型1代表出发地，3代表目的地
 
+    /**
+     * 站点对应的序号
+     */
+    private int sequence;
+
     public long getId() {
         return id;
     }
@@ -68,8 +73,17 @@ public class MapPositionModel implements Parcelable {
         this.type = type;
     }
 
+    public int getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(int sequence) {
+        this.sequence = sequence;
+    }
+
+
     public MapPositionModel() {
-        super();
+
     }
 
     protected MapPositionModel(Parcel in) {
@@ -79,6 +93,23 @@ public class MapPositionModel implements Parcelable {
         longitude = in.readDouble();
         sort = in.readInt();
         type = in.readInt();
+        sequence = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(address);
+        dest.writeDouble(latitude);
+        dest.writeDouble(longitude);
+        dest.writeInt(sort);
+        dest.writeInt(type);
+        dest.writeInt(sequence);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<MapPositionModel> CREATOR = new Creator<MapPositionModel>() {
@@ -92,19 +123,4 @@ public class MapPositionModel implements Parcelable {
             return new MapPositionModel[size];
         }
     };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeLong(id);
-        parcel.writeString(address);
-        parcel.writeDouble(latitude);
-        parcel.writeDouble(longitude);
-        parcel.writeInt(sort);
-        parcel.writeInt(type);
-    }
 }

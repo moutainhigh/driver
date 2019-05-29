@@ -40,12 +40,33 @@ public class Station implements Parcelable {
      */
     public List<MapPositionModel> coordinate;
 
+    /**
+     * 站点对应的序号
+     */
+    public int sequence;
+
     protected Station(Parcel in) {
         id = in.readLong();
         name = in.readString();
         latitude = in.readDouble();
         longitude = in.readDouble();
         coordinate = in.createTypedArrayList(MapPositionModel.CREATOR);
+        sequence = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(name);
+        dest.writeDouble(latitude);
+        dest.writeDouble(longitude);
+        dest.writeTypedList(coordinate);
+        dest.writeInt(sequence);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<Station> CREATOR = new Creator<Station>() {
@@ -59,18 +80,4 @@ public class Station implements Parcelable {
             return new Station[size];
         }
     };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeLong(id);
-        parcel.writeString(name);
-        parcel.writeDouble(latitude);
-        parcel.writeDouble(longitude);
-        parcel.writeTypedList(coordinate);
-    }
 }
