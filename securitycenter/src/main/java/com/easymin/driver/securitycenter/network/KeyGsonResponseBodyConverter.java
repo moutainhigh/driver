@@ -2,11 +2,11 @@ package com.easymin.driver.securitycenter.network;
 
 import com.easymin.driver.securitycenter.CenterConfig;
 import com.easymin.driver.securitycenter.utils.AesUtil;
+import com.easymin.driver.securitycenter.utils.URLDecoderUtil;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 
 import java.io.IOException;
-import java.net.URLDecoder;
 
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
@@ -33,7 +33,7 @@ public class KeyGsonResponseBodyConverter<T> implements Converter<ResponseBody, 
         try {
             String str = value.string();
             String jsonStr = AesUtil.aesDecrypt(str,CenterConfig.AES_KEY);
-            String urlString = URLDecoder.decode(jsonStr);
+            String urlString = URLDecoderUtil.decode(jsonStr);
             return adapter.fromJson(urlString);
         } finally {
             value.close();
