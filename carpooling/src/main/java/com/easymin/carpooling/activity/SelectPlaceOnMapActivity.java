@@ -588,7 +588,7 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
                 break;
 
             case 3:
-                centerLatLng = new LatLng(mMapPosList.get(mMapPosList.size()-1).latitude, mMapPosList.get(mMapPosList.size()-1).longitude);
+                centerLatLng = new LatLng(mMapPosList.get(mMapPosList.size() - 1).latitude, mMapPosList.get(mMapPosList.size() - 1).longitude);
                 mAMap.animateCamera(CameraUpdateFactory.newLatLngZoom(centerLatLng, 14));
                 break;
             default:
@@ -692,7 +692,7 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
     private void addMarkersToMap() {
         //  目的地（target）         缩放级别（zoom）       方向（bearing）        倾斜角度（tilt）
         LatLng latLng = mAMap.getCameraPosition().target;
-        Log.e("hufeng/latLng",latLng.latitude+"/"+latLng.longitude);
+        Log.e("hufeng/latLng", latLng.latitude + "/" + latLng.longitude);
         Point screenPosition = mAMap.getProjection().toScreenLocation(latLng);
         Marker screenMarker = mAMap.addMarker(new MarkerOptions().title("")
                 .anchor(0.5f, 1f)
@@ -745,7 +745,7 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
             result.setAddress(mInputEt.getText().toString());
             result.setLongitude(mLongitude);
             result.setLatitude(mLatitude);
-            result.setSequence(mMapPosList.get((int)id).sequence);
+            result.setSequence(getSequence());
             switch (getIntent().getIntExtra("select_place_type", -1)) {
                 case 1:
                     //起点
@@ -764,6 +764,18 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
             finish();
         }
     }
+
+    public int getSequence() {
+        int sequence = 0;
+        for (Station station : mMapPosList) {
+            if (station.id == id) {
+                sequence = station.sequence;
+                break;
+            }
+        }
+        return sequence;
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -449,6 +449,7 @@ public class CreateOrderActivity extends RxBaseActivity {
                     @Override
                     public void onNext(PriceResult priceResult) {
                         CreateOrderActivity.this.priceResult = priceResult;
+                        calcPrice();
                     }
 
                     @Override
