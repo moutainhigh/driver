@@ -2,12 +2,13 @@ package com.easymin.driver.securitycenter.network;
 
 import android.support.annotation.NonNull;
 
-import java.io.IOException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-
 import com.easymin.driver.securitycenter.CenterConfig;
 import com.easymin.driver.securitycenter.utils.AesUtil;
+import com.easymin.driver.securitycenter.utils.URLDecoderUtil;
+
+import java.io.IOException;
+import java.net.URLEncoder;
+
 import okhttp3.FormBody;
 import okhttp3.Interceptor;
 import okhttp3.Request;
@@ -117,7 +118,7 @@ public class EncryptInterceptor implements Interceptor {
         String value = content;
         try {
             //将默认的url编码还原后加密在url编码
-            String decoderStr = URLDecoder.decode(content, "utf-8");
+            String decoderStr = URLDecoderUtil.decode(content);
             value = AesUtil.aesEncrypt(decoderStr, CenterConfig.AES_KEY);
             value = URLEncoder.encode(value, "utf-8");
         } catch (Exception e) {
