@@ -57,6 +57,7 @@ import com.easymi.component.utils.CountDownUtils;
 import com.easymi.component.utils.CsEditor;
 import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.DensityUtil;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MapUtil;
 import com.easymi.component.utils.StringUtils;
@@ -904,7 +905,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         IntentFilter filter = new IntentFilter();
         filter.addAction(Config.BROAD_CANCEL_ORDER);
         filter.addAction(Config.BROAD_BACK_ORDER);
-        registerReceiver(cancelOrderReceiver, filter);
+        registerReceiver(cancelOrderReceiver, filter, EmUtil.getBroadCastPermission(),null);
 
     }
 

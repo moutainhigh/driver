@@ -1,17 +1,15 @@
 package com.easymi.component.network;
 
-import android.util.Log;
-
 import com.easymi.component.Config;
-import com.easymi.component.app.XApp;
 import com.easymi.component.utils.AesUtil;
 import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EncApi;
+import com.easymi.component.utils.Log;
+import com.easymi.component.utils.URLDecoderUtil;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 
 import java.io.IOException;
-import java.net.URLDecoder;
 
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
@@ -39,12 +37,12 @@ public class KeyGsonResponseBodyConverter<T> implements Converter<ResponseBody, 
             String str = value.string();
             if (!str.contains("{")){
                 String jsonStr = EncApi.getInstance().dec(new CsSharedPreferences().getString(Config.AES_PASSWORD,AesUtil.AAAAA),str);
-                String urlString = URLDecoder.decode(jsonStr);
-                Log.e("responseJson", urlString);
+                String urlString = URLDecoderUtil.decode(jsonStr);
+                Log.d("okhttp", urlString);
                 return adapter.fromJson(urlString);
             }else {
-                String urlString = URLDecoder.decode(str);
-                Log.e("responseJson", urlString);
+                String urlString =URLDecoderUtil.decode(str);
+                Log.e("okhttp", urlString);
                 return adapter.fromJson(urlString);
             }
         } finally {

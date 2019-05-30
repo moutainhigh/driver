@@ -1102,16 +1102,16 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         traceReceiver = new TraceReceiver(this);
         IntentFilter filter2 = new IntentFilter();
         filter2.addAction(LocService.BROAD_TRACE_SUC);
-        registerReceiver(traceReceiver, filter2);
+        registerReceiver(traceReceiver, filter2,EmUtil.getBroadCastPermission(),null);
 
         cancelOrderReceiver = new CancelOrderReceiver(this);
         IntentFilter filter = new IntentFilter();
         filter.addAction(Config.BROAD_CANCEL_ORDER);
         filter.addAction(Config.BROAD_BACK_ORDER);
-        registerReceiver(cancelOrderReceiver, filter);
+        registerReceiver(cancelOrderReceiver, filter,EmUtil.getBroadCastPermission(),null);
 
         orderFinishReceiver = new OrderFinishReceiver(this);
-        registerReceiver(orderFinishReceiver, new IntentFilter(Config.BROAD_FINISH_ORDER));
+        registerReceiver(orderFinishReceiver, new IntentFilter(Config.BROAD_FINISH_ORDER),EmUtil.getBroadCastPermission(),null);
     }
 
     boolean canGoOld = false;
@@ -1354,7 +1354,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
 //    @Override
 //    public void onConfigurationChanged(Configuration newConfig) {
-//        android.util.Log.e("lifecycle", "onConfigurationChanged()");
+//        com.easymi.component.utils.Log.e("lifecycle", "onConfigurationChanged()");
 //        super.onConfigurationChanged(newConfig);
 //        if (System.currentTimeMillis() - lastChangeTime > 1000) {
 //            lastChangeTime = System.currentTimeMillis();
@@ -1420,7 +1420,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 //            if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN || !canGoOld) {
 //                return;
 //            }
-//            android.util.Log.e("TAG", "orientation = " + orientation);
+//            com.easymi.component.utils.Log.e("TAG", "orientation = " + orientation);
 //            if ((orientation > 70 && orientation < 110) || (orientation > 250 && orientation < 290)) {
 //                toWhatOldByOrder(taxiOrder);
 //            }

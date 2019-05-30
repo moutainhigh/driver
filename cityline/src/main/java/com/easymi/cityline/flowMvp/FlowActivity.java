@@ -222,7 +222,7 @@ public class FlowActivity extends RxBaseActivity implements
                 for (int i = 0; i < orderCustomers.size(); i++) {
                     OrderCustomer orderCustomer1 = orderCustomers.get(i);
 
-                    if ((cusOrder.id == orderCustomer1.id)) {
+                    if ((cusOrder.id == orderCustomer1.orderId)) {
                         isExist = true;
                         break;
                     }
@@ -1000,7 +1000,7 @@ public class FlowActivity extends RxBaseActivity implements
         IntentFilter filter = new IntentFilter();
         filter.addAction(Config.BROAD_CANCEL_ORDER);
         filter.addAction(Config.BROAD_BACK_ORDER);
-        registerReceiver(cancelOrderReceiver, filter);
+        registerReceiver(cancelOrderReceiver, filter,EmUtil.getBroadCastPermission(),null);
     }
 
     @Override

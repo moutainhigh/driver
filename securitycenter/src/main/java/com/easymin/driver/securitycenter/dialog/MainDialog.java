@@ -2,14 +2,12 @@ package com.easymin.driver.securitycenter.dialog;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.easymin.driver.securitycenter.CenterConfig;
 import com.easymin.driver.securitycenter.ComService;
@@ -118,7 +116,7 @@ public class MainDialog {
         //安全中心描述
         lin_decript.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, WebActivity.class);
-            intent.putExtra("url", "http://h5.xiaokakj.com/#/protocol?articleName=passengerSafetyCenter&appKey="+CenterConfig.APPKEY);
+            intent.putExtra("url", CenterConfig.H5_HOST+"#/protocol?articleName=passengerSafetyCenter&appKey="+CenterConfig.APPKEY);
             intent.putExtra("title", "安全中心说明");
             mContext.startActivity(intent);
             dialog.dismiss();

@@ -2,8 +2,6 @@ package com.easymin.driver.securitycenter.rxmvp;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-
 
 import com.easymin.driver.securitycenter.utils.ReflectUtil;
 
@@ -25,7 +23,6 @@ public abstract class MVPActivity<T extends BasePresenter, E extends BaseModel> 
         E mModel = ReflectUtil.getT(this, 1);
 
         if (mPresenter == null || mModel == null) {
-            Log.d("TAG", "this is general activity");
         } else if (this instanceof BaseView) {
             mPresenter.setMV(mModel, (BaseView) this);
         } else {

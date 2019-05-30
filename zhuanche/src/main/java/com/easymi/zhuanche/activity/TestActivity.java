@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.LinearLayout;

@@ -17,7 +17,7 @@ import java.util.List;
  * @FileName: CarpoolOrder
  * @Author: hufeng
  * @Date: 2019/2/21 下午5:17
- * @Description:  订单乘客信息
+ * @Description: 订单乘客信息
  * @History:
  */
 public class CarpoolOrder implements Serializable {
@@ -113,6 +113,11 @@ public class CarpoolOrder implements Serializable {
     public double startLng;
     public double endLat;
     public double endLng;
+    /**
+     * 是否已经联系过客户（点击过拨打用户按钮）
+     * 0未联系 1已经联系过
+     */
+    public int isContract;
 
 
     /**
@@ -178,7 +183,7 @@ public class CarpoolOrder implements Serializable {
     /**
      * 终点站
      */
-    public String  endStationName;
+    public String endStationName;
 
     /**
      * 公司电话
@@ -237,6 +242,22 @@ public class CarpoolOrder implements Serializable {
         SQLiteDatabase db = helper.openSqliteDatabase();
         ContentValues values = new ContentValues();
         values.put("customeStatus", customeStatus);
+
+        boolean flag = db.update("t_cp_order_customer", values, " id = ? ",
+                new String[]{String.valueOf(id)}) == 1;
+        return flag;
+    }
+
+    /**
+     * 更新是否拨打客户电话状态
+     *
+     * @return
+     */
+    public boolean updateIsContract() {
+        SqliteHelper helper = SqliteHelper.getInstance();
+        SQLiteDatabase db = helper.openSqliteDatabase();
+        ContentValues values = new ContentValues();
+        values.put("isContract", isContract);
 
         boolean flag = db.update("t_cp_order_customer", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
@@ -332,6 +353,7 @@ public class CarpoolOrder implements Serializable {
         }
         return flag;
     }
+
     /**
      * 根据ID和type查询数据
      */
@@ -419,6 +441,7 @@ public class CarpoolOrder implements Serializable {
         carpoolOrder.customeStatus = cursor.getInt(cursor.getColumnIndex("customeStatus"));
         carpoolOrder.subStatus = cursor.getInt(cursor.getColumnIndex("subStatus"));
         carpoolOrder.waitMinute = cursor.getInt(cursor.getColumnIndex("waitMinute"));
+        carpoolOrder.isContract = cursor.getInt(cursor.getColumnIndex("isContract"));
 
         return carpoolOrder;
     }
@@ -493,7 +516,7 @@ public class CarpoolOrder implements Serializable {
 
         values.put("customeStatus", customeStatus);
         values.put("subStatus", subStatus);
-        values.put("orderId",orderId);
+        values.put("orderId", orderId);
         values.put("waitMinute", waitMinute);
 
         boolean flag = db.update("t_cp_order_customer", values, " id = ? ",

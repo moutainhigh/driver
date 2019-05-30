@@ -14,6 +14,7 @@ import rx.Observable;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName:
+ *
  * @Author: hufeng
  * Date: 2018/12/24 下午1:10
  * Description:
@@ -40,6 +41,7 @@ public interface FlowContract {
 
         /**
          * 添加marker
+         *
          * @param latLng
          * @param flag
          */
@@ -47,26 +49,30 @@ public interface FlowContract {
 
         /**
          * 添加顺序marker
+         *
          * @param latLng
          * @param flag
          * @param num
          */
-        void addMarker(LatLng latLng, int flag, int num);
+        void addMarker(LatLng latLng, int flag, int num, int ticketNumber, String photo);
 
         /**
          * 线路缩放
+         *
          * @param latLngs
          */
         void boundsZoom(List<LatLng> latLngs);
 
         /**
          * 定位缩放
+         *
          * @param level
          */
         void locZoom(int level);
 
         /**
          * 展示导航线路
+         *
          * @param ints
          * @param path
          */
@@ -74,12 +80,14 @@ public interface FlowContract {
 
         /**
          * 展示规划线路
+         *
          * @param result
          */
         void showPath(DriveRouteResult result);
 
         /**
          * 展示线路信息
+         *
          * @param dis
          * @param time
          */
@@ -92,30 +100,35 @@ public interface FlowContract {
 
         /**
          * 到达起点
+         *
          * @param carpoolOrder
          */
         void arriveStartSuc(CarpoolOrder carpoolOrder);
 
         /**
          * 接到乘客
+         *
          * @param carpoolOrder
          */
         void acceptCustomerSuc(CarpoolOrder carpoolOrder);
 
         /**
          * 跳过接乘客成功
+         *
          * @param carpoolOrder
          */
         void jumpAcceptSuc(CarpoolOrder carpoolOrder);
 
         /**
          * 到达终点成功
+         *
          * @param carpoolOrder
          */
         void arriveEndSuc(CarpoolOrder carpoolOrder);
 
         /**
          * 跳过送成功
+         *
          * @param carpoolOrder
          */
         void jumpSendSuc(CarpoolOrder carpoolOrder);
@@ -127,6 +140,7 @@ public interface FlowContract {
 
         /**
          * 切换toolbar
+         *
          * @param flag
          */
         void changeToolbar(int flag);
@@ -153,6 +167,7 @@ public interface FlowContract {
     interface Presenter {
         /**
          * 通过导航获取路径
+         *
          * @param start
          * @param latLngs
          * @param end
@@ -161,6 +176,7 @@ public interface FlowContract {
 
         /**
          * 通过线路规划获取路径
+         *
          * @param start
          * @param latLngs
          * @param end
@@ -174,48 +190,56 @@ public interface FlowContract {
 
         /**
          * 开始接人
+         *
          * @param orderId
          */
         void startOutSet(long orderId);
 
         /**
          * 前往预约地
+         *
          * @param carpoolOrder
          */
         void gotoStart(CarpoolOrder carpoolOrder);
 
         /**
          * 到达起点
+         *
          * @param carpoolOrder
          */
         void arriveStart(CarpoolOrder carpoolOrder);
 
         /**
          * 接到乘客
+         *
          * @param carpoolOrder
          */
         void acceptCustomer(CarpoolOrder carpoolOrder);
 
         /**
          * 跳过接乘客
+         *
          * @param carpoolOrder
          */
         void jumpAccept(CarpoolOrder carpoolOrder);
 
         /**
          * 到达终点
+         *
          * @param carpoolOrder
          */
         void arriveEnd(CarpoolOrder carpoolOrder);
 
         /**
          * 跳过送乘客
+         *
          * @param carpoolOrder
          */
         void jumpSend(CarpoolOrder carpoolOrder);
 
         /**
          * 完成班次删除数据库
+         *
          * @param orderId
          * @param orderType
          */
@@ -223,6 +247,7 @@ public interface FlowContract {
 
         /**
          * 开始导航
+         *
          * @param latLng
          * @param orderId
          */
@@ -230,12 +255,14 @@ public interface FlowContract {
 
         /**
          * 开始送人
+         *
          * @param orderId
          */
         void startSend(long orderId);
 
         /**
          * 完成订单
+         *
          * @param orderId
          */
         void finishTask(long orderId);
@@ -244,6 +271,7 @@ public interface FlowContract {
     interface Model {
         /**
          * 开始送人
+         *
          * @param orderId
          * @return
          */
@@ -251,6 +279,7 @@ public interface FlowContract {
 
         /**
          * 开始接人
+         *
          * @param orderId
          * @return
          */
@@ -258,6 +287,7 @@ public interface FlowContract {
 
         /**
          * 班次结束
+         *
          * @param orderId
          * @return
          */
@@ -265,6 +295,7 @@ public interface FlowContract {
 
         /**
          * 前往预约地
+         *
          * @param id
          * @return
          */
@@ -272,6 +303,7 @@ public interface FlowContract {
 
         /**
          * 到达起点
+         *
          * @param id
          * @return
          */
@@ -279,6 +311,7 @@ public interface FlowContract {
 
         /**
          * 接到乘客
+         *
          * @param id
          * @return
          */
@@ -286,6 +319,7 @@ public interface FlowContract {
 
         /**
          * 跳过乘客
+         *
          * @param id
          * @return
          */
@@ -293,6 +327,7 @@ public interface FlowContract {
 
         /**
          * 送到乘客
+         *
          * @param id
          * @return
          */

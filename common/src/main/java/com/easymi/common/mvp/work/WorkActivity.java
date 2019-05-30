@@ -669,19 +669,19 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         IntentFilter filter = new IntentFilter();
         filter.addAction(Config.BROAD_CANCEL_ORDER);
         filter.addAction(Config.BROAD_BACK_ORDER);
-        registerReceiver(cancelOrderReceiver, filter);
+        registerReceiver(cancelOrderReceiver, filter,EmUtil.getBroadCastPermission(),null);
 
         employStatusChangeReceiver = new EmployStatusChangeReceiver(this);
-        registerReceiver(employStatusChangeReceiver, new IntentFilter(Config.BROAD_EMPLOY_STATUS_CHANGE));
+        registerReceiver(employStatusChangeReceiver, new IntentFilter(Config.BROAD_EMPLOY_STATUS_CHANGE),EmUtil.getBroadCastPermission(),null);
 
         noticeReceiver = new NoticeReceiver(this);
-        registerReceiver(noticeReceiver, new IntentFilter(Config.BROAD_NOTICE));
+        registerReceiver(noticeReceiver, new IntentFilter(Config.BROAD_NOTICE),EmUtil.getBroadCastPermission(),null);
 
         annReceiver = new AnnReceiver(this);
-        registerReceiver(annReceiver, new IntentFilter(Config.BROAD_ANN));
+        registerReceiver(annReceiver, new IntentFilter(Config.BROAD_ANN),EmUtil.getBroadCastPermission(),null);
 
         orderRefreshReceiver = new OrderRefreshReceiver(this);
-        registerReceiver(orderRefreshReceiver, new IntentFilter(Config.ORDER_REFRESH));
+        registerReceiver(orderRefreshReceiver, new IntentFilter(Config.ORDER_REFRESH),EmUtil.getBroadCastPermission(),null);
     }
 
     @Override

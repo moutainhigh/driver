@@ -26,6 +26,7 @@
             android:text="送人路线规划：" />
 
         <FrameLayout
+            android:clickable="true"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginLeft="10dp"

@@ -4,17 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ParseException;
 
-import com.easymi.component.BuildConfig;
 import com.easymi.component.Config;
 import com.easymi.component.R;
-import com.easymi.component.app.XApp;
-import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
-import com.easymi.component.utils.SysUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.LoadingButton;
-import com.fundebug.Fundebug;
 import com.google.gson.JsonParseException;
 
 import org.json.JSONException;
@@ -119,16 +114,6 @@ public class MySubscriber<T> extends Subscriber<T> implements ProgressDismissLis
      */
     @Override
     public void onError(Throwable e) {
-        new Thread(() -> {
-            Fundebug fundebug = new Fundebug("8e480c8e262e013a31cece2ce5a9b60e4720a91d5c21dd36c12b159a4dc483a1");
-            fundebug.setAppVersion(SysUtil.getVersionName(XApp.getInstance()));
-            fundebug.setSilent(BuildConfig.DEBUG);//debug时不上报错误
-            if (null != MyHttpLoggingInterceptor.stringBuilder) {
-                fundebug.notify("接口请求错误", MyHttpLoggingInterceptor.stringBuilder.toString());
-            }
-        }).start();
-
-         e.printStackTrace();
         if (e instanceof HttpException) {
             if (((HttpException) e).code() == 403 ||((HttpException) e).code() == 401
                     ||((HttpException) e).code() == 423

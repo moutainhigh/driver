@@ -1,13 +1,11 @@
 package com.easymi.common.mvp.work;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import com.easymi.common.CommApiService;
 import com.easymi.common.R;
 import com.easymi.common.entity.AnnAndNotice;
-import com.easymi.common.entity.CityLine;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.push.CountEvent;
@@ -43,10 +41,8 @@ import com.easymi.component.utils.AesUtil;
 import com.easymi.component.utils.CsEditor;
 import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
-import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.LoadingButton;
 import com.easymin.driver.securitycenter.utils.CenterUtil;
@@ -180,7 +176,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                                     dymOrder.orderType = order.serviceType;
                                     dymOrder.saveOrUpdate();
                                 }
-                            }else if (TextUtils.equals(order.serviceType, Config.CARPOOL)) {
+                            } else if (TextUtils.equals(order.serviceType, Config.CARPOOL)) {
                                 if (DymOrder.exists(order.scheduleId, order.serviceType)) {
                                     //专线 本地有 状态同步
                                     dymOrder = DymOrder.findByIDType(order.scheduleId, order.serviceType);
@@ -213,7 +209,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                             boolean isExist = false;
                             for (MultipleOrder order : orders) {
                                 if (dymOrder.orderType.equals(Config.CITY_LINE)
-                                     ||dymOrder.orderType.equals(Config.CARPOOL)) {
+                                        || dymOrder.orderType.equals(Config.CARPOOL)) {
                                     if ((dymOrder.orderId == order.scheduleId)) {
                                         isExist = true;
                                         break;
@@ -372,7 +368,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                     }
                 }
                 employ.saveOrUpdate();
-                CsEditor editor =  new CsEditor();
+                CsEditor editor = new CsEditor();
                 editor.putLong(Config.SP_DRIVERID, employ.id);
                 editor.apply();
                 view.showDriverStatus();

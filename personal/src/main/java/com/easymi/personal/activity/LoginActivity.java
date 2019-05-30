@@ -13,9 +13,14 @@ import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -43,6 +48,7 @@ import com.easymi.component.utils.GPSUtils;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MacUtils;
 import com.easymi.component.utils.MobileInfoUtil;
+import com.easymi.component.utils.NumberToHanzi;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.RsaUtils;
 import com.easymi.component.utils.SHA256Util;
@@ -51,6 +57,7 @@ import com.easymi.component.utils.SysUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.utils.UIStatusBarHelper;
 import com.easymi.component.widget.LoadingButton;
+import com.easymi.component.widget.keyboard.SafeKeyboard;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
 import com.easymi.personal.activity.register.RegisterAcitivty;
@@ -90,6 +97,8 @@ public class LoginActivity extends RxBaseActivity {
 
     private Location mlocation;
 
+    SafeKeyboard safeKeyboard;
+
     @Override
     public int getLayoutId() {
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -101,6 +110,7 @@ public class LoginActivity extends RxBaseActivity {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);//禁止截屏
 
         Intent intent222 = new Intent(Intent.ACTION_VIEW, Uri.parse("customscheme://com.rvakva.travel.publicdriver/local_push?title=华为测试"));
         intent222.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -161,6 +171,22 @@ public class LoginActivity extends RxBaseActivity {
                 mlocation = location;
             }
         });
+
+
+        initKeyBoard();
+    }
+
+    private void initKeyBoard() {
+        LinearLayout keyboardContainer = findViewById(R.id.keyboardViewPlace);
+
+
+        safeKeyboard = new SafeKeyboard(
+                LoginActivity.this,
+                keyboardContainer, editPsw);
+        safeKeyboard.setDelDrawable(LoginActivity.this.getResources().getDrawable(R.drawable.icon_del));
+        safeKeyboard.setLowDrawable(LoginActivity.this.getResources().getDrawable(R.drawable.icon_capital_default));
+        safeKeyboard.setUpDrawable(LoginActivity.this.getResources().getDrawable(R.drawable.icon_capital_selected));
+
     }
 
     /**
@@ -169,7 +195,7 @@ public class LoginActivity extends RxBaseActivity {
     private void initBox() {
         textAgreement.setOnClickListener(view -> {
             Intent intent = new Intent(LoginActivity.this, WebActivity.class);
-            intent.putExtra("url", "http://h5.xiaokakj.com/#/protocol?articleName=driverLogin&appKey=" + Config.APP_KEY);
+            intent.putExtra("url", Config.H5_HOST + "#/protocol?articleName=driverLogin&appKey=" + Config.APP_KEY);
             intent.putExtra("title", getString(R.string.login_agreement));
             startActivity(intent);
         });

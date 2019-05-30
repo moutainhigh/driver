@@ -1,10 +1,11 @@
 package com.easymin.driver.securitycenter.network;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ParseException;
-import android.util.Log;
 
+import com.easymin.driver.securitycenter.R;
+import com.easymin.driver.securitycenter.utils.ToastUtil;
+import com.easymin.driver.securitycenter.widget.LoadingButton;
 import com.google.gson.JsonParseException;
 
 import org.json.JSONException;
@@ -13,9 +14,6 @@ import java.net.ConnectException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
-import com.easymin.driver.securitycenter.R;
-import com.easymin.driver.securitycenter.utils.ToastUtil;
-import com.easymin.driver.securitycenter.widget.LoadingButton;
 import retrofit2.HttpException;
 import rx.Subscriber;
 
@@ -91,7 +89,6 @@ public class MySubscriber<T> extends Subscriber<T> implements ProgressDismissLis
 
     @Override
     public void onCompleted() {
-        Log.e("MySubscriber", "mission complete");
 
         if (null != progressHandler) {
             progressHandler.sendEmptyMessage(ProgressHandler.DISMISS_DIALOG);

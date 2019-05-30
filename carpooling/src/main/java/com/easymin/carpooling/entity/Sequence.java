@@ -25,4 +25,19 @@ public class Sequence implements Serializable{
      * 文字内容
      */
     public String text;
+
+    /**
+     * 头像
+     */
+    public String photo;
+
+    /**
+     * 票数
+     */
+    public int ticketNumber;
+
+    /**
+     * 状态   0 未接 1 已接 2 跳过接 3 未送 4 已送 5 跳过送
+     */
+    public int status;
 }

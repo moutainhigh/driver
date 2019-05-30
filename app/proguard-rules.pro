@@ -182,7 +182,7 @@ public static ** valueOf(java.lang.String);
 
 
 #移除Log类打印各个等级日志的代码，打正式包的时候可以做为禁log使用，这里可以作为禁止log打印的功能使用，另外的一种实现方案是通过BuildConfig.DEBUG的变量来控制
--assumenosideeffects class android.util.Log {
+-assumenosideeffects class com.easymi.component.utils.Log {
     public static *** v(...);
     public static *** i(...);
     public static *** d(...);
@@ -230,9 +230,7 @@ public static ** valueOf(java.lang.String);
 }
 
 #---------------------------------本app内的混淆-------------------------------
--keep public class com.easymi.component.entity.**{*;}
--keep public class com.easymi.component.widget.**{*;}
--keep public class com.easymi.component.result.**{*;}
+-keep public class com.easymi.component.**{*;}
 
 -keep public class com.easymi.common.entity.**{*;}
 -keep public class com.easymi.common.result.**{*;}
@@ -421,7 +419,9 @@ public static ** valueOf(java.lang.String);
 #科大讯飞语音
 -keep class com.iflytek.**{*;}
 -keepattributes Signature
-
+#百度语音
+-keep class com.baidu.tts.**{*;}
+-keep class com.baidu.speechsynthesizer.**{*;}
 
 
 

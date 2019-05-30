@@ -136,6 +136,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("status").append(" ").append("INTEGER").append(",")
                 .append("scheduleId").append(" ").append("LONG").append(",")
                 .append("waitMinute").append(" ").append("INTEGER").append(",")
+                .append("isContract").append(" ").append("INTEGER").append(",")
 
                 .append("subStatus").append(" ").append("INTEGER")
                 .append(");");

@@ -6,7 +6,7 @@ import android.os.FileObserver;
 import android.os.IBinder;
 import android.os.Process;
 import android.support.annotation.Nullable;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 import android.widget.Toast;
 
 

@@ -5,7 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;

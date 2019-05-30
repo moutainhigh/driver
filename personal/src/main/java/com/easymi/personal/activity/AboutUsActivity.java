@@ -101,7 +101,7 @@ public class AboutUsActivity extends RxBaseActivity {
             }
         });
 
-        url = "http://h5.xiaokakj.com/#/protocol?articleName=driverAboutUs&appKey="+Config.APP_KEY;
+        url = Config.H5_HOST+"#/protocol?articleName=driverAboutUs&appKey="+Config.APP_KEY;
 
         initWeb();
     }
@@ -114,6 +114,8 @@ public class AboutUsActivity extends RxBaseActivity {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setUseWideViewPort(true);
         webView.getSettings().setLoadWithOverviewMode(true);
+        webView.getSettings().setAllowFileAccess(false);
+        webView.getSettings().setSavePassword(false);
 
         webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
         //解决部分H5中的一些控件标签可能使用后android中不支持 造成的白屏不显示问题
