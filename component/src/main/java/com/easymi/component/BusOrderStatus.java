@@ -70,6 +70,10 @@ public class BusOrderStatus {
      * 客运班车订单已消单
      */
     public static final int CITY_COUNTRY_STATUS_CANCEL = 30;
+    /**
+     * 客运班车订单已退款
+     */
+    public static final int CITY_COUNTRY_ORDER_REFOUND = 35;
 
 
     public static String orderStatus2Str(int status) {
@@ -92,6 +96,8 @@ public class BusOrderStatus {
                 return XApp.getInstance().getString(R.string.cb_status_review);
             case CITY_COUNTRY_STATUS_CANCEL:
                 return XApp.getInstance().getString(R.string.cb_status_cancel);
+            case CITY_COUNTRY_ORDER_REFOUND:
+                return XApp.getInstance().getString(R.string.cb_status_back);
             default:
                 return "";
         }

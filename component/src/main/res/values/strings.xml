@@ -116,7 +116,7 @@
     <string name="cb_status_skip">已跳过</string>
     <string name="cb_status_review">已评价</string>
     <string name="cb_status_cancel">已取消</string>
-
+    <string name="cb_status_back">已退款</string>
     <!--公共-->
     <string name="common_camera">拍照</string>
     <string name="common_photo">相册</string>
