@@ -230,9 +230,7 @@ public static ** valueOf(java.lang.String);
 }
 
 #---------------------------------本app内的混淆-------------------------------
--keep public class com.easymi.component.entity.**{*;}
--keep public class com.easymi.component.widget.**{*;}
--keep public class com.easymi.component.result.**{*;}
+-keep public class com.easymi.component.**{*;}
 
 -keep public class com.easymi.common.entity.**{*;}
 -keep public class com.easymi.common.result.**{*;}
