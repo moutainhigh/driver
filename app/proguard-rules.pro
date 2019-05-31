@@ -230,28 +230,35 @@ public static ** valueOf(java.lang.String);
 }
 
 #---------------------------------本app内的混淆-------------------------------
--keep public class com.easymi.component.**{*;}
-
--keep public class com.easymi.common.entity.**{*;}
--keep public class com.easymi.common.result.**{*;}
-
 -keep public class com.easymin.carpooling.entity.**{*;}
--keep public class com.easymin.carpooling.result.**{*;}
 
 -keep public class com.easymin.chartered.entity.**{*;}
 -keep public class com.easymin.chartered.result.**{*;}
 
 -keep public class com.easymi.cityline.entity.**{*;}
+-keep public class com.easymi.cityline.result.**{*;}
+
+-keep public class com.easymi.common.entity.**{*;}
 -keep public class com.easymi.common.result.**{*;}
+-keep public class com.easymi.common.push.**{*;}
+
+-keep public class com.easymi.component.cat.**{*;}
+-keep public class com.easymi.component.db.**{*;}
+-keep public class com.easymi.component.entity.**{*;}
+-keep public class com.easymi.component.push.**{*;}
+-keep public class com.easymi.component.result.**{*;}
+-keep public class com.easymi.component.trace.**{*;}
+-keep public class com.easymi.component.update.**{*;}
+-keep public class com.easymi.component.utils.**{*;}
 
 -keep public class com.easymin.custombus.entity.**{*;}
--keep public class com.easymin.custombus.result.**{*;}
-
--keep public class com.easymin.passengerbus.entity.**{*;}
--keep public class com.easymin.passengerbus.result.**{*;}
 
 -keep public class com.easymi.personal.entity.**{*;}
 -keep public class com.easymi.personal.result.**{*;}
+
+-keep public class com.easymi.cityline.entity.**{*;}
+
+-keep public class com.easymin.passengerbus.entity.**{*;}
 
 -keep public class com.easymin.rental.entity.**{*;}
 -keep public class com.easymin.rental.result.**{*;}
@@ -265,14 +272,11 @@ public static ** valueOf(java.lang.String);
 -keep public class com.easymi.zhuanche.entity.**{*;}
 -keep public class com.easymi.zhuanche.result.**{*;}
 
+-keep public class cn.projcet.hf.securitycenter.entity.**{*;}
+-keep public class cn.projcet.hf.securitycenter.result.**{*;}
+
 -keep public class com.easymin.official.entity.**{*;}
 -keep public class com.easymin.official.result.**{*;}
-
--keep public class com.easymi.component.app.**{*;}
--keep public class com.easymi.component.db.**{*;}
-
--keep public class com.easymi.component.utils.AesUtil{*;}
--keep public class com.easymi.component.cat.Cat{*;}
 
 
 #不混淆所有的接口的某个字段：
