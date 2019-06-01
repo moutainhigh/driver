@@ -640,7 +640,8 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
         public void callback(MultipleOrderResult multipleOrderResult, String orderType) {
             MultipleOrder order = multipleOrderResult.data;
             if (order != null) {
-                if (order.status == DJOrderStatus.FINISH_ORDER) {
+                if (order.status == DJOrderStatus.FINISH_ORDER
+                        || order.status == DJOrderStatus.RATED_ORDER) {
                     //已完成订单
                     String weihao = order.passengerPhone;
                     if (weihao.length() > 4) {
