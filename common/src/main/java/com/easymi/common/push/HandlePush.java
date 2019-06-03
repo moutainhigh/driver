@@ -251,9 +251,9 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 String orderType = jbData.optString("orderType");
                 DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
                 if (dymOrder != null) {
-//                    if(dymOrder.distance > jbData.optDouble("Mileges")){
-//                        return;
-//                    }
+                    if(dymOrder.distance > jbData.optDouble("Mileges")){
+                        return;
+                    }
                     dymOrder.startFee = jbData.optDouble("startFee");
                     dymOrder.waitTime = jbData.optInt("waitTime") / 60;
                     dymOrder.waitTimeFee = jbData.optDouble("waitFee");
