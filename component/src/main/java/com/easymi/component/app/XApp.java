@@ -224,7 +224,8 @@ public class XApp extends MultiDexApplication {
 
         InitConfig initConfig = new InitConfig(Config.TTS_APP_ID, Config.TTS_APP_KEY, Config.TTS_APP_SECRET, TtsMode.ONLINE, params, listener);
 
-        mSpeechSynthesizer = new NonBlockSyntherizer(this, initConfig, null); // 此处可以改为MySyntherizer 了解调用过程
+        // 此处可以改为MySyntherizer 了解调用过程
+        mSpeechSynthesizer = new NonBlockSyntherizer(this, initConfig, null);
 
 
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);

@@ -120,6 +120,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
                 if (order.serviceType.equals(Config.GOV)) {
                     XApp.getInstance().shake();
+                    XApp.getInstance().stopVoice();
                     XApp.getInstance().syntheticVoice("你有新的公务用车订单");
 
                     refreshWork();
@@ -165,16 +166,19 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
             } else if (msg.equals("thaw")) {
                 //冻结
                 XApp.getInstance().shake();
+                XApp.getInstance().stopVoice();
                 XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.freezed));
                 EmUtil.employLogout(XApp.getInstance());
             } else if (msg.equals("force_offline")) {
                 //强制下线
                 XApp.getInstance().shake();
+                XApp.getInstance().stopVoice();
                 XApp.getInstance().syntheticVoice(XApp.getInstance().getString(R.string.force_offline));
                 EmUtil.employLogout(XApp.getInstance());
             } else if (msg.equals("unbunding")) {
                 //解绑
                 XApp.getInstance().shake();
+                XApp.getInstance().stopVoice();
                 XApp.getInstance().syntheticVoice("您的账户已被管理员解绑");
                 EmUtil.employLogout(XApp.getInstance());
             } else if (msg.equals("finish")) {
@@ -321,21 +325,25 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 }
             } else if (msg.equals("chartered")) {
                 XApp.getInstance().shake();
+                XApp.getInstance().stopVoice();
                 XApp.getInstance().syntheticVoice("您有定制包车订单需要处理");
 
                 refreshWork();
             } else if (msg.equals("rental")) {
                 XApp.getInstance().shake();
+                XApp.getInstance().stopVoice();
                 XApp.getInstance().syntheticVoice("您有包车租车订单需要处理");
 
                 refreshWork();
             } else if (msg.equals("order_hot_create")) {
                 XApp.getInstance().shake();
+                XApp.getInstance().stopVoice();
                 XApp.getInstance().syntheticVoice("您有城际拼车订单需要处理");
 
                 refreshWork();
             } else if (msg.equals("country") || msg.equals("custombus")) {
                 XApp.getInstance().shake();
+                XApp.getInstance().stopVoice();
                 XApp.getInstance().syntheticVoice("您有班车订单需要处理");
 
                 refreshWork();
@@ -357,11 +365,13 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 handler.sendMessage(message);
             } else if (msg.equals("order_change")) {
                 XApp.getInstance().shake();
+                XApp.getInstance().stopVoice();
                 XApp.getInstance().syntheticVoice("您有新的转单");
 
                 refreshWork();
             } else if (msg.equals("order_transferred")) {
                 XApp.getInstance().shake();
+                XApp.getInstance().stopVoice();
                 XApp.getInstance().syntheticVoice("您有班次被转单了");
 
                 refreshWork();
@@ -378,6 +388,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 handler.sendMessage(message);
             } else if (msg.equals("book_order")) {
                 XApp.getInstance().shake();
+                XApp.getInstance().stopVoice();
                 XApp.getInstance().syntheticVoice("你有公务用车订单需要执行");
             }
         } catch (JSONException e) {
@@ -649,6 +660,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                     }
                     XApp.getInstance().shake();
                     //语音播报xx客户已完成支付
+                    XApp.getInstance().stopVoice();
                     XApp.getInstance().syntheticVoice(
                             XApp.getMyString(R.string.pay_suc_1) +
                                     NumberToHanzi.number2hanzi(weihao) +
