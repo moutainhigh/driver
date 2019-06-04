@@ -201,49 +201,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 handler.sendMessage(message);
             } else if (msg.equals("setting_change")) {
                 loadSetting();
-            } else if (msg.equals("http_costInfo")) {
-                //费用信息
-                String data = jb.optString("data");
-                JSONObject jbData = new JSONObject(data.replaceAll("\\\\\\\"", "--"));
-                long orderId = jbData.optLong("OrderId");
-                String orderType = jbData.optString("OrderType");
-                DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
-                if (dymOrder != null) {
-                    if (dymOrder.distance > jbData.optDouble("Mileges")) {
-                        return;
-                    }
-                    dymOrder.startFee = jbData.optDouble("StartPrice");
-                    dymOrder.waitTime = jbData.optInt("WaitTime") / 60;
-                    dymOrder.waitTimeFee = jbData.optDouble("WaitTimeFee");
-                    dymOrder.travelTime = jbData.optInt("DriverTime") / 60;
-                    dymOrder.travelFee = jbData.optDouble("DriveTimeCost");
-                    dymOrder.totalFee = jbData.optDouble("TotalAmount");
-
-                    dymOrder.minestMoney = jbData.optDouble("MinCost");
-
-                    dymOrder.disFee = jbData.optDouble("MileageCost");
-                    dymOrder.distance = jbData.optDouble("Mileges");
-
-                    if (Config.ZHUANCHE.equals(orderType)) {
-                        dymOrder.peakCost = jbData.optDouble("PeakCost");
-                        dymOrder.nightPrice = jbData.optDouble("NightPrice");
-                        dymOrder.lowSpeedCost = jbData.optDouble("LowSpeedCost");
-                        dymOrder.lowSpeedTime = jbData.getInt("LowSpeedTime") / 60;
-                        dymOrder.peakMile = jbData.optDouble("PeakMile");
-                        dymOrder.nightTime = jbData.getInt("NightTime") / 60;
-                        dymOrder.nightMile = jbData.optDouble("NightMile");
-                        dymOrder.nightTimePrice = jbData.optDouble("NightTimePrice");
-                    }
-
-                    DecimalFormat decimalFormat = new DecimalFormat("#0.0");
-                    decimalFormat.setRoundingMode(RoundingMode.DOWN);
-                    dymOrder.distance = Double.parseDouble(decimalFormat.format(dymOrder.distance));
-                    //公里数保留一位小数。。
-
-                    dymOrder.updateFee();
-                    notifyObserver(orderId, orderType);
-                }
-            } else if (msg.equals("realFee")) {
+            }else if (msg.equals("realFee")) {
                 //费用信息
                 String data = jb.optString("data");
                 JSONObject jbData = new JSONObject(data.replaceAll("\\\\\\\"", "--"));
@@ -251,7 +209,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 String orderType = jbData.optString("orderType");
                 DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
                 if (dymOrder != null) {
-                    if(dymOrder.distance > jbData.optDouble("Mileges")){
+                    if(dymOrder.distance > jbData.optDouble("distance")){
                         return;
                     }
                     dymOrder.startFee = jbData.optDouble("startFee");
