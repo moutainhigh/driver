@@ -209,8 +209,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
      */
     private double payMoney;
 
-    //是否是前往过费用详情界面
-    private boolean isToFeeDetail = true;
 
     /**
      * 是否是极速指派订单
@@ -241,8 +239,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         flashAssign = getIntent().getBooleanExtra("flashAssign", false);
 
-        //是否是从计价器过来的
-        isToFeeDetail = getIntent().getBooleanExtra("showSettle", false);
         if (orderId == -1) {
             finish();
             return;
@@ -579,15 +575,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.commit();
         } else if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
             showToEndFragment();
-            if (isToFeeDetail) {
-                if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
-                    settleFragmentDialog.setDjOrder(zcOrder);
-                } else {
-                    settleFragmentDialog = new SettleFragmentDialog(FlowActivity.this, zcOrder, bridge);
-                    settleFragmentDialog.show();
-                }
-                isToFeeDetail = false;
-            }
+//                if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
+//                    settleFragmentDialog.setDjOrder(zcOrder);
+//                } else {
+//                    settleFragmentDialog = new SettleFragmentDialog(FlowActivity.this, zcOrder, bridge);
+//                    settleFragmentDialog.show();
+//                }
         } else if (zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_DESTINATION_ORDER) {
             toolbar.setTitle(R.string.settle);
             runningFragment = new RunningFragment();
@@ -602,7 +595,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.replace(R.id.flow_frame, runningFragment);
             transaction.commit();
 
-            if (settleFragmentDialog != null && settleFragmentDialog.isShowing() && !isToFeeDetail) {
+            if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
                 settleFragmentDialog.setDjOrder(zcOrder);
                 //确认费用后直接弹出支付页面
                 DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.ZHUANCHE);
@@ -616,7 +609,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                     settleFragmentDialog = new SettleFragmentDialog(FlowActivity.this, zcOrder, bridge);
                     settleFragmentDialog.show();
                 }
-                isToFeeDetail = false;
             }
         }
     }
@@ -1269,7 +1261,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void toFeeDetail() {
-                isToFeeDetail = true;
             }
 
             @Override
@@ -1607,7 +1598,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             } else if (null != runningFragment && runningFragment.isVisible()) {
                 runningFragment.showFee(dyo);
             }
-            if (null != settleFragmentDialog && settleFragmentDialog.isShowing()) {
+            if (null != settleFragmentDialog) {
                 settleFragmentDialog.setDymOrder(dyo);
             }
         }

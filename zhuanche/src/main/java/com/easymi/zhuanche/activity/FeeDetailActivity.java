@@ -160,7 +160,7 @@ public class FeeDetailActivity extends RxBaseActivity {
         low_fee_title.setText("低速费(" + dymOrder.lowSpeedTime + "分钟)");
         low_pay_fee.setText(dymOrder.lowSpeedCost + getString(R.string.yuan));
 
-        totalFee.setText(getString(R.string.money_sign) + dymOrder.orderShouldPay);
+        totalFee.setText(getString(R.string.money_sign) + dymOrder.totalFee);
 
         stages = GsonUtil.parseToArrayList(dymOrder.stageArrays, StageArrays.class);
 

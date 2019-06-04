@@ -302,9 +302,14 @@ public class SettleFragmentDialog {
     private void initView() {
         initEdit();
         if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+            DymOrder dOrder = DymOrder.findByIDType(zcOrder.orderId, zcOrder.orderType);
+            if (dOrder == null){
+                return;
+            }
             confirmBtn.setVisibility(View.VISIBLE);
             payButton.setVisibility(View.GONE);
             dialogTitle.setText(context.getString(R.string.confirm_money));
+            needPayText.setText(String.valueOf(dOrder.totalFee));
         } else {
             addedHint.setVisibility(View.GONE);
             confirmBtn.setVisibility(View.GONE);
@@ -314,7 +319,7 @@ public class SettleFragmentDialog {
             paymentEdit.setText(String.valueOf(dymOrder.paymentFee));
             remarkEdit.setText(dymOrder.remark);
             prepayMoneyText.setText(String.valueOf(dymOrder.prepay));
-            needPayText.setText(String.valueOf(dymOrder.orderShouldPay));
+            needPayText.setText(String.valueOf(dymOrder.totalFee));
             extraFeeEdit.setEnabled(false);
             paymentEdit.setEnabled(false);
             remarkEdit.setEnabled(false);
@@ -423,7 +428,7 @@ public class SettleFragmentDialog {
                 public void run() {
                     prepayMoneyText.setText(String.valueOf(dymOrder.prepay));
 //                    needPayText.setText(String.valueOf(dymOrder.orderShouldPay));
-                    needPayText.setText(df.format(dymOrder.orderShouldPay));
+                    needPayText.setText(df.format(dymOrder.totalFee));
                 }
             });
         }
