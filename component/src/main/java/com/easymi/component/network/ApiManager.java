@@ -12,6 +12,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import tech.linjiang.pandora.Pandora;
 
 /**
  * Created by xyin on 2016/10/11.
@@ -50,9 +51,10 @@ public class ApiManager {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.readTimeout(16000, TimeUnit.MILLISECONDS)
                 .connectTimeout(16000, TimeUnit.MILLISECONDS)
-        //拦截器顺序不要改 谁改谁是狗
+                //拦截器顺序不要改 谁改谁是狗
                 .addInterceptor(new EncryptInterceptor())  //加密拦截器
                 .addInterceptor(new TokenInterceptor())//token拦截器
+                .addInterceptor(Pandora.get().getInterceptor())
                 .addInterceptor(new ResponseIntercepter())
                 .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS)) //添加日志拦截器,进行输出日志
                 .retryOnConnectionFailure(true) //失败重连
