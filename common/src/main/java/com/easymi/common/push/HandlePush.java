@@ -37,6 +37,7 @@ import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.AesUtil;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.NumberToHanzi;
@@ -186,7 +187,10 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
-                loadOrder(order);
+
+                if (order.orderId != XApp.getMyPreferences().getLong("finish_orderId",0)){
+                    loadOrder(order);
+                }
             } else if (msg.equals("reAssign")) {
                 //订单被改派 （收回）
                 MultipleOrder order = new MultipleOrder();
@@ -629,6 +633,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                     intent1.putExtra("orderId", order.id);
                     intent1.putExtra("orderType", order.serviceType);
                     XApp.getInstance().sendBroadcast(intent1);
+                    XApp.getPreferencesEditor().putLong("finish_orderId",order.orderId).apply();
                     return;
                 }
                 if (order.status != DJOrderStatus.NEW_ORDER && order.status != DJOrderStatus.PAIDAN_ORDER) {
