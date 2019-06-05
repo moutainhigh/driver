@@ -200,6 +200,7 @@ public class WorkTimeCounter {
                     if ((start.getTime()-System.currentTimeMillis())/1000 < 60){
                         totalMinute = 0;
                     }
+
                 }
             } else {
                 ToastUtil.showMessage(context, result.getMessage());

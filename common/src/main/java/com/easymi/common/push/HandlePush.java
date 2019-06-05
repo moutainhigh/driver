@@ -113,7 +113,6 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 if (!DymOrder.exists(order.orderId, order.serviceType)) {
                     loadOrder(order);
                 }
-//                XApp.getInstance().syntheticVoice();
             } else if (msg.equals("sendorders")) {
                 //派单
                 MultipleOrder order = new MultipleOrder();
@@ -189,6 +188,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
 
                 if (order.orderId != XApp.getMyPreferences().getLong("finish_orderId",0)){
+                    XApp.getPreferencesEditor().putLong("finish_orderId",order.orderId).apply();
                     loadOrder(order);
                 }
             } else if (msg.equals("reAssign")) {
@@ -633,7 +633,6 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                     intent1.putExtra("orderId", order.id);
                     intent1.putExtra("orderType", order.serviceType);
                     XApp.getInstance().sendBroadcast(intent1);
-                    XApp.getPreferencesEditor().putLong("finish_orderId",order.orderId).apply();
                     return;
                 }
                 if (order.status != DJOrderStatus.NEW_ORDER && order.status != DJOrderStatus.PAIDAN_ORDER) {

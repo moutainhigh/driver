@@ -350,6 +350,7 @@ public class MqttManager implements LocObserver {
 
             Log.e(TAG, "MqttReceivePull:" + str1);
 
+
             HandlePush.getInstance().handPush(str1);
         }
 
