@@ -661,6 +661,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
      */
     public void flashAssign() {
         XApp.getInstance().syntheticVoice("您有快速指派订单需要处理，客户起点为" + zcOrder.getStartSite().addr + ",终点为" + zcOrder.getEndSite().addr);
+        flashAssign = false;
     }
 
     /**

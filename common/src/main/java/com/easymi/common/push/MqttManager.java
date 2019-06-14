@@ -155,8 +155,7 @@ public class MqttManager implements LocObserver {
 
         Integer qos = 1;
         Boolean retained = false;
-        String pullTopic = "/trip/driver" + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
-        String message = "{\"terminal_uid\":\"" + clientId + "\"}";
+        String message = "";
         conOpt.setWill(pullTopic, message.getBytes(), qos, retained);
 
         // Construct an MQTT blocking mode client
@@ -249,6 +248,7 @@ public class MqttManager implements LocObserver {
             Log.e(TAG, "Subscribing to topic \"" + topicName + "\" qos " + qos);
             try {
                 client.subscribe(topicName, qos);
+
                 flag = true;
             } catch (MqttException e) {
                 Log.e(TAG, "subscribe  exception--> " + e.getMessage());

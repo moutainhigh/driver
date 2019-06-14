@@ -118,6 +118,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
+
                 if (order.serviceType.equals(Config.GOV)) {
                     XApp.getInstance().shake();
                     XApp.getInstance().stopVoice();
@@ -136,12 +137,17 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
 
-                Message message = new Message();
-                message.what = 1;
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("order", order);
-                message.setData(bundle);
-                handler.sendMessage(message);
+                if (order.orderId != XApp.getMyPreferences().getLong("cancel_orderId", 0)) {
+                    XApp.getPreferencesEditor().putLong("cancel_orderId", order.orderId).apply();
+
+                    Message message = new Message();
+                    message.what = 1;
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("order", order);
+                    message.setData(bundle);
+                    handler.sendMessage(message);
+                }
+
             } else if (msg.equals("driver_status")) {
                 //司机状态
                 String status = jb.optJSONObject("data").optString("status");
@@ -187,8 +193,8 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
 
-                if (order.orderId != XApp.getMyPreferences().getLong("finish_orderId",0)){
-                    XApp.getPreferencesEditor().putLong("finish_orderId",order.orderId).apply();
+                if (order.orderId != XApp.getMyPreferences().getLong("finish_orderId", 0)) {
+                    XApp.getPreferencesEditor().putLong("finish_orderId", order.orderId).apply();
                     loadOrder(order);
                 }
             } else if (msg.equals("reAssign")) {
@@ -197,15 +203,19 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
 
-                Message message = new Message();
-                message.what = 3;
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("order", order);
-                message.setData(bundle);
-                handler.sendMessage(message);
+                if (order.orderId != XApp.getMyPreferences().getLong("reAssign_orderId", 0)) {
+                    XApp.getPreferencesEditor().putLong("reAssign_orderId", order.orderId).apply();
+
+                    Message message = new Message();
+                    message.what = 3;
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("order", order);
+                    message.setData(bundle);
+                    handler.sendMessage(message);
+                }
             } else if (msg.equals("setting_change")) {
                 loadSetting();
-            }else if (msg.equals("realFee")) {
+            } else if (msg.equals("realFee")) {
                 //费用信息
                 String data = jb.optString("data");
                 JSONObject jbData = new JSONObject(data.replaceAll("\\\\\\\"", "--"));
@@ -213,7 +223,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 String orderType = jbData.optString("orderType");
                 DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
                 if (dymOrder != null) {
-                    if(dymOrder.distance > jbData.optDouble("distance")){
+                    if (dymOrder.distance > jbData.optDouble("distance")) {
                         return;
                     }
                     dymOrder.startFee = jbData.optDouble("startFee");
@@ -269,20 +279,21 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 order.passengerId = jb.optJSONObject("data").optLong("passengerId");
                 order.passengerPhone = jb.optJSONObject("data").optString("userPhone");
 
-                XApp.getInstance().shake();
+                if (order.orderId != XApp.getMyPreferences().getLong("flashAssign_orderId", 0)) {
+                    XApp.getPreferencesEditor().putLong("flashAssign_orderId", order.orderId).apply();
 
-                if (StringUtils.isNotBlank(order.serviceType)) {
-                    if (order.serviceType.equals(Config.ZHUANCHE)) {
-                        ARouter.getInstance()
-                                .build("/zhuanche/FlowActivity")
-                                .withBoolean("flashAssign", true)
-                                .withLong("orderId", order.orderId).navigation();
-                    } else if (order.serviceType.equals(Config.TAXI)) {
-                        ARouter.getInstance()
-                                .build("/taxi/FlowActivity")
-                                .withLong("orderId", order.orderId).navigation();
-                    } else if (order.serviceType.equals(Config.GOV)) {
-
+                    XApp.getInstance().shake();
+                    if (StringUtils.isNotBlank(order.serviceType)) {
+                        if (order.serviceType.equals(Config.ZHUANCHE)) {
+                            ARouter.getInstance()
+                                    .build("/zhuanche/FlowActivity")
+                                    .withBoolean("flashAssign", true)
+                                    .withLong("orderId", order.orderId).navigation();
+                        } else if (order.serviceType.equals(Config.TAXI)) {
+                            ARouter.getInstance()
+                                    .build("/taxi/FlowActivity")
+                                    .withLong("orderId", order.orderId).navigation();
+                        }
                     }
                 }
             } else if (msg.equals("chartered")) {
