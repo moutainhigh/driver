@@ -34,6 +34,20 @@ public class Config {
     public static  String MQTT_HOST = "tcp://ws.xiaokayun.cn";//线上地址
 //    public static  String MQTT_HOST = "tcp://10.10.4.5:1883";//本地地址
 //    public static  String MQTT_HOST = "tcp://10.10.4.22:1883";//test
+
+
+    public static int PORT_HTTP;
+    public static int PORT_TCP;
+    public static String MQTT_TOPIC;
+    public static String MQTT_CLIENT_ID;
+
+    //线上和预发
+    public static  String MQTT_USER_NAME = "xiaoka";
+    public static  String MQTT_PSW = "&mv7dHapB5J!95BJ";
+//    //本地地址
+//    public static  String MQTT_USER_NAME = "admin";
+//    public static  String MQTT_PSW = "public";
+
     /**
      * APP_KEY
      */
@@ -50,15 +64,7 @@ public class Config {
 //    public static  String APP_KEY = "vkv15FSFieLhCYmmlHXESzfKCUjLiNNM";//七彩筋斗云
 //    public static  String APP_KEY = "79z7XRGgtxVGMLnSCcGj5KOdBgip3wBM";//test
 
-    /**
-     * MQTT
-     */
-    //线上和预发
-    public static  String MQTT_USER_NAME = "xiaoka";
-    public static  String MQTT_PSW = "&mv7dHapB5J!95BJ";
-//    //本地地址
-//    public static  String MQTT_USER_NAME = "admin";
-//    public static  String MQTT_PSW = "public";
+
 
     /**
      * 上传图片地址.

@@ -42,6 +42,9 @@ import com.easymi.common.adapter.OrderAdapter;
 import com.easymi.common.entity.AnnAndNotice;
 import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.entity.CityLine;
+import com.easymi.common.entity.MqttConfig;
+import com.easymi.common.entity.MqttResult;
+import com.easymi.common.entity.MqttTopic;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.mvp.order.OrderActivity;
@@ -68,7 +71,9 @@ import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
+import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.AesUtil;
 import com.easymi.component.utils.CsSharedPreferences;
@@ -92,9 +97,11 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 
@@ -629,7 +636,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         if (presenter!=null){
             presenter.loadDataOnResume();
         }
-        MqttManager.getInstance().pushLocNoLimit(new BuildPushData(EmUtil.getLastLoc()));
+        getMqttConfig();
     }
 
     @Override
@@ -894,4 +901,91 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
             }
         }));
     }
+
+    private boolean isStartMqtt;
+
+    /**
+     * 获取mqtt推送配置
+     */
+    private void getMqttConfig() {
+        if (isStartMqtt) {
+            return;
+        }
+        isStartMqtt = true;
+
+        mRxManager.add(
+                ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                        .getConfig()
+                        .map(new HttpResultFunc2<>())
+                        .retryWhen(observable -> observable.delay(5, TimeUnit.SECONDS))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new MySubscriber<MqttConfig>(this, false, false, new NoErrSubscriberListener<MqttConfig>() {
+                            @Override
+                            public void onNext(MqttConfig mqttConfig) {
+                                Config.MQTT_USER_NAME = mqttConfig.userName;
+                                Config.MQTT_PSW = mqttConfig.password;
+                                Config.MQTT_HOST = mqttConfig.broker;
+                                Config.PORT_HTTP = mqttConfig.portHttp;
+                                Config.PORT_TCP = mqttConfig.portTcp;
+                                Config.MQTT_TOPIC = mqttConfig.topic;
+                                MqttManager.getInstance().creatConnect();
+                                getTopic();
+                            }
+                        })));
+    }
+
+    /**
+     * 检查clentid是否存活
+     */
+    private void checkTopic() {
+        mRxManager.add(
+                ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                        .getCurrentTopic(Config.MQTT_CLIENT_ID)
+                        .filter(new HttpResultFunc<>(0))
+                        .map(new Func1<MqttResult, MqttResult>() {
+                            @Override
+                            public MqttResult call(MqttResult mqttResult) {
+                                if (!(mqttResult.result == null || mqttResult.result.objects.isEmpty())) {
+                                    throw new RuntimeException();
+                                }
+                                return mqttResult;
+                            }
+                        })
+                        .retryWhen(observable -> observable.delay(30, TimeUnit.SECONDS))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new MySubscriber<>(WorkActivity.this, false, false, new NoErrSubscriberListener<MqttResult>() {
+                            @Override
+                            public void onNext(MqttResult mqttResult) {
+                                if ((mqttResult.result == null || mqttResult.result.objects.isEmpty())) {
+                                    MqttManager.release();
+                                    Config.MQTT_USER_NAME = "";
+                                    Config.MQTT_CLIENT_ID = "";
+                                    getMqttConfig();
+                                }
+                            }
+                        })));
+    }
+
+    /**
+     * 获取clentid
+     */
+    private void getTopic() {
+        mRxManager.add(ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .getMqttTopic()
+                .filter(new HttpResultFunc<>())
+                .retryWhen(observable -> observable.delay(5, TimeUnit.SECONDS))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MySubscriber<MqttTopic>(WorkActivity.this, false, false, new NoErrSubscriberListener<MqttTopic>() {
+                    @Override
+                    public void onNext(MqttTopic mqttTopic) {
+                        Config.MQTT_CLIENT_ID = mqttTopic.data;
+                        checkTopic();
+                    }
+                })));
+
+    }
+
 }

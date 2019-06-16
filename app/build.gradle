@@ -70,7 +70,7 @@ android {
             dimension "App"//同在App这个名字维度
             buildConfigField "String", "HOST", '"http://api.xiaokakj.cn/"'
             buildConfigField "String", "H5_HOST", '"http://h5.xiaokakj.cn/"'
-            buildConfigField "String", "MQTT_HOST", '"tcp://118.190.131.49:1883"'
+            buildConfigField "String", "MQTT_HOST", '"tcp://39.97.117.29:1883"'
             buildConfigField "String", "MQTT_USER_NAME", '"xiaoka"'
             buildConfigField "String", "MQTT_PSW", '"&mv7dHapB5J!95BJ"'
             buildConfigField "String", "IMG_SERVER", '"https://assets.xiaokakj.com/"'
@@ -78,7 +78,7 @@ android {
         //局域网环境
         local {
             dimension "App"//同在App这个名字维度
-            buildConfigField "String", "HOST", '"http://10.10.2.40:10001/"'
+            buildConfigField "String", "HOST", '"http://10.10.2.23:10001/"'
             buildConfigField "String", "H5_HOST", '"http://h5.xiaokakj.cn/"'
             buildConfigField "String", "MQTT_HOST", '"tcp://10.10.4.6:1883"'
             buildConfigField "String", "MQTT_USER_NAME", '"admin"'
