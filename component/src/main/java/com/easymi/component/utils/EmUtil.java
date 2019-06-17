@@ -1,12 +1,11 @@
 package com.easymi.component.utils;
 
 import android.app.ActivityManager;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 
 import com.easymi.component.Config;
+import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
@@ -85,6 +84,8 @@ public class EmUtil {
                 .getLaunchIntentForPackage(context.getPackageName());
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(i);
+
+        ActManager.getInstance().finishActivity("HomeActivity");
 
         ActivityManager activityMgr = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         if (activityMgr != null) {

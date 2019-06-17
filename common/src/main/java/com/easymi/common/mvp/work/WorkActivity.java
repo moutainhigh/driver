@@ -2,11 +2,9 @@ package com.easymi.common.mvp.work;
 
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,14 +35,11 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.easymi.common.CommApiService;
 import com.easymi.common.R;
 import com.easymi.common.activity.CreateActivity;
-import com.easymi.common.activity.ModelSetActivity;
 import com.easymi.common.adapter.OrderAdapter;
 import com.easymi.common.entity.AnnAndNotice;
 import com.easymi.common.entity.BuildPushData;
-import com.easymi.common.entity.CityLine;
 import com.easymi.common.entity.MqttConfig;
 import com.easymi.common.entity.MqttResult;
-import com.easymi.common.entity.MqttTopic;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.mvp.order.OrderActivity;
@@ -75,19 +70,16 @@ import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.rxmvp.RxManager;
-import com.easymi.component.utils.AesUtil;
 import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MapUtil;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
-import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.component.widget.pinned.PinnedHeaderDecoration;
 import com.skyfishjy.library.RippleBackground;
-import com.tencent.bugly.crashreport.CrashReport;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
@@ -101,13 +93,14 @@ import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName:
+ *
  * @Author: hufeng
  * Date: 2018/9/24 下午5:00
  * Description: 工作台主界面
@@ -542,9 +535,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         /**
          * 专车补单在下线状态
          */
-        if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)){
+        if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)) {
             btn_create.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             btn_create.setVisibility(View.GONE);
         }
     }
@@ -559,12 +552,12 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         Employ employ = EmUtil.getEmployInfo();
         if (String.valueOf(employ.status).equals(EmployStatus.FROZEN) || employ.status == 1) {
             EmUtil.employLogout(this);
-        } else if (String.valueOf(employ.status).equals(EmployStatus.ONLINE) ) {
+        } else if (String.valueOf(employ.status).equals(EmployStatus.ONLINE)) {
             showOffline();//非听单状态
             presenter.initDaemon();
         } else {
             showOnline();//听单状态
-            if (presenter !=null){
+            if (presenter != null) {
                 presenter.indexOrders();
                 presenter.initDaemon();
             }
@@ -633,7 +626,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
             ARouter.getInstance().build("/personal/LoginActivity").navigation();
             finish();
         }
-        if (presenter!=null){
+        if (presenter != null) {
             presenter.loadDataOnResume();
         }
         getMqttConfig();
@@ -656,6 +649,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
         getRxManager().clear();
+        MqttManager.release();
         mapView.onDestroy();
         super.onDestroy();
 
@@ -676,19 +670,19 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         IntentFilter filter = new IntentFilter();
         filter.addAction(Config.BROAD_CANCEL_ORDER);
         filter.addAction(Config.BROAD_BACK_ORDER);
-        registerReceiver(cancelOrderReceiver, filter,EmUtil.getBroadCastPermission(),null);
+        registerReceiver(cancelOrderReceiver, filter, EmUtil.getBroadCastPermission(), null);
 
         employStatusChangeReceiver = new EmployStatusChangeReceiver(this);
-        registerReceiver(employStatusChangeReceiver, new IntentFilter(Config.BROAD_EMPLOY_STATUS_CHANGE),EmUtil.getBroadCastPermission(),null);
+        registerReceiver(employStatusChangeReceiver, new IntentFilter(Config.BROAD_EMPLOY_STATUS_CHANGE), EmUtil.getBroadCastPermission(), null);
 
         noticeReceiver = new NoticeReceiver(this);
-        registerReceiver(noticeReceiver, new IntentFilter(Config.BROAD_NOTICE),EmUtil.getBroadCastPermission(),null);
+        registerReceiver(noticeReceiver, new IntentFilter(Config.BROAD_NOTICE), EmUtil.getBroadCastPermission(), null);
 
         annReceiver = new AnnReceiver(this);
-        registerReceiver(annReceiver, new IntentFilter(Config.BROAD_ANN),EmUtil.getBroadCastPermission(),null);
+        registerReceiver(annReceiver, new IntentFilter(Config.BROAD_ANN), EmUtil.getBroadCastPermission(), null);
 
         orderRefreshReceiver = new OrderRefreshReceiver(this);
-        registerReceiver(orderRefreshReceiver, new IntentFilter(Config.ORDER_REFRESH),EmUtil.getBroadCastPermission(),null);
+        registerReceiver(orderRefreshReceiver, new IntentFilter(Config.ORDER_REFRESH), EmUtil.getBroadCastPermission(), null);
     }
 
     @Override
@@ -837,7 +831,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
 
     public void modelSet(View view) {
         Intent intent = new Intent(WorkActivity.this, CreateActivity.class);
-        intent.putExtra("type",EmUtil.getEmployInfo().serviceType);
+        intent.putExtra("type", EmUtil.getEmployInfo().serviceType);
         startActivity(intent);
     }
 
@@ -864,7 +858,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
 
     /**
      * 获取配置信息
-     *
      */
     private void getSetting() {
         Observable<SettingResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
@@ -942,26 +935,23 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         mRxManager.add(
                 ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                         .getCurrentTopic(Config.MQTT_CLIENT_ID)
-                        .filter(new HttpResultFunc<>(0))
-                        .map(new Func1<MqttResult, MqttResult>() {
+                        .map(new HttpResultFunc2<>(0))
+                        .doOnNext(new Action1<List<MqttResult>>() {
                             @Override
-                            public MqttResult call(MqttResult mqttResult) {
-                                if (!(mqttResult.result == null || mqttResult.result.objects.isEmpty())) {
+                            public void call(List<MqttResult> mqttResults) {
+                                if (!(mqttResults == null || mqttResults.isEmpty())) {
                                     throw new RuntimeException();
                                 }
-                                return mqttResult;
                             }
                         })
                         .retryWhen(observable -> observable.delay(30, TimeUnit.SECONDS))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new MySubscriber<>(WorkActivity.this, false, false, new NoErrSubscriberListener<MqttResult>() {
+                        .subscribe(new MySubscriber<>(WorkActivity.this, false, false, new NoErrSubscriberListener<List<MqttResult>>() {
                             @Override
-                            public void onNext(MqttResult mqttResult) {
-                                if ((mqttResult.result == null || mqttResult.result.objects.isEmpty())) {
+                            public void onNext(List<MqttResult> mqttResults) {
+                                if ((mqttResults == null || mqttResults.isEmpty())) {
                                     MqttManager.release();
-                                    Config.MQTT_USER_NAME = "";
-                                    Config.MQTT_CLIENT_ID = "";
                                     getMqttConfig();
                                 }
                             }
@@ -974,18 +964,17 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     private void getTopic() {
         mRxManager.add(ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .getMqttTopic()
-                .filter(new HttpResultFunc<>())
+                .map(new HttpResultFunc2<>())
                 .retryWhen(observable -> observable.delay(5, TimeUnit.SECONDS))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MySubscriber<MqttTopic>(WorkActivity.this, false, false, new NoErrSubscriberListener<MqttTopic>() {
+                .subscribe(new MySubscriber<String>(WorkActivity.this, false, false, new NoErrSubscriberListener<String>() {
                     @Override
-                    public void onNext(MqttTopic mqttTopic) {
-                        Config.MQTT_CLIENT_ID = mqttTopic.data;
+                    public void onNext(String mqttTopic) {
+                        Config.MQTT_CLIENT_ID = mqttTopic;
                         checkTopic();
                     }
                 })));
 
     }
-
 }

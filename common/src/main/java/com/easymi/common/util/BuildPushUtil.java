@@ -8,23 +8,14 @@ import com.easymi.common.entity.PushData;
 import com.easymi.common.entity.PushDataLoc;
 import com.easymi.common.entity.PushDataOrder;
 import com.easymi.component.Config;
-import com.easymi.component.DJOrderStatus;
-import com.easymi.component.ZCOrderStatus;
-import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.entity.PushEmploy;
 import com.easymi.component.entity.Vehicle;
-import com.easymi.component.network.GsonUtil;
 import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.FileUtil;
-import com.easymi.component.utils.Log;
-import com.easymi.component.utils.LogUtil;
-import com.easymi.component.utils.StringUtils;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -193,7 +184,6 @@ public class BuildPushUtil {
         PushBean pushBean = new PushBean("gps", pushData);
 
         String pushStr = new Gson().toJson(pushBean);
-        Log.e("MqttManager", "push loc data--->" + pushStr);
         return pushStr;
     }
 

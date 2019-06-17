@@ -2,10 +2,8 @@ package com.easymi.component.network;
 
 import android.content.res.Configuration;
 
-import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.result.EmResult;
-import com.easymi.component.utils.StringUtils;
 
 import java.util.Locale;
 
@@ -22,19 +20,10 @@ import rx.functions.Func1;
  * @param <T> Subscriber真正需要的数据类型，也就是Data部分的数据类型
  */
 public class HttpResultFunc<T extends EmResult> implements Func1<T, Boolean> {
-    private int errCode;
-
-    public HttpResultFunc() {
-        errCode = 1;
-    }
-
-    public HttpResultFunc(int errCode) {
-        this.errCode = errCode;
-    }
 
     @Override
     public Boolean call(T t) {
-        if (t.getCode() != errCode) {
+        if (t.getCode() != 1) {
             String msg = t.getMessage();
             //获取默认配置
             Configuration config = XApp.getInstance().getResources().getConfiguration();

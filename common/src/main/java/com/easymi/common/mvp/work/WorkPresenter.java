@@ -415,7 +415,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                     if (employ.serviceType.contains(Config.ZHUANCHE)
                             || employ.serviceType.contains(Config.TAXI)
 //                            || employ.serviceType.contains(Config.CITY_LINE)
-                            )
+                    )
                         ToastUtil.showMessage(context, "未绑定该业务车辆，不能接单");
                 }
             }

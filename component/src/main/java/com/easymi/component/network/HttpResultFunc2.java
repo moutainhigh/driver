@@ -21,12 +21,19 @@ import rx.functions.Func1;
  */
 public class HttpResultFunc2<T> implements Func1<EmResult2<T>, T> {
 
+    int errCode;
+
     public HttpResultFunc2() {
+        errCode = 1;
+    }
+
+    public HttpResultFunc2(int errCode) {
+        this.errCode = errCode;
     }
 
     @Override
     public T call(EmResult2<T> t) {
-        if (t.getCode() != 1) {
+        if (t.getCode() != errCode) {
             String msg = t.getMessage();
             Configuration config = XApp.getInstance().getResources().getConfiguration();   //获取默认配置
             if (config.locale == Locale.TAIWAN || config.locale == Locale.TRADITIONAL_CHINESE) {

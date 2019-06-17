@@ -25,9 +25,6 @@ public class MainConfig {
 
                 Config.HOST = BuildConfig.HOST;
                 Config.H5_HOST = BuildConfig.H5_HOST;
-                Config.MQTT_HOST = BuildConfig.MQTT_HOST;
-                Config.MQTT_USER_NAME = BuildConfig.MQTT_USER_NAME;
-                Config.MQTT_PSW = BuildConfig.MQTT_PSW;
                 Config.VERSION_NAME = BuildConfig.VERSION_NAME;
                 Config.IMG_SERVER = BuildConfig.IMG_SERVER;
 

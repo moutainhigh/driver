@@ -1,18 +1,13 @@
 package com.easymi.common.push;
 
-import android.os.Handler;
 import android.text.TextUtils;
 
 import com.easymi.common.CommApiService;
 import com.easymi.common.entity.BuildPushData;
-import com.easymi.common.entity.PullFeeEntity;
-import com.easymi.common.entity.PushBean;
-import com.easymi.common.entity.PushData;
 import com.easymi.common.result.GetFeeResult;
 import com.easymi.common.util.BuildPushUtil;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
-import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
@@ -28,23 +23,16 @@ import com.easymi.component.utils.FileUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.NetUtil;
 import com.easymi.component.utils.StringUtils;
-import com.google.gson.Gson;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
-import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Executors;
 
 import rx.Observable;
@@ -64,7 +52,7 @@ public class MqttManager implements LocObserver {
     // 单例
     private static MqttManager mInstance = null;
 
-    Integer qos = 2;
+    private int qos = 2;
 
     /**
      * Private instance variables
@@ -72,14 +60,9 @@ public class MqttManager implements LocObserver {
     private MqttAndroidClient client;
     private MqttConnectOptions conOpt;
 
-    private Handler handler;
-
     private boolean isConnecting = false;
 
-    /**
-     * 订阅topic
-     */
-    String pullTopic;
+    private String pullTopic;
 
     private RxManager rxManager;
 
@@ -87,7 +70,6 @@ public class MqttManager implements LocObserver {
      * 初始化
      */
     private MqttManager() {
-        handler = new Handler();
         rxManager = new RxManager();
         LocReceiver.getInstance().addObserver(MqttManager.this);
     }
@@ -126,7 +108,6 @@ public class MqttManager implements LocObserver {
      */
     public synchronized boolean creatConnect() {
 
-
         if (!new CsSharedPreferences().getBoolean(Config.SP_ISLOGIN, false)) {
             //未登陆 不连接
             return false;
@@ -136,7 +117,7 @@ public class MqttManager implements LocObserver {
             //正在连接，不连接
             return false;
         }
-        if (client != null && client.isConnected()) {
+        if (isConnected()) {
             //client连接起的  不连接
             return false;
         }
@@ -146,33 +127,24 @@ public class MqttManager implements LocObserver {
 
         pullTopic = "/trip/driver" + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
         String brokerUrl = "tcp://" + Config.MQTT_HOST + ":" + Config.PORT_TCP;
-        String userName = Config.MQTT_USER_NAME;
-        String password = Config.MQTT_PSW;
-        Log.e("MqttManager", pullTopic + "   " + brokerUrl + "  " + userName + "  " + password);
-
         //身份唯一码
         String clientId = "driver-" + EmUtil.getEmployId();
 
-        // Construct the connection options object that contains connection parameters
-        // such as cleanSession and LWT
         conOpt = new MqttConnectOptions();
         conOpt.setCleanSession(true);
-        conOpt.setPassword(password.toCharArray());
-        conOpt.setUserName(userName);
+        conOpt.setUserName(Config.MQTT_USER_NAME);
+        conOpt.setPassword(Config.MQTT_PSW.toCharArray());
         // 设置超时时间，单位：秒
         conOpt.setConnectionTimeout(5);
         // 心跳包发送间隔，单位：秒
         conOpt.setKeepAliveInterval(10);
         conOpt.setAutomaticReconnect(true);
 
-        Boolean retained = false;
-        String message = "";
-        conOpt.setWill(pullTopic, message.getBytes(), qos, retained);
+        String message = "{\"terminal_uid\":\"" + clientId + "\"}";
+        conOpt.setWill(pullTopic, message.getBytes(), qos, false);
 
-        // Construct an MQTT blocking mode client
         client = new MqttAndroidClient(XApp.getInstance(), brokerUrl, clientId);
 
-        // Set this wrapper as the callback handler
         client.setCallback(mCallback);
         doConnect();
 
@@ -204,67 +176,23 @@ public class MqttManager implements LocObserver {
      *
      * @return boolean
      */
-    public boolean publish(String pushStr) {
+    public void publish(String pushStr) {
         if (StringUtils.isBlank(pushStr)) {
-            return false;
+            return;
         }
-        //上行topic
-        String topicName = Config.MQTT_TOPIC;
-
-        boolean flag = false;
 
         if (client != null && client.isConnected()) {
-
-            Log.e(TAG, "Publishing to topic \"" + topicName + "\" qos " + qos);
-
-            // Create and configure a message
             MqttMessage message = new MqttMessage(pushStr.getBytes());
             message.setQos(qos);
-
-            // Send the message to the server, control is not returned until
-            // it has been delivered to the server meeting the specified
-            // quality of service.
             try {
-                client.publish(topicName, message);
-                flag = true;
+                client.publish(Config.MQTT_TOPIC, message);
+                Log.e("MqttManager", "push loc data--->" + pushStr);
             } catch (MqttException e) {
                 Log.e(TAG, "Publishing msg exception " + e.getMessage());
             }
         }
-
-        return flag;
     }
 
-    /**
-     * Subscribe to a topic on an MQTT server
-     * Once subscribed this method waits for the messages to arrive from the server
-     * that match the subscription. It continues listening for messages until the enter key is
-     * pressed.
-     *
-     * @param topicName to subscribe to (can be wild carded)
-     * @return boolean
-     */
-    public boolean subscribe(String topicName) {
-        boolean flag = false;
-
-        if (client != null && client.isConnected()) {
-            // Subscribe to the requested topic
-            // The QoS specified is the maximum level that messages will be sent to the client at.
-            // For instance if QoS 1 is specified, any messages originally published at QoS 2 will
-            // be downgraded to 1 when delivering to the client but messages published at 1 and 0
-            // will be received at the same level they were published at.
-            Log.e(TAG, "Subscribing to topic \"" + topicName + "\" qos " + qos);
-            try {
-                client.subscribe(topicName, qos);
-
-                flag = true;
-            } catch (MqttException e) {
-                Log.e(TAG, "subscribe  exception--> " + e.getMessage());
-            }
-        }
-        return flag;
-
-    }
 
     /**
      * mqtt是否连接
@@ -290,59 +218,6 @@ public class MqttManager implements LocObserver {
         }
     }
 
-    private long lastSucTime = 0;
-
-//    /**
-//     * MQTT是否连接成功
-//     */
-//    private IMqttActionListener iMqttActionListener = new IMqttActionListener() {
-//
-//        @Override
-//        public void onSuccess(IMqttToken arg0) {
-//            //会话连接成功，就开始订阅消息
-//            isConnecting = false;
-//            Log.e("hufeng", "连接成功");
-//            try {
-//                if (lastSucTime == 0) {
-//                    client.subscribe(pullTopic, qos);
-//                    client.subscribe(configTopic, qos);
-//                } else {
-//                    if (System.currentTimeMillis() - lastSucTime < 2000) {
-//                        //小于2秒的回调
-//                    } else {
-//                        client.subscribe(pullTopic, qos);
-//                        client.subscribe(configTopic, qos);
-//                    }
-//                }
-//                lastSucTime = System.currentTimeMillis();
-//            } catch (MqttException e) {
-//
-//            } catch (NullPointerException e) { //在长时间失去网络连接后再连上mqtt，client有可能因为长时间限制而被回收，所以这里加上catch
-//
-//            } catch (Exception e) {
-//
-//            }
-//        }
-//
-//        @Override
-//        public void onFailure(IMqttToken arg0, Throwable arg1) {
-//            isConnecting = false;
-//            Log.e(TAG, "连接失败");
-//            if (null != client) {
-//                try {
-//                    client.unsubscribe(pullTopic);
-//                    client.unsubscribe(configTopic);
-//                    Log.e(TAG, "取消订阅的topic");
-//                } catch (Exception e) {
-//                    CrashReport.postCatchedException(e);
-//                }
-//            }
-//            handler.postDelayed(() -> {
-//                creatConnect();
-//            }, 5000);
-//        }
-//    };
-
     /**
      * 回调
      */
@@ -352,7 +227,7 @@ public class MqttManager implements LocObserver {
             Executors.newSingleThreadExecutor().submit(() -> {
                 try {
                     System.out.println("订阅服务器：" + serverURI);
-                    client.subscribe(pullTopic, 2);
+                    client.subscribe(pullTopic, qos);
                 } catch (MqttException e) {
                     e.printStackTrace();
                 }
@@ -363,19 +238,12 @@ public class MqttManager implements LocObserver {
         @Override
         public void connectionLost(Throwable cause) {
             //失去连接
-//            handler.postDelayed(() -> creatConnect(), 5000);
-            System.out.println("connectionLost" + cause);
-            while (true) {
+            if (null != client) {
                 try {
-                    boolean connected = client.isConnected();
-                    System.out.println("connected:"+connected);
-                    if(connected){
-                        break;
-                    }
-                    //  creatConnect();
-                    Thread.sleep(5000);
+                    client.unsubscribe(pullTopic);
+                    Log.e(TAG, "取消订阅的topic");
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    e.fillInStackTrace();
                 }
             }
         }
@@ -383,9 +251,7 @@ public class MqttManager implements LocObserver {
         @Override
         public void messageArrived(String topic, MqttMessage message) throws Exception {
             String str1 = new String(message.getPayload());
-
             Log.e(TAG, "MqttReceivePull:" + str1);
-
             HandlePush.getInstance().handPush(str1);
         }
 

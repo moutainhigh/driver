@@ -1,7 +1,5 @@
 package com.easymi.common.entity;
 
-import com.easymi.component.result.EmResult;
-
 /**
  * @Copyright (C), 2012-2019, Sichuan Xiaoka Technology Co., Ltd.
  * @FileName: MqttResult
@@ -10,7 +8,7 @@ import com.easymi.component.result.EmResult;
  * @Description:
  * @History:
  */
-public class MqttResult extends EmResult {
-    public MqttResultBody result;
+public class MqttResult{
+    public String client_id;
 }
 

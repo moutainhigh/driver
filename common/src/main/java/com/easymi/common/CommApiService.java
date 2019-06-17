@@ -5,7 +5,6 @@ import com.easymi.common.entity.BusinessList;
 import com.easymi.common.entity.CompanyList;
 import com.easymi.common.entity.MqttConfig;
 import com.easymi.common.entity.MqttResult;
-import com.easymi.common.entity.MqttTopic;
 import com.easymi.common.entity.Pic;
 import com.easymi.common.entity.PushAnnouncement;
 import com.easymi.common.entity.QiNiuToken;
@@ -13,11 +12,11 @@ import com.easymi.common.entity.RegisterRes;
 import com.easymi.common.entity.Vehicles;
 import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.CityLineResult;
+import com.easymi.common.result.GetFeeResult;
 import com.easymi.common.result.LoginResult;
 import com.easymi.common.result.MultipleOrderResult;
 import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
-import com.easymi.common.result.GetFeeResult;
 import com.easymi.common.result.OnLineTimeResult;
 import com.easymi.common.result.PCOrderResult;
 import com.easymi.common.result.QueryOrdersResult;
@@ -28,6 +27,7 @@ import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.result.EmResult2;
 
+import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -606,12 +606,12 @@ public interface CommApiService {
 
 
     @GET("/api/v2/clients/{topic}")
-    Observable<MqttResult> getCurrentTopic(@Path(value = "topic") String topic);
+    Observable<EmResult2<List<MqttResult>>> getCurrentTopic(@Path(value = "topic") String topic);
 
     @GET("/api/v1/public/topic/driver_mqtt_config")
     Observable<EmResult2<MqttConfig>> getConfig();
 
     @GET("/api/v1/public/topic/mqtt_client")
-    Observable<MqttTopic> getMqttTopic();
+    Observable<EmResult2<String>> getMqttTopic();
 
 }
