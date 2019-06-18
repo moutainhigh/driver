@@ -75,6 +75,7 @@ public class Config {
     public static final String SP_DRIVERID = "driverId";
     public static final String SP_ISLOGIN = "isLogin";
     public static final String SP_LAST_LOC = "lastLoc";
+    public static final String SP_NAME = "em";
 
     public static final String SP_QIYE_CODE = "qiye_code"; //企业编码
     public static final String SP_APP_KEY = "app_key"; //app_key
@@ -114,11 +115,24 @@ public class Config {
 
     public static final String SP_SHOW_GUIDE = "show_guide";//是否播放静音音乐音乐
 
-    public static final String SP_LAST_VERSION = "sp_last_version";//是否播放静音音乐音乐
+    public static final String SP_VERSION = "sp_version";
     public static final String SP_LAST_GPS_PUSH_TIME = "sp_last_gps_push_time";//mqtt上次响应的时间点
 
     //是否只上传GPS类型点
     public static final String SP_GPS_FILTER = "sp_gps_filter";
+
+    public static final int TTS_QUICK_REACTION = 100000;
+    public static final int TTS_TYPE_GOV = 100001;
+    public static final int TTS_TYPE_CHAR = 100002;
+    public static final int TTS_TYPE_RENT = 100003;
+    public static final int TTS_TYPE_PIN = 100004;
+    public static final int TTS_TYPE_BUS = 100005;
+    public static final int TTS_TYPE_CHANGE = 100006;
+    public static final int TTS_TYPE_TRANS = 100007;
+    public static final int TTS_TYPE_BOOK = 100008;
+    public static final int TTS_TYPE_PAY = 100009;
+
+
 
     /**
      * 业务类型

@@ -18,6 +18,7 @@ import com.easymi.component.BuildConfig;
 import com.easymi.component.Config;
 import com.easymi.component.R;
 import com.easymi.component.db.SqliteHelper;
+import com.easymi.component.entity.TtsPojo;
 import com.easymi.component.loc.LocService;
 import com.easymi.component.tts.InitConfig;
 import com.easymi.component.tts.NonBlockSyntherizer;
@@ -27,9 +28,12 @@ import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.SysUtil;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.jaredrummler.android.processes.AndroidProcesses;
 import com.tencent.bugly.crashreport.CrashReport;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -98,19 +102,16 @@ public class XApp extends MultiDexApplication {
 
         CrashReport.initCrashReport(getApplicationContext(), "28ff5239b4", true);
 
-        if (TextUtils.isEmpty(getMyPreferences().getString("isFormatData", ""))) {
-            getEditor().clear().putString("isFormatData", "Format").apply();
-        }
-
-        int lastVersion = getMyPreferences().getInt(Config.SP_LAST_VERSION, 0);
+        int lastVersion = getMyPreferences().getInt(Config.SP_VERSION, 0);
         int current = SysUtil.getVersionCode(this);
         if (current > lastVersion) {
-            getEditor().clear().apply();
-
-            getEditor().putLong(Config.SP_DRIVERID, -1)
+            getEditor().clear()
+                    .putLong(Config.SP_DRIVERID, -1)
                     .putBoolean(Config.SP_ISLOGIN, false)
-                    .putInt(Config.SP_LAST_VERSION, current)
+                    .putInt(Config.SP_VERSION, current)
                     .apply();
+        } else {
+            getEditor().remove("TTS_SPEAK").apply();
         }
     }
 
@@ -399,13 +400,37 @@ public class XApp extends MultiDexApplication {
         }
     }
 
-    /**
-     * 播放语音
-     *
-     * @param msg
-     */
-    public void syntheticVoice(String msg) {
-        Log.e("syntheticVoice", msg);
+
+    public void syntheticVoice(String msg, long orderId, int type) {
+        if (orderId != -1 && type != -1) {
+            String content = getMyPreferences().getString("TTS_SPEAK", "");
+            List<TtsPojo> data = new ArrayList<>();
+            if (!TextUtils.isEmpty(content)) {
+                data.addAll(new Gson().fromJson(content, new TypeToken<List<TtsPojo>>() {
+                }.getType()));
+            }
+
+            TtsPojo lastPojo = null;
+            for (TtsPojo datum : data) {
+                if (datum.getId() == orderId && datum.getType() == type) {
+                    lastPojo = datum;
+                    break;
+                }
+            }
+
+            if (lastPojo == null || System.currentTimeMillis() - lastPojo.getTime() > 3000) {
+                stopVoice();
+                speak(msg);
+                TtsPojo currentPojo = new TtsPojo(orderId, type, System.currentTimeMillis());
+                data.add(currentPojo);
+                getEditor().putString("TTS_SPEAK", new Gson().toJson(data));
+            }
+        } else {
+            speak(msg);
+        }
+    }
+
+    private void speak(String msg) {
         boolean voiceAble = getMyPreferences().getBoolean(Config.SP_VOICE_ABLE, true);
         if (!voiceAble) {
             return;
@@ -417,6 +442,15 @@ public class XApp extends MultiDexApplication {
         if (requestFocus() && null != mSpeechSynthesizer) {
             int code = mSpeechSynthesizer.speak(msg);
         }
+    }
+
+    /**
+     * 播放语音
+     *
+     * @param msg
+     */
+    public void syntheticVoice(String msg) {
+        syntheticVoice(msg, -1, -1);
     }
 
     /**

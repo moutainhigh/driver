@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
+import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 
 /**
@@ -29,7 +30,7 @@ public class CsSharedPreferences {
 
     private SharedPreferences getSharedPreference() {
         if (sharedPreferences == null) {
-            sharedPreferences = XApp.getInstance().getSharedPreferences("em", Context.MODE_PRIVATE);
+            sharedPreferences = XApp.getInstance().getSharedPreferences(Config.SP_NAME, Context.MODE_PRIVATE);
         }
         return sharedPreferences;
     }

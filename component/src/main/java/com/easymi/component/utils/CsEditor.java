@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
+import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 
 /**
@@ -27,7 +28,7 @@ public class CsEditor {
 
     private SharedPreferences.Editor getEditor() {
         if (editor == null) {
-            editor = XApp.getInstance().getSharedPreferences("em", Context.MODE_PRIVATE).edit();
+            editor = XApp.getInstance().getSharedPreferences(Config.SP_NAME, Context.MODE_PRIVATE).edit();
         }
         return editor;
     }

@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.NotificationCompat;
-import android.text.TextUtils;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.amap.api.maps.AMapUtils;
@@ -41,8 +40,6 @@ import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.NumberToHanzi;
 import com.easymi.component.utils.StringUtils;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -119,9 +116,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
 
                 if (order.serviceType.equals(Config.GOV)) {
                     XApp.getInstance().shake();
-                    XApp.getInstance().stopVoice();
-                    XApp.getInstance().syntheticVoice("你有新的公务用车订单");
-
+                    XApp.getInstance().syntheticVoice("你有新的公务用车订单", order.orderId, Config.TTS_TYPE_GOV);
                     refreshWork();
                 } else {
                     if (!DymOrder.exists(order.orderId, order.serviceType)) {
@@ -296,27 +291,19 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 }
             } else if (msg.equals("chartered")) {
                 XApp.getInstance().shake();
-                XApp.getInstance().stopVoice();
-                XApp.getInstance().syntheticVoice("您有定制包车订单需要处理");
-
+                XApp.getInstance().syntheticVoice("您有定制包车订单需要处理", jb.optJSONObject("data").optLong("orderId"), Config.TTS_TYPE_CHAR);
                 refreshWork();
             } else if (msg.equals("rental")) {
                 XApp.getInstance().shake();
-                XApp.getInstance().stopVoice();
-                XApp.getInstance().syntheticVoice("您有包车租车订单需要处理");
-
+                XApp.getInstance().syntheticVoice("您有包车租车订单需要处理", jb.optJSONObject("data").optLong("orderId"), Config.TTS_TYPE_RENT);
                 refreshWork();
             } else if (msg.equals("order_hot_create")) {
                 XApp.getInstance().shake();
-                XApp.getInstance().stopVoice();
-                XApp.getInstance().syntheticVoice("您有城际拼车订单需要处理");
-
+                XApp.getInstance().syntheticVoice("您有城际拼车订单需要处理", jb.optJSONObject("data").optLong("orderId"), Config.TTS_TYPE_PIN);
                 refreshWork();
             } else if (msg.equals("country") || msg.equals("custombus")) {
                 XApp.getInstance().shake();
-                XApp.getInstance().stopVoice();
-                XApp.getInstance().syntheticVoice("您有班车订单需要处理");
-
+                XApp.getInstance().syntheticVoice("您有班车订单需要处理", jb.optJSONObject("data").optLong("orderId"), Config.TTS_TYPE_BUS);
                 refreshWork();
             } else if (msg.equals("schedule_auto_finish")) {
                 XApp.getInstance().shake();
@@ -336,15 +323,11 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 handler.sendMessage(message);
             } else if (msg.equals("order_change")) {
                 XApp.getInstance().shake();
-                XApp.getInstance().stopVoice();
-                XApp.getInstance().syntheticVoice("您有新的转单");
-
+                XApp.getInstance().syntheticVoice("您有新的转单", jb.optJSONObject("data").optLong("orderId"), Config.TTS_TYPE_CHANGE);
                 refreshWork();
             } else if (msg.equals("order_transferred")) {
                 XApp.getInstance().shake();
-                XApp.getInstance().stopVoice();
-                XApp.getInstance().syntheticVoice("您有班次被转单了");
-
+                XApp.getInstance().syntheticVoice("您有班次被转单了", jb.optJSONObject("data").optLong("orderId"), Config.TTS_TYPE_TRANS);
                 refreshWork();
 
                 MultipleOrder order = new MultipleOrder();
@@ -359,8 +342,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 handler.sendMessage(message);
             } else if (msg.equals("book_order")) {
                 XApp.getInstance().shake();
-                XApp.getInstance().stopVoice();
-                XApp.getInstance().syntheticVoice("你有公务用车订单需要执行");
+                XApp.getInstance().syntheticVoice("你有公务用车订单需要执行", jb.optJSONObject("data").optLong("orderId"), Config.TTS_TYPE_BOOK);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -630,25 +612,9 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                         weihao = weihao.substring(weihao.length() - 4, weihao.length());
                     }
 
-                    String str = XApp.getMyPreferences().getString("payOrder", "");
-                    List<Long> idList = new ArrayList<>();
-
-                    if (!TextUtils.isEmpty(str)) {
-                        idList.addAll(new Gson().fromJson(str, new TypeToken<List<Long>>() {
-                        }.getType()));
-                    }
-
-                    if (!idList.contains(order.id)) {
-                        idList.add(order.id);
-                        XApp.getInstance().shake();
-                        //语音播报xx客户已完成支付
-                        XApp.getInstance().stopVoice();
-                        XApp.getInstance().syntheticVoice(
-                                XApp.getMyString(R.string.pay_suc_1) +
-                                        NumberToHanzi.number2hanzi(weihao) +
-                                        XApp.getMyString(R.string.pay_suc_2));
-                        XApp.getEditor().putString("payOrder", new Gson().toJson(idList));
-                    }
+                    XApp.getInstance().shake();
+                    //语音播报xx客户已完成支付
+                    XApp.getInstance().syntheticVoice(XApp.getMyString(R.string.pay_suc_1) + NumberToHanzi.number2hanzi(weihao) + XApp.getMyString(R.string.pay_suc_2), order.id, Config.TTS_TYPE_PAY);
 
                     Intent intent1 = new Intent();
                     intent1.setAction(Config.BROAD_FINISH_ORDER);
