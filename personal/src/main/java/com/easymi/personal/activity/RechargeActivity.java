@@ -5,11 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-
-import com.easymi.component.Config;
-import com.easymi.component.utils.CsEditor;
-import com.easymi.component.utils.Log;
-
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -21,12 +16,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
+import com.easymi.common.result.PayResult;
+import com.easymi.component.Config;
+import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
@@ -36,7 +35,6 @@ import com.easymi.personal.R;
 import com.easymi.personal.entity.MoneyConfig;
 import com.easymi.personal.result.ConfigResult;
 import com.easymi.personal.result.LoginResult;
-import com.easymi.common.result.PayResult;
 import com.easymi.personal.result.RechargeResult;
 import com.easymi.personal.result.RechargeTypeResult;
 import com.ffcs.inapppaylib.bean.Constants;
@@ -57,6 +55,7 @@ import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: RechargeActivity
+ *
  * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:  充值界面
@@ -388,9 +387,8 @@ public class RechargeActivity extends RxBaseActivity {
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, loginResult -> {
             Employ employ = loginResult.data;
             employ.saveOrUpdate();
-            CsEditor editor = new CsEditor();
-            editor.putLong(Config.SP_DRIVERID, employ.id);
-            editor.apply();
+            XApp.getEditor().putLong(Config.SP_DRIVERID, employ.id)
+                    .apply();
 
             balanceText.setText(String.valueOf(employ.balance));
         })));

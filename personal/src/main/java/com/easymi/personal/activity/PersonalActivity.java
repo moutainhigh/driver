@@ -133,7 +133,7 @@ public class PersonalActivity extends RxBaseActivity {
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, true, loginResult -> {
             Employ employ = loginResult.data;
             employ.saveOrUpdate();
-            CsEditor editor = new CsEditor();
+            CsEditor editor = XApp.getEditor();
             editor.putLong(Config.SP_DRIVERID, employ.id);
             editor.apply();
 

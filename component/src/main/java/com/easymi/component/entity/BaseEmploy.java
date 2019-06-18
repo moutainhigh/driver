@@ -49,7 +49,7 @@
 //    }
 //
 //    public BaseEmploy employ2This() {
-//        return Employ.findByID(new CsSharedPreferences().getLong(Config.SP_DRIVERID, -1));
+//        return Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1));
 ////        if (employ == null) {
 ////            LogUtil.e("TAG", "查询为null");
 ////            return null;

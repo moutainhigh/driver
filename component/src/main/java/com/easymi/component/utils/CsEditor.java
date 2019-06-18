@@ -1,8 +1,8 @@
 package com.easymi.component.utils;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
-import android.widget.TextView;
 
 import com.easymi.component.app.XApp;
 
@@ -12,50 +12,66 @@ import com.easymi.component.app.XApp;
 
 public class CsEditor {
 
-    private static SharedPreferences.Editor editor;
+    private SharedPreferences.Editor editor;
 
-    public CsEditor() {
-        editor = XApp.getPreferencesEditor();
+    private CsEditor() {
     }
 
-    public  SharedPreferences.Editor putString(String key, String value) {
-        if (TextUtils.isEmpty(value)){
-            editor.remove(key);
-        }else {
-            editor.putString(key, EncApi.getInstance().en(new Loader().getRsaPs().substring(0, 16), value));
+    private static class SingletonHolder {
+        private static final CsEditor INSTANCE = new CsEditor();
+    }
+
+    public static CsEditor getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
+
+    private SharedPreferences.Editor getEditor() {
+        if (editor == null) {
+            editor = XApp.getInstance().getSharedPreferences("em", Context.MODE_PRIVATE).edit();
         }
         return editor;
     }
 
-    public SharedPreferences.Editor putLong(String key, long value) {
-        editor.putString(key, EncApi.getInstance().en(new Loader().getRsaPs().substring(0, 16), String.valueOf(value)));
-        return editor;
+    public CsEditor putString(String key, String value) {
+        if (TextUtils.isEmpty(value)) {
+            getEditor().remove(key);
+        } else {
+            getEditor().putString(key, EncApi.getInstance().en(new Loader().getRsaPs().substring(0, 16), value));
+        }
+        return this;
     }
 
-    public SharedPreferences.Editor putFloat(String key, float value) {
-        editor.putString(key, EncApi.getInstance().en(new Loader().getRsaPs().substring(0, 16), String.valueOf(value)));
-        return editor;
+    public CsEditor putLong(String key, long value) {
+        getEditor().putString(key, EncApi.getInstance().en(new Loader().getRsaPs().substring(0, 16), String.valueOf(value)));
+        return this;
     }
 
-    public SharedPreferences.Editor putInt(String key, int value) {
-        editor.putString(key, EncApi.getInstance().en(new Loader().getRsaPs().substring(0, 16), String.valueOf(value)));
-        return editor;
+    public CsEditor putFloat(String key, float value) {
+        getEditor().putString(key, EncApi.getInstance().en(new Loader().getRsaPs().substring(0, 16), String.valueOf(value)));
+        return this;
     }
 
-    public SharedPreferences.Editor putBoolean(String key, boolean value) {
-        editor.putBoolean(key, value);
-        return editor;
+    public CsEditor putInt(String key, int value) {
+        getEditor().putString(key, EncApi.getInstance().en(new Loader().getRsaPs().substring(0, 16), String.valueOf(value)));
+        return this;
+    }
+
+    public CsEditor putBoolean(String key, boolean value) {
+        getEditor().putBoolean(key, value);
+        return this;
     }
 
     public void apply() {
-        editor.apply();
+        getEditor().apply();
     }
 
-    public void remove(String key) {
-        editor.remove(key);
+    public CsEditor remove(String key) {
+        getEditor().remove(key);
+        return this;
     }
 
-    public void clear() {
-        editor.clear();
+    public CsEditor clear() {
+        getEditor().clear();
+        return this;
     }
 }

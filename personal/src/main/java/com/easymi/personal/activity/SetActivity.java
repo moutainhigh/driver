@@ -84,27 +84,27 @@ public class SetActivity extends RxBaseActivity {
      */
     private void initSwitch() {
         voiceAble.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            CsEditor editor = new CsEditor();
+            CsEditor editor = XApp.getEditor();
             editor.putBoolean(Config.SP_VOICE_ABLE, isChecked);
             editor.apply();
         });
         shakeAble.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            CsEditor editor =  new CsEditor();
+            CsEditor editor =  XApp.getEditor();
             editor.putBoolean(Config.SP_SHAKE_ABLE, isChecked);
             editor.apply();
         });
         alwaysOren.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            CsEditor editor = new CsEditor();
+            CsEditor editor = XApp.getEditor();
             editor.putBoolean(Config.SP_ALWAYS_OREN, isChecked);
             editor.apply();
         });
         defaultNavi.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            CsEditor editor = new CsEditor();
+            CsEditor editor = XApp.getEditor();
             editor.putBoolean(Config.SP_DEFAULT_NAVI, isChecked);
             editor.apply();
         });
         backRun.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            CsEditor editor = new CsEditor();
+            CsEditor editor = XApp.getEditor();
             editor.putBoolean(Config.SP_PLAY_CLIENT_MUSIC, isChecked);
             editor.apply();
         });

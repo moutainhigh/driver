@@ -530,7 +530,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         aMap.setOnMapTouchListener(this);
 
-        String locStr = new CsSharedPreferences().getString(Config.SP_LAST_LOC, "");
+        String locStr = XApp.getMyPreferences().getString(Config.SP_LAST_LOC, "");
         EmLoc emLoc = new Gson().fromJson(locStr, EmLoc.class);
         if (null != emLoc) {
             lastLatlng = new LatLng(emLoc.latitude, emLoc.longitude);

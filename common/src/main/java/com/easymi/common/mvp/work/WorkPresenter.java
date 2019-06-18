@@ -38,8 +38,6 @@ import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.AesUtil;
-import com.easymi.component.utils.CsEditor;
-import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
@@ -265,13 +263,13 @@ public class WorkPresenter implements WorkContract.Presenter {
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, btn, emResult -> {
             //一键报警 上线
             CenterUtil centerUtil = new CenterUtil(context, Config.APP_KEY,
-                    new CsSharedPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
-                    new CsSharedPreferences().getString(Config.SP_TOKEN, ""));
+                    XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
+                    XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
             centerUtil.driverUp(driverId, EmUtil.getEmployInfo().companyId, EmUtil.getEmployInfo().userName, EmUtil.getEmployInfo().realName,
                     EmUtil.getEmployInfo().phone, System.currentTimeMillis() / 1000, EmUtil.getEmployInfo().serviceType);
 
             view.onlineSuc();
-            new CsEditor().putLong(Config.ONLINE_TIME, System.currentTimeMillis()).apply();
+            XApp.getEditor().putLong(Config.ONLINE_TIME, System.currentTimeMillis()).apply();
             uploadTime(2);
 
         })));
@@ -285,13 +283,13 @@ public class WorkPresenter implements WorkContract.Presenter {
                 true, emResult -> {
             //一键报警  下线
             CenterUtil centerUtil = new CenterUtil(context, Config.APP_KEY,
-                    new CsSharedPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
-                    new CsSharedPreferences().getString(Config.SP_TOKEN, ""));
+                    XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
+                    XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
             centerUtil.driverDown(driverId, EmUtil.getEmployInfo().companyId, EmUtil.getEmployInfo().userName, EmUtil.getEmployInfo().realName,
                     EmUtil.getEmployInfo().phone, System.currentTimeMillis() / 1000, EmUtil.getEmployInfo().serviceType);
 
             view.offlineSuc();
-            new CsEditor().putLong(Config.ONLINE_TIME, 0).apply();
+            XApp.getEditor().putLong(Config.ONLINE_TIME, 0).apply();
             uploadTime(1);
 
         })));
@@ -358,7 +356,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                 Employ employ = result.getEmployInfo();
 
                 employType = employ.serviceType;
-                String udid = new CsSharedPreferences().getString(Config.SP_UDID, "");
+                String udid = XApp.getMyPreferences().getString(Config.SP_UDID, "");
                 if (StringUtils.isNotBlank(employ.deviceNo)
                         && StringUtils.isNotBlank(udid)) {
                     if (!employ.deviceNo.equals(udid)) {
@@ -368,9 +366,9 @@ public class WorkPresenter implements WorkContract.Presenter {
                     }
                 }
                 employ.saveOrUpdate();
-                CsEditor editor = new CsEditor();
-                editor.putLong(Config.SP_DRIVERID, employ.id);
-                editor.apply();
+                XApp.getEditor()
+                .putLong(Config.SP_DRIVERID, employ.id)
+                .apply();
                 view.showDriverStatus();
                 MqttManager.getInstance().creatConnect();//在查询完服务人员后初始化mqtt
 //                if (employ.serviceType.equals(Config.ZHUANCHE) || employ.serviceType.equals(Config.TAXI)) {

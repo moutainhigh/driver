@@ -64,7 +64,7 @@ public class JobKeepLiveService extends JobService {
             @Override
             public void run() {
                 Log.e("JobKeepLiveService", "start job,check service is alive?");
-                boolean isLogin = new CsSharedPreferences().getBoolean(Config.SP_ISLOGIN, false);
+                boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
                 Log.e("JobKeepLiveService", "isLogin-->" + isLogin);
                 if (isLogin) {
                     if (!PhoneUtil.isServiceRunning(LocService.class.getName(), JobKeepLiveService.this)) {

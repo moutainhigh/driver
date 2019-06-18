@@ -308,7 +308,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         bottomBtnCon = findViewById(R.id.bottom_btn_con);
         btn_create = findViewById(R.id.btn_create);
 
-        Employ employ = Employ.findByID(new CsSharedPreferences().getLong(Config.SP_DRIVERID, -1));
+        Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1));
         Log.e("employ", "" + employ);
     }
 
@@ -621,7 +621,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         super.onResume();
         mapView.onResume();
         isFront = true;
-        boolean isLogin = new CsSharedPreferences().getBoolean(Config.SP_ISLOGIN, false);
+        boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
         if (!isLogin) {
             ARouter.getInstance().build("/personal/LoginActivity").navigation();
             finish();

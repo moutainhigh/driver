@@ -122,7 +122,7 @@ public class FlowModel implements FlowContract.Model {
         PushFee pushData = new PushFee();
 
         //司机的信息
-        Employ employ1 = Employ.findByID(new CsSharedPreferences().getLong(Config.SP_DRIVERID,0));
+        Employ employ1 = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID,0));
         PushFeeEmploy pe = null;
         if (employ1 != null && employ1 instanceof Employ) {
             Employ employ = (Employ) employ1;

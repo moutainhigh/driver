@@ -18,7 +18,8 @@ import java.lang.reflect.Method;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: FinishActivity
- *@Author: shine
+ *
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:  封装的一些快捷获取对象方法
  * History:
@@ -27,14 +28,14 @@ import java.lang.reflect.Method;
 public class EmUtil {
 
     public static Long getEmployId() {
-        return new CsSharedPreferences().getLong(Config.SP_DRIVERID, -1);
+        return XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1);
     }
 
     public static String getAppKey() {
         if (!Config.COMM_USE) {
             return Config.APP_KEY;
         } else {
-            return new CsSharedPreferences().getString(Config.SP_APP_KEY, "");
+            return XApp.getMyPreferences().getString(Config.SP_APP_KEY, "");
         }
     }
 
@@ -44,7 +45,7 @@ public class EmUtil {
     }
 
     public static EmLoc getLastLoc() {
-        EmLoc emLoc = new Gson().fromJson(new CsSharedPreferences().getString(Config.SP_LAST_LOC, ""), EmLoc.class);
+        EmLoc emLoc = new Gson().fromJson(XApp.getMyPreferences().getString(Config.SP_LAST_LOC, ""), EmLoc.class);
         if (null == emLoc) {
             emLoc = new EmLoc();
             emLoc.poiName = "未知";
@@ -53,12 +54,12 @@ public class EmUtil {
     }
 
     public static void employLogout(Context context) {
-        CsEditor editor = new CsEditor();
-        editor.putBoolean(Config.SP_ISLOGIN, false);
-        editor.putString(Config.APP_KEY, "");//重置APPKEY
-        editor.putString(Config.SP_TOKEN, "");
-        editor.putLong(Config.SP_DRIVERID, -1);
-        editor.apply();
+
+        XApp.getEditor().putBoolean(Config.SP_ISLOGIN, false)
+                .putString(Config.APP_KEY, "")//重置APPKEY
+                .putString(Config.SP_TOKEN, "")
+                .putLong(Config.SP_DRIVERID, -1)
+                .apply();
 
         if (null != XApp.getInstance().player) {
             XApp.getInstance().player.stop();
@@ -133,9 +134,9 @@ public class EmUtil {
 //        }
     }
 
-    public static String getBroadCastPermission(){
-        String s = XApp.getInstance().getPackageName()+".broadcast.permission";//与app模块下的permission一致
-        Log.e("permission",s);
+    public static String getBroadCastPermission() {
+        String s = XApp.getInstance().getPackageName() + ".broadcast.permission";//与app模块下的permission一致
+        Log.e("permission", s);
         return s;
     }
 }

@@ -132,10 +132,10 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
         }
 
         int strategy = mAMapNavi.strategyConvert(
-                new CsSharedPreferences().getBoolean(Config.SP_CONGESTION, true),
-                new CsSharedPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
-                new CsSharedPreferences().getBoolean(Config.SP_COST, true),
-                new CsSharedPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
+                XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, true),
+                XApp.getMyPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
+                XApp.getMyPreferences().getBoolean(Config.SP_COST, true),
+                XApp.getMyPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
                 false);
 
         List<NaviLatLng> startLs = new ArrayList<>();
@@ -323,7 +323,7 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
         }
         if (path != null) {
             view.showPath(ints, path);
-            if (new CsSharedPreferences().getBoolean(Config.SP_DEFAULT_NAVI, true)) {
+            if (XApp.getMyPreferences().getBoolean(Config.SP_DEFAULT_NAVI, true)) {
                 mAMapNavi.startNavi(NaviType.GPS);
                 view.showLeft(path.getAllLength(), path.getAllTime());
             }

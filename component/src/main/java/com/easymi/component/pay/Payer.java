@@ -157,7 +157,7 @@ public class Payer {
 //                req.transaction = transaction;  //该字段标识一个唯一请求,标注支付场景场景
 //                //保存支付来源
 //                req.transaction = transaction;  //该字段标识一个唯一请求,标注支付场景场景
-//                CsEditor et = new CsEditor();
+//                CsEditor et = XApp.getEditor();
 //                et.putString("wxPayFrom", transaction);
 //                et.apply();
 //

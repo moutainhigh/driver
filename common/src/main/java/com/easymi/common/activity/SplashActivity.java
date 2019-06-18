@@ -1,9 +1,7 @@
 package com.easymi.common.activity;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,11 +9,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -37,15 +32,12 @@ import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.utils.WifiProxyUtil;
 import com.easymi.component.utils.emulator.EmulatorCheckUtil;
 
-import java.io.IOException;
 import java.util.Locale;
-
-import pl.droidsonroids.gif.GifDrawable;
-import pl.droidsonroids.gif.GifImageView;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName:SplashActivity
+ *
  * @Author: shine
  * Date: 2018/12/24 下午5:00
  * Description:
@@ -237,7 +229,7 @@ public class SplashActivity extends RxBaseActivity {
      * 跳转方法
      */
     private void jump() {
-        boolean isLogin = new CsSharedPreferences().getBoolean(Config.SP_ISLOGIN, false);
+        boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
         if (isLogin) {
             startActivity(new Intent(SplashActivity.this, WorkActivity.class));
         } else {
@@ -293,8 +285,8 @@ public class SplashActivity extends RxBaseActivity {
      */
     private void loadLanguage() {
         Log.e(TAG, "loadLanguage");
-        SharedPreferences preferences = XApp.getMyPreferences();
 
+        CsSharedPreferences preferences = XApp.getMyPreferences();
         //获取默认配置
         Configuration config = getResources().getConfiguration();
         int language = preferences.getInt(Config.SP_USER_LANGUAGE, Config.SP_LANGUAGE_AUTO);
@@ -312,7 +304,7 @@ public class SplashActivity extends RxBaseActivity {
             case Config.SP_LANGUAGE_AUTO:
                 String sysLan = preferences.getString(Config.SP_SYS_LANGUAGE, "");
                 if (StringUtils.isBlank(sysLan)) {
-                    preferences.edit().putString(Config.SP_SYS_LANGUAGE,
+                    XApp.getEditor().putString(Config.SP_SYS_LANGUAGE,
                             Locale.getDefault().toString()).apply();
                 } else {
                     if (sysLan.contains(Locale.TAIWAN.toString())

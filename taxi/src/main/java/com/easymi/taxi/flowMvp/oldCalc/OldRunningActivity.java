@@ -106,7 +106,7 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
 
         orderId = getIntent().getLongExtra("orderId", -1);
 
-        forceOre = new CsSharedPreferences().getBoolean(Config.SP_ALWAYS_OREN, false);
+        forceOre = XApp.getMyPreferences().getBoolean(Config.SP_ALWAYS_OREN, false);
         if (forceOre) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);//动态设置为横屏
         }

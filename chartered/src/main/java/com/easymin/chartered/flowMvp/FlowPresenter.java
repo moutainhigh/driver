@@ -84,10 +84,10 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
         }
 
         int strateFlag = mAMapNavi.strategyConvert(
-                new CsSharedPreferences().getBoolean(Config.SP_CONGESTION, false),
-                new CsSharedPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
-                new CsSharedPreferences().getBoolean(Config.SP_COST, false),
-                new CsSharedPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
+                XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, false),
+                XApp.getMyPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
+                XApp.getMyPreferences().getBoolean(Config.SP_COST, false),
+                XApp.getMyPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
                 false);
 
         NaviLatLng start = new NaviLatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
@@ -275,7 +275,7 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
         }
         if (path != null) {
             view.showPath(ints, path);
-            if (new CsSharedPreferences().getBoolean(Config.SP_DEFAULT_NAVI, true)) {
+            if (XApp.getMyPreferences().getBoolean(Config.SP_DEFAULT_NAVI, true)) {
                 mAMapNavi.startNavi(NaviType.GPS);
                 view.showLeft(path.getAllLength(), path.getAllTime());
             }

@@ -12,6 +12,7 @@ import com.easymi.component.Config;
 import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.utils.CsEditor;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.R;
 
@@ -86,7 +87,7 @@ public class LanguageActivity extends RxBaseActivity implements View.OnClickList
     public void onClick(View v) {
         int id = v.getId();
         //获取偏好设置编辑器
-        SharedPreferences.Editor editor = XApp.getMyPreferences().edit();
+        CsEditor editor = XApp.getEditor();
         currentLanguage = Config.SP_LANGUAGE_AUTO;
         if (id == R.id.flow_system) {
             currentLanguage = Config.SP_LANGUAGE_AUTO;

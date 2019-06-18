@@ -3,11 +3,11 @@ package com.easymi.component.app;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.support.annotation.StringRes;
 import android.support.multidex.MultiDexApplication;
+import android.text.TextUtils;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.baidu.tts.client.SpeechError;
@@ -21,6 +21,8 @@ import com.easymi.component.db.SqliteHelper;
 import com.easymi.component.loc.LocService;
 import com.easymi.component.tts.InitConfig;
 import com.easymi.component.tts.NonBlockSyntherizer;
+import com.easymi.component.utils.CsEditor;
+import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
@@ -54,10 +56,6 @@ public class XApp extends MultiDexApplication {
      * 提示音标志位--end
      */
 
-    /**
-     * SharedPreferences 文件名
-     */
-    private static final String SHARED_PREFERENCES_NAME = "em";
 
     /**
      * 实例化对象
@@ -100,16 +98,19 @@ public class XApp extends MultiDexApplication {
 
         CrashReport.initCrashReport(getApplicationContext(), "28ff5239b4", true);
 
+        if (TextUtils.isEmpty(getMyPreferences().getString("isFormatData", ""))) {
+            getEditor().clear().putString("isFormatData", "Format").apply();
+        }
+
         int lastVersion = getMyPreferences().getInt(Config.SP_LAST_VERSION, 0);
         int current = SysUtil.getVersionCode(this);
         if (current > lastVersion) {
-            getPreferencesEditor().clear().commit();
+            getEditor().clear().apply();
 
-            SharedPreferences.Editor editor = getPreferencesEditor();
-            editor.putLong(Config.SP_DRIVERID, -1);
-            editor.putBoolean(Config.SP_ISLOGIN, false);
-            editor.putInt(Config.SP_LAST_VERSION, current);
-            editor.apply();
+            getEditor().putLong(Config.SP_DRIVERID, -1)
+                    .putBoolean(Config.SP_ISLOGIN, false)
+                    .putInt(Config.SP_LAST_VERSION, current)
+                    .apply();
         }
     }
 
@@ -132,8 +133,8 @@ public class XApp extends MultiDexApplication {
      *
      * @return SharedPreferences对象
      */
-    public static SharedPreferences getMyPreferences() {
-        return instance.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+    public static CsSharedPreferences getMyPreferences() {
+        return CsSharedPreferences.getInstance();
     }
 
     /**
@@ -141,8 +142,8 @@ public class XApp extends MultiDexApplication {
      *
      * @return editor对象
      */
-    public static SharedPreferences.Editor getPreferencesEditor() {
-        return instance.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE).edit();
+    public static CsEditor getEditor() {
+        return CsEditor.getInstance();
     }
 
     /**

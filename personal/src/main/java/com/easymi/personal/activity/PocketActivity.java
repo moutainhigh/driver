@@ -89,7 +89,7 @@ public class PocketActivity extends RxBaseActivity {
             Employ employ = loginResult.data;
             Log.e("okhttp", employ.toString());
             employ.saveOrUpdate();
-            CsEditor editor = new CsEditor();
+            CsEditor editor = XApp.getEditor();
             editor.putLong(Config.SP_DRIVERID, employ.id);
             editor.apply();
 

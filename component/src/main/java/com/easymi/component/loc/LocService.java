@@ -25,8 +25,6 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.db.SqliteHelper;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
-import com.easymi.component.trace.TraceUtil;
-import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.google.gson.Gson;
@@ -216,7 +214,7 @@ public class LocService extends Service implements AMapLocationListener {
     }
 
     private Notification buildNotification() {
-        boolean isLogin = new CsSharedPreferences().getBoolean(Config.SP_ISLOGIN, false);
+        boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
         Intent intent = new Intent();
 
         if (isLogin) {

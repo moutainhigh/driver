@@ -8,12 +8,12 @@ import com.easymi.common.entity.PushData;
 import com.easymi.common.entity.PushDataLoc;
 import com.easymi.common.entity.PushDataOrder;
 import com.easymi.component.Config;
+import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.entity.PushEmploy;
 import com.easymi.component.entity.Vehicle;
-import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.google.gson.Gson;
 
@@ -43,7 +43,7 @@ public class BuildPushUtil {
         PushData pushData = new PushData();
 
         //转换一下
-        Employ employ1 = Employ.findByID(new CsSharedPreferences().getLong(Config.SP_DRIVERID, 0));
+        Employ employ1 = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, 0));
         PushEmploy pe;
         if (employ1 != null && employ1 instanceof Employ) {
             Employ employ = (Employ) employ1;

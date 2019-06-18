@@ -1,8 +1,8 @@
 package com.easymi.component.network;
 
 import com.easymi.component.Config;
+import com.easymi.component.app.XApp;
 import com.easymi.component.utils.Base64;
-import com.easymi.component.utils.CsSharedPreferences;
 
 import java.io.IOException;
 
@@ -31,7 +31,7 @@ public class TokenInterceptor implements Interceptor {
                     .addHeader("Accept", "applicaton/json")
                     .build());
         } else {
-            String sToken = new CsSharedPreferences().getString(Config.SP_TOKEN, "");
+            String sToken = XApp.getMyPreferences().getString(Config.SP_TOKEN, "");
             return chain.proceed(request.newBuilder()
                     .addHeader("token", sToken)
                     .addHeader("appKey", Config.APP_KEY)

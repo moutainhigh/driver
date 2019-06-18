@@ -108,7 +108,7 @@ public class MqttManager implements LocObserver {
      */
     public synchronized boolean creatConnect() {
 
-        if (!new CsSharedPreferences().getBoolean(Config.SP_ISLOGIN, false)) {
+        if (!XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false)) {
             //未登陆 不连接
             return false;
         }
@@ -335,9 +335,9 @@ public class MqttManager implements LocObserver {
 //        if (DymOrder.findAll().size() == 0) {
 //            return;
 //        }
-        long lastPushTime = new CsSharedPreferences().getLong(Config.SP_LAST_GPS_PUSH_TIME, 0);
+        long lastPushTime = XApp.getMyPreferences().getLong(Config.SP_LAST_GPS_PUSH_TIME, 0);
         if (System.currentTimeMillis() - lastPushTime > 5 * 1000) {
-            new CsEditor().putLong(Config.SP_LAST_GPS_PUSH_TIME, System.currentTimeMillis()).apply();
+            XApp.getEditor().putLong(Config.SP_LAST_GPS_PUSH_TIME, System.currentTimeMillis()).apply();
 
             Observable<GetFeeResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                     .gpsPush(Config.APP_KEY, pushStr)

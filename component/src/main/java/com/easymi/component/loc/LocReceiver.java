@@ -3,14 +3,10 @@ package com.easymi.component.loc;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.EmLoc;
-import com.easymi.component.utils.CsEditor;
-import com.easymi.component.utils.CsSharedPreferences;
-import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
 import com.google.gson.Gson;
 
@@ -20,6 +16,7 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: FinishActivity
+ *
  * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description: 接收来自其他线程的位置变化广播
@@ -53,7 +50,7 @@ public class LocReceiver extends BroadcastReceiver implements LocSubject {
             EmLoc emLoc = new Gson().fromJson(loc, EmLoc.class);
 
             //上次的定位信息
-            String lastLocJson = new CsSharedPreferences().getString(Config.SP_LAST_LOC, "");
+            String lastLocJson = XApp.getMyPreferences().getString(Config.SP_LAST_LOC, "");
 
             if (StringUtils.isNotBlank(lastLocJson)) {
                 //相当于在没有poi时只保存了位置的经纬度，poi检索没变
@@ -67,20 +64,20 @@ public class LocReceiver extends BroadcastReceiver implements LocSubject {
                     lastLoc.altitude = emLoc.altitude;
                     lastLoc.speed = emLoc.speed;
                     lastLoc.bearing = emLoc.bearing;
-                    CsEditor editor = new CsEditor();
-                    editor.putString(Config.SP_LAST_LOC, new Gson().toJson(lastLoc));
-                    editor.apply();//保存上次的位置信息 json格式字符创
+                    XApp.getEditor()
+                            .putString(Config.SP_LAST_LOC, new Gson().toJson(lastLoc))
+                            .apply();//保存上次的位置信息 json格式字符创
                     notifyObserver(lastLoc);
                 } else {
-                    CsEditor editor = new CsEditor();
-                    editor.putString(Config.SP_LAST_LOC, loc);
-                    editor.apply();//保存上次的位置信息 json格式字符创
+                    XApp.getEditor()
+                            .putString(Config.SP_LAST_LOC, loc)
+                            .apply();//保存上次的位置信息 json格式字符创
                     notifyObserver(emLoc);
                 }
             } else {
-                CsEditor editor = new CsEditor();
-                editor.putString(Config.SP_LAST_LOC, loc);
-                editor.apply();//保存上次的位置信息 json格式字符创
+                XApp.getEditor()
+                        .putString(Config.SP_LAST_LOC, loc)
+                        .apply();//保存上次的位置信息 json格式字符创
                 notifyObserver(emLoc);
             }
         }

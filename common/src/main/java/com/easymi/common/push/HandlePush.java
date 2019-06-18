@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.NotificationCompat;
+import android.text.TextUtils;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.amap.api.maps.AMapUtils;
@@ -27,6 +28,7 @@ import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.SettingResult;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
+import com.easymi.component.EmployStatus;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.Employ;
@@ -36,20 +38,16 @@ import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.rxmvp.RxManager;
-import com.easymi.component.utils.AesUtil;
-import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.Log;
 import com.easymi.component.utils.NumberToHanzi;
 import com.easymi.component.utils.StringUtils;
-import com.easymi.component.EmployStatus;
-import com.easymin.driver.securitycenter.utils.CenterUtil;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -138,7 +136,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
 
                 if (order.orderId != XApp.getMyPreferences().getLong("cancel_orderId", 0)) {
-                    XApp.getPreferencesEditor().putLong("cancel_orderId", order.orderId).apply();
+                    XApp.getEditor().putLong("cancel_orderId", order.orderId).apply();
 
                     Message message = new Message();
                     message.what = 1;
@@ -194,7 +192,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
 
                 if (order.orderId != XApp.getMyPreferences().getLong("finish_orderId", 0)) {
-                    XApp.getPreferencesEditor().putLong("finish_orderId", order.orderId).apply();
+                    XApp.getEditor().putLong("finish_orderId", order.orderId).apply();
                     loadOrder(order);
                 }
             } else if (msg.equals("reAssign")) {
@@ -204,7 +202,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
 
                 if (order.orderId != XApp.getMyPreferences().getLong("reAssign_orderId", 0)) {
-                    XApp.getPreferencesEditor().putLong("reAssign_orderId", order.orderId).apply();
+                    XApp.getEditor().putLong("reAssign_orderId", order.orderId).apply();
 
                     Message message = new Message();
                     message.what = 3;
@@ -280,7 +278,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 order.passengerPhone = jb.optJSONObject("data").optString("userPhone");
 
                 if (order.orderId != XApp.getMyPreferences().getLong("flashAssign_orderId", 0)) {
-                    XApp.getPreferencesEditor().putLong("flashAssign_orderId", order.orderId).apply();
+                    XApp.getEditor().putLong("flashAssign_orderId", order.orderId).apply();
 
                     XApp.getInstance().shake();
                     if (StringUtils.isNotBlank(order.serviceType)) {
@@ -631,13 +629,26 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                     if (weihao.length() > 4) {
                         weihao = weihao.substring(weihao.length() - 4, weihao.length());
                     }
-                    XApp.getInstance().shake();
-                    //语音播报xx客户已完成支付
-                    XApp.getInstance().stopVoice();
-                    XApp.getInstance().syntheticVoice(
-                            XApp.getMyString(R.string.pay_suc_1) +
-                                    NumberToHanzi.number2hanzi(weihao) +
-                                    XApp.getMyString(R.string.pay_suc_2));
+
+                    String str = XApp.getMyPreferences().getString("payOrder", "");
+                    List<Long> idList = new ArrayList<>();
+
+                    if (!TextUtils.isEmpty(str)) {
+                        idList.addAll(new Gson().fromJson(str, new TypeToken<List<Long>>() {
+                        }.getType()));
+                    }
+
+                    if (!idList.contains(order.id)) {
+                        idList.add(order.id);
+                        XApp.getInstance().shake();
+                        //语音播报xx客户已完成支付
+                        XApp.getInstance().stopVoice();
+                        XApp.getInstance().syntheticVoice(
+                                XApp.getMyString(R.string.pay_suc_1) +
+                                        NumberToHanzi.number2hanzi(weihao) +
+                                        XApp.getMyString(R.string.pay_suc_2));
+                        XApp.getEditor().putString("payOrder", new Gson().toJson(idList));
+                    }
 
                     Intent intent1 = new Intent();
                     intent1.setAction(Config.BROAD_FINISH_ORDER);

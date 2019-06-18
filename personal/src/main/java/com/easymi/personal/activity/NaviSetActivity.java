@@ -56,13 +56,13 @@ public class NaviSetActivity extends RxBaseActivity {
         hightspeed.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_HIGHT_SPEED, false));
 
         congestion.setOnCheckedChangeListener((compoundButton, b) ->
-                new CsEditor().putBoolean(Config.SP_CONGESTION, b).apply());
+                XApp.getEditor().putBoolean(Config.SP_CONGESTION, b).apply());
         avoidhightspeed.setOnCheckedChangeListener((compoundButton, b) ->
-                new CsEditor().putBoolean(Config.SP_AVOID_HIGH_SPEED, b).apply());
+                XApp.getEditor().putBoolean(Config.SP_AVOID_HIGH_SPEED, b).apply());
         cost.setOnCheckedChangeListener((compoundButton, b) ->
-                new CsEditor().putBoolean(Config.SP_COST, b).apply());
+                XApp.getEditor().putBoolean(Config.SP_COST, b).apply());
         hightspeed.setOnCheckedChangeListener((compoundButton, b) ->
-                new CsEditor().putBoolean(Config.SP_HIGHT_SPEED, b).apply());
+                XApp.getEditor().putBoolean(Config.SP_HIGHT_SPEED, b).apply());
     }
 
     @Override

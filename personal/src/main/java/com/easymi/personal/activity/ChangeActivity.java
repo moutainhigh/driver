@@ -82,7 +82,7 @@ public class ChangeActivity extends RxBaseActivity {
             String newPsw = editNew.getText().toString();
             String confirmPsw = editConfirm.getText().toString();
 
-            String oldPswSave = new CsSharedPreferences().getString(Config.SP_LOGIN_PSW, "");
+            String oldPswSave = XApp.getMyPreferences().getString(Config.SP_LOGIN_PSW, "");
             if (!oldPsw.equals(oldPswSave)) {
                 ToastUtil.showMessage(ChangeActivity.this, getString(R.string.not_same_old));
                 return;

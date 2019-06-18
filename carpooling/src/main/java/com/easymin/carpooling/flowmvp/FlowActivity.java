@@ -34,6 +34,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.component.Config;
 import com.easymi.component.ZXOrderStatus;
+import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.entity.DymOrder;
@@ -45,7 +46,6 @@ import com.easymi.component.network.HttpResultFunc3;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult2;
 import com.easymi.component.rxmvp.RxManager;
-import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.GlideCircleTransform;
@@ -534,7 +534,7 @@ public class FlowActivity extends RxBaseActivity implements
 
         aMap.setInfoWindowAdapter(new LeftWindowAdapter(this));
 
-        String locStr = new CsSharedPreferences().getString(Config.SP_LAST_LOC, "");
+        String locStr = XApp.getMyPreferences().getString(Config.SP_LAST_LOC, "");
         EmLoc emLoc = new Gson().fromJson(locStr, EmLoc.class);
         if (null != emLoc) {
             lastLatlng = new LatLng(emLoc.latitude, emLoc.longitude);

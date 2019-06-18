@@ -612,7 +612,7 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
      * 判断是否震动手机
      */
     private void shake() {
-        boolean shakeAble = new CsSharedPreferences().getBoolean(Config.SP_SHAKE_ABLE, true);
+        boolean shakeAble = XApp.getMyPreferences().getBoolean(Config.SP_SHAKE_ABLE, true);
         if (shakeAble) {
             //震动
             PhoneUtil.vibrate(XApp.getInstance(), false);

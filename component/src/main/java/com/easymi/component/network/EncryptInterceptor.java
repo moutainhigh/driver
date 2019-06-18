@@ -3,8 +3,8 @@ package com.easymi.component.network;
 import android.support.annotation.NonNull;
 
 import com.easymi.component.Config;
+import com.easymi.component.app.XApp;
 import com.easymi.component.utils.AesUtil;
-import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EncApi;
 import com.easymi.component.utils.URLDecoderUtil;
 
@@ -150,7 +150,7 @@ public class EncryptInterceptor implements Interceptor {
         try {
             //将默认的url编码还原后加密在url编码
             String decoderStr = URLDecoderUtil.decode(content);
-            value = EncApi.getInstance().en(new CsSharedPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),decoderStr);
+            value = EncApi.getInstance().en(XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),decoderStr);
             value = URLEncoder.encode(value, "utf-8");
         } catch (Exception e) {
             e.printStackTrace();

@@ -70,7 +70,7 @@ public class DaemonService extends Service {
             @Override
             public void run() {
                 Log.e("DaemonService", "start daemon,check service is alive?");
-                boolean isLogin = new CsSharedPreferences().getBoolean(Config.SP_ISLOGIN, false);
+                boolean isLogin = XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false);
                 Log.e("DaemonService", "isLogin-->" + isLogin);
                 if (isLogin) {
                     if (!PhoneUtil.isServiceRunning(LocService.class.getName(), DaemonService.this)) {

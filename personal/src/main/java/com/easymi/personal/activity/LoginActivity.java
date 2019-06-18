@@ -279,10 +279,10 @@ public class LoginActivity extends RxBaseActivity {
             }
         });
 
-        checkboxRemember.setChecked(new CsSharedPreferences().getBoolean(Config.SP_REMEMBER_PSW, false));
-        if (new CsSharedPreferences().getBoolean(Config.SP_REMEMBER_PSW, false)) {
-            String enAcc = new CsSharedPreferences().getString(Config.SP_LOGIN_ACCOUNT, "");
-            String enPsw = new CsSharedPreferences().getString(Config.SP_LOGIN_PSW, "");
+        checkboxRemember.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_REMEMBER_PSW, false));
+        if (XApp.getMyPreferences().getBoolean(Config.SP_REMEMBER_PSW, false)) {
+            String enAcc = XApp.getMyPreferences().getString(Config.SP_LOGIN_ACCOUNT, "");
+            String enPsw = XApp.getMyPreferences().getString(Config.SP_LOGIN_PSW, "");
             if (StringUtils.isNotBlank(enAcc) && StringUtils.isNotBlank(enPsw)) {
                 editAccount.setText(enAcc);
                 editPsw.setText(enPsw);
@@ -326,10 +326,10 @@ public class LoginActivity extends RxBaseActivity {
 
         McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
-        new CsEditor().putString(Config.SP_TOKEN, "").apply();
+        XApp.getEditor().putString(Config.SP_TOKEN, "").apply();
 
         String randomStr = RsaUtils.getRandomString(16);
-        new CsEditor().putString(Config.AES_PASSWORD, randomStr).apply();
+        XApp.getEditor().putString(Config.AES_PASSWORD, randomStr).apply();
 
         String name_rsa = null;
         String pws_rsa = null;
@@ -374,10 +374,10 @@ public class LoginActivity extends RxBaseActivity {
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, loginBtn, loginResult -> {
             if (loginResult.getCode() == 1) {
                 Employ employ = loginResult.data;
-                new CsEditor().putLong(Config.SP_DRIVERID, employ.id).apply();
+                XApp.getEditor().putLong(Config.SP_DRIVERID, employ.id).apply();
                 employ.saveOrUpdate();
 
-                new CsEditor().putString(Config.SP_TOKEN, employ.token).apply();
+                XApp.getEditor().putString(Config.SP_TOKEN, employ.token).apply();
                 getSetting(employ, name, psw);
             } else if (loginResult.getCode() == APPLYING) {
                 Intent intent = new Intent(this, RegisterNoticeActivity.class);
@@ -385,10 +385,10 @@ public class LoginActivity extends RxBaseActivity {
                 startActivity(intent);
             } else if (loginResult.getCode() == APPLY_PASS) {
                 Employ employ = loginResult.data;
-                new CsEditor().putLong(Config.SP_DRIVERID, employ.id).apply();
+                XApp.getEditor().putLong(Config.SP_DRIVERID, employ.id).apply();
                 employ.saveOrUpdate();
 
-                new CsEditor().putString(Config.SP_TOKEN, employ.token).apply();
+                XApp.getEditor().putString(Config.SP_TOKEN, employ.token).apply();
                 getSetting(employ, name, psw);
             } else if (loginResult.getCode() == APPLY_REJECT) {
                 Intent intent = new Intent(this, RegisterNoticeActivity.class);
@@ -456,7 +456,7 @@ public class LoginActivity extends RxBaseActivity {
 
         observable.subscribe(new MySubscriber<>(this, false, false, settingResult -> {
 
-            CsEditor editor = new CsEditor();
+            CsEditor editor = XApp.getEditor();
 
             editor.putBoolean(Config.SP_ISLOGIN, true);
             editor.putString(Config.SP_LOGIN_ACCOUNT, name);

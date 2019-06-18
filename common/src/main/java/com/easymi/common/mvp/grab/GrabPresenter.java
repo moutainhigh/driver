@@ -102,8 +102,8 @@ public class GrabPresenter implements GrabContract.Presenter {
             public void onNext(MultipleOrderResult multipleOrderResult) {
                 //todo 一键报警
 //                CenterUtil centerUtil = new CenterUtil(context,Config.APP_KEY,
-//                        new CsSharedPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
-//                        new CsSharedPreferences().getString(Config.SP_TOKEN, ""));
+//                        XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
+//                        XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
 //                centerUtil.smsShareAuto(order.id, EmUtil.getEmployInfo().companyId, order.passengerId, order.passengerPhone, order.serviceType);
 //                centerUtil.checkingAuth(order.passengerId);
                 if (order.serviceType.equals(Config.ZHUANCHE)) {
@@ -159,8 +159,8 @@ public class GrabPresenter implements GrabContract.Presenter {
             public void onNext(MultipleOrderResult multipleOrderResult) {
                 //todo 一键报警
 //                CenterUtil centerUtil = new CenterUtil(context,Config.APP_KEY,
-//                        new CsSharedPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
-//                        new CsSharedPreferences().getString(Config.SP_TOKEN, ""));
+//                        XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
+//                        XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
 //                centerUtil.smsShareAuto(order.id, EmUtil.getEmployInfo().companyId, order.passengerId, order.passengerPhone, order.serviceType);
 //                centerUtil.checkingAuth(order.passengerId);
                 if (order.serviceType.equals(Config.ZHUANCHE)) {

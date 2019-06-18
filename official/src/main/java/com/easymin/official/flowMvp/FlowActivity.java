@@ -271,7 +271,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         // 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false
         aMap.setMyLocationEnabled(true);
 
-        String locStr = new CsSharedPreferences().getString(Config.SP_LAST_LOC, "");
+        String locStr = XApp.getMyPreferences().getString(Config.SP_LAST_LOC, "");
         EmLoc emLoc = new Gson().fromJson(locStr, EmLoc.class);
 
         if (null != emLoc) {
@@ -348,7 +348,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 //            }
         } else if (govOrder.orderStatus == GWOrderStatus.GOTO_DESTINATION_ORDER) {
             if (XApp.getMyPreferences().getLong("" + govOrder.orderId, 0) != 0) {
-                XApp.getMyPreferences().edit().remove("" + govOrder.orderId);
+                XApp.getEditor().remove("" + govOrder.orderId);
             }
             go_text.setText("去");
             top_layout.setVisibility(View.VISIBLE);
@@ -386,7 +386,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             public void doArriveStart() {
                 presenter.arriveStart(govOrder.orderId, govOrder.version);
                 if (XApp.getMyPreferences().getLong("" + govOrder.orderId, 0) == 0) {
-                    XApp.getMyPreferences().edit().putLong("" + govOrder.orderId, System.currentTimeMillis() + 10 * 60 * 1000).apply();
+                    XApp.getEditor().putLong("" + govOrder.orderId, System.currentTimeMillis() + 10 * 60 * 1000).apply();
                 }
             }
 
@@ -574,7 +574,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                     DensityUtil.dp2px(this, 180)));
         } else if (govOrder.orderStatus == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER
                 || govOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER
-                ) {
+        ) {
             if (null != govOrder.getEndSite()) {
                 latLngs.add(new LatLng(govOrder.getEndSite().lat, govOrder.getEndSite().lng));
                 presenter.routePlanByNavi(govOrder.getEndSite().lat, govOrder.getEndSite().lng);
@@ -841,7 +841,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
             Log.e("mapTouch", "-----map onTouched-----");
             isMapTouched = true;
-            new CsEditor().putLong(Config.DOWN_TIME, System.currentTimeMillis()).apply();
+            XApp.getEditor().putLong(Config.DOWN_TIME, System.currentTimeMillis()).apply();
         }
     }
 
@@ -886,7 +886,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             if (aMap != null) {
                 aMap.setMyLocationStyle(myLocationStyle);
             }
-            if ((System.currentTimeMillis() - new CsSharedPreferences().getLong(Config.DOWN_TIME, 0)) / 1000 > 5) {
+            if ((System.currentTimeMillis() - XApp.getMyPreferences().getLong(Config.DOWN_TIME, 0)) / 1000 > 5) {
                 isMapTouched = false;
             }
         }
@@ -905,7 +905,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         IntentFilter filter = new IntentFilter();
         filter.addAction(Config.BROAD_CANCEL_ORDER);
         filter.addAction(Config.BROAD_BACK_ORDER);
-        registerReceiver(cancelOrderReceiver, filter, EmUtil.getBroadCastPermission(),null);
+        registerReceiver(cancelOrderReceiver, filter, EmUtil.getBroadCastPermission(), null);
 
     }
 
