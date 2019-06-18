@@ -605,7 +605,7 @@ public interface CommApiService {
     Observable<EmResult> upLoadOnlineTime (@Field("time") long time);
 
 
-    @GET("/api/v2/clients/{topic}")
+    @GET("/api/v3/connections/{topic}")
     Observable<EmResult2<List<MqttResult>>> getCurrentTopic(@Path(value = "topic") String topic);
 
     @GET("/api/v1/public/topic/driver_mqtt_config")

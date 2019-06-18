@@ -42,6 +42,7 @@ public class EncryptInterceptor implements Interceptor {
                 || url.contains("api/v1/public/driver/register/get")
                 || url.contains("api/v1/public/driver/register/apply/app/save")
                 || url.contains("api/v1/public/driver/register/apply/app/update")
+                || url.contains("/api/v3/connections/")
         ) {
             return chain.proceed(originRequest);
         }
