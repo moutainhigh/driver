@@ -421,9 +421,12 @@ public class XApp extends MultiDexApplication {
             if (lastPojo == null || System.currentTimeMillis() - lastPojo.getTime() > 3000) {
                 stopVoice();
                 speak(msg);
+                if (lastPojo != null) {
+                    data.remove(lastPojo);
+                }
                 TtsPojo currentPojo = new TtsPojo(orderId, type, System.currentTimeMillis());
                 data.add(currentPojo);
-                getEditor().putString("TTS_SPEAK", new Gson().toJson(data));
+                getEditor().putString("TTS_SPEAK", new Gson().toJson(data)).apply();
             }
         } else {
             speak(msg);
