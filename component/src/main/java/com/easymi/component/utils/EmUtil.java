@@ -12,9 +12,6 @@ import com.easymi.component.entity.Employ;
 import com.easymi.component.loc.LocService;
 import com.google.gson.Gson;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: FinishActivity
@@ -65,19 +62,23 @@ public class EmUtil {
             XApp.getInstance().player.stop();
         }
 
-        try {
-            Class<?> clazz = Class.forName("com.easymi.common.push.MqttManager");
-            Method method = clazz.getMethod("release");
-            method.invoke(null);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Class<?> clazz = Class.forName("com.easymi.common.push.MqttManager");
+//            Method method = clazz.getMethod("release");
+//            method.invoke(null);
+//        } catch (ClassNotFoundException e) {
+//            Log.e("EmUtil", "ClassNotFoundException:"+e.getMessage());
+//            e.printStackTrace();
+//        } catch (NoSuchMethodException e) {
+//            Log.e("EmUtil", "NoSuchMethodException:"+e.getMessage());
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            Log.e("EmUtil", "IllegalAccessException:"+e.getMessage());
+//            e.printStackTrace();
+//        } catch (InvocationTargetException e) {
+//            Log.e("EmUtil", "InvocationTargetException:"+e.getMessage());
+//            e.printStackTrace();
+//        }
 
         stopAllService(context);
 
@@ -86,7 +87,7 @@ public class EmUtil {
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(i);
 
-        ActManager.getInstance().finishActivity("HomeActivity");
+        ActManager.getInstance().finishActivity("WorkActivity");
 
         ActivityManager activityMgr = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         if (activityMgr != null) {

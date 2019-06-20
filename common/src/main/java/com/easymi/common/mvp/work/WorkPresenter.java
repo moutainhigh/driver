@@ -367,8 +367,8 @@ public class WorkPresenter implements WorkContract.Presenter {
                 }
                 employ.saveOrUpdate();
                 XApp.getEditor()
-                .putLong(Config.SP_DRIVERID, employ.id)
-                .apply();
+                        .putLong(Config.SP_DRIVERID, employ.id)
+                        .apply();
                 view.showDriverStatus();
                 MqttManager.getInstance().creatConnect();//在查询完服务人员后初始化mqtt
 //                if (employ.serviceType.equals(Config.ZHUANCHE) || employ.serviceType.equals(Config.TAXI)) {

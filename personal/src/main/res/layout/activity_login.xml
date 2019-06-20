@@ -101,7 +101,7 @@
                 <EditText
                     android:id="@+id/login_et_account"
                     android:layout_width="0.0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_weight="1"
                     android:background="@null"
                     android:gravity="center_vertical"
@@ -139,7 +139,7 @@
                 <EditText
                     android:id="@+id/login_et_password"
                     android:layout_width="0.0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_weight="1"
                     android:background="@null"
                     android:gravity="center_vertical"
