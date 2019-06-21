@@ -60,7 +60,6 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
-import com.easymi.component.entity.TaxiSetting;
 import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
@@ -868,26 +867,30 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         observable.subscribe(new MySubscriber<>(this, false, false, settingResult -> {
             if (settingResult.data != null) {
                 for (ZCSetting sub : settingResult.data) {
-                    if (sub.serviceType.equals(Config.ZHUANCHE) ||
-                            sub.serviceType.equals(Config.CARPOOL)) {
+//                    if (sub.serviceType.equals(Config.ZHUANCHE) ||
+//                            sub.serviceType.equals(Config.CARPOOL)) {
+//                        ZCSetting.deleteAll();
+//                        sub.save();
+//                    } else if (sub.serviceType.equals(Config.TAXI)) {
+//                        TaxiSetting.deleteAll();
+//                        TaxiSetting taxiSetting = new TaxiSetting();
+//                        taxiSetting.isPaid = sub.isPaid;
+//                        taxiSetting.isExpenses = sub.isExpenses;
+//                        taxiSetting.canCancelOrder = sub.canCancelOrder;
+//                        taxiSetting.isAddPrice = sub.isAddPrice;
+//                        taxiSetting.employChangePrice = sub.employChangePrice;
+//                        taxiSetting.employChangeOrder = sub.employChangeOrder;
+//                        taxiSetting.driverRepLowBalance = sub.driverRepLowBalance;
+//                        taxiSetting.passengerDistance = sub.passengerDistance;
+//                        taxiSetting.version = sub.version;
+//                        taxiSetting.grabOrder = sub.grabOrder;
+//                        taxiSetting.distributeOrder = sub.distributeOrder;
+//                        taxiSetting.serviceType = sub.serviceType;
+//                        taxiSetting.save();
+//                    }
+                    if (EmUtil.getEmployInfo().serviceType.equals(sub.serviceType)) {
                         ZCSetting.deleteAll();
                         sub.save();
-                    } else if (sub.serviceType.equals(Config.TAXI)) {
-                        TaxiSetting.deleteAll();
-                        TaxiSetting taxiSetting = new TaxiSetting();
-                        taxiSetting.isPaid = sub.isPaid;
-                        taxiSetting.isExpenses = sub.isExpenses;
-                        taxiSetting.canCancelOrder = sub.canCancelOrder;
-                        taxiSetting.isAddPrice = sub.isAddPrice;
-                        taxiSetting.employChangePrice = sub.employChangePrice;
-                        taxiSetting.employChangeOrder = sub.employChangeOrder;
-                        taxiSetting.driverRepLowBalance = sub.driverRepLowBalance;
-                        taxiSetting.passengerDistance = sub.passengerDistance;
-                        taxiSetting.version = sub.version;
-                        taxiSetting.grabOrder = sub.grabOrder;
-                        taxiSetting.distributeOrder = sub.distributeOrder;
-                        taxiSetting.serviceType = sub.serviceType;
-                        taxiSetting.save();
                     }
                 }
             }
