@@ -97,9 +97,16 @@ public class AssignFragment extends RxBaseFragment implements MyOrderContract.Vi
             if (StringUtils.isNotBlank(baseOrder.serviceType)) {
                 if (view.getId() == R.id.root) {
                     if (baseOrder.serviceType.equals(Config.ZHUANCHE)) {
+                        long id = -1;
+                        if (baseOrder.id != 0) {
+                            id = baseOrder.id;
+                        }
+                        if (baseOrder.orderId != 0) {
+                            id = baseOrder.orderId;
+                        }
                         ARouter.getInstance()
                                 .build("/zhuanche/FlowActivity")
-                                .withLong("orderId", baseOrder.orderId).navigation();
+                                .withLong("orderId", id).navigation();
                     } else if (baseOrder.serviceType.equals(Config.TAXI)) {
                         ARouter.getInstance()
                                 .build("/taxi/FlowActivity")
