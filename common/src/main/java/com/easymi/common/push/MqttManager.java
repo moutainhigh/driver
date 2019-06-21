@@ -16,8 +16,6 @@ import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.rxmvp.RxManager;
-import com.easymi.component.utils.CsEditor;
-import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.FileUtil;
 import com.easymi.component.utils.Log;
@@ -65,6 +63,11 @@ public class MqttManager implements LocObserver {
     private String pullTopic;
 
     private RxManager rxManager;
+    private boolean isSubscribe;
+
+    public boolean isSubscribe() {
+        return isSubscribe;
+    }
 
     /**
      * 初始化
@@ -226,7 +229,7 @@ public class MqttManager implements LocObserver {
         public void connectComplete(boolean reconnect, String serverURI) {
             Executors.newSingleThreadExecutor().submit(() -> {
                 try {
-                    System.out.println("订阅服务器：" + serverURI);
+                    isSubscribe = true;
                     client.subscribe(pullTopic, qos);
                 } catch (MqttException e) {
                     e.printStackTrace();
@@ -238,9 +241,10 @@ public class MqttManager implements LocObserver {
         @Override
         public void connectionLost(Throwable cause) {
             //失去连接
-            if (null != client) {
+            if (null != client && isSubscribe) {
                 try {
                     client.unsubscribe(pullTopic);
+                    isSubscribe = false;
                     Log.e(TAG, "取消订阅的topic");
                 } catch (Exception e) {
                     e.fillInStackTrace();

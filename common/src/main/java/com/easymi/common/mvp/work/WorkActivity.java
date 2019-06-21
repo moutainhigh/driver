@@ -70,7 +70,6 @@ import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.rxmvp.RxManager;
-import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MapUtil;
@@ -939,8 +938,10 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
                         .doOnNext(new Action1<List<MqttResult>>() {
                             @Override
                             public void call(List<MqttResult> mqttResults) {
-                                if (!(mqttResults != null && mqttResults.isEmpty())) {
-                                    throw new RuntimeException();
+                                if (MqttManager.getInstance().isSubscribe()) {
+                                    if (!(mqttResults != null && mqttResults.isEmpty())) {
+                                        throw new RuntimeException();
+                                    }
                                 }
                             }
                         })
@@ -950,7 +951,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
                         .subscribe(new MySubscriber<>(WorkActivity.this, false, false, new NoErrSubscriberListener<List<MqttResult>>() {
                             @Override
                             public void onNext(List<MqttResult> mqttResults) {
-                                if ((mqttResults != null && mqttResults.isEmpty())) {
+                                if (!MqttManager.getInstance().isSubscribe() || (mqttResults != null && mqttResults.isEmpty())) {
                                     MqttManager.release();
                                     isStartMqtt = false;
                                     getMqttConfig();
