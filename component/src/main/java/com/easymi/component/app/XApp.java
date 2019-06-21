@@ -18,7 +18,6 @@ import com.easymi.component.BuildConfig;
 import com.easymi.component.Config;
 import com.easymi.component.R;
 import com.easymi.component.db.SqliteHelper;
-import com.easymi.component.entity.TtsPojo;
 import com.easymi.component.loc.LocService;
 import com.easymi.component.tts.InitConfig;
 import com.easymi.component.tts.NonBlockSyntherizer;
@@ -28,14 +27,10 @@ import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.SysUtil;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.jaredrummler.android.processes.AndroidProcesses;
 import com.tencent.bugly.crashreport.CrashReport;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -79,6 +74,8 @@ public class XApp extends MultiDexApplication {
      */
     private boolean haveFoucs = false;
     private boolean isSpeeching;
+    private String lastReadContent;
+    private long lastReadTime;
 
     @Override
     public void onCreate() {
@@ -110,8 +107,6 @@ public class XApp extends MultiDexApplication {
                     .putBoolean(Config.SP_ISLOGIN, false)
                     .putInt(Config.SP_VERSION, current)
                     .apply();
-        } else {
-            getEditor().remove("TTS_SPEAK").apply();
         }
     }
 
@@ -210,9 +205,9 @@ public class XApp extends MultiDexApplication {
             @Override
             public void onSpeechFinish(String s) {
                 isSpeeching = false;
-                if (voiceList != null && !voiceList.isEmpty()) {
-                    syntheticVoice(voiceList.removeFirst());
-                }
+//                if (voiceList != null && !voiceList.isEmpty()) {
+//                    syntheticVoice(voiceList.removeFirst());
+//                }
                 abandonFocus();
             }
 
@@ -276,7 +271,7 @@ public class XApp extends MultiDexApplication {
         return false;
     }
 
-    private LinkedList<String> voiceList;
+//    private LinkedList<String> voiceList;
 
     /**
      * @param text
@@ -381,71 +376,31 @@ public class XApp extends MultiDexApplication {
         }
     }
 
-    /**
-     * @param text    要播报的内容
-     * @param isQueue 是否需要排队
-     */
-    public void syntheticVoice(String text, boolean isQueue) {
-        if (voiceList == null) {
-            voiceList = new LinkedList<>();
-        }
-        if (isQueue) {
-            voiceList.add(text);
-            if (!isSpeeching) {
-                syntheticVoice(voiceList.removeFirst());
-            }
-        } else {
-            stopVoice();
-            syntheticVoice(text);
-        }
-    }
-
-
-    public void syntheticVoice(String msg, long orderId, int type) {
-        if (orderId != -1 && type != -1) {
-            String content = getMyPreferences().getString("TTS_SPEAK", "");
-            List<TtsPojo> data = new ArrayList<>();
-            if (!TextUtils.isEmpty(content)) {
-                data.addAll(new Gson().fromJson(content, new TypeToken<List<TtsPojo>>() {
-                }.getType()));
-            }
-
-            TtsPojo lastPojo = null;
-            for (TtsPojo datum : data) {
-                if (datum.getId() == orderId && datum.getType() == type) {
-                    lastPojo = datum;
-                    break;
-                }
-            }
-
-            if (lastPojo == null || System.currentTimeMillis() - lastPojo.getTime() > 3000) {
-                stopVoice();
-                speak(msg);
-                if (lastPojo != null) {
-                    data.remove(lastPojo);
-                }
-                TtsPojo currentPojo = new TtsPojo(orderId, type, System.currentTimeMillis());
-                data.add(currentPojo);
-                getEditor().putString("TTS_SPEAK", new Gson().toJson(data)).apply();
-            }
-        } else {
-            speak(msg);
-        }
-    }
-
-    private void speak(String msg) {
-        boolean voiceAble = getMyPreferences().getBoolean(Config.SP_VOICE_ABLE, true);
-        if (!voiceAble) {
-            return;
-        }
-        if (mSpeechSynthesizer == null) {
-            initBaiduTTs();
-            return;
-        }
-        if (requestFocus() && null != mSpeechSynthesizer) {
-            int code = mSpeechSynthesizer.speak(msg);
-        }
-    }
+//    /**
+//     * @param text    要播报的内容
+//     * @param isQueue 是否需要排队
+//     */
+//    public void syntheticVoice(String text, boolean isQueue) {
+//        if (voiceList == null) {
+//            voiceList = new LinkedList<>();
+//        }
+//        if (isQueue) {
+//            voiceList.add(text);
+//            if (!isSpeeching) {
+//                syntheticVoice(voiceList.removeFirst());
+//            }
+//        } else {
+//            if (TextUtils.equals(text, lastReadContent)) {
+//                if (System.currentTimeMillis() - lastReadTime > 3000) {
+//                    stopVoice();
+//                    syntheticVoice(text);
+//                }
+//            } else {
+//                stopVoice();
+//                syntheticVoice(text);
+//            }
+//        }
+//    }
 
     /**
      * 播放语音
@@ -453,7 +408,23 @@ public class XApp extends MultiDexApplication {
      * @param msg
      */
     public void syntheticVoice(String msg) {
-        syntheticVoice(msg, -1, -1);
+        if (TextUtils.equals(msg, lastReadContent) && System.currentTimeMillis() - lastReadTime <= 3000) {
+            return;
+        }
+        boolean voiceAble = getMyPreferences().getBoolean(Config.SP_VOICE_ABLE, true);
+        if (!voiceAble) {
+            return;
+        }
+        stopVoice();
+        if (mSpeechSynthesizer == null) {
+            initBaiduTTs();
+            return;
+        }
+        if (requestFocus() && null != mSpeechSynthesizer) {
+            lastReadContent = msg;
+            lastReadTime = System.currentTimeMillis();
+            int code = mSpeechSynthesizer.speak(msg);
+        }
     }
 
     /**
@@ -472,9 +443,9 @@ public class XApp extends MultiDexApplication {
      * 清理播放列表
      */
     public void clearVoiceList() {
-        if (null != voiceList) {
-            voiceList.clear();
-        }
+//        if (null != voiceList) {
+//            voiceList.clear();
+//        }
     }
 
     /**

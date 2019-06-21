@@ -116,7 +116,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
 
                 if (order.serviceType.equals(Config.GOV)) {
                     XApp.getInstance().shake();
-                    XApp.getInstance().syntheticVoice("你有新的公务用车订单", order.orderId, Config.TTS_TYPE_GOV);
+                    XApp.getInstance().syntheticVoice("你有新的公务用车订单");
                     refreshWork();
                 } else {
                     if (!DymOrder.exists(order.orderId, order.serviceType)) {
@@ -291,19 +291,19 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 }
             } else if (msg.equals("chartered")) {
                 XApp.getInstance().shake();
-                XApp.getInstance().syntheticVoice("您有定制包车订单需要处理", jb.optJSONObject("data").optLong("orderId"), Config.TTS_TYPE_CHAR);
+                XApp.getInstance().syntheticVoice("您有定制包车订单需要处理");
                 refreshWork();
             } else if (msg.equals("rental")) {
                 XApp.getInstance().shake();
-                XApp.getInstance().syntheticVoice("您有包车租车订单需要处理", jb.optJSONObject("data").optLong("orderId"), Config.TTS_TYPE_RENT);
+                XApp.getInstance().syntheticVoice("您有包车租车订单需要处理");
                 refreshWork();
             } else if (msg.equals("order_hot_create")) {
                 XApp.getInstance().shake();
-                XApp.getInstance().syntheticVoice("您有城际拼车订单需要处理", jb.optJSONObject("data").optLong("orderId"), Config.TTS_TYPE_PIN);
+                XApp.getInstance().syntheticVoice("您有城际拼车订单需要处理");
                 refreshWork();
             } else if (msg.equals("country") || msg.equals("custombus")) {
                 XApp.getInstance().shake();
-                XApp.getInstance().syntheticVoice("您有班车订单需要处理", jb.optJSONObject("data").optLong("orderId"), Config.TTS_TYPE_BUS);
+                XApp.getInstance().syntheticVoice("您有班车订单需要处理");
                 refreshWork();
             } else if (msg.equals("schedule_auto_finish")) {
                 XApp.getInstance().shake();
@@ -323,11 +323,11 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 handler.sendMessage(message);
             } else if (msg.equals("order_change")) {
                 XApp.getInstance().shake();
-                XApp.getInstance().syntheticVoice("您有新的转单", jb.optJSONObject("data").optLong("orderId"), Config.TTS_TYPE_CHANGE);
+                XApp.getInstance().syntheticVoice("您有新的转单");
                 refreshWork();
             } else if (msg.equals("order_transferred")) {
                 XApp.getInstance().shake();
-                XApp.getInstance().syntheticVoice("您有班次被转单了", jb.optJSONObject("data").optLong("orderId"), Config.TTS_TYPE_TRANS);
+                XApp.getInstance().syntheticVoice("您有班次被转单了");
                 refreshWork();
 
                 MultipleOrder order = new MultipleOrder();
@@ -342,7 +342,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 handler.sendMessage(message);
             } else if (msg.equals("book_order")) {
                 XApp.getInstance().shake();
-                XApp.getInstance().syntheticVoice("你有公务用车订单需要执行", jb.optJSONObject("data").optLong("orderId"), Config.TTS_TYPE_BOOK);
+                XApp.getInstance().syntheticVoice("你有公务用车订单需要执行");
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -614,7 +614,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
 
                     XApp.getInstance().shake();
                     //语音播报xx客户已完成支付
-                    XApp.getInstance().syntheticVoice(XApp.getMyString(R.string.pay_suc_1) + NumberToHanzi.number2hanzi(weihao) + XApp.getMyString(R.string.pay_suc_2), order.id, Config.TTS_TYPE_PAY);
+                    XApp.getInstance().syntheticVoice(XApp.getMyString(R.string.pay_suc_1) + NumberToHanzi.number2hanzi(weihao) + XApp.getMyString(R.string.pay_suc_2));
 
                     Intent intent1 = new Intent();
                     intent1.setAction(Config.BROAD_FINISH_ORDER);
