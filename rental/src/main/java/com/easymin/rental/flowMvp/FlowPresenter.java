@@ -1,11 +1,11 @@
 package com.easymin.rental.flowMvp;
+
 import android.content.Context;
 import android.content.Intent;
 
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.navi.AMapNavi;
 import com.amap.api.navi.AMapNaviListener;
-import com.amap.api.navi.enums.NaviType;
 import com.amap.api.navi.model.AMapLaneInfo;
 import com.amap.api.navi.model.AMapModelCross;
 import com.amap.api.navi.model.AMapNaviCameraInfo;
@@ -32,11 +32,9 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
-import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.widget.LoadingButton;
-import com.easymin.rental.entity.RentalOrder;
 import com.easymin.rental.result.OrderResult;
 
 import java.util.ArrayList;
@@ -48,6 +46,7 @@ import rx.Observable;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: FlowPresenter
+ *
  * @Author: shine
  * Date: 2018/12/18 下午1:59
  * Description:
@@ -67,29 +66,54 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
         model = new FlowModel(context);
     }
 
+
+    private double endLat;
+    private double endLng;
+    private boolean isInit;
+    private boolean isCalculate;
+
     @Override
     public void routePlanByNavi(Double endLat, Double endLng) {
+        if (isInit || isCalculate) {
+            return;
+        }
+        this.endLat = endLat;
+        this.endLng = endLng;
+
         if (null == mAMapNavi) {
             mAMapNavi = AMapNavi.getInstance(context);
             mAMapNavi.addAMapNaviListener(this);
+            isInit = true;
+        } else {
+            onInitNaviSuccess();
         }
 
-        int strateFlag = mAMapNavi.strategyConvert(
-                XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, false),
-                XApp.getMyPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
-                XApp.getMyPreferences().getBoolean(Config.SP_COST, false),
-                XApp.getMyPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
-                false);
+    }
 
-        NaviLatLng start = new NaviLatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
-        NaviLatLng end = new NaviLatLng(endLat, endLng);
+    private void calculateRoute() {
 
-        List<NaviLatLng> startLs = new ArrayList<>();
-        List<NaviLatLng> endLs = new ArrayList<>();
+        if (isCalculate) {
+            return;
+        }
+        if (mAMapNavi != null) {
+            int strateFlag = mAMapNavi.strategyConvert(
+                    XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, false),
+                    XApp.getMyPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
+                    XApp.getMyPreferences().getBoolean(Config.SP_COST, false),
+                    XApp.getMyPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
+                    false);
 
-        startLs.add(start);
-        endLs.add(end);
-        mAMapNavi.calculateDriveRoute(startLs, endLs, null, strateFlag);
+            NaviLatLng start = new NaviLatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
+            NaviLatLng end = new NaviLatLng(endLat, endLng);
+
+            List<NaviLatLng> startLs = new ArrayList<>();
+            List<NaviLatLng> endLs = new ArrayList<>();
+
+            startLs.add(start);
+            endLs.add(end);
+            isCalculate = true;
+            mAMapNavi.calculateDriveRoute(startLs, endLs, null, strateFlag);
+        }
     }
 
     RouteSearch routeSearch;
@@ -163,9 +187,9 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
         if (null != mAMapNavi) {
             mAMapNavi.stopNavi();
             mAMapNavi.destroy();
+            mAMapNavi = null;
         }
     }
-
 
 
     @Override
@@ -173,52 +197,52 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
         Observable<OrderResult> observable = model.findOne(orderId);
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true,
                 new HaveErrSubscriberListener<OrderResult>() {
-            @Override
-            public void onNext(OrderResult orderResult) {
-                view.showOrder(orderResult.data);
-            }
+                    @Override
+                    public void onNext(OrderResult orderResult) {
+                        view.showOrder(orderResult.data);
+                    }
 
-            @Override
-            public void onError(int code) {
-                view.showOrder(null);
-            }
-        })));
+                    @Override
+                    public void onError(int code) {
+                        view.showOrder(null);
+                    }
+                })));
     }
 
     @Override
     public void changeStauts(Long orderId, int status) {
-        Observable<EmResult> observable = model.changeStauts(orderId,status);
+        Observable<EmResult> observable = model.changeStauts(orderId, status);
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, false, false,
                 new HaveErrSubscriberListener<EmResult>() {
                     @Override
                     public void onNext(EmResult emResult) {
-                        if (emResult.getCode() == 1){
+                        if (emResult.getCode() == 1) {
                             findOne(orderId);
                         }
                     }
 
                     @Override
                     public void onError(int code) {
-                        Log.e("hufeng/code","errorCode:"+code);
+                        Log.e("hufeng/code", "errorCode:" + code);
                     }
                 })));
     }
 
     @Override
-    public void orderConfirm(long orderId, long version,LoadingButton button) {
-        Observable<EmResult> observable = model.orderConfirm(orderId,version);
+    public void orderConfirm(long orderId, long version, LoadingButton button) {
+        Observable<EmResult> observable = model.orderConfirm(orderId, version);
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, button,
                 new HaveErrSubscriberListener<EmResult>() {
                     @Override
                     public void onNext(EmResult emResult) {
-                        if (emResult.getCode() == 1){
+                        if (emResult.getCode() == 1) {
                             view.toFinish();
                         }
                     }
 
                     @Override
                     public void onError(int code) {
-                        Log.e("hufeng/code","errorCode:"+code);
+                        Log.e("hufeng/code", "errorCode:" + code);
                     }
                 })));
     }
@@ -226,12 +250,15 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
 
     @Override
     public void onInitNaviFailure() {
+        isInit = false;
+        stopNavi();
 
     }
 
     @Override
     public void onInitNaviSuccess() {
-
+        isInit = false;
+        calculateRoute();
     }
 
     @Override
@@ -256,19 +283,21 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
 
     @Override
     public void onCalculateRouteSuccess(int[] ints) {
-        Log.e("FlowerPresenter", "onCalculateRouteSuccess()");
-        AMapNaviPath path;
-        HashMap<Integer, AMapNaviPath> paths = mAMapNavi.getNaviPaths();
-        if (null != paths && paths.size() != 0) {
-            path = paths.get(ints[0]);
-        } else {
-            path = mAMapNavi.getNaviPath();
-        }
-        if (path != null) {
-            view.showPath(ints, path);
-            if (XApp.getMyPreferences().getBoolean(Config.SP_DEFAULT_NAVI, true)) {
-                mAMapNavi.startNavi(NaviType.GPS);
+        isCalculate = false;
+        if (mAMapNavi != null) {
+            AMapNaviPath path;
+            HashMap<Integer, AMapNaviPath> paths = mAMapNavi.getNaviPaths();
+            if (null != paths && paths.size() != 0) {
+                path = paths.get(ints[0]);
+            } else {
+                path = mAMapNavi.getNaviPath();
+            }
+            if (path != null) {
+                view.showPath(ints, path);
                 view.showLeft(path.getAllLength(), path.getAllTime());
+                if (XApp.getMyPreferences().getBoolean(Config.SP_DEFAULT_NAVI, true)) {
+//                    mAMapNavi.startNavi(NaviType.GPS);
+                }
             }
         }
     }
@@ -310,7 +339,7 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
 
     @Override
     public void onCalculateRouteFailure(int i) {
-
+        isCalculate = false;
     }
 
     /**

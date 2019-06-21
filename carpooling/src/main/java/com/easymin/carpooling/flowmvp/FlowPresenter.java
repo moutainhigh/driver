@@ -8,7 +8,6 @@ import android.support.v7.app.AlertDialog;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.navi.AMapNavi;
 import com.amap.api.navi.AMapNaviListener;
-import com.amap.api.navi.enums.NaviType;
 import com.amap.api.navi.model.AMapLaneInfo;
 import com.amap.api.navi.model.AMapModelCross;
 import com.amap.api.navi.model.AMapNaviCameraInfo;
@@ -30,7 +29,6 @@ import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
 import com.autonavi.tbt.TrafficFacilityInfo;
 import com.easymi.common.entity.CarpoolOrder;
-import com.easymi.common.entity.OrderCustomer;
 import com.easymi.component.Config;
 import com.easymi.component.activity.NaviActivity;
 import com.easymi.component.app.XApp;
@@ -39,7 +37,6 @@ import com.easymi.component.network.ErrCode;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
-import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 
@@ -50,6 +47,7 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName:
+ *
  * @Author: hufeng
  * Date: 2018/12/24 下午1:10
  * Description:
@@ -68,6 +66,11 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
     AMapNavi mAMapNavi;
 
     RouteSearch routeSearch;
+    private LatLng start;
+    private List<LatLng> latLngs;
+    private LatLng end;
+    private boolean isInit;
+    private boolean isCalculate;
 
     public FlowPresenter(Context context, FlowContract.View view) {
         this.context = context;
@@ -108,38 +111,54 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
 
     @Override
     public void routeLineByNavi(LatLng start, List<LatLng> latLngs, LatLng end) {
-//        stopNavi();  //这个地方貌似还有点问题
         if (start == null || end == null) {
             return;
         }
-        //重新初始化导航
-        mAMapNavi = AMapNavi.getInstance(context);
-        mAMapNavi.addAMapNaviListener(this);
-
-        NaviLatLng startNavi = new NaviLatLng(start.latitude, start.longitude);
-        NaviLatLng endNavi = new NaviLatLng(end.latitude, end.longitude);
-
-        List<NaviLatLng> naviLatLngs = new ArrayList<>();
-        if (null != latLngs && latLngs.size() != 0) {
-            for (LatLng latLng : latLngs) {
-                NaviLatLng passNavi = new NaviLatLng(latLng.latitude, latLng.longitude);
-                naviLatLngs.add(passNavi);
-            }
+        if (isInit || isCalculate) {
+            return;
         }
+        this.start = start;
+        this.latLngs = latLngs;
+        this.end = end;
+        if (mAMapNavi == null) {
+            mAMapNavi = AMapNavi.getInstance(context);
+            mAMapNavi.addAMapNaviListener(this);
+            isInit = true;
+        } else {
+            onInitNaviSuccess();
+        }
+    }
 
-        int strategy = mAMapNavi.strategyConvert(
-                XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, true),
-                XApp.getMyPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
-                XApp.getMyPreferences().getBoolean(Config.SP_COST, true),
-                XApp.getMyPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
-                false);
+    private void calculateRoute() {
+        if (isCalculate) {
+            return;
+        }
+        if (mAMapNavi != null) {
+            NaviLatLng startNavi = new NaviLatLng(start.latitude, start.longitude);
+            NaviLatLng endNavi = new NaviLatLng(end.latitude, end.longitude);
+            List<NaviLatLng> naviLatLngs = new ArrayList<>();
+            if (null != latLngs && latLngs.size() != 0) {
+                for (LatLng latLng : latLngs) {
+                    NaviLatLng passNavi = new NaviLatLng(latLng.latitude, latLng.longitude);
+                    naviLatLngs.add(passNavi);
+                }
+            }
 
-        List<NaviLatLng> startLs = new ArrayList<>();
-        List<NaviLatLng> endLs = new ArrayList<>();
+            int strategy = mAMapNavi.strategyConvert(
+                    XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, true),
+                    XApp.getMyPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
+                    XApp.getMyPreferences().getBoolean(Config.SP_COST, true),
+                    XApp.getMyPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
+                    false);
 
-        startLs.add(startNavi);
-        endLs.add(endNavi);
-        mAMapNavi.calculateDriveRoute(startLs, endLs, naviLatLngs, strategy);
+            List<NaviLatLng> startLs = new ArrayList<>();
+            List<NaviLatLng> endLs = new ArrayList<>();
+
+            startLs.add(startNavi);
+            endLs.add(endNavi);
+            isCalculate = true;
+            mAMapNavi.calculateDriveRoute(startLs, endLs, naviLatLngs, strategy);
+        }
     }
 
     @Override
@@ -193,10 +212,9 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
     public void stopNavi() {
         //since 1.6.0 不再在naviview destroy的时候自动执行AMapNavi.stopNavi();请自行执行
         if (null != mAMapNavi) {
-            new Thread(() -> { //
-                mAMapNavi.stopNavi();
-                mAMapNavi.destroy();
-            }).start();
+            mAMapNavi.stopNavi();
+            mAMapNavi.destroy();
+            mAMapNavi = null;
         }
     }
 
@@ -289,12 +307,14 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
 
     @Override
     public void onInitNaviFailure() {
-
+        isInit = false;
+        stopNavi();
     }
 
     @Override
     public void onInitNaviSuccess() {
-
+        isInit = false;
+        calculateRoute();
     }
 
     @Override
@@ -319,19 +339,21 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
 
     @Override
     public void onCalculateRouteSuccess(int[] ints) {
-        Log.e("FlowerPresenter", "onCalculateRouteSuccess()");
-        AMapNaviPath path;
-        HashMap<Integer, AMapNaviPath> paths = mAMapNavi.getNaviPaths();
-        if (null != paths && paths.size() != 0) {
-            path = paths.get(ints[0]);
-        } else {
-            path = mAMapNavi.getNaviPath();
-        }
-        if (path != null) {
-            view.showPath(ints, path);
-            if (XApp.getMyPreferences().getBoolean(Config.SP_DEFAULT_NAVI, true)) {
-                mAMapNavi.startNavi(NaviType.GPS);
+        isCalculate = false;
+        if (mAMapNavi != null) {
+            AMapNaviPath path;
+            HashMap<Integer, AMapNaviPath> paths = mAMapNavi.getNaviPaths();
+            if (null != paths && paths.size() != 0) {
+                path = paths.get(ints[0]);
+            } else {
+                path = mAMapNavi.getNaviPath();
+            }
+            if (path != null) {
+                view.showPath(ints, path);
                 view.showLeft(path.getAllLength(), path.getAllTime());
+                if (XApp.getMyPreferences().getBoolean(Config.SP_DEFAULT_NAVI, true)) {
+//                    mAMapNavi.startNavi(NaviType.GPS);
+                }
             }
         }
     }
@@ -373,7 +395,7 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
 
     @Override
     public void onCalculateRouteFailure(int i) {
-
+        isCalculate = false;
     }
 
     /**

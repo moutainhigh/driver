@@ -31,7 +31,6 @@ import com.easymi.component.R;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.DymOrder;
-import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
@@ -188,8 +187,8 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
         mAMapNaviView.onDestroy();
         //since 1.6.0 不再在naviview destroy的时候自动执行AMapNavi.stopNavi();请自行执行
         //mAMapNavi是全局的，执行订单页面还需要用，所以这里不能销毁资源
-//        mAMapNavi.stopNavi();
-//        mAMapNavi.destroy();
+        mAMapNavi.stopNavi();
+        mAMapNavi.destroy();
 //        XApp.getInstance().stopVoice();
     }
 
@@ -200,7 +199,6 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     @Override
     public void onInitNaviSuccess() {
-
         if (naviMode == Config.WALK_TYPE) {
             mAMapNavi.calculateWalkRoute(mStartLatlng, mEndLatlng);
         } else {
@@ -403,7 +401,6 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     @Override
     public void onNaviCancel() {
-        mAMapNavi.destroy();
         finish();
     }
 

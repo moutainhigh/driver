@@ -7,7 +7,6 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.navi.AMapNavi;
 import com.amap.api.navi.AMapNaviListener;
 import com.amap.api.navi.INaviInfoCallback;
-import com.amap.api.navi.enums.NaviType;
 import com.amap.api.navi.model.AMapLaneInfo;
 import com.amap.api.navi.model.AMapModelCross;
 import com.amap.api.navi.model.AMapNaviCameraInfo;
@@ -29,11 +28,8 @@ import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
 import com.autonavi.tbt.TrafficFacilityInfo;
 import com.easymi.common.entity.BuildPushData;
-//import com.easymi.common.push.MQTTService;
 import com.easymi.common.push.MqttManager;
 import com.easymi.component.Config;
-import com.easymi.component.DJOrderStatus;
-import com.easymi.component.ZCOrderStatus;
 import com.easymi.component.activity.NaviActivity;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
@@ -41,14 +37,11 @@ import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.zhuanche.entity.ZCOrder;
 import com.easymi.zhuanche.result.ZCOrderResult;
-import com.easymin.driver.securitycenter.utils.AudioUtil;
-import com.easymin.driver.securitycenter.utils.CenterUtil;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -57,9 +50,12 @@ import java.util.List;
 
 import rx.Observable;
 
+//import com.easymi.common.push.MQTTService;
+
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName:
+ *
  * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
@@ -71,6 +67,10 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     private FlowContract.View view;
     private FlowContract.Model model;
+    private double endLat;
+    private double endLng;
+    private boolean isInit;
+    private boolean isCalculate;
 
     public FlowPresenter(Context context, FlowContract.View view) {
         this.context = context;
@@ -148,7 +148,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             return;
         }
         Observable<ZCOrderResult> observable = model.startDrive(orderId, version);
-        view.getManager().add(observable.subscribe(new MySubscriber<ZCOrderResult>(context,false,false,  zcOrderResult -> {
+        view.getManager().add(observable.subscribe(new MySubscriber<ZCOrderResult>(context, false, false, zcOrderResult -> {
             updateDymOrder(zcOrderResult.data);
             view.showOrder(zcOrderResult.data);
         })));
@@ -254,30 +254,37 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void routePlanByNavi(Double endLat, Double endLng) {
+        if (isInit || isCalculate) {
+            return;
+        }
+        this.endLat = endLat;
+        this.endLng = endLng;
         if (null == mAMapNavi) {
             mAMapNavi = AMapNavi.getInstance(context);
             mAMapNavi.addAMapNaviListener(this);
+            isInit = true;
+        } else {
+            onInitNaviSuccess();
         }
+    }
 
-        //默认全false 策略60
-        int strateFlag = mAMapNavi.strategyConvert(
-                XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, false),
-                XApp.getMyPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
-                XApp.getMyPreferences().getBoolean(Config.SP_COST, false),
-                XApp.getMyPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
-                false);
+    private void calculateRoute() {
+        if (isCalculate) {
+            return;
+        }
+        if (mAMapNavi != null) {
+            NaviLatLng start = new NaviLatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
+            NaviLatLng end = new NaviLatLng(endLat, endLng);
 
-        NaviLatLng start = new NaviLatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
-        NaviLatLng end = new NaviLatLng(endLat, endLng);
+            List<NaviLatLng> startLs = new ArrayList<>();
+            List<NaviLatLng> endLs = new ArrayList<>();
 
-        List<NaviLatLng> startLs = new ArrayList<>();
-        List<NaviLatLng> endLs = new ArrayList<>();
+            startLs.add(start);
+            endLs.add(end);
 
-        startLs.add(start);
-        endLs.add(end);
-
-        //只有专车改成线路最短 2策略
-        mAMapNavi.calculateDriveRoute(startLs, endLs, null, 2);
+            isCalculate = true;
+            mAMapNavi.calculateDriveRoute(startLs, endLs, null, 2);
+        }
     }
 
     RouteSearch routeSearch;
@@ -388,6 +395,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         if (null != mAMapNavi) {
             mAMapNavi.stopNavi();
             mAMapNavi.destroy();
+            mAMapNavi = null;
         }
     }
 
@@ -400,11 +408,16 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void onInitNaviFailure() {
+        isInit = false;
+        stopNavi();
         view.reRout();
     }
 
     @Override
     public void onInitNaviSuccess() {
+        isInit = false;
+        calculateRoute();
+
     }
 
     @Override
@@ -431,18 +444,21 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void onCalculateRouteSuccess(int[] ints) {
-        AMapNaviPath path;
-        HashMap<Integer, AMapNaviPath> paths = mAMapNavi.getNaviPaths();
-        if (null != paths && paths.size() != 0) {
-            path = paths.get(ints[0]);
-        } else {
-            path = mAMapNavi.getNaviPath();
-        }
-        if (path != null) {
-            view.showPath(ints, path);
-            view.showLeft(path.getAllLength(), path.getAllTime());
-            if (XApp.getMyPreferences().getBoolean(Config.SP_DEFAULT_NAVI, true)) {
-                mAMapNavi.startNavi(NaviType.GPS);
+        isCalculate = false;
+        if (mAMapNavi != null) {
+            AMapNaviPath path;
+            HashMap<Integer, AMapNaviPath> paths = mAMapNavi.getNaviPaths();
+            if (null != paths && paths.size() != 0) {
+                path = paths.get(ints[0]);
+            } else {
+                path = mAMapNavi.getNaviPath();
+            }
+            if (path != null) {
+                view.showPath(ints, path);
+                view.showLeft(path.getAllLength(), path.getAllTime());
+//            if (XApp.getMyPreferences().getBoolean(Config.SP_DEFAULT_NAVI, true)) {
+//                mAMapNavi.startNavi(NaviType.GPS);
+//            }
             }
         }
     }
@@ -484,6 +500,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void onCalculateRouteFailure(int i) {
+        isCalculate = false;
         view.showReCal();
     }
 
@@ -511,8 +528,8 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void onGpsOpenStatus(boolean b) {
-        if (!b){
-            ToastUtil.showMessage(context,"请打开手机gps");
+        if (!b) {
+            ToastUtil.showMessage(context, "请打开手机gps");
         }
     }
 

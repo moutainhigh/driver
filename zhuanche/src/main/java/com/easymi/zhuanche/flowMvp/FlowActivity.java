@@ -1086,7 +1086,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 if (null != getEndAddr()) {
                     presenter.routePlanByNavi(getEndAddr().lat, getEndAddr().lng);
                 }
-        } else if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
+            } else if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
                 if (null != getEndAddr()) {
                     presenter.routePlanByNavi(getStartAddr().lat, getStartAddr().lng);
                 }
