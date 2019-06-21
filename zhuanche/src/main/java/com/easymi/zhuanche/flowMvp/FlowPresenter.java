@@ -460,6 +460,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 //                mAMapNavi.startNavi(NaviType.GPS);
 //            }
             }
+
         }
     }
 

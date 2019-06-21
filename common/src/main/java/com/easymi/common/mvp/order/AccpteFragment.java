@@ -3,28 +3,20 @@ package com.easymi.common.mvp.order;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.LayoutInflater;
 import android.view.View;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.easymi.common.CommApiService;
 import com.easymi.common.R;
 import com.easymi.common.adapter.MyOrderAdapter;
 import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.common.entity.MultipleOrder;
-import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.component.Config;
 import com.easymi.component.GWOrderStatus;
-import com.easymi.component.ZCOrderStatus;
 import com.easymi.component.base.RxBaseFragment;
-import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.entity.ZCSetting;
-import com.easymi.component.network.ApiManager;
-import com.easymi.component.network.HttpResultFunc;
-import com.easymi.component.network.MySubscriber;
-import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.LogUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusErrLayout;
@@ -32,10 +24,6 @@ import com.easymi.component.widget.SwipeRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
@@ -131,6 +119,7 @@ public class AccpteFragment extends RxBaseFragment implements MyOrderContract.Vi
                                 ARouter.getInstance()
                                         .build("/zhuanche/FlowActivity")
                                         .withLong("orderId", baseOrder.orderId).navigation();
+
                             } else {
                                 ToastUtil.showMessage(getContext(),"未开启司机代付");
                             }
