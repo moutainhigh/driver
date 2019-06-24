@@ -11,12 +11,13 @@ import com.easymi.common.result.SettingResult;
 import com.easymi.common.result.SystemResult;
 import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.Config;
-import com.easymi.component.entity.SystemConfig;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
-import com.easymi.component.network.MySubscriber;
+import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
+
+import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -25,7 +26,8 @@ import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: FinishActivity
- *@Author: shine
+ *
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -36,7 +38,7 @@ public class WorkModel implements WorkContract.Model {
     @Override
     public Observable<QueryOrdersResult> indexOrders(Long driverId, String appKey) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .queryRunningOrders( 1, 100,null)
+                .queryRunningOrders(1, 100, null)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -45,8 +47,19 @@ public class WorkModel implements WorkContract.Model {
     @Override
     public Observable<EmResult> online(Long driverId, String appKey) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .online(driverId,EmUtil.getEmployInfo().companyId)
+                .online(driverId, EmUtil.getEmployInfo().companyId)
                 .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<String> getTitleStatus() {
+        return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .getTitleStatus()
+                .map(new HttpResultFunc2<>())
+                .retryWhen(observable -> observable.delay(30, TimeUnit.SECONDS))
+                .repeatWhen(observable -> observable.delay(30, TimeUnit.SECONDS))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -54,7 +67,7 @@ public class WorkModel implements WorkContract.Model {
     @Override
     public Observable<EmResult> offline(Long driverId, String appKey) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .offline(driverId,EmUtil.getEmployInfo().companyId)
+                .offline(driverId, EmUtil.getEmployInfo().companyId)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -89,9 +102,9 @@ public class WorkModel implements WorkContract.Model {
     }
 
     @Override
-    public Observable<NearDriverResult> queryNearDriver( Double lat, Double lng, Double distance, String business) {
+    public Observable<NearDriverResult> queryNearDriver(Double lat, Double lng, Double distance, String business) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .getNearDrivers( lat, lng, distance, business)
+                .getNearDrivers(lat, lng, distance, business)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -136,7 +149,7 @@ public class WorkModel implements WorkContract.Model {
     @Override
     public Observable<QueryOrdersResult> getTaxiOrders(String driverPhone, int page, int size, String status) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .getTaxiOrders(driverPhone,page,size,status)
+                .getTaxiOrders(driverPhone, page, size, status)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -145,7 +158,7 @@ public class WorkModel implements WorkContract.Model {
     @Override
     public Observable<CityLineResult> getCityLineOrders(Long driverId, String appKey) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .getCityLineOrders(driverId,appKey)
+                .getCityLineOrders(driverId, appKey)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

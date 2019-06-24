@@ -63,10 +63,10 @@ public class MqttManager implements LocObserver {
     private String pullTopic;
 
     private RxManager rxManager;
-    private boolean isSubscribe;
+    private boolean isLosingConnect;
 
-    public boolean isSubscribe() {
-        return isSubscribe;
+    public boolean isLosingConnect() {
+        return isLosingConnect;
     }
 
     /**
@@ -229,7 +229,7 @@ public class MqttManager implements LocObserver {
         public void connectComplete(boolean reconnect, String serverURI) {
             Executors.newSingleThreadExecutor().submit(() -> {
                 try {
-                    isSubscribe = true;
+                    isLosingConnect = false;
                     client.subscribe(pullTopic, qos);
                 } catch (MqttException e) {
                     e.printStackTrace();
@@ -241,10 +241,10 @@ public class MqttManager implements LocObserver {
         @Override
         public void connectionLost(Throwable cause) {
             //失去连接
-            if (null != client && isSubscribe) {
+            if (null != client && !isLosingConnect) {
                 try {
                     client.unsubscribe(pullTopic);
-                    isSubscribe = false;
+                    isLosingConnect = true;
                     Log.e(TAG, "取消订阅的topic");
                 } catch (Exception e) {
                     e.fillInStackTrace();

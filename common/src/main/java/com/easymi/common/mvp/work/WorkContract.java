@@ -1,10 +1,8 @@
 package com.easymi.common.mvp.work;
 
 import com.easymi.common.entity.AnnAndNotice;
-import com.easymi.common.entity.CityLine;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
-import com.easymi.common.entity.WorkStatistics;
 import com.easymi.common.push.CountEvent;
 import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.CityLineResult;
@@ -15,7 +13,6 @@ import com.easymi.common.result.QueryOrdersResult;
 import com.easymi.common.result.SettingResult;
 import com.easymi.common.result.SystemResult;
 import com.easymi.common.result.WorkStatisticsResult;
-import com.easymi.component.entity.SystemConfig;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.widget.LoadingButton;
@@ -147,6 +144,8 @@ public interface WorkContract {
          */
         void showRegisterDialog(String companyPhone, int type, String reason);
         void hideRegisterDialog();
+
+        void setTitleStatus(String content);
     }
 
     interface Presenter {
@@ -200,6 +199,8 @@ public interface WorkContract {
          */
         void getAppSetting(long id);
         void loadNoticeAndAnn();
+
+        void getTitleStatus();
     }
 
     interface Model {
@@ -218,6 +219,9 @@ public interface WorkContract {
          * @return
          */
         Observable<EmResult> online(Long driverId, String appKey);
+
+
+        Observable<String> getTitleStatus();
 
         /**
          * 下线

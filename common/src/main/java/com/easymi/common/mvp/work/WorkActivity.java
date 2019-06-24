@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -167,6 +168,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     private OrderRefreshReceiver orderRefreshReceiver;
 
     private WorkPresenter presenter;
+    private TextView tvTitle;
 
     @Override
     public int getLayoutId() {
@@ -210,7 +212,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         if (emLoc != null) {
             receiveLoc(emLoc);
         }
+        presenter.getTitleStatus();
     }
+
 
     private RegisterDialog registerDialog;
     private int lastType = -1;
@@ -260,6 +264,11 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         }
     }
 
+    @Override
+    public void setTitleStatus(String content) {
+        tvTitle.setVisibility(TextUtils.equals(content, "1") ? View.VISIBLE : View.GONE);
+    }
+
     private void initNotifity() {
         notifityClose.setOnClickListener(v -> notifityCon.setVisibility(View.GONE));
     }
@@ -293,6 +302,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
 
         expandableLayout = findViewById(R.id.map_expand);
 
+        tvTitle = findViewById(R.id.tv_title);
         finishNo = findViewById(R.id.finish_no);
         onLineHour = findViewById(R.id.online_time_hour);
         onLineMonute = findViewById(R.id.online_time_minute);
@@ -941,7 +951,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
                         .doOnNext(new Action1<List<MqttResult>>() {
                             @Override
                             public void call(List<MqttResult> mqttResults) {
-                                if (MqttManager.getInstance().isSubscribe()) {
+                                if (!MqttManager.getInstance().isLosingConnect()) {
                                     if (!(mqttResults != null && mqttResults.isEmpty())) {
                                         throw new RuntimeException();
                                     }
@@ -954,7 +964,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
                         .subscribe(new MySubscriber<>(WorkActivity.this, false, false, new NoErrSubscriberListener<List<MqttResult>>() {
                             @Override
                             public void onNext(List<MqttResult> mqttResults) {
-                                if (!MqttManager.getInstance().isSubscribe() || (mqttResults != null && mqttResults.isEmpty())) {
+                                if (MqttManager.getInstance().isLosingConnect() || (mqttResults != null && mqttResults.isEmpty())) {
                                     MqttManager.release();
                                     isStartMqtt = false;
                                     getMqttConfig();

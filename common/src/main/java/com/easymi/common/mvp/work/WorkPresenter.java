@@ -535,6 +535,13 @@ public class WorkPresenter implements WorkContract.Presenter {
                 }));
     }
 
+    @Override
+    public void getTitleStatus() {
+        view.getRxManager().add(model.getTitleStatus()
+                .subscribe(new MySubscriber<>(context, false, false,
+                        s -> view.setTitleStatus(s))));
+    }
+
 
     public void workStatistics() {
         CommApiService api = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class);
