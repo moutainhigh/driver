@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -58,8 +59,12 @@ public class WorkModel implements WorkContract.Model {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .getTitleStatus()
                 .map(new HttpResultFunc2<>())
-                .retryWhen(observable -> observable.delay(30, TimeUnit.SECONDS))
-                .repeatWhen(observable -> observable.delay(30, TimeUnit.SECONDS))
+                .retryWhen(observable
+                        -> observable.flatMap((Func1<Throwable, Observable<?>>) throwable
+                        -> Observable.timer(5, TimeUnit.SECONDS)))
+                .repeatWhen(observable
+                        -> observable.flatMap((Func1<Void, Observable<?>>) aVoid
+                        -> Observable.timer(5, TimeUnit.SECONDS)))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

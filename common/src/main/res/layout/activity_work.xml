@@ -24,7 +24,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
             android:background="@mipmap/corners_alpha_bg"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/ic_laba"
@@ -66,15 +66,15 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
-            android:drawablePadding="6dp"
-            android:paddingStart="10dp"
-            android:drawableStart="@mipmap/work_error"
             android:background="@mipmap/corners_alpha_bg"
+            android:drawableStart="@mipmap/work_error"
+            android:drawablePadding="6dp"
             android:gravity="center_vertical"
+            android:paddingStart="10dp"
             android:text="夜间时段，为了您的安全，将不可接男性乘客订单"
             android:textColor="@android:color/white"
             android:textSize="15sp"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="match_parent"

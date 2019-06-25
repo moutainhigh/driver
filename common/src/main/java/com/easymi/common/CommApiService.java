@@ -69,7 +69,7 @@ public interface CommApiService {
                                                 @Query("range") Double range,
                                                 @Query("serviceType") String serviceType);
 
-    @GET("/api/v1/taxi_online/taxi_online/config/app/driver")
+    @GET("/api/v1/taxi_online/config/app/driver")
     Observable<EmResult2<String>> getTitleStatus();
 
     /**
