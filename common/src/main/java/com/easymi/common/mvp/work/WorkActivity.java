@@ -941,7 +941,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
                         .doOnNext(new Action1<List<MqttResult>>() {
                             @Override
                             public void call(List<MqttResult> mqttResults) {
-                                if (MqttManager.getInstance().isSubscribe()) {
+                                if (!MqttManager.getInstance().isLosingConnect()) {
                                     if (!(mqttResults != null && mqttResults.isEmpty())) {
                                         throw new RuntimeException();
                                     }
@@ -954,7 +954,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
                         .subscribe(new MySubscriber<>(WorkActivity.this, false, false, new NoErrSubscriberListener<List<MqttResult>>() {
                             @Override
                             public void onNext(List<MqttResult> mqttResults) {
-                                if (!MqttManager.getInstance().isSubscribe() || (mqttResults != null && mqttResults.isEmpty())) {
+                                if (MqttManager.getInstance().isLosingConnect() || (mqttResults != null && mqttResults.isEmpty())) {
                                     MqttManager.release();
                                     isStartMqtt = false;
                                     getMqttConfig();
