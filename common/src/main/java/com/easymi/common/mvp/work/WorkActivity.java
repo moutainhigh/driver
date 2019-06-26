@@ -955,6 +955,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
                             @Override
                             public void onNext(List<MqttResult> mqttResults) {
                                 if (MqttManager.getInstance().isLosingConnect() || (mqttResults != null && mqttResults.isEmpty())) {
+                                    Log.e("MqttManager", "onRelease" );
                                     MqttManager.release();
                                     isStartMqtt = false;
                                     getMqttConfig();

@@ -97,8 +97,7 @@ public class LocService extends Service implements AMapLocationListener {
         AMapLocationClientOption mLocationOption = new AMapLocationClientOption()
                 .setInterval(scanTime)
                 .setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.Transport)
-                .setGpsFirst(true)
-                .setWifiScan(true)
+//                .setWifiScan(true)
                 .setLocationCacheEnable(false)
                 .setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy)
                 .setNeedAddress(true)
@@ -184,7 +183,10 @@ public class LocService extends Service implements AMapLocationListener {
     public void onLocationChanged(AMapLocation amapLocation) {
         if (amapLocation != null) {
             if (amapLocation.getErrorCode() == AMapLocation.LOCATION_SUCCESS) {
-
+                Log.e("LocService", "onLocationChanged" +  amapLocation.getAccuracy()+"   "+amapLocation.getLocationType());
+                if (amapLocation.getLocationType() == AMapLocation.LOCATION_TYPE_WIFI) {
+                    return;
+                }
 //                FileUtil.saveLog(this, "loc suc \n\n");
 
                 EmLoc locationInfo = EmLoc.ALocToLoc(amapLocation);

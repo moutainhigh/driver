@@ -93,6 +93,7 @@ public class MqttManager implements LocObserver {
      * 释放单例, 及其所引用的资源
      */
     public static void release() {
+        Log.e("MqttManager", "onRelease");
         LocReceiver.getInstance().deleteObserver(getInstance());
         try {
             if (mInstance != null) {
@@ -142,7 +143,6 @@ public class MqttManager implements LocObserver {
         // 心跳包发送间隔，单位：秒
         conOpt.setKeepAliveInterval(10);
         conOpt.setAutomaticReconnect(true);
-
         String message = "{\"terminal_uid\":\"" + clientId + "\"}";
         conOpt.setWill(pullTopic, message.getBytes(), qos, false);
 
@@ -227,6 +227,7 @@ public class MqttManager implements LocObserver {
     private MqttCallback mCallback = new MqttCallbackExtended() {
         @Override
         public void connectComplete(boolean reconnect, String serverURI) {
+            Log.e("MqttManager", "connectComplete" + " " + serverURI);
             Executors.newSingleThreadExecutor().submit(() -> {
                 try {
                     isLosingConnect = false;
@@ -240,6 +241,8 @@ public class MqttManager implements LocObserver {
 
         @Override
         public void connectionLost(Throwable cause) {
+            Log.e("MqttManager", "connectionLost" + cause.getMessage() + " " + cause.getLocalizedMessage());
+
             //失去连接
             if (null != client && !isLosingConnect) {
                 try {
