@@ -212,7 +212,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         if (emLoc != null) {
             receiveLoc(emLoc);
         }
-        if (EmUtil.getEmployInfo() != null && TextUtils.equals("special", EmUtil.getEmployInfo().serviceType)) {
+        if (EmUtil.getEmployInfo() != null &&
+                TextUtils.equals(Config.ZHUANCHE, EmUtil.getEmployInfo().serviceType) &&
+                EmUtil.getEmployInfo().sex == 2) {
             presenter.getTitleStatus();
         }
     }
