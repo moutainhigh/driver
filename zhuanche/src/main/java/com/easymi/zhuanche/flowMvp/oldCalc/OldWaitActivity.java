@@ -177,10 +177,6 @@ public class OldWaitActivity extends RxBaseActivity implements FlowContract.View
         return mRxManager;
     }
 
-    @Override
-    public void reRout() {
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

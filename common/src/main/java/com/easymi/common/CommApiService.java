@@ -5,6 +5,7 @@ import com.easymi.common.entity.BusinessList;
 import com.easymi.common.entity.CompanyList;
 import com.easymi.common.entity.MqttConfig;
 import com.easymi.common.entity.MqttResult;
+import com.easymi.common.entity.NearDriver;
 import com.easymi.common.entity.Pic;
 import com.easymi.common.entity.PushAnnouncement;
 import com.easymi.common.entity.QiNiuToken;
@@ -15,7 +16,6 @@ import com.easymi.common.result.CityLineResult;
 import com.easymi.common.result.GetFeeResult;
 import com.easymi.common.result.LoginResult;
 import com.easymi.common.result.MultipleOrderResult;
-import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.OnLineTimeResult;
 import com.easymi.common.result.PCOrderResult;
@@ -64,7 +64,7 @@ public interface CommApiService {
      * @return
      */
     @GET("api/v1/public/driver/ranges")
-    Observable<NearDriverResult> getNearDrivers(@Query("lat") Double lat,
+    Observable<EmResult2<List<NearDriver>>> getNearDrivers(@Query("lat") Double lat,
                                                 @Query("lng") Double lng,
                                                 @Query("range") Double range,
                                                 @Query("serviceType") String serviceType);

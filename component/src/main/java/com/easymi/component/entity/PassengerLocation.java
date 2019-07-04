@@ -1,4 +1,4 @@
-package com.easymi.common.entity;
+package com.easymi.component.entity;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
@@ -33,4 +33,14 @@ public class PassengerLocation {
      */
     public String serviceType;
 
+    @Override
+    public String toString() {
+        return "PassengerLocation{" +
+                "passengerId=" + passengerId +
+                ", orderId=" + orderId +
+                ", longitude=" + longitude +
+                ", latitude=" + latitude +
+                ", serviceType='" + serviceType + '\'' +
+                '}';
+    }
 }

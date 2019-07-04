@@ -6,8 +6,8 @@ android {
         applicationId "com.easymin.daijia.driver.zyziyunsjdaijia"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 9500
-        versionName "V6.1.8.00"
+        versionCode 9605
+        versionName "V6.1.9.05"
         multiDexEnabled true
         flavorDimensions "App" //同在App这个名字维度
         ndk {
@@ -60,7 +60,7 @@ android {
     //V6（系统）.prepare（环境）.20190330（日期）.driver（端）.01（序号）
     applicationVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "V6.${variant.productFlavors[0].name}.${releaseDate()}.driver.${releaseTime()}.apk"
+            outputFileName = "V6.${variant.productFlavors[0].name}.${releaseTime()}.driver.apk"
         }
     }
 
@@ -75,7 +75,7 @@ android {
         //局域网环境
         local {
             dimension "App"//同在App这个名字维度
-            buildConfigField "String", "HOST", '"http://10.10.2.40:10001/"'
+            buildConfigField "String", "HOST", '"http://10.10.2.12:10001/"'
             buildConfigField "String", "H5_HOST", '"http://h5.xiaokakj.cn/"'
             buildConfigField "String", "IMG_SERVER", '"https://assets.xiaokakj.com/"'
         }
@@ -106,7 +106,7 @@ android {
 }
 
 static def releaseTime() {
-    return new Date().format("HHmm")
+    return new Date().format("yyyyMMddHHmm")
 }
 
 static def releaseDate() {

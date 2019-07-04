@@ -1,11 +1,17 @@
 package com.easymi.component.activity;
 
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Marker;
+import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.navi.AMapNavi;
 import com.amap.api.navi.AMapNaviListener;
 import com.amap.api.navi.AMapNaviView;
@@ -25,23 +31,38 @@ import com.amap.api.navi.model.AimLessModeStat;
 import com.amap.api.navi.model.NaviInfo;
 import com.amap.api.navi.model.NaviLatLng;
 import com.autonavi.tbt.TrafficFacilityInfo;
+import com.easymi.component.ComponentService;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
 import com.easymi.component.R;
-import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.DymOrder;
+import com.easymi.component.entity.PassengerLcResult;
+import com.easymi.component.entity.PassengerLocation;
+import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.MySubscriber;
+import com.easymi.component.push.PushEvent;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName:
+ *
  * @Author: shine
  * Date: 2018/12/24 下午5:00
  * Description:
@@ -71,20 +92,60 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
     LinearLayout simpleFeeCon;
     TextView lcTxt;
     TextView feeTxt;
+    private PassengerLocation mPlocation;
+    private Marker plMaker;
 
     @Override
     public int getLayoutId() {
         return R.layout.activity_navi;
     }
 
+
+    public void addPlMaker() {
+        LatLng latLng = new LatLng(mPlocation.latitude, mPlocation.longitude);
+        if (plMaker == null) {
+            MarkerOptions markerOption = new MarkerOptions();
+            markerOption.position(latLng);
+            markerOption.draggable(false);//设置Marker可拖动
+            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                    .decodeResource(getResources(), R.mipmap.ic_passenger_location)));
+            plMaker = mAMapNaviView.getMap().addMarker(markerOption);
+        } else {
+            plMaker.setPosition(latLng);
+        }
+    }
+
+    public void plChange(PassengerLocation plocation) {
+        //订单只有在前往目的地前显示
+        if (plocation != null) {
+            mPlocation = plocation;
+            addPlMaker();
+        }
+    }
+
+    public void passengerLoc(long orderId) {
+        Observable<PassengerLcResult> observable = ApiManager.getInstance().createApi(Config.HOST, ComponentService.class)
+                .passengerLoc(orderId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        observable.subscribe(new MySubscriber<>(this, false, false, passengerLcResult -> {
+            if (passengerLcResult.getCode() == 1) {
+                plChange(passengerLcResult.data);
+            }
+        }));
+    }
+
     @Override
     public void initViews(Bundle savedInstanceState) {
-
+        EventBus.getDefault().register(this);
         mStartLatlng = getIntent().getParcelableExtra("startLatlng");
         mEndLatlng = getIntent().getParcelableExtra("endLatlng");
-
-        orderId = getIntent().getLongExtra("orderId", -1);
         orderType = getIntent().getStringExtra("orderType");
+        orderId = getIntent().getLongExtra("orderId", -1);
+        if (TextUtils.equals(Config.ZHUANCHE, orderType)) {
+            passengerLoc(orderId);
+        }
         naviMode = getIntent().getIntExtra(Config.NAVI_MODE, Config.DRIVE_TYPE);
 
         wayPoints = getIntent().getParcelableArrayListExtra("wayPoints");
@@ -100,7 +161,6 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
         mAMapNaviView = findViewById(R.id.navi_view);
         mAMapNaviView.onCreate(savedInstanceState);
         mAMapNaviView.setAMapNaviViewListener(this);
-
         mAMapNavi = AMapNavi.getInstance(this);
         mAMapNavi.addAMapNaviListener(this);
         mAMapNavi.setUseInnerVoice(true);
@@ -189,12 +249,20 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
         //mAMapNavi是全局的，执行订单页面还需要用，所以这里不能销毁资源
         mAMapNavi.stopNavi();
         mAMapNavi.destroy();
+        EventBus.getDefault().unregister(this);
 //        XApp.getInstance().stopVoice();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPushEvent(PushEvent event) {
+        if (TextUtils.equals(Config.ZHUANCHE, orderType)) {
+            plChange(event.getPassengerLocation());
+        }
     }
 
     @Override
     public void onInitNaviFailure() {
-        Log.e("NaviActivity","初始化导航失败");
+        Log.e("NaviActivity", "初始化导航失败");
     }
 
     @Override
@@ -202,31 +270,31 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
         if (naviMode == Config.WALK_TYPE) {
             mAMapNavi.calculateWalkRoute(mStartLatlng, mEndLatlng);
         } else {
-            /**
-             * 方法: int strategy=mAMapNavi.strategyConvert(congestion, avoidhightspeed, cost, hightspeed, multipleroute); 参数:
-             *
-             * @congestion 躲避拥堵
-             * @avoidhightspeed 不走高速
-             * @cost 避免收费
-             * @hightspeed 高速优先
-             * @multipleroute 多路径
-             *
-             *  说明: 以上参数都是boolean类型，其中multipleroute参数表示是否多条路线，如果为true则此策略会算出多条路线。
-             *  注意: 不走高速与高速优先不能同时为true 高速优先与避免收费不能同时为true
-             */
-            int strategy = 0;
-            try {
-                //再次强调，最后一个参数为true时代表多路径，否则代表单路径
-                strategy = mAMapNavi.strategyConvert(
-                        XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, false),
-                        XApp.getMyPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
-                        XApp.getMyPreferences().getBoolean(Config.SP_COST, false),
-                        XApp.getMyPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
-                        false);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            mAMapNavi.calculateDriveRoute(sList, eList, wayPoints, strategy);
+//            /**
+//             * 方法: int strategy=mAMapNavi.strategyConvert(congestion, avoidhightspeed, cost, hightspeed, multipleroute); 参数:
+//             *
+//             * @congestion 躲避拥堵
+//             * @avoidhightspeed 不走高速
+//             * @cost 避免收费
+//             * @hightspeed 高速优先
+//             * @multipleroute 多路径
+//             *
+//             *  说明: 以上参数都是boolean类型，其中multipleroute参数表示是否多条路线，如果为true则此策略会算出多条路线。
+//             *  注意: 不走高速与高速优先不能同时为true 高速优先与避免收费不能同时为true
+//             */
+//            int strategy = 0;
+//            try {
+//                //再次强调，最后一个参数为true时代表多路径，否则代表单路径
+//                strategy = mAMapNavi.strategyConvert(
+//                        XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, false),
+//                        XApp.getMyPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
+//                        XApp.getMyPreferences().getBoolean(Config.SP_COST, false),
+//                        XApp.getMyPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
+//                        false);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+            mAMapNavi.calculateDriveRoute(sList, eList, null, 2);
         }
 
     }
@@ -273,12 +341,12 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     @Override
     public void onReCalculateRouteForYaw() {
-        XApp.getInstance().syntheticVoice("您已偏航，正在重新规划路径");
+//        XApp.getInstance().syntheticVoice("您已偏航，正在重新规划路径");
     }
 
     @Override
     public void onReCalculateRouteForTrafficJam() {
-        XApp.getInstance().syntheticVoice("为躲避拥堵，正在重新规划路径");
+//        XApp.getInstance().syntheticVoice("为躲避拥堵，正在重新规划路径");
     }
 
     @Override

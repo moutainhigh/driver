@@ -6,7 +6,6 @@ import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.amap.api.navi.AMapNavi;
@@ -38,7 +37,6 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.rxmvp.RxManager;
-import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.widget.CustomSlideToUnlockView;
@@ -660,11 +658,6 @@ public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener
     @Override
     public RxManager getManager() {
         return mRxManager;
-    }
-
-    @Override
-    public void reRout() {
-
     }
 
 

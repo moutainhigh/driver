@@ -18,7 +18,6 @@ import com.easymi.common.CommApiService;
 import com.easymi.common.R;
 import com.easymi.common.entity.Address;
 import com.easymi.common.entity.MultipleOrder;
-import com.easymi.common.entity.PassengerLocation;
 import com.easymi.common.entity.PushAnnouncement;
 import com.easymi.common.mvp.grab.GrabActivity2;
 import com.easymi.common.mvp.work.WorkActivity;
@@ -28,9 +27,11 @@ import com.easymi.common.result.SettingResult;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
 import com.easymi.component.EmployStatus;
+import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.Employ;
+import com.easymi.component.entity.PassengerLocation;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.GsonUtil;
 import com.easymi.component.network.HaveErrSubscriberListener;
@@ -216,7 +217,8 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 String orderType = jbData.optString("orderType");
                 DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
                 if (dymOrder != null) {
-                    if (dymOrder.distance > jbData.optDouble("distance")) {
+                    double currentDistance = new BigDecimal(jbData.optDouble("distance") / 1000).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    if (dymOrder.distance > currentDistance) {
                         return;
                     }
                     dymOrder.startFee = jbData.optDouble("startFee");
@@ -229,7 +231,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                     dymOrder.minestMoney = jbData.optDouble("minCost");
 
                     dymOrder.disFee = jbData.optDouble("distanceFee");
-                    dymOrder.distance = new BigDecimal(jbData.optDouble("distance") / 1000).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    dymOrder.distance = currentDistance;
                     //add
                     dymOrder.addDistance = jbData.optDouble("addDistance");
                     dymOrder.addFee = jbData.optDouble("addFee");
@@ -276,12 +278,18 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                     XApp.getEditor().putLong("flashAssign_orderId", order.orderId).apply();
 
                     XApp.getInstance().shake();
+                    XApp.getInstance().syntheticVoice("您有新的快速指派订单需要处理");
                     if (StringUtils.isNotBlank(order.serviceType)) {
                         if (order.serviceType.equals(Config.ZHUANCHE)) {
-                            ARouter.getInstance()
-                                    .build("/zhuanche/FlowActivity")
-                                    .withBoolean("flashAssign", true)
-                                    .withLong("orderId", order.orderId).navigation();
+                            handler.post(() -> {
+                                if (ActManager.getInstance().existActivity("zhuanche.flowMvp.FlowActivity")) {
+                                    ActManager.getInstance().finishActivity("zhuanche.flowMvp.FlowActivity");
+                                }
+                                ARouter.getInstance()
+                                        .build("/zhuanche/FlowActivity")
+                                        .withBoolean("flashAssign", true)
+                                        .withLong("orderId", order.orderId).navigation();
+                            });
                         } else if (order.serviceType.equals(Config.TAXI)) {
                             ARouter.getInstance()
                                     .build("/taxi/FlowActivity")

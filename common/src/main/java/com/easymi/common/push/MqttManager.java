@@ -5,10 +5,13 @@ import android.text.TextUtils;
 import com.easymi.common.CommApiService;
 import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.result.GetFeeResult;
+import com.easymi.common.result.VehicleResult;
 import com.easymi.common.util.BuildPushUtil;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.EmLoc;
+import com.easymi.component.entity.Employ;
+import com.easymi.component.entity.Vehicle;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.network.ApiManager;
@@ -21,19 +24,26 @@ import com.easymi.component.utils.FileUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.NetUtil;
 import com.easymi.component.utils.StringUtils;
+import com.easymi.component.utils.TimeUtil;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
+import org.eclipse.paho.client.mqttv3.DisconnectedBufferOptions;
+import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-import java.util.concurrent.Executors;
+import java.util.ArrayList;
+import java.util.List;
 
 import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -45,7 +55,7 @@ import rx.schedulers.Schedulers;
  */
 public class MqttManager implements LocObserver {
 
-    private static String TAG = MqttManager.class.getSimpleName();
+    private static String TAG = "MqttManager";
 
     // 单例
     private static MqttManager mInstance = null;
@@ -58,16 +68,11 @@ public class MqttManager implements LocObserver {
     private MqttAndroidClient client;
     private MqttConnectOptions conOpt;
 
-    private boolean isConnecting = false;
 
     private String pullTopic;
 
     private RxManager rxManager;
-    private boolean isLosingConnect;
-
-    public boolean isLosingConnect() {
-        return isLosingConnect;
-    }
+    private Subscription subscription;
 
     /**
      * 初始化
@@ -93,6 +98,7 @@ public class MqttManager implements LocObserver {
      * 释放单例, 及其所引用的资源
      */
     public static void release() {
+        Log.e("MqttManager", "onRelease");
         LocReceiver.getInstance().deleteObserver(getInstance());
         try {
             if (mInstance != null) {
@@ -109,23 +115,19 @@ public class MqttManager implements LocObserver {
      *
      * @return
      */
-    public synchronized boolean creatConnect() {
+    public void creatConnect() {
 
         if (!XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false)) {
             //未登陆 不连接
-            return false;
+            return;
         }
 
-        if (isConnecting) {
-            //正在连接，不连接
-            return false;
-        }
         if (isConnected()) {
             //client连接起的  不连接
-            return false;
+            return;
         }
         if (TextUtils.isEmpty(Config.MQTT_TOPIC)) {
-            return false;
+            return;
         }
 
         pullTopic = "/trip/driver" + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
@@ -140,18 +142,57 @@ public class MqttManager implements LocObserver {
         // 设置超时时间，单位：秒
         conOpt.setConnectionTimeout(5);
         // 心跳包发送间隔，单位：秒
-        conOpt.setKeepAliveInterval(10);
+        conOpt.setKeepAliveInterval(5);
+        //自己处理了重连事件
         conOpt.setAutomaticReconnect(true);
-
         String message = "{\"terminal_uid\":\"" + clientId + "\"}";
         conOpt.setWill(pullTopic, message.getBytes(), qos, false);
 
         client = new MqttAndroidClient(XApp.getInstance(), brokerUrl, clientId);
 
-        client.setCallback(mCallback);
-        doConnect();
+        client.setCallback(new MqttCallbackExtended() {
+            @Override
+            public void connectComplete(boolean reconnect, String serverURI) {
+                Log.e("MqttManager", "connectComplete  " + reconnect);
+                saveData("connectComplete     " + reconnect);
+                try {
+                    client.subscribe(pullTopic, qos, null, new IMqttActionListener() {
+                        @Override
+                        public void onSuccess(IMqttToken asyncActionToken) {
+                            Log.e("MqttManager", "subscribeSuccess");
+                            saveData("subscribeSuccess");
+                        }
 
-        return true;
+                        @Override
+                        public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                            Log.e("MqttManager", "subscribeFail");
+                        }
+                    });
+                } catch (MqttException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void connectionLost(Throwable cause) {
+                //失去连接
+                Log.e(TAG, "connectionLost");
+                saveData("connectionLost");
+            }
+
+            @Override
+            public void messageArrived(String topic, MqttMessage message) throws Exception {
+                String str1 = new String(message.getPayload());
+                Log.e(TAG, "MqttReceivePull:" + str1);
+                HandlePush.getInstance().handPush(str1);
+            }
+
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken token) {
+
+            }
+        });
+        doConnect();
     }
 
     /**
@@ -159,19 +200,68 @@ public class MqttManager implements LocObserver {
      *
      * @return
      */
-    private synchronized boolean doConnect() {
-        isConnecting = false;
-
+    private void doConnect() {
         if (client != null) {
             try {
-                client.connect(conOpt);
-                Log.e(TAG, "Connected to " + client.getServerURI() + " with client ID " + client.getClientId());
-                isConnecting = true;
+                client.connect(conOpt, null, new IMqttActionListener() {
+                    @Override
+                    public void onSuccess(IMqttToken asyncActionToken) {
+                        DisconnectedBufferOptions disconnectedBufferOptions = new DisconnectedBufferOptions();
+                        disconnectedBufferOptions.setBufferEnabled(true);
+                        disconnectedBufferOptions.setBufferSize(100);
+                        disconnectedBufferOptions.setPersistBuffer(false);
+                        disconnectedBufferOptions.setDeleteOldestMessages(false);
+                        client.setBufferOpts(disconnectedBufferOptions);
+                        Log.e("MqttManager", "connectSuccess");
+                        saveData("connectSuccess");
+                    }
+
+                    @Override
+                    public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                        Log.e("MqttManager", "connectFailure   " + exception.getMessage());
+                        saveData("connectFailure");
+                    }
+                });
             } catch (Exception e) {
                 Log.e(TAG, "doConnect exception-->" + e.getMessage());
             }
         }
-        return isConnecting;
+    }
+
+
+    private void getModelId(Employ employ) {
+        if (subscription == null) {
+            subscription = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                    .driverehicle()
+                    .filter(new HttpResultFunc<>())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new MySubscriber<>(null, false,
+                            true, new HaveErrSubscriberListener<VehicleResult>() {
+                        @Override
+                        public void onNext(VehicleResult result) {
+                            if (result == null || result.getCode() != 1) {
+                            } else {
+                                String driverService = EmUtil.getEmployInfo().serviceType;
+                                if (result.data != null && result.data.size() > 0) {
+                                    for (Vehicle vehicle : result.data) {
+                                        if (vehicle.serviceType.contains(driverService)) {
+                                            vehicle.saveOrUpdate(employ.id);
+                                            employ.modelId = vehicle.vehicleModel;
+                                            employ.updateAll();
+                                        }
+                                    }
+                                }
+                            }
+                            subscription = null;
+                        }
+
+                        @Override
+                        public void onError(int code) {
+                            subscription = null;
+                        }
+                    }));
+        }
     }
 
     /**
@@ -185,11 +275,17 @@ public class MqttManager implements LocObserver {
         }
 
         if (client != null && client.isConnected()) {
+
+            Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, 0));
+            if (employ.modelId == 0) {
+                getModelId(employ);
+                return;
+            }
             MqttMessage message = new MqttMessage(pushStr.getBytes());
             message.setQos(qos);
             try {
                 client.publish(Config.MQTT_TOPIC, message);
-                Log.e("MqttManager", "push loc data--->" + pushStr);
+//                Log.e("MqttManager", "push loc data--->" + pushStr);
             } catch (MqttException e) {
                 Log.e(TAG, "Publishing msg exception " + e.getMessage());
             }
@@ -221,49 +317,26 @@ public class MqttManager implements LocObserver {
         }
     }
 
-    /**
-     * 回调
-     */
-    private MqttCallback mCallback = new MqttCallbackExtended() {
-        @Override
-        public void connectComplete(boolean reconnect, String serverURI) {
-            Executors.newSingleThreadExecutor().submit(() -> {
-                try {
-                    isLosingConnect = false;
-                    client.subscribe(pullTopic, qos);
-                } catch (MqttException e) {
-                    e.printStackTrace();
-                }
 
-            });
+    private List<String> getData() {
+        String temp = XApp.getMyPreferences().getString("getMqttTemp", "");
+        List<String> data;
+        if (!TextUtils.isEmpty(temp)) {
+            data = new Gson().fromJson(temp, new TypeToken<List<String>>() {
+            }.getType());
+        } else {
+            data = new ArrayList<>();
         }
+        return data;
+    }
 
-        @Override
-        public void connectionLost(Throwable cause) {
-            //失去连接
-            if (null != client && !isLosingConnect) {
-                try {
-                    client.unsubscribe(pullTopic);
-                    isLosingConnect = true;
-                    Log.e(TAG, "取消订阅的topic");
-                } catch (Exception e) {
-                    e.fillInStackTrace();
-                }
-            }
-        }
 
-        @Override
-        public void messageArrived(String topic, MqttMessage message) throws Exception {
-            String str1 = new String(message.getPayload());
-            Log.e(TAG, "MqttReceivePull:" + str1);
-            HandlePush.getInstance().handPush(str1);
-        }
+    private void saveData(String data) {
+        List<String> cache = getData();
+        cache.add(TimeUtil.getTime("HH:mm:ss", System.currentTimeMillis()) + "   " + data);
+        XApp.getEditor().putString("getMqttTemp", new Gson().toJson(cache)).apply();
+    }
 
-        @Override
-        public void deliveryComplete(IMqttDeliveryToken token) {
-
-        }
-    };
 
     @Override
     public void receiveLoc(EmLoc loc) {
@@ -323,7 +396,7 @@ public class MqttManager implements LocObserver {
 //                    FileUtil.savePushCache(XApp.getInstance(), new Gson().toJson(beanList));//只保存位置的list
 //                }
             }
-            creatConnect();
+//            creatConnect();
             //更改到断连就http上报
             gpsPush(pushStr);
         }

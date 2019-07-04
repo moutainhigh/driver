@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -13,9 +12,6 @@ import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -42,13 +38,11 @@ import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.AlexStatusBarUtils;
 import com.easymi.component.utils.CsEditor;
-import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.GPSUtils;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MacUtils;
 import com.easymi.component.utils.MobileInfoUtil;
-import com.easymi.component.utils.NumberToHanzi;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.RsaUtils;
 import com.easymi.component.utils.SHA256Util;
@@ -112,10 +106,10 @@ public class LoginActivity extends RxBaseActivity {
     public void initViews(Bundle savedInstanceState) {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);//禁止截屏
 
-        Intent intent222 = new Intent(Intent.ACTION_VIEW, Uri.parse("customscheme://com.rvakva.travel.publicdriver/local_push?title=华为测试"));
-        intent222.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        String intentUri = intent222.toUri(Intent.URI_INTENT_SCHEME);
-        Log.e("intentUri", intentUri);
+//        Intent intent222 = new Intent(Intent.ACTION_VIEW, Uri.parse("customscheme://com.rvakva.travel.publicdriver/local_push?title=华为测试"));
+//        intent222.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        String intentUri = intent222.toUri(Intent.URI_INTENT_SCHEME);
+//        Log.e("intentUri", intentUri);
 
         loginBtn = findViewById(R.id.login_button);
         loginBtn.setOnClickListener(v -> {
@@ -472,6 +466,8 @@ public class LoginActivity extends RxBaseActivity {
                 for (ZCSetting sub : settingResult.data) {
                     if (sub.serviceType.equals(Config.ZHUANCHE) ||
                             sub.serviceType.equals(Config.CARPOOL)) {
+                        Log.e("LoginActivity", "getSetting" +sub.emploiesKm);
+
                         ZCSetting.deleteAll();
                         sub.save();
                     } else if (sub.serviceType.equals(Config.TAXI)) {

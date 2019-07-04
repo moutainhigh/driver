@@ -1,6 +1,6 @@
 package com.easymi.common.push;
 
-import com.easymi.common.entity.PassengerLocation;
+import com.easymi.component.entity.PassengerLocation;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.

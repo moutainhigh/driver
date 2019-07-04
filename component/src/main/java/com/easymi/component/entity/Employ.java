@@ -7,9 +7,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.easymi.component.db.SqliteHelper;
-import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.Log;
-import com.google.gson.annotations.SerializedName;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -507,8 +504,8 @@ public class Employ implements Parcelable {
         values.put("modelId", modelId);
         values.put("taxiModelId", taxiModelId);
         values.put("registerStatus", registerStatus);
-        values.put("qrCodeUrl",qrCodeUrl);
-        values.put("serviceTel",serviceTel);
+        values.put("qrCodeUrl", qrCodeUrl);
+        values.put("serviceTel", serviceTel);
         /*
          * values.put("age", age); values.put("jialing", jialing);
          */
@@ -932,10 +929,10 @@ public class Employ implements Parcelable {
         values.put("balance", balance);
         values.put("modelId", modelId);
         values.put("taxiModelId", taxiModelId);
-        values.put("serviceTel",serviceTel);
+        values.put("serviceTel", serviceTel);
 
         values.put("registerStatus", registerStatus);
-        values.put("qrCodeUrl",qrCodeUrl);
+        values.put("qrCodeUrl", qrCodeUrl);
 
         boolean flag = db.update("t_driverinfo", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
