@@ -43,7 +43,6 @@ dependencies {
     api rootProject.ext.viewPagerIndicator
     api rootProject.ext.magicIndicator
     api rootProject.ext.gifDrawable
-    api rootProject.ext.eventbus
     annotationProcessor rootProject.ext.aroutercompiler
     api project(path: ':securitycenter')
 

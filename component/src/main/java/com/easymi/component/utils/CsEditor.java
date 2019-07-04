@@ -37,7 +37,7 @@ public class CsEditor {
         if (TextUtils.isEmpty(value)) {
             getEditor().remove(key);
         } else {
-            if (TextUtils.equals(key, "testLocation")) {
+            if (TextUtils.equals(key, "getMqttTemp")) {
                 getEditor().putString(key, value);
             } else {
                 getEditor().putString(key, EncApi.getInstance().en(new Loader().getRsaPs().substring(0, 16), value));

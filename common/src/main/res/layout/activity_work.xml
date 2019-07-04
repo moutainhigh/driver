@@ -209,18 +209,13 @@
                 android:textSize="14sp"
                 android:visibility="gone" />
 
-            <android.support.v4.widget.SwipeRefreshLayout
+            <com.easymi.component.widget.SwipeRecyclerView
                 android:id="@+id/swipe_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp">
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </android.support.v4.widget.SwipeRefreshLayout>
+            </com.easymi.component.widget.SwipeRecyclerView>
         </FrameLayout>
 
         <LinearLayout
@@ -405,37 +400,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </net.cachapa.expandablelayout.ExpandableLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/guide_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#cc000000"
-        android:clickable="true"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_notify_set_icon" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:src="@mipmap/ic_text" />
-
-
-        <ImageView
-            android:id="@+id/guide_go_to_set"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:src="@mipmap/go_to_set" />
 
     </LinearLayout>
 

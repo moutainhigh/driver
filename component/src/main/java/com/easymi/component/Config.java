@@ -159,7 +159,7 @@ public class Config {
     public static final String SCHEDULE_FINISH = "com.easymi.v5driver.SCHEDULE_FINISH";
 
     //固定定位时间 毫秒
-    public static final int NORMAL_LOC_TIME = 5000;
+    public static final int NORMAL_LOC_TIME = 3000;
     //是否纠偏
     public static final boolean NEED_TRACE = false;
     //是否保存位置信息

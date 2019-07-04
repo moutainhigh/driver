@@ -183,36 +183,35 @@ public class LocService extends Service implements AMapLocationListener {
     public void onLocationChanged(AMapLocation amapLocation) {
         if (amapLocation != null) {
             if (amapLocation.getErrorCode() == AMapLocation.LOCATION_SUCCESS) {
-                Log.e("LocService", "onLocationChanged" +  amapLocation.getAccuracy()+"   "+amapLocation.getLocationType());
-                if (amapLocation.getLocationType() == AMapLocation.LOCATION_TYPE_WIFI) {
-                    return;
+                if (amapLocation.getLocationType() == AMapLocation.LOCATION_TYPE_GPS) {
+                    if (amapLocation.getAccuracy() > 200) {
+                        return;
+                    }
+                } else if (amapLocation.getLocationType() == AMapLocation.LOCATION_TYPE_WIFI) {
+                    if (amapLocation.getAccuracy() > 300) {
+                        return;
+                    }
+                } else {
+                    if (amapLocation.getAccuracy() > 800) {
+                        return;
+                    }
                 }
-//                FileUtil.saveLog(this, "loc suc \n\n");
 
                 EmLoc locationInfo = EmLoc.ALocToLoc(amapLocation);
-
-                Log.e("locPos", "emLoc>>>>" + locationInfo.toString());
-
+                Log.e("locService", "emLoc>>>>" + locationInfo.toString());
                 Intent intent = new Intent(LocService.this, LocReceiver.class);
                 intent.setAction(LOC_CHANGED);
                 intent.putExtra("locPos", new Gson().toJson(locationInfo));
                 sendBroadcast(intent);//发送位置变化广播
 
-//                if (needTrace()) {
-//                    startTrace();
-//                } else {
-//                    stopTrace();
-//                }
-
             } else {
                 //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
-                Log.e("AmapError", "location Error, ErrCode:"
+                Log.e("locService", "location Error, ErrCode:"
                         + amapLocation.getErrorCode() + ", errInfo:"
                         + amapLocation.getErrorInfo());
-
-//                FileUtil.saveLog(this, "loc failed \n\n");
             }
         }
+
     }
 
     private Notification buildNotification() {

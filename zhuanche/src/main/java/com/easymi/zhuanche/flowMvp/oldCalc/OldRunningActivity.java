@@ -5,7 +5,6 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import com.easymi.component.utils.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -23,6 +22,7 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.utils.Log;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.zhuanche.R;
 import com.easymi.zhuanche.entity.Address;
@@ -357,10 +357,6 @@ public class OldRunningActivity extends RxBaseActivity implements FlowContract.V
         return mRxManager;
     }
 
-    @Override
-    public void reRout() {
-
-    }
 
     private void showView() {
         DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.ZHUANCHE);

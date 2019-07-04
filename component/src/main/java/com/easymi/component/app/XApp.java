@@ -101,6 +101,11 @@ public class XApp extends MultiDexApplication {
 
         int lastVersion = getMyPreferences().getInt(Config.SP_VERSION, 0);
         int current = SysUtil.getVersionCode(this);
+
+//        if (current == 9500) {
+//            ZCSetting.deleteAll();
+//        }
+//        getEditor().putString("getMqttTemp","");
         if (current > lastVersion) {
             getEditor().clear()
                     .putLong(Config.SP_DRIVERID, -1)

@@ -1,6 +1,5 @@
-package com.easymi.zhuanche.result;
+package com.easymi.component.entity;
 
-import com.easymi.common.entity.PassengerLocation;
 import com.easymi.component.result.EmResult;
 
 /**

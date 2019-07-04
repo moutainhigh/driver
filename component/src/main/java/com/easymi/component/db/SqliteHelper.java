@@ -1,13 +1,10 @@
 package com.easymi.component.db;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import com.easymi.component.app.XApp;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -16,7 +13,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "data.db";
 
-    private static final int VERSION = 80;
+    private static final int VERSION = 90;
 
     private StringBuffer sqlBuf;
 
@@ -312,6 +309,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("id").append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
                 .append("isPaid").append(" ").append("INTEGER").append(",")
                 .append("isExpenses").append(" ").append("INTEGER").append(",")
+                .append("emploiesKm").append(" ").append("DOUBLE").append(",")
                 .append("canCancelOrder").append(" ").append("INTEGER").append(",")
                 .append("isAddPrice").append(" ").append("INTEGER").append(",")
                 .append("employChangePrice").append(" ").append("INTEGER").append(",")
