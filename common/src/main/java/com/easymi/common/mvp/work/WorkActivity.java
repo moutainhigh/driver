@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -147,6 +148,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     private OrderRefreshReceiver orderRefreshReceiver;
 
     private WorkPresenter presenter;
+    private TextView tvTitle;
 
     @Override
     public int getLayoutId() {
@@ -238,6 +240,11 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         }
     }
 
+    @Override
+    public void setTitleStatus(String content) {
+        tvTitle.setVisibility(TextUtils.equals(content, "1") ? View.VISIBLE : View.GONE);
+    }
+
     private void initNotifity() {
         notifityClose.setOnClickListener(v -> notifityCon.setVisibility(View.GONE));
     }
@@ -253,7 +260,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         swipeRefreshLayout = findViewById(R.id.swipe_layout);
         pullIcon = findViewById(R.id.pull_icon);
         peek_con = findViewById(R.id.peek_con);
-
+        tvTitle = findViewById(R.id.tv_title);
         listenOrderCon = findViewById(R.id.listen_order_con);
         onLineBtn = findViewById(R.id.online_btn);
 

@@ -55,10 +55,11 @@ public class BuildPushUtil {
             pe.phone = employ.phone;
             pe.business = employ.serviceType;
             pe.modelId = employ.modelId;
-            if (Vehicle.exists(employ.id)){
+            pe.sex = employ.sex;
+            if (Vehicle.exists(employ.id)) {
                 Vehicle vehicle = Vehicle.findByEmployId(employ.id);
                 pe.vehicleNo = vehicle.vehicleNo;
-            }else {
+            } else {
                 pe.vehicleNo = "";
             }
         } else {
