@@ -319,7 +319,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
                 noOrderText.setVisibility(View.GONE);
                 presenter.loadEmploy(EmUtil.getEmployId());
                 presenter.indexOrders();
-                presenter.getMoney();
+                presenter.workStatistics();
             }
 
             @Override
@@ -493,9 +493,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         if (countEvent.finishCount >= 0) {
             finishNo.setText(String.valueOf(countEvent.finishCount));
         }
-//        if (countEvent.income >= 0) {
-//            todayIncome.setText(String.valueOf(countEvent.income));
-//        }
+        if (countEvent.income >= 0) {
+            todayIncome.setText(String.valueOf(countEvent.income));
+        }
     }
 
     @Override

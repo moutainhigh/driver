@@ -5,7 +5,6 @@ import android.text.TextUtils;
 
 import com.easymi.common.CommApiService;
 import com.easymi.common.R;
-import com.easymi.common.entity.AmountBean;
 import com.easymi.common.entity.MqttConfig;
 import com.easymi.common.entity.MqttResult;
 import com.easymi.common.entity.MultipleOrder;
@@ -361,7 +360,6 @@ public class WorkPresenter implements WorkContract.Presenter {
     public void loadDataOnResume() {
         uploadTime(-1);
         PhoneUtil.checkGps(context);
-        workStatistics();
         getMqttConfig();
     }
 
@@ -585,13 +583,6 @@ public class WorkPresenter implements WorkContract.Presenter {
 
     @Override
     public void getMoney() {
-        Observable<AmountBean> observable = model.getMoney();
-        view.getRxManager().add(observable.subscribe(new MySubscriber<AmountBean>(context, false, false, new NoErrSubscriberListener<AmountBean>() {
-            @Override
-            public void onNext(AmountBean amountBean) {
-                view.getMoney(amountBean.todayAmount);
-            }
-        })));
     }
 
 

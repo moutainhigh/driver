@@ -1,6 +1,5 @@
 package com.easymi.common;
 
-import com.easymi.common.entity.AmountBean;
 import com.easymi.common.entity.Brands;
 import com.easymi.common.entity.BusinessList;
 import com.easymi.common.entity.CompanyList;
@@ -337,9 +336,6 @@ public interface CommApiService {
 
     @GET("api/v1/taxi_online/order/status/{id}")
     Observable<EmResult2<String>> getOrderStatus(@Path("id") long id);
-
-    @GET("api/v1/statistics/driverTodayStatistics/get")
-    Observable<EmResult2<AmountBean>> getMoney();
 
     /**
      * 专车 --> 抢单

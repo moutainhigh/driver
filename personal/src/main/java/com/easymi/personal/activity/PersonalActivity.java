@@ -25,6 +25,7 @@ import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.GlideCircleTransform;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.CusToolbar;
+import com.easymi.component.widget.city.LetterIndexView;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
 import com.easymi.personal.result.LoginResult;
@@ -97,13 +98,16 @@ public class PersonalActivity extends RxBaseActivity {
 
         Employ employ = EmUtil.getEmployInfo();
 
-        if (employ.serviceType.equals(Config.CUSTOMBUS) ||
-                employ.serviceType.equals(Config.COUNTRY)){
-            lin_card.setVisibility(View.VISIBLE);
-        }else {
+        if (employ==null){
             lin_card.setVisibility(View.GONE);
+        }else {
+            if (employ.serviceType.equals(Config.CUSTOMBUS) ||
+                    employ.serviceType.equals(Config.COUNTRY)) {
+                lin_card.setVisibility(View.VISIBLE);
+            } else {
+                lin_card.setVisibility(View.GONE);
+            }
         }
-
         showBase(employ);
     }
 
