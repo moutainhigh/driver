@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.easymi.common.CommApiService;
 import com.easymi.common.R;
+import com.easymi.common.entity.AmountBean;
 import com.easymi.common.entity.MqttConfig;
 import com.easymi.common.entity.MqttResult;
 import com.easymi.common.entity.MultipleOrder;
@@ -289,6 +290,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                         Config.PORT_HTTP = mqttConfig.portHttp;
                         Config.PORT_TCP = mqttConfig.portTcp;
                         Config.MQTT_TOPIC = mqttConfig.topic;
+                        Config.ACK_TOPIC = mqttConfig.ackTopic;
                         MqttManager.getInstance().creatConnect();
                         getTopic();
                     }
@@ -588,6 +590,15 @@ public class WorkPresenter implements WorkContract.Presenter {
                         s -> view.setTitleStatus(s))));
     }
 
+    public void getMoney() {
+        Observable<AmountBean> observable = model.getMoney();
+        view.getRxManager().add(observable.subscribe(new MySubscriber<AmountBean>(context, false, false, new NoErrSubscriberListener<AmountBean>() {
+            @Override
+            public void onNext(AmountBean amountBean) {
+                view.getMoney(amountBean.todayAmount);
+            }
+        })));
+    }
 
     public void workStatistics() {
         CommApiService api = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class);

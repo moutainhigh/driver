@@ -23,6 +23,7 @@ public class Config {
     public static int PORT_HTTP;
     public static int PORT_TCP;
     public static String MQTT_TOPIC;
+    public static String ACK_TOPIC;
     public static String MQTT_CLIENT_ID;
     public static  String MQTT_USER_NAME ;
     public static  String MQTT_PSW ;

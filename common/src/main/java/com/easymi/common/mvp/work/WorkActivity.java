@@ -55,6 +55,7 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
+import com.easymi.component.entity.HandleBean;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.rxmvp.RxManager;
@@ -246,6 +247,10 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         tvTitle.setVisibility(TextUtils.equals(content, "1") ? View.VISIBLE : View.GONE);
     }
 
+    public void getMoney(double value) {
+        todayIncome.setText(String.valueOf(value));
+    }
+
     private void initNotifity() {
         notifityClose.setOnClickListener(v -> notifityCon.setVisibility(View.GONE));
     }
@@ -321,6 +326,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
                 noOrderText.setVisibility(View.GONE);
                 presenter.loadEmploy(EmUtil.getEmployId());
                 presenter.indexOrders();
+                presenter.getMoney();
             }
 
             @Override
@@ -408,6 +414,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         listenOrderCon.setVisibility(View.GONE);
         rippleBackground.stopRippleAnimation();
         bottomBtnCon.setVisibility(View.VISIBLE);
+        HandleBean.deleteAll();
         EmUtil.employLogout(this);
 //        showEmpty(0);
     }
@@ -493,9 +500,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         if (countEvent.finishCount >= 0) {
             finishNo.setText(String.valueOf(countEvent.finishCount));
         }
-        if (countEvent.income >= 0) {
-            todayIncome.setText(String.valueOf(countEvent.income));
-        }
+//        if (countEvent.income >= 0) {
+//            todayIncome.setText(String.valueOf(countEvent.income));
+//        }
     }
 
     @Override

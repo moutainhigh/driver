@@ -209,6 +209,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     private Marker myLocationMarker;
     private MapView mapView;
     private SensorEventHelper helper;
+    private boolean flashAssign;
 
     @Override
     public int getLayoutId() {
@@ -222,6 +223,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         orderId = getIntent().getLongExtra("orderId", -1);
 
+        flashAssign = getIntent().getBooleanExtra("flashAssign", false);
         if (orderId == -1) {
             finish();
             return;
@@ -612,6 +614,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
     }
 
+    private void flashAssign() {
+        XApp.getInstance().syntheticVoice("您有快速指派订单需要处理，客户起点为" + zcOrder.getStartSite().addr + ",终点为" + zcOrder.getEndSite().addr);
+        flashAssign = false;
+    }
 
     @Override
     public void showOrder(ZCOrder zcOrder) {
@@ -629,6 +635,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 }
             }
             this.zcOrder = zcOrder;
+            if (flashAssign &&zcOrder.orderStatus ==DJOrderStatus.GOTO_BOOKPALCE_ORDER){
+                flashAssign();
+            }
             showTopView();
             initBridge();
             showBottomFragment(zcOrder);

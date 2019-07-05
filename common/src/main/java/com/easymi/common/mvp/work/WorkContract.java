@@ -1,5 +1,6 @@
 package com.easymi.common.mvp.work;
 
+import com.easymi.common.entity.AmountBean;
 import com.easymi.common.entity.AnnAndNotice;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
@@ -156,6 +157,8 @@ public interface WorkContract {
         void hideRegisterDialog();
 
         void setTitleStatus(String content);
+
+        void getMoney(double todayIncome);
     }
 
     interface Presenter {
@@ -212,6 +215,8 @@ public interface WorkContract {
         void loadNoticeAndAnn();
 
         void getTitleStatus();
+
+        void getMoney();
     }
 
     interface Model {
@@ -293,6 +298,8 @@ public interface WorkContract {
          * @return
          */
         Observable<LoginResult> getEmploy(Long driverId, String appKey);
+
+        Observable<AmountBean> getMoney();
 
         /**
          * 获取app配置

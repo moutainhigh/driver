@@ -466,8 +466,6 @@ public class LoginActivity extends RxBaseActivity {
                 for (ZCSetting sub : settingResult.data) {
                     if (sub.serviceType.equals(Config.ZHUANCHE) ||
                             sub.serviceType.equals(Config.CARPOOL)) {
-                        Log.e("LoginActivity", "getSetting" +sub.emploiesKm);
-
                         ZCSetting.deleteAll();
                         sub.save();
                     } else if (sub.serviceType.equals(Config.TAXI)) {
