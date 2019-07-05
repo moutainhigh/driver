@@ -13,7 +13,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "data.db";
 
-    private static final int VERSION = 90;
+    private static final int VERSION = 100;
 
     private StringBuffer sqlBuf;
 
@@ -73,6 +73,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
         createBusStation(db);
         createCPOrderCustomer(db);
+        createHandlePojo(db);
     }
 
     @Override
@@ -103,6 +104,9 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
         db.execSQL("DROP TABLE IF EXISTS " + "t_cp_order_customer");
         createCPOrderCustomer(db);
+
+        db.execSQL("DROP TABLE IF EXISTS " + "t_cp_handle_pojo");
+        createHandlePojo(db);
     }
 
     private void createCPOrderCustomer(SQLiteDatabase db) {
@@ -136,6 +140,17 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("isContract").append(" ").append("INTEGER").append(",")
 
                 .append("subStatus").append(" ").append("INTEGER")
+                .append(");");
+        execCreateTableSQL(db);
+    }
+
+
+    private void createHandlePojo(SQLiteDatabase db) {
+        sqlBuf.append("CREATE TABLE ").append("t_cp_handle_pojo").append(" (")
+                .append("id").append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
+                .append("orderId").append(" ").append("LONG").append(",")
+                .append("doAction").append(" ").append("TEXT").append(",")
+                .append("serviceType").append(" ").append("TEXT")
                 .append(");");
         execCreateTableSQL(db);
     }

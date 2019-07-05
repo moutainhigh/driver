@@ -8,7 +8,9 @@ import com.easymi.common.result.GetFeeResult;
 import com.easymi.common.result.VehicleResult;
 import com.easymi.common.util.BuildPushUtil;
 import com.easymi.component.Config;
+import com.easymi.component.ZCOrderStatus;
 import com.easymi.component.app.XApp;
+import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.entity.Vehicle;
@@ -17,7 +19,9 @@ import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
+import com.easymi.component.network.HttpResultFunc3;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.result.EmResult2;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.FileUtil;
@@ -38,6 +42,8 @@ import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -159,8 +165,10 @@ public class MqttManager implements LocObserver {
                     client.subscribe(pullTopic, qos, null, new IMqttActionListener() {
                         @Override
                         public void onSuccess(IMqttToken asyncActionToken) {
-                            Log.e("MqttManager", "subscribeSuccess");
                             saveData("subscribeSuccess");
+                            if (reconnect) {
+                                getOrderStatus();
+                            }
                         }
 
                         @Override
@@ -193,6 +201,39 @@ public class MqttManager implements LocObserver {
             }
         });
         doConnect();
+    }
+
+
+    private void getOrderStatus() {
+        Observable<EmResult2<String>> observable = null;
+        List<DymOrder> data = DymOrder.findAll();
+        if (data.size() > 0) {
+            long orderId = 0;
+            for (DymOrder datum : data) {
+                if (TextUtils.equals(datum.orderType, Config.ZHUANCHE) && (datum.orderStatus == ZCOrderStatus.PAIDAN_ORDER
+                        || datum.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER)) {
+                    orderId = datum.orderId;
+                    break;
+                }
+            }
+            if (orderId != 0) {
+                observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                        .getOrderStatus(orderId);
+            }
+        } else {
+            observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                    .getNewOrder();
+        }
+
+        if (observable != null) {
+            observable
+                    .filter(new HttpResultFunc3<>())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new MySubscriber<>(null, false, false, s -> {
+                        HandlePush.getInstance().handPush(new Gson().toJson(s), false);
+                    }));
+        }
     }
 
     /**
@@ -292,6 +333,32 @@ public class MqttManager implements LocObserver {
         }
     }
 
+
+    public void publishAck(long orderId, int type) {
+        if (orderId == 0) {
+            return;
+        }
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("orderId", orderId);
+            jsonObject.put("appKey", Config.APP_KEY);
+            jsonObject.put("msgTime", System.currentTimeMillis());
+            jsonObject.put("ackType", type);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (client != null && client.isConnected()) {
+            MqttMessage message = new MqttMessage(jsonObject.toString().getBytes());
+            message.setQos(qos);
+            try {
+                client.publish(Config.ACK_TOPIC, message);
+//                Log.e("MqttManager", "push loc data--->" + pushStr);
+            } catch (MqttException e) {
+                Log.e(TAG, "Publishing msg exception " + e.getMessage());
+            }
+        }
+    }
 
     /**
      * mqtt是否连接

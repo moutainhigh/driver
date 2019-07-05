@@ -86,6 +86,16 @@ public class GsonUtil {
     }
 
 
+    public static ArrayList<String> parseToStringList(String json) {
+        if (TextUtils.isEmpty(json)) {
+            return null;
+        }
+        Gson gson = new Gson();
+        return gson.fromJson(json, new TypeToken<ArrayList<String>>() {
+        }.getType());
+    }
+
+
     /**
      * 将对象转化成json字符串.
      *

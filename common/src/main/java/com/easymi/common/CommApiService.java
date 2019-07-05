@@ -1,5 +1,6 @@
 package com.easymi.common;
 
+import com.easymi.common.entity.AmountBean;
 import com.easymi.common.entity.Brands;
 import com.easymi.common.entity.BusinessList;
 import com.easymi.common.entity.CompanyList;
@@ -46,6 +47,7 @@ import rx.Observable;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName:
+ *
  * @Author: shine
  * Date: 2018/12/24 下午5:00
  * Description:
@@ -65,9 +67,9 @@ public interface CommApiService {
      */
     @GET("api/v1/public/driver/ranges")
     Observable<EmResult2<List<NearDriver>>> getNearDrivers(@Query("lat") Double lat,
-                                                @Query("lng") Double lng,
-                                                @Query("range") Double range,
-                                                @Query("serviceType") String serviceType);
+                                                           @Query("lng") Double lng,
+                                                           @Query("range") Double range,
+                                                           @Query("serviceType") String serviceType);
 
     /**
      * 查询所有通知
@@ -330,6 +332,15 @@ public interface CommApiService {
     Observable<MultipleOrderResult> queryZCOrder(@Path("id") Long id,
                                                  @Query("appKey") String appKey);
 
+    @GET("api/v1/taxi_online/order/new")
+    Observable<EmResult2<String>> getNewOrder();
+
+    @GET("api/v1/taxi_online/order/status/{id}")
+    Observable<EmResult2<String>> getOrderStatus(@Path("id") long id);
+
+    @GET("api/v1/statistics/driverTodayStatistics/get")
+    Observable<EmResult2<AmountBean>> getMoney();
+
     /**
      * 专车 --> 抢单
      *
@@ -547,6 +558,7 @@ public interface CommApiService {
     Observable<QueryOrdersResult> queryMyOrders(@Query("page") int page,
                                                 @Query("size") int size,
                                                 @Query("status") String status);
+
     /**
      * 拼车完成订单详情查询
      */
@@ -583,10 +595,6 @@ public interface CommApiService {
             @Field("scheduleId") long scheduleId);
 
 
-
-
-
-
 ////////工作台工作时长统计
 
 
@@ -602,7 +610,7 @@ public interface CommApiService {
      */
     @FormUrlEncoded
     @POST("/api/v1/public/driver/online_time")
-    Observable<EmResult> upLoadOnlineTime (@Field("time") long time);
+    Observable<EmResult> upLoadOnlineTime(@Field("time") long time);
 
 
     @GET("/api/v3/connections/{topic}")

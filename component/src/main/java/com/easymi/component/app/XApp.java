@@ -90,6 +90,7 @@ public class XApp extends MultiDexApplication {
             ARouter.openDebug();   //非打包情况下,必须调用调用
             ARouter.openLog();
         }
+
         ARouter.init(this);
         SqliteHelper.init(this);
 
