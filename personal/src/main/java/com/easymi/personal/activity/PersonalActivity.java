@@ -97,13 +97,16 @@ public class PersonalActivity extends RxBaseActivity {
 
         Employ employ = EmUtil.getEmployInfo();
 
-        if (employ.serviceType.equals(Config.CUSTOMBUS) ||
-                employ.serviceType.equals(Config.COUNTRY)){
-            lin_card.setVisibility(View.VISIBLE);
-        }else {
+        if (employ==null){
             lin_card.setVisibility(View.GONE);
+        }else {
+            if (employ.serviceType.equals(Config.CUSTOMBUS) ||
+                    employ.serviceType.equals(Config.COUNTRY)) {
+                lin_card.setVisibility(View.VISIBLE);
+            } else {
+                lin_card.setVisibility(View.GONE);
+            }
         }
-
         showBase(employ);
     }
 
