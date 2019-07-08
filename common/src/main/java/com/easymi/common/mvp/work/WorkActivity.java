@@ -412,6 +412,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         listenOrderCon.setVisibility(View.GONE);
         rippleBackground.stopRippleAnimation();
         bottomBtnCon.setVisibility(View.VISIBLE);
+        refreshData();
 //        showEmpty(0);
     }
 
