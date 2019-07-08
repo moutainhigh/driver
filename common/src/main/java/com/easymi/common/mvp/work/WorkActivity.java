@@ -322,8 +322,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         swipeRefreshLayout.setOnLoadListener(new SwipeRecyclerView.OnLoadListener() {
             @Override
             public void onRefresh() {
-                Log.e("WorkActivity", "onRefresh");
-                noOrderText.setVisibility(View.GONE);
                 presenter.loadEmploy(EmUtil.getEmployId());
                 presenter.indexOrders();
                 presenter.workStatistics();
@@ -343,10 +341,10 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     @Override
     public void showOrders(List<MultipleOrder> MultipleOrders) {
         orders.clear();
-        if (MultipleOrders == null || MultipleOrders.size() == 0) {
+        orders.addAll(MultipleOrders);
+        if (orders.size() == 1) {
             showEmpty(0);
         } else {
-            orders.addAll(MultipleOrders);
             hideEmpty();
         }
 
@@ -414,7 +412,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         listenOrderCon.setVisibility(View.GONE);
         rippleBackground.stopRippleAnimation();
         bottomBtnCon.setVisibility(View.VISIBLE);
-        showEmpty(0);
+//        showEmpty(0);
     }
 
     @Override
