@@ -40,7 +40,6 @@ import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.Log;
 import com.easymi.component.utils.NumberToHanzi;
 import com.easymi.component.utils.StringUtils;
 
@@ -106,20 +105,24 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
-                if (!HandleBean.exists(order.orderId, order.serviceType, "robbing")) {
+                if (needSend) {
+                    MqttManager.getInstance().publishAck(order.orderId, 1);
+                }
+                if (!HandleBean.exists(order.orderId, order.serviceType, "robbing") &&
+                        !HandleBean.exists(order.orderId, order.serviceType, "cancel")) {
                     HandleBean.save(order.orderId, order.serviceType, "robbing");
                     loadOrder(order);
-                    if (needSend) {
-                        MqttManager.getInstance().publishAck(order.orderId, 1);
-                    }
                 }
             } else if (msg.equals("sendorders")) {
                 //派单
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
-
-                if (!HandleBean.exists(order.orderId, order.serviceType, "sendorders")) {
+                if (needSend) {
+                    MqttManager.getInstance().publishAck(order.orderId, 1);
+                }
+                if (!HandleBean.exists(order.orderId, order.serviceType, "sendorders") &&
+                        !HandleBean.exists(order.orderId, order.serviceType, "cancel")) {
                     HandleBean.save(order.orderId, order.serviceType, "sendorders");
 
                     if (order.serviceType.equals(Config.GOV)) {
@@ -128,9 +131,6 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                         refreshWork();
                     } else {
                         loadOrder(order);
-                        if (needSend) {
-                            MqttManager.getInstance().publishAck(order.orderId, 1);
-                        }
                         newShowNotify(XApp.getInstance(), "", XApp.getInstance().getString(R.string.send_order), XApp.getInstance().getString(R.string.send_order_content));
                     }
                 }
@@ -140,12 +140,12 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
-
-                if (HandleBean.exists(order.orderId, order.serviceType)) {
-                    HandleBean.delete(order.orderId, order.serviceType);
-                    if (needSend) {
-                        MqttManager.getInstance().publishAck(order.orderId, 2);
-                    }
+                if (needSend) {
+                    MqttManager.getInstance().publishAck(order.orderId, 2);
+                }
+                if (HandleBean.exists(order.orderId, order.serviceType) &&
+                        !HandleBean.exists(order.orderId, order.serviceType, "cancel")) {
+                    HandleBean.save(order.orderId, order.serviceType, "cancel");
                     Message message = new Message();
                     message.what = 1;
                     Bundle bundle = new Bundle();
@@ -199,7 +199,8 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
 
-                if (!HandleBean.exists(order.orderId, order.serviceType, "finish")) {
+                if (!HandleBean.exists(order.orderId, order.serviceType, "finish") &&
+                        !HandleBean.exists(order.orderId, order.serviceType, "cancel")) {
                     HandleBean.save(order.orderId, order.serviceType, "finish");
                     loadOrder(order);
                 }
@@ -209,7 +210,8 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
 
-                if (!HandleBean.exists(order.orderId, order.serviceType, "reAssign")) {
+                if (!HandleBean.exists(order.orderId, order.serviceType, "reAssign") &&
+                        !HandleBean.exists(order.orderId, order.serviceType, "cancel")) {
                     HandleBean.save(order.orderId, order.serviceType, "reAssign");
                     Message message = new Message();
                     message.what = 3;
@@ -285,12 +287,13 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
 
                 order.passengerId = jb.optJSONObject("data").optLong("passengerId");
                 order.passengerPhone = jb.optJSONObject("data").optString("userPhone");
-                if (!HandleBean.exists(order.orderId, order.serviceType, "flashAssign")) {
+                if (needSend) {
+                    MqttManager.getInstance().publishAck(order.orderId, 1);
+                }
+                if (!HandleBean.exists(order.orderId, order.serviceType, "flashAssign") &&
+                        !HandleBean.exists(order.orderId, order.serviceType, "cancel")) {
                     HandleBean.save(order.orderId, order.serviceType, "flashAssign");
                     XApp.getInstance().shake();
-                    if (needSend) {
-                        MqttManager.getInstance().publishAck(order.orderId, 1);
-                    }
                     if (StringUtils.isNotBlank(order.serviceType)) {
                         if (order.serviceType.equals(Config.ZHUANCHE)) {
                             handler.post(() -> {

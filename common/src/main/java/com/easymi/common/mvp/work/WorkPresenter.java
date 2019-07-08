@@ -24,6 +24,7 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.Employ;
+import com.easymi.component.entity.HandleBean;
 import com.easymi.component.entity.SystemConfig;
 import com.easymi.component.entity.Vehicle;
 import com.easymi.component.entity.ZCSetting;
@@ -337,7 +338,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                     XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
             centerUtil.driverDown(driverId, EmUtil.getEmployInfo().companyId, EmUtil.getEmployInfo().userName, EmUtil.getEmployInfo().realName,
                     EmUtil.getEmployInfo().phone, System.currentTimeMillis() / 1000, EmUtil.getEmployInfo().serviceType);
-
+            HandleBean.deleteAll();
             XApp.getEditor().putLong(Config.ONLINE_TIME, 0).apply();
             uploadTime(1);
             view.offlineSuc();
@@ -592,7 +593,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                 .subscribe(new MySubscriber<>(context, false, false,
                         s -> view.setTitleStatus(s))));
     }
-    
+
     public void workStatistics() {
         CommApiService api = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class);
 

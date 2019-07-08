@@ -81,7 +81,6 @@ public class MqttManager implements LocObserver {
 
     private RxManager rxManager;
     private Subscription subscription;
-    private boolean isFirst;
 
     /**
      * 初始化
@@ -325,13 +324,6 @@ public class MqttManager implements LocObserver {
         if (client != null && client.isConnected()) {
 
             Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, 0));
-
-            if (!isFirst) {
-                employ.modelId = 0;
-                employ.updateAll();
-                isFirst = true;
-            }
-            Log.e("MqttManager", "publish" + employ.modelId);
 
             if (employ.modelId == 0) {
                 getModelId(employ);
