@@ -8,6 +8,7 @@ import com.easymi.common.entity.MqttResult;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.entity.Pic;
 import com.easymi.common.entity.PushAnnouncement;
+import com.easymi.common.entity.PushPojo;
 import com.easymi.common.entity.QiNiuToken;
 import com.easymi.common.entity.RegisterRes;
 import com.easymi.common.entity.Vehicles;
@@ -335,10 +336,10 @@ public interface CommApiService {
                                                  @Query("appKey") String appKey);
 
     @GET("api/v1/taxi_online/order/new")
-    Observable<EmResult2<String>> getNewOrder();
+    Observable<EmResult2<PushPojo>> getNewOrder();
 
     @GET("api/v1/taxi_online/order/status/{id}")
-    Observable<EmResult2<String>> getOrderStatus(@Path("id") long id);
+    Observable<EmResult2<PushPojo>> getOrderStatus(@Path("id") long id);
 
     /**
      * 专车 --> 抢单

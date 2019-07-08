@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.easymi.common.CommApiService;
 import com.easymi.common.entity.BuildPushData;
+import com.easymi.common.entity.PushPojo;
 import com.easymi.common.result.GetFeeResult;
 import com.easymi.common.result.VehicleResult;
 import com.easymi.common.util.BuildPushUtil;
@@ -21,6 +22,7 @@ import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.HttpResultFunc3;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult2;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
@@ -79,6 +81,7 @@ public class MqttManager implements LocObserver {
 
     private RxManager rxManager;
     private Subscription subscription;
+    private boolean isFirst;
 
     /**
      * 初始化
@@ -165,6 +168,7 @@ public class MqttManager implements LocObserver {
                     client.subscribe(pullTopic, qos, null, new IMqttActionListener() {
                         @Override
                         public void onSuccess(IMqttToken asyncActionToken) {
+                            Log.e("MqttManager", "subscribeSuccess");
                             saveData("subscribeSuccess");
                             if (reconnect) {
                                 getOrderStatus();
@@ -205,7 +209,7 @@ public class MqttManager implements LocObserver {
 
 
     private void getOrderStatus() {
-        Observable<EmResult2<String>> observable = null;
+        Observable<EmResult2<PushPojo>> observable = null;
         List<DymOrder> data = DymOrder.findAll();
         if (data.size() > 0) {
             long orderId = 0;
@@ -230,8 +234,11 @@ public class MqttManager implements LocObserver {
                     .filter(new HttpResultFunc3<>())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new MySubscriber<>(null, false, false, s -> {
-                        HandlePush.getInstance().handPush(new Gson().toJson(s), false);
+                    .subscribe(new MySubscriber<>(null, false, false, new NoErrSubscriberListener<EmResult2<PushPojo>>() {
+                        @Override
+                        public void onNext(EmResult2<PushPojo> pushPojoEmResult2) {
+                            HandlePush.getInstance().handPush(new Gson().toJson(pushPojoEmResult2), false);
+                        }
                     }));
         }
     }
@@ -318,6 +325,14 @@ public class MqttManager implements LocObserver {
         if (client != null && client.isConnected()) {
 
             Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, 0));
+
+            if (!isFirst) {
+                employ.modelId = 0;
+                employ.updateAll();
+                isFirst = true;
+            }
+            Log.e("MqttManager", "publish" + employ.modelId);
+
             if (employ.modelId == 0) {
                 getModelId(employ);
                 return;

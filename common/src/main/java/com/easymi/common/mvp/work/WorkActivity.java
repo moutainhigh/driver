@@ -55,7 +55,6 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
-import com.easymi.component.entity.HandleBean;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.rxmvp.RxManager;
@@ -323,6 +322,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         swipeRefreshLayout.setOnLoadListener(new SwipeRecyclerView.OnLoadListener() {
             @Override
             public void onRefresh() {
+                Log.e("WorkActivity", "onRefresh");
                 noOrderText.setVisibility(View.GONE);
                 presenter.loadEmploy(EmUtil.getEmployId());
                 presenter.indexOrders();
@@ -410,13 +410,11 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
 
     @Override
     public void offlineSuc() {
-//        XApp.getInstance().syntheticVoice("", XApp.OFF_LINE);
+        XApp.getInstance().syntheticVoice("", XApp.OFF_LINE);
         listenOrderCon.setVisibility(View.GONE);
         rippleBackground.stopRippleAnimation();
         bottomBtnCon.setVisibility(View.VISIBLE);
-        HandleBean.deleteAll();
-        EmUtil.employLogout(this);
-//        showEmpty(0);
+        showEmpty(0);
     }
 
     @Override
@@ -614,12 +612,12 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     }
 
     private void refreshData() {
-        swipeRefreshLayout.post(new Runnable() {
+        swipeRefreshLayout.postDelayed(new Runnable() {
             @Override
             public void run() {
                 swipeRefreshLayout.setRefreshing(true);
             }
-        });
+        }, 300);
     }
 
     @Override

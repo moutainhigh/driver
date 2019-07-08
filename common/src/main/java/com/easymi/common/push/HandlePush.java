@@ -40,6 +40,7 @@ import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.Log;
 import com.easymi.component.utils.NumberToHanzi;
 import com.easymi.component.utils.StringUtils;
 
@@ -284,7 +285,6 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
 
                 order.passengerId = jb.optJSONObject("data").optLong("passengerId");
                 order.passengerPhone = jb.optJSONObject("data").optString("userPhone");
-
                 if (!HandleBean.exists(order.orderId, order.serviceType, "flashAssign")) {
                     HandleBean.save(order.orderId, order.serviceType, "flashAssign");
                     XApp.getInstance().shake();

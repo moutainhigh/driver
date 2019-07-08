@@ -86,7 +86,7 @@ public class WorkPresenter implements WorkContract.Presenter {
     public void indexOrders() {
         Observable<QueryOrdersResult> observable = model.indexOrders(EmUtil.getEmployId(), EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(
-                new MySubscriber<>(context, false, false, new NoErrSubscriberListener<QueryOrdersResult>() {
+                new MySubscriber<>(context, false, false, new HaveErrSubscriberListener<QueryOrdersResult>() {
                     @Override
                     public void onNext(QueryOrdersResult emResult) {
                         view.stopRefresh();
@@ -214,6 +214,11 @@ public class WorkPresenter implements WorkContract.Presenter {
                             view.showOrders(orders);
                         }
                     }
+
+                    @Override
+                    public void onError(int code) {
+                        view.stopRefresh();
+                    }
                 })));
 //        }
     }
@@ -333,8 +338,8 @@ public class WorkPresenter implements WorkContract.Presenter {
             centerUtil.driverDown(driverId, EmUtil.getEmployInfo().companyId, EmUtil.getEmployInfo().userName, EmUtil.getEmployInfo().realName,
                     EmUtil.getEmployInfo().phone, System.currentTimeMillis() / 1000, EmUtil.getEmployInfo().serviceType);
 
-//            XApp.getEditor().putLong(Config.ONLINE_TIME, 0).apply();
-//            uploadTime(1);
+            XApp.getEditor().putLong(Config.ONLINE_TIME, 0).apply();
+            uploadTime(1);
             view.offlineSuc();
 
         })));

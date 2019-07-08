@@ -27,14 +27,14 @@ public class HandleBean {
     public static void delete(long orderId, String serviceType) {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
-        db.delete("t_cp_handle_pojo", "orderId = ? and serviceType = ?", new String[]{String.valueOf(orderId),serviceType});
+        db.delete("t_cp_handle_pojo", "orderId = ? and serviceType = ?", new String[]{String.valueOf(orderId), serviceType});
     }
 
     public static boolean exists(long id, String serviceType, String doAction) {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
         Cursor cursor = db.rawQuery(
-                "select count(1) from t_cp_handle_pojo where orderId = ? and serviceType = ? and doAction = ?",
+                "select count(*) from t_cp_handle_pojo where orderId = ? and serviceType = ? and doAction = ?",
                 new String[]{String.valueOf(id), serviceType, doAction});
         boolean flag = false;
         try {
@@ -51,7 +51,7 @@ public class HandleBean {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
         Cursor cursor = db.rawQuery(
-                "select count(1) from t_cp_handle_pojo where orderId = ? and serviceType = ?",
+                "select count(*) from t_cp_handle_pojo where orderId = ? and serviceType = ?",
                 new String[]{String.valueOf(id), serviceType});
         boolean flag = false;
         try {
