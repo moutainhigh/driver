@@ -9,6 +9,7 @@ import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
+import com.easymi.component.entity.Vehicle;
 import com.easymi.component.loc.LocService;
 import com.google.gson.Gson;
 
@@ -40,6 +41,11 @@ public class EmUtil {
     public static Employ getEmployInfo() {
         return Employ.findByID(getEmployId());
     }
+
+    public static Vehicle getVehicle() {
+        return Vehicle.findByEmployId(getEmployId());
+    }
+
 
     public static EmLoc getLastLoc() {
         EmLoc emLoc = new Gson().fromJson(XApp.getMyPreferences().getString(Config.SP_LAST_LOC, ""), EmLoc.class);

@@ -3,8 +3,6 @@ package com.easymi.component.entity;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Parcel;
-import android.os.Parcelable;
 
 import com.easymi.component.db.SqliteHelper;
 
@@ -20,7 +18,7 @@ import java.util.List;
  * Description:
  * History:
  */
-public class Employ implements Parcelable {
+public class Employ {
 
     public long id;
 
@@ -327,11 +325,6 @@ public class Employ implements Parcelable {
     public double star;
 
     /**
-     * specialModel 专车车辆型号
-     */
-    public long modelId;
-
-    /**
      * specialModel 出租车车辆型号
      */
     public long taxiModelId;
@@ -350,88 +343,6 @@ public class Employ implements Parcelable {
      * 客服电话
      */
     public String serviceTel;
-
-
-    protected Employ(Parcel in) {
-        id = in.readLong();
-        userName = in.readString();
-        password = in.readString();
-        nickName = in.readString();
-        realName = in.readString();
-        idCard = in.readString();
-        sex = in.readInt();
-        birthDate = in.readLong();
-        phone = in.readString();
-        portraitPath = in.readString();
-        serviceType = in.readString();
-        emergency = in.readString();
-        emergencyPhone = in.readString();
-        licensingTime = in.readLong();
-        driveLicenceStart = in.readInt();
-        driveLicenceEnd = in.readInt();
-        level = in.readLong();
-        dutyTime = in.readLong();
-        status = in.readInt();
-        introducer = in.readString();
-        companyId = in.readLong();
-        created = in.readLong();
-        updated = in.readLong();
-        idcardPath = in.readString();
-        homeAddress = in.readString();
-        driveLicensePath = in.readString();
-        driveLicenseType = in.readString();
-        drivingLicensePath = in.readString();
-        remark = in.readString();
-        appVersion = in.readString();
-        driverType = in.readLong();
-        deviceNo = in.readString();
-        deviceType = in.readString();
-        fullBodyPath = in.readString();
-        height = in.readString();
-        originPlace = in.readString();
-        motorNo = in.readString();
-        nationality = in.readString();
-        networkTaximanNo = in.readString();
-        nation = in.readString();
-        maritalStatus = in.readString();
-        foreignLanguageLevel = in.readString();
-        email = in.readString();
-        education = in.readString();
-        networkTaximanLicenseDate = in.readLong();
-        licenseOrganization = in.readString();
-        trafficViolationTimes = in.readInt();
-        contractStart = in.readLong();
-        contractEnd = in.readLong();
-        isCruisingTaxiDrivers = in.readInt();
-        driverServiceOperator = in.readString();
-        mapType = in.readString();
-        idcardBackPath = in.readString();
-        mobileModel = in.readString();
-        mobileOperators = in.readString();
-        isFulltimeDriver = in.readInt();
-        householdRegistrationName = in.readString();
-        token = in.readString();
-        refreshToken = in.readString();
-        balance = in.readDouble();
-        modelId = in.readLong();
-        taxiModelId = in.readLong();
-        registerStatus = in.readInt();
-        qrCodeUrl = in.readString();
-        serviceTel = in.readString();
-    }
-
-
-    public static final Creator<Employ> CREATOR = new Creator<Employ>() {
-        @Override
-        public Employ createFromParcel(Parcel in) {
-            return new Employ(in);
-        }
-
-        @Override
-        public Employ[] newArray(int size) {
-            return new Employ[size];
-        }
-    };
 
     /**
      * 保存数据
@@ -501,7 +412,6 @@ public class Employ implements Parcelable {
         values.put("token", token);
         values.put("refreshToken", refreshToken);
         values.put("balance", balance);
-        values.put("modelId", modelId);
         values.put("taxiModelId", taxiModelId);
         values.put("registerStatus", registerStatus);
         values.put("qrCodeUrl", qrCodeUrl);
@@ -661,8 +571,6 @@ public class Employ implements Parcelable {
                         .getColumnIndex("refreshToken"));
                 driverInfo.balance = cursor.getDouble(cursor
                         .getColumnIndex("balance"));
-                driverInfo.modelId = cursor.getLong(cursor
-                        .getColumnIndex("modelId"));
                 driverInfo.taxiModelId = cursor.getLong(cursor.getColumnIndex("taxiModelId"));
 
                 driverInfo.registerStatus = cursor.getInt(cursor.getColumnIndex("registerStatus"));
@@ -847,8 +755,6 @@ public class Employ implements Parcelable {
                 .getColumnIndex("refreshToken"));
         driverInfo.balance = cursor.getDouble(cursor
                 .getColumnIndex("balance"));
-        driverInfo.modelId = cursor.getLong(cursor
-                .getColumnIndex("modelId"));
         driverInfo.taxiModelId = cursor.getLong(cursor.getColumnIndex("taxiModelId"));
 
         driverInfo.qrCodeUrl = cursor.getString(cursor.getColumnIndex("qrCodeUrl"));
@@ -927,10 +833,8 @@ public class Employ implements Parcelable {
         values.put("token", token);
         values.put("refreshToken", refreshToken);
         values.put("balance", balance);
-        values.put("modelId", modelId);
         values.put("taxiModelId", taxiModelId);
         values.put("serviceTel", serviceTel);
-
         values.put("registerStatus", registerStatus);
         values.put("qrCodeUrl", qrCodeUrl);
 
@@ -950,82 +854,4 @@ public class Employ implements Parcelable {
     public Employ() {
 
     }
-
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(userName);
-        dest.writeString(password);
-        dest.writeString(nickName);
-        dest.writeString(realName);
-        dest.writeString(idCard);
-        dest.writeInt(sex);
-        dest.writeLong(birthDate);
-        dest.writeString(phone);
-        dest.writeString(portraitPath);
-        dest.writeString(serviceType);
-        dest.writeString(emergency);
-        dest.writeString(emergencyPhone);
-        dest.writeLong(licensingTime);
-        dest.writeInt(driveLicenceStart);
-        dest.writeInt(driveLicenceEnd);
-        dest.writeLong(level);
-        dest.writeLong(dutyTime);
-        dest.writeInt(status);
-        dest.writeString(introducer);
-        dest.writeLong(companyId);
-        dest.writeLong(created);
-        dest.writeLong(updated);
-        dest.writeString(idcardPath);
-        dest.writeString(homeAddress);
-        dest.writeString(driveLicensePath);
-        dest.writeString(driveLicenseType);
-        dest.writeString(drivingLicensePath);
-        dest.writeString(remark);
-        dest.writeString(appVersion);
-        dest.writeLong(driverType);
-        dest.writeString(deviceNo);
-        dest.writeString(deviceType);
-        dest.writeString(fullBodyPath);
-        dest.writeString(height);
-        dest.writeString(originPlace);
-        dest.writeString(motorNo);
-        dest.writeString(nationality);
-        dest.writeString(networkTaximanNo);
-        dest.writeString(nation);
-        dest.writeString(maritalStatus);
-        dest.writeString(foreignLanguageLevel);
-        dest.writeString(email);
-        dest.writeString(education);
-        dest.writeLong(networkTaximanLicenseDate);
-        dest.writeString(licenseOrganization);
-        dest.writeInt(trafficViolationTimes);
-        dest.writeLong(contractStart);
-        dest.writeLong(contractEnd);
-        dest.writeInt(isCruisingTaxiDrivers);
-        dest.writeString(driverServiceOperator);
-        dest.writeString(mapType);
-        dest.writeString(idcardBackPath);
-        dest.writeString(mobileModel);
-        dest.writeString(mobileOperators);
-        dest.writeInt(isFulltimeDriver);
-        dest.writeString(householdRegistrationName);
-        dest.writeString(token);
-        dest.writeString(refreshToken);
-        dest.writeDouble(balance);
-        dest.writeDouble(star);
-        dest.writeLong(modelId);
-        dest.writeLong(taxiModelId);
-        dest.writeInt(registerStatus);
-        dest.writeString(qrCodeUrl);
-        dest.writeString(serviceTel);
-    }
-
-
 }

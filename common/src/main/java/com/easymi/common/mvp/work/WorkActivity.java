@@ -403,7 +403,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         bottomBtnCon.setVisibility(View.GONE);
         MqttManager.getInstance().pushLocNoLimit(new BuildPushData(EmUtil.getLastLoc()));
         refreshData();
-        hideEmpty();
+//        hideEmpty();
     }
 
     @Override

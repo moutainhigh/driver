@@ -9,6 +9,7 @@ import com.easymi.common.entity.MqttConfig;
 import com.easymi.common.entity.MqttResult;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
+import com.easymi.common.entity.NewToken;
 import com.easymi.common.push.CountEvent;
 import com.easymi.common.push.MqttManager;
 import com.easymi.common.push.WorkTimeCounter;
@@ -76,6 +77,7 @@ public class WorkPresenter implements WorkContract.Presenter {
 
     public static WorkTimeCounter timeCounter;
     private Subscription subscription;
+    private boolean isFirstLoadToken;
 
     public WorkPresenter(Context context, WorkContract.View view) {
         this.context = context;
@@ -367,6 +369,24 @@ public class WorkPresenter implements WorkContract.Presenter {
         uploadTime(-1);
         PhoneUtil.checkGps(context);
         getMqttConfig();
+        refreshToken();
+    }
+
+    public void refreshToken() {
+        if (isFirstLoadToken) {
+            return;
+        }
+        view.getRxManager().add(ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .refreshToken(XApp.getMyPreferences().getString(Config.SP_TOKEN, ""))
+                .map(new HttpResultFunc2<>())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new MySubscriber<NewToken>(context, false, false, companyInfo -> {
+                    XApp.getEditor()
+                            .putString(Config.SP_TOKEN, companyInfo.token)
+                            .apply();
+                    isFirstLoadToken = true;
+                })));
     }
 
     /**
@@ -453,12 +473,8 @@ public class WorkPresenter implements WorkContract.Presenter {
                 String driverService = EmUtil.getEmployInfo().serviceType;
                 if (result.data != null && result.data.size() > 0) {
                     for (Vehicle vehicle : result.data) {
-                        if (vehicle.serviceType.contains(driverService)) {
-
+                        if (TextUtils.equals(vehicle.serviceType, driverService)) {
                             vehicle.saveOrUpdate(employ.id);
-
-                            employ.modelId = vehicle.vehicleModel;
-                            employ.updateAll();
                         }
                     }
                 } else {

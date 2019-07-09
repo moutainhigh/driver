@@ -45,11 +45,7 @@ public class CsSharedPreferences {
     public String getString(String key, String defaultValue) {
         String s = getSharedPreference().getString(key, "");
         if (!TextUtils.isEmpty(s)) {
-            if (TextUtils.equals(key, "getMqttTemp")) {
-                return s;
-            } else {
                 return EncApi.getInstance().dec(new Loader().getRsaPs().substring(0, 16), s);
-            }
         }
         return defaultValue;
     }

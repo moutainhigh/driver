@@ -1,5 +1,7 @@
 package com.easymi.common.util;
 
+import android.util.Log;
+
 import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.common.entity.OrderCustomer;
@@ -43,10 +45,9 @@ public class BuildPushUtil {
         PushData pushData = new PushData();
 
         //转换一下
-        Employ employ1 = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, 0));
+        Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, 0));
         PushEmploy pe;
-        if (employ1 != null && employ1 instanceof Employ) {
-            Employ employ = (Employ) employ1;
+        if (employ != null) {
             pe = new PushEmploy();
             pe.id = employ.id;
             pe.name = employ.realName;
@@ -54,14 +55,16 @@ public class BuildPushUtil {
             pe.companyId = employ.companyId;
             pe.phone = employ.phone;
             pe.business = employ.serviceType;
-            pe.modelId = employ.modelId;
             pe.sex = employ.sex;
             if (Vehicle.exists(employ.id)) {
                 Vehicle vehicle = Vehicle.findByEmployId(employ.id);
                 pe.vehicleNo = vehicle.vehicleNo;
+                pe.modelId = vehicle.vehicleModel;
+                Log.e("BuildPushUtil", "buildPush " + pe.modelId);
             } else {
                 pe.vehicleNo = "";
             }
+            pushData.serviceType = employ.serviceType;
         } else {
             //司机信息异常不处理
             return null;
@@ -69,7 +72,6 @@ public class BuildPushUtil {
 
         pushData.driver = pe;
         pushData.appKey = EmUtil.getAppKey();
-        pushData.serviceType = employ1.serviceType;
 
         pushData.location = new PushDataLoc();
         pushData.location.latitude = emLoc.latitude;
@@ -183,7 +185,6 @@ public class BuildPushUtil {
 //        PushBean pushBean = new PushBean("gps", newestDataList);
 
         PushBean pushBean = new PushBean("gps", pushData);
-
         String pushStr = new Gson().toJson(pushBean);
         return pushStr;
     }

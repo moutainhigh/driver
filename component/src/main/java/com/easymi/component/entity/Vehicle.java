@@ -68,7 +68,7 @@ public class Vehicle {
         /*
          * values.put("age", age); values.put("jialing", jialing);
          */
-        boolean flag = db.insert("t_Vehicle", null, values) != -1;
+        boolean flag = db.insert("t_vehicle", null, values) != -1;
         return flag;
     }
 

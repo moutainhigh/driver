@@ -29,16 +29,14 @@ import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.MoneyWatcher;
 import com.easymi.zhuanche.R;
 import com.easymi.zhuanche.entity.Budget;
-import com.easymi.zhuanche.entity.ZCType;
 import com.easymi.zhuanche.entity.Passenger;
+import com.easymi.zhuanche.entity.ZCType;
 import com.easymi.zhuanche.flowMvp.FlowActivity;
 import com.easymi.zhuanche.result.BudgetResult;
-import com.easymi.zhuanche.result.ZCOrderResult;
-import com.easymi.zhuanche.result.ZCTypeResult;
 import com.easymi.zhuanche.result.PassengerResult;
+import com.easymi.zhuanche.result.ZCTypeResult;
 import com.easymi.zhuanche.widget.TimePicker2;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -143,7 +141,7 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
         isPrepared = false;
         findById();
 
-        if (0 == EmUtil.getEmployInfo().modelId) {
+        if (0 == EmUtil.getVehicle().vehicleModel) {
             ToastUtil.showMessage(getActivity(), getString(R.string.no_car));
             return;
         }
@@ -151,7 +149,7 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
         init();
         //查询专车子类型
         presenter.queryZCType(EmUtil.getLastLoc().adCode, EmUtil.getLastLoc().cityCode,
-                (int) EmUtil.getEmployInfo().modelId, EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
+                (int) EmUtil.getVehicle().vehicleModel, EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
     }
 
 //    public void initQueryZCType(){
@@ -291,7 +289,7 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
                     EmUtil.getEmployId(),
                     EmUtil.getEmployInfo().realName,
                     EmUtil.getEmployInfo().phone,
-                    EmUtil.getEmployInfo().modelId,
+                    EmUtil.getVehicle().vehicleModel,
                     getAddressJson(),
                     passenger.id,
                     passenger.name,
@@ -496,6 +494,6 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
             return;
         }
 
-        presenter.queryBudget(selectedZCType.id, EmUtil.getEmployInfo().companyId, distance, duration, EmUtil.getEmployInfo().modelId);
+        presenter.queryBudget(selectedZCType.id, EmUtil.getEmployInfo().companyId, distance, duration, EmUtil.getVehicle().vehicleModel);
     }
 }

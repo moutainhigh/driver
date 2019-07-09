@@ -6,6 +6,7 @@ import com.easymi.common.entity.CompanyList;
 import com.easymi.common.entity.MqttConfig;
 import com.easymi.common.entity.MqttResult;
 import com.easymi.common.entity.NearDriver;
+import com.easymi.common.entity.NewToken;
 import com.easymi.common.entity.Pic;
 import com.easymi.common.entity.PushAnnouncement;
 import com.easymi.common.entity.PushPojo;
@@ -498,6 +499,10 @@ public interface CommApiService {
                                                      @Query("size") int size,
                                                      @Query("status") String status);
 
+
+    @POST("/api/v1/public/refresh_token")
+    @FormUrlEncoded
+    Observable<EmResult2<NewToken>> refreshToken(@Field("token") String adCode);
 
     /**
      * 通用拒单 专车出租车用

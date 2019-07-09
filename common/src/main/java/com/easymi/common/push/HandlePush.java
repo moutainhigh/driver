@@ -747,7 +747,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 Employ employ = EmUtil.getEmployInfo();
                 if (null != employ) {
                     employ.status = Integer.parseInt(status);
-                    employ.updateAll();
+                    employ.saveOrUpdate();
 
                     if (status != null) {
                         if (status.equals(EmployStatus.FROZEN)) {
