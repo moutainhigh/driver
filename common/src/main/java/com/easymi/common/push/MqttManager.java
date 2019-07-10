@@ -266,32 +266,39 @@ public class MqttManager implements LocObserver {
 
 
     private void sendTemp(List<String> data) {
-        isWorking = true;
         if (client != null && client.isConnected()) {
-            for (String datum : data) {
-                if (StringUtils.isBlank(datum)) {
-                    return;
-                }
-                MqttMessage message = new MqttMessage(datum.getBytes());
-                message.setQos(qos);
-                try {
-                    client.publish(Config.MQTT_TOPIC, message, null, new IMqttActionListener() {
-                        @Override
-                        public void onSuccess(IMqttToken asyncActionToken) {
-                            Log.e("MqttManager", "sendSuccess");
-                            List<String> temp = PushMessage.findAll();
-                            if (temp.size() > 0) {
-                                PushMessage.findAll().size();
-                            }
+            if (data == null || data.isEmpty()) {
+                return;
+            }
+            Log.e("MqttManager", "sendTemp" + data.size());
+            String content = data.get(0);
+            if (StringUtils.isBlank(content)) {
+                return;
+            }
+            MqttMessage message = new MqttMessage(content.getBytes());
+            message.setQos(qos);
+            try {
+                client.publish(Config.MQTT_TOPIC, message, null, new IMqttActionListener() {
+                    @Override
+                    public void onSuccess(IMqttToken asyncActionToken) {
+                        Log.e("MqttManager", "sendTempSuccess");
+                        PushMessage.delete(content);
+                        List<String> temp = PushMessage.findAll();
+                        if (temp.size() > 0) {
+                            sendTemp(temp);
+                        } else {
+                            isWorking = false;
                         }
+                    }
 
-                        @Override
-                        public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                        }
-                    });
-                } catch (MqttException e) {
-                    e.fillInStackTrace();
-                }
+                    @Override
+                    public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                        Log.e("MqttManager", "sendTempFail");
+                        isWorking = false;
+                    }
+                });
+            } catch (MqttException e) {
+                e.fillInStackTrace();
             }
         }
     }
@@ -315,7 +322,8 @@ public class MqttManager implements LocObserver {
                         Log.e("MqttManager", "sendSuccess");
                         List<String> temp = PushMessage.findAll();
                         if (temp.size() > 0 && !isWorking) {
-//                            sendTemp(temp);
+                            isWorking = true;
+                            sendTemp(temp);
                         }
                     }
 
