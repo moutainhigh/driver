@@ -183,7 +183,7 @@ public class MqttManager implements LocObserver {
             @Override
             public void connectionLost(Throwable cause) {
                 //失去连接
-                Log.e(TAG, "connectionLost" + cause.getMessage());
+                Log.e(TAG, "connectionLost");
                 removeNotify();
             }
 

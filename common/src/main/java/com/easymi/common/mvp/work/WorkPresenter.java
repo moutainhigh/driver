@@ -78,6 +78,7 @@ public class WorkPresenter implements WorkContract.Presenter {
     public static WorkTimeCounter timeCounter;
     private Subscription subscription;
     private boolean isFirstLoadToken;
+    private Subscription titleSubscription;
 
     public WorkPresenter(Context context, WorkContract.View view) {
         this.context = context;
@@ -441,6 +442,9 @@ public class WorkPresenter implements WorkContract.Presenter {
                     }
                 }
                 employ.saveOrUpdate();
+                if (employ.sex == 2) {
+                    getTitleStatus();
+                }
                 XApp.getEditor()
                         .putLong(Config.SP_DRIVERID, employ.id)
                         .apply();
@@ -605,9 +609,12 @@ public class WorkPresenter implements WorkContract.Presenter {
 
     @Override
     public void getTitleStatus() {
-        view.getRxManager().add(model.getTitleStatus()
-                .subscribe(new MySubscriber<>(context, false, false,
-                        s -> view.setTitleStatus(s))));
+        if (titleSubscription == null) {
+            titleSubscription = model.getTitleStatus()
+                    .subscribe(new MySubscriber<>(context, false, false,
+                            s -> view.setTitleStatus(s)));
+            view.getRxManager().add(titleSubscription);
+        }
     }
 
     public void workStatistics() {

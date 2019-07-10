@@ -185,8 +185,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         listenOrderCon.setOnClickListener(v -> {
             presenter.offline();
         });
-
-        presenter.getTitleStatus();
         EmLoc emLoc = EmUtil.getLastLoc();
         if (emLoc != null) {
             receiveLoc(emLoc);
