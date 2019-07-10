@@ -442,9 +442,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                     }
                 }
                 employ.saveOrUpdate();
-                if (employ.sex == 2) {
-                    getTitleStatus();
-                }
+                getTitleStatus();
                 XApp.getEditor()
                         .putLong(Config.SP_DRIVERID, employ.id)
                         .apply();

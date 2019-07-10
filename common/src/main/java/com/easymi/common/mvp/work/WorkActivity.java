@@ -241,7 +241,11 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
 
     @Override
     public void setTitleStatus(String content) {
-        tvTitle.setVisibility(TextUtils.equals(content, "1") ? View.VISIBLE : View.GONE);
+        if (EmUtil.getEmployInfo().sex == 2) {
+            tvTitle.setVisibility(TextUtils.equals(content, "1") ? View.VISIBLE : View.GONE);
+        } else {
+            tvTitle.setVisibility(View.GONE);
+        }
     }
 
     public void getMoney(double value) {
