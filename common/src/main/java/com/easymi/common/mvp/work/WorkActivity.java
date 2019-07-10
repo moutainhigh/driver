@@ -401,7 +401,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         listenOrderCon.setVisibility(View.VISIBLE);
         rippleBackground.startRippleAnimation();
         bottomBtnCon.setVisibility(View.GONE);
-        MqttManager.getInstance().pushLocNoLimit(new BuildPushData(EmUtil.getLastLoc()));
+        MqttManager.getInstance().pushLoc(new BuildPushData(EmUtil.getLastLoc()));
         refreshData();
 //        hideEmpty();
     }

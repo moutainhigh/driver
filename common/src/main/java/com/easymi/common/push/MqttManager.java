@@ -1,12 +1,14 @@
 package com.easymi.common.push;
 
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 
 import com.easymi.common.CommApiService;
 import com.easymi.common.entity.BuildPushData;
+import com.easymi.common.entity.PushBean;
 import com.easymi.common.entity.PushMessage;
 import com.easymi.common.entity.PushPojo;
-import com.easymi.common.result.GetFeeResult;
 import com.easymi.common.util.BuildPushUtil;
 import com.easymi.component.Config;
 import com.easymi.component.ZCOrderStatus;
@@ -16,18 +18,13 @@ import com.easymi.component.entity.EmLoc;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.network.ApiManager;
-import com.easymi.component.network.HaveErrSubscriberListener;
-import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.HttpResultFunc3;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult2;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.FileUtil;
 import com.easymi.component.utils.Log;
-import com.easymi.component.utils.NetUtil;
-import com.easymi.component.utils.StringUtils;
 import com.google.gson.Gson;
 import com.tencent.bugly.crashreport.CrashReport;
 
@@ -74,7 +71,7 @@ public class MqttManager implements LocObserver {
     private String pullTopic;
 
     private RxManager rxManager;
-    private boolean isWorking;
+    private final Handler handler;
 
     /**
      * 初始化
@@ -82,6 +79,13 @@ public class MqttManager implements LocObserver {
     private MqttManager() {
         rxManager = new RxManager();
         LocReceiver.getInstance().addObserver(MqttManager.this);
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                publish();
+                return true;
+            }
+        });
     }
 
     /**
@@ -142,10 +146,9 @@ public class MqttManager implements LocObserver {
         conOpt.setUserName(Config.MQTT_USER_NAME);
         conOpt.setPassword(Config.MQTT_PSW.toCharArray());
         // 设置超时时间，单位：秒
-        conOpt.setConnectionTimeout(5);
+        conOpt.setConnectionTimeout(20);
         // 心跳包发送间隔，单位：秒
-        conOpt.setKeepAliveInterval(5);
-        //自己处理了重连事件
+        conOpt.setKeepAliveInterval(20);
         conOpt.setAutomaticReconnect(true);
         String message = "{\"terminal_uid\":\"" + clientId + "\"}";
         conOpt.setWill(pullTopic, message.getBytes(), qos, false);
@@ -164,6 +167,7 @@ public class MqttManager implements LocObserver {
                             if (reconnect) {
                                 getOrderStatus();
                             }
+                            notifySend();
                         }
 
                         @Override
@@ -179,7 +183,8 @@ public class MqttManager implements LocObserver {
             @Override
             public void connectionLost(Throwable cause) {
                 //失去连接
-                Log.e(TAG, "connectionLost");
+                Log.e(TAG, "connectionLost" + cause.getMessage());
+                removeNotify();
             }
 
             @Override
@@ -197,6 +202,21 @@ public class MqttManager implements LocObserver {
         doConnect();
     }
 
+    private void notifySendDelayed() {
+        removeNotify();
+        handler.sendEmptyMessageDelayed(0, 10000);
+    }
+
+    private void notifySend() {
+        removeNotify();
+        handler.sendEmptyMessage(0);
+    }
+
+    private void removeNotify() {
+        if (handler.hasMessages(0)) {
+            handler.removeMessages(0);
+        }
+    }
 
     private void getOrderStatus() {
         Observable<EmResult2<PushPojo>> observable = null;
@@ -264,82 +284,62 @@ public class MqttManager implements LocObserver {
         }
     }
 
-
-    private void sendTemp(List<String> data) {
-        if (client != null && client.isConnected()) {
-            if (data == null || data.isEmpty()) {
-                return;
-            }
-            Log.e("MqttManager", "sendTemp" + data.size());
-            String content = data.get(0);
-            if (StringUtils.isBlank(content)) {
-                return;
-            }
-            MqttMessage message = new MqttMessage(content.getBytes());
-            message.setQos(qos);
-            try {
-                client.publish(Config.MQTT_TOPIC, message, null, new IMqttActionListener() {
-                    @Override
-                    public void onSuccess(IMqttToken asyncActionToken) {
-                        Log.e("MqttManager", "sendTempSuccess");
-                        PushMessage.delete(content);
-                        List<String> temp = PushMessage.findAll();
-                        if (temp.size() > 0) {
-                            sendTemp(temp);
-                        } else {
-                            isWorking = false;
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                        Log.e("MqttManager", "sendTempFail");
-                        isWorking = false;
-                    }
-                });
-            } catch (MqttException e) {
-                e.fillInStackTrace();
-            }
-        }
-    }
-
     /**
      * 推送消息
      *
      * @return boolean
      */
-    public void publish(String pushStr) {
-        if (StringUtils.isBlank(pushStr)) {
-            return;
-        }
+    public void publish() {
         if (client != null && client.isConnected()) {
-            MqttMessage message = new MqttMessage(pushStr.getBytes());
+            List<PushMessage> dataList;
+            Log.e("MqttManager", "sendTotalSize  " + PushMessage.findAll().size());
+            if (PushMessage.findAll().size() > 20) {
+                dataList = PushMessage.findAll().subList(0, 20);
+            } else {
+                dataList = PushMessage.findAll();
+            }
+            if (dataList == null || dataList.size() == 0) {
+                notifySendDelayed();
+                return;
+            }
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("{\"list\": [");
+            for (int i = 0; i < dataList.size(); i++) {
+                stringBuilder.append(dataList.get(i).data);
+                if (i != dataList.size() - 1) {
+                    stringBuilder.append(",");
+                }
+            }
+            stringBuilder.append("]}");
+
+            Log.e("MqttManager", "sendContent  " + dataList.size());
+            MqttMessage message = new MqttMessage(stringBuilder.toString().getBytes());
             message.setQos(qos);
+
             try {
                 client.publish(Config.MQTT_TOPIC, message, null, new IMqttActionListener() {
                     @Override
                     public void onSuccess(IMqttToken asyncActionToken) {
-                        Log.e("MqttManager", "sendSuccess");
-                        List<String> temp = PushMessage.findAll();
-                        if (temp.size() > 0 && !isWorking) {
-                            isWorking = true;
-                            sendTemp(temp);
+                        PushMessage.delete(dataList);
+                        Log.e("MqttManager", "sendSuccess   restSize==  " + PushMessage.findAll().size()+"      ");
+                        if (PushMessage.findAll().size() > 0) {
+                            notifySend();
+                        } else {
+                            notifySendDelayed();
                         }
                     }
 
                     @Override
                     public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                        PushMessage.save(pushStr);
-                        Log.e("MqttManager", "sendFail");
+                        Log.e("MqttManager", "sendFail     ");
+                        notifySendDelayed();
                     }
                 });
             } catch (MqttException e) {
                 e.fillInStackTrace();
-                Log.e("MqttManager", "Publishing msg exception " + e.getMessage());
             }
         } else {
-            Log.e("MqttManager", "sendFail null");
-            PushMessage.save(pushStr);
+            notifySendDelayed();
         }
     }
 
@@ -400,78 +400,23 @@ public class MqttManager implements LocObserver {
     }
 
     public void pushLoc(BuildPushData data) {
-        pushInternalLoc(data, false);
-    }
-
-    /**
-     * 不限制推送数据
-     *
-     * @param data
-     */
-    public void pushLocNoLimit(BuildPushData data) {
-        pushInternalLoc(data, true);
+        pushInternalLoc(data);
     }
 
     /**
      * 推送司机及其定位信息
      *
      * @param data
-     * @param noLimit
      */
-    private void pushInternalLoc(BuildPushData data, boolean noLimit) {
+    private void pushInternalLoc(BuildPushData data) {
         if (data != null) {
-            String pushStr = BuildPushUtil.buildPush(data, noLimit);
-
-            if (pushStr == null) {
+            PushBean pushBean = BuildPushUtil.buildPush(data);
+            if (pushBean == null) {
                 Exception exception = new IllegalArgumentException("自定义异常：推送数据为空，可能是司机信息为空");
                 CrashReport.postCatchedException(exception);
                 return;
             }
-            publish(pushStr);
-            //上传后删除本地的缓存
-            FileUtil.delete("v6driver", "pushCache.txt");
+            PushMessage.save(pushBean);
         }
     }
-
-    /**
-     * http 上传位置信息
-     */
-    private void gpsPush(String pushStr) {
-        if (NetUtil.getNetWorkState(XApp.getInstance()) == NetUtil.NETWORK_NONE) {
-            return; //没网
-        }
-//        if (DymOrder.findAll().size() == 0) {
-//            return;
-//        }
-        long lastPushTime = XApp.getMyPreferences().getLong(Config.SP_LAST_GPS_PUSH_TIME, 0);
-        if (System.currentTimeMillis() - lastPushTime > 5 * 1000) {
-            XApp.getEditor().putLong(Config.SP_LAST_GPS_PUSH_TIME, System.currentTimeMillis()).apply();
-
-            Observable<GetFeeResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                    .gpsPush(Config.APP_KEY, pushStr)
-                    .filter(new HttpResultFunc<>())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread());
-
-            rxManager.add(observable.subscribe(new MySubscriber<>(XApp.getInstance(),
-                    false,
-                    false,
-                    new HaveErrSubscriberListener<GetFeeResult>() {
-                        @Override
-                        public void onNext(GetFeeResult getFeeResult) {
-//                            PullFeeEntity entity = new PullFeeEntity();
-//                            entity.msg = "http_costInfo";
-//                            entity.data = getFeeResult.data;
-//                            HandlePush.getInstance().handPush(new Gson().toJson(entity));
-                        }
-
-                        @Override
-                        public void onError(int code) {
-
-                        }
-                    })));
-            FileUtil.delete("v6driver", "pushCache.txt");
-        }
-    }
-
 }

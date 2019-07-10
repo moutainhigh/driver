@@ -13,7 +13,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "data.db";
 
-    private static final int VERSION = 122;
+    private static final int VERSION = 123;
 
     private StringBuffer sqlBuf;
 
@@ -163,6 +163,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
     private void createTempMessage(SQLiteDatabase db) {
         sqlBuf.append("CREATE TABLE ").append("t_cp_temp_message").append(" (")
                 .append("id").append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
+                .append("timeStamp").append(" ").append("LONG").append(",")
                 .append("data").append(" ").append("TEXT")
                 .append(");");
         execCreateTableSQL(db);
