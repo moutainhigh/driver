@@ -298,6 +298,7 @@ public class MqttManager implements LocObserver {
             } else {
                 dataList = PushMessage.findAll();
             }
+
             if (dataList == null || dataList.size() == 0) {
                 notifySendDelayed();
                 return;
@@ -321,7 +322,7 @@ public class MqttManager implements LocObserver {
                     @Override
                     public void onSuccess(IMqttToken asyncActionToken) {
                         PushMessage.delete(dataList);
-                        Log.e("MqttManager", "sendSuccess   restSize==  " + PushMessage.findAll().size()+"      ");
+                        Log.e("MqttManager", "sendSuccess   restSize==  " + PushMessage.findAll().size() + "      ");
                         if (PushMessage.findAll().size() > 0) {
                             notifySend();
                         } else {

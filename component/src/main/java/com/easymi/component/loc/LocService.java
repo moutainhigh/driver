@@ -209,12 +209,6 @@ public class LocService extends Service implements AMapLocationListener {
                 Log.e("locService", "location Error, ErrCode:"
                         + amapLocation.getErrorCode() + ", errInfo:"
                         + amapLocation.getErrorInfo());
-                EmLoc locationInfo = EmLoc.ALocToLoc(amapLocation);
-                Log.e("locService", "emLoc>>>>" + locationInfo.toString());
-                Intent intent = new Intent(LocService.this, LocReceiver.class);
-                intent.setAction(LOC_CHANGED);
-                intent.putExtra("locPos", new Gson().toJson(locationInfo));
-                sendBroadcast(intent);//发送位置变化广播
             }
         }
 
