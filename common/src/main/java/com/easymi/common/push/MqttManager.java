@@ -71,7 +71,7 @@ public class MqttManager implements LocObserver {
     private String pullTopic;
 
     private RxManager rxManager;
-    private final Handler handler;
+    private Handler handler;
 
     /**
      * 初始化
@@ -392,6 +392,10 @@ public class MqttManager implements LocObserver {
         rxManager.clear();
         if (client != null && client.isConnected()) {
             client.disconnect();
+        }
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
+            handler = null;
         }
     }
 
