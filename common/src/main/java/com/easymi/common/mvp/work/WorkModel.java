@@ -63,10 +63,10 @@ public class WorkModel implements WorkContract.Model {
                 .map(new HttpResultFunc2<>())
                 .retryWhen(observable
                         -> observable.flatMap((Func1<Throwable, Observable<?>>) throwable
-                        -> Observable.timer(5, TimeUnit.SECONDS)))
+                        -> Observable.timer(30, TimeUnit.SECONDS)))
                 .repeatWhen(observable
                         -> observable.flatMap((Func1<Void, Observable<?>>) aVoid
-                        -> Observable.timer(5, TimeUnit.SECONDS)))
+                        -> Observable.timer(30, TimeUnit.SECONDS)))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
