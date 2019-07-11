@@ -558,7 +558,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.replace(R.id.flow_frame, waitFragment);
             transaction.commit();
         } else if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+            cancelTimer();
             showToEndFragment();
+            toolbar.setRightText("", null);
 //                if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
 //                    settleFragmentDialog.setDjOrder(zcOrder);
 //                } else {
