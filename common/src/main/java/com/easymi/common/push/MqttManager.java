@@ -304,14 +304,14 @@ public class MqttManager implements LocObserver {
                 return;
             }
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("{\"list\": [");
+            stringBuilder.append("[");
             for (int i = 0; i < dataList.size(); i++) {
                 stringBuilder.append(dataList.get(i).data);
                 if (i != dataList.size() - 1) {
                     stringBuilder.append(",");
                 }
             }
-            stringBuilder.append("]}");
+            stringBuilder.append("]");
 
             Log.e("MqttManager", "sendContent  " + dataList.size());
             MqttMessage message = new MqttMessage(stringBuilder.toString().getBytes());
