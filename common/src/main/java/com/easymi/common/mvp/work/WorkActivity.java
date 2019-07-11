@@ -320,6 +320,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     public void initRecycler() {
         adapter = new OrderAdapter(new ArrayList<>(), this);
         swipeRefreshLayout.getRecyclerView().setAdapter(adapter);
+        swipeRefreshLayout.setLoadMoreEnable(false);
         swipeRefreshLayout.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         swipeRefreshLayout.setOnLoadListener(new SwipeRecyclerView.OnLoadListener() {
             @Override
@@ -613,12 +614,12 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     }
 
     private void refreshData() {
-        swipeRefreshLayout.postDelayed(new Runnable() {
+        swipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
                 swipeRefreshLayout.setRefreshing(true);
             }
-        }, 300);
+        });
     }
 
     @Override
