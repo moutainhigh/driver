@@ -106,13 +106,9 @@ public class MqttManager implements LocObserver {
     public static void release() {
         Log.e("MqttManager", "onRelease");
         LocReceiver.getInstance().deleteObserver(getInstance());
-        try {
-            if (mInstance != null) {
-                mInstance.disConnect();
-                mInstance = null;
-            }
-        } catch (Exception e) {
-
+        if (mInstance != null) {
+            mInstance.disConnect();
+            mInstance = null;
         }
     }
 
@@ -203,16 +199,25 @@ public class MqttManager implements LocObserver {
     }
 
     private void notifySendDelayed() {
+        if (handler == null) {
+            return;
+        }
         removeNotify();
         handler.sendEmptyMessageDelayed(0, 10000);
     }
 
     private void notifySend() {
+        if (handler == null) {
+            return;
+        }
         removeNotify();
         handler.sendEmptyMessage(0);
     }
 
     private void removeNotify() {
+        if (handler == null) {
+            return;
+        }
         if (handler.hasMessages(0)) {
             handler.removeMessages(0);
         }
@@ -388,14 +393,18 @@ public class MqttManager implements LocObserver {
      *
      * @throws MqttException
      */
-    public void disConnect() throws MqttException {
+    private void disConnect() {
         rxManager.clear();
-        if (client != null && client.isConnected()) {
-            client.disconnect();
-        }
         if (handler != null) {
             handler.removeCallbacksAndMessages(null);
             handler = null;
+        }
+        try {
+            if (client != null && client.isConnected()) {
+                client.disconnect();
+            }
+        } catch (MqttException e) {
+            e.fillInStackTrace();
         }
     }
 
