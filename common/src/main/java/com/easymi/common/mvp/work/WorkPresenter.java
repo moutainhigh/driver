@@ -343,7 +343,10 @@ public class WorkPresenter implements WorkContract.Presenter {
                     EmUtil.getEmployInfo().phone, System.currentTimeMillis() / 1000, EmUtil.getEmployInfo().serviceType);
             HandleBean.deleteAll();
             XApp.getEditor().putLong(Config.ONLINE_TIME, 0).apply();
-            uploadTime(1);
+            if (TextUtils.equals(Config.APP_KEY, "1HAcient1kLqfeX7DVTV0dklUkpGEnUC")) {
+            } else {
+                uploadTime(1);
+            }
             view.offlineSuc();
 
         })));
