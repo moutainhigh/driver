@@ -342,7 +342,9 @@ public class WorkPresenter implements WorkContract.Presenter {
             centerUtil.driverDown(driverId, EmUtil.getEmployInfo().companyId, EmUtil.getEmployInfo().userName, EmUtil.getEmployInfo().realName,
                     EmUtil.getEmployInfo().phone, System.currentTimeMillis() / 1000, EmUtil.getEmployInfo().serviceType);
             HandleBean.deleteAll();
-            XApp.getEditor().putLong(Config.ONLINE_TIME, 0).apply();
+            XApp.getEditor().remove(Config.SP_TEMP)
+                    .putLong(Config.ONLINE_TIME, 0)
+                    .apply();
             if (TextUtils.equals(Config.APP_KEY, "1HAcient1kLqfeX7DVTV0dklUkpGEnUC")) {
             } else {
                 uploadTime(1);

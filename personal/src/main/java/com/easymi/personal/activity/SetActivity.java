@@ -262,6 +262,7 @@ public class SetActivity extends RxBaseActivity {
             @Override
             public void onNext(EmResult emResult) {
                 HandleBean.deleteAll();
+                XApp.getEditor().remove(Config.SP_TEMP).apply();
                 EmUtil.employLogout(SetActivity.this);
             }
 
