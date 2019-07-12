@@ -30,6 +30,13 @@ public class PushMessage {
         db.delete("t_cp_temp_message", null, null);
     }
 
+    public static void delete(PushMessage data) {
+        SqliteHelper helper = SqliteHelper.getInstance();
+        SQLiteDatabase db = helper.openSqliteDatabase();
+        db.delete("t_cp_temp_message", "data = ?", new String[]{String.valueOf(data.data)});
+    }
+
+
     public static void delete(List<PushMessage> data) {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();

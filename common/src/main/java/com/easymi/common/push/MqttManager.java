@@ -26,6 +26,7 @@ import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
@@ -40,6 +41,8 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import rx.Observable;
@@ -296,29 +299,57 @@ public class MqttManager implements LocObserver {
      */
     public void publish() {
         if (client != null && client.isConnected()) {
-            List<PushMessage> dataList;
+            List<PushMessage> cacheList;
             Log.e("MqttManager", "sendTotalSize  " + PushMessage.findAll().size());
             if (PushMessage.findAll().size() > 20) {
-                dataList = PushMessage.findAll().subList(0, 20);
+                cacheList = PushMessage.findAll().subList(0, 20);
             } else {
-                dataList = PushMessage.findAll();
+                cacheList = PushMessage.findAll();
             }
 
-            if (dataList == null || dataList.size() == 0) {
+            if (cacheList == null || cacheList.size() == 0) {
                 notifySendDelayed();
                 return;
             }
+
+            String temp = XApp.getMyPreferences().getString(Config.SP_TEMP, "");
+
+            List<String> tempList = new ArrayList<>();
+
+            if (!TextUtils.isEmpty(temp)) {
+                tempList.addAll(new Gson().fromJson(temp, new TypeToken<List<String>>() {
+                }.getType()));
+            }
+
+            Iterator<PushMessage> iterator = cacheList.iterator();
+
+            while (iterator.hasNext()) {
+                PushMessage message = iterator.next();
+                for (String s : tempList) {
+                    if (message.data.contains(s)) {
+                        PushMessage.delete(message);
+                        iterator.remove();
+                        break;
+                    }
+                }
+            }
+
+            if (cacheList.size() == 0) {
+                notifySendDelayed();
+                return;
+            }
+
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("[");
-            for (int i = 0; i < dataList.size(); i++) {
-                stringBuilder.append(dataList.get(i).data);
-                if (i != dataList.size() - 1) {
+            for (int i = 0; i < cacheList.size(); i++) {
+                stringBuilder.append(cacheList.get(i).data);
+                if (i != cacheList.size() - 1) {
                     stringBuilder.append(",");
                 }
             }
             stringBuilder.append("]");
 
-            Log.e("MqttManager", "sendContent  " + dataList.size());
+            Log.e("MqttManager", "sendContent  " + cacheList.size());
             MqttMessage message = new MqttMessage(stringBuilder.toString().getBytes());
             message.setQos(qos);
 
@@ -326,8 +357,8 @@ public class MqttManager implements LocObserver {
                 client.publish(Config.MQTT_TOPIC, message, null, new IMqttActionListener() {
                     @Override
                     public void onSuccess(IMqttToken asyncActionToken) {
-                        PushMessage.delete(dataList);
-                        Log.e("MqttManager", "sendSuccess   restSize==  " + PushMessage.findAll().size() + "      ");
+                        PushMessage.delete(cacheList);
+                        Log.e("MqttManager", "sendSuccess   restSize==  " + PushMessage.findAll().size() + "      " + stringBuilder.toString());
                         if (PushMessage.findAll().size() > 0) {
                             notifySend();
                         } else {

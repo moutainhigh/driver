@@ -73,6 +73,7 @@ public class Config {
     /**
      * SharedPrefence 常量配置
      */
+    public static final String SP_TEMP = "orderTemp";
     public static final String SP_DRIVERID = "driverId";
     public static final String SP_ISLOGIN = "isLogin";
     public static final String SP_LAST_LOC = "lastLoc";

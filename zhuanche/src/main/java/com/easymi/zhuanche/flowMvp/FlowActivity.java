@@ -89,6 +89,7 @@ import com.easymi.zhuanche.receiver.CancelOrderReceiver;
 import com.easymi.zhuanche.receiver.OrderFinishReceiver;
 import com.easymi.zhuanche.widget.RefuseOrderDialog;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
@@ -1250,10 +1251,25 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void showSettleDialog() {
+                saveTemp();
                 settleFragmentDialog = new SettleFragmentDialog(FlowActivity.this, zcOrder, bridge);
                 settleFragmentDialog.show();
             }
         };
+    }
+
+
+    private void saveTemp() {
+        String temp = XApp.getMyPreferences().getString(Config.SP_TEMP, "");
+        List<String> list = new ArrayList<>();
+        if (!TextUtils.isEmpty(temp)) {
+            list.addAll(new Gson().fromJson(temp, new TypeToken<List<String>>() {
+            }.getType()));
+        }
+        if (!list.contains(String.valueOf(orderId))) {
+            list.add(String.valueOf(orderId));
+        }
+        XApp.getEditor().putString(Config.SP_TEMP, new Gson().toJson(list)).apply();
     }
 
     @Override
