@@ -84,7 +84,6 @@ public class XApp extends MultiDexApplication {
         if (!isAppProcess()) {
             return;
         }
-
         //初始化路由
         if (BuildConfig.DEBUG) {
             ARouter.openDebug();   //非打包情况下,必须调用调用
