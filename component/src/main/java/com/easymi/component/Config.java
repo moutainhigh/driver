@@ -3,6 +3,7 @@ package com.easymi.component;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName:
+ *
  * @Author: shine
  * Date: 2018/12/24 下午5:00
  * Description:
@@ -11,42 +12,40 @@ package com.easymi.component;
 
 public class Config {
 
-    public static  String HOST;
+    public static String HOST;
 
 
-    public static String H5_HOST ;
+    public static String H5_HOST;
 
-    public static  String MQTT_HOST ;
-
-
+    public static String MQTT_HOST;
+    public static boolean IS_ENCRYPT;
 
     public static int PORT_HTTP;
     public static int PORT_TCP;
     public static String MQTT_TOPIC;
     public static String ACK_TOPIC;
     public static String MQTT_CLIENT_ID;
-    public static  String MQTT_USER_NAME ;
-    public static  String MQTT_PSW ;
+    public static String MQTT_USER_NAME;
+    public static String MQTT_PSW;
 
-    public static  String APP_KEY;//资运
-
+    public static String APP_KEY;//资运
 
 
     /**
      * 上传图片地址.
      */
-    public static  String HOST_UP_PIC = "http://up-z2.qiniu.com";
+    public static String HOST_UP_PIC = "http://up-z2.qiniu.com";
     //是否是通用司机端
     public static final boolean COMM_USE = false;
 
     /**
      * QQ分享id
      */
-    public static  String QQ_APP_ID ;
+    public static String QQ_APP_ID;
     /**
      * 微信分享id
      */
-    public static  String WX_APP_ID ;
+    public static String WX_APP_ID;
 
     /**
      * 百度TTS_ID
@@ -64,8 +63,8 @@ public class Config {
     /**
      * 图片服务器地址  线上
      */
-    public static  String IMG_SERVER;
-    public static  String IMG_PATH ;
+    public static String IMG_SERVER;
+    public static String IMG_PATH;
     public static String VERSION_NAME;
 
     public static final String MQTT_PUSH_TOPIC = "/driver/gps";

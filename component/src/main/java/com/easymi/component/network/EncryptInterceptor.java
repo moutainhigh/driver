@@ -21,6 +21,7 @@ import okhttp3.Response;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: EncryptInterceptor
+ *
  * @Author: hufeng
  * Date: 2018/12/24 下午1:10
  * Description: 拦截请求添加sign
@@ -32,6 +33,10 @@ public class EncryptInterceptor implements Interceptor {
     public Response intercept(@NonNull Chain chain) throws IOException {
 
         Request originRequest = chain.request();
+
+        if (!Config.IS_ENCRYPT) {
+            return chain.proceed(originRequest);
+        }
 
         //排除登录及其之前接口，其余接口使用拦截器进行aes加密。
         String url = chain.request().url().toString();
@@ -75,6 +80,7 @@ public class EncryptInterceptor implements Interceptor {
 
     /**
      * post方法处理
+     *
      * @param originRequest
      * @param originBody
      * @return
@@ -101,6 +107,7 @@ public class EncryptInterceptor implements Interceptor {
 
     /**
      * get方式处理
+     *
      * @param originRequest
      * @return
      */
@@ -150,7 +157,7 @@ public class EncryptInterceptor implements Interceptor {
         try {
             //将默认的url编码还原后加密在url编码
             String decoderStr = URLDecoderUtil.decode(content);
-            value = EncApi.getInstance().en(XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),decoderStr);
+            value = EncApi.getInstance().en(XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA), decoderStr);
             value = URLEncoder.encode(value, "utf-8");
         } catch (Exception e) {
             e.printStackTrace();

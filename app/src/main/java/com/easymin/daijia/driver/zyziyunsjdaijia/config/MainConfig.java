@@ -24,6 +24,7 @@ public class MainConfig {
                 JSONObject jb = new JSONObject(config);
 
                 Config.HOST = BuildConfig.HOST;
+                Config.IS_ENCRYPT = BuildConfig.IS_ENCRYPT;
                 Config.H5_HOST = BuildConfig.H5_HOST;
                 Config.VERSION_NAME = BuildConfig.VERSION_NAME;
                 Config.IMG_SERVER = BuildConfig.IMG_SERVER;

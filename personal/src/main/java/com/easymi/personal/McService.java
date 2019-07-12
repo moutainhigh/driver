@@ -12,7 +12,6 @@ import com.easymi.personal.result.AnnouncementResult;
 import com.easymi.personal.result.ArticleResult;
 import com.easymi.personal.result.BankResult;
 import com.easymi.personal.result.BusinessResult;
-import com.easymi.personal.result.CardHostResult;
 import com.easymi.personal.result.CompanyResult;
 import com.easymi.personal.result.ConfigResult;
 import com.easymi.personal.result.EvaResult;
@@ -256,7 +255,7 @@ public interface McService {
      * @return
      */
     @FormUrlEncoded
-    @POST("api/v1/public/driver/login")
+    @POST("api/v1/resources/driver/login")
     Observable<LoginResult> loginByPW(@Field("phone") String phone,
                                       @Field("password") String password,
                                       @Field("randomStr") String randomStr,
@@ -266,7 +265,6 @@ public interface McService {
                                       @Field("loginType") String loginType,
                                       @Field("latitude") String latitude,
                                       @Field("longitude") String longitude,
-
                                       @Field("appVersion") String appVersion,
                                       @Field("mobileOperators") String mobileOperators,
                                       @Field("mapType") String mapType

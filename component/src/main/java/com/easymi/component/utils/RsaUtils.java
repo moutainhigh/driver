@@ -1,20 +1,19 @@
 // Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
 package com.easymi.component.utils;
 
-import android.content.Context;
-import com.easymi.component.utils.Log;
-
-
-import com.easymi.component.R;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
+import com.easymi.component.Config;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
-import java.security.*;
+import java.security.Key;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.Signature;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -22,6 +21,10 @@ import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.RSAPublicKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Random;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 
 /**
  * RSA公钥/私钥/签名工具包
@@ -389,7 +392,10 @@ public class RsaUtils {
      * @param content
      * @return
      */
-    public static String rsaEncode( String content) {
+    public static String rsaEncode(String content) {
+        if (!Config.IS_ENCRYPT) {
+            return content;
+        }
         String str = "";
         try {
             str = Base64Utils.encode(encryptByPublicKey(content.getBytes("UTF-8"), new Loader().getRsaPs()));

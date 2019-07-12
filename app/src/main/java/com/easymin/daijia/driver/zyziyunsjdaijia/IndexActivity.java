@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.easymi.common.activity.SplashActivity;
 import com.easymi.component.base.RxBaseActivity;
 

@@ -22,13 +22,13 @@ public class ResponseIntercepter implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         Response response = chain.proceed(chain.request());
         String content = response.body().string();
-
-        if (content.startsWith("{") && content.endsWith("}")) {
+        if (!Config.IS_ENCRYPT || content.startsWith("{") && content.endsWith("}")) {
             HttpLoggingInterceptor.Logger.DEFAULT.log(URLDecoderUtil.stringToJSON(content));
         } else {
             content = URLDecoderUtil.decode(EncApi.getInstance().dec(XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA), content));
             HttpLoggingInterceptor.Logger.DEFAULT.log(URLDecoderUtil.stringToJSON(content));
         }
+
         return response
                 .newBuilder()
                 .body(ResponseBody.create(MediaType.parse(MIME), content))
