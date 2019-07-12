@@ -241,7 +241,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
 
     @Override
     public void setTitleStatus(String content) {
-        if (EmUtil.getEmployInfo().sex == 2) {
+        if (TextUtils.equals(EmUtil.getEmployInfo().serviceType, Config.ZHUANCHE) && EmUtil.getEmployInfo().sex == 2) {
             tvTitle.setVisibility(TextUtils.equals(content, "1") ? View.VISIBLE : View.GONE);
         } else {
             tvTitle.setVisibility(View.GONE);
@@ -412,12 +412,15 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
 
     @Override
     public void offlineSuc() {
-        XApp.getInstance().syntheticVoice("", XApp.OFF_LINE);
-        listenOrderCon.setVisibility(View.GONE);
-        rippleBackground.stopRippleAnimation();
-        bottomBtnCon.setVisibility(View.VISIBLE);
-        refreshData();
-//        showEmpty(0);
+        if (TextUtils.equals(Config.APP_KEY, "1HAcient1kLqfeX7DVTV0dklUkpGEnUC")) {
+            EmUtil.employLogout(this);
+        } else {
+            XApp.getInstance().syntheticVoice("", XApp.OFF_LINE);
+            listenOrderCon.setVisibility(View.GONE);
+            rippleBackground.stopRippleAnimation();
+            bottomBtnCon.setVisibility(View.VISIBLE);
+            refreshData();
+        }
     }
 
     @Override
