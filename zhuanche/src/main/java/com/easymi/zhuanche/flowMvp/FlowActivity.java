@@ -637,7 +637,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 }
             }
             this.zcOrder = zcOrder;
-            if (flashAssign &&zcOrder.orderStatus ==DJOrderStatus.GOTO_BOOKPALCE_ORDER){
+            if (flashAssign && zcOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) {
                 flashAssign();
             }
             showTopView();
