@@ -268,6 +268,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         pullIcon = findViewById(R.id.pull_icon);
         peek_con = findViewById(R.id.peek_con);
         tvTitle = findViewById(R.id.tv_title);
+        tvTitle.setSelected(true);
         listenOrderCon = findViewById(R.id.listen_order_con);
         onLineBtn = findViewById(R.id.online_btn);
 
