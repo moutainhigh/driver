@@ -84,12 +84,12 @@ public class XApp extends MultiDexApplication {
         if (!isAppProcess()) {
             return;
         }
-
         //初始化路由
         if (BuildConfig.DEBUG) {
             ARouter.openDebug();   //非打包情况下,必须调用调用
             ARouter.openLog();
         }
+
         ARouter.init(this);
         SqliteHelper.init(this);
 
@@ -101,6 +101,11 @@ public class XApp extends MultiDexApplication {
 
         int lastVersion = getMyPreferences().getInt(Config.SP_VERSION, 0);
         int current = SysUtil.getVersionCode(this);
+
+//        if (current == 9500) {
+//            ZCSetting.deleteAll();
+//        }
+//        getEditor().putString("getMqttTemp","");
         if (current > lastVersion) {
             getEditor().clear()
                     .putLong(Config.SP_DRIVERID, -1)

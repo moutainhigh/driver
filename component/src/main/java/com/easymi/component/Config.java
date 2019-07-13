@@ -23,6 +23,7 @@ public class Config {
     public static int PORT_HTTP;
     public static int PORT_TCP;
     public static String MQTT_TOPIC;
+    public static String ACK_TOPIC;
     public static String MQTT_CLIENT_ID;
     public static  String MQTT_USER_NAME ;
     public static  String MQTT_PSW ;
@@ -72,6 +73,7 @@ public class Config {
     /**
      * SharedPrefence 常量配置
      */
+    public static final String SP_TEMP = "orderTemp";
     public static final String SP_DRIVERID = "driverId";
     public static final String SP_ISLOGIN = "isLogin";
     public static final String SP_LAST_LOC = "lastLoc";

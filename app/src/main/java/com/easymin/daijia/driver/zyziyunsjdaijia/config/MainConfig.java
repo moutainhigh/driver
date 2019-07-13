@@ -27,7 +27,7 @@ public class MainConfig {
                 Config.H5_HOST = BuildConfig.H5_HOST;
                 Config.VERSION_NAME = BuildConfig.VERSION_NAME;
                 Config.IMG_SERVER = BuildConfig.IMG_SERVER;
-
+                Config.IMG_PATH = "";
                 Config.APP_KEY = jb.optString("APP_KEY");
                 Config.QQ_APP_ID = jb.optString("QQ_APP_ID");
                 Config.WX_APP_ID = jb.optString("WX_APP_ID");

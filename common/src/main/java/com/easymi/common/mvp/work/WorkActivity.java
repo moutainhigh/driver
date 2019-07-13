@@ -6,9 +6,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -24,7 +24,6 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.amap.api.maps.AMap;
-import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
@@ -32,14 +31,11 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
-import com.easymi.common.CommApiService;
 import com.easymi.common.R;
 import com.easymi.common.activity.CreateActivity;
 import com.easymi.common.adapter.OrderAdapter;
 import com.easymi.common.entity.AnnAndNotice;
 import com.easymi.common.entity.BuildPushData;
-import com.easymi.common.entity.MqttConfig;
-import com.easymi.common.entity.MqttResult;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.mvp.order.OrderActivity;
@@ -51,7 +47,6 @@ import com.easymi.common.receiver.EmployStatusChangeReceiver;
 import com.easymi.common.receiver.NoticeReceiver;
 import com.easymi.common.receiver.OrderRefreshReceiver;
 import com.easymi.common.register.InfoActivity;
-import com.easymi.common.result.SettingResult;
 import com.easymi.common.widget.NearInfoWindowAdapter;
 import com.easymi.common.widget.RegisterDialog;
 import com.easymi.component.Config;
@@ -60,14 +55,8 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
-import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
-import com.easymi.component.network.ApiManager;
-import com.easymi.component.network.HttpResultFunc;
-import com.easymi.component.network.HttpResultFunc2;
-import com.easymi.component.network.MySubscriber;
-import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
@@ -76,6 +65,7 @@ import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.LoadingButton;
+import com.easymi.component.widget.SwipeRecyclerView;
 import com.easymi.component.widget.pinned.PinnedHeaderDecoration;
 import com.skyfishjy.library.RippleBackground;
 
@@ -87,12 +77,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 
 /**
@@ -117,8 +101,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     LinearLayout bottomBar;
     MapView mapView;
     RippleBackground rippleBackground;
-    RecyclerView recyclerView;
-    SwipeRefreshLayout swipeRefreshLayout;
+    SwipeRecyclerView swipeRefreshLayout;
     CusToolbar toolbar;
     LinearLayout createOrder;
     ImageView pullIcon;
@@ -140,8 +123,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     TextView todayIncome;
     TextView noOrderText;
     LinearLayout bottomBtnCon;
-    LinearLayout guideFrame;
-    ImageView gotoSet;
     Button btn_create;
 
     /**
@@ -167,6 +148,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     private OrderRefreshReceiver orderRefreshReceiver;
 
     private WorkPresenter presenter;
+    private TextView tvTitle;
 
     @Override
     public int getLayoutId() {
@@ -176,7 +158,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     @Override
     public void initViews(Bundle savedInstanceState) {
         EventBus.getDefault().register(this);
-
         // 屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -191,7 +172,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
 
         createOrder.setOnClickListener(v -> {
             Intent intent = new Intent(WorkActivity.this, CreateActivity.class);
-
             startActivity(intent);
         });
 
@@ -205,7 +185,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         listenOrderCon.setOnClickListener(v -> {
             presenter.offline();
         });
-
         EmLoc emLoc = EmUtil.getLastLoc();
         if (emLoc != null) {
             receiveLoc(emLoc);
@@ -260,6 +239,19 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         }
     }
 
+    @Override
+    public void setTitleStatus(String content) {
+        if (TextUtils.equals(EmUtil.getEmployInfo().serviceType, Config.ZHUANCHE) && EmUtil.getEmployInfo().sex == 2) {
+            tvTitle.setVisibility(TextUtils.equals(content, "1") ? View.VISIBLE : View.GONE);
+        } else {
+            tvTitle.setVisibility(View.GONE);
+        }
+    }
+
+    public void getMoney(double value) {
+        todayIncome.setText(String.valueOf(value));
+    }
+
     private void initNotifity() {
         notifityClose.setOnClickListener(v -> notifityCon.setVisibility(View.GONE));
     }
@@ -271,12 +263,12 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         bottomBar = findViewById(R.id.bottom_bar);
         mapView = findViewById(R.id.map_view);
         rippleBackground = findViewById(R.id.ripple_ground);
-        recyclerView = findViewById(R.id.recyclerView);
         createOrder = findViewById(R.id.create_order);
         swipeRefreshLayout = findViewById(R.id.swipe_layout);
         pullIcon = findViewById(R.id.pull_icon);
         peek_con = findViewById(R.id.peek_con);
-
+        tvTitle = findViewById(R.id.tv_title);
+        tvTitle.setSelected(true);
         listenOrderCon = findViewById(R.id.listen_order_con);
         onLineBtn = findViewById(R.id.online_btn);
 
@@ -299,10 +291,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         todayIncome = findViewById(R.id.today_income);
 
         noOrderText = findViewById(R.id.no_order_img);
-
-        guideFrame = findViewById(R.id.guide_frame);
-        gotoSet = findViewById(R.id.guide_go_to_set);
-
         bottomBtnCon = findViewById(R.id.bottom_btn_con);
         btn_create = findViewById(R.id.btn_create);
 
@@ -331,14 +319,22 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
      */
     @Override
     public void initRecycler() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        adapter = new OrderAdapter(new ArrayList<>(), this);
+        swipeRefreshLayout.getRecyclerView().setAdapter(adapter);
+        swipeRefreshLayout.setLoadMoreEnable(false);
+        swipeRefreshLayout.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        swipeRefreshLayout.setOnLoadListener(new SwipeRecyclerView.OnLoadListener() {
+            @Override
+            public void onRefresh() {
+                presenter.loadEmploy(EmUtil.getEmployId());
+                presenter.indexOrders();
+                presenter.workStatistics();
+            }
 
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            noOrderText.setVisibility(View.GONE);
-            presenter.loadEmploy(EmUtil.getEmployId());
+            @Override
+            public void onLoadMore() {
+            }
         });
-
-        swipeRefreshLayout.setRefreshing(true);
     }
 
     /**
@@ -349,24 +345,21 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     @Override
     public void showOrders(List<MultipleOrder> MultipleOrders) {
         orders.clear();
-        if (MultipleOrders == null || MultipleOrders.size() == 0) {
+        orders.addAll(MultipleOrders);
+        if (orders.size() == 1) {
             showEmpty(0);
         } else {
-            orders.addAll(MultipleOrders);
             hideEmpty();
-            recyclerView.setVisibility(View.VISIBLE);
         }
 
         adapter = new OrderAdapter(orders, this);
-        recyclerView.setAdapter(adapter);
+        swipeRefreshLayout.getRecyclerView().setAdapter(adapter);
         PinnedHeaderDecoration pinnedHeaderDecoration = new PinnedHeaderDecoration();
         //设置只有RecyclerItem.ITEM_HEADER的item显示标签
         pinnedHeaderDecoration.setPinnedTypeHeader(MultipleOrder.ITEM_HEADER);
         pinnedHeaderDecoration.registerTypePinnedHeader(MultipleOrder.ITEM_HEADER, (parent, adapterPosition) -> true);
         pinnedHeaderDecoration.registerTypePinnedHeader(MultipleOrder.ITEM_DESC, (parent, adapterPosition) -> true);
-        recyclerView.addItemDecoration(pinnedHeaderDecoration);
-
-        getSetting();
+        swipeRefreshLayout.getRecyclerView().addItemDecoration(pinnedHeaderDecoration);
     }
 
     private void setHeaderView(RecyclerView view) {
@@ -412,24 +405,22 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         listenOrderCon.setVisibility(View.VISIBLE);
         rippleBackground.startRippleAnimation();
         bottomBtnCon.setVisibility(View.GONE);
-        MqttManager.getInstance().pushLocNoLimit(new BuildPushData(EmUtil.getLastLoc()));
-        presenter.indexOrders();
-        swipeRefreshLayout.setRefreshing(true);
-        recyclerView.setVisibility(View.VISIBLE);
-        hideEmpty();
-        presenter.loadEmploy(EmUtil.getEmployId());
+        MqttManager.getInstance().pushLoc(new BuildPushData(EmUtil.getLastLoc()));
+        refreshData();
+//        hideEmpty();
     }
 
     @Override
     public void offlineSuc() {
-        XApp.getInstance().syntheticVoice("", XApp.OFF_LINE);
-        listenOrderCon.setVisibility(View.GONE);
-        rippleBackground.stopRippleAnimation();
-        bottomBtnCon.setVisibility(View.VISIBLE);
-        swipeRefreshLayout.setRefreshing(false);
-        recyclerView.setVisibility(View.GONE);
-        showEmpty(0);
-        presenter.loadEmploy(EmUtil.getEmployId());
+        if (TextUtils.equals(Config.APP_KEY, "1HAcient1kLqfeX7DVTV0dklUkpGEnUC")) {
+            EmUtil.employLogout(this);
+        } else {
+            XApp.getInstance().syntheticVoice("", XApp.OFF_LINE);
+            listenOrderCon.setVisibility(View.GONE);
+            rippleBackground.stopRippleAnimation();
+            bottomBtnCon.setVisibility(View.VISIBLE);
+            refreshData();
+        }
     }
 
     @Override
@@ -445,15 +436,20 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     }
 
     List<Marker> markers = new ArrayList<>();
-    List<NearDriver> drivers = new ArrayList<>();
 
     @Override
     public void showDrivers(List<NearDriver> drivers) {
+        if (drivers == null || drivers.isEmpty()) {
+            for (Marker marker : markers) {
+                marker.remove();
+            }
+            markers.clear();
+            return;
+        }
         for (Marker marker : markers) {
             marker.remove();
         }
         markers.clear();
-        this.drivers = drivers;
         MarkerOptions options = new MarkerOptions();
         //设置Marker可拖动
         options.draggable(false);
@@ -469,9 +465,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
             options.position(new LatLng(driver.latitude, driver.longitude));
             options.icon(BitmapDescriptorFactory.fromView(getMarkerView(driver)));
             Marker marker = aMap.addMarker(options);
-            marker.setInfoWindowEnable(true);
-            marker.setSnippet(driver.name);
-            marker.setTitle(driver.phone);
             markers.add(marker);
 
             LatLng latLng = new LatLng(driver.latitude, driver.longitude);
@@ -479,7 +472,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         }
         LatLng center = new LatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
         LatLngBounds bounds = MapUtil.getBounds(latLngs, center);
-        aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50));
+        aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 200));
     }
 
     @Override
@@ -521,7 +514,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         listenOrderCon.setVisibility(View.VISIBLE);
         rippleBackground.startRippleAnimation();
         bottomBtnCon.setVisibility(View.GONE);
-        swipeRefreshLayout.setRefreshing(true);
     }
 
     @Override
@@ -529,7 +521,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         listenOrderCon.setVisibility(View.GONE);
         rippleBackground.stopRippleAnimation();
         bottomBtnCon.setVisibility(View.VISIBLE);
-        swipeRefreshLayout.setRefreshing(false);
+        stopRefresh();
         /**
          * 专车补单在下线状态
          */
@@ -552,13 +544,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
             EmUtil.employLogout(this);
         } else if (String.valueOf(employ.status).equals(EmployStatus.ONLINE)) {
             showOffline();//非听单状态
-            presenter.initDaemon();
         } else {
             showOnline();//听单状态
-            if (presenter != null) {
-                presenter.indexOrders();
-                presenter.initDaemon();
-            }
         }
     }
 
@@ -624,10 +611,19 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
             ARouter.getInstance().build("/personal/LoginActivity").navigation();
             finish();
         }
+        refreshData();
         if (presenter != null) {
             presenter.loadDataOnResume();
         }
-        getMqttConfig();
+    }
+
+    private void refreshData() {
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(true);
+            }
+        });
     }
 
     @Override
@@ -686,6 +682,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     @Override
     protected void onStop() {
         super.onStop();
+        stopRefresh();
         LocReceiver.getInstance().deleteObserver(this);//取消位置改变的订阅
         unregisterReceiver(cancelOrderReceiver);
         unregisterReceiver(employStatusChangeReceiver);
@@ -746,22 +743,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
             ((AnimationDrawable) loadingImg.getBackground()).stop();
             loadingFrame.setVisibility(View.INVISIBLE);
             refreshImg.setVisibility(View.VISIBLE);
-
             aMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-            presenter.queryNearDriver(location.latitude, location.longitude);
-        } else {
-            if (this.location != null) {
-                LatLng last = new LatLng(this.location.latitude, this.location.longitude);
-                LatLng current = new LatLng(location.latitude, location.longitude);
-                double dis = AMapUtils.calculateLineDistance(last, current);
-                if (dis > 30) {//大于30米重新加载司机
-                    if (isFront) {//activity可见时才调用该接口
-                        presenter.queryNearDriver(location.latitude, location.longitude);
-                    }
-                }
-            }
         }
-
+        presenter.queryNearDriver(location.latitude, location.longitude);
         this.location = location;
     }
 
@@ -785,14 +769,14 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
 
     @Override
     public void onCancelOrder(long orderId, String orderType) {
-        swipeRefreshLayout.setRefreshing(true);
-        presenter.indexOrders();
+        refreshData();
     }
 
     @Override
     public void onStatusChange(String status) {
         if (status.equals(EmployStatus.WORK)) {
             showOnline();
+            refreshData();
         } else {
             showOffline();
         }
@@ -850,138 +834,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
 
     @Override
     public void onRefreshOrder() {
-        swipeRefreshLayout.setRefreshing(true);
-        presenter.indexOrders();
-    }
-
-    /**
-     * 获取配置信息
-     */
-    private void getSetting() {
-        Observable<SettingResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .getAppSetting(EmUtil.getEmployInfo().companyId)
-                .filter(new HttpResultFunc<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        observable.subscribe(new MySubscriber<>(this, false, false, settingResult -> {
-            if (settingResult.data != null) {
-                for (ZCSetting sub : settingResult.data) {
-//                    if (sub.serviceType.equals(Config.ZHUANCHE) ||
-//                            sub.serviceType.equals(Config.CARPOOL)) {
-//                        ZCSetting.deleteAll();
-//                        sub.save();
-//                    } else if (sub.serviceType.equals(Config.TAXI)) {
-//                        TaxiSetting.deleteAll();
-//                        TaxiSetting taxiSetting = new TaxiSetting();
-//                        taxiSetting.isPaid = sub.isPaid;
-//                        taxiSetting.isExpenses = sub.isExpenses;
-//                        taxiSetting.canCancelOrder = sub.canCancelOrder;
-//                        taxiSetting.isAddPrice = sub.isAddPrice;
-//                        taxiSetting.employChangePrice = sub.employChangePrice;
-//                        taxiSetting.employChangeOrder = sub.employChangeOrder;
-//                        taxiSetting.driverRepLowBalance = sub.driverRepLowBalance;
-//                        taxiSetting.passengerDistance = sub.passengerDistance;
-//                        taxiSetting.version = sub.version;
-//                        taxiSetting.grabOrder = sub.grabOrder;
-//                        taxiSetting.distributeOrder = sub.distributeOrder;
-//                        taxiSetting.serviceType = sub.serviceType;
-//                        taxiSetting.save();
-//                    }
-                    if (EmUtil.getEmployInfo().serviceType.equals(sub.serviceType)) {
-                        ZCSetting.deleteAll();
-                        sub.save();
-                    }
-                }
-            }
-        }));
-    }
-
-    private boolean isStartMqtt;
-
-    /**
-     * 获取mqtt推送配置
-     */
-    private void getMqttConfig() {
-        if (isStartMqtt) {
-            return;
-        }
-        isStartMqtt = true;
-
-        mRxManager.add(
-                ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                        .getConfig()
-                        .map(new HttpResultFunc2<>())
-                        .retryWhen(observable -> observable.delay(5, TimeUnit.SECONDS))
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new MySubscriber<MqttConfig>(this, false, false, new NoErrSubscriberListener<MqttConfig>() {
-                            @Override
-                            public void onNext(MqttConfig mqttConfig) {
-                                Config.MQTT_USER_NAME = mqttConfig.userName;
-                                Config.MQTT_PSW = mqttConfig.password;
-                                Config.MQTT_HOST = mqttConfig.broker;
-                                Config.PORT_HTTP = mqttConfig.portHttp;
-                                Config.PORT_TCP = mqttConfig.portTcp;
-                                Config.MQTT_TOPIC = mqttConfig.topic;
-                                MqttManager.getInstance().creatConnect();
-                                getTopic();
-                            }
-                        })));
-    }
-
-    /**
-     * 检查clentid是否存活
-     */
-    private void checkTopic() {
-        mRxManager.add(
-                ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                        .getCurrentTopic(Config.MQTT_CLIENT_ID)
-                        .map(new HttpResultFunc2<>(0))
-                        .doOnNext(new Action1<List<MqttResult>>() {
-                            @Override
-                            public void call(List<MqttResult> mqttResults) {
-                                if (MqttManager.getInstance().isSubscribe()) {
-                                    if (mqttResults != null && mqttResults.isEmpty()) {
-
-                                    } else {
-                                        throw new RuntimeException();
-                                    }
-                                }
-                            }
-                        })
-                        .retryWhen(observable -> observable.delay(30, TimeUnit.SECONDS))
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new MySubscriber<>(WorkActivity.this, false, false, new NoErrSubscriberListener<List<MqttResult>>() {
-                            @Override
-                            public void onNext(List<MqttResult> mqttResults) {
-                                if (!MqttManager.getInstance().isSubscribe() || (mqttResults != null && mqttResults.isEmpty())) {
-                                    MqttManager.release();
-                                    isStartMqtt = false;
-                                    getMqttConfig();
-                                }
-                            }
-                        })));
-    }
-
-    /**
-     * 获取clentid
-     */
-    private void getTopic() {
-        mRxManager.add(ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .getMqttTopic()
-                .map(new HttpResultFunc2<>())
-                .retryWhen(observable -> observable.delay(5, TimeUnit.SECONDS))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MySubscriber<String>(WorkActivity.this, false, false, new NoErrSubscriberListener<String>() {
-                    @Override
-                    public void onNext(String mqttTopic) {
-                        Config.MQTT_CLIENT_ID = mqttTopic;
-                        checkTopic();
-                    }
-                })));
-
+        refreshData();
     }
 }

@@ -16,4 +16,19 @@ public class NearDriver {
     public double latitude;
     public double longitude;
     public String status;
+    public float bearing;//方位角
+
+    @Override
+    public String toString() {
+        return "NearDriver{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", distance=" + distance +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", status='" + status + '\'' +
+                ", bearing=" + bearing +
+                '}';
+    }
 }

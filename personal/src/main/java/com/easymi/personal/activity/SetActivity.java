@@ -2,7 +2,6 @@ package com.easymi.personal.activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +14,7 @@ import com.easymi.component.Config;
 import com.easymi.component.activity.WebActivity;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.entity.HandleBean;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
@@ -35,6 +35,7 @@ import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: SetActivity
+ *
  * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description: 设置界面
@@ -89,7 +90,7 @@ public class SetActivity extends RxBaseActivity {
             editor.apply();
         });
         shakeAble.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            CsEditor editor =  XApp.getEditor();
+            CsEditor editor = XApp.getEditor();
             editor.putBoolean(Config.SP_SHAKE_ABLE, isChecked);
             editor.apply();
         });
@@ -123,6 +124,7 @@ public class SetActivity extends RxBaseActivity {
 
     /**
      * 修改密码
+     *
      * @param view
      */
     public void changePsw(View view) {
@@ -132,6 +134,7 @@ public class SetActivity extends RxBaseActivity {
 
     /**
      * 选择本地语言
+     *
      * @param view
      */
     public void choiceLanguage(View view) {
@@ -141,6 +144,7 @@ public class SetActivity extends RxBaseActivity {
 
     /**
      * 跳转统计
+     *
      * @param view
      */
     public void toStats(View view) {
@@ -150,17 +154,19 @@ public class SetActivity extends RxBaseActivity {
 
     /**
      * 帮助中心
+     *
      * @param view
      */
     public void helpCenter(View view) {
         Intent intent = new Intent(this, WebActivity.class);
-        intent.putExtra("url", Config.H5_HOST+"#/protocol?articleName=driverHelp&appKey="+Config.APP_KEY);
+        intent.putExtra("url", Config.H5_HOST + "#/protocol?articleName=driverHelp&appKey=" + Config.APP_KEY);
         intent.putExtra("title", getString(R.string.help_center));
         startActivity(intent);
     }
 
     /**
      * 意见反馈
+     *
      * @param view
      */
     public void feedBack(View view) {
@@ -169,8 +175,8 @@ public class SetActivity extends RxBaseActivity {
     }
 
     /**
-     *
      * 导航设置
+     *
      * @param view
      */
     public void naviPrefence(View view) {
@@ -180,6 +186,7 @@ public class SetActivity extends RxBaseActivity {
 
     /**
      * 通知帮助
+     *
      * @param view
      */
     public void notifyHelp(View view) {
@@ -192,6 +199,7 @@ public class SetActivity extends RxBaseActivity {
 
     /**
      * 联系我们
+     *
      * @param view
      */
     public void contractUs(View view) {
@@ -200,11 +208,12 @@ public class SetActivity extends RxBaseActivity {
 //        intent.putExtra("title", getString(R.string.set_contract_us));
 //        startActivity(intent);
 //        PhoneUtil.call(SetActivity.this, EmUtil.getEmployInfo().company_phone);
-        PhoneUtil.call(SetActivity.this,"11111111");
+        PhoneUtil.call(SetActivity.this, "11111111");
     }
 
     /**
      * 关于我们
+     *
      * @param view
      */
     public void aboutUs(View view) {
@@ -219,6 +228,7 @@ public class SetActivity extends RxBaseActivity {
 
     /**
      * 退出登陆
+     *
      * @param view
      */
     public void logOut(View view) {
@@ -251,7 +261,8 @@ public class SetActivity extends RxBaseActivity {
                 true, new HaveErrSubscriberListener<EmResult>() {
             @Override
             public void onNext(EmResult emResult) {
-
+                HandleBean.deleteAll();
+                XApp.getEditor().remove(Config.SP_TEMP).apply();
                 EmUtil.employLogout(SetActivity.this);
             }
 

@@ -1,9 +1,7 @@
 package com.easymi.personal.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,13 +23,10 @@ import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.CsEditor;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.GlideCircleTransform;
-import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.CusToolbar;
-import com.easymi.component.widget.RatingBar;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
-import com.easymi.personal.activity.register.RegisterBaseActivity;
 import com.easymi.personal.result.LoginResult;
 
 import rx.Observable;
@@ -102,13 +97,16 @@ public class PersonalActivity extends RxBaseActivity {
 
         Employ employ = EmUtil.getEmployInfo();
 
-        if (employ.serviceType.equals(Config.CUSTOMBUS) ||
-                employ.serviceType.equals(Config.COUNTRY)){
-            lin_card.setVisibility(View.VISIBLE);
-        }else {
+        if (employ==null){
             lin_card.setVisibility(View.GONE);
+        }else {
+            if (employ.serviceType.equals(Config.CUSTOMBUS) ||
+                    employ.serviceType.equals(Config.COUNTRY)) {
+                lin_card.setVisibility(View.VISIBLE);
+            } else {
+                lin_card.setVisibility(View.GONE);
+            }
         }
-
         showBase(employ);
     }
 
@@ -165,6 +163,7 @@ public class PersonalActivity extends RxBaseActivity {
                         .transform(new GlideCircleTransform())
                         .placeholder(R.mipmap.photo_default)
                         .diskCacheStrategy(DiskCacheStrategy.ALL);
+
                 Glide.with(PersonalActivity.this)
                         .load(Config.IMG_SERVER + employ.portraitPath + Config.IMG_PATH)
                         .apply(options)

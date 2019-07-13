@@ -70,8 +70,8 @@ public class SwipeRecyclerView extends FrameLayout
         mFootView = new SimpleFooterView(getContext());
 
         View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_swipe_recyclerview, this);
-        mRefreshLayout =  view.findViewById(R.id.SwipeRefreshLayout);
-        recyclerView =  view.findViewById(R.id.RecyclerView);
+        mRefreshLayout = view.findViewById(R.id.SwipeRefreshLayout);
+        recyclerView = view.findViewById(R.id.RecyclerView);
         mLayoutManager = recyclerView.getLayoutManager();
 
         mRefreshLayout.setOnRefreshListener(this);
@@ -192,9 +192,10 @@ public class SwipeRecyclerView extends FrameLayout
 
     /**
      * 设置layoutManager
+     *
      * @param manager
      */
-    public void setLayoutManager(LayoutManager manager){
+    public void setLayoutManager(LayoutManager manager) {
         recyclerView.setLayoutManager(manager);
     }
 
@@ -546,9 +547,9 @@ public class SwipeRecyclerView extends FrameLayout
     /**
      * RecyclerView 移动到当前位置，
      *
-     * @param manager   设置RecyclerView对应的manager
-     * @param mRecyclerView  当前的RecyclerView
-     * @param n  要跳转的位置
+     * @param manager       设置RecyclerView对应的manager
+     * @param mRecyclerView 当前的RecyclerView
+     * @param n             要跳转的位置
      */
     public static void moveToPosition(LinearLayoutManager manager, RecyclerView mRecyclerView, int n) {
 

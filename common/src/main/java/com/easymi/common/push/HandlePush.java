@@ -18,7 +18,6 @@ import com.easymi.common.CommApiService;
 import com.easymi.common.R;
 import com.easymi.common.entity.Address;
 import com.easymi.common.entity.MultipleOrder;
-import com.easymi.common.entity.PassengerLocation;
 import com.easymi.common.entity.PushAnnouncement;
 import com.easymi.common.mvp.grab.GrabActivity2;
 import com.easymi.common.mvp.work.WorkActivity;
@@ -28,9 +27,12 @@ import com.easymi.common.result.SettingResult;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
 import com.easymi.component.EmployStatus;
+import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.Employ;
+import com.easymi.component.entity.HandleBean;
+import com.easymi.component.entity.PassengerLocation;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.GsonUtil;
 import com.easymi.component.network.HaveErrSubscriberListener;
@@ -88,13 +90,11 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
         return instance;
     }
 
-    /**
-     * 推送消息分发
-     *
-     * @param jsonStr
-     */
     public void handPush(String jsonStr) {
+        this.handPush(jsonStr, true);
+    }
 
+    public void handPush(String jsonStr, boolean needSend) {
         rxManager = new RxManager();
         try {
             JSONObject jb = new JSONObject(jsonStr);
@@ -105,7 +105,12 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
-                if (!DymOrder.exists(order.orderId, order.serviceType)) {
+                if (needSend) {
+                    MqttManager.getInstance().publishAck(order.orderId, 1);
+                }
+                if (!HandleBean.exists(order.orderId, order.serviceType, "robbing") &&
+                        !HandleBean.exists(order.orderId, order.serviceType, "cancel")) {
+                    HandleBean.save(order.orderId, order.serviceType, "robbing");
                     loadOrder(order);
                 }
             } else if (msg.equals("sendorders")) {
@@ -113,26 +118,33 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
-
-                if (order.serviceType.equals(Config.GOV)) {
-                    XApp.getInstance().shake();
-                    XApp.getInstance().syntheticVoice("你有新的公务用车订单");
-                    refreshWork();
-                } else {
-                    if (!DymOrder.exists(order.orderId, order.serviceType)) {
-                        loadOrder(order);
-                    }
-                    newShowNotify(XApp.getInstance(), "", XApp.getInstance().getString(R.string.send_order), XApp.getInstance().getString(R.string.send_order_content));
+                if (needSend) {
+                    MqttManager.getInstance().publishAck(order.orderId, 1);
                 }
+                if (!HandleBean.exists(order.orderId, order.serviceType, "sendorders") &&
+                        !HandleBean.exists(order.orderId, order.serviceType, "cancel")) {
+                    HandleBean.save(order.orderId, order.serviceType, "sendorders");
+
+                    if (order.serviceType.equals(Config.GOV)) {
+                        XApp.getInstance().shake();
+                        XApp.getInstance().syntheticVoice("你有新的公务用车订单");
+                        refreshWork();
+                    } else {
+                        loadOrder(order);
+                        newShowNotify(XApp.getInstance(), "", XApp.getInstance().getString(R.string.send_order), XApp.getInstance().getString(R.string.send_order_content));
+                    }
+                }
+
             } else if (msg.equals("cancel")) {
                 //取消订单
                 MultipleOrder order = new MultipleOrder();
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
-
-                if (order.orderId != XApp.getMyPreferences().getLong("cancel_orderId", 0)) {
-                    XApp.getEditor().putLong("cancel_orderId", order.orderId).apply();
-
+                if (needSend) {
+                    MqttManager.getInstance().publishAck(order.orderId, 2);
+                }
+                if (!HandleBean.exists(order.orderId, order.serviceType, "cancel")) {
+                    HandleBean.save(order.orderId, order.serviceType, "cancel");
                     Message message = new Message();
                     message.what = 1;
                     Bundle bundle = new Bundle();
@@ -186,8 +198,9 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
 
-                if (order.orderId != XApp.getMyPreferences().getLong("finish_orderId", 0)) {
-                    XApp.getEditor().putLong("finish_orderId", order.orderId).apply();
+                if (!HandleBean.exists(order.orderId, order.serviceType, "finish") &&
+                        !HandleBean.exists(order.orderId, order.serviceType, "cancel")) {
+                    HandleBean.save(order.orderId, order.serviceType, "finish");
                     loadOrder(order);
                 }
             } else if (msg.equals("reAssign")) {
@@ -196,9 +209,9 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 order.orderId = jb.optJSONObject("data").optLong("orderId");
                 order.serviceType = jb.optJSONObject("data").optString("serviceType");
 
-                if (order.orderId != XApp.getMyPreferences().getLong("reAssign_orderId", 0)) {
-                    XApp.getEditor().putLong("reAssign_orderId", order.orderId).apply();
-
+                if (!HandleBean.exists(order.orderId, order.serviceType, "reAssign") &&
+                        !HandleBean.exists(order.orderId, order.serviceType, "cancel")) {
+                    HandleBean.save(order.orderId, order.serviceType, "reAssign");
                     Message message = new Message();
                     message.what = 3;
                     Bundle bundle = new Bundle();
@@ -206,6 +219,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                     message.setData(bundle);
                     handler.sendMessage(message);
                 }
+
             } else if (msg.equals("setting_change")) {
                 loadSetting();
             } else if (msg.equals("realFee")) {
@@ -216,7 +230,8 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 String orderType = jbData.optString("orderType");
                 DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
                 if (dymOrder != null) {
-                    if (dymOrder.distance > jbData.optDouble("distance")) {
+                    double currentDistance = new BigDecimal(jbData.optDouble("distance") / 1000).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    if (dymOrder.distance > currentDistance) {
                         return;
                     }
                     dymOrder.startFee = jbData.optDouble("startFee");
@@ -229,7 +244,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                     dymOrder.minestMoney = jbData.optDouble("minCost");
 
                     dymOrder.disFee = jbData.optDouble("distanceFee");
-                    dymOrder.distance = new BigDecimal(jbData.optDouble("distance") / 1000).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    dymOrder.distance = currentDistance;
                     //add
                     dymOrder.addDistance = jbData.optDouble("addDistance");
                     dymOrder.addFee = jbData.optDouble("addFee");
@@ -271,17 +286,24 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
 
                 order.passengerId = jb.optJSONObject("data").optLong("passengerId");
                 order.passengerPhone = jb.optJSONObject("data").optString("userPhone");
-
-                if (order.orderId != XApp.getMyPreferences().getLong("flashAssign_orderId", 0)) {
-                    XApp.getEditor().putLong("flashAssign_orderId", order.orderId).apply();
-
+                if (needSend) {
+                    MqttManager.getInstance().publishAck(order.orderId, 1);
+                }
+                if (!HandleBean.exists(order.orderId, order.serviceType, "flashAssign") &&
+                        !HandleBean.exists(order.orderId, order.serviceType, "cancel")) {
+                    HandleBean.save(order.orderId, order.serviceType, "flashAssign");
                     XApp.getInstance().shake();
                     if (StringUtils.isNotBlank(order.serviceType)) {
                         if (order.serviceType.equals(Config.ZHUANCHE)) {
-                            ARouter.getInstance()
-                                    .build("/zhuanche/FlowActivity")
-                                    .withBoolean("flashAssign", true)
-                                    .withLong("orderId", order.orderId).navigation();
+                            handler.post(() -> {
+                                if (ActManager.getInstance().existActivity("zhuanche.flowMvp.FlowActivity")) {
+                                    ActManager.getInstance().finishActivity("zhuanche.flowMvp.FlowActivity");
+                                }
+                                ARouter.getInstance()
+                                        .build("/zhuanche/FlowActivity")
+                                        .withBoolean("flashAssign", true)
+                                        .withLong("orderId", order.orderId).navigation();
+                            });
                         } else if (order.serviceType.equals(Config.TAXI)) {
                             ARouter.getInstance()
                                     .build("/taxi/FlowActivity")
@@ -344,7 +366,8 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice("你有公务用车订单需要执行");
             }
-        } catch (JSONException e) {
+        } catch (
+                JSONException e) {
             e.printStackTrace();
         }
     }
@@ -723,7 +746,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 Employ employ = EmUtil.getEmployInfo();
                 if (null != employ) {
                     employ.status = Integer.parseInt(status);
-                    employ.updateAll();
+                    employ.saveOrUpdate();
 
                     if (status != null) {
                         if (status.equals(EmployStatus.FROZEN)) {

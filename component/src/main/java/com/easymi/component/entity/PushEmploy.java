@@ -34,4 +34,6 @@ public class PushEmploy {
      * 绑定车牌号
      */
     public String vehicleNo;
+
+    public int sex;
 }

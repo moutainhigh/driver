@@ -1,5 +1,7 @@
 package com.easymi.common.util;
 
+import android.util.Log;
+
 import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.common.entity.OrderCustomer;
@@ -15,7 +17,6 @@ import com.easymi.component.entity.Employ;
 import com.easymi.component.entity.PushEmploy;
 import com.easymi.component.entity.Vehicle;
 import com.easymi.component.utils.EmUtil;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,19 +35,17 @@ public class BuildPushUtil {
 
     /**
      * @param buildPushData 需要推送的数据
-     * @param noLimit       不限制任何
      */
-    public static String buildPush(BuildPushData buildPushData, boolean noLimit) {
+    public static PushBean buildPush(BuildPushData buildPushData) {
 
         EmLoc emLoc = buildPushData.emLoc;
 
         PushData pushData = new PushData();
 
         //转换一下
-        Employ employ1 = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, 0));
+        Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, 0));
         PushEmploy pe;
-        if (employ1 != null && employ1 instanceof Employ) {
-            Employ employ = (Employ) employ1;
+        if (employ != null) {
             pe = new PushEmploy();
             pe.id = employ.id;
             pe.name = employ.realName;
@@ -54,13 +53,16 @@ public class BuildPushUtil {
             pe.companyId = employ.companyId;
             pe.phone = employ.phone;
             pe.business = employ.serviceType;
-            pe.modelId = employ.modelId;
-            if (Vehicle.exists(employ.id)){
+            pe.sex = employ.sex;
+            if (Vehicle.exists(employ.id)) {
                 Vehicle vehicle = Vehicle.findByEmployId(employ.id);
                 pe.vehicleNo = vehicle.vehicleNo;
-            }else {
+                pe.modelId = vehicle.vehicleModel;
+                Log.e("BuildPushUtil", "buildPush " + pe.modelId);
+            } else {
                 pe.vehicleNo = "";
             }
+            pushData.serviceType = employ.serviceType;
         } else {
             //司机信息异常不处理
             return null;
@@ -68,7 +70,6 @@ public class BuildPushUtil {
 
         pushData.driver = pe;
         pushData.appKey = EmUtil.getAppKey();
-        pushData.serviceType = employ1.serviceType;
 
         pushData.location = new PushDataLoc();
         pushData.location.latitude = emLoc.latitude;
@@ -148,43 +149,7 @@ public class BuildPushUtil {
         }
 
         pushData.location.orderInfo = orderList;
-
-//        /**
-//         * 历史未上传的位置信息
-//         */
-//        String cacheStr = FileUtil.readPushCache();
-//        List<PushData> dataList = new ArrayList<>();
-//        if (!StringUtils.isBlank(cacheStr)) {
-//            List<PushData> list = GsonUtil.parseToList(cacheStr, PushData[].class);
-//            if (list != null && !list.isEmpty()) {
-//                Log.e("MqttManager", "缓存点");
-//                dataList.addAll(list);
-//            }
-//        }
-//
-//        //本次的位置信息
-//        dataList.add(pushData);
-//
-//        List<PushData> newestDataList = new ArrayList<>();
-//
-//        //能上传网络定位或者不限制任何
-//        boolean canPushNetLoc = GPSSetting.getInstance().getNetEnable() || noLimit;
-//        if (!canPushNetLoc) {
-//            for (PushData pd : dataList) {
-//                if (pd != null && pd.location != null && pd.location.locationType == 1) {
-//                    //只上传GPS类型的定位
-//                    newestDataList.add(pd);
-//                }
-//            }
-//        } else {
-//            newestDataList.addAll(dataList);
-//        }
-//        PushBean pushBean = new PushBean("gps", newestDataList);
-
-        PushBean pushBean = new PushBean("gps", pushData);
-
-        String pushStr = new Gson().toJson(pushBean);
-        return pushStr;
+        return new PushBean("gps", pushData);
     }
 
 }

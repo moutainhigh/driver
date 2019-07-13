@@ -4,6 +4,7 @@ package com.easymi.component.entity;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.easymi.component.db.SqliteHelper;
 import com.google.gson.annotations.SerializedName;
@@ -49,7 +50,7 @@ public class ZCSetting {
     public int unStartCancel;
 
     /**
-     *前往预约地销单
+     * 前往预约地销单
      */
     public int goToCancel;
 
@@ -99,7 +100,8 @@ public class ZCSetting {
         values.put("goToCancel", goToCancel);
         values.put("arriveCancel", arriveCancel);
         values.put("arriveTime", arriveTime);
-        values.put("isRepairOrder",isRepairOrder);
+        values.put("isRepairOrder", isRepairOrder);
+        values.put("emploiesKm", emploiesKm);
 
         db.insert("t_zc_settinginfo", null, values);
     }
@@ -131,7 +133,11 @@ public class ZCSetting {
                 settingInfo.arriveCancel = cursor.getInt(cursor.getColumnIndex("arriveCancel"));
                 settingInfo.arriveTime = cursor.getLong(cursor.getColumnIndex("arriveTime"));
                 settingInfo.isRepairOrder = cursor.getInt(cursor.getColumnIndex("isRepairOrder"));
+                settingInfo.emploiesKm = cursor.getInt(cursor.getColumnIndex("emploiesKm"));
             }
+        } catch (Exception e) {
+            e.fillInStackTrace();
+            Log.e("ZCSetting", "catch   ");
         } finally {
             cursor.close();
         }

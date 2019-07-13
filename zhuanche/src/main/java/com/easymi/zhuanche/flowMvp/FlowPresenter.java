@@ -7,6 +7,7 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.navi.AMapNavi;
 import com.amap.api.navi.AMapNaviListener;
 import com.amap.api.navi.INaviInfoCallback;
+import com.amap.api.navi.enums.NaviType;
 import com.amap.api.navi.model.AMapLaneInfo;
 import com.amap.api.navi.model.AMapModelCross;
 import com.amap.api.navi.model.AMapNaviCameraInfo;
@@ -179,7 +180,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         intent.putExtra("endLatlng", end);
         intent.putExtra("orderId", orderId);
         intent.putExtra("orderType", Config.ZHUANCHE);
-
         intent.putExtra(Config.NAVI_MODE, Config.DRIVE_TYPE);
 
         stopNavi();//停止当前页面的导航，在到导航页时重新初始化导航
@@ -248,6 +248,16 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     public void onStopSpeaking() {
         XApp.getInstance().stopVoice();
         XApp.getInstance().clearVoiceList();
+    }
+
+    @Override
+    public void onReCalculateRoute(int i) {
+
+    }
+
+    @Override
+    public void onExitPage(int i) {
+
     }
 
     AMapNavi mAMapNavi;
@@ -410,7 +420,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     public void onInitNaviFailure() {
         isInit = false;
         stopNavi();
-        view.reRout();
+        view.showReCal();
     }
 
     @Override
@@ -453,6 +463,8 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             } else {
                 path = mAMapNavi.getNaviPath();
             }
+
+            mAMapNavi.startNavi(NaviType.GPS);//驾车导航
             if (path != null) {
                 view.showPath(ints, path);
                 view.showLeft(path.getAllLength(), path.getAllTime());
@@ -502,6 +514,7 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     @Override
     public void onCalculateRouteFailure(int i) {
         isCalculate = false;
+        stopNavi();
         view.showReCal();
     }
 
@@ -510,8 +523,8 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
      */
     @Override
     public void onReCalculateRouteForYaw() {
-        view.showReCal();
-        XApp.getInstance().syntheticVoice("您已偏航，已为您重新规划路径");
+//        view.showReCal();
+//        XApp.getInstance().syntheticVoice("您已偏航，已为您重新规划路径");
     }
 
     /**
@@ -603,13 +616,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     }
 
-    public void onExitPage(int i) {
-
-    }
-
-    public void onReCalculateRoute(int i) {
-
-    }
 
 
 }

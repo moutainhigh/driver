@@ -1,13 +1,10 @@
 package com.easymi.component.db;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import com.easymi.component.app.XApp;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -16,7 +13,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "data.db";
 
-    private static final int VERSION = 80;
+    private static final int VERSION = 123;
 
     private StringBuffer sqlBuf;
 
@@ -76,6 +73,8 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
         createBusStation(db);
         createCPOrderCustomer(db);
+        createHandlePojo(db);
+        createTempMessage(db);
     }
 
     @Override
@@ -92,7 +91,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + "t_zc_settinginfo");
         createZCSettingTable(db);
 
-        db.execSQL("DROP TABLE IF EXISTS " + "t_Vehicle");
+        db.execSQL("DROP TABLE IF EXISTS " + "t_vehicle");
         createVehicleInfoTable(db);
 
         db.execSQL("DROP TABLE IF EXISTS " + "t_systemconfig");
@@ -106,6 +105,12 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
         db.execSQL("DROP TABLE IF EXISTS " + "t_cp_order_customer");
         createCPOrderCustomer(db);
+
+        db.execSQL("DROP TABLE IF EXISTS " + "t_cp_handle_pojo");
+        createHandlePojo(db);
+
+        db.execSQL("DROP TABLE IF EXISTS " + "t_cp_temp_message");
+        createTempMessage(db);
     }
 
     private void createCPOrderCustomer(SQLiteDatabase db) {
@@ -139,6 +144,27 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("isContract").append(" ").append("INTEGER").append(",")
 
                 .append("subStatus").append(" ").append("INTEGER")
+                .append(");");
+        execCreateTableSQL(db);
+    }
+
+
+    private void createHandlePojo(SQLiteDatabase db) {
+        sqlBuf.append("CREATE TABLE ").append("t_cp_handle_pojo").append(" (")
+                .append("id").append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
+                .append("orderId").append(" ").append("LONG").append(",")
+                .append("doAction").append(" ").append("TEXT").append(",")
+                .append("serviceType").append(" ").append("TEXT")
+                .append(");");
+        execCreateTableSQL(db);
+    }
+
+
+    private void createTempMessage(SQLiteDatabase db) {
+        sqlBuf.append("CREATE TABLE ").append("t_cp_temp_message").append(" (")
+                .append("id").append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
+                .append("timeStamp").append(" ").append("LONG").append(",")
+                .append("data").append(" ").append("TEXT")
                 .append(");");
         execCreateTableSQL(db);
     }
@@ -219,7 +245,6 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("householdRegistrationName").append(" ").append("TEXT").append(",")
                 .append("token").append(" ").append("TEXT").append(",")
                 .append("refreshToken").append(" ").append("TEXT").append(",")
-                .append("modelId").append(" ").append("LONG").append(",")
                 .append("taxiModelId").append(" ").append("LONG").append(",")
                 .append("qrCodeUrl").append(" ").append("TEXT").append(",")
                 .append("serviceTel").append(" ").append("TEXT").append(",")
@@ -312,6 +337,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("id").append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
                 .append("isPaid").append(" ").append("INTEGER").append(",")
                 .append("isExpenses").append(" ").append("INTEGER").append(",")
+                .append("emploiesKm").append(" ").append("DOUBLE").append(",")
                 .append("canCancelOrder").append(" ").append("INTEGER").append(",")
                 .append("isAddPrice").append(" ").append("INTEGER").append(",")
                 .append("employChangePrice").append(" ").append("INTEGER").append(",")
@@ -336,12 +362,12 @@ public class SqliteHelper extends SQLiteOpenHelper {
     }
 
     private void createVehicleInfoTable(SQLiteDatabase db) {
-        sqlBuf.append("CREATE TABLE ").append("t_Vehicle").append(" (")
+        sqlBuf.append("CREATE TABLE ").append("t_vehicle").append(" (")
                 .append("employId").append(" INTEGER PRIMARY KEY, ")
                 .append("vehicleId").append(" ").append("LONG").append(",")
                 .append("companyId").append(" ").append("LONG").append(",")
                 .append("vehicleBrand").append(" ").append("TEXT").append(",")
-                .append("vehicleModel").append(" ").append("TEXT").append(",")
+                .append("vehicleModel").append(" ").append("LONG").append(",")
                 .append("plateColor").append(" ").append("TEXT").append(",")
                 .append("vehicleNo").append(" ").append("TEXT").append(",")
                 .append("vehicleType").append(" ").append("TEXT").append(",")

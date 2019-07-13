@@ -139,10 +139,6 @@ public interface FlowContract {
          */
         RxManager getManager();
 
-        /**
-         * 重新导航规划
-         */
-        void reRout();
     }
 
     interface Presenter {

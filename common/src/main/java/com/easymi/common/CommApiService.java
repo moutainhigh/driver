@@ -5,8 +5,11 @@ import com.easymi.common.entity.BusinessList;
 import com.easymi.common.entity.CompanyList;
 import com.easymi.common.entity.MqttConfig;
 import com.easymi.common.entity.MqttResult;
+import com.easymi.common.entity.NearDriver;
+import com.easymi.common.entity.NewToken;
 import com.easymi.common.entity.Pic;
 import com.easymi.common.entity.PushAnnouncement;
+import com.easymi.common.entity.PushPojo;
 import com.easymi.common.entity.QiNiuToken;
 import com.easymi.common.entity.RegisterRes;
 import com.easymi.common.entity.Vehicles;
@@ -15,7 +18,6 @@ import com.easymi.common.result.CityLineResult;
 import com.easymi.common.result.GetFeeResult;
 import com.easymi.common.result.LoginResult;
 import com.easymi.common.result.MultipleOrderResult;
-import com.easymi.common.result.NearDriverResult;
 import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.OnLineTimeResult;
 import com.easymi.common.result.PCOrderResult;
@@ -46,6 +48,7 @@ import rx.Observable;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName:
+ *
  * @Author: shine
  * Date: 2018/12/24 下午5:00
  * Description:
@@ -64,10 +67,13 @@ public interface CommApiService {
      * @return
      */
     @GET("api/v1/public/driver/ranges")
-    Observable<NearDriverResult> getNearDrivers(@Query("lat") Double lat,
-                                                @Query("lng") Double lng,
-                                                @Query("range") Double range,
-                                                @Query("serviceType") String serviceType);
+    Observable<EmResult2<List<NearDriver>>> getNearDrivers(@Query("lat") Double lat,
+                                                           @Query("lng") Double lng,
+                                                           @Query("range") Double range,
+                                                           @Query("serviceType") String serviceType);
+
+    @GET("/api/v1/taxi_online/config/app/driver")
+    Observable<EmResult2<String>> getTitleStatus();
 
     /**
      * 查询所有通知
@@ -330,6 +336,12 @@ public interface CommApiService {
     Observable<MultipleOrderResult> queryZCOrder(@Path("id") Long id,
                                                  @Query("appKey") String appKey);
 
+    @GET("api/v1/taxi_online/order/new")
+    Observable<EmResult2<PushPojo>> getNewOrder();
+
+    @GET("api/v1/taxi_online/order/status/{id}")
+    Observable<EmResult2<PushPojo>> getOrderStatus(@Path("id") long id);
+
     /**
      * 专车 --> 抢单
      *
@@ -488,6 +500,10 @@ public interface CommApiService {
                                                      @Query("status") String status);
 
 
+    @POST("/api/v1/public/refresh_token")
+    @FormUrlEncoded
+    Observable<EmResult2<NewToken>> refreshToken(@Field("token") String adCode);
+
     /**
      * 通用拒单 专车出租车用
      */
@@ -547,6 +563,7 @@ public interface CommApiService {
     Observable<QueryOrdersResult> queryMyOrders(@Query("page") int page,
                                                 @Query("size") int size,
                                                 @Query("status") String status);
+
     /**
      * 拼车完成订单详情查询
      */
@@ -583,10 +600,6 @@ public interface CommApiService {
             @Field("scheduleId") long scheduleId);
 
 
-
-
-
-
 ////////工作台工作时长统计
 
 
@@ -602,7 +615,7 @@ public interface CommApiService {
      */
     @FormUrlEncoded
     @POST("/api/v1/public/driver/online_time")
-    Observable<EmResult> upLoadOnlineTime (@Field("time") long time);
+    Observable<EmResult> upLoadOnlineTime(@Field("time") long time);
 
 
     @GET("/api/v3/connections/{topic}")
