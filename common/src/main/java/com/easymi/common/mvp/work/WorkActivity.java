@@ -942,7 +942,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
                             @Override
                             public void call(List<MqttResult> mqttResults) {
                                 if (MqttManager.getInstance().isSubscribe()) {
-                                    if (!(mqttResults != null && mqttResults.isEmpty())) {
+                                    if (mqttResults != null && mqttResults.isEmpty()) {
+
+                                    } else {
                                         throw new RuntimeException();
                                     }
                                 }
