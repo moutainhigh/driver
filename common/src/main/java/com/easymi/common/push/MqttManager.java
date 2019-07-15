@@ -326,7 +326,7 @@ public class MqttManager implements LocObserver {
             while (iterator.hasNext()) {
                 PushMessage message = iterator.next();
                 for (String s : tempList) {
-                    if (message.data.contains(s)) {
+                    if (message.data.contains("\"orderId\":" + s + ",")) {
                         PushMessage.delete(message);
                         iterator.remove();
                         break;

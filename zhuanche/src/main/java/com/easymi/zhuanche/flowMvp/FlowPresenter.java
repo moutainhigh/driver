@@ -6,8 +6,8 @@ import android.content.Intent;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.navi.AMapNavi;
 import com.amap.api.navi.AMapNaviListener;
-import com.amap.api.navi.INaviInfoCallback;
 import com.amap.api.navi.enums.NaviType;
+import com.amap.api.navi.model.AMapCalcRouteResult;
 import com.amap.api.navi.model.AMapLaneInfo;
 import com.amap.api.navi.model.AMapModelCross;
 import com.amap.api.navi.model.AMapNaviCameraInfo;
@@ -15,6 +15,7 @@ import com.amap.api.navi.model.AMapNaviCross;
 import com.amap.api.navi.model.AMapNaviInfo;
 import com.amap.api.navi.model.AMapNaviLocation;
 import com.amap.api.navi.model.AMapNaviPath;
+import com.amap.api.navi.model.AMapNaviRouteNotifyData;
 import com.amap.api.navi.model.AMapNaviTrafficFacilityInfo;
 import com.amap.api.navi.model.AMapServiceAreaInfo;
 import com.amap.api.navi.model.AimLessModeCongestionInfo;
@@ -32,7 +33,6 @@ import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.push.MqttManager;
 import com.easymi.component.Config;
 import com.easymi.component.activity.NaviActivity;
-import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
@@ -62,7 +62,7 @@ import rx.Observable;
  * Description:
  * History:
  */
-public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback, AMapNaviListener {
+public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
 
     private Context context;
 
@@ -244,22 +244,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
         })));
     }
 
-    @Override
-    public void onStopSpeaking() {
-        XApp.getInstance().stopVoice();
-        XApp.getInstance().clearVoiceList();
-    }
-
-    @Override
-    public void onReCalculateRoute(int i) {
-
-    }
-
-    @Override
-    public void onExitPage(int i) {
-
-    }
-
     AMapNavi mAMapNavi;
 
     @Override
@@ -439,11 +423,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     }
 
     @Override
-    public void onArriveDestination(boolean b) {
-        XApp.getInstance().syntheticVoice("即将到达目的地");
-    }
-
-    @Override
     public void onStartNavi(int i) {
     }
 
@@ -512,6 +491,21 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     }
 
     @Override
+    public void onCalculateRouteSuccess(AMapCalcRouteResult aMapCalcRouteResult) {
+
+    }
+
+    @Override
+    public void onCalculateRouteFailure(AMapCalcRouteResult aMapCalcRouteResult) {
+
+    }
+
+    @Override
+    public void onNaviRouteNotify(AMapNaviRouteNotifyData aMapNaviRouteNotifyData) {
+
+    }
+
+    @Override
     public void onCalculateRouteFailure(int i) {
         isCalculate = false;
         stopNavi();
@@ -568,6 +562,11 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     }
 
     @Override
+    public void updateIntervalCameraInfo(AMapNaviCameraInfo aMapNaviCameraInfo, AMapNaviCameraInfo aMapNaviCameraInfo1, int i) {
+
+    }
+
+    @Override
     public void onServiceAreaUpdate(AMapServiceAreaInfo[] aMapServiceAreaInfos) {
 
     }
@@ -594,6 +593,11 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void showLaneInfo(AMapLaneInfo[] aMapLaneInfos, byte[] bytes, byte[] bytes1) {
+
+    }
+
+    @Override
+    public void showLaneInfo(AMapLaneInfo aMapLaneInfo) {
 
     }
 

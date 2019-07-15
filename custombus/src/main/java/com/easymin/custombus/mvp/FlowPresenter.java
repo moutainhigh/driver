@@ -2,11 +2,10 @@ package com.easymin.custombus.mvp;
 
 import android.content.Context;
 
-import com.amap.api.maps.model.LatLng;
 import com.amap.api.navi.AMapNavi;
 import com.amap.api.navi.AMapNaviListener;
-import com.amap.api.navi.INaviInfoCallback;
 import com.amap.api.navi.enums.NaviType;
+import com.amap.api.navi.model.AMapCalcRouteResult;
 import com.amap.api.navi.model.AMapLaneInfo;
 import com.amap.api.navi.model.AMapModelCross;
 import com.amap.api.navi.model.AMapNaviCameraInfo;
@@ -14,6 +13,7 @@ import com.amap.api.navi.model.AMapNaviCross;
 import com.amap.api.navi.model.AMapNaviInfo;
 import com.amap.api.navi.model.AMapNaviLocation;
 import com.amap.api.navi.model.AMapNaviPath;
+import com.amap.api.navi.model.AMapNaviRouteNotifyData;
 import com.amap.api.navi.model.AMapNaviTrafficFacilityInfo;
 import com.amap.api.navi.model.AMapServiceAreaInfo;
 import com.amap.api.navi.model.AimLessModeCongestionInfo;
@@ -47,7 +47,7 @@ import java.util.List;
  * @Description:
  * @History:
  */
-public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback, AMapNaviListener {
+public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
 
     private Context context;
 
@@ -127,6 +127,11 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     }
 
     @Override
+    public void updateIntervalCameraInfo(AMapNaviCameraInfo aMapNaviCameraInfo, AMapNaviCameraInfo aMapNaviCameraInfo1, int i) {
+
+    }
+
+    @Override
     public void onServiceAreaUpdate(AMapServiceAreaInfo[] aMapServiceAreaInfos) {
 
     }
@@ -153,6 +158,11 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void showLaneInfo(AMapLaneInfo[] aMapLaneInfos, byte[] bytes, byte[] bytes1) {
+
+    }
+
+    @Override
+    public void showLaneInfo(AMapLaneInfo aMapLaneInfo) {
 
     }
 
@@ -197,6 +207,21 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
     }
 
     @Override
+    public void onCalculateRouteSuccess(AMapCalcRouteResult aMapCalcRouteResult) {
+
+    }
+
+    @Override
+    public void onCalculateRouteFailure(AMapCalcRouteResult aMapCalcRouteResult) {
+
+    }
+
+    @Override
+    public void onNaviRouteNotify(AMapNaviRouteNotifyData aMapNaviRouteNotifyData) {
+
+    }
+
+    @Override
     public void onInitNaviFailure() {
 
     }
@@ -208,11 +233,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void onLocationChange(AMapNaviLocation aMapNaviLocation) {
-
-    }
-
-    @Override
-    public void onArriveDestination(boolean b) {
 
     }
 
@@ -244,20 +264,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     }
 
-    @Override
-    public void onStopSpeaking() {
-
-    }
-
-    @Override
-    public void onReCalculateRoute(int i) {
-
-    }
-
-    @Override
-    public void onExitPage(int i) {
-
-    }
 
     @Override
     public void routePlanByNavi(Double endLat, Double endLng) {

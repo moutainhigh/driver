@@ -6,7 +6,7 @@ import android.content.Intent;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.navi.AMapNavi;
 import com.amap.api.navi.AMapNaviListener;
-import com.amap.api.navi.INaviInfoCallback;
+import com.amap.api.navi.model.AMapCalcRouteResult;
 import com.amap.api.navi.model.AMapLaneInfo;
 import com.amap.api.navi.model.AMapModelCross;
 import com.amap.api.navi.model.AMapNaviCameraInfo;
@@ -14,6 +14,7 @@ import com.amap.api.navi.model.AMapNaviCross;
 import com.amap.api.navi.model.AMapNaviInfo;
 import com.amap.api.navi.model.AMapNaviLocation;
 import com.amap.api.navi.model.AMapNaviPath;
+import com.amap.api.navi.model.AMapNaviRouteNotifyData;
 import com.amap.api.navi.model.AMapNaviTrafficFacilityInfo;
 import com.amap.api.navi.model.AMapServiceAreaInfo;
 import com.amap.api.navi.model.AimLessModeCongestionInfo;
@@ -61,7 +62,7 @@ import rx.Observable;
  * History:
  */
 
-public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback, AMapNaviListener {
+public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
 
     private Context context;
 
@@ -251,12 +252,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
             }
             view.cancelSuc();
         })));
-    }
-
-    @Override
-    public void onStopSpeaking() {
-        XApp.getInstance().stopVoice();
-        XApp.getInstance().clearVoiceList();
     }
 
     AMapNavi mAMapNavi;
@@ -453,10 +448,6 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     }
 
-    @Override
-    public void onArriveDestination(boolean b) {
-
-    }
 
     @Override
     public void onStartNavi(int i) {
@@ -518,6 +509,21 @@ public class FlowPresenter implements FlowContract.Presenter, INaviInfoCallback,
 
     @Override
     public void onPlayRing(int i) {
+
+    }
+
+    @Override
+    public void onCalculateRouteSuccess(AMapCalcRouteResult aMapCalcRouteResult) {
+
+    }
+
+    @Override
+    public void onCalculateRouteFailure(AMapCalcRouteResult aMapCalcRouteResult) {
+
+    }
+
+    @Override
+    public void onNaviRouteNotify(AMapNaviRouteNotifyData aMapNaviRouteNotifyData) {
 
     }
 

@@ -255,7 +255,8 @@ public interface McService {
      * @return
      */
     @FormUrlEncoded
-    @POST("api/v1/resources/driver/login")
+//    @POST("api/v1/resources/driver/login")
+    @POST("api/v1/public/driver/login")
     Observable<LoginResult> loginByPW(@Field("phone") String phone,
                                       @Field("password") String password,
                                       @Field("randomStr") String randomStr,

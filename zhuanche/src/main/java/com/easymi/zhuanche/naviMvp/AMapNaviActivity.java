@@ -11,10 +11,10 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.amap.api.navi.AMapNavi;
 import com.amap.api.navi.AMapNaviListener;
 import com.amap.api.navi.AMapNaviView;
-import com.amap.api.navi.AMapNaviViewListener;
 import com.amap.api.navi.enums.AMapNaviRingType;
 import com.amap.api.navi.enums.IconType;
 import com.amap.api.navi.enums.NaviType;
+import com.amap.api.navi.model.AMapCalcRouteResult;
 import com.amap.api.navi.model.AMapLaneInfo;
 import com.amap.api.navi.model.AMapModelCross;
 import com.amap.api.navi.model.AMapNaviCameraInfo;
@@ -22,6 +22,7 @@ import com.amap.api.navi.model.AMapNaviCross;
 import com.amap.api.navi.model.AMapNaviInfo;
 import com.amap.api.navi.model.AMapNaviLocation;
 import com.amap.api.navi.model.AMapNaviPath;
+import com.amap.api.navi.model.AMapNaviRouteNotifyData;
 import com.amap.api.navi.model.AMapNaviTrafficFacilityInfo;
 import com.amap.api.navi.model.AMapServiceAreaInfo;
 import com.amap.api.navi.model.AimLessModeCongestionInfo;
@@ -59,7 +60,7 @@ import java.util.List;
  * @History:
  */
 @Route(path = "/zhuanche/AMapNaviActivity")
-public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener, AMapNaviViewListener, FlowContract.View {
+public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener, FlowContract.View {
 
     /**
      * 导航基础界面
@@ -301,6 +302,11 @@ public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener
     }
 
     @Override
+    public void updateIntervalCameraInfo(AMapNaviCameraInfo aMapNaviCameraInfo, AMapNaviCameraInfo aMapNaviCameraInfo1, int i) {
+
+    }
+
+    @Override
     public void onServiceAreaUpdate(AMapServiceAreaInfo[] aMapServiceAreaInfos) {
 
     }
@@ -327,6 +333,11 @@ public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener
 
     @Override
     public void showLaneInfo(AMapLaneInfo[] aMapLaneInfos, byte[] bytes, byte[] bytes1) {
+
+    }
+
+    @Override
+    public void showLaneInfo(AMapLaneInfo aMapLaneInfo) {
 
     }
 
@@ -390,48 +401,17 @@ public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener
     }
 
     @Override
-    public void onNaviSetting() {
+    public void onCalculateRouteSuccess(AMapCalcRouteResult aMapCalcRouteResult) {
 
     }
 
     @Override
-    public void onNaviCancel() {
-        mAMapNavi.destroy();
-        finish();
-    }
-
-    @Override
-    public boolean onNaviBackClick() {
-        return false;
-    }
-
-    @Override
-    public void onNaviMapMode(int i) {
+    public void onCalculateRouteFailure(AMapCalcRouteResult aMapCalcRouteResult) {
 
     }
 
     @Override
-    public void onNaviTurnClick() {
-
-    }
-
-    @Override
-    public void onNextRoadClick() {
-
-    }
-
-    @Override
-    public void onScanViewButtonClick() {
-
-    }
-
-    @Override
-    public void onLockMap(boolean b) {
-
-    }
-
-    @Override
-    public void onNaviViewLoaded() {
+    public void onNaviRouteNotify(AMapNaviRouteNotifyData aMapNaviRouteNotifyData) {
 
     }
 
@@ -504,8 +484,6 @@ public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener
 
         sList.add(start);
         eList.add(end);
-
-        mAMapNaviView.setAMapNaviViewListener(this);
 
         if (null == mAMapNavi) {
             mAMapNavi = AMapNavi.getInstance(this);
