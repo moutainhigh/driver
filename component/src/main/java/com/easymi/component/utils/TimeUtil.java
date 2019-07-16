@@ -360,7 +360,6 @@ public class TimeUtil {
         // cal.set
         cal.set(Calendar.MONTH, Calendar.JANUARY);
         cal.set(Calendar.DATE, 1);
-
         return getDayStartTime(cal.getTime());
     }
     //获取本年的结束时间

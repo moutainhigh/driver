@@ -12,6 +12,8 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.easymi.common.CommApiService;
+import com.easymi.common.result.LoginResult;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
@@ -25,9 +27,7 @@ import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.GlideCircleTransform;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.CusToolbar;
-import com.easymi.personal.McService;
 import com.easymi.personal.R;
-import com.easymi.personal.result.LoginResult;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -122,7 +122,7 @@ public class PersonalActivity extends RxBaseActivity {
      * @param driverId
      */
     private void getDriverInfo(Long driverId) {
-        Observable<LoginResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
+        Observable<LoginResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .getDriverInfo(driverId, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())

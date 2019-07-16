@@ -16,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
+import com.easymi.common.CommApiService;
+import com.easymi.common.result.LoginResult;
 import com.easymi.common.result.PayResult;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
@@ -34,7 +36,6 @@ import com.easymi.personal.McService;
 import com.easymi.personal.R;
 import com.easymi.personal.entity.MoneyConfig;
 import com.easymi.personal.result.ConfigResult;
-import com.easymi.personal.result.LoginResult;
 import com.easymi.personal.result.RechargeResult;
 import com.easymi.personal.result.RechargeTypeResult;
 import com.ffcs.inapppaylib.bean.Constants;
@@ -378,7 +379,7 @@ public class RechargeActivity extends RxBaseActivity {
      * @param driverId
      */
     private void getDriverInfo(Long driverId) {
-        Observable<LoginResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
+        Observable<LoginResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .getDriverInfo(driverId, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())

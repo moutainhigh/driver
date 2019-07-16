@@ -1,5 +1,6 @@
 package com.easymi.taxi.flowMvp;
 
+import com.easymi.common.CommApiService;
 import com.easymi.common.entity.PullFeeResult;
 import com.easymi.common.entity.PushFee;
 import com.easymi.common.entity.PushFeeEmploy;
@@ -61,7 +62,7 @@ public class FlowModel implements FlowContract.Model {
 
     @Override
     public Observable<EmResult> refuseOrder(Long orderId,String orderType, String remark) {
-        return ApiManager.getInstance().createApi(Config.HOST, TaxiApiService.class)
+        return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .refuseOrder(orderId, orderType, remark)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
@@ -278,7 +279,7 @@ public class FlowModel implements FlowContract.Model {
 
     @Override
     public Observable<EmResult> cancelOrder(Long orderId, String remark) {
-        return ApiManager.getInstance().createApi(Config.HOST, TaxiApiService.class)
+        return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .cancelOrder(orderId, remark)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())

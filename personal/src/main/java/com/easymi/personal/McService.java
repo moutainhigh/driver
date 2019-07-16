@@ -4,7 +4,6 @@ import com.easymi.common.entity.CompanyList;
 import com.easymi.common.entity.PushAnnouncement;
 import com.easymi.common.entity.QiNiuToken;
 import com.easymi.common.entity.RegisterRes;
-import com.easymi.common.result.SettingResult;
 import com.easymi.component.result.EmResult;
 import com.easymi.personal.entity.CarInfo;
 import com.easymi.personal.entity.Register;
@@ -115,7 +114,7 @@ public interface McService {
      * @return
      */
     @FormUrlEncoded
-    @POST("/api/v1/feedback")
+    @POST("api/v1/feedback")
     Observable<EmResult> feedback(@Field("user_id") Long userId,
                                   @Field("user_name") String userName,
                                   @Field("company_id") Long companyId,
@@ -132,7 +131,7 @@ public interface McService {
      * @return
      */
     @FormUrlEncoded
-    @POST("api/v1/public/driver/cancellation")
+    @POST("api/v1/resources/driver/cancellation")
     Observable<EmResult> employLoginOut(@Field("id") Long driverId);
 
     /**
@@ -143,7 +142,7 @@ public interface McService {
      * @param appKey
      * @return
      */
-    @GET("/driver/api/v1/company")
+    @GET("driver/api/v1/company")
     Observable<CompanyResult> getCompany(@Query("city_code") String cityCode,
                                          @Query("ad_code") String adCode,
                                          @Query("app_key") String appKey
@@ -159,7 +158,7 @@ public interface McService {
      * @param type
      * @return
      */
-    @GET("/api/v1/shareLink")
+    @GET("api/v1/shareLink")
     Observable<ShareResult> shareLink(@Query("id") Long driverId,
                                       @Query("company_id") Long companyId,
                                       @Query("app_key") String appKey,
@@ -174,7 +173,7 @@ public interface McService {
      * @param endTime
      * @return
      */
-    @GET("/driver/api/v1/driverSend")
+    @GET("driver/api/v1/driverSend")
     Observable<StatisResult> driverSend(@Query("driver_id") Long driverId,
                                         @Query("app_key") String appKey,
                                         @Query("start_time") String startTime,
@@ -190,7 +189,7 @@ public interface McService {
      * @param cateId    代驾：2
      * @return
      */
-    @GET("/driver/api/v1/articles")
+    @GET("driver/api/v1/articles")
     Observable<HelpMenuResult> getHelpeSubMenu(@Query("app_key") String appKey,
                                                @Query("company_id") Long companyId,
                                                @Query("page") Integer page,
@@ -204,7 +203,7 @@ public interface McService {
      * @param id
      * @return
      */
-    @GET("/driver/api/v1/article")
+    @GET("driver/api/v1/article")
     Observable<ArticleResult> getArticleById(@Query("app_key") String appKey,
                                              @Query("id") Long id);
 
@@ -226,7 +225,7 @@ public interface McService {
      * @param companyId
      * @return
      */
-    @GET("/driver/api/v1/smsCode")
+    @GET("driver/api/v1/smsCode")
     Observable<EmResult> smsCode(@Query("phone") String phone,
                                  @Query("app_key") String appKey,
                                  @Query("country") String country,
@@ -255,8 +254,7 @@ public interface McService {
      * @return
      */
     @FormUrlEncoded
-//    @POST("api/v1/resources/driver/login")
-    @POST("api/v1/public/driver/login")
+    @POST("api/v1/resources/driver/login")
     Observable<LoginResult> loginByPW(@Field("phone") String phone,
                                       @Field("password") String password,
                                       @Field("randomStr") String randomStr,
@@ -273,22 +271,13 @@ public interface McService {
     );
 
     /**
-     * 获取APP配置
-     *
-     * @return
-     */
-    @GET("api/v1/public/driver/app")
-    Observable<SettingResult> getAppSetting(@Query("companyId") long companyId);
-
-
-    /**
      * 查询所有公告
      *
      * @param page
      * @param size
      * @return
      */
-    @GET("api/v1/public/message/affiches")
+    @GET("api/v1/message/affiches")
     Observable<AnnouncementResult> employAffiches(@Query("page") Integer page,
                                                   @Query("size") Integer size
     );
@@ -300,22 +289,10 @@ public interface McService {
      * @param size
      * @return
      */
-    @GET("api/v1/public/notice/employ/records")
+    @GET("api/v1/message/notice/employ/records")
     Observable<NotifityResult> notices(@Query("page") Integer page,
                                        @Query("size") Integer size
     );
-
-
-    /**
-     * 获取司机信息
-     *
-     * @param driverId
-     * @param appKey
-     * @return
-     */
-    @GET("api/v1/public/driver/get/{id}")
-    Observable<LoginResult> getDriverInfo(@Path("id") Long driverId,
-                                          @Query("app_key") String appKey);
 
     /**
      * 服务人员读通知
@@ -324,7 +301,7 @@ public interface McService {
      * @return
      */
     @FormUrlEncoded
-    @PUT("api/v1/public/notice/employ/read")
+    @PUT("api/v1/message/notice/employ/records/read ")
     Observable<EmResult> readNotice(@Field("id") Long id);
 
     /**
@@ -335,7 +312,7 @@ public interface McService {
      * @return
      */
     @FormUrlEncoded
-    @PUT("api/v1/public/notice/employ/read/all")
+    @PUT("api/v1/message/notice/employ/records/read/all")
     Observable<EmResult> readAll(@Field("ids") String ids,
                                  @Field("appKey") String appKey);
 
@@ -346,7 +323,7 @@ public interface McService {
      * @param limit
      * @return
      */
-    @GET("api/v1/public/finance/put_forward/list")
+    @GET("api/v1/finance/driver/put_forward")
     Observable<TixianResult> enchashments(@Query("page") int page,
                                           @Query("size") int limit);
 
@@ -355,7 +332,7 @@ public interface McService {
      *
      * @return
      */
-    @GET("api/v1/public/driver/put_forward_configure")
+    @GET("api/v1/finance/driver/put_forward/configure")
     Observable<TixianRuleResult> tixianRule();
 
     /**
@@ -363,7 +340,7 @@ public interface McService {
      *
      * @return
      */
-    @GET("api/v1/public/driver/driver_encash")
+    @GET("api/v1/resources/driver/encash/my")
     Observable<BankResult> bankInfo();
 
     /**
@@ -376,7 +353,7 @@ public interface McService {
      * @return
      */
     @FormUrlEncoded
-    @POST("api/v1/public/finance/put_forward/save")
+    @POST("api/v1/finance/driver/put_forward")
     Observable<EmResult> enchashment(@Field("account") String account,
                                      @Field("fee") double fee,
                                      @Field("payType") String payType,
@@ -387,7 +364,7 @@ public interface McService {
      *
      * @return
      */
-    @GET("api/v1/public/driver/recharge_configure")
+    @GET("api/v1/resources/driver/recharge/configure")
     Observable<ConfigResult> rechargeConfigure();
 
 
@@ -396,7 +373,7 @@ public interface McService {
      *
      * @return
      */
-    @GET("/api/v1/public/system/config/payment")
+    @GET("api/v1/system/config/payment")
     Observable<RechargeTypeResult> configPayment();
 
 
@@ -408,7 +385,7 @@ public interface McService {
      * @return
      */
     @FormUrlEncoded
-    @POST("api/v1/public/driver/recharge")
+    @POST("api/v1/resources/driver/recharge\n")
     Observable<RechargeResult> recharge(@Field("channel") String channel,
                                         @Field("fee") Double fee);
 
@@ -422,7 +399,7 @@ public interface McService {
      * @param endTime
      * @return
      */
-    @GET("api/v1/public/driver/flowing/list")
+    @GET("api/v1/finance/driver/flowing/list")
     Observable<LiushuiResult> getLiushui(@Query("page") Integer page,
                                          @Query("size") Integer size,
                                          @Query("startTime") Long startTime,
@@ -436,7 +413,7 @@ public interface McService {
      * @param operator
      * @return
      */
-    @PUT("api/v1/public/driver/updatePwd")
+    @PUT("api/v1/resources/driver/password")
     @FormUrlEncoded
     Observable<EmResult> updatePsw(@Field("newPassword") String newPassword,
                                    @Field("oldPassword") String oldPassword,
@@ -449,7 +426,7 @@ public interface McService {
      * @param size
      * @return
      */
-    @GET("api/v1/public/statistics/evaluate_content/list")
+    @GET("api/v1/statistics/evaluate/content")
     Observable<EvaResult> drivertag(@Query("page") int page,
                                     @Query("size") int size);
 
@@ -458,18 +435,8 @@ public interface McService {
      *
      * @return
      */
-    @GET("api/v1/public/statistics/evaluate_grade/get")
+    @GET("api/v1/statistics/evaluate/grade/my")
     Observable<RateResult> driverstar();
-
-    /**
-     * 下线接口
-     *
-     * @param id
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("api/v1/public/driver/offline")
-    Observable<EmResult> offline(@Field("id") Long id, @Field("companyId") Long companyId);
 
 
     /**
@@ -507,7 +474,7 @@ public interface McService {
      *
      * @return
      */
-    @GET("/api/v1/public/system/app/company/{id}")
+    @GET("api/v1/public/system/app/company/{id}")
     Observable<BusinessResult> getBusinessType(@Path("id") long id);
 
     /**
@@ -613,7 +580,7 @@ public interface McService {
      * @param driverId 司机id
      * @return
      */
-    @GET("/api/v1/public/driver/card")
+    @GET("api/v1/resources/driver/card")
     Observable<LoginResult> queryCardHost(@Query("driverId") String driverId);
 
 

@@ -1,40 +1,30 @@
 package com.easymi.zhuanche.flowMvp;
 
-import com.easymi.common.entity.PullFeeResult;
-import com.easymi.common.entity.PushData;
-import com.easymi.common.entity.PushDataLoc;
-import com.easymi.common.entity.PushDataOrder;
+import com.easymi.common.CommApiService;
 import com.easymi.common.entity.PushFee;
 import com.easymi.common.entity.PushFeeEmploy;
 import com.easymi.common.entity.PushFeeLoc;
 import com.easymi.common.entity.PushFeeOrder;
-import com.easymi.common.push.HandlePush;
 import com.easymi.common.result.GetFeeResult;
 import com.easymi.component.Config;
-import com.easymi.component.DJOrderStatus;
 import com.easymi.component.ZCOrderStatus;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
-import com.easymi.component.entity.PushEmploy;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.GsonUtil;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.result.EmResult;
-import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.Log;
 import com.easymi.zhuanche.ZCApiService;
 import com.easymi.zhuanche.entity.ZCOrder;
 import com.easymi.zhuanche.result.ConsumerResult;
 import com.easymi.zhuanche.result.ZCOrderResult;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.http.Field;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
@@ -73,7 +63,7 @@ public class FlowModel implements FlowContract.Model {
 
     @Override
     public Observable<EmResult> refuseOrder(Long orderId,String orderType, String remark) {
-        return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
+        return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .refuseOrder(orderId,orderType , remark)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
@@ -178,7 +168,7 @@ public class FlowModel implements FlowContract.Model {
         pushData.calc.orderInfo = orderList;
         String json = GsonUtil.toJson(pushData);
         EmLoc emLoc = EmUtil.getLastLoc();
-        return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
+        return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
 //                .pullFee(json, EmUtil.getAppKey())
                 .gpsPush(EmUtil.getAppKey(), json)
 //                .flatMap(new Func1<PullFeeResult, Observable<ZCOrderResult>>() {
@@ -302,7 +292,7 @@ public class FlowModel implements FlowContract.Model {
 
     @Override
     public Observable<EmResult> cancelOrder(Long orderId, String remark) {
-        return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
+        return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .cancelOrder(orderId, remark)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())

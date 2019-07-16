@@ -2,8 +2,6 @@ package com.easymi.zhuanche;
 
 import com.easymi.common.entity.PullFeeResult;
 import com.easymi.common.result.CreateOrderResult;
-import com.easymi.common.result.GetFeeResult;
-import com.easymi.component.entity.PassengerLcResult;
 import com.easymi.component.result.EmResult;
 import com.easymi.zhuanche.entity.TransferList;
 import com.easymi.zhuanche.result.BudgetResult;
@@ -55,18 +53,6 @@ public interface ZCApiService {
     @POST("driver/api/v1/waitSpecialOrder")
     Observable<ZCOrderResult> waitOrder(@Field("order_id") Long orderId,
                                         @Field("app_key") String appKey);
-
-    /**
-     * 销单
-     *
-     * @param orderId
-     * @param memo
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("api/v1/public/order/cancel")
-    Observable<EmResult> cancelOrder(@Field("orderId") Long orderId,
-                                     @Field("memo") String memo);
 
     /**
      * 同单司机
@@ -208,19 +194,6 @@ public interface ZCApiService {
                                                  @Field("detailAddress") String detailAddress);
 
     /**
-     * 通过http上传位置信息，30秒一次
-     *
-     * @param appKey
-     * @param json
-     * @return
-     */
-    @POST("api/v1/public/message/location")
-    @FormUrlEncoded
-    Observable<GetFeeResult> gpsPush(@Field("app_key") String appKey,
-                                     @Field("json") String json);
-
-
-    /**
      * 结算订单
      * pay_type  string
      *
@@ -232,21 +205,6 @@ public interface ZCApiService {
     @POST("api/v1/public/pay/order")
     Observable<EmResult> payOrder(@Field("id") Long orderId,
                                   @Field("channel") String channel);
-
-    /**
-     * 拒单
-     *
-     * @param orderId
-     * @param serviceType
-     * @param remark
-     * @return
-     */
-    @FormUrlEncoded
-    @PUT("api/v1/public/order/refusal")
-    Observable<EmResult> refuseOrder(@Field("orderId") long orderId,
-                                     @Field("serviceType") String serviceType,
-                                     @Field("remark") String remark);
-
 
     /**
      * 根据电话验证客户是新客户还是老客户  根据电话号码查询客户信息，如果客户不存在，新建客户信息
@@ -326,15 +284,5 @@ public interface ZCApiService {
                                               @Field("time") Integer time,
                                               @Field("distance") Double distance);
 
-
-
-    /**
-     * 乘客位置请求
-     *
-     * @param
-     * @return
-     */
-    @GET("api/v1/public/passenger/location")
-    Observable<PassengerLcResult> passengerLoc(@Query("orderId") Long orderId);
 
 }

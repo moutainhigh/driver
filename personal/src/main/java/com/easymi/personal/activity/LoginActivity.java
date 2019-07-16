@@ -35,12 +35,10 @@ import com.easymi.component.network.ErrCode;
 import com.easymi.component.network.ErrCodeTran;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
-import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.AlexStatusBarUtils;
 import com.easymi.component.utils.CsEditor;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.GPSUtils;
-import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MacUtils;
 import com.easymi.component.utils.MobileInfoUtil;
 import com.easymi.component.utils.PhoneUtil;
@@ -442,7 +440,7 @@ public class LoginActivity extends RxBaseActivity {
      * @param psw
      */
     private void getSetting(Employ employ, String name, String psw) {
-        Observable<com.easymi.common.result.SettingResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
+        Observable<com.easymi.common.result.SettingResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .getAppSetting(EmUtil.getEmployInfo().companyId)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
@@ -488,8 +486,6 @@ public class LoginActivity extends RxBaseActivity {
                 }
             }
 
-            pushBinding(employ.id);
-
             ARouter.getInstance()
                     .build("/common/WorkActivity")
                     .navigation();
@@ -502,30 +498,4 @@ public class LoginActivity extends RxBaseActivity {
      */
     String androidID = Settings.Secure.getString(XApp.getInstance().getContentResolver(), Settings.Secure.ANDROID_ID);
     String id = androidID + Build.SERIAL;
-
-    /**
-     * 绑定推送
-     *
-     * @param userId
-     */
-    private void pushBinding(long userId) {
-        Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .pushBinding(userId,
-                        "12323",
-                        "/driver" + "/" + EmUtil.getEmployId(),
-                        "driver-" + EmUtil.getEmployId(),
-                        "ANDROID",
-                        2)
-                .filter(new HttpResultFunc<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, false, emResult -> {
-            if (emResult.getCode() == 1) {
-                Log.e("hufeng/binding", "bindingMerchants is Ok");
-            } else {
-                ToastUtil.showMessage(this, emResult.getMessage());
-            }
-        })));
-    }
 }

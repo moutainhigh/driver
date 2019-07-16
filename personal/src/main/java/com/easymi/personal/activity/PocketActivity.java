@@ -1,27 +1,24 @@
 package com.easymi.personal.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import com.easymi.component.Config;
-import com.easymi.component.utils.CsEditor;
-import com.easymi.component.utils.Log;
-
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.easymi.common.CommApiService;
+import com.easymi.common.result.LoginResult;
+import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.utils.CsEditor;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.Log;
 import com.easymi.component.widget.CusToolbar;
-import com.easymi.personal.McService;
 import com.easymi.personal.R;
-import com.easymi.personal.result.LoginResult;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -79,7 +76,7 @@ public class PocketActivity extends RxBaseActivity {
      * @param driverId
      */
     private void getDriverInfo(Long driverId) {
-        Observable<LoginResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
+        Observable<LoginResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .getDriverInfo(driverId, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())

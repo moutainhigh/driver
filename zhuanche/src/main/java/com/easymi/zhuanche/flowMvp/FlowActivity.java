@@ -44,6 +44,7 @@ import com.easymi.common.push.MqttManager;
 import com.easymi.common.push.PassengerLocObserver;
 import com.easymi.common.trace.TraceInterface;
 import com.easymi.common.trace.TraceReceiver;
+import com.easymi.component.ComponentService;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
 import com.easymi.component.ZCOrderStatus;
@@ -73,7 +74,6 @@ import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.component.widget.overlay.DrivingRouteOverlay;
 import com.easymi.zhuanche.R;
-import com.easymi.zhuanche.ZCApiService;
 import com.easymi.zhuanche.activity.CancelNewActivity;
 import com.easymi.zhuanche.entity.Address;
 import com.easymi.zhuanche.entity.ConsumerInfo;
@@ -1584,7 +1584,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
      * @param orderId
      */
     public void passengerLoc(long orderId) {
-        Observable<PassengerLcResult> observable = ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
+        Observable<PassengerLcResult> observable = ApiManager.getInstance().createApi(Config.HOST, ComponentService.class)
                 .passengerLoc(orderId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

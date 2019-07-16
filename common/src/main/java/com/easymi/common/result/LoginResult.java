@@ -14,7 +14,7 @@ import com.easymi.component.result.EmResult;
 
 public class LoginResult extends EmResult{
 
-    private Employ data;
+    public Employ data;
 
     public Employ getEmployInfo() {
         return data;

@@ -345,7 +345,7 @@ public class WorkPresenter implements WorkContract.Presenter {
             XApp.getEditor().remove(Config.SP_TEMP)
                     .putLong(Config.ONLINE_TIME, 0)
                     .apply();
-            if (TextUtils.equals(Config.APP_KEY, "1HAcient1kLqfeX7DVTV0dklUkpGEnUC")) {
+            if (Config.IS_ENCRYPT && TextUtils.equals(Config.APP_KEY, "1HAcient1kLqfeX7DVTV0dklUkpGEnUC")) {
             } else {
                 uploadTime(1);
             }

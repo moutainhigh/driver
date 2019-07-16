@@ -73,7 +73,7 @@ public interface TaxiApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("/driver/api/v1/goToSpecialBookAddress")
+    @POST("driver/api/v1/goToSpecialBookAddress")
     Observable<TaxiOrderResult> goToBookAddress(@Field("order_id") Long orderId,
                                                 @Field("app_key") String appKey);
 
@@ -176,7 +176,7 @@ public interface TaxiApiService {
      * @return
      */
     @FormUrlEncoded
-    @PUT("/api/v1/finishSpecialOrder")
+    @PUT("api/v1/finishSpecialOrder")
     Observable<EmResult> payOrder(@Field("id") Long orderId,
                                   @Field("app_key") String appKey,
                                   @Field("pay_type") String payType);
@@ -204,7 +204,7 @@ public interface TaxiApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("/driver/api/v1/createSpecialOrder")
+    @POST("driver/api/v1/createSpecialOrder")
     Observable<TaxiOrderResult> createOrder(@Field("passenger_id") Long passengerId,
                                             @Field("passenger_name") String passengerName,
                                             @Field("passenger_phone") String passengerPhone,
@@ -254,7 +254,7 @@ public interface TaxiApiService {
      * @param appKey
      * @return
      */
-    @GET("/api/v1/specialcar/bustree")
+    @GET("api/v1/specialcar/bustree")
     Observable<ZCTypeResult> getZCBusiness(@Query("app_key") String appKey,
                                            @Query("page") Integer page,
                                            @Query("limit") Integer limit,
@@ -268,17 +268,6 @@ public interface TaxiApiService {
                                                @Query("app_key") String appKey,
                                                @Query("channel") String channel);
 
-    /**
-     * 销单
-     *
-     * @param orderId
-     * @param memo
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("api/v1/public/order/cancel")
-    Observable<EmResult> cancelOrder(@Field("orderId") long orderId,
-                                     @Field("memo") String memo);
 
     /**
      * 同单司机
@@ -394,18 +383,4 @@ public interface TaxiApiService {
                                         @Field("latitude") Double latitude,
                                         @Field("detailAddress") String detailAddress,
                                         @Field("fee") double fee);
-
-    /**
-     * 通用拒单 专车出租车用
-     *
-     * @param orderId
-     * @param serviceType
-     * @param remark
-     * @return
-     */
-    @FormUrlEncoded
-    @PUT("api/v1/public/order/refusal")
-    Observable<EmResult> refuseOrder(@Field("orderId") long orderId,
-                                     @Field("serviceType") String serviceType,
-                                     @Field("remark") String remark);
 }

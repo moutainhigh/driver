@@ -32,7 +32,7 @@ public interface CLService {
      *
      * @return
      */
-    @GET("/api/v1/bus/city/schedule/queryDriverSchedule")
+    @GET("api/v1/bus/city/schedule/queryDriverSchedule")
     Observable<EmResult2<List<ZXOrder>>> queryDriverSchedule();
 
     /**
@@ -42,7 +42,7 @@ public interface CLService {
      * @return
      */
     @FormUrlEncoded
-    @POST("/api/v1/bus/city/schedule/runSchedule")
+    @POST("api/v1/bus/city/schedule/runSchedule")
     Observable<EmResult2<Object>> runSchedule(
             @Field("scheduleId") long scheduleId);
 
@@ -53,7 +53,7 @@ public interface CLService {
      * @return
      */
     @FormUrlEncoded
-    @POST("/api/v1/bus/city/schedule/startSchedule")
+    @POST("api/v1/bus/city/schedule/startSchedule")
     Observable<EmResult2<Object>> startSchedule(
             @Field("scheduleId") long scheduleId);
 
@@ -63,7 +63,7 @@ public interface CLService {
      * @param scheduleId
      * @return
      */
-    @GET("/api/v1/bus/city/order/list")
+    @GET("api/v1/bus/city/order/list")
     Observable<EmResult2<List<OrderCustomer>>> getOrderCustomers(
             @Query("scheduleId") long scheduleId,
             @Query("status") String status,
@@ -76,7 +76,7 @@ public interface CLService {
      * @return
      */
     @FormUrlEncoded
-    @POST("/api/v1/bus/city/schedule/finishSchedule")
+    @POST("api/v1/bus/city/schedule/finishSchedule")
     Observable<EmResult2<Object>> finishTask(
             @Field("scheduleId") long scheduleId);
 
@@ -87,7 +87,7 @@ public interface CLService {
      * @return
      */
     @FormUrlEncoded
-    @POST("/api/v1/bus/city/order/take")
+    @POST("api/v1/bus/city/order/take")
     Observable<EmResult2<Object>> arriveStart(
             @Field("orderId") long orderId);
 
@@ -99,7 +99,7 @@ public interface CLService {
      * @return
      */
     @FormUrlEncoded
-    @POST("/api/v1/bus/city/order/run")
+    @POST("api/v1/bus/city/order/run")
     Observable<EmResult2<Object>> acceptCustomer(
             @Field("orderId") long orderId);
 
@@ -110,7 +110,7 @@ public interface CLService {
      * @return
      */
     @FormUrlEncoded
-    @POST("/api/v1/bus/city/order/skip")
+    @POST("api/v1/bus/city/order/skip")
     Observable<EmResult2<Object>> jumpCustomer(
             @Field("orderId") long orderId);
 
@@ -121,7 +121,7 @@ public interface CLService {
      * @return
      */
     @FormUrlEncoded
-    @POST("/api/v1/bus/city/order/finish")
+    @POST("api/v1/bus/city/order/finish")
     Observable<EmResult2<Object>> sendCustomer(
             @Field("orderId") long orderId);
 
@@ -133,7 +133,7 @@ public interface CLService {
      * @param startStationId
      * @return
      */
-    @GET("/api/v1/bus/city/order/price")
+    @GET("api/v1/bus/city/order/price")
     Observable<EmResult2<PriceResult>> getPrice(@Query("endStationId") long endStationId,
                                                 @Query("lineId") long lineId,
                                                 @Query("startStationId") long startStationId);
@@ -152,7 +152,7 @@ public interface CLService {
      * @return
      */
     @FormUrlEncoded
-    @POST("/api/v1/bus/city/order/save")
+    @POST("api/v1/bus/city/order/save")
     Observable<EmResult2<Object>> createOrder(@Field("bookTime") long bookTime,
                                               @Field("channelAlias") String channelAlias,
                                               @Field("endStationId") long endStationId,
@@ -168,6 +168,6 @@ public interface CLService {
      * @param scheduleId
      * @return
      */
-    @GET("/api/v1/bus/city/station/queryByScheduleId")
+    @GET("api/v1/bus/city/station/queryByScheduleId")
     Observable<StationResult> getStationResult(@Query("scheduleId") long scheduleId);
 }

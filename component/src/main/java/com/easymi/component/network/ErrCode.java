@@ -3,6 +3,7 @@ package com.easymi.component.network;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName:
+ *
  * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
@@ -578,12 +579,12 @@ public enum ErrCode {
     /**
      * 评论包含敏感词
      */
-     MOMO_SENSITIVE_ERROR(40205,"评论包含敏感词"),
+    MOMO_SENSITIVE_ERROR(40205, "评论包含敏感词"),
 
     /**
      * 申请中
      */
-    APPLYING(50009,"申请中"),
+    APPLYING(50009, "申请中"),
 
 //old
     /**
@@ -605,7 +606,13 @@ public enum ErrCode {
     /**
      * 服务人员不存在
      */
-    EMPLOY_NOT_EXIST(31001, "服务人员不存在");
+    EMPLOY_NOT_EXIST(31001, "服务人员不存在"),
+
+    /**
+     * 电话号码格式错误
+     */
+    PHONE_ERR(10016, "电话号码格式错误");
+
 
     private int code;
     private String showMsg;

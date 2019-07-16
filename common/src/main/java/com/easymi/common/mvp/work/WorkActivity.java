@@ -412,7 +412,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
 
     @Override
     public void offlineSuc() {
-        if (TextUtils.equals(Config.APP_KEY, "1HAcient1kLqfeX7DVTV0dklUkpGEnUC")) {
+        if (Config.IS_ENCRYPT && TextUtils.equals(Config.APP_KEY, "1HAcient1kLqfeX7DVTV0dklUkpGEnUC")) {
             EmUtil.employLogout(this);
         } else {
             XApp.getInstance().syntheticVoice("", XApp.OFF_LINE);

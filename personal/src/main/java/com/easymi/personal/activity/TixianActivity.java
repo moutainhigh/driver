@@ -1,27 +1,22 @@
 package com.easymi.personal.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.easymi.component.Config;
 import com.easymi.component.activity.WebActivity;
-import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
-import com.easymi.component.entity.Employ;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MathUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
@@ -31,8 +26,6 @@ import com.easymi.personal.R;
 import com.easymi.personal.entity.BankInfo;
 import com.easymi.personal.entity.TixianRule;
 import com.easymi.personal.result.BankResult;
-import com.easymi.personal.result.LoginResult;
-import com.easymi.personal.result.TixianResult;
 import com.easymi.personal.result.TixianRuleResult;
 import com.easymi.personal.widget.AddSpaceTextWatcher;
 
@@ -42,9 +35,11 @@ import java.text.DecimalFormat;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: TixianActivity
+ *
  * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description: 余额提现
@@ -90,7 +85,7 @@ public class TixianActivity extends RxBaseActivity {
         tixianRuleText.setOnClickListener(view -> {
                     //                startActivity(new Intent(TixianActivity.this, TixianRuleActivity.class))
                     Intent intent = new Intent(this, WebActivity.class);
-                    intent.putExtra("url", Config.H5_HOST+"#/protocol?articleName=driverPutForward&appKey=" + Config.APP_KEY);
+                    intent.putExtra("url", Config.H5_HOST + "#/protocol?articleName=driverPutForward&appKey=" + Config.APP_KEY);
                     intent.putExtra("title", getString(R.string.tixian_rule));
                     startActivity(intent);
                 }
@@ -167,6 +162,7 @@ public class TixianActivity extends RxBaseActivity {
 
     /**
      * 设置提现等级
+     *
      * @param money
      * @return
      */

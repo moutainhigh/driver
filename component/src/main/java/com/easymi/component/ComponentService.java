@@ -14,6 +14,6 @@ public interface ComponentService {
      * @param
      * @return
      */
-    @GET("api/v1/public/passenger/location")
+    @GET("api/v1/message/location/passenger")
     Observable<PassengerLcResult> passengerLoc(@Query("orderId") Long orderId);
 }

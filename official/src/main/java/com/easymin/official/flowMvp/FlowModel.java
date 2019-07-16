@@ -1,5 +1,6 @@
 package com.easymin.official.flowMvp;
 
+import com.easymi.common.CommApiService;
 import com.easymi.component.Config;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
@@ -76,7 +77,7 @@ public class FlowModel implements FlowContract.Model{
 
     @Override
     public Observable<EmResult> cancelOrder(Long orderId, String remark) {
-        return ApiManager.getInstance().createApi(Config.HOST, OfficialService.class)
+        return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .cancelOrder(orderId, remark)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())

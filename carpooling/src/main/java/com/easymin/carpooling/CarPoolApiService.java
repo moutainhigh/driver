@@ -34,7 +34,7 @@ public interface CarPoolApiService {
      * @param scheduleId
      * @return
      */
-    @GET("/api/v1/carpool/driver/order")
+    @GET("api/v1/carpool/driver/order")
     Observable<EmResult2<List<CarpoolOrder>>> getOrderCustomers(@Query("scheduleId") long scheduleId, @Query("appKey") String appKey);
 
     /**
@@ -44,7 +44,7 @@ public interface CarPoolApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("/api/v1/carpool/driver/schedule/runSchedule")
+    @POST("api/v1/carpool/driver/schedule/runSchedule")
     Observable<EmResult2<Object>> runSchedule(
             @Field("scheduleId") long scheduleId);
 
@@ -55,7 +55,7 @@ public interface CarPoolApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("/api/v1/carpool/driver/schedule/startSchedule")
+    @POST("api/v1/carpool/driver/schedule/startSchedule")
     Observable<EmResult2<Object>> startSchedule(
             @Field("scheduleId") long scheduleId);
 
@@ -66,7 +66,7 @@ public interface CarPoolApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("/api/v1/carpool/driver/schedule/finishSchedule")
+    @POST("api/v1/carpool/driver/schedule/finishSchedule")
     Observable<EmResult2<Object>> finishTask(
             @Field("scheduleId") long scheduleId);
 
@@ -78,7 +78,7 @@ public interface CarPoolApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("/api/v1/carpool/driver/order/gotoStartAddress")
+    @POST("api/v1/carpool/driver/order/gotoStartAddress")
     Observable<EmResult2<Object>> gotoStart(
             @Field("orderId") long orderId);
 
@@ -89,7 +89,7 @@ public interface CarPoolApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("/api/v1/carpool/driver/order/arriveStartAddress")
+    @POST("api/v1/carpool/driver/order/arriveStartAddress")
     Observable<EmResult2<Object>> arriveStart(
             @Field("orderId") long orderId);
 
@@ -100,7 +100,7 @@ public interface CarPoolApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("/api/v1/carpool/driver/order/runningOrder")
+    @POST("api/v1/carpool/driver/order/runningOrder")
     Observable<EmResult2<Object>> acceptCustomer(
             @Field("orderId") long orderId);
 
@@ -111,7 +111,7 @@ public interface CarPoolApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("/api/v1/carpool/driver/order/skipOrder")
+    @POST("api/v1/carpool/driver/order/skipOrder")
     Observable<EmResult2<Object>> jumpCustomer(
             @Field("orderId") long orderId);
 
@@ -122,7 +122,7 @@ public interface CarPoolApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("/api/v1/carpool/driver/order/finishOrder")
+    @POST("api/v1/carpool/driver/order/finishOrder")
     Observable<EmResult2<Object>> sendCustomer(
             @Field("orderId") long orderId);
 
@@ -132,7 +132,7 @@ public interface CarPoolApiService {
      *
      * @return
      */
-    @GET("/api/v1/carpool/driver/schedule/getDriverSchedule")
+    @GET("api/v1/carpool/driver/schedule/getDriverSchedule")
     Observable<EmResult2<List<PincheOrder>>> queryDriverSchedule(@Query("id") long driverId);
 
 
@@ -142,7 +142,7 @@ public interface CarPoolApiService {
      * @param scheduleId
      * @return
      */
-    @GET("/api/v1/carpool/driver/schedule/getStation")
+    @GET("api/v1/carpool/driver/schedule/getStation")
     Observable<StationResult> getStationResult(@Query("scheduleId") long scheduleId);
 
     /**
@@ -153,7 +153,7 @@ public interface CarPoolApiService {
      * @param startStationId
      * @return
      */
-    @GET("/api/v1/carpool/passenger/order/price")
+    @GET("api/v1/carpool/passenger/order/price")
     Observable<PriceResult> getPrice(@Query("endStationId") long endStationId,
                                      @Query("lineId") long lineId,
                                      @Query("startStationId") long startStationId);
@@ -172,7 +172,7 @@ public interface CarPoolApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("/api/v1/carpool/driver/order/create")
+    @POST("api/v1/carpool/driver/order/create")
     Observable<EmResult2<Long>> createOrder(@Field("companyId") long companyId,
                                             @Field("startStationId") long startStationId,
                                             @Field("endStationId") long endStationId,
@@ -191,7 +191,7 @@ public interface CarPoolApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("/api/v1/public/pay/order")
+    @POST("api/v1/public/pay/order")
     Observable<EmResult2<JsonElement>> payOrder(@Field("id") Long orderId,
                                                 @Field("channel") String channel);
 
@@ -208,7 +208,7 @@ public interface CarPoolApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("/api/v1/carpool/driver/order/assign")
+    @POST("api/v1/carpool/driver/order/assign")
     Observable<EmResult> assginOrder(@Field("orderIds") long orderIds,
                                               @Field("timeSlotId") long timeSlotId,
                                               @Field("driverId") long driverId,

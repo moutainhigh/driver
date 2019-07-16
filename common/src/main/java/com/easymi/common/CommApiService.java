@@ -66,13 +66,13 @@ public interface CommApiService {
      * @param serviceType
      * @return
      */
-    @GET("api/v1/public/driver/ranges")
+    @GET("api/v1/message/location/ranges")
     Observable<EmResult2<List<NearDriver>>> getNearDrivers(@Query("lat") Double lat,
                                                            @Query("lng") Double lng,
                                                            @Query("range") Double range,
                                                            @Query("serviceType") String serviceType);
 
-    @GET("/api/v1/taxi_online/config/app/driver")
+    @GET("api/v1/taxi_online/config/app/driver")
     Observable<EmResult2<String>> getTitleStatus();
 
     /**
@@ -84,7 +84,7 @@ public interface CommApiService {
      * @param limit
      * @return
      */
-    @GET("/driver/api/v1/notices")
+    @GET("driver/api/v1/notices")
     Observable<NotitfyResult> loadNotice(@Query("driver_id") Long driverId,
                                          @Query("app_key") String appKey,
                                          @Query("page") Integer page,
@@ -100,7 +100,7 @@ public interface CommApiService {
      * @param limit
      * @return
      */
-    @GET("/driver/api/v1/employAffiches")
+    @GET("driver/api/v1/employAffiches")
     Observable<AnnouncementResult> loadAnn(@Query("company_id") Long companyId,
                                            @Query("app_key") String appKey,
                                            @Query("page") Integer page,
@@ -273,7 +273,7 @@ public interface CommApiService {
                                      @Query("page") int page,
                                      @Query("limit") int limit);
 
-    @GET("/driver/api/v1/pullFee")
+    @GET("driver/api/v1/pullFee")
     Observable<GetFeeResult> pullFee(@Query("order_id") long orderId,
                                      @Query("distance") double distance,
                                      @Query("app_key") String appKey,
@@ -292,7 +292,7 @@ public interface CommApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("api/v1/public/driver/online")
+    @POST("api/v1/resources/driver/online")
     Observable<EmResult> online(@Field("id") Long id, @Field("companyId") Long companyId);
 
     /**
@@ -302,29 +302,8 @@ public interface CommApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("api/v1/public/driver/offline")
+    @POST("api/v1/resources/driver/offline")
     Observable<EmResult> offline(@Field("id") Long id, @Field("companyId") Long companyId);
-
-
-    /**
-     * 推送绑定接口
-     *
-     * @param userId
-     * @param aliBaBaKey
-     * @param mqttKey
-     * @param mqttClientId
-     * @param driverType
-     * @param type
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("api/v1/public/message/push/binding")
-    Observable<EmResult> pushBinding(@Field("userId") long userId,
-                                     @Field("aliBaBaKey") String aliBaBaKey,
-                                     @Field("mqttKey") String mqttKey,
-                                     @Field("mqttClientId") String mqttClientId,
-                                     @Field("driverType") String driverType,
-                                     @Field("type") int type);
 
     /**
      * 专车 --> 查询单个订单
@@ -429,7 +408,7 @@ public interface CommApiService {
      * @param appKey
      * @return
      */
-    @GET("api/v1/public/driver/get/{id}")
+    @GET("api/v1/resources/driver/{id}")
     Observable<LoginResult> getDriverInfo(@Path("id") Long driverId,
                                           @Query("appKey") String appKey);
 
@@ -440,7 +419,7 @@ public interface CommApiService {
      * @param json
      * @return
      */
-    @POST("api/v1/public/message/location")
+    @POST("api/v1/message/location/driver")
     @FormUrlEncoded
     Observable<GetFeeResult> gpsPush(@Field("app_key") String appKey,
                                      @Field("json") String json);
@@ -477,7 +456,7 @@ public interface CommApiService {
      * @param size
      * @return
      */
-    @GET("api/v1/public/order/cold/list")
+    @GET("api/v1/order/cold")
     Observable<QueryOrdersResult> queryOverOrdersByBunsiness(@Query("startTime") Long startTime,
                                                              @Query("endTime") Long endTime,
                                                              @Query("page") int page,
@@ -488,27 +467,33 @@ public interface CommApiService {
      *
      * @return
      */
-    @GET("api/v1/public/statistics/driver_profit/get")
+    @GET("api/v1/statistics/driver_profit/get")
     Observable<WorkStatisticsResult> workStatistics();
 
     /**
      * 获取工作台 所有业务列表
      */
-    @GET("api/v1/public/order/hot/list")
+    @GET("api/v1/order/hot")
     Observable<QueryOrdersResult> queryRunningOrders(@Query("page") int page,
                                                      @Query("size") int size,
                                                      @Query("status") String status);
 
 
-    @POST("/api/v1/public/refresh_token")
+    @POST("api/v1/system/refresh_token")
     @FormUrlEncoded
     Observable<EmResult2<NewToken>> refreshToken(@Field("token") String adCode);
+
+
+    @FormUrlEncoded
+    @POST("api/v1/order/cancel")
+    Observable<EmResult> cancelOrder(@Field("orderId") long orderId,
+                                     @Field("memo") String memo);
 
     /**
      * 通用拒单 专车出租车用
      */
     @FormUrlEncoded
-    @PUT("api/v1/public/order/refusal")
+    @PUT("api/v1/order/refusal")
     Observable<EmResult> refuseOrder(@Field("orderId") long orderId,
                                      @Field("serviceType") String serviceType,
                                      @Field("remark") String remark);
@@ -520,7 +505,7 @@ public interface CommApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("api/v1/public/finance/order_reimburse/save")
+    @POST("api/v1/finance/order_reimburse")
     Observable<EmResult> baoxiao(@Field("orderId") Long orderId,
                                  @Field("reimburseFee") Double reimburseFee,
                                  @Field("reimburseCause") String reimburseCause,
@@ -559,7 +544,7 @@ public interface CommApiService {
     /**
      * 我的订单接口 （新的）
      */
-    @GET("api/v1/public/driver/myOrders")
+    @GET("api/v1/order/my")
     Observable<QueryOrdersResult> queryMyOrders(@Query("page") int page,
                                                 @Query("size") int size,
                                                 @Query("status") String status);
@@ -576,7 +561,7 @@ public interface CommApiService {
      *
      * @return
      */
-    @GET("api/v1/public/driver/vehicle")
+    @GET("api/v1/resources/driver/vehicle")
     Observable<VehicleResult> driverehicle();
 
     /**
@@ -584,7 +569,7 @@ public interface CommApiService {
      *
      * @return
      */
-    @GET("api/v1/public/driver/app")
+    @GET("api/v1/resources/driver/app")
     Observable<SettingResult> getAppSetting(@Query("companyId") long companyId);
 
 
@@ -595,7 +580,7 @@ public interface CommApiService {
      * @return
      */
     @FormUrlEncoded
-    @POST("/api/v1/carpool/driver/schedule/finishSchedule")
+    @POST("api/v1/carpool/driver/schedule/finishSchedule")
     Observable<EmResult2<Object>> finishTask(
             @Field("scheduleId") long scheduleId);
 
@@ -606,7 +591,7 @@ public interface CommApiService {
     /**
      * 获取司机在线时长
      */
-    @GET("/api/v1/public/driver/driver_online_time")
+    @GET("api/v1/resources/driver/driver_online_time")
     Observable<OnLineTimeResult> getOnlineTime();
 
 
@@ -614,17 +599,17 @@ public interface CommApiService {
      * 上传司机在线时长接口
      */
     @FormUrlEncoded
-    @POST("/api/v1/public/driver/online_time")
+    @POST("api/v1/resources/driver/online_time")
     Observable<EmResult> upLoadOnlineTime(@Field("time") long time);
 
 
-    @GET("/api/v3/connections/{topic}")
-    Observable<EmResult2<List<MqttResult>>> getCurrentTopic(@Path(value = "topic") String topic);
+    @GET("api/v3/connections/{topic}")
+    Observable<EmResult2<List<MqttResult>>> getCurrentTopic(@Path("topic") String topic);
 
-    @GET("/api/v1/public/topic/driver_mqtt_config")
+    @GET("api/v1/message/topic/driver_mqtt_config")
     Observable<EmResult2<MqttConfig>> getConfig();
 
-    @GET("/api/v1/public/topic/mqtt_client")
+    @GET("api/v1/message/topic/mqtt_client")
     Observable<EmResult2<String>> getMqttTopic();
 
 }

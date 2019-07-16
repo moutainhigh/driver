@@ -9,7 +9,6 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
-import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -80,19 +79,6 @@ public interface OfficialService {
                                                   @Field("longitude") Double longitude,
                                                   @Field("latitude") Double latitude,
                                                   @Field("detailAddress") String detailAddress);
-
-    /**
-     * 销单
-     *
-     * @param orderId
-     * @param memo
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("api/v1/public/order/cancel")
-    Observable<EmResult> cancelOrder(@Field("orderId") Long orderId,
-                                     @Field("memo") String memo);
-
 
 
     /**

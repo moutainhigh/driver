@@ -27,7 +27,7 @@ public interface DZBusApiService {
     /**
      * 查询班次完整信息(包含站点)
      */
-    @GET("/api/v1/bus/country/driver/order/querySchedule")
+    @GET("api/v1/bus/country/driver/order/querySchedule")
     Observable<StationResult> findBusInfoById(@Query("scheduleId") long scheduleId);
 
     /**
@@ -44,27 +44,27 @@ public interface DZBusApiService {
      * 开始验票
      */
     @FormUrlEncoded
-    @POST("/api/v1/bus/country/driver/order/startCheck")
+    @POST("api/v1/bus/country/driver/order/startCheck")
     Observable<TimeResult> startCheck(@Field("scheduleId") long scheduleId);
 
     /**
      * 根据班次id和站点id查询对应站点的订单详情
      */
-    @GET("/api/v1/bus/country/driver/order/queryScheduleDetail")
+    @GET("api/v1/bus/country/driver/order/queryScheduleDetail")
     Observable<OrdersResult> queryOrders(@Query("scheduleId") long scheduleId,
                                          @Query("stationId") long stationId);
 
     /**
      * 根据乘车码查询订单详情
      */
-    @GET("/api/v1/bus/country/driver/order/queryByRideCode")
+    @GET("api/v1/bus/country/driver/order/queryByRideCode")
     Observable<EmResult2<Customer>> queryByRideCode(@Query("rideCode") String rideCode);
 
     /**
      * 检查乘车码
      */
     @FormUrlEncoded
-    @POST("/api/v1/bus/country/driver/order/checkRideCode")
+    @POST("api/v1/bus/country/driver/order/checkRideCode")
     Observable<EmResult2<Object>> checkRideCode(@Field("rideCode") String rideCode);
 
     /**
