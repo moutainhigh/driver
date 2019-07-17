@@ -73,7 +73,6 @@ import rx.schedulers.Schedulers;
  */
 @Route(path = "/personal/LoginActivity")
 public class LoginActivity extends RxBaseActivity {
-
     /**
      * 布局控件
      */

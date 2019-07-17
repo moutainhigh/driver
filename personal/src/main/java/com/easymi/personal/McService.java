@@ -89,22 +89,6 @@ public interface McService {
                                    @Field("app_key") String appKey);
 
     /**
-     * 文章
-     * <p>
-     * 联系我们 alias = ContactUs
-     * 关于我们 alias = AboutUs
-     * 司机推广 alias = DriverPromotion
-     *
-     * @param appKey
-     * @param alias
-     * @return
-     */
-    @GET("v1/public/article_configure/get")
-    Observable<ArticleResult> getArticle(@Query("appKey") String appKey,
-                                         @Query("alias") String alias,
-                                         @Query("companyId") Long companyId);
-
-    /**
      * 反馈
      *
      * @param userName

@@ -44,7 +44,6 @@ public class EncryptInterceptor implements Interceptor {
         if (url.contains("api/v1/resources/driver/login")
                 || url.contains("api/v1/public/driver/register/save")
                 || url.contains("api/v1/public/app/captcha/send_sms")
-                || url.contains("api/v1/public/driver/register/apply/save")
                 || url.contains("api/v1/public/driver/register/get")
                 || url.contains("api/v1/public/driver/register/apply/app/save")
                 || url.contains("api/v1/public/driver/register/apply/app/update")
