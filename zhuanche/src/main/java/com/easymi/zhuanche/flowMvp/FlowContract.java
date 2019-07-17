@@ -11,6 +11,7 @@ import com.easymi.zhuanche.entity.ConsumerInfo;
 import com.easymi.zhuanche.entity.ZCOrder;
 import com.easymi.zhuanche.result.ConsumerResult;
 import com.easymi.zhuanche.result.ZCOrderResult;
+import com.google.gson.JsonElement;
 
 import rx.Observable;
 
@@ -377,6 +378,6 @@ public interface FlowContract {
          * @param version
          * @return
          */
-        Observable<EmResult> payOrder(Long orderId, String payType, Long version);
+        Observable<JsonElement> payOrder(Long orderId, String payType, Long version);
     }
 }

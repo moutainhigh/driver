@@ -388,7 +388,7 @@ public class RegisterAcitivty extends RxBaseActivity {
      */
     public void getImgCode() {
         randomNum = "" + System.currentTimeMillis() + (int) ((Math.random() * 9 + 1) * 100000);
-        Glide.with(this).load(Config.HOST + "api/v1/public/app/captcha/code/" + randomNum).into(iv_image_code);
+        Glide.with(this).load(Config.HOST + "api/v1/system/captcha/code/" + randomNum).into(iv_image_code);
     }
 
     /**

@@ -87,14 +87,13 @@
         }
         //排除登录及其之前接口，其余接口使用拦截器进行aes加密。
         String url = chain.request().url().toString();
-        if (url.contains("api/v1/resources/driver/login")
-                || url.contains("api/v1/public/driver/register/save")
-                || url.contains("api/v1/public/app/captcha/send_sms")
-                || url.contains("api/v1/public/driver/register/apply/save")
-                || url.contains("api/v1/public/driver/register/get")
-                || url.contains("api/v1/public/driver/register/apply/app/save")
-                || url.contains("api/v1/public/driver/register/apply/app/update")
-        ) {
+         if (url.contains("api/v1/resources/driver/login")
+                        || url.contains("api/v1/resources/driver/register/apply")
+                        || url.contains("api/v1/system/captcha/send_sms")
+                        || url.contains("api/v1/resources/driver/register/getByDriverPhone")
+                        || url.contains("api/v1/resources/driver/register/app")
+                        || url.contains("/api/v3/connections/")
+                ) {
             return chain.proceed(originRequest);
         }
 
@@ -140,7 +139,7 @@
      */
     public void getImgCode() {
         randomNum = "" + System.currentTimeMillis() + (int) ((Math.random() * 9 + 1) * 100000);
-        Glide.with(this).load(Config.HOST + "api/v1/public/app/captcha/code/" + randomNum).into(iv_image_code);
+        Glide.with(this).load(Config.HOST + "api/v1/system/captcha/code/" + randomNum).into(iv_image_code);
     }
 ```
   * 注册界面填入电话号码、图形验证码、验证码、密码后点击注册。后台会生成一个基本的司机信息。但是司机状态是为未提交资料状态。

@@ -55,7 +55,6 @@ import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MapUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
-import com.easymin.official.OfficialService;
 import com.easymin.official.R;
 import com.easymin.official.activity.CancelNewActivity;
 import com.easymin.official.entity.GovOrder;
@@ -963,7 +962,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
      * 获取七牛云token
      */
     public void getQiniuToken() {
-        Observable<QiNiuToken> observable = ApiManager.getInstance().createApi(Config.HOST, OfficialService.class)
+        Observable<QiNiuToken> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .getToken()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

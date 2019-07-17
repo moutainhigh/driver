@@ -1,6 +1,5 @@
 package com.easymin.official;
 
-import com.easymi.common.entity.QiNiuToken;
 import com.easymi.component.result.EmResult;
 import com.easymin.official.result.GovOrderResult;
 
@@ -79,15 +78,6 @@ public interface OfficialService {
                                                   @Field("longitude") Double longitude,
                                                   @Field("latitude") Double latitude,
                                                   @Field("detailAddress") String detailAddress);
-
-
-    /**
-     * 获取七牛云token
-     * @return
-     */
-    @GET("api/v1/public/app/qny_token")
-    Observable<QiNiuToken> getToken();
-
 
 
     /**

@@ -153,7 +153,7 @@ public class RegisterModel {
      * @return
      */
     public static Observable<Pic> uploadPics(RegisterRequest request) {
-        return ApiManager.getInstance().createApi(Config.HOST, McService.class)
+        return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .getToken()
                 .subscribeOn(Schedulers.io())
                 .flatMap((Func1<QiNiuToken, Observable<Pic>>) qiNiuToken -> {
@@ -217,7 +217,7 @@ public class RegisterModel {
      * @return
      */
     public static Observable<QiNiuToken> getQiniuToken() {
-        return ApiManager.getInstance().createApi(Config.HOST, McService.class)
+        return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .getToken()
                 .subscribeOn(Schedulers.io())
                 .filter(new HttpResultFunc<>())

@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alipay.sdk.app.PayTask;
+import com.easymi.common.CommApiService;
 import com.easymi.common.result.PayResult;
 import com.easymi.common.widget.ComPayDialog;
 import com.easymi.component.Config;
@@ -27,7 +28,6 @@ import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
-import com.easymi.component.result.EmResult2;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
@@ -526,7 +526,7 @@ public class CreateOrderActivity extends RxBaseActivity {
      * @param payType
      */
     private void toPay(String payType, long orderId) {
-        Observable<JsonElement> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
+        Observable<JsonElement> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .payOrder(orderId, payType)
                 .map(new HttpResultFunc2<>())
                 .subscribeOn(Schedulers.io())

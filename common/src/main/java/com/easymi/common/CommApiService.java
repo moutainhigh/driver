@@ -28,6 +28,7 @@ import com.easymi.common.result.VehicleResult;
 import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.result.EmResult2;
+import com.google.gson.JsonElement;
 
 import java.util.List;
 
@@ -74,6 +75,12 @@ public interface CommApiService {
 
     @GET("api/v1/taxi_online/config/app/driver")
     Observable<EmResult2<String>> getTitleStatus();
+
+
+    @FormUrlEncoded
+    @POST("api/v1/order/pay")
+    Observable<EmResult2<JsonElement>> payOrder(@Field("id") Long orderId,
+                                                @Field("channel") String channel);
 
     /**
      * 查询所有通知
@@ -518,9 +525,16 @@ public interface CommApiService {
      * @param noticeId
      * @return
      */
-    @GET("api/v1/public/notice/employ/record/{id}")
+    @GET("api/v1/message/notice/employ/record/{id}")
     Observable<NotitfyResult> loadNotice(@Path("id") Long noticeId,
                                          @Query("app_key") String appKey);
+
+    /**
+     * 获取七牛云token
+     * @return
+     */
+    @GET("api/v1/system/qny_token")
+    Observable<QiNiuToken> getToken();
 
     /**
      * 查询单个公告
@@ -528,7 +542,7 @@ public interface CommApiService {
      * @param noticeId
      * @return
      */
-    @GET("api/v1/public/message/affiche/{id}")
+    @GET("api/v1/message/affiche/{id}")
     Observable<PushAnnouncement> employAfficheById(@Path("id") Long noticeId,
                                                    @Query("app_key") String appKey);
 

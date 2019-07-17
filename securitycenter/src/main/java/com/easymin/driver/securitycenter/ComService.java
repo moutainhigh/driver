@@ -5,13 +5,11 @@ import com.easymin.driver.securitycenter.result.EmResult;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
-import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -253,15 +251,6 @@ public interface ComService {
      */
     @GET("api/v1/safe/checking_auth")
     Observable<EmResult> checkingAuth(@Query("passengerId") long passengerId);
-
-
-    /**
-     * 开始获取七牛云token
-     *
-     * @return
-     */
-    @GET("api/v1/safe/app/qny_token")
-    Observable<EmResult> anyToken();
 
 
     /**

@@ -1,13 +1,11 @@
 package com.easymin.carpooling;
 
 import com.easymi.common.entity.CarpoolOrder;
-import com.easymi.common.entity.OrderCustomer;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.result.EmResult2;
 import com.easymin.carpooling.entity.PincheOrder;
 import com.easymin.carpooling.entity.PriceResult;
 import com.easymin.carpooling.entity.StationResult;
-import com.google.gson.JsonElement;
 
 import java.util.List;
 
@@ -181,19 +179,6 @@ public interface CarPoolApiService {
                                             @Field("passengerPhone") String passengerPhone,
                                             @Field("channelAlias") String channelAlias,
                                             @Field("timeSlotId") long timeSlotId);
-
-
-    /**
-     * 订单支付接口（公共接口）
-     *
-     * @param orderId
-     * @param channel
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("api/v1/public/pay/order")
-    Observable<EmResult2<JsonElement>> payOrder(@Field("id") Long orderId,
-                                                @Field("channel") String channel);
 
     /**
      * 指派订单

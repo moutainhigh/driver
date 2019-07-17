@@ -43,6 +43,7 @@ import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.zhuanche.entity.ZCOrder;
 import com.easymi.zhuanche.result.ZCOrderResult;
+import com.google.gson.JsonElement;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -372,7 +373,7 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
     //选择支付类型后的结算接口
     @Override
     public void payOrder(Long orderId, String payType, Long version) {
-        Observable<EmResult> observable = model.payOrder(orderId, payType, version);
+        Observable<JsonElement> observable = model.payOrder(orderId, payType, version);
 
         view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, emResult -> {
             DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.DAIJIA);

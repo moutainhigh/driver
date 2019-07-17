@@ -194,19 +194,6 @@ public interface ZCApiService {
                                                  @Field("detailAddress") String detailAddress);
 
     /**
-     * 结算订单
-     * pay_type  string
-     *
-     * @param orderId
-     * @param channel
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("api/v1/public/pay/order")
-    Observable<EmResult> payOrder(@Field("id") Long orderId,
-                                  @Field("channel") String channel);
-
-    /**
      * 根据电话验证客户是新客户还是老客户  根据电话号码查询客户信息，如果客户不存在，新建客户信息
      *
      * @param phone

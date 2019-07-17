@@ -1,8 +1,6 @@
 package com.easymi.personal;
 
 import com.easymi.common.entity.CompanyList;
-import com.easymi.common.entity.PushAnnouncement;
-import com.easymi.common.entity.QiNiuToken;
 import com.easymi.common.entity.RegisterRes;
 import com.easymi.component.result.EmResult;
 import com.easymi.personal.entity.CarInfo;
@@ -285,7 +283,7 @@ public interface McService {
      * @return
      */
     @FormUrlEncoded
-    @PUT("api/v1/message/notice/employ/records/read ")
+    @PUT("api/v1/message/notice/employ/records/read")
     Observable<EmResult> readNotice(@Field("id") Long id);
 
     /**
@@ -428,20 +426,8 @@ public interface McService {
      *
      * @return
      */
-    @GET("api/v1/public/article_configure/get/{alias}")
+    @GET("api/v1/system/article/configure/{alias}")
     Observable<ArticleResult> getArticle(@Path("alias") String alias);
-
-
-    /**
-     * 查询单个公告
-     *
-     * @param noticeId
-     * @return
-     */
-    @GET("api/v1/public/message/affiche/{id}")
-    Observable<PushAnnouncement> employAfficheById(@Path("id") Long noticeId,
-                                                   @Query("appKey") String appKey);
-
 
     //注册相关
 
@@ -450,7 +436,7 @@ public interface McService {
      *
      * @return
      */
-    @GET("api/v1/public/system/app/companys")
+    @GET("api/v1/system/company")
     Observable<CompanyList> qureyCompanys();
 
     /**
@@ -458,7 +444,7 @@ public interface McService {
      *
      * @return
      */
-    @GET("api/v1/public/system/app/company/{id}")
+    @GET("api/v1/system/company/{id}")
     Observable<BusinessResult> getBusinessType(@Path("id") long id);
 
     /**
@@ -472,7 +458,7 @@ public interface McService {
      * @return
      */
     @FormUrlEncoded
-    @POST("api/v1/public/app/captcha/send_sms")
+    @POST("api/v1/system/captcha/send_sms")
     Observable<EmResult> sendSms(@Field("code") String code,
                                  @Field("phone") String phone,
                                  @Field("random") String random,
@@ -488,21 +474,13 @@ public interface McService {
      * @return
      */
     @FormUrlEncoded
-    @POST("api/v1/public/driver/register/save")
+    @POST("api/v1/resources/driver/register/apply")
     Observable<Register> register(@Field("password") String password,
                                   @Field("phone") String phone,
                                   @Field("smsCode") String smsCode,
 //                                  @Field("randomStr") String randomStr,
 //                                  @Field("code") String code,
                                   @Field("random") String random);
-
-    /**
-     * 获取七牛云token
-     *
-     * @return
-     */
-    @GET("api/v1/public/app/qny_token")
-    Observable<QiNiuToken> getToken();
 
     /**
      * 注册提交申请资料
@@ -525,7 +503,7 @@ public interface McService {
      * @return
      */
     @FormUrlEncoded
-    @POST("api/v1/public/driver/register/apply/app/save")
+    @POST("api/v1/resources/driver/register/app")
     Observable<RegisterRes> applyDriver(@Field("id") String id,
                                         @Field("realName") String realName,
                                         @Field("phone") String phone,
@@ -554,7 +532,7 @@ public interface McService {
      * @param phone
      * @return
      */
-    @GET("api/v1/public/driver/register/get")
+    @GET("api/v1/resources/driver/register/getByDriverPhone")
     Observable<RegisterResult> getDriverInfo(@Query("phone") String phone);
 
 

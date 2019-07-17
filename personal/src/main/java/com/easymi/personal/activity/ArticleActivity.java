@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.easymi.common.CommApiService;
 import com.easymi.common.entity.PushAnnouncement;
 import com.easymi.component.Config;
 import com.easymi.component.R;
@@ -27,7 +28,6 @@ import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.personal.McService;
-import com.easymi.personal.result.AnnResult;
 import com.easymi.personal.result.ArticleResult;
 
 import rx.Observable;
@@ -157,7 +157,7 @@ public class ArticleActivity extends RxBaseActivity implements View.OnClickListe
      * @param annId
      */
     private void getAnn(long annId) {
-        Observable<PushAnnouncement> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
+        Observable<PushAnnouncement> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .employAfficheById(annId, EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())

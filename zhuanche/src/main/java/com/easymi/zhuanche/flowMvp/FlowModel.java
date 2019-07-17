@@ -15,12 +15,14 @@ import com.easymi.component.entity.Employ;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.GsonUtil;
 import com.easymi.component.network.HttpResultFunc;
+import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.zhuanche.ZCApiService;
 import com.easymi.zhuanche.entity.ZCOrder;
 import com.easymi.zhuanche.result.ConsumerResult;
 import com.easymi.zhuanche.result.ZCOrderResult;
+import com.google.gson.JsonElement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -309,10 +311,10 @@ public class FlowModel implements FlowContract.Model {
     }
 
     @Override
-    public Observable<EmResult> payOrder(Long orderId, String payType, Long version) {
-        return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
+    public Observable<JsonElement> payOrder(Long orderId, String payType, Long version) {
+        return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .payOrder(orderId, payType)
-                .filter(new HttpResultFunc<>())
+                .map(new HttpResultFunc2<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
