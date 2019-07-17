@@ -7,7 +7,6 @@ import com.easymi.common.entity.MqttConfig;
 import com.easymi.common.entity.MqttResult;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.entity.NewToken;
-import com.easymi.common.entity.Pic;
 import com.easymi.common.entity.PushAnnouncement;
 import com.easymi.common.entity.PushPojo;
 import com.easymi.common.entity.QiNiuToken;
@@ -32,18 +31,13 @@ import com.google.gson.JsonElement;
 
 import java.util.List;
 
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
-import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import retrofit2.http.Url;
 import rx.Observable;
 
 /**
@@ -196,12 +190,6 @@ public interface CommApiService {
     @GET("driver/api/v1/getToken")
     Observable<QiNiuToken> getToken(@Query("app_key") String appKey,
                                     @Query("id") long id);
-
-    @Multipart
-    @POST
-    Observable<Pic> uploadPic(@Url String url,
-                              @Part("token") RequestBody token,
-                              @Part MultipartBody.Part photo);
 
 
     /**
@@ -531,6 +519,7 @@ public interface CommApiService {
 
     /**
      * 获取七牛云token
+     *
      * @return
      */
     @GET("api/v1/system/qny_token")
@@ -546,14 +535,6 @@ public interface CommApiService {
     Observable<PushAnnouncement> employAfficheById(@Path("id") Long noticeId,
                                                    @Query("app_key") String appKey);
 
-//    /**
-//     * 我的订单接口
-//     */
-//    @GET("api/v1/public/orders")
-//    Observable<QueryOrdersResult> queryMyOrders(@Query("page") int page,
-//                                                @Query("size") int size,
-//                                                @Query("status") String status,
-//                                                @Query("serviceType") String serviceType);
 
     /**
      * 我的订单接口 （新的）

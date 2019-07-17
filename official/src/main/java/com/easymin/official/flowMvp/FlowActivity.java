@@ -32,7 +32,6 @@ import com.amap.api.navi.model.RouteOverlayOptions;
 import com.amap.api.navi.view.RouteOverLay;
 import com.amap.api.services.route.DriveRouteResult;
 import com.easymi.common.CommApiService;
-import com.easymi.common.entity.Pic;
 import com.easymi.common.entity.QiNiuToken;
 import com.easymi.common.push.FeeChangeObserver;
 import com.easymi.common.push.HandlePush;
@@ -55,6 +54,8 @@ import com.easymi.component.utils.Log;
 import com.easymi.component.utils.MapUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
+import com.easymin.driver.securitycenter.ComService;
+import com.easymin.driver.securitycenter.entity.Pic;
 import com.easymin.official.R;
 import com.easymin.official.activity.CancelNewActivity;
 import com.easymin.official.entity.GovOrder;
@@ -997,7 +998,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         RequestBody tokenBody = RequestBody.create(MediaType.parse("multipart/form-data"), token);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), photoRequestBody);
 
-        Observable<Pic> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+        Observable<Pic> observable = ApiManager.getInstance().createApi(Config.HOST, ComService.class)
                 .uploadPic(Config.HOST_UP_PIC, tokenBody, body)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

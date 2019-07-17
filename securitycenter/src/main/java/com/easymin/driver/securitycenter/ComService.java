@@ -1,5 +1,6 @@
 package com.easymin.driver.securitycenter;
 
+import com.easymin.driver.securitycenter.entity.Pic;
 import com.easymin.driver.securitycenter.result.ContactResult;
 import com.easymin.driver.securitycenter.result.EmResult;
 
@@ -314,7 +315,7 @@ public interface ComService {
 
     @Multipart
     @POST
-    Observable<EmResult> uploadPic(@Url String url,
-                                   @Part("token") RequestBody token,
-                                   @Part MultipartBody.Part audio);
+    Observable<Pic> uploadPic(@Url String url,
+                              @Part("token") RequestBody token,
+                              @Part MultipartBody.Part audio);
 }

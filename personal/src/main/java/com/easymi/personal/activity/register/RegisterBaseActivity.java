@@ -2,7 +2,6 @@ package com.easymi.personal.activity.register;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -14,13 +13,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.easymi.common.entity.CompanyList;
-import com.easymi.common.entity.Pic;
 import com.easymi.common.entity.QiNiuToken;
 import com.easymi.common.register.RegisterRequest;
 import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.MySubscriber;
-import com.easymi.component.utils.AlexStatusBarUtils;
 import com.easymi.component.utils.CommonUtil;
 import com.easymi.component.utils.GlideCircleTransform;
 import com.easymi.component.utils.PhoneUtil;
@@ -28,17 +25,15 @@ import com.easymi.component.utils.RsaUtils;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
-import com.easymi.component.utils.UIStatusBarHelper;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.R;
 import com.easymi.personal.entity.BusinessType;
 import com.easymi.personal.result.RegisterResult;
 import com.easymi.personal.widget.CusImgHint;
+import com.easymin.driver.securitycenter.entity.Pic;
 import com.luck.picture.lib.PictureSelector;
-import com.luck.picture.lib.entity.LocalMedia;
-//import com.yalantis.ucrop.UCrop;
-//import com.zhihu.matisse.Matisse;
 import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.entity.LocalMedia;
 
 import java.io.File;
 import java.util.Calendar;
@@ -46,6 +41,9 @@ import java.util.List;
 import java.util.Locale;
 
 import rx.Observable;
+
+//import com.yalantis.ucrop.UCrop;
+//import com.zhihu.matisse.Matisse;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.

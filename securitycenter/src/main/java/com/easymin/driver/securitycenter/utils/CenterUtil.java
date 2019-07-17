@@ -1,11 +1,10 @@
 package com.easymin.driver.securitycenter.utils;
 
 import android.content.Context;
-import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.easymin.driver.securitycenter.CenterConfig;
 import com.easymin.driver.securitycenter.ComService;
+import com.easymin.driver.securitycenter.entity.Pic;
 import com.easymin.driver.securitycenter.network.ApiManager;
 import com.easymin.driver.securitycenter.network.HttpResultFunc;
 import com.easymin.driver.securitycenter.network.MySubscriber;
@@ -82,20 +81,20 @@ public class CenterUtil {
 
     //获取七牛云token
     public void anyToken() {
-        Observable<EmResult> observable = ApiManager.getInstance().createApi(CenterConfig.HOST, ComService.class)
-                .anyToken()
-                .filter(new HttpResultFunc<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        new RxManager().add(observable.subscribe(new MySubscriber<>(mContext, false,
-                true, emResult -> {
-            if (emResult.getCode() == 1){
-                CenterConfig.QINIU_TOKEN = emResult.qiniuyun;
-            }else {
-                ToastUtil.showMessage(mContext,emResult.getMessage());
-            }
-        })));
+//        Observable<EmResult> observable = ApiManager.getInstance().createApi(CenterConfig.HOST, ComService.class)
+//                .anyToken()
+//                .filter(new HttpResultFunc<>())
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread());
+//
+//        new RxManager().add(observable.subscribe(new MySubscriber<>(mContext, false,
+//                true, emResult -> {
+//            if (emResult.getCode() == 1){
+//                CenterConfig.QINIU_TOKEN = emResult.qiniuyun;
+//            }else {
+//                ToastUtil.showMessage(mContext,emResult.getMessage());
+//            }
+//        })));
     }
 
     //七牛云的语音文件key上传后台
@@ -148,9 +147,8 @@ public class CenterUtil {
         RequestBody tokenBody = RequestBody.create(MediaType.parse("multipart/form-data"), token);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), audioRequestBody);
 
-        Observable<EmResult> observable = ApiManager.getInstance().createApi(CenterConfig.HOST, ComService.class)
+        Observable<Pic> observable = ApiManager.getInstance().createApi(CenterConfig.HOST, ComService.class)
                 .uploadPic(CenterConfig.QINIU_HOST, tokenBody, body)
-                .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 

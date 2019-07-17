@@ -1,29 +1,22 @@
 package com.easymi.common.register;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.widget.Toast;
 
-import com.easymi.common.entity.Pic;
 import com.easymi.common.entity.RegisterRes;
-//import com.easymi.component.Glide4Engine;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.RxProgressHUD;
+import com.easymin.driver.securitycenter.entity.Pic;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.yalantis.ucrop.UCrop;
-//import com.zhihu.matisse.Matisse;
-//import com.zhihu.matisse.MimeType;
-//import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -32,10 +25,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import io.reactivex.disposables.Disposable;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
+
+//import com.easymi.component.Glide4Engine;
+//import com.zhihu.matisse.Matisse;
+//import com.zhihu.matisse.MimeType;
+//import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.

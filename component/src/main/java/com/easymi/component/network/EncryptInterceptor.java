@@ -46,11 +46,11 @@ public class EncryptInterceptor implements Interceptor {
                 || url.contains("api/v1/system/captcha/send_sms")
                 || url.contains("api/v1/resources/driver/register/getByDriverPhone")
                 || url.contains("api/v1/resources/driver/register/app")
+                || url.contains("http://up-z2.qiniu.com")
                 || url.contains("/api/v3/connections/")
         ) {
             return chain.proceed(originRequest);
         }
-
         EncryptSet encryptSet = hookRequest(originRequest);
 
         if (encryptSet == null || encryptSet.request == null) {

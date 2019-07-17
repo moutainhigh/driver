@@ -5,13 +5,14 @@ import android.text.TextUtils;
 import com.easymi.common.CommApiService;
 import com.easymi.common.entity.BusinessList;
 import com.easymi.common.entity.CompanyList;
-import com.easymi.common.entity.Pic;
 import com.easymi.common.entity.QiNiuToken;
 import com.easymi.common.entity.RegisterRes;
 import com.easymi.component.Config;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.utils.EmUtil;
+import com.easymin.driver.securitycenter.ComService;
+import com.easymin.driver.securitycenter.entity.Pic;
 
 import java.io.File;
 import java.util.List;
@@ -54,7 +55,7 @@ public class RegisterModel {
         RequestBody photoRequestBody = RequestBody.create(MediaType.parse("image/jpg"), file);
         RequestBody tokenBody = RequestBody.create(MediaType.parse("multipart/form-data"), token);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), photoRequestBody);
-        return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+        return ApiManager.getInstance().createApi(Config.HOST, ComService.class)
                 .uploadPic(Config.HOST_UP_PIC, tokenBody, body);
     }
 

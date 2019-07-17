@@ -1,4 +1,4 @@
-package com.easymi.common.entity;
+package com.easymin.driver.securitycenter.entity;
 
 import com.google.gson.annotations.SerializedName;
 
