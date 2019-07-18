@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ScrollView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.easymi.common.entity.PushMessage;
 import com.easymi.common.mvp.work.WorkPresenter;
 import com.easymi.common.util.GPSSetting;
 import com.easymi.component.Config;
@@ -262,6 +263,7 @@ public class SetActivity extends RxBaseActivity {
             @Override
             public void onNext(EmResult emResult) {
                 HandleBean.deleteAll();
+                PushMessage.deleteAll();
                 XApp.getEditor().remove(Config.SP_TEMP).apply();
                 EmUtil.employLogout(SetActivity.this);
             }

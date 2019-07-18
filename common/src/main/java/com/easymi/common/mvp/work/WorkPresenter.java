@@ -10,6 +10,7 @@ import com.easymi.common.entity.MqttResult;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.entity.NewToken;
+import com.easymi.common.entity.PushMessage;
 import com.easymi.common.push.CountEvent;
 import com.easymi.common.push.MqttManager;
 import com.easymi.common.push.WorkTimeCounter;
@@ -342,6 +343,7 @@ public class WorkPresenter implements WorkContract.Presenter {
             centerUtil.driverDown(driverId, EmUtil.getEmployInfo().companyId, EmUtil.getEmployInfo().userName, EmUtil.getEmployInfo().realName,
                     EmUtil.getEmployInfo().phone, System.currentTimeMillis() / 1000, EmUtil.getEmployInfo().serviceType);
             HandleBean.deleteAll();
+            PushMessage.deleteAll();
             XApp.getEditor().remove(Config.SP_TEMP)
                     .putLong(Config.ONLINE_TIME, 0)
                     .apply();

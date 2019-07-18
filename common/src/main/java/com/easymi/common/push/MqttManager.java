@@ -42,7 +42,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import rx.Observable;
@@ -299,57 +298,48 @@ public class MqttManager implements LocObserver {
      */
     public void publish() {
         if (client != null && client.isConnected()) {
-            List<PushMessage> cacheList;
+            List<PushMessage> pushList;
             Log.e("MqttManager", "sendTotalSize  " + PushMessage.findAll().size());
             if (PushMessage.findAll().size() > 20) {
-                cacheList = PushMessage.findAll().subList(0, 20);
+                pushList = PushMessage.findAll().subList(0, 20);
             } else {
-                cacheList = PushMessage.findAll();
+                pushList = PushMessage.findAll();
             }
 
-            if (cacheList == null || cacheList.size() == 0) {
+            if (pushList == null || pushList.size() == 0) {
                 notifySendDelayed();
                 return;
             }
 
             String temp = XApp.getMyPreferences().getString(Config.SP_TEMP, "");
 
-            List<String> tempList = new ArrayList<>();
+            List<String> paidList = new ArrayList<>();
 
             if (!TextUtils.isEmpty(temp)) {
-                tempList.addAll(new Gson().fromJson(temp, new TypeToken<List<String>>() {
+                paidList.addAll(new Gson().fromJson(temp, new TypeToken<List<String>>() {
                 }.getType()));
             }
 
-            Iterator<PushMessage> iterator = cacheList.iterator();
-
-            while (iterator.hasNext()) {
-                PushMessage message = iterator.next();
-                for (String s : tempList) {
+            for (PushMessage message : pushList) {
+                for (String s : paidList) {
                     if (message.data.contains("\"orderId\":" + s + ",")) {
-                        PushMessage.delete(message);
-                        iterator.remove();
-                        break;
+                        message.data = message.data.replace("\"orderId\":" + s + ",", "");
+                        message.update();
                     }
                 }
             }
 
-            if (cacheList.size() == 0) {
-                notifySendDelayed();
-                return;
-            }
-
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("[");
-            for (int i = 0; i < cacheList.size(); i++) {
-                stringBuilder.append(cacheList.get(i).data);
-                if (i != cacheList.size() - 1) {
+            for (int i = 0; i < pushList.size(); i++) {
+                stringBuilder.append(pushList.get(i).data);
+                if (i != pushList.size() - 1) {
                     stringBuilder.append(",");
                 }
             }
             stringBuilder.append("]");
 
-            Log.e("MqttManager", "sendContent  " + cacheList.size());
+            Log.e("MqttManager", "sendContent  " + pushList.size());
             MqttMessage message = new MqttMessage(stringBuilder.toString().getBytes());
             message.setQos(qos);
 
@@ -357,7 +347,7 @@ public class MqttManager implements LocObserver {
                 client.publish(Config.MQTT_TOPIC, message, null, new IMqttActionListener() {
                     @Override
                     public void onSuccess(IMqttToken asyncActionToken) {
-                        PushMessage.delete(cacheList);
+                        PushMessage.delete(pushList);
                         Log.e("MqttManager", "sendSuccess   restSize==  " + PushMessage.findAll().size() + "      " + stringBuilder.toString());
                         if (PushMessage.findAll().size() > 0) {
                             notifySend();
