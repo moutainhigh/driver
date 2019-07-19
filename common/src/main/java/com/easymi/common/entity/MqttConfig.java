@@ -16,5 +16,6 @@ public class MqttConfig {
     public int portTcp;
     public String topic;
     public String ackTopic;
+    public String connectionsUrl;
 
 }

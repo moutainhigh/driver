@@ -367,7 +367,7 @@ public interface McService {
      * @return
      */
     @FormUrlEncoded
-    @POST("api/v1/resources/driver/recharge\n")
+    @POST("api/v1/resources/driver/recharge")
     Observable<RechargeResult> recharge(@Field("channel") String channel,
                                         @Field("fee") Double fee);
 

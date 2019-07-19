@@ -113,8 +113,12 @@ public class WorkModel implements WorkContract.Model {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .getNearDrivers(lat, lng, ZCSetting.findOne().emploiesKm, business)
                 .map(new HttpResultFunc2<>())
-                .retryWhen(observable -> observable.flatMap((Func1<Throwable, Observable<?>>) throwable -> Observable.timer(5, TimeUnit.SECONDS)))
-                .repeatWhen(observable -> observable.flatMap((Func1<Void, Observable<?>>) aVoid -> Observable.timer(5, TimeUnit.SECONDS)))
+                .retryWhen(observable
+                        -> observable.flatMap((Func1<Throwable, Observable<?>>) throwable
+                        -> Observable.timer(10, TimeUnit.SECONDS)))
+                .repeatWhen(observable
+                        -> observable.flatMap((Func1<Void, Observable<?>>) aVoid
+                        -> Observable.timer(10, TimeUnit.SECONDS)))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 

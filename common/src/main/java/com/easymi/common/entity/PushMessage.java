@@ -30,7 +30,7 @@ public class PushMessage {
         ContentValues values = new ContentValues();
         values.put("data", data);
         values.put("timeStamp", timeStamp);
-        db.update("t_cp_temp_message", values, " timeStamp = ? ",
+        db.update("t_cp_temp_message", values, "timeStamp = ?",
                 new String[]{String.valueOf(timeStamp)});
     }
 
@@ -48,6 +48,9 @@ public class PushMessage {
 
 
     public static void delete(List<PushMessage> data) {
+        if (data.isEmpty()){
+            return;
+        }
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
         long time = data.get(data.size() - 1).timeStamp;

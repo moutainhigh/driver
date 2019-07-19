@@ -1,6 +1,7 @@
 package com.easymi.component.network;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
@@ -47,8 +48,7 @@ public class EncryptInterceptor implements Interceptor {
                 || url.contains("api/v1/resources/driver/register/getByDriverPhone")
                 || url.contains("api/v1/resources/driver/register/app")
                 || url.contains("http://up-z2.qiniu.com")
-                || url.contains("/api/v3/connections/")
-        ) {
+                || ((!TextUtils.isEmpty(Config.MQTT_CONNECTION_URL) && url.contains(Config.MQTT_CONNECTION_URL)))) {
             return chain.proceed(originRequest);
         }
         EncryptSet encryptSet = hookRequest(originRequest);

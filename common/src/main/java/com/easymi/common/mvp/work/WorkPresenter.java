@@ -254,7 +254,7 @@ public class WorkPresenter implements WorkContract.Presenter {
      */
     private void checkTopic() {
         view.getRxManager().add(ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .getCurrentTopic(Config.MQTT_CLIENT_ID)
+                .getCurrentTopic(Config.MQTT_CONNECTION_URL)
                 .map(new HttpResultFunc2<>(0))
                 .doOnNext(new Action1<List<MqttResult>>() {
                     @Override
@@ -287,6 +287,14 @@ public class WorkPresenter implements WorkContract.Presenter {
         view.getRxManager().add(ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .getConfig()
                 .map(new HttpResultFunc2<>())
+                .doOnNext(new Action1<MqttConfig>() {
+                    @Override
+                    public void call(MqttConfig mqttConfig) {
+                        if (TextUtils.isEmpty(mqttConfig.connectionsUrl)){
+                            throw new RuntimeException();
+                        }
+                    }
+                })
                 .retryWhen(observable -> observable.delay(5, TimeUnit.SECONDS))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -300,6 +308,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                         Config.PORT_TCP = mqttConfig.portTcp;
                         Config.MQTT_TOPIC = mqttConfig.topic;
                         Config.ACK_TOPIC = mqttConfig.ackTopic;
+                        Config.MQTT_CONNECTION_URL = mqttConfig.connectionsUrl;
                         MqttManager.getInstance().creatConnect();
                         getTopic();
                     }

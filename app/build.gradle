@@ -105,7 +105,7 @@ android {
             buildConfigField "String", "HOST", '"http://10.10.4.16:10001/"'
             buildConfigField "String", "H5_HOST", '"http://10.10.4.16"'
             buildConfigField "String", "IMG_SERVER", '"https://assets.xiaokakj.com/"'
-            buildConfigField "boolean", "IS_ENCRYPT", "true"
+            buildConfigField "boolean", "IS_ENCRYPT", "false"
         }
     }
 }

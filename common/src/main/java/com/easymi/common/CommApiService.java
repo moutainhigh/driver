@@ -38,6 +38,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 import rx.Observable;
 
 /**
@@ -598,8 +599,8 @@ public interface CommApiService {
     Observable<EmResult> upLoadOnlineTime(@Field("time") long time);
 
 
-    @GET("api/v3/connections/{topic}")
-    Observable<EmResult2<List<MqttResult>>> getCurrentTopic(@Path("topic") String topic);
+    @GET
+    Observable<EmResult2<List<MqttResult>>> getCurrentTopic(@Url String url);
 
     @GET("api/v1/message/topic/driver_mqtt_config")
     Observable<EmResult2<MqttConfig>> getConfig();

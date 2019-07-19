@@ -27,6 +27,7 @@ public class Config {
     public static String MQTT_CLIENT_ID;
     public static String MQTT_USER_NAME;
     public static String MQTT_PSW;
+    public static String MQTT_CONNECTION_URL;
 
     public static String APP_KEY;//资运
 

@@ -644,6 +644,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             showTopView();
             initBridge();
             showBottomFragment(zcOrder);
+            routePlan();
             showMapBounds();
             addLocationMarker();
 
@@ -740,7 +741,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void showMapBounds() {
-        routePlan();
         if (null != getStartAddr()) {
             if (null == startMarker) {
                 MarkerOptions markerOption = new MarkerOptions();
@@ -1325,12 +1325,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         registerReceiver(orderFinishReceiver, new IntentFilter(Config.BROAD_FINISH_ORDER), EmUtil.getBroadCastPermission(), null);
     }
 
-    boolean canGoOld = false;
 
     @Override
     protected void onResume() {
         super.onResume();
-        canGoOld = true;
         EmLoc location = EmUtil.getLastLoc();
         if (location == null) {
             ToastUtil.showMessage(this, getString(R.string.loc_failed));
@@ -1340,7 +1338,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         mapView.onResume();
         lastLatlng = new LatLng(location.latitude, location.longitude);
         presenter.findOne(orderId);
-
     }
 
     @Override
@@ -1351,7 +1348,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     protected void onPause() {
-        canGoOld = false;
         super.onPause();
         mapView.onPause();
         cancelTimer();
@@ -1398,19 +1394,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         if (!isMapTouched) {
             aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
         }
-
-        if (zcOrder != null) {
-            if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-                if (null != getEndAddr()) {
-                    presenter.routePlanByNavi(getEndAddr().lat, getEndAddr().lng);
-                }
-            } else if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
-                if (null != getEndAddr()) {
-                    presenter.routePlanByNavi(getStartAddr().lat, getStartAddr().lng);
-                }
-            }
-        }
-
+        routePlan();
         lastLatlng = latLng;
 
     }
