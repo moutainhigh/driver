@@ -528,7 +528,7 @@ public class AlexStatusBarUtils {
      * @param activity
      * @return
      */
-    private static int getStatusBarHeight(Activity activity) {
+    public static int getStatusBarHeight(Activity activity) {
         int resourceId = activity.getResources().getIdentifier("status_bar_height", "dimen", "android");
         return activity.getResources().getDimensionPixelSize(resourceId);
     }

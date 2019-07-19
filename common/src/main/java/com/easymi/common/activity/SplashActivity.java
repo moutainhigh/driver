@@ -9,8 +9,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -23,6 +21,7 @@ import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.cat.Cat;
 import com.easymi.component.permission.RxPermissions;
 import com.easymi.component.update.UpdateHelper;
+import com.easymi.component.utils.AlexStatusBarUtils;
 import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.NetUtil;
@@ -52,8 +51,7 @@ public class SplashActivity extends RxBaseActivity {
 
     @Override
     public int getLayoutId() {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        AlexStatusBarUtils.setTransparentStatusBar(this, null);
         return R.layout.activity_splash;
     }
 

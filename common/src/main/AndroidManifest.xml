@@ -58,8 +58,7 @@
         <activity
             android:name=".activity.SplashActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.ImgFullScreen" />
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".register.InfoActivity"
