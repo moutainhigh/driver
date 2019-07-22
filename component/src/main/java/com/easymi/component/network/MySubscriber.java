@@ -1,11 +1,10 @@
 package com.easymi.component.network;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ParseException;
 
-import com.easymi.component.Config;
 import com.easymi.component.R;
+import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
@@ -121,13 +120,12 @@ public class MySubscriber<T> extends Subscriber<T> implements ProgressDismissLis
             return;
         }
         if (e instanceof HttpException) {
-            if (((HttpException) e).code() == 403 || ((HttpException) e).code() == 401
-                    || ((HttpException) e).code() == 423
-                    || ((HttpException) e).code() == 410
-            ) {
-                Intent intent = new Intent(Config.HTTP_CUSTOM);
-                intent.putExtra("http_custom", ((HttpException) e).code());
-                context.sendBroadcast(intent);
+            if (((HttpException) e).code() == 401 || ((HttpException) e).code() == 410) {
+                ToastUtil.showMessage(context, "登陆失效，请重新登陆");
+                EmUtil.employLogout(context);
+                return;
+            } else if (((HttpException) e).code() == 403) {
+                ToastUtil.showMessage(context, "您点击太快啦");
             } else {
                 ToastUtil.showMessage(context, context.getString(R.string.response_error) + ((HttpException) e).code());//400、500、404之类的响应码错误
             }
@@ -140,15 +138,6 @@ public class MySubscriber<T> extends Subscriber<T> implements ProgressDismissLis
         } else if (e instanceof ApiException) {
             if (StringUtils.isNotBlank(e.getMessage())) {
                 ToastUtil.showMessage(context, e.getMessage());//服务器定义的错误
-//                if (((ApiException) e).getErrCode() == ErrCode.EMPLOY_NOT_EXIST.getCode()) {
-//                    //服务人员不存在时，退出到登录界面
-//                    EmUtil.employLogout(context);
-//                }
-//                else if(((ApiException) e).getErrCode() == ErrCode.ORDER_STATUS_ERR.getCode()){
-//                    //订单状态错误
-//                    //如遇客户未支付也会提示该错误
-//
-//                }
             } else {
                 ToastUtil.showMessage(context, context.getString(R.string.unknown_error));//服务器定义的错误
             }

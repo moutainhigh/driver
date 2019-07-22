@@ -2,9 +2,10 @@ package com.easymin.daijia.driver.zyziyunsjdaijia;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.easymi.common.activity.SplashActivity;
-import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.base.RxBaseActivity2;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
@@ -15,7 +16,7 @@ import com.easymi.component.base.RxBaseActivity;
  * Description:  防止白屏
  * History:
  */
-public class IndexActivity extends RxBaseActivity {
+public class IndexActivity extends RxBaseActivity2 {
 
     @Override
     public boolean isEnableSwipe() {
@@ -29,6 +30,8 @@ public class IndexActivity extends RxBaseActivity {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
+        Log.e("IndexActivity", "initViews");
+
         if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
             finish();
             return;

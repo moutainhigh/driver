@@ -24,4 +24,15 @@
     <dimen name="key_horizontal_gap">10dp</dimen>
     <dimen name="key_vertical_gap">6dp</dimen>
     <dimen name="keyboard_tip_height">50dp</dimen>
+
+
+    <dimen name="sizeTitle">18sp</dimen>
+    <dimen name="sizeButton">16sp</dimen>
+    <dimen name="sizeContent">15sp</dimen>
+    <dimen name="sizeHint">13sp</dimen>
+
+    <dimen name="sizeLine">1px</dimen>
+
+    <dimen name="sizeButtonHeight">44dp</dimen>
+
 </resources>

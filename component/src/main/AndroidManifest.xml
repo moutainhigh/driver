@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.easymi.component">
 
@@ -20,30 +21,26 @@
     <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-
-
     <uses-permission android:name="android.permission.VIBRATE" />
 
-
     <application>
-
+        <activity android:name=".activity.SettingActivity"></activity>
         <activity
             android:name=".activity.WebActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
-
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name="com.amap.api.navi.AmapRouteActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".activity.PlaceActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.CityActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.NaviActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
@@ -57,18 +54,17 @@
             </intent-filter>
         </service>
 
-        <receiver android:name=".loc.LocReceiver"
+        <receiver
+            android:name=".loc.LocReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.easymi.eomponent.LOC_CHANGED" />
             </intent-filter>
-        </receiver>
-
-        <!--图片裁剪-->
+        </receiver> <!-- 图片裁剪 -->
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
     </application>
+
 </manifest>

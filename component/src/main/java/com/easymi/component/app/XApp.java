@@ -17,6 +17,7 @@ import com.baidu.tts.client.TtsMode;
 import com.easymi.component.BuildConfig;
 import com.easymi.component.Config;
 import com.easymi.component.R;
+import com.easymi.component.activity.SettingActivity;
 import com.easymi.component.db.SqliteHelper;
 import com.easymi.component.loc.LocService;
 import com.easymi.component.tts.InitConfig;
@@ -33,6 +34,9 @@ import com.tencent.bugly.crashreport.CrashReport;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import tech.linjiang.pandora.Pandora;
+import tech.linjiang.pandora.function.IFunc;
 
 /**
  * @author xyin
@@ -89,6 +93,28 @@ public class XApp extends MultiDexApplication {
             ARouter.openDebug();   //非打包情况下,必须调用调用
             ARouter.openLog();
         }
+
+        IFunc customFunc = new IFunc() {
+            @Override
+            public int getIcon() {
+                return android.R.drawable.ic_menu_set_as;
+            }
+
+            @Override
+            public String getName() {
+                return "环境配置";
+            }
+
+            @Override
+            public boolean onClick() {
+                Intent intent = new Intent(XApp.this, SettingActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                return false;
+            }
+        };
+
+        Pandora.get().addFunction(customFunc);
 
         ARouter.init(this);
         SqliteHelper.init(this);

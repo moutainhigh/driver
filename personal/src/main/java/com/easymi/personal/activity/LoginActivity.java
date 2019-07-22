@@ -92,8 +92,6 @@ public class LoginActivity extends RxBaseActivity {
 
     @Override
     public int getLayoutId() {
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         UIStatusBarHelper.setStatusBarLightMode(this);
         AlexStatusBarUtils.setStatusColor(this, Color.WHITE);
         return R.layout.activity_login;
@@ -102,11 +100,6 @@ public class LoginActivity extends RxBaseActivity {
     @Override
     public void initViews(Bundle savedInstanceState) {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);//禁止截屏
-
-//        Intent intent222 = new Intent(Intent.ACTION_VIEW, Uri.parse("customscheme://com.rvakva.travel.publicdriver/local_push?title=华为测试"));
-//        intent222.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        String intentUri = intent222.toUri(Intent.URI_INTENT_SCHEME);
-//        Log.e("intentUri", intentUri);
 
         loginBtn = findViewById(R.id.login_button);
         loginBtn.setOnClickListener(v -> {

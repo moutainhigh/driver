@@ -37,11 +37,9 @@
     </style>
 
 
-    <style name="SplashTheme" parent="AppTheme">
-        <item name="colorPrimaryDark">@android:color/transparent</item>
-        <item name="windowActionBar">false</item>
-        <item name="android:background">@mipmap/splash</item>
-        <item name="windowNoTitle">true</item>
+    <style name="SplashTheme" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+        <item name="android:windowBackground">@mipmap/splash</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 
 

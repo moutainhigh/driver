@@ -2,11 +2,11 @@ package com.easymi.cityline.flowMvp;
 
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -36,7 +36,6 @@ import com.easymi.cityline.CLService;
 import com.easymi.cityline.R;
 import com.easymi.cityline.StaticVal;
 import com.easymi.cityline.adapter.LeftWindowAdapter;
-import com.easymi.common.entity.OrderCustomer;
 import com.easymi.cityline.entity.ZXOrder;
 import com.easymi.cityline.flowMvp.fragment.AcceptSendFragment;
 import com.easymi.cityline.flowMvp.fragment.ChangeSeqFragment;
@@ -46,6 +45,7 @@ import com.easymi.cityline.flowMvp.fragment.NotStartFragment;
 import com.easymi.cityline.receiver.CancelOrderReceiver;
 import com.easymi.cityline.receiver.OrderFinishReceiver;
 import com.easymi.cityline.widget.ChangePopWindow;
+import com.easymi.common.entity.OrderCustomer;
 import com.easymi.component.Config;
 import com.easymi.component.ZXOrderStatus;
 import com.easymi.component.app.XApp;
@@ -56,12 +56,11 @@ import com.easymi.component.entity.EmLoc;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc3;
 import com.easymi.component.network.MySubscriber;
-import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult2;
 import com.easymi.component.rxmvp.RxManager;
-import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.GlideCircleTransform;
@@ -72,6 +71,8 @@ import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.overlay.DrivingRouteOverlay;
 import com.google.gson.Gson;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -198,85 +199,102 @@ public class FlowActivity extends RxBaseActivity implements
      * @param zxOrder
      */
     private void getCustomers(ZXOrder zxOrder) {
+        String temp = null;
+        try {
+            temp = URLEncoder.encode("`id` ASC", "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        if (TextUtils.isEmpty(temp)) {
+            temp = URLEncoder.encode("`id` ASC");
+        }
         Observable<EmResult2<List<OrderCustomer>>> observable = ApiManager.getInstance().createApi(Config.HOST, CLService.class)
-                .getOrderCustomers(zxOrder.orderId, "5,10,15,20", "`id` ASC")
+                .getOrderCustomers(zxOrder.orderId, "5,10,15,20", temp)
                 .filter(new HttpResultFunc3<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, false, result2 -> {
-            if (result2.getData() == null || result2.getData().size() == 0) {
-                ToastUtil.showMessage(this, "当前班次没有任何乘客");
-                presenter.finishTask(zxOrder.orderId);
-                return;
-            }
-            isOrderLoadOk = true;
-            List<OrderCustomer> orderCustomers = result2.getData();
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, false, new HaveErrSubscriberListener<EmResult2<List<OrderCustomer>>>() {
+            @Override
+            public void onNext(EmResult2<List<OrderCustomer>> result2) {
+                if (result2.getData() == null || result2.getData().size() == 0) {
+                    ToastUtil.showMessage(FlowActivity.this, "当前班次没有任何乘客");
+                    presenter.finishTask(zxOrder.orderId);
+                    return;
+                }
+                isOrderLoadOk = true;
+                List<OrderCustomer> orderCustomers = result2.getData();
 
-            /**
-             * 删除退票订单
-             */
-            List<OrderCustomer> allCus = OrderCustomer.findByIDTypeOrderByAcceptSeq(zxOrder.orderId, zxOrder.orderType);
-            for (OrderCustomer cusOrder : allCus) {
-                boolean isExist = false;
+                /**
+                 * 删除退票订单
+                 */
+                List<OrderCustomer> allCus = OrderCustomer.findByIDTypeOrderByAcceptSeq(zxOrder.orderId, zxOrder.orderType);
+                for (OrderCustomer cusOrder : allCus) {
+                    boolean isExist = false;
+                    for (int i = 0; i < orderCustomers.size(); i++) {
+                        OrderCustomer orderCustomer1 = orderCustomers.get(i);
+
+                        if ((cusOrder.id == orderCustomer1.orderId)) {
+                            isExist = true;
+                            break;
+                        }
+                    }
+                    if (!isExist) {
+                        OrderCustomer.delete(cusOrder.id);
+                    }
+                }
+
                 for (int i = 0; i < orderCustomers.size(); i++) {
-                    OrderCustomer orderCustomer1 = orderCustomers.get(i);
+                    OrderCustomer orderCustomer = orderCustomers.get(i);
 
-                    if ((cusOrder.id == orderCustomer1.orderId)) {
-                        isExist = true;
-                        break;
+                    orderCustomer.appointTime = orderCustomer.appointTime * 1000;
+                    orderCustomer.num = i + 1;
+                    orderCustomer.acceptSequence = i;
+                    orderCustomer.sendSequence = i;
+                    //后端状态与本地状态衔接 这些仅仅针对于本地数据库首次创建时
+                    if (orderCustomer.status <= OrderCustomer.CITY_LINE_STATUS_NEW) {
+                        orderCustomer.status = 0;
+                        orderCustomer.subStatus = 0;
+                    } else if (orderCustomer.status == OrderCustomer.CITY_LINE_STATUS_TAKE) {
+                        orderCustomer.status = 0;
+                        orderCustomer.subStatus = 1;
+                    } else if (orderCustomer.status == OrderCustomer.CITY_LINE_STATUS_RUN) {
+                        orderCustomer.status = 3;
+                        orderCustomer.subStatus = 1;
+                    } else if (orderCustomer.status == OrderCustomer.CITY_LINE_STATUS_SKIP) {
+                        orderCustomer.status = 5;
+                        orderCustomer.subStatus = 1;
+                    } else if (orderCustomer.status == OrderCustomer.CITY_LINE_STATUS_FINISH) {
+                        orderCustomer.status = 4;
+                        orderCustomer.subStatus = 1;
                     }
+
+                    orderCustomer.orderId = zxOrder.orderId;
+                    orderCustomer.orderType = zxOrder.orderType;
+
+                    for (OrderCustomer.OrderAddressVo orderAddressVo : orderCustomer.orderAddressVos) {
+                        if (orderAddressVo.type == 1) {
+                            //起点
+                            orderCustomer.startAddr = orderAddressVo.address;
+                            orderCustomer.startLat = orderAddressVo.latitude;
+                            orderCustomer.startLng = orderAddressVo.longitude;
+                        } else {
+                            //终点
+                            orderCustomer.endAddr = orderAddressVo.address;
+                            orderCustomer.endLat = orderAddressVo.latitude;
+                            orderCustomer.endLng = orderAddressVo.longitude;
+                        }
+                    }
+
+                    orderCustomer.saveOrUpdate();
                 }
-                if (!isExist) {
-                    OrderCustomer.delete(cusOrder.id);
-                }
+                showFragmentByStatus();
             }
 
-            for (int i = 0; i < orderCustomers.size(); i++) {
-                OrderCustomer orderCustomer = orderCustomers.get(i);
-
-                orderCustomer.appointTime = orderCustomer.appointTime * 1000;
-                orderCustomer.num = i + 1;
-                orderCustomer.acceptSequence = i;
-                orderCustomer.sendSequence = i;
-                //后端状态与本地状态衔接 这些仅仅针对于本地数据库首次创建时
-                if (orderCustomer.status <= OrderCustomer.CITY_LINE_STATUS_NEW) {
-                    orderCustomer.status = 0;
-                    orderCustomer.subStatus = 0;
-                } else if (orderCustomer.status == OrderCustomer.CITY_LINE_STATUS_TAKE) {
-                    orderCustomer.status = 0;
-                    orderCustomer.subStatus = 1;
-                } else if (orderCustomer.status == OrderCustomer.CITY_LINE_STATUS_RUN) {
-                    orderCustomer.status = 3;
-                    orderCustomer.subStatus = 1;
-                } else if (orderCustomer.status == OrderCustomer.CITY_LINE_STATUS_SKIP) {
-                    orderCustomer.status = 5;
-                    orderCustomer.subStatus = 1;
-                } else if (orderCustomer.status == OrderCustomer.CITY_LINE_STATUS_FINISH) {
-                    orderCustomer.status = 4;
-                    orderCustomer.subStatus = 1;
-                }
-
-                orderCustomer.orderId = zxOrder.orderId;
-                orderCustomer.orderType = zxOrder.orderType;
-
-                for (OrderCustomer.OrderAddressVo orderAddressVo : orderCustomer.orderAddressVos) {
-                    if (orderAddressVo.type == 1) {
-                        //起点
-                        orderCustomer.startAddr = orderAddressVo.address;
-                        orderCustomer.startLat = orderAddressVo.latitude;
-                        orderCustomer.startLng = orderAddressVo.longitude;
-                    } else {
-                        //终点
-                        orderCustomer.endAddr = orderAddressVo.address;
-                        orderCustomer.endLat = orderAddressVo.latitude;
-                        orderCustomer.endLng = orderAddressVo.longitude;
-                    }
-                }
-
-                orderCustomer.saveOrUpdate();
+            @Override
+            public void onError(int code) {
+                finish();
             }
-            showFragmentByStatus();
         })));
     }
 
@@ -562,8 +580,8 @@ public class FlowActivity extends RxBaseActivity implements
             }
 
             @Override
-            public void addMarker(LatLng latLng, int flag, int num, int ticketNumber,String photo) {
-                FlowActivity.this.addMarker(latLng, flag, num, ticketNumber,photo);
+            public void addMarker(LatLng latLng, int flag, int num, int ticketNumber, String photo) {
+                FlowActivity.this.addMarker(latLng, flag, num, ticketNumber, photo);
             }
 
             @Override
@@ -710,7 +728,7 @@ public class FlowActivity extends RxBaseActivity implements
      * @param flag
      */
     @Override
-    public void addMarker(LatLng latLng, int flag, int num, int ticketNumber,String photo) {
+    public void addMarker(LatLng latLng, int flag, int num, int ticketNumber, String photo) {
         MarkerOptions markerOption = new MarkerOptions();
         markerOption.position(latLng);
         markerOption.draggable(false);//设置Marker可拖动
@@ -1000,7 +1018,7 @@ public class FlowActivity extends RxBaseActivity implements
         IntentFilter filter = new IntentFilter();
         filter.addAction(Config.BROAD_CANCEL_ORDER);
         filter.addAction(Config.BROAD_BACK_ORDER);
-        registerReceiver(cancelOrderReceiver, filter,EmUtil.getBroadCastPermission(),null);
+        registerReceiver(cancelOrderReceiver, filter, EmUtil.getBroadCastPermission(), null);
     }
 
     @Override

@@ -155,7 +155,6 @@ public class Config {
     public static final String BROAD_ANN = "com.easymi.v5driver.BROAD_ANN";
     public static final String BROAD_FINISH_ORDER = "com.easymi.v5driver.BROAD_FINISH_ORDER";
     public static final String TIRED_NOTICE = "com.easymi.v5driver.TIRED_NOTICE";
-    public static final String HTTP_CUSTOM = "com.easymi.v5driver.HTTP_CUSTOM";
     public static final String ORDER_REFRESH = "com.easymi.v5driver.ORDER_REFRESH";
     public static final String AUTO_FINISH = "com.easymi.v5driver.AUTO_FINISH";
     public static final String SCHEDULE_FINISH = "com.easymi.v5driver.SCHEDULE_FINISH";

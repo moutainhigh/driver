@@ -73,7 +73,7 @@ public interface CommApiService {
 
 
     @FormUrlEncoded
-    @POST("api/v1/order/pay")
+    @POST("api/v1/system/pay")
     Observable<EmResult2<JsonElement>> payOrder(@Field("id") Long orderId,
                                                 @Field("channel") String channel);
 

@@ -1,7 +1,5 @@
 package com.easymi.component.utils;
 
-import com.easymi.component.Config;
-
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -22,9 +20,6 @@ public class SHA256Util {
      *
      */
     public static String getSHA256StrJava(String str) {
-        if (!Config.IS_ENCRYPT){
-            return str;
-        }
         MessageDigest messageDigest;
         String encodeStr = "";
         try {

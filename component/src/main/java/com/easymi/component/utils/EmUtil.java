@@ -88,17 +88,18 @@ public class EmUtil {
 
         stopAllService(context);
 
+        ActivityManager activityMgr = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        if (activityMgr != null) {
+            activityMgr.killBackgroundProcesses(context.getPackageName());
+        }
+        ActManager.getInstance().finishActivity("WorkActivity");
+
         Intent i = context.getPackageManager()
                 .getLaunchIntentForPackage(context.getPackageName());
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(i);
 
-        ActManager.getInstance().finishActivity("WorkActivity");
 
-        ActivityManager activityMgr = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        if (activityMgr != null) {
-            activityMgr.killBackgroundProcesses(context.getPackageName());
-        }
 
 //        System.exit(0);
     }

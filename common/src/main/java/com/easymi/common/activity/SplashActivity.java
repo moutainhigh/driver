@@ -21,6 +21,7 @@ import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.cat.Cat;
 import com.easymi.component.permission.RxPermissions;
 import com.easymi.component.update.UpdateHelper;
+import com.easymi.component.utils.AlexStatusBarUtils;
 import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.NetUtil;
@@ -50,6 +51,7 @@ public class SplashActivity extends RxBaseActivity {
 
     @Override
     public int getLayoutId() {
+        AlexStatusBarUtils.setTransparentStatusBar(this,null);
         return R.layout.activity_splash;
     }
 
@@ -82,24 +84,6 @@ public class SplashActivity extends RxBaseActivity {
         super.onResume();
         Log.e(TAG, "onResume");
     }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (animateStarted) {
-            handler.removeMessages(0);
-        }
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        if (animateStarted) {
-            handler.sendEmptyMessageDelayed(0, 1000);
-        }
-    }
-
-    private boolean animateStarted = false;
 
     @Override
     public void initViews(Bundle savedInstanceState) {
