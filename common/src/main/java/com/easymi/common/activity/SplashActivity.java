@@ -21,7 +21,6 @@ import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.cat.Cat;
 import com.easymi.component.permission.RxPermissions;
 import com.easymi.component.update.UpdateHelper;
-import com.easymi.component.utils.AlexStatusBarUtils;
 import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.NetUtil;
@@ -51,7 +50,6 @@ public class SplashActivity extends RxBaseActivity {
 
     @Override
     public int getLayoutId() {
-        AlexStatusBarUtils.setTransparentStatusBar(this, null);
         return R.layout.activity_splash;
     }
 
