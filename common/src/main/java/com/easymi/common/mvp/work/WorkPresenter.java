@@ -290,7 +290,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                 .doOnNext(new Action1<MqttConfig>() {
                     @Override
                     public void call(MqttConfig mqttConfig) {
-                        if (TextUtils.isEmpty(mqttConfig.connectionsUrl)){
+                        if (TextUtils.isEmpty(mqttConfig.connectionsUrl)) {
                             throw new RuntimeException();
                         }
                     }
@@ -416,12 +416,11 @@ public class WorkPresenter implements WorkContract.Presenter {
         timeCounter.forceUpload(statues);
     }
 
-
     //表示司机业务
     private String employType;
 
 
-    private void getSetting() {
+    public void getSetting() {
         Observable<SettingResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .getAppSetting(EmUtil.getEmployInfo().companyId)
                 .filter(new HttpResultFunc<>())
@@ -463,8 +462,6 @@ public class WorkPresenter implements WorkContract.Presenter {
                         .putLong(Config.SP_DRIVERID, employ.id)
                         .apply();
                 view.showDriverStatus();
-                driverehicle(employ);
-                getSetting();
             }
 
             @Override
@@ -483,7 +480,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        new RxManager().add(observable.subscribe(new MySubscriber<>(context, false,
+        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, false,
                 true, result -> {
             if (result == null || result.getCode() != 1) {
                 ToastUtil.showMessage(context, "未绑定该业务车辆，不能接单");

@@ -51,7 +51,7 @@ public class SplashActivity extends RxBaseActivity {
 
     @Override
     public int getLayoutId() {
-        AlexStatusBarUtils.setTransparentStatusBar(this,null);
+        AlexStatusBarUtils.setTransparentStatusBar(this, null);
         return R.layout.activity_splash;
     }
 
@@ -82,11 +82,11 @@ public class SplashActivity extends RxBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e(TAG, "onResume");
     }
 
     @Override
     public void initViews(Bundle savedInstanceState) {
+
         rxPermissions = new RxPermissions(this);
 
         loadLanguage();

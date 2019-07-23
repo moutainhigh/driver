@@ -68,24 +68,6 @@ public class EmUtil {
             XApp.getInstance().player.stop();
         }
 
-//        try {
-//            Class<?> clazz = Class.forName("com.easymi.common.push.MqttManager");
-//            Method method = clazz.getMethod("release");
-//            method.invoke(null);
-//        } catch (ClassNotFoundException e) {
-//            Log.e("EmUtil", "ClassNotFoundException:"+e.getMessage());
-//            e.printStackTrace();
-//        } catch (NoSuchMethodException e) {
-//            Log.e("EmUtil", "NoSuchMethodException:"+e.getMessage());
-//            e.printStackTrace();
-//        } catch (IllegalAccessException e) {
-//            Log.e("EmUtil", "IllegalAccessException:"+e.getMessage());
-//            e.printStackTrace();
-//        } catch (InvocationTargetException e) {
-//            Log.e("EmUtil", "InvocationTargetException:"+e.getMessage());
-//            e.printStackTrace();
-//        }
-
         stopAllService(context);
 
         ActivityManager activityMgr = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
@@ -98,10 +80,6 @@ public class EmUtil {
                 .getLaunchIntentForPackage(context.getPackageName());
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(i);
-
-
-
-//        System.exit(0);
     }
 
     private static void stopAllService(Context context) {

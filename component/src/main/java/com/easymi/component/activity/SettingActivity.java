@@ -1,7 +1,6 @@
 package com.easymi.component.activity;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -34,7 +33,6 @@ public class SettingActivity extends RxBaseActivity {
         RadioGroup settingRgKey = findViewById(R.id.setting_rg_key);
         EditText settingEtHost = findViewById(R.id.setting_et_host);
         EditText settingEtH5 = findViewById(R.id.setting_et_h5);
-        EditText settingEtServer = findViewById(R.id.setting_et_server);
         RadioGroup settingRg = findViewById(R.id.setting_rg);
         TextView settingTv = findViewById(R.id.setting_tv);
 
@@ -55,22 +53,10 @@ public class SettingActivity extends RxBaseActivity {
                     }
                 });
 
-        String data = XApp.getMyPreferences().getString("environment_setting", "");
-
-        if (!TextUtils.isEmpty(data)) {
-            EnvironmentPojo environmentPojo = new Gson().fromJson(data, EnvironmentPojo.class);
-            settingRgKey.check(environmentPojo.appKey.startsWith("1H") ? R.id.setting_rb_1h : R.id.setting_rb_4j);
-            settingEtHost.setText(environmentPojo.host);
-            settingEtH5.setText(environmentPojo.h5Host);
-            settingEtServer.setText(environmentPojo.server);
-            settingRg.check(environmentPojo.encryption ? R.id.setting_rb_en : R.id.setting_rb_de);
-        } else {
-            settingRgKey.check(Config.APP_KEY.startsWith("1H") ? R.id.setting_rb_1h : R.id.setting_rb_4j);
-            settingEtHost.setText(Config.HOST);
-            settingEtH5.setText(Config.H5_HOST);
-            settingEtServer.setText(Config.IMG_SERVER);
-            settingRg.check(Config.IS_ENCRYPT ? R.id.setting_rb_en : R.id.setting_rb_de);
-        }
+        settingRgKey.check(Config.APP_KEY.startsWith("1H") ? R.id.setting_rb_1h : R.id.setting_rb_4j);
+        settingEtHost.setText(Config.HOST);
+        settingEtH5.setText(Config.H5_HOST);
+        settingRg.check(Config.IS_ENCRYPT ? R.id.setting_rb_en : R.id.setting_rb_de);
 
         settingTv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,9 +65,8 @@ public class SettingActivity extends RxBaseActivity {
                 environmentPojo.appKey = settingRgKey.getCheckedRadioButtonId() == R.id.setting_rb_1h ? "1HAcient1kLqfeX7DVTV0dklUkpGEnUC" : "4ji3EvuwNziPKF8QXqXMTukGqPmlwOFJ";
                 environmentPojo.host = settingEtHost.getText().toString();
                 environmentPojo.h5Host = settingEtH5.getText().toString();
-                environmentPojo.server = settingEtServer.getText().toString();
                 environmentPojo.encryption = settingRg.getCheckedRadioButtonId() == R.id.setting_rb_en;
-                XApp.getEditor().putString("environment_setting",new Gson().toJson(environmentPojo)).apply();
+                XApp.getEditor().putString("environment_setting", new Gson().toJson(environmentPojo)).apply();
                 ToastUtil.showMessage(SettingActivity.this, "保存成功,请重启APP再试。");
                 finish();
             }

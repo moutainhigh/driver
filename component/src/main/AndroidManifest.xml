@@ -24,7 +24,11 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application>
-        <activity android:name=".activity.SettingActivity"></activity>
+        <activity
+            android:name=".activity.SettingActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.WebActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"

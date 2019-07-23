@@ -1,10 +1,14 @@
 package com.easymin.daijia.driver.zyziyunsjdaijia.config;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.easymi.component.Config;
+import com.easymi.component.app.XApp;
+import com.easymi.component.entity.EnvironmentPojo;
 import com.easymi.component.utils.StringUtils;
 import com.easymin.daijia.driver.zyziyunsjdaijia.BuildConfig;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,13 +27,22 @@ public class MainConfig {
             try {
                 JSONObject jb = new JSONObject(config);
 
-                Config.HOST = BuildConfig.HOST;
-                Config.IS_ENCRYPT = BuildConfig.IS_ENCRYPT;
-                Config.H5_HOST = BuildConfig.H5_HOST;
+                String data = XApp.getMyPreferences().getString("environment_setting", "");
+                if (!TextUtils.isEmpty(data) && BuildConfig.DEBUG) {
+                    EnvironmentPojo environmentPojo = new Gson().fromJson(data, EnvironmentPojo.class);
+                    Config.HOST = environmentPojo.host;
+                    Config.IS_ENCRYPT = environmentPojo.encryption;
+                    Config.H5_HOST = environmentPojo.h5Host;
+                    Config.APP_KEY = environmentPojo.appKey;
+                } else {
+                    Config.HOST = BuildConfig.HOST;
+                    Config.IS_ENCRYPT = BuildConfig.IS_ENCRYPT;
+                    Config.H5_HOST = BuildConfig.H5_HOST;
+                    Config.APP_KEY = jb.optString("APP_KEY");
+                }
                 Config.VERSION_NAME = BuildConfig.VERSION_NAME;
                 Config.IMG_SERVER = BuildConfig.IMG_SERVER;
                 Config.IMG_PATH = "";
-                Config.APP_KEY = jb.optString("APP_KEY");
                 Config.QQ_APP_ID = jb.optString("QQ_APP_ID");
                 Config.WX_APP_ID = jb.optString("WX_APP_ID");
                 Config.TTS_APP_ID = jb.optString("TTS_APP_ID");

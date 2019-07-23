@@ -259,7 +259,7 @@ public interface McService {
      * @param size
      * @return
      */
-    @GET("api/v1/message/affiches")
+    @GET("api/v1/message/affiche")
     Observable<AnnouncementResult> employAffiches(@Query("page") Integer page,
                                                   @Query("size") Integer size
     );

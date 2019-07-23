@@ -156,11 +156,17 @@ public class MqttManager implements LocObserver {
         client.setCallback(new MqttCallbackExtended() {
             @Override
             public void connectComplete(boolean reconnect, String serverURI) {
+                if (mInstance == null) {
+                    return;
+                }
                 Log.e("MqttManager", "connectComplete  " + reconnect);
                 try {
                     client.subscribe(pullTopic, qos, null, new IMqttActionListener() {
                         @Override
                         public void onSuccess(IMqttToken asyncActionToken) {
+                            if (mInstance == null) {
+                                return;
+                            }
                             Log.e("MqttManager", "subscribeSuccess");
                             if (reconnect) {
                                 getOrderStatus();
@@ -187,6 +193,9 @@ public class MqttManager implements LocObserver {
 
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
+                if (mInstance == null) {
+                    return;
+                }
                 String str1 = new String(message.getPayload());
                 Log.e(TAG, "MqttReceivePull:" + str1);
                 HandlePush.getInstance().handPush(str1);
@@ -204,12 +213,18 @@ public class MqttManager implements LocObserver {
         if (handler == null) {
             return;
         }
+        if (mInstance == null) {
+            return;
+        }
         removeNotify();
         handler.sendEmptyMessageDelayed(0, 10000);
     }
 
     private void notifySend() {
         if (handler == null) {
+            return;
+        }
+        if (mInstance == null) {
             return;
         }
         removeNotify();
@@ -220,12 +235,18 @@ public class MqttManager implements LocObserver {
         if (handler == null) {
             return;
         }
+        if (mInstance == null) {
+            return;
+        }
         if (handler.hasMessages(0)) {
             handler.removeMessages(0);
         }
     }
 
     private void getOrderStatus() {
+        if (mInstance == null) {
+            return;
+        }
         Observable<EmResult2<PushPojo>> observable = null;
         List<DymOrder> data = DymOrder.findAll();
         if (data.size() > 0) {
@@ -271,6 +292,9 @@ public class MqttManager implements LocObserver {
                 client.connect(conOpt, null, new IMqttActionListener() {
                     @Override
                     public void onSuccess(IMqttToken asyncActionToken) {
+                        if (mInstance == null) {
+                            return;
+                        }
                         DisconnectedBufferOptions disconnectedBufferOptions = new DisconnectedBufferOptions();
                         disconnectedBufferOptions.setBufferEnabled(true);
                         disconnectedBufferOptions.setBufferSize(100);

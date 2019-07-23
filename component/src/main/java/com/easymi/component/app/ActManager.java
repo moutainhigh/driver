@@ -68,6 +68,18 @@ public class ActManager {
         return false;
     }
 
+
+    public boolean existActivity(Class<?> cls) {
+        if (cls!=null && activityStack != null) {
+            for (Activity activity : activityStack) {
+                if (activity.getClass().equals(cls)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      * 增加一个activity实例在Stack中.
      *
