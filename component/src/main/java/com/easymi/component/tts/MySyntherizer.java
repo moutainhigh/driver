@@ -1,8 +1,6 @@
 package com.easymi.component.tts;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.util.Pair;
 
@@ -25,7 +23,6 @@ public class MySyntherizer implements MainHandlerConstant {
 
     protected SpeechSynthesizer mSpeechSynthesizer;
     protected Context context;
-    protected Handler mainHandler;
 
     private static final String TAG = "NonBlockSyntherizer";
 
@@ -33,19 +30,18 @@ public class MySyntherizer implements MainHandlerConstant {
 
     private boolean isCheckFile = true;
 
-    public MySyntherizer(Context context, InitConfig initConfig, Handler mainHandler) {
-        this(context, mainHandler);
+    public MySyntherizer(Context context, InitConfig initConfig) {
+        this(context);
         init(initConfig);
     }
 
 
-    protected MySyntherizer(Context context, Handler mainHandler) {
+    protected MySyntherizer(Context context) {
         if (isInitied) {
             // SpeechSynthesizer.getInstance() 不要连续调用
             throw new RuntimeException("MySynthesizer 类里面 SpeechSynthesizer还未释放，请勿新建一个新类");
         }
         this.context = context;
-        this.mainHandler = mainHandler;
         isInitied = true;
     }
 
@@ -57,7 +53,6 @@ public class MySyntherizer implements MainHandlerConstant {
      */
     protected boolean init(InitConfig config) {
 
-        sendToUiThread("初始化开始");
         boolean isMix = config.getTtsMode().equals(TtsMode.MIX);
         mSpeechSynthesizer = SpeechSynthesizer.getInstance();
         mSpeechSynthesizer.setContext(context);
@@ -75,21 +70,20 @@ public class MySyntherizer implements MainHandlerConstant {
             if (!authInfo.isSuccess()) {
                 // 离线授权需要网站上的应用填写包名。本demo的包名是com.baidu.tts.sample，定义在build.gradle中
                 String errorMsg = authInfo.getTtsError().getDetailMessage();
-                sendToUiThread("鉴权失败 =" + errorMsg);
+                Log.e("XApp", "鉴权失败 =" + errorMsg);
                 return false;
             } else {
-                sendToUiThread("验证通过，离线正式授权文件存在。");
+                Log.e("XApp", "验证通过，离线正式授权文件存在。");
             }
         }
         setParams(config.getParams());
         // 初始化tts
         int result = mSpeechSynthesizer.initTts(config.getTtsMode());
         if (result != 0) {
-            sendToUiThread("【error】initTts 初始化失败 + errorCode：" + result);
+            Log.e("XApp", "【error】initTts 初始化失败 + errorCode：" + result);
             return false;
         }
         // 此时可以调用 speak和synthesize方法
-        sendToUiThread(INIT_SUCCESS, "合成引擎初始化成功");
         return true;
     }
 
@@ -170,8 +164,7 @@ public class MySyntherizer implements MainHandlerConstant {
      * @return
      */
     public int loadModel(String modelFilename, String textFilename) {
-        int res  = mSpeechSynthesizer.loadModel(modelFilename, textFilename);
-        sendToUiThread("切换离线发音人成功。");
+        int res = mSpeechSynthesizer.loadModel(modelFilename, textFilename);
         return res;
     }
 
@@ -191,21 +184,5 @@ public class MySyntherizer implements MainHandlerConstant {
         mSpeechSynthesizer.release();
         mSpeechSynthesizer = null;
         isInitied = false;
-    }
-
-
-    protected void sendToUiThread(String message) {
-        sendToUiThread(PRINT, message);
-    }
-
-    protected void sendToUiThread(int action, String message) {
-        Log.i(TAG, message);
-        if (mainHandler == null) { // 可以不依赖mainHandler
-            return;
-        }
-        Message msg = Message.obtain();
-        msg.what = action;
-        msg.obj = message + "\n";
-        mainHandler.sendMessage(msg);
     }
 }

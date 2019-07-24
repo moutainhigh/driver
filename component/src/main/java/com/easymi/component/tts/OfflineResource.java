@@ -4,10 +4,9 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-
-import static android.content.ContentValues.TAG;
 
 
 /**
@@ -48,14 +47,14 @@ public class OfflineResource {
 
 
     private String copyAssetsFile(String sourceFilename) throws IOException {
-        String destFilename = destPath + "/" + sourceFilename;
-        boolean recover = false;
-        Boolean existed = mapInitied.get(sourceFilename); // 启动时完全覆盖一次
-        if (existed == null || !existed) {
-            recover = true;
+        File file = new File(destPath);
+        if (!file.exists()) {
+            file.mkdirs();
         }
-        FileUtil.copyFromAssets(assets, sourceFilename, destFilename, recover);
-        Log.i(TAG, "文件复制成功：" + destFilename);
+        String destFilename = destPath + "/" + sourceFilename;
+        Log.e("XApp", "文件复制开始：" + destFilename);
+        FileUtil.copyFromAssets(assets, sourceFilename, destFilename);
+        Log.e("XApp", "文件复制成功：" + destFilename);
         return destFilename;
     }
 

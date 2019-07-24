@@ -3,6 +3,8 @@ package com.easymi.component.tts;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Environment;
+import android.text.TextUtils;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,12 +21,7 @@ public class FileUtil {
     public static String createTmpDir(Context context) {
         String sampleDir = "baiduTTS";
         String tmpDir = Environment.getExternalStorageDirectory().toString() + "/" + sampleDir;
-        if (!FileUtil.makeDir(tmpDir)) {
-            tmpDir = context.getExternalFilesDir(sampleDir).getAbsolutePath();
-            if (!FileUtil.makeDir(sampleDir)) {
-                throw new RuntimeException("create model resources dir failed :" + tmpDir);
-            }
-        }
+        FileUtil.makeDir(tmpDir);
         return tmpDir;
     }
 
@@ -42,10 +39,11 @@ public class FileUtil {
         }
     }
 
-    public static void copyFromAssets(AssetManager assets, String source, String dest, boolean isCover)
+    public static void copyFromAssets(AssetManager assets, String source, String dest)
             throws IOException {
         File file = new File(dest);
-        if (isCover || (!isCover && !file.exists())) {
+        if (!file.exists()) {
+            Log.e("XApp", "copyFromAssets  !exists");
             InputStream is = null;
             FileOutputStream fos = null;
             try {
@@ -67,6 +65,24 @@ public class FileUtil {
                         }
                     }
                 }
+            }
+        }
+        checkFiles(assets, source, dest, file);
+    }
+
+    private static void checkFiles(AssetManager assets, String source, String dest, File file) throws IOException {
+        Log.e("XApp", "copyFromAssets  exists");
+        if (TextUtils.equals(source, "bd_etts_text.dat")) {
+            if (file.length() != 7561916) {
+                Log.e("XApp", "copyFromAssets  del 1");
+                file.delete();
+                copyFromAssets(assets, source, dest);
+            }
+        } else if (TextUtils.equals(source, "bd_etts_common_speech_f7_mand_eng_high_am-mix_v3.0.0_20170512.dat")) {
+            if (file.length() != 304972) {
+                Log.e("XApp", "copyFromAssets  del 2");
+                file.delete();
+                copyFromAssets(assets, source, dest);
             }
         }
     }

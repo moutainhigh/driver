@@ -465,7 +465,7 @@ public interface McService {
      * @return
      */
     @FormUrlEncoded
-    @POST("api/v1/resources/driver/register/apply")
+    @POST("api/v1/resources/driver/register")
     Observable<Register> register(@Field("password") String password,
                                   @Field("phone") String phone,
                                   @Field("smsCode") String smsCode,

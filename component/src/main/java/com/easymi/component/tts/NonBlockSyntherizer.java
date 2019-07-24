@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.util.Log;
 
 /**
  * 在新线程中调用initTTs方法。防止UI柱塞
@@ -24,8 +25,8 @@ public class NonBlockSyntherizer extends MySyntherizer {
     private static final String TAG = "NonBlockSyntherizer";
 
 
-    public NonBlockSyntherizer(Context context, InitConfig initConfig, Handler mainHandler) {
-        super(context, mainHandler);
+    public NonBlockSyntherizer(Context context, InitConfig initConfig) {
+        super(context);
         initThread();
         runInHandlerThread(INIT, initConfig);
     }
@@ -43,10 +44,12 @@ public class NonBlockSyntherizer extends MySyntherizer {
                         InitConfig config = (InitConfig) msg.obj;
                         boolean isSuccess = init(config);
                         if (isSuccess) {
-                            // speak("初始化成功");
-                            sendToUiThread("NonBlockSyntherizer 初始化成功");
+                            Log.e("XApp", "NonBlockSyntherizer 初始化成功");
                         } else {
-                            sendToUiThread("合成引擎初始化失败, 请查看日志");
+                            Log.e("XApp", "合成引擎初始化失败, 请查看日志");
+                            Message message = tHandler.obtainMessage(INIT);
+                            message.obj = config;
+                            tHandler.sendMessageDelayed(message, 2000);
                         }
                         break;
                     case RELEASE:

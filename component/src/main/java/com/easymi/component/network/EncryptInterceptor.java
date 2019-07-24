@@ -43,7 +43,7 @@ public class EncryptInterceptor implements Interceptor {
         //排除登录及其之前接口，其余接口使用拦截器进行aes加密。
         String url = chain.request().url().toString();
         if (url.contains("api/v1/resources/driver/login")
-                || url.contains("api/v1/resources/driver/register/apply")
+                || url.contains("api/v1/resources/driver/register")
                 || url.contains("api/v1/system/captcha/send/sms")
                 || url.contains("api/v1/resources/driver/register/getByDriverPhone")
                 || url.contains("api/v1/resources/driver/register/app")

@@ -180,7 +180,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
 
         initMap();
         initNotifity();
-
+        XApp.getInstance().initBaiduTTs();
         mapView.onCreate(savedInstanceState);
 
         createOrder.setOnClickListener(v -> {
@@ -196,8 +196,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
             presenter.online(onLineBtn);
         });
         listenOrderCon.setOnClickListener(v -> {
-            XApp.getInstance().syntheticVoice("还是就哭了好久上课了" + new Random().nextInt());
-//            presenter.offline();
+            presenter.offline();
         });
         EmLoc emLoc = EmUtil.getLastLoc();
         if (emLoc != null) {

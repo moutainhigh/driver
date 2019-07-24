@@ -100,7 +100,6 @@ public class LoginActivity extends RxBaseActivity {
     @Override
     public void initViews(Bundle savedInstanceState) {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);//禁止截屏
-
         loginBtn = findViewById(R.id.login_button);
         loginBtn.setOnClickListener(v -> {
             if (!checkboxAgreement.isChecked()) {
