@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ScrollView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.easymi.common.CommApiService;
 import com.easymi.common.entity.PushMessage;
 import com.easymi.common.mvp.work.WorkPresenter;
 import com.easymi.common.util.GPSSetting;
@@ -26,7 +27,6 @@ import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.switchButton.SwitchButton;
-import com.easymi.personal.McService;
 import com.easymi.personal.R;
 
 import rx.Observable;
@@ -251,7 +251,7 @@ public class SetActivity extends RxBaseActivity {
         if (null != WorkPresenter.timeCounter) {
             WorkPresenter.timeCounter.forceUpload(-1);
         }
-        McService mcService = ApiManager.getInstance().createApi(Config.HOST, McService.class);
+        CommApiService mcService = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class);
         Observable<EmResult> observable = mcService
                 .employLoginOut(EmUtil.getEmployId())
                 .filter(new HttpResultFunc<>())

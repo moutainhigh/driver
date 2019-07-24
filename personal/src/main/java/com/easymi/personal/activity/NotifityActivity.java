@@ -34,6 +34,7 @@ import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: NotifityActivity
+ *
  * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description: 通知列表
@@ -158,12 +159,13 @@ public class NotifityActivity extends RxBaseActivity {
 
     /**
      * 单个已读
+     *
      * @param id
      * @param position
      */
     private void readOne(long id, int position) {
         Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .readNotice(id)
+                .readNotice(id, 2)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -179,8 +181,8 @@ public class NotifityActivity extends RxBaseActivity {
      * 已读全部
      */
     private void readAll() {
-        if (TextUtils.isEmpty(getIds())){
-            ToastUtil.showMessage(this,getResources().getString(R.string.com_no_read));
+        if (TextUtils.isEmpty(getIds())) {
+            ToastUtil.showMessage(this, getResources().getString(R.string.com_no_read));
             return;
         }
         Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
@@ -198,12 +200,13 @@ public class NotifityActivity extends RxBaseActivity {
 
     /**
      * 获取未读id集合
+     *
      * @return
      */
     public String getIds() {
         String ids = null;
         for (Notifity notifity : notifities) {
-            if (notifity.state == 1){
+            if (notifity.state == 1) {
                 if (TextUtils.isEmpty(ids)) {
                     ids = notifity.id + "";
                 } else {

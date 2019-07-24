@@ -106,15 +106,6 @@ public interface McService {
                                   @Field("phone") String phone
     );
 
-    /**
-     * 注销
-     *
-     * @param driverId
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("api/v1/resources/driver/cancellation")
-    Observable<EmResult> employLoginOut(@Field("id") Long driverId);
 
     /**
      * 根据区域编码获取公司
@@ -283,8 +274,8 @@ public interface McService {
      * @return
      */
     @FormUrlEncoded
-    @PUT("api/v1/message/notice/employ/records/read")
-    Observable<EmResult> readNotice(@Field("id") Long id);
+    @PUT("api/v1/message/notice/employ/records")
+    Observable<EmResult> readNotice(@Field("id") Long id, @Field("state") int state);
 
     /**
      * 服务人员通知全部已读
@@ -305,7 +296,7 @@ public interface McService {
      * @param limit
      * @return
      */
-    @GET("api/v1/finance/driver/put_forward")
+    @GET("api/v1/finance/driver/put/forward")
     Observable<TixianResult> enchashments(@Query("page") int page,
                                           @Query("size") int limit);
 
@@ -314,7 +305,7 @@ public interface McService {
      *
      * @return
      */
-    @GET("api/v1/finance/driver/put_forward/configure")
+    @GET("api/v1/finance/driver/put/forward/configure")
     Observable<TixianRuleResult> tixianRule();
 
     /**
@@ -335,7 +326,7 @@ public interface McService {
      * @return
      */
     @FormUrlEncoded
-    @POST("api/v1/finance/driver/put_forward")
+    @POST("api/v1/finance/driver/put/forward")
     Observable<EmResult> enchashment(@Field("account") String account,
                                      @Field("fee") double fee,
                                      @Field("payType") String payType,
@@ -458,7 +449,7 @@ public interface McService {
      * @return
      */
     @FormUrlEncoded
-    @POST("api/v1/system/captcha/send_sms")
+    @POST("api/v1/system/captcha/send/sms")
     Observable<EmResult> sendSms(@Field("code") String code,
                                  @Field("phone") String phone,
                                  @Field("random") String random,

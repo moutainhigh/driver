@@ -29,13 +29,14 @@ public class Config {
     public static String MQTT_PSW;
     public static String MQTT_CONNECTION_URL;
 
-    public static String APP_KEY;//资运
+    public static String APP_KEY;
 
 
     /**
      * 上传图片地址.
      */
-    public static String HOST_UP_PIC = "http://up-z2.qiniu.com";
+    public static final String HOST_UP_PIC = "http://up-z2.qiniu.com";
+
     //是否是通用司机端
     public static final boolean COMM_USE = false;
 

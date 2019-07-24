@@ -121,7 +121,6 @@ public class LoginActivity extends RxBaseActivity {
         registerText.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, RegisterAcitivty.class);
             startActivity(intent);
-            finish();
         });
 
         resetPsw = findViewById(R.id.login_forget);
@@ -139,10 +138,7 @@ public class LoginActivity extends RxBaseActivity {
 
         initBox();
 
-        //该activity不加入Activity栈
-        ActManager.getInstance().removeActivity(this);
-
-        ActManager.getInstance().finishAllActivity();
+        ActManager.getInstance().finishAllActivity(getClass().getName());
 
         GPSUtils.getInstance(this).getLngAndLat(new GPSUtils.OnLocationResultListener() {
             @Override

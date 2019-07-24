@@ -44,7 +44,7 @@ public class EncryptInterceptor implements Interceptor {
         String url = chain.request().url().toString();
         if (url.contains("api/v1/resources/driver/login")
                 || url.contains("api/v1/resources/driver/register/apply")
-                || url.contains("api/v1/system/captcha/send_sms")
+                || url.contains("api/v1/system/captcha/send/sms")
                 || url.contains("api/v1/resources/driver/register/getByDriverPhone")
                 || url.contains("api/v1/resources/driver/register/app")
                 || url.contains("http://up-z2.qiniu.com")

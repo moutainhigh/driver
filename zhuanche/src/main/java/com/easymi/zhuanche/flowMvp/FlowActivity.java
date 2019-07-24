@@ -711,6 +711,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 presenter.routePlanByNavi(getStartAddr().lat, getStartAddr().lng);
             }
             LatLngBounds bounds = MapUtil.getBounds(latLngs, lastLatlng);
+            if (isMapTouched) {
+                return;
+            }
             aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(this) / 1.5), (int) (DensityUtil.getDisplayWidth(this) / 1.5), 0));
         } else if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
             if (null != getStartAddr()) {
@@ -721,6 +724,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 left_time.setText("");
             }
             LatLngBounds bounds = MapUtil.getBounds(latLngs, lastLatlng);
+            if (isMapTouched) {
+                return;
+            }
             aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(this) / 1.5), (int) (DensityUtil.getDisplayWidth(this) / 1.5), 0));
         } else if (zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER
                 || zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER
@@ -731,9 +737,15 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 presenter.routePlanByNavi(getEndAddr().lat, getEndAddr().lng);
             }
             if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+                if (isMapTouched) {
+                    return;
+                }
                 aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLatlng, 17));
             } else {
                 LatLngBounds bounds = MapUtil.getBounds(latLngs, lastLatlng);
+                if (isMapTouched) {
+                    return;
+                }
                 aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(this) / 1.5), (int) (DensityUtil.getDisplayWidth(this) / 1.5), 0));
             }
         }
@@ -1201,6 +1213,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 LatLngBounds bounds = MapUtil.getBounds(latLngs);
                 aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(FlowActivity.this) / 1.5),
                         (int) (DensityUtil.getDisplayWidth(FlowActivity.this) / 1.5), 0));
+                isMapTouched = true;
             }
 
             @Override
@@ -1391,11 +1404,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         addLocationMarker();
 
-        if (!isMapTouched) {
-            aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
-        }
         routePlan();
         lastLatlng = latLng;
+
+        if (!isMapTouched) {
+            aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
+        }
 
     }
 
@@ -1527,20 +1541,13 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void onTouch(MotionEvent motionEvent) {
-        if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
-            isMapTouched = true;
-            if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER || zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
-                XApp.getEditor().putLong(Config.DOWN_TIME, System.currentTimeMillis()).apply();
-            }
-            if (null != runningFragment) {
+        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+            if (null != runningFragment && runningFragment.getUserVisibleHint()) {
+                isMapTouched = true;
                 runningFragment.mapStatusChanged();
+            } else {
+                isMapTouched = false;
             }
-        } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-            isMapTouched = false;
-        } else if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-            isMapTouched = true;
-        } else if (motionEvent.getAction() == MotionEvent.ACTION_CANCEL) {
-            isMapTouched = false;
         }
     }
 

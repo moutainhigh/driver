@@ -31,6 +31,7 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
+import com.easymi.common.CommApiService;
 import com.easymi.common.R;
 import com.easymi.common.activity.CreateActivity;
 import com.easymi.common.adapter.OrderAdapter;
@@ -38,6 +39,7 @@ import com.easymi.common.entity.AnnAndNotice;
 import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
+import com.easymi.common.entity.PushMessage;
 import com.easymi.common.mvp.order.OrderActivity;
 import com.easymi.common.push.CountEvent;
 import com.easymi.common.push.MqttManager;
@@ -55,8 +57,14 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
+import com.easymi.component.entity.HandleBean;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
+import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HaveErrSubscriberListener;
+import com.easymi.component.network.HttpResultFunc;
+import com.easymi.component.network.MySubscriber;
+import com.easymi.component.result.EmResult;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
@@ -77,6 +85,11 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 /**
@@ -183,7 +196,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
             presenter.online(onLineBtn);
         });
         listenOrderCon.setOnClickListener(v -> {
-            presenter.offline();
+            XApp.getInstance().syntheticVoice("还是就哭了好久上课了" + new Random().nextInt());
+//            presenter.offline();
         });
         EmLoc emLoc = EmUtil.getLastLoc();
         if (emLoc != null) {
@@ -410,10 +424,38 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
 //        hideEmpty();
     }
 
+    private void doLogOut() {
+        if (null != WorkPresenter.timeCounter) {
+            WorkPresenter.timeCounter.forceUpload(-1);
+        }
+        CommApiService mcService = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class);
+        Observable<EmResult> observable = mcService
+                .employLoginOut(EmUtil.getEmployId())
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
+                true, new HaveErrSubscriberListener<EmResult>() {
+            @Override
+            public void onNext(EmResult emResult) {
+                HandleBean.deleteAll();
+                PushMessage.deleteAll();
+                XApp.getEditor().remove(Config.SP_TEMP).apply();
+                EmUtil.employLogout(WorkActivity.this);
+            }
+
+            @Override
+            public void onError(int code) {
+
+            }
+        })));
+    }
+
     @Override
     public void offlineSuc() {
         if (Config.IS_ENCRYPT && TextUtils.equals(Config.APP_KEY, "1HAcient1kLqfeX7DVTV0dklUkpGEnUC")) {
-            EmUtil.employLogout(this);
+            doLogOut();
         } else {
             XApp.getInstance().syntheticVoice("", XApp.OFF_LINE);
             listenOrderCon.setVisibility(View.GONE);

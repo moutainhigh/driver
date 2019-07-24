@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.easymi.component.Config;
-import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
@@ -74,11 +73,9 @@ public class EmUtil {
         if (activityMgr != null) {
             activityMgr.killBackgroundProcesses(context.getPackageName());
         }
-        ActManager.getInstance().finishActivity("WorkActivity");
-
         Intent i = context.getPackageManager()
                 .getLaunchIntentForPackage(context.getPackageName());
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(i);
     }
 

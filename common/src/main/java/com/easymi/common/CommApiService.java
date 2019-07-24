@@ -68,6 +68,16 @@ public interface CommApiService {
                                                            @Query("range") Double range,
                                                            @Query("serviceType") String serviceType);
 
+    /**
+     * 注销
+     *
+     * @param driverId
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/resources/driver/cancellation")
+    Observable<EmResult> employLoginOut(@Field("id") Long driverId);
+
     @GET("api/v1/taxi_online/config/app/driver")
     Observable<EmResult2<String>> getTitleStatus();
 
@@ -514,7 +524,7 @@ public interface CommApiService {
      * @param noticeId
      * @return
      */
-    @GET("api/v1/message/notice/employ/record/{id}")
+    @GET("api/v1/message/notice/employ/records/{id}")
     Observable<NotitfyResult> loadNotice(@Path("id") Long noticeId,
                                          @Query("app_key") String appKey);
 

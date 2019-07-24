@@ -11,7 +11,6 @@ import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.widget.CustomSlideToUnlockView;
-import com.easymi.component.widget.LoadingButton;
 import com.easymi.zhuanche.R;
 import com.easymi.zhuanche.flowMvp.ActFraCommBridge;
 import com.easymi.zhuanche.flowMvp.FlowActivity;
@@ -21,6 +20,7 @@ import java.text.DecimalFormat;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: RunningFragment
+ *
  * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description: 前往目的地布局
@@ -36,8 +36,10 @@ public class RunningFragment extends RxBaseFragment {
      * activity和fragment的通信接口
      */
     private ActFraCommBridge bridge;
+
     /**
      * 设置bridge
+     *
      * @param bridge
      */
     public void setBridge(ActFraCommBridge bridge) {
@@ -113,18 +115,21 @@ public class RunningFragment extends RxBaseFragment {
         refreshImg.setOnClickListener(v -> {
             bridge.doRefresh();
             refreshImg.setVisibility(View.GONE);
+            quanlanText.setSelected(false);
             quanlanImg.setImageResource(R.drawable.ic_quan_lan_normal);
             quanlanText.setTextColor(getResources().getColor(R.color.text_default));
         });
 
         quanlanCon.setOnClickListener(v -> {
-            if (FlowActivity.isMapTouched) {
+            if (quanlanText.isSelected()) {
+                quanlanText.setSelected(false);
                 quanlanImg.setImageResource(R.drawable.ic_quan_lan_normal);
                 quanlanText.setTextColor(getResources().getColor(R.color.text_default));
                 refreshImg.setVisibility(View.GONE);
                 bridge.doRefresh();
             } else {
                 FlowActivity.isMapTouched = true;
+                quanlanText.setSelected(true);
                 refreshImg.setVisibility(View.VISIBLE);
                 quanlanImg.setImageResource(R.drawable.ic_quan_lan_pressed);
                 quanlanText.setTextColor(getResources().getColor(R.color.color_50b8da));
@@ -142,6 +147,7 @@ public class RunningFragment extends RxBaseFragment {
             return true;
         });
     }
+
     DecimalFormat df = new DecimalFormat("#0.00");
 
     public void showFee(DymOrder dymOrder) {

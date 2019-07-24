@@ -248,13 +248,6 @@ public interface FlowContract {
         void routePlanByNavi(Double endLat, Double endLng);
 
         /**
-         * 通过查询规划路线
-         * @param endLat
-         * @param endLng
-         */
-        void routePlanByRouteSearch(Double endLat, Double endLng);
-
-        /**
          * 更新本地订单信息
          * @param zcOrder
          */

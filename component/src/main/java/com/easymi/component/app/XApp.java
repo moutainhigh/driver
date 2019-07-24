@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.StringRes;
 import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
@@ -22,6 +24,7 @@ import com.easymi.component.db.SqliteHelper;
 import com.easymi.component.loc.LocService;
 import com.easymi.component.tts.InitConfig;
 import com.easymi.component.tts.NonBlockSyntherizer;
+import com.easymi.component.tts.OfflineResource;
 import com.easymi.component.utils.CsEditor;
 import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.Log;
@@ -31,6 +34,7 @@ import com.easymi.component.utils.SysUtil;
 import com.jaredrummler.android.processes.AndroidProcesses;
 import com.tencent.bugly.crashreport.CrashReport;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -203,7 +207,26 @@ public class XApp extends MultiDexApplication {
         params.put(SpeechSynthesizer.PARAM_SPEED, "5");
         // 设置合成的语调，0-9 ，默认 5
         params.put(SpeechSynthesizer.PARAM_PITCH, "5");
+        params.put(SpeechSynthesizer.PARAM_MIX_MODE, SpeechSynthesizer.MIX_MODE_HIGH_SPEED_SYNTHESIZE_WIFI);
+
+        // 离线资源文件， 从assets目录中复制到临时目录，需要在initTTs方法前完成
+        OfflineResource offlineResource = createOfflineResource();
+        // 声学模型文件路径 (离线引擎使用), 请确认下面两个文件存在
+        params.put(SpeechSynthesizer.PARAM_TTS_TEXT_MODEL_FILE, offlineResource.getTextFilename());
+        params.put(SpeechSynthesizer.PARAM_TTS_SPEECH_MODEL_FILE,
+                offlineResource.getModelFilename());
         return params;
+    }
+
+    protected OfflineResource createOfflineResource() {
+        OfflineResource offlineResource = null;
+        try {
+            offlineResource = new OfflineResource(this);
+        } catch (IOException e) {
+            // IO 错误自行处理
+            e.printStackTrace();
+        }
+        return offlineResource;
     }
 
     /**
@@ -255,7 +278,21 @@ public class XApp extends MultiDexApplication {
 
         Map<String, String> params = getParams();
 
-        InitConfig initConfig = new InitConfig(Config.TTS_APP_ID, Config.TTS_APP_KEY, Config.TTS_APP_SECRET, TtsMode.ONLINE, params, listener);
+        InitConfig initConfig = new InitConfig(Config.TTS_APP_ID, Config.TTS_APP_KEY, Config.TTS_APP_SECRET, TtsMode.MIX, params, listener);
+
+        AutoCheck.getInstance(getApplicationContext()).check(initConfig, new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                if (msg.what == 100) {
+                    AutoCheck autoCheck = (AutoCheck) msg.obj;
+                    synchronized (autoCheck) {
+                        String message = autoCheck.obtainDebugMessage();
+                        Log.e("XApp", "handleMessage " + message);
+                    }
+                }
+            }
+
+        });
 
         // 此处可以改为MySyntherizer 了解调用过程
         mSpeechSynthesizer = new NonBlockSyntherizer(this, initConfig, null);

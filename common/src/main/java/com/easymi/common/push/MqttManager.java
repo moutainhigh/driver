@@ -120,7 +120,6 @@ public class MqttManager implements LocObserver {
      * @return
      */
     public void creatConnect() {
-
         if (!XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false)) {
             //未登陆 不连接
             return;

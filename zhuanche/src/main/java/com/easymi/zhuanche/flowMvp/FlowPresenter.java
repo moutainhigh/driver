@@ -22,12 +22,6 @@ import com.amap.api.navi.model.AimLessModeCongestionInfo;
 import com.amap.api.navi.model.AimLessModeStat;
 import com.amap.api.navi.model.NaviInfo;
 import com.amap.api.navi.model.NaviLatLng;
-import com.amap.api.services.core.LatLonPoint;
-import com.amap.api.services.route.BusRouteResult;
-import com.amap.api.services.route.DriveRouteResult;
-import com.amap.api.services.route.RideRouteResult;
-import com.amap.api.services.route.RouteSearch;
-import com.amap.api.services.route.WalkRouteResult;
 import com.autonavi.tbt.TrafficFacilityInfo;
 import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.push.MqttManager;
@@ -279,46 +273,10 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
 
             isCalculate = true;
             mAMapNavi.calculateDriveRoute(startLs, endLs, null, 2);
+        } else {
+            stopNavi();
+            view.showReCal();
         }
-    }
-
-    RouteSearch routeSearch;
-
-    @Override
-    public void routePlanByRouteSearch(Double endLat, Double endLng) {
-        if (null == routeSearch) {
-            routeSearch = new RouteSearch(context);
-            routeSearch.setRouteSearchListener(new RouteSearch.OnRouteSearchListener() {
-                @Override
-                public void onBusRouteSearched(BusRouteResult busRouteResult, int i) {
-
-                }
-
-                @Override
-                public void onDriveRouteSearched(DriveRouteResult driveRouteResult, int code) {
-                    if (code == 1000) {
-                        view.showPath(driveRouteResult);
-                    }
-                }
-
-                @Override
-                public void onWalkRouteSearched(WalkRouteResult walkRouteResult, int i) {
-
-                }
-
-                @Override
-                public void onRideRouteSearched(RideRouteResult rideRouteResult, int i) {
-
-                }
-            });
-        }
-        LatLonPoint start = new LatLonPoint(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
-        LatLonPoint end = new LatLonPoint(endLat, endLng);
-
-        RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(start, end);
-        RouteSearch.DriveRouteQuery query = new RouteSearch.DriveRouteQuery(fromAndTo,
-                RouteSearch.DRIVING_MULTI_STRATEGY_FASTEST_SHORTEST, null, null, "");
-        routeSearch.calculateDriveRouteAsyn(query);
     }
 
 
@@ -392,6 +350,8 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
             mAMapNavi.destroy();
             mAMapNavi = null;
         }
+        isCalculate = false;
+        isInit = false;
     }
 
     @Override
@@ -452,7 +412,9 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
 //                mAMapNavi.startNavi(NaviType.GPS);
 //            }
             }
-
+        } else {
+            stopNavi();
+            view.showReCal();
         }
     }
 
@@ -620,7 +582,6 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
     public void onArriveDestination() {
 
     }
-
 
 
 }
