@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -26,6 +27,7 @@ import com.easymi.component.db.SqliteHelper;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.GPSUtils;
 import com.easymi.component.utils.Log;
 import com.google.gson.Gson;
 
@@ -183,6 +185,8 @@ public class LocService extends Service implements AMapLocationListener {
     public void onLocationChanged(AMapLocation amapLocation) {
         if (amapLocation != null) {
             if (amapLocation.getErrorCode() == AMapLocation.LOCATION_SUCCESS) {
+                EmLoc locationInfo = EmLoc.ALocToLoc(amapLocation);
+                android.util.Log.e("locService", "emLoc>>>>" + locationInfo.toString());
                 if (amapLocation.getLocationType() == AMapLocation.LOCATION_TYPE_GPS) {
                     if (amapLocation.getAccuracy() > 200) {
                         return;
@@ -197,15 +201,30 @@ public class LocService extends Service implements AMapLocationListener {
                     }
                 }
 
-                EmLoc locationInfo = EmLoc.ALocToLoc(amapLocation);
-                Log.e("locService", "emLoc>>>>" + locationInfo.toString());
                 Intent intent = new Intent(LocService.this, LocReceiver.class);
                 intent.setAction(LOC_CHANGED);
                 intent.putExtra("locPos", new Gson().toJson(locationInfo));
                 sendBroadcast(intent);//发送位置变化广播
 
             } else {
-                //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
+                Location location = GPSUtils.getInstance(this).getLngAndLat();
+
+                if (location != null) {
+                    EmLoc emLoc = new EmLoc();
+                    emLoc.latitude = location.getLatitude();
+                    emLoc.longitude = location.getLongitude();
+                    emLoc.accuracy = location.getAccuracy();
+                    emLoc.locTime = location.getTime();
+                    emLoc.altitude = location.getAltitude();
+                    emLoc.speed = location.getSpeed();
+                    emLoc.bearing = location.getBearing();
+
+                    Intent intent = new Intent(LocService.this, LocReceiver.class);
+                    intent.setAction(LOC_CHANGED);
+                    intent.putExtra("locPos", new Gson().toJson(emLoc));
+                    sendBroadcast(intent);//发送位置变化广播
+                }
+
                 Log.e("locService", "location Error, ErrCode:"
                         + amapLocation.getErrorCode() + ", errInfo:"
                         + amapLocation.getErrorInfo());

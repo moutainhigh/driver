@@ -139,25 +139,17 @@ public class LoginActivity extends RxBaseActivity {
 
         ActManager.getInstance().finishAllActivity(getClass().getName());
 
-        GPSUtils.getInstance(this).getLngAndLat(new GPSUtils.OnLocationResultListener() {
-            @Override
-            public void onLocationResult(Location location) {
-                mlocation = location;
-            }
-
-            @Override
-            public void OnLocationChange(Location location) {
-                mlocation = location;
-            }
-        });
-
+        getLocation();
 
         initKeyBoard();
     }
 
+    private void getLocation() {
+        mlocation = GPSUtils.getInstance(this).getLngAndLat();
+    }
+
     private void initKeyBoard() {
         LinearLayout keyboardContainer = findViewById(R.id.keyboardViewPlace);
-
 
         safeKeyboard = new SafeKeyboard(
                 LoginActivity.this,
@@ -290,6 +282,11 @@ public class LoginActivity extends RxBaseActivity {
      * @param psw
      */
     private void login(String name, String psw) {
+        if (mlocation == null) {
+            ToastUtil.showMessage(this, "获取当前位置失败,请重试;");
+            getLocation();
+            return;
+        }
         TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         String operatorName = "其他";
         String operator = tm.getSimOperator();
