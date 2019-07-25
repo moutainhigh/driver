@@ -44,6 +44,8 @@ import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 //import com.zhihu.matisse.MimeType;
 //import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
+import java.util.Locale;
+
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -168,6 +170,9 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
         if (SysUtil.isRunningInBackground(this)) {
             //后台运行时 静音播放音频保活
             XApp.getInstance().playSlientMusic();
+            Toast.makeText(this,
+                    String.format(Locale.CHINESE, "已离开%s，注意信息安全", getString(R.string.app_name)),
+                    Toast.LENGTH_LONG).show();
         }
     }
 
