@@ -231,30 +231,11 @@ public class WorkPresenter implements WorkContract.Presenter {
     private boolean isStartMqtt;
 
     /**
-     * 获取clentid
-     */
-    private void getTopic() {
-        view.getRxManager().add(ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .getMqttTopic()
-                .map(new HttpResultFunc2<>())
-                .retryWhen(observable -> observable.delay(5, TimeUnit.SECONDS))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MySubscriber<String>(context, false, false, new NoErrSubscriberListener<String>() {
-                    @Override
-                    public void onNext(String mqttTopic) {
-                        Config.MQTT_CLIENT_ID = mqttTopic;
-                        checkTopic();
-                    }
-                })));
-    }
-
-    /**
      * 检查clentid是否存活
      */
     private void checkTopic() {
         view.getRxManager().add(ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .getCurrentTopic(Config.MQTT_CONNECTION_URL)
+                .getCurrentTopic(Config.MQTT_CONNECTION_URL + Config.MQTT_CLIENT_ID)
                 .map(new HttpResultFunc2<>(0))
                 .doOnNext(new Action1<List<MqttResult>>() {
                     @Override
@@ -290,7 +271,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                 .doOnNext(new Action1<MqttConfig>() {
                     @Override
                     public void call(MqttConfig mqttConfig) {
-                        if (TextUtils.isEmpty(mqttConfig.connectionsUrl)) {
+                        if (TextUtils.isEmpty(mqttConfig.connectionsUrl) || TextUtils.isEmpty(mqttConfig.clientId)) {
                             throw new RuntimeException();
                         }
                     }
@@ -309,8 +290,9 @@ public class WorkPresenter implements WorkContract.Presenter {
                         Config.MQTT_TOPIC = mqttConfig.topic;
                         Config.ACK_TOPIC = mqttConfig.ackTopic;
                         Config.MQTT_CONNECTION_URL = mqttConfig.connectionsUrl;
+                        Config.MQTT_CLIENT_ID = mqttConfig.clientId;
                         MqttManager.getInstance().creatConnect();
-                        getTopic();
+                        checkTopic();
                     }
                 })));
     }

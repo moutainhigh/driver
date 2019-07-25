@@ -615,7 +615,4 @@ public interface CommApiService {
     @GET("api/v1/message/topic/driver_mqtt_config")
     Observable<EmResult2<MqttConfig>> getConfig();
 
-    @GET("api/v1/message/topic/mqtt_client")
-    Observable<EmResult2<String>> getMqttTopic();
-
 }
