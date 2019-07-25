@@ -85,7 +85,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -321,6 +320,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         });
         toolbar.setTitle(R.string.work_title);
         toolbar.setRightIcon(R.drawable.ic_more_icon, view -> {
+//            XApp.getInstance().syntheticVoice("内容");
             ARouter.getInstance()
                     .build("/personal/MoreActivity")
                     .navigation();

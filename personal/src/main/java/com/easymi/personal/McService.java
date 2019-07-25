@@ -427,7 +427,7 @@ public interface McService {
      *
      * @return
      */
-    @GET("api/v1/system/company")
+    @GET("api/v1/system/company/app")
     Observable<CompanyList> qureyCompanys();
 
     /**
@@ -435,7 +435,7 @@ public interface McService {
      *
      * @return
      */
-    @GET("api/v1/system/company/{id}")
+    @GET("api/v1/system/company_service/app/{id}")
     Observable<BusinessResult> getBusinessType(@Path("id") long id);
 
     /**
@@ -494,7 +494,7 @@ public interface McService {
      * @return
      */
     @FormUrlEncoded
-    @POST("api/v1/resources/driver/register/app")
+    @POST("api/v1/resources/driver/register/last")
     Observable<RegisterRes> applyDriver(@Field("id") String id,
                                         @Field("realName") String realName,
                                         @Field("phone") String phone,

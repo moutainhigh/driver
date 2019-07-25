@@ -91,7 +91,7 @@
                         || url.contains("api/v1/resources/driver/register/apply")
                         || url.contains("api/v1/system/captcha/send/sms")
                         || url.contains("api/v1/resources/driver/register/getByDriverPhone")
-                        || url.contains("api/v1/resources/driver/register/app")
+                        || url.contains("api/v1/resources/driver/register/last")
                         || url.contains("/api/v3/connections/")
                 ) {
             return chain.proceed(originRequest);

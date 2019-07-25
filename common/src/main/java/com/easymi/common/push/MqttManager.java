@@ -151,7 +151,6 @@ public class MqttManager implements LocObserver {
         conOpt.setWill(pullTopic, message.getBytes(), qos, false);
 
         client = new MqttAndroidClient(XApp.getInstance(), brokerUrl, clientId);
-
         client.setCallback(new MqttCallbackExtended() {
             @Override
             public void connectComplete(boolean reconnect, String serverURI) {
@@ -444,8 +443,11 @@ public class MqttManager implements LocObserver {
             handler = null;
         }
         try {
-            if (client != null && client.isConnected()) {
-                client.disconnect();
+            if (client != null) {
+                client.unregisterResources();
+                if (client.isConnected()) {
+                    client.disconnect();
+                }
             }
         } catch (MqttException e) {
             e.fillInStackTrace();

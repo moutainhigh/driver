@@ -46,7 +46,7 @@ public class EncryptInterceptor implements Interceptor {
                 || url.contains("api/v1/resources/driver/register")
                 || url.contains("api/v1/system/captcha/send/sms")
                 || url.contains("api/v1/resources/driver/register/getByDriverPhone")
-                || url.contains("api/v1/resources/driver/register/app")
+                || url.contains("api/v1/resources/driver/register/last")
                 || url.contains("http://up-z2.qiniu.com")
                 || ((!TextUtils.isEmpty(Config.MQTT_CONNECTION_URL) && url.contains(Config.MQTT_CONNECTION_URL)))) {
             return chain.proceed(originRequest);
