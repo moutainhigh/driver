@@ -64,6 +64,7 @@ public class LocReceiver extends BroadcastReceiver implements LocSubject {
                     lastLoc.altitude = emLoc.altitude;
                     lastLoc.speed = emLoc.speed;
                     lastLoc.bearing = emLoc.bearing;
+                    lastLoc.isOffline = emLoc.isOffline;
                     XApp.getEditor()
                             .putString(Config.SP_LAST_LOC, new Gson().toJson(lastLoc))
                             .apply();//保存上次的位置信息 json格式字符创

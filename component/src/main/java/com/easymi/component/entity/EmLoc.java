@@ -103,6 +103,8 @@ public class EmLoc {
 
     public long sysTime;
 
+    public boolean isOffline;
+
     public static EmLoc ALocToLoc(AMapLocation aLoc) {
         if (null == aLoc) {
             return null;
@@ -134,6 +136,7 @@ public class EmLoc {
         locationInfo.isFixLastLocation = aLoc.isFixLastLocation();
         locationInfo.satellites = aLoc.getSatellites();
         locationInfo.sysTime = System.currentTimeMillis();
+        locationInfo.isOffline = false;
         return locationInfo;
     }
 
@@ -180,6 +183,7 @@ public class EmLoc {
                 ", isOffset=" + isOffset +
                 ", isFixLastLocation=" + isFixLastLocation +
                 ", satellites=" + satellites +
+                ", isOffline=" + isOffline +
                 '}';
     }
 }

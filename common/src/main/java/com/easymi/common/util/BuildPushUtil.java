@@ -88,6 +88,7 @@ public class BuildPushUtil {
         pushData.location.provider = emLoc.provider;
         pushData.location.altitude = emLoc.altitude;
         pushData.location.time = System.currentTimeMillis() / 1000;
+        pushData.location.isOffline = emLoc.isOffline;
 
         List<PushDataOrder> orderList = new ArrayList<>();
 

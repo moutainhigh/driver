@@ -83,4 +83,6 @@ public class PushDataLoc {
      */
     public Long time;
 
+    public boolean isOffline;
+
 }

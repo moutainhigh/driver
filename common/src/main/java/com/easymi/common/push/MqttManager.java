@@ -342,6 +342,7 @@ public class MqttManager implements LocObserver {
                 }.getType()));
             }
 
+
             for (PushMessage message : pushList) {
                 for (String s : paidList) {
                     if (message.data.contains("\"orderId\":" + s + ",")) {

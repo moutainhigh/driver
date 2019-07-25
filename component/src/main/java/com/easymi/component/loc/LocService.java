@@ -185,8 +185,6 @@ public class LocService extends Service implements AMapLocationListener {
     public void onLocationChanged(AMapLocation amapLocation) {
         if (amapLocation != null) {
             if (amapLocation.getErrorCode() == AMapLocation.LOCATION_SUCCESS) {
-                EmLoc locationInfo = EmLoc.ALocToLoc(amapLocation);
-                android.util.Log.e("locService", "emLoc>>>>" + locationInfo.toString());
                 if (amapLocation.getLocationType() == AMapLocation.LOCATION_TYPE_GPS) {
                     if (amapLocation.getAccuracy() > 200) {
                         return;
@@ -201,6 +199,8 @@ public class LocService extends Service implements AMapLocationListener {
                     }
                 }
 
+                EmLoc locationInfo = EmLoc.ALocToLoc(amapLocation);
+                Log.e("locService", "emLoc>>>>" + locationInfo.toString());
                 Intent intent = new Intent(LocService.this, LocReceiver.class);
                 intent.setAction(LOC_CHANGED);
                 intent.putExtra("locPos", new Gson().toJson(locationInfo));
@@ -218,7 +218,7 @@ public class LocService extends Service implements AMapLocationListener {
                     emLoc.altitude = location.getAltitude();
                     emLoc.speed = location.getSpeed();
                     emLoc.bearing = location.getBearing();
-
+                    emLoc.isOffline = true;
                     Intent intent = new Intent(LocService.this, LocReceiver.class);
                     intent.setAction(LOC_CHANGED);
                     intent.putExtra("locPos", new Gson().toJson(emLoc));
