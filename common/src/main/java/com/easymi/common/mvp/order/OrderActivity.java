@@ -10,9 +10,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.easymi.common.R;
 import com.easymi.common.activity.CreateActivity;
 import com.easymi.common.adapter.VpAdapter;
-import com.easymi.common.result.SettingResult;
 import com.easymi.common.widget.CreatOrderDialog;
-import com.easymi.common.widget.MakeOrderPopWindow;
 import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.ZCSetting;
@@ -65,19 +63,19 @@ public class OrderActivity extends RxBaseActivity {
                 });
                 creatOrderDialog.show();
             });
-        }else if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)){
+        } else if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)) {
             toolbar.setRightText(R.string.com_make_order, v -> {
                 creatOrderDialog = new CreatOrderDialog(this);
                 creatOrderDialog.setOnMyClickListener(view -> {
                     Intent intent = new Intent(this, CreateActivity.class);
-                    intent.putExtra("type",Config.ZHUANCHE);
+                    intent.putExtra("type", Config.ZHUANCHE);
                     startActivity(intent);
                     creatOrderDialog.dismiss();
                 });
                 creatOrderDialog.show();
             });
-        }else if (EmUtil.getEmployInfo().serviceType.equals(Config.CARPOOL)){
-            if (ZCSetting.findOne().isRepairOrder == 1){
+        } else if (EmUtil.getEmployInfo().serviceType.equals(Config.CARPOOL)) {
+            if (ZCSetting.findOne().isRepairOrder == 1) {
                 toolbar.setRightText(R.string.com_make_order, v -> {
                     creatOrderDialog = new CreatOrderDialog(this);
                     creatOrderDialog.setOnMyClickListener(view -> {
@@ -87,6 +85,15 @@ public class OrderActivity extends RxBaseActivity {
                     creatOrderDialog.show();
                 });
             }
+        } else if (EmUtil.getEmployInfo().serviceType.equals(Config.COUNTRY)) {
+            toolbar.setRightText(R.string.com_make_order, v -> {
+                creatOrderDialog = new CreatOrderDialog(this);
+                creatOrderDialog.setOnMyClickListener(view -> {
+//                    ARouter.getInstance().build("/carpooling/CreateOrderActivity").navigation();
+                    creatOrderDialog.dismiss();
+                });
+                creatOrderDialog.show();
+            });
         }
     }
 
