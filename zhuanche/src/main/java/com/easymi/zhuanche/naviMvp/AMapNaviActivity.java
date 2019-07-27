@@ -674,7 +674,7 @@ public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener
                 } else if (zcOrder.orderStatus == DJOrderStatus.ARRIVAL_BOOKPLACE_ORDER) {
                     presenter.startDrive(zcOrder.orderId, zcOrder.version);
                 } else if (zcOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
-                    presenter.arriveDes(zcOrder, zcOrder.version, null, DymOrder.findByIDType(zcOrder.orderId, zcOrder.orderType));
+                    presenter.arriveDes(zcOrder, zcOrder.version, DymOrder.findByIDType(zcOrder.orderId, zcOrder.orderType));
                 }
                 resetView();
             }

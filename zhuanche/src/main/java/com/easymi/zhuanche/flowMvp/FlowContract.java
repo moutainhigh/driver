@@ -198,10 +198,9 @@ public interface FlowContract {
          * 到达目的地
          * @param zcOrder
          * @param version
-         * @param btn
          * @param dymOrder
          */
-        void arriveDes(ZCOrder zcOrder,Long version, LoadingButton btn, DymOrder dymOrder);
+        void arriveDes(ZCOrder zcOrder, Long version, DymOrder dymOrder);
 
         /**
          * 开始导航

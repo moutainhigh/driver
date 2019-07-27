@@ -89,7 +89,6 @@ import com.easymi.zhuanche.receiver.CancelOrderReceiver;
 import com.easymi.zhuanche.receiver.OrderFinishReceiver;
 import com.easymi.zhuanche.widget.RefuseOrderDialog;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
@@ -562,12 +561,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             cancelTimer();
             showToEndFragment();
             toolbar.setRightText("", null);
-//                if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
-//                    settleFragmentDialog.setDjOrder(zcOrder);
-//                } else {
-//                    settleFragmentDialog = new SettleFragmentDialog(FlowActivity.this, zcOrder, bridge);
-//                    settleFragmentDialog.show();
-//                }
+
         } else if (zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_DESTINATION_ORDER) {
             toolbar.setTitle(R.string.settle);
             runningFragment = new RunningFragment();
@@ -582,21 +576,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.replace(R.id.flow_frame, runningFragment);
             transaction.commit();
 
-            if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
-                settleFragmentDialog.setDjOrder(zcOrder);
-                //确认费用后直接弹出支付页面
-                DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.ZHUANCHE);
-                if (null != dymOrder) {
-                    bridge.doPay(dymOrder.orderShouldPay);
-                }
-            } else {
-                if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
-                    settleFragmentDialog.setDjOrder(zcOrder);
-                } else {
-                    settleFragmentDialog = new SettleFragmentDialog(FlowActivity.this, zcOrder, bridge);
-                    settleFragmentDialog.show();
-                }
-            }
+            settleFragmentDialog = new SettleFragmentDialog(FlowActivity.this, zcOrder, bridge);
+            settleFragmentDialog.show();
         }
     }
 
@@ -631,12 +612,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 ToastUtil.showMessage(this, getResources().getString(R.string.order_finish));
                 finish();
             }
-            ZCSetting zcSetting = ZCSetting.findOne();
-            if (zcSetting.isPaid == 2 || (zcOrder.prepayment && zcOrder.paid)) {
-                if (zcOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {
-                    finish();
-                }
-            }
+//            ZCSetting zcSetting = ZCSetting.findOne();
+//            if (zcSetting.isPaid == 2 || (zcOrder.prepayment && zcOrder.paid)) {
+//                if (zcOrder.orderStatus == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {
+//                    finish();
+//                }
+//            }
             this.zcOrder = zcOrder;
             if (flashAssign && zcOrder.orderStatus == DJOrderStatus.GOTO_BOOKPALCE_ORDER) {
                 flashAssign();
@@ -1245,7 +1226,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void doConfirmMoney(LoadingButton btn, DymOrder dymOrder) {
-                presenter.arriveDes(zcOrder, zcOrder.version, btn, dymOrder);
             }
 
             @Override
@@ -1264,26 +1244,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void showSettleDialog() {
-                saveTemp();
-                settleFragmentDialog = new SettleFragmentDialog(FlowActivity.this, zcOrder, bridge);
-                settleFragmentDialog.show();
+                presenter.arriveDes(zcOrder, zcOrder.version, zcOrder.orderFee);
             }
         };
     }
 
-
-    private void saveTemp() {
-        String temp = XApp.getMyPreferences().getString(Config.SP_TEMP, "");
-        List<String> list = new ArrayList<>();
-        if (!TextUtils.isEmpty(temp)) {
-            list.addAll(new Gson().fromJson(temp, new TypeToken<List<String>>() {
-            }.getType()));
-        }
-        if (!list.contains(String.valueOf(orderId))) {
-            list.add(String.valueOf(orderId));
-        }
-        XApp.getEditor().putString(Config.SP_TEMP, new Gson().toJson(list)).apply();
-    }
 
     @Override
     public void showToEndFragment() {
@@ -1527,9 +1492,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 waitFragment.showFee(dyo);
             } else if (null != runningFragment && runningFragment.isVisible()) {
                 runningFragment.showFee(dyo);
-            }
-            if (null != settleFragmentDialog) {
-                settleFragmentDialog.setDymOrder(dyo);
             }
         }
     }

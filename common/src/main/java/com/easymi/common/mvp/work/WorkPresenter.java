@@ -335,7 +335,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                     EmUtil.getEmployInfo().phone, System.currentTimeMillis() / 1000, EmUtil.getEmployInfo().serviceType);
             HandleBean.deleteAll();
             PushMessage.deleteAll();
-            XApp.getEditor().remove(Config.SP_TEMP)
+            XApp.getEditor()
                     .putLong(Config.ONLINE_TIME, 0)
                     .apply();
             if (Config.IS_ENCRYPT && TextUtils.equals(Config.APP_KEY, "1HAcient1kLqfeX7DVTV0dklUkpGEnUC")) {

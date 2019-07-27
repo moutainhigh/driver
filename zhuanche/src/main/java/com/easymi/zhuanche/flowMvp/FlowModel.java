@@ -171,90 +171,20 @@ public class FlowModel implements FlowContract.Model {
         String json = GsonUtil.toJson(pushData);
         EmLoc emLoc = EmUtil.getLastLoc();
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-//                .pullFee(json, EmUtil.getAppKey())
                 .gpsPush(EmUtil.getAppKey(), json)
-//                .flatMap(new Func1<PullFeeResult, Observable<ZCOrderResult>>() {
-//                    @Override
-//                    public Observable<ZCOrderResult> call(PullFeeResult pullFeeResult) {
-//                        //-------------------------------------
-//                        //order为原始数据,finalOrder为最终数据
-//                        //--------------------------------------
-//
-//                        DymOrder finalOrder = null;
-//                        if (pullFeeResult != null) {
-//                            try {
-//                                HandlePush.getInstance().handPush(pullFeeResult.fee);
-//                                finalOrder = DymOrder.findByIDType(order.orderId, order.orderType);
-//                            } catch (Exception ex) {
-//                                ex.printStackTrace();
-//                            }
-//                        }
-//                        if (finalOrder == null) {
-//                            finalOrder = order;
-//                        }
-//
-//
-//                        //-----------------重新计算费用---------------------
-//
-//                        DecimalFormat df = new DecimalFormat("#0.0");
-//
-//                        //拷贝本地数据
-//                        finalOrder.prepay = order.prepay;
-//                        finalOrder.extraFee = order.extraFee;
-//                        finalOrder.remark = order.remark;
-//                        finalOrder.paymentFee = order.paymentFee;
-//                        finalOrder.prepay = order.prepay;
-//
-//                        finalOrder.orderTotalFee = Double.parseDouble(df.format(finalOrder.totalFee + finalOrder.extraFee + finalOrder.paymentFee));
-//
-//                        double canCouponMoney = finalOrder.totalFee + finalOrder.extraFee;//可以参与优惠券抵扣的钱
-//                        if (canCouponMoney < finalOrder.minestMoney) {
-//                            canCouponMoney = finalOrder.minestMoney;
-//                        }
-//
-//                        if (zcOrder != null && zcOrder.coupon != null) {
-//                            if (zcOrder.coupon.couponType == 2) {
-//                                finalOrder.couponFee = zcOrder.coupon.deductible;
-//                            } else if (zcOrder.coupon.couponType == 1) {
-//                                finalOrder.couponFee = Double.parseDouble(df.format(canCouponMoney * (100 - zcOrder.coupon.discount) / 100));
-//                            }
-//                        }
-//                        double exls = Double.parseDouble(df.format(canCouponMoney - finalOrder.couponFee));//打折抵扣后应付的钱
-//                        if (exls < 0) {
-//                            exls = 0;//优惠券不退钱
-//                        }
-//
-//                        finalOrder.orderShouldPay = Double.parseDouble(df.format(exls + finalOrder.paymentFee - finalOrder.prepay));
-//
-//                        //--------------------------------------
-//
-//                        double couponFee = finalOrder.couponFee;
-//                        double orderTotalFee = finalOrder.orderTotalFee;
-//                        double orderShouldPay = finalOrder.orderShouldPay;
-//
-//                        DymOrder finalOrder1 = finalOrder;
                 .flatMap(new Func1<GetFeeResult, Observable<ZCOrderResult>>() {
                     @Override
                     public Observable<ZCOrderResult> call(GetFeeResult getFeeResult) {
 
                         return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
                                 .arrivalDistination(
-//                                        finalOrder.orderId,
                                         zcOrder.orderId,
                                         EmUtil.getAppKey(),
                                         version,
                                         emLoc.longitude,
                                         emLoc.latitude,
                                         emLoc.address
-//                                        , finalOrder.paymentFee, finalOrder.extraFee,
-//                                        finalOrder.remark, finalOrder.distance, finalOrder.disFee, finalOrder.travelTime,
-//                                        finalOrder.travelFee, finalOrder.waitTime,
-//                                        finalOrder.waitTimeFee, 0.0, 0.0, couponFee,
-//                                        orderTotalFee, orderShouldPay, finalOrder.startFee,
-//                                        loc.street + "  " + loc.poiName, loc.latitude, loc.longitude,
-//                                        finalOrder.minestMoney, finalOrder.peakCost, finalOrder.nightPrice, finalOrder.lowSpeedCost, finalOrder.lowSpeedTime,
-//                                        finalOrder.peakMile, finalOrder.nightTime, finalOrder.nightMile, finalOrder.nightTimePrice
-                                )
+                               )
                                 .filter(new HttpResultFunc<>())
                                 .map(new Func1<ZCOrderResult, ZCOrderResult>() {
                                     @Override
@@ -267,20 +197,6 @@ public class FlowModel implements FlowContract.Model {
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-
-
-//        return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
-//                .arrivalDistination(order.orderId, EmUtil.getAppKey(), order.paymentFee, order.extraFee,
-//                        order.remark, order.distance, order.disFee, order.travelTime,
-//                        order.travelFee, order.waitTime,
-//                        order.waitTimeFee, 0.0, 0.0, order.couponFee,
-//                        order.orderTotalFee, order.orderShouldPay, order.startFee,
-//                        loc.street + "  " + loc.poiName, loc.latitude, loc.longitude,
-//                        order.minestMoney, order.peakCost, order.nightPrice, order.lowSpeedCost, order.lowSpeedTime,
-//                        order.peakMile,order.nightTime,order.nightMile,order.nightTimePrice)
-//                .filter(new HttpResultFunc<>())
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override

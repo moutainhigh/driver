@@ -440,7 +440,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
             public void onNext(EmResult emResult) {
                 HandleBean.deleteAll();
                 PushMessage.deleteAll();
-                XApp.getEditor().remove(Config.SP_TEMP).apply();
                 EmUtil.employLogout(WorkActivity.this);
             }
 

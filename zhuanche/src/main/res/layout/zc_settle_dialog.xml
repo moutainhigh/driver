@@ -62,46 +62,6 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-
-                    <LinearLayout
-                        android:layout_width="0.0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical"
-                        android:padding="10dp"
-                        android:visibility="gone">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/consumer_prepay"
-                            android:textSize="16sp" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/money_sign"
-                                android:textColor="@color/yellow" />
-
-                            <TextView
-                                android:id="@+id/prepay_money"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text=""
-                                android:textColor="@color/yellow"
-                                android:textSize="25sp" />
-                        </LinearLayout>
-
-
-                    </LinearLayout>
-
                     <View
                         android:layout_width="0.1dp"
                         android:layout_height="30dp"
@@ -164,114 +124,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:visibility="gone">
-
-                <LinearLayout
-                    android:layout_width="0.0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/extra_fee" />
-
-                    <EditText
-                        android:id="@+id/extra_fee"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:background="@null"
-                        android:gravity="center"
-                        android:inputType="numberDecimal"
-                        android:text="0"
-                        android:textColor="@color/yellow"
-                        android:textSize="18sp" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.1dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:background="@color/dark_gray" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="0.1dp"
-                    android:layout_height="40dp"
-                    android:background="@color/dark_gray" />
-
-                <LinearLayout
-                    android:layout_width="0.0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/help_pay_fee" />
-
-                    <EditText
-                        android:id="@+id/payment_fee"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:background="@null"
-                        android:gravity="center"
-                        android:inputType="numberDecimal"
-                        android:text="0"
-                        android:textColor="@color/yellow"
-                        android:textSize="18sp" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.1dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:background="@color/dark_gray" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/added_hint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="5dp"
-                android:text="@string/hint_edit"
-                android:textColor="@color/colorAccent"
-                android:visibility="gone"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="15dp"
                 android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/car_no"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/corners_alpha_a"
-                    android:paddingBottom="3dp"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:paddingTop="3dp"
-                    android:text=""
-                    android:visibility="gone"/>
 
                 <EditText
                     android:id="@+id/remark"

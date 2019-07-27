@@ -24,26 +24,10 @@ public class PushMessage {
         db.insert("t_cp_temp_message", null, values);
     }
 
-    public void update() {
-        SqliteHelper helper = SqliteHelper.getInstance();
-        SQLiteDatabase db = helper.openSqliteDatabase();
-        ContentValues values = new ContentValues();
-        values.put("data", data);
-        values.put("timeStamp", timeStamp);
-        db.update("t_cp_temp_message", values, "timeStamp = ?",
-                new String[]{String.valueOf(timeStamp)});
-    }
-
     public static void deleteAll() {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
         db.delete("t_cp_temp_message", null, null);
-    }
-
-    public static void delete(PushMessage data) {
-        SqliteHelper helper = SqliteHelper.getInstance();
-        SQLiteDatabase db = helper.openSqliteDatabase();
-        db.delete("t_cp_temp_message", "data = ?", new String[]{String.valueOf(data.data)});
     }
 
 

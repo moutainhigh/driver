@@ -153,11 +153,10 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
 
     //到达目的地
     @Override
-    public void arriveDes(ZCOrder zcOrder, Long version, LoadingButton btn, DymOrder dymOrder) {
-
+    public void arriveDes(ZCOrder zcOrder, Long version, DymOrder dymOrder) {
         Observable<ZCOrderResult> observable = model.arriveDes(zcOrder, dymOrder, version);
 
-        view.getManager().add(observable.subscribe(new MySubscriber<>(context, btn, zcOrderResult -> {
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, false, zcOrderResult -> {
             updateDymOrder(zcOrderResult.data);
             view.showOrder(zcOrderResult.data);
             //todo 一键报警
