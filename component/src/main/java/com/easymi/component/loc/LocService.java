@@ -208,9 +208,8 @@ public class LocService extends Service implements AMapLocationListener {
 
             } else {
                 Location location = GPSUtils.getInstance(this).getLngAndLat();
-
+                EmLoc emLoc = new EmLoc();
                 if (location != null) {
-                    EmLoc emLoc = new EmLoc();
                     emLoc.latitude = location.getLatitude();
                     emLoc.longitude = location.getLongitude();
                     emLoc.accuracy = location.getAccuracy();
@@ -218,13 +217,14 @@ public class LocService extends Service implements AMapLocationListener {
                     emLoc.altitude = location.getAltitude();
                     emLoc.speed = location.getSpeed();
                     emLoc.bearing = location.getBearing();
-                    emLoc.isOffline = true;
-                    Intent intent = new Intent(LocService.this, LocReceiver.class);
-                    intent.setAction(LOC_CHANGED);
-                    intent.putExtra("locPos", new Gson().toJson(emLoc));
-                    sendBroadcast(intent);//发送位置变化广播
                 }
+                emLoc.isOffline = true;
+                Intent intent = new Intent(LocService.this, LocReceiver.class);
+                intent.setAction(LOC_CHANGED);
+                intent.putExtra("locPos", new Gson().toJson(emLoc));
+                sendBroadcast(intent);//发送位置变化广播
 
+                //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
                 Log.e("locService", "location Error, ErrCode:"
                         + amapLocation.getErrorCode() + ", errInfo:"
                         + amapLocation.getErrorInfo());
