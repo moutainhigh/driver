@@ -1,10 +1,6 @@
 package com.easymi.personal.activity;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -13,21 +9,17 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Space;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.alipay.sdk.app.PayTask;
 import com.easymi.common.CommApiService;
 import com.easymi.common.result.LoginResult;
-import com.easymi.common.result.PayResult;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
-import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.base.RxPayActivity;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
@@ -38,13 +30,6 @@ import com.easymi.personal.entity.MoneyConfig;
 import com.easymi.personal.result.ConfigResult;
 import com.easymi.personal.result.RechargeResult;
 import com.easymi.personal.result.RechargeTypeResult;
-import com.ffcs.inapppaylib.bean.Constants;
-import com.ffcs.inapppaylib.bean.response.BaseResponse;
-import com.google.gson.JsonElement;
-import com.tencent.mm.sdk.modelpay.PayReq;
-import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.WXAPIFactory;
-import com.unionpay.UPPayAssistEx;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -62,7 +47,7 @@ import rx.schedulers.Schedulers;
  * Description:  充值界面
  * History:
  */
-public class RechargeActivity extends RxBaseActivity {
+public class RechargeActivity extends RxPayActivity {
 
     CheckBox pay50;
     CheckBox pay100;
@@ -287,6 +272,16 @@ public class RechargeActivity extends RxBaseActivity {
         id_space2 = findViewById(R.id.id_space2);
     }
 
+    @Override
+    public void onPaySuc() {
+
+    }
+
+    @Override
+    public void onPayFail() {
+
+    }
+
     /**
      * 选择框监听
      */
@@ -421,129 +416,6 @@ public class RechargeActivity extends RxBaseActivity {
                 launchZfb(url);
             }
         })));
-    }
-
-    /**
-     * 加载充值微信配置信息
-     *
-     * @param data
-     */
-    private void launchWeixin(JsonElement data) {
-        JSONObject json;
-        try {
-            json = new JSONObject(data.toString());
-            PayReq req = new PayReq();
-            req.appId = json.getString("wx_app_id");
-            req.partnerId = json.getString("wx_mch_id");
-            req.prepayId = json.getString("wx_pre_id");
-            req.nonceStr = json.getString("wx_app_nonce");
-            req.timeStamp = json.getString("wx_app_ts");
-            req.packageValue = json.getString("wx_app_pkg");
-            req.sign = json.getString("wx_app_sign");
-            req.extData = "app data"; // optional
-            Log.e("wxPay", "正常调起支付");
-
-            IWXAPI api = WXAPIFactory.createWXAPI(RechargeActivity.this, req.appId);
-            // 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
-
-            api.sendReq(req);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 调用支付包充值
-     *
-     * @param data
-     */
-    private void launchZfb(String data) {
-        new Thread() {
-            public void run() {
-
-                PayTask alipay = new PayTask(RechargeActivity.this);
-                String result = alipay
-                        .pay(data, true);
-
-                Message msg = new Message();
-                msg.what = 0;
-                msg.obj = result;
-                handler.sendMessage(msg);
-            }
-        }.start();
-    }
-
-    /**
-     * 翼支付
-     *
-     * @param data
-     */
-    private void launchYiPay(String data) {
-        String serverMode = "01";//00测试环境 01真实环境
-        UPPayAssistEx.startPay(RechargeActivity.this, null, null, data, serverMode);
-    }
-
-    /**
-     * 各种支付回调处理
-     */
-    Handler handler = new Handler(msg -> {
-        switch (msg.what) {
-            case 0:
-                Context context = RechargeActivity.this;
-                PayResult result = new PayResult((String) msg.obj);
-                if (result.resultStatus.equals("9000")) {
-                    ToastUtil.showMessage(context, getString(R.string.alipay_success),
-                            Toast.LENGTH_SHORT);
-                } else {
-                    ToastUtil.showMessage(context, getString(R.string.alipay_failed),
-                            Toast.LENGTH_SHORT);
-                }
-                break;
-            /**翼支付回调**/
-            case Constants.RESULT_VALIDATE_FAILURE:
-                // 合法性验证失败
-                BaseResponse resp = (BaseResponse) msg.obj;
-                ToastUtil.showMessage(RechargeActivity.this,
-                        resp.getRes_code() + ":" + resp.getRes_message(),
-                        Toast.LENGTH_SHORT);
-                break;
-
-            case Constants.RESULT_PAY_SUCCESS:
-                // 支付成功
-                resp = (BaseResponse) msg.obj;
-                ToastUtil.showMessage(RechargeActivity.this,
-                        resp.getRes_code() + ":" + resp.getRes_message(),
-                        Toast.LENGTH_SHORT);
-                break;
-
-            case Constants.RESULT_PAY_FAILURE:
-                // 支付失败
-                resp = (BaseResponse) msg.obj;
-                ToastUtil.showMessage(RechargeActivity.this,
-                        resp.getRes_code() + ":" + resp.getRes_message(),
-                        Toast.LENGTH_SHORT);
-                break;
-            /**翼支付回调**/
-        }
-        return true;
-    });
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data == null) {
-            return;
-        }
-        String str = data.getExtras().getString("pay_result");
-        if (str.equalsIgnoreCase("success")) {
-
-            ToastUtil.showMessage(RechargeActivity.this, "支付成功");
-
-            // 结果result_data为成功时，去商户后台查询一下再展示成功
-        } else if (str.equalsIgnoreCase("fail")) {
-            ToastUtil.showMessage(RechargeActivity.this, "支付失败！");
-        } else if (str.equalsIgnoreCase("cancel")) {
-            ToastUtil.showMessage(RechargeActivity.this, "你已取消了本次订单的支付！");
-        }
     }
 
     @Override

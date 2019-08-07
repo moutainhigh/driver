@@ -1,5 +1,6 @@
 package com.easymi.common.entity;
 
+import com.easymi.component.entity.PushEmploy;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -16,5 +17,5 @@ public class PushFee {
     public PushFeeLoc calc;
 
     @SerializedName("employ")
-    public PushFeeEmploy employ;
+    public PushEmploy employ;
 }

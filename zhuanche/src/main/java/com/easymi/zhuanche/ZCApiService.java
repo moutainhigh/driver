@@ -23,6 +23,7 @@ import rx.Observable;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: ZCApiService
+ *
  * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description: 专车接口地址
@@ -233,8 +234,17 @@ public interface ZCApiService {
                                            @Query("lat") double lat,
                                            @Query("lng") double lng);
 
+
+    @GET("api/v1/taxi_online/order/queryEnclosure")
+    Observable<EmResult> queryEnclosure(@Query("startCityCode") String startCityCode,
+                                        @Query("startAdCode") String startAdCode,
+                                        @Query("endCityCode") String endCityCode,
+                                        @Query("endAdCode") String endAdCode);
+
+
     /**
-     *  补单
+     * 补单
+     *
      * @param bookTime
      * @param budgetFee
      * @param businessId

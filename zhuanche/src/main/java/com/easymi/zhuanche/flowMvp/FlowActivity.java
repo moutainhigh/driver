@@ -576,6 +576,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.replace(R.id.flow_frame, runningFragment);
             transaction.commit();
 
+            if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
+                settleFragmentDialog.dismiss();
+            }
             settleFragmentDialog = new SettleFragmentDialog(FlowActivity.this, zcOrder, bridge);
             settleFragmentDialog.show();
         }

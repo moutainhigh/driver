@@ -60,7 +60,6 @@ public class BanciAdapter extends RecyclerView.Adapter<BanciAdapter.Holder> {
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.banci_item, null);
-
         return new Holder(view);
     }
 

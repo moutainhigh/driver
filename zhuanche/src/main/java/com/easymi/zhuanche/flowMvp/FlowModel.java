@@ -1,10 +1,10 @@
 package com.easymi.zhuanche.flowMvp;
 
 import com.easymi.common.CommApiService;
-import com.easymi.common.entity.PushFee;
-import com.easymi.common.entity.PushFeeEmploy;
-import com.easymi.common.entity.PushFeeLoc;
-import com.easymi.common.entity.PushFeeOrder;
+import com.easymi.common.entity.PushBean;
+import com.easymi.common.entity.PushData;
+import com.easymi.common.entity.PushDataLoc;
+import com.easymi.common.entity.PushDataOrder;
 import com.easymi.common.result.GetFeeResult;
 import com.easymi.component.Config;
 import com.easymi.component.ZCOrderStatus;
@@ -12,6 +12,8 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
+import com.easymi.component.entity.PushEmploy;
+import com.easymi.component.entity.Vehicle;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.GsonUtil;
 import com.easymi.component.network.HttpResultFunc;
@@ -35,6 +37,7 @@ import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: FlowModel
+ *
  * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
@@ -47,8 +50,8 @@ public class FlowModel implements FlowContract.Model {
     public Observable<ZCOrderResult> doAccept(Long orderId, Long version) {
         return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
                 .takeOrder(EmUtil.getEmployId(), EmUtil.getEmployInfo().realName, EmUtil.getEmployInfo().phone, orderId, version
-                        ,EmUtil.getLastLoc().longitude+""
-                        ,EmUtil.getLastLoc().longitude+"")
+                        , EmUtil.getLastLoc().longitude + ""
+                        , EmUtil.getLastLoc().longitude + "")
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -64,9 +67,9 @@ public class FlowModel implements FlowContract.Model {
     }
 
     @Override
-    public Observable<EmResult> refuseOrder(Long orderId,String orderType, String remark) {
+    public Observable<EmResult> refuseOrder(Long orderId, String orderType, String remark) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .refuseOrder(orderId,orderType , remark)
+                .refuseOrder(orderId, orderType, remark)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -111,39 +114,55 @@ public class FlowModel implements FlowContract.Model {
 
     @Override
     public Observable<ZCOrderResult> arriveDes(ZCOrder zcOrder, DymOrder order, Long version) {
-        PushFee pushData = new PushFee();
-
+        PushData pushData = new PushData();
         //司机的信息
-        Employ employ1 = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID,0));
-        PushFeeEmploy pe = null;
-        if (employ1 != null && employ1 instanceof Employ) {
-            Employ employ = (Employ) employ1;
-            pe = new PushFeeEmploy();
+        Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, 0));
+        PushEmploy pe = null;
+        if (employ != null) {
+            pe = new PushEmploy();
             pe.id = employ.id;
+            pe.name = employ.realName;
             pe.status = employ.status;
-            pe.realName = employ.realName;
             pe.companyId = employ.companyId;
             pe.phone = employ.phone;
             pe.business = employ.serviceType;
+            pe.sex = employ.sex;
+            if (Vehicle.exists(employ.id)) {
+                Vehicle vehicle = Vehicle.findByEmployId(employ.id);
+                pe.vehicleNo = vehicle.vehicleNo;
+                pe.modelId = vehicle.vehicleModel;
+            } else {
+                pe.vehicleNo = "";
+            }
+            pushData.serviceType = employ.serviceType;
         }
-        pushData.employ = pe;
+        pushData.driver = pe;
 
-        EmLoc loc = EmUtil.getLastLoc();
+        EmLoc emLoc = EmUtil.getLastLoc();
 
-        //位置信息
-        pushData.calc = new PushFeeLoc();
-        pushData.calc.lat = loc.latitude;
-        pushData.calc.lng = loc.longitude;
-        pushData.calc.speed = loc.speed;
-        pushData.calc.locationType = loc.locationType;
-        pushData.calc.appKey = EmUtil.getAppKey();
-        pushData.calc.positionTime = System.currentTimeMillis() / 1000;
-        pushData.calc.accuracy = (float) loc.accuracy;
+        pushData.location = new PushDataLoc();
+        pushData.location.latitude = emLoc.latitude;
+        pushData.location.longitude = emLoc.longitude;
+        pushData.location.speed = emLoc.speed;
+        pushData.location.locationType = emLoc.locationType;
+        pushData.location.appKey = EmUtil.getAppKey();
+//        pushData.calc.darkCost = buildPushData.darkCost;
+//        pushData.calc.darkMileage = buildPushData.darkMileage;
+        pushData.location.positionTime = System.currentTimeMillis() / 1000;
+        pushData.location.accuracy = (float) emLoc.accuracy;
+
+        pushData.location.adCode = emLoc.adCode;
+        pushData.location.cityCode = emLoc.cityCode;
+        pushData.location.bearing = emLoc.bearing;
+        pushData.location.provider = emLoc.provider;
+        pushData.location.altitude = emLoc.altitude;
+        pushData.location.time = System.currentTimeMillis() / 1000;
+        pushData.location.isOffline = emLoc.isOffline;
 
         //订单信息
-        List<PushFeeOrder> orderList = new ArrayList<>();
+        List<PushDataOrder> orderList = new ArrayList<>();
         for (DymOrder dymOrder : DymOrder.findAll()) {
-            PushFeeOrder dataOrder = new PushFeeOrder();
+            PushDataOrder dataOrder = new PushDataOrder();
             if (dymOrder.orderId == order.orderId && dymOrder.orderType.equals(Config.ZHUANCHE)) {
                 dataOrder.orderId = dymOrder.orderId;
                 dataOrder.orderType = dymOrder.orderType;
@@ -167,9 +186,9 @@ public class FlowModel implements FlowContract.Model {
                 break;
             }
         }
-        pushData.calc.orderInfo = orderList;
-        String json = GsonUtil.toJson(pushData);
-        EmLoc emLoc = EmUtil.getLastLoc();
+        pushData.location.orderInfo = orderList;
+
+        String json = GsonUtil.toJson(new PushBean("gps", pushData));
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .gpsPush(EmUtil.getAppKey(), json)
                 .flatMap(new Func1<GetFeeResult, Observable<ZCOrderResult>>() {
@@ -184,7 +203,7 @@ public class FlowModel implements FlowContract.Model {
                                         emLoc.longitude,
                                         emLoc.latitude,
                                         emLoc.address
-                               )
+                                )
                                 .filter(new HttpResultFunc<>())
                                 .map(new Func1<ZCOrderResult, ZCOrderResult>() {
                                     @Override

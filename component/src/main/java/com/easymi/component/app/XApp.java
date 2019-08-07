@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.StringRes;
 import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
@@ -286,23 +284,8 @@ public class XApp extends MultiDexApplication {
 
         InitConfig initConfig = new InitConfig(Config.TTS_APP_ID, Config.TTS_APP_KEY, Config.TTS_APP_SECRET, TtsMode.MIX, params, listener);
 
-        AutoCheck.getInstance(getApplicationContext()).check(initConfig, new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                if (msg.what == 100) {
-                    AutoCheck autoCheck = (AutoCheck) msg.obj;
-                    synchronized (autoCheck) {
-                        String message = autoCheck.obtainDebugMessage();
-                        Log.e("XApp", "handleMessage " + message);
-                    }
-                }
-            }
-
-        });
-
         // 此处可以改为MySyntherizer 了解调用过程
         mSpeechSynthesizer = new NonBlockSyntherizer(this, initConfig);
-
 
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 

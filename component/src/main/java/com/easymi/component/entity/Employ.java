@@ -28,11 +28,6 @@ public class Employ {
     public String userName;
 
     /**
-     * 密码
-     */
-    public String password;
-
-    /**
      * 昵称
      */
     public String nickName;
@@ -43,19 +38,9 @@ public class Employ {
     public String realName;
 
     /**
-     * 身份证号码
-     */
-    public String idCard;
-
-    /**
      * 性别 1，男；2，女；3，未知
      */
     public int sex;
-
-    /**
-     * 出生日期
-     */
-    public long birthDate;
 
     /**
      * 手机号
@@ -72,40 +57,6 @@ public class Employ {
      */
     public String serviceType;
 
-    /**
-     * 紧急联系人（姓名+电话+关系）
-     */
-    public String emergency;
-
-    /**
-     * 紧急电话
-     */
-    public String emergencyPhone;
-
-    /**
-     * 驾驶证初次领取时间
-     */
-    public long licensingTime;
-
-    /**
-     * 驾驶证有效期起
-     */
-    public int driveLicenceStart;
-
-    /**
-     * 驾驶证有效期限止
-     */
-    public int driveLicenceEnd;
-
-    /**
-     * 等级
-     */
-    public long level;
-
-    /**
-     * 入职时间
-     */
-    public long dutyTime;
 
     /**
      * 司机状态（0离线 5在线 10空闲 15派单 20接单 25前往预约地 30到达预约地 35前往目的地 40中途等待  45冻结）
@@ -115,64 +66,9 @@ public class Employ {
     public int status;
 
     /**
-     * 推荐人
-     */
-    public String introducer;
-
-    /**
      * 所属公司Id
      */
     public long companyId;
-
-    /**
-     * 创建时间
-     */
-    public long created;
-
-    /**
-     * 修改时间
-     */
-    public long updated;
-
-    /**
-     * 身份证照片地址
-     */
-    public String idcardPath;
-
-    /**
-     * 家庭地址
-     */
-    public String homeAddress;
-
-    /**
-     * 驾驶证照片地址
-     */
-    public String driveLicensePath;
-
-    /**
-     * 驾照类型
-     */
-    public String driveLicenseType;
-
-    /**
-     * 行驶证照片地址
-     */
-    public String drivingLicensePath;
-
-    /**
-     * 备注
-     */
-    public String remark;
-
-    /**
-     * 设备信息
-     */
-    public String appVersion;
-
-    /**
-     * 类型
-     */
-    public long driverType;
 
     /**
      * 设备编号
@@ -180,139 +76,9 @@ public class Employ {
     public String deviceNo;
 
     /**
-     * 设备类型
-     */
-    public String deviceType;
-
-    /**
-     * 全身照地址
-     */
-    public String fullBodyPath;
-
-    /**
-     * 身高
-     */
-    public String height;
-
-    /**
-     * 籍贯
-     */
-    public String originPlace;
-
-    /**
-     * 机动车驾驶证号
-     */
-    public String motorNo;
-
-    /**
-     * 国籍
-     */
-    public String nationality;
-
-    /**
-     * 网络预约出租车驾驶员证编号
-     */
-    public String networkTaximanNo;
-
-    /**
-     * 驾驶员民族
-     */
-    public String nation;
-
-    /**
-     * 驾驶员婚姻状况(0未婚，1已婚，2保密)
-     */
-    public String maritalStatus;
-
-    /**
-     * 驾驶员外语能力
-     */
-    public String foreignLanguageLevel;
-
-    /**
-     * 驾驶员通信地址
-     */
-    public String email;
-
-    /**
-     * 驾驶员学历
-     */
-    public String education;
-
-    /**
-     * 网络预约出租车驾驶员领证日期
-     */
-    public long networkTaximanLicenseDate;
-
-    /**
-     * 驾驶员发证机构
-     */
-    public String licenseOrganization;
-
-    /**
-     * 交通违章次数
-     */
-    public int trafficViolationTimes;
-
-    /**
-     * 合同有效期起
-     */
-    public long contractStart;
-
-    /**
-     * 合同有效期止
-     */
-    public long contractEnd;
-
-    /**
-     * NULL       NOT      NULL巡游出租汽车驾驶员
-     */
-    public int isCruisingTaxiDrivers;
-
-    /**
-     * 司机服务运营商
-     */
-    public String driverServiceOperator;
-
-    /**
-     * 使用地图类型
-     */
-    public String mapType;
-
-    /**
-     * 身份证背面照片地址
-     */
-    public String idcardBackPath;
-
-    /**
-     * 手机型号
-     */
-    public String mobileModel;
-
-    /**
-     * 手机运营商
-     */
-    public String mobileOperators;
-
-    /**
-     * NULL       NOT      NULL专职驾驶员
-     */
-    public int isFulltimeDriver;
-
-    /**
-     * 户口登记机关名称
-     */
-    public String householdRegistrationName;
-
-    /**
      * 登录token
      */
     public String token;
-
-    /**
-     * 刷新token
-     */
-    public String refreshToken;
 
     /**
      * 余额
@@ -323,16 +89,6 @@ public class Employ {
      * 司机平均星级
      */
     public double star;
-
-    /**
-     * specialModel 出租车车辆型号
-     */
-    public long taxiModelId;
-
-    /**
-     * 注册状态：1.未提交资料；2.审核中；3驳回；4通过
-     */
-    public int registerStatus;
 
     /**
      * 司机名片地址host
@@ -354,71 +110,20 @@ public class Employ {
 
         values.put("id", id);
         values.put("userName", userName);
-        values.put("password", password);
         values.put("nickName", nickName);
         values.put("realName", realName);
-        values.put("idCard", idCard);
         values.put("sex", sex);
-        values.put("birthDate", birthDate);
         values.put("phone", phone);
         values.put("portraitPath", portraitPath);
         values.put("serviceType", serviceType);
-        values.put("emergency", emergency);
-        values.put("emergencyPhone", emergencyPhone);
-        values.put("licensingTime", licensingTime);
-        values.put("driveLicenceStart", driveLicenceStart);
-        values.put("driveLicenceEnd", driveLicenceEnd);
-        values.put("level", level);
-        values.put("dutyTime", dutyTime);
         values.put("status", status);
-        values.put("introducer", introducer);
         values.put("companyId", companyId);
-        values.put("created", created);
-        values.put("updated", updated);
-        values.put("idcardPath", idcardPath);
-        values.put("homeAddress", homeAddress);
-        values.put("driveLicensePath", driveLicensePath);
-        values.put("driveLicenseType", driveLicenseType);
-        values.put("drivingLicensePath", drivingLicensePath);
-        values.put("remark", remark);
-        values.put("appVersion", appVersion);
-        values.put("driverType", driverType);
         values.put("deviceNo", deviceNo);
-        values.put("deviceType", deviceType);
-        values.put("fullBodyPath", fullBodyPath);
-        values.put("height", height);
-        values.put("originPlace", originPlace);
-        values.put("motorNo", motorNo);
-        values.put("nationality", nationality);
-        values.put("networkTaximanNo", networkTaximanNo);
-        values.put("nation", nation);
-        values.put("maritalStatus", maritalStatus);
-        values.put("foreignLanguageLevel", foreignLanguageLevel);
-        values.put("email", email);
-        values.put("education", education);
-        values.put("networkTaximanLicenseDate", networkTaximanLicenseDate);
-        values.put("licenseOrganization", licenseOrganization);
-        values.put("trafficViolationTimes", trafficViolationTimes);
-        values.put("contractStart", contractStart);
-        values.put("contractEnd", contractEnd);
-        values.put("isCruisingTaxiDrivers", isCruisingTaxiDrivers);
-        values.put("driverServiceOperator", driverServiceOperator);
-        values.put("mapType", mapType);
-        values.put("idcardBackPath", idcardBackPath);
-        values.put("mobileModel", mobileModel);
-        values.put("mobileOperators", mobileOperators);
-        values.put("isFulltimeDriver", isFulltimeDriver);
-        values.put("householdRegistrationName", householdRegistrationName);
         values.put("token", token);
-        values.put("refreshToken", refreshToken);
         values.put("balance", balance);
-        values.put("taxiModelId", taxiModelId);
-        values.put("registerStatus", registerStatus);
         values.put("qrCodeUrl", qrCodeUrl);
         values.put("serviceTel", serviceTel);
-        /*
-         * values.put("age", age); values.put("jialing", jialing);
-         */
+        values.put("star", star);
         boolean flag = db.insert("t_driverinfo", null, values) != -1;
         return flag;
     }
@@ -453,131 +158,7 @@ public class Employ {
         Employ driverInfo = null;
         try {
             if (cursor.moveToFirst()) {
-                driverInfo = new Employ();
-
-                driverInfo.id = cursor.getLong(cursor.getColumnIndex("id"));
-                driverInfo.userName = cursor.getString(cursor
-                        .getColumnIndex("userName"));
-                driverInfo.password = cursor.getString(cursor.getColumnIndex("password"));
-                driverInfo.nickName = cursor.getString(cursor
-                        .getColumnIndex("nickName"));
-                driverInfo.realName = cursor.getString(cursor
-                        .getColumnIndex("realName"));
-                driverInfo.idCard = cursor.getString(cursor
-                        .getColumnIndex("idCard"));
-                driverInfo.sex = cursor.getInt(cursor.getColumnIndex("sex"));
-                driverInfo.birthDate = cursor.getInt(cursor
-                        .getColumnIndex("birthDate"));
-                driverInfo.phone = cursor.getString(cursor
-                        .getColumnIndex("phone"));
-                driverInfo.portraitPath = cursor.getString(cursor
-                        .getColumnIndex("portraitPath"));
-                driverInfo.serviceType = cursor.getString(cursor
-                        .getColumnIndex("serviceType"));
-                driverInfo.emergency = cursor.getString(cursor
-                        .getColumnIndex("emergency"));
-                driverInfo.emergencyPhone = cursor.getString(cursor
-                        .getColumnIndex("emergencyPhone"));
-                driverInfo.licensingTime = cursor.getLong(cursor
-                        .getColumnIndex("licensingTime"));
-                driverInfo.driveLicenceStart = cursor.getInt(cursor
-                        .getColumnIndex("driveLicenceStart"));
-                driverInfo.driveLicenceEnd = cursor.getInt(cursor
-                        .getColumnIndex("driveLicenceEnd"));
-                driverInfo.level = cursor.getLong(cursor
-                        .getColumnIndex("level"));
-                driverInfo.dutyTime = cursor.getInt(cursor
-                        .getColumnIndex("dutyTime"));
-                driverInfo.status = cursor.getInt(cursor.getColumnIndex("status"));
-                driverInfo.introducer = cursor.getString(cursor
-                        .getColumnIndex("introducer"));
-                driverInfo.companyId = cursor.getLong(cursor
-                        .getColumnIndex("companyId"));
-                driverInfo.created = cursor.getLong(cursor
-                        .getColumnIndex("created"));
-                driverInfo.updated = cursor.getLong(cursor
-                        .getColumnIndex("updated"));
-                driverInfo.idcardPath = cursor.getString(cursor
-                        .getColumnIndex("idcardPath"));
-                driverInfo.homeAddress = cursor.getString(cursor
-                        .getColumnIndex("homeAddress"));
-                driverInfo.driveLicensePath = cursor.getString(cursor
-                        .getColumnIndex("driveLicensePath"));
-                driverInfo.driveLicenseType = cursor.getString(cursor
-                        .getColumnIndex("driveLicenseType"));
-                driverInfo.drivingLicensePath = cursor.getString(cursor
-                        .getColumnIndex("drivingLicensePath"));
-                driverInfo.remark = cursor.getString(cursor
-                        .getColumnIndex("remark"));
-                driverInfo.appVersion = cursor.getString(cursor
-                        .getColumnIndex("appVersion"));
-                driverInfo.driverType = cursor.getLong(cursor
-                        .getColumnIndex("driverType"));
-                driverInfo.deviceNo = cursor.getString(cursor
-                        .getColumnIndex("deviceNo"));
-                driverInfo.deviceType = cursor.getString(cursor
-                        .getColumnIndex("deviceType"));
-                driverInfo.fullBodyPath = cursor.getString(cursor
-                        .getColumnIndex("fullBodyPath"));
-                driverInfo.height = cursor.getString(cursor
-                        .getColumnIndex("height"));
-                driverInfo.originPlace = cursor.getString(cursor
-                        .getColumnIndex("originPlace"));
-                driverInfo.motorNo = cursor.getString(cursor
-                        .getColumnIndex("motorNo"));
-                driverInfo.nationality = cursor.getString(cursor
-                        .getColumnIndex("nationality"));
-                driverInfo.networkTaximanNo = cursor.getString(cursor
-                        .getColumnIndex("networkTaximanNo"));
-                driverInfo.nation = cursor.getString(cursor
-                        .getColumnIndex("nation"));
-                driverInfo.maritalStatus = cursor.getString(cursor
-                        .getColumnIndex("maritalStatus"));
-                driverInfo.foreignLanguageLevel = cursor.getString(cursor
-                        .getColumnIndex("foreignLanguageLevel"));
-                driverInfo.email = cursor.getString(cursor
-                        .getColumnIndex("email"));
-                driverInfo.education = cursor.getString(cursor
-                        .getColumnIndex("education"));
-                driverInfo.networkTaximanLicenseDate = cursor.getInt(cursor
-                        .getColumnIndex("networkTaximanLicenseDate"));
-                driverInfo.licenseOrganization = cursor.getString(cursor
-                        .getColumnIndex("licenseOrganization"));
-                driverInfo.trafficViolationTimes = cursor.getInt(cursor
-                        .getColumnIndex("trafficViolationTimes"));
-                driverInfo.contractStart = cursor.getInt(cursor
-                        .getColumnIndex("contractStart"));
-                driverInfo.contractEnd = cursor.getInt(cursor
-                        .getColumnIndex("contractEnd"));
-                driverInfo.isCruisingTaxiDrivers = cursor.getInt(cursor
-                        .getColumnIndex("isCruisingTaxiDrivers"));
-                driverInfo.driverServiceOperator = cursor.getString(cursor
-                        .getColumnIndex("driverServiceOperator"));
-                driverInfo.mapType = cursor.getString(cursor
-                        .getColumnIndex("mapType"));
-                driverInfo.idcardBackPath = cursor.getString(cursor
-                        .getColumnIndex("idcardBackPath"));
-                driverInfo.mobileModel = cursor.getString(cursor
-                        .getColumnIndex("mobileModel"));
-                driverInfo.mobileOperators = cursor.getString(cursor
-                        .getColumnIndex("mobileOperators"));
-                driverInfo.isFulltimeDriver = cursor.getInt(cursor
-                        .getColumnIndex("isFulltimeDriver"));
-                driverInfo.householdRegistrationName = cursor.getString(cursor
-                        .getColumnIndex("householdRegistrationName"));
-                driverInfo.token = cursor.getString(cursor
-                        .getColumnIndex("token"));
-                driverInfo.refreshToken = cursor.getString(cursor
-                        .getColumnIndex("refreshToken"));
-                driverInfo.balance = cursor.getDouble(cursor
-                        .getColumnIndex("balance"));
-                driverInfo.taxiModelId = cursor.getLong(cursor.getColumnIndex("taxiModelId"));
-
-                driverInfo.registerStatus = cursor.getInt(cursor.getColumnIndex("registerStatus"));
-
-                driverInfo.qrCodeUrl = cursor.getString(cursor.getColumnIndex("qrCodeUrl"));
-
-                driverInfo.serviceTel = cursor.getString(cursor.getColumnIndex("serviceTel"));
+                driverInfo = cursorToEmploy(cursor);
             }
         } catch (Exception e) {
 //			CrashReport.setUserSceneTag();
@@ -642,126 +223,31 @@ public class Employ {
         driverInfo.id = cursor.getLong(cursor.getColumnIndex("id"));
         driverInfo.userName = cursor.getString(cursor
                 .getColumnIndex("userName"));
-        driverInfo.password = cursor.getString(cursor.getColumnIndex("password"));
         driverInfo.nickName = cursor.getString(cursor
                 .getColumnIndex("nickName"));
         driverInfo.realName = cursor.getString(cursor
                 .getColumnIndex("realName"));
-        driverInfo.idCard = cursor.getString(cursor
-                .getColumnIndex("idCard"));
         driverInfo.sex = cursor.getInt(cursor.getColumnIndex("sex"));
-        driverInfo.birthDate = cursor.getInt(cursor
-                .getColumnIndex("birthDate"));
         driverInfo.phone = cursor.getString(cursor
                 .getColumnIndex("phone"));
         driverInfo.portraitPath = cursor.getString(cursor
                 .getColumnIndex("portraitPath"));
         driverInfo.serviceType = cursor.getString(cursor
                 .getColumnIndex("serviceType"));
-        driverInfo.emergency = cursor.getString(cursor
-                .getColumnIndex("emergency"));
-        driverInfo.emergencyPhone = cursor.getString(cursor
-                .getColumnIndex("emergencyPhone"));
-        driverInfo.licensingTime = cursor.getLong(cursor
-                .getColumnIndex("licensingTime"));
-        driverInfo.driveLicenceStart = cursor.getInt(cursor
-                .getColumnIndex("driveLicenceStart"));
-        driverInfo.driveLicenceEnd = cursor.getInt(cursor
-                .getColumnIndex("driveLicenceEnd"));
-        driverInfo.level = cursor.getLong(cursor
-                .getColumnIndex("level"));
-        driverInfo.dutyTime = cursor.getInt(cursor
-                .getColumnIndex("dutyTime"));
+
         driverInfo.status = cursor.getInt(cursor.getColumnIndex("status"));
-        driverInfo.introducer = cursor.getString(cursor
-                .getColumnIndex("introducer"));
         driverInfo.companyId = cursor.getLong(cursor
                 .getColumnIndex("companyId"));
-        driverInfo.created = cursor.getLong(cursor
-                .getColumnIndex("created"));
-        driverInfo.updated = cursor.getLong(cursor
-                .getColumnIndex("updated"));
-        driverInfo.idcardPath = cursor.getString(cursor
-                .getColumnIndex("idcardPath"));
-        driverInfo.homeAddress = cursor.getString(cursor
-                .getColumnIndex("homeAddress"));
-        driverInfo.driveLicensePath = cursor.getString(cursor
-                .getColumnIndex("driveLicensePath"));
-        driverInfo.driveLicenseType = cursor.getString(cursor
-                .getColumnIndex("driveLicenseType"));
-        driverInfo.drivingLicensePath = cursor.getString(cursor
-                .getColumnIndex("drivingLicensePath"));
-        driverInfo.remark = cursor.getString(cursor
-                .getColumnIndex("remark"));
-        driverInfo.appVersion = cursor.getString(cursor
-                .getColumnIndex("appVersion"));
-        driverInfo.driverType = cursor.getLong(cursor
-                .getColumnIndex("driverType"));
         driverInfo.deviceNo = cursor.getString(cursor
                 .getColumnIndex("deviceNo"));
-        driverInfo.deviceType = cursor.getString(cursor
-                .getColumnIndex("deviceType"));
-        driverInfo.fullBodyPath = cursor.getString(cursor
-                .getColumnIndex("fullBodyPath"));
-        driverInfo.height = cursor.getString(cursor
-                .getColumnIndex("height"));
-        driverInfo.originPlace = cursor.getString(cursor
-                .getColumnIndex("originPlace"));
-        driverInfo.motorNo = cursor.getString(cursor
-                .getColumnIndex("motorNo"));
-        driverInfo.nationality = cursor.getString(cursor
-                .getColumnIndex("nationality"));
-        driverInfo.networkTaximanNo = cursor.getString(cursor
-                .getColumnIndex("networkTaximanNo"));
-        driverInfo.nation = cursor.getString(cursor
-                .getColumnIndex("nation"));
-        driverInfo.maritalStatus = cursor.getString(cursor
-                .getColumnIndex("maritalStatus"));
-        driverInfo.foreignLanguageLevel = cursor.getString(cursor
-                .getColumnIndex("foreignLanguageLevel"));
-        driverInfo.email = cursor.getString(cursor
-                .getColumnIndex("email"));
-        driverInfo.education = cursor.getString(cursor
-                .getColumnIndex("education"));
-        driverInfo.networkTaximanLicenseDate = cursor.getInt(cursor
-                .getColumnIndex("networkTaximanLicenseDate"));
-        driverInfo.licenseOrganization = cursor.getString(cursor
-                .getColumnIndex("licenseOrganization"));
-        driverInfo.trafficViolationTimes = cursor.getInt(cursor
-                .getColumnIndex("trafficViolationTimes"));
-        driverInfo.contractStart = cursor.getInt(cursor
-                .getColumnIndex("contractStart"));
-        driverInfo.contractEnd = cursor.getInt(cursor
-                .getColumnIndex("contractEnd"));
-        driverInfo.isCruisingTaxiDrivers = cursor.getInt(cursor
-                .getColumnIndex("isCruisingTaxiDrivers"));
-        driverInfo.driverServiceOperator = cursor.getString(cursor
-                .getColumnIndex("driverServiceOperator"));
-        driverInfo.mapType = cursor.getString(cursor
-                .getColumnIndex("mapType"));
-        driverInfo.idcardBackPath = cursor.getString(cursor
-                .getColumnIndex("idcardBackPath"));
-        driverInfo.mobileModel = cursor.getString(cursor
-                .getColumnIndex("mobileModel"));
-        driverInfo.mobileOperators = cursor.getString(cursor
-                .getColumnIndex("mobileOperators"));
-        driverInfo.isFulltimeDriver = cursor.getInt(cursor
-                .getColumnIndex("isFulltimeDriver"));
-        driverInfo.householdRegistrationName = cursor.getString(cursor
-                .getColumnIndex("householdRegistrationName"));
         driverInfo.token = cursor.getString(cursor
                 .getColumnIndex("token"));
-        driverInfo.refreshToken = cursor.getString(cursor
-                .getColumnIndex("refreshToken"));
         driverInfo.balance = cursor.getDouble(cursor
                 .getColumnIndex("balance"));
-        driverInfo.taxiModelId = cursor.getLong(cursor.getColumnIndex("taxiModelId"));
-
         driverInfo.qrCodeUrl = cursor.getString(cursor.getColumnIndex("qrCodeUrl"));
-
         driverInfo.serviceTel = cursor.getString(cursor.getColumnIndex("serviceTel"));
+        driverInfo.star = cursor.getLong(cursor.getColumnIndex("star"));
 
-        driverInfo.registerStatus = cursor.getInt(cursor.getColumnIndex("registerStatus"));
         return driverInfo;
     }
 
@@ -775,68 +261,20 @@ public class Employ {
 
         values.put("id", id);
         values.put("userName", userName);
-        values.put("password", password);
         values.put("nickName", nickName);
         values.put("realName", realName);
-        values.put("idCard", idCard);
         values.put("sex", sex);
-        values.put("birthDate", birthDate);
         values.put("phone", phone);
         values.put("portraitPath", portraitPath);
         values.put("serviceType", serviceType);
-        values.put("emergency", emergency);
-        values.put("emergencyPhone", emergencyPhone);
-        values.put("licensingTime", licensingTime);
-        values.put("driveLicenceStart", driveLicenceStart);
-        values.put("driveLicenceEnd", driveLicenceEnd);
-        values.put("level", level);
-        values.put("dutyTime", dutyTime);
         values.put("status", status);
-        values.put("introducer", introducer);
         values.put("companyId", companyId);
-        values.put("created", created);
-        values.put("updated", updated);
-        values.put("idcardPath", idcardPath);
-        values.put("homeAddress", homeAddress);
-        values.put("driveLicensePath", driveLicensePath);
-        values.put("driveLicenseType", driveLicenseType);
-        values.put("drivingLicensePath", drivingLicensePath);
-        values.put("remark", remark);
-        values.put("appVersion", appVersion);
-        values.put("driverType", driverType);
         values.put("deviceNo", deviceNo);
-        values.put("deviceType", deviceType);
-        values.put("fullBodyPath", fullBodyPath);
-        values.put("height", height);
-        values.put("originPlace", originPlace);
-        values.put("motorNo", motorNo);
-        values.put("nationality", nationality);
-        values.put("networkTaximanNo", networkTaximanNo);
-        values.put("nation", nation);
-        values.put("maritalStatus", maritalStatus);
-        values.put("foreignLanguageLevel", foreignLanguageLevel);
-        values.put("email", email);
-        values.put("education", education);
-        values.put("networkTaximanLicenseDate", networkTaximanLicenseDate);
-        values.put("licenseOrganization", licenseOrganization);
-        values.put("trafficViolationTimes", trafficViolationTimes);
-        values.put("contractStart", contractStart);
-        values.put("contractEnd", contractEnd);
-        values.put("isCruisingTaxiDrivers", isCruisingTaxiDrivers);
-        values.put("driverServiceOperator", driverServiceOperator);
-        values.put("mapType", mapType);
-        values.put("idcardBackPath", idcardBackPath);
-        values.put("mobileModel", mobileModel);
-        values.put("mobileOperators", mobileOperators);
-        values.put("isFulltimeDriver", isFulltimeDriver);
-        values.put("householdRegistrationName", householdRegistrationName);
         values.put("token", token);
-        values.put("refreshToken", refreshToken);
         values.put("balance", balance);
-        values.put("taxiModelId", taxiModelId);
         values.put("serviceTel", serviceTel);
-        values.put("registerStatus", registerStatus);
         values.put("qrCodeUrl", qrCodeUrl);
+        values.put("star", star);
 
         boolean flag = db.update("t_driverinfo", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;

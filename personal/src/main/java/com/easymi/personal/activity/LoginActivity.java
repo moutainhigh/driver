@@ -28,11 +28,11 @@ import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.Employ;
-import com.easymi.component.entity.TaxiSetting;
 import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.ErrCode;
 import com.easymi.component.network.ErrCodeTran;
+import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.AlexStatusBarUtils;
@@ -300,7 +300,6 @@ public class LoginActivity extends RxBaseActivity {
             }
         }
 
-        McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
 
         XApp.getEditor().putString(Config.SP_TOKEN, "").apply();
 
@@ -340,57 +339,68 @@ public class LoginActivity extends RxBaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Observable<LoginResult> observable = api
+        Observable<LoginResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .loginByPW(name_rsa, pws_rsa, randomStr_rsa,
                         mac_rsa, imei_rsa, imsi_rsa, loginType_rsa,
                         longitude_rsa, latitude_rsa, appVersion_rsa, mobileOperators_rsa, mapType_rsa)
+                .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, loginBtn, loginResult -> {
-            if (loginResult.getCode() == 1) {
-                Employ employ = loginResult.data;
-                XApp.getEditor().putLong(Config.SP_DRIVERID, employ.id).apply();
-                employ.saveOrUpdate();
-
-                XApp.getEditor().putString(Config.SP_TOKEN, employ.token).apply();
-                getSetting(employ, name, psw);
-            } else if (loginResult.getCode() == APPLYING) {
-                Intent intent = new Intent(this, RegisterNoticeActivity.class);
-                intent.putExtra("type", 2);
-                startActivity(intent);
-            } else if (loginResult.getCode() == APPLY_PASS) {
-                Employ employ = loginResult.data;
-                XApp.getEditor().putLong(Config.SP_DRIVERID, employ.id).apply();
-                employ.saveOrUpdate();
-
-                XApp.getEditor().putString(Config.SP_TOKEN, employ.token).apply();
-                getSetting(employ, name, psw);
-            } else if (loginResult.getCode() == APPLY_REJECT) {
-                Intent intent = new Intent(this, RegisterNoticeActivity.class);
-                intent.putExtra("type", 3);
-                intent.putExtra("phone", name);
-                startActivity(intent);
-            } else {
-                String msg = loginResult.getMessage();
-                //获取默认配置
-                Configuration config = XApp.getInstance().getResources().getConfiguration();
-                if (config.locale == Locale.TAIWAN || config.locale == Locale.TRADITIONAL_CHINESE) {
-                    for (ErrCodeTran errCode : ErrCodeTran.values()) {
-                        if (loginResult.getCode() == errCode.getCode()) {
-                            msg = errCode.getShowMsg();
-                            break;
-                        }
-                    }
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, loginBtn, new HaveErrSubscriberListener<LoginResult>() {
+            @Override
+            public void onNext(LoginResult loginResult) {
+                if (loginResult.getCode() == 1) {
+                    Employ employ = loginResult.data;
+                    XApp.getEditor()
+                            .putLong(Config.SP_DRIVERID, employ.id)
+                            .putString(Config.SP_TOKEN, employ.token)
+                            .apply();
+                    employ.saveOrUpdate();
+                    getSetting(employ, name, psw);
+                } else if (loginResult.getCode() == APPLYING) {
+                    Intent intent = new Intent(LoginActivity.this, RegisterNoticeActivity.class);
+                    intent.putExtra("type", 2);
+                    startActivity(intent);
+                } else if (loginResult.getCode() == APPLY_PASS) {
+                    Employ employ = loginResult.data;
+                    XApp.getEditor()
+                            .putLong(Config.SP_DRIVERID, employ.id)
+                            .putString(Config.SP_TOKEN, employ.token)
+                            .apply();
+                    employ.saveOrUpdate();
+                    getSetting(employ, name, psw);
+                } else if (loginResult.getCode() == APPLY_REJECT) {
+                    Intent intent = new Intent(LoginActivity.this, RegisterNoticeActivity.class);
+                    intent.putExtra("type", 3);
+                    intent.putExtra("phone", name);
+                    startActivity(intent);
                 } else {
-                    for (ErrCode errCode : ErrCode.values()) {
-                        if (loginResult.getCode() == errCode.getCode()) {
-                            msg = errCode.getShowMsg();
-                            break;
+                    String msg = loginResult.getMessage();
+                    //获取默认配置
+                    Configuration config = XApp.getInstance().getResources().getConfiguration();
+                    if (config.locale == Locale.TAIWAN || config.locale == Locale.TRADITIONAL_CHINESE) {
+                        for (ErrCodeTran errCode : ErrCodeTran.values()) {
+                            if (loginResult.getCode() == errCode.getCode()) {
+                                msg = errCode.getShowMsg();
+                                break;
+                            }
+                        }
+                    } else {
+                        for (ErrCode errCode : ErrCode.values()) {
+                            if (loginResult.getCode() == errCode.getCode()) {
+                                msg = errCode.getShowMsg();
+                                break;
+                            }
                         }
                     }
+                    ToastUtil.showMessage(LoginActivity.this, msg);
                 }
-                ToastUtil.showMessage(this, msg);
+            }
+
+            @Override
+            public void onError(int code) {
+
             }
         })));
     }
@@ -431,9 +441,7 @@ public class LoginActivity extends RxBaseActivity {
                 .observeOn(AndroidSchedulers.mainThread());
 
         observable.subscribe(new MySubscriber<>(this, false, false, settingResult -> {
-
             CsEditor editor = XApp.getEditor();
-
             editor.putBoolean(Config.SP_ISLOGIN, true);
             editor.putString(Config.SP_LOGIN_ACCOUNT, name);
             editor.putBoolean(Config.SP_REMEMBER_PSW, checkboxRemember.isChecked());
@@ -444,31 +452,38 @@ public class LoginActivity extends RxBaseActivity {
             }
             editor.apply();
 
-            if (settingResult.data != null) {
-                for (ZCSetting sub : settingResult.data) {
-                    if (sub.serviceType.equals(Config.ZHUANCHE) ||
-                            sub.serviceType.equals(Config.CARPOOL)) {
-                        ZCSetting.deleteAll();
-                        sub.save();
-                    } else if (sub.serviceType.equals(Config.TAXI)) {
-                        TaxiSetting.deleteAll();
-                        TaxiSetting taxiSetting = new TaxiSetting();
-                        taxiSetting.isPaid = sub.isPaid;
-                        taxiSetting.isExpenses = sub.isExpenses;
-                        taxiSetting.canCancelOrder = sub.canCancelOrder;
-                        taxiSetting.isAddPrice = sub.isAddPrice;
-                        taxiSetting.employChangePrice = sub.employChangePrice;
-                        taxiSetting.employChangeOrder = sub.employChangeOrder;
-                        taxiSetting.driverRepLowBalance = sub.driverRepLowBalance;
-                        taxiSetting.passengerDistance = sub.passengerDistance;
-                        taxiSetting.version = sub.version;
-                        taxiSetting.grabOrder = sub.grabOrder;
-                        taxiSetting.distributeOrder = sub.distributeOrder;
-                        taxiSetting.serviceType = sub.serviceType;
-                        taxiSetting.save();
-                    }
+            for (ZCSetting sub : settingResult.data) {
+                if (EmUtil.getEmployInfo().serviceType.equals(sub.serviceType)) {
+                    ZCSetting.deleteAll();
+                    sub.save();
                 }
             }
+
+//            if (settingResult.data != null) {
+//                for (ZCSetting sub : settingResult.data) {
+//                    if (sub.serviceType.equals(Config.ZHUANCHE) ||
+//                            sub.serviceType.equals(Config.CARPOOL)) {
+//                        ZCSetting.deleteAll();
+//                        sub.save();
+//                    } else if (sub.serviceType.equals(Config.TAXI)) {
+//                        TaxiSetting.deleteAll();
+//                        TaxiSetting taxiSetting = new TaxiSetting();
+//                        taxiSetting.isPaid = sub.isPaid;
+//                        taxiSetting.isExpenses = sub.isExpenses;
+//                        taxiSetting.canCancelOrder = sub.canCancelOrder;
+//                        taxiSetting.isAddPrice = sub.isAddPrice;
+//                        taxiSetting.employChangePrice = sub.employChangePrice;
+//                        taxiSetting.employChangeOrder = sub.employChangeOrder;
+//                        taxiSetting.driverRepLowBalance = sub.driverRepLowBalance;
+//                        taxiSetting.passengerDistance = sub.passengerDistance;
+//                        taxiSetting.version = sub.version;
+//                        taxiSetting.grabOrder = sub.grabOrder;
+//                        taxiSetting.distributeOrder = sub.distributeOrder;
+//                        taxiSetting.serviceType = sub.serviceType;
+//                        taxiSetting.save();
+//                    }
+//                }
+//            }
 
             ARouter.getInstance()
                     .build("/common/WorkActivity")

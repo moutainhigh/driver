@@ -70,6 +70,9 @@ public class ZCSetting {
     public int isRepairOrder;
 
 
+    public int driverOrder;
+
+
     public static void deleteAll() {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
@@ -101,6 +104,7 @@ public class ZCSetting {
         values.put("arriveCancel", arriveCancel);
         values.put("arriveTime", arriveTime);
         values.put("isRepairOrder", isRepairOrder);
+        values.put("driverOrder",driverOrder);
         values.put("emploiesKm", emploiesKm);
 
         db.insert("t_zc_settinginfo", null, values);
@@ -133,6 +137,7 @@ public class ZCSetting {
                 settingInfo.arriveCancel = cursor.getInt(cursor.getColumnIndex("arriveCancel"));
                 settingInfo.arriveTime = cursor.getLong(cursor.getColumnIndex("arriveTime"));
                 settingInfo.isRepairOrder = cursor.getInt(cursor.getColumnIndex("isRepairOrder"));
+                settingInfo.driverOrder = cursor.getInt(cursor.getColumnIndex("driverOrder"));
                 settingInfo.emploiesKm = cursor.getInt(cursor.getColumnIndex("emploiesKm"));
             }
         } catch (Exception e) {

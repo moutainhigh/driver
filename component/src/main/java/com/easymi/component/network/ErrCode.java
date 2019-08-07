@@ -580,6 +580,8 @@ public enum ErrCode {
      * 评论包含敏感词
      */
     MOMO_SENSITIVE_ERROR(40205, "评论包含敏感词"),
+    
+    START_NO_SERVICE(40300, "当前起始地未开通服务机构"),
 
     /**
      * 申请中

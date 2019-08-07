@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 
@@ -21,17 +19,21 @@ import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.cat.Cat;
 import com.easymi.component.permission.RxPermissions;
 import com.easymi.component.update.UpdateHelper;
-import com.easymi.component.utils.AlexStatusBarUtils;
 import com.easymi.component.utils.CsSharedPreferences;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.NetUtil;
 import com.easymi.component.utils.RootUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
-import com.easymi.component.utils.WifiProxyUtil;
 import com.easymi.component.utils.emulator.EmulatorCheckUtil;
 
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
+import rx.Observable;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
@@ -51,7 +53,6 @@ public class SplashActivity extends RxBaseActivity {
 
     @Override
     public int getLayoutId() {
-        AlexStatusBarUtils.setTransparentStatusBar(this, null);
         return R.layout.activity_splash;
     }
 
@@ -60,29 +61,7 @@ public class SplashActivity extends RxBaseActivity {
      */
     RxPermissions rxPermissions;
 
-    private int leftTime;
-
     private static final String TAG = "SplashActivity";
-
-    Handler handler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(Message message) {
-            switch (message.what) {
-                case 0:
-                    if (leftTime > 0) {
-                        leftTime--;
-                        handler.sendEmptyMessageDelayed(0, 1000);
-                    }
-                    break;
-            }
-            return true;
-        }
-    });
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
 
     @Override
     public void initViews(Bundle savedInstanceState) {
@@ -174,18 +153,18 @@ public class SplashActivity extends RxBaseActivity {
             dialog.show();
             return;
         }
-        if (WifiProxyUtil.isWifiProxy(this)) {
-            AlertDialog dialog = new AlertDialog.Builder(this)
-                    .setTitle("提示")
-                    .setMessage("请关闭代理后再使用该程序")
-                    .setPositiveButton(R.string.ok, (dialog1, which) -> {
-                        finish();
-                    })
-                    .create();
-            dialog.setCancelable(false);
-            dialog.show();
-            return;
-        }
+//        if (WifiProxyUtil.isWifiProxy(this)) {
+//            AlertDialog dialog = new AlertDialog.Builder(this)
+//                    .setTitle("提示")
+//                    .setMessage("请关闭代理后再使用该程序")
+//                    .setPositiveButton(R.string.ok, (dialog1, which) -> {
+//                        finish();
+//                    })
+//                    .create();
+//            dialog.setCancelable(false);
+//            dialog.show();
+//            return;
+//        }
         update();
     }
 
@@ -224,16 +203,31 @@ public class SplashActivity extends RxBaseActivity {
      * 延时退出
      */
     private void delayExit() {
-        handler.postDelayed(() -> runOnUiThread(() -> {
-            ActManager.getInstance().finishAllActivity();
-        }), 1000);
+        Observable.timer(1, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onCompleted() {
+                        ActManager.getInstance().finishAllActivity();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Long aLong) {
+
+                    }
+                });
     }
 
     /**
      * 显示加载框
      */
     private void showDialog() {
-
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("温馨提示")
                 .setMessage("亲爱的司机师傅，为了您能正常使用软件，我们需要下列权限:\n"

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialog_query_station_item_rl"
+    android:layout_width="match_parent"
+    android:layout_height="68dp"
+    android:orientation="horizontal"
+    android:paddingStart="12dp"
+    android:paddingEnd="12dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/dialog_query_station_item_tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="4dp"
+            android:text="古城桥"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/sizeContent" />
+
+        <TextView
+            android:id="@+id/dialog_query_station_item_tv_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dialog_query_station_item_tv_title"
+            android:layout_marginEnd="40dp"
+            android:drawableStart="@mipmap/c_station_icon"
+            android:drawablePadding="4dp"
+            android:maxLength="35"
+            android:textColor="@color/colorSub"
+            android:textSize="@dimen/sizeHint" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/dialog_query_station_item_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerInParent="true"
+        android:src="@mipmap/c_up_station" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sizeLine"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorLine" />
+
+</RelativeLayout>

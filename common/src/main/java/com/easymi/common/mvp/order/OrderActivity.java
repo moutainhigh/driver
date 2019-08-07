@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.easymi.common.R;
@@ -54,42 +55,25 @@ public class OrderActivity extends RxBaseActivity {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.com_my_order);
         toolbar.setLeftIcon(R.drawable.ic_arrow_back, v -> finish());
-        if (EmUtil.getEmployInfo().serviceType.equals(Config.CITY_LINE)) {
+
+        if (EmUtil.getEmployInfo().serviceType.equals(Config.CITY_LINE) ||
+                (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)) ||
+                (EmUtil.getEmployInfo().serviceType.equals(Config.CARPOOL) && ZCSetting.findOne().isRepairOrder == 1) ||
+                EmUtil.getEmployInfo().serviceType.equals(Config.COUNTRY) && ZCSetting.findOne().driverOrder == 1) {
             toolbar.setRightText(R.string.com_make_order, v -> {
                 creatOrderDialog = new CreatOrderDialog(this);
                 creatOrderDialog.setOnMyClickListener(view -> {
-                    ARouter.getInstance().build("/cityline/CreateOrderActivity").navigation();
-                    creatOrderDialog.dismiss();
-                });
-                creatOrderDialog.show();
-            });
-        } else if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)) {
-            toolbar.setRightText(R.string.com_make_order, v -> {
-                creatOrderDialog = new CreatOrderDialog(this);
-                creatOrderDialog.setOnMyClickListener(view -> {
-                    Intent intent = new Intent(this, CreateActivity.class);
-                    intent.putExtra("type", Config.ZHUANCHE);
-                    startActivity(intent);
-                    creatOrderDialog.dismiss();
-                });
-                creatOrderDialog.show();
-            });
-        } else if (EmUtil.getEmployInfo().serviceType.equals(Config.CARPOOL)) {
-            if (ZCSetting.findOne().isRepairOrder == 1) {
-                toolbar.setRightText(R.string.com_make_order, v -> {
-                    creatOrderDialog = new CreatOrderDialog(this);
-                    creatOrderDialog.setOnMyClickListener(view -> {
+                    if (EmUtil.getEmployInfo().serviceType.equals(Config.CITY_LINE)) {
+                        ARouter.getInstance().build("/cityline/CreateOrderActivity").navigation();
+                    } else if ((EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE))) {
+                        Intent intent = new Intent(this, CreateActivity.class);
+                        intent.putExtra("type", Config.ZHUANCHE);
+                        startActivity(intent);
+                    } else if (EmUtil.getEmployInfo().serviceType.equals(Config.CARPOOL)) {
                         ARouter.getInstance().build("/carpooling/CreateOrderActivity").navigation();
-                        creatOrderDialog.dismiss();
-                    });
-                    creatOrderDialog.show();
-                });
-            }
-        } else if (EmUtil.getEmployInfo().serviceType.equals(Config.COUNTRY)) {
-            toolbar.setRightText(R.string.com_make_order, v -> {
-                creatOrderDialog = new CreatOrderDialog(this);
-                creatOrderDialog.setOnMyClickListener(view -> {
-//                    ARouter.getInstance().build("/carpooling/CreateOrderActivity").navigation();
+                    } else if (EmUtil.getEmployInfo().serviceType.equals(Config.COUNTRY)) {
+                        ARouter.getInstance().build("/custombus/CreateOrderActivity").navigation();
+                    }
                     creatOrderDialog.dismiss();
                 });
                 creatOrderDialog.show();
@@ -121,29 +105,27 @@ public class OrderActivity extends RxBaseActivity {
     private void initTabLayout() {
         fragments = new ArrayList<>();
         fragments.add(new AccpteFragment());
+        List<String> title = new ArrayList<>();
+        title.add(getString(R.string.com_accept_order));
         if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)
                 || EmUtil.getEmployInfo().serviceType.equals(Config.TAXI)) {
             fragments.add(new AssignFragment());
+            title.add(getString(R.string.com_assign_order));
+            tabLayout.setVisibility(View.VISIBLE);
         }
 
 //        if (ZCSetting.findOne().grabOrder == 1){
 //            fragments.add(new GrabFragment());
 //        }
         viewPager.setOffscreenPageLimit(fragments.size());
-        adapter = new VpAdapter(getSupportFragmentManager(), fragments);
+        adapter = new VpAdapter(getSupportFragmentManager(), fragments, title);
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
-
-        tabLayout.getTabAt(0).setText(getString(R.string.com_accept_order));
 
 //        if (ZCSetting.findOne().grabOrder == 1){
 //            tabLayout.getTabAt(1).setText(getString(R.string.com_assign_order));
 //            tabLayout.getTabAt(2).setText(getString(R.string.com_grab_order));
 //        }else {
-        if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)
-                || EmUtil.getEmployInfo().serviceType.equals(Config.TAXI)) {
-            tabLayout.getTabAt(1).setText(getString(R.string.com_assign_order));
-        }
 //        }
 
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {

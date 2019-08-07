@@ -1,4 +1,4 @@
-package com.easymi.common.result;
+package com.easymi.component.entity;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.

@@ -2,15 +2,18 @@ package com.easymin.custombus;
 
 import com.easymi.component.result.EmResult2;
 import com.easymin.custombus.entity.Customer;
+import com.easymin.custombus.entity.DZBusLine;
 import com.easymin.custombus.entity.OrdersResult;
+import com.easymin.custombus.entity.StationBean;
 import com.easymin.custombus.entity.StationResult;
 import com.easymin.custombus.entity.TimeResult;
+
+import java.util.List;
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -29,6 +32,21 @@ public interface DZBusApiService {
      */
     @GET("api/v1/bus/country/driver/order/querySchedule")
     Observable<StationResult> findBusInfoById(@Query("scheduleId") long scheduleId);
+
+    @POST("api/v1/bus/country/driver/order/create")
+    @FormUrlEncoded
+    Observable<EmResult2<Long>> createOrder(@Field("startStationId") long startStationId,
+                                            @Field("endStationId") long endStationId,
+                                            @Field("scheduleId")long scheduleId,
+                                            @Field("ticketNumber") int ticketNumber,
+                                            @Field("passengerPhone") String passengerPhone,
+                                            @Field("channelAlias") String channelAlias);
+
+    @GET("api/v1/bus/country/driver/schedule/driverSchedule")
+    Observable<EmResult2<List<DZBusLine>>> queryDriverSchedule(@Query("driverId") long driverId);
+
+    @GET("api/v1/bus/country/driver/schedule/driverQueryStation")
+    Observable<EmResult2<List<StationBean>>> queryStation(@Query("lineId") long lineId, @Query("scheduleId") long scheduleId);
 
     /**
      * 开始班次
@@ -97,8 +115,6 @@ public interface DZBusApiService {
     @FormUrlEncoded
     @POST("api/v1/bus/country/driver/order/finishSchedule")
     Observable<EmResult2<Object>> finish(@Field("scheduleId") long scheduleId);
-
-
 
 
 }

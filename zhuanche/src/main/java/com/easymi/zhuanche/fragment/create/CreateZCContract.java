@@ -4,13 +4,11 @@ import android.widget.TextView;
 
 import com.amap.api.services.core.LatLonPoint;
 import com.easymi.common.result.CreateOrderResult;
+import com.easymi.component.result.EmResult;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.zhuanche.result.BudgetResult;
-import com.easymi.zhuanche.result.ZCOrderResult;
-import com.easymi.zhuanche.result.ZCTypeResult;
 import com.easymi.zhuanche.result.PassengerResult;
-
-import java.math.BigDecimal;
+import com.easymi.zhuanche.result.ZCTypeResult;
 
 import rx.Observable;
 
@@ -195,7 +193,12 @@ public interface CreateZCContract {
                          String serviceType,
                          boolean onePrice,
                          Integer time,
-                         Double distance);
+                         Double distance,
+                         String startAdCode,
+                         String startCityCode,
+                         String endAdCode,
+                         String endCityCode);
+
     }
 
     interface Model {
@@ -268,6 +271,12 @@ public interface CreateZCContract {
                                                   boolean onePrice,
                                                   Integer time,
                                                   Double distance);
+
+
+        Observable<EmResult> queryEnclosure(String startCityCode,
+                                            String startAdCode,
+                                            String endCityCode,
+                                            String endAdCode);
 
     }
 }

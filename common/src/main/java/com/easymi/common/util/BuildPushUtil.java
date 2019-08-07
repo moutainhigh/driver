@@ -1,7 +1,5 @@
 package com.easymi.common.util;
 
-import android.util.Log;
-
 import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.common.entity.OrderCustomer;
@@ -58,7 +56,6 @@ public class BuildPushUtil {
                 Vehicle vehicle = Vehicle.findByEmployId(employ.id);
                 pe.vehicleNo = vehicle.vehicleNo;
                 pe.modelId = vehicle.vehicleModel;
-                Log.e("BuildPushUtil", "buildPush " + pe.modelId);
             } else {
                 pe.vehicleNo = "";
             }

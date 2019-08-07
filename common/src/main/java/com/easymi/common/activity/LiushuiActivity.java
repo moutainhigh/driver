@@ -2,8 +2,6 @@ package com.easymi.common.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +21,6 @@ import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
-import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.widget.CusBottomSheetDialog;
 import com.easymi.component.widget.CusErrLayout;
@@ -218,6 +215,7 @@ public class LiushuiActivity extends RxBaseActivity {
                     showErr(0);
                 } else {
                     hideErr();
+                    recyclerView.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -237,6 +235,7 @@ public class LiushuiActivity extends RxBaseActivity {
             errLayout.setErrText(tag);
             errLayout.setErrImg();
         }
+        recyclerView.setVisibility(View.GONE);
         errLayout.setVisibility(View.VISIBLE);
         errLayout.setOnClickListener(v -> {
             hideErr();

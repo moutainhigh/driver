@@ -1,10 +1,7 @@
 package com.easymin.carpooling.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,15 +10,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alipay.sdk.app.PayTask;
 import com.easymi.common.CommApiService;
-import com.easymi.common.result.PayResult;
 import com.easymi.common.widget.ComPayDialog;
 import com.easymi.component.Config;
-import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.base.RxPayActivity;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
@@ -29,7 +23,6 @@ import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
@@ -42,9 +35,6 @@ import com.easymin.carpooling.entity.PriceResult;
 import com.easymin.carpooling.entity.StationResult;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.tencent.mm.sdk.modelpay.PayReq;
-import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -66,7 +56,7 @@ import rx.schedulers.Schedulers;
  * @History:
  */
 @Route(path = "/carpooling/CreateOrderActivity")
-public class CreateOrderActivity extends RxBaseActivity {
+public class CreateOrderActivity extends RxPayActivity {
     TextView banci_select;
     TextView start_place;
     TextView end_place;
@@ -307,7 +297,7 @@ public class CreateOrderActivity extends RxBaseActivity {
                         ToastUtil.showMessage(this, "上车点和下车点是同一站点");
                     } else if (startSite.getSequence() > endSite.getSequence()) {
                         ToastUtil.showMessage(this, "下车点在上车点之前");
-                    }  else {
+                    } else {
                         queryPrice(pcOrder.lineId, startSite.getId(), endSite.getId());
                     }
                 }
@@ -324,21 +314,6 @@ public class CreateOrderActivity extends RxBaseActivity {
                     } else {
                         queryPrice(pcOrder.lineId, startSite.getId(), endSite.getId());
                     }
-                }
-            } else {
-                if (data == null) {
-                    return;
-                }
-                String str = data.getExtras().getString("pay_result");
-                if (str.equalsIgnoreCase("success")) {
-                    //支付成功，指派订单
-                    assginOrder();
-
-                    // 结果result_data为成功时，去商户后台查询一下再展示成功
-                } else if (str.equalsIgnoreCase("fail")) {
-                    ToastUtil.showMessage(CreateOrderActivity.this, "支付失败！");
-                } else if (str.equalsIgnoreCase("cancel")) {
-                    ToastUtil.showMessage(CreateOrderActivity.this, "你已取消了本次订单的支付！");
                 }
             }
         }
@@ -551,80 +526,6 @@ public class CreateOrderActivity extends RxBaseActivity {
         })));
     }
 
-
-    /**
-     * 加载充值微信配置信息
-     *
-     * @param data
-     */
-    private void launchWeixin(JsonElement data) {
-        JSONObject json;
-        try {
-            json = new JSONObject(data.toString());
-            PayReq req = new PayReq();
-            req.appId = json.getString("wx_app_id");
-            req.partnerId = json.getString("wx_mch_id");
-            req.prepayId = json.getString("wx_pre_id");
-            req.nonceStr = json.getString("wx_app_nonce");
-            req.timeStamp = json.getString("wx_app_ts");
-            req.packageValue = json.getString("wx_app_pkg");
-            req.sign = json.getString("wx_app_sign");
-            req.extData = "app data"; // optional
-            Log.e("wxPay", "正常调起支付");
-
-            IWXAPI api = WXAPIFactory.createWXAPI(CreateOrderActivity.this, req.appId);
-            // 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
-
-            api.sendReq(req);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 调用支付包充值
-     *
-     * @param data
-     */
-    private void launchZfb(String data) {
-        new Thread() {
-            public void run() {
-
-                PayTask alipay = new PayTask(CreateOrderActivity.this);
-                String result = alipay
-                        .pay(data, true);
-
-                Message msg = new Message();
-                msg.what = 0;
-                msg.obj = result;
-                handler.sendMessage(msg);
-            }
-        }.start();
-    }
-
-
-    /**
-     * 各种支付回调处理
-     */
-    Handler handler = new Handler(msg -> {
-        switch (msg.what) {
-            case 0:
-                Context context = CreateOrderActivity.this;
-                PayResult result = new PayResult((String) msg.obj);
-                if (result.resultStatus.equals("9000")) {
-                    ToastUtil.showMessage(context, getString(R.string.com_alipay_success),
-                            Toast.LENGTH_SHORT);
-                    assginOrder();
-                } else {
-                    ToastUtil.showMessage(context, getString(R.string.com_alipay_failed),
-                            Toast.LENGTH_SHORT);
-                }
-                break;
-        }
-        return true;
-    });
-
-
     public void assginOrder() {
         Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
                 .assginOrder(orderId, pcOrder.timeSlotId, EmUtil.getEmployId(), pcOrder.seats, priceResult.data.money * seatNo, pcOrder.saleSeat, 1, EmUtil.getAppKey())
@@ -642,4 +543,13 @@ public class CreateOrderActivity extends RxBaseActivity {
         })));
     }
 
+    @Override
+    public void onPaySuc() {
+        assginOrder();
+    }
+
+    @Override
+    public void onPayFail() {
+        ToastUtil.showMessage(this, "支付失败,请重试");
+    }
 }

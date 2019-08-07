@@ -14,12 +14,18 @@ import com.easymi.common.result.CreateOrderResult;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.network.NoErrSubscriberListener;
+import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.zhuanche.result.BudgetResult;
-import com.easymi.zhuanche.result.ZCTypeResult;
 import com.easymi.zhuanche.result.PassengerResult;
+import com.easymi.zhuanche.result.ZCTypeResult;
 
 import java.util.List;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
@@ -159,25 +165,37 @@ public class CreateZCPresenter implements CreateZCContract.Presenter {
                             String serviceType,
                             boolean onePrice,
                             Integer time,
-                            Double distance) {
-        view.getManager().add(model.createOrder(bookTime,
-                budgetFee,
-                businessId,
-                channelAlias,
-                companyId,
-                driverId,
-                driverName,
-                driverPhone,
-                modelId,
-                orderAddress,
-                passengerId,
-                passengerName,
-                passengerPhone,
-                serviceType,
-                onePrice,
-                time,
-                distance).subscribe(
-                new MySubscriber<>(context, true, false, createOrderResult -> view.createSuc(createOrderResult))
-        ));
+                            Double distance,
+                            String startAdCode,
+                            String startCityCode,
+                            String endAdCode,
+                            String endCityCode) {
+
+        view.getManager().add(model.queryEnclosure(startCityCode, startAdCode, endCityCode, endAdCode)
+                .flatMap((Func1<EmResult, Observable<CreateOrderResult>>) emResult -> model.createOrder(bookTime,
+                        budgetFee,
+                        businessId,
+                        channelAlias,
+                        companyId,
+                        driverId,
+                        driverName,
+                        driverPhone,
+                        modelId,
+                        orderAddress,
+                        passengerId,
+                        passengerName,
+                        passengerPhone,
+                        serviceType,
+                        onePrice,
+                        time,
+                        distance))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MySubscriber<CreateOrderResult>(context, true, false,
+                        new NoErrSubscriberListener<CreateOrderResult>() {
+                            @Override
+                            public void onNext(CreateOrderResult createOrderResult) {
+                                view.createSuc(createOrderResult);
+                            }
+                        })));
     }
 }

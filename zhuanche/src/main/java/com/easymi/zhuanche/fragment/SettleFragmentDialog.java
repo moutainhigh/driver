@@ -199,4 +199,9 @@ public class SettleFragmentDialog {
             context.startActivity(intent);
         });
     }
+
+    public boolean isShowing(){
+        return dialog.isShowing();
+    }
+
 }

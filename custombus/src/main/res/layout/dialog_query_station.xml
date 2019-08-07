@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/corner_white_4dp_bg"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/dialog_query_station_iv"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="end"
+        android:paddingTop="10dp"
+        android:paddingEnd="10dp"
+        android:src="@mipmap/common_cancel" />
+
+    <TextView
+        android:textStyle="bold"
+        android:textSize="@dimen/sizeContent"
+        android:id="@+id/dialog_query_station_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_gravity="center" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/dialog_query_station_rv"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp" />
+
+    <Button
+        android:layout_marginTop="12dp"
+        android:id="@+id/dialog_query_station_bt"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sizeButtonHeight"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/cor4_solid_blue"
+        android:text="确定"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/sizeButton"
+        android:textStyle="bold" />
+</LinearLayout>

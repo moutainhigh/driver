@@ -171,7 +171,16 @@ public class RunningFragment extends RxBaseFragment {
     /**
      * 滑动重置handler
      */
-    Handler handler = new Handler();
+    private Handler handler = new Handler();
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
+        }
+    }
 
     /**
      * 重置slider
@@ -179,10 +188,10 @@ public class RunningFragment extends RxBaseFragment {
     private void resetView() {
         slideView.setVisibility(View.GONE);
 
-        handler.postDelayed(() -> getActivity().runOnUiThread(() -> {
+        handler.postDelayed(() -> {
             slideView.resetView();
             slideView.setVisibility(View.VISIBLE);
-        }), 1000);
+        }, 1000);
         //防止卡顿
     }
 }

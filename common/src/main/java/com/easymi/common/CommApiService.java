@@ -31,6 +31,7 @@ import com.google.gson.JsonElement;
 
 import java.util.List;
 
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -467,6 +468,9 @@ public interface CommApiService {
                                                              @Query("endTime") Long endTime,
                                                              @Query("page") int page,
                                                              @Query("size") int size);
+
+    @DELETE("api/v1/order/cold/{id}")
+    Observable<EmResult> deleteOrder(@Path("id") long id);
 
     /**
      * 首页统计

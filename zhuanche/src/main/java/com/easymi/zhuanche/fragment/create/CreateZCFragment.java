@@ -23,7 +23,6 @@ import com.easymi.component.entity.EmLoc;
 import com.easymi.component.network.GsonUtil;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.Log;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.MoneyWatcher;
@@ -207,6 +206,8 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
         startPlace.setText(emLoc.poiName);
         startPlace.setTextColor(getResources().getColor(R.color.text_color_black));
         startPoi = new PoiItem("", new LatLonPoint(emLoc.latitude, emLoc.longitude), emLoc.poiName, emLoc.address);
+        startPoi.setAdCode(emLoc.adCode);
+        startPoi.setCityCode(emLoc.cityCode);
 
 //        initQueryZCType();
 
@@ -297,11 +298,16 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
                     Config.ZHUANCHE,
                     onePrice,
                     duration,
-                    distance);
+                    distance,
+                    startPoi.getAdCode(),
+                    startPoi.getCityCode(),
+                    endPoi.getAdCode(),
+                    endPoi.getCityCode());
         });
 
         et_money.addTextChangedListener(new MoneyWatcher(et_money).setLimit(2).setMaxMoney(9999));
     }
+
 
     public String getAddressJson() {
         List<Address> listJson = new ArrayList<>();
@@ -466,7 +472,9 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
         Intent intent = new Intent(getActivity(), FlowActivity.class);
         intent.putExtra("orderId", createOrderResult.data);
         startActivity(intent);
-        getActivity().finish();
+        if (getActivity() != null) {
+            getActivity().finish();
+        }
     }
 
     @Override
@@ -475,7 +483,6 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
         if (resultCode == RESULT_OK) {
             if (requestCode == START_CODE) {
                 startPoi = data.getParcelableExtra("poiItem");
-                Log.e("poi", startPoi.toString());
                 startPlace.setText(startPoi.getTitle());
                 startPlace.setTextColor(getResources().getColor(R.color.text_color_black));
             } else if (requestCode == END_CODE) {
