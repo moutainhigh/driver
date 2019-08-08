@@ -79,5 +79,4 @@ public class DriverApp extends XApp {
             Log.e("daemon", "--onWatchDaemonDaed--");
         }
     }
-
 }

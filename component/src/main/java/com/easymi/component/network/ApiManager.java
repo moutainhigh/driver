@@ -1,5 +1,6 @@
 package com.easymi.component.network;
 
+import com.easymi.component.BuildConfig;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 
@@ -47,18 +48,21 @@ public class ApiManager {
         Cache cache = new Cache(cacheFile, 1024 * 1024 * 2); //2M
 
         Ssl ssl = new Ssl(XApp.getInstance(), "");
-        //创建okhttp客户端
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.readTimeout(16000, TimeUnit.MILLISECONDS)
                 .connectTimeout(16000, TimeUnit.MILLISECONDS)
                 //拦截器顺序不要改 谁改谁是狗
-                .addInterceptor(new EncryptInterceptor())  //加密拦截器
-                .addInterceptor(new TokenInterceptor())//token拦截器
-                .addInterceptor(Pandora.get().getInterceptor())
-                .addInterceptor(new ResponseIntercepter())
-                .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS)) //添加日志拦截器,进行输出日志
-                .retryOnConnectionFailure(true) //失败重连
-                .cache(cache);
+                .addInterceptor(new EncryptInterceptor())
+                .addInterceptor(new TokenInterceptor());//Header拦截器
+        if (BuildConfig.DEBUG) {
+            builder.addInterceptor(Pandora.get().getInterceptor());
+        }
+        builder.addInterceptor(new ResponseIntercepter());
+        if (BuildConfig.DEBUG) {
+            builder.addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS));
+            //添加日志拦截器,进行输出日志
+        }
+        builder.cache(cache);
 
         if (Config.HOST.contains("https://")) {
             builder.sslSocketFactory(ssl.getSslSocketFactory(), ssl.getTrustManager());

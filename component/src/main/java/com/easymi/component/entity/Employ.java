@@ -5,9 +5,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.easymi.component.db.SqliteHelper;
+import com.easymi.component.utils.AesUtil;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
@@ -416,11 +421,27 @@ public class Employ {
         values.put("registerStatus", registerStatus);
         values.put("qrCodeUrl", qrCodeUrl);
         values.put("serviceTel", serviceTel);
-        /*
-         * values.put("age", age); values.put("jialing", jialing);
-         */
-        boolean flag = db.insert("t_driverinfo", null, values) != -1;
+
+        boolean flag = db.insert("t_driverinfo", null, encryptString(values)) != -1;
         return flag;
+    }
+
+    /**
+     * 加密string字符串
+     *
+     * @param values
+     * @return
+     */
+    private ContentValues encryptString(ContentValues values) {
+        for (Map.Entry<String, Object> item : values.valueSet()) {
+            String key = item.getKey();
+            Object value = item.getValue();
+            if (value instanceof String) {
+                value = AesUtil.aesEncrypt(AesUtil.AAAAA, (String) item.getValue());
+                values.put(key, (String) value);
+            }
+        }
+        return values;
     }
 
     /**
@@ -584,7 +605,7 @@ public class Employ {
         } finally {
             cursor.close();
         }
-        return driverInfo;
+        return decrptyString(driverInfo);
     }
 
     /**
@@ -762,7 +783,7 @@ public class Employ {
         driverInfo.serviceTel = cursor.getString(cursor.getColumnIndex("serviceTel"));
 
         driverInfo.registerStatus = cursor.getInt(cursor.getColumnIndex("registerStatus"));
-        return driverInfo;
+        return decrptyString(driverInfo);
     }
 
     /**
@@ -838,7 +859,7 @@ public class Employ {
         values.put("registerStatus", registerStatus);
         values.put("qrCodeUrl", qrCodeUrl);
 
-        boolean flag = db.update("t_driverinfo", values, " id = ? ",
+        boolean flag = db.update("t_driverinfo", encryptString(values), " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
         return flag;
     }
@@ -853,5 +874,58 @@ public class Employ {
 
     public Employ() {
 
+    }
+
+    /**
+     * 解密String
+     * @param employ
+     * @return
+     */
+    private static Employ decrptyString(Employ employ){
+        employ.userName = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.userName);
+        employ.password = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.password);
+        employ.nickName = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.nickName);
+        employ.realName = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.realName);
+        employ.idCard = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.idCard);
+        employ.phone = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.phone);
+        employ.portraitPath = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.portraitPath);
+        employ.serviceType = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.serviceType);
+        employ.emergency = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.emergency);
+        employ.emergencyPhone = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.emergencyPhone);
+        employ.introducer = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.introducer);
+        employ.idcardPath = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.idcardPath);
+        employ.homeAddress = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.homeAddress);
+        employ.driveLicensePath = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.driveLicensePath);
+        employ.driveLicenseType = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.driveLicenseType);
+        employ.drivingLicensePath = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.drivingLicensePath);
+        employ.remark = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.remark);
+        employ.appVersion = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.appVersion);
+        employ.deviceNo = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.deviceNo);
+        employ.deviceType = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.deviceType);
+        employ.fullBodyPath = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.fullBodyPath);
+        employ.height = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.height);
+        employ.originPlace = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.originPlace);
+        employ.motorNo = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.motorNo);
+        employ.nationality = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.nationality);
+        employ.networkTaximanNo = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.networkTaximanNo);
+        employ.nation = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.nation);
+        employ.maritalStatus = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.maritalStatus);
+        employ.foreignLanguageLevel = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.foreignLanguageLevel);
+        employ.email = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.email);
+        employ.education = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.education);
+        employ.licenseOrganization = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.licenseOrganization);
+        employ.driverServiceOperator = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.driverServiceOperator);
+        employ.mapType = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.mapType);
+        employ.idcardBackPath = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.idcardBackPath);
+        employ.mobileModel = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.mobileModel);
+        employ.mobileOperators = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.mobileOperators);
+        employ.householdRegistrationName = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.householdRegistrationName);
+        employ.token = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.token);
+        employ.refreshToken = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.refreshToken);
+        employ.qrCodeUrl = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.qrCodeUrl);
+        employ.serviceTel = AesUtil.aesDecrypt(AesUtil.AAAAA,employ.serviceTel);
+
+
+        return employ;
     }
 }

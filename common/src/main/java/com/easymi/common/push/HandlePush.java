@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -583,14 +584,6 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
         })));
     }
 
-    /**
-     * 新建通知栏
-     *
-     * @param context
-     * @param tips
-     * @param title
-     * @param content
-     */
     private void newShowNotify(Context context, String tips, String title,
                                String content) {
         String ns = Context.NOTIFICATION_SERVICE;
@@ -604,7 +597,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(
                 XApp.getInstance());
-        builder.setSmallIcon(com.easymi.component.R.mipmap.role_driver);
+        builder.setSmallIcon(com.easymi.component.R.mipmap.ic_launcher);
         builder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher));
         builder.setColor(context.getResources().getColor(R.color.colorPrimary));
         builder.setTicker(tips);
@@ -612,6 +605,10 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
         builder.setContentTitle(title);
         builder.setContentText(content);
         builder.setContentIntent(contentIntent);
+        if (Build.VERSION.SDK_INT >= 26) {
+            String channelId = context.getPackageName()+"/pushChannel";
+            builder.setChannelId(channelId);
+        }
 
         Notification notification = builder.build();
 

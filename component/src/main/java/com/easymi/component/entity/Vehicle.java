@@ -5,7 +5,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.easymi.component.db.SqliteHelper;
+import com.easymi.component.utils.AesUtil;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.Map;
 
 /**
  * Copyright (C) , 2012-2018 , 四川小咖科技有限公司
@@ -68,7 +71,7 @@ public class Vehicle {
         /*
          * values.put("age", age); values.put("jialing", jialing);
          */
-        boolean flag = db.insert("t_vehicle", null, values) != -1;
+        boolean flag = db.insert("t_vehicle", null, encryptString(values)) != -1;
         return flag;
     }
 
@@ -93,7 +96,7 @@ public class Vehicle {
         /*
          * values.put("age", age); values.put("jialing", jialing);
          */
-        boolean flag = db.update("t_Vehicle", values, " employId = ? ",
+        boolean flag = db.update("t_Vehicle", encryptString(values), " employId = ? ",
                 new String[]{String.valueOf(employId)}) == 1;
         return flag;
     }
@@ -122,7 +125,7 @@ public class Vehicle {
         } finally {
             cursor.close();
         }
-        return vehicle;
+        return decryptString(vehicle);
     }
 
     public boolean saveOrUpdate(long employId) {
@@ -149,5 +152,38 @@ public class Vehicle {
             ex.printStackTrace();
         }
         return flag;
+    }
+
+    /**
+     * 加密string字符串
+     *
+     * @param values
+     * @return
+     */
+    private ContentValues encryptString(ContentValues values) {
+        for (Map.Entry<String, Object> item : values.valueSet()) {
+            String key = item.getKey();
+            Object value = item.getValue();
+            if (value instanceof String) {
+                value = AesUtil.aesEncrypt(AesUtil.AAAAA, (String) item.getValue());
+                values.put(key, (String) value);
+            }
+        }
+        return values;
+    }
+
+    /**
+     * 解密字符串
+     *
+     * @param vehicle
+     * @return
+     */
+    private static Vehicle decryptString(Vehicle vehicle) {
+        vehicle.brand = AesUtil.aesDecrypt(AesUtil.AAAAA, vehicle.brand);
+        vehicle.plateColor = AesUtil.aesDecrypt(AesUtil.AAAAA, vehicle.plateColor);
+        vehicle.vehicleNo = AesUtil.aesDecrypt(AesUtil.AAAAA, vehicle.vehicleNo);
+        vehicle.vehicleType = AesUtil.aesDecrypt(AesUtil.AAAAA, vehicle.vehicleType);
+        vehicle.serviceType = AesUtil.aesDecrypt(AesUtil.AAAAA, vehicle.serviceType);
+        return vehicle;
     }
 }

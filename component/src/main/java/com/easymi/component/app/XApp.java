@@ -1,10 +1,14 @@
 package com.easymi.component.app;
 
 import android.app.ActivityManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.support.annotation.StringRes;
 import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
@@ -112,6 +116,18 @@ public class XApp extends MultiDexApplication {
                     .putBoolean(Config.SP_ISLOGIN, false)
                     .putInt(Config.SP_VERSION, current)
                     .apply();
+        }
+        if (Build.VERSION.SDK_INT >= 26) {
+            String channelId = getPackageName() + "/pushChannel";
+            NotificationChannel notificationChannel = new NotificationChannel(channelId,
+                    "普通消息通知栏", NotificationManager.IMPORTANCE_HIGH);
+            notificationChannel.enableLights(true);//是否在桌面icon右上角展示小圆点
+            notificationChannel.setLightColor(Color.BLUE); //小圆点颜色
+            notificationChannel.setShowBadge(true); //是否在久按桌面图标时显示此渠道的通知
+            NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            if (mNotificationManager != null) {
+                mNotificationManager.createNotificationChannel(notificationChannel);
+            }
         }
     }
 

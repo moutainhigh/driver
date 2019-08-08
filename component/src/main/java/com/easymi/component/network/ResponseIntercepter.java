@@ -1,5 +1,6 @@
 package com.easymi.component.network;
 
+import com.easymi.component.BuildConfig;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.utils.AesUtil;
@@ -24,10 +25,14 @@ public class ResponseIntercepter implements Interceptor {
         String content = response.body().string();
 
         if (content.startsWith("{") && content.endsWith("}")) {
-            HttpLoggingInterceptor.Logger.DEFAULT.log(URLDecoderUtil.stringToJSON(content));
+            if (BuildConfig.DEBUG) {
+                HttpLoggingInterceptor.Logger.DEFAULT.log(URLDecoderUtil.stringToJSON(content));
+            }
         } else {
             content = URLDecoderUtil.decode(EncApi.getInstance().dec(XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA), content));
-            HttpLoggingInterceptor.Logger.DEFAULT.log(URLDecoderUtil.stringToJSON(content));
+            if (BuildConfig.DEBUG) {
+                HttpLoggingInterceptor.Logger.DEFAULT.log(URLDecoderUtil.stringToJSON(content));
+            }
         }
         return response
                 .newBuilder()

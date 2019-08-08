@@ -84,7 +84,7 @@ android {
         //生产环境
         product {
             dimension "App"//同在App这个名字维度
-            buildConfigField "String", "HOST", '"http://api.xiaokakj.com/"'
+            buildConfigField "String", "HOST", '"https://api.xiaokakj.com/"'
             buildConfigField "String", "H5_HOST", '"https://h5.xiaokakj.com/"'
             buildConfigField "String", "IMG_SERVER", '"https://assets.xiaokakj.com/"'
         }

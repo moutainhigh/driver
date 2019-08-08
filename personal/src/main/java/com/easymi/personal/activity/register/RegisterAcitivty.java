@@ -139,6 +139,12 @@ public class RegisterAcitivty extends RxBaseActivity {
                 ToastUtil.showMessage(RegisterAcitivty.this, getString(R.string.please_agree_agreement));
                 return;
             }
+            String psw = et_password.getText().toString();
+            String regex = "^[a-z]+$|^[0-9]+$|^[A-Z]+$";
+            if (psw.matches(regex) || psw.length() < 8) {
+                ToastUtil.showMessage(RegisterAcitivty.this, "密码必须超过8位，且不能为纯数字或纯字母");
+                return;
+            }
             PhoneUtil.hideKeyboard(this);
 
             register();
@@ -316,7 +322,7 @@ public class RegisterAcitivty extends RxBaseActivity {
     private void initBox() {
         text_agreement.setOnClickListener(view -> {
             Intent intent = new Intent(this, WebActivity.class);
-            intent.putExtra("url", Config.H5_HOST+"#/protocol?articleName=driverLogin&appKey=" + Config.APP_KEY);
+            intent.putExtra("url", Config.H5_HOST + "#/protocol?articleName=driverLogin&appKey=" + Config.APP_KEY);
             intent.putExtra("title", getString(R.string.login_agreement));
             startActivity(intent);
         });
@@ -401,11 +407,11 @@ public class RegisterAcitivty extends RxBaseActivity {
         String type_rsa = null;
         String userType_rsa = null;
         try {
-            code_rsa = RsaUtils.rsaEncode( et_img_code.getText().toString());
-            phone_rsa = RsaUtils.rsaEncode( et_phone.getText().toString());
-            randomNum_rsa = RsaUtils.rsaEncode( randomNum);
-            type_rsa = RsaUtils.rsaEncode( "PASSENGER_LOGIN_CODE");
-            userType_rsa = RsaUtils.rsaEncode( "2");
+            code_rsa = RsaUtils.rsaEncode(et_img_code.getText().toString());
+            phone_rsa = RsaUtils.rsaEncode(et_phone.getText().toString());
+            randomNum_rsa = RsaUtils.rsaEncode(randomNum);
+            type_rsa = RsaUtils.rsaEncode("PASSENGER_LOGIN_CODE");
+            userType_rsa = RsaUtils.rsaEncode("2");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -444,15 +450,15 @@ public class RegisterAcitivty extends RxBaseActivity {
         String smsCode_rsa = null;
         String random_rsa = null;
         try {
-            password_rsa = RsaUtils.rsaEncode( et_password.getText().toString());
-            phone_rsa = RsaUtils.rsaEncode( et_phone.getText().toString());
-            smsCode_rsa = RsaUtils.rsaEncode( et_code.getText().toString());
-            random_rsa = RsaUtils.rsaEncode( randomNum);
+            password_rsa = RsaUtils.rsaEncode(et_password.getText().toString());
+            phone_rsa = RsaUtils.rsaEncode(et_phone.getText().toString());
+            smsCode_rsa = RsaUtils.rsaEncode(et_code.getText().toString());
+            random_rsa = RsaUtils.rsaEncode(randomNum);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        Observable<Register> observable = RegisterModel.register(password_rsa, phone_rsa, smsCode_rsa,random_rsa);
+        Observable<Register> observable = RegisterModel.register(password_rsa, phone_rsa, smsCode_rsa, random_rsa);
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, register_button, register -> {
             if (register.getCode() == 1) {
                 startBase(register.data);
@@ -467,7 +473,7 @@ public class RegisterAcitivty extends RxBaseActivity {
                 intent.putExtra("type", 3);
                 intent.putExtra("phone", et_phone.getText().toString());
                 startActivity(intent);
-            }else {
+            } else {
                 String msg = register.getMessage();
                 //获取默认配置
                 Configuration config = XApp.getInstance().getResources().getConfiguration();
@@ -491,3 +497,4 @@ public class RegisterAcitivty extends RxBaseActivity {
         })));
     }
 }
+

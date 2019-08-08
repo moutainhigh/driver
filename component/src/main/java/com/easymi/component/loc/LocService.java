@@ -53,7 +53,7 @@ public class LocService extends Service implements AMapLocationListener {
 
     private static final int NOTI_ID = 1011;
 
-    private static final String NOTIFICATION_CHANNEL_NAME = "BackgroundLocation";
+    private static final String NOTIFICATION_CHANNEL_NAME = "定位服务通知栏";
     private NotificationManager notificationManager = null;
     boolean isCreateChannel = false;
 
@@ -234,14 +234,16 @@ public class LocService extends Service implements AMapLocationListener {
             if (null == notificationManager) {
                 notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             }
-            String channelId = getPackageName();
+            String channelId = getPackageName()+"/locChannel";
             if (!isCreateChannel) {
                 NotificationChannel notificationChannel = new NotificationChannel(channelId,
-                        NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+                        NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_MIN);
                 notificationChannel.enableLights(true);//是否在桌面icon右上角展示小圆点
                 notificationChannel.setLightColor(Color.BLUE); //小圆点颜色
                 notificationChannel.setShowBadge(true); //是否在久按桌面图标时显示此渠道的通知
                 notificationChannel.setSound(null, null);
+                notificationChannel.enableVibration(false);
+                notificationChannel.setVibrationPattern(null);
                 notificationManager.createNotificationChannel(notificationChannel);
                 isCreateChannel = true;
             }
@@ -262,7 +264,7 @@ public class LocService extends Service implements AMapLocationListener {
         builder.setWhen(System.currentTimeMillis());
         builder.setContentIntent(pendingIntent);
         builder.setOngoing(true);
-        builder.setSound(null);
+        builder.setVibrate(null);
 
         notification = builder.build();
 

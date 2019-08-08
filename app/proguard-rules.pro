@@ -245,7 +245,7 @@ public static ** valueOf(java.lang.String);
 -keep public class com.easymi.common.push.**{*;}
 
 -keep public class com.easymi.component.cat.**{*;}
--keep public class com.easymi.component.db.**{*;}
+#-keep public class com.easymi.component.db.**{*;}
 -keep public class com.easymi.component.entity.**{*;}
 -keep public class com.easymi.component.push.**{*;}
 -keep public class com.easymi.component.result.**{*;}
