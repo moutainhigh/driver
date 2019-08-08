@@ -6,6 +6,7 @@ import com.easymi.common.entity.PushData;
 import com.easymi.common.entity.PushDataLoc;
 import com.easymi.common.entity.PushDataOrder;
 import com.easymi.common.result.GetFeeResult;
+import com.easymi.component.ComponentService;
 import com.easymi.component.Config;
 import com.easymi.component.ZCOrderStatus;
 import com.easymi.component.app.XApp;
@@ -247,7 +248,7 @@ public class FlowModel implements FlowContract.Model {
 
     @Override
     public Observable<JsonElement> payOrder(Long orderId, String payType, Long version) {
-        return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+        return ApiManager.getInstance().createApi(Config.HOST, ComponentService.class)
                 .payOrder(orderId, payType)
                 .map(new HttpResultFunc2<>())
                 .subscribeOn(Schedulers.io())

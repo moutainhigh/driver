@@ -1,38 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:SlideToUnlockView="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/top_con"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:background="@color/white"
         android:clickable="true"
-        android:background="@color/white">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingTop="15dp"
-            android:paddingLeft="15dp">
+            android:orientation="horizontal"
+            android:paddingLeft="15dp"
+            android:paddingTop="15dp">
 
             <ImageView
                 android:id="@+id/customer_photo"
                 android:layout_width="62dp"
                 android:layout_height="62dp"
-                android:src="@mipmap/photo_default"/>
+                android:src="@mipmap/photo_default" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
                 android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
                 android:orientation="vertical">
 
                 <TextView
@@ -41,45 +40,45 @@
                     android:layout_height="wrap_content"
                     android:text="刘子豪"
                     android:textColor="@color/black"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/customer_phone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="手机尾号：0010"
                     android:layout_marginTop="10dp"
-                    android:textSize="14sp"/>
+                    android:text="手机尾号：0010"
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
             <ImageButton
                 android:id="@+id/call_phone"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_marginRight="15dp"
-                android:background="@mipmap/ic_zx_phone"/>
+                android:background="@mipmap/ic_zx_phone" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
             android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
             android:layout_marginRight="15dp"
-            android:gravity="center_vertical"
             android:layout_marginBottom="15dp"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_zx_loc_icon"/>
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@mipmap/ic_zx_loc_icon" />
 
             <TextView
                 android:id="@+id/to_place"
@@ -87,69 +86,94 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:text="珠江国际中心"
-                android:textColor="#232323"/>
+                android:textColor="#232323" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@mipmap/order_remark" />
+
+            <TextView
+                android:id="@+id/tv_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="珠江国际中心"
+                android:textColor="#232323" />
 
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="@color/dark_gray"/>
+            android:background="@color/dark_gray" />
 
     </LinearLayout>
 
     <ImageView
         android:id="@+id/navi_view"
-        android:layout_below="@+id/top_con"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_below="@+id/top_con"
         android:layout_alignParentRight="true"
         android:layout_marginTop="10dp"
-        android:clickable="true"
         android:layout_marginRight="15dp"
-        android:src="@mipmap/ic_zx_navi_icon"/>
+        android:clickable="true"
+        android:src="@mipmap/ic_zx_navi_icon" />
+
 
     <LinearLayout
         android:id="@+id/bottom_con"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
         android:background="@color/white"
-        android:layout_alignParentBottom="true">
+        android:clickable="true"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/count_time_con"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/dark_gray"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/dark_gray" />
 
-        <TextView
-            android:id="@+id/count_hint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="等候倒计时/等候已超时："
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginBottom="15dp"/>
+            <TextView
+                android:id="@+id/count_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:text="等候倒计时/等候已超时：" />
 
-        <TextView
-            android:id="@+id/count_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="00分00秒"
-            android:gravity="center"
-            android:textSize="20sp"
-            android:textColor="@color/yellow"
-            android:textStyle="bold"
-            android:layout_marginBottom="20dp"
-            />
+            <TextView
+                android:id="@+id/count_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"
+                android:text="00分00秒"
+                android:textColor="@color/yellow"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -170,71 +194,106 @@
                     android:layout_width="55dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:visibility="gone"
                     android:text="返回"
-                    android:textColor="@color/colorAccent"/>
+                    android:textColor="@color/colorAccent"
+                    android:visibility="gone" />
 
 
                 <com.easymi.component.widget.CustomSlideToUnlockView
                     android:id="@+id/slider"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="55dp"
+                    android:layout_gravity="center_horizontal|bottom"
+                    android:layout_weight="1"
                     android:elevation="0.5dp"
                     android:visibility="visible"
-                    android:layout_gravity="center_horizontal|bottom"
-                    SlideToUnlockView:sliderTextSize="25"
                     SlideToUnlockView:sliderTextHint="滑动确认接到乘客"
-                    />
+                    SlideToUnlockView:sliderTextSize="25" />
             </LinearLayout>
-
 
 
             <LinearLayout
                 android:id="@+id/chaoshi_con"
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:orientation="horizontal"
-                android:layout_marginBottom="10dp">
+                android:visibility="gone">
 
                 <Button
                     android:id="@+id/jump_accept"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/btn_height"
-                    android:layout_weight="1"
-                    android:text="跳过乘客"
-                    android:textColor="@color/white"
-                    android:background="@drawable/corners_primary"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"/>
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/corners_primary"
+                    android:text="跳过乘客"
+                    android:textColor="@color/white" />
 
                 <Button
                     android:id="@+id/accept_cus"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/btn_height"
-                    android:layout_weight="1"
-                    android:text="接到乘客"
-                    android:textColor="@color/white"
-                    android:background="@drawable/corners_accent"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"/>
-
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/corners_accent"
+                    android:text="接到乘客"
+                    android:textColor="@color/white" />
             </LinearLayout>
-
-
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/main_ll_action"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:layout_above="@id/bottom_con"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@android:color/white"
+        android:divider="@drawable/divider"
+        android:dividerPadding="20dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:showDividers="middle">
+
+        <TextView
+            android:id="@+id/main_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:drawableTop="@mipmap/order_cancel"
+            android:drawablePadding="5dp"
+            android:text="取消订单"
+            android:textColor="@color/colorBlackLight"
+            android:textSize="@dimen/sizeContent" />
+
+        <TextView
+            android:id="@+id/main_pay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:drawableTop="@mipmap/order_pay"
+            android:drawablePadding="5dp"
+            android:text="司机代付"
+            android:textColor="@color/colorBlackLight"
+            android:textSize="@dimen/sizeContent" />
 
     </LinearLayout>
 
     <ImageView
         android:id="@+id/ic_refresh"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_above="@+id/bottom_con"
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="3dp"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
         android:background="@drawable/corners_white_gray_stroke_2"
         android:padding="7.5dp"
         android:src="@mipmap/ic_refresh_2"

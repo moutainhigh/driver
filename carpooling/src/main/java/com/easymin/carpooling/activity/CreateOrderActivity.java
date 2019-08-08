@@ -12,8 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.easymi.common.CommApiService;
-import com.easymi.common.widget.ComPayDialog;
 import com.easymi.component.Config;
 import com.easymi.component.base.RxPayActivity;
 import com.easymi.component.network.ApiManager;
@@ -34,10 +32,6 @@ import com.easymin.carpooling.entity.PincheOrder;
 import com.easymin.carpooling.entity.PriceResult;
 import com.easymin.carpooling.entity.StationResult;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -477,53 +471,6 @@ public class CreateOrderActivity extends RxPayActivity {
         } else {
             showDialog(orderId);
         }
-    }
-
-    public void showDialog(long orderId) {
-        ComPayDialog comPayDialog = new ComPayDialog(CreateOrderActivity.this);
-        comPayDialog.setOnMyClickListener(view -> {
-            comPayDialog.dismiss();
-            if (view.getId() == R.id.pay_wenXin) {
-                toPay("CHANNEL_APP_WECHAT", orderId);
-            } else if (view.getId() == R.id.pay_zfb) {
-                toPay("CHANNEL_APP_ALI", orderId);
-            } else if (view.getId() == R.id.pay_balance) {
-                toPay("PAY_DRIVER_BALANCE", orderId);
-            }
-        });
-        comPayDialog.show();
-    }
-
-
-    /**
-     * 支付
-     *
-     * @param payType
-     */
-    private void toPay(String payType, long orderId) {
-        Observable<JsonElement> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .payOrder(orderId, payType)
-                .map(new HttpResultFunc2<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, jsonElement -> {
-
-            if (payType.equals("CHANNEL_APP_WECHAT")) {
-                launchWeixin(jsonElement);
-            } else if (payType.equals("CHANNEL_APP_ALI")) {
-                String url = null;
-                try {
-                    url = new JSONObject(jsonElement.toString()).getString("ali_app_url");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                launchZfb(url);
-            } else if (payType.equals("PAY_DRIVER_BALANCE")) {
-                //todo 司机代付
-                assginOrder();
-            }
-        })));
     }
 
     public void assginOrder() {

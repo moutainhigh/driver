@@ -5,9 +5,18 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.alipay.sdk.app.PayTask;
+import com.easymi.component.ComponentService;
+import com.easymi.component.Config;
+import com.easymi.component.R;
 import com.easymi.component.entity.PayEvent;
 import com.easymi.component.entity.PayResult;
+import com.easymi.component.entity.RechargeResult;
+import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HttpResultFunc;
+import com.easymi.component.network.HttpResultFunc2;
+import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.Log;
+import com.easymi.component.widget.ComPayDialog;
 import com.google.gson.JsonElement;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
@@ -21,7 +30,13 @@ import org.json.JSONObject;
 
 import java.util.concurrent.Executors;
 
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 public abstract class RxPayActivity extends RxBaseActivity {
+
+    protected long payOrderId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +124,77 @@ public abstract class RxPayActivity extends RxBaseActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+
+    protected void showDialog(long orderId) {
+        ComPayDialog comPayDialog = new ComPayDialog(this);
+        comPayDialog.setOnMyClickListener(view -> {
+            comPayDialog.dismiss();
+            if (view.getId() == R.id.pay_wenXin) {
+                toPay("CHANNEL_APP_WECHAT", orderId);
+            } else if (view.getId() == R.id.pay_zfb) {
+                toPay("CHANNEL_APP_ALI", orderId);
+            } else if (view.getId() == R.id.pay_balance) {
+                toPay("PAY_DRIVER_BALANCE", orderId);
+            }
+        });
+        comPayDialog.show();
+    }
+
+
+    /**
+     * 支付
+     *
+     * @param payType
+     */
+    private void toPay(String payType, long orderId) {
+        Observable<JsonElement> observable = ApiManager.getInstance().createApi(Config.HOST, ComponentService.class)
+                .payOrder(orderId, payType)
+                .map(new HttpResultFunc2<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, jsonElement -> {
+            payOrderId = orderId;
+            if (payType.equals("CHANNEL_APP_WECHAT")) {
+                launchWeixin(jsonElement);
+            } else if (payType.equals("CHANNEL_APP_ALI")) {
+                String url = null;
+                try {
+                    url = new JSONObject(jsonElement.toString()).getString("ali_app_url");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                launchZfb(url);
+            } else if (payType.equals("PAY_DRIVER_BALANCE")) {
+                //todo 司机代付
+                onPaySuc();
+            }
+        })));
+    }
+
+
+    public void recharge(String payType, Double money) {
+        Observable<RechargeResult> observable = ApiManager.getInstance().createApi(Config.HOST, ComponentService.class)
+                .recharge(payType, money)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, rechargeResult -> {
+            if (payType.equals("CHANNEL_APP_WECHAT")) {
+                launchWeixin(rechargeResult.data);
+            } else if (payType.equals("CHANNEL_APP_ALI")) {
+                String url = null;
+                try {
+                    url = new JSONObject(rechargeResult.data.toString()).getString("ali_app_url");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                launchZfb(url);
+            }
+        })));
     }
 
 }

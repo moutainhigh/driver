@@ -1,79 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="72dp"
-    android:gravity="center_vertical"
-    android:layout_marginTop="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginLeft="12dp"
+    android:layout_marginTop="12dp"
     android:layout_marginRight="12dp"
-    android:background="@color/white">
+    android:background="@drawable/corners_white_4dp_bg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/cus_photo"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="12dp"
+            android:src="@mipmap/photo_default" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp">
+
+            <TextView
+                android:id="@+id/cus_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="刘子豪"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+
+
+            <TextView
+                android:id="@+id/cp_ticket_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cus_name"
+                android:layout_marginTop="3dp"
+                android:text="车票:1"
+                android:textColor="#999999"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/status_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/cus_name"
+                android:background="@drawable/corner_status_called"
+                android:paddingLeft="3dp"
+                android:paddingTop="2dp"
+                android:paddingRight="3dp"
+                android:paddingBottom="2dp"
+                android:text="已联系"
+                android:textColor="#0099E9"
+                android:textSize="@dimen/sizeHint" />
+        </RelativeLayout>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/call_phone"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="12dp"
+            android:src="@mipmap/ic_zx_phone" />
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/sequence_num"
+        android:id="@+id/cus_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="1"
-        android:textColor="#999999"
-        android:layout_marginLeft="18dp"
-        android:textSize="20sp"/>
-
-    <ImageView
-        android:id="@+id/cus_photo"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
-        android:layout_margin="10dp"
-        android:src="@mipmap/photo_default"/>
+        android:paddingStart="12dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="12dp"
+        android:text="hjklshiklf;s"
+        android:textColor="@color/colorBlackLight"
+        android:textSize="@dimen/sizeHint" />
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:orientation="vertical">
+        android:id="@+id/cus_rl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sizeLine"
+            android:background="@color/colorLine" />
 
         <TextView
-            android:id="@+id/cus_name"
-            android:layout_width="wrap_content"
+            android:id="@+id/cus_tv_pay"
+            android:layout_width="72dp"
             android:layout_height="wrap_content"
-            android:text="刘子豪"
-            android:textColor="@color/black"
-            android:textSize="15sp"/>
-
-
-        <TextView
-            android:id="@+id/cp_ticket_num"
-            android:layout_below="@+id/cus_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="车票:1"
-            android:layout_marginTop="3dp"
-            android:textColor="#999999"
-            android:textSize="12sp"/>
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/cor4_solid_blue"
+            android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="代付"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sizeContent" />
 
         <TextView
-            android:id="@+id/status_text"
-            android:layout_toRightOf="@+id/cus_name"
-            android:layout_marginLeft="9dp"
-            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:id="@+id/cus_tv_cancel"
+            android:layout_width="72dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/corner_status_called"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
-            android:text="已联系"/>
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="8dp"
+            android:layout_toStartOf="@id/cus_tv_pay"
+            android:background="@drawable/cor4_st1_blacklight"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="取消订单"
+            android:textColor="@color/colorBlackLight"
+            android:textSize="@dimen/sizeContent" />
+
     </RelativeLayout>
-
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_weight="1"/>
-
-    <ImageView
-        android:id="@+id/call_phone"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginRight="18dp"
-        android:src="@mipmap/ic_zx_phone"/>
-
 </LinearLayout>

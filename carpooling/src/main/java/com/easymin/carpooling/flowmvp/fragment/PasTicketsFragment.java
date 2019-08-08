@@ -74,9 +74,18 @@ public class PasTicketsFragment extends RxBaseFragment {
                 order.isContract = 1;
                 order.updateIsContract();
                 showList();
-                PhoneUtil.call(getActivity(),order.passengerPhone);
+                PhoneUtil.call(getActivity(), order.passengerPhone);
             }
         });
+
+
+        cusListAdapter.setOnShowDialogListener(new CusListAdapter.OnDialogClickListener() {
+            @Override
+            public void onDialogClick(boolean isPay, long orderId) {
+                bridge.onDialogClick(isPay, orderId);
+            }
+        });
+
         recyclerView.setAdapter(cusListAdapter);
 
         showList();

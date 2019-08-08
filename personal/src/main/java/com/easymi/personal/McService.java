@@ -18,7 +18,6 @@ import com.easymi.personal.result.LoginResult;
 import com.easymi.personal.result.NotifityResult;
 import com.easymi.personal.result.PicCodeResult;
 import com.easymi.personal.result.RateResult;
-import com.easymi.personal.result.RechargeResult;
 import com.easymi.personal.result.RechargeTypeResult;
 import com.easymi.personal.result.RegisterResult;
 import com.easymi.personal.result.ShareResult;
@@ -350,17 +349,7 @@ public interface McService {
     Observable<RechargeTypeResult> configPayment();
 
 
-    /**
-     * 司机充值
-     *
-     * @param channel 充值方式
-     * @param fee     充值金额
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("api/v1/resources/driver/recharge")
-    Observable<RechargeResult> recharge(@Field("channel") String channel,
-                                        @Field("fee") Double fee);
+
 
 
     /**

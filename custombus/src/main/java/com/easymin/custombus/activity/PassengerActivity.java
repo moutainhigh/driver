@@ -1,28 +1,29 @@
 package com.easymin.custombus.activity;
 
-import android.content.Context;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MotionEvent;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Space;
 import android.widget.TextView;
 
+import com.easymi.common.CommApiService;
 import com.easymi.component.Config;
-import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.base.RxPayActivity;
+import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.MySubscriber;
+import com.easymi.component.network.NoErrSubscriberListener;
+import com.easymi.component.result.EmResult;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.Log;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
-import com.easymi.component.widget.LoadingButton;
 import com.easymin.custombus.MyScrollVIew;
 import com.easymin.custombus.R;
 import com.easymin.custombus.adapter.PassengerAdapter;
@@ -32,14 +33,14 @@ import com.easymin.custombus.entity.Customer;
 import com.easymin.custombus.mvp.FlowContract;
 import com.easymin.custombus.mvp.FlowPresenter;
 import com.easymin.custombus.receiver.CancelOrderReceiver;
-import com.easymin.custombus.receiver.OrderFinishReceiver;
 import com.easymin.custombus.receiver.ScheduleTurnReceiver;
-
-import net.cachapa.expandablelayout.ExpandableLayout;
 
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * @Copyright (C), 2012-2019, Sichuan Xiaoka Technology Co., Ltd.
@@ -49,9 +50,9 @@ import java.util.TimerTask;
  * @Description:
  * @History:
  */
-public class PassengerActivity extends RxBaseActivity implements FlowContract.View,
+public class PassengerActivity extends RxPayActivity implements FlowContract.View,
         CancelOrderReceiver.OnCancelListener,
-        ScheduleTurnReceiver.OnTurnListener {
+        ScheduleTurnReceiver.OnTurnListener, PassengerAdapter.OnDialogShowingListener {
     /**
      * 界面控件
      */
@@ -130,8 +131,8 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
     @Override
     public void initViews(Bundle savedInstanceState) {
         cbBusOrder = (CbBusOrder) getIntent().getSerializableExtra("cbBusOrder");
-        booktime = getIntent().getLongExtra("time", 0);
-        position = getIntent().getIntExtra("position", 0);
+        booktime = getIntent().getLongExtra("time" , 0);
+        position = getIntent().getIntExtra("position" , 0);
         presenter = new FlowPresenter(this, this);
         findById();
         initAdapter();
@@ -200,6 +201,7 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
      */
     public void initAdapter() {
         adapter = new PassengerAdapter(this);
+        adapter.setOnDialogShowingListener(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
         //禁止滑动
@@ -216,7 +218,7 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
         //跳转验票
         tv_check_btn.setOnClickListener(v -> {
             Intent intent = new Intent(this, NewCheckTicketActivity.class);
-            intent.putExtra("isUnCheck", uncheck);
+            intent.putExtra("isUnCheck" , uncheck);
             startActivityForResult(intent, 0x00);
         });
         //前往下一站
@@ -407,6 +409,16 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
         cancelTimer();
     }
 
+    @Override
+    public void onPaySuc() {
+
+    }
+
+    @Override
+    public void onPayFail() {
+
+    }
+
     public void getData() {
         presenter.queryOrders(cbBusOrder.id, cbBusOrder.driverStationVos.get(position).stationId);
     }
@@ -513,7 +525,7 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
 
             lin_check_top.setOnClickListener(v -> {
                 Intent intent = new Intent(this, NewCheckTicketActivity.class);
-                intent.putExtra("isUnCheck", uncheck);
+                intent.putExtra("isUnCheck" , uncheck);
                 startActivityForResult(intent, 0x00);
             });
         }
@@ -521,7 +533,7 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
 
     public void setMyResult() {
         Intent intent = new Intent();
-        intent.putExtra("type", 2);
+        intent.putExtra("type" , 2);
         setResult(RESULT_OK, intent);
         finish();
     }
@@ -552,12 +564,12 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
         IntentFilter filter = new IntentFilter();
         filter.addAction(Config.BROAD_CANCEL_ORDER);
         filter.addAction(Config.BROAD_BACK_ORDER);
-        registerReceiver(cancelOrderReceiver, filter, EmUtil.getBroadCastPermission(),null);
+        registerReceiver(cancelOrderReceiver, filter, EmUtil.getBroadCastPermission(), null);
 
         scheduleTurnReceiver = new ScheduleTurnReceiver(this);
         IntentFilter filter1 = new IntentFilter();
         filter1.addAction(Config.SCHEDULE_FINISH);
-        registerReceiver(scheduleTurnReceiver, filter1,EmUtil.getBroadCastPermission(),null);
+        registerReceiver(scheduleTurnReceiver, filter1, EmUtil.getBroadCastPermission(), null);
     }
 
     @Override
@@ -571,4 +583,52 @@ public class PassengerActivity extends RxBaseActivity implements FlowContract.Vi
     public void onTurnOrder(long id, String orderType, String msg) {
         finish();
     }
+
+    @Override
+    public void onShowing(boolean isPay, long orderId) {
+        createDialog(isPay, orderId);
+    }
+
+    private void createDialog(boolean isPay, long orderId) {
+        Dialog dialog = new Dialog(this);
+        View view = LayoutInflater.from(this).inflate(isPay ? R.layout.cus_list_dialog_pay : R.layout.cus_list_dialog_order, null);
+        dialog.setContentView(view);
+        TextView dialogTvCancel = view.findViewById(R.id.dialog_tv_cancel);
+        dialogTvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        TextView dialogTvAction = view.findViewById(R.id.dialog_tv_action);
+        dialogTvAction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                if (isPay) {
+                    showDialog(orderId);
+                } else {
+                    cancelOrder(orderId);
+                }
+            }
+        });
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
+    private void cancelOrder(long orderId) {
+        ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .cancelOrder(orderId, "")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MySubscriber<EmResult>(this, true, false, new NoErrSubscriberListener<EmResult>() {
+                    @Override
+                    public void onNext(EmResult emResult) {
+                        ToastUtil.showMessage(PassengerActivity.this, "取消订单成功");
+                        finish();
+                    }
+                }));
+    }
+
 }

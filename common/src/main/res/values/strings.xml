@@ -241,10 +241,7 @@
 
     <string name="com_turn_order">转单</string>
 
-    <!--支付dialog-->
-    <string name="com_pay_wechat">微信</string>
-    <string name="com_pay_zfb">支付宝</string>
-    <string name="com_pay_balance">余额</string>
+
 
     <string name="com_alipay_success">支付宝支付成功</string>
     <string name="com_alipay_failed">支付宝支付失败</string>

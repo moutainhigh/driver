@@ -1,5 +1,6 @@
 package com.easymin.carpooling.flowmvp;
 
+import android.app.Dialog;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -31,11 +32,12 @@ import com.amap.api.services.route.DriveRouteResult;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.easymi.common.CommApiService;
 import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.component.Config;
 import com.easymi.component.ZXOrderStatus;
 import com.easymi.component.app.XApp;
-import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.base.RxPayActivity;
 import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
@@ -44,6 +46,8 @@ import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc3;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.network.NoErrSubscriberListener;
+import com.easymi.component.result.EmResult;
 import com.easymi.component.result.EmResult2;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.DensityUtil;
@@ -88,7 +92,7 @@ import rx.schedulers.Schedulers;
  * History:
  */
 @Route(path = "/carpooling/FlowActivity")
-public class FlowActivity extends RxBaseActivity implements
+public class FlowActivity extends RxPayActivity implements
         FlowContract.View,
         LocObserver,
         CancelOrderReceiver.OnCancelListener,
@@ -701,7 +705,62 @@ public class FlowActivity extends RxBaseActivity implements
                 pasTicketsFragment.setParam(bridge);
                 switchFragment(pasTicketsFragment).commit();
             }
+
+            @Override
+            public void onDialogClick(boolean isPay, long orderId) {
+                createDialog(isPay, false, orderId);
+            }
+
+            @Override
+            public void onDialogClick(boolean isPay, boolean isForce, long orderId) {
+                createDialog(isPay, isForce, orderId);
+            }
         };
+    }
+
+    private void createDialog(boolean isPay, boolean isForce, long orderId) {
+        Dialog dialog = new Dialog(this);
+        View view = LayoutInflater.from(this).inflate(isPay ? R.layout.cus_list_dialog_pay : R.layout.cus_list_dialog_order, null);
+        dialog.setContentView(view);
+        TextView dialogTvCancel = view.findViewById(R.id.dialog_tv_cancel);
+        dialogTvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isForce) {
+                    cancelOrder(orderId);
+                }
+                dialog.dismiss();
+            }
+        });
+        TextView dialogTvAction = view.findViewById(R.id.dialog_tv_action);
+        dialogTvAction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                if (isPay) {
+                    showDialog(orderId);
+                } else {
+                    cancelOrder(orderId);
+                }
+            }
+        });
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
+    private void cancelOrder(long orderId) {
+        ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .cancelOrder(orderId, "")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MySubscriber<EmResult>(this, true, false, new NoErrSubscriberListener<EmResult>() {
+                    @Override
+                    public void onNext(EmResult emResult) {
+                        ToastUtil.showMessage(FlowActivity.this, "取消订单成功");
+                        finish();
+                    }
+                }));
     }
 
 
@@ -1044,12 +1103,12 @@ public class FlowActivity extends RxBaseActivity implements
         IntentFilter filter = new IntentFilter();
         filter.addAction(Config.BROAD_CANCEL_ORDER);
         filter.addAction(Config.BROAD_BACK_ORDER);
-        registerReceiver(cancelOrderReceiver, filter,EmUtil.getBroadCastPermission(),null);
+        registerReceiver(cancelOrderReceiver, filter, EmUtil.getBroadCastPermission(), null);
 
         scheduleTurnReceiver = new ScheduleTurnReceiver(this);
         IntentFilter filter1 = new IntentFilter();
         filter1.addAction(Config.SCHEDULE_FINISH);
-        registerReceiver(scheduleTurnReceiver, filter1,EmUtil.getBroadCastPermission(),null);
+        registerReceiver(scheduleTurnReceiver, filter1, EmUtil.getBroadCastPermission(), null);
     }
 
     @Override
@@ -1078,6 +1137,29 @@ public class FlowActivity extends RxBaseActivity implements
             mapView.onDestroy();
         }
         presenter.stopNavi();
+    }
+
+    @Override
+    public void onPaySuc() {
+        ToastUtil.showMessage(this, "代付成功");
+        List<CarpoolOrder> carpoolOrders = CarpoolOrder.findByIDTypeOrderByAcceptSeq(pincheOrder.orderId, pincheOrder.orderType);
+        for (CarpoolOrder carpoolOrder : carpoolOrders) {
+            if (carpoolOrder.id == payOrderId) {
+                carpoolOrder.advanceAssign = 2;
+                carpoolOrder.updateAdvanceAssign();
+                break;
+            }
+        }
+        if (currentFragment instanceof PasTicketsFragment || currentFragment instanceof CusListFragment) {
+            currentFragment.onHiddenChanged(false);
+        } else if (currentFragment instanceof AcceptSendFragment) {
+            ((AcceptSendFragment) currentFragment).showWhatByStatus();
+        }
+    }
+
+    @Override
+    public void onPayFail() {
+
     }
 
     @Override

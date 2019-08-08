@@ -27,7 +27,6 @@ import com.easymi.common.result.VehicleResult;
 import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.result.EmResult2;
-import com.google.gson.JsonElement;
 
 import java.util.List;
 
@@ -83,10 +82,7 @@ public interface CommApiService {
     Observable<EmResult2<String>> getTitleStatus();
 
 
-    @FormUrlEncoded
-    @POST("api/v1/system/pay")
-    Observable<EmResult2<JsonElement>> payOrder(@Field("id") Long orderId,
-                                                @Field("channel") String channel);
+
 
     /**
      * 查询所有通知

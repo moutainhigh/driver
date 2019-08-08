@@ -3,6 +3,7 @@ package com.easymin.carpooling.flowmvp.fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -15,7 +16,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.easymi.common.entity.CarpoolOrder;
-import com.easymi.common.entity.OrderCustomer;
 import com.easymi.component.Config;
 import com.easymi.component.ZXOrderStatus;
 import com.easymi.component.app.XApp;
@@ -36,6 +36,7 @@ import java.util.TimerTask;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: AcceptSendFragment
+ *
  * @Author: hufeng
  * Date: 2018/12/24 下午1:10
  * Description: 接送客户界面
@@ -86,9 +87,15 @@ public class AcceptSendFragment extends RxBaseFragment {
      * 当前order
      */
     private CarpoolOrder current;
+    private LinearLayout llDesc;
+    private TextView tvDesc;
+    private LinearLayout mainLlAction;
+    private TextView mainCancel;
+    private TextView mainPay;
 
     /**
      * 设置bridge
+     *
      * @param bridge
      */
     public void setBridge(ActFraCommBridge bridge) {
@@ -109,13 +116,13 @@ public class AcceptSendFragment extends RxBaseFragment {
         if (args == null) {
             return;
         }
-        orderId = args.getLong("orderId", 0);
-        orderType = args.getString("orderType", "");
+        orderId = args.getLong("orderId" , 0);
+        orderType = args.getString("orderType" , "");
     }
 
     @Override
     public int getLayoutResId() {
-        return R.layout.fragment_main_flow;
+        return R.layout.car_pool_fragment_main_flow;
     }
 
     @Override
@@ -136,7 +143,11 @@ public class AcceptSendFragment extends RxBaseFragment {
         chaoshiCon = $(R.id.chaoshi_con);
         back = $(R.id.back);
         sliderCon = $(R.id.slider_con);
-
+        llDesc = $(R.id.ll_desc);
+        tvDesc = $(R.id.tv_desc);
+        mainLlAction = $(R.id.main_ll_action);
+        mainCancel = $(R.id.main_cancel);
+        mainPay = $(R.id.main_pay);
         refreshImg.setOnClickListener(v -> {
             bridge.doRefresh();
             refreshImg.setVisibility(View.GONE);
@@ -190,7 +201,7 @@ public class AcceptSendFragment extends RxBaseFragment {
             }
         }
 
-        if (isSend){
+        if (isSend) {
             dymOrder.orderStatus = ZXOrderStatus.SEND_ING;
         }
 
@@ -204,6 +215,9 @@ public class AcceptSendFragment extends RxBaseFragment {
                 iterator.remove();
             }
         }
+
+        mainLlAction.setVisibility(View.GONE);
+        llDesc.setVisibility(View.GONE);
         if (carpoolOrders.size() != 0) {
             current = carpoolOrders.get(0);
             if (current.customeStatus == 0) {
@@ -227,12 +241,33 @@ public class AcceptSendFragment extends RxBaseFragment {
                         }
                     });
 
-                }else if (current.subStatus == 1) {
+                } else if (current.subStatus == 1) {
                     //未到达预约地
                     countTimeCon.setVisibility(View.GONE);
                     sliderCon.setVisibility(View.VISIBLE);
                     chaoshiCon.setVisibility(View.GONE);
                     back.setVisibility(View.GONE);
+                    if (!TextUtils.isEmpty(current.orderRemark)) {
+                        llDesc.setVisibility(View.VISIBLE);
+                        tvDesc.setText(current.orderRemark);
+                    }
+
+                    if (current.advanceAssign == 1) {
+                        mainLlAction.setVisibility(View.VISIBLE);
+                        mainCancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                bridge.onDialogClick(false, current.id);
+                            }
+                        });
+                        mainPay.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                bridge.onDialogClick(true, current.id);
+                            }
+                        });
+                    }
+
                     slider.setHint("滑动到达乘客位置");
                     slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
                         @Override
@@ -242,11 +277,15 @@ public class AcceptSendFragment extends RxBaseFragment {
 
                         @Override
                         public void onUnlocked() {
-                            bridge.arriveStart(current);
+                            if (current.advanceAssign == 1) {
+                                bridge.onDialogClick(true, true, current.id);
+                            } else {
+                                bridge.arriveStart(current);
+                            }
                             resetView();
                         }
                     });
-                } else if (current.subStatus == 2){
+                } else if (current.subStatus == 2) {
                     countTimeCon.setVisibility(View.VISIBLE);
                     sliderCon.setVisibility(View.GONE);
                     chaoshiCon.setVisibility(View.GONE);
@@ -325,6 +364,7 @@ public class AcceptSendFragment extends RxBaseFragment {
 
     /**
      * 添加marker和路线到地图
+     *
      * @param toLatlng
      * @param flag
      */
@@ -350,6 +390,7 @@ public class AcceptSendFragment extends RxBaseFragment {
 
     /**
      * 根据订单信息设置等待倒计时
+     *
      * @param carpoolOrder
      */
     private void initTimer(CarpoolOrder carpoolOrder) {
@@ -415,6 +456,7 @@ public class AcceptSendFragment extends RxBaseFragment {
 
     /**
      * 判断是正常接到乘客还是跳过乘客
+     *
      * @param jump
      */
     private void showConfirmFlag(boolean jump) {
@@ -457,6 +499,7 @@ public class AcceptSendFragment extends RxBaseFragment {
 
     /**
      * 获取当前的订单
+     *
      * @return
      */
     public CarpoolOrder getCurrent() {
@@ -470,6 +513,7 @@ public class AcceptSendFragment extends RxBaseFragment {
 
     /**
      * 判断距离是否在200内。进行语音播报
+     *
      * @param dis
      */
     public void showLeft(int dis) {

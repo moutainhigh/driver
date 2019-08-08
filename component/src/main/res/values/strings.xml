@@ -13,6 +13,11 @@
     <string name="no_internet">网络连接失败，请检查网络连接</string>
     <string name="parse_error">数据异常，解析失败</string>
 
+    <!--支付dialog-->
+    <string name="com_pay_wechat">微信</string>
+    <string name="com_pay_zfb">支付宝</string>
+    <string name="com_pay_balance">余额</string>
+
     <string name="money_sign">¥</string>
 
     <string name="slide_arrive">滑动到达预约地</string>

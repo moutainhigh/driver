@@ -3,7 +3,6 @@ package com.easymin.carpooling.flowmvp;
 
 import com.amap.api.maps.model.LatLng;
 import com.easymi.common.entity.CarpoolOrder;
-import com.easymi.common.entity.OrderCustomer;
 
 import java.util.List;
 
@@ -158,4 +157,9 @@ public interface ActFraCommBridge {
      * 购票乘客页面(不用CusListFragment是因为他们是两个不同的页面状态，顶部toolbar的事件都不一样)
      */
     void toPasTickets();
+
+
+    void onDialogClick(boolean isPay, long orderId);
+
+    void onDialogClick(boolean isPay, boolean isForce,long orderId);
 }

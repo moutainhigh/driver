@@ -11,12 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.easymi.common.CommApiService;
-import com.easymi.common.widget.ComPayDialog;
 import com.easymi.component.Config;
 import com.easymi.component.base.RxPayActivity;
 import com.easymi.component.network.ApiManager;
-import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
@@ -27,10 +24,6 @@ import com.easymin.custombus.R;
 import com.easymin.custombus.dialog.StationDialog;
 import com.easymin.custombus.entity.DZBusLine;
 import com.easymin.custombus.entity.StationBean;
-import com.google.gson.JsonElement;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -323,67 +316,12 @@ public class CreateOrderActivity extends RxPayActivity {
                 @Override
                 public void onNext(Long aLong) {
                     orderId = aLong;
-                    showPayDialog(orderId);
+                    showDialog(orderId);
                 }
             })));
         } else {
-            showPayDialog(orderId);
+            showDialog(orderId);
         }
-    }
-
-    public void showPayDialog(long orderId) {
-        ComPayDialog comPayDialog = new ComPayDialog(CreateOrderActivity.this);
-        comPayDialog.setOnMyClickListener(view -> {
-            comPayDialog.dismiss();
-            if (view.getId() == R.id.pay_wenXin) {
-                toPay("CHANNEL_APP_WECHAT", orderId);
-            } else if (view.getId() == R.id.pay_zfb) {
-                toPay("CHANNEL_APP_ALI", orderId);
-            } else if (view.getId() == R.id.pay_balance) {
-                toPay("PAY_DRIVER_BALANCE", orderId);
-            }
-        });
-        comPayDialog.show();
-    }
-
-
-    /**
-     * 支付
-     *
-     * @param payType
-     */
-    private void toPay(String payType, long orderId) {
-        Observable<JsonElement> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .payOrder(orderId, payType)
-                .map(new HttpResultFunc2<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, new HaveErrSubscriberListener<JsonElement>() {
-            @Override
-            public void onNext(JsonElement jsonElement) {
-                if (payType.equals("CHANNEL_APP_WECHAT")) {
-                    launchWeixin(jsonElement);
-                } else if (payType.equals("CHANNEL_APP_ALI")) {
-                    String url = null;
-                    try {
-                        url = new JSONObject(jsonElement.toString()).getString("ali_app_url");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    launchZfb(url);
-                } else if (payType.equals("PAY_DRIVER_BALANCE")) {
-                    onPaySuc();
-                }
-            }
-
-            @Override
-            public void onError(int code) {
-                if (payType.equals("PAY_DRIVER_BALANCE")) {
-                    onPayFail();
-                }
-            }
-        })));
     }
 
 

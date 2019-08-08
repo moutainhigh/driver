@@ -28,11 +28,7 @@ import com.easymi.personal.McService;
 import com.easymi.personal.R;
 import com.easymi.personal.entity.MoneyConfig;
 import com.easymi.personal.result.ConfigResult;
-import com.easymi.personal.result.RechargeResult;
 import com.easymi.personal.result.RechargeTypeResult;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -390,33 +386,6 @@ public class RechargeActivity extends RxPayActivity {
         })));
     }
 
-    /**
-     * 充值
-     *
-     * @param payType
-     * @param money
-     */
-    private void recharge(String payType, Double money) {
-        Observable<RechargeResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .recharge(payType, money)
-                .filter(new HttpResultFunc<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, rechargeResult -> {
-            if (payType.equals("CHANNEL_APP_WECHAT")) {
-                launchWeixin(rechargeResult.data);
-            } else if (payType.equals("CHANNEL_APP_ALI")) {
-                String url = null;
-                try {
-                    url = new JSONObject(rechargeResult.data.toString()).getString("ali_app_url");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                launchZfb(url);
-            }
-        })));
-    }
 
     @Override
     public boolean isEnableSwipe() {

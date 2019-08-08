@@ -4,10 +4,12 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -16,7 +18,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.component.Config;
 import com.easymi.component.utils.GlideCircleTransform;
-import com.easymi.component.utils.PhoneUtil;
 import com.easymin.carpooling.R;
 
 import java.util.List;
@@ -40,6 +41,11 @@ public class CusListAdapter extends RecyclerView.Adapter<CusListAdapter.ViewHold
     private int flag;//标志位，区分PasTicketsFragment和CusListFragment
 
     private OnCallClickListener onCallClickListener;
+    private OnDialogClickListener onShowDialogListener;
+
+    public void setOnShowDialogListener(OnDialogClickListener onShowDialogListener) {
+        this.onShowDialogListener = onShowDialogListener;
+    }
 
     public void setOnCallClickListener(OnCallClickListener onCallClickListener) {
         this.onCallClickListener = onCallClickListener;
@@ -75,9 +81,9 @@ public class CusListAdapter extends RecyclerView.Adapter<CusListAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CarpoolOrder carpoolOrder = carpoolOrders.get(position);
-        holder.sequenceNum.setText(String.valueOf(carpoolOrder.num));
         holder.cusName.setText(carpoolOrder.passengerName);
         holder.ticketNum.setText("车票:" + carpoolOrder.ticketNumber);
+        holder.cusDesc.setText("备注: " + (TextUtils.isEmpty(carpoolOrder.orderRemark) ? "暂无备注" : carpoolOrder.orderRemark));
         if (flag == 0) {//PasTickets
             if (carpoolOrder.isContract == 1) {
                 holder.status.setVisibility(View.VISIBLE);
@@ -122,12 +128,31 @@ public class CusListAdapter extends RecyclerView.Adapter<CusListAdapter.ViewHold
                 }
             }
         }
+        holder.cusRl.setVisibility(carpoolOrder.advanceAssign == 1 ? View.VISIBLE : View.GONE);
+        holder.cusTvPay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onShowDialogListener != null) {
+                    onShowDialogListener.onDialogClick(true, carpoolOrder.id);
+                }
+            }
+        });
+
+        holder.cusTvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onShowDialogListener != null) {
+                    onShowDialogListener.onDialogClick(false, carpoolOrder.id);
+                }
+            }
+        });
 
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 .transform(new GlideCircleTransform())
                 .placeholder(R.mipmap.photo_default)
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
+
         Glide.with(context)
                 .load(Config.IMG_SERVER + carpoolOrder.avatar + Config.IMG_PATH)
                 .apply(options)
@@ -138,10 +163,9 @@ public class CusListAdapter extends RecyclerView.Adapter<CusListAdapter.ViewHold
                 onCallClickListener.onCallClick(carpoolOrder, position);
             }
         });
-
-
         lastCustomer = carpoolOrder;
     }
+
 
     @Override
     public int getItemCount() {
@@ -151,16 +175,22 @@ public class CusListAdapter extends RecyclerView.Adapter<CusListAdapter.ViewHold
     class ViewHolder extends RecyclerView.ViewHolder {
 
         //序号
-        TextView sequenceNum;
         ImageView cusPhoto;
         TextView cusName;
         TextView ticketNum;
         TextView status;
         ImageView callPhone;
+        TextView cusDesc;
+        RelativeLayout cusRl;
+        TextView cusTvCancel;
+        TextView cusTvPay;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            sequenceNum = itemView.findViewById(R.id.sequence_num);
+            cusTvPay = itemView.findViewById(R.id.cus_tv_pay);
+            cusTvCancel = itemView.findViewById(R.id.cus_tv_cancel);
+            cusRl = itemView.findViewById(R.id.cus_rl);
+            cusDesc = itemView.findViewById(R.id.cus_desc);
             cusPhoto = itemView.findViewById(R.id.cus_photo);
             cusName = itemView.findViewById(R.id.cus_name);
             status = itemView.findViewById(R.id.status_text);
@@ -173,4 +203,8 @@ public class CusListAdapter extends RecyclerView.Adapter<CusListAdapter.ViewHold
         void onCallClick(CarpoolOrder order, int position);
     }
 
+
+    public interface OnDialogClickListener {
+        void onDialogClick(boolean isPay, long orderId);
+    }
 }

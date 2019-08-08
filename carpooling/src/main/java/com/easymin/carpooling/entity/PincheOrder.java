@@ -10,7 +10,7 @@ import java.math.BigDecimal;
  * @FileName: PincheOrder
  * @Author: hufeng
  * @Date: 2019/2/21 下午4:42
- * @Description:  拼车班车信息
+ * @Description: 拼车班车信息
  * @History:
  */
 public class PincheOrder implements Serializable {
@@ -34,6 +34,7 @@ public class PincheOrder implements Serializable {
 
     /**
      * 根据班次状态获取状态文字
+     *
      * @return
      */
     public String getOrderStatusStr() {
@@ -198,7 +199,6 @@ public class PincheOrder implements Serializable {
      * 本班次票价
      */
     public double money;
-
 
 
     public PincheOrder() {

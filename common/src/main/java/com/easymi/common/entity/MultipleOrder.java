@@ -6,7 +6,6 @@ import com.easymi.common.mvp.grab.GrabActivity2;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.BaseOrder;
-import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.List;
@@ -14,6 +13,7 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName:
+ *
  * @Author: hufeng
  * Date: 2018/12/24 下午1:10
  * Description:
@@ -44,6 +44,11 @@ public class MultipleOrder extends BaseOrder implements Serializable, MultiItemE
     public static final int ITEM_DESC = 3;//底
 
     public int viewType;
+
+    public int orderNum;
+    public int ticketNum;
+    public int noPay;
+    public int haveNewPassgener;
 
     public MultipleOrder() {
     }
@@ -84,21 +89,22 @@ public class MultipleOrder extends BaseOrder implements Serializable, MultiItemE
 
     /**
      * 获取订单预约起点
+     *
      * @return
      */
-    public Address getStartSite(){
+    public Address getStartSite() {
         Address start = null;
-        if (orderAddressVos != null && orderAddressVos.size() != 0){
+        if (orderAddressVos != null && orderAddressVos.size() != 0) {
             for (Address address : orderAddressVos) {
                 if (address.type == 1) {
                     return address;
                 }
             }
-            if (start == null){
+            if (start == null) {
                 start = new Address();
                 start.address = XApp.getInstance().getResources().getString(R.string.unknown_site);
             }
-        }else {
+        } else {
             start = new Address();
             start.address = XApp.getInstance().getResources().getString(R.string.unknown_site);
         }
@@ -107,21 +113,22 @@ public class MultipleOrder extends BaseOrder implements Serializable, MultiItemE
 
     /**
      * 获取订单预约终点
+     *
      * @return
      */
-    public Address getEndSite(){
+    public Address getEndSite() {
         Address end = null;
-        if (orderAddressVos != null && orderAddressVos.size() != 0){
+        if (orderAddressVos != null && orderAddressVos.size() != 0) {
             for (Address address : orderAddressVos) {
                 if (address.type == 3) {
                     return address;
                 }
             }
-            if (end == null){
+            if (end == null) {
                 end = new Address();
                 end.address = XApp.getInstance().getResources().getString(R.string.unknown_site);
             }
-        }else {
+        } else {
             end = new Address();
             end.address = XApp.getInstance().getResources().getString(R.string.unknown_site);
         }
@@ -130,19 +137,20 @@ public class MultipleOrder extends BaseOrder implements Serializable, MultiItemE
 
     /**
      * 获取业务类型名称
+     *
      * @return
      */
-    public String getOrderType(){
+    public String getOrderType() {
         String orderType = null;
-        if (serviceType.equals(Config.ZHUANCHE)){
+        if (serviceType.equals(Config.ZHUANCHE)) {
             orderType = XApp.getInstance().getResources().getString(R.string.create_zhuanche);
-        }else if (serviceType.equals(Config.TAXI)){
+        } else if (serviceType.equals(Config.TAXI)) {
             orderType = XApp.getInstance().getResources().getString(R.string.create_taxi);
-        }else if (serviceType.equals(Config.CITY_LINE)){
+        } else if (serviceType.equals(Config.CITY_LINE)) {
             orderType = XApp.getInstance().getResources().getString(R.string.create_zhuanxian);
-        }else if (serviceType.equals(Config.CHARTERED)){
+        } else if (serviceType.equals(Config.CHARTERED)) {
             orderType = XApp.getInstance().getResources().getString(R.string.create_chartered);
-        }else if (serviceType.equals(Config.RENTAL)){
+        } else if (serviceType.equals(Config.RENTAL)) {
             orderType = XApp.getInstance().getResources().getString(R.string.create_rental);
         } else if (serviceType.equals(Config.COUNTRY)) {
             orderType = XApp.getInstance().getResources().getString(R.string.create_custombus);

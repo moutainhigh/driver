@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/corner_white_4dp_bg">
+
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="24dp"
+        android:paddingBottom="32dp"
+        android:text="订单未支付"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/sizeTitle"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/dialog_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dialog_title"
+        android:gravity="center"
+        android:lineSpacingExtra="3dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="40dp"
+        android:text="该乘客未支付，请根据实际情况对乘客订单进行处理"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/sizeContent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dialog_tv"
+        android:layout_alignStart="@id/dialog_tv"
+        android:layout_alignEnd="@id/dialog_tv"
+        android:layout_marginBottom="24dp"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <TextView
+            android:id="@+id/dialog_tv_cancel"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/sizeButtonHeight"
+            android:layout_marginEnd="12dp"
+            android:layout_weight="1"
+            android:background="@drawable/cor5_solid_desc"
+            android:gravity="center"
+            android:text="取消"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/dialog_tv_action"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/sizeButtonHeight"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:background="@drawable/cor5_solid_blue"
+            android:gravity="center"
+            android:text="代付"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
+
+</RelativeLayout>

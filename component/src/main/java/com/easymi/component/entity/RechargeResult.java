@@ -1,8 +1,6 @@
-package com.easymi.personal.result;
+package com.easymi.component.entity;
 
 import com.easymi.component.result.EmResult;
-import com.easymi.personal.entity.AliPay;
-import com.easymi.personal.entity.Article;
 import com.google.gson.JsonElement;
 
 /**

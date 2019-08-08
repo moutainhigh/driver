@@ -5,20 +5,19 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.easymi.component.Config;
-import com.easymi.component.network.GsonUtil;
 import com.easymi.component.utils.GlideCircleTransform;
-import com.easymi.component.utils.PhoneUtil;
 import com.easymin.custombus.R;
 import com.easymin.custombus.entity.Customer;
 
@@ -30,10 +29,10 @@ import java.util.List;
  * @FileName: PassengerAdapter
  * @Author: hufeng
  * @Date: 2019/2/16 下午4:29
- * @Description:  乘客信息适配器
+ * @Description: 乘客信息适配器
  * @History:
  */
-public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Holder>{
+public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Holder> {
 
 
     private Context context;
@@ -46,8 +45,15 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
             .placeholder(R.mipmap.com_head_up)
             .diskCacheStrategy(DiskCacheStrategy.ALL);
 
+    private OnDialogShowingListener onDialogShowingListener;
+
+    public void setOnDialogShowingListener(OnDialogShowingListener onDialogShowingListener) {
+        this.onDialogShowingListener = onDialogShowingListener;
+    }
+
     /**
      * 构造器
+     *
      * @param context
      */
     public PassengerAdapter(Context context) {
@@ -57,6 +63,7 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
 
     /**
      * 加载数据
+     *
      * @param listPassenger
      */
     public void setDatas(List<Customer> listPassenger) {
@@ -67,7 +74,7 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
     @NonNull
     @Override
     public PassengerAdapter.Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_passenger, parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_passenger, parent, false);
         return new PassengerAdapter.Holder(view);
     }
 
@@ -75,14 +82,14 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
     public void onBindViewHolder(PassengerAdapter.Holder holder, int position) {
         Customer customer = listPassenger.get(position);
 
-        if (customer.status <= Customer.CITY_COUNTRY_STATUS_ARRIVED){
+        if (customer.status <= Customer.CITY_COUNTRY_STATUS_ARRIVED) {
             holder.iv_call_phone.setVisibility(View.VISIBLE);
             holder.tv_status.setVisibility(View.GONE);
-        }else if (customer.status > Customer.CITY_COUNTRY_STATUS_ARRIVED && customer.status != Customer.CITY_COUNTRY_STATUS_INVALID){
+        } else if (customer.status != Customer.CITY_COUNTRY_STATUS_INVALID) {
             holder.iv_call_phone.setVisibility(View.GONE);
             holder.tv_status.setVisibility(View.VISIBLE);
             holder.tv_status.setText(context.getResources().getString(R.string.cb_alredy_check));
-        }else if (customer.status == Customer.CITY_COUNTRY_STATUS_INVALID){
+        } else {
             holder.iv_call_phone.setVisibility(View.GONE);
             holder.tv_status.setVisibility(View.VISIBLE);
             holder.tv_status.setText(context.getResources().getString(R.string.cb_alredy_jump));
@@ -92,16 +99,31 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
                 .apply(options)
                 .into(holder.iv_head);
         holder.tv_pass_name.setText(customer.passengerName);
-        holder.tv_pass_number.setText(customer.ticketNumber+"");
-
-        if (position == listPassenger.size()-1){
-            holder.iv_line.setVisibility(View.GONE);
-        }
+        holder.tv_pass_number.setText("车票数量: " + customer.ticketNumber);
 
         holder.iv_call_phone.setOnClickListener(v -> {
             //跳转到拨号界面，同时传递电话号码
             Intent dialIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + customer.passengerPhone));
             context.startActivity(dialIntent);
+        });
+        holder.cusDesc.setText("备注: " + (TextUtils.isEmpty(customer.orderRemark) ? "暂无备注" : customer.orderRemark));
+
+        holder.cusRl.setVisibility(View.VISIBLE);
+        holder.cusTvPay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onDialogShowingListener != null) {
+                    onDialogShowingListener.onShowing(true, customer.id);
+                }
+            }
+        });
+        holder.cusTvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onDialogShowingListener != null) {
+                    onDialogShowingListener.onShowing(false, customer.id);
+                }
+            }
         });
     }
 
@@ -119,23 +141,33 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
         TextView tv_pass_name;
         TextView tv_pass_number;
         ImageView iv_call_phone;
-        ImageView iv_line;
         TextView tv_status;
 
         View rootView;
+        TextView cusDesc;
+        RelativeLayout cusRl;
+        TextView cusTvCancel;
+        TextView cusTvPay;
+
 
         public Holder(View itemView) {
             super(itemView);
             rootView = itemView;
-            iv_head = itemView.findViewById(R.id.iv_head);
-            tv_pass_name = itemView.findViewById(R.id.tv_pass_name);
-            tv_pass_number = itemView.findViewById(R.id.tv_pass_number);
-            iv_call_phone = itemView.findViewById(R.id.iv_call_phone);
-            iv_line = itemView.findViewById(R.id.iv_line);
-            tv_status = itemView.findViewById(R.id.tv_status);
+            iv_head = itemView.findViewById(R.id.cus_photo);
+            tv_pass_name = itemView.findViewById(R.id.cus_name);
+            tv_pass_number = itemView.findViewById(R.id.cp_ticket_num);
+            iv_call_phone = itemView.findViewById(R.id.call_phone);
+            tv_status = itemView.findViewById(R.id.status_text);
+
+            cusDesc = itemView.findViewById(R.id.cus_desc);
+            cusRl = itemView.findViewById(R.id.cus_rl);
+            cusTvCancel = itemView.findViewById(R.id.cus_tv_cancel);
+            cusTvPay = itemView.findViewById(R.id.cus_tv_pay);
         }
     }
 
-
+   public interface OnDialogShowingListener {
+        void onShowing(boolean isPay, long orderId);
+    }
 
 }

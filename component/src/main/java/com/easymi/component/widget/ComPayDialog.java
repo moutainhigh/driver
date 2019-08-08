@@ -1,16 +1,11 @@
-package com.easymi.common.widget;
+package com.easymi.component.widget;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.easymi.common.R;
-import com.easymi.component.Config;
-import com.easymi.component.entity.Employ;
-import com.easymi.component.utils.EmUtil;
-import com.easymi.component.widget.BaseBottomDialog;
+import com.easymi.component.R;
 
 /**
  * @Copyright (C), 2012-2019, Sichuan Xiaoka Technology Co., Ltd.
