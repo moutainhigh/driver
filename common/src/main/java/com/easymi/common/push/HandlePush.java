@@ -320,8 +320,8 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 XApp.getInstance().syntheticVoice("您有包车租车订单需要处理");
                 refreshWork();
             } else if (msg.equals("order_hot_create")) {
-//                XApp.getInstance().shake();
-//                XApp.getInstance().syntheticVoice("您有城际拼车订单需要处理");
+                XApp.getInstance().shake();
+                XApp.getInstance().syntheticVoice("您有城际拼车订单需要处理");
                 refreshWork();
             } else if (msg.equals("country") || msg.equals("custombus")) {
                 XApp.getInstance().shake();

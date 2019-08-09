@@ -13,7 +13,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "data.db";
 
-    private static final int VERSION = 128;
+    private static final int VERSION = 130;
 
     private StringBuffer sqlBuf;
 
@@ -128,6 +128,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("endAddr").append(" ").append("TEXT").append(",")
                 .append("startLat").append(" ").append("DOUBLE").append(",")
                 .append("startLng").append(" ").append("DOUBLE").append(",")
+                .append("money").append(" ").append("DOUBLE").append(",")
                 .append("endLat").append(" ").append("DOUBLE").append(",")
                 .append("endLng").append(" ").append("DOUBLE").append(",")
                 .append("acceptSequence").append(" ").append("INTEGER").append(",")
@@ -178,6 +179,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("nickName").append(" ").append("TEXT").append(",")
                 .append("realName").append(" ").append("TEXT").append(",")
                 .append("sex").append(" ").append("INTEGER").append(",")
+                .append("driverType").append(" ").append("INTEGER").append(",")
                 .append("phone").append(" ").append("TEXT").append(",")
                 .append("portraitPath").append(" ").append("TEXT").append(",")
                 .append("serviceType").append(" ").append("TEXT").append(",")

@@ -161,6 +161,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
 
     private WorkPresenter presenter;
     private TextView tvTitle;
+    private TextView moneyDesc;
 
     @Override
     public int getLayoutId() {
@@ -301,7 +302,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         onLineHour = findViewById(R.id.online_time_hour);
         onLineMonute = findViewById(R.id.online_time_minute);
         todayIncome = findViewById(R.id.today_income);
-
+        moneyDesc = findViewById(R.id.money_desc);
         noOrderText = findViewById(R.id.no_order_img);
         bottomBtnCon = findViewById(R.id.bottom_btn_con);
         btn_create = findViewById(R.id.btn_create);
@@ -544,8 +545,14 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         if (countEvent.finishCount >= 0) {
             finishNo.setText(String.valueOf(countEvent.finishCount));
         }
-        if (countEvent.income >= 0) {
-            todayIncome.setText(String.valueOf(countEvent.income));
+        if (countEvent.income >= 0 || countEvent.orderTotalAmount > 0) {
+            if (EmUtil.getEmployInfo().driverType == 2) {
+                todayIncome.setText(String.valueOf(countEvent.orderTotalAmount));
+                moneyDesc.setText("订单总金额");
+            } else {
+                todayIncome.setText(String.valueOf(countEvent.income));
+                moneyDesc.setText("今日收入");
+            }
         }
     }
 

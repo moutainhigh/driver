@@ -3,7 +3,10 @@
     package="com.easymin.custombus">
 
     <application>
-        <activity android:name=".activity.BanciSelectActivity"></activity>
+        <activity
+            android:name=".activity.BanciSelectActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.CreateOrderActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"

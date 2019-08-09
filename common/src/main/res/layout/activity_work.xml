@@ -200,10 +200,10 @@
                     android:textSize="28sp" />
 
                 <TextView
+                    android:id="@+id/money_desc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="@string/work_today_income"
                     android:textColor="#ffffff"
                     android:textSize="16sp" />
 

@@ -34,7 +34,6 @@ import java.util.List;
  */
 public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Holder> {
 
-
     private Context context;
 
     private List<Customer> listPassenger;
@@ -98,6 +97,7 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
                 .load(Config.IMG_SERVER + customer.avatar + Config.IMG_PATH)
                 .apply(options)
                 .into(holder.iv_head);
+
         holder.tv_pass_name.setText(customer.passengerName);
         holder.tv_pass_number.setText("车票数量: " + customer.ticketNumber);
 
@@ -108,7 +108,7 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
         });
         holder.cusDesc.setText("备注: " + (TextUtils.isEmpty(customer.orderRemark) ? "暂无备注" : customer.orderRemark));
 
-        holder.cusRl.setVisibility(View.VISIBLE);
+        holder.cusRl.setVisibility(customer.status == 1 ? View.VISIBLE : View.GONE);
         holder.cusTvPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,7 +166,7 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
         }
     }
 
-   public interface OnDialogShowingListener {
+    public interface OnDialogShowingListener {
         void onShowing(boolean isPay, long orderId);
     }
 

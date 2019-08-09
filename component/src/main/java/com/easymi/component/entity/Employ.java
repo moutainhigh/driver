@@ -58,6 +58,8 @@ public class Employ {
     public String serviceType;
 
 
+    public int driverType;
+
     /**
      * 司机状态（0离线 5在线 10空闲 15派单 20接单 25前往预约地 30到达预约地 35前往目的地 40中途等待  45冻结）
      * 司机状态 1离线 2空闲 5派单 10接单 15前往预约地 20到达预约地 25前往目的地 28中途等待 45冻结   修改后的
@@ -116,6 +118,7 @@ public class Employ {
         values.put("phone", phone);
         values.put("portraitPath", portraitPath);
         values.put("serviceType", serviceType);
+        values.put("driverType", driverType);
         values.put("status", status);
         values.put("companyId", companyId);
         values.put("deviceNo", deviceNo);
@@ -234,7 +237,7 @@ public class Employ {
                 .getColumnIndex("portraitPath"));
         driverInfo.serviceType = cursor.getString(cursor
                 .getColumnIndex("serviceType"));
-
+        driverInfo.driverType = cursor.getInt(cursor.getColumnIndex("driverType"));
         driverInfo.status = cursor.getInt(cursor.getColumnIndex("status"));
         driverInfo.companyId = cursor.getLong(cursor
                 .getColumnIndex("companyId"));
@@ -267,6 +270,7 @@ public class Employ {
         values.put("phone", phone);
         values.put("portraitPath", portraitPath);
         values.put("serviceType", serviceType);
+        values.put("driverType",driverType);
         values.put("status", status);
         values.put("companyId", companyId);
         values.put("deviceNo", deviceNo);

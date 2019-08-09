@@ -48,7 +48,7 @@ public class MultipleOrder extends BaseOrder implements Serializable, MultiItemE
     public int orderNum;
     public int ticketNum;
     public int noPay;
-    public int haveNewPassgener;
+    public int haveNewPassenger;
 
     public MultipleOrder() {
     }

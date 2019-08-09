@@ -18,7 +18,6 @@ import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.CountDownUtils;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.Log;
 import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.CustomSlideToUnlockView;
@@ -29,13 +28,11 @@ import com.easymin.custombus.entity.Customer;
 import com.easymin.custombus.mvp.FlowContract;
 import com.easymin.custombus.mvp.FlowPresenter;
 import com.easymin.custombus.receiver.CancelOrderReceiver;
-import com.easymin.custombus.receiver.OrderFinishReceiver;
 import com.easymin.custombus.receiver.ScheduleTurnReceiver;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,8 +45,8 @@ import java.util.List;
  */
 @Route(path = "/custombus/CbRunActivity")
 public class CbRunActivity extends RxBaseActivity implements FlowContract.View,
-        CancelOrderReceiver.OnCancelListener ,
-        ScheduleTurnReceiver.OnTurnListener{
+        CancelOrderReceiver.OnCancelListener,
+        ScheduleTurnReceiver.OnTurnListener {
 
     /**
      * 界面控件
@@ -150,12 +147,12 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View,
         IntentFilter filter = new IntentFilter();
         filter.addAction(Config.BROAD_CANCEL_ORDER);
         filter.addAction(Config.BROAD_BACK_ORDER);
-        registerReceiver(cancelOrderReceiver, filter, EmUtil.getBroadCastPermission(),null);
+        registerReceiver(cancelOrderReceiver, filter, EmUtil.getBroadCastPermission(), null);
 
         scheduleTurnReceiver = new ScheduleTurnReceiver(this);
         IntentFilter filter1 = new IntentFilter();
         filter1.addAction(Config.SCHEDULE_FINISH);
-        registerReceiver(scheduleTurnReceiver, filter1,EmUtil.getBroadCastPermission(),null);
+        registerReceiver(scheduleTurnReceiver, filter1, EmUtil.getBroadCastPermission(), null);
     }
 
     /**
@@ -515,7 +512,7 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void onTurnOrder(long id, String orderType, String msg) {
-        if (id == scheduleId){
+        if (id == scheduleId) {
             finish();
         }
     }

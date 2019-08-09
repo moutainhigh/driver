@@ -308,15 +308,15 @@ public class BaseOrder implements Serializable {
 
     public String getPCOrderStatusStr() {
         if (scheduleStatus == PC_SCHEDULE_STATUS_NEW) {
-            return "未开始";
+            return "等待行程开始";
         } else if (scheduleStatus == PC_SCHEDULE_STATUS_TAKE) {
-            return "正在接人";
+            return "司机接人";
         } else if (scheduleStatus == PC_SCHEDULE_STATUS_RUN) {
-            return "正在送人";
+            return "司机送人";
         } else if (scheduleStatus == PC_SCHEDULE_STATUS_FINISH) {
-            return "已完成";
+            return "已结束";
         } else {
-            return "已完成";
+            return "已结束";
         }
     }
 
@@ -344,6 +344,7 @@ public class BaseOrder implements Serializable {
 
     /**
      * 更具班次状态获取状态文字
+     *
      * @return
      */
     public String getZXOrderStatusStr() {

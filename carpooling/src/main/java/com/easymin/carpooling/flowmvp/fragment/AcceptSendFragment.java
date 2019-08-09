@@ -116,8 +116,8 @@ public class AcceptSendFragment extends RxBaseFragment {
         if (args == null) {
             return;
         }
-        orderId = args.getLong("orderId" , 0);
-        orderType = args.getString("orderType" , "");
+        orderId = args.getLong("orderId", 0);
+        orderType = args.getString("orderType", "");
     }
 
     @Override
@@ -161,6 +161,12 @@ public class AcceptSendFragment extends RxBaseFragment {
      */
     private Timer timer;
     private TimerTask timerTask;
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        cancelTimer();
+    }
 
     /**
      * 取消计时器
@@ -217,7 +223,6 @@ public class AcceptSendFragment extends RxBaseFragment {
         }
 
         mainLlAction.setVisibility(View.GONE);
-        llDesc.setVisibility(View.GONE);
         if (carpoolOrders.size() != 0) {
             current = carpoolOrders.get(0);
             if (current.customeStatus == 0) {
@@ -247,23 +252,19 @@ public class AcceptSendFragment extends RxBaseFragment {
                     sliderCon.setVisibility(View.VISIBLE);
                     chaoshiCon.setVisibility(View.GONE);
                     back.setVisibility(View.GONE);
-                    if (!TextUtils.isEmpty(current.orderRemark)) {
-                        llDesc.setVisibility(View.VISIBLE);
-                        tvDesc.setText(current.orderRemark);
-                    }
-
+                    tvDesc.setText(!TextUtils.isEmpty(current.orderRemark) ? current.orderRemark : "暂无备注");
                     if (current.advanceAssign == 1) {
                         mainLlAction.setVisibility(View.VISIBLE);
                         mainCancel.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                bridge.onDialogClick(false, current.id);
+                                bridge.onDialogClick(2, current.id, current.money);
                             }
                         });
                         mainPay.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                bridge.onDialogClick(true, current.id);
+                                bridge.onDialogClick(3, current.id, current.money);
                             }
                         });
                     }
@@ -278,7 +279,7 @@ public class AcceptSendFragment extends RxBaseFragment {
                         @Override
                         public void onUnlocked() {
                             if (current.advanceAssign == 1) {
-                                bridge.onDialogClick(true, true, current.id);
+                                bridge.onDialogClick(4, current.id, current.money);
                             } else {
                                 bridge.arriveStart(current);
                             }
@@ -307,6 +308,22 @@ public class AcceptSendFragment extends RxBaseFragment {
                 }
                 showInMap(new LatLng(current.startLat, current.startLng), StaticVal.MARKER_FLAG_END);
             } else if (current.customeStatus == 3) {
+
+                if (current.advanceAssign == 1) {
+                    mainLlAction.setVisibility(View.VISIBLE);
+                    mainCancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            bridge.onDialogClick(2, current.id, current.money);
+                        }
+                    });
+                    mainPay.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            bridge.onDialogClick(3, current.id, current.money);
+                        }
+                    });
+                }
                 countTimeCon.setVisibility(View.GONE);
                 sliderCon.setVisibility(View.VISIBLE);
                 chaoshiCon.setVisibility(View.GONE);
@@ -320,7 +337,11 @@ public class AcceptSendFragment extends RxBaseFragment {
 
                     @Override
                     public void onUnlocked() {
-                        bridge.arriveEnd(current);
+                        if (current.advanceAssign == 1) {
+                            bridge.onDialogClick(4, current.id, current.money);
+                        } else {
+                            bridge.arriveEnd(current);
+                        }
                         resetView();
                     }
                 });
@@ -346,7 +367,7 @@ public class AcceptSendFragment extends RxBaseFragment {
             } else {
                 weihao = current.passengerPhone;
             }
-            customerPhone.setText("手机尾号：" + weihao);
+            customerPhone.setText("手机尾号:" + weihao + "  购票数:" + current.ticketNumber);
 
             toPlace.setText(current.customeStatus < 3 ? current.startAddr : current.endAddr);
         }

@@ -2,6 +2,7 @@ package com.easymi.component.widget;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -22,22 +23,30 @@ public class ComPayDialog extends BaseBottomDialog {
     RelativeLayout pay_wenXin;
     RelativeLayout pay_zfb;
     RelativeLayout pay_balance;
+    private TextView tv_prise;
+    private double money;
 
     public ComPayDialog(Context context) {
         super(context);
+    }
+
+    public void setMoney(double money) {
+        this.money = money;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.com_dialog_pay);
-
         pay_wenXin = findViewById(R.id.pay_wenXin);
         pay_zfb = findViewById(R.id.pay_zfb);
         pay_balance = findViewById(R.id.pay_balance);
-
+        tv_prise = findViewById(R.id.tv_prise);
         tv_cancel = findViewById(R.id.tv_cancel);
-
+        if (money > 0) {
+            tv_prise.setVisibility(View.VISIBLE);
+            tv_prise.setText("￥" + money);
+        }
         pay_wenXin.setOnClickListener(view -> {
             if (onMyClickListener != null) {
                 onMyClickListener.onItemClick(view);

@@ -121,6 +121,8 @@ public class CarpoolOrder implements Serializable {
 
     public int advanceAssign;
 
+    public double money;
+
     /**
      * 接的顺序(这个是位置顺序，可以拖动排序的)
      */
@@ -197,7 +199,6 @@ public class CarpoolOrder implements Serializable {
     public int orderChange;
 
 
-
     public boolean save() {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
@@ -228,9 +229,10 @@ public class CarpoolOrder implements Serializable {
         values.put("num", num);
         values.put("customeStatus", customeStatus);
         values.put("advanceAssign", advanceAssign);
+        values.put("money", money);
         values.put("subStatus", subStatus);
         values.put("waitMinute", waitMinute);
-        values.put("orderRemark",orderRemark);
+        values.put("orderRemark", orderRemark);
 
         boolean flag = db.insert("t_cp_order_customer", null, values) != -1;
         return flag;
@@ -457,6 +459,7 @@ public class CarpoolOrder implements Serializable {
         carpoolOrder.waitMinute = cursor.getInt(cursor.getColumnIndex("waitMinute"));
         carpoolOrder.isContract = cursor.getInt(cursor.getColumnIndex("isContract"));
         carpoolOrder.advanceAssign = cursor.getInt(cursor.getColumnIndex("advanceAssign"));
+        carpoolOrder.money = cursor.getDouble(cursor.getColumnIndex("money"));
         carpoolOrder.orderRemark = cursor.getString(cursor.getColumnIndex("orderRemark"));
         return carpoolOrder;
     }
@@ -534,7 +537,7 @@ public class CarpoolOrder implements Serializable {
         values.put("orderId", orderId);
         values.put("waitMinute", waitMinute);
         values.put("advanceAssign", advanceAssign);
-
+        values.put("money", money);
         boolean flag = db.update("t_cp_order_customer", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
         return flag;

@@ -30,6 +30,8 @@ public class WorkStatistics implements Serializable{
     @SerializedName("orderProfit")
     public double income;
 
+    public double orderTotalAmount;
+
     /**
      * 在线时长
      */

@@ -625,6 +625,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                 CountEvent event = new CountEvent();
                 event.finishCount = result.workStatistics.finishCount;
                 event.income = result.workStatistics.income;
+                event.orderTotalAmount = result.workStatistics.orderTotalAmount;
                 event.minute = -1;
                 EventBus.getDefault().post(event);
             }

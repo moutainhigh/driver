@@ -82,14 +82,14 @@ public class CusListAdapter extends RecyclerView.Adapter<CusListAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CarpoolOrder carpoolOrder = carpoolOrders.get(position);
         holder.cusName.setText(carpoolOrder.passengerName);
-        holder.ticketNum.setText("车票:" + carpoolOrder.ticketNumber);
+        holder.ticketNum.setText("车票数量:" + carpoolOrder.ticketNumber);
         holder.cusDesc.setText("备注: " + (TextUtils.isEmpty(carpoolOrder.orderRemark) ? "暂无备注" : carpoolOrder.orderRemark));
         if (flag == 0) {//PasTickets
             if (carpoolOrder.isContract == 1) {
                 holder.status.setVisibility(View.VISIBLE);
                 holder.status.setText("已联系");
                 holder.status.setBackgroundResource(R.drawable.corner_status_called);
-                holder.status.setTextColor(Color.parseColor("#999999"));
+                holder.status.setTextColor(Color.parseColor("#0099E9"));
             } else {
                 holder.status.setVisibility(View.GONE);
             }
@@ -99,17 +99,17 @@ public class CusListAdapter extends RecyclerView.Adapter<CusListAdapter.ViewHold
             holder.status.setText(carpoolOrder.getOrderStatus());
             holder.callPhone.setVisibility(View.GONE);
             if (carpoolOrder.customeStatus == 0 || carpoolOrder.customeStatus == 3) {
-                holder.status.setBackgroundResource(R.drawable.corner_status_not_accept);
-                holder.status.setTextColor(Color.parseColor("#FFFFFF"));
+                holder.status.setBackgroundResource(R.drawable.corner_status_called);
+                holder.status.setTextColor(Color.parseColor("#0099E9"));
                 if (carpoolOrder.customeStatus == 0) {
                     holder.callPhone.setVisibility(View.VISIBLE);
                 }
             } else if (carpoolOrder.customeStatus == 1 || carpoolOrder.customeStatus == 4) {
                 holder.status.setBackgroundResource(R.drawable.corner_status_called);
-                holder.status.setTextColor(Color.parseColor("#999999"));
+                holder.status.setTextColor(Color.parseColor("#0099E9"));
             } else if (carpoolOrder.customeStatus == 2 || carpoolOrder.customeStatus == 5) {
-                holder.status.setBackgroundResource(R.drawable.corner_status_jumped);
-                holder.status.setTextColor(Color.parseColor("#FFFFFF"));
+                holder.status.setBackgroundResource(R.drawable.corner_status_called);
+                holder.status.setTextColor(Color.parseColor("#0099E9"));
             }
 
             if (lastCustomer == null) {
@@ -133,7 +133,7 @@ public class CusListAdapter extends RecyclerView.Adapter<CusListAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 if (onShowDialogListener != null) {
-                    onShowDialogListener.onDialogClick(true, carpoolOrder.id);
+                    onShowDialogListener.onDialogClick(true, carpoolOrder.id, carpoolOrder.money);
                 }
             }
         });
@@ -142,7 +142,7 @@ public class CusListAdapter extends RecyclerView.Adapter<CusListAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 if (onShowDialogListener != null) {
-                    onShowDialogListener.onDialogClick(false, carpoolOrder.id);
+                    onShowDialogListener.onDialogClick(false, carpoolOrder.id, carpoolOrder.money);
                 }
             }
         });
@@ -205,6 +205,6 @@ public class CusListAdapter extends RecyclerView.Adapter<CusListAdapter.ViewHold
 
 
     public interface OnDialogClickListener {
-        void onDialogClick(boolean isPay, long orderId);
+        void onDialogClick(boolean isPay, long orderId, double money);
     }
 }

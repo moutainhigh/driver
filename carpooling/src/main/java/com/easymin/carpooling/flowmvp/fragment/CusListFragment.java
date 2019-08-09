@@ -142,6 +142,12 @@ public class CusListFragment extends RxBaseFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
         cusListAdapter = new CusListAdapter(getActivity(), 1);
+        cusListAdapter.setOnShowDialogListener(new CusListAdapter.OnDialogClickListener() {
+            @Override
+            public void onDialogClick(boolean isPay, long orderId, double money) {
+                bridge.onDialogClick(isPay ? 1 : 2, orderId, money);
+            }
+        });
         cusListAdapter.setOnCallClickListener((order, position) -> PhoneUtil.call(getActivity(), order.passengerPhone));
         recyclerView.setAdapter(cusListAdapter);
 

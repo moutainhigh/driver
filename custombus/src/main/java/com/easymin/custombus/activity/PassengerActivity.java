@@ -131,8 +131,8 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
     @Override
     public void initViews(Bundle savedInstanceState) {
         cbBusOrder = (CbBusOrder) getIntent().getSerializableExtra("cbBusOrder");
-        booktime = getIntent().getLongExtra("time" , 0);
-        position = getIntent().getIntExtra("position" , 0);
+        booktime = getIntent().getLongExtra("time", 0);
+        position = getIntent().getIntExtra("position", 0);
         presenter = new FlowPresenter(this, this);
         findById();
         initAdapter();
@@ -207,8 +207,7 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
         //禁止滑动
         recyclerView.setNestedScrollingEnabled(false);
     }
-
-
+    
     /**
      * 初始化监听
      */
@@ -218,7 +217,7 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
         //跳转验票
         tv_check_btn.setOnClickListener(v -> {
             Intent intent = new Intent(this, NewCheckTicketActivity.class);
-            intent.putExtra("isUnCheck" , uncheck);
+            intent.putExtra("isUnCheck", uncheck);
             startActivityForResult(intent, 0x00);
         });
         //前往下一站
@@ -411,12 +410,11 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
 
     @Override
     public void onPaySuc() {
-
+        getData();
     }
 
     @Override
     public void onPayFail() {
-
     }
 
     public void getData() {
@@ -525,7 +523,7 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
 
             lin_check_top.setOnClickListener(v -> {
                 Intent intent = new Intent(this, NewCheckTicketActivity.class);
-                intent.putExtra("isUnCheck" , uncheck);
+                intent.putExtra("isUnCheck", uncheck);
                 startActivityForResult(intent, 0x00);
             });
         }
@@ -533,7 +531,7 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
 
     public void setMyResult() {
         Intent intent = new Intent();
-        intent.putExtra("type" , 2);
+        intent.putExtra("type", 2);
         setResult(RESULT_OK, intent);
         finish();
     }
@@ -626,7 +624,7 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
                     @Override
                     public void onNext(EmResult emResult) {
                         ToastUtil.showMessage(PassengerActivity.this, "取消订单成功");
-                        finish();
+                        getData();
                     }
                 }));
     }

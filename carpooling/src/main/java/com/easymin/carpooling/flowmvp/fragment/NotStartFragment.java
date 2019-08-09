@@ -101,7 +101,6 @@ public class NotStartFragment extends RxBaseFragment {
 
             bridge.showBounds(latLngs);
             bridge.changeToolbar(StaticVal.TOOLBAR_NOT_START);
-
         }
     }
 
@@ -151,6 +150,12 @@ public class NotStartFragment extends RxBaseFragment {
             };
             timer.schedule(timerTask, 0, 1000);
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        cancelTimer();
     }
 
     /**

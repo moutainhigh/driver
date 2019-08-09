@@ -9,6 +9,7 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName:
+ *
  * @Author: hufeng
  * Date: 2018/12/24 下午1:10
  * Description:
@@ -19,12 +20,14 @@ public interface ActFraCommBridge {
 
     /**
      * 规划线路点
+     *
      * @param latLngs
      */
     void showBounds(List<LatLng> latLngs);
 
     /**
      * 添加marker到地图
+     *
      * @param latLng
      * @param flag
      */
@@ -32,14 +35,16 @@ public interface ActFraCommBridge {
 
     /**
      * 添加排序marker
+     *
      * @param latLng
      * @param flag
      * @param num
      */
-    void addMarker(LatLng latLng, int flag, int num,int ticketNumber,String photo);
+    void addMarker(LatLng latLng, int flag, int num, int ticketNumber, String photo);
 
     /**
      * 自定义排序
+     *
      * @param flag
      */
     void toCusList(int flag);
@@ -56,6 +61,7 @@ public interface ActFraCommBridge {
 
     /**
      * 排序
+     *
      * @param flag
      */
     void toChangeSeq(int flag);
@@ -72,6 +78,7 @@ public interface ActFraCommBridge {
 
     /**
      * 改变toolbar展示
+     *
      * @param flag
      */
     void changeToolbar(int flag);
@@ -83,12 +90,14 @@ public interface ActFraCommBridge {
 
     /**
      * 规划线路
+     *
      * @param toLatlng
      */
     void routePath(LatLng toLatlng);
 
     /**
      * 根据起点终点途径点规划路径
+     *
      * @param startLatlng
      * @param passLatlngs
      * @param endLatlng
@@ -102,36 +111,42 @@ public interface ActFraCommBridge {
 
     /**
      * 前往预约地
+     *
      * @param carpoolOrder
      */
     void gotoStart(CarpoolOrder carpoolOrder);
 
     /**
      * 到达预约地
+     *
      * @param carpoolOrder
      */
     void arriveStart(CarpoolOrder carpoolOrder);
 
     /**
      * 接到客户
+     *
      * @param carpoolOrder
      */
     void acceptCustomer(CarpoolOrder carpoolOrder);
 
     /**
      * 跳过接客户
+     *
      * @param carpoolOrder
      */
     void jumpAccept(CarpoolOrder carpoolOrder);
 
     /**
      * 到达终点
+     *
      * @param carpoolOrder
      */
     void arriveEnd(CarpoolOrder carpoolOrder);
 
     /**
      * 跳过送客户
+     *
      * @param carpoolOrder
      */
     void jumpSend(CarpoolOrder carpoolOrder);
@@ -148,6 +163,7 @@ public interface ActFraCommBridge {
 
     /**
      * 开始导航
+     *
      * @param latLng
      * @param orderId
      */
@@ -158,8 +174,10 @@ public interface ActFraCommBridge {
      */
     void toPasTickets();
 
+// type 1 弹框 支付
+// type 2 弹框 取消
+// type 3 直接 支付
+// type 4 弹框 支付并强制取消
 
-    void onDialogClick(boolean isPay, long orderId);
-
-    void onDialogClick(boolean isPay, boolean isForce,long orderId);
+    void onDialogClick(int type, long orderId, double money);
 }

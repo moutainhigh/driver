@@ -66,12 +66,21 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
                 baseViewHolder.setText(R.id.order_status, "" + baseOrder.getPCOrderStatusStr() + " >");
                 baseViewHolder.setGone(R.id.order_ll_info, true)
                         .setGone(R.id.order_ll_count, true)
-                        .setGone(R.id.order_tv_new, baseOrder.haveNewPassgener == 1)
+                        .setGone(R.id.order_tv_new, baseOrder.haveNewPassenger == 1)
                         .setText(R.id.order_tv_order_count, "订单: " + baseOrder.orderNum)
                         .setText(R.id.order_tv_passenger_count, "乘客: " + baseOrder.ticketNum)
-                        .setText(R.id.order_tv_rest_count, "余票: " + baseOrder.seats)
-                        .setText(R.id.order_tv_unpay_count, "未支付订单: " + baseOrder.noPay);
-
+                        .setText(R.id.order_tv_rest_count, "余座: " + baseOrder.seats)
+                        .setVisible(R.id.order_tv_unpay_count, baseOrder.noPay > 0)
+                        .setText(R.id.order_tv_unpay_count, "未支付订单: " + baseOrder.noPay)
+                        .setOnClickListener(R.id.order_tv_new, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ARouter.getInstance()
+                                        .build("/carpooling/FlowActivity")
+                                        .withBoolean("needJump", true)
+                                        .withSerializable("baseOrder", baseOrder).navigation();
+                            }
+                        });
             } else if (TextUtils.equals(baseOrder.serviceType, Config.COUNTRY)) {
                 baseViewHolder.setText(R.id.order_status, "" + BusOrderStatus.status2Str(baseOrder.scheduleStatus) + " >");
             } else if (TextUtils.equals(baseOrder.serviceType, Config.GOV)) {
@@ -91,35 +100,35 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
                     if (baseOrder.serviceType.equals(Config.ZHUANCHE)) {
                         ARouter.getInstance()
                                 .build("/zhuanche/FlowActivity")
-                                .withLong("orderId" , baseOrder.orderId).navigation();
+                                .withLong("orderId", baseOrder.orderId).navigation();
                     } else if (baseOrder.serviceType.equals(Config.TAXI)) {
                         ARouter.getInstance()
                                 .build("/taxi/FlowActivity")
-                                .withLong("orderId" , baseOrder.orderId).navigation();
+                                .withLong("orderId", baseOrder.orderId).navigation();
                     } else if (baseOrder.serviceType.equals(Config.CITY_LINE)) {
                         ARouter.getInstance()
                                 .build("/cityline/FlowActivity")
-                                .withSerializable("baseOrder" , baseOrder).navigation();
+                                .withSerializable("baseOrder", baseOrder).navigation();
                     } else if (baseOrder.serviceType.equals(Config.CHARTERED)) {
                         ARouter.getInstance()
                                 .build("/chartered/FlowActivity")
-                                .withLong("orderId" , baseOrder.orderId).navigation();
+                                .withLong("orderId", baseOrder.orderId).navigation();
                     } else if (baseOrder.serviceType.equals(Config.RENTAL)) {
                         ARouter.getInstance()
                                 .build("/rental/FlowActivity")
-                                .withLong("orderId" , baseOrder.orderId).navigation();
+                                .withLong("orderId", baseOrder.orderId).navigation();
                     } else if (baseOrder.serviceType.equals(Config.COUNTRY)) {
                         ARouter.getInstance()
                                 .build("/custombus/CbRunActivity")
-                                .withLong("scheduleId" , baseOrder.scheduleId).navigation();
+                                .withLong("scheduleId", baseOrder.scheduleId).navigation();
                     } else if (baseOrder.serviceType.equals(Config.CARPOOL)) {
                         ARouter.getInstance()
                                 .build("/carpooling/FlowActivity")
-                                .withSerializable("baseOrder" , baseOrder).navigation();
+                                .withSerializable("baseOrder", baseOrder).navigation();
                     } else if (baseOrder.serviceType.equals(Config.GOV)) {
                         ARouter.getInstance()
                                 .build("/official/FlowActivity")
-                                .withLong("orderId" , baseOrder.orderId).navigation();
+                                .withLong("orderId", baseOrder.orderId).navigation();
                     }
                 }
             });

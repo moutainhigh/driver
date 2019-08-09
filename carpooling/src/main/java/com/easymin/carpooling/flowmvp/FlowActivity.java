@@ -155,6 +155,7 @@ public class FlowActivity extends RxPayActivity implements
      * 转单
      */
     private ScheduleTurnReceiver scheduleTurnReceiver;
+    private boolean needJump;
 
     @Override
     public boolean isEnableSwipe() {
@@ -178,6 +179,7 @@ public class FlowActivity extends RxPayActivity implements
         mapView = findViewById(R.id.map_view);
         fragmentFrame = findViewById(R.id.fragment_frame);
 
+        needJump = getIntent().getBooleanExtra("needJump", false);
         mapView.onCreate(savedInstanceState);
         initMap();
         initBridget();
@@ -202,11 +204,9 @@ public class FlowActivity extends RxPayActivity implements
             if (result2.getData() == null || result2.getData().size() == 0) {
                 ToastUtil.showMessage(this, "当前班次没有任何乘客");
                 presenter.finishTask(pincheOrder.orderId);
-                return;
             } else {
                 isOrderLoadOk = true;
                 List<CarpoolOrder> carpoolOrders = result2.getData();
-
                 /**
                  * 删除退票订单
                  */
@@ -215,7 +215,6 @@ public class FlowActivity extends RxPayActivity implements
                     boolean isExist = false;
                     for (int i = 0; i < carpoolOrders.size(); i++) {
                         CarpoolOrder carpoolOrder = carpoolOrders.get(i);
-
                         if ((cusOrder.id == carpoolOrder.orderId)) {
                             isExist = true;
                             break;
@@ -272,7 +271,6 @@ public class FlowActivity extends RxPayActivity implements
                     }
                     carpoolOrder.saveOrUpdate();
                 }
-
                 showFragmentByStatus();
             }
         })));
@@ -707,46 +705,45 @@ public class FlowActivity extends RxPayActivity implements
             }
 
             @Override
-            public void onDialogClick(boolean isPay, long orderId) {
-                createDialog(isPay, false, orderId);
-            }
-
-            @Override
-            public void onDialogClick(boolean isPay, boolean isForce, long orderId) {
-                createDialog(isPay, isForce, orderId);
+            public void onDialogClick(int type, long orderId, double money) {
+                createDialog(type, orderId, money);
             }
         };
     }
 
-    private void createDialog(boolean isPay, boolean isForce, long orderId) {
-        Dialog dialog = new Dialog(this);
-        View view = LayoutInflater.from(this).inflate(isPay ? R.layout.cus_list_dialog_pay : R.layout.cus_list_dialog_order, null);
-        dialog.setContentView(view);
-        TextView dialogTvCancel = view.findViewById(R.id.dialog_tv_cancel);
-        dialogTvCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isForce) {
-                    cancelOrder(orderId);
+    private void createDialog(int type, long orderId, double money) {
+        if (type == 3) {
+            showDialog(orderId, money);
+        } else {
+            Dialog dialog = new Dialog(this);
+            View view = LayoutInflater.from(this).inflate(type == 1 || type == 4 ? R.layout.cus_list_dialog_pay : R.layout.cus_list_dialog_order, null);
+            dialog.setContentView(view);
+            TextView dialogTvCancel = view.findViewById(R.id.dialog_tv_cancel);
+            dialogTvCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (type == 4) {
+                        cancelOrder(orderId);
+                    }
+                    dialog.dismiss();
                 }
-                dialog.dismiss();
-            }
-        });
-        TextView dialogTvAction = view.findViewById(R.id.dialog_tv_action);
-        dialogTvAction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                if (isPay) {
-                    showDialog(orderId);
-                } else {
-                    cancelOrder(orderId);
+            });
+            TextView dialogTvAction = view.findViewById(R.id.dialog_tv_action);
+            dialogTvAction.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    if (type == 1 || type == 4) {
+                        showDialog(orderId, money);
+                    } else {
+                        cancelOrder(orderId);
+                    }
                 }
-            }
-        });
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
+            });
+            dialog.setCancelable(false);
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.show();
+        }
     }
 
     private void cancelOrder(long orderId) {
@@ -1079,17 +1076,28 @@ public class FlowActivity extends RxPayActivity implements
         DymOrder dymOrder = DymOrder.findByIDType(pincheOrder.orderId, pincheOrder.orderType);
         if (null != dymOrder) {
             if (dymOrder.orderStatus <= ZXOrderStatus.WAIT_START) {
-                bridge.toNotStart();
-            } else if (dymOrder.orderStatus == ZXOrderStatus.ACCEPT_PLAN) {
-                bridge.toChangeSeq(StaticVal.PLAN_ACCEPT);
-            } else if (dymOrder.orderStatus == ZXOrderStatus.SEND_PLAN) {
-                bridge.toChangeSeq(StaticVal.PLAN_SEND);
-            } else if (dymOrder.orderStatus == ZXOrderStatus.ACCEPT_ING
-                    || dymOrder.orderStatus == ZXOrderStatus.SEND_ING) {
-                bridge.toAcSend();
-            } else if (dymOrder.orderStatus == ZXOrderStatus.SEND_OVER) {
-                presenter.finishTask(pincheOrder.orderId);
+                if (needJump) {
+                    needJump = false;
+                    bridge.toPasTickets();
+                } else {
+                    bridge.toNotStart();
+                }
+            } else {
+                needJump = false;
+                if (dymOrder.orderStatus == ZXOrderStatus.ACCEPT_PLAN) {
+                    bridge.toChangeSeq(StaticVal.PLAN_ACCEPT);
+                } else if (dymOrder.orderStatus == ZXOrderStatus.SEND_PLAN) {
+                    bridge.toChangeSeq(StaticVal.PLAN_SEND);
+                } else if (dymOrder.orderStatus == ZXOrderStatus.ACCEPT_ING
+                        || dymOrder.orderStatus == ZXOrderStatus.SEND_ING) {
+                    bridge.toAcSend();
+                } else if (dymOrder.orderStatus == ZXOrderStatus.SEND_OVER) {
+                    presenter.finishTask(pincheOrder.orderId);
+                }
             }
+        } else {
+            ToastUtil.showMessage(this, "订单状态出现错误");
+            finish();
         }
     }
 
@@ -1269,7 +1277,6 @@ public class FlowActivity extends RxPayActivity implements
      * @return
      */
     private FragmentTransaction switchFragment(Fragment targetFragment) {
-
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction();
         if (!targetFragment.isAdded()) {

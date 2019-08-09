@@ -239,7 +239,6 @@ public interface McService {
                                       @Field("appVersion") String appVersion,
                                       @Field("mobileOperators") String mobileOperators,
                                       @Field("mapType") String mapType
-
     );
 
     /**
@@ -347,9 +346,6 @@ public interface McService {
      */
     @GET("api/v1/system/config/payment")
     Observable<RechargeTypeResult> configPayment();
-
-
-
 
 
     /**

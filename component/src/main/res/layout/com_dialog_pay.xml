@@ -7,9 +7,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/corners_white_4dp_bg"
         android:orientation="vertical">
 
@@ -21,6 +21,16 @@
             android:textColor="@color/color_333333"
             android:textSize="16sp"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_prise"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:textColor="@color/colorYellow"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -132,9 +142,9 @@
         android:id="@+id/tv_cancel"
         android:layout_width="match_parent"
         android:layout_height="57dp"
-        android:layout_marginBottom="8dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/corners_white_4dp_bg"
         android:gravity="center"
         android:text="取消"

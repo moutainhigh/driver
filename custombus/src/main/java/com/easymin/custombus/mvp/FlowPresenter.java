@@ -450,7 +450,7 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
     @Override
     public void queryOrders(long scheduleId, long stationId) {
         view.getManager().add(model.queryOrders(scheduleId, stationId).subscribe(new MySubscriber<>(context,
-                false,
+                true,
                 false,
                 new HaveErrSubscriberListener<OrdersResult>() {
 

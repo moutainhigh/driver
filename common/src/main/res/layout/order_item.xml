@@ -179,18 +179,21 @@
         android:paddingStart="12dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="乘客信息"
             android:textColor="#7E869A"
             android:textSize="@dimen/sizeContent" />
 
         <TextView
+            android:drawablePadding="4dp"
+            android:drawableStart="@drawable/dot4_red"
+            android:visibility="gone"
             android:id="@+id/order_tv_new"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
-            android:layout_weight="1"
             android:gravity="end"
             android:text="有新乘客"
             android:textColor="@android:color/white"

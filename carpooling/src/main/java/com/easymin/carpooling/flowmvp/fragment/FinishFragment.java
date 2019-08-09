@@ -14,6 +14,7 @@ import java.util.TimerTask;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: FinishFragment
+ *
  * @Author: hufeng
  * Date: 2018/12/24 下午1:10
  * Description: 完成订单界面
@@ -42,6 +43,7 @@ public class FinishFragment extends RxBaseFragment {
 
     /**
      * 设置bridge
+     *
      * @param bridge
      */
     public void setBridge(ActFraCommBridge bridge) {
@@ -76,8 +78,13 @@ public class FinishFragment extends RxBaseFragment {
             }
         };
         timer.schedule(timerTask, 1000, 1000);
-
         back.setOnClickListener(view -> bridge.toOrderList());
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        cancelTimer();
     }
 
     /**

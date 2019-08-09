@@ -69,7 +69,7 @@ public class BanciSelectActivity extends RxBaseActivity {
             finish();
         });
 
-        recyclerView.getRecyclerView().setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setLoadMoreEnable(false);
         recyclerView.setAdapter(adapter);
         recyclerView.setOnLoadListener(new SwipeRecyclerView.OnLoadListener() {
@@ -100,7 +100,6 @@ public class BanciSelectActivity extends RxBaseActivity {
                 .map(new HttpResultFunc2<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-//
         mRxManager.add(observable.subscribe(new MySubscriber<List<DZBusLine>>(this, false, false, new HaveErrSubscriberListener<List<DZBusLine>>() {
             @Override
             public void onNext(List<DZBusLine> cbBusOrders) {
@@ -108,8 +107,8 @@ public class BanciSelectActivity extends RxBaseActivity {
                     showErr(0);
                 } else {
                     hideErr();
+                    adapter.setBaseOrders(cbBusOrders);
                 }
-                adapter.setBaseOrders(cbBusOrders);
                 recyclerView.complete();
             }
 
