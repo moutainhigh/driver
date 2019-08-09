@@ -716,9 +716,10 @@ public class FlowActivity extends RxPayActivity implements
             showDialog(orderId, money);
         } else {
             Dialog dialog = new Dialog(this);
-            View view = LayoutInflater.from(this).inflate(type == 1 || type == 4 ? R.layout.cus_list_dialog_pay : R.layout.cus_list_dialog_order, null);
+            View view = LayoutInflater.from(this).inflate(type == 2 ? R.layout.cus_list_dialog_order : R.layout.cus_list_dialog_pay, null);
             dialog.setContentView(view);
             TextView dialogTvCancel = view.findViewById(R.id.dialog_tv_cancel);
+            dialogTvCancel.setText(type == 4 ? "取消订单" : "取消");
             dialogTvCancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -732,12 +733,12 @@ public class FlowActivity extends RxPayActivity implements
             dialogTvAction.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    dialog.dismiss();
-                    if (type == 1 || type == 4) {
-                        showDialog(orderId, money);
-                    } else {
+                    if (type == 2) {
                         cancelOrder(orderId);
+                    } else {
+                        showDialog(orderId, money);
                     }
+                    dialog.dismiss();
                 }
             });
             dialog.setCancelable(false);

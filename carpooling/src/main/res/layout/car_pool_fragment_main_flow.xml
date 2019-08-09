@@ -91,7 +91,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/ll_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
@@ -110,7 +109,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="珠江国际中心"
                 android:textColor="#232323" />
 
         </LinearLayout>
@@ -290,9 +288,9 @@
         android:id="@+id/ic_refresh"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_above="@+id/bottom_con"
+        android:layout_above="@+id/main_ll_action"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="12dp"
         android:layout_marginBottom="3dp"
         android:background="@drawable/corners_white_gray_stroke_2"
         android:padding="7.5dp"

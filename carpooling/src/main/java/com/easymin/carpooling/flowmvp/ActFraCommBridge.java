@@ -174,10 +174,10 @@ public interface ActFraCommBridge {
      */
     void toPasTickets();
 
-// type 1 弹框 支付
-// type 2 弹框 取消
-// type 3 直接 支付
-// type 4 弹框 支付并强制取消
+// type 1 弹框 支付订单和取消弹窗
+// type 2 弹框 取消订单和取消弹窗
+// type 3 直接支付
+// type 4 弹框 支付订单和取消订单
 
     void onDialogClick(int type, long orderId, double money);
 }

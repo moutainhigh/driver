@@ -114,7 +114,7 @@ public abstract class RxPayActivity extends RxBaseActivity {
             req.timeStamp = json.getString("wx_app_ts");
             req.packageValue = json.getString("wx_app_pkg");
             req.sign = json.getString("wx_app_sign");
-            req.extData = "app data"; // optional
+            req.extData = "app data";
             Log.e("wxPay", "正常调起支付");
 
             IWXAPI api = WXAPIFactory.createWXAPI(RxPayActivity.this, req.appId);
