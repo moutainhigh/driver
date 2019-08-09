@@ -31,7 +31,7 @@
             android:name=".activity.WebActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
 
         <activity
             android:name="com.amap.api.navi.AmapRouteActivity"
@@ -39,14 +39,16 @@
         <activity
             android:name=".activity.PlaceActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.CityActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@style/ThemeSwipeBack"/>
+            android:theme="@style/ThemeSwipeBack" />
         <activity
             android:name=".activity.NaviActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
+
+        <service android:name=".cat.DumpService" />
 
         <service
             android:name=".loc.LocService"
@@ -57,7 +59,8 @@
             </intent-filter>
         </service>
 
-        <receiver android:name=".loc.LocReceiver"
+        <receiver
+            android:name=".loc.LocReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.easymi.eomponent.LOC_CHANGED" />
