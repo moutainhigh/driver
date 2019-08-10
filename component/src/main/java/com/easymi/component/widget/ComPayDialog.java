@@ -24,7 +24,7 @@ public class ComPayDialog extends BaseBottomDialog {
     RelativeLayout pay_zfb;
     RelativeLayout pay_balance;
     private TextView tv_prise;
-    private double money;
+    private double money = -1;
 
     public ComPayDialog(Context context) {
         super(context);
@@ -43,7 +43,7 @@ public class ComPayDialog extends BaseBottomDialog {
         pay_balance = findViewById(R.id.pay_balance);
         tv_prise = findViewById(R.id.tv_prise);
         tv_cancel = findViewById(R.id.tv_cancel);
-        if (money > 0) {
+        if (money >= 0) {
             tv_prise.setVisibility(View.VISIBLE);
             tv_prise.setText("￥" + money);
         }

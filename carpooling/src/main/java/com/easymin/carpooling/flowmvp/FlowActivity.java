@@ -719,11 +719,11 @@ public class FlowActivity extends RxPayActivity implements
             View view = LayoutInflater.from(this).inflate(type == 2 ? R.layout.cus_list_dialog_order : R.layout.cus_list_dialog_pay, null);
             dialog.setContentView(view);
             TextView dialogTvCancel = view.findViewById(R.id.dialog_tv_cancel);
-            dialogTvCancel.setText(type == 4 ? "取消订单" : "取消");
+            dialogTvCancel.setText(type == 2 ? "取消" : "取消订单");
             dialogTvCancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (type == 4) {
+                    if (type == 1) {
                         cancelOrder(orderId);
                     }
                     dialog.dismiss();

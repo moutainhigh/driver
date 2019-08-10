@@ -113,7 +113,7 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
             @Override
             public void onClick(View v) {
                 if (onDialogShowingListener != null) {
-                    onDialogShowingListener.onShowing(true, customer.id);
+                    onDialogShowingListener.onShowing(true, customer.id, customer.money);
                 }
             }
         });
@@ -121,7 +121,7 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
             @Override
             public void onClick(View v) {
                 if (onDialogShowingListener != null) {
-                    onDialogShowingListener.onShowing(false, customer.id);
+                    onDialogShowingListener.onShowing(false, customer.id, customer.money);
                 }
             }
         });
@@ -167,7 +167,7 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
     }
 
     public interface OnDialogShowingListener {
-        void onShowing(boolean isPay, long orderId);
+        void onShowing(boolean isPay, long orderId, double money);
     }
 
 }

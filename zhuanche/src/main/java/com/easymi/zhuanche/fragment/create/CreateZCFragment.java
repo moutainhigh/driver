@@ -14,10 +14,12 @@ import android.widget.TextView;
 
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.core.PoiItem;
+import com.easymi.common.activity.CreateActivity;
 import com.easymi.common.entity.Address;
 import com.easymi.common.result.CreateOrderResult;
 import com.easymi.component.Config;
 import com.easymi.component.activity.PlaceActivity;
+import com.easymi.component.app.ActManager;
 import com.easymi.component.base.RxLazyFragment;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.network.GsonUtil;
@@ -468,13 +470,13 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
 
     @Override
     public void createSuc(CreateOrderResult createOrderResult) {
-        ToastUtil.showMessage(getActivity(), getString(R.string.create_suc));
-        Intent intent = new Intent(getActivity(), FlowActivity.class);
-        intent.putExtra("orderId", createOrderResult.data);
-        startActivity(intent);
-        if (getActivity() != null) {
-            getActivity().finish();
+        ToastUtil.showMessage(getContext(), getString(R.string.create_suc));
+        if (createOrderResult.data != null && createOrderResult.data != 0) {
+            Intent intent = new Intent(getContext(), FlowActivity.class);
+            intent.putExtra("orderId", createOrderResult.data);
+            startActivity(intent);
         }
+        ActManager.getInstance().finishActivity(CreateActivity.class);
     }
 
     @Override

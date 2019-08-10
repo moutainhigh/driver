@@ -49,6 +49,7 @@ import rx.schedulers.Schedulers;
  * History:
  */
 
+@SuppressWarnings("ALL")
 public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> {
 
     private Context context;
@@ -171,12 +172,12 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
             @Override
             public void onClick(View v) {
                 holder.orderSml.smoothClose();
-                createDialog(baseOrder.id);
+                createDialog(baseOrder.orderId);
             }
         });
     }
 
-    private void createDialog(long id) {
+    private void createDialog(long orderId) {
         new CommonDialog(context, R.layout.dialog_del) {
             @Override
             public void initData(View view) {
@@ -191,7 +192,7 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
                 dialogDelPos.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        deleteData(id);
+                        deleteData(orderId);
                         dismiss();
                     }
                 });
@@ -199,9 +200,9 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
         }.show();
     }
 
-    private void deleteData(long id) {
+    private void deleteData(long orderId) {
         ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .deleteOrder(id)
+                .deleteOrder(orderId)
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -209,7 +210,7 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
                     @Override
                     public void onNext(EmResult emResult) {
                         for (BaseOrder baseOrder : baseOrders) {
-                            if (baseOrder.id == id) {
+                            if (baseOrder.orderId == orderId) {
                                 baseOrders.remove(baseOrder);
                                 notifyDataSetChanged();
                                 break;

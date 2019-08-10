@@ -47,8 +47,7 @@ public class Customer {
      */
     public String orderRemark;
 
-
-
+    public double money;
 
     /**
      * 客运班车订单未支付

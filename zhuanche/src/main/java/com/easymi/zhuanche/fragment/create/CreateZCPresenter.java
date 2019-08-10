@@ -24,7 +24,6 @@ import com.easymi.zhuanche.result.ZCTypeResult;
 import java.util.List;
 
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 
 /**
@@ -189,7 +188,6 @@ public class CreateZCPresenter implements CreateZCContract.Presenter {
                         onePrice,
                         time,
                         distance))
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MySubscriber<CreateOrderResult>(context, true, false,
                         new NoErrSubscriberListener<CreateOrderResult>() {
                             @Override

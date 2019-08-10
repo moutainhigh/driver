@@ -207,7 +207,7 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
         //禁止滑动
         recyclerView.setNestedScrollingEnabled(false);
     }
-    
+
     /**
      * 初始化监听
      */
@@ -583,36 +583,36 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
     }
 
     @Override
-    public void onShowing(boolean isPay, long orderId) {
-        createDialog(isPay, orderId);
+    public void onShowing(boolean isPay, long orderId, double money) {
+        createDialog(isPay, orderId, money);
     }
 
-    private void createDialog(boolean isPay, long orderId) {
-        Dialog dialog = new Dialog(this);
-        View view = LayoutInflater.from(this).inflate(isPay ? R.layout.cus_list_dialog_pay : R.layout.cus_list_dialog_order, null);
-        dialog.setContentView(view);
-        TextView dialogTvCancel = view.findViewById(R.id.dialog_tv_cancel);
-        dialogTvCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        TextView dialogTvAction = view.findViewById(R.id.dialog_tv_action);
-        dialogTvAction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                if (isPay) {
-                    showDialog(orderId);
-                } else {
-                    cancelOrder(orderId);
+    private void createDialog(boolean isPay, long orderId, double money) {
+        if (isPay) {
+            showDialog(orderId, money);
+        } else {
+            Dialog dialog = new Dialog(this);
+            View view = LayoutInflater.from(this).inflate(R.layout.cus_list_dialog_order, null);
+            dialog.setContentView(view);
+            TextView dialogTvCancel = view.findViewById(R.id.dialog_tv_cancel);
+            dialogTvCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
                 }
-            }
-        });
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
+            });
+            TextView dialogTvAction = view.findViewById(R.id.dialog_tv_action);
+            dialogTvAction.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    cancelOrder(orderId);
+                    dialog.dismiss();
+                }
+            });
+            dialog.setCancelable(false);
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.show();
+        }
     }
 
     private void cancelOrder(long orderId) {

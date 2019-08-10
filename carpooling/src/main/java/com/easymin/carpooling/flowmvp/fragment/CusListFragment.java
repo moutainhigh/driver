@@ -145,7 +145,7 @@ public class CusListFragment extends RxBaseFragment {
         cusListAdapter.setOnShowDialogListener(new CusListAdapter.OnDialogClickListener() {
             @Override
             public void onDialogClick(boolean isPay, long orderId, double money) {
-                bridge.onDialogClick(isPay ? 1 : 2, orderId, money);
+                bridge.onDialogClick(isPay ? 3 : 2, orderId, money);
             }
         });
         cusListAdapter.setOnCallClickListener((order, position) -> PhoneUtil.call(getActivity(), order.passengerPhone));

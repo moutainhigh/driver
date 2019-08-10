@@ -1330,14 +1330,20 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     @Override
     protected void onPause() {
         super.onPause();
-        mapView.onPause();
+        if (mapView != null) {
+            mapView.onPause();
+        }
         cancelTimer();
     }
 
     @Override
     protected void onDestroy() {
-        mapView.onDestroy();
-        presenter.stopNavi();
+        if (mapView != null) {
+            mapView.onDestroy();
+        }
+        if (presenter != null) {
+            presenter.stopNavi();
+        }
         if (mPlocation != null) {
             mPlocation = null;
         }
@@ -1356,9 +1362,15 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         HandlePush.getInstance().deleteObserver(this);//取消订单变化订阅
         HandlePush.getInstance().deletePLObserver(this);//取消订单变化订阅
 
-        unregisterReceiver(traceReceiver);
-        unregisterReceiver(cancelOrderReceiver);
-        unregisterReceiver(orderFinishReceiver);
+        if (traceReceiver != null) {
+            unregisterReceiver(traceReceiver);
+        }
+        if (cancelOrderReceiver != null) {
+            unregisterReceiver(cancelOrderReceiver);
+        }
+        if (orderFinishReceiver != null) {
+            unregisterReceiver(orderFinishReceiver);
+        }
     }
 
     private LatLng lastLatlng;

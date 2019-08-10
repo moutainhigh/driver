@@ -298,7 +298,7 @@ public class AcceptSendFragment extends RxBaseFragment {
                         @Override
                         public void onUnlocked() {
                             if (current.advanceAssign == 1) {
-                                bridge.onDialogClick(4, current.id, current.money);
+                                bridge.onDialogClick(1, current.id, current.money);
                             } else {
                                 bridge.acceptCustomer(current);
                             }
@@ -493,7 +493,7 @@ public class AcceptSendFragment extends RxBaseFragment {
                 @Override
                 public void onUnlocked() {
                     if (current.advanceAssign == 1) {
-                        bridge.onDialogClick(4, current.id, current.money);
+                        bridge.onDialogClick(1, current.id, current.money);
                     } else {
                         bridge.acceptCustomer(current);
                     }
