@@ -103,7 +103,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:gravity="center_vertical|right"
-                                android:hint="请选择地址"
+                                android:hint="请选择乘客上车点"
                                 android:textColor="@color/black" />
 
                             <ImageView
@@ -141,7 +141,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:gravity="center_vertical|right"
-                                android:hint="请选择地址"
+                                android:hint="请选择乘客下车点"
                                 android:textColor="@color/black" />
 
                             <ImageView

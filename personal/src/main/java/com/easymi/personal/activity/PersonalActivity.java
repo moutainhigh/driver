@@ -97,9 +97,9 @@ public class PersonalActivity extends RxBaseActivity {
 
         Employ employ = EmUtil.getEmployInfo();
 
-        if (employ==null){
+        if (employ == null) {
             lin_card.setVisibility(View.GONE);
-        }else {
+        } else {
             if (employ.serviceType.equals(Config.CUSTOMBUS) ||
                     employ.serviceType.equals(Config.COUNTRY)) {
                 lin_card.setVisibility(View.VISIBLE);
@@ -147,13 +147,13 @@ public class PersonalActivity extends RxBaseActivity {
     private void showBase(Employ employ) {
         if (employ != null) {
             driverName.setText(employ.realName);
-            userName.setText( employ.userName );
-            tv_star.setText((employ.star == 0 ? 5.0 : employ.star)+"");
+            userName.setText(employ.userName);
+            tv_star.setText((employ.star == 0 ? 5.0 : employ.star) + "");
 
-            if (Vehicle.exists(employ.id)){
+            if (Vehicle.exists(employ.id)) {
                 Vehicle vehicle = Vehicle.findByEmployId(employ.id);
-                tv_car_info.setText(vehicle.brand+" "+vehicle.plateColor+" "+vehicle.vehicleNo);
-            }else {
+                tv_car_info.setText(vehicle.brand + " " + vehicle.vehicleColor + " " + vehicle.vehicleNo);
+            } else {
                 tv_car_info.setText("未绑定该业务车辆");
             }
 

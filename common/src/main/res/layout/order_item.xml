@@ -188,7 +188,7 @@
 
         <TextView
             android:drawablePadding="4dp"
-            android:drawableStart="@drawable/dot4_red"
+            android:drawableStart="@drawable/dot6_red"
             android:visibility="gone"
             android:id="@+id/order_tv_new"
             android:layout_width="wrap_content"

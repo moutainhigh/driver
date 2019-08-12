@@ -4,7 +4,7 @@ import com.easymi.component.result.EmResult2;
 import com.easymin.custombus.entity.Customer;
 import com.easymin.custombus.entity.DZBusLine;
 import com.easymin.custombus.entity.OrdersResult;
-import com.easymin.custombus.entity.StationBean;
+import com.easymin.custombus.entity.StationMainBean;
 import com.easymin.custombus.entity.StationResult;
 import com.easymin.custombus.entity.TimeResult;
 
@@ -37,16 +37,23 @@ public interface DZBusApiService {
     @FormUrlEncoded
     Observable<EmResult2<Long>> createOrder(@Field("startStationId") long startStationId,
                                             @Field("endStationId") long endStationId,
-                                            @Field("scheduleId")long scheduleId,
+                                            @Field("scheduleId") long scheduleId,
                                             @Field("ticketNumber") int ticketNumber,
                                             @Field("passengerPhone") String passengerPhone,
                                             @Field("channelAlias") String channelAlias);
+
+
+    @GET("api/v1/bus/country/driver/schedule/priceOrder")
+    Observable<EmResult2<Double>> priceOrder(@Query("startStationId") long startStationId,
+                                             @Query("endStationId") long endStationId,
+                                             @Query("scheduleId") long scheduleId);
+
 
     @GET("api/v1/bus/country/driver/schedule/driverSchedule")
     Observable<EmResult2<List<DZBusLine>>> queryDriverSchedule(@Query("driverId") long driverId);
 
     @GET("api/v1/bus/country/driver/schedule/driverQueryStation")
-    Observable<EmResult2<List<StationBean>>> queryStation(@Query("lineId") long lineId, @Query("scheduleId") long scheduleId);
+    Observable<EmResult2<StationMainBean>> queryStation(@Query("lineId") long lineId, @Query("scheduleId") long scheduleId);
 
     /**
      * 开始班次

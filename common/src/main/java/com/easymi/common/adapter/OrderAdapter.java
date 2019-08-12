@@ -18,6 +18,8 @@ import com.easymi.component.GWOrderStatus;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.TimeUtil;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 /**
@@ -72,15 +74,8 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
                         .setText(R.id.order_tv_rest_count, "余座: " + baseOrder.seats)
                         .setVisible(R.id.order_tv_unpay_count, baseOrder.noPay > 0)
                         .setText(R.id.order_tv_unpay_count, "未支付订单: " + baseOrder.noPay)
-                        .setOnClickListener(R.id.order_tv_new, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                ARouter.getInstance()
-                                        .build("/carpooling/FlowActivity")
-                                        .withBoolean("needJump", true)
-                                        .withSerializable("baseOrder", baseOrder).navigation();
-                            }
-                        });
+                        .setOnClickListener(R.id.order_ll_count, createOnClickListener(baseOrder))
+                        .setOnClickListener(R.id.order_ll_info, createOnClickListener(baseOrder));
             } else if (TextUtils.equals(baseOrder.serviceType, Config.COUNTRY)) {
                 baseViewHolder.setText(R.id.order_status, "" + BusOrderStatus.status2Str(baseOrder.scheduleStatus) + " >");
             } else if (TextUtils.equals(baseOrder.serviceType, Config.GOV)) {
@@ -133,6 +128,19 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
                 }
             });
         }
+    }
+
+    @NotNull
+    private View.OnClickListener createOnClickListener(MultipleOrder baseOrder) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ARouter.getInstance()
+                        .build("/carpooling/FlowActivity")
+                        .withBoolean("needJump", true)
+                        .withSerializable("baseOrder", baseOrder).navigation();
+            }
+        };
     }
 
 }

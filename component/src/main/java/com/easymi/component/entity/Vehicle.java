@@ -35,6 +35,8 @@ public class Vehicle {
     @SerializedName("plateColor")
     public String plateColor; // 车牌颜色
 
+    public String vehicleColor;
+
     @SerializedName("vehicleNo")
     public String vehicleNo;// 车牌
 
@@ -60,6 +62,7 @@ public class Vehicle {
         values.put("vehicleBrand", brand);
         values.put("vehicleModel", vehicleModel);
         values.put("plateColor", plateColor);
+        values.put("vehicleColor",vehicleColor);
         values.put("vehicleNo", vehicleNo);
         values.put("vehicleType", vehicleType);
         values.put("commercialType", commercialType);
@@ -85,6 +88,7 @@ public class Vehicle {
         values.put("vehicleBrand", brand);
         values.put("vehicleModel", vehicleModel);
         values.put("plateColor", plateColor);
+        values.put("vehicleColor",vehicleColor);
         values.put("vehicleNo", vehicleNo);
         values.put("vehicleType", vehicleType);
         values.put("commercialType", commercialType);
@@ -113,6 +117,7 @@ public class Vehicle {
                 vehicle.brand = cursor.getString(cursor.getColumnIndex("vehicleBrand"));
                 vehicle.vehicleModel = cursor.getLong(cursor.getColumnIndex("vehicleModel"));
                 vehicle.plateColor = cursor.getString(cursor.getColumnIndex("plateColor"));
+                vehicle.vehicleColor = cursor.getString(cursor.getColumnIndex("vehicleColor"));
                 vehicle.vehicleNo = cursor.getString(cursor.getColumnIndex("vehicleNo"));
                 vehicle.vehicleType = cursor.getString(cursor.getColumnIndex("vehicleType"));
 

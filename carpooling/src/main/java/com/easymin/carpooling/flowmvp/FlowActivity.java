@@ -515,6 +515,11 @@ public class FlowActivity extends RxPayActivity implements
 //        if (isOrderLoadOk) {
 //            showFragmentByStatus();
 //        }
+
+        notStartFragment.setPause(false);
+        finishFragment.setPause(false);
+        acceptSendFragment.setPause(false);
+
     }
 
     /**
@@ -724,7 +729,7 @@ public class FlowActivity extends RxPayActivity implements
                 @Override
                 public void onClick(View v) {
                     if (type == 1) {
-                        cancelOrder(orderId);
+                        createDialog(2, orderId, money);
                     }
                     dialog.dismiss();
                 }
@@ -1128,16 +1133,19 @@ public class FlowActivity extends RxPayActivity implements
 
         unregisterReceiver(cancelOrderReceiver);
         unregisterReceiver(scheduleTurnReceiver);
+
+        notStartFragment.setPause(true);
+        finishFragment.setPause(true);
+        acceptSendFragment.setPause(true);
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mapView.onPause();
-        notStartFragment.cancelTimer();
-        finishFragment.cancelTimer();
-        acceptSendFragment.cancelTimer();
     }
+
 
     @Override
     protected void onDestroy() {

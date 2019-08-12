@@ -144,20 +144,7 @@ public interface WorkContract {
          */
         RxManager getRxManager();
 
-        /**
-         * 注册弹窗 已废弃
-         *
-         * @param companyPhone
-         * @param type
-         * @param reason
-         */
-        void showRegisterDialog(String companyPhone, int type, String reason);
-
-        void hideRegisterDialog();
-
         void setTitleStatus(String content);
-
-        void getMoney(double todayIncome);
     }
 
     interface Presenter {

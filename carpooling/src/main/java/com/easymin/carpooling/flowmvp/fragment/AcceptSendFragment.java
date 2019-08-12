@@ -91,6 +91,7 @@ public class AcceptSendFragment extends RxBaseFragment {
     private LinearLayout mainLlAction;
     private TextView mainCancel;
     private TextView mainPay;
+    private boolean pause;
 
     /**
      * 设置bridge
@@ -164,6 +165,12 @@ public class AcceptSendFragment extends RxBaseFragment {
         super.onDestroyView();
         cancelTimer();
     }
+
+
+    public void setPause(boolean isPause) {
+        pause = isPause;
+    }
+
 
     /**
      * 取消计时器
@@ -410,6 +417,9 @@ public class AcceptSendFragment extends RxBaseFragment {
         timerTask = new TimerTask() {
             @Override
             public void run() {
+                if (pause) {
+                    return;
+                }
                 timeSeq--;
                 setTimeText();
             }

@@ -40,6 +40,7 @@ public class FinishFragment extends RxBaseFragment {
      * 倒计时5s
      */
     int time = 5;
+    private boolean pause;
 
     /**
      * 设置bridge
@@ -65,6 +66,9 @@ public class FinishFragment extends RxBaseFragment {
         timerTask = new TimerTask() {
             @Override
             public void run() {
+                if (pause) {
+                    return;
+                }
                 time--;
                 if (time == 0) {
                     bridge.toOrderList();
@@ -86,6 +90,12 @@ public class FinishFragment extends RxBaseFragment {
         super.onDestroyView();
         cancelTimer();
     }
+
+
+    public void setPause(boolean isPause) {
+        pause = isPause;
+    }
+
 
     /**
      * 取消定时器

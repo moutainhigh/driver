@@ -27,7 +27,7 @@ import java.util.List;
 
 public class StationDialog extends BottomSheetDialog implements View.OnClickListener {
 
-    private final DialogQueryStationAdapter adapter;
+    private DialogQueryStationAdapter adapter;
     private Button dialogQueryStationBt;
     private ImageView dialogQueryStationIv;
     private View.OnClickListener onClickListener;
@@ -83,7 +83,7 @@ public class StationDialog extends BottomSheetDialog implements View.OnClickList
 
             int fragmentHeight = 0;
             //最多6个 虽少2个
-            int totalCount = data.size() > 6 ? 6 : data.size() > 2 ? data.size() : 2;
+            int totalCount = data.size() > 6 ? 6 : data.size();
             //24是iv 30是tablayout 56是bt 12是recyclerView底部padding
             int totalHeight = UIDisplayHelper.dpToPx(totalCount * 68 + 24 + 30 + 56 + 12);
 

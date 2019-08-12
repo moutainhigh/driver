@@ -3,6 +3,7 @@ package com.easymin.custombus.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.easymi.component.Config;
 import com.easymi.component.base.RxPayActivity;
 import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
@@ -24,6 +26,7 @@ import com.easymin.custombus.R;
 import com.easymin.custombus.dialog.StationDialog;
 import com.easymin.custombus.entity.DZBusLine;
 import com.easymin.custombus.entity.StationBean;
+import com.easymin.custombus.entity.StationMainBean;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -52,14 +55,15 @@ public class CreateOrderActivity extends RxPayActivity {
     Button btn;
 
     private DZBusLine dzBusLine;
-    private List<StationBean> stationList;
+    private List<StationBean> startList;
+    private List<StationBean> endList;
     private StationBean startBean;
     private StationBean endBean;
     private int currentNum;
-    private double prise;
     private DecimalFormat decimalFormat;
-    private boolean isNumberSuccess;
     private long orderId;
+    private boolean request;
+    private double currentMoney;
 
     @Override
     public boolean isEnableSwipe() {
@@ -73,6 +77,7 @@ public class CreateOrderActivity extends RxPayActivity {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
+        currentMoney = -1;
         currentNum = 1;
         banci_select = findViewById(R.id.banci_select);
         start_place = findViewById(R.id.start_place);
@@ -93,7 +98,9 @@ public class CreateOrderActivity extends RxPayActivity {
         btn = findViewById(R.id.btn);
         btn.setText("返回我的订单");
         btn.setOnClickListener(view -> finish());
-        stationList = new ArrayList<>();
+        startList = new ArrayList<>();
+        endList = new ArrayList<>();
+
         decimalFormat = new DecimalFormat("0.00");
         banci_select.setOnClickListener(view -> {
             Intent intent = new Intent(CreateOrderActivity.this, BanciSelectActivity.class);
@@ -128,12 +135,7 @@ public class CreateOrderActivity extends RxPayActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (editable.length() == 11) {
-                    isNumberSuccess = true;
-                    checkMoney();
-                } else {
-                    isNumberSuccess = false;
-                }
+                buttonAction();
             }
         });
 
@@ -179,17 +181,19 @@ public class CreateOrderActivity extends RxPayActivity {
                 .map(new HttpResultFunc2<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MySubscriber<List<StationBean>>(this, true, false, new NoErrSubscriberListener<List<StationBean>>() {
+                .subscribe(new MySubscriber<StationMainBean>(this, true, false, new NoErrSubscriberListener<StationMainBean>() {
                     @Override
-                    public void onNext(List<StationBean> dzBusStaion) {
-                        stationList = dzBusStaion;
+                    public void onNext(StationMainBean dzBusStaion) {
+                        request = true;
+                        startList = dzBusStaion.onStation;
+                        endList = dzBusStaion.offStation;
                         showDialog(isStart);
                     }
                 }));
     }
 
     private void checkList(boolean isStart) {
-        if (stationList == null || stationList.isEmpty()) {
+        if (!request) {
             getStation(isStart);
         } else {
             showDialog(isStart);
@@ -197,20 +201,24 @@ public class CreateOrderActivity extends RxPayActivity {
     }
 
     private void showDialog(boolean isStart) {
-        StationDialog bottomSheetDialog = new StationDialog(this, stationList, isStart, startBean, endBean);
+        StationDialog bottomSheetDialog = new StationDialog(this, isStart ? startList : endList, isStart, startBean, endBean);
         bottomSheetDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (StationBean stationBean : stationList) {
+                for (StationBean stationBean : isStart ? startList : endList) {
                     if (stationBean.chooseStatus == 1) {
                         startBean = stationBean;
                         endBean = null;
                         end_place.setText("");
                         start_place.setText(startBean.name);
+                        currentMoney = -1;
+                        money.setText("0.00");
                     } else if (stationBean.chooseStatus == 2) {
                         endBean = stationBean;
                         end_place.setText(endBean.name);
+                        currentMoney = -1;
                     }
+                    buttonAction();
                 }
                 checkMoney();
             }
@@ -218,28 +226,38 @@ public class CreateOrderActivity extends RxPayActivity {
         bottomSheetDialog.show();
     }
 
-    private void checkMoney() {
-        if (startBean != null && endBean != null && dzBusLine != null) {
-            //一口价
-            if (dzBusLine.throughTicket == 1) {
-                prise = dzBusLine.throughMoney;
-            } else {
-                //计算价钱
-                int startIndex = startBean.sequence - 1;
-                int endIndex = endBean.sequence - 1;
-                prise = 0;
-                for (int i = 0; i < stationList.size(); i++) {
-                    if (i >= startIndex && i < endIndex) {
-                        prise += stationList.get(i).ticket;
-                    }
-                }
-            }
-            money.setText(decimalFormat.format(prise * currentNum));
-        } else {
-            money.setText(decimalFormat.format(0));
-        }
+    private void setMoney() {
+        money.setText(decimalFormat.format(currentMoney * currentNum));
+    }
 
-        if (isNumberSuccess) {
+    private void checkMoney() {
+        if (startBean != null && endBean != null && dzBusLine != null && currentMoney == -1) {
+            ApiManager.getInstance().createApi(Config.HOST, DZBusApiService.class)
+                    .priceOrder(startBean.stationId, endBean.stationId, dzBusLine.id)
+                    .map(new HttpResultFunc2<>())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new MySubscriber<Double>(this, true, false, new HaveErrSubscriberListener<Double>() {
+                        @Override
+                        public void onNext(Double aDouble) {
+                            currentMoney = aDouble;
+                            setMoney();
+                        }
+
+                        @Override
+                        public void onError(int code) {
+                            endBean = null;
+                            end_place.setText("");
+                        }
+                    }));
+        } else if (currentMoney != -1) {
+            setMoney();
+        }
+    }
+
+    private void buttonAction() {
+        if (!TextUtils.isEmpty(start_place.getText()) && !TextUtils.isEmpty(end_place.getText()) &&
+                !TextUtils.isEmpty(banci_select.getText()) && edit_phone.getText().length() == 11) {
             create_order.setEnabled(true);
             create_order.setBackgroundResource(R.drawable.corners_button_selector);
         } else {
@@ -263,7 +281,10 @@ public class CreateOrderActivity extends RxPayActivity {
                 DZBusLine newDzBusLine = (DZBusLine) data.getSerializableExtra("data");
                 if (dzBusLine == null || dzBusLine.id != newDzBusLine.id) {
                     dzBusLine = newDzBusLine;
-                    stationList.clear();
+                    request = false;
+                    startList.clear();
+                    endList.clear();
+                    currentMoney = -1;
                     banci_select.setText(dzBusLine.lineName);
                     start_place.setText("");
                     end_place.setText("");
@@ -272,6 +293,7 @@ public class CreateOrderActivity extends RxPayActivity {
                     currentNum = 1;
                     num.setText("" + currentNum);
                     sub.setEnabled(false);
+                    buttonAction();
                     if (dzBusLine.restrict == 1) {
                         add.setEnabled(true);
                     } else {
@@ -281,7 +303,6 @@ public class CreateOrderActivity extends RxPayActivity {
                             add.setEnabled(false);
                         }
                     }
-                    checkMoney();
                 }
             }
         }

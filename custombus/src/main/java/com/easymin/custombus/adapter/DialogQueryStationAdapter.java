@@ -22,7 +22,6 @@ public class DialogQueryStationAdapter extends RecyclerView.Adapter<DialogQueryS
     private Context context;
     private List<StationBean> list;
     private boolean isStart;
-    private OnItemClickListener onItemClickListener;
     private StationBean startBean;
     private StationBean endBean;
 
@@ -44,11 +43,11 @@ public class DialogQueryStationAdapter extends RecyclerView.Adapter<DialogQueryS
                     }
                 }
             } else {
-                for (StationBean stationBean : list) {
-                    if (stationBean.isCurrentStation == 1) {
-                        stationBean.chooseStatus = 1;
+                for (int i = 0; i < list.size(); i++) {
+                    if (i == 0) {
+                        list.get(i).chooseStatus = 1;
                     } else {
-                        stationBean.chooseStatus = 0;
+                        list.get(i).chooseStatus = 0;
                     }
                 }
             }
@@ -86,14 +85,6 @@ public class DialogQueryStationAdapter extends RecyclerView.Adapter<DialogQueryS
         return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.dialog_query_station_item, parent, false));
     }
 
-    public interface OnItemClickListener {
-        void getStation(StationBean stationBean);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         StationBean bean = list.get(position);
@@ -111,7 +102,6 @@ public class DialogQueryStationAdapter extends RecyclerView.Adapter<DialogQueryS
         });
         if ((isStart && bean.onOff == 2)
                 || (!isStart && bean.onOff == 1)
-                || (!isStart && bean.chooseStatus == 1)
                 || (!isStart && startBean != null && bean.sequence <= startBean.sequence)) {
             holder.dialogQueryStationItemTvTitle.setTextColor(ContextCompat.getColor(context, R.color.colorDesc));
             holder.dialogQueryStationItemTvSubtitle.setTextColor(ContextCompat.getColor(context, R.color.colorDesc));

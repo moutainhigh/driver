@@ -23,6 +23,7 @@ import java.util.TimerTask;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: NotStartFragment
+ *
  * @Author: hufeng
  * Date: 2018/12/24 下午1:10
  * Description: 行程未开始界面
@@ -45,9 +46,11 @@ public class NotStartFragment extends RxBaseFragment {
      * 通信接口
      */
     ActFraCommBridge bridge;
+    private boolean pause;
 
     /**
      * 设置bridge
+     *
      * @param bridge
      */
     public void setBridge(ActFraCommBridge bridge) {
@@ -130,6 +133,9 @@ public class NotStartFragment extends RxBaseFragment {
             timerTask = new TimerTask() {
                 @Override
                 public void run() {
+                    if (pause) {
+                        return;
+                    }
                     jieRenTimeLeftSec--;
                     long sec = jieRenTimeLeftSec % (60 * 60 * 24);
                     if (sec != 0) {
@@ -158,6 +164,11 @@ public class NotStartFragment extends RxBaseFragment {
         cancelTimer();
     }
 
+
+    public void setPause(boolean isPause) {
+        pause = isPause;
+    }
+
     /**
      * 取消计时器
      */
@@ -174,6 +185,7 @@ public class NotStartFragment extends RxBaseFragment {
 
     /**
      * 设置显示距离开始时间的计时
+     *
      * @param leftSec
      */
     private void setLeftText(long leftSec) {

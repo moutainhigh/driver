@@ -108,7 +108,7 @@ public class MqttManager implements LocObserver {
         LocReceiver.getInstance().deleteObserver(getInstance());
         if (mInstance != null) {
             mInstance.disConnect();
-            mInstance = null;
+//            mInstance = null;
         }
     }
 

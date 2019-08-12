@@ -48,9 +48,7 @@ import com.easymi.common.receiver.CancelOrderReceiver;
 import com.easymi.common.receiver.EmployStatusChangeReceiver;
 import com.easymi.common.receiver.NoticeReceiver;
 import com.easymi.common.receiver.OrderRefreshReceiver;
-import com.easymi.common.register.InfoActivity;
 import com.easymi.common.widget.NearInfoWindowAdapter;
-import com.easymi.common.widget.RegisterDialog;
 import com.easymi.component.Config;
 import com.easymi.component.EmployStatus;
 import com.easymi.component.app.XApp;
@@ -117,7 +115,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     CusToolbar toolbar;
     LinearLayout createOrder;
     ImageView pullIcon;
-    LinearLayout peek_con;
     ImageView refreshImg;
     FrameLayout loadingFrame;
     ImageView loadingImg;
@@ -135,7 +132,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     TextView todayIncome;
     TextView noOrderText;
     LinearLayout bottomBtnCon;
-    Button btn_create;
+    Button btCreate;
 
     /**
      * 取消订单
@@ -204,54 +201,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         }
     }
 
-    private RegisterDialog registerDialog;
-    private int lastType = -1;
-
-    @Override
-    public void showRegisterDialog(String companyPhone, int type, String reason) {
-        if (registerDialog == null || lastType != type) {
-            if (registerDialog != null) {
-                registerDialog.dismiss();
-            }
-            if (type == 2) {
-                registerDialog = RegisterDialog.newInstance("亲爱的师傅您好：",
-                        "    您的资料已提交成功，管理人员正在审核，如有疑问请及时联后台管理人员，审核通过后您可开启接单旅程了。",
-                        "联系客服",
-                        true)
-                        .setOnClickListener(() ->
-                                PhoneUtil.call(WorkActivity.this, companyPhone));
-            } else if (type == 3) {
-                //没完善资料
-                registerDialog = RegisterDialog.newInstance("亲爱的师傅您好：",
-                        "    您的资料还未完善，请尽快完善提交资料，管理员审核通过之后您就可以开启接单旅程了。",
-                        "完善资料",
-                        false)
-                        .setOnClickListener(() ->
-                                startActivity(new Intent(WorkActivity.this, InfoActivity.class)));
-
-            } else if (type == 4) {
-                //驳回
-                registerDialog = RegisterDialog.newInstance("审核不通过原因：",
-                        "    " + reason,
-                        "重新完善",
-                        false)
-                        .setOnClickListener(() ->
-                                startActivity(new Intent(WorkActivity.this, InfoActivity.class)));
-            }
-            lastType = type;
-        }
-        if (registerDialog != null && !registerDialog.isShow()) {
-            registerDialog.show(getSupportFragmentManager(), "registerDialog");
-        }
-    }
-
-    @Override
-    public void hideRegisterDialog() {
-        if (registerDialog != null) {
-            registerDialog.dismiss();
-        }
-    }
-
     @Override
     public void setTitleStatus(String content) {
         if (TextUtils.equals(EmUtil.getEmployInfo().serviceType, Config.ZHUANCHE) && EmUtil.getEmployInfo().sex == 2) {
@@ -259,10 +208,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         } else {
             tvTitle.setVisibility(View.GONE);
         }
-    }
-
-    public void getMoney(double value) {
-        todayIncome.setText(String.valueOf(value));
     }
 
     private void initNotifity() {
@@ -279,7 +224,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         createOrder = findViewById(R.id.create_order);
         swipeRefreshLayout = findViewById(R.id.swipe_layout);
         pullIcon = findViewById(R.id.pull_icon);
-        peek_con = findViewById(R.id.peek_con);
         tvTitle = findViewById(R.id.tv_title);
         tvTitle.setSelected(true);
         listenOrderCon = findViewById(R.id.listen_order_con);
@@ -305,7 +249,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         moneyDesc = findViewById(R.id.money_desc);
         noOrderText = findViewById(R.id.no_order_img);
         bottomBtnCon = findViewById(R.id.bottom_btn_con);
-        btn_create = findViewById(R.id.btn_create);
+        btCreate = findViewById(R.id.btn_create);
 
         Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1));
         Log.e("employ", "" + employ);
@@ -573,9 +517,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
          * 专车补单在下线状态
          */
         if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)) {
-            btn_create.setVisibility(View.VISIBLE);
+            btCreate.setVisibility(View.VISIBLE);
         } else {
-            btn_create.setVisibility(View.GONE);
+            btCreate.setVisibility(View.GONE);
         }
     }
 
