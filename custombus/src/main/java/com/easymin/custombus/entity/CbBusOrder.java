@@ -8,7 +8,7 @@ import java.util.List;
  * @FileName: CbBusOrder
  * @Author: hufeng
  * @Date: 2019/2/18 下午2:25
- * @Description: 定制班车班次实体
+ * @Description: 客运班车班次实体
  * @History:
  */
 public class CbBusOrder implements Serializable{

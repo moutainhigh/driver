@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.easymi.component.Config;
+import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.GlideCircleTransform;
 import com.easymin.custombus.R;
 import com.easymin.custombus.entity.Customer;
@@ -80,6 +82,14 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
     @Override
     public void onBindViewHolder(PassengerAdapter.Holder holder, int position) {
         Customer customer = listPassenger.get(position);
+
+        RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) holder.cus_ll.getLayoutParams();
+        if (position == 0) {
+            layoutParams.topMargin = DensityUtil.dp2px(context, 0);
+        } else {
+            layoutParams.topMargin = DensityUtil.dp2px(context, 12);
+        }
+        holder.cus_ll.setLayoutParams(layoutParams);
 
         if (customer.status <= Customer.CITY_COUNTRY_STATUS_ARRIVED) {
             holder.iv_call_phone.setVisibility(View.VISIBLE);
@@ -148,11 +158,13 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
         RelativeLayout cusRl;
         TextView cusTvCancel;
         TextView cusTvPay;
+        LinearLayout cus_ll;
 
 
         public Holder(View itemView) {
             super(itemView);
             rootView = itemView;
+            cus_ll = itemView.findViewById(R.id.cus_ll);
             iv_head = itemView.findViewById(R.id.cus_photo);
             tv_pass_name = itemView.findViewById(R.id.cus_name);
             tv_pass_number = itemView.findViewById(R.id.cp_ticket_num);

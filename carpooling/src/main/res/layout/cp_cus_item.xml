@@ -10,7 +10,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginTop="16dp"
         android:orientation="horizontal">
 
@@ -23,11 +23,12 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="8dp">
 
             <TextView
+                android:maxLines="1"
                 android:id="@+id/cus_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -50,16 +51,19 @@
                 android:id="@+id/status_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignTop="@id/cus_name"
+                android:layout_alignBottom="@id/cus_name"
                 android:layout_marginLeft="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
                 android:layout_toRightOf="@+id/cus_name"
                 android:background="@drawable/corner_status_called"
+                android:gravity="center"
                 android:paddingLeft="3dp"
-                android:paddingTop="2dp"
                 android:paddingRight="3dp"
-                android:paddingBottom="2dp"
                 android:text="已联系"
                 android:textColor="#0099E9"
-                android:textSize="@dimen/sizeHint" />
+                android:textSize="@dimen/sizeSmall" />
         </RelativeLayout>
 
         <Space
@@ -84,7 +88,7 @@
         android:paddingTop="16dp"
         android:paddingBottom="12dp"
         android:text="hjklshiklf;s"
-        android:textColor="@color/colorBlackLight"
+        android:textColor="@color/colorSub"
         android:textSize="@dimen/sizeHint" />
 
     <RelativeLayout
@@ -115,7 +119,6 @@
             android:textSize="@dimen/sizeContent" />
 
         <TextView
-            android:gravity="center"
             android:id="@+id/cus_tv_cancel"
             android:layout_width="72dp"
             android:layout_height="wrap_content"
@@ -124,6 +127,7 @@
             android:layout_marginBottom="8dp"
             android:layout_toStartOf="@id/cus_tv_pay"
             android:background="@drawable/cor4_st1_blacklight"
+            android:gravity="center"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:text="取消订单"

@@ -211,11 +211,9 @@ public class WorkPresenter implements WorkContract.Presenter {
                             } else {
                                 DymOrder.deleteAll();
                             }
-                            startLocService();//重启定位更改定位周期
                             view.showOrders(orders);
                         } else {
                             DymOrder.deleteAll();
-                            startLocService();//重启定位更改定位周期
                             view.showOrders(orders);
                         }
                     }

@@ -250,7 +250,7 @@ public class LoginActivity extends RxBaseActivity {
             }
         });
 
-        checkboxRemember.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_REMEMBER_PSW, false));
+        checkboxRemember.setChecked(XApp.getMyPreferences().getBoolean(Config.SP_REMEMBER_PSW, true));
         if (XApp.getMyPreferences().getBoolean(Config.SP_REMEMBER_PSW, false)) {
             String enAcc = XApp.getMyPreferences().getString(Config.SP_LOGIN_ACCOUNT, "");
             String enPsw = XApp.getMyPreferences().getString(Config.SP_LOGIN_PSW, "");

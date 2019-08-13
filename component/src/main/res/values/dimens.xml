@@ -30,6 +30,7 @@
     <dimen name="sizeButton">16sp</dimen>
     <dimen name="sizeContent">15sp</dimen>
     <dimen name="sizeHint">13sp</dimen>
+    <dimen name="sizeSmall">12sp</dimen>
 
     <dimen name="sizeLine">1px</dimen>
 

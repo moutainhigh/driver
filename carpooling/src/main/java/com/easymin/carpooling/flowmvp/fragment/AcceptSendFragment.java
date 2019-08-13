@@ -417,6 +417,9 @@ public class AcceptSendFragment extends RxBaseFragment {
         timerTask = new TimerTask() {
             @Override
             public void run() {
+                if (!isAdded()) {
+                    return;
+                }
                 if (pause) {
                     return;
                 }
@@ -432,6 +435,9 @@ public class AcceptSendFragment extends RxBaseFragment {
      * 显示对应格式等待时间
      */
     private void setTimeText() {
+        if (!isAdded()) {
+            return;
+        }
         getActivity().runOnUiThread(() -> {
 
             StringBuilder sb = new StringBuilder();
@@ -447,7 +453,7 @@ public class AcceptSendFragment extends RxBaseFragment {
             sb.append(sec).append("秒");
             if (timeSeq < 0) {
                 //超时
-                countHint.setText("等候已超时：");
+                countHint.setText("等候已超时");
                 countTime.setText(sb.toString());
                 countTime.setTextColor(getResources().getColor(R.color.color_red));
                 sliderCon.setVisibility(View.GONE);
@@ -456,7 +462,7 @@ public class AcceptSendFragment extends RxBaseFragment {
                 acceptedBtn.setOnClickListener(view -> showConfirmFlag(false));
             } else {
                 //正常计时
-                countHint.setText("等候倒计时：");
+                countHint.setText("等候倒计时");
                 countTime.setText(sb.toString());
                 countTime.setTextColor(getResources().getColor(R.color.color_orange));
                 sliderCon.setVisibility(View.VISIBLE);

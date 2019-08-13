@@ -427,6 +427,7 @@ public class MqttManager implements LocObserver {
                 client.unregisterResources();
                 if (client.isConnected()) {
                     client.disconnect();
+                    client = null;
                 }
             }
         } catch (MqttException e) {

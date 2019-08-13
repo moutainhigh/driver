@@ -180,24 +180,24 @@
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="乘客信息"
             android:textColor="#7E869A"
             android:textSize="@dimen/sizeContent" />
 
         <TextView
-            android:drawablePadding="4dp"
-            android:drawableStart="@drawable/dot6_red"
-            android:visibility="gone"
             android:id="@+id/order_tv_new"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
+            android:drawableStart="@drawable/dot6_red"
+            android:drawablePadding="4dp"
             android:gravity="end"
             android:text="有新乘客"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/sizeContent" />
+            android:textSize="@dimen/sizeContent"
+            android:visibility="gone" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -224,12 +224,12 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:background="@drawable/cor100_st1_7e869a"
-            android:paddingStart="4dp"
+            android:paddingStart="6dp"
             android:paddingTop="2dp"
-            android:paddingEnd="4dp"
+            android:paddingEnd="6dp"
             android:paddingBottom="2dp"
             android:textColor="#7E869A"
-            android:textSize="@dimen/sizeContent" />
+            android:textSize="@dimen/sizeSmall" />
 
         <TextView
             android:id="@+id/order_tv_passenger_count"
@@ -237,12 +237,12 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:background="@drawable/cor100_st1_7e869a"
-            android:paddingStart="4dp"
+            android:paddingStart="6dp"
             android:paddingTop="2dp"
-            android:paddingEnd="4dp"
+            android:paddingEnd="6dp"
             android:paddingBottom="2dp"
             android:textColor="#7E869A"
-            android:textSize="@dimen/sizeContent" />
+            android:textSize="@dimen/sizeSmall" />
 
         <TextView
             android:id="@+id/order_tv_rest_count"
@@ -250,24 +250,24 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:background="@drawable/cor100_st1_7e869a"
-            android:paddingStart="4dp"
+            android:paddingStart="6dp"
             android:paddingTop="2dp"
-            android:paddingEnd="4dp"
+            android:paddingEnd="6dp"
             android:paddingBottom="2dp"
             android:textColor="#7E869A"
-            android:textSize="@dimen/sizeContent" />
+            android:textSize="@dimen/sizeSmall" />
 
         <TextView
             android:id="@+id/order_tv_unpay_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/cor100_st1_7e869a"
-            android:paddingStart="4dp"
+            android:paddingStart="6dp"
             android:paddingTop="2dp"
-            android:paddingEnd="4dp"
+            android:paddingEnd="6dp"
             android:paddingBottom="2dp"
             android:textColor="#7E869A"
-            android:textSize="@dimen/sizeContent" />
+            android:textSize="@dimen/sizeSmall" />
     </LinearLayout>
 
     <View

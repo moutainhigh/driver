@@ -40,7 +40,7 @@ import java.util.List;
  * @FileName: CbRunActivity
  * @Author: hufeng
  * @Date: 2019/2/14 下午1:55
- * @Description: 定制班车跑单主界面
+ * @Description: 客运班车跑单主界面
  * @History:
  */
 @Route(path = "/custombus/CbRunActivity")

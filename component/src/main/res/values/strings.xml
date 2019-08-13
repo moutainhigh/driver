@@ -110,7 +110,7 @@
     <string name="carpool_status_cancel">已取消</string>
 
 
-    <!--定制班车状态-->
+    <!--客运班车状态-->
     <string name="cb_status_pay">未支付</string>
     <string name="cb_status_no_start">未开始</string>
     <string name="cb_status_wait">等待上车</string>

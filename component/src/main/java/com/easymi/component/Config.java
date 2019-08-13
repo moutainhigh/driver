@@ -137,7 +137,7 @@ public class Config {
     public static final String RENTAL = "rental";
     //客运班车
     public static final String COUNTRY = "country";
-    //哈罗定制班车
+    //哈罗客运班车
     public static final String CUSTOMBUS = "custombus";
     //哈罗城际拼车
     public static final String CARPOOL = "carpool";

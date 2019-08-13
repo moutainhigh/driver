@@ -66,6 +66,9 @@ public class FinishFragment extends RxBaseFragment {
         timerTask = new TimerTask() {
             @Override
             public void run() {
+                if (!isAdded()) {
+                    return;
+                }
                 if (pause) {
                     return;
                 }

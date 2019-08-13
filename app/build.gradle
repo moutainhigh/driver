@@ -6,8 +6,8 @@ android {
         applicationId "com.easymin.daijia.driver.zyziyunsjdaijia"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 9615
-        versionName "V6.1.9.15"
+        versionCode 9620
+        versionName "V6.1.9.20"
         multiDexEnabled true
         flavorDimensions "App" //同在App这个名字维度
         ndk {
@@ -71,7 +71,7 @@ android {
             buildConfigField "String", "HOST", '"http://v6api.rvaka.cn/"'
             buildConfigField "String", "H5_HOST", '"http://v6h5.rvaka.cn/"'
             buildConfigField "String", "IMG_SERVER", '"https://prevassets.xiaokakj.com/"'
-            buildConfigField "boolean", "IS_ENCRYPT", "false"
+            buildConfigField "boolean", "IS_ENCRYPT", "true"
         }
         //局域网环境
         local {
