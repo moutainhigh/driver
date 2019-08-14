@@ -584,14 +584,6 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
         })));
     }
 
-    /**
-     * 新建通知栏
-     *
-     * @param context
-     * @param tips
-     * @param title
-     * @param content
-     */
     private void newShowNotify(Context context, String tips, String title,
                                String content) {
         String ns = Context.NOTIFICATION_SERVICE;

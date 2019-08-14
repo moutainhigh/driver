@@ -49,6 +49,8 @@
             android:name=".activity.NaviActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
 
+        <service android:name=".cat.DumpService" />
+
         <service
             android:name=".loc.LocService"
             android:exported="false">

@@ -138,6 +138,12 @@ public class RegisterAcitivty extends RxBaseActivity {
                 ToastUtil.showMessage(RegisterAcitivty.this, getString(R.string.please_agree_agreement));
                 return;
             }
+            String psw = et_password.getText().toString();
+            String regex = "^[a-z]+$|^[0-9]+$|^[A-Z]+$";
+            if (psw.matches(regex) || psw.length() < 8) {
+                ToastUtil.showMessage(RegisterAcitivty.this, "密码必须超过8位，且不能为纯数字或纯字母");
+                return;
+            }
             PhoneUtil.hideKeyboard(this);
 
             register();
@@ -490,3 +496,4 @@ public class RegisterAcitivty extends RxBaseActivity {
         })));
     }
 }
+

@@ -38,6 +38,8 @@ import com.luck.picture.lib.config.PictureMimeType;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
+import java.util.Locale;
+
 import io.reactivex.disposables.Disposable;
 
 //import com.easymi.component.Glide4Engine;
@@ -48,6 +50,7 @@ import io.reactivex.disposables.Disposable;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: RxBaseActivity
+ *
  * @Author: hufeng
  * Date: 2018/12/24 下午1:10
  * Description:Activity基类
@@ -135,17 +138,17 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
         gpsReceiver = new GpsReceiver();
         gpsReceiver.setListener(this);
         IntentFilter intentFilter = new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION);
-        registerReceiver(gpsReceiver, intentFilter,EmUtil.getBroadCastPermission(),null);
+        registerReceiver(gpsReceiver, intentFilter, EmUtil.getBroadCastPermission(), null);
 
         netChangeReceiver = new NetWorkChangeReceiver();
         netChangeReceiver.setEvent(this);
         IntentFilter netFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(netChangeReceiver, netFilter,EmUtil.getBroadCastPermission(),null);
+        registerReceiver(netChangeReceiver, netFilter, EmUtil.getBroadCastPermission(), null);
 
 
         tiredReceiver = new TiredReceiver();
         IntentFilter tiredFilter = new IntentFilter(Config.TIRED_NOTICE);
-        registerReceiver(tiredReceiver, tiredFilter,EmUtil.getBroadCastPermission(),null);
+        registerReceiver(tiredReceiver, tiredFilter, EmUtil.getBroadCastPermission(), null);
 
     }
 
@@ -162,6 +165,9 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
         if (SysUtil.isRunningInBackground(this)) {
             //后台运行时 静音播放音频保活
             XApp.getInstance().playSlientMusic();
+            Toast.makeText(this,
+                    String.format(Locale.CHINESE, "已离开%s，注意信息安全", getString(R.string.app_name)),
+                    Toast.LENGTH_LONG).show();
         }
     }
 
@@ -318,14 +324,14 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if(StringUtils.isNotBlank(action)){
+            if (StringUtils.isNotBlank(action)) {
                 if (intent.getAction().equals(Config.TIRED_NOTICE)) {
-                    TiredNotice tiredNotice = GsonUtil.parseJson(intent.getStringExtra("data"),TiredNotice.class);
+                    TiredNotice tiredNotice = GsonUtil.parseJson(intent.getStringExtra("data"), TiredNotice.class);
                     String message = "";
-                    if (tiredNotice.isTired == 1){
-                        message = "您已处于疲劳驾驶状态"+tiredNotice.tiredTime+"分钟，为了保障您和乘客的安全，请休息片刻再继续工作。休息时间："+tiredNotice.relaxTime+"分钟。";
-                    }else {
-                        message = "您即将进入疲劳驾驶状态，请合理安排工作休息时间。正常工作状态剩余时间:"+tiredNotice.remainTime+"分钟。";
+                    if (tiredNotice.isTired == 1) {
+                        message = "您已处于疲劳驾驶状态" + tiredNotice.tiredTime + "分钟，为了保障您和乘客的安全，请休息片刻再继续工作。休息时间：" + tiredNotice.relaxTime + "分钟。";
+                    } else {
+                        message = "您即将进入疲劳驾驶状态，请合理安排工作休息时间。正常工作状态剩余时间:" + tiredNotice.remainTime + "分钟。";
                     }
 
                     AlertDialog dialog = new AlertDialog.Builder(RxBaseActivity.this)
@@ -342,7 +348,7 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
 
     private RxPermissions rxPermissions;
 
-    public void choicePic(int x, int y,int max) {
+    public void choicePic(int x, int y, int max) {
         Disposable d = rxPermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.CAMERA).subscribe(granted -> {
