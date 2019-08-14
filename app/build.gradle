@@ -42,13 +42,13 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
         debug {
-            minifyEnabled true
+            minifyEnabled false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -114,10 +114,6 @@ android {
 
 static def releaseTime() {
     return new Date().format("yyyyMMddHHmm")
-}
-
-static def releaseDate() {
-    return new Date().format("yyyyMMdd")
 }
 
 task handleMd5 {

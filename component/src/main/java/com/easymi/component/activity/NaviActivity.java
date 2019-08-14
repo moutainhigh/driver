@@ -154,6 +154,7 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
         if (null == mStartLatlng || mEndLatlng == null) {
             finish();
+            ToastUtil.showMessage(this, "数据出现错误,请重试...");
             return;
         }
 
@@ -246,11 +247,15 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mAMapNaviView.onDestroy();
+        if (mAMapNaviView != null) {
+            mAMapNaviView.onDestroy();
+        }
         //since 1.6.0 不再在naviview destroy的时候自动执行AMapNavi.stopNavi();请自行执行
         //mAMapNavi是全局的，执行订单页面还需要用，所以这里不能销毁资源
-        mAMapNavi.stopNavi();
-        mAMapNavi.destroy();
+        if (mAMapNavi != null) {
+            mAMapNavi.stopNavi();
+            mAMapNavi.destroy();
+        }
         EventBus.getDefault().unregister(this);
 //        XApp.getInstance().stopVoice();
     }

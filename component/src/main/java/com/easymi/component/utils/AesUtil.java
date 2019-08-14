@@ -1,7 +1,8 @@
 package com.easymi.component.utils;
 
+import android.text.TextUtils;
+
 import java.io.UnsupportedEncodingException;
-import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
@@ -13,7 +14,6 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class AesUtil {
-    public static final String VIPARA = "aaaaaaaaaaaaaaaa";
     public static final String bm = "utf-8";
 
     public static final String AAAAA = "aaaaaaaaaaaaaaaa";
@@ -105,6 +105,9 @@ public class AesUtil {
     public static String aesDecrypt(String password, String content) {
         if (content == null) {
             return null;
+        }
+        if (TextUtils.isEmpty(content)) {
+            return "";
         }
         try {
             byte[] byteMi = Base64.decode(content);

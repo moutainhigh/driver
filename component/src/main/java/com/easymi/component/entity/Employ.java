@@ -3,13 +3,11 @@ package com.easymi.component.entity;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.easymi.component.db.SqliteHelper;
 import com.easymi.component.utils.AesUtil;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +22,6 @@ import java.util.Map;
  * History:
  */
 public class Employ {
-
     public long id;
 
     /**
@@ -131,7 +128,9 @@ public class Employ {
         values.put("qrCodeUrl", qrCodeUrl);
         values.put("serviceTel", serviceTel);
         values.put("star", star);
+        Log.e("Employ", "save");
         boolean flag = db.insert("t_driverinfo", null, encryptString(values)) != -1;
+        Log.e("Employ", "save+  " + flag);
         return flag;
     }
 
@@ -190,7 +189,7 @@ public class Employ {
         } finally {
             cursor.close();
         }
-        return decrptyString(driverInfo);
+        return driverInfo;
     }
 
     /**
@@ -300,9 +299,11 @@ public class Employ {
         values.put("serviceTel", serviceTel);
         values.put("qrCodeUrl", qrCodeUrl);
         values.put("star", star);
+        Log.e("Employ", "updateAll");
 
         boolean flag = db.update("t_driverinfo", encryptString(values), " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
+        Log.e("Employ", "updateAll+  " + flag);
         return flag;
     }
 

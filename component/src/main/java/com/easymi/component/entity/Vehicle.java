@@ -189,6 +189,7 @@ public class Vehicle {
         vehicle.vehicleNo = AesUtil.aesDecrypt(AesUtil.AAAAA, vehicle.vehicleNo);
         vehicle.vehicleType = AesUtil.aesDecrypt(AesUtil.AAAAA, vehicle.vehicleType);
         vehicle.serviceType = AesUtil.aesDecrypt(AesUtil.AAAAA, vehicle.serviceType);
+        vehicle.vehicleColor = AesUtil.aesDecrypt(AesUtil.AAAAA,vehicle.vehicleColor);
         return vehicle;
     }
 }
