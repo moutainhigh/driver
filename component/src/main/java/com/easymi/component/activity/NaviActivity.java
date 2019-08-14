@@ -18,14 +18,12 @@ import com.amap.api.navi.AMapNaviView;
 import com.amap.api.navi.AMapNaviViewListener;
 import com.amap.api.navi.enums.AMapNaviRingType;
 import com.amap.api.navi.enums.NaviType;
-import com.amap.api.navi.model.AMapCalcRouteResult;
 import com.amap.api.navi.model.AMapLaneInfo;
 import com.amap.api.navi.model.AMapModelCross;
 import com.amap.api.navi.model.AMapNaviCameraInfo;
 import com.amap.api.navi.model.AMapNaviCross;
 import com.amap.api.navi.model.AMapNaviInfo;
 import com.amap.api.navi.model.AMapNaviLocation;
-import com.amap.api.navi.model.AMapNaviRouteNotifyData;
 import com.amap.api.navi.model.AMapNaviTrafficFacilityInfo;
 import com.amap.api.navi.model.AMapServiceAreaInfo;
 import com.amap.api.navi.model.AimLessModeCongestionInfo;
@@ -154,6 +152,7 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
         if (null == mStartLatlng || mEndLatlng == null) {
             finish();
+            ToastUtil.showMessage(this, "数据出现错误,请重试...");
             return;
         }
 
@@ -246,11 +245,15 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mAMapNaviView.onDestroy();
+        if (mAMapNaviView != null) {
+            mAMapNaviView.onDestroy();
+        }
         //since 1.6.0 不再在naviview destroy的时候自动执行AMapNavi.stopNavi();请自行执行
         //mAMapNavi是全局的，执行订单页面还需要用，所以这里不能销毁资源
-        mAMapNavi.stopNavi();
-        mAMapNavi.destroy();
+        if (mAMapNavi != null) {
+            mAMapNavi.stopNavi();
+            mAMapNavi.destroy();
+        }
         EventBus.getDefault().unregister(this);
 //        XApp.getInstance().stopVoice();
     }
@@ -465,21 +468,6 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
     }
 
     @Override
-    public void onCalculateRouteSuccess(AMapCalcRouteResult aMapCalcRouteResult) {
-
-    }
-
-    @Override
-    public void onCalculateRouteFailure(AMapCalcRouteResult aMapCalcRouteResult) {
-
-    }
-
-    @Override
-    public void onNaviRouteNotify(AMapNaviRouteNotifyData aMapNaviRouteNotifyData) {
-
-    }
-
-    @Override
     public void onNaviSetting() {
 
     }
@@ -521,16 +509,6 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     @Override
     public void onNaviViewLoaded() {
-
-    }
-
-    @Override
-    public void onMapTypeChanged(int i) {
-
-    }
-
-    @Override
-    public void onNaviViewShowMode(int i) {
 
     }
 

@@ -14,7 +14,6 @@ import com.amap.api.navi.AMapNaviView;
 import com.amap.api.navi.enums.AMapNaviRingType;
 import com.amap.api.navi.enums.IconType;
 import com.amap.api.navi.enums.NaviType;
-import com.amap.api.navi.model.AMapCalcRouteResult;
 import com.amap.api.navi.model.AMapLaneInfo;
 import com.amap.api.navi.model.AMapModelCross;
 import com.amap.api.navi.model.AMapNaviCameraInfo;
@@ -22,7 +21,6 @@ import com.amap.api.navi.model.AMapNaviCross;
 import com.amap.api.navi.model.AMapNaviInfo;
 import com.amap.api.navi.model.AMapNaviLocation;
 import com.amap.api.navi.model.AMapNaviPath;
-import com.amap.api.navi.model.AMapNaviRouteNotifyData;
 import com.amap.api.navi.model.AMapNaviTrafficFacilityInfo;
 import com.amap.api.navi.model.AMapServiceAreaInfo;
 import com.amap.api.navi.model.AimLessModeCongestionInfo;
@@ -272,21 +270,21 @@ public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener
         tv_destance.setText(naviInfo.getCurStepRetainDistance() + "米后");
         tv_next_site.setText(naviInfo.getNextRoadName());
 
-        if (naviInfo.getIconType() == IconType.LEFT){
+        if (naviInfo.getIconType() == IconType.LEFT) {
             tv_turn.setText("左转");
-        }else if (naviInfo.getIconType() == IconType.RIGHT){
+        } else if (naviInfo.getIconType() == IconType.RIGHT) {
             tv_turn.setText("右转");
-        }else if (naviInfo.getIconType() == IconType.LEFT_FRONT){
+        } else if (naviInfo.getIconType() == IconType.LEFT_FRONT) {
             tv_turn.setText("左前方行驶");
-        }else if (naviInfo.getIconType() == IconType.RIGHT_FRONT){
+        } else if (naviInfo.getIconType() == IconType.RIGHT_FRONT) {
             tv_turn.setText("右前方行驶");
-        }else if (naviInfo.getIconType() == IconType.LEFT_BACK){
+        } else if (naviInfo.getIconType() == IconType.LEFT_BACK) {
             tv_turn.setText("左后方行驶");
-        }else if (naviInfo.getIconType() == IconType.RIGHT_BACK){
+        } else if (naviInfo.getIconType() == IconType.RIGHT_BACK) {
             tv_turn.setText("右后方行驶");
-        }else if (naviInfo.getIconType() == IconType.LEFT_TURN_AROUND){
+        } else if (naviInfo.getIconType() == IconType.LEFT_TURN_AROUND) {
             tv_turn.setText("左转掉头");
-        }else if (naviInfo.getIconType() == IconType.STRAIGHT){
+        } else if (naviInfo.getIconType() == IconType.STRAIGHT) {
             tv_turn.setText("直行");
         }
     }
@@ -298,11 +296,6 @@ public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener
 
     @Override
     public void updateCameraInfo(AMapNaviCameraInfo[] aMapNaviCameraInfos) {
-
-    }
-
-    @Override
-    public void updateIntervalCameraInfo(AMapNaviCameraInfo aMapNaviCameraInfo, AMapNaviCameraInfo aMapNaviCameraInfo1, int i) {
 
     }
 
@@ -333,11 +326,6 @@ public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener
 
     @Override
     public void showLaneInfo(AMapLaneInfo[] aMapLaneInfos, byte[] bytes, byte[] bytes1) {
-
-    }
-
-    @Override
-    public void showLaneInfo(AMapLaneInfo aMapLaneInfo) {
 
     }
 
@@ -400,21 +388,6 @@ public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener
         }
     }
 
-    @Override
-    public void onCalculateRouteSuccess(AMapCalcRouteResult aMapCalcRouteResult) {
-
-    }
-
-    @Override
-    public void onCalculateRouteFailure(AMapCalcRouteResult aMapCalcRouteResult) {
-
-    }
-
-    @Override
-    public void onNaviRouteNotify(AMapNaviRouteNotifyData aMapNaviRouteNotifyData) {
-
-    }
-
 
     /**
      * 订单操作相关
@@ -473,7 +446,7 @@ public class AMapNaviActivity extends RxBaseActivity implements AMapNaviListener
                 || zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER
                 || zcOrder.orderStatus == ZCOrderStatus.START_WAIT_ORDER
                 || zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_DESTINATION_ORDER
-                ) {
+        ) {
             if (null != zcOrder.getEndSite()) {
                 start = new NaviLatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
                 end = new NaviLatLng(zcOrder.getEndSite().lat, zcOrder.getEndSite().lng);
