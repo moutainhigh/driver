@@ -105,7 +105,7 @@ public class MqttManager implements LocObserver {
      */
     public static void release() {
         Log.e("MqttManager", "onRelease");
-        LocReceiver.getInstance().deleteObserver(getInstance());
+//        LocReceiver.getInstance().deleteObserver(getInstance());
         if (mInstance != null) {
             mInstance.disConnect();
 //            mInstance = null;
@@ -420,7 +420,7 @@ public class MqttManager implements LocObserver {
         rxManager.clear();
         if (handler != null) {
             handler.removeCallbacksAndMessages(null);
-            handler = null;
+//            handler = null;
         }
         try {
             if (client != null) {
