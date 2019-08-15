@@ -29,11 +29,10 @@ import com.google.gson.Gson;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
-import org.eclipse.paho.client.mqttv3.DisconnectedBufferOptions;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
-import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -73,22 +72,18 @@ public class MqttManager implements LocObserver {
 
     private RxManager rxManager;
     private Handler handler;
-    private boolean isFirst;
-    private int count;
+    private boolean isConnecting = false;//是否正在连接
 
     /**
      * 初始化
      */
     private MqttManager() {
         rxManager = new RxManager();
-        LocReceiver.getInstance().addObserver(MqttManager.this);
         handler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
                 if (msg.what == 0) {
                     publish();
-                } else if (msg.what == 1) {
-                    doConnect();
                 }
                 return true;
             }
@@ -115,7 +110,6 @@ public class MqttManager implements LocObserver {
         LocReceiver.getInstance().deleteObserver(getInstance());
         if (mInstance != null) {
             mInstance.disConnect();
-            mInstance = null;
         }
     }
 
@@ -127,15 +121,24 @@ public class MqttManager implements LocObserver {
     public void creatConnect() {
         if (!XApp.getMyPreferences().getBoolean(Config.SP_ISLOGIN, false)) {
             //未登陆 不连接
+            Log.e("MqttManager", "SP_ISLOGIN");
             return;
         }
-
+        if (isConnecting) {//重连时不连
+            Log.e("MqttManager", "isConnecting");
+            return;
+        }
         if (isConnected()) {
             //client连接起的  不连接
+            Log.e("MqttManager", "isConnected");
             return;
         }
         if (TextUtils.isEmpty(Config.MQTT_TOPIC)) {
+            Log.e("MqttManager", "MQTT_TOPIC");
             return;
+        }
+        if (client != null) {
+            client.unregisterResources();
         }
 
         Log.e("MqttManager", "creatConnect");
@@ -158,57 +161,37 @@ public class MqttManager implements LocObserver {
             String message = "{\"terminal_uid\":\"" + clientId + "\"}";
             conOpt.setWill(pullTopic, message.getBytes(), qos, false);
         }
+        client = new MqttAndroidClient(XApp.getInstance(), brokerUrl, clientId);
+        client.setCallback(new MqttCallback() {
+            @Override
+            public void connectionLost(Throwable cause) {
+                Log.e(TAG, "connectionLost");
+                //失去连接后延时3秒重连
+                postCreateConnect();
+            }
 
-        if (client == null) {
-            client = new MqttAndroidClient(XApp.getInstance(), brokerUrl, clientId);
+            @Override
+            public void messageArrived(String topic, MqttMessage message) {
+                String str1 = new String(message.getPayload());
+                Log.e(TAG, "MqttReceivePull:" + str1);
+                HandlePush.getInstance().handPush(str1);
+            }
 
-            client.setCallback(new MqttCallbackExtended() {
-                @Override
-                public void connectComplete(boolean reconnect, String serverURI) {
-                    Log.e("MqttManager", "connectComplete  " + reconnect);
-                    try {
-                        client.subscribe(pullTopic, qos, null, new IMqttActionListener() {
-                            @Override
-                            public void onSuccess(IMqttToken asyncActionToken) {
-                                Log.e("MqttManager", "subscribeSuccess");
-                                //连上后走接口看有没有余冗数据
-                                getOrderStatus();
-                                //连接后立即发送
-                                notifySend();
-                            }
-
-                            @Override
-                            public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                                Log.e("MqttManager", "subscribeFail");
-                                //出现异常 进行计数
-                                countEvent(true);
-                            }
-                        });
-                    } catch (MqttException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void connectionLost(Throwable cause) {
-                    //出现异常 进行计数
-                    countEvent(true);
-                    Log.e(TAG, "connectionLost");
-                }
-
-                @Override
-                public void messageArrived(String topic, MqttMessage message) throws Exception {
-                    String str1 = new String(message.getPayload());
-                    Log.e(TAG, "MqttReceivePull:" + str1);
-                    HandlePush.getInstance().handPush(str1);
-                }
-
-                @Override
-                public void deliveryComplete(IMqttDeliveryToken token) {
-                }
-            });
-        }
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken token) {
+            }
+        });
         doConnect();
+    }
+
+    private void postCreateConnect() {
+        isConnecting = false;
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                creatConnect();
+            }
+        }, 3000);
     }
 
     private void notifySendDelayed() {
@@ -229,7 +212,6 @@ public class MqttManager implements LocObserver {
         if (handler == null) {
             return;
         }
-
         removeNotify(0);
         handler.sendEmptyMessage(0);
     }
@@ -243,36 +225,6 @@ public class MqttManager implements LocObserver {
         }
         if (handler.hasMessages(what)) {
             handler.removeMessages(what);
-        }
-    }
-
-    private void resetRetryCount() {
-        count = 0;
-    }
-
-    private void sendReconnect() {
-        if (mInstance == null) {
-            return;
-        }
-        if (handler == null) {
-            return;
-        }
-        removeNotify(0);
-        removeNotify(1);
-        handler.sendEmptyMessageDelayed(1, 3000);
-    }
-
-    private void countEvent(boolean isReconnect) {
-        count++;
-        if (count >= 10) {
-            EventBus.getDefault().post(new MqttReconnectEvent());
-            count = 0;
-        } else {
-            if (isReconnect) {
-                sendReconnect();
-            } else {
-                notifySendDelayed();
-            }
         }
     }
 
@@ -318,34 +270,52 @@ public class MqttManager implements LocObserver {
      */
     private void doConnect() {
         Log.e("MqttManager", "doConnect ");
-        if (client != null && !client.isConnected()) {
-            try {
-                client.connect(conOpt, null, new IMqttActionListener() {
-                    @Override
-                    public void onSuccess(IMqttToken asyncActionToken) {
-                        if (!isFirst && client != null) {
-                            DisconnectedBufferOptions disconnectedBufferOptions = new DisconnectedBufferOptions();
-                            disconnectedBufferOptions.setBufferEnabled(true);
-                            disconnectedBufferOptions.setBufferSize(100);
-                            disconnectedBufferOptions.setPersistBuffer(false);
-                            disconnectedBufferOptions.setDeleteOldestMessages(false);
-                            client.setBufferOpts(disconnectedBufferOptions);
-                            isFirst = true;
-                        }
-                        Log.e("MqttManager", "connectSuccess");
-                    }
+        try {
+            LocReceiver.getInstance().addObserver(this);
+            isConnecting = true;
+            client.connect(conOpt, null, new IMqttActionListener() {
+                @Override
+                public void onSuccess(IMqttToken asyncActionToken) {
+                    isConnecting = false;
+                    Log.e("MqttManager", "connectSuccess");
+                    try {
+                        client.unsubscribe(pullTopic);//订阅topic前先取消订阅，防止重复订阅
+                        client.subscribe(pullTopic, qos, null, new IMqttActionListener() {
+                            @Override
+                            public void onSuccess(IMqttToken asyncActionToken) {
+                                isConnecting = false;
+                                Log.e("MqttManager", "subscribeSuccess");
+                                //连上后走接口看有没有余冗数据
+                                getOrderStatus();
+                                //连接后立即发送
+                                notifySend();
+                            }
 
-                    @Override
-                    public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                        Log.e("MqttManager", "connectFailure   " + exception.getMessage());
-                        //出现异常 进行计数
-                        countEvent(true);
+                            @Override
+                            public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                                Log.e("MqttManager", "subscribeFail");
+                                sendReconnectEvent();
+                            }
+                        });
+                    } catch (MqttException e) {
+                        e.printStackTrace();
                     }
-                });
-            } catch (Exception e) {
-                Log.e(TAG, "doConnect exception-->" + e.getMessage());
-            }
+                }
+
+                @Override
+                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                    Log.e("MqttManager", "connectFailure   " + exception.getMessage());
+                    postCreateConnect();
+                }
+            });
+        } catch (Exception e) {
+            Log.e(TAG, "doConnect exception-->" + e.getMessage());
         }
+
+    }
+
+    private void sendReconnectEvent() {
+        EventBus.getDefault().post(new MqttReconnectEvent());
     }
 
     /**
@@ -387,8 +357,6 @@ public class MqttManager implements LocObserver {
                 client.publish(Config.MQTT_TOPIC, message, null, new IMqttActionListener() {
                     @Override
                     public void onSuccess(IMqttToken asyncActionToken) {
-                        //发送成功 说明连上了 清除计数器
-                        resetRetryCount();
                         //删除已发送数据
                         PushMessage.delete(pushList);
                         Log.e("MqttManager", "sendSuccess   restSize==  " + PushMessage.findAll().size() + "      " + stringBuilder.toString());
@@ -404,16 +372,15 @@ public class MqttManager implements LocObserver {
                     @Override
                     public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
                         Log.e("MqttManager", "sendFail");
-                        //出现异常 进行计数
-                        countEvent(false);
+                        sendReconnectEvent();
                     }
                 });
             } catch (MqttException e) {
                 e.fillInStackTrace();
             }
         } else {
-            //出现异常 进行计数
-            countEvent(true);
+            //重连
+            postCreateConnect();
         }
     }
 
@@ -465,16 +432,22 @@ public class MqttManager implements LocObserver {
         rxManager.clear();
         if (handler != null) {
             handler.removeCallbacksAndMessages(null);
-            handler = null;
+        }
+        isConnecting = false;
+        if (client == null) {
+            return;
         }
         try {
-            if (client != null) {
-                client.unregisterResources();
+            client.unregisterResources();
+            if (client != null && client.isConnected()) {
                 client.disconnect();
             }
+            client = null;
         } catch (MqttException e) {
+            Log.e("MqttManager","MqttException");
             e.fillInStackTrace();
         } catch (NullPointerException e) {
+            Log.e("MqttManager","NullPointerException");
             e.fillInStackTrace();
         }
     }
