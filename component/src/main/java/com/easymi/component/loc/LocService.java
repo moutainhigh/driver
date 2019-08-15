@@ -284,7 +284,7 @@ public class LocService extends Service implements AMapLocationListener {
         builder.setWhen(System.currentTimeMillis());
         builder.setContentIntent(pendingIntent);
         builder.setOngoing(true);
-        builder.setSound(null);
+        builder.setVibrate(null);
 
         notification = builder.build();
 

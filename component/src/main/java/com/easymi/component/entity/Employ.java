@@ -3,11 +3,14 @@ package com.easymi.component.entity;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.easymi.component.db.SqliteHelper;
+import com.easymi.component.utils.AesUtil;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
@@ -19,7 +22,6 @@ import java.util.List;
  * History:
  */
 public class Employ {
-
     public long id;
 
     /**
@@ -109,7 +111,6 @@ public class Employ {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
         ContentValues values = new ContentValues();
-
         values.put("id", id);
         values.put("userName", userName);
         values.put("nickName", nickName);
@@ -127,8 +128,28 @@ public class Employ {
         values.put("qrCodeUrl", qrCodeUrl);
         values.put("serviceTel", serviceTel);
         values.put("star", star);
-        boolean flag = db.insert("t_driverinfo", null, values) != -1;
+        Log.e("Employ", "save");
+        boolean flag = db.insert("t_driverinfo", null, encryptString(values)) != -1;
+        Log.e("Employ", "save+  " + flag);
         return flag;
+    }
+
+    /**
+     * 加密string字符串
+     *
+     * @param values
+     * @return
+     */
+    private ContentValues encryptString(ContentValues values) {
+        for (Map.Entry<String, Object> item : values.valueSet()) {
+            String key = item.getKey();
+            Object value = item.getValue();
+            if (value instanceof String) {
+                value = AesUtil.aesEncrypt(AesUtil.AAAAA, (String) item.getValue());
+                values.put(key, (String) value);
+            }
+        }
+        return values;
     }
 
     /**
@@ -250,8 +271,7 @@ public class Employ {
         driverInfo.qrCodeUrl = cursor.getString(cursor.getColumnIndex("qrCodeUrl"));
         driverInfo.serviceTel = cursor.getString(cursor.getColumnIndex("serviceTel"));
         driverInfo.star = cursor.getLong(cursor.getColumnIndex("star"));
-
-        return driverInfo;
+        return decrptyString(driverInfo);
     }
 
     /**
@@ -270,7 +290,7 @@ public class Employ {
         values.put("phone", phone);
         values.put("portraitPath", portraitPath);
         values.put("serviceType", serviceType);
-        values.put("driverType",driverType);
+        values.put("driverType", driverType);
         values.put("status", status);
         values.put("companyId", companyId);
         values.put("deviceNo", deviceNo);
@@ -279,9 +299,11 @@ public class Employ {
         values.put("serviceTel", serviceTel);
         values.put("qrCodeUrl", qrCodeUrl);
         values.put("star", star);
+        Log.e("Employ", "updateAll");
 
-        boolean flag = db.update("t_driverinfo", values, " id = ? ",
+        boolean flag = db.update("t_driverinfo", encryptString(values), " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
+        Log.e("Employ", "updateAll+  " + flag);
         return flag;
     }
 
@@ -295,5 +317,25 @@ public class Employ {
 
     public Employ() {
 
+    }
+
+    /**
+     * 解密String
+     *
+     * @param employ
+     * @return
+     */
+    private static Employ decrptyString(Employ employ) {
+        employ.userName = AesUtil.aesDecrypt(AesUtil.AAAAA, employ.userName);
+        employ.nickName = AesUtil.aesDecrypt(AesUtil.AAAAA, employ.nickName);
+        employ.realName = AesUtil.aesDecrypt(AesUtil.AAAAA, employ.realName);
+        employ.phone = AesUtil.aesDecrypt(AesUtil.AAAAA, employ.phone);
+        employ.portraitPath = AesUtil.aesDecrypt(AesUtil.AAAAA, employ.portraitPath);
+        employ.serviceType = AesUtil.aesDecrypt(AesUtil.AAAAA, employ.serviceType);
+        employ.deviceNo = AesUtil.aesDecrypt(AesUtil.AAAAA, employ.deviceNo);
+        employ.token = AesUtil.aesDecrypt(AesUtil.AAAAA, employ.token);
+        employ.qrCodeUrl = AesUtil.aesDecrypt(AesUtil.AAAAA, employ.qrCodeUrl);
+        employ.serviceTel = AesUtil.aesDecrypt(AesUtil.AAAAA, employ.serviceTel);
+        return employ;
     }
 }
