@@ -37,6 +37,7 @@ import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -72,6 +73,8 @@ public class MqttManager implements LocObserver {
 
     private RxManager rxManager;
     private Handler handler;
+    private boolean isFirst;
+    private int count;
 
     /**
      * 初始化
@@ -82,7 +85,11 @@ public class MqttManager implements LocObserver {
         handler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
-                publish();
+                if (msg.what == 0) {
+                    publish();
+                } else if (msg.what == 1) {
+                    doConnect();
+                }
                 return true;
             }
         });
@@ -131,118 +138,145 @@ public class MqttManager implements LocObserver {
             return;
         }
 
+        Log.e("MqttManager", "creatConnect");
+
         pullTopic = "/trip/driver" + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
         String brokerUrl = "tcp://" + Config.MQTT_HOST + ":" + Config.PORT_TCP;
         //身份唯一码
         String clientId = "driver-" + EmUtil.getEmployId();
 
-        conOpt = new MqttConnectOptions();
-        conOpt.setCleanSession(true);
-        conOpt.setUserName(Config.MQTT_USER_NAME);
-        conOpt.setPassword(Config.MQTT_PSW.toCharArray());
-        // 设置超时时间，单位：秒
-        conOpt.setConnectionTimeout(20);
-        // 心跳包发送间隔，单位：秒
-        conOpt.setKeepAliveInterval(20);
-        conOpt.setAutomaticReconnect(true);
-        String message = "{\"terminal_uid\":\"" + clientId + "\"}";
-        conOpt.setWill(pullTopic, message.getBytes(), qos, false);
+        if (conOpt == null) {
+            conOpt = new MqttConnectOptions();
+            conOpt.setCleanSession(true);
+            conOpt.setUserName(Config.MQTT_USER_NAME);
+            conOpt.setPassword(Config.MQTT_PSW.toCharArray());
+            // 设置超时时间，单位：秒
+            conOpt.setConnectionTimeout(20);
+            // 心跳包发送间隔，单位：秒
+            conOpt.setKeepAliveInterval(20);
+//        conOpt.setAutomaticReconnect(true);
+            String message = "{\"terminal_uid\":\"" + clientId + "\"}";
+            conOpt.setWill(pullTopic, message.getBytes(), qos, false);
+        }
 
-        client = new MqttAndroidClient(XApp.getInstance(), brokerUrl, clientId);
-        client.setCallback(new MqttCallbackExtended() {
-            @Override
-            public void connectComplete(boolean reconnect, String serverURI) {
-                if (mInstance == null) {
-                    return;
-                }
-                Log.e("MqttManager", "connectComplete  " + reconnect);
-                try {
-                    client.subscribe(pullTopic, qos, null, new IMqttActionListener() {
-                        @Override
-                        public void onSuccess(IMqttToken asyncActionToken) {
-                            if (mInstance == null) {
-                                return;
-                            }
-                            Log.e("MqttManager", "subscribeSuccess");
-                            if (reconnect) {
+        if (client == null) {
+            client = new MqttAndroidClient(XApp.getInstance(), brokerUrl, clientId);
+
+            client.setCallback(new MqttCallbackExtended() {
+                @Override
+                public void connectComplete(boolean reconnect, String serverURI) {
+                    Log.e("MqttManager", "connectComplete  " + reconnect);
+                    try {
+                        client.subscribe(pullTopic, qos, null, new IMqttActionListener() {
+                            @Override
+                            public void onSuccess(IMqttToken asyncActionToken) {
+                                Log.e("MqttManager", "subscribeSuccess");
+                                //连上后走接口看有没有余冗数据
                                 getOrderStatus();
+                                //连接后立即发送
+                                notifySend();
                             }
-                            notifySend();
-                        }
 
-                        @Override
-                        public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                            Log.e("MqttManager", "subscribeFail");
-                        }
-                    });
-                } catch (MqttException e) {
-                    e.printStackTrace();
+                            @Override
+                            public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                                Log.e("MqttManager", "subscribeFail");
+                                //出现异常 进行计数
+                                countEvent(true);
+                            }
+                        });
+                    } catch (MqttException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
 
-            @Override
-            public void connectionLost(Throwable cause) {
-                //失去连接
-                Log.e(TAG, "connectionLost");
-                removeNotify();
-            }
-
-            @Override
-            public void messageArrived(String topic, MqttMessage message) throws Exception {
-                if (mInstance == null) {
-                    return;
+                @Override
+                public void connectionLost(Throwable cause) {
+                    //出现异常 进行计数
+                    countEvent(true);
+                    Log.e(TAG, "connectionLost");
                 }
-                String str1 = new String(message.getPayload());
-                Log.e(TAG, "MqttReceivePull:" + str1);
-                HandlePush.getInstance().handPush(str1);
-            }
 
-            @Override
-            public void deliveryComplete(IMqttDeliveryToken token) {
+                @Override
+                public void messageArrived(String topic, MqttMessage message) throws Exception {
+                    String str1 = new String(message.getPayload());
+                    Log.e(TAG, "MqttReceivePull:" + str1);
+                    HandlePush.getInstance().handPush(str1);
+                }
 
-            }
-        });
+                @Override
+                public void deliveryComplete(IMqttDeliveryToken token) {
+                }
+            });
+        }
         doConnect();
     }
 
     private void notifySendDelayed() {
-        if (handler == null) {
-            return;
-        }
         if (mInstance == null) {
             return;
         }
-        removeNotify();
+        if (handler == null) {
+            return;
+        }
+        removeNotify(0);
         handler.sendEmptyMessageDelayed(0, 10000);
     }
 
     private void notifySend() {
-        if (handler == null) {
-            return;
-        }
         if (mInstance == null) {
             return;
         }
-        removeNotify();
+        if (handler == null) {
+            return;
+        }
+
+        removeNotify(0);
         handler.sendEmptyMessage(0);
     }
 
-    private void removeNotify() {
-        if (handler == null) {
-            return;
-        }
+    private void removeNotify(int what) {
         if (mInstance == null) {
             return;
         }
-        if (handler.hasMessages(0)) {
-            handler.removeMessages(0);
+        if (handler == null) {
+            return;
+        }
+        if (handler.hasMessages(what)) {
+            handler.removeMessages(what);
+        }
+    }
+
+    private void resetRetryCount() {
+        count = 0;
+    }
+
+    private void sendReconnect() {
+        if (mInstance == null) {
+            return;
+        }
+        if (handler == null) {
+            return;
+        }
+        removeNotify(0);
+        removeNotify(1);
+        handler.sendEmptyMessageDelayed(1, 3000);
+    }
+
+    private void countEvent(boolean isReconnect) {
+        count++;
+        if (count >= 10) {
+            EventBus.getDefault().post(new MqttReconnectEvent());
+            count = 0;
+        } else {
+            if (isReconnect) {
+                sendReconnect();
+            } else {
+                notifySendDelayed();
+            }
         }
     }
 
     private void getOrderStatus() {
-        if (mInstance == null) {
-            return;
-        }
         Observable<EmResult2<PushPojo>> observable = null;
         List<DymOrder> data = DymOrder.findAll();
         if (data.size() > 0) {
@@ -283,26 +317,29 @@ public class MqttManager implements LocObserver {
      * @return
      */
     private void doConnect() {
-        if (client != null) {
+        Log.e("MqttManager", "doConnect ");
+        if (client != null && !client.isConnected()) {
             try {
                 client.connect(conOpt, null, new IMqttActionListener() {
                     @Override
                     public void onSuccess(IMqttToken asyncActionToken) {
-                        if (mInstance == null) {
-                            return;
+                        if (!isFirst && client != null) {
+                            DisconnectedBufferOptions disconnectedBufferOptions = new DisconnectedBufferOptions();
+                            disconnectedBufferOptions.setBufferEnabled(true);
+                            disconnectedBufferOptions.setBufferSize(100);
+                            disconnectedBufferOptions.setPersistBuffer(false);
+                            disconnectedBufferOptions.setDeleteOldestMessages(false);
+                            client.setBufferOpts(disconnectedBufferOptions);
+                            isFirst = true;
                         }
-                        DisconnectedBufferOptions disconnectedBufferOptions = new DisconnectedBufferOptions();
-                        disconnectedBufferOptions.setBufferEnabled(true);
-                        disconnectedBufferOptions.setBufferSize(100);
-                        disconnectedBufferOptions.setPersistBuffer(false);
-                        disconnectedBufferOptions.setDeleteOldestMessages(false);
-                        client.setBufferOpts(disconnectedBufferOptions);
                         Log.e("MqttManager", "connectSuccess");
                     }
 
                     @Override
                     public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
                         Log.e("MqttManager", "connectFailure   " + exception.getMessage());
+                        //出现异常 进行计数
+                        countEvent(true);
                     }
                 });
             } catch (Exception e) {
@@ -327,6 +364,7 @@ public class MqttManager implements LocObserver {
             }
 
             if (pushList == null || pushList.size() == 0) {
+                //没有数据 等待下次发送
                 notifySendDelayed();
                 return;
             }
@@ -349,26 +387,33 @@ public class MqttManager implements LocObserver {
                 client.publish(Config.MQTT_TOPIC, message, null, new IMqttActionListener() {
                     @Override
                     public void onSuccess(IMqttToken asyncActionToken) {
+                        //发送成功 说明连上了 清除计数器
+                        resetRetryCount();
+                        //删除已发送数据
                         PushMessage.delete(pushList);
                         Log.e("MqttManager", "sendSuccess   restSize==  " + PushMessage.findAll().size() + "      " + stringBuilder.toString());
                         if (PushMessage.findAll().size() > 0) {
+                            //发现有多余数据立即发送
                             notifySend();
                         } else {
+                            //等待下次发送
                             notifySendDelayed();
                         }
                     }
 
                     @Override
                     public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                        Log.e("MqttManager", "sendFail     ");
-                        notifySendDelayed();
+                        Log.e("MqttManager", "sendFail");
+                        //出现异常 进行计数
+                        countEvent(false);
                     }
                 });
             } catch (MqttException e) {
                 e.fillInStackTrace();
             }
         } else {
-            notifySendDelayed();
+            //出现异常 进行计数
+            countEvent(true);
         }
     }
 
@@ -423,10 +468,13 @@ public class MqttManager implements LocObserver {
             handler = null;
         }
         try {
-            if (client != null && client.isConnected()) {
+            if (client != null) {
+                client.unregisterResources();
                 client.disconnect();
             }
         } catch (MqttException e) {
+            e.fillInStackTrace();
+        } catch (NullPointerException e) {
             e.fillInStackTrace();
         }
     }
