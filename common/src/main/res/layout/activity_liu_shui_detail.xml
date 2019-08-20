@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.LiuShuiDetailActivity">
+
+    <com.easymi.component.widget.CusToolbar
+        android:id="@+id/liuShuiDetailCtb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="53dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/corner_white_4dp_bg"
+        android:orientation="vertical"
+        android:paddingStart="12dp"
+        android:paddingTop="24dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="24dp">
+
+        <TextView
+            android:id="@+id/liuShuiDetailTvPrise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="19.80"
+            android:textColor="@color/colorYellow"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/liuShuiDetailTvCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="乘车人数:3"
+            android:textSize="@dimen/sizeHint" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sizeLine"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="12dp"
+            android:background="@color/colorLine" />
+
+
+        <LinearLayout
+            android:paddingTop="24dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="订单编号"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/sizeHint" />
+
+            <TextView
+                android:id="@+id/liuShuiDetailTvId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="s45f14s56fssss"
+                android:textSize="@dimen/sizeHint" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:paddingTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="上车时间"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/sizeHint" />
+
+            <TextView
+                android:id="@+id/liuShuiDetailTvTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="s45f14s56fssss"
+                android:textSize="@dimen/sizeHint" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:paddingTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="下单编号"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/sizeHint" />
+
+            <TextView
+                android:id="@+id/liuShuiDetailTvName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="s45f14s56fssss"
+                android:textSize="@dimen/sizeHint" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:paddingTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="上车位置"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/sizeHint" />
+
+            <TextView
+                android:id="@+id/liuShuiDetailTvOnPlace"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="s45f14s56fssss"
+                android:textSize="@dimen/sizeHint" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:paddingTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="下车位置"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/sizeHint" />
+
+            <TextView
+                android:id="@+id/liuShuiDetailTvOffPlace"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="s45f14s56fssss"
+                android:textSize="@dimen/sizeHint" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+</FrameLayout>

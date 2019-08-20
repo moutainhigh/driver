@@ -1,29 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.easymi.common">
-
-    <!--阿里移动推送相关权限-->
-    <!--进行网络访问和网络状态监控相关的权限声明-->
+    <!-- 阿里移动推送相关权限 -->
+    <!-- 进行网络访问和网络状态监控相关的权限声明 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <!--允许对sd卡进行读写操作-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!--网络库使用，当网络操作时需要确保事务完成不被杀掉-->
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <!--用于读取手机硬件信息等，用于机型过滤-->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <!--选举使用，当应用有删除或者更新时需要重新选举，复用推送通道-->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- 允许对sd卡进行读写操作 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 网络库使用，当网络操作时需要确保事务完成不被杀掉 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- 用于读取手机硬件信息等，用于机型过滤 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- 选举使用，当应用有删除或者更新时需要重新选举，复用推送通道 -->
     <uses-permission android:name="android.permission.BROADCAST_PACKAGE_CHANGED" />
-    <uses-permission android:name="android.permission.BROADCAST_PACKAGE_REPLACED" />
-    <!--补偿通道小米PUSH使用，不用可去除-->
-    <uses-permission android:name="android.permission.GET_TASKS" />
-    <!--允许访问震动器-->
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <!-- 允许task重排序 -->
+    <uses-permission android:name="android.permission.BROADCAST_PACKAGE_REPLACED" /> <!-- 补偿通道小米PUSH使用，不用可去除 -->
+    <uses-permission android:name="android.permission.GET_TASKS" /> <!-- 允许访问震动器 -->
+    <uses-permission android:name="android.permission.VIBRATE" /> <!-- 允许task重排序 -->
     <uses-permission android:name="android.permission.REORDER_TASKS" />
 
     <application>
-
+        <activity android:name=".activity.LiuShuiDetailActivity"></activity>
         <activity
             android:name=".mvp.work.WorkActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
@@ -54,36 +47,28 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-
         <activity
-            android:theme="@style/SplashTheme"
             android:name=".activity.SplashActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="portrait" />
-
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme" />
         <activity
             android:name=".register.InfoActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".register.BrandActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".register.VehicleActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".mvp.order.OrderActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".mvp.order.OrderDetailActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait" />
-
-
     </application>
 
 </manifest>
