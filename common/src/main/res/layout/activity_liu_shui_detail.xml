@@ -29,7 +29,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="19.80"
             android:textColor="@color/colorYellow"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -39,7 +38,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="乘车人数:3"
             android:textSize="@dimen/sizeHint" />
 
         <View
@@ -69,7 +67,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="s45f14s56fssss"
                 android:textSize="@dimen/sizeHint" />
         </LinearLayout>
 
@@ -91,11 +88,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="s45f14s56fssss"
                 android:textSize="@dimen/sizeHint" />
         </LinearLayout>
 
         <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/liuShuiDetailLlName"
             android:paddingTop="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -104,7 +102,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="下单编号"
+                android:text="下单姓名"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/sizeHint" />
 
@@ -113,7 +111,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="s45f14s56fssss"
                 android:textSize="@dimen/sizeHint" />
         </LinearLayout>
 
@@ -135,7 +132,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="s45f14s56fssss"
                 android:textSize="@dimen/sizeHint" />
         </LinearLayout>
 
@@ -157,7 +153,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="s45f14s56fssss"
                 android:textSize="@dimen/sizeHint" />
         </LinearLayout>
 

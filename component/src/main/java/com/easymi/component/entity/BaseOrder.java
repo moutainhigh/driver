@@ -15,6 +15,8 @@ import java.io.Serializable;
  */
 public class BaseOrder implements Serializable {
 
+
+
     public String orderDetailType;
 
     @SerializedName("examineStatus")
@@ -246,6 +248,8 @@ public class BaseOrder implements Serializable {
      * 购买票数
      */
     public int ticket;
+
+    public String ticketNumber;
 
     /**
      * 提前接人分钟数

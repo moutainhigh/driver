@@ -16,7 +16,11 @@
     <uses-permission android:name="android.permission.REORDER_TASKS" />
 
     <application>
-        <activity android:name=".activity.LiuShuiDetailActivity"></activity>
+        <activity
+            android:name=".activity.LiuShuiDetailActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".mvp.work.WorkActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"

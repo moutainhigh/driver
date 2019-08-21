@@ -25,6 +25,7 @@ import com.easymi.common.result.SettingResult;
 import com.easymi.common.result.SystemResult;
 import com.easymi.common.result.VehicleResult;
 import com.easymi.common.result.WorkStatisticsResult;
+import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.result.EmResult2;
 
@@ -80,8 +81,6 @@ public interface CommApiService {
 
     @GET("api/v1/taxi_online/config/app/driver")
     Observable<EmResult2<String>> getTitleStatus();
-
-
 
 
     /**
@@ -608,6 +607,9 @@ public interface CommApiService {
     @POST("api/v1/resources/driver/online_time")
     Observable<EmResult> upLoadOnlineTime(@Field("time") long time);
 
+
+    @GET("api/v1/order/cold/getOrderInfo")
+    Observable<EmResult2<BaseOrder>> getOrderInfo(@Query("orderId") long orderId);
 
     @GET
     Observable<EmResult2<List<MqttResult>>> getCurrentTopic(@Url String url);

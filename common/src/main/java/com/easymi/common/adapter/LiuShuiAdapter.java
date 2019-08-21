@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.easymi.common.CommApiService;
 import com.easymi.common.R;
 import com.easymi.common.activity.BaoxiaoActivity;
+import com.easymi.common.activity.LiuShuiDetailActivity;
 import com.easymi.common.activity.LiushuiActivity;
 import com.easymi.common.util.DJStatus2Str;
 import com.easymi.common.util.ZXStatus2Str;
@@ -144,29 +144,31 @@ public class LiuShuiAdapter extends RecyclerView.Adapter<LiuShuiAdapter.Holder> 
         }
 
         if (baseOrder.status == DJOrderStatus.ARRIVAL_DESTINATION_ORDER) {
-            holder.orderLl.setClickable(true);
-            holder.orderLl.setOnClickListener(v -> {
-                LiushuiActivity.CLICK_POS = position + 1;
-                if (baseOrder.serviceType.equals(Config.DAIJIA)) {
-                    ARouter.getInstance().build("/daijia/FlowActivity")
-                            .withLong("orderId", baseOrder.orderId)
-                            .navigation((Activity) context, LiushuiActivity.CLICK_POS);
-                } else if (baseOrder.serviceType.equals(Config.ZHUANCHE)) {
-                    ARouter.getInstance().build("/zhuanche/FlowActivity")
-                            .withLong("orderId", baseOrder.orderId)
-                            .navigation((Activity) context, LiushuiActivity.CLICK_POS);
-                }
-            });
+
             holder.orderBaoxiao.setVisibility(View.GONE);
         } else {
-            holder.orderLl.setClickable(false);
-
             if (ZCSetting.findOne().isExpenses == 1) {
                 holder.orderBaoxiao.setVisibility(View.VISIBLE);
             } else {
                 holder.orderBaoxiao.setVisibility(View.GONE);
             }
         }
+
+        holder.orderLl.setOnClickListener(v -> {
+            Intent intent = new Intent(context, LiuShuiDetailActivity.class);
+            intent.putExtra("orderId", baseOrder.orderId);
+            context.startActivity(intent);
+//                LiushuiActivity.CLICK_POS = position + 1;
+//                if (baseOrder.serviceType.equals(Config.DAIJIA)) {
+//                    ARouter.getInstance().build("/daijia/FlowActivity")
+//                            .withLong("orderId", baseOrder.orderId)
+//                            .navigation((Activity) context, LiushuiActivity.CLICK_POS);
+//                } else if (baseOrder.serviceType.equals(Config.ZHUANCHE)) {
+//                    ARouter.getInstance().build("/zhuanche/FlowActivity")
+//                            .withLong("orderId", baseOrder.orderId)
+//                            .navigation((Activity) context, LiushuiActivity.CLICK_POS);
+//                }
+        });
 
         holder.orderTvDel.setOnClickListener(new View.OnClickListener() {
             @Override
