@@ -194,8 +194,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
             presenter.online(onLineBtn);
         });
         listenOrderCon.setOnClickListener(v -> {
-//            presenter.offline();
-            presenter.resetMqtt();
+            presenter.offline();
+//            presenter.resetMqtt();
         });
         EmLoc emLoc = EmUtil.getLastLoc();
         if (emLoc != null) {

@@ -17,17 +17,16 @@ public class Config {
 
     public static String H5_HOST;
 
-    public static String MQTT_HOST;
+    public static String MQTT_BROKER;
     public static boolean IS_ENCRYPT;
 
-    public static int PORT_HTTP;
     public static int PORT_TCP;
     public static String MQTT_TOPIC;
-    public static String ACK_TOPIC;
-    public static String MQTT_CLIENT_ID;
-    public static String MQTT_USER_NAME;
-    public static String MQTT_PSW;
-    public static String MQTT_CONNECTION_URL;
+    public static String MQTT_ACK_TOPIC;
+    public static String MQTT_ACCESS_KEY;
+    public static String MQTT_SECRET_KEY;
+    public static String MQTT_GROUP_ID;
+    public static String MQTT_INSTANCE_ID;
 
     public static String APP_KEY;
 

@@ -9,14 +9,12 @@ package com.easymi.common.entity;
  * @History:
  */
 public class MqttConfig {
-    public String userName;
-    public String password;
+    public String accessKey;
+    public String secretKey;
     public String broker;
-    public int portHttp;
     public int portTcp;
     public String topic;
     public String ackTopic;
-    public String connectionsUrl;
-    public String clientId;
-
+    public String groupId;
+    public String instanceId;
 }

@@ -611,6 +611,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         if (null == zcOrder) {
             finish();
         } else {
+            Log.e("FlowActivity", "showOrder" + zcOrder.orderStatus);
             if (zcOrder.orderStatus >= DJOrderStatus.FINISH_ORDER) {
                 ToastUtil.showMessage(this, getResources().getString(R.string.order_finish));
                 finish();
@@ -633,7 +634,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             addLocationMarker();
 
             if (zcOrder.orderStatus < ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-                Log.e("FlowActivity", "showOrder" + (mPlocation == null));
                 if (mPlocation == null) {
                     passengerLoc(zcOrder.orderId);
                 }
@@ -702,6 +702,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         } else if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
             if (null != getStartAddr()) {
                 latLngs.add(new LatLng(getStartAddr().lat, getStartAddr().lng));
+                Log.e("FlowActivity", "routePlan");
                 presenter.routePlanByNavi(getStartAddr().lat, getStartAddr().lng);
             } else {
                 presenter.stopNavi();
@@ -1068,6 +1069,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void showReCal() {
+        Log.e("FlowActivity", "showReCal");
         routePlan();
     }
 
@@ -1384,6 +1386,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
         addLocationMarker();
 
+        Log.e("FlowActivity", "receiveLoc");
         routePlan();
         lastLatlng = latLng;
 
