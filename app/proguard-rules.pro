@@ -234,9 +234,6 @@ public static ** valueOf(java.lang.String);
 #---------------------------------本app内的混淆-------------------------------
 -keep public class com.easymin.carpooling.entity.**{*;}
 
--keep public class com.easymin.chartered.entity.**{*;}
--keep public class com.easymin.chartered.result.**{*;}
-
 -keep public class com.easymi.cityline.entity.**{*;}
 -keep public class com.easymi.cityline.result.**{*;}
 
@@ -262,8 +259,6 @@ public static ** valueOf(java.lang.String);
 
 -keep public class com.easymin.passengerbus.entity.**{*;}
 
--keep public class com.easymin.rental.entity.**{*;}
--keep public class com.easymin.rental.result.**{*;}
 
 -keep public class com.easymin.driver.securitycenter.entity.**{*;}
 -keep public class com.easymin.driver.securitycenter.result.**{*;}
@@ -276,10 +271,6 @@ public static ** valueOf(java.lang.String);
 
 -keep public class cn.projcet.hf.securitycenter.entity.**{*;}
 -keep public class cn.projcet.hf.securitycenter.result.**{*;}
-
--keep public class com.easymin.official.entity.**{*;}
--keep public class com.easymin.official.result.**{*;}
-
 
 #不混淆所有的接口的某个字段：
 -keep class com._65.sdk.Constants{
