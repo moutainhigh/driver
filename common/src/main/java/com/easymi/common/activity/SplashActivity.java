@@ -165,6 +165,7 @@ public class SplashActivity extends RxBaseActivity {
 //            dialog.show();
 //            return;
 //        }
+        XApp.getInstance().startLocService();
         update();
     }
 

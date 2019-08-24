@@ -644,9 +644,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         MqttManager.release();
         mapView.onDestroy();
         super.onDestroy();
-
     }
-
 
     @Override
     public boolean isEnableSwipe() {
