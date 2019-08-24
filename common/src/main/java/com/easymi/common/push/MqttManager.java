@@ -37,7 +37,6 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -91,6 +90,9 @@ public class MqttManager implements LocObserver {
             public boolean handleMessage(Message msg) {
                 if (msg.what == 0) {
                     publish();
+                } else if (msg.what == 1) {
+                    isConnecting = false;
+                    creatConnect();
                 }
                 return true;
             }
@@ -150,7 +152,7 @@ public class MqttManager implements LocObserver {
 
         Log.e("MqttManager", "creatConnect");
 
-        subscribeTopic = "trip/driver/"+ EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
+        subscribeTopic = "trip/driver/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
 
         String brokerUrl = "tcp://" + Config.MQTT_BROKER + ":" + Config.PORT_TCP;
         //身份唯一码
@@ -193,13 +195,14 @@ public class MqttManager implements LocObserver {
     }
 
     private void postCreateConnect() {
-        isConnecting = false;
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                creatConnect();
-            }
-        }, 3000);
+        if (mInstance == null) {
+            return;
+        }
+        if (handler == null) {
+            return;
+        }
+        removeNotify(1);
+        handler.sendEmptyMessageDelayed(1, 3000);
     }
 
     private void notifySendDelayed() {
@@ -302,7 +305,7 @@ public class MqttManager implements LocObserver {
                             @Override
                             public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
                                 Log.e("MqttManager", "subscribeFail");
-                                sendReconnectEvent();
+                                postCreateConnect();
                             }
                         });
                     } catch (MqttException e) {
@@ -320,10 +323,6 @@ public class MqttManager implements LocObserver {
             Log.e(TAG, "doConnect exception-->" + e.getMessage());
         }
 
-    }
-
-    private void sendReconnectEvent() {
-        EventBus.getDefault().post(new MqttReconnectEvent());
     }
 
     /**
@@ -380,7 +379,7 @@ public class MqttManager implements LocObserver {
                     @Override
                     public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
                         Log.e("MqttManager", "sendFail");
-                        sendReconnectEvent();
+                        postCreateConnect();
                     }
                 });
             } catch (MqttException e) {

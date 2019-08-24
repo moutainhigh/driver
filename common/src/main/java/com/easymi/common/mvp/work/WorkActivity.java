@@ -43,7 +43,6 @@ import com.easymi.common.entity.PushMessage;
 import com.easymi.common.mvp.order.OrderActivity;
 import com.easymi.common.push.CountEvent;
 import com.easymi.common.push.MqttManager;
-import com.easymi.common.push.MqttReconnectEvent;
 import com.easymi.common.receiver.AnnReceiver;
 import com.easymi.common.receiver.CancelOrderReceiver;
 import com.easymi.common.receiver.EmployStatusChangeReceiver;
@@ -648,11 +647,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
 
     }
 
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onReconnectEvent(MqttReconnectEvent reconnectEvent){
-        presenter.resetMqtt();
-    }
 
     @Override
     public boolean isEnableSwipe() {

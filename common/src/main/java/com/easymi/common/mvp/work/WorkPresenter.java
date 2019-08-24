@@ -78,7 +78,6 @@ public class WorkPresenter implements WorkContract.Presenter {
     private Subscription subscription;
     private boolean isFirstLoadToken;
     private Subscription titleSubscription;
-    private Subscription mqttConfigSubscription;
 
     public WorkPresenter(Context context, WorkContract.View view) {
         this.context = context;
@@ -227,22 +226,13 @@ public class WorkPresenter implements WorkContract.Presenter {
 
     private boolean isStartMqtt;
 
-    public void resetMqtt() {
-        if (mqttConfigSubscription != null) {
-            mqttConfigSubscription.unsubscribe();
-        }
-        MqttManager.release();
-        isStartMqtt = false;
-        getMqttConfig();
-    }
-
     public void getMqttConfig() {
         if (isStartMqtt) {
             return;
         }
         isStartMqtt = true;
 
-        mqttConfigSubscription = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+        view.getRxManager().add(ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .getConfig()
                 .map(new HttpResultFunc2<>())
                 .retryWhen(observable -> observable.delay(5, TimeUnit.SECONDS))
@@ -261,9 +251,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                         Config.MQTT_TOPIC = mqttConfig.topic;
                         MqttManager.getInstance().creatConnect();
                     }
-                }));
-
-        view.getRxManager().add(mqttConfigSubscription);
+                })));
     }
 
     @Override
