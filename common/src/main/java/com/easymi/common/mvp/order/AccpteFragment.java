@@ -16,7 +16,6 @@ import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.LogUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusErrLayout;
@@ -140,9 +139,9 @@ public class AccpteFragment extends RxBaseFragment implements MyOrderContract.Vi
                         }
                     }else if (baseOrder.serviceType.equals(Config.GOV)){
                         if (baseOrder.status < GWOrderStatus.FINISH_ORDER){
-                            ARouter.getInstance()
-                                    .build("/official/FlowActivity")
-                                    .withLong("orderId", baseOrder.orderId).navigation();
+//                            ARouter.getInstance()
+//                                    .build("/official/FlowActivity")
+//                                    .withLong("orderId", baseOrder.orderId).navigation();
                         }
                     }
             }

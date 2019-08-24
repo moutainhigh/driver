@@ -137,9 +137,6 @@ dependencies {
     implementation project(path: ':cityline')
     implementation project(path: ':securitycenter')
     implementation project(path: ':passengerbus')
-    implementation project(path: ':chartered')
-    implementation project(path: ':rental')
     implementation project(path: ':custombus')
     implementation project(path: ':carpooling')
-    implementation project(path: ':official')
 }

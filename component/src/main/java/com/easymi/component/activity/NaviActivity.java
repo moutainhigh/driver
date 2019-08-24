@@ -162,7 +162,7 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
         mAMapNaviView = findViewById(R.id.navi_view);
         mAMapNaviView.onCreate(savedInstanceState);
         mAMapNaviView.setAMapNaviViewListener(this);
-        mAMapNavi = AMapNavi.getInstance(this);
+        mAMapNavi = AMapNavi.getInstance(getApplicationContext());
         mAMapNavi.addAMapNaviListener(this);
         mAMapNavi.setUseInnerVoice(true);
 

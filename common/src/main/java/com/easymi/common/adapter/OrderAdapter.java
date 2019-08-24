@@ -105,13 +105,7 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
                                 .build("/cityline/FlowActivity")
                                 .withSerializable("baseOrder", baseOrder).navigation();
                     } else if (baseOrder.serviceType.equals(Config.CHARTERED)) {
-                        ARouter.getInstance()
-                                .build("/chartered/FlowActivity")
-                                .withLong("orderId", baseOrder.orderId).navigation();
                     } else if (baseOrder.serviceType.equals(Config.RENTAL)) {
-                        ARouter.getInstance()
-                                .build("/rental/FlowActivity")
-                                .withLong("orderId", baseOrder.orderId).navigation();
                     } else if (baseOrder.serviceType.equals(Config.COUNTRY)) {
                         ARouter.getInstance()
                                 .build("/custombus/CbRunActivity")
@@ -121,9 +115,9 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
                                 .build("/carpooling/FlowActivity")
                                 .withSerializable("baseOrder", baseOrder).navigation();
                     } else if (baseOrder.serviceType.equals(Config.GOV)) {
-                        ARouter.getInstance()
-                                .build("/official/FlowActivity")
-                                .withLong("orderId", baseOrder.orderId).navigation();
+//                        ARouter.getInstance()
+//                                .build("/official/FlowActivity")
+//                                .withLong("orderId", baseOrder.orderId).navigation();
                     }
                 }
             });

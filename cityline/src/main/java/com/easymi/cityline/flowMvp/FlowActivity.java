@@ -26,9 +26,8 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.utils.overlay.SmoothMoveMarker;
 import com.amap.api.navi.model.AMapNaviPath;
-import com.amap.api.navi.model.RouteOverlayOptions;
-import com.amap.api.navi.view.RouteOverLay;
 import com.amap.api.services.route.DriveRouteResult;
+import com.amap.api.services.route.DriveStep;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -633,7 +632,7 @@ public class FlowActivity extends RxBaseActivity implements
 
             @Override
             public void routePath(LatLng toLatlng) {
-                presenter.routeLineByNavi(lastLatlng, null, toLatlng);
+                presenter.routePlanByRouteSearch(lastLatlng, null, toLatlng);
             }
 
             @Override
@@ -799,8 +798,6 @@ public class FlowActivity extends RxBaseActivity implements
         }
     }
 
-    RouteOverLay routeOverLay;
-
     /**
      * 导航路径展示
      *
@@ -809,25 +806,6 @@ public class FlowActivity extends RxBaseActivity implements
      */
     @Override
     public void showPath(int[] ints, AMapNaviPath path) {
-        if (null != routeOverLay) {
-            routeOverLay.removeFromMap();
-        }
-//        aMap.moveCamera(CameraUpdateFactory.changeTilt(0));
-        routeOverLay = new RouteOverLay(aMap, path, this);
-        routeOverLay.setStartPointBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.yellow_dot_small));
-        routeOverLay.setEndPointBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.blue_dot_small));
-        routeOverLay.setTrafficLine(true);
-
-        RouteOverlayOptions options = new RouteOverlayOptions();
-        options.setSmoothTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_green));
-        options.setUnknownTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_no));
-        options.setSlowTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_slow));
-        options.setJamTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_bad));
-        options.setVeryJamTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_grayred));
-
-        routeOverLay.setRouteOverlayOptions(options);
-
-        routeOverLay.addToMap();
     }
 
     private DrivingRouteOverlay drivingRouteOverlay;
@@ -839,25 +817,29 @@ public class FlowActivity extends RxBaseActivity implements
      */
     @Override
     public void showPath(DriveRouteResult result) {
+
+        DrivingRouteOverlay overlayout = new DrivingRouteOverlay(this, aMap,
+                result.getPaths().get(0), result.getStartPos()
+                , result.getTargetPos(), null);
+//        overlayout.setRouteWidth(5);
+        overlayout.setIsColorfulline(false);
+        overlayout.setNodeIconVisibility(false);//隐藏转弯的节点
+        overlayout.addToMap();
+
         if (drivingRouteOverlay != null) {
             drivingRouteOverlay.removeFromMap();
         }
 
-        drivingRouteOverlay = new DrivingRouteOverlay(this, aMap,
-                result.getPaths().get(0), result.getStartPos()
-                , result.getTargetPos(), null);
-//        drivingRouteOverlay.setRouteWidth(5);
-        drivingRouteOverlay.setIsColorfulline(false);
-        drivingRouteOverlay.setNodeIconVisibility(false);//隐藏转弯的节点
-        drivingRouteOverlay.addToMap();
-//        drivingRouteOverlay.zoomToSpan();
-//        List<LatLng> latLngs = new ArrayList<>();
-//        latLngs.add(new LatLng(result.getStartPos().getLatitude(), result.getStartPos().getLongitude()));
-//        latLngs.add(new LatLng(result.getTargetPos().getLatitude(), result.getTargetPos().getLongitude()));
-//        EmLoc lastLoc = EmUtil.getLastLoc();
-//        latLngs.add(new LatLng(lastLoc.latitude, lastLoc.longitude));
-//
-//        boundsZoom(latLngs);
+        drivingRouteOverlay = overlayout;
+
+        float dis = 0;
+        float time = 0;
+        for (DriveStep step : result.getPaths().get(0).getSteps()) {
+            dis += step.getDistance();
+            time += step.getDuration();
+        }
+        showLeft((int) dis, (int) time);
+
     }
 
     String leftDis;
@@ -1043,7 +1025,6 @@ public class FlowActivity extends RxBaseActivity implements
     protected void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
-        presenter.stopNavi();
     }
 
     @Override
