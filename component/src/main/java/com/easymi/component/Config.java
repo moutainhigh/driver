@@ -21,12 +21,13 @@ public class Config {
     public static boolean IS_ENCRYPT;
 
     public static int PORT_TCP;
-    public static String MQTT_TOPIC;
-    public static String MQTT_ACK_TOPIC;
     public static String MQTT_ACCESS_KEY;
     public static String MQTT_SECRET_KEY;
     public static String MQTT_GROUP_ID;
     public static String MQTT_INSTANCE_ID;
+    public static String MQTT_DRIVER_GPS_TOPIC;
+    public static String MQTT_DRIVER_ACK_TOPIC;
+    public static String MQTT_PARENT_TOPIC;
 
     public static String APP_KEY;
 
