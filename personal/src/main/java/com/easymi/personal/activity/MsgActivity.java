@@ -10,7 +10,6 @@ import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
-import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.McService;
@@ -111,7 +110,7 @@ public class MsgActivity extends RxBaseActivity {
             if (null != notifityList && notifityList.size() != 0) {
                 Notifity notifity = notifityList.get(0);
                 noticeContent.setText(notifity.message);
-                noticeTime.setText(TimeUtil.getTime("yyy-MM-dd HH:mm", notifity.time * 1000));
+                noticeTime.setText(TimeUtil.getTime("yyyy-MM-dd HH:mm", notifity.time * 1000));
             }
         })));
     }
@@ -132,7 +131,7 @@ public class MsgActivity extends RxBaseActivity {
             if (null != announcements && announcements.size() != 0) {
                 Announcement announcement = announcements.get(0);
                 announcementContent.setText(announcement.message);
-                announcementTime.setText(TimeUtil.getTime("yyy-MM-dd HH:mm", announcement.time * 1000));
+                announcementTime.setText(TimeUtil.getTime("yyyy-MM-dd HH:mm", announcement.time * 1000));
             }
         })));
     }

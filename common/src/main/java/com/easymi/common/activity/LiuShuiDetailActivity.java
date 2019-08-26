@@ -15,6 +15,7 @@ import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
 
@@ -86,7 +87,7 @@ public class LiuShuiDetailActivity extends RxBaseActivity {
                     @Override
                     public void onNext(BaseOrder baseOrder) {
                         liuShuiDetailTvId.setText(baseOrder.orderNo);
-                        liuShuiDetailTvTime.setText(String.valueOf(baseOrder.bookTime));
+                        liuShuiDetailTvTime.setText(TimeUtil.getTime("yyyy-MM-dd HH:mm", baseOrder.bookTime * 1000));
                         if (TextUtils.isEmpty(baseOrder.passengerName)) {
                             liuShuiDetailLlName.setVisibility(View.GONE);
                         } else {
