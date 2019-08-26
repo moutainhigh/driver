@@ -13,8 +13,9 @@ public class MqttConfig {
     public String secretKey;
     public String broker;
     public int portTcp;
-    public String topic;
-    public String ackTopic;
+    public String driverGpsTopic;
+    public String driverAckTopic;
+    public String parentTopic;
     public String groupId;
     public String instanceId;
 }

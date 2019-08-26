@@ -606,7 +606,7 @@ public interface CommApiService {
     @POST("api/v1/resources/driver/online_time")
     Observable<EmResult> upLoadOnlineTime(@Field("time") long time);
 
-    @GET("api/v1/message/topic/driver_mqtt_config")
+    @GET("api/v1/message/topic/mqtt_config/ali")
     Observable<EmResult2<MqttConfig>> getConfig();
 
 }

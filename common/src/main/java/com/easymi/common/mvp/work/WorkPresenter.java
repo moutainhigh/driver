@@ -246,9 +246,10 @@ public class WorkPresenter implements WorkContract.Presenter {
                         Config.MQTT_BROKER = mqttConfig.broker;
                         Config.PORT_TCP = mqttConfig.portTcp;
                         Config.MQTT_GROUP_ID = mqttConfig.groupId;
-                        Config.MQTT_ACK_TOPIC = mqttConfig.ackTopic;
                         Config.MQTT_INSTANCE_ID = mqttConfig.instanceId;
-                        Config.MQTT_TOPIC = mqttConfig.topic;
+                        Config.MQTT_DRIVER_GPS_TOPIC = mqttConfig.driverGpsTopic;
+                        Config.MQTT_DRIVER_ACK_TOPIC = mqttConfig.driverAckTopic;
+                        Config.MQTT_PARENT_TOPIC = mqttConfig.parentTopic;
                         MqttManager.getInstance().creatConnect();
                     }
                 })));

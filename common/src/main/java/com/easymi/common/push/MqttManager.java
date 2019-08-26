@@ -142,7 +142,7 @@ public class MqttManager implements LocObserver {
             Log.e("MqttManager", "isConnected");
             return;
         }
-        if (TextUtils.isEmpty(Config.MQTT_TOPIC)) {
+        if (TextUtils.isEmpty(Config.MQTT_DRIVER_GPS_TOPIC)) {
             Log.e("MqttManager", "MQTT_TOPIC");
             return;
         }
@@ -152,7 +152,7 @@ public class MqttManager implements LocObserver {
 
         Log.e("MqttManager", "creatConnect");
 
-        subscribeTopic = "trip/driver/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
+        subscribeTopic = Config.MQTT_PARENT_TOPIC + "driver/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
 
         String brokerUrl = "tcp://" + Config.MQTT_BROKER + ":" + Config.PORT_TCP;
         //身份唯一码
@@ -361,7 +361,7 @@ public class MqttManager implements LocObserver {
             message.setQos(qos);
 
             try {
-                client.publish(Config.MQTT_TOPIC, message, null, new IMqttActionListener() {
+                client.publish(Config.MQTT_DRIVER_GPS_TOPIC, message, null, new IMqttActionListener() {
                     @Override
                     public void onSuccess(IMqttToken asyncActionToken) {
                         //删除已发送数据
@@ -410,7 +410,7 @@ public class MqttManager implements LocObserver {
             MqttMessage message = new MqttMessage(jsonObject.toString().getBytes());
             message.setQos(qos);
             try {
-                client.publish(Config.MQTT_ACK_TOPIC, message);
+                client.publish(Config.MQTT_DRIVER_ACK_TOPIC, message);
 //                Log.e("MqttManager", "push loc data--->" + pushStr);
             } catch (MqttException e) {
                 Log.e(TAG, "Publishing msg exception " + e.getMessage());
@@ -424,10 +424,7 @@ public class MqttManager implements LocObserver {
      * @return
      */
     public boolean isConnected() {
-        if (client != null && client.isConnected()) {
-            return true;
-        }
-        return false;
+        return client != null && client.isConnected();
     }
 
     /**
