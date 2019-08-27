@@ -29,6 +29,7 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: ChangeSeqFragment
+ *
  * @Author: hufeng
  * Date: 2018/12/24 下午1:10
  * Description: 接送排序界面
@@ -89,6 +90,7 @@ public class ChangeSeqFragment extends RxBaseFragment {
 
     /**
      * 倒计时结束操作
+     *
      * @param countStratOver
      */
     public void setCountStratOver(boolean countStratOver) {
@@ -267,6 +269,7 @@ public class ChangeSeqFragment extends RxBaseFragment {
 
     /**
      * 根据状态构造数据
+     *
      * @return
      */
     private List<Sequence> buildData() {
@@ -281,13 +284,13 @@ public class ChangeSeqFragment extends RxBaseFragment {
                 sequence.num = customer.num;
                 sequence.type = 1;
                 sequence.text = "";
-                sequence.photo = customer.avatar ;
+                sequence.photo = customer.avatar;
                 sequence.ticketNumber = customer.ticketNumber;
                 sequence.status = customer.customeStatus;
 
                 sequences.add(sequence);
                 if (customer.customeStatus != 0) {
-                    min = i+1;
+                    min = i + 1;
                 }
             }
         } else {
@@ -298,13 +301,13 @@ public class ChangeSeqFragment extends RxBaseFragment {
                 sequence.num = customer.num;
                 sequence.type = 1;
                 sequence.text = "";
-                sequence.photo = customer.avatar ;
+                sequence.photo = customer.avatar;
                 sequence.ticketNumber = customer.ticketNumber;
                 sequence.status = customer.customeStatus;
 
                 sequences.add(sequence);
                 if (customer.customeStatus > 3) {
-                    min = i+1;
+                    min = i + 1;
                 }
             }
         }
@@ -342,10 +345,10 @@ public class ChangeSeqFragment extends RxBaseFragment {
                 latLng = new LatLng(orderCustomer.endLat, orderCustomer.endLng);
             }
             if (orderCustomer.customeStatus == 0 || orderCustomer.customeStatus == 3) {
-                bridge.addMarker(latLng, StaticVal.MARKER_FLAG_PASS_ENABLE, orderCustomer.num,orderCustomer.ticketNumber,orderCustomer.avatar);
+                bridge.addMarker(latLng, StaticVal.MARKER_FLAG_PASS_ENABLE, orderCustomer.num, orderCustomer.ticketNumber, orderCustomer.avatar);
                 latLngs.add(latLng);
             } else {
-                bridge.addMarker(latLng, StaticVal.MARKER_FLAG_PASS_DISABLE, orderCustomer.num,orderCustomer.ticketNumber,orderCustomer.avatar);
+                bridge.addMarker(latLng, StaticVal.MARKER_FLAG_PASS_DISABLE, orderCustomer.num, orderCustomer.ticketNumber, orderCustomer.avatar);
             }
         }
         bridge.showBounds(latLngs);
