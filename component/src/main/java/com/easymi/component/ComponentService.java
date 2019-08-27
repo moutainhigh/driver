@@ -25,7 +25,8 @@ public interface ComponentService {
 
     @FormUrlEncoded
     @POST("api/v1/system/pay")
-    Observable<EmResult2<JsonElement>> payOrder(@Field("id") Long orderId,
+    Observable<EmResult2<JsonElement>> payOrder(@Field("driver") boolean isDriver,
+                                                @Field("id") Long orderId,
                                                 @Field("channel") String channel);
 
     /**

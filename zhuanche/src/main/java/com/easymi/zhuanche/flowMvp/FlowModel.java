@@ -249,7 +249,7 @@ public class FlowModel implements FlowContract.Model {
     @Override
     public Observable<JsonElement> payOrder(Long orderId, String payType, Long version) {
         return ApiManager.getInstance().createApi(Config.HOST, ComponentService.class)
-                .payOrder(orderId, payType)
+                .payOrder(true, orderId, payType)
                 .map(new HttpResultFunc2<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
