@@ -257,6 +257,7 @@ public class WorkPresenter implements WorkContract.Presenter {
 
     @Override
     public void startLocService() {
+        XApp.getInstance().startLocService();
     }
 
     @Override
