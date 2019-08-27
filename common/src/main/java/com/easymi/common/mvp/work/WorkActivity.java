@@ -489,13 +489,22 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         if (countEvent.finishCount >= 0) {
             finishNo.setText(String.valueOf(countEvent.finishCount));
         }
-        if (countEvent.income >= 0 || countEvent.orderTotalAmount > 0) {
+
+        if (TextUtils.equals(EmUtil.getEmployInfo().serviceType, Config.ZHUANCHE)) {
             if (EmUtil.getEmployInfo().driverType == 2) {
                 todayIncome.setText(String.valueOf(countEvent.orderTotalAmount));
                 moneyDesc.setText("订单总金额");
             } else {
                 todayIncome.setText(String.valueOf(countEvent.income));
                 moneyDesc.setText("今日收入");
+            }
+        } else {
+            if (EmUtil.getEmployInfo().commissionStatus == 1) {
+                todayIncome.setText(String.valueOf(countEvent.income));
+                moneyDesc.setText("今日收入");
+            } else {
+                todayIncome.setText(String.valueOf(countEvent.orderTotalAmount));
+                moneyDesc.setText("订单总金额");
             }
         }
     }

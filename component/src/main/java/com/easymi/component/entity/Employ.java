@@ -27,6 +27,9 @@ public class Employ {
      */
     public String userName;
 
+
+    public int commissionStatus;
+
     /**
      * 昵称
      */
@@ -115,6 +118,7 @@ public class Employ {
         values.put("nickName", nickName);
         values.put("realName", realName);
         values.put("sex", sex);
+        values.put("commissionStatus", commissionStatus);
         values.put("phone", phone);
         values.put("portraitPath", portraitPath);
         values.put("serviceType", serviceType);
@@ -228,6 +232,8 @@ public class Employ {
                 .getColumnIndex("userName"));
         driverInfo.nickName = cursor.getString(cursor
                 .getColumnIndex("nickName"));
+        driverInfo.commissionStatus = cursor.getInt(cursor
+                .getColumnIndex("commissionStatus"));
         driverInfo.realName = cursor.getString(cursor
                 .getColumnIndex("realName"));
         driverInfo.sex = cursor.getInt(cursor.getColumnIndex("sex"));
@@ -270,7 +276,8 @@ public class Employ {
         values.put("phone", phone);
         values.put("portraitPath", portraitPath);
         values.put("serviceType", serviceType);
-        values.put("driverType",driverType);
+        values.put("commissionStatus",commissionStatus);
+        values.put("driverType", driverType);
         values.put("status", status);
         values.put("companyId", companyId);
         values.put("deviceNo", deviceNo);
