@@ -26,6 +26,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="安岳站"
+                android:singleLine="true"
+                android:ellipsize="marquee"
                 android:textSize="18sp"
                 android:gravity="center"
                 android:textColor="@color/black"
@@ -39,6 +41,8 @@
                 android:layout_marginRight="10dp"/>
 
             <TextView
+                android:singleLine="true"
+                android:ellipsize="marquee"
                 android:gravity="center"
                 android:id="@+id/end_site"
                 android:layout_weight="1"
