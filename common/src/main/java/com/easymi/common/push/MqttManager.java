@@ -3,7 +3,6 @@ package com.easymi.common.push;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Base64;
 
 import com.easymi.common.CommApiService;
 import com.easymi.common.entity.BuildPushData;
@@ -37,16 +36,11 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.nio.charset.Charset;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
-
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -74,7 +68,7 @@ public class MqttManager implements LocObserver {
     private MqttConnectOptions conOpt;
 
 
-    private String subscribeTopic;
+    private String pullTopic;
 
     private RxManager rxManager;
     private Handler handler;
@@ -90,9 +84,6 @@ public class MqttManager implements LocObserver {
             public boolean handleMessage(Message msg) {
                 if (msg.what == 0) {
                     publish();
-                } else if (msg.what == 1) {
-                    isConnecting = false;
-                    creatConnect();
                 }
                 return true;
             }
@@ -142,7 +133,7 @@ public class MqttManager implements LocObserver {
             Log.e("MqttManager", "isConnected");
             return;
         }
-        if (TextUtils.isEmpty(Config.MQTT_DRIVER_GPS_TOPIC)) {
+        if (TextUtils.isEmpty(Config.MQTT_TOPIC)) {
             Log.e("MqttManager", "MQTT_TOPIC");
             return;
         }
@@ -152,24 +143,23 @@ public class MqttManager implements LocObserver {
 
         Log.e("MqttManager", "creatConnect");
 
-        subscribeTopic = Config.MQTT_PARENT_TOPIC + "driver/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
-
-        String brokerUrl = "tcp://" + Config.MQTT_BROKER + ":" + Config.PORT_TCP;
+        pullTopic = "/trip/driver" + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
+        String brokerUrl = "tcp://" + Config.MQTT_HOST + ":" + Config.PORT_TCP;
         //身份唯一码
-        String clientId = Config.MQTT_GROUP_ID + "@@@driver-" + EmUtil.getEmployId();
+        String clientId = "driver-" + EmUtil.getEmployId();
 
         if (conOpt == null) {
             conOpt = new MqttConnectOptions();
             conOpt.setCleanSession(true);
-            conOpt.setUserName("Signature|" + Config.MQTT_ACCESS_KEY + "|" + Config.MQTT_INSTANCE_ID);
-            conOpt.setPassword(macSignature(clientId, Config.MQTT_SECRET_KEY).toCharArray());
+            conOpt.setUserName(Config.MQTT_USER_NAME);
+            conOpt.setPassword(Config.MQTT_PSW.toCharArray());
             // 设置超时时间，单位：秒
-            conOpt.setConnectionTimeout(30);
+            conOpt.setConnectionTimeout(20);
             // 心跳包发送间隔，单位：秒
-            conOpt.setKeepAliveInterval(90);
+            conOpt.setKeepAliveInterval(20);
 //        conOpt.setAutomaticReconnect(true);
             String message = "{\"terminal_uid\":\"" + clientId + "\"}";
-            conOpt.setWill(subscribeTopic, message.getBytes(), qos, false);
+            conOpt.setWill(pullTopic, message.getBytes(), qos, false);
         }
         client = new MqttAndroidClient(XApp.getInstance(), brokerUrl, clientId);
         client.setCallback(new MqttCallback() {
@@ -195,14 +185,13 @@ public class MqttManager implements LocObserver {
     }
 
     private void postCreateConnect() {
-        if (mInstance == null) {
-            return;
-        }
-        if (handler == null) {
-            return;
-        }
-        removeNotify(1);
-        handler.sendEmptyMessageDelayed(1, 3000);
+        isConnecting = false;
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                creatConnect();
+            }
+        }, 3000);
     }
 
     private void notifySendDelayed() {
@@ -290,8 +279,8 @@ public class MqttManager implements LocObserver {
                     isConnecting = false;
                     Log.e("MqttManager", "connectSuccess");
                     try {
-                        client.unsubscribe(subscribeTopic);//订阅topic前先取消订阅，防止重复订阅
-                        client.subscribe(subscribeTopic, qos, null, new IMqttActionListener() {
+                        client.unsubscribe(pullTopic);//订阅topic前先取消订阅，防止重复订阅
+                        client.subscribe(pullTopic, qos, null, new IMqttActionListener() {
                             @Override
                             public void onSuccess(IMqttToken asyncActionToken) {
                                 isConnecting = false;
@@ -305,7 +294,7 @@ public class MqttManager implements LocObserver {
                             @Override
                             public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
                                 Log.e("MqttManager", "subscribeFail");
-                                postCreateConnect();
+                                sendReconnectEvent();
                             }
                         });
                     } catch (MqttException e) {
@@ -323,6 +312,10 @@ public class MqttManager implements LocObserver {
             Log.e(TAG, "doConnect exception-->" + e.getMessage());
         }
 
+    }
+
+    private void sendReconnectEvent() {
+        EventBus.getDefault().post(new MqttReconnectEvent());
     }
 
     /**
@@ -361,7 +354,7 @@ public class MqttManager implements LocObserver {
             message.setQos(qos);
 
             try {
-                client.publish(Config.MQTT_DRIVER_GPS_TOPIC, message, null, new IMqttActionListener() {
+                client.publish(Config.MQTT_TOPIC, message, null, new IMqttActionListener() {
                     @Override
                     public void onSuccess(IMqttToken asyncActionToken) {
                         //删除已发送数据
@@ -379,7 +372,7 @@ public class MqttManager implements LocObserver {
                     @Override
                     public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
                         Log.e("MqttManager", "sendFail");
-                        postCreateConnect();
+                        sendReconnectEvent();
                     }
                 });
             } catch (MqttException e) {
@@ -410,7 +403,7 @@ public class MqttManager implements LocObserver {
             MqttMessage message = new MqttMessage(jsonObject.toString().getBytes());
             message.setQos(qos);
             try {
-                client.publish(Config.MQTT_DRIVER_ACK_TOPIC, message);
+                client.publish(Config.ACK_TOPIC, message);
 //                Log.e("MqttManager", "push loc data--->" + pushStr);
             } catch (MqttException e) {
                 Log.e(TAG, "Publishing msg exception " + e.getMessage());
@@ -424,7 +417,10 @@ public class MqttManager implements LocObserver {
      * @return
      */
     public boolean isConnected() {
-        return client != null && client.isConnected();
+        if (client != null && client.isConnected()) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -481,24 +477,4 @@ public class MqttManager implements LocObserver {
             PushMessage.save(pushBean);
         }
     }
-
-    private String macSignature(String text, String secretKey) {
-        Charset charset = Charset.forName("UTF-8");
-        String algorithm = "HmacSHA1";
-        Mac mac = null;
-        String s = "";
-        try {
-            mac = Mac.getInstance(algorithm);
-            mac.init(new SecretKeySpec(secretKey.getBytes(charset), algorithm));
-            byte[] bytes = mac.doFinal(text.getBytes(charset));
-            // android的base64编码注意换行符情况, 使用NO_WRAP
-            s = new String(Base64.encode(bytes, Base64.NO_WRAP), charset);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        }
-        return s;
-    }
-
 }

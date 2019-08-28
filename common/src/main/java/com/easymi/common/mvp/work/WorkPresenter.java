@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.easymi.common.CommApiService;
 import com.easymi.common.R;
 import com.easymi.common.entity.MqttConfig;
+import com.easymi.common.entity.MqttResult;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.entity.NewToken;
@@ -55,6 +56,7 @@ import java.util.concurrent.TimeUnit;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -78,6 +80,8 @@ public class WorkPresenter implements WorkContract.Presenter {
     private Subscription subscription;
     private boolean isFirstLoadToken;
     private Subscription titleSubscription;
+    private Subscription checkSubscription;
+    private Subscription configSubscription;
 
     public WorkPresenter(Context context, WorkContract.View view) {
         this.context = context;
@@ -226,33 +230,93 @@ public class WorkPresenter implements WorkContract.Presenter {
 
     private boolean isStartMqtt;
 
+
+    public void resetMqtt() {
+        if (configSubscription != null) {
+            configSubscription.unsubscribe();
+        }
+        if (checkSubscription != null) {
+            checkSubscription.unsubscribe();
+        }
+        MqttManager.release();
+        isStartMqtt = false;
+        getMqttConfig();
+    }
+
+
     public void getMqttConfig() {
         if (isStartMqtt) {
             return;
         }
         isStartMqtt = true;
 
-        view.getRxManager().add(ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+        if (configSubscription != null) {
+            configSubscription.unsubscribe();
+        }
+        configSubscription = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .getConfig()
                 .map(new HttpResultFunc2<>())
+                .doOnNext(new Action1<MqttConfig>() {
+                    @Override
+                    public void call(MqttConfig mqttConfig) {
+                        if (TextUtils.isEmpty(mqttConfig.connectionsUrl) || TextUtils.isEmpty(mqttConfig.clientId)) {
+                            throw new RuntimeException();
+                        }
+                    }
+                })
                 .retryWhen(observable -> observable.delay(5, TimeUnit.SECONDS))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MySubscriber<MqttConfig>(context, false, false, new NoErrSubscriberListener<MqttConfig>() {
                     @Override
                     public void onNext(MqttConfig mqttConfig) {
-                        Config.MQTT_ACCESS_KEY = mqttConfig.accessKey;
-                        Config.MQTT_SECRET_KEY = mqttConfig.secretKey;
-                        Config.MQTT_BROKER = mqttConfig.broker;
+                        Config.MQTT_USER_NAME = mqttConfig.userName;
+                        Config.MQTT_PSW = mqttConfig.password;
+                        Config.MQTT_HOST = mqttConfig.broker;
+                        Config.PORT_HTTP = mqttConfig.portHttp;
                         Config.PORT_TCP = mqttConfig.portTcp;
-                        Config.MQTT_GROUP_ID = mqttConfig.groupId;
-                        Config.MQTT_INSTANCE_ID = mqttConfig.instanceId;
-                        Config.MQTT_DRIVER_GPS_TOPIC = mqttConfig.driverGpsTopic;
-                        Config.MQTT_DRIVER_ACK_TOPIC = mqttConfig.driverAckTopic;
-                        Config.MQTT_PARENT_TOPIC = mqttConfig.parentTopic;
+                        Config.MQTT_TOPIC = mqttConfig.topic;
+                        Config.ACK_TOPIC = mqttConfig.ackTopic;
+                        Config.MQTT_CONNECTION_URL = mqttConfig.connectionsUrl;
+                        Config.MQTT_CLIENT_ID = mqttConfig.clientId;
                         MqttManager.getInstance().creatConnect();
+                        checkTopic();
                     }
-                })));
+                }));
+
+        view.getRxManager().add(configSubscription);
+    }
+
+
+
+
+    private void checkTopic() {
+        if (checkSubscription != null) {
+            checkSubscription.unsubscribe();
+        }
+        checkSubscription = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .getCurrentTopic(Config.MQTT_CONNECTION_URL + Config.MQTT_CLIENT_ID)
+                .map(new HttpResultFunc2<>(0))
+                .doOnNext(new Action1<List<MqttResult>>() {
+                    @Override
+                    public void call(List<MqttResult> mqttResults) {
+                        if (!(mqttResults != null && mqttResults.isEmpty())) {
+                            throw new RuntimeException();
+                        }
+                    }
+                })
+                .retryWhen(observable -> observable.delay(30, TimeUnit.SECONDS))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MySubscriber<>(context, false, false, new NoErrSubscriberListener<List<MqttResult>>() {
+                    @Override
+                    public void onNext(List<MqttResult> mqttResults) {
+                        if (mqttResults != null && mqttResults.isEmpty()) {
+                            resetMqtt();
+                        }
+                    }
+                }));
+        view.getRxManager().add(checkSubscription);
     }
 
     @Override

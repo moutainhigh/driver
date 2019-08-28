@@ -4,6 +4,7 @@ import com.easymi.common.entity.Brands;
 import com.easymi.common.entity.BusinessList;
 import com.easymi.common.entity.CompanyList;
 import com.easymi.common.entity.MqttConfig;
+import com.easymi.common.entity.MqttResult;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.entity.NewToken;
 import com.easymi.common.entity.PushAnnouncement;
@@ -37,6 +38,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 import rx.Observable;
 
 /**
@@ -78,8 +80,6 @@ public interface CommApiService {
 
     @GET("api/v1/taxi_online/config/app/driver")
     Observable<EmResult2<String>> getTitleStatus();
-
-
 
 
     /**
@@ -606,7 +606,10 @@ public interface CommApiService {
     @POST("api/v1/resources/driver/online_time")
     Observable<EmResult> upLoadOnlineTime(@Field("time") long time);
 
-    @GET("api/v1/message/topic/mqtt_config/ali")
+    @GET
+    Observable<EmResult2<List<MqttResult>>> getCurrentTopic(@Url String url);
+
+    @GET("api/v1/message/topic/driver_mqtt_config")
     Observable<EmResult2<MqttConfig>> getConfig();
 
 }
