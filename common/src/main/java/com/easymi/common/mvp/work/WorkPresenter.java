@@ -288,8 +288,6 @@ public class WorkPresenter implements WorkContract.Presenter {
     }
 
 
-
-
     private void checkTopic() {
         if (checkSubscription != null) {
             checkSubscription.unsubscribe();

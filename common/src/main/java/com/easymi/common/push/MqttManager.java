@@ -6,6 +6,7 @@ import android.text.TextUtils;
 
 import com.easymi.common.CommApiService;
 import com.easymi.common.entity.BuildPushData;
+import com.easymi.common.entity.MqttReconnectEvent;
 import com.easymi.common.entity.PushBean;
 import com.easymi.common.entity.PushMessage;
 import com.easymi.common.entity.PushPojo;
