@@ -65,7 +65,7 @@ public class NotStartFragment extends RxBaseFragment {
 
     @Override
     public int getLayoutResId() {
-        return R.layout.fragment_not_start;
+        return R.layout.fragment_carpool_not_start;
     }
 
     @Override

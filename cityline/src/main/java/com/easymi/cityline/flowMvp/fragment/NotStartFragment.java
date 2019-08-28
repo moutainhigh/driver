@@ -1,8 +1,6 @@
 package com.easymi.cityline.flowMvp.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -14,7 +12,6 @@ import com.easymi.cityline.flowMvp.ActFraCommBridge;
 import com.easymi.component.ZXOrderStatus;
 import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.entity.DymOrder;
-import com.easymi.component.entity.EmLoc;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.TimeUtil;
 
@@ -65,7 +62,7 @@ public class NotStartFragment extends RxBaseFragment {
 
     @Override
     public int getLayoutResId() {
-        return R.layout.fragment_not_start;
+        return R.layout.fragment_cityline_not_start;
     }
 
     @Override
