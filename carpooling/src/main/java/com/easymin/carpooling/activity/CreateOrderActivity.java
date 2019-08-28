@@ -472,26 +472,8 @@ public class CreateOrderActivity extends RxPayActivity {
         }
     }
 
-//    public void assginOrder() {
-//        Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
-//                .assginOrder(orderId, pcOrder.timeSlotId, EmUtil.getEmployId(), pcOrder.seats, priceResult.data.money * seatNo, pcOrder.saleSeat, 1, EmUtil.getAppKey())
-//                .filter(new HttpResultFunc<>())
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread());
-//
-//        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, emResult -> {
-//            if (emResult.getCode() == 1) {
-//                ToastUtil.showMessage(this, "补单成功");
-//            } else {
-//                ToastUtil.showMessage(this, "指派订单失败，请联系客服重新指派");
-//            }
-//            finish();
-//        })));
-//    }
-
     @Override
     public void onPaySuc() {
-//        assginOrder();
         ToastUtil.showMessage(this, "支付成功");
         finish();
     }
