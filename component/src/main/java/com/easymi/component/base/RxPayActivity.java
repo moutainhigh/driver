@@ -166,7 +166,7 @@ public abstract class RxPayActivity extends RxBaseActivity {
      */
     private void toPay(String payType, long orderId) {
         Observable<JsonElement> observable = ApiManager.getInstance().createApi(Config.HOST, ComponentService.class)
-                .payOrder(orderId, payType)
+                .payOrder(true, orderId, payType)
                 .map(new HttpResultFunc2<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

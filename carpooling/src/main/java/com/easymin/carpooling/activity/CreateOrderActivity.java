@@ -490,9 +490,12 @@ public class CreateOrderActivity extends RxPayActivity {
         })));
     }
 
+
     @Override
     public void onPaySuc() {
         assginOrder();
+//        ToastUtil.showMessage(this, "支付成功");
+//        finish();
     }
 
     @Override
