@@ -1,5 +1,7 @@
 package com.easymi.component.network;
 
+import android.text.TextUtils;
+
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.utils.Base64;
@@ -20,10 +22,10 @@ public class TokenInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         HttpUrl httpUrl = chain.request().url();
         Request request = chain.request();
-        if (httpUrl.toString().contains("/api/v3/connections/")) {
-//            request.url().queryParameter()
+        if ((!TextUtils.isEmpty(Config.MQTT_CONNECTION_URL) && httpUrl.toString().contains(Config.MQTT_CONNECTION_URL))) {
             return chain.proceed(request.newBuilder()
                     .url(httpUrl.newBuilder()
+                            .scheme("http")
                             .host(Config.MQTT_HOST)
                             .port(Config.PORT_HTTP)
                             .build())
