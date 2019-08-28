@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -38,7 +37,6 @@ import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.AlexStatusBarUtils;
 import com.easymi.component.utils.CsEditor;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.GPSUtils;
 import com.easymi.component.utils.MacUtils;
 import com.easymi.component.utils.MobileInfoUtil;
 import com.easymi.component.utils.PhoneUtil;
@@ -86,7 +84,6 @@ public class LoginActivity extends RxBaseActivity {
     CheckBox checkboxRemember;
     TextView textAgreement;
 
-    private Location mlocation;
 
     SafeKeyboard safeKeyboard;
 
@@ -139,13 +136,8 @@ public class LoginActivity extends RxBaseActivity {
 
         ActManager.getInstance().finishAllActivity(getClass().getName());
 
-        getLocation();
 
         initKeyBoard();
-    }
-
-    private void getLocation() {
-        mlocation = GPSUtils.getInstance(this).getLngAndLat();
     }
 
     private void initKeyBoard() {
@@ -282,9 +274,8 @@ public class LoginActivity extends RxBaseActivity {
      * @param psw
      */
     private void login(String name, String psw) {
-        if (mlocation == null) {
-            ToastUtil.showMessage(this, "获取当前位置失败,请重试;");
-            getLocation();
+        if (EmUtil.getLastLoc() == null) {
+            ToastUtil.showMessage(this, "获取当前位置失败,请重试");
             return;
         }
         TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -329,8 +320,8 @@ public class LoginActivity extends RxBaseActivity {
             imei_rsa = RsaUtils.rsaEncode(MobileInfoUtil.getIMEI(this));
             imsi_rsa = RsaUtils.rsaEncode(MobileInfoUtil.getIMSI(this));
             loginType_rsa = RsaUtils.rsaEncode(Build.MODEL);
-            longitude_rsa = RsaUtils.rsaEncode((mlocation.getLatitude() + ""));
-            latitude_rsa = RsaUtils.rsaEncode((mlocation.getLongitude() + ""));
+            longitude_rsa = RsaUtils.rsaEncode(EmUtil.getLastLoc().latitude + "");
+            latitude_rsa = RsaUtils.rsaEncode(EmUtil.getLastLoc().longitude + "");
 
             appVersion_rsa = RsaUtils.rsaEncode(SysUtil.getVersionName(this));
             mobileOperators_rsa = RsaUtils.rsaEncode(operatorName);
@@ -400,7 +391,6 @@ public class LoginActivity extends RxBaseActivity {
 
             @Override
             public void onError(int code) {
-
             }
         })));
     }

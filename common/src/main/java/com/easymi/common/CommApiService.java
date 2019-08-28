@@ -607,7 +607,6 @@ public interface CommApiService {
     @POST("api/v1/resources/driver/online_time")
     Observable<EmResult> upLoadOnlineTime(@Field("time") long time);
 
-
     @GET("api/v1/order/cold/getOrderInfo")
     Observable<EmResult2<BaseOrder>> getOrderInfo(@Query("orderId") long orderId);
 

@@ -25,6 +25,7 @@ public class TokenInterceptor implements Interceptor {
         if ((!TextUtils.isEmpty(Config.MQTT_CONNECTION_URL) && httpUrl.toString().contains(Config.MQTT_CONNECTION_URL))) {
             return chain.proceed(request.newBuilder()
                     .url(httpUrl.newBuilder()
+                            .scheme("http")
                             .host(Config.MQTT_HOST)
                             .port(Config.PORT_HTTP)
                             .build())

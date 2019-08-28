@@ -37,6 +37,7 @@ import com.easymi.common.activity.CreateActivity;
 import com.easymi.common.adapter.OrderAdapter;
 import com.easymi.common.entity.AnnAndNotice;
 import com.easymi.common.entity.BuildPushData;
+import com.easymi.common.entity.MqttReconnectEvent;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.entity.PushMessage;
@@ -194,12 +195,15 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         });
         listenOrderCon.setOnClickListener(v -> {
             presenter.offline();
+//            presenter.resetMqtt();
         });
         EmLoc emLoc = EmUtil.getLastLoc();
         if (emLoc != null) {
             receiveLoc(emLoc);
         }
     }
+
+
 
     @Override
     public void setTitleStatus(String content) {
@@ -653,8 +657,13 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         MqttManager.release();
         mapView.onDestroy();
         super.onDestroy();
-
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onReconnectEvent(MqttReconnectEvent reconnectEvent) {
+        presenter.resetMqtt();
+    }
+
 
     @Override
     public boolean isEnableSwipe() {

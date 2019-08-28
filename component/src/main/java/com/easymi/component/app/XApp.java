@@ -127,7 +127,6 @@ public class XApp extends MultiDexApplication {
         };
 
 
-
         Pandora.get().addFunction(customFunc);
 
         ARouter.init(this);
@@ -152,8 +151,8 @@ public class XApp extends MultiDexApplication {
                     .apply();
         }
 
-        if (Build.VERSION.SDK_INT >= 26) { //创建普通消息
-            String channelId = getPackageName()+"/pushChannel";
+        if (Build.VERSION.SDK_INT >= 26) {
+            String channelId = getPackageName() + "/pushChannel";
             NotificationChannel notificationChannel = new NotificationChannel(channelId,
                     "普通消息通知栏", NotificationManager.IMPORTANCE_HIGH);
             notificationChannel.enableLights(true);//是否在桌面icon右上角展示小圆点
@@ -164,7 +163,6 @@ public class XApp extends MultiDexApplication {
                 mNotificationManager.createNotificationChannel(notificationChannel);
             }
         }
-
     }
 
 

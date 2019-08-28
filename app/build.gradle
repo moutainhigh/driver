@@ -48,7 +48,9 @@ android {
         }
 
         debug {
-            signingConfig signingConfigs.debug
+            minifyEnabled false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -79,12 +81,12 @@ android {
             buildConfigField "String", "HOST", '"http://10.10.2.24:10001/"'
             buildConfigField "String", "H5_HOST", '"http://h5.xiaokakj.cn/"'
             buildConfigField "String", "IMG_SERVER", '"https://assets.xiaokakj.com/"'
-            buildConfigField "boolean", "IS_ENCRYPT", "false"
+            buildConfigField "boolean", "IS_ENCRYPT", "true"
         }
         //生产环境
         product {
             dimension "App"//同在App这个名字维度
-            buildConfigField "String", "HOST", '"http://api.xiaokakj.com/"'
+            buildConfigField "String", "HOST", '"https://api.xiaokakj.com/"'
             buildConfigField "String", "H5_HOST", '"https://h5.xiaokakj.com/"'
             buildConfigField "String", "IMG_SERVER", '"https://assets.xiaokakj.com/"'
             buildConfigField "boolean", "IS_ENCRYPT", "true"
@@ -114,7 +116,6 @@ static def releaseTime() {
     return new Date().format("yyyyMMddHHmm")
 }
 
-
 task handleMd5 {
     String md5Str = project.android.defaultConfig.manifestPlaceholders.get("XK_MD5")
     println "原始md5：" + md5Str
@@ -136,9 +137,6 @@ dependencies {
     implementation project(path: ':cityline')
     implementation project(path: ':securitycenter')
     implementation project(path: ':passengerbus')
-    implementation project(path: ':chartered')
-    implementation project(path: ':rental')
     implementation project(path: ':custombus')
     implementation project(path: ':carpooling')
-    implementation project(path: ':official')
 }

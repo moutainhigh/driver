@@ -8,8 +8,5 @@ include ':app',
         ':cityline',
         ':securitycenter',
         ':passengerbus',
-        ':chartered',
-        ':rental',
         ':custombus',
-        ':carpooling',
-        ':official'
+        ':carpooling'

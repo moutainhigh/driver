@@ -53,7 +53,11 @@ public class SettingActivity extends RxBaseActivity {
                     }
                 });
 
-        settingRgKey.check(Config.APP_KEY.startsWith("1H") ? R.id.setting_rb_1h : R.id.setting_rb_4j);
+        if (Config.APP_KEY.startsWith("1HAc")) {
+            settingRgKey.check(R.id.setting_rb_1h);
+        } else if (Config.APP_KEY.startsWith("4ji3")) {
+            settingRgKey.check(R.id.setting_rb_4j);
+        }
         settingEtHost.setText(Config.HOST);
         settingEtH5.setText(Config.H5_HOST);
         settingRg.check(Config.IS_ENCRYPT ? R.id.setting_rb_en : R.id.setting_rb_de);
@@ -62,7 +66,13 @@ public class SettingActivity extends RxBaseActivity {
             @Override
             public void onClick(View v) {
                 EnvironmentPojo environmentPojo = new EnvironmentPojo();
-                environmentPojo.appKey = settingRgKey.getCheckedRadioButtonId() == R.id.setting_rb_1h ? "1HAcient1kLqfeX7DVTV0dklUkpGEnUC" : "4ji3EvuwNziPKF8QXqXMTukGqPmlwOFJ";
+                if (settingRgKey.getCheckedRadioButtonId() == R.id.setting_rb_1h) {
+                    environmentPojo.appKey = "1HAcient1kLqfeX7DVTV0dklUkpGEnUC";
+                } else if (settingRgKey.getCheckedRadioButtonId() == R.id.setting_rb_4j) {
+                    environmentPojo.appKey = "4ji3EvuwNziPKF8QXqXMTukGqPmlwOFJ";
+                } else {
+                    environmentPojo.appKey = Config.APP_KEY;
+                }
                 environmentPojo.host = settingEtHost.getText().toString();
                 environmentPojo.h5Host = settingEtH5.getText().toString();
                 environmentPojo.encryption = settingRg.getCheckedRadioButtonId() == R.id.setting_rb_en;

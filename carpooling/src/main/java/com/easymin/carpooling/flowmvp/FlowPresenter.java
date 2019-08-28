@@ -6,20 +6,6 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 
 import com.amap.api.maps.model.LatLng;
-import com.amap.api.navi.AMapNavi;
-import com.amap.api.navi.AMapNaviListener;
-import com.amap.api.navi.model.AMapLaneInfo;
-import com.amap.api.navi.model.AMapModelCross;
-import com.amap.api.navi.model.AMapNaviCameraInfo;
-import com.amap.api.navi.model.AMapNaviCross;
-import com.amap.api.navi.model.AMapNaviInfo;
-import com.amap.api.navi.model.AMapNaviLocation;
-import com.amap.api.navi.model.AMapNaviPath;
-import com.amap.api.navi.model.AMapNaviTrafficFacilityInfo;
-import com.amap.api.navi.model.AMapServiceAreaInfo;
-import com.amap.api.navi.model.AimLessModeCongestionInfo;
-import com.amap.api.navi.model.AimLessModeStat;
-import com.amap.api.navi.model.NaviInfo;
 import com.amap.api.navi.model.NaviLatLng;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.route.BusRouteResult;
@@ -27,21 +13,17 @@ import com.amap.api.services.route.DriveRouteResult;
 import com.amap.api.services.route.RideRouteResult;
 import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
-import com.autonavi.tbt.TrafficFacilityInfo;
 import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.component.Config;
 import com.easymi.component.activity.NaviActivity;
-import com.easymi.component.app.XApp;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.network.ErrCode;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.Log;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -54,23 +36,13 @@ import java.util.List;
  * History:
  */
 
-public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
+public class FlowPresenter implements FlowContract.Presenter {
 
     private Context context;
     private FlowContract.View view;
     private FlowContract.Model model;
 
-    /**
-     * 导航
-     */
-    AMapNavi mAMapNavi;
-
-    RouteSearch routeSearch;
-    private LatLng start;
-    private List<LatLng> latLngs;
-    private LatLng end;
-    private boolean isInit;
-    private boolean isCalculate;
+    private RouteSearch routeSearch;
 
     public FlowPresenter(Context context, FlowContract.View view) {
         this.context = context;
@@ -89,7 +61,6 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
         intent.putExtra("orderType", Config.CITY_LINE);
 
         intent.putExtra(Config.NAVI_MODE, Config.DRIVE_TYPE);
-        stopNavi();//停止当前页面的导航，在到导航页时重新初始化导航
         context.startActivity(intent);
     }
 
@@ -111,55 +82,8 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
 
     @Override
     public void routeLineByNavi(LatLng start, List<LatLng> latLngs, LatLng end) {
-        if (start == null || end == null) {
-            return;
-        }
-        if (isInit || isCalculate) {
-            return;
-        }
-        this.start = start;
-        this.latLngs = latLngs;
-        this.end = end;
-        if (mAMapNavi == null) {
-            mAMapNavi = AMapNavi.getInstance(context);
-            mAMapNavi.addAMapNaviListener(this);
-            isInit = true;
-        } else {
-            onInitNaviSuccess();
-        }
     }
 
-    private void calculateRoute() {
-        if (isCalculate) {
-            return;
-        }
-        if (mAMapNavi != null) {
-            NaviLatLng startNavi = new NaviLatLng(start.latitude, start.longitude);
-            NaviLatLng endNavi = new NaviLatLng(end.latitude, end.longitude);
-            List<NaviLatLng> naviLatLngs = new ArrayList<>();
-            if (null != latLngs && latLngs.size() != 0) {
-                for (LatLng latLng : latLngs) {
-                    NaviLatLng passNavi = new NaviLatLng(latLng.latitude, latLng.longitude);
-                    naviLatLngs.add(passNavi);
-                }
-            }
-
-            int strategy = mAMapNavi.strategyConvert(
-                    XApp.getMyPreferences().getBoolean(Config.SP_CONGESTION, true),
-                    XApp.getMyPreferences().getBoolean(Config.SP_AVOID_HIGH_SPEED, false),
-                    XApp.getMyPreferences().getBoolean(Config.SP_COST, true),
-                    XApp.getMyPreferences().getBoolean(Config.SP_HIGHT_SPEED, false),
-                    false);
-
-            List<NaviLatLng> startLs = new ArrayList<>();
-            List<NaviLatLng> endLs = new ArrayList<>();
-
-            startLs.add(startNavi);
-            endLs.add(endNavi);
-            isCalculate = true;
-            mAMapNavi.calculateDriveRoute(startLs, endLs, naviLatLngs, strategy);
-        }
-    }
 
     @Override
     public void routePlanByRouteSearch(LatLng start, List<LatLng> latLngs, LatLng end) {
@@ -210,13 +134,9 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
 
     @Override
     public void stopNavi() {
-        //since 1.6.0 不再在naviview destroy的时候自动执行AMapNavi.stopNavi();请自行执行
-        if (null != mAMapNavi) {
-            mAMapNavi.stopNavi();
-            mAMapNavi.destroy();
-            mAMapNavi = null;
-        }
+
     }
+
 
     @Override
     public void startOutSet(long orderId) {
@@ -303,210 +223,5 @@ public class FlowPresenter implements FlowContract.Presenter, AMapNaviListener {
             dymOrder.delete();
         }
         CarpoolOrder.delete(orderId, orderType);
-    }
-
-    @Override
-    public void onInitNaviFailure() {
-        isInit = false;
-        stopNavi();
-    }
-
-    @Override
-    public void onInitNaviSuccess() {
-        isInit = false;
-        calculateRoute();
-    }
-
-    @Override
-    public void onLocationChange(AMapNaviLocation aMapNaviLocation) {
-        Log.e("FlowerPresenter", "onCalculateRouteSuccess()");
-    }
-
-    @Override
-    public void onGetNavigationText(int i, String s) {
-
-    }
-
-    @Override
-    public void onStartNavi(int i) {
-
-    }
-
-    @Override
-    public void onTrafficStatusUpdate() {
-
-    }
-
-    @Override
-    public void onCalculateRouteSuccess(int[] ints) {
-        isCalculate = false;
-        if (mAMapNavi != null) {
-            AMapNaviPath path;
-            HashMap<Integer, AMapNaviPath> paths = mAMapNavi.getNaviPaths();
-            if (null != paths && paths.size() != 0) {
-                path = paths.get(ints[0]);
-            } else {
-                path = mAMapNavi.getNaviPath();
-            }
-            if (path != null) {
-                view.showPath(ints, path);
-                view.showLeft(path.getAllLength(), path.getAllTime());
-                if (XApp.getMyPreferences().getBoolean(Config.SP_DEFAULT_NAVI, true)) {
-//                    mAMapNavi.startNavi(NaviType.GPS);
-                }
-            }
-        }
-    }
-
-    @Override
-    public void notifyParallelRoad(int i) {
-
-    }
-
-    @Override
-    public void OnUpdateTrafficFacility(AMapNaviTrafficFacilityInfo aMapNaviTrafficFacilityInfo) {
-
-    }
-
-    @Override
-    public void OnUpdateTrafficFacility(AMapNaviTrafficFacilityInfo[] aMapNaviTrafficFacilityInfos) {
-
-    }
-
-    @Override
-    public void OnUpdateTrafficFacility(TrafficFacilityInfo trafficFacilityInfo) {
-
-    }
-
-    @Override
-    public void updateAimlessModeStatistics(AimLessModeStat aimLessModeStat) {
-
-    }
-
-    @Override
-    public void updateAimlessModeCongestionInfo(AimLessModeCongestionInfo aimLessModeCongestionInfo) {
-
-    }
-
-    @Override
-    public void onPlayRing(int i) {
-
-    }
-
-    @Override
-    public void onCalculateRouteFailure(int i) {
-        isCalculate = false;
-    }
-
-    /**
-     * 重新算路前的回调
-     */
-    @Override
-    public void onReCalculateRouteForYaw() {
-
-    }
-
-    /**
-     * 重新算路前的回调
-     */
-    @Override
-    public void onReCalculateRouteForTrafficJam() {
-
-    }
-
-    @Override
-    public void onArrivedWayPoint(int i) {
-
-    }
-
-    @Override
-    public void onGpsOpenStatus(boolean b) {
-
-    }
-
-    /**
-     * 导航信息更新
-     *
-     * @param naviInfo
-     */
-    @Override
-    public void onNaviInfoUpdate(NaviInfo naviInfo) {
-        view.showLeft(naviInfo.getPathRetainDistance(), naviInfo.getPathRetainTime());
-    }
-
-    @Override
-    public void onNaviInfoUpdated(AMapNaviInfo aMapNaviInfo) {
-
-    }
-
-    @Override
-    public void updateCameraInfo(AMapNaviCameraInfo[] aMapNaviCameraInfos) {
-
-    }
-
-    @Override
-    public void onServiceAreaUpdate(AMapServiceAreaInfo[] aMapServiceAreaInfos) {
-
-    }
-
-    @Override
-    public void showCross(AMapNaviCross aMapNaviCross) {
-
-    }
-
-    @Override
-    public void hideCross() {
-
-    }
-
-    @Override
-    public void showModeCross(AMapModelCross aMapModelCross) {
-
-    }
-
-    @Override
-    public void hideModeCross() {
-
-    }
-
-    @Override
-    public void showLaneInfo(AMapLaneInfo[] aMapLaneInfos, byte[] bytes, byte[] bytes1) {
-
-    }
-
-    @Override
-    public void hideLaneInfo() {
-
-    }
-
-    @Override
-    public void onGetNavigationText(String s) {
-//        XApp.getInstance().syntheticVoice(s, true);
-    }
-
-    @Override
-    public void onEndEmulatorNavi() {
-
-    }
-
-    @Override
-    public void onArriveDestination() {
-
-    }
-
-    public void onExitPage(int i) {
-
-    }
-
-    public void onReCalculateRoute(int i) {
-
-    }
-
-    public void showLaneInfo(AMapLaneInfo info) {
-
-    }
-
-    public void updateIntervalCameraInfo(AMapNaviCameraInfo info1, AMapNaviCameraInfo info2, int i) {
-
     }
 }

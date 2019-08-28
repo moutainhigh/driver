@@ -18,5 +18,4 @@ public class MqttConfig {
     public String ackTopic;
     public String connectionsUrl;
     public String clientId;
-
 }

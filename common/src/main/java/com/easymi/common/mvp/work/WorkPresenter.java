@@ -80,6 +80,8 @@ public class WorkPresenter implements WorkContract.Presenter {
     private Subscription subscription;
     private boolean isFirstLoadToken;
     private Subscription titleSubscription;
+    private Subscription checkSubscription;
+    private Subscription configSubscription;
 
     public WorkPresenter(Context context, WorkContract.View view) {
         this.context = context;
@@ -228,42 +230,30 @@ public class WorkPresenter implements WorkContract.Presenter {
 
     private boolean isStartMqtt;
 
-    /**
-     * 检查clentid是否存活
-     */
-    private void checkTopic() {
-        view.getRxManager().add(ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .getCurrentTopic(Config.MQTT_CONNECTION_URL + Config.MQTT_CLIENT_ID)
-                .map(new HttpResultFunc2<>(0))
-                .doOnNext(new Action1<List<MqttResult>>() {
-                    @Override
-                    public void call(List<MqttResult> mqttResults) {
-                        if (!(mqttResults != null && mqttResults.isEmpty())) {
-                            throw new RuntimeException();
-                        }
-                    }
-                })
-                .retryWhen(observable -> observable.delay(30, TimeUnit.SECONDS))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MySubscriber<>(context, false, false, new NoErrSubscriberListener<List<MqttResult>>() {
-                    @Override
-                    public void onNext(List<MqttResult> mqttResults) {
-                        if (mqttResults != null && mqttResults.isEmpty()) {
-                            MqttManager.release();
-                            isStartMqtt = false;
-                            getMqttConfig();
-                        }
-                    }
-                })));
+
+    public void resetMqtt() {
+        if (configSubscription != null) {
+            configSubscription.unsubscribe();
+        }
+        if (checkSubscription != null) {
+            checkSubscription.unsubscribe();
+        }
+        MqttManager.release();
+        isStartMqtt = false;
+        getMqttConfig();
     }
+
 
     public void getMqttConfig() {
         if (isStartMqtt) {
             return;
         }
         isStartMqtt = true;
-        view.getRxManager().add(ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+
+        if (configSubscription != null) {
+            configSubscription.unsubscribe();
+        }
+        configSubscription = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .getConfig()
                 .map(new HttpResultFunc2<>())
                 .doOnNext(new Action1<MqttConfig>() {
@@ -292,7 +282,39 @@ public class WorkPresenter implements WorkContract.Presenter {
                         MqttManager.getInstance().creatConnect();
                         checkTopic();
                     }
-                })));
+                }));
+
+        view.getRxManager().add(configSubscription);
+    }
+
+
+    private void checkTopic() {
+        if (checkSubscription != null) {
+            checkSubscription.unsubscribe();
+        }
+        checkSubscription = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .getCurrentTopic(Config.MQTT_CONNECTION_URL + Config.MQTT_CLIENT_ID)
+                .map(new HttpResultFunc2<>(0))
+                .doOnNext(new Action1<List<MqttResult>>() {
+                    @Override
+                    public void call(List<MqttResult> mqttResults) {
+                        if (!(mqttResults != null && mqttResults.isEmpty())) {
+                            throw new RuntimeException();
+                        }
+                    }
+                })
+                .retryWhen(observable -> observable.delay(30, TimeUnit.SECONDS))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MySubscriber<>(context, false, false, new NoErrSubscriberListener<List<MqttResult>>() {
+                    @Override
+                    public void onNext(List<MqttResult> mqttResults) {
+                        if (mqttResults != null && mqttResults.isEmpty()) {
+                            resetMqtt();
+                        }
+                    }
+                }));
+        view.getRxManager().add(checkSubscription);
     }
 
     @Override
@@ -475,8 +497,9 @@ public class WorkPresenter implements WorkContract.Presenter {
                 } else {
                     if (employ.serviceType.contains(Config.ZHUANCHE)
                             || employ.serviceType.contains(Config.TAXI)
-                    )
+                    ) {
                         ToastUtil.showMessage(context, "未绑定该业务车辆，不能接单");
+                    }
                 }
             }
         })));

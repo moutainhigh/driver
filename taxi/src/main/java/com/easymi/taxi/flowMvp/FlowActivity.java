@@ -38,10 +38,9 @@ import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.maps.utils.overlay.SmoothMoveMarker;
 import com.amap.api.navi.model.AMapNaviPath;
-import com.amap.api.navi.model.RouteOverlayOptions;
-import com.amap.api.navi.view.RouteOverLay;
 import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.route.DriveRouteResult;
+import com.amap.api.services.route.DriveStep;
 import com.easymi.common.entity.Address;
 import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.push.FeeChangeObserver;
@@ -104,7 +103,8 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: FinishActivity
- *@Author: shine
+ *
+ * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
  * History:
@@ -554,10 +554,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         if (taxiOrder.status == ZCOrderStatus.NEW_ORDER
                 || taxiOrder.status == ZCOrderStatus.PAIDAN_ORDER
                 || taxiOrder.status == ZCOrderStatus.TAKE_ORDER
-                ) {
+        ) {
             if (null != getStartAddr()) {
                 latLngs.add(new LatLng(getStartAddr().latitude, getStartAddr().longitude));
-                presenter.routePlanByNavi(getStartAddr().latitude, getStartAddr().longitude);
+                presenter.routePlanByRouteSearch(getStartAddr().latitude, getStartAddr().longitude);
             }
             if (null != getEndAddr()) {
                 latLngs.add(new LatLng(getEndAddr().latitude, getEndAddr().longitude));
@@ -567,7 +567,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         } else if (taxiOrder.status == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
             if (null != getStartAddr()) {
                 latLngs.add(new LatLng(getStartAddr().latitude, getStartAddr().longitude));
-                presenter.routePlanByNavi(getStartAddr().latitude, getStartAddr().longitude);
+                presenter.routePlanByRouteSearch(getStartAddr().latitude, getStartAddr().longitude);
             } else {
                 presenter.stopNavi();
                 leftTimeText.setText("");
@@ -578,10 +578,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 || taxiOrder.status == ZCOrderStatus.GOTO_DESTINATION_ORDER
                 || taxiOrder.status == ZCOrderStatus.START_WAIT_ORDER
                 || taxiOrder.status == ZCOrderStatus.ARRIVAL_DESTINATION_ORDER
-                ) {
+        ) {
             if (null != getEndAddr()) {
                 latLngs.add(new LatLng(getEndAddr().latitude, getEndAddr().longitude));
-                presenter.routePlanByNavi(getEndAddr().latitude, getEndAddr().longitude);
+                presenter.routePlanByRouteSearch(getEndAddr().latitude, getEndAddr().longitude);
             }
             if (taxiOrder.status == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
                 aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLatlng, 19));
@@ -632,7 +632,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         finish();
     }
 
-    RouteOverLay routeOverLay;
 
     /**
      * 绘制路径规划结果
@@ -641,42 +640,26 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
      */
     @Override
     public void showPath(int[] ints, AMapNaviPath path) {
-        if (null != routeOverLay) {
-            routeOverLay.removeFromMap();
-        }
-//        aMap.moveCamera(CameraUpdateFactory.changeTilt(0));
-        routeOverLay = new RouteOverLay(aMap, path, this);
-        routeOverLay.setStartPointBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.yellow_dot_small));
-        routeOverLay.setEndPointBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.blue_dot_small));
-        routeOverLay.setTrafficLine(true);
-
-        RouteOverlayOptions options = new RouteOverlayOptions();
-        options.setSmoothTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_green));
-        options.setUnknownTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_no));
-        options.setSlowTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_slow));
-        options.setJamTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_bad));
-        options.setVeryJamTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_grayred));
-
-        routeOverLay.setRouteOverlayOptions(options);
-
-        routeOverLay.addToMap();
     }
 
     private DrivingRouteOverlay drivingRouteOverlay;
 
     @Override
     public void showPath(DriveRouteResult result) {
+
+        DrivingRouteOverlay overlay = new DrivingRouteOverlay(this, aMap,
+                result.getPaths().get(0), result.getStartPos()
+                , result.getTargetPos(), null);
+        overlay.setRouteWidth(0);
+        overlay.setIsColorfulline(false);
+        overlay.setNodeIconVisibility(false);//隐藏转弯的节点
+        overlay.addToMap();
+
         if (drivingRouteOverlay != null) {
             drivingRouteOverlay.removeFromMap();
         }
-        drivingRouteOverlay = new DrivingRouteOverlay(this, aMap,
-                result.getPaths().get(0), result.getStartPos()
-                , result.getTargetPos(), null);
-        drivingRouteOverlay.setRouteWidth(0);
-        drivingRouteOverlay.setIsColorfulline(false);
-        drivingRouteOverlay.setNodeIconVisibility(false);//隐藏转弯的节点
-        drivingRouteOverlay.addToMap();
-        drivingRouteOverlay.zoomToSpan();
+        drivingRouteOverlay = overlay;
+
         List<LatLng> latLngs = new ArrayList<>();
         latLngs.add(new LatLng(result.getStartPos().getLatitude(), result.getStartPos().getLongitude()));
         latLngs.add(new LatLng(result.getTargetPos().getLatitude(), result.getTargetPos().getLongitude()));
@@ -684,6 +667,15 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         latLngs.add(new LatLng(lastLoc.latitude, lastLoc.longitude));
         LatLngBounds bounds = MapUtil.getBounds(latLngs);
         aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(this) / 1.5), (int) (DensityUtil.getDisplayWidth(this) / 1.5), 0));
+
+        float dis = 0;
+        float time = 0;
+        for (DriveStep step : result.getPaths().get(0).getSteps()) {
+            dis += step.getDistance();
+            time += step.getDuration();
+        }
+        showLeft((int) dis, (int) time);
+
     }
 
     private CusBottomSheetDialog bottomSheetDialog;//支付弹窗
@@ -1097,16 +1089,16 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         traceReceiver = new TraceReceiver(this);
         IntentFilter filter2 = new IntentFilter();
         filter2.addAction(LocService.BROAD_TRACE_SUC);
-        registerReceiver(traceReceiver, filter2,EmUtil.getBroadCastPermission(),null);
+        registerReceiver(traceReceiver, filter2, EmUtil.getBroadCastPermission(), null);
 
         cancelOrderReceiver = new CancelOrderReceiver(this);
         IntentFilter filter = new IntentFilter();
         filter.addAction(Config.BROAD_CANCEL_ORDER);
         filter.addAction(Config.BROAD_BACK_ORDER);
-        registerReceiver(cancelOrderReceiver, filter,EmUtil.getBroadCastPermission(),null);
+        registerReceiver(cancelOrderReceiver, filter, EmUtil.getBroadCastPermission(), null);
 
         orderFinishReceiver = new OrderFinishReceiver(this);
-        registerReceiver(orderFinishReceiver, new IntentFilter(Config.BROAD_FINISH_ORDER),EmUtil.getBroadCastPermission(),null);
+        registerReceiver(orderFinishReceiver, new IntentFilter(Config.BROAD_FINISH_ORDER), EmUtil.getBroadCastPermission(), null);
     }
 
     boolean canGoOld = false;
@@ -1292,10 +1284,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void plChange(PassengerLocation plocation) {
-        if (plMaker != null){
+        if (plMaker != null) {
             plMaker.remove();
         }
-        if (taxiOrder.status < ZCOrderStatus.GOTO_DESTINATION_ORDER){
+        if (taxiOrder.status < ZCOrderStatus.GOTO_DESTINATION_ORDER) {
             if (null != plocation) {
                 LatLng plLatlng = new LatLng(plocation.latitude, plocation.longitude);
 //            receiveLoc(plocation);//手动调用上次位置 减少从北京跳过来的时间

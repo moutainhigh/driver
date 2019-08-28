@@ -33,10 +33,9 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.navi.model.AMapNaviPath;
-import com.amap.api.navi.model.RouteOverlayOptions;
-import com.amap.api.navi.view.RouteOverLay;
 import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.route.DriveRouteResult;
+import com.amap.api.services.route.DriveStep;
 import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.push.FeeChangeObserver;
 import com.easymi.common.push.HandlePush;
@@ -633,7 +632,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             addLocationMarker();
 
             if (zcOrder.orderStatus < ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-                Log.e("FlowActivity", "showOrder" + (mPlocation == null));
                 if (mPlocation == null) {
                     passengerLoc(zcOrder.orderId);
                 }
@@ -704,7 +702,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 latLngs.add(new LatLng(getStartAddr().lat, getStartAddr().lng));
                 presenter.routePlanByNavi(getStartAddr().lat, getStartAddr().lng);
             } else {
-                presenter.stopNavi();
                 left_time.setText("");
             }
             LatLngBounds bounds = MapUtil.getBounds(latLngs, lastLatlng);
@@ -778,8 +775,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         finish();
     }
 
-    RouteOverLay routeOverLay;
-
     /**
      * 绘制路径规划结果
      *
@@ -787,28 +782,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
      */
     @Override
     public void showPath(int[] ints, AMapNaviPath path) {
-        RouteOverLay routeOverLay = new RouteOverLay(aMap, path, this);
 
-        routeOverLay.setStartPointBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.yellow_dot_small));
-        routeOverLay.setEndPointBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.blue_dot_small));
-        routeOverLay.setTrafficLine(true);
-
-        RouteOverlayOptions options = new RouteOverlayOptions();
-        options.setSmoothTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_green));
-        options.setUnknownTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_green));
-//        options.setUnknownTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_no));
-        options.setSlowTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_slow));
-        options.setJamTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_bad));
-        options.setVeryJamTraffic(BitmapFactory.decodeResource(getResources(), com.easymi.component.R.mipmap.custtexture_grayred));
-
-        routeOverLay.setRouteOverlayOptions(options);
-
-        routeOverLay.addToMap();
-
-        if (this.routeOverLay != null) {
-            this.routeOverLay.removeFromMap();
-        }
-        this.routeOverLay = routeOverLay;
     }
 
     /**
@@ -818,26 +792,26 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void showPath(DriveRouteResult result) {
-        if (drivingRouteOverlay != null) {
-            drivingRouteOverlay.removeFromMap();
-        }
-        drivingRouteOverlay = new DrivingRouteOverlay(this, aMap,
+        DrivingRouteOverlay drivingRouteOverlay = new DrivingRouteOverlay(this, aMap,
                 result.getPaths().get(0), result.getStartPos()
                 , result.getTargetPos(), null);
-        drivingRouteOverlay.setRouteWidth(0);
         drivingRouteOverlay.setIsColorfulline(false);
         drivingRouteOverlay.setNodeIconVisibility(false);//隐藏转弯的节点
         drivingRouteOverlay.addToMap();
-        drivingRouteOverlay.zoomToSpan();
-        List<LatLng> latLngs = new ArrayList<>();
-        latLngs.add(new LatLng(result.getStartPos().getLatitude(), result.getStartPos().getLongitude()));
-        latLngs.add(new LatLng(result.getTargetPos().getLatitude(), result.getTargetPos().getLongitude()));
-        EmLoc lastLoc = EmUtil.getLastLoc();
-        latLngs.add(new LatLng(lastLoc.latitude, lastLoc.latitude));
 
-        LatLngBounds bounds = MapUtil.getBounds(latLngs);
-        aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, (int) (DensityUtil.getDisplayWidth(this) / 1.5), (int) (DensityUtil.getDisplayWidth(this) / 1.5), 0));
+        if (this.drivingRouteOverlay != null) {
+            this.drivingRouteOverlay.removeFromMap();
+        }
+        this.drivingRouteOverlay = drivingRouteOverlay;
 
+        float dis = 0;
+        float time = 0;
+
+        for (DriveStep driveStep : result.getPaths().get(0).getSteps()) {
+            dis += driveStep.getDistance();
+            time += driveStep.getDuration();
+        }
+        showLeft((int) dis, (int) time);
     }
 
     /**
@@ -1340,9 +1314,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     protected void onDestroy() {
         if (mapView != null) {
             mapView.onDestroy();
-        }
-        if (presenter != null) {
-            presenter.stopNavi();
         }
         if (mPlocation != null) {
             mPlocation = null;

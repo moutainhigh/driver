@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.easymi.common.BuildConfig;
 import com.easymi.common.R;
 import com.easymi.common.mvp.work.WorkActivity;
 import com.easymi.component.Config;
@@ -165,23 +166,28 @@ public class SplashActivity extends RxBaseActivity {
 //            dialog.show();
 //            return;
 //        }
+        XApp.getInstance().startLocService();
         update();
     }
 
     private void update() {
-        new UpdateHelper(this, new UpdateHelper.OnNextListener() {
-            @Override
-            public void onNext() {
-                Log.e(TAG, "onNext");
-                runOnUiThread(() -> jump());
-            }
+        if (BuildConfig.DEBUG) {
+            jump();
+        } else {
+            new UpdateHelper(this, new UpdateHelper.OnNextListener() {
+                @Override
+                public void onNext() {
+                    Log.e(TAG, "onNext");
+                    runOnUiThread(() -> jump());
+                }
 
-            @Override
-            public void onNoVersion() {
-                Log.e(TAG, "onNoVersion");
-                runOnUiThread(() -> jump());
-            }
-        });
+                @Override
+                public void onNoVersion() {
+                    Log.e(TAG, "onNoVersion");
+                    runOnUiThread(() -> jump());
+                }
+            });
+        }
     }
 
     /**

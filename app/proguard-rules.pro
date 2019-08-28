@@ -19,6 +19,8 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-ignorewarnings
+
 # 小米通道
 -keep class com.xiaomi.** {*;}
 -dontwarn com.xiaomi.**
@@ -232,9 +234,6 @@ public static ** valueOf(java.lang.String);
 #---------------------------------本app内的混淆-------------------------------
 -keep public class com.easymin.carpooling.entity.**{*;}
 
--keep public class com.easymin.chartered.entity.**{*;}
--keep public class com.easymin.chartered.result.**{*;}
-
 -keep public class com.easymi.cityline.entity.**{*;}
 -keep public class com.easymi.cityline.result.**{*;}
 
@@ -243,7 +242,7 @@ public static ** valueOf(java.lang.String);
 -keep public class com.easymi.common.push.**{*;}
 
 -keep public class com.easymi.component.cat.**{*;}
--keep public class com.easymi.component.db.**{*;}
+#-keep public class com.easymi.component.db.**{*;}
 -keep public class com.easymi.component.entity.**{*;}
 -keep public class com.easymi.component.push.**{*;}
 -keep public class com.easymi.component.result.**{*;}
@@ -260,8 +259,6 @@ public static ** valueOf(java.lang.String);
 
 -keep public class com.easymin.passengerbus.entity.**{*;}
 
--keep public class com.easymin.rental.entity.**{*;}
--keep public class com.easymin.rental.result.**{*;}
 
 -keep public class com.easymin.driver.securitycenter.entity.**{*;}
 -keep public class com.easymin.driver.securitycenter.result.**{*;}
@@ -274,10 +271,6 @@ public static ** valueOf(java.lang.String);
 
 -keep public class cn.projcet.hf.securitycenter.entity.**{*;}
 -keep public class cn.projcet.hf.securitycenter.result.**{*;}
-
--keep public class com.easymin.official.entity.**{*;}
--keep public class com.easymin.official.result.**{*;}
-
 
 #不混淆所有的接口的某个字段：
 -keep class com._65.sdk.Constants{
@@ -368,13 +361,46 @@ public static ** valueOf(java.lang.String);
 
 
 #高德地图map
+#3D 地图 V5.0.0之后：
+-keep   class com.amap.api.maps.**{*;}
+-keep   class com.autonavi.**{*;}
+-keep   class com.amap.api.trace.**{*;}
+-dontwarn    com.amap.api.maps.**
+-dontwarn    com.autonavi.**
+-dontwarn    com.amap.api.trace.**
+
+#定位
 -keep class com.amap.api.location.**{*;}
 -keep class com.amap.api.fence.**{*;}
 -keep class com.autonavi.aps.amapapi.model.**{*;}
+-dontwarn  com.amap.api.location.**
+-dontwarn  com.amap.api.fence.**
+-dontwarn  com.autonavi.aps.amapapi.model.**
 
--keep class com.amap.api.**{*;}
+#搜索
+-keep   class com.amap.api.services.**{*;}
+-dontwarn  com.amap.api.services.**
+
+#2D地图
+-keep class com.amap.api.maps2d.**{*;}
+-keep class com.amap.api.mapcore2d.**{*;}
+-dontwarn  com.amap.api.maps2d.**
+-dontwarn  com.amap.api.mapcore2d.**
+
+#导航
+-keep class com.amap.api.navi.**{*;}
 -keep class com.autonavi.**{*;}
--dontwarn com.amap.api.**
+-dontwarn  com.amap.api.navi.**
+-dontwarn  com.autonavi.**
+
+
+#内置语音 V5.6.0之后
+-keep class com.alibaba.idst.nls.** {*;}
+-keep class com.google.**{*;}
+-keep class com.nlspeech.nlscodec.** {*;}
+-dontwarn  com.alibaba.idst.nls.**
+-dontwarn  com.google.**
+-dontwarn  com.nlspeech.nlscodec.**
 
 
 #PictureSelector 2.0
@@ -427,6 +453,12 @@ public static ** valueOf(java.lang.String);
 -keep class com.baidu.tts.**{*;}
 -keep class com.baidu.speechsynthesizer.**{*;}
 
+#网络调试盒子
+-keep class tech.linjiang.pandora.cache.**{*;}
+
+#bugly
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}
 
 
 
