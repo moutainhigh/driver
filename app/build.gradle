@@ -74,7 +74,7 @@ android {
             buildConfigField "String", "H5_HOST", '"http://v6h5.rvaka.cn/"'
             buildConfigField "String", "IMG_SERVER", '"https://prevassets.xiaokakj.com/"'
             buildConfigField "boolean", "IS_ENCRYPT", "true"
-            buildConfigField "String", "VERSION_DATA", ""
+            buildConfigField "String", "VERSION_DATA", '""'
         }
         //局域网环境
         local {
@@ -83,7 +83,7 @@ android {
             buildConfigField "String", "H5_HOST", '"http://h5.xiaokakj.cn/"'
             buildConfigField "String", "IMG_SERVER", '"https://assets.xiaokakj.com/"'
             buildConfigField "boolean", "IS_ENCRYPT", "true"
-            buildConfigField "String", "VERSION_DATA", ""
+            buildConfigField "String", "VERSION_DATA", '""'
         }
         //生产环境
         product {
@@ -92,7 +92,7 @@ android {
             buildConfigField "String", "H5_HOST", '"https://h5.xiaokakj.com/"'
             buildConfigField "String", "IMG_SERVER", '"https://assets.xiaokakj.com/"'
             buildConfigField "boolean", "IS_ENCRYPT", "true"
-            buildConfigField "String", "VERSION_DATA", "version_placeholder"
+            buildConfigField "String", "VERSION_DATA", '"version_placeholder"'
         }
 
         //dev环境
@@ -102,7 +102,7 @@ android {
             buildConfigField "String", "H5_HOST", '"http://10.10.4.3/h5/"'
             buildConfigField "String", "IMG_SERVER", '"https://assets.xiaokakj.com/"'
             buildConfigField "boolean", "IS_ENCRYPT", "true"
-            buildConfigField "String", "VERSION_DATA", ""
+            buildConfigField "String", "VERSION_DATA", '""'
         }
 
         //test环境
@@ -112,7 +112,7 @@ android {
             buildConfigField "String", "H5_HOST", '"http://10.10.4.16/"'
             buildConfigField "String", "IMG_SERVER", '"https://assets.xiaokakj.com/"'
             buildConfigField "boolean", "IS_ENCRYPT", "false"
-            buildConfigField "String", "VERSION_DATA", ""
+            buildConfigField "String", "VERSION_DATA", '""'
         }
     }
 }
