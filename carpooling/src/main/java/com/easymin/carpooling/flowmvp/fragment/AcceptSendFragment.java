@@ -91,7 +91,6 @@ public class AcceptSendFragment extends RxBaseFragment {
     private LinearLayout mainLlAction;
     private TextView mainCancel;
     private TextView mainPay;
-    private boolean pause;
 
     /**
      * 设置bridge
@@ -165,12 +164,6 @@ public class AcceptSendFragment extends RxBaseFragment {
         super.onDestroyView();
         cancelTimer();
     }
-
-
-    public void setPause(boolean isPause) {
-        pause = isPause;
-    }
-
 
     /**
      * 取消计时器
@@ -420,7 +413,7 @@ public class AcceptSendFragment extends RxBaseFragment {
                 if (!isAdded()) {
                     return;
                 }
-                if (pause) {
+                if (getActivity() == null) {
                     return;
                 }
                 timeSeq--;
@@ -435,7 +428,7 @@ public class AcceptSendFragment extends RxBaseFragment {
      * 显示对应格式等待时间
      */
     private void setTimeText() {
-        if (!isAdded()) {
+        if (!isAdded() || getActivity() == null) {
             return;
         }
         getActivity().runOnUiThread(() -> {

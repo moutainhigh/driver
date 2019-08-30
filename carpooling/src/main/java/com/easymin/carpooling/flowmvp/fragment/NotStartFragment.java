@@ -46,7 +46,6 @@ public class NotStartFragment extends RxBaseFragment {
      * 通信接口
      */
     ActFraCommBridge bridge;
-    private boolean pause;
 
     /**
      * 设置bridge
@@ -136,7 +135,7 @@ public class NotStartFragment extends RxBaseFragment {
                     if (!isAdded()) {
                         return;
                     }
-                    if (pause) {
+                    if (bridge == null || getActivity() == null) {
                         return;
                     }
                     jieRenTimeLeftSec--;
@@ -167,10 +166,6 @@ public class NotStartFragment extends RxBaseFragment {
         cancelTimer();
     }
 
-
-    public void setPause(boolean isPause) {
-        pause = isPause;
-    }
 
     /**
      * 取消计时器

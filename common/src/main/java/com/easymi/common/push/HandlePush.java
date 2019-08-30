@@ -606,7 +606,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
         builder.setContentText(content);
         builder.setContentIntent(contentIntent);
         if (Build.VERSION.SDK_INT >= 26) {
-            String channelId = context.getPackageName()+"/pushChannel";
+            String channelId = context.getPackageName() + "/pushChannel";
             builder.setChannelId(channelId);
         }
 
