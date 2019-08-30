@@ -67,6 +67,7 @@ public class Config {
     public static String IMG_SERVER;
     public static String IMG_PATH;
     public static String VERSION_NAME;
+    public static String VERSION_DATA;
 
     public static final String MQTT_PUSH_TOPIC = "/driver/gps";
 
