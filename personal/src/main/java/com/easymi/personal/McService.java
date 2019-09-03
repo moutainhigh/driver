@@ -3,6 +3,7 @@ package com.easymi.personal;
 import com.easymi.common.entity.CompanyList;
 import com.easymi.common.entity.RegisterRes;
 import com.easymi.component.result.EmResult;
+import com.easymi.component.result.EmResult2;
 import com.easymi.personal.entity.CarInfo;
 import com.easymi.personal.entity.Register;
 import com.easymi.personal.result.AnnouncementResult;
@@ -45,6 +46,11 @@ import rx.Observable;
  */
 
 public interface McService {
+
+
+    @GET("api/v1/resources/isLogin")
+    Observable<EmResult2<Boolean>> getIsLogin(@Query("userType") int userType,
+                                              @Query("phone") String phone);
 
     @FormUrlEncoded
     @POST("driver/api/v1/employLogin")

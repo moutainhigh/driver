@@ -204,7 +204,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     }
 
 
-
     @Override
     public void setTitleStatus(String content) {
         if (TextUtils.equals(EmUtil.getEmployInfo().serviceType, Config.ZHUANCHE) && EmUtil.getEmployInfo().sex == 2) {
