@@ -109,9 +109,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 if (needSend) {
                     MqttManager.getInstance().publishAck(order.orderId, 1);
                 }
-                if (!HandleBean.exists(order.orderId, order.serviceType, "robbing") &&
-                        !HandleBean.exists(order.orderId, order.serviceType, "cancel")) {
-                    HandleBean.save(order.orderId, order.serviceType, "robbing");
+                if (!HandleBean.exists(order.orderId, order.serviceType, "cancel")) {
                     loadOrder(order);
                 }
             } else if (msg.equals("sendorders")) {
