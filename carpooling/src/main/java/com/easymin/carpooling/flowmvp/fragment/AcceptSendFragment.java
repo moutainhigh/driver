@@ -313,7 +313,7 @@ public class AcceptSendFragment extends RxBaseFragment {
                     });
                     initTimer(current);
                 }
-                showInMap(new LatLng(current.startLat, current.startLng), StaticVal.MARKER_FLAG_END);
+                showInMap(new LatLng(current.startLat, current.startLng), StaticVal.MARKER_FLAG_START);
             } else if (current.customeStatus == 3) {
                 countTimeCon.setVisibility(View.GONE);
                 sliderCon.setVisibility(View.VISIBLE);
