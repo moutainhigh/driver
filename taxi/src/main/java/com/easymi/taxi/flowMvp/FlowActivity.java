@@ -36,7 +36,6 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
-import com.amap.api.maps.utils.overlay.SmoothMoveMarker;
 import com.amap.api.navi.model.AMapNaviPath;
 import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.route.DriveRouteResult;
@@ -56,6 +55,7 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
+import com.easymi.component.entity.MySmoothMarker;
 import com.easymi.component.entity.PassengerLocation;
 import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.loc.LocObserver;
@@ -167,6 +167,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     private long orderId;
 
     private AlbumOrientationEventListener mAlbumOrientationEventListener;
+    private MySmoothMarker smoothMarker;
 
     @Override
     public int getLayoutId() {
@@ -1149,7 +1150,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         unregisterReceiver(orderFinishReceiver);
     }
 
-    SmoothMoveMarker smoothMoveMarker;
 
     private LatLng lastLatlng;
 
@@ -1161,28 +1161,19 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         Log.e("locPos", "bearing 2 >>>>" + location.bearing);
         LatLng latLng = new LatLng(location.latitude, location.longitude);
 
-        if (null == smoothMoveMarker) {//首次进入
-            smoothMoveMarker = new SmoothMoveMarker(aMap);
-            smoothMoveMarker.setDescriptor(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+        if (null == smoothMarker) { //首次进入
+            MarkerOptions markerOption = new MarkerOptions();
+            markerOption.position(latLng);
+            markerOption.draggable(false);
+            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                     .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
-            smoothMoveMarker.setPosition(lastLatlng);
-            smoothMoveMarker.setRotate(location.bearing);
+            markerOption.rotateAngle(360.0F - location.bearing + aMap.getCameraPosition().bearing);
+            smoothMarker = new MySmoothMarker(aMap, markerOption);
         } else {
-            if (null != myFirstMarker) {//去除掉首次的位置marker
-                myFirstMarker.remove();
-            }
-            List<LatLng> latLngs = new ArrayList<>();
-            latLngs.add(lastLatlng);
-            latLngs.add(latLng);
-            smoothMoveMarker.setPosition(lastLatlng);
-            smoothMoveMarker.setPoints(latLngs);
-
-            smoothMoveMarker.setTotalDuration(Config.NORMAL_LOC_TIME / 1000);
-
-            smoothMoveMarker.setRotate(location.bearing);
-            smoothMoveMarker.startSmoothMove();
-            Marker marker = smoothMoveMarker.getMarker();
+            smoothMarker.startMove(latLng, 3000, true);
+            Marker marker = smoothMarker.getMarker();
             if (null != marker) {
+                marker.setRotateAngle(360.0F - location.bearing + aMap.getCameraPosition().bearing);
                 marker.setDraggable(false);
                 marker.setClickable(false);
                 marker.setAnchor(0.5f, 0.5f);
