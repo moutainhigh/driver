@@ -792,17 +792,16 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void showPath(DriveRouteResult result) {
-        DrivingRouteOverlay drivingRouteOverlay = new DrivingRouteOverlay(this, aMap,
+        if (this.drivingRouteOverlay != null) {
+            this.drivingRouteOverlay.removeFromMap();
+        }
+        drivingRouteOverlay = new DrivingRouteOverlay(this, aMap,
                 result.getPaths().get(0), result.getStartPos()
                 , result.getTargetPos(), null);
         drivingRouteOverlay.setIsColorfulline(false);
         drivingRouteOverlay.setNodeIconVisibility(false);//隐藏转弯的节点
         drivingRouteOverlay.addToMap();
 
-        if (this.drivingRouteOverlay != null) {
-            this.drivingRouteOverlay.removeFromMap();
-        }
-        this.drivingRouteOverlay = drivingRouteOverlay;
 
         float dis = 0;
         float time = 0;

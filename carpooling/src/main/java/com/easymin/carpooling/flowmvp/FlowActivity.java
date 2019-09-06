@@ -899,19 +899,16 @@ public class FlowActivity extends RxPayActivity implements
      */
     @Override
     public void showPath(DriveRouteResult result) {
-
-        DrivingRouteOverlay overlay = new DrivingRouteOverlay(this, aMap,
-                result.getPaths().get(0), result.getStartPos()
-                , result.getTargetPos(), null);
-//        overlay.setRouteWidth(5);
-        overlay.setIsColorfulline(false);
-        overlay.setNodeIconVisibility(false);//隐藏转弯的节点
-        overlay.addToMap();
-
         if (drivingRouteOverlay != null) {
             drivingRouteOverlay.removeFromMap();
         }
-        drivingRouteOverlay = overlay;
+        drivingRouteOverlay = new DrivingRouteOverlay(this, aMap,
+                result.getPaths().get(0), result.getStartPos()
+                , result.getTargetPos(), null);
+//        overlay.setRouteWidth(5);
+        drivingRouteOverlay.setIsColorfulline(false);
+        drivingRouteOverlay.setNodeIconVisibility(false);//隐藏转弯的节点
+        drivingRouteOverlay.addToMap();
 
         float dis = 0;
         float time = 0;

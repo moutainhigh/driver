@@ -818,19 +818,16 @@ public class FlowActivity extends RxBaseActivity implements
     @Override
     public void showPath(DriveRouteResult result) {
 
-        DrivingRouteOverlay overlayout = new DrivingRouteOverlay(this, aMap,
-                result.getPaths().get(0), result.getStartPos()
-                , result.getTargetPos(), null);
-//        overlayout.setRouteWidth(5);
-        overlayout.setIsColorfulline(false);
-        overlayout.setNodeIconVisibility(false);//隐藏转弯的节点
-        overlayout.addToMap();
-
         if (drivingRouteOverlay != null) {
             drivingRouteOverlay.removeFromMap();
         }
-
-        drivingRouteOverlay = overlayout;
+        drivingRouteOverlay = new DrivingRouteOverlay(this, aMap,
+                result.getPaths().get(0), result.getStartPos()
+                , result.getTargetPos(), null);
+//        drivingRouteOverlay.setRouteWidth(5);
+        drivingRouteOverlay.setIsColorfulline(false);
+        drivingRouteOverlay.setNodeIconVisibility(false);//隐藏转弯的节点
+        drivingRouteOverlay.addToMap();
 
         float dis = 0;
         float time = 0;
