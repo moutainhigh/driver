@@ -193,7 +193,7 @@ public class TaxiGrabFragment extends Fragment {
 
         RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(start, end);
         RouteSearch.DriveRouteQuery query = new RouteSearch.DriveRouteQuery(fromAndTo,
-                RouteSearch.DRIVING_MULTI_STRATEGY_FASTEST_SHORTEST, null, null, "");
+                RouteSearch.DRIVING_SINGLE_SHORTEST, null, null, "");
         routeSearch.calculateDriveRouteAsyn(query);
     }
 
