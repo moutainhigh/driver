@@ -850,9 +850,9 @@ public class FlowActivity extends RxPayActivity implements
         }
         LatLngBounds bounds = builder.build();
         if (currentFragment instanceof ChangeSeqFragment) {
-            int left = DensityUtil.dp2px(this, 10);
-            int bottom = DensityUtil.dp2px(this, 260);
-            int top = DensityUtil.dp2px(this, 45);
+            int left = DensityUtil.dp2px(this, 100);
+            int bottom = DensityUtil.dp2px(this, 280);
+            int top = DensityUtil.dp2px(this, 100);
             aMap.animateCamera(CameraUpdateFactory.newLatLngBoundsRect(bounds, left, left, top, bottom));
         } else {
 
