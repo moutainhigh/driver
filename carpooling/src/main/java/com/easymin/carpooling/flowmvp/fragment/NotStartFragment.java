@@ -225,10 +225,10 @@ public class NotStartFragment extends RxBaseFragment {
         timeCountDown.setText(sb.toString());
 
         if (leftSec > 0) {
-            bottomBtn.setText("行程规划");
+            bottomBtn.setText("规划线路");
             bottomBtn.setOnClickListener(view -> bridge.toChangeSeq(StaticVal.PLAN_ACCEPT));
         } else {
-            bottomBtn.setText("行程规划");
+            bottomBtn.setText("规划线路");
             bottomBtn.setOnClickListener(view -> {
                 DymOrder dymOrder = DymOrder.findByIDType(pincheOrder.orderId, pincheOrder.orderType);
                 if (null != dymOrder) {
