@@ -182,12 +182,16 @@ public class FlowActivity extends RxPayActivity implements
         getCustomers(pincheOrder.scheduleId);
     }
 
+    private void getCustomers(long scheduleId) {
+        getCustomers(scheduleId, false);
+    }
+
     /**
      * 查询专线班次的详细订单
      *
      * @param scheduleId
      */
-    private void getCustomers(long scheduleId) {
+    private void getCustomers(long scheduleId, boolean isFinish) {
         Observable<EmResult2<List<CarpoolOrder>>> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
                 .getOrderCustomers(scheduleId, Config.APP_KEY)
                 .filter(new HttpResultFunc3<>())
@@ -196,8 +200,13 @@ public class FlowActivity extends RxPayActivity implements
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, false, result2 -> {
             if (result2.getData() == null || result2.getData().size() == 0) {
-                ToastUtil.showMessage(this, "当前班次没有任何乘客");
+                if (!isFinish) {
+                    ToastUtil.showMessage(this, "当前班次没有任何乘客");
+                }
                 presenter.finishTask(pincheOrder.orderId);
+            } else if (isFinish) {
+                acceptSendFragment.showWhatByStatus();
+                acceptSendFragment.resetSpeakedHint();
             } else {
                 isOrderLoadOk = true;
                 List<CarpoolOrder> carpoolOrders = result2.getData();
@@ -1017,14 +1026,7 @@ public class FlowActivity extends RxPayActivity implements
     public void arriveEndSuc(CarpoolOrder carpoolOrder) {
         carpoolOrder.customeStatus = 4;
         carpoolOrder.updateStatus();
-        List<CarpoolOrder> customers = CarpoolOrder.findByIDTypeOrderBySendSeq(pincheOrder.orderId, pincheOrder.orderType);
-        if (carpoolOrder.id == customers.get(customers.size() - 1).id) {
-            //送完最后一个更新订单状态
-            presenter.finishTask(pincheOrder.orderId);
-        } else {
-            acceptSendFragment.showWhatByStatus();
-            acceptSendFragment.resetSpeakedHint();
-        }
+        getCustomers(carpoolOrder.scheduleId, true);
     }
 
     @Override
