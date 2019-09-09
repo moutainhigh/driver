@@ -52,6 +52,7 @@ public class BuildPushUtil {
             pe.phone = employ.phone;
             pe.business = employ.serviceType;
             pe.sex = employ.sex;
+            pe.driverCompanyId = employ.driverCompanyId;
             if (Vehicle.exists(employ.id)) {
                 Vehicle vehicle = Vehicle.findByEmployId(employ.id);
                 pe.vehicleNo = vehicle.vehicleNo;

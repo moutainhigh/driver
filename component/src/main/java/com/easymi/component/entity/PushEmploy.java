@@ -2,6 +2,9 @@ package com.easymi.component.entity;
 
 public class PushEmploy {
 
+
+    public long driverCompanyId;
+
     public int status;
     //服务子类型
     public String child_type;

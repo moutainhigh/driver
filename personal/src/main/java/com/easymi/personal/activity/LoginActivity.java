@@ -331,6 +331,7 @@ public class LoginActivity extends RxBaseActivity {
                             .putString(Config.SP_TOKEN, employ.token)
                             .apply();
                     employ.saveOrUpdate();
+                    employ.updateDriverCompanyId();
                     getSetting(employ, account, password);
                 } else if (loginResult.getCode() == APPLYING) {
                     Intent intent = new Intent(LoginActivity.this, RegisterNoticeActivity.class);
@@ -343,6 +344,7 @@ public class LoginActivity extends RxBaseActivity {
                             .putString(Config.SP_TOKEN, employ.token)
                             .apply();
                     employ.saveOrUpdate();
+                    employ.updateDriverCompanyId();
                     getSetting(employ, account, password);
                 } else if (loginResult.getCode() == APPLY_REJECT) {
                     Intent intent = new Intent(LoginActivity.this, RegisterNoticeActivity.class);
