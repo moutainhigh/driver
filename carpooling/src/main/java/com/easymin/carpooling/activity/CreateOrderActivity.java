@@ -437,13 +437,12 @@ public class CreateOrderActivity extends RxPayActivity {
             List<MapPositionModel> models = new ArrayList<>();
             models.add(startSite);
             models.add(endSite);
-            String orderAddress = new Gson().toJson(models);
             Observable<Long> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
                     .createOrder(
                             EmUtil.getEmployInfo().companyId,
+                            new Gson().toJson(models),
                             startSite.getId(),
                             endSite.getId(),
-
                             pcOrder.id,
                             seatNo,
                             edit_phone.getText().toString(),
