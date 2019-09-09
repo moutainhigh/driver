@@ -1228,9 +1228,9 @@ public class FlowActivity extends RxPayActivity implements
 //                cancelDialog.show();
 //            }
 //            XApp.getInstance().syntheticVoice("您有订单被取消或者收回");
-//            presenter.deleteDb(orderId, orderType);
-//            finish();
-            getCustomers(pincheOrder.scheduleId);
+            presenter.deleteDb(orderId, orderType);
+            finish();
+//            getCustomers(pincheOrder.scheduleId);
         }
     }
 
