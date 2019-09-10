@@ -182,16 +182,13 @@ public class FlowActivity extends RxPayActivity implements
         getCustomers(pincheOrder.scheduleId);
     }
 
-    private void getCustomers(long scheduleId) {
-        getCustomers(scheduleId, false);
-    }
 
     /**
      * 查询专线班次的详细订单
      *
      * @param scheduleId
      */
-    private void getCustomers(long scheduleId, boolean isFinish) {
+    private void getCustomers(long scheduleId) {
         Observable<EmResult2<List<CarpoolOrder>>> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
                 .getOrderCustomers(scheduleId, Config.APP_KEY)
                 .filter(new HttpResultFunc3<>())
@@ -200,13 +197,8 @@ public class FlowActivity extends RxPayActivity implements
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, false, result2 -> {
             if (result2.getData() == null || result2.getData().size() == 0) {
-                if (!isFinish) {
-                    ToastUtil.showMessage(this, "当前班次没有任何乘客");
-                }
+                ToastUtil.showMessage(this, "当前班次没有任何乘客");
                 presenter.finishTask(pincheOrder.orderId);
-            } else if (isFinish) {
-                acceptSendFragment.showWhatByStatus();
-                acceptSendFragment.resetSpeakedHint();
             } else {
                 isOrderLoadOk = true;
                 List<CarpoolOrder> carpoolOrders = result2.getData();
@@ -1023,10 +1015,15 @@ public class FlowActivity extends RxPayActivity implements
     }
 
     @Override
-    public void arriveEndSuc(CarpoolOrder carpoolOrder) {
+    public void arriveEndSuc(CarpoolOrder carpoolOrder, Integer integer) {
         carpoolOrder.customeStatus = 4;
         carpoolOrder.updateStatus();
-        getCustomers(carpoolOrder.scheduleId, true);
+        if (integer == 1) {
+            finishTaskSuc();
+        } else {
+            acceptSendFragment.showWhatByStatus();
+            acceptSendFragment.resetSpeakedHint();
+        }
     }
 
     @Override

@@ -208,7 +208,7 @@ public class FlowPresenter implements FlowContract.Presenter {
         view.getManager().add(model.sendCustomer(carpoolOrder.id).subscribe(new MySubscriber<>(context,
                 true,
                 true,
-                o -> view.arriveEndSuc(carpoolOrder))));
+                o -> view.arriveEndSuc(carpoolOrder, o))));
     }
 
     @Override

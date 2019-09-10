@@ -4,7 +4,6 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.navi.model.AMapNaviPath;
 import com.amap.api.services.route.DriveRouteResult;
 import com.easymi.common.entity.CarpoolOrder;
-import com.easymi.component.result.EmResult2;
 import com.easymi.component.rxmvp.RxManager;
 
 import java.util.List;
@@ -124,7 +123,7 @@ public interface FlowContract {
          *
          * @param carpoolOrder
          */
-        void arriveEndSuc(CarpoolOrder carpoolOrder);
+        void arriveEndSuc(CarpoolOrder carpoolOrder,Integer integer);
 
         /**
          * 跳过送成功
@@ -331,6 +330,6 @@ public interface FlowContract {
          * @param id
          * @return
          */
-        Observable<Object> sendCustomer(long id);
+        Observable<Integer> sendCustomer(long id);
     }
 }

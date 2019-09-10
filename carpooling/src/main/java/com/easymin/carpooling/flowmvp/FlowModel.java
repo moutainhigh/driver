@@ -93,7 +93,7 @@ public class FlowModel implements FlowContract.Model {
     }
 
     @Override
-    public Observable<Object> sendCustomer(long id) {
+    public Observable<Integer> sendCustomer(long id) {
         return ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
                 .sendCustomer(id)
                 .map(new HttpResultFunc2<>())
