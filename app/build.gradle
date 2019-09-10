@@ -6,8 +6,8 @@ android {
         applicationId "com.easymin.daijia.driver.zyziyunsjdaijia"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 9655
-        versionName "V6.1.9.55"
+        versionCode 9680
+        versionName "V6.1.9.80"
         multiDexEnabled true
         flavorDimensions "App" //同在App这个名字维度
         ndk {
@@ -48,7 +48,7 @@ android {
         }
 
         debug {
-            minifyEnabled true
+            minifyEnabled false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
