@@ -121,7 +121,7 @@ public interface CarPoolApiService {
      */
     @FormUrlEncoded
     @POST("api/v1/carpool/driver/order/finishOrder")
-    Observable<EmResult2<Integer>> sendCustomer(
+    Observable<EmResult2<Object>> sendCustomer(
             @Field("orderId") long orderId);
 
 

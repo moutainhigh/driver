@@ -1010,11 +1010,13 @@ public class FlowActivity extends RxPayActivity implements
     }
 
     @Override
-    public void arriveEndSuc(CarpoolOrder carpoolOrder, Integer integer) {
+    public void arriveEndSuc(CarpoolOrder carpoolOrder) {
         carpoolOrder.customeStatus = 4;
         carpoolOrder.updateStatus();
-        if (integer == 1) {
-            finishTaskSuc();
+        List<CarpoolOrder> customers = CarpoolOrder.findByIDTypeOrderBySendSeq(pincheOrder.orderId, pincheOrder.orderType);
+        if (carpoolOrder.id == customers.get(customers.size() - 1).id) {
+            //送完最后一个更新订单状态
+            presenter.finishTask(pincheOrder.orderId);
         } else {
             acceptSendFragment.showWhatByStatus();
             acceptSendFragment.resetSpeakedHint();

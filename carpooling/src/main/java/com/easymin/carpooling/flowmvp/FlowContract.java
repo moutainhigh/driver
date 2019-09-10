@@ -123,7 +123,7 @@ public interface FlowContract {
          *
          * @param carpoolOrder
          */
-        void arriveEndSuc(CarpoolOrder carpoolOrder,Integer integer);
+        void arriveEndSuc(CarpoolOrder carpoolOrder);
 
         /**
          * 跳过送成功
@@ -330,6 +330,6 @@ public interface FlowContract {
          * @param id
          * @return
          */
-        Observable<Integer> sendCustomer(long id);
+        Observable<Object> sendCustomer(long id);
     }
 }
