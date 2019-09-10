@@ -34,10 +34,13 @@ public class TokenInterceptor implements Interceptor {
                     .build());
         } else {
             String sToken = XApp.getMyPreferences().getString(Config.SP_TOKEN, "");
-            return chain.proceed(request.newBuilder()
+            Request.Builder builder = request.newBuilder()
                     .addHeader("token", sToken)
-                    .addHeader("appKey", Config.APP_KEY)
-                    .build());
+                    .addHeader("appKey", Config.APP_KEY);
+            if (!TextUtils.isEmpty(Config.VERSION_DATA) && !TextUtils.equals(Config.VERSION_DATA, "version_placeholder")) {
+                builder.addHeader("versionData", Config.VERSION_DATA);
+            }
+            return chain.proceed(builder.build());
         }
     }
 }

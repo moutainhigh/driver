@@ -109,9 +109,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 if (needSend) {
                     MqttManager.getInstance().publishAck(order.orderId, 1);
                 }
-                if (!HandleBean.exists(order.orderId, order.serviceType, "robbing") &&
-                        !HandleBean.exists(order.orderId, order.serviceType, "cancel")) {
-                    HandleBean.save(order.orderId, order.serviceType, "robbing");
+                if (!HandleBean.exists(order.orderId, order.serviceType, "cancel")) {
                     loadOrder(order);
                 }
             } else if (msg.equals("sendorders")) {
@@ -606,7 +604,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
         builder.setContentText(content);
         builder.setContentIntent(contentIntent);
         if (Build.VERSION.SDK_INT >= 26) {
-            String channelId = context.getPackageName()+"/pushChannel";
+            String channelId = context.getPackageName() + "/pushChannel";
             builder.setChannelId(channelId);
         }
 

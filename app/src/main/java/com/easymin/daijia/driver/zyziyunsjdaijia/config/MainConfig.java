@@ -40,6 +40,7 @@ public class MainConfig {
                     Config.H5_HOST = BuildConfig.H5_HOST;
                     Config.APP_KEY = jb.optString("APP_KEY");
                 }
+                Config.VERSION_DATA = BuildConfig.VERSION_DATA;
                 Config.VERSION_NAME = BuildConfig.VERSION_NAME;
                 Config.IMG_SERVER = BuildConfig.IMG_SERVER;
                 Config.IMG_PATH = "";

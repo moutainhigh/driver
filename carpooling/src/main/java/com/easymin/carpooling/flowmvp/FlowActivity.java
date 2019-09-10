@@ -510,11 +510,6 @@ public class FlowActivity extends RxPayActivity implements
 //        if (isOrderLoadOk) {
 //            showFragmentByStatus();
 //        }
-
-        notStartFragment.setPause(false);
-        finishFragment.setPause(false);
-        acceptSendFragment.setPause(false);
-
     }
 
     /**
@@ -1099,11 +1094,6 @@ public class FlowActivity extends RxPayActivity implements
 
         unregisterReceiver(cancelOrderReceiver);
         unregisterReceiver(scheduleTurnReceiver);
-
-        notStartFragment.setPause(true);
-        finishFragment.setPause(true);
-        acceptSendFragment.setPause(true);
-
     }
 
     @Override

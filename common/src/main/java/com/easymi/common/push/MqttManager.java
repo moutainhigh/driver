@@ -168,7 +168,13 @@ public class MqttManager implements LocObserver {
             public void connectionLost(Throwable cause) {
                 Log.e(TAG, "connectionLost");
                 //失去连接后延时3秒重连
-                postCreateConnect();
+                isConnecting = false;
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        creatConnect();
+                    }
+                }, 3000);
             }
 
             @Override
@@ -183,16 +189,6 @@ public class MqttManager implements LocObserver {
             }
         });
         doConnect();
-    }
-
-    private void postCreateConnect() {
-        isConnecting = false;
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                creatConnect();
-            }
-        }, 3000);
     }
 
     private void notifySendDelayed() {
@@ -306,7 +302,7 @@ public class MqttManager implements LocObserver {
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
                     Log.e("MqttManager", "connectFailure   " + exception.getMessage());
-                    postCreateConnect();
+                    sendReconnectEvent();
                 }
             });
         } catch (Exception e) {
@@ -381,7 +377,7 @@ public class MqttManager implements LocObserver {
             }
         } else {
             //重连
-            postCreateConnect();
+            sendReconnectEvent();
         }
     }
 
@@ -439,17 +435,18 @@ public class MqttManager implements LocObserver {
             return;
         }
         try {
-            client.unregisterResources();
-            if (client != null && client.isConnected()) {
+            if (client.isConnected()) {
                 client.disconnect();
             }
-            client = null;
         } catch (MqttException e) {
-            Log.e("MqttManager", "MqttException");
+            Log.e("MqttManager", "MqttException " + e.getMessage());
             e.fillInStackTrace();
-        } catch (NullPointerException e) {
-            Log.e("MqttManager", "NullPointerException");
+        } catch (Exception e) {
+            Log.e("MqttManager", "Exception " + e.getMessage());
             e.fillInStackTrace();
+        } finally {
+            client.unregisterResources();
+            client = null;
         }
     }
 
