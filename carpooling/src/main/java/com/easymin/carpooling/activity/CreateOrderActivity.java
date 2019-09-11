@@ -96,6 +96,7 @@ public class CreateOrderActivity extends RxPayActivity {
      * 生成的未支付订单id
      */
     private long orderId;
+    private double calMoney;
 
     @Override
     public boolean isEnableSwipe() {
@@ -285,29 +286,33 @@ public class CreateOrderActivity extends RxPayActivity {
                 //起点
                 startSite = data.getParcelableExtra("pos_model");
                 start_place.setText(startSite.getAddress());
+                endSite = null;
+                end_place.setText("");
                 setBtnEnable();
-                if (endSite != null) {
-                    if (startSite.getId() == endSite.getId()) {
-                        ToastUtil.showMessage(this, "上车点和下车点是同一站点");
-                    } else if (startSite.getSequence() > endSite.getSequence()) {
-                        ToastUtil.showMessage(this, "下车点在上车点之前");
-                    } else {
-                        queryPrice(pcOrder.lineId, startSite.getId(), endSite.getId());
-                    }
-                }
+                money_con.setVisibility(View.GONE);
+                orderId = 0;
             } else if (requestCode == 3) {
                 //终点
+                orderId = 0;
+                money_con.setVisibility(View.GONE);
                 endSite = data.getParcelableExtra("pos_model");
-                end_place.setText(endSite.getAddress());
-                setBtnEnable();
                 if (startSite != null) {
                     if (startSite.getId() == endSite.getId()) {
+                        endSite = null;
+                        end_place.setText("");
                         ToastUtil.showMessage(this, "上车点和下车点是同一站点");
                     } else if (startSite.getSequence() > endSite.getSequence()) {
+                        endSite = null;
+                        end_place.setText("");
                         ToastUtil.showMessage(this, "下车点在上车点之前");
                     } else {
+                        end_place.setText(endSite.getAddress());
+                        setBtnEnable();
                         queryPrice(pcOrder.lineId, startSite.getId(), endSite.getId());
                     }
+                } else {
+                    end_place.setText(endSite.getAddress());
+                    setBtnEnable();
                 }
             }
         }
@@ -433,6 +438,12 @@ public class CreateOrderActivity extends RxPayActivity {
      * 创建订单
      */
     private void createOrder() {
+        calMoney = 0;
+        try {
+            calMoney = Double.parseDouble(money.getText().toString());
+        } catch (NumberFormatException e) {
+            e.fillInStackTrace();
+        }
         if (orderId == 0) {
             List<MapPositionModel> models = new ArrayList<>();
             models.add(startSite);
@@ -459,7 +470,7 @@ public class CreateOrderActivity extends RxPayActivity {
                 @Override
                 public void onNext(Long id) {
                     orderId = id;
-                    showDialog(orderId);
+                    showDialog(orderId, calMoney);
                 }
 
                 @Override
@@ -468,7 +479,7 @@ public class CreateOrderActivity extends RxPayActivity {
                 }
             })));
         } else {
-            showDialog(orderId);
+            showDialog(orderId, calMoney);
         }
     }
 
