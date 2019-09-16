@@ -63,7 +63,7 @@ public class BanciAdapter extends RecyclerView.Adapter<BanciAdapter.Holder> {
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.dzbus_banci_item, parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.dzbus_banci_item, parent, false);
         return new Holder(view);
     }
 
@@ -77,7 +77,17 @@ public class BanciAdapter extends RecyclerView.Adapter<BanciAdapter.Holder> {
         holder.orderEndPlace.setText(dzBusLine.endStation);
         holder.orderStatus.setText("售票中 >");
         if (null != onItemClickListener) {
-            holder.itemView.setOnClickListener(view -> onItemClickListener.onClick(dzBusLine));
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (position == 0 || position == 1) {
+                        dzBusLine.model = 1;
+                    } else {
+                        dzBusLine.model = 2;
+                    }
+                    onItemClickListener.onClick(dzBusLine);
+                }
+            });
         }
     }
 

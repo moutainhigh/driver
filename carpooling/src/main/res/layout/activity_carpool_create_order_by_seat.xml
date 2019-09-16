@@ -261,6 +261,9 @@
     <include
         android:id="@+id/create_suc"
         layout="@layout/fragment_finish"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/carPoolCreateOrderBySeatCtb"
         android:visibility="gone" />
 
 

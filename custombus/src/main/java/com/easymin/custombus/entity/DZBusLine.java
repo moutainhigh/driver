@@ -41,5 +41,6 @@ public class DZBusLine implements Serializable {
     public int restrict;
     public int throughTicket;
     public double throughMoney;
+    public int model;
 
 }

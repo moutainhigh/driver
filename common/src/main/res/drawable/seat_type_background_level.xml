@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:drawable="@drawable/cor4_bdbdbd"
+        android:maxLevel="1" />
+    <item
+        android:drawable="@drawable/cor4_dark"
+        android:maxLevel="2" />
+    <item
+        android:drawable="@drawable/cor4_solid_blue"
+        android:maxLevel="3" />
+    <item
+        android:drawable="@drawable/cor4_st1_line_bg"
+        android:maxLevel="4" />
+</level-list>
