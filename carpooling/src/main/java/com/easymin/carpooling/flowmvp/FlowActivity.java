@@ -43,6 +43,7 @@ import com.easymi.component.entity.MySmoothMarker;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc3;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
@@ -195,78 +196,86 @@ public class FlowActivity extends RxPayActivity implements
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, false, result2 -> {
-            if (result2.getData() == null || result2.getData().size() == 0) {
-                ToastUtil.showMessage(this, "当前班次没有任何乘客");
-                presenter.finishTask(pincheOrder.orderId);
-            } else {
-                isOrderLoadOk = true;
-                List<CarpoolOrder> carpoolOrders = result2.getData();
-                /**
-                 * 删除退票订单
-                 */
-                List<CarpoolOrder> allCus = CarpoolOrder.findByIDTypeOrderByAcceptSeq(pincheOrder.orderId, pincheOrder.orderType);
-                for (CarpoolOrder cusOrder : allCus) {
-                    boolean isExist = false;
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, false, new HaveErrSubscriberListener<EmResult2<List<CarpoolOrder>>>() {
+            @Override
+            public void onNext(EmResult2<List<CarpoolOrder>> result2) {
+                if (result2.getData() == null || result2.getData().size() == 0) {
+                    ToastUtil.showMessage(FlowActivity.this, "当前班次没有任何乘客");
+                    presenter.finishTask(pincheOrder.orderId);
+                } else {
+                    isOrderLoadOk = true;
+                    List<CarpoolOrder> carpoolOrders = result2.getData();
+                    /**
+                     * 删除退票订单
+                     */
+                    List<CarpoolOrder> allCus = CarpoolOrder.findByIDTypeOrderByAcceptSeq(pincheOrder.orderId, pincheOrder.orderType);
+                    for (CarpoolOrder cusOrder : allCus) {
+                        boolean isExist = false;
+                        for (int i = 0; i < carpoolOrders.size(); i++) {
+                            CarpoolOrder carpoolOrder = carpoolOrders.get(i);
+                            if ((cusOrder.id == carpoolOrder.orderId)) {
+                                isExist = true;
+                                break;
+                            }
+                        }
+                        if (!isExist) {
+                            CarpoolOrder.delete(cusOrder.id);
+                        }
+                    }
+
                     for (int i = 0; i < carpoolOrders.size(); i++) {
                         CarpoolOrder carpoolOrder = carpoolOrders.get(i);
-                        if ((cusOrder.id == carpoolOrder.orderId)) {
-                            isExist = true;
-                            break;
+
+                        carpoolOrder.id = carpoolOrder.orderId;
+                        carpoolOrder.bookTime = carpoolOrder.bookTime * 1000;
+                        carpoolOrder.num = i + 1;
+                        carpoolOrder.acceptSequence = i;
+                        carpoolOrder.sendSequence = i;
+                        //后端状态与本地状态衔接 这些仅仅针对于本地数据库首次创建时
+                        if (carpoolOrder.status <= CarpoolOrder.CARPOOL_STATUS_ASSIGN) {
+                            carpoolOrder.customeStatus = 0;
+                            carpoolOrder.subStatus = 0;
+                        } else if (carpoolOrder.status == CarpoolOrder.CARPOOL_STATUS_START) {
+                            carpoolOrder.customeStatus = 0;
+                            carpoolOrder.subStatus = 1;
+                        } else if (carpoolOrder.status == CarpoolOrder.CARPOOL_STATUS_ARRIVED) {
+                            carpoolOrder.customeStatus = 0;
+                            carpoolOrder.subStatus = 2;
+                        } else if (carpoolOrder.status == CarpoolOrder.CARPOOL_STATUS_RUNNING) {
+                            carpoolOrder.customeStatus = 3;
+                            carpoolOrder.subStatus = 2;
+                        } else if (carpoolOrder.status == CarpoolOrder.CARPOOL_STATUS_SKIP) {
+                            carpoolOrder.customeStatus = 5;
+                            carpoolOrder.subStatus = 2;
+                        } else if (carpoolOrder.status == CarpoolOrder.CARPOOL_STATUS_FINISH ||
+                                carpoolOrder.status == CarpoolOrder.CARPOOL_STATUS_REVIEW) {
+                            carpoolOrder.customeStatus = 4;
+                            carpoolOrder.subStatus = 2;
                         }
-                    }
-                    if (!isExist) {
-                        CarpoolOrder.delete(cusOrder.id);
-                    }
-                }
+                        carpoolOrder.orderId = pincheOrder.scheduleId;
+                        carpoolOrder.orderType = pincheOrder.orderType;
 
-                for (int i = 0; i < carpoolOrders.size(); i++) {
-                    CarpoolOrder carpoolOrder = carpoolOrders.get(i);
-
-                    carpoolOrder.id = carpoolOrder.orderId;
-                    carpoolOrder.bookTime = carpoolOrder.bookTime * 1000;
-                    carpoolOrder.num = i + 1;
-                    carpoolOrder.acceptSequence = i;
-                    carpoolOrder.sendSequence = i;
-                    //后端状态与本地状态衔接 这些仅仅针对于本地数据库首次创建时
-                    if (carpoolOrder.status <= CarpoolOrder.CARPOOL_STATUS_ASSIGN) {
-                        carpoolOrder.customeStatus = 0;
-                        carpoolOrder.subStatus = 0;
-                    } else if (carpoolOrder.status == CarpoolOrder.CARPOOL_STATUS_START) {
-                        carpoolOrder.customeStatus = 0;
-                        carpoolOrder.subStatus = 1;
-                    } else if (carpoolOrder.status == CarpoolOrder.CARPOOL_STATUS_ARRIVED) {
-                        carpoolOrder.customeStatus = 0;
-                        carpoolOrder.subStatus = 2;
-                    } else if (carpoolOrder.status == CarpoolOrder.CARPOOL_STATUS_RUNNING) {
-                        carpoolOrder.customeStatus = 3;
-                        carpoolOrder.subStatus = 2;
-                    } else if (carpoolOrder.status == CarpoolOrder.CARPOOL_STATUS_SKIP) {
-                        carpoolOrder.customeStatus = 5;
-                        carpoolOrder.subStatus = 2;
-                    } else if (carpoolOrder.status == CarpoolOrder.CARPOOL_STATUS_FINISH ||
-                            carpoolOrder.status == CarpoolOrder.CARPOOL_STATUS_REVIEW) {
-                        carpoolOrder.customeStatus = 4;
-                        carpoolOrder.subStatus = 2;
-                    }
-                    carpoolOrder.orderId = pincheOrder.scheduleId;
-                    carpoolOrder.orderType = pincheOrder.orderType;
-
-                    for (CarpoolOrder.OrderAddressVo orderAddressVo : carpoolOrder.orderAddressVos) {
-                        if (orderAddressVo.type == 1) {
-                            //起点
-                            carpoolOrder.startAddr = orderAddressVo.address;
-                            carpoolOrder.startLat = orderAddressVo.latitude;
-                            carpoolOrder.startLng = orderAddressVo.longitude;
-                        } else { //终点
-                            carpoolOrder.endAddr = orderAddressVo.address;
-                            carpoolOrder.endLat = orderAddressVo.latitude;
-                            carpoolOrder.endLng = orderAddressVo.longitude;
+                        for (CarpoolOrder.OrderAddressVo orderAddressVo : carpoolOrder.orderAddressVos) {
+                            if (orderAddressVo.type == 1) {
+                                //起点
+                                carpoolOrder.startAddr = orderAddressVo.address;
+                                carpoolOrder.startLat = orderAddressVo.latitude;
+                                carpoolOrder.startLng = orderAddressVo.longitude;
+                            } else { //终点
+                                carpoolOrder.endAddr = orderAddressVo.address;
+                                carpoolOrder.endLat = orderAddressVo.latitude;
+                                carpoolOrder.endLng = orderAddressVo.longitude;
+                            }
                         }
+                        carpoolOrder.saveOrUpdate();
                     }
-                    carpoolOrder.saveOrUpdate();
+                    showFragmentByStatus();
                 }
-                showFragmentByStatus();
+            }
+
+            @Override
+            public void onError(int code) {
+                finish();
             }
         })));
     }

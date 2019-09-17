@@ -27,6 +27,7 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: AccpteFragment
+ *
  * @Author: shine
  * Date: 2018/11/15 下午4:05
  * Description:  接单列表界面
@@ -69,18 +70,18 @@ public class AccpteFragment extends RxBaseFragment implements MyOrderContract.Vi
      * 请求数据
      */
     public void setRefresh() {
-        if (EmUtil.getEmployInfo().serviceType.equals(Config.CARPOOL)){
+        if (EmUtil.getEmployInfo().serviceType.equals(Config.CARPOOL)) {
             presenter.indexOrders(page, size, "10,15,20,25,30,35,40,45");
 
-        }else if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)  ||
-                EmUtil.getEmployInfo().serviceType.equals(Config.TAXI)){
+        } else if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE) ||
+                EmUtil.getEmployInfo().serviceType.equals(Config.TAXI)) {
 
             presenter.indexOrders(page, size, "10,15,20,25,28,30,35,40");
-        }else if(EmUtil.getEmployInfo().serviceType.equals(Config.CUSTOMBUS) ||
-                EmUtil.getEmployInfo().serviceType.equals(Config.COUNTRY) ){
+        } else if (EmUtil.getEmployInfo().serviceType.equals(Config.CUSTOMBUS) ||
+                EmUtil.getEmployInfo().serviceType.equals(Config.COUNTRY)) {
 
             presenter.indexOrders(page, size, "5,10,15,20,25,28,30,35,40");
-        }else {
+        } else {
             presenter.indexOrders(page, size, "5,10,15,20,25,28,30,35,40");
         }
     }
@@ -112,38 +113,38 @@ public class AccpteFragment extends RxBaseFragment implements MyOrderContract.Vi
 
         adapter.setItemClickListener((view, baseOrder) -> {
             if (view.getId() == R.id.root && StringUtils.isNotBlank(baseOrder.serviceType)) {
-                    if (baseOrder.serviceType.equals(Config.ZHUANCHE)) {
-                        if (baseOrder.status < 35) {
-                            if (ZCSetting.findOne().isPaid == 1){
-                                ARouter.getInstance()
-                                        .build("/zhuanche/FlowActivity")
-                                        .withLong("orderId", baseOrder.orderId).navigation();
+                if (baseOrder.serviceType.equals(Config.ZHUANCHE)) {
+                    if (baseOrder.status < 35) {
+                        if (ZCSetting.findOne().isPaid == 1) {
+                            ARouter.getInstance()
+                                    .build("/zhuanche/FlowActivity")
+                                    .withLong("orderId", baseOrder.orderId).navigation();
 
-                            } else {
-                                ToastUtil.showMessage(getContext(),"未开启司机代付");
-                            }
+                        } else {
+                            ToastUtil.showMessage(getContext(), "未开启司机代付");
                         }
-                    } else if (baseOrder.serviceType.equals(Config.TAXI)) {
-                        if (baseOrder.status < 35) {
-                            ARouter.getInstance()
-                                    .build("/taxi/FlowActivity")
-                                    .withLong("orderId", baseOrder.id).navigation();
-                        }
-                    }else if (baseOrder.serviceType.equals(Config.CARPOOL)){
-                        if (baseOrder.status < CarpoolOrder.CARPOOL_STATUS_FINISH){
-                            ARouter.getInstance()
-                                    .build("/carpooling/FlowActivity")
-                                    .withSerializable("baseOrder", baseOrder).navigation();
-                        }else {
-                            startActivity(new Intent(getContext(), OrderDetailActivity.class).putExtra("orderId",baseOrder.orderId));
-                        }
-                    }else if (baseOrder.serviceType.equals(Config.GOV)){
-                        if (baseOrder.status < GWOrderStatus.FINISH_ORDER){
+                    }
+                } else if (baseOrder.serviceType.equals(Config.TAXI)) {
+                    if (baseOrder.status < 35) {
+                        ARouter.getInstance()
+                                .build("/taxi/FlowActivity")
+                                .withLong("orderId", baseOrder.id).navigation();
+                    }
+                } else if (baseOrder.serviceType.equals(Config.CARPOOL)) {
+                    if (baseOrder.status < CarpoolOrder.CARPOOL_STATUS_FINISH) {
+                        ARouter.getInstance()
+                                .build("/carpooling/FlowActivity")
+                                .withSerializable("baseOrder", baseOrder).navigation();
+                    } else {
+                        startActivity(new Intent(getContext(), OrderDetailActivity.class).putExtra("orderId", baseOrder.orderId));
+                    }
+                } else if (baseOrder.serviceType.equals(Config.GOV)) {
+                    if (baseOrder.status < GWOrderStatus.FINISH_ORDER) {
 //                            ARouter.getInstance()
 //                                    .build("/official/FlowActivity")
 //                                    .withLong("orderId", baseOrder.orderId).navigation();
-                        }
                     }
+                }
             }
         });
     }

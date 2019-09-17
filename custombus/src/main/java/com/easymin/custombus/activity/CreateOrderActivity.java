@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
@@ -37,6 +38,7 @@ import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.SwipeMenuLayout;
@@ -116,6 +118,7 @@ public class CreateOrderActivity extends RxPayActivity {
         customBusCreateOrderTvStart = findViewById(R.id.customBusCreateOrderTvStart);
         customBusCreateOrderTvEnd = findViewById(R.id.customBusCreateOrderTvEnd);
         customBusCreateOrderEtPhone = findViewById(R.id.customBusCreateOrderEtPhone);
+        customBusCreateOrderEtPhone.setInputType(InputType.TYPE_NULL);
         customBusCreateOrderTvSub = findViewById(R.id.customBusCreateOrderTvSub);
         customBusCreateOrderTvAdd = findViewById(R.id.customBusCreateOrderTvAdd);
         customBusCreateOrderTvNum = findViewById(R.id.customBusCreateOrderTvNum);
@@ -195,11 +198,11 @@ public class CreateOrderActivity extends RxPayActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (currentModeType == 2) {
-                    if (editable.length() == 11) {
+                if (editable.length() == 11) {
+                    customBusCreateOrderEtPhone.clearFocus();
+                    PhoneUtil.hideKeyboard(CreateOrderActivity.this);
+                    if (currentModeType == 2) {
                         getPassengerId();
-                    } else {
-                        passengerId = 0;
                     }
                 } else {
                     passengerId = 0;
@@ -258,6 +261,7 @@ public class CreateOrderActivity extends RxPayActivity {
                             passengerId = employ.id;
                             buttonAction();
                         } else {
+                            passengerId = 0;
                             customBusCreateOrderEtPhone.setText("");
                         }
                     }
@@ -373,6 +377,7 @@ public class CreateOrderActivity extends RxPayActivity {
             public void onClick(View v) {
                 for (StationBean stationBean : isStart ? startList : endList) {
                     if (stationBean.chooseStatus == 1) {
+                        orderId = 0;
                         startBean = stationBean;
                         endBean = null;
                         customBusCreateOrderTvEnd.setText("");
@@ -380,6 +385,7 @@ public class CreateOrderActivity extends RxPayActivity {
                         currentMoney = -1;
                         customBusCreateOrderTvMoney.setText("0.00");
                     } else if (stationBean.chooseStatus == 2) {
+                        orderId = 0;
                         endBean = stationBean;
                         customBusCreateOrderTvEnd.setText(endBean.name);
                         currentMoney = -1;
@@ -430,20 +436,20 @@ public class CreateOrderActivity extends RxPayActivity {
             if (!TextUtils.isEmpty(customBusCreateOrderTvStart.getText()) && !TextUtils.isEmpty(customBusCreateOrderTvEnd.getText()) &&
                     !TextUtils.isEmpty(customBusCreateOrderTvLine.getText()) && customBusCreateOrderEtPhone.getText().length() == 11) {
                 customBusCreateOrderBtCreate.setEnabled(true);
-                customBusCreateOrderBtCreate.setBackgroundResource(R.drawable.corners_button_bg);
+                customBusCreateOrderBtCreate.setBackgroundResource(R.drawable.cor4_solid_blue);
             } else {
                 customBusCreateOrderBtCreate.setEnabled(false);
-                customBusCreateOrderBtCreate.setBackgroundResource(R.drawable.pc_btn_unpress_999999_bg);
+                customBusCreateOrderBtCreate.setBackgroundResource(R.drawable.cor4_solid_sub);
             }
         } else {
             if (!TextUtils.isEmpty(customBusCreateOrderTvStart.getText()) && !TextUtils.isEmpty(customBusCreateOrderTvEnd.getText()) &&
                     !TextUtils.isEmpty(customBusCreateOrderTvLine.getText()) && customBusCreateOrderEtPhone.getText().length() == 11
                     && passengerId != 0 && !TextUtils.isEmpty(customBusCreateOrderTvSeatSelect.getText()) && adapter.getData().size() > 0) {
                 customBusCreateOrderBtCreate.setEnabled(true);
-                customBusCreateOrderBtCreate.setBackgroundResource(R.drawable.corners_button_bg);
+                customBusCreateOrderBtCreate.setBackgroundResource(R.drawable.cor4_solid_blue);
             } else {
                 customBusCreateOrderBtCreate.setEnabled(false);
-                customBusCreateOrderBtCreate.setBackgroundResource(R.drawable.pc_btn_unpress_999999_bg);
+                customBusCreateOrderBtCreate.setBackgroundResource(R.drawable.cor4_solid_sub);
             }
         }
     }
@@ -468,6 +474,7 @@ public class CreateOrderActivity extends RxPayActivity {
                     }
                     dzBusLine = newDzBusLine;
                     currentModeType = dzBusLine.model;
+                    customBusCreateOrderEtPhone.setInputType(InputType.TYPE_CLASS_PHONE);
                     if (currentModeType == 1) {
                         customBusCreateOrderLlSeatSelect.setVisibility(View.GONE);
                         customBusCreateOrderLlCount.setVisibility(View.VISIBLE);

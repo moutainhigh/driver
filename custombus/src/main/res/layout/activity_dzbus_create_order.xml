@@ -49,7 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/btn_height"
             android:layout_marginTop="10dp"
-            android:background="@drawable/pc_btn_unpress_999999_bg"
+            android:background="@drawable/cor4_solid_sub"
             android:enabled="false"
             android:text="代乘客支付"
             android:textColor="@color/white" />
@@ -273,17 +273,11 @@
                             android:textColor="@color/black" />
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:text="(儿童均购全票)" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical|right"
-                            android:textColor="@color/black" />
 
                         <TextView
                             android:id="@+id/customBusCreateOrderTvSub"
