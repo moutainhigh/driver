@@ -144,7 +144,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_margin="10dp"
                 android:background="@drawable/corners_button_selector"
-                android:text="规划路线"
+                android:text="规划线路"
                 android:textColor="@color/white" />
 
         </LinearLayout>

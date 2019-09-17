@@ -613,8 +613,16 @@ public enum ErrCode {
     /**
      * 电话号码格式错误
      */
-    PHONE_ERR(10016, "电话号码格式错误");
+    PHONE_ERR(10016, "电话号码格式错误"),
 
+    /**
+     * 服务机构被禁用
+     */
+    COMPANY_NDISABLE_ERROR(40402, "服务机构被禁用"),
+    /**
+     * 平台级账号的级别不能被修改
+     */
+    ADMIN_MAIN_NOT_UPDATE(40403, "平台级账号的级别不能被修改");
 
     private int code;
     private String showMsg;

@@ -275,7 +275,8 @@ public class AcceptSendFragment extends RxBaseFragment {
                     .transform(new GlideCircleTransform())
                     .placeholder(R.mipmap.photo_default)
                     .diskCacheStrategy(DiskCacheStrategy.ALL);
-            Glide.with(getActivity())
+
+            Glide.with(this)
                     .load(Config.IMG_SERVER + current.photo + Config.IMG_PATH)
                     .apply(options)
                     .into(customerPhoto);

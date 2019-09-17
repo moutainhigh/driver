@@ -2,6 +2,7 @@ package com.easymi.personal.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -150,11 +151,17 @@ public class PersonalActivity extends RxBaseActivity {
             userName.setText(employ.userName);
             tv_star.setText((employ.star == 0 ? 5.0 : employ.star) + "");
 
-            if (Vehicle.exists(employ.id)) {
-                Vehicle vehicle = Vehicle.findByEmployId(employ.id);
-                tv_car_info.setText(vehicle.brand + " " + vehicle.vehicleColor + " " + vehicle.vehicleNo);
+            if (TextUtils.equals(employ.serviceType, Config.COUNTRY)
+                    || TextUtils.equals(employ.serviceType, Config.CUSTOMBUS)) {
+                tv_car_info.setVisibility(View.INVISIBLE);
             } else {
-                tv_car_info.setText("未绑定该业务车辆");
+                tv_car_info.setVisibility(View.VISIBLE);
+                if (Vehicle.exists(employ.id)) {
+                    Vehicle vehicle = Vehicle.findByEmployId(employ.id);
+                    tv_car_info.setText(vehicle.brand + " " + vehicle.vehicleColor + " " + vehicle.vehicleNo);
+                } else {
+                    tv_car_info.setText("未绑定该业务车辆");
+                }
             }
 
             if (StringUtils.isNotBlank(employ.portraitPath)) {

@@ -264,7 +264,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                         }
                     }
                 })
-                .retryWhen(observable -> observable.delay(5, TimeUnit.SECONDS))
+                .retryWhen(observable -> observable.delay(3, TimeUnit.SECONDS))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MySubscriber<MqttConfig>(context, false, false, new NoErrSubscriberListener<MqttConfig>() {

@@ -128,7 +128,7 @@ public class FlowPresenter implements FlowContract.Presenter {
 
         RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(startPoint, endPoint);
         RouteSearch.DriveRouteQuery query = new RouteSearch.DriveRouteQuery(fromAndTo,
-                RouteSearch.DRIVING_MULTI_STRATEGY_FASTEST_SHORTEST, latLonPoints, null, "");
+                RouteSearch.DRIVING_SINGLE_SHORTEST, latLonPoints, null, "");
         routeSearch.calculateDriveRouteAsyn(query);
     }
 

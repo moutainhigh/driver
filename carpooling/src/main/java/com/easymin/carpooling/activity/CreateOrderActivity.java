@@ -437,13 +437,12 @@ public class CreateOrderActivity extends RxPayActivity {
             List<MapPositionModel> models = new ArrayList<>();
             models.add(startSite);
             models.add(endSite);
-            String orderAddress = new Gson().toJson(models);
             Observable<Long> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
                     .createOrder(
                             EmUtil.getEmployInfo().companyId,
+                            new Gson().toJson(models),
                             startSite.getId(),
                             endSite.getId(),
-
                             pcOrder.id,
                             seatNo,
                             edit_phone.getText().toString(),
@@ -493,9 +492,9 @@ public class CreateOrderActivity extends RxPayActivity {
 
     @Override
     public void onPaySuc() {
-        assginOrder();
-//        ToastUtil.showMessage(this, "支付成功");
-//        finish();
+//        assginOrder();
+        ToastUtil.showMessage(this, "支付成功");
+        finish();
     }
 
     @Override

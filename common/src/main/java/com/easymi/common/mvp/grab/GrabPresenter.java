@@ -13,13 +13,10 @@ import com.amap.api.services.route.WalkRouteResult;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.result.MultipleOrderResult;
 import com.easymi.component.Config;
-import com.easymi.component.app.XApp;
 import com.easymi.component.network.ErrCode;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
-import com.easymi.component.utils.AesUtil;
 import com.easymi.component.utils.EmUtil;
-import com.easymin.driver.securitycenter.utils.CenterUtil;
 
 import java.util.List;
 
@@ -224,7 +221,7 @@ public class GrabPresenter implements GrabContract.Presenter {
 
         RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(start, endPoint);
         RouteSearch.DriveRouteQuery query = new RouteSearch.DriveRouteQuery(fromAndTo,
-                RouteSearch.DRIVING_MULTI_STRATEGY_FASTEST_SHORTEST, pass, null, "");
+                RouteSearch.DRIVING_SINGLE_SHORTEST, pass, null, "");
         routeSearch.calculateDriveRouteAsyn(query);
     }
 }

@@ -3,13 +3,11 @@ package com.easymin.passengerbus.fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.text.Html;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.amap.api.services.core.LatLonPoint;
-import com.amap.api.services.help.Tip;
 import com.amap.api.services.route.BusRouteResult;
 import com.amap.api.services.route.DrivePath;
 import com.amap.api.services.route.DriveRouteResult;
@@ -17,12 +15,10 @@ import com.amap.api.services.route.DriveStep;
 import com.amap.api.services.route.RideRouteResult;
 import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
-import com.easymi.component.ZCOrderStatus;
 import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.widget.CustomSlideToUnlockView;
 import com.easymin.passengerbus.R;
-import com.easymin.passengerbus.entity.BusStationResult;
 import com.easymin.passengerbus.entity.BusStationsBean;
 import com.easymin.passengerbus.flowmvp.ActFraCommBridge;
 import com.easymin.passengerbus.flowmvp.BcFlowActivity;
@@ -308,7 +304,7 @@ public class BcRuningFragment extends RxBaseFragment implements RouteSearch.OnRo
 
             RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(start, endPoint);
             RouteSearch.DriveRouteQuery query = new RouteSearch.DriveRouteQuery(fromAndTo,
-                    RouteSearch.DRIVING_MULTI_STRATEGY_FASTEST_SHORTEST_AVOID_CONGESTION, null, null, "");
+                    RouteSearch.DRIVING_SINGLE_SHORTEST, null, null, "");
             mRouteSearch.calculateDriveRouteAsyn(query);
         }
     }

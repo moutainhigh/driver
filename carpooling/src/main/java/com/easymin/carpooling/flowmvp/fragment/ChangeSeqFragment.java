@@ -139,12 +139,13 @@ public class ChangeSeqFragment extends RxBaseFragment {
             DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
             if (null != dymOrder) {
                 if (dymOrder.orderStatus <= ZXOrderStatus.WAIT_START) {
-                    if (!countStratOver) {
-                        bottomBtn.setEnabled(false);
-                        bottomBtn.setBackgroundResource(R.drawable.corners_button_press_bg);
-                    } else {
-                        bottomBtn.setOnClickListener(view -> bridge.startOutSet());
-                    }
+                    // TODO: 2019-08-30 暂时取消判断
+//                    if (!countStratOver) {
+//                        bottomBtn.setEnabled(false);
+//                        bottomBtn.setBackgroundResource(R.drawable.corners_button_press_bg);
+//                    } else {
+                    bottomBtn.setOnClickListener(view -> bridge.startOutSet());
+//                    }
                 } else if (dymOrder.orderStatus == ZXOrderStatus.SEND_PLAN) {
                     bottomBtn.setOnClickListener(view -> bridge.startOutSet());
                 } else {

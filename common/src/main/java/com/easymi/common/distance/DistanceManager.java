@@ -10,7 +10,6 @@ import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
 import com.easymi.common.CommApiService;
 import com.easymi.common.entity.PullFeeEntity;
-import com.easymi.common.entity.PullFeeResult;
 import com.easymi.common.push.HandlePush;
 import com.easymi.common.result.GetFeeResult;
 import com.easymi.component.Config;
@@ -156,7 +155,7 @@ public class DistanceManager {
 
             RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(start, end);
             RouteSearch.DriveRouteQuery query = new RouteSearch.DriveRouteQuery(fromAndTo,
-                    RouteSearch.DRIVING_MULTI_STRATEGY_FASTEST_SHORTEST,
+                    RouteSearch.DRIVING_SINGLE_SHORTEST,
                     latLonPoints,//途经点
                     null,//避让点
                     "");

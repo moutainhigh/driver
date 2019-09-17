@@ -4,7 +4,6 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.navi.model.AMapNaviPath;
 import com.amap.api.services.route.DriveRouteResult;
 import com.easymi.common.entity.CarpoolOrder;
-import com.easymi.component.result.EmResult2;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymin.carpooling.entity.AllStation;
 import com.easymin.carpooling.entity.Station;

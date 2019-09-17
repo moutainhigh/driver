@@ -3,11 +3,13 @@ package com.easymi.zhuanche.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.easymi.component.ZCOrderStatus;
@@ -54,6 +56,7 @@ public class SettleFragmentDialog {
      */
     ActFraCommBridge bridge;
     CusBottomSheetDialog dialog;
+    private LinearLayout zcSettleDialogLl;
 
     /**
      * @param context 上下文
@@ -80,7 +83,7 @@ public class SettleFragmentDialog {
         payButton = view.findViewById(R.id.pay_button);
         feeDetail = view.findViewById(R.id.fee_detail);
         dialogTitle = view.findViewById(R.id.dialog_title);
-
+        zcSettleDialogLl = view.findViewById(R.id.zcSettleDialogLl);
         dialog = new CusBottomSheetDialog(context);
         initView();
         dialog.setCancelable(false);
@@ -169,9 +172,15 @@ public class SettleFragmentDialog {
             confirmBtn.setVisibility(View.GONE);
             payButton.setVisibility(View.VISIBLE);
             dialogTitle.setText(context.getString(R.string.settle));
-            remarkEdit.setText(dymOrder.remark);
             needPayText.setText(String.valueOf(dymOrder.totalFee));
-            remarkEdit.setEnabled(false);
+            if (!TextUtils.isEmpty(dymOrder.remark)) {
+                remarkEdit.setText(dymOrder.remark);
+                remarkEdit.setEnabled(false);
+                zcSettleDialogLl.setVisibility(View.VISIBLE);
+            } else {
+                zcSettleDialogLl.setVisibility(View.GONE);
+            }
+
         }
 
         confirmBtn.setOnClickListener(v -> {
@@ -200,7 +209,7 @@ public class SettleFragmentDialog {
         });
     }
 
-    public boolean isShowing(){
+    public boolean isShowing() {
         return dialog.isShowing();
     }
 
