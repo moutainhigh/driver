@@ -158,12 +158,16 @@ public class PassengerSelectActivity extends RxBaseActivity {
                 return;
             }
             if (chooseAdultCount > adultSeatCount) {
-                ToastUtil.showMessage(PassengerSelectActivity.this, "仅能选择" + adultSeatCount + "位成人");
+                if (adultSeatCount == 0) {
+                    ToastUtil.showMessage(PassengerSelectActivity.this, "仅能选择儿童");
+                } else {
+                    ToastUtil.showMessage(PassengerSelectActivity.this, "仅能选择" + adultSeatCount + "位成人");
+                }
                 return;
             }
             Intent intent = new Intent();
             intent.putExtra("data", chooseData);
-            setResult(0x11, intent);
+            setResult(RESULT_OK, intent);
             finish();
         }
     }

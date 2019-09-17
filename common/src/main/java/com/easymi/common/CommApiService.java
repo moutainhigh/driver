@@ -12,6 +12,7 @@ import com.easymi.common.entity.PushAnnouncement;
 import com.easymi.common.entity.PushPojo;
 import com.easymi.common.entity.QiNiuToken;
 import com.easymi.common.entity.RegisterRes;
+import com.easymi.common.entity.SeatBean;
 import com.easymi.common.entity.Vehicles;
 import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.CityLineResult;
@@ -27,6 +28,7 @@ import com.easymi.common.result.SystemResult;
 import com.easymi.common.result.VehicleResult;
 import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.entity.BaseOrder;
+import com.easymi.component.entity.Employ;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.result.EmResult2;
 
@@ -72,6 +74,17 @@ public interface CommApiService {
                                                            @Query("range") Double range,
                                                            @Query("serviceType") String serviceType);
 
+    @GET("api/v1/carpool/driver/schedule/querySeats")
+    Observable<EmResult2<List<SeatBean>>> queryCarpoolSeats(@Query("timeSlotId") long timeSlotId,
+                                                            @Query("startStationId") long startStationId,
+                                                            @Query("endStationId") long endStationId);
+
+
+    @GET("api/v1/bus/country/driver/schedule/querySeats")
+    Observable<EmResult2<List<SeatBean>>> queryBusSeats(@Query("scheduleId") long scheduleId,
+                                                        @Query("startStationId") long startStationId,
+                                                        @Query("endStationId") long endStationId);
+
     /**
      * 注销
      *
@@ -97,8 +110,8 @@ public interface CommApiService {
     Observable<EmResult> addPassenger(@FieldMap Map<String, String> data);
 
     @GET("api/v1/resources/passenger/by_phone")
-    Observable<EmResult2<Long>> getPassengerId(@Query("phone") String phone,
-                                               @Query("companyId") long companyId);
+    Observable<EmResult2<Employ>> getPassengerId(@Query("phone") String phone,
+                                                 @Query("companyId") long companyId);
 
     /**
      * 查询所有通知

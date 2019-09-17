@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -24,8 +25,10 @@ import com.easymi.common.activity.SeatSelectActivity;
 import com.easymi.common.adapter.PassengerAdapter;
 import com.easymi.common.entity.PassengerBean;
 import com.easymi.common.entity.SeatBean;
+import com.easymi.common.entity.SeatQueryBean;
 import com.easymi.component.Config;
 import com.easymi.component.base.RxPayActivity;
+import com.easymi.component.entity.Employ;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc2;
@@ -42,6 +45,7 @@ import com.easymin.custombus.dialog.StationDialog;
 import com.easymin.custombus.entity.DZBusLine;
 import com.easymin.custombus.entity.StationBean;
 import com.easymin.custombus.entity.StationMainBean;
+import com.google.gson.Gson;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -126,7 +130,25 @@ public class CreateOrderActivity extends RxPayActivity {
         customBusCreateOrderTvSeatSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (dzBusLine == null) {
+                    ToastUtil.showMessage(CreateOrderActivity.this, "请先选择班次");
+                    return;
+                }
+                if (startBean == null) {
+                    ToastUtil.showMessage(CreateOrderActivity.this, "请先选择上车点");
+                    return;
+                }
+                if (endBean == null) {
+                    ToastUtil.showMessage(CreateOrderActivity.this, "请先选择下车点");
+                    return;
+                }
                 Intent intent = new Intent(CreateOrderActivity.this, SeatSelectActivity.class);
+                SeatQueryBean seatQueryBean = new SeatQueryBean();
+                seatQueryBean.type = Config.COUNTRY;
+                seatQueryBean.startId = startBean.id;
+                seatQueryBean.endId = endBean.id;
+                seatQueryBean.id = dzBusLine.id;
+                intent.putExtra("seatQueryBean", seatQueryBean);
                 startActivityForResult(intent, 0x20);
             }
         });
@@ -141,7 +163,7 @@ public class CreateOrderActivity extends RxPayActivity {
         decimalFormat = new DecimalFormat("0.00");
         customBusCreateOrderTvLine.setOnClickListener(view -> {
             Intent intent = new Intent(CreateOrderActivity.this, BanciSelectActivity.class);
-            startActivityForResult(intent, 0);
+            startActivityForResult(intent, 0x01);
         });
 
         customBusCreateOrderTvStart.setOnClickListener(view -> {
@@ -228,11 +250,11 @@ public class CreateOrderActivity extends RxPayActivity {
                 .map(new HttpResultFunc2<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MySubscriber<Long>(this, true, false, new HaveErrSubscriberListener<Long>() {
+                .subscribe(new MySubscriber<Employ>(this, true, false, new HaveErrSubscriberListener<Employ>() {
                     @Override
-                    public void onNext(Long aLong) {
-                        if (aLong != null) {
-                            passengerId = aLong.longValue();
+                    public void onNext(Employ employ) {
+                        if (employ != null) {
+                            passengerId = employ.id;
                             buttonAction();
                         } else {
                             customBusCreateOrderEtPhone.setText("");
@@ -249,12 +271,7 @@ public class CreateOrderActivity extends RxPayActivity {
 
     private void setRecyclerView() {
         customBusCreateOrderRv = findViewById(R.id.customBusCreateOrderRv);
-        customBusCreateOrderRv.setLayoutManager(new LinearLayoutManager(this) {
-            @Override
-            public boolean canScrollVertically() {
-                return adapter.getData().size() > 0;
-            }
-        });
+        customBusCreateOrderRv.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new PassengerAdapter(false);
 
@@ -281,26 +298,33 @@ public class CreateOrderActivity extends RxPayActivity {
     }
 
     public View getPassengerView(boolean isEmpty) {
-        View emptyView = getLayoutInflater().inflate(com.easymi.common.R.layout.item_passenger_select_header, customBusCreateOrderRv, false);
-        View itemPassengerSelectHeaderV = emptyView.findViewById(com.easymi.common.R.id.itemPassengerSelectHeaderV);
+        View emptyView = getLayoutInflater().inflate(R.layout.item_passenger_select_header, customBusCreateOrderRv, false);
+        View itemPassengerSelectHeaderV = emptyView.findViewById(R.id.itemPassengerSelectHeaderV);
+        TextView itemPassengerSelectHeaderTv = emptyView.findViewById(R.id.itemPassengerSelectHeaderTv);
         if (!isEmpty) {
             itemPassengerSelectHeaderV.setVisibility(View.VISIBLE);
         }
         ViewGroup.LayoutParams layoutParams = emptyView.getLayoutParams();
+//        Drawable drawable = ContextCompat.getDrawable(this, isEmpty ?)
         if (isEmpty) {
+            itemPassengerSelectHeaderTv.setTextColor(ContextCompat.getColor(this, R.color.colorSub));
             layoutParams.height = DensityUtil.dp2px(this, 100);
+        } else {
+            itemPassengerSelectHeaderTv.setTextColor(ContextCompat.getColor(this, R.color.colorBlue));
         }
+//        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+//        itemPassengerSelectHeaderTv.setCompoundDrawables(drawable, null, null, null);
         emptyView.setLayoutParams(layoutParams);
         emptyView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (passengerId == 0) {
-                    ToastUtil.showMessage(CreateOrderActivity.this, "请先输入乘客联系电话");
-                } else if (chooseSeatList == null || chooseSeatList.isEmpty()) {
+                if (chooseSeatList == null || chooseSeatList.isEmpty()) {
                     ToastUtil.showMessage(CreateOrderActivity.this, "请先选择乘客座位");
+                } else if (passengerId == 0) {
+                    ToastUtil.showMessage(CreateOrderActivity.this, "请先输入乘客联系电话");
                 } else {
                     Intent intent = new Intent(CreateOrderActivity.this, PassengerSelectActivity.class);
-                    intent.putExtra("passengerId", 170964L);
+                    intent.putExtra("passengerId", passengerId);
                     intent.putExtra("data", chooseSeatList);
                     intent.putExtra("chooseList", new ArrayList<>(adapter.getData()));
                     startActivityForResult(intent, 0x10);
@@ -407,7 +431,7 @@ public class CreateOrderActivity extends RxPayActivity {
         } else {
             if (!TextUtils.isEmpty(customBusCreateOrderTvStart.getText()) && !TextUtils.isEmpty(customBusCreateOrderTvEnd.getText()) &&
                     !TextUtils.isEmpty(customBusCreateOrderTvLine.getText()) && customBusCreateOrderEtPhone.getText().length() == 11
-                    && passengerId != 0 && !TextUtils.isEmpty(customBusCreateOrderTvSeatSelect.getText())) {
+                    && passengerId != 0 && !TextUtils.isEmpty(customBusCreateOrderTvSeatSelect.getText()) && adapter.getData().size() > 0) {
                 customBusCreateOrderBtCreate.setEnabled(true);
                 customBusCreateOrderBtCreate.setBackgroundResource(R.drawable.corners_button_bg);
             } else {
@@ -427,8 +451,9 @@ public class CreateOrderActivity extends RxPayActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == 0) {
+            if (requestCode == 0x01) {
                 DZBusLine newDzBusLine = (DZBusLine) data.getSerializableExtra("data");
                 if (dzBusLine == null || dzBusLine.id != newDzBusLine.id) {
                     if (dzBusLine != null && dzBusLine.model != newDzBusLine.model) {
@@ -451,6 +476,7 @@ public class CreateOrderActivity extends RxPayActivity {
                         adapter.removeFooterView(passengerFooterView);
                         passengerFooterView = null;
                     }
+                    orderId = 0;
                     request = false;
                     startList.clear();
                     endList.clear();
@@ -476,24 +502,33 @@ public class CreateOrderActivity extends RxPayActivity {
                         }
                     }
                 }
-            }
-        } else if (resultCode == 0x11) {
-            List<PassengerBean> newData = (List<PassengerBean>) data.getSerializableExtra("data");
-            List<PassengerBean> currentData = adapter.getData();
-            for (PassengerBean newDatum : newData) {
-                if (!currentData.contains(newDatum)) {
-                    currentData.add(newDatum);
+            } else if (requestCode == 0x20) {
+                if (data != null) {
+                    double prise = data.getDoubleExtra("prise", 0);
+                    customBusCreateOrderTvMoney.setText(String.valueOf(prise));
+                    chooseSeatList = (ArrayList<SeatBean>) data.getSerializableExtra("data");
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (SeatBean seatBean : chooseSeatList) {
+                        stringBuilder.append(seatBean.getDesc());
+                    }
+                    customBusCreateOrderTvSeatSelect.setText(stringBuilder.toString());
+                }
+            } else if (requestCode == 0x10) {
+                if (data != null) {
+                    List<PassengerBean> newData = (List<PassengerBean>) data.getSerializableExtra("data");
+                    List<PassengerBean> currentData = adapter.getData();
+                    for (PassengerBean newDatum : newData) {
+                        if (!currentData.contains(newDatum)) {
+                            currentData.add(newDatum);
+                        }
+                    }
+                    if (passengerFooterView == null) {
+                        passengerFooterView = getPassengerView(false);
+                        adapter.addFooterView(passengerFooterView, 0);
+                    }
+                    adapter.notifyDataSetChanged();
                 }
             }
-            if (passengerFooterView == null) {
-                passengerFooterView = getPassengerView(false);
-                adapter.addFooterView(passengerFooterView, 0);
-            }
-            adapter.notifyDataSetChanged();
-        } else if (requestCode == 0x20) {
-            double prise = data.getDoubleExtra("prise", 0);
-            customBusCreateOrderTvMoney.setText(String.valueOf(prise));
-            chooseSeatList = (ArrayList<SeatBean>) data.getSerializableExtra("data");
         }
     }
 
@@ -501,20 +536,17 @@ public class CreateOrderActivity extends RxPayActivity {
      * 创建订单
      */
     private void createOrder() {
-        if (customBusCreateOrderEtPhone.getText().length() != 11) {
-            ToastUtil.showMessage(this, "请输入正确的电话号码");
-            return;
-        }
-
         if (orderId == 0) {
             Observable<Long> observable = ApiManager.getInstance().createApi(Config.HOST, DZBusApiService.class)
                     .createOrder(
                             startBean.stationId,
                             endBean.stationId,
                             dzBusLine.id,
-                            currentNum,
+                            currentModeType == 1 ? currentNum : 1,
                             customBusCreateOrderEtPhone.getText().toString(),
-                            "driver"
+                            "driver",
+                            currentModeType == 1 ? "" : new Gson().toJson(adapter.getData()),
+                            currentModeType == 1 ? "" : new Gson().toJson(chooseSeatList)
                     )
                     .map(new HttpResultFunc2<>())
                     .observeOn(AndroidSchedulers.mainThread())

@@ -13,6 +13,7 @@
         android:layout_height="@dimen/sizeLine"/>
 
     <TextView
+        android:id="@+id/itemPassengerSelectHeaderTv"
         android:drawableStart="@mipmap/ic_add_passenger"
         android:drawablePadding="10dp"
         android:layout_width="wrap_content"

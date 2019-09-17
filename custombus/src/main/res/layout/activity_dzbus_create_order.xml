@@ -56,267 +56,270 @@
 
     </LinearLayout>
 
-    <com.easymin.custombus.StickyNavLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/customBusCreateOrderLlBottom"
-        android:layout_below="@id/customBusCreateOrderCtb"
-        android:orientation="vertical">
+        android:layout_below="@id/customBusCreateOrderCtb">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="@drawable/divider"
-            android:dividerPadding="10dp"
-            android:orientation="vertical"
-            android:showDividers="middle">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:gravity="center_vertical"
-                android:paddingLeft="10dp"
-                android:paddingTop="5dp"
-                android:text="请填写票务信息" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/btn_height"
+                    android:layout_height="40dp"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="选择班次"
-                        android:textColor="@color/black" />
-
-                    <TextView
-                        android:id="@+id/customBusCreateOrderTvLine"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical|right"
-                        android:hint="请选择车辆班次"
-                        android:textColor="@color/black" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:src="@mipmap/ic_pc_right_row" />
-
-                </LinearLayout>
+                    android:paddingTop="5dp"
+                    android:text="请填写票务信息" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/btn_height"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:divider="@drawable/divider"
+                    android:dividerPadding="10dp"
+                    android:orientation="vertical"
+                    android:showDividers="middle">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="上车地点"
-                        android:textColor="@color/black" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/btn_height"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
 
-                    <TextView
-                        android:id="@+id/customBusCreateOrderTvStart"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical|right"
-                        android:hint="请选择乘客上车点"
-                        android:textColor="@color/black" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="选择班次"
+                            android:textColor="@color/black" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:src="@mipmap/ic_pc_right_row" />
+                        <TextView
+                            android:id="@+id/customBusCreateOrderTvLine"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|right"
+                            android:hint="请选择车辆班次"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/colorSub" />
 
-                </LinearLayout>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:src="@mipmap/ic_pc_right_row" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="#ebebeb" />
+                    </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/btn_height"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/btn_height"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="下车地点"
-                        android:textColor="@color/black" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="上车地点"
+                            android:textColor="@color/black" />
 
-                    <TextView
-                        android:id="@+id/customBusCreateOrderTvEnd"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical|right"
-                        android:hint="请选择乘客下车点"
-                        android:textColor="@color/black" />
+                        <TextView
+                            android:id="@+id/customBusCreateOrderTvStart"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|right"
+                            android:hint="请选择乘客上车点"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/colorSub" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:src="@mipmap/ic_pc_right_row" />
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:src="@mipmap/ic_pc_right_row" />
 
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/customBusCreateOrderLvSeatSelect"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/btn_height"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="选择座位"
-                        android:textColor="@color/black" />
-
-                    <TextView
-                        android:id="@+id/customBusCreateOrderTvSeatSelect"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical|right"
-                        android:hint="请选择座位"
-                        android:textColor="@color/black" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:src="@mipmap/ic_pc_right_row" />
-
-                </LinearLayout>
+                    </LinearLayout>
 
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/btn_height"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/btn_height"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="联系电话"
-                        android:textColor="@color/black" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="下车地点"
+                            android:textColor="@color/black" />
 
-                    <EditText
-                        android:id="@+id/customBusCreateOrderEtPhone"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@null"
-                        android:gravity="center_vertical|right"
-                        android:hint="请输入电话"
-                        android:inputType="number"
-                        android:maxLength="11"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
+                        <TextView
+                            android:id="@+id/customBusCreateOrderTvEnd"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|right"
+                            android:hint="请选择乘客下车点"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/colorSub" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:src="@mipmap/ic_pc_right_row"
-                        android:visibility="invisible" />
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:src="@mipmap/ic_pc_right_row" />
 
-                </LinearLayout>
+                    </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/customBusCreateOrderLlCount"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/btn_height"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
+                    <LinearLayout
+                        android:id="@+id/customBusCreateOrderLvSeatSelect"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/btn_height"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:visibility="gone">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="乘车人数"
-                        android:textColor="@color/black" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="选择座位"
+                            android:textColor="@color/black" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:text="(儿童均购全票)" />
+                        <TextView
+                            android:id="@+id/customBusCreateOrderTvSeatSelect"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|right"
+                            android:hint="请选择座位"
+                            android:textColor="@color/black" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical|right"
-                        android:textColor="@color/black" />
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:src="@mipmap/ic_pc_right_row" />
 
-                    <TextView
-                        android:id="@+id/customBusCreateOrderTvSub"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/pc_sub_selector"
-                        android:enabled="false" />
+                    </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/customBusCreateOrderTvNum"
-                        android:layout_width="30dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="1"
-                        android:textColor="@color/black" />
 
-                    <TextView
-                        android:id="@+id/customBusCreateOrderTvAdd"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/pc_add_selector"
-                        android:enabled="false" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/btn_height"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="联系电话"
+                            android:textColor="@color/black" />
+
+                        <EditText
+                            android:id="@+id/customBusCreateOrderEtPhone"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:gravity="center_vertical|right"
+                            android:hint="请输入电话"
+                            android:inputType="number"
+                            android:maxLength="11"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/colorSub"
+                            android:textSize="14sp" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:src="@mipmap/ic_pc_right_row"
+                            android:visibility="invisible" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/customBusCreateOrderLlCount"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/btn_height"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="乘车人数"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="(儿童均购全票)" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|right"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:id="@+id/customBusCreateOrderTvSub"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/pc_sub_selector"
+                            android:enabled="false" />
+
+                        <TextView
+                            android:id="@+id/customBusCreateOrderTvNum"
+                            android:layout_width="30dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="1"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:id="@+id/customBusCreateOrderTvAdd"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/pc_add_selector"
+                            android:enabled="false" />
+
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/customBusCreateOrderRv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:visibility="invisible" />
+
         </LinearLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/customBusCreateOrderRv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="10dp"
-            android:visibility="invisible" />
-
-    </com.easymin.custombus.StickyNavLayout>
+    </android.support.v4.widget.NestedScrollView>
 
     <include
         android:id="@+id/create_suc"

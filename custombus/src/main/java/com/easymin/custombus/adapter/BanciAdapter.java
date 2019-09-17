@@ -80,11 +80,6 @@ public class BanciAdapter extends RecyclerView.Adapter<BanciAdapter.Holder> {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (position == 0 || position == 1) {
-                        dzBusLine.model = 1;
-                    } else {
-                        dzBusLine.model = 2;
-                    }
                     onItemClickListener.onClick(dzBusLine);
                 }
             });

@@ -1,6 +1,7 @@
 package com.easymi.common.activity;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -19,10 +20,13 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.easymi.common.CommApiService;
 import com.easymi.common.R;
 import com.easymi.common.entity.SeatBean;
+import com.easymi.common.entity.SeatQueryBean;
 import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.network.MySubscriber;
@@ -46,22 +50,15 @@ public class SeatSelectActivity extends RxBaseActivity {
     private android.widget.Button seatSelectBt;
     private android.support.v7.widget.RecyclerView seatSelectRv;
     private BaseQuickAdapter<SeatBean, BaseViewHolder> baseQuickAdapter;
-    private TextView itemSeatSelectHeaderStartStation;
-    private TextView itemSeatSelectHeaderEndStation;
-    private TextView itemSeatSelectHeaderStartTime;
-    private TextView itemSeatSelectHeaderEndTime;
-    private TextView itemSeatSelectHeaderDesc;
-    private TextView itemSeatSelectFooterTvPhone;
-    private TextView itemSeatSelectFooterTvInfo;
     private android.widget.RelativeLayout itemSeatSelectHeaderRlChildSelect;
-    private android.widget.ImageView itemSeatSelectHeaderIvChildSelect;
     private TextView itemSeatSelectHeaderTvChildSelect;
-//    private QueryLineListBean queryLineListBean;
+    private SeatQueryBean seatQueryBean;
     private List<SeatBean> childSeats;
-    private int size3;
+    private int size8;
     private DecimalFormat decimalFormat;
-    private String type;
     private double total;
+    private float itemMainWidth;
+    private float itemSubWidth;
 
 
     @Override
@@ -93,22 +90,19 @@ public class SeatSelectActivity extends RxBaseActivity {
                     ToastUtil.showMessage(SeatSelectActivity.this, "请选择座位");
                 } else {
                     Intent intent = new Intent();
-//                    intent.putExtra("queryLineListBean", queryLineListBean);
                     intent.putExtra("data", chooseSeatList);
-                    intent.putExtra("size", baseQuickAdapter.getData().size());
                     intent.putExtra("prise", total);
-                    intent.putExtra("type", type);
                     setResult(RESULT_OK,intent);
+                    finish();
                 }
             }
         });
         seatSelectRv = findViewById(R.id.seatSelectRv);
-//        queryLineListBean = (QueryLineListBean) getIntent().getSerializableExtra("queryLineListBean");
-//        if (queryLineListBean == null) {
-//            ToastUtil.showMessage(this, "数据发生错误,请重试");
-//            finish();
-//        }
-        type = getIntent().getStringExtra("type");
+        seatQueryBean = (SeatQueryBean) getIntent().getSerializableExtra("seatQueryBean");
+        if (seatQueryBean == null) {
+            ToastUtil.showMessage(this, "数据发生错误,请重试");
+            finish();
+        }
         decimalFormat = new DecimalFormat("0.00");
         initRecyclerView();
         getData();
@@ -116,14 +110,13 @@ public class SeatSelectActivity extends RxBaseActivity {
 
     private void getData() {
         Observable<EmResult2<List<SeatBean>>> observable = null;
-        if (TextUtils.equals(type, Config.COUNTRY)) {
-//            observable = ApiManager.getInstance().createApi(Config.HOST, CommonService.class)
-//                    .queryBusSeats(queryLineListBean.id, queryLineListBean.startId, queryLineListBean.endId);
+        if (TextUtils.equals(seatQueryBean.type, Config.COUNTRY)) {
+            observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                    .queryBusSeats(seatQueryBean.id, seatQueryBean.startId, seatQueryBean.endId);
         } else {
-//            observable = ApiManager.getInstance().createApi(Config.HOST, CommonService.class)
-//                    .queryCarpoolSeats(queryLineListBean.timeSlotId, queryLineListBean.startId, queryLineListBean.endId);
+            observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                    .queryCarpoolSeats(seatQueryBean.timeSlotId, seatQueryBean.startId, seatQueryBean.endId);
         }
-
         mRxManager.add(observable
                 .map(new HttpResultFunc2<>())
                 .subscribeOn(Schedulers.io())
@@ -145,11 +138,9 @@ public class SeatSelectActivity extends RxBaseActivity {
     private void createData(List<SeatBean> seatBeans) {
         baseQuickAdapter.setNewData(seatBeans);
         if (childSeats.size() > 0) {
-            itemSeatSelectHeaderTvChildSelect.setVisibility(View.GONE);
-            itemSeatSelectHeaderIvChildSelect.setVisibility(View.VISIBLE);
+            itemSeatSelectHeaderTvChildSelect.setHint("点击可选择儿童座");
         } else {
-            itemSeatSelectHeaderTvChildSelect.setVisibility(View.VISIBLE);
-            itemSeatSelectHeaderIvChildSelect.setVisibility(View.GONE);
+            itemSeatSelectHeaderTvChildSelect.setHint("暂不支持儿童座");
         }
         itemSeatSelectHeaderRlChildSelect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,7 +152,10 @@ public class SeatSelectActivity extends RxBaseActivity {
 
     private void bindData(List<SeatBean> seatBeans) {
         int size16 = DensityUtil.dp2px(this, 16);
-        size3 = DensityUtil.dp2px(this, 3);
+        size8 = DensityUtil.dp2px(this, 8);
+        itemMainWidth = ((float) Resources.getSystem().getDisplayMetrics().widthPixels) / 3 - size16 - size8;
+        itemSubWidth = ((float) Resources.getSystem().getDisplayMetrics().widthPixels) / 3 - size16;
+
         SeatBean seatBean = new SeatBean();
         seatBean.status = 2;
         seatBeans.add(0, seatBean);
@@ -175,37 +169,39 @@ public class SeatSelectActivity extends RxBaseActivity {
         if (seatBeans.size() == 7) {
             for (int i = 0; i < 7; i++) {
                 seatBean = seatBeans.get(i);
+                seatBean.listSize = 7;
                 if (seatBean.child == 1 && seatBean.status == 1) {
                     childSeats.add(seatBean);
                 }
                 if (i == 0 || i == 2 || i == 4) {
                     seatBean.paddingLeft = size16;
-                    seatBean.paddingRight = size3;
-                } else if (i == 1 || i == 3 || i == 6) {
+                    seatBean.paddingRight = size8;
+                } else if (i == 1 || i == 6) {
                     seatBean.paddingRight = size16;
-                    seatBean.paddingLeft = size3;
+                    seatBean.paddingLeft = size8;
                 } else {
-                    seatBean.paddingLeft = size3;
-                    seatBean.paddingRight = size3;
+                    seatBean.paddingLeft = size8;
+                    seatBean.paddingRight = size8;
                 }
                 seatBean.paddingBottom = size16;
             }
             createData(seatBeans);
         } else if (seatBeans.size() == 5) {
             for (int i = 0; i < 5; i++) {
+                seatBean.listSize = 5;
                 seatBean = seatBeans.get(i);
                 if (seatBean.child == 1 && seatBean.status == 1) {
                     childSeats.add(seatBean);
                 }
                 if (i == 0 || i == 2) {
                     seatBean.paddingLeft = size16;
-                    seatBean.paddingRight = size3;
+                    seatBean.paddingRight = size8;
                 } else if (i == 1 || i == 4) {
                     seatBean.paddingRight = size16;
-                    seatBean.paddingLeft = size3;
+                    seatBean.paddingLeft = size8;
                 } else {
-                    seatBean.paddingLeft = size3;
-                    seatBean.paddingRight = size3;
+                    seatBean.paddingLeft = size8;
+                    seatBean.paddingRight = size8;
                 }
                 seatBean.paddingBottom = size16;
             }
@@ -216,26 +212,52 @@ public class SeatSelectActivity extends RxBaseActivity {
         }
     }
 
+
     private void changeData() {
         List<SeatBean> currentList = baseQuickAdapter.getData();
+        StringBuilder stringBuilder = new StringBuilder();
         for (SeatBean childSeat : childSeats) {
             if (childSeat.isDialogSelect) {
+                stringBuilder.append(childSeat.getDesc());
                 for (SeatBean seatBean : currentList) {
                     if (seatBean.sort == childSeat.sort) {
                         seatBean.isChild = 1;
                         seatBean.isChoose = true;
                     }
                 }
+            } else {
+                for (SeatBean seatBean : currentList) {
+                    if (seatBean.sort == childSeat.sort && seatBean.isChild == 1 && seatBean.isChoose) {
+                        seatBean.isChild = 0;
+                        seatBean.isChoose = false;
+                    }
+                }
             }
         }
+        itemSeatSelectHeaderTvChildSelect.setText(stringBuilder.toString());
         calculateTotal();
         baseQuickAdapter.notifyDataSetChanged();
     }
 
     private void createDialog() {
-        if (itemSeatSelectHeaderIvChildSelect.isShown()) {
+        if (childSeats.size() > 0) {
+            List<SeatBean> currentList = baseQuickAdapter.getData();
+            List<SeatBean> chooseChildSeats = new ArrayList<>();
+            for (SeatBean seatBean : currentList) {
+                if (seatBean.isChild == 1 && seatBean.isChoose) {
+                    chooseChildSeats.add(seatBean);
+                }
+            }
+
             for (SeatBean childSeat : childSeats) {
                 childSeat.isDialogSelect = false;
+            }
+            for (SeatBean childSeat : childSeats) {
+                for (SeatBean chooseChildSeat : chooseChildSeats) {
+                    if (childSeat.sort == chooseChildSeat.sort) {
+                        childSeat.isDialogSelect = true;
+                    }
+                }
             }
 
             BottomSheetDialog dialog = new BottomSheetDialog(this);
@@ -266,17 +288,20 @@ public class SeatSelectActivity extends RxBaseActivity {
                 @Override
                 protected void convert(BaseViewHolder helper, SeatBean item) {
                     TextView itemBottomSheetDialogSeatSelectTv = helper.getView(R.id.itemBottomSheetDialogSeatSelectTv);
-                    RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) itemBottomSheetDialogSeatSelectTv.getLayoutParams();
+                    FrameLayout itemBottomSheetDialogSeatSelectFl = helper.getView(R.id.itemBottomSheetDialogSeatSelectFl);
+                    RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) itemBottomSheetDialogSeatSelectFl.getLayoutParams();
                     if (helper.getLayoutPosition() % 2 == 0) {
-                        layoutParams.rightMargin = size3;
+                        layoutParams.rightMargin = size8;
                     } else {
-                        layoutParams.leftMargin = size3;
+                        layoutParams.leftMargin = size8;
                     }
-                    itemBottomSheetDialogSeatSelectTv.setLayoutParams(layoutParams);
-                    setText(item, itemBottomSheetDialogSeatSelectTv, true);
-                    itemBottomSheetDialogSeatSelectTv.getBackground().setLevel(item.isDialogSelect ? 3 : 4);
-                    itemBottomSheetDialogSeatSelectTv.setTextColor(
-                            ContextCompat.getColor(SeatSelectActivity.this, item.isDialogSelect ? R.color.white : R.color.colorBlackLight));
+                    itemBottomSheetDialogSeatSelectFl.setLayoutParams(layoutParams);
+                    ImageView itemBottomSheetDialogSeatSelectIv = helper.getView(R.id.itemBottomSheetDialogSeatSelectIv);
+                    setContent(item, itemBottomSheetDialogSeatSelectTv, itemBottomSheetDialogSeatSelectIv, true);
+                    ImageView itemBottomSheetDialogSeatSelectIvIcon = helper.getView(R.id.itemBottomSheetDialogSeatSelectIvIcon);
+                    itemBottomSheetDialogSeatSelectFl.getBackground().setLevel(item.isDialogSelect ? 2 : 1);
+                    itemBottomSheetDialogSeatSelectIvIcon.setVisibility(item.isDialogSelect ? View.VISIBLE : View.GONE);
+                    itemBottomSheetDialogSeatSelectTv.setTextColor(ContextCompat.getColor(SeatSelectActivity.this, R.color.colorBlue));
                 }
             };
             bottomSheetDialogSeatSelectRv.setAdapter(adapter);
@@ -303,7 +328,7 @@ public class SeatSelectActivity extends RxBaseActivity {
     @Override
     public void initToolBar() {
         super.initToolBar();
-        seatSelectCtb.setTitle("司机补单")
+        seatSelectCtb.setTitle("选择座位")
                 .setLeftIcon(R.drawable.ic_arrow_back, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -321,9 +346,29 @@ public class SeatSelectActivity extends RxBaseActivity {
             protected void convert(BaseViewHolder helper, SeatBean item) {
                 helper.itemView.setPadding(item.paddingLeft, 0, item.paddingRight, item.paddingBottom);
                 FrameLayout itemSeatSelectContentFl = helper.getView(R.id.itemSeatSelectContentFl);
+                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) itemSeatSelectContentFl.getLayoutParams();
+                int position = helper.getLayoutPosition() - 1;
+                if (baseQuickAdapter.getData().size() == 7) {
+                    if (position == 0) {
+                        layoutParams.width = (int) itemMainWidth;
+                    } else if (position == 3) {
+                        layoutParams.width = (int) itemSubWidth;
+                    } else {
+                        layoutParams.width = FrameLayout.LayoutParams.MATCH_PARENT;
+                    }
+                } else {
+                    if (position == 0) {
+                        layoutParams.width = (int) itemMainWidth;
+                    } else {
+                        layoutParams.width = FrameLayout.LayoutParams.MATCH_PARENT;
+                    }
+                }
+                itemSeatSelectContentFl.setLayoutParams(layoutParams);
                 TextView itemSeatSelectContentTv = helper.getView(R.id.itemSeatSelectContentTv);
-                setStatus(item, itemSeatSelectContentFl, itemSeatSelectContentTv);
-                setText(item, itemSeatSelectContentTv, false);
+                ImageView itemSeatSelectContentIv = helper.getView(R.id.itemSeatSelectContentIv);
+                ImageView itemSeatSelectContentIvIcon = helper.getView(R.id.itemSeatSelectContentIvIcon);
+                setStatus(item, itemSeatSelectContentFl, itemSeatSelectContentTv, itemSeatSelectContentIv);
+                setContent(item, itemSeatSelectContentTv, itemSeatSelectContentIvIcon, false);
             }
         };
 
@@ -332,33 +377,37 @@ public class SeatSelectActivity extends RxBaseActivity {
             if (seatBean.status == 1) {
                 seatBean.isChoose = !seatBean.isChoose;
                 seatBean.isChild = 0;
+                String currentText = itemSeatSelectHeaderTvChildSelect.getText().toString();
+                if (currentText.contains(seatBean.getDesc())) {
+                    itemSeatSelectHeaderTvChildSelect.setText(currentText.replace(seatBean.getDesc(), ""));
+                }
                 calculateTotal();
                 adapter.notifyItemChanged(position + adapter.getHeaderLayoutCount());
             }
         });
 
         baseQuickAdapter.addHeaderView(getHeaderView());
+        baseQuickAdapter.addFooterView(getFooterView());
 
         seatSelectRv.setAdapter(baseQuickAdapter);
-
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 6);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
                 if (position == 0 || position == baseQuickAdapter.getData().size() + 1) {
-                    return 6;
+                    return 3;
                 }
                 if (baseQuickAdapter.getData().size() == 5) {
-                    if (position < 3) {
-                        return 3;
-                    } else {
+                    if (position == 1) {
                         return 2;
+                    } else {
+                        return 1;
                     }
                 } else {
-                    if (position < 5) {
-                        return 3;
-                    } else {
+                    if (position == 1 || position == 4) {
                         return 2;
+                    } else {
+                        return 1;
                     }
                 }
             }
@@ -368,63 +417,72 @@ public class SeatSelectActivity extends RxBaseActivity {
     }
 
     @NonNull
-    public View getHeaderView() {
-        View headerView = getLayoutInflater().inflate(R.layout.item_seat_select_header, seatSelectCtb, false);
-        itemSeatSelectHeaderRlChildSelect = headerView.findViewById(R.id.itemSeatSelectHeaderRlChildSelect);
-        itemSeatSelectHeaderIvChildSelect = headerView.findViewById(R.id.itemSeatSelectHeaderIvChildSelect);
-        itemSeatSelectHeaderTvChildSelect = headerView.findViewById(R.id.itemSeatSelectHeaderTvChildSelect);
-        itemSeatSelectHeaderStartStation = headerView.findViewById(R.id.itemSeatSelectHeaderStartStation);
-        itemSeatSelectHeaderEndStation = headerView.findViewById(R.id.itemSeatSelectHeaderEndStation);
-        itemSeatSelectHeaderStartTime = headerView.findViewById(R.id.itemSeatSelectHeaderStartTime);
-        itemSeatSelectHeaderEndTime = headerView.findViewById(R.id.itemSeatSelectHeaderEndTime);
-        itemSeatSelectHeaderDesc = headerView.findViewById(R.id.itemSeatSelectHeaderDesc);
-
-//        itemSeatSelectHeaderStartStation.setText(queryLineListBean.startStationName);
-//        itemSeatSelectHeaderEndStation.setText(queryLineListBean.endStationName);
-
-        return headerView;
+    public View getFooterView() {
+        View footerView = getLayoutInflater().inflate(R.layout.item_seat_select_footer, seatSelectCtb, false);
+        itemSeatSelectHeaderRlChildSelect = footerView.findViewById(R.id.itemSeatSelectHeaderRlChildSelect);
+        itemSeatSelectHeaderTvChildSelect = footerView.findViewById(R.id.itemSeatSelectHeaderTvChildSelect);
+        return footerView;
     }
 
-    private void setText(SeatBean seatBean, TextView textView, boolean isDialog) {
+    @NonNull
+    public View getHeaderView() {
+        return getLayoutInflater().inflate(R.layout.item_seat_select_header, seatSelectCtb, false);
+    }
+
+    private void setContent(SeatBean seatBean, TextView textView, ImageView itemSeatSelectContentIvIcon, boolean isDialog) {
         if (baseQuickAdapter.getData().size() == 7) {
             if (seatBean.sort == 0) {
                 textView.setText("司机");
+                itemSeatSelectContentIvIcon.setImageResource(R.drawable.icon_driver);
             } else if (seatBean.sort == 1) {
-                textView.setText("前右");
+                setImageResource(seatBean, itemSeatSelectContentIvIcon, isDialog, R.drawable.icon_enable_front_right, R.drawable.icon_disable_front_right);
             } else if (seatBean.sort == 2) {
-                textView.setText("中左");
+                setImageResource(seatBean, itemSeatSelectContentIvIcon, isDialog, R.drawable.icon_enable_middle_left, R.drawable.icon_disable_middle_left);
             } else if (seatBean.sort == 3) {
-                textView.setText("中右");
+                setImageResource(seatBean, itemSeatSelectContentIvIcon, isDialog, R.drawable.icon_enable_middle_right, R.drawable.icon_disable_middle_right);
             } else if (seatBean.sort == 4) {
-                textView.setText("后左");
+                setImageResource(seatBean, itemSeatSelectContentIvIcon, isDialog, R.drawable.icon_enable_behind_left, R.drawable.icon_disable_behind_left);
             } else if (seatBean.sort == 5) {
-                textView.setText("后中");
+                setImageResource(seatBean, itemSeatSelectContentIvIcon, isDialog, R.drawable.icon_enable_behind_middle, R.drawable.icon_disable_behind_middle);
             } else if (seatBean.sort == 6) {
-                textView.setText("后右");
+                setImageResource(seatBean, itemSeatSelectContentIvIcon, isDialog, R.drawable.icon_enable_behind_right, R.drawable.icon_disable_behind_right);
             }
         } else {
             if (seatBean.sort == 0) {
                 textView.setText("司机");
+                itemSeatSelectContentIvIcon.setImageResource(R.drawable.icon_driver);
             } else if (seatBean.sort == 1) {
-                textView.setText("前右");
+                setImageResource(seatBean, itemSeatSelectContentIvIcon, isDialog, R.drawable.icon_enable_front_right, R.drawable.icon_disable_front_right);
             } else if (seatBean.sort == 2) {
-                textView.setText("后左");
+                setImageResource(seatBean, itemSeatSelectContentIvIcon, isDialog, R.drawable.icon_enable_behind_left, R.drawable.icon_disable_behind_left);
             } else if (seatBean.sort == 3) {
-                textView.setText("后中");
+                setImageResource(seatBean, itemSeatSelectContentIvIcon, isDialog, R.drawable.icon_enable_behind_middle, R.drawable.icon_disable_behind_middle);
             } else if (seatBean.sort == 4) {
-                textView.setText("后右");
+                setImageResource(seatBean, itemSeatSelectContentIvIcon, isDialog, R.drawable.icon_enable_behind_right, R.drawable.icon_disable_behind_right);
             }
         }
         if (!isDialog) {
-            if (seatBean.isChoose && seatBean.isChild == 1) {
-                textView.setText(textView.getText() + "(儿童) ¥" + decimalFormat.format(seatBean.childPrice));
-            } else {
-                if (seatBean.price != 0) {
-                    textView.setText(textView.getText() + " ¥" + decimalFormat.format(seatBean.price));
+            if (seatBean.sort != 0) {
+                if (seatBean.isChoose && seatBean.isChild == 1) {
+                    textView.setText(" ¥" + decimalFormat.format(seatBean.childPrice));
+                } else {
+                    textView.setText(" ¥" + decimalFormat.format(seatBean.price));
                 }
             }
         } else {
-            textView.setText(textView.getText() + " ¥" + decimalFormat.format(seatBean.childPrice));
+            textView.setText(" ¥" + decimalFormat.format(seatBean.childPrice));
+        }
+    }
+
+    private void setImageResource(SeatBean seatBean, ImageView itemSeatSelectContentIvIcon, boolean isDialog, int p, int p2) {
+        if (isDialog) {
+            itemSeatSelectContentIvIcon.setImageResource(p);
+        } else {
+            if (seatBean.status == 1) {
+                itemSeatSelectContentIvIcon.setImageResource(p);
+            } else {
+                itemSeatSelectContentIvIcon.setImageResource(p2);
+            }
         }
     }
 
@@ -443,28 +501,25 @@ public class SeatSelectActivity extends RxBaseActivity {
     }
 
 
-    private void setStatus(SeatBean seatBean, FrameLayout frameLayout, TextView textView) {
+    private void setStatus(SeatBean seatBean, FrameLayout frameLayout, TextView textView, ImageView imageView) {
         if (seatBean.status == 2) {
-            frameLayout.getBackground().setLevel(1);
-            textView.getCompoundDrawables()[1].setLevel(2);
-            textView.setTextColor(ContextCompat.getColor(this, R.color.white));
+            frameLayout.getBackground().setLevel(3);
+            imageView.setVisibility(View.GONE);
+            textView.setTextColor(ContextCompat.getColor(this, R.color.colorSub));
         } else if (seatBean.status == 3) {
-            frameLayout.getBackground().setLevel(2);
-            textView.getCompoundDrawables()[1].setLevel(2);
-            textView.setTextColor(ContextCompat.getColor(this, R.color.white));
+            imageView.setVisibility(View.VISIBLE);
+            imageView.setImageResource(R.drawable.icon_seat_taken);
+            frameLayout.getBackground().setLevel(3);
+            textView.setTextColor(ContextCompat.getColor(this, R.color.colorSub));
         } else {
+            textView.setTextColor(ContextCompat.getColor(this, R.color.colorBlue));
             if (seatBean.isChoose) {
-                frameLayout.getBackground().setLevel(3);
-                if (seatBean.isChild == 1) {
-                    textView.getCompoundDrawables()[1].setLevel(1);
-                } else {
-                    textView.getCompoundDrawables()[1].setLevel(2);
-                }
-                textView.setTextColor(ContextCompat.getColor(this, R.color.white));
+                frameLayout.getBackground().setLevel(2);
+                imageView.setVisibility(View.VISIBLE);
+                imageView.setImageResource(R.drawable.icon_seat_choose);
             } else {
-                frameLayout.getBackground().setLevel(4);
-                textView.getCompoundDrawables()[1].setLevel(3);
-                textView.setTextColor(ContextCompat.getColor(this, R.color.colorBlackLight));
+                frameLayout.getBackground().setLevel(1);
+                imageView.setVisibility(View.GONE);
             }
         }
     }

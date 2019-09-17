@@ -1,11 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/itemBottomSheetDialogSeatSelectTv"
-    android:layout_marginTop="12dp"
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/itemBottomSheetDialogSeatSelectFl"
     android:layout_width="match_parent"
     android:layout_height="46dp"
-    android:background="@drawable/seat_type_background_level"
-    android:gravity="center"
-    android:textSize="@dimen/sizeContent">
+    android:layout_marginTop="12dp"
+    android:background="@drawable/level_seat_type_background">
 
-</TextView>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/itemBottomSheetDialogSeatSelectIv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/itemBottomSheetDialogSeatSelectTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingStart="5dp"
+            android:textColor="@color/colorGreen"
+            android:textSize="@dimen/sizeContent" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/itemBottomSheetDialogSeatSelectIvIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:src="@drawable/icon_seat_choose" />
+</FrameLayout>

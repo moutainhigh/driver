@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.easymi.common.CommApiService;
 import com.easymi.common.activity.PassengerSelectActivity;
 import com.easymi.common.activity.SeatSelectActivity;
 import com.easymi.common.adapter.PassengerAdapter;
@@ -230,27 +229,27 @@ public class CarpoolCreateOrderBySeatActivity extends RxPayActivity {
     }
 
     private void getPassengerId() {
-        ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .getPassengerId(carPoolCreateOrderBySeatEtPhone.getText().toString(), EmUtil.getEmployInfo().companyId)
-                .map(new HttpResultFunc2<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MySubscriber<Long>(this, true, false, new HaveErrSubscriberListener<Long>() {
-                    @Override
-                    public void onNext(Long aLong) {
-                        if (aLong != null) {
-                            passengerId = aLong.longValue();
-                            setBtnEnable();
-                        } else {
-                            carPoolCreateOrderBySeatEtPhone.setText("");
-                        }
-                    }
-
-                    @Override
-                    public void onError(int code) {
-                        carPoolCreateOrderBySeatEtPhone.setText("");
-                    }
-                }));
+//        ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+//                .getPassengerId(carPoolCreateOrderBySeatEtPhone.getText().toString(), EmUtil.getEmployInfo().companyId)
+//                .map(new HttpResultFunc2<>())
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new MySubscriber<Long>(this, true, false, new HaveErrSubscriberListener<Long>() {
+//                    @Override
+//                    public void onNext(Long aLong) {
+//                        if (aLong != null) {
+//                            passengerId = aLong.longValue();
+//                            setBtnEnable();
+//                        } else {
+//                            carPoolCreateOrderBySeatEtPhone.setText("");
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onError(int code) {
+//                        carPoolCreateOrderBySeatEtPhone.setText("");
+//                    }
+//                }));
     }
 
     private void setRecyclerView() {
