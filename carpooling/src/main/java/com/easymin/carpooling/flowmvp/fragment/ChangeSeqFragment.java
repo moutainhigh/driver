@@ -151,7 +151,6 @@ public class ChangeSeqFragment extends RxBaseFragment {
                     bottomBtn.setOnClickListener(view -> bridge.toAcSend());
                 }
             }
-
         }
         adapter.setSequences(buildData());
         showInMap();
@@ -287,7 +286,7 @@ public class ChangeSeqFragment extends RxBaseFragment {
                 sequence.photo = customer.avatar;
                 sequence.ticketNumber = customer.ticketNumber;
                 sequence.status = customer.customeStatus;
-
+//                sequence.sort = customer.
                 sequences.add(sequence);
                 if (customer.customeStatus != 0) {
                     min = i + 1;
@@ -345,10 +344,10 @@ public class ChangeSeqFragment extends RxBaseFragment {
                 latLng = new LatLng(orderCustomer.endLat, orderCustomer.endLng);
             }
             if (orderCustomer.customeStatus == 0 || orderCustomer.customeStatus == 3) {
-                bridge.addMarker(latLng, StaticVal.MARKER_FLAG_PASS_ENABLE, orderCustomer.num, orderCustomer.ticketNumber, orderCustomer.avatar);
+                bridge.addMarker(latLng, StaticVal.MARKER_FLAG_PASS_ENABLE, orderCustomer.num, orderCustomer.ticketNumber, orderCustomer.passengerPhone);
                 latLngs.add(latLng);
             } else {
-                bridge.addMarker(latLng, StaticVal.MARKER_FLAG_PASS_DISABLE, orderCustomer.num, orderCustomer.ticketNumber, orderCustomer.avatar);
+                bridge.addMarker(latLng, StaticVal.MARKER_FLAG_PASS_DISABLE, orderCustomer.num, orderCustomer.ticketNumber, orderCustomer.passengerPhone);
             }
         }
         bridge.showBounds(latLngs);

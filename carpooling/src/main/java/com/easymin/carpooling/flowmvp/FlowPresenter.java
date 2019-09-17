@@ -22,6 +22,7 @@ import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.utils.EmUtil;
+import com.easymin.carpooling.entity.StationResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,10 +81,6 @@ public class FlowPresenter implements FlowContract.Presenter {
                 o -> view.finishTaskSuc())));
     }
 
-    @Override
-    public void routeLineByNavi(LatLng start, List<LatLng> latLngs, LatLng end) {
-    }
-
 
     @Override
     public void routePlanByRouteSearch(LatLng start, List<LatLng> latLngs, LatLng end) {
@@ -131,12 +128,6 @@ public class FlowPresenter implements FlowContract.Presenter {
                 RouteSearch.DRIVING_MULTI_STRATEGY_FASTEST_SHORTEST, latLonPoints, null, "");
         routeSearch.calculateDriveRouteAsyn(query);
     }
-
-    @Override
-    public void stopNavi() {
-
-    }
-
 
     @Override
     public void startOutSet(long orderId) {
@@ -224,4 +215,21 @@ public class FlowPresenter implements FlowContract.Presenter {
         }
         CarpoolOrder.delete(orderId, orderType);
     }
+
+
+////////////////
+
+    /**
+     * 查询班次下所有信息
+     *
+     * @param scheduleId
+     */
+    @Override
+    public void qureyScheduleInfo(long scheduleId) {
+        view.getManager().add(model.qureyScheduleInfo(scheduleId).subscribe(new MySubscriber<>(context, true,
+                true, allStation -> {
+            view.scheduleInfo(allStation);
+        })));
+    }
+
 }

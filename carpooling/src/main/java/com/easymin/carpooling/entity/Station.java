@@ -45,6 +45,19 @@ public class Station implements Parcelable {
      */
     public int sequence;
 
+
+//订单流程中的字段
+    /**
+     * 当前执行到的订单下标
+     */
+    public int current;
+
+    /**
+     * 当前站点是否已经通过
+     */
+    public boolean isPass;
+
+
     protected Station(Parcel in) {
         id = in.readLong();
         name = in.readString();
@@ -52,21 +65,8 @@ public class Station implements Parcelable {
         longitude = in.readDouble();
         coordinate = in.createTypedArrayList(MapPositionModel.CREATOR);
         sequence = in.readInt();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(name);
-        dest.writeDouble(latitude);
-        dest.writeDouble(longitude);
-        dest.writeTypedList(coordinate);
-        dest.writeInt(sequence);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
+        current = in.readInt();
+        isPass = in.readByte() != 0;
     }
 
     public static final Creator<Station> CREATOR = new Creator<Station>() {
@@ -80,4 +80,21 @@ public class Station implements Parcelable {
             return new Station[size];
         }
     };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(name);
+        dest.writeDouble(latitude);
+        dest.writeDouble(longitude);
+        dest.writeTypedList(coordinate);
+        dest.writeInt(sequence);
+        dest.writeInt(current);
+        dest.writeByte((byte) (isPass ? 1 : 0));
+    }
 }

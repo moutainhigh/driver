@@ -543,24 +543,6 @@ public class CarpoolOrder implements Serializable {
         return flag;
     }
 
-//    /**
-//     * 更新接人时间
-//     *
-//     * @return
-//     */
-//    public boolean updateBookTime() {
-//        SqliteHelper helper = SqliteHelper.getInstance();
-//        SQLiteDatabase db = helper.openSqliteDatabase();
-//        ContentValues values = new ContentValues();
-//
-//        values.put("appointTime", appointTime);
-//
-//        boolean flag = db.update("t_cp_order_customer", values, " id = ? ",
-//                new String[]{String.valueOf(id)}) == 1;
-//        return flag;
-//    }
-
-
     /**
      * 城际拼车订单未支付
      */

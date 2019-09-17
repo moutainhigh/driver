@@ -12,7 +12,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -28,9 +27,6 @@ import com.amap.api.maps.utils.overlay.SmoothMoveMarker;
 import com.amap.api.navi.model.AMapNaviPath;
 import com.amap.api.services.route.DriveRouteResult;
 import com.amap.api.services.route.DriveStep;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.easymi.common.CommApiService;
 import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.component.Config;
@@ -43,6 +39,7 @@ import com.easymi.component.entity.EmLoc;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.GsonUtil;
 import com.easymi.component.network.HttpResultFunc3;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
@@ -51,7 +48,6 @@ import com.easymi.component.result.EmResult2;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.GlideCircleTransform;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
@@ -60,7 +56,10 @@ import com.easymin.carpooling.CarPoolApiService;
 import com.easymin.carpooling.R;
 import com.easymin.carpooling.StaticVal;
 import com.easymin.carpooling.adapter.LeftWindowAdapter;
+import com.easymin.carpooling.entity.AllStation;
+import com.easymin.carpooling.entity.MyStation;
 import com.easymin.carpooling.entity.PincheOrder;
+import com.easymin.carpooling.entity.Station;
 import com.easymin.carpooling.flowmvp.fragment.AcceptSendFragment;
 import com.easymin.carpooling.flowmvp.fragment.ChangeSeqFragment;
 import com.easymin.carpooling.flowmvp.fragment.CusListFragment;
@@ -71,6 +70,7 @@ import com.easymin.carpooling.receiver.CancelOrderReceiver;
 import com.easymin.carpooling.receiver.OrderFinishReceiver;
 import com.easymin.carpooling.receiver.ScheduleTurnReceiver;
 import com.easymin.carpooling.widget.ChangePopWindow;
+import com.easymin.carpooling.widget.StationListDialog;
 import com.google.gson.Gson;
 
 import java.text.DecimalFormat;
@@ -185,6 +185,8 @@ public class FlowActivity extends RxPayActivity implements
         initFragment();
 
         getCustomers(pincheOrder.scheduleId);
+        presenter.qureyScheduleInfo(503);
+        scheduleInfo(null);
     }
 
     /**
@@ -380,18 +382,21 @@ public class FlowActivity extends RxPayActivity implements
         } else if (flag == StaticVal.TOOLBAR_FLOW) {
             cusToolbar.setLeftBack(view -> finish());
             cusToolbar.setRightText("查看规划", view -> {
-                if (dymOrder.orderStatus == ZXOrderStatus.ACCEPT_ING) {
-                    bridge.toCusList(StaticVal.PLAN_ACCEPT);
-                } else {
-                    bridge.toCusList(StaticVal.PLAN_SEND);
-                }
+
+                new StationListDialog(this, stations).setOnSelectListener(this::switchCompany).show();
+//                if (dymOrder.orderStatus == ZXOrderStatus.ACCEPT_ING) {
+//                    bridge.toCusList(StaticVal.PLAN_ACCEPT);
+//                } else {
+//                    bridge.toCusList(StaticVal.PLAN_SEND);
+//                }
             });
             CarpoolOrder current = acceptSendFragment.getCurrent();
             if (current == null) {
                 ToastUtil.showMessage(this, "未获取到当前订单");
                 finish();
             } else {
-                if (current.customeStatus == 0) { //未接
+                if (current.customeStatus == 0) {
+                    //未接
                     if (current.subStatus == 0) {
                         cusToolbar.setTitle("出发接人");
                     } else if (current.subStatus == 1) {
@@ -456,6 +461,8 @@ public class FlowActivity extends RxPayActivity implements
             bridge.toFinished();
         }
     }
+
+
 
     @Override
     public RxManager getManager() {
@@ -580,8 +587,8 @@ public class FlowActivity extends RxPayActivity implements
             }
 
             @Override
-            public void addMarker(LatLng latLng, int flag, int num, int ticketNumber, String photo) {
-                FlowActivity.this.addMarker(latLng, flag, num, ticketNumber, photo);
+            public void addMarker(LatLng latLng, int flag, int num, int ticketNumber, String phone) {
+                FlowActivity.this.addMarker(latLng, flag, num, ticketNumber, phone);
             }
 
 
@@ -793,36 +800,27 @@ public class FlowActivity extends RxPayActivity implements
     }
 
     /**
-     * 加载圆形头像
-     */
-    RequestOptions options = new RequestOptions()
-            .centerCrop()
-            .transform(new GlideCircleTransform())
-            .placeholder(R.mipmap.photo_default)
-            .diskCacheStrategy(DiskCacheStrategy.ALL);
-
-    /**
      * 添加数字标号种类的marker
      *
      * @param latLng
      * @param flag
      */
     @Override
-    public void addMarker(LatLng latLng, int flag, int num, int ticketNumber, String photo) {
+    public void addMarker(LatLng latLng, int flag, int num, int ticketNumber, String phone) {
         MarkerOptions markerOption = new MarkerOptions();
         markerOption.position(latLng);
-        markerOption.draggable(false);//设置Marker可拖动
+        //设置Marker可拖动
+        markerOption.draggable(false);
 
-        View view = LayoutInflater.from(this).inflate(R.layout.sequence_marker, null);
+        View view = LayoutInflater.from(this).inflate(R.layout.pc_sequence_marker, null);
 
-        TextView tv = view.findViewById(R.id.seq_num);
-        ImageView avater = view.findViewById(R.id.iv_avater_marker);
+        TextView tv_seq_num = view.findViewById(R.id.tv_seq_num);
+        TextView tv_name = view.findViewById(R.id.tv_name);
+        TextView tv_ticket_num = view.findViewById(R.id.tv_ticket_num);
 
-        tv.setText("车票:" + ticketNumber);
-        Glide.with(this)
-                .load(Config.IMG_SERVER + photo)
-                .apply(options)
-                .into(avater);
+        tv_seq_num.setText(num+"");
+        tv_name.setText("尾号"+phone.substring(phone.length()-4,phone.length()));
+        tv_ticket_num.setText("车票:" + ticketNumber);
 
         markerOption.icon(BitmapDescriptorFactory.fromView(view));
 
@@ -903,9 +901,9 @@ public class FlowActivity extends RxPayActivity implements
         DrivingRouteOverlay overlay = new DrivingRouteOverlay(this, aMap,
                 result.getPaths().get(0), result.getStartPos()
                 , result.getTargetPos(), null);
-//        overlay.setRouteWidth(5);
         overlay.setIsColorfulline(false);
-        overlay.setNodeIconVisibility(false);//隐藏转弯的节点
+        //隐藏转弯的节点
+        overlay.setNodeIconVisibility(false);
         overlay.addToMap();
 
         if (drivingRouteOverlay != null) {
@@ -1317,4 +1315,166 @@ public class FlowActivity extends RxPayActivity implements
 //            finish();
         }
     }
+
+
+////////////////
+
+    List<MyStation> stations = new ArrayList<>();
+
+    @Override
+    public void scheduleInfo(AllStation allStation) {
+        String json = "[\n" +
+                "        {\n" +
+                "            \"name\":\"光华公园\",\n" +
+                "            \"current\":1,\n" +
+                "            \"id\":123,\n" +
+                "            \"isPass\":false,\n" +
+                "            \"orders\":[\n" +
+                "                {\n" +
+                "                    \"orderAddressVos\":[\n" +
+                "                        {\n" +
+                "                            \"id\":1106181,\n" +
+                "                            \"address\":\"恒大城\",\n" +
+                "                            \"latitude\":30.680233,\n" +
+                "                            \"longitude\":103.851485,\n" +
+                "                            \"type\":1,\n" +
+                "                            \"sort\":1\n" +
+                "                        },\n" +
+                "                        {\n" +
+                "                            \"id\":1106182,\n" +
+                "                            \"address\":\"大邑县\",\n" +
+                "                            \"latitude\":30.572269,\n" +
+                "                            \"longitude\":103.511875,\n" +
+                "                            \"type\":3,\n" +
+                "                            \"sort\":2\n" +
+                "                        }\n" +
+                "                    ],\n" +
+                "                    \"orderId\":367820,\n" +
+                "                    \"bookTime\":1568678400,\n" +
+                "                    \"orderRemark\":null,\n" +
+                "                    \"passengerId\":null,\n" +
+                "                    \"passengerPhone\":\"18800000088\",\n" +
+                "                    \"passengerName\":\"用户0088\",\n" +
+                "                    \"avatar\":\"static/img/userMenu/moren_toxiang.png\",\n" +
+                "                    \"status\":10,\n" +
+                "                    \"waitMinute\":10,\n" +
+                "                    \"ticketNumber\":1\n" +
+                "                },\n" +
+                "                {\n" +
+                "                    \"orderAddressVos\":[\n" +
+                "                        {\n" +
+                "                            \"id\":1106192,\n" +
+                "                            \"address\":\"恒大城\",\n" +
+                "                            \"latitude\":30.680233,\n" +
+                "                            \"longitude\":103.851485,\n" +
+                "                            \"type\":1,\n" +
+                "                            \"sort\":1\n" +
+                "                        },\n" +
+                "                        {\n" +
+                "                            \"id\":1106193,\n" +
+                "                            \"address\":\"大邑县\",\n" +
+                "                            \"latitude\":30.572269,\n" +
+                "                            \"longitude\":103.511875,\n" +
+                "                            \"type\":3,\n" +
+                "                            \"sort\":2\n" +
+                "                        }\n" +
+                "                    ],\n" +
+                "                    \"orderId\":367824,\n" +
+                "                    \"orderNo\":\"46002345602416\",\n" +
+                "                    \"bookTime\":1568678400,\n" +
+                "                    \"orderRemark\":null,\n" +
+                "                    \"passengerId\":null,\n" +
+                "                    \"passengerPhone\":\"18180635910\",\n" +
+                "                    \"passengerName\":\"用户5910\",\n" +
+                "                    \"avatar\":\"icon_29114058608\",\n" +
+                "                    \"money\":10,\n" +
+                "                    \"status\":10,\n" +
+                "                    \"waitMinute\":10,\n" +
+                "                    \"ticketNumber\":1\n" +
+                "                }\n" +
+                "            ]\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"name\":\"光华公园\",\n" +
+                "            \"current\":1,\n" +
+                "            \"id\":123,\n" +
+                "            \"isPass\":false,\n" +
+                "            \"orders\":[\n" +
+                "                {\n" +
+                "                    \"orderAddressVos\":[\n" +
+                "                        {\n" +
+                "                            \"id\":1106181,\n" +
+                "                            \"address\":\"恒大城\",\n" +
+                "                            \"latitude\":30.680233,\n" +
+                "                            \"longitude\":103.851485,\n" +
+                "                            \"type\":1,\n" +
+                "                            \"sort\":1\n" +
+                "                        },\n" +
+                "                        {\n" +
+                "                            \"id\":1106182,\n" +
+                "                            \"address\":\"大邑县\",\n" +
+                "                            \"latitude\":30.572269,\n" +
+                "                            \"longitude\":103.511875,\n" +
+                "                            \"type\":3,\n" +
+                "                            \"sort\":2\n" +
+                "                        }\n" +
+                "                    ],\n" +
+                "                    \"orderId\":367820,\n" +
+                "                    \"bookTime\":1568678400,\n" +
+                "                    \"orderRemark\":null,\n" +
+                "                    \"passengerId\":null,\n" +
+                "                    \"passengerPhone\":\"18800000088\",\n" +
+                "                    \"passengerName\":\"用户0088\",\n" +
+                "                    \"avatar\":\"static/img/userMenu/moren_toxiang.png\",\n" +
+                "                    \"status\":10,\n" +
+                "                    \"waitMinute\":10,\n" +
+                "                    \"ticketNumber\":1\n" +
+                "                },\n" +
+                "                {\n" +
+                "                    \"orderAddressVos\":[\n" +
+                "                        {\n" +
+                "                            \"id\":1106192,\n" +
+                "                            \"address\":\"恒大城\",\n" +
+                "                            \"latitude\":30.680233,\n" +
+                "                            \"longitude\":103.851485,\n" +
+                "                            \"type\":1,\n" +
+                "                            \"sort\":1\n" +
+                "                        },\n" +
+                "                        {\n" +
+                "                            \"id\":1106193,\n" +
+                "                            \"address\":\"大邑县\",\n" +
+                "                            \"latitude\":30.572269,\n" +
+                "                            \"longitude\":103.511875,\n" +
+                "                            \"type\":3,\n" +
+                "                            \"sort\":2\n" +
+                "                        }\n" +
+                "                    ],\n" +
+                "                    \"orderId\":367824,\n" +
+                "                    \"orderNo\":\"46002345602416\",\n" +
+                "                    \"bookTime\":1568678400,\n" +
+                "                    \"orderRemark\":null,\n" +
+                "                    \"passengerId\":null,\n" +
+                "                    \"passengerPhone\":\"18180635910\",\n" +
+                "                    \"passengerName\":\"用户5910\",\n" +
+                "                    \"avatar\":\"icon_29114058608\",\n" +
+                "                    \"money\":10,\n" +
+                "                    \"status\":10,\n" +
+                "                    \"waitMinute\":10,\n" +
+                "                    \"ticketNumber\":1\n" +
+                "                }\n" +
+                "            ]\n" +
+                "        }\n" +
+                "    ]";
+        stations = GsonUtil.parseToArrayList(json,MyStation.class);
+
+    }
+
+    /**
+     * 选择站点后的处理
+     * @param station
+     */
+    public void switchCompany(MyStation station){
+        ToastUtil.showMessage(this,station.name);
+    }
+
 }

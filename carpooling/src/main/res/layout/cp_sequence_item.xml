@@ -2,63 +2,104 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:minHeight="60dp"
-    android:gravity="center">
+    android:gravity="center"
+    android:minHeight="60dp">
 
 
-    <!--<TextView-->
-        <!--android:id="@+id/seq_num"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="1"-->
-        <!--android:gravity="center"-->
-        <!--android:textSize="18sp"-->
-        <!--android:textColor="@color/white"-->
-        <!--android:background="@drawable/circle_accent"/>-->
-    <RelativeLayout
-        android:id="@+id/rl_person"
-        android:layout_width="35dp"
-        android:layout_height="35dp">
-        <ImageView
-            android:id="@+id/iv_avater"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@mipmap/photo_default"/>
+    <LinearLayout
+        android:id="@+id/lin_seq_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:background="@color/white">
+
         <TextView
-            android:id="@+id/tv_get"
+            android:id="@+id/tv_seq_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="已接"
+            android:background="@drawable/circle_accent"
             android:gravity="center"
-            android:textSize="10sp"
+            android:text="1"
             android:textColor="@color/white"
-            android:background="@drawable/circle_dark"/>
-    </RelativeLayout>
+            android:textSize="18sp" />
 
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-10dp"
+            android:background="@drawable/shape_000000_7dp_bg"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="下车"
+            android:textColor="@color/white"
+            android:textSize="10dp" />
+    </LinearLayout>
+
+    <!--<RelativeLayout-->
+    <!--android:id="@+id/rl_person"-->
+    <!--android:layout_width="35dp"-->
+    <!--android:layout_height="35dp">-->
+    <!--<ImageView-->
+    <!--android:id="@+id/iv_avater"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:src="@mipmap/photo_default"/>-->
     <!--<TextView-->
-        <!--android:id="@+id/seq_num_gray"-->
+    <!--android:id="@+id/tv_get"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="已接"-->
+    <!--android:gravity="center"-->
+    <!--android:textSize="10sp"-->
+    <!--android:textColor="@color/white"-->
+    <!--android:background="@drawable/circle_dark"/>-->
+    <!--</RelativeLayout>-->
+
+    <!--<LinearLayout-->
+        <!--android:id="@+id/lin_seq_num_dark"-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
-        <!--android:text="1"-->
-        <!--android:gravity="center"-->
-        <!--android:textSize="18sp"-->
-        <!--android:textColor="@color/white"-->
-        <!--android:background="@drawable/circle_gray"/>-->
+        <!--android:gravity="center_horizontal"-->
+        <!--android:orientation="vertical">-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/tv_seq_num_dark"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@drawable/circle_dark_22"-->
+            <!--android:gravity="center"-->
+            <!--android:text="1"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="18sp" />-->
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="-10dp"-->
+            <!--android:background="@drawable/shape_000000_7dp_bg"-->
+            <!--android:paddingLeft="5dp"-->
+            <!--android:paddingRight="5dp"-->
+            <!--android:text="上车"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="10dp" />-->
+    <!--</LinearLayout>-->
 
     <ImageView
         android:id="@+id/seq_car_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:scaleType="fitCenter"
-        android:src="@mipmap/ic_zx_seq_car"
-        android:layout_gravity="center"/>
+        android:src="@mipmap/ic_zx_seq_car" />
 
     <TextView
         android:id="@+id/seq_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="出城"
         android:layout_gravity="center"
-        android:textColor="@color/colorAccent"/>
+        android:text="下一站"
+        android:textColor="@color/colorAccent" />
 
 </LinearLayout>

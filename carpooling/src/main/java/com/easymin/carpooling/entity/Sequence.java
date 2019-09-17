@@ -40,4 +40,9 @@ public class Sequence implements Serializable{
      * 状态   0 未接 1 已接 2 跳过接 3 未送 4 已送 5 跳过送
      */
     public int status;
+
+    /**
+     * 订单顺序序号
+     */
+    public int sort;
 }

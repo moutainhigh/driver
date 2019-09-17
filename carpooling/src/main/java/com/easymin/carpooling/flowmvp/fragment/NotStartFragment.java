@@ -38,7 +38,7 @@ public class NotStartFragment extends RxBaseFragment {
     TextView timeCountDown;
     Button bottomBtn;
     /**
-     * 专线班次
+     * 拼车班次
      */
     PincheOrder pincheOrder;
 

@@ -6,6 +6,9 @@ import com.amap.api.services.route.DriveRouteResult;
 import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.component.result.EmResult2;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymin.carpooling.entity.AllStation;
+import com.easymin.carpooling.entity.Station;
+import com.easymin.carpooling.entity.StationResult;
 
 import java.util.List;
 
@@ -161,18 +164,16 @@ public interface FlowContract {
          */
         void finishTaskSuc();
 
+///////////迭代新增
+
+        void scheduleInfo(AllStation allStation);
+
+
         RxManager getManager();
     }
 
     interface Presenter {
-        /**
-         * 通过导航获取路径
-         *
-         * @param start
-         * @param latLngs
-         * @param end
-         */
-        void routeLineByNavi(LatLng start, List<LatLng> latLngs, LatLng end);
+
 
         /**
          * 通过线路规划获取路径
@@ -182,11 +183,6 @@ public interface FlowContract {
          * @param end
          */
         void routePlanByRouteSearch(LatLng start, List<LatLng> latLngs, LatLng end);
-
-        /**
-         * 停止导航
-         */
-        void stopNavi();
 
         /**
          * 开始接人
@@ -266,6 +262,15 @@ public interface FlowContract {
          * @param orderId
          */
         void finishTask(long orderId);
+
+///////////迭代新增
+
+        /**
+         * 查询班次详情
+         * @param scheduleId
+         */
+        void qureyScheduleInfo(long scheduleId);
+
     }
 
     interface Model {
@@ -332,5 +337,13 @@ public interface FlowContract {
          * @return
          */
         Observable<Object> sendCustomer(long id);
+
+///////////迭代新增
+
+        /**
+         * 查询班次详情
+         * @param scheduleId
+         */
+        Observable<AllStation> qureyScheduleInfo(long scheduleId);
     }
 }

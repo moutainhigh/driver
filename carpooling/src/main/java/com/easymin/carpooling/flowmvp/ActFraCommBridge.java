@@ -35,12 +35,13 @@ public interface ActFraCommBridge {
 
     /**
      * 添加排序marker
-     *
      * @param latLng
      * @param flag
      * @param num
+     * @param ticketNumber
+     * @param phone
      */
-    void addMarker(LatLng latLng, int flag, int num, int ticketNumber, String photo);
+    void addMarker(LatLng latLng, int flag, int num, int ticketNumber, String phone);
 
     /**
      * 自定义排序
