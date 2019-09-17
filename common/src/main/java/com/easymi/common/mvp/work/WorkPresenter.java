@@ -341,6 +341,41 @@ public class WorkPresenter implements WorkContract.Presenter {
         })));
     }
 
+    public void doLogOut() {
+        if (null != WorkPresenter.timeCounter) {
+            WorkPresenter.timeCounter.forceUpload(-1);
+        }
+        CommApiService mcService = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class);
+        Observable<EmResult> observable = mcService
+                .employLoginOut(EmUtil.getEmployId())
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, true,
+                true, new HaveErrSubscriberListener<EmResult>() {
+            @Override
+            public void onNext(EmResult emResult) {
+                CenterUtil centerUtil = new CenterUtil(context, Config.APP_KEY,
+                        XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
+                        XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
+                centerUtil.driverDown(EmUtil.getEmployId(), EmUtil.getEmployInfo().companyId, EmUtil.getEmployInfo().userName, EmUtil.getEmployInfo().realName,
+                        EmUtil.getEmployInfo().phone, System.currentTimeMillis() / 1000, EmUtil.getEmployInfo().serviceType);
+                HandleBean.deleteAll();
+                PushMessage.deleteAll();
+                XApp.getEditor()
+                        .putLong(Config.ONLINE_TIME, 0)
+                        .apply();
+                EmUtil.employLogout(context);
+            }
+
+            @Override
+            public void onError(int code) {
+
+            }
+        })));
+    }
+
     @Override
     public void offline() {
         long driverId = EmUtil.getEmployId();
@@ -358,10 +393,7 @@ public class WorkPresenter implements WorkContract.Presenter {
             XApp.getEditor()
                     .putLong(Config.ONLINE_TIME, 0)
                     .apply();
-            if (Config.IS_ENCRYPT && TextUtils.equals(Config.APP_KEY, "1HAcient1kLqfeX7DVTV0dklUkpGEnUC")) {
-            } else {
-                uploadTime(1);
-            }
+            uploadTime(1);
             view.offlineSuc();
 
         })));

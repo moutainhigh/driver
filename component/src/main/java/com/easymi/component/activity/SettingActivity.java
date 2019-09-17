@@ -59,6 +59,8 @@ public class SettingActivity extends RxBaseActivity {
             settingRgKey.check(R.id.setting_rb_4j);
         } else if (Config.APP_KEY.startsWith("955B")) {
             settingRgKey.check(R.id.setting_rb_95);
+        } else if (Config.APP_KEY.startsWith("7Oa3")) {
+            settingRgKey.check(R.id.setting_rb_7o);
         }
         settingEtHost.setText(Config.HOST);
         settingEtH5.setText(Config.H5_HOST);
@@ -74,6 +76,8 @@ public class SettingActivity extends RxBaseActivity {
                     environmentPojo.appKey = "4ji3EvuwNziPKF8QXqXMTukGqPmlwOFJ";
                 } else if (settingRgKey.getCheckedRadioButtonId() == R.id.setting_rb_95) {
                     environmentPojo.appKey = "955BF9BC78A5032107C4B74F4AB65702";
+                } else if (settingRgKey.getCheckedRadioButtonId() == R.id.setting_rb_7o) {
+                    environmentPojo.appKey = "7Oa3N6IoRCLtNcZcXy28mnsCXOQTSWeW";
                 } else {
                     environmentPojo.appKey = Config.APP_KEY;
                 }
