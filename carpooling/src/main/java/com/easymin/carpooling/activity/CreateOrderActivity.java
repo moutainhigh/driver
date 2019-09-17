@@ -148,29 +148,13 @@ public class CreateOrderActivity extends RxPayActivity {
                 ToastUtil.showMessage(CreateOrderActivity.this, "未查询到站点信息");
                 return;
             }
-
-
             Intent intent = new Intent(CreateOrderActivity.this, SelectPlaceOnMapActivity.class);
             intent.putExtra("select_place_type", 1);
-//            if (stationResult.data.size() == 0) {
-//                List<MapPositionModel> list = new ArrayList<>();
-//                MapPositionModel model = new MapPositionModel();
-//                model.setLatitude(stationResult.data.get(0).latitude);
-//                model.setLongitude(stationResult.data.get(0).longitude);
-//                list.add(model);
-
-
             intent.putParcelableArrayListExtra("pos_list",
                     (ArrayList<? extends Parcelable>) stationResult.data);
-//            }
-//            else {
-//                intent.putParcelableArrayListExtra("pos_list",
-//                        (ArrayList<? extends Parcelable>) stationResult.data.get(0).coordinate);
-//            }
             startActivityForResult(intent, 1);
         });
         end_place.setOnClickListener(view -> {
-
             if (pcOrder == null) {
                 ToastUtil.showMessage(CreateOrderActivity.this, "请先选择班次");
                 return;
@@ -181,20 +165,8 @@ public class CreateOrderActivity extends RxPayActivity {
             }
             Intent intent = new Intent(CreateOrderActivity.this, SelectPlaceOnMapActivity.class);
             intent.putExtra("select_place_type", 3);
-//            if (stationResult.data.size() == 0) {
-//                List<MapPositionModel> list = new ArrayList<>();
-//                MapPositionModel model = new MapPositionModel();
-//                model.setLatitude(stationResult.data.get(1).latitude);
-//                model.setLongitude(stationResult.data.get(1).longitude);
-//                list.add(model);
-//
-//                intent.putParcelableArrayListExtra("pos_list",
-//                        (ArrayList<? extends Parcelable>) list);
-//            } else {
             intent.putParcelableArrayListExtra("pos_list",
                     (ArrayList<? extends Parcelable>) stationResult.data);
-//            }
-
             startActivityForResult(intent, 3);
         });
 
@@ -220,7 +192,6 @@ public class CreateOrderActivity extends RxPayActivity {
             }
         });
         sub.setOnClickListener(view -> {
-
             seatNo--;
             num.setText("" + seatNo);
 
@@ -228,10 +199,8 @@ public class CreateOrderActivity extends RxPayActivity {
             calcPrice();
         });
         add.setOnClickListener(view -> {
-
             seatNo++;
             num.setText("" + seatNo);
-
             setBtnEnable();
             calcPrice();
         });
@@ -324,19 +293,16 @@ public class CreateOrderActivity extends RxPayActivity {
      */
     private void initViewByPcOrder() {
         stationResult = null;
-
         start_place.setText(null);
         startSite = null;
         end_place.setText(null);
         endSite = null;
-
         seatNo = 1;
         num.setText("" + seatNo);
         sub.setEnabled(false);
         if (pcOrder.seats > seatNo) {
             add.setEnabled(true);
         }
-
         money_con.setVisibility(View.GONE);
 
         queryStation(pcOrder.id);

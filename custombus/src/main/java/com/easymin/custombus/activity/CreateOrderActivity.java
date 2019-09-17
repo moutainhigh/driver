@@ -1,6 +1,7 @@
 package com.easymin.custombus.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -305,20 +306,26 @@ public class CreateOrderActivity extends RxPayActivity {
             itemPassengerSelectHeaderV.setVisibility(View.VISIBLE);
         }
         ViewGroup.LayoutParams layoutParams = emptyView.getLayoutParams();
-//        Drawable drawable = ContextCompat.getDrawable(this, isEmpty ?)
+        Drawable drawable = ContextCompat.getDrawable(this, isEmpty ? R.mipmap.ic_add_passenger_sub : R.mipmap.ic_add_passenger);
         if (isEmpty) {
             itemPassengerSelectHeaderTv.setTextColor(ContextCompat.getColor(this, R.color.colorSub));
             layoutParams.height = DensityUtil.dp2px(this, 100);
         } else {
             itemPassengerSelectHeaderTv.setTextColor(ContextCompat.getColor(this, R.color.colorBlue));
         }
-//        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-//        itemPassengerSelectHeaderTv.setCompoundDrawables(drawable, null, null, null);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+        itemPassengerSelectHeaderTv.setCompoundDrawables(drawable, null, null, null);
         emptyView.setLayoutParams(layoutParams);
         emptyView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (chooseSeatList == null || chooseSeatList.isEmpty()) {
+                if (dzBusLine == null) {
+                    ToastUtil.showMessage(CreateOrderActivity.this, "请先选择班次");
+                } else if (startBean == null) {
+                    ToastUtil.showMessage(CreateOrderActivity.this, "请先选择上车点");
+                } else if (endBean == null) {
+                    ToastUtil.showMessage(CreateOrderActivity.this, "请先选择下车点");
+                } else if (chooseSeatList == null || chooseSeatList.isEmpty()) {
                     ToastUtil.showMessage(CreateOrderActivity.this, "请先选择乘客座位");
                 } else if (passengerId == 0) {
                     ToastUtil.showMessage(CreateOrderActivity.this, "请先输入乘客联系电话");
@@ -512,21 +519,17 @@ public class CreateOrderActivity extends RxPayActivity {
                         stringBuilder.append(seatBean.getDesc());
                     }
                     customBusCreateOrderTvSeatSelect.setText(stringBuilder.toString());
+                    buttonAction();
                 }
             } else if (requestCode == 0x10) {
                 if (data != null) {
                     List<PassengerBean> newData = (List<PassengerBean>) data.getSerializableExtra("data");
-                    List<PassengerBean> currentData = adapter.getData();
-                    for (PassengerBean newDatum : newData) {
-                        if (!currentData.contains(newDatum)) {
-                            currentData.add(newDatum);
-                        }
-                    }
+                    adapter.setNewData(newData);
                     if (passengerFooterView == null) {
                         passengerFooterView = getPassengerView(false);
                         adapter.addFooterView(passengerFooterView, 0);
                     }
-                    adapter.notifyDataSetChanged();
+                    buttonAction();
                 }
             }
         }

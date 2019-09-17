@@ -92,7 +92,7 @@ public class SeatSelectActivity extends RxBaseActivity {
                     Intent intent = new Intent();
                     intent.putExtra("data", chooseSeatList);
                     intent.putExtra("prise", total);
-                    setResult(RESULT_OK,intent);
+                    setResult(RESULT_OK, intent);
                     finish();
                 }
             }
@@ -188,8 +188,8 @@ public class SeatSelectActivity extends RxBaseActivity {
             createData(seatBeans);
         } else if (seatBeans.size() == 5) {
             for (int i = 0; i < 5; i++) {
-                seatBean.listSize = 5;
                 seatBean = seatBeans.get(i);
+                seatBean.listSize = 5;
                 if (seatBean.child == 1 && seatBean.status == 1) {
                     childSeats.add(seatBean);
                 }
