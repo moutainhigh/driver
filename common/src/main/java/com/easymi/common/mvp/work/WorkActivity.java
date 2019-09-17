@@ -194,7 +194,11 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
             presenter.online(onLineBtn);
         });
         listenOrderCon.setOnClickListener(v -> {
-            presenter.offline();
+            if (Config.IS_ENCRYPT && TextUtils.equals(Config.APP_KEY, "1HAcient1kLqfeX7DVTV0dklUkpGEnUC")) {
+                presenter.doLogOut();
+            } else {
+                presenter.offline();
+            }
 //            presenter.resetMqtt();
         });
         EmLoc emLoc = EmUtil.getLastLoc();
@@ -371,44 +375,14 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
 //        hideEmpty();
     }
 
-    private void doLogOut() {
-        if (null != WorkPresenter.timeCounter) {
-            WorkPresenter.timeCounter.forceUpload(-1);
-        }
-        CommApiService mcService = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class);
-        Observable<EmResult> observable = mcService
-                .employLoginOut(EmUtil.getEmployId())
-                .filter(new HttpResultFunc<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
-                true, new HaveErrSubscriberListener<EmResult>() {
-            @Override
-            public void onNext(EmResult emResult) {
-                HandleBean.deleteAll();
-                PushMessage.deleteAll();
-                EmUtil.employLogout(WorkActivity.this);
-            }
-
-            @Override
-            public void onError(int code) {
-
-            }
-        })));
-    }
 
     @Override
     public void offlineSuc() {
-        if (Config.IS_ENCRYPT && TextUtils.equals(Config.APP_KEY, "1HAcient1kLqfeX7DVTV0dklUkpGEnUC")) {
-            doLogOut();
-        } else {
-            XApp.getInstance().syntheticVoice("", XApp.OFF_LINE);
-            listenOrderCon.setVisibility(View.GONE);
-            rippleBackground.stopRippleAnimation();
-            bottomBtnCon.setVisibility(View.VISIBLE);
-            refreshData();
-        }
+        XApp.getInstance().syntheticVoice("", XApp.OFF_LINE);
+        listenOrderCon.setVisibility(View.GONE);
+        rippleBackground.stopRippleAnimation();
+        bottomBtnCon.setVisibility(View.VISIBLE);
+        refreshData();
     }
 
     @Override
