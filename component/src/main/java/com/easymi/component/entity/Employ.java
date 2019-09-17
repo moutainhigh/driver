@@ -107,6 +107,19 @@ public class Employ {
      */
     public String serviceTel;
 
+    public long driverCompanyId;
+
+
+    public void updateDriverCompanyId() {
+        SqliteHelper helper = SqliteHelper.getInstance();
+        SQLiteDatabase db = helper.openSqliteDatabase();
+        ContentValues values = new ContentValues();
+        values.put("driverCompanyId", companyId);
+
+        boolean flag = db.update("t_driverinfo", encryptString(values), " id = ? ",
+                new String[]{String.valueOf(id)}) == 1;
+    }
+
     /**
      * 保存数据
      */
@@ -268,6 +281,8 @@ public class Employ {
         driverInfo.status = cursor.getInt(cursor.getColumnIndex("status"));
         driverInfo.companyId = cursor.getLong(cursor
                 .getColumnIndex("companyId"));
+        driverInfo.driverCompanyId = cursor.getLong(cursor
+                .getColumnIndex("driverCompanyId"));
         driverInfo.deviceNo = cursor.getString(cursor
                 .getColumnIndex("deviceNo"));
         driverInfo.token = cursor.getString(cursor
