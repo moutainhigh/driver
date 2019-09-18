@@ -3,6 +3,7 @@
     package="com.easymin.custombus">
 
     <application>
+        <activity android:name=".activity.ManualCreateActivity"></activity>
         <activity
             android:name=".activity.BanciSelectActivity"
             android:screenOrientation="portrait"
