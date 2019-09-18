@@ -532,22 +532,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             lastLatlng = new LatLng(emLoc.latitude, emLoc.longitude);
             receiveLoc(emLoc);//手动调用上次位置 减少从北京跳过来的时间
             aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLatlng, 19));//移动镜头，首次镜头快速跳到指定位置
-
-            MarkerOptions markerOption = new MarkerOptions();
-            markerOption.position(new LatLng(emLoc.latitude, emLoc.longitude));
-            markerOption.draggable(false);//设置Marker可拖动
-            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                    .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
-            // 将Marker设置为贴地显示，可以双指下拉地图查看效果
-            markerOption.setFlat(true);//设置marker平贴地图效果
-            myFirstMarker = aMap.addMarker(markerOption);
         }
     }
 
     private Marker startMarker;
     private Marker endMarker;
 
-    private Marker myFirstMarker;//首次进入时默认位置的marker
 
     @Override
     public void showMapBounds() {
@@ -1033,7 +1023,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 dialog.setOnMyClickListener((view, string) -> {
                     if (TextUtils.isEmpty(string)) {
                         ToastUtil.showMessage(FlowActivity.this, "请输入结算金额");
-                    } else if (Double.parseDouble(string) == 0) {
+                    } else if (Double.parseDouble(string) <= 0) {
+                        ToastUtil.showMessage(FlowActivity.this, "请输入正确结算金额");
+                    } else if (Double.parseDouble(string) > 10000) {
                         ToastUtil.showMessage(FlowActivity.this, "请输入正确结算金额");
                     } else {
                         presenter.taxiSettlement(orderId, taxiOrder.orderNo, Double.parseDouble(string));

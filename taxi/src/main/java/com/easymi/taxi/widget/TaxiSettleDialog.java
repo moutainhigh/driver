@@ -2,7 +2,6 @@ package com.easymi.taxi.widget;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -41,7 +40,6 @@ public class TaxiSettleDialog extends BaseCenterDialog {
         tv_sure = findViewById(R.id.tv_sure);
         tv_cancel = findViewById(R.id.tv_cancel);
 
-        et_input.setInputType(EditorInfo.TYPE_CLASS_NUMBER | EditorInfo.TYPE_NUMBER_FLAG_DECIMAL);
 
         tv_sure.setOnClickListener(view -> {
             if (getOnMyClickListener() != null) {
