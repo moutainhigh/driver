@@ -1162,20 +1162,22 @@ public class FlowActivity extends RxPayActivity implements
             MarkerOptions markerOption = new MarkerOptions();
             markerOption.position(latLng);
             markerOption.draggable(false);
+            markerOption.infoWindowEnable(true);
+            markerOption.anchor(0.5f,0.5f);
             markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                     .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
             markerOption.rotateAngle(360.0F - location.bearing + aMap.getCameraPosition().bearing);
             smoothMoveMarker = new MySmoothMarker(aMap, markerOption);
+            Marker marker = smoothMoveMarker.getMarker();
+            if (null != marker) {
+                marker.setClickable(false);
+            }
         } else {
-            smoothMoveMarker.startMove(latLng, 3000, true);
             Marker marker = smoothMoveMarker.getMarker();
             if (null != marker) {
                 marker.setRotateAngle(360.0F - location.bearing + aMap.getCameraPosition().bearing);
-                marker.setDraggable(false);
-                marker.setInfoWindowEnable(true);
-                marker.setClickable(false);
-                marker.setAnchor(0.5f, 0.5f);
             }
+            smoothMoveMarker.startMove(latLng, 3000, true);
         }
 
         if (null != dymOrder) {

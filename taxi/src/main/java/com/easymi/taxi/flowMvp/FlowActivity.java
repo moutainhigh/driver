@@ -1157,19 +1157,21 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             MarkerOptions markerOption = new MarkerOptions();
             markerOption.position(latLng);
             markerOption.draggable(false);
+            markerOption.anchor(0.5f, 0.5f);
             markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                     .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
             markerOption.rotateAngle(360.0F - location.bearing + aMap.getCameraPosition().bearing);
             smoothMarker = new MySmoothMarker(aMap, markerOption);
+            Marker marker = smoothMarker.getMarker();
+            if (null != marker) {
+                marker.setClickable(false);
+            }
         } else {
-            smoothMarker.startMove(latLng, 3000, true);
             Marker marker = smoothMarker.getMarker();
             if (null != marker) {
                 marker.setRotateAngle(360.0F - location.bearing + aMap.getCameraPosition().bearing);
-                marker.setDraggable(false);
-                marker.setClickable(false);
-                marker.setAnchor(0.5f, 0.5f);
             }
+            smoothMarker.startMove(latLng, 3000, true);
         }
 
         if (null != taxiOrder) {

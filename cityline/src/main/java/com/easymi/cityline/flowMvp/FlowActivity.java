@@ -1042,20 +1042,22 @@ public class FlowActivity extends RxBaseActivity implements
             MarkerOptions markerOption = new MarkerOptions();
             markerOption.position(latLng);
             markerOption.draggable(false);
+            markerOption.anchor(0.5f, 0.5f);
+            markerOption.infoWindowEnable(true);
             markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                     .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
             markerOption.rotateAngle(360.0F - location.bearing + aMap.getCameraPosition().bearing);
             driverMarker = new MySmoothMarker(aMap, markerOption);
+            Marker marker = driverMarker.getMarker();
+            if (marker != null) {
+                marker.setClickable(false);
+            }
         } else {
-            driverMarker.startMove(latLng, 3000, true);
             Marker marker = driverMarker.getMarker();
             if (null != marker) {
                 marker.setRotateAngle(360.0F - location.bearing + aMap.getCameraPosition().bearing);
-                marker.setDraggable(false);
-                marker.setInfoWindowEnable(true);
-                marker.setClickable(false);
-                marker.setAnchor(0.5f, 0.5f);
             }
+            driverMarker.startMove(latLng, 3000, true);
         }
 
         if (dymOrder == null) {

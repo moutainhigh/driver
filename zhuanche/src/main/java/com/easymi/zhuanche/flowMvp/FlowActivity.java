@@ -52,6 +52,7 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
+import com.easymi.component.entity.MySmoothMarker;
 import com.easymi.component.entity.PassengerLcResult;
 import com.easymi.component.entity.PassengerLocation;
 import com.easymi.component.entity.ZCSetting;
@@ -205,10 +206,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     private double payMoney;
 
 
-    private Marker myLocationMarker;
     private MapView mapView;
     private SensorEventHelper helper;
     private boolean flashAssign;
+    private MySmoothMarker smoothMarker;
 
     @Override
     public int getLayoutId() {
@@ -586,17 +587,20 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     private void addLocationMarker() {
         LatLng latLng = new LatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
-        if (null == myLocationMarker) {
+        if (null == smoothMarker) { //首次进入
             MarkerOptions markerOption = new MarkerOptions();
-            markerOption.anchor(0.5f, 0.5f);
             markerOption.position(latLng);
             markerOption.draggable(false);
             markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                     .decodeResource(getResources(), R.mipmap.location_mine)));
-            myLocationMarker = aMap.addMarker(markerOption);
-            helper.setMarker(myLocationMarker);
+            markerOption.anchor(0.5f, 0.5f);
+            smoothMarker = new MySmoothMarker(aMap, markerOption);
+            Marker marker = smoothMarker.getMarker();
+            if (null != marker) {
+                marker.setClickable(false);
+            }
         } else {
-            myLocationMarker.setPosition(latLng);
+            smoothMarker.startMove(latLng, 3000, true);
         }
     }
 
