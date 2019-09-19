@@ -21,7 +21,6 @@ import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.CommonUtil;
 import com.easymi.component.utils.GlideCircleTransform;
 import com.easymi.component.utils.PhoneUtil;
-import com.easymi.component.utils.RsaUtils;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
@@ -564,8 +563,7 @@ public class RegisterBaseActivity extends RxBaseActivity {
      * 获取司机提交过的注册资料
      */
     public void getDriverInfo() {
-        String id_rsa = RsaUtils.rsaEncode(phone);
-        Observable<RegisterResult> observable = RegisterModel.getDriverInfo(id_rsa);
+        Observable<RegisterResult> observable = RegisterModel.getDriverInfo(phone);
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, emResult -> {
             if (emResult.getCode() == 1) {
                 initData(emResult.data);

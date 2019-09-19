@@ -171,6 +171,10 @@ public class Config {
 
     public static final String AES_PASSWORD = "aes_password";
 
+    public static final String TYPE_RSA = "type:rsa";
+    public static final String RSA = "rsa";
+    public static final String TYPE = "type";
+
     public static final String ONLINE_TIME = "online_time";
 
     public static final String DOWN_TIME = "down_time";

@@ -1,7 +1,6 @@
 package com.easymi.personal.activity.register;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,9 +8,6 @@ import android.widget.TextView;
 
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.MySubscriber;
-import com.easymi.component.utils.AlexStatusBarUtils;
-import com.easymi.component.utils.RsaUtils;
-import com.easymi.component.utils.UIStatusBarHelper;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.R;
 import com.easymi.personal.result.RegisterResult;
@@ -106,8 +102,7 @@ public class RegisterNoticeActivity extends RxBaseActivity {
      * 获取司机信息
      */
     public void getDriverInfo() {
-        String id_rsa = RsaUtils.rsaEncode( phone);
-        Observable<RegisterResult> observable = RegisterModel.getDriverInfo(id_rsa);
+        Observable<RegisterResult> observable = RegisterModel.getDriverInfo(phone);
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, emResult -> {
             if (emResult.getCode() == 1) {
                 id = emResult.data.id;

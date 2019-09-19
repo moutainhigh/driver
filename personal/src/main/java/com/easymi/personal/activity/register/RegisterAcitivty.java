@@ -28,7 +28,6 @@ import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.AlexStatusBarUtils;
 import com.easymi.component.utils.CommonUtil;
 import com.easymi.component.utils.PhoneUtil;
-import com.easymi.component.utils.RsaUtils;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.utils.UIStatusBarHelper;
@@ -400,22 +399,9 @@ public class RegisterAcitivty extends RxBaseActivity {
      * 发送验证码
      */
     private void sendSms() {
-        String code_rsa = null;
-        String phone_rsa = null;
-        String randomNum_rsa = null;
-        String type_rsa = null;
-        String userType_rsa = null;
-        try {
-            code_rsa = RsaUtils.rsaEncode(et_img_code.getText().toString());
-            phone_rsa = RsaUtils.rsaEncode(et_phone.getText().toString());
-            randomNum_rsa = RsaUtils.rsaEncode(randomNum);
-            type_rsa = RsaUtils.rsaEncode("PASSENGER_LOGIN_CODE");
-            userType_rsa = RsaUtils.rsaEncode("2");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Observable<EmResult> observable = RegisterModel.getSms(et_img_code.getText().toString(), et_phone.getText().toString(), randomNum,
+                "PASSENGER_LOGIN_CODE", "2");
 
-        Observable<EmResult> observable = RegisterModel.getSms(code_rsa, phone_rsa, randomNum_rsa, type_rsa, userType_rsa);
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, emResult -> {
             if (emResult.getCode() == 1) {
                 ToastUtil.showMessage(this, getResources().getString(R.string.register_send_succed));
@@ -444,20 +430,10 @@ public class RegisterAcitivty extends RxBaseActivity {
      * 调用注册接口
      */
     private void register() {
-        String password_rsa = null;
-        String phone_rsa = null;
-        String smsCode_rsa = null;
-        String random_rsa = null;
-        try {
-            password_rsa = RsaUtils.rsaEncode(et_password.getText().toString());
-            phone_rsa = RsaUtils.rsaEncode(et_phone.getText().toString());
-            smsCode_rsa = RsaUtils.rsaEncode(et_code.getText().toString());
-            random_rsa = RsaUtils.rsaEncode(randomNum);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        Observable<Register> observable = RegisterModel.register(password_rsa, phone_rsa, smsCode_rsa, random_rsa);
+        Observable<Register> observable = RegisterModel.register(et_password.getText().toString(), et_phone.getText().toString(),
+                et_code.getText().toString(), randomNum);
+
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, register_button, register -> {
             if (register.getCode() == 1) {
                 startBase(register.data);

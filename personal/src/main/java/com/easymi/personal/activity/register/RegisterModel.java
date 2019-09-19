@@ -11,7 +11,6 @@ import com.easymi.component.Config;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.result.EmResult;
-import com.easymi.component.utils.RsaUtils;
 import com.easymi.personal.McService;
 import com.easymi.personal.entity.Register;
 import com.easymi.personal.result.BusinessResult;
@@ -122,25 +121,24 @@ public class RegisterModel {
 
         return ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .applyDriver(
-                        RsaUtils.rsaEncode(request.id + ""),
-                        RsaUtils.rsaEncode(request.driverName + ""),
-                        RsaUtils.rsaEncode(request.driverPhone + ""),
-                        RsaUtils.rsaEncode(request.idCard + ""),
-                        RsaUtils.rsaEncode(request.emergency + ""),
-                        RsaUtils.rsaEncode(request.emergencyPhone + ""),
-                        RsaUtils.rsaEncode(request.companyId + ""),
-                        RsaUtils.rsaEncode(request.serviceType + ""),
-                        RsaUtils.rsaEncode(request.startTime + ""),
-                        RsaUtils.rsaEncode(request.endTime + ""),
-                        RsaUtils.rsaEncode(request.introducer + ""),
-                        RsaUtils.rsaEncode(portraitPath + ""),
-                        RsaUtils.rsaEncode(idCardPath + ""),
-                        RsaUtils.rsaEncode(idCardBackPath + ""),
-                        RsaUtils.rsaEncode(driveLicensePath + ""),
-
-                        RsaUtils.rsaEncode(request.netCarQualificationsStart + ""),
-                        RsaUtils.rsaEncode(request.netCarQualificationsEnd + ""),
-                        RsaUtils.rsaEncode(practitionersPhoto + "")
+                        request.id + "",
+                        request.driverName + "",
+                        request.driverPhone + "",
+                        request.idCard + "",
+                        request.emergency + "",
+                        request.emergencyPhone + "",
+                        request.companyId + "",
+                        request.serviceType + "",
+                        request.startTime + "",
+                        request.endTime + "",
+                        request.introducer + "",
+                        portraitPath + "",
+                        idCardPath + "",
+                        idCardBackPath + "",
+                        driveLicensePath + "",
+                        request.netCarQualificationsStart + "",
+                        request.netCarQualificationsEnd + "",
+                        practitionersPhoto + ""
                 )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -244,25 +242,25 @@ public class RegisterModel {
 
         return ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .applyDriver(
-                        RsaUtils.rsaEncode(request.id + ""),
-                        RsaUtils.rsaEncode(request.driverName + ""),
-                        RsaUtils.rsaEncode(request.driverPhone + ""),
-                        RsaUtils.rsaEncode(request.idCard + ""),
-                        RsaUtils.rsaEncode(request.emergency + ""),
-                        RsaUtils.rsaEncode(request.emergencyPhone + ""),
-                        RsaUtils.rsaEncode(request.companyId + ""),
-                        RsaUtils.rsaEncode(request.serviceType + ""),
-                        RsaUtils.rsaEncode(request.startTime + ""),
-                        RsaUtils.rsaEncode(request.endTime + ""),
-                        RsaUtils.rsaEncode(request.introducer + ""),
-                        RsaUtils.rsaEncode(portraitPath + ""),
-                        RsaUtils.rsaEncode(idCardPath + ""),
-                        RsaUtils.rsaEncode(idCardBackPath + ""),
-                        RsaUtils.rsaEncode(driveLicensePath + ""),
+                        request.id + "",
+                        request.driverName + "",
+                        request.driverPhone + "",
+                        request.idCard + "",
+                        request.emergency + "",
+                        request.emergencyPhone + "",
+                        request.companyId + "",
+                        request.serviceType + "",
+                        request.startTime + "",
+                        request.endTime + "",
+                        request.introducer + "",
+                        portraitPath + "",
+                        idCardPath + "",
+                        idCardBackPath + "",
+                        driveLicensePath + "",
 
-                        RsaUtils.rsaEncode(request.netCarQualificationsStart + ""),
-                        RsaUtils.rsaEncode(request.netCarQualificationsEnd + ""),
-                        RsaUtils.rsaEncode(practitionersPhoto + ""))
+                        request.netCarQualificationsStart + "",
+                        request.netCarQualificationsEnd + "",
+                        practitionersPhoto + "")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

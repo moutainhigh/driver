@@ -399,44 +399,11 @@ public class LoginActivity extends RxBaseActivity {
         String randomStr = RsaUtils.getRandomString(16);
         XApp.getEditor().putString(Config.AES_PASSWORD, randomStr).apply();
 
-        String name_rsa = null;
-        String pws_rsa = null;
-        String randomStr_rsa = null;
-
-        String mac_rsa = null;
-        String imei_rsa = null;
-        String imsi_rsa = null;
-        String loginType_rsa = null;
-        String longitude_rsa = null;
-        String latitude_rsa = null;
-
-        String mobileOperators_rsa = null;
-        String appVersion_rsa = null;
-        String mapType_rsa = null;
-        try {
-            name_rsa = RsaUtils.rsaEncode(name);
-            pws_rsa = RsaUtils.rsaEncode(SHA256Util.getSHA256StrJava(psw));
-            randomStr_rsa = RsaUtils.rsaEncode(randomStr);
-
-            mac_rsa = RsaUtils.rsaEncode(MacUtils.getMobileMAC(this));
-            imei_rsa = RsaUtils.rsaEncode(MobileInfoUtil.getIMEI(this));
-            imsi_rsa = RsaUtils.rsaEncode(MobileInfoUtil.getIMSI(this));
-            loginType_rsa = RsaUtils.rsaEncode(Build.MODEL);
-            longitude_rsa = RsaUtils.rsaEncode(EmUtil.getLastLoc().latitude + "");
-            latitude_rsa = RsaUtils.rsaEncode(EmUtil.getLastLoc().longitude + "");
-
-            appVersion_rsa = RsaUtils.rsaEncode(SysUtil.getVersionName(this));
-            mobileOperators_rsa = RsaUtils.rsaEncode(operatorName);
-            mapType_rsa = RsaUtils.rsaEncode("2");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         return ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .loginByPW(name_rsa, pws_rsa, randomStr_rsa,
-                        mac_rsa, imei_rsa, imsi_rsa, loginType_rsa,
-                        longitude_rsa, latitude_rsa, appVersion_rsa, mobileOperators_rsa, mapType_rsa)
+                .loginByPW(name, SHA256Util.getSHA256StrJava(psw), randomStr,
+                        MacUtils.getMobileMAC(this), MobileInfoUtil.getIMEI(this), MobileInfoUtil.getIMSI(this),
+                        Build.MODEL, String.valueOf(EmUtil.getLastLoc().latitude), String.valueOf(EmUtil.getLastLoc().longitude), SysUtil.getVersionName(this),
+                        operatorName, "2")
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
