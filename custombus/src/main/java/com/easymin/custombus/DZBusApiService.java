@@ -7,6 +7,7 @@ import com.easymin.custombus.entity.OrdersResult;
 import com.easymin.custombus.entity.StationMainBean;
 import com.easymin.custombus.entity.StationResult;
 import com.easymin.custombus.entity.TimeResult;
+import com.easymin.custombus.entity.manualCreateBean;
 
 import java.util.List;
 
@@ -32,6 +33,9 @@ public interface DZBusApiService {
      */
     @GET("api/v1/bus/country/driver/order/querySchedule")
     Observable<StationResult> findBusInfoById(@Query("scheduleId") long scheduleId);
+
+    @GET("api/v1/bus/country/driver/line/findLineListByDriverId")
+    Observable<EmResult2<List<manualCreateBean>>> findLineListByDriverId(@Query("driverId") long driverId);
 
     @POST("api/v1/bus/country/driver/order/create")
     @FormUrlEncoded

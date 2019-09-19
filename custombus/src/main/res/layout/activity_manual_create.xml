@@ -36,7 +36,6 @@
                 android:textSize="@dimen/sizeContent" />
 
             <TextView
-                android:onClick="onManualCreateClick"
                 android:id="@+id/manualCreateTvLineSelect"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -44,6 +43,7 @@
                 android:drawablePadding="8dp"
                 android:gravity="end|center_vertical"
                 android:hint="请选择线路"
+                android:onClick="onManualCreateClick"
                 android:textColor="@color/colorBlack"
                 android:textColorHint="@color/colorSub"
                 android:textSize="@dimen/sizeContent" />
@@ -121,15 +121,16 @@
             android:layout_height="@dimen/sizeLine"
             android:background="@color/colorLine" />
 
-        <LinearLayout
+        <FrameLayout
+            android:id="@+id/manualCreateFl"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:gravity="start|center_vertical"
                 android:text="乘客端展示"
                 android:textColor="@color/colorBlack"
@@ -139,16 +140,16 @@
                 android:id="@+id/manualCreateSb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_gravity="center_vertical|end"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/sizeContent" />
 
-        </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/sizeLine"
+                android:background="@color/colorLine" />
+        </FrameLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/sizeLine"
-            android:background="@color/colorLine" />
 
         <TextView
             android:layout_width="wrap_content"

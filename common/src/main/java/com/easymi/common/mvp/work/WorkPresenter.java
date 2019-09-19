@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.easymi.common.CommApiService;
 import com.easymi.common.R;
+import com.easymi.common.entity.ManualCreateBean;
 import com.easymi.common.entity.MqttConfig;
 import com.easymi.common.entity.MqttResult;
 import com.easymi.common.entity.MultipleOrder;
@@ -46,6 +47,7 @@ import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.LoadingButton;
 import com.easymin.driver.securitycenter.utils.CenterUtil;
+import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -87,6 +89,26 @@ public class WorkPresenter implements WorkContract.Presenter {
         this.context = context;
         this.view = view;
         model = new WorkModel();
+    }
+
+    public void getManualConfig() {
+        Observable<ManualCreateBean> observable = model.getManualCreateConfig(EmUtil.getEmployId());
+        view.getRxManager().add(observable.subscribe(new MySubscriber<ManualCreateBean>(context, false, false, new HaveErrSubscriberListener<ManualCreateBean>() {
+            @Override
+            public void onNext(ManualCreateBean manualCreateBean) {
+                view.onManualCreateConfigSuc(manualCreateBean);
+                if (manualCreateBean.showView == 1) {
+                    XApp.getEditor().putString(Config.SP_MANUAL_DATA, new Gson().toJson(manualCreateBean)).apply();
+                } else {
+                    XApp.getEditor().remove(Config.SP_MANUAL_DATA).apply();
+                }
+            }
+
+            @Override
+            public void onError(int code) {
+                XApp.getEditor().remove(Config.SP_MANUAL_DATA).apply();
+            }
+        })));
     }
 
     @Override

@@ -79,7 +79,7 @@ android {
         //局域网环境
         local {
             dimension "App"//同在App这个名字维度
-            buildConfigField "String", "HOST", '"http://10.10.2.24:10001/"'
+            buildConfigField "String", "HOST", '"http://10.10.2.40:10001/"'
             buildConfigField "String", "H5_HOST", '"http://h5.xiaokakj.cn/"'
             buildConfigField "String", "IMG_SERVER", '"https://assets.xiaokakj.com/"'
             buildConfigField "boolean", "IS_ENCRYPT", "true"

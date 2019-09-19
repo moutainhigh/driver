@@ -234,7 +234,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"></com.easymi.component.widget.SwipeRecyclerView>
+                android:layout_marginRight="10dp" />
         </FrameLayout>
 
         <LinearLayout
@@ -276,28 +276,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="5dp"
-            android:visibility="gone">
+            android:visibility="visible">
 
-            <LinearLayout
-                android:id="@+id/workLlManual"
+            <ImageView
+                android:id="@+id/workIvManual"
                 android:layout_width="wrap_content"
-                android:layout_height="32dp"
+                android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="12dp"
-                android:background="@drawable/cor100_solid_white"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="8dp"
-                    android:paddingTop="8dp"
-                    android:paddingEnd="12dp"
-                    android:paddingBottom="8dp"
-                    android:text="报班"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/sizeHint" />
-            </LinearLayout>
+                android:orientation="horizontal"
+                android:padding="12dp"
+                android:src="@mipmap/icon_manual_create" />
 
             <TextView
                 android:layout_width="90dp"

@@ -1,6 +1,7 @@
 package com.easymi.common.mvp.work;
 
 import com.easymi.common.entity.AnnAndNotice;
+import com.easymi.common.entity.ManualCreateBean;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.push.CountEvent;
@@ -49,6 +50,8 @@ public interface WorkContract {
          * @param MultipleOrders
          */
         void showOrders(List<MultipleOrder> MultipleOrders);
+
+        void onManualCreateConfigSuc(ManualCreateBean manualCreateBean);
 
         /**
          * 初始化地图
@@ -291,6 +294,9 @@ public interface WorkContract {
          * @return
          */
         Observable<SettingResult> getAppSetting(long driverId);
+
+
+        Observable<ManualCreateBean> getManualCreateConfig(long driverId);
 
         /**
          * 获取系统配置

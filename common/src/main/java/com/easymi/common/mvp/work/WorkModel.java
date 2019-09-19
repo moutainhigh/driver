@@ -1,6 +1,7 @@
 package com.easymi.common.mvp.work;
 
 import com.easymi.common.CommApiService;
+import com.easymi.common.entity.ManualCreateBean;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.CityLineResult;
@@ -139,6 +140,15 @@ public class WorkModel implements WorkContract.Model {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .getAppSetting(EmUtil.getAppKey())
                 .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<ManualCreateBean> getManualCreateConfig(long driverId) {
+        return ApiManager.getInstance().createApi(Config.HOST,CommApiService.class)
+                .getManualCreateConfig(driverId)
+                .map(new HttpResultFunc2<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
