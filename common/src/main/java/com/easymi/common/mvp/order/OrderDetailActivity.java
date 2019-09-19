@@ -11,11 +11,9 @@ import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.common.result.PCOrderResult;
 import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
-import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
-import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.widget.CusToolbar;
 
@@ -60,7 +58,7 @@ public class OrderDetailActivity extends RxBaseActivity {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
-        orderId = getIntent().getLongExtra("orderId",0);
+        orderId = getIntent().getLongExtra("orderId", 0);
         findById();
         queryOrderDetail(orderId);
     }
@@ -73,7 +71,7 @@ public class OrderDetailActivity extends RxBaseActivity {
         toolbar.setTitle(R.string.finish_order);
     }
 
-    public void findById(){
+    public void findById() {
         tv_order_type = findViewById(R.id.tv_order_type);
         tv_line_name = findViewById(R.id.tv_line_name);
         tv_service_time = findViewById(R.id.tv_service_time);
@@ -103,23 +101,23 @@ public class OrderDetailActivity extends RxBaseActivity {
         })));
     }
 
-    public void setData(CarpoolOrder order){
+    public void setData(CarpoolOrder order) {
         tv_order_type.setText(getResources().getString(R.string.create_carpool));
-        tv_line_name.setText(order.startStationName + "到"+order.endStationName);
-        tv_service_time.setText(order.day+"  "+order.timeSlot);
+        tv_line_name.setText(order.lineName);
+        tv_service_time.setText(order.day + "  " + order.timeSlot);
         tv_name.setText(order.passengerName);
-        tv_person_number.setText(order.ticketNumber+"");
+        tv_person_number.setText(order.ticketNumber + "");
         tv_start_addrrs.setText(order.startAddress);
         tv_end_addrrs.setText(order.endAddress);
         tv_remark.setText(order.orderRemark);
 
         tv_call_me.setOnClickListener(view -> {
-            PhoneUtil.call(this,order.companyPhone);
+            PhoneUtil.call(this, order.companyPhone);
         });
 
-        if (order.orderChange == 1){
+        if (order.orderChange == 1) {
             iv_turn.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             iv_turn.setVisibility(View.GONE);
         }
     }
