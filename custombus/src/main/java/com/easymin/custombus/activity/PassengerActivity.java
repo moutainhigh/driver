@@ -117,6 +117,7 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
      * 自动完成订单
      */
     private ScheduleTurnReceiver scheduleTurnReceiver;
+    private List<Customer> customers;
 
     @Override
     public boolean isEnableSwipe() {
@@ -216,9 +217,7 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
 
         //跳转验票
         tv_check_btn.setOnClickListener(v -> {
-            Intent intent = new Intent(this, NewCheckTicketActivity.class);
-            intent.putExtra("isUnCheck", uncheck);
-            startActivityForResult(intent, 0x00);
+            goCheckTicket();
         });
         //前往下一站
         tv_go_next.setOnClickListener(v -> {
@@ -276,6 +275,20 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
 //                return false;
 //            }
 //        });
+    }
+
+    public void goCheckTicket() {
+        int ticketCount = 0;
+        if (customers != null && customers.size() > 0) {
+            for (Customer customer : customers) {
+                if (customer.status <= Customer.CITY_COUNTRY_STATUS_ARRIVED || customer.status == Customer.CITY_COUNTRY_STATUS_INVALID) {
+                    ticketCount++;
+                }
+            }
+        }
+        Intent intent = new Intent(this, NewCheckTicketActivity.class);
+        intent.putExtra("isUnCheck", ticketCount);
+        startActivityForResult(intent, 0x00);
     }
 
     /**
@@ -439,7 +452,8 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
     @Override
     public void showOrders(List<Customer> customers) {
         if (customers != null && customers.size() != 0) {
-            adapter.setDatas(customers);
+            this.customers = customers;
+            adapter.setDatas(this.customers);
             checkNumber(customers);
         } else {
             setMyResult();
@@ -522,9 +536,7 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
             tv_check_btn.setBackground(getResources().getDrawable(R.drawable.corners_btn_4dp_bg));
 
             lin_check_top.setOnClickListener(v -> {
-                Intent intent = new Intent(this, NewCheckTicketActivity.class);
-                intent.putExtra("isUnCheck", uncheck);
-                startActivityForResult(intent, 0x00);
+                goCheckTicket();
             });
         }
     }
