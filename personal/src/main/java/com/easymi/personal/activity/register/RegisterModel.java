@@ -121,24 +121,24 @@ public class RegisterModel {
 
         return ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .applyDriver(
-                        request.id + "",
-                        request.driverName + "",
-                        request.driverPhone + "",
-                        request.idCard + "",
-                        request.emergency + "",
-                        request.emergencyPhone + "",
-                        request.companyId + "",
-                        request.serviceType + "",
-                        request.startTime + "",
-                        request.endTime + "",
-                        request.introducer + "",
-                        portraitPath + "",
-                        idCardPath + "",
-                        idCardBackPath + "",
-                        driveLicensePath + "",
-                        request.netCarQualificationsStart + "",
-                        request.netCarQualificationsEnd + "",
-                        practitionersPhoto + ""
+                        String.valueOf(request.id),
+                        request.driverName,
+                        request.driverPhone,
+                        request.idCard,
+                        request.emergency,
+                        request.emergencyPhone,
+                        String.valueOf(request.companyId),
+                        request.serviceType,
+                        String.valueOf(request.startTime),
+                        String.valueOf(request.endTime),
+                        request.introducer,
+                        portraitPath,
+                        idCardPath,
+                        idCardBackPath,
+                        driveLicensePath,
+                        String.valueOf(request.netCarQualificationsStart),
+                        String.valueOf(request.netCarQualificationsEnd),
+                        practitionersPhoto
                 )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -242,25 +242,24 @@ public class RegisterModel {
 
         return ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .applyDriver(
-                        request.id + "",
-                        request.driverName + "",
-                        request.driverPhone + "",
-                        request.idCard + "",
-                        request.emergency + "",
-                        request.emergencyPhone + "",
-                        request.companyId + "",
-                        request.serviceType + "",
-                        request.startTime + "",
-                        request.endTime + "",
-                        request.introducer + "",
-                        portraitPath + "",
-                        idCardPath + "",
-                        idCardBackPath + "",
-                        driveLicensePath + "",
-
-                        request.netCarQualificationsStart + "",
-                        request.netCarQualificationsEnd + "",
-                        practitionersPhoto + "")
+                        String.valueOf(request.id),
+                        request.driverName,
+                        request.driverPhone,
+                        request.idCard,
+                        request.emergency,
+                        request.emergencyPhone,
+                        String.valueOf(request.companyId),
+                        request.serviceType,
+                        String.valueOf(request.startTime),
+                        String.valueOf(request.endTime),
+                        request.introducer,
+                        portraitPath,
+                        idCardPath,
+                        idCardBackPath,
+                        driveLicensePath,
+                        String.valueOf(request.netCarQualificationsStart),
+                        String.valueOf(request.netCarQualificationsEnd),
+                        practitionersPhoto)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

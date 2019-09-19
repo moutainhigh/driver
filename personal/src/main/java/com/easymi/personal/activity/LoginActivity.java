@@ -399,10 +399,23 @@ public class LoginActivity extends RxBaseActivity {
         String randomStr = RsaUtils.getRandomString(16);
         XApp.getEditor().putString(Config.AES_PASSWORD, randomStr).apply();
 
+        String mac = "";
+        String imei = "";
+        String imsi = "";
+        String appVersion = "";
+        try {
+            mac = MacUtils.getMobileMAC(this);
+            imei = MobileInfoUtil.getIMEI(this);
+            imsi = MobileInfoUtil.getIMSI(this);
+            appVersion = SysUtil.getVersionName(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return ApiManager.getInstance().createApi(Config.HOST, McService.class)
                 .loginByPW(name, SHA256Util.getSHA256StrJava(psw), randomStr,
-                        MacUtils.getMobileMAC(this), MobileInfoUtil.getIMEI(this), MobileInfoUtil.getIMSI(this),
-                        Build.MODEL, String.valueOf(EmUtil.getLastLoc().latitude), String.valueOf(EmUtil.getLastLoc().longitude), SysUtil.getVersionName(this),
+                        mac, imei, imsi,
+                        Build.MODEL, String.valueOf(EmUtil.getLastLoc().latitude), String.valueOf(EmUtil.getLastLoc().longitude), appVersion,
                         operatorName, "2")
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
