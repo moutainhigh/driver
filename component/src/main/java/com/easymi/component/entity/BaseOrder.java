@@ -297,13 +297,9 @@ public class BaseOrder implements Serializable {
      */
     public static final int PC_SCHEDULE_STATUS_NEW = 1;
     /**
-     * 司机接人
+     * 执行中
      */
-    public static final int PC_SCHEDULE_STATUS_TAKE = 5;
-    /**
-     * 司机送人
-     */
-    public static final int PC_SCHEDULE_STATUS_RUN = 10;
+    public static final int PC_SCHEDULE_RUNNING = 12;
     /**
      * 已结束
      */
@@ -313,10 +309,8 @@ public class BaseOrder implements Serializable {
     public String getPCOrderStatusStr() {
         if (scheduleStatus == PC_SCHEDULE_STATUS_NEW) {
             return "等待行程开始";
-        } else if (scheduleStatus == PC_SCHEDULE_STATUS_TAKE) {
-            return "司机接人";
-        } else if (scheduleStatus == PC_SCHEDULE_STATUS_RUN) {
-            return "司机送人";
+        } else if (scheduleStatus == PC_SCHEDULE_RUNNING) {
+            return "执行中";
         } else if (scheduleStatus == PC_SCHEDULE_STATUS_FINISH) {
             return "已结束";
         } else {

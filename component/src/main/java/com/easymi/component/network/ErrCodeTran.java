@@ -588,7 +588,12 @@ public enum ErrCodeTran {
     /**
      * 服務人員不存在
      */
-    EMPLOY_NOT_EXIST(31001, "服務人員不存在");
+    EMPLOY_NOT_EXIST(31001, "服務人員不存在"),
+
+    /**
+     * 此途徑站點不允許下車
+     */
+    STATION_NOT_ALLOW_GET_OFF(40211,"此途徑站點不允許下車");
 
     private int code;
     private String showMsg;

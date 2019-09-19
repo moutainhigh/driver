@@ -157,14 +157,12 @@ public class WorkPresenter implements WorkContract.Presenter {
                                         }
                                     } else if (TextUtils.equals(order.serviceType, Config.CARPOOL)) {
                                         if (DymOrder.exists(order.scheduleId, order.serviceType)) {
-                                            //专线 本地有 状态同步
+                                            //拼车 本地有 状态同步
                                             dymOrder = DymOrder.findByIDType(order.scheduleId, order.serviceType);
                                             if (order.scheduleStatus <= BaseOrder.PC_SCHEDULE_STATUS_NEW) {
                                                 dymOrder.orderStatus = ZXOrderStatus.WAIT_START;
-                                            } else if (order.scheduleStatus == BaseOrder.PC_SCHEDULE_STATUS_TAKE) {
+                                            } else if (order.scheduleStatus == BaseOrder.PC_SCHEDULE_RUNNING) {
                                                 dymOrder.orderStatus = ZXOrderStatus.ACCEPT_ING;
-                                            } else if (order.scheduleStatus == BaseOrder.PC_SCHEDULE_STATUS_RUN) {
-                                                dymOrder.orderStatus = ZXOrderStatus.SEND_ING;
                                             } else if (order.scheduleStatus == BaseOrder.PC_SCHEDULE_STATUS_FINISH) {
                                                 dymOrder.orderStatus = ZXOrderStatus.SEND_OVER;
                                             }

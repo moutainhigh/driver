@@ -45,4 +45,15 @@ public class Sequence implements Serializable{
      * 订单顺序序号
      */
     public int sort;
+
+    /**
+     * 站点状态 1上车站点  2 下车站点 3途径点
+     */
+    public int stationStatus;
+
+    /**
+     * 订单id
+     */
+    public long orderId;
+
 }

@@ -622,7 +622,12 @@ public enum ErrCode {
     /**
      * 平台级账号的级别不能被修改
      */
-    ADMIN_MAIN_NOT_UPDATE(40403, "平台级账号的级别不能被修改");
+    ADMIN_MAIN_NOT_UPDATE(40403, "平台级账号的级别不能被修改"),
+
+    /**
+     * 此途径站点不允许下车
+     */
+     STATION_NOT_ALLOW_GET_OFF(40211,"此途径站点不允许下车");
 
     private int code;
     private String showMsg;

@@ -145,7 +145,7 @@ public interface FlowContract {
          *
          * @param flag
          */
-        void changeToolbar(int flag);
+        void changeToolbar(int flag,int index);
 
         /**
          * 开始接人
@@ -165,14 +165,22 @@ public interface FlowContract {
 
 ///////////迭代新增
 
+        /**
+         * 获取当前班次的信息
+         * @param allStation
+         */
         void scheduleInfo(AllStation allStation);
+
+        /**
+         * 改变当前站点的订单信息成功
+         */
+        void changeSequenceSuc();
 
 
         RxManager getManager();
     }
 
     interface Presenter {
-
 
         /**
          * 通过线路规划获取路径
@@ -270,6 +278,12 @@ public interface FlowContract {
          */
         void qureyScheduleInfo(long scheduleId);
 
+        /**
+         * 司机端修改订单执行顺序
+         * @param orderIdSequence
+         */
+        void changeOrderSequence(String orderIdSequence);
+
     }
 
     interface Model {
@@ -344,5 +358,11 @@ public interface FlowContract {
          * @param scheduleId
          */
         Observable<AllStation> qureyScheduleInfo(long scheduleId);
+
+        /**
+         * 司机端修改订单执行顺序
+         * @param orderIdSequence
+         */
+        Observable<Object> changeOrderSequence(String orderIdSequence);
     }
 }

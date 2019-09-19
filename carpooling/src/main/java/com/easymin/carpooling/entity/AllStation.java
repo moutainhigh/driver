@@ -1,7 +1,11 @@
 package com.easymin.carpooling.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.easymi.component.result.EmResult;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -12,11 +16,14 @@ import java.util.List;
  * @Description:
  * @History:
  */
-public class AllStation{
+public class AllStation implements Serializable {
 
     public long scheduleId;
+    /**
+     * 拼车班次状态  1未开始
+     */
     public int scheduleStatus;
-    public long currentStationId;
+    public int currentStationId;
     public List<MyStation> scheduleStationVoList;
 
 }

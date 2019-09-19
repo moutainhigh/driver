@@ -1,21 +1,16 @@
 package com.easymin.carpooling.widget;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.easymi.common.entity.CompanyList;
-import com.easymi.common.register.CompanyPicker;
-import com.easymi.component.widget.BaseBottomDialog;
 import com.easymi.component.widget.wheelview.WheelView;
 import com.easymi.component.widget.wheelview.adapter.AbstractWheelTextAdapter;
 import com.easymin.carpooling.R;
 import com.easymin.carpooling.entity.MyStation;
-import com.easymin.carpooling.entity.Station;
 
 import java.util.List;
 
@@ -76,12 +71,12 @@ public class StationListDialog extends BottomSheetDialog {
             station = stations.get(index);
         }
         if (onSelectListener != null && station != null) {
-            onSelectListener.onSelect(station);
+            onSelectListener.onSelect(index);
         }
     }
 
     public interface OnSelectListener {
-        void onSelect(MyStation station);
+        void onSelect(int index);
     }
 
     public StationListDialog setOnSelectListener(OnSelectListener listener) {
@@ -100,7 +95,7 @@ public class StationListDialog extends BottomSheetDialog {
 
         @Override
         protected CharSequence getItemText(int index) {
-            return datas != null ? datas.get(index).name : "";
+            return datas != null ? datas.get(index).stationName : "";
         }
 
         @Override

@@ -10,13 +10,15 @@ import android.widget.TextView;
 
 import com.amap.api.maps.model.LatLng;
 import com.easymi.common.entity.CarpoolOrder;
-import com.easymi.component.ZXOrderStatus;
 import com.easymi.component.base.RxBaseFragment;
-import com.easymi.component.entity.DymOrder;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.Log;
+import com.easymi.component.utils.ToastUtil;
 import com.easymin.carpooling.R;
 import com.easymin.carpooling.StaticVal;
 import com.easymin.carpooling.adapter.SequenceAdapter;
+import com.easymin.carpooling.entity.AllStation;
+import com.easymin.carpooling.entity.MyStation;
 import com.easymin.carpooling.entity.Sequence;
 import com.easymin.carpooling.flowmvp.ActFraCommBridge;
 import com.easymin.carpooling.widget.ItemDragCallback;
@@ -49,11 +51,6 @@ public class ChangeSeqFragment extends RxBaseFragment {
     TextView bottomBtn;
 
     /**
-     * 本地数据库动态订单
-     */
-    DymOrder dymOrder;
-
-    /**
      * 订单数据集
      */
     List<CarpoolOrder> orderCustomers;
@@ -80,13 +77,18 @@ public class ChangeSeqFragment extends RxBaseFragment {
     ActFraCommBridge bridge;
 
     /**
-     * 规划接人或者送人
+     * 排序站点的下标
      */
     private int flag;
     /**
      * 倒计时结束
      */
     private boolean countStratOver = false;
+
+    /**
+     * 班次的所有信息
+     */
+    private AllStation allStation;
 
     /**
      * 倒计时结束操作
@@ -102,12 +104,16 @@ public class ChangeSeqFragment extends RxBaseFragment {
      * 设置必要参数
      *
      * @param bridge
-     * @param flag   接/送
+     * @param flag   排序站点的下标
      */
     public void setParam(ActFraCommBridge bridge, int flag) {
         this.bridge = bridge;
         this.flag = flag;
         changeUi();
+    }
+
+    public void setAllStation(AllStation allStation) {
+        this.allStation = allStation;
     }
 
     /**
@@ -119,43 +125,76 @@ public class ChangeSeqFragment extends RxBaseFragment {
         }
         bottomBtn.setEnabled(true);
         bottomBtn.setBackgroundResource(R.drawable.corners_button_selector);
-        if (flag == StaticVal.PLAN_ACCEPT) {
-            bridge.changeToolbar(StaticVal.TOOLBAR_CHANGE_ACCEPT);
+
+        bridge.changeToolbar(StaticVal.TOOLBAR_CHANGE_ACCEPT, flag);
+
+        if (flag == 0) {
             hintText.setText("接人路线规划：");
             bottomBtn.setText("下一步");
+
             bottomBtn.setOnClickListener(view -> {
-                flag = StaticVal.PLAN_SEND;
-                DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
-                if (dymOrder != null && dymOrder.orderStatus == ZXOrderStatus.ACCEPT_PLAN) {
-                    dymOrder.orderStatus = ZXOrderStatus.SEND_PLAN;
-                    dymOrder.updateStatus();
-                }
+                flag++;
                 changeUi();
             });
-        } else {
-            bridge.changeToolbar(StaticVal.TOOLBAR_CHANGE_SEND);
+
+        } else if (flag == allStation.scheduleStationVoList.size() - 1) {
             hintText.setText("送人路线规划：");
             bottomBtn.setText("行程开始");
-            DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
-            if (null != dymOrder) {
-                if (dymOrder.orderStatus <= ZXOrderStatus.WAIT_START) {
-                    // TODO: 2019-08-30 暂时取消判断
-//                    if (!countStratOver) {
-//                        bottomBtn.setEnabled(false);
-//                        bottomBtn.setBackgroundResource(R.drawable.corners_button_press_bg);
-//                    } else {
-                    bottomBtn.setOnClickListener(view -> bridge.startOutSet());
-//                    }
-                } else if (dymOrder.orderStatus == ZXOrderStatus.SEND_PLAN) {
-                    bottomBtn.setOnClickListener(view -> bridge.startOutSet());
-                } else {
-                    bottomBtn.setOnClickListener(view -> bridge.toAcSend());
-                }
-            }
+
+            bottomBtn.setOnClickListener(view -> {
+                ToastUtil.showMessage(getContext(), "行程开始");
+                bridge.startOutSet();
+            });
+
+        } else {
+            hintText.setText("接送人路线规划：");
+            bottomBtn.setText("下一步");
+
+            bottomBtn.setOnClickListener(view -> {
+                flag++;
+                changeUi();
+            });
         }
+
+
+//        if (flag == StaticVal.PLAN_ACCEPT) {
+//            bridge.changeToolbar(StaticVal.TOOLBAR_CHANGE_ACCEPT);
+//            hintText.setText("接人路线规划：");
+//            bottomBtn.setText("下一步");
+//            bottomBtn.setOnClickListener(view -> {
+//                flag = StaticVal.PLAN_SEND;
+//                DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
+//                if (dymOrder != null && dymOrder.orderStatus == ZXOrderStatus.ACCEPT_PLAN) {
+//                    dymOrder.orderStatus = ZXOrderStatus.SEND_PLAN;
+//                    dymOrder.updateStatus();
+//                }
+//                changeUi();
+//            });
+//        } else {
+//            bridge.changeToolbar(StaticVal.TOOLBAR_CHANGE_SEND);
+//            hintText.setText("送人路线规划：");
+//            bottomBtn.setText("行程开始");
+//            DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
+//            if (null != dymOrder) {
+//                if (dymOrder.orderStatus <= ZXOrderStatus.WAIT_START) {
+//                    // TODO: 2019-08-30 暂时取消判断
+////                    if (!countStratOver) {
+////                        bottomBtn.setEnabled(false);
+////                        bottomBtn.setBackgroundResource(R.drawable.corners_button_press_bg);
+////                    } else {
+//                    bottomBtn.setOnClickListener(view -> bridge.startOutSet());
+////                    }
+//                } else if (dymOrder.orderStatus == ZXOrderStatus.SEND_PLAN) {
+//                    bottomBtn.setOnClickListener(view -> bridge.startOutSet());
+//                } else {
+//                    bottomBtn.setOnClickListener(view -> bridge.toAcSend());
+//                }
+//            }
+//        }
         adapter.setSequences(buildData());
         showInMap();
     }
+
 
     @Override
     public void setArguments(@Nullable Bundle args) {
@@ -165,9 +204,6 @@ public class ChangeSeqFragment extends RxBaseFragment {
         }
         orderId = args.getLong("orderId", 0);
         orderType = args.getString("orderType", "");
-
-        dymOrder = DymOrder.findByIDType(orderId, orderType);
-
     }
 
     @Override
@@ -211,51 +247,44 @@ public class ChangeSeqFragment extends RxBaseFragment {
             List<Sequence> list = new ArrayList<>();
             list.addAll(adapter.getLists());
             Iterator iterator = list.iterator();
-            int i = 0;
+            int i = 1;
             while (iterator.hasNext()) {
                 Sequence sequence = (Sequence) iterator.next();
                 if (sequence.type != 1) {
                     iterator.remove();//移除图片和出城
                 } else {
                     for (CarpoolOrder orderCustomer : orderCustomers) {
-                        if (orderCustomer.num == sequence.num) {
-                            if (flag == StaticVal.PLAN_ACCEPT) {
-                                orderCustomer.acceptSequence = i;
-                                orderCustomer.updateAcceptSequence();
-                            } else {
-                                orderCustomer.sendSequence = i;
-                                orderCustomer.updateSendSequence();
-                            }
-
+                        if (orderCustomer.orderId == sequence.orderId) {
+                            orderCustomer.beginIndex = i;
                         }
                     }
                     i++;
                 }
             }
-            if (flag == StaticVal.PLAN_ACCEPT) {
-                //根据acceptSequence排序
-                Collections.sort(orderCustomers, (o1, o2) -> {
-                    if (o1.acceptSequence < o2.acceptSequence) {
-                        return -1;
-                    } else if (o1.acceptSequence > o2.acceptSequence) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                });
-            } else {
-                //根据acceptSequence排序
-                Collections.sort(orderCustomers, (o1, o2) -> {
-                    if (o1.sendSequence < o2.sendSequence) {
-                        return -1;
-                    } else if (o1.sendSequence > o2.sendSequence) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                });
-            }
+            //根据acceptSequence排序
+            Collections.sort(orderCustomers, (o1, o2) -> {
+                if (o1.beginIndex < o2.beginIndex) {
+                    return -1;
+                } else if (o1.beginIndex > o2.beginIndex) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            });
+            //将新顺序显示到地图上
             showInMap();
+
+            //生成排序请求的字段
+            String orderIdSequence = "";
+            for (int index = 0; index < orderCustomers.size(); index++) {
+                if (index == orderCustomers.size() - 1) {
+                    orderIdSequence = orderIdSequence + orderCustomers.get(index).orderId + "-" + (index+1);
+                } else {
+                    orderIdSequence = orderIdSequence + orderCustomers.get(index).orderId + "-" + (index+1) + ",";
+                }
+            }
+            //调用排序接口
+            bridge.changeOrderSequence(orderIdSequence);
             return false;
         });
 
@@ -267,59 +296,69 @@ public class ChangeSeqFragment extends RxBaseFragment {
 
     }
 
+
     /**
      * 根据状态构造数据
      *
      * @return
      */
     private List<Sequence> buildData() {
+
         List<Sequence> sequences = new ArrayList<>();
 
         min = 0;
-        if (flag == StaticVal.PLAN_ACCEPT) {
-            orderCustomers = CarpoolOrder.findByIDTypeOrderByAcceptSeq(orderId, orderType);
-            for (int i = 0; i < orderCustomers.size(); i++) {
-                CarpoolOrder customer = orderCustomers.get(i);
-                Sequence sequence = new Sequence();
-                sequence.num = customer.num;
-                sequence.type = 1;
-                sequence.text = "";
-                sequence.photo = customer.avatar;
-                sequence.ticketNumber = customer.ticketNumber;
-                sequence.status = customer.customeStatus;
-//                sequence.sort = customer.
-                sequences.add(sequence);
-                if (customer.customeStatus != 0) {
-                    min = i + 1;
-                }
-            }
-        } else {
-            orderCustomers = CarpoolOrder.findByIDTypeOrderBySendSeq(orderId, orderType);
-            for (int i = 0; i < orderCustomers.size(); i++) {
-                CarpoolOrder customer = orderCustomers.get(i);
-                Sequence sequence = new Sequence();
-                sequence.num = customer.num;
-                sequence.type = 1;
-                sequence.text = "";
-                sequence.photo = customer.avatar;
-                sequence.ticketNumber = customer.ticketNumber;
-                sequence.status = customer.customeStatus;
 
-                sequences.add(sequence);
-                if (customer.customeStatus > 3) {
+        MyStation currentStation = allStation.scheduleStationVoList.get(flag);
+        orderCustomers = currentStation.stationOrderVoList;
+
+        for (int i = 0; i < orderCustomers.size(); i++) {
+            CarpoolOrder customer = orderCustomers.get(i);
+            customer.beginIndex = i;
+            Sequence sequence = new Sequence();
+            sequence.num = i;
+            sequence.type = 1;
+            sequence.text = "";
+            sequence.orderId = customer.orderId;
+            sequence.photo = customer.avatar;
+            sequence.ticketNumber = customer.ticketNumber;
+            sequence.status = customer.status;
+            sequence.sort = customer.sequence;
+
+            if (customer.startStationId == currentStation.stationId) {
+                //上车点
+                sequence.stationStatus = 1;
+
+                if (customer.status >= CarpoolOrder.CARPOOL_STATUS_RUNNING) {
                     min = i + 1;
                 }
+
+            } else if (customer.endStationId == currentStation.stationId) {
+                //下车点
+                sequence.stationStatus = 2;
+
+                if (customer.status >= CarpoolOrder.CARPOOL_STATUS_FINISH) {
+                    min = i + 1;
+                }
+
+            } else {
+                //途径点
+                sequence.stationStatus = 3;
             }
+
+            sequences.add(sequence);
+
         }
 
+        //车车
         Sequence car = new Sequence();
         car.type = 3;
-        sequences.add(min, car);//车车
+        sequences.add(min, car);
 
+        //出城
         Sequence data2 = new Sequence();
         data2.type = 2;
         data2.text = "出城";
-        sequences.add(data2);//出城
+        sequences.add(data2);
 
         max = sequences.size() - 1;
 
@@ -338,17 +377,15 @@ public class ChangeSeqFragment extends RxBaseFragment {
         bridge.clearMap();
         List<LatLng> latLngs = new ArrayList<>();
         for (CarpoolOrder orderCustomer : orderCustomers) {
-            LatLng latLng;
-            if (flag == StaticVal.PLAN_ACCEPT) {
-                latLng = new LatLng(orderCustomer.startLat, orderCustomer.startLng);
-            } else {
-                latLng = new LatLng(orderCustomer.endLat, orderCustomer.endLng);
-            }
-            if (orderCustomer.customeStatus == 0 || orderCustomer.customeStatus == 3) {
-                bridge.addMarker(latLng, StaticVal.MARKER_FLAG_PASS_ENABLE, orderCustomer.num, orderCustomer.ticketNumber, orderCustomer.passengerPhone);
+            LatLng latLng = null;
+            if (orderCustomer.startStationId == allStation.scheduleStationVoList.get(flag).stationId) {
+                latLng = new LatLng(orderCustomer.startLatitude, orderCustomer.startLongitude);
+                bridge.addMarker(latLng, StaticVal.MARKER_FLAG_PASS_ENABLE, orderCustomer.sequence, orderCustomer.ticketNumber, orderCustomer.passengerPhone);
                 latLngs.add(latLng);
-            } else {
-                bridge.addMarker(latLng, StaticVal.MARKER_FLAG_PASS_DISABLE, orderCustomer.num, orderCustomer.ticketNumber, orderCustomer.passengerPhone);
+            } else if (orderCustomer.endStationId == allStation.scheduleStationVoList.get(flag).stationId) {
+                latLng = new LatLng(orderCustomer.endLatitude, orderCustomer.endLongitude);
+                bridge.addMarker(latLng, StaticVal.MARKER_FLAG_PASS_DISABLE, orderCustomer.sequence, orderCustomer.ticketNumber, orderCustomer.passengerPhone);
+                latLngs.add(latLng);
             }
         }
         bridge.showBounds(latLngs);

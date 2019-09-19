@@ -69,7 +69,7 @@ public class SettingActivity extends RxBaseActivity {
             public void onClick(View v) {
                 EnvironmentPojo environmentPojo = new EnvironmentPojo();
                 if (settingRgKey.getCheckedRadioButtonId() == R.id.setting_rb_1h) {
-                    environmentPojo.appKey = "955BF9BC78A5032107C4B74F4AB65702";
+                    environmentPojo.appKey = "1HAcient1kLqfeX7DVTV0dklUkpGEnUC";
                 } else if (settingRgKey.getCheckedRadioButtonId() == R.id.setting_rb_4j) {
                     environmentPojo.appKey = "4ji3EvuwNziPKF8QXqXMTukGqPmlwOFJ";
                 } else if (settingRgKey.getCheckedRadioButtonId() == R.id.setting_rb_95) {

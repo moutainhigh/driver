@@ -6,36 +6,54 @@
     android:minHeight="60dp">
 
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/lin_seq_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:background="@color/white">
+        android:background="@color/color_f2f2f2">
 
-        <TextView
-            android:id="@+id/tv_seq_num"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/circle_accent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_seq_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/circle_accent"
+                android:gravity="center"
+                android:text="1"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tv_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-10dp"
+                android:background="@drawable/shape_000000_7dp_bg"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="下车"
+                android:textColor="@color/white"
+                android:textSize="10dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_get"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circle_dark"
             android:gravity="center"
-            android:text="1"
+            android:text="已接"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="10sp"
+            android:visibility="gone"/>
+    </RelativeLayout>
 
-        <TextView
-            android:id="@+id/tv_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-10dp"
-            android:background="@drawable/shape_000000_7dp_bg"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:text="下车"
-            android:textColor="@color/white"
-            android:textSize="10dp" />
-    </LinearLayout>
+
 
     <!--<RelativeLayout-->
     <!--android:id="@+id/rl_person"-->
@@ -58,32 +76,32 @@
     <!--</RelativeLayout>-->
 
     <!--<LinearLayout-->
-        <!--android:id="@+id/lin_seq_num_dark"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:gravity="center_horizontal"-->
-        <!--android:orientation="vertical">-->
+    <!--android:id="@+id/lin_seq_num_dark"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:gravity="center_horizontal"-->
+    <!--android:orientation="vertical">-->
 
-        <!--<TextView-->
-            <!--android:id="@+id/tv_seq_num_dark"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:background="@drawable/circle_dark_22"-->
-            <!--android:gravity="center"-->
-            <!--android:text="1"-->
-            <!--android:textColor="@color/white"-->
-            <!--android:textSize="18sp" />-->
+    <!--<TextView-->
+    <!--android:id="@+id/tv_seq_num_dark"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@drawable/circle_dark_22"-->
+    <!--android:gravity="center"-->
+    <!--android:text="1"-->
+    <!--android:textColor="@color/white"-->
+    <!--android:textSize="18sp" />-->
 
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="-10dp"-->
-            <!--android:background="@drawable/shape_000000_7dp_bg"-->
-            <!--android:paddingLeft="5dp"-->
-            <!--android:paddingRight="5dp"-->
-            <!--android:text="上车"-->
-            <!--android:textColor="@color/white"-->
-            <!--android:textSize="10dp" />-->
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="-10dp"-->
+    <!--android:background="@drawable/shape_000000_7dp_bg"-->
+    <!--android:paddingLeft="5dp"-->
+    <!--android:paddingRight="5dp"-->
+    <!--android:text="上车"-->
+    <!--android:textColor="@color/white"-->
+    <!--android:textSize="10dp" />-->
     <!--</LinearLayout>-->
 
     <ImageView

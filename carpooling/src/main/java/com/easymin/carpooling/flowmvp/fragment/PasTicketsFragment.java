@@ -10,8 +10,11 @@ import com.easymi.component.utils.PhoneUtil;
 import com.easymin.carpooling.R;
 import com.easymin.carpooling.StaticVal;
 import com.easymin.carpooling.adapter.CusListAdapter;
+import com.easymin.carpooling.entity.AllStation;
+import com.easymin.carpooling.entity.MyStation;
 import com.easymin.carpooling.flowmvp.ActFraCommBridge;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PasTicketsFragment extends RxBaseFragment {
@@ -31,7 +34,7 @@ public class PasTicketsFragment extends RxBaseFragment {
     /**
      * 客户数据集
      */
-    private List<CarpoolOrder> carpoolOrderList;
+    private List<CarpoolOrder> carpoolOrderList = new ArrayList<>();
 
     /**
      * activity和fragment的通信接口
@@ -68,14 +71,11 @@ public class PasTicketsFragment extends RxBaseFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
         cusListAdapter = new CusListAdapter(getActivity(), 0);
-        cusListAdapter.setOnCallClickListener(new CusListAdapter.OnCallClickListener() {
-            @Override
-            public void onCallClick(CarpoolOrder order, int position) {
-                order.isContract = 1;
-                order.updateIsContract();
-                showList();
-                PhoneUtil.call(getActivity(), order.passengerPhone);
-            }
+        cusListAdapter.setOnCallClickListener((order, position) -> {
+            order.isContract = 1;
+            order.updateIsContract();
+            showList();
+            PhoneUtil.call(getActivity(), order.passengerPhone);
         });
 
 
@@ -99,12 +99,30 @@ public class PasTicketsFragment extends RxBaseFragment {
         }
     }
 
+    AllStation allStation;
+
+    /**
+     * 传递数据
+     * @param allStation
+     */
+    public void setAllStation(AllStation allStation){
+        this.allStation = allStation;
+    }
+
     /**
      * 添加数据到适配器
      */
     private void showList() {
-        carpoolOrderList = CarpoolOrder.findByIDTypeOrderByAcceptSeq(orderId, orderType);
+        carpoolOrderList.clear();
+        for (MyStation myStation : allStation.scheduleStationVoList){
+            if (myStation.stationOrderVoList != null && myStation.stationOrderVoList.size()!= 0){
+                for (CarpoolOrder carpoolOrder : myStation.stationOrderVoList){
+                    carpoolOrderList.add(carpoolOrder);
+                }
+            }
+        }
+
         cusListAdapter.setOrderCustomers(carpoolOrderList);
-        bridge.changeToolbar(StaticVal.TOOLBAR_PAS_TICKET);
+        bridge.changeToolbar(StaticVal.TOOLBAR_PAS_TICKET,-1);
     }
 }

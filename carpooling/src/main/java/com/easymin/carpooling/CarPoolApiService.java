@@ -218,4 +218,13 @@ public interface CarPoolApiService {
     Observable<EmResult2<AllStation>> qureyScheduleInfo(@Query("scheduleId") long scheduleId);
 
 
+
+    /**
+     * 司机端修改订单执行顺序
+     *
+     * @param orderIdSequence
+     * @return
+     */
+    @GET("api/v1/carpool/driver/schedule/changeOrderSequence")
+    Observable<EmResult2<Object>> changeOrderSequence(@Query("orderIdSequence") String orderIdSequence);
 }

@@ -74,9 +74,9 @@
 //
 //    public List<OrderAddressVo> orderAddressVos;//位置信息集合
 //
-//    public String startAddr;//起点
+//    public String startAddress;//起点
 //
-//    public String endAddr;//终点
+//    public String endAddress;//终点
 //
 //    public double startLat;
 //    public double startLng;
@@ -127,12 +127,12 @@
 //        values.put("orderType", orderType);
 //        values.put("name", name);
 //        values.put("phone", phone);
-//        values.put("startAddr", startAddr);
-//        values.put("endAddr", endAddr);
-//        values.put("startLat", startLat);
-//        values.put("startLng", startLng);
-//        values.put("endLat", endLat);
-//        values.put("endLng", endLng);
+//        values.put("startAddress", startAddress);
+//        values.put("endAddress", endAddress);
+//        values.put("startLatitude", startLatitude);
+//        values.put("startLongitude", startLongitude);
+//        values.put("endLatitude", endLatitude);
+//        values.put("endLongitude", endLongitude);
 //        values.put("appointTime", appointTime);
 //        values.put("acceptSequence", acceptSequence);
 //        values.put("sendSequence", sendSequence);
@@ -315,12 +315,12 @@
 //        orderCustomer.orderType = cursor.getString(cursor.getColumnIndex("orderType"));
 //        orderCustomer.name = cursor.getString(cursor.getColumnIndex("name"));
 //        orderCustomer.phone = cursor.getString(cursor.getColumnIndex("phone"));
-//        orderCustomer.startAddr = cursor.getString(cursor.getColumnIndex("startAddr"));
-//        orderCustomer.endAddr = cursor.getString(cursor.getColumnIndex("endAddr"));
-//        orderCustomer.startLat = cursor.getDouble(cursor.getColumnIndex("startLat"));
-//        orderCustomer.startLng = cursor.getDouble(cursor.getColumnIndex("startLng"));
-//        orderCustomer.endLat = cursor.getDouble(cursor.getColumnIndex("endLat"));
-//        orderCustomer.endLng = cursor.getDouble(cursor.getColumnIndex("endLng"));
+//        orderCustomer.startAddress = cursor.getString(cursor.getColumnIndex("startAddress"));
+//        orderCustomer.endAddress = cursor.getString(cursor.getColumnIndex("endAddress"));
+//        orderCustomer.startLatitude = cursor.getDouble(cursor.getColumnIndex("startLatitude"));
+//        orderCustomer.startLongitude = cursor.getDouble(cursor.getColumnIndex("startLongitude"));
+//        orderCustomer.endLatitude = cursor.getDouble(cursor.getColumnIndex("endLatitude"));
+//        orderCustomer.endLongitude = cursor.getDouble(cursor.getColumnIndex("endLongitude"));
 //        orderCustomer.appointTime = cursor.getLong(cursor.getColumnIndex("appointTime"));
 //        orderCustomer.acceptSequence = cursor.getInt(cursor.getColumnIndex("acceptSequence"));
 //        orderCustomer.sendSequence = cursor.getInt(cursor.getColumnIndex("sendSequence"));
@@ -375,12 +375,12 @@
 //        values.put("name", name);
 //        values.put("phone", phone);
 //        values.put("photo", photo);
-//        values.put("startAddr", startAddr);
-//        values.put("endAddr", endAddr);
-//        values.put("startLat", startLat);
-//        values.put("startLng", startLng);
-//        values.put("endLat", endLat);
-//        values.put("endLng", endLng);
+//        values.put("startAddress", startAddress);
+//        values.put("endAddress", endAddress);
+//        values.put("startLatitude", startLatitude);
+//        values.put("startLongitude", startLongitude);
+//        values.put("endLatitude", endLatitude);
+//        values.put("endLongitude", endLongitude);
 ////        values.put("appointTime", appointTime);
 //
 //        //hf add

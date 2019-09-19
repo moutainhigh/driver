@@ -31,8 +31,7 @@ public class MainConfig {
                 if (!TextUtils.isEmpty(data) && BuildConfig.DEBUG) {
                     EnvironmentPojo environmentPojo = new Gson().fromJson(data, EnvironmentPojo.class);
                     Config.HOST = environmentPojo.host;
-//                    Config.IS_ENCRYPT = environmentPojo.encryption;
-                    Config.IS_ENCRYPT = false;
+                    Config.IS_ENCRYPT = environmentPojo.encryption;
                     Config.H5_HOST = environmentPojo.h5Host;
                     Config.APP_KEY = environmentPojo.appKey;
                 } else {

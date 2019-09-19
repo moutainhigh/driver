@@ -22,10 +22,15 @@ import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.Log;
+import com.easymi.component.utils.LogUtil;
+import com.easymin.carpooling.entity.AllStation;
 import com.easymin.carpooling.entity.StationResult;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
@@ -97,6 +102,7 @@ public class FlowPresenter implements FlowContract.Presenter {
 
                 @Override
                 public void onDriveRouteSearched(DriveRouteResult driveRouteResult, int code) {
+                    Log.e("hufeng/code", code + "");
                     if (code == 1000) {
                         view.showPath(driveRouteResult);
                     }
@@ -141,7 +147,7 @@ public class FlowPresenter implements FlowContract.Presenter {
 
     @Override
     public void gotoStart(CarpoolOrder carpoolOrder) {
-        view.getManager().add(model.gotoStart(carpoolOrder.id).subscribe(new MySubscriber<Object>(context, true, true, new NoErrSubscriberListener<Object>() {
+        view.getManager().add(model.gotoStart(carpoolOrder.orderId).subscribe(new MySubscriber<Object>(context, true, true, new NoErrSubscriberListener<Object>() {
             @Override
             public void onNext(Object o) {
                 view.gotoStartSuc(carpoolOrder);
@@ -151,7 +157,7 @@ public class FlowPresenter implements FlowContract.Presenter {
 
     @Override
     public void arriveStart(CarpoolOrder carpoolOrder) {
-        view.getManager().add(model.arriveStart(carpoolOrder.id).subscribe(new MySubscriber<>(context,
+        view.getManager().add(model.arriveStart(carpoolOrder.orderId).subscribe(new MySubscriber<>(context,
                 true,
                 true,
                 new HaveErrSubscriberListener<Object>() {
@@ -180,7 +186,7 @@ public class FlowPresenter implements FlowContract.Presenter {
 
     @Override
     public void acceptCustomer(CarpoolOrder carpoolOrder) {
-        view.getManager().add(model.acceptCustomer(carpoolOrder.id).subscribe(new MySubscriber<>(context,
+        view.getManager().add(model.acceptCustomer(carpoolOrder.orderId).subscribe(new MySubscriber<>(context,
                 true,
                 true,
                 o -> view.acceptCustomerSuc(carpoolOrder))));
@@ -188,7 +194,7 @@ public class FlowPresenter implements FlowContract.Presenter {
 
     @Override
     public void jumpAccept(CarpoolOrder carpoolOrder) {
-        view.getManager().add(model.jumpCustomer(carpoolOrder.id).subscribe(new MySubscriber<>(context,
+        view.getManager().add(model.jumpCustomer(carpoolOrder.orderId).subscribe(new MySubscriber<>(context,
                 true,
                 true,
                 o -> view.jumpAcceptSuc(carpoolOrder))));
@@ -196,7 +202,7 @@ public class FlowPresenter implements FlowContract.Presenter {
 
     @Override
     public void arriveEnd(CarpoolOrder carpoolOrder) {
-        view.getManager().add(model.sendCustomer(carpoolOrder.id).subscribe(new MySubscriber<>(context,
+        view.getManager().add(model.sendCustomer(carpoolOrder.orderId).subscribe(new MySubscriber<>(context,
                 true,
                 true,
                 o -> view.arriveEndSuc(carpoolOrder))));
@@ -227,9 +233,47 @@ public class FlowPresenter implements FlowContract.Presenter {
     @Override
     public void qureyScheduleInfo(long scheduleId) {
         view.getManager().add(model.qureyScheduleInfo(scheduleId).subscribe(new MySubscriber<>(context, true,
-                true, allStation -> {
-            view.scheduleInfo(allStation);
-        })));
+                true, allStation -> view.scheduleInfo(allStation))));
+    }
+
+    @Override
+    public void changeOrderSequence(String orderIdSequence) {
+        view.getManager().add(model.changeOrderSequence(orderIdSequence).subscribe(new MySubscriber<>(context, false,
+                false, object -> view.changeSequenceSuc())));
+    }
+
+    private Timer timer;
+    private TimerTask timerTask;
+
+    /**
+     * 定时查询班次 60秒查询一次
+     *
+     * @param scheduleId
+     */
+    public void queryOrderInTime(long scheduleId) {
+        cancelQueryInTime();
+        timer = new Timer();
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                qureyScheduleInfo(scheduleId);
+            }
+        };
+        timer.schedule(timerTask, 0, 60 * 1000);
+    }
+
+    /**
+     * 取消轮训
+     */
+    public void cancelQueryInTime() {
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+        if (timerTask != null) {
+            timerTask.cancel();
+            timerTask = null;
+        }
     }
 
 }

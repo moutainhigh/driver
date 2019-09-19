@@ -126,15 +126,10 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
 
     @NotNull
     private View.OnClickListener createOnClickListener(MultipleOrder baseOrder) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ARouter.getInstance()
-                        .build("/carpooling/FlowActivity")
-                        .withBoolean("needJump", true)
-                        .withSerializable("baseOrder", baseOrder).navigation();
-            }
-        };
+        return v -> ARouter.getInstance()
+                .build("/carpooling/FlowActivity")
+                .withBoolean("needJump", true)
+                .withSerializable("baseOrder", baseOrder).navigation();
     }
 
 }

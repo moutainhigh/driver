@@ -113,4 +113,13 @@ public class FlowModel implements FlowContract.Model {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    @Override
+    public Observable<Object> changeOrderSequence(String orderIdSequence) {
+        return ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
+                .changeOrderSequence(orderIdSequence)
+                .map(new HttpResultFunc2<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 }
