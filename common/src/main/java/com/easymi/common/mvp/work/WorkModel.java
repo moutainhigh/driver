@@ -1,7 +1,7 @@
 package com.easymi.common.mvp.work;
 
 import com.easymi.common.CommApiService;
-import com.easymi.common.entity.ManualCreateBean;
+import com.easymi.common.entity.ManualConfigBean;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.CityLineResult;
@@ -145,7 +145,7 @@ public class WorkModel implements WorkContract.Model {
     }
 
     @Override
-    public Observable<ManualCreateBean> getManualCreateConfig(long driverId) {
+    public Observable<ManualConfigBean> getManualCreateConfig(long driverId) {
         return ApiManager.getInstance().createApi(Config.HOST,CommApiService.class)
                 .getManualCreateConfig(driverId)
                 .map(new HttpResultFunc2<>())

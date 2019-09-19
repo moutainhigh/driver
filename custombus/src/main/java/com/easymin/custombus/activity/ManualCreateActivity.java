@@ -8,14 +8,16 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.easymi.common.entity.ManualCreateBean;
+import com.easymi.common.entity.ManualConfigBean;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
+import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
@@ -24,12 +26,15 @@ import com.easymi.component.widget.switchButton.SwitchButton;
 import com.easymin.custombus.DZBusApiService;
 import com.easymin.custombus.R;
 import com.easymin.custombus.dialog.ManualCreateDialog;
-import com.easymin.custombus.entity.manualCreateBean;
+import com.easymin.custombus.entity.ManualCreateLineBean;
 import com.google.gson.Gson;
 import com.jzxiang.pickerview.TimePickerDialog;
 import com.jzxiang.pickerview.data.Type;
 
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -47,6 +52,8 @@ public class ManualCreateActivity extends RxBaseActivity {
     private int day;
     private FrameLayout manualCreateFl;
     private int isShow;
+    private ManualCreateLineBean manualCreateLineBean;
+    private long ChooseDayTimeMillSeconds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +80,9 @@ public class ManualCreateActivity extends RxBaseActivity {
         manualCreateFl = findViewById(R.id.manualCreateFl);
         String content = XApp.getMyPreferences().getString(Config.SP_MANUAL_DATA, "");
         if (!TextUtils.isEmpty(content)) {
-            ManualCreateBean manualCreateBean = new Gson().fromJson(content, ManualCreateBean.class);
-            day = manualCreateBean.day;
-            isShow = manualCreateBean.isShow;
+            ManualConfigBean manualConfigBean = new Gson().fromJson(content, ManualConfigBean.class);
+            day = manualConfigBean.day;
+            isShow = manualConfigBean.isShow;
             manualCreateFl.setVisibility(isShow == 1 ? View.VISIBLE : View.GONE);
         } else {
             ToastUtil.showMessage(this, "数据发生错误");
@@ -102,8 +109,57 @@ public class ManualCreateActivity extends RxBaseActivity {
         } else if (v.getId() == R.id.manualCreateTvDateSelect) {
             showTimePicker(Type.YEAR_MONTH_DAY);
         } else if (v.getId() == R.id.manualCreateTvTimeSelect) {
+            if (ChooseDayTimeMillSeconds == 0) {
+                ToastUtil.showMessage(this, "请先选择发车日期");
+                return;
+            }
             showTimePicker(Type.HOURS_MINS);
+        } else if (v.getId() == R.id.manualCreateTvCreate) {
+            createManualOrder();
         }
+    }
+
+    private void createManualOrder() {
+        if (manualCreateLineBean == null) {
+            ToastUtil.showMessage(this, "请先选择线路");
+            return;
+        }
+        if (TextUtils.isEmpty(manualCreateTvDateSelect.getText())) {
+            ToastUtil.showMessage(this, "请先选择发车日期");
+            return;
+        }
+        if (TextUtils.isEmpty(manualCreateTvTimeSelect.getText())) {
+            ToastUtil.showMessage(this, "请先选择发车时间");
+            return;
+        }
+        Map<String, String> data = new HashMap<>();
+
+        data.put("lineId", String.valueOf(manualCreateLineBean.id));
+        data.put("lineName", manualCreateLineBean.name);
+        data.put("driverId", String.valueOf(EmUtil.getEmployId()));
+        data.put("driverName", EmUtil.getEmployInfo().realName);
+        data.put("driverPhone", EmUtil.getEmployInfo().phone);
+        data.put("day", manualCreateTvDateSelect.getText().toString());
+        data.put("hour", manualCreateTvTimeSelect.getText().toString());
+        data.put("endTimeType", String.valueOf(1));
+        data.put("isShow", isShow == 1 ? String.valueOf(manualCreateSb.isChecked() ? 1 : 2) : String.valueOf(1));
+        data.put("vehicleNo", "K2596");
+
+        ApiManager.getInstance().createApi(Config.HOST, DZBusApiService.class)
+                .manualOrderCreate(data)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MySubscriber<EmResult>(this, true, false, new NoErrSubscriberListener<EmResult>() {
+                    @Override
+                    public void onNext(EmResult emResult) {
+                        if (emResult.getCode() == 1) {
+                            ToastUtil.showMessage(ManualCreateActivity.this, "报班成功");
+                            finish();
+                        }
+                    }
+                }));
+
     }
 
     private void getDataList() {
@@ -112,12 +168,12 @@ public class ManualCreateActivity extends RxBaseActivity {
                 .map(new HttpResultFunc2<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MySubscriber<List<manualCreateBean>>
-                        (this, true, false, new NoErrSubscriberListener<List<manualCreateBean>>() {
+                .subscribe(new MySubscriber<List<ManualCreateLineBean>>
+                        (this, true, false, new NoErrSubscriberListener<List<ManualCreateLineBean>>() {
                             @Override
-                            public void onNext(List<manualCreateBean> manualCreateBeans) {
-                                if (!manualCreateBeans.isEmpty()) {
-                                    showDialog(manualCreateBeans);
+                            public void onNext(List<ManualCreateLineBean> manualCreateLineBeans) {
+                                if (!manualCreateLineBeans.isEmpty()) {
+                                    showDialog(manualCreateLineBeans);
                                 } else {
                                     ToastUtil.showMessage(ManualCreateActivity.this, "数据发生错误,请重试");
                                 }
@@ -125,10 +181,11 @@ public class ManualCreateActivity extends RxBaseActivity {
                         }));
     }
 
-    private void showDialog(List<manualCreateBean> manualCreateBeans) {
+    private void showDialog(List<ManualCreateLineBean> manualCreateLineBeans) {
         if (dialog == null) {
-            dialog = new ManualCreateDialog(this, manualCreateBeans, manualCreateBean -> {
-                manualCreateTvLineSelect.setText(manualCreateBean.name);
+            dialog = new ManualCreateDialog(this, manualCreateLineBeans, manualCreateLineBean -> {
+                this.manualCreateLineBean = manualCreateLineBean;
+                manualCreateTvLineSelect.setText(manualCreateLineBean.name);
             });
         }
         if (dialog.isShowing()) {
@@ -138,10 +195,13 @@ public class ManualCreateActivity extends RxBaseActivity {
     }
 
     public void showTimePicker(Type type) {
-        new TimePickerDialog.Builder()
+
+        TimePickerDialog.Builder builder = new TimePickerDialog.Builder()
                 .setCallBack((timePickerView, millseconds) -> {
                     if (type == Type.YEAR_MONTH_DAY) {
-                        manualCreateTvDateSelect.setText(TimeUtil.getTime("MM月dd日", millseconds));
+                        ChooseDayTimeMillSeconds = millseconds;
+                        manualCreateTvDateSelect.setText(TimeUtil.getTime("yyyy-MM-dd", millseconds));
+                        manualCreateTvTimeSelect.setText("");
                     } else {
                         manualCreateTvTimeSelect.setText(TimeUtil.getTime("HH:mm", millseconds));
                     }
@@ -155,8 +215,21 @@ public class ManualCreateActivity extends RxBaseActivity {
                 .setCurrentMillseconds(System.currentTimeMillis())
                 .setThemeColor(ContextCompat.getColor(this, R.color.colorBlue))
                 .setType(type)
-                .setWheelItemTextSize(12)
-                .build()
+                .setWheelItemTextSize(12);
+
+        if (type == Type.HOURS_MINS) {
+            Calendar chooseCalendar = Calendar.getInstance();
+            chooseCalendar.setTimeInMillis(ChooseDayTimeMillSeconds);
+            Calendar currentCalendar = Calendar.getInstance();
+            currentCalendar.setTimeInMillis(System.currentTimeMillis());
+            int chooseDayInYear = chooseCalendar.get(Calendar.DAY_OF_YEAR);
+            int currentDayInYear = currentCalendar.get(Calendar.DAY_OF_YEAR);
+            if (chooseDayInYear != currentDayInYear) {
+                builder.setMinMillseconds(0);
+            }
+        }
+
+        builder.build()
                 .show(getSupportFragmentManager(), "");
     }
 }

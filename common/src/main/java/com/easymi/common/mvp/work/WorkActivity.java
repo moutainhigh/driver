@@ -36,7 +36,7 @@ import com.easymi.common.activity.CreateActivity;
 import com.easymi.common.adapter.OrderAdapter;
 import com.easymi.common.entity.AnnAndNotice;
 import com.easymi.common.entity.BuildPushData;
-import com.easymi.common.entity.ManualCreateBean;
+import com.easymi.common.entity.ManualConfigBean;
 import com.easymi.common.entity.MqttReconnectEvent;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
@@ -320,9 +320,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     }
 
     @Override
-    public void onManualCreateConfigSuc(ManualCreateBean manualCreateBean) {
-        if (manualCreateBean.showView == 1) {
-            XApp.getEditor().putString(Config.SP_MANUAL_DATA, new Gson().toJson(manualCreateBean)).apply();
+    public void onManualCreateConfigSuc(ManualConfigBean manualConfigBean) {
+        if (manualConfigBean.showView == 1) {
+            XApp.getEditor().putString(Config.SP_MANUAL_DATA, new Gson().toJson(manualConfigBean)).apply();
             workIvManual.setVisibility(View.VISIBLE);
             workIvManual.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -503,11 +503,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         listenOrderCon.setVisibility(View.VISIBLE);
         rippleBackground.startRippleAnimation();
         bottomBtnCon.setVisibility(View.GONE);
-        if (TextUtils.equals(EmUtil.getEmployInfo().serviceType, Config.COUNTRY)) {
-            presenter.getManualConfig();
-        } else {
-            XApp.getEditor().remove(Config.SP_MANUAL_DATA).apply();
-        }
     }
 
     @Override
@@ -544,6 +539,12 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
             } else {
                 showOnline();//听单状态
             }
+        }
+
+        if (TextUtils.equals(EmUtil.getEmployInfo().serviceType, Config.COUNTRY)) {
+            presenter.getManualConfig();
+        } else {
+            XApp.getEditor().remove(Config.SP_MANUAL_DATA).apply();
         }
     }
 

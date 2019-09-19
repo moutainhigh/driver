@@ -6,6 +6,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,9 +14,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.easymi.common.CommApiService;
+import com.easymi.common.entity.ManualConfigBean;
 import com.easymi.component.Config;
+import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxPayActivity;
 import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult;
@@ -24,6 +28,7 @@ import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
+import com.easymin.custombus.DZBusApiService;
 import com.easymin.custombus.MyScrollVIew;
 import com.easymin.custombus.R;
 import com.easymin.custombus.adapter.PassengerAdapter;
@@ -34,7 +39,9 @@ import com.easymin.custombus.mvp.FlowContract;
 import com.easymin.custombus.mvp.FlowPresenter;
 import com.easymin.custombus.receiver.CancelOrderReceiver;
 import com.easymin.custombus.receiver.ScheduleTurnReceiver;
+import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -52,7 +59,8 @@ import rx.schedulers.Schedulers;
  */
 public class PassengerActivity extends RxPayActivity implements FlowContract.View,
         CancelOrderReceiver.OnCancelListener,
-        ScheduleTurnReceiver.OnTurnListener, PassengerAdapter.OnDialogShowingListener {
+        ScheduleTurnReceiver.OnTurnListener, PassengerAdapter.OnDialogShowingListener,
+        PassengerAdapter.OnConfirmBoardingListener {
     /**
      * 界面控件
      */
@@ -117,6 +125,9 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
      * 自动完成订单
      */
     private ScheduleTurnReceiver scheduleTurnReceiver;
+    private int inspectTicket;
+    private List<Customer> customers;
+    private LinearLayout passengerLl;
 
     @Override
     public boolean isEnableSwipe() {
@@ -134,16 +145,26 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
         booktime = getIntent().getLongExtra("time", 0);
         position = getIntent().getIntExtra("position", 0);
         presenter = new FlowPresenter(this, this);
+        String content = XApp.getMyPreferences().getString(Config.SP_MANUAL_DATA, "");
+        if (!TextUtils.isEmpty(content)) {
+            ManualConfigBean manualConfigBean = new Gson().fromJson(content, ManualConfigBean.class);
+            inspectTicket = manualConfigBean.inspectTicket;
+        }
         findById();
         initAdapter();
         initListener();
         getData();
         setData();
-        if (booktime != 0) {
-            setWaitTime();
-            passenger_v.setVisibility(View.VISIBLE);
+
+        if (inspectTicket != 2) {
+            if (booktime != 0) {
+                setWaitTime();
+                passenger_v.setVisibility(View.VISIBLE);
+            } else {
+                passenger_v.setVisibility(View.GONE);
+            }
         } else {
-            passenger_v.setVisibility(View.GONE);
+            showNextStation();
         }
     }
 
@@ -181,6 +202,7 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
         passenger_ll_top = findViewById(R.id.passenger_ll_top);
         lin_head = findViewById(R.id.lin_head);
         passenger_v = findViewById(R.id.passenger_v);
+        passengerLl = findViewById(R.id.passengerLl);
 
         tv_countdown1 = findViewById(R.id.tv_countdown1);
         tv_countdown_hint1 = findViewById(R.id.tv_countdown_hint1);
@@ -200,8 +222,9 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
      * 初始化适配器
      */
     public void initAdapter() {
-        adapter = new PassengerAdapter(this);
+        adapter = new PassengerAdapter(this, inspectTicket);
         adapter.setOnDialogShowingListener(this);
+        adapter.setOnConfirmBoarding(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
         //禁止滑动
@@ -222,26 +245,10 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
         });
         //前往下一站
         tv_go_next.setOnClickListener(v -> {
-            if (uncheck == 0) {
-                presenter.toNextStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position + 1).stationId);
-            } else {
-                GoNextDialog dialog = new GoNextDialog(this);
-                dialog.setOnMyClickListener((view, string) -> {
-                    presenter.toNextStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position + 1).stationId);
-                });
-                dialog.show();
-            }
+            goToNextStation();
         });
         tv_go_next_btn.setOnClickListener(v -> {
-            if (uncheck == 0) {
-                presenter.toNextStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position + 1).stationId);
-            } else {
-                GoNextDialog dialog = new GoNextDialog(this);
-                dialog.setOnMyClickListener((view, string) -> {
-                    presenter.toNextStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position + 1).stationId);
-                });
-                dialog.show();
-            }
+            goToNextStation();
         });
         //视差和悬浮头部展示
         scrollview.setScrollListener(scrollY -> {
@@ -276,6 +283,22 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
 //                return false;
 //            }
 //        });
+    }
+
+    public void goToNextStation() {
+        if (inspectTicket == 2) {
+            if (uncheck == 0) {
+                presenter.toNextStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position + 1).stationId);
+            } else {
+                GoNextDialog dialog = new GoNextDialog(this);
+                dialog.setOnMyClickListener((view, string) -> {
+                    presenter.toNextStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position + 1).stationId);
+                });
+                dialog.show();
+            }
+        } else if (uncheck == 0) {
+            presenter.toNextStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position + 1).stationId);
+        }
     }
 
     /**
@@ -361,16 +384,7 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
 
                 //超时验完
                 if (uncheck == 0) {
-                    lin_go_next.setVisibility(View.GONE);
-
-                    iv_ticket.setVisibility(View.GONE);
-                    tv_check_hint.setText(getResources().getString(R.string.cb_go_next_station));
-
-                    tv_go_next_btn.setVisibility(View.VISIBLE);
-                    tv_check_btn.setVisibility(View.GONE);
-
-                    tv_go_next_btn.setTextColor(getResources().getColor(R.color.white));
-                    tv_go_next_btn.setBackground(getResources().getDrawable(R.drawable.corners_btn_4dp_bg));
+                    showNextStation();
                 } else {
                     //超时未验票完
                     lin_go_next.setVisibility(View.VISIBLE);
@@ -439,7 +453,8 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
     @Override
     public void showOrders(List<Customer> customers) {
         if (customers != null && customers.size() != 0) {
-            adapter.setDatas(customers);
+            this.customers = customers;
+            adapter.setDatas(this.customers);
             checkNumber(customers);
         } else {
             setMyResult();
@@ -493,26 +508,34 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
         tv_status_yes.setText(getResources().getString(R.string.cb_alredy_check) + " " + check);
         tv_status_no.setText(getResources().getString(R.string.cb_no_check) + " " + uncheck);
 
+
+        if (inspectTicket == 2 && uncheck > 0) {
+            passengerLl.setVisibility(View.VISIBLE);
+            TextView passengerTvManualAction = findViewById(R.id.passengerTvManualAction);
+            passengerTvManualAction.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (customers != null && customers.size() > 0) {
+                        List<String> data = new ArrayList<>();
+                        for (Customer customer : customers) {
+                            if (customer.status == Customer.CITY_COUNTRY_STATUS_COMING
+                                    || customer.status == Customer.CITY_COUNTRY_STATUS_ARRIVED) {
+                                data.add(String.valueOf(customer.id));
+                            }
+                        }
+                        confirmBoarding(data);
+                    }
+                }
+            });
+        } else {
+            passengerLl.setVisibility(View.GONE);
+        }
+
         /**
          * 根据未验票数显示布局
          */
-        if (uncheck == 0) {
-
-            iv_ticket.setVisibility(View.GONE);
-            tv_check_hint.setText(getResources().getString(R.string.cb_go_next_station));
-
-            lin_go_next.setVisibility(View.GONE);
-            tv_go_next_btn.setVisibility(View.VISIBLE);
-            tv_check_btn.setVisibility(View.GONE);
-
-            tv_go_next_btn.setTextColor(getResources().getColor(R.color.white));
-            tv_go_next_btn.setBackground(getResources().getDrawable(R.drawable.corners_btn_4dp_bg));
-
-            lin_check_top.setOnClickListener(v -> {
-                if (uncheck == 0) {
-                    presenter.toNextStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position + 1).stationId);
-                }
-            });
+        if (inspectTicket == 2 || uncheck == 0) {
+            showNextStation();
         } else {
             iv_ticket.setVisibility(View.VISIBLE);
             tv_check_hint.setText(getResources().getString(R.string.cb_check_ticket));
@@ -525,6 +548,29 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
                 Intent intent = new Intent(this, NewCheckTicketActivity.class);
                 intent.putExtra("isUnCheck", uncheck);
                 startActivityForResult(intent, 0x00);
+            });
+        }
+    }
+
+    public void showNextStation() {
+        if (inspectTicket == 2) {
+            lin_time_countdown.setVisibility(View.GONE);
+            lin_time_countdown1.setVisibility(View.GONE);
+        }
+        iv_ticket.setVisibility(View.GONE);
+        tv_check_hint.setText(getResources().getString(R.string.cb_go_next_station));
+
+        lin_go_next.setVisibility(View.GONE);
+        tv_go_next_btn.setVisibility(View.VISIBLE);
+        tv_check_btn.setVisibility(View.GONE);
+
+        tv_go_next_btn.setTextColor(getResources().getColor(R.color.white));
+        tv_go_next_btn.setBackground(getResources().getDrawable(R.drawable.corners_btn_4dp_bg));
+        passenger_v.setVisibility(View.VISIBLE);
+
+        if (customers != null && customers.size() > 0) {
+            lin_check_top.setOnClickListener(v -> {
+                goToNextStation();
             });
         }
     }
@@ -624,6 +670,35 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
                     @Override
                     public void onNext(EmResult emResult) {
                         ToastUtil.showMessage(PassengerActivity.this, "取消订单成功");
+                        getData();
+                    }
+                }));
+    }
+
+    @Override
+    public void onConfirm(long orderId) {
+        List<String> data = new ArrayList<>();
+        data.add(String.valueOf(orderId));
+        confirmBoarding(data);
+    }
+
+    private void confirmBoarding(List<String> ids) {
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String id : ids) {
+            stringBuilder.append(id);
+            stringBuilder.append(",");
+        }
+        stringBuilder.delete(stringBuilder.length() - 1, stringBuilder.length());
+
+        ApiManager.getInstance().createApi(Config.HOST, DZBusApiService.class)
+                .confirmBoarding(stringBuilder.toString())
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MySubscriber<EmResult>(this, true, false, new NoErrSubscriberListener<EmResult>() {
+                    @Override
+                    public void onNext(EmResult emResult) {
                         getData();
                     }
                 }));

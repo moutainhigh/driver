@@ -1,6 +1,6 @@
 package com.easymin.custombus.entity;
 
-public class manualCreateBean {
+public class ManualCreateLineBean {
     public long id;
     public String name;
 }

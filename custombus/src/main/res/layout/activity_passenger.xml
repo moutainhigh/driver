@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_20212C"
-    android:orientation="vertical"
-    android:clickable="true">
+    android:clickable="true"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/passenger_ll_top"
@@ -42,10 +42,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
+                    android:gravity="center"
                     android:text="@string/cb_check_ticket"
                     android:textColor="@color/white"
-                    android:textSize="20sp"
-                    android:gravity="center"/>
+                    android:textSize="20sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -80,10 +80,10 @@
             android:id="@+id/lin_go_next"
             android:layout_width="match_parent"
             android:layout_height="45dp"
+            android:background="#08ffffff"
             android:gravity="center"
             android:orientation="horizontal"
-            android:visibility="visible"
-            android:background="#08ffffff">
+            android:visibility="visible">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -106,6 +106,7 @@
     </LinearLayout>
 
     <com.easymin.custombus.MyScrollVIew
+        android:overScrollMode="never"
         android:id="@+id/scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -124,7 +125,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="280dp"
                 android:orientation="vertical"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -174,19 +175,52 @@
 
             </LinearLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:descendantFocusability="blocksDescendants">
+                android:descendantFocusability="blocksDescendants"
+                android:orientation="vertical">
 
                 <android.support.v7.widget.RecyclerView
-                    android:overScrollMode="never"
-                    android:background="@color/color_f2f2f2"
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/color_f2f2f2"
+                    android:overScrollMode="never"
                     android:scrollbars="none" />
-            </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/passengerLl"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:background="@color/color_f2f2f2"
+                    android:orientation="vertical"
+                    android:paddingTop="12dp"
+                    android:visibility="gone">
+
+                    <FrameLayout
+                        android:id="@+id/passengerFl"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/white"
+                        android:paddingStart="12dp"
+                        android:paddingTop="12dp"
+                        android:paddingEnd="12dp">
+
+                        <TextView
+                            android:id="@+id/passengerTvManualAction"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:background="@drawable/cor4_solid_blue"
+                            android:gravity="center"
+                            android:text="确认全部上车"
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/sizeButton" />
+                    </FrameLayout>
+                </LinearLayout>
+
+            </LinearLayout>
         </LinearLayout>
     </com.easymin.custombus.MyScrollVIew>
 
@@ -201,10 +235,10 @@
         android:layout_height="55dp"
         android:layout_marginTop="40dp"
         android:background="@color/white"
+        android:elevation="4dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:visibility="gone"
-        android:elevation="4dp">
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tv_check_btn"

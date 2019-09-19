@@ -3,7 +3,7 @@ package com.easymi.common;
 import com.easymi.common.entity.Brands;
 import com.easymi.common.entity.BusinessList;
 import com.easymi.common.entity.CompanyList;
-import com.easymi.common.entity.ManualCreateBean;
+import com.easymi.common.entity.ManualConfigBean;
 import com.easymi.common.entity.MqttConfig;
 import com.easymi.common.entity.MqttResult;
 import com.easymi.common.entity.NearDriver;
@@ -166,7 +166,7 @@ public interface CommApiService {
 
 
     @GET("api/v1/bus/country/driver/line/getNoScheduleInfo")
-    Observable<EmResult2<ManualCreateBean>> getManualCreateConfig(@Query("driverId") long driverId);
+    Observable<EmResult2<ManualConfigBean>> getManualCreateConfig(@Query("driverId") long driverId);
 
     /**
      * 获取系统配置

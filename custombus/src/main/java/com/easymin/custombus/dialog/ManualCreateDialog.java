@@ -20,7 +20,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.easymi.component.utils.UIDisplayHelper;
 import com.easymin.custombus.R;
-import com.easymin.custombus.entity.manualCreateBean;
+import com.easymin.custombus.entity.ManualCreateLineBean;
 
 import java.util.List;
 
@@ -29,9 +29,9 @@ public class ManualCreateDialog extends BottomSheetDialog implements View.OnClic
     private BottomSheetBehavior<View> behavior;
     private ImageView dialogManualCreateIv;
     private RecyclerView dialogManualCreateRv;
-    private List<manualCreateBean> data;
+    private List<ManualCreateLineBean> data;
 
-    public ManualCreateDialog(@NonNull Context context, List<manualCreateBean> manualCreateBeans, onManualCreateDialogClickListener onManualCreateDialogClickListener) {
+    public ManualCreateDialog(@NonNull Context context, List<ManualCreateLineBean> manualCreateBeans, onManualCreateDialogClickListener onManualCreateDialogClickListener) {
         super(context);
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_manual_create, null);
         this.data = manualCreateBeans;
@@ -40,10 +40,10 @@ public class ManualCreateDialog extends BottomSheetDialog implements View.OnClic
         dialogManualCreateRv = view.findViewById(R.id.dialogManualCreateRv);
         setContentView(view);
         dialogManualCreateRv.setLayoutManager(new LinearLayoutManager(context));
-        BaseQuickAdapter<manualCreateBean, BaseViewHolder> adapter =
-                new BaseQuickAdapter<manualCreateBean, BaseViewHolder>(R.layout.dialog_manual_create_item, data) {
+        BaseQuickAdapter<ManualCreateLineBean, BaseViewHolder> adapter =
+                new BaseQuickAdapter<ManualCreateLineBean, BaseViewHolder>(R.layout.dialog_manual_create_item, data) {
             @Override
-            protected void convert(BaseViewHolder helper, manualCreateBean item) {
+            protected void convert(BaseViewHolder helper, ManualCreateLineBean item) {
                 helper.setText(R.id.dialogManualCreateItemTv, item.name);
             }
         };
@@ -51,7 +51,7 @@ public class ManualCreateDialog extends BottomSheetDialog implements View.OnClic
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 if (onManualCreateDialogClickListener != null) {
-                    onManualCreateDialogClickListener.onClick((manualCreateBean) adapter.getData().get(position));
+                    onManualCreateDialogClickListener.onClick((ManualCreateLineBean) adapter.getData().get(position));
                 }
                 dismiss();
             }
@@ -109,7 +109,7 @@ public class ManualCreateDialog extends BottomSheetDialog implements View.OnClic
     }
 
     public interface onManualCreateDialogClickListener {
-        void onClick(manualCreateBean str);
+        void onClick(ManualCreateLineBean str);
     }
 
 }

@@ -5,7 +5,7 @@ import android.text.TextUtils;
 
 import com.easymi.common.CommApiService;
 import com.easymi.common.R;
-import com.easymi.common.entity.ManualCreateBean;
+import com.easymi.common.entity.ManualConfigBean;
 import com.easymi.common.entity.MqttConfig;
 import com.easymi.common.entity.MqttResult;
 import com.easymi.common.entity.MultipleOrder;
@@ -92,13 +92,13 @@ public class WorkPresenter implements WorkContract.Presenter {
     }
 
     public void getManualConfig() {
-        Observable<ManualCreateBean> observable = model.getManualCreateConfig(EmUtil.getEmployId());
-        view.getRxManager().add(observable.subscribe(new MySubscriber<ManualCreateBean>(context, false, false, new HaveErrSubscriberListener<ManualCreateBean>() {
+        Observable<ManualConfigBean> observable = model.getManualCreateConfig(EmUtil.getEmployId());
+        view.getRxManager().add(observable.subscribe(new MySubscriber<ManualConfigBean>(context, false, false, new HaveErrSubscriberListener<ManualConfigBean>() {
             @Override
-            public void onNext(ManualCreateBean manualCreateBean) {
-                view.onManualCreateConfigSuc(manualCreateBean);
-                if (manualCreateBean.showView == 1) {
-                    XApp.getEditor().putString(Config.SP_MANUAL_DATA, new Gson().toJson(manualCreateBean)).apply();
+            public void onNext(ManualConfigBean manualConfigBean) {
+                view.onManualCreateConfigSuc(manualConfigBean);
+                if (manualConfigBean.showView == 1) {
+                    XApp.getEditor().putString(Config.SP_MANUAL_DATA, new Gson().toJson(manualConfigBean)).apply();
                 } else {
                     XApp.getEditor().remove(Config.SP_MANUAL_DATA).apply();
                 }

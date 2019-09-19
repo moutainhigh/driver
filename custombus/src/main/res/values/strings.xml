@@ -44,7 +44,7 @@
 
     <string name="cb_go_next_station">前往\n下一站</string>
     <string name="cb_dialog_title">是否前往下一站</string>
-    <string name="cb_dialog_hint">前往下一站后，未验票乘客将不能再验票</string>
+    <string name="cb_dialog_hint">还有乘客订单未支付或未确认，前往下一站将会自动跳过这些订单，未支付订单将自动取消，是否前往？</string>
 
 
     <string name="canceled_order">当前订单已被取消:)</string>
