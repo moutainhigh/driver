@@ -13,7 +13,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "data.db";
 
-    private static final int VERSION = 182;
+    private static final int VERSION = 185;
 
     private StringBuffer sqlBuf;
 
