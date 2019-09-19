@@ -156,15 +156,15 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
         getData();
         setData();
 
-        if (inspectTicket != 2) {
-            if (booktime != 0) {
+        if (booktime != 0) {
+            if (inspectTicket != 2) {
                 setWaitTime();
-                passenger_v.setVisibility(View.VISIBLE);
             } else {
-                passenger_v.setVisibility(View.GONE);
+                showNextStation();
             }
+            passenger_v.setVisibility(View.VISIBLE);
         } else {
-            showNextStation();
+            passenger_v.setVisibility(View.GONE);
         }
     }
 
@@ -509,7 +509,7 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
         tv_status_no.setText(getResources().getString(R.string.cb_no_check) + " " + uncheck);
 
 
-        if (inspectTicket == 2 && uncheck > 0) {
+        if (inspectTicket == 2 && uncheck > 0 && booktime > 0) {
             passengerLl.setVisibility(View.VISIBLE);
             TextView passengerTvManualAction = findViewById(R.id.passengerTvManualAction);
             passengerTvManualAction.setOnClickListener(new View.OnClickListener() {
@@ -518,8 +518,7 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
                     if (customers != null && customers.size() > 0) {
                         List<String> data = new ArrayList<>();
                         for (Customer customer : customers) {
-                            if (customer.status == Customer.CITY_COUNTRY_STATUS_COMING
-                                    || customer.status == Customer.CITY_COUNTRY_STATUS_ARRIVED) {
+                            if (customer.status == Customer.CITY_COUNTRY_STATUS_ARRIVED) {
                                 data.add(String.valueOf(customer.id));
                             }
                         }
@@ -566,7 +565,6 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
 
         tv_go_next_btn.setTextColor(getResources().getColor(R.color.white));
         tv_go_next_btn.setBackground(getResources().getDrawable(R.drawable.corners_btn_4dp_bg));
-        passenger_v.setVisibility(View.VISIBLE);
 
         if (customers != null && customers.size() > 0) {
             lin_check_top.setOnClickListener(v -> {

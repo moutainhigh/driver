@@ -26,7 +26,6 @@ import com.easymin.custombus.entity.Customer;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.easymin.custombus.entity.Customer.CITY_COUNTRY_STATUS_COMING;
 import static com.easymin.custombus.entity.Customer.CITY_COUNTRY_STATUS_PAY;
 
 /**
@@ -131,14 +130,12 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
 
         if (inspectTicket == 2) {
             holder.cusRl.setVisibility(customer.status == CITY_COUNTRY_STATUS_PAY
-                    || customer.status == CITY_COUNTRY_STATUS_COMING
                     || customer.status == Customer.CITY_COUNTRY_STATUS_ARRIVED ? View.VISIBLE : View.GONE);
         } else {
             holder.cusRl.setVisibility(customer.status == CITY_COUNTRY_STATUS_PAY ? View.VISIBLE : View.GONE);
         }
 
-        if (inspectTicket == 2 && (customer.status == CITY_COUNTRY_STATUS_COMING
-                || customer.status == Customer.CITY_COUNTRY_STATUS_ARRIVED)) {
+        if (inspectTicket == 2 && customer.status == Customer.CITY_COUNTRY_STATUS_ARRIVED) {
             holder.cusTvCancel.setVisibility(View.GONE);
             holder.cusTvPay.setVisibility(View.VISIBLE);
             holder.cusTvPay.setText("确认上车");
@@ -151,8 +148,7 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
         holder.cusTvPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (inspectTicket == 2 && (customer.status == CITY_COUNTRY_STATUS_COMING
-                        || customer.status == Customer.CITY_COUNTRY_STATUS_ARRIVED)) {
+                if (inspectTicket == 2 && customer.status == Customer.CITY_COUNTRY_STATUS_ARRIVED) {
                     if (onConfirmBoardingListener != null) {
                         onConfirmBoardingListener.onConfirm(customer.id);
                     }
