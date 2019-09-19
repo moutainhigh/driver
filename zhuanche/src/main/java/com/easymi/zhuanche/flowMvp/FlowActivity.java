@@ -1325,6 +1325,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             helper.unRegisterSensorListener();
             helper = null;
         }
+        if (smoothMarker != null) {
+            smoothMarker.destory();
+        }
 
         super.onDestroy();
     }

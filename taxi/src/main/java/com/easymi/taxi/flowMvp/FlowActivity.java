@@ -1127,6 +1127,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         mAlbumOrientationEventListener.disable();
         mapView.onDestroy();
         presenter.stopNavi();
+        if (smoothMarker!=null){
+            smoothMarker.destory();
+        }
         super.onDestroy();
     }
 

@@ -607,7 +607,9 @@ public class FlowActivity extends RxPayActivity implements
             @Override
             public void clearMap() {
                 aMap.clear();
-                smoothMoveMarker = null;
+                if (smoothMoveMarker != null) {
+                    smoothMoveMarker.destory();
+                }
                 initMap();
                 //第一时间加上自身位置
                 receiveLoc(EmUtil.getLastLoc());
@@ -1163,7 +1165,7 @@ public class FlowActivity extends RxPayActivity implements
             markerOption.position(latLng);
             markerOption.draggable(false);
             markerOption.infoWindowEnable(true);
-            markerOption.anchor(0.5f,0.5f);
+            markerOption.anchor(0.5f, 0.5f);
             markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                     .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
             markerOption.rotateAngle(360.0F - location.bearing + aMap.getCameraPosition().bearing);
