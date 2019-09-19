@@ -52,7 +52,7 @@ public interface McService {
 
     @Headers(Config.TYPE_RSA)
     @GET("api/v1/resources/isLogin")
-    Observable<EmResult2<Boolean>> getIsLogin(@Query("userType") String userType,
+    Observable<EmResult2<Boolean>> getIsLogin(@Query("userType") int userType,
                                               @Query("phone") String phone);
 
     @FormUrlEncoded
