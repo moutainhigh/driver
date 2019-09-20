@@ -56,4 +56,14 @@ public class Sequence implements Serializable{
      */
     public long orderId;
 
+    /**
+     * 上车下标
+     */
+    public int startIndex;
+
+
+    /**
+     * 下车下标
+     */
+    public int endIndex;
 }

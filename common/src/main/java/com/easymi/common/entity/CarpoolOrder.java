@@ -4,10 +4,12 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.easymi.component.Config;
 import com.easymi.component.db.SqliteHelper;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -142,29 +144,20 @@ public class CarpoolOrder implements Serializable {
      */
     public int beginIndex;
 
-//    /**
-//     * 接的顺序(这个是位置顺序，可以拖动排序的)
-//     */
-//    public int acceptSequence;
-//    /**
-//     * 送的顺序(这个是位置顺序，可以拖动排序的)
-//     */
-//    public int sendSequence;
-//    /**
-//     * 序号(这个是序号，一开始确定后就不会再变了)
-//     */
-//    public int num;
-//
-//    //在第一次保存时，sequence是和num一致的
-//    /**
-//     * 0 未接 1 已接 2 跳过接 3 未送 4 已送 5 跳过送
-//     */
-//    public int customeStatus;
-//    /**
-//     * (接客户时的子状态) 0未到达预约地 1等待客户上车中
-//     * (接客户时的子状态) 0为前往  1前往未到达 2等待客户上车中
-//     */
-//    public int subStatus;
+
+    /**
+     * 当前订单在当前站点的订单集合的顺序
+     */
+    public int index;
+
+
+
+
+
+
+
+
+
 
     /**
      * 等候过期分钟数
@@ -242,11 +235,6 @@ public class CarpoolOrder implements Serializable {
         values.put("startLongitude", startLongitude);
         values.put("endLatitude", endLatitude);
         values.put("endLongitude", endLongitude);
-//        values.put("acceptSequence", acceptSequence);
-//        values.put("sendSequence", sendSequence);
-//        values.put("num", num);
-//        values.put("customeStatus", customeStatus);
-//        values.put("subStatus", subStatus);
         values.put("advanceAssign", advanceAssign);
         values.put("money", money);
         values.put("waitMinute", waitMinute);
@@ -255,8 +243,7 @@ public class CarpoolOrder implements Serializable {
         boolean flag = db.insert("t_cp_order_customer", null, values) != -1;
         return flag;
     }
-//
-//
+
     public void updateAdvanceAssign() {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
@@ -264,22 +251,6 @@ public class CarpoolOrder implements Serializable {
         values.put("advanceAssign", advanceAssign);
         db.update("t_cp_order_customer", values, " id = ? ",
                 new String[]{String.valueOf(id)});
-    }
-
-    /**
-     * 更新接送客户的状态
-     *
-     * @return
-     */
-    public boolean updateStatus() {
-        SqliteHelper helper = SqliteHelper.getInstance();
-        SQLiteDatabase db = helper.openSqliteDatabase();
-        ContentValues values = new ContentValues();
-//        values.put("customeStatus", customeStatus);
-
-        boolean flag = db.update("t_cp_order_customer", values, " id = ? ",
-                new String[]{String.valueOf(id)}) == 1;
-        return flag;
     }
 
     /**
@@ -292,55 +263,6 @@ public class CarpoolOrder implements Serializable {
         SQLiteDatabase db = helper.openSqliteDatabase();
         ContentValues values = new ContentValues();
         values.put("isContract", isContract);
-
-        boolean flag = db.update("t_cp_order_customer", values, " id = ? ",
-                new String[]{String.valueOf(id)}) == 1;
-        return flag;
-    }
-
-    /**
-     * 更新前往接的子状态
-     *
-     * @return
-     */
-    public boolean updateSubStatus() {
-        SqliteHelper helper = SqliteHelper.getInstance();
-        SQLiteDatabase db = helper.openSqliteDatabase();
-        ContentValues values = new ContentValues();
-//        values.put("subStatus", subStatus);
-        values.put("bookTime", bookTime);
-
-        boolean flag = db.update("t_cp_order_customer", values, " id = ? ",
-                new String[]{String.valueOf(id)}) == 1;
-        return flag;
-    }
-
-    /**
-     * 更新送的排序
-     *
-     * @return
-     */
-    public boolean updateSendSequence() {
-        SqliteHelper helper = SqliteHelper.getInstance();
-        SQLiteDatabase db = helper.openSqliteDatabase();
-        ContentValues values = new ContentValues();
-//        values.put("sendSequence", sendSequence);
-
-        boolean flag = db.update("t_cp_order_customer", values, " id = ? ",
-                new String[]{String.valueOf(id)}) == 1;
-        return flag;
-    }
-
-    /**
-     * 更新接的排序
-     *
-     * @return
-     */
-    public boolean updateAcceptSequence() {
-        SqliteHelper helper = SqliteHelper.getInstance();
-        SQLiteDatabase db = helper.openSqliteDatabase();
-        ContentValues values = new ContentValues();
-//        values.put("acceptSequence", acceptSequence);
 
         boolean flag = db.update("t_cp_order_customer", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
@@ -371,12 +293,12 @@ public class CarpoolOrder implements Serializable {
     /**
      * 判断数据库中是否已保存订单相关的CarpoolOrder
      */
-    public static boolean existsById(long id, String orderType) {
+    public static boolean existsByOrderId(long orderId, String orderType) {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
         Cursor cursor = db.rawQuery(
                 "select count(*) from t_cp_order_customer where id = ? and orderType = ?",
-                new String[]{String.valueOf(id), orderType});
+                new String[]{String.valueOf(orderId), orderType});
         boolean flag = false;
         try {
             if (cursor.moveToNext()) {
@@ -409,7 +331,7 @@ public class CarpoolOrder implements Serializable {
         }
         return carpoolOrders;
     }
-//
+
 //    /**
 //     * 根据ID和type查询数据
 //     */
@@ -444,8 +366,8 @@ public class CarpoolOrder implements Serializable {
 //
 //        return carpoolOrders;
 //    }
-//
-//
+
+
     private static CarpoolOrder cursorToOrder(Cursor cursor) {
         CarpoolOrder carpoolOrder = new CarpoolOrder();
         carpoolOrder.id = cursor.getLong(cursor.getColumnIndex("id"));
@@ -469,11 +391,6 @@ public class CarpoolOrder implements Serializable {
         carpoolOrder.startLongitude = cursor.getDouble(cursor.getColumnIndex("startLongitude"));
         carpoolOrder.endLatitude = cursor.getDouble(cursor.getColumnIndex("endLatitude"));
         carpoolOrder.endLongitude = cursor.getDouble(cursor.getColumnIndex("endLongitude"));
-//        carpoolOrder.acceptSequence = cursor.getInt(cursor.getColumnIndex("acceptSequence"));
-//        carpoolOrder.sendSequence = cursor.getInt(cursor.getColumnIndex("sendSequence"));
-//        carpoolOrder.num = cursor.getInt(cursor.getColumnIndex("num"));
-//        carpoolOrder.customeStatus = cursor.getInt(cursor.getColumnIndex("customeStatus"));
-//        carpoolOrder.subStatus = cursor.getInt(cursor.getColumnIndex("subStatus"));
         carpoolOrder.waitMinute = cursor.getInt(cursor.getColumnIndex("waitMinute"));
         carpoolOrder.isContract = cursor.getInt(cursor.getColumnIndex("isContract"));
         carpoolOrder.advanceAssign = cursor.getInt(cursor.getColumnIndex("advanceAssign"));
@@ -485,14 +402,14 @@ public class CarpoolOrder implements Serializable {
     /**
      * 通过订单id和订单类型删除（整个班次）
      *
-     * @param orderId
+     * @param id
      * @param orderType
      */
-    public static void delete(long orderId, String orderType) {
+    public static void delete(long id, String orderType) {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
-        db.delete("t_cp_order_customer", "orderId = ? and orderType = ? ",
-                new String[]{String.valueOf(orderId), orderType});
+        db.delete("t_cp_order_customer", "id = ? and orderType = ? ",
+                new String[]{String.valueOf(id), orderType});
     }
 
     /**
@@ -503,17 +420,17 @@ public class CarpoolOrder implements Serializable {
     public static void delete(long orderId) {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
-        db.delete("t_cp_order_customer", "id = ?",
+        db.delete("t_cp_order_customer", "orderId = ?",
                 new String[]{String.valueOf(orderId)});
     }
 
 
     public boolean saveOrUpdate() {
-//        if (existsById(id, Config.CARPOOL)) {
-//            return this.updateBase();
-//        } else {
+        if (existsByOrderId(orderId, Config.CARPOOL)) {
+            return this.updateBase();
+        } else {
             return this.save();
-//        }
+        }
     }
 
     /**
@@ -544,14 +461,15 @@ public class CarpoolOrder implements Serializable {
         values.put("endLatitude", endLatitude);
         values.put("endLongitude", endLongitude);
 
-//        values.put("customeStatus", customeStatus);
-//        values.put("subStatus", subStatus);
         values.put("orderId", orderId);
         values.put("waitMinute", waitMinute);
         values.put("advanceAssign", advanceAssign);
         values.put("money", money);
-        boolean flag = db.update("t_cp_order_customer", values, " id = ? ",
-                new String[]{String.valueOf(id)}) == 1;
+
+        values.put("id", id);
+
+        boolean flag = db.update("t_cp_order_customer", values, " orderId = ? ",
+                new String[]{String.valueOf(orderId)}) == 1;
         return flag;
     }
 
@@ -615,4 +533,12 @@ public class CarpoolOrder implements Serializable {
         return "";
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        CarpoolOrder other = (CarpoolOrder) obj;
+        if (orderId == other.orderId){
+            return true;
+        }
+        return false;
+    }
 }

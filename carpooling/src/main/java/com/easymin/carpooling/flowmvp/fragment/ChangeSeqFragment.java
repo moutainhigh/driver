@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.TextView;
 
 import com.amap.api.maps.model.LatLng;
@@ -19,6 +20,7 @@ import com.easymin.carpooling.StaticVal;
 import com.easymin.carpooling.adapter.SequenceAdapter;
 import com.easymin.carpooling.entity.AllStation;
 import com.easymin.carpooling.entity.MyStation;
+import com.easymin.carpooling.entity.PincheOrder;
 import com.easymin.carpooling.entity.Sequence;
 import com.easymin.carpooling.flowmvp.ActFraCommBridge;
 import com.easymin.carpooling.widget.ItemDragCallback;
@@ -80,6 +82,8 @@ public class ChangeSeqFragment extends RxBaseFragment {
      * 排序站点的下标
      */
     private int flag;
+
+
     /**
      * 倒计时结束
      */
@@ -112,8 +116,16 @@ public class ChangeSeqFragment extends RxBaseFragment {
         changeUi();
     }
 
+    /**
+     * 设置数据
+     * @param allStation
+     */
     public void setAllStation(AllStation allStation) {
         this.allStation = allStation;
+    }
+
+    public int getFlag(){
+        return flag;
     }
 
     /**
@@ -127,6 +139,14 @@ public class ChangeSeqFragment extends RxBaseFragment {
         bottomBtn.setBackgroundResource(R.drawable.corners_button_selector);
 
         bridge.changeToolbar(StaticVal.TOOLBAR_CHANGE_ACCEPT, flag);
+
+
+
+        if(allStation.scheduleStatus == PincheOrder.SCHEDULE_STATUS_NEW){
+            bottomBtn.setVisibility(View.VISIBLE);
+        }else {
+            bottomBtn.setVisibility(View.GONE);
+        }
 
         if (flag == 0) {
             hintText.setText("接人路线规划：");
@@ -142,7 +162,6 @@ public class ChangeSeqFragment extends RxBaseFragment {
             bottomBtn.setText("行程开始");
 
             bottomBtn.setOnClickListener(view -> {
-                ToastUtil.showMessage(getContext(), "行程开始");
                 bridge.startOutSet();
             });
 
@@ -278,9 +297,9 @@ public class ChangeSeqFragment extends RxBaseFragment {
             String orderIdSequence = "";
             for (int index = 0; index < orderCustomers.size(); index++) {
                 if (index == orderCustomers.size() - 1) {
-                    orderIdSequence = orderIdSequence + orderCustomers.get(index).orderId + "-" + (index+1);
+                    orderIdSequence = orderIdSequence + orderCustomers.get(index).orderId + "-" + (index+1) +"-" +allStation.scheduleStationVoList.get(flag).stationId;
                 } else {
-                    orderIdSequence = orderIdSequence + orderCustomers.get(index).orderId + "-" + (index+1) + ",";
+                    orderIdSequence = orderIdSequence + orderCustomers.get(index).orderId + "-" + (index+1) +"-" +allStation.scheduleStationVoList.get(flag).stationId+  ",";
                 }
             }
             //调用排序接口
@@ -310,6 +329,17 @@ public class ChangeSeqFragment extends RxBaseFragment {
 
         MyStation currentStation = allStation.scheduleStationVoList.get(flag);
         orderCustomers = currentStation.stationOrderVoList;
+
+        //根据index排序
+        Collections.sort(orderCustomers, (o1, o2) -> {
+            if (o1.index < o2.index) {
+                return -1;
+            } else if (o1.index > o2.index) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
 
         for (int i = 0; i < orderCustomers.size(); i++) {
             CarpoolOrder customer = orderCustomers.get(i);
@@ -346,8 +376,18 @@ public class ChangeSeqFragment extends RxBaseFragment {
             }
 
             sequences.add(sequence);
-
         }
+
+//        //根据acceptSequence排序
+//        Collections.sort(sequences, (o1, o2) -> {
+//            if (o1.beginIndex < o2.beginIndex) {
+//                return -1;
+//            } else if (o1.beginIndex > o2.beginIndex) {
+//                return 1;
+//            } else {
+//                return 0;
+//            }
+//        });
 
         //车车
         Sequence car = new Sequence();

@@ -15,7 +15,10 @@ import com.easymin.carpooling.entity.MyStation;
 import com.easymin.carpooling.flowmvp.ActFraCommBridge;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class PasTicketsFragment extends RxBaseFragment {
 
@@ -103,9 +106,10 @@ public class PasTicketsFragment extends RxBaseFragment {
 
     /**
      * 传递数据
+     *
      * @param allStation
      */
-    public void setAllStation(AllStation allStation){
+    public void setAllStation(AllStation allStation) {
         this.allStation = allStation;
     }
 
@@ -114,15 +118,34 @@ public class PasTicketsFragment extends RxBaseFragment {
      */
     private void showList() {
         carpoolOrderList.clear();
-        for (MyStation myStation : allStation.scheduleStationVoList){
-            if (myStation.stationOrderVoList != null && myStation.stationOrderVoList.size()!= 0){
-                for (CarpoolOrder carpoolOrder : myStation.stationOrderVoList){
+        for (MyStation myStation : allStation.scheduleStationVoList) {
+            if (myStation.stationOrderVoList != null && myStation.stationOrderVoList.size() != 0) {
+                for (CarpoolOrder carpoolOrder : myStation.stationOrderVoList) {
                     carpoolOrderList.add(carpoolOrder);
                 }
             }
         }
 
-        cusListAdapter.setOrderCustomers(carpoolOrderList);
-        bridge.changeToolbar(StaticVal.TOOLBAR_PAS_TICKET,-1);
+        cusListAdapter.setOrderCustomers(getList(carpoolOrderList));
+        bridge.changeToolbar(StaticVal.TOOLBAR_PAS_TICKET, -1);
     }
+
+
+    /**
+     * 过滤重复数据
+     * @param arr
+     * @return
+     */
+    private ArrayList getList(List arr) {
+        List list = new ArrayList();
+        Iterator it = arr.iterator();
+        while (it.hasNext()) {
+            CarpoolOrder carpoolOrder = (CarpoolOrder) it.next();
+            if (!list.contains(carpoolOrder)) {
+                list.add(carpoolOrder);
+            }
+        }
+        return (ArrayList) list;
+    }
+
 }

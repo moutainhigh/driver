@@ -30,6 +30,8 @@ import com.easymin.carpooling.entity.AllStation;
 import com.easymin.carpooling.entity.MyStation;
 import com.easymin.carpooling.flowmvp.ActFraCommBridge;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
@@ -73,7 +75,7 @@ public class AcceptSendFragment extends RxBaseFragment {
     /**
      * 专线订单集
      */
-    List<CarpoolOrder> carpoolOrders;
+    List<CarpoolOrder> carpoolOrders = new ArrayList<>();
 
     /**
      * 通信桥
@@ -118,31 +120,31 @@ public class AcceptSendFragment extends RxBaseFragment {
 
     @Override
     public int getLayoutResId() {
-        return R.layout.car_pool_fragment_main_flow;
+        return R.layout.car_pool_fragment_accep_send;
     }
 
     @Override
     public void finishCreateView(Bundle state) {
-        customerPhoto = $(R.id.customer_photo);
-        customerName = $(R.id.customer_name);
-        customerPhone = $(R.id.customer_phone);
-        callPhone = $(R.id.call_phone);
-        toPlace = $(R.id.to_place);
-        naviBtn = $(R.id.navi_view);
-        countTimeCon = $(R.id.count_time_con);
-        countHint = $(R.id.count_hint);
-        countTime = $(R.id.count_time);
-        slider = $(R.id.slider);
-        refreshImg = $(R.id.ic_refresh);
-        jumpBtn = $(R.id.jump_accept);
-        acceptedBtn = $(R.id.accept_cus);
-        chaoshiCon = $(R.id.chaoshi_con);
-        back = $(R.id.back);
-        sliderCon = $(R.id.slider_con);
-        tvDesc = $(R.id.tv_desc);
-        mainLlAction = $(R.id.main_ll_action);
-        mainCancel = $(R.id.main_cancel);
-        mainPay = $(R.id.main_pay);
+        customerPhoto = getActivity().findViewById(R.id.customer_photo);
+        customerName = getActivity().findViewById(R.id.customer_name);
+        customerPhone = getActivity().findViewById(R.id.customer_phone);
+        callPhone = getActivity().findViewById(R.id.img_call_phone);
+        toPlace = getActivity().findViewById(R.id.to_place);
+        naviBtn = getActivity().findViewById(R.id.navi_view);
+        countTimeCon = getActivity().findViewById(R.id.count_time_con);
+        countHint = getActivity().findViewById(R.id.count_hint);
+        countTime = getActivity().findViewById(R.id.count_time);
+        slider = getActivity().findViewById(R.id.slider);
+        refreshImg = getActivity().findViewById(R.id.ic_refresh_cp);
+        jumpBtn = getActivity().findViewById(R.id.jump_accept);
+        acceptedBtn = getActivity().findViewById(R.id.accept_cus);
+        chaoshiCon = getActivity().findViewById(R.id.chaoshi_con);
+        back = getActivity().findViewById(R.id.tv_back);
+        sliderCon = getActivity().findViewById(R.id.slider_con);
+        tvDesc = getActivity().findViewById(R.id.tv_desc);
+        mainLlAction = getActivity().findViewById(R.id.main_ll_action);
+        mainCancel = getActivity().findViewById(R.id.main_cancel);
+        mainPay = getActivity().findViewById(R.id.main_pay);
         refreshImg.setOnClickListener(v -> {
             bridge.doRefresh();
             refreshImg.setVisibility(View.GONE);
@@ -181,6 +183,10 @@ public class AcceptSendFragment extends RxBaseFragment {
 
     public void setOrders(AllStation allStation) {
         this.allStation = allStation;
+        if (mainLlAction == null){
+            return;
+        }
+        showWhatByStatus();
     }
 
     /**
@@ -202,11 +208,21 @@ public class AcceptSendFragment extends RxBaseFragment {
      */
     public void showWhatByStatus() {
         cancelTimer();
-        MyStation myStation = null;
+        MyStation myStation = allStation.scheduleStationVoList.get(getCurrentIndex());
 
-        myStation = allStation.scheduleStationVoList.get(getCurrentIndex());
+        carpoolOrders.clear();
+        carpoolOrders.addAll(myStation.stationOrderVoList);
 
-        carpoolOrders = myStation.stationOrderVoList;
+        //根据index排序
+        Collections.sort(carpoolOrders, (o1, o2) -> {
+            if (o1.index < o2.index) {
+                return -1;
+            } else if (o1.index > o2.index) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
 
         Iterator iterator = carpoolOrders.iterator();
 
@@ -220,9 +236,9 @@ public class AcceptSendFragment extends RxBaseFragment {
         }
 
         mainLlAction.setVisibility(View.GONE);
-        Log.e("hufeng/carpoolOrders", carpoolOrders.size() + "");
         if (carpoolOrders.size() != 0) {
             current = carpoolOrders.get(0);
+
             tvDesc.setText(!TextUtils.isEmpty(current.orderRemark) ? current.orderRemark : "暂无备注");
 
             if (current.advanceAssign == 1) {
@@ -243,7 +259,6 @@ public class AcceptSendFragment extends RxBaseFragment {
                 mainLlAction.setVisibility(View.GONE);
             }
 
-
             if (current.status < CarpoolOrder.CARPOOL_STATUS_RUNNING) {
                 //未接
                 if (current.status < CarpoolOrder.CARPOOL_STATUS_START) {
@@ -260,7 +275,6 @@ public class AcceptSendFragment extends RxBaseFragment {
 
                         @Override
                         public void onUnlocked() {
-                            Log.e("hufeng/current", current.orderId + "");
                             bridge.gotoStart(current);
                             resetView();
                         }
@@ -281,7 +295,6 @@ public class AcceptSendFragment extends RxBaseFragment {
 
                         @Override
                         public void onUnlocked() {
-                            Log.e("hufeng/current", current.orderId + "");
                             bridge.arriveStart(current);
                             resetView();
                         }
@@ -303,7 +316,6 @@ public class AcceptSendFragment extends RxBaseFragment {
                             if (current.advanceAssign == 1) {
                                 bridge.onDialogClick(1, current.id, current.money);
                             } else {
-                                Log.e("hufeng/current", current.orderId + "");
                                 bridge.acceptCustomer(current);
                             }
                             resetView();
@@ -326,14 +338,14 @@ public class AcceptSendFragment extends RxBaseFragment {
 
                     @Override
                     public void onUnlocked() {
-                        Log.e("hufeng/current", current.orderId + "");
                         bridge.arriveEnd(current);
                         resetView();
                     }
                 });
                 showInMap(new LatLng(current.endLatitude, current.endLongitude), StaticVal.MARKER_FLAG_END);
-            }
+            }else {
 
+            }
             RequestOptions options = new RequestOptions()
                     .centerCrop()
                     .transform(new GlideCircleTransform())
@@ -344,7 +356,6 @@ public class AcceptSendFragment extends RxBaseFragment {
                     .load(Config.IMG_SERVER + current.avatar + Config.IMG_PATH)
                     .apply(options)
                     .into(customerPhoto);
-
             callPhone.setOnClickListener(view -> PhoneUtil.call(getActivity(), current.passengerPhone));
 
             customerName.setText(current.passengerName);
@@ -355,7 +366,6 @@ public class AcceptSendFragment extends RxBaseFragment {
                 weihao = current.passengerPhone;
             }
             customerPhone.setText("手机尾号:" + weihao + "  购票数:" + current.ticketNumber);
-
             toPlace.setText(current.status < CarpoolOrder.CARPOOL_STATUS_ARRIVED ? current.startAddress : current.endAddress);
         } else {
             if (getCurrentIndex() == allStation.scheduleStationVoList.size()-1){
