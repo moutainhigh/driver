@@ -4,8 +4,11 @@ import android.content.Context;
 
 import com.easymi.component.Config;
 import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.HttpResultFunc2;
 import com.easymin.carpooling.CarPoolApiService;
+import com.easymin.carpooling.entity.AllStation;
+import com.easymin.carpooling.entity.StationResult;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -96,6 +99,24 @@ public class FlowModel implements FlowContract.Model {
     public Observable<Object> sendCustomer(long id) {
         return ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
                 .sendCustomer(id)
+                .map(new HttpResultFunc2<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<AllStation> qureyScheduleInfo(long scheduleId) {
+        return ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
+                .qureyScheduleInfo(scheduleId)
+                .map(new HttpResultFunc2<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<Object> changeOrderSequence(String orderIdSequence) {
+        return ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
+                .changeOrderSequence(orderIdSequence)
                 .map(new HttpResultFunc2<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

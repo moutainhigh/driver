@@ -35,12 +35,13 @@ public interface ActFraCommBridge {
 
     /**
      * 添加排序marker
-     *
      * @param latLng
      * @param flag
      * @param num
+     * @param ticketNumber
+     * @param phone
      */
-    void addMarker(LatLng latLng, int flag, int num, int ticketNumber, String photo);
+    void addMarker(LatLng latLng, int flag, int num, int ticketNumber, String phone);
 
     /**
      * 自定义排序
@@ -62,7 +63,7 @@ public interface ActFraCommBridge {
     /**
      * 排序
      *
-     * @param flag
+     * @param flag  排序站点下标
      */
     void toChangeSeq(int flag);
 
@@ -81,7 +82,7 @@ public interface ActFraCommBridge {
      *
      * @param flag
      */
-    void changeToolbar(int flag);
+    void changeToolbar(int flag,int index);
 
     /**
      * 清理地图
@@ -179,4 +180,22 @@ public interface ActFraCommBridge {
 // type 3 直接支付
 
     void onDialogClick(int type, long orderId, double money);
+
+
+
+/////////////////////////
+
+    /**
+     * 修改订单顺序
+     * @param orderIdSequence
+     */
+    void changeOrderSequence(String orderIdSequence);
+
+
+    /**
+     * 完成班次
+     * @param scheduleId
+     */
+    void finishTask(long scheduleId);
+
 }

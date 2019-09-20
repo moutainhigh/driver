@@ -2,17 +2,19 @@ package com.easymin.carpooling.flowmvp;
 
 import android.app.Dialog;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -24,42 +26,39 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
+import com.amap.api.maps.utils.overlay.SmoothMoveMarker;
 import com.amap.api.navi.model.AMapNaviPath;
 import com.amap.api.services.route.DriveRouteResult;
 import com.amap.api.services.route.DriveStep;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.easymi.common.CommApiService;
 import com.easymi.common.entity.CarpoolOrder;
+import com.easymi.common.receiver.OrderRefreshReceiver;
 import com.easymi.component.Config;
+import com.easymi.component.PCOrderStatus;
 import com.easymi.component.ZXOrderStatus;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxPayActivity;
 import com.easymi.component.entity.BaseOrder;
-import com.easymi.component.entity.DymOrder;
+//import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
-import com.easymi.component.entity.MySmoothMarker;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.network.ApiManager;
-import com.easymi.component.network.HttpResultFunc3;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult;
-import com.easymi.component.result.EmResult2;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.GlideCircleTransform;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.overlay.DrivingRouteOverlay;
-import com.easymin.carpooling.CarPoolApiService;
 import com.easymin.carpooling.R;
 import com.easymin.carpooling.StaticVal;
 import com.easymin.carpooling.adapter.LeftWindowAdapter;
+import com.easymin.carpooling.entity.AllStation;
+import com.easymin.carpooling.entity.MyStation;
 import com.easymin.carpooling.entity.PincheOrder;
 import com.easymin.carpooling.flowmvp.fragment.AcceptSendFragment;
 import com.easymin.carpooling.flowmvp.fragment.ChangeSeqFragment;
@@ -70,13 +69,13 @@ import com.easymin.carpooling.flowmvp.fragment.PasTicketsFragment;
 import com.easymin.carpooling.receiver.CancelOrderReceiver;
 import com.easymin.carpooling.receiver.OrderFinishReceiver;
 import com.easymin.carpooling.receiver.ScheduleTurnReceiver;
-import com.easymin.carpooling.widget.ChangePopWindow;
+import com.easymin.carpooling.widget.StationListDialog;
 import com.google.gson.Gson;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -98,7 +97,8 @@ public class FlowActivity extends RxPayActivity implements
         AMap.OnMapTouchListener,
         OrderFinishReceiver.OnFinishListener,
         AMap.OnMarkerClickListener,
-        AMap.OnMapClickListener {
+        AMap.OnMapClickListener,
+        OrderRefreshReceiver.OnRefreshOrderListener{
 
     CusToolbar cusToolbar;
     MapView mapView;
@@ -110,6 +110,11 @@ public class FlowActivity extends RxPayActivity implements
      * 司机位置
      */
     private LatLng lastLatlng;
+    /**
+     * 首次进入司机marker
+     */
+    private Marker myFirstMarker;
+
 
     FlowPresenter presenter;
 
@@ -121,11 +126,6 @@ public class FlowActivity extends RxPayActivity implements
      * activity和fragment的通信接口
      */
     private ActFraCommBridge bridge;
-
-    /**
-     * 本地数据库班次信息
-     */
-    DymOrder dymOrder;
 
     /**
      * 是否是手动操作地图
@@ -148,6 +148,12 @@ public class FlowActivity extends RxPayActivity implements
      * 转单
      */
     private ScheduleTurnReceiver scheduleTurnReceiver;
+
+    /**
+     * 刷新订单
+     */
+    private OrderRefreshReceiver orderRefreshReceiver;
+
     private boolean needJump;
     private MySmoothMarker smoothMoveMarker;
 
@@ -160,6 +166,8 @@ public class FlowActivity extends RxPayActivity implements
     public int getLayoutId() {
         return R.layout.activity_cp_flow;
     }
+
+
 
     @Override
     public void initViews(Bundle savedInstanceState) {
@@ -179,96 +187,7 @@ public class FlowActivity extends RxPayActivity implements
         initBridget();
         initFragment();
 
-        getCustomers(pincheOrder.scheduleId);
-    }
-
-
-    /**
-     * 查询专线班次的详细订单
-     *
-     * @param scheduleId
-     */
-    private void getCustomers(long scheduleId) {
-        Observable<EmResult2<List<CarpoolOrder>>> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
-                .getOrderCustomers(scheduleId, Config.APP_KEY)
-                .filter(new HttpResultFunc3<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, false, result2 -> {
-            if (result2.getData() == null || result2.getData().size() == 0) {
-                ToastUtil.showMessage(this, "当前班次没有任何乘客");
-                presenter.finishTask(pincheOrder.orderId);
-            } else {
-                isOrderLoadOk = true;
-                List<CarpoolOrder> carpoolOrders = result2.getData();
-                /**
-                 * 删除退票订单
-                 */
-                List<CarpoolOrder> allCus = CarpoolOrder.findByIDTypeOrderByAcceptSeq(pincheOrder.orderId, pincheOrder.orderType);
-                for (CarpoolOrder cusOrder : allCus) {
-                    boolean isExist = false;
-                    for (int i = 0; i < carpoolOrders.size(); i++) {
-                        CarpoolOrder carpoolOrder = carpoolOrders.get(i);
-                        if ((cusOrder.id == carpoolOrder.orderId)) {
-                            isExist = true;
-                            break;
-                        }
-                    }
-                    if (!isExist) {
-                        CarpoolOrder.delete(cusOrder.id);
-                    }
-                }
-
-                for (int i = 0; i < carpoolOrders.size(); i++) {
-                    CarpoolOrder carpoolOrder = carpoolOrders.get(i);
-
-                    carpoolOrder.id = carpoolOrder.orderId;
-                    carpoolOrder.bookTime = carpoolOrder.bookTime * 1000;
-                    carpoolOrder.num = i + 1;
-                    carpoolOrder.acceptSequence = i;
-                    carpoolOrder.sendSequence = i;
-                    //后端状态与本地状态衔接 这些仅仅针对于本地数据库首次创建时
-                    if (carpoolOrder.status <= CarpoolOrder.CARPOOL_STATUS_ASSIGN) {
-                        carpoolOrder.customeStatus = 0;
-                        carpoolOrder.subStatus = 0;
-                    } else if (carpoolOrder.status == CarpoolOrder.CARPOOL_STATUS_START) {
-                        carpoolOrder.customeStatus = 0;
-                        carpoolOrder.subStatus = 1;
-                    } else if (carpoolOrder.status == CarpoolOrder.CARPOOL_STATUS_ARRIVED) {
-                        carpoolOrder.customeStatus = 0;
-                        carpoolOrder.subStatus = 2;
-                    } else if (carpoolOrder.status == CarpoolOrder.CARPOOL_STATUS_RUNNING) {
-                        carpoolOrder.customeStatus = 3;
-                        carpoolOrder.subStatus = 2;
-                    } else if (carpoolOrder.status == CarpoolOrder.CARPOOL_STATUS_SKIP) {
-                        carpoolOrder.customeStatus = 5;
-                        carpoolOrder.subStatus = 2;
-                    } else if (carpoolOrder.status == CarpoolOrder.CARPOOL_STATUS_FINISH ||
-                            carpoolOrder.status == CarpoolOrder.CARPOOL_STATUS_REVIEW) {
-                        carpoolOrder.customeStatus = 4;
-                        carpoolOrder.subStatus = 2;
-                    }
-                    carpoolOrder.orderId = pincheOrder.scheduleId;
-                    carpoolOrder.orderType = pincheOrder.orderType;
-
-                    for (CarpoolOrder.OrderAddressVo orderAddressVo : carpoolOrder.orderAddressVos) {
-                        if (orderAddressVo.type == 1) {
-                            //起点
-                            carpoolOrder.startAddr = orderAddressVo.address;
-                            carpoolOrder.startLat = orderAddressVo.latitude;
-                            carpoolOrder.startLng = orderAddressVo.longitude;
-                        } else { //终点
-                            carpoolOrder.endAddr = orderAddressVo.address;
-                            carpoolOrder.endLat = orderAddressVo.latitude;
-                            carpoolOrder.endLng = orderAddressVo.longitude;
-                        }
-                    }
-                    carpoolOrder.saveOrUpdate();
-                }
-                showFragmentByStatus();
-            }
-        })));
+        presenter.queryOrderInTime(pincheOrder.scheduleId);
     }
 
     /**
@@ -297,106 +216,49 @@ public class FlowActivity extends RxPayActivity implements
         pincheOrder.scheduleId = baseOrder.scheduleId;
     }
 
-    ChangePopWindow changePopWindow;
-
     @Override
-    public void changeToolbar(int flag) {
-        DymOrder dymOrder = DymOrder.findByIDType(pincheOrder.orderId, pincheOrder.orderType);
-        if (null == dymOrder) {
-            return;
-        }
+    public void changeToolbar(int flag, int index) {
         if (flag == StaticVal.TOOLBAR_NOT_START) {
             cusToolbar.setLeftBack(view -> finish());
             cusToolbar.setTitle("行程未开始");
-            cusToolbar.setRightText("购票乘客", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    bridge.toPasTickets();
-                }
-            });
+            cusToolbar.setRightText("购票乘客", v -> bridge.toPasTickets());
         } else if (flag == StaticVal.TOOLBAR_CHANGE_ACCEPT) {
             cusToolbar.setLeftBack(view -> {
-                if (dymOrder.orderStatus <= ZXOrderStatus.WAIT_START) {
+                if (myAllStation.scheduleStatus == PincheOrder.SCHEDULE_STATUS_NEW) {
                     bridge.toNotStart();
-                } else if (dymOrder.orderStatus == ZXOrderStatus.ACCEPT_PLAN) {
-                    finish();
-                } else if (dymOrder.orderStatus == ZXOrderStatus.ACCEPT_ING) {
-                    bridge.toCusList(StaticVal.PLAN_ACCEPT);
+                } else if (myAllStation.scheduleStatus == PincheOrder.SCHEDULE_STATUS_RUNNING) {
+                    bridge.toAcSend();
                 }
             });
-            cusToolbar.setTitle("行程规划");
+            if (!TextUtils.isEmpty(myAllStation.scheduleStationVoList.get(index).stationName)) {
+                cusToolbar.setTitle(myAllStation.scheduleStationVoList.get(index).stationName);
+            } else {
+                cusToolbar.setTitle("站点名");
+            }
             cusToolbar.setRightGone();
-        } else if (flag == StaticVal.TOOLBAR_CHANGE_SEND) {
-            cusToolbar.setLeftBack(view -> {
-                if (dymOrder.orderStatus <= ZXOrderStatus.WAIT_START) {
-                    bridge.toNotStart();
-                } else if (dymOrder.orderStatus == ZXOrderStatus.SEND_PLAN) {
-                    finish();
-                } else if (dymOrder.orderStatus == ZXOrderStatus.ACCEPT_ING) {
-                    bridge.toCusList(StaticVal.PLAN_ACCEPT);
-                } else if (dymOrder.orderStatus == ZXOrderStatus.SEND_ING) {
-                    bridge.toCusList(StaticVal.PLAN_SEND);
-                }
-            });
-            cusToolbar.setTitle("行程规划");
-            cusToolbar.setRightGone();
-        } else if (flag == StaticVal.TOOLBAR_ACCEPT_ING) {
-            cusToolbar.setLeftBack(view -> bridge.toAcSend());
-            cusToolbar.setTitle("正在接人");
-            cusToolbar.setRightText(R.string.change_sequence, view -> {
-                //展示修改顺序的pop
-                changePopWindow = new ChangePopWindow(FlowActivity.this);
-                changePopWindow.setOnClickListener(view1 -> {
-                    long id = view1.getId();
-                    if (id == R.id.pop_change_accept) {
-                        bridge.toChangeSeq(StaticVal.PLAN_ACCEPT);
-                    } else if (id == R.id.pop_change_send) {
-                        bridge.toChangeSeq(StaticVal.PLAN_SEND);
-                    }
-                });
-                changePopWindow.show(view);
-            });
-        } else if (flag == StaticVal.TOOLBAR_SEND_ING) {
-            cusToolbar.setLeftBack(view -> bridge.toAcSend());
-            cusToolbar.setTitle("正在送人");
-            cusToolbar.setRightText(R.string.change_sequence, view -> {
-                //展示修改顺序的pop
-                changePopWindow = new ChangePopWindow(FlowActivity.this);
-                changePopWindow.hideAccept();
-                changePopWindow.setOnClickListener(view1 -> {
-                    long id = view1.getId();
-                    if (id == R.id.pop_change_accept) {
-                        bridge.toChangeSeq(StaticVal.PLAN_ACCEPT);
-                    } else if (id == R.id.pop_change_send) {
-                        bridge.toChangeSeq(StaticVal.PLAN_SEND);
-                    }
-                });
-                changePopWindow.show(view);
-            });
-        } else if (flag == StaticVal.TOOLBAR_FLOW) {
+        }
+        else if (flag == StaticVal.TOOLBAR_FLOW) {
             cusToolbar.setLeftBack(view -> finish());
             cusToolbar.setRightText("查看规划", view -> {
-                if (dymOrder.orderStatus == ZXOrderStatus.ACCEPT_ING) {
-                    bridge.toCusList(StaticVal.PLAN_ACCEPT);
-                } else {
-                    bridge.toCusList(StaticVal.PLAN_SEND);
+                StationListDialog dialog = null;
+                if (dialog == null) {
+                    dialog = new StationListDialog(this, stations);
                 }
+                dialog.setOnSelectListener(this::switchCompany).show();
             });
             CarpoolOrder current = acceptSendFragment.getCurrent();
             if (current == null) {
                 ToastUtil.showMessage(this, "未获取到当前订单");
                 finish();
             } else {
-                if (current.customeStatus == 0) { //未接
-                    if (current.subStatus == 0) {
-                        cusToolbar.setTitle("出发接人");
-                    } else if (current.subStatus == 1) {
-                        cusToolbar.setTitle("前往预约地");
-                    } else if (current.subStatus == 2) {
-                        cusToolbar.setTitle("等待中");
-                    }
-                } else if (current.customeStatus == 3) {
-                    cusToolbar.setTitle("行程中");
+                if (current.status < CarpoolOrder.CARPOOL_STATUS_START) {
+                    cusToolbar.setTitle("出发接人");
+                } else if (current.status == CarpoolOrder.CARPOOL_STATUS_START) {
+                    cusToolbar.setTitle("前往预约地");
+                } else if (current.status == CarpoolOrder.CARPOOL_STATUS_ARRIVED) {
+                    cusToolbar.setTitle("到达预约地");
+                } else if (current.status == CarpoolOrder.CARPOOL_STATUS_RUNNING) {
+                    cusToolbar.setTitle("前往目的地");
                 }
             }
         } else if (flag == StaticVal.TOOLBAR_FINISH) {
@@ -413,45 +275,20 @@ public class FlowActivity extends RxPayActivity implements
 
     @Override
     public void startOutSuc() {
-        DymOrder dymOrder = DymOrder.findByIDType(pincheOrder.orderId, pincheOrder.orderType);
-        if (null != dymOrder) {
-            dymOrder.orderStatus = ZXOrderStatus.ACCEPT_ING;
-            dymOrder.updateStatus();
-        }
-        bridge.toAcSend();
 
+        presenter.queryOrderInTime(pincheOrder.scheduleId);
     }
 
     @Override
     public void startSendSuc() {
-        dymOrder = DymOrder.findByIDType(pincheOrder.orderId, pincheOrder.orderType);
-        if (null != dymOrder) {
-            dymOrder.orderStatus = ZXOrderStatus.SEND_ING;
-            dymOrder.updateStatus();
-        }
-        List<CarpoolOrder> customers = CarpoolOrder.findByIDTypeOrderBySendSeq(pincheOrder.orderId, pincheOrder.orderType);
-        for (CarpoolOrder customer : customers) {
-            //接完后把所有的订单置为未送
-            if (customer.customeStatus == 2) {
-                //跳过接的直接置为跳过送状态
-                customer.customeStatus = 5;
-                customer.updateStatus();
-            }
-        }
-        acceptSendFragment.showWhatByStatus();
-        acceptSendFragment.resetSpeakedHint();
+
     }
 
     @Override
     public void finishTaskSuc() {
-        dymOrder = DymOrder.findByIDType(pincheOrder.orderId, pincheOrder.orderType);
-        if (null != dymOrder) {
-            dymOrder.orderStatus = ZXOrderStatus.SEND_OVER;
-            dymOrder.updateStatus();
-
-            bridge.toFinished();
-        }
+        bridge.toFinished();
     }
+
 
     @Override
     public RxManager getManager() {
@@ -560,8 +397,8 @@ public class FlowActivity extends RxPayActivity implements
             }
 
             @Override
-            public void addMarker(LatLng latLng, int flag, int num, int ticketNumber, String photo) {
-                FlowActivity.this.addMarker(latLng, flag, num, ticketNumber, photo);
+            public void addMarker(LatLng latLng, int flag, int num, int ticketNumber, String phone) {
+                FlowActivity.this.addMarker(latLng, flag, num, ticketNumber, phone);
             }
 
 
@@ -580,10 +417,12 @@ public class FlowActivity extends RxPayActivity implements
             public void toAcSend() {
                 delayAnimate = false;
                 switchFragment(acceptSendFragment).commit();
+                acceptSendFragment.setOrders(myAllStation);
             }
 
             @Override
             public void toChangeSeq(int flag) {
+                changeSeqFragment.setAllStation(myAllStation);
                 changeSeqFragment.setParam(bridge, flag);
                 switchFragment(changeSeqFragment).commit();
             }
@@ -591,7 +430,6 @@ public class FlowActivity extends RxPayActivity implements
             @Override
             public void toFinished() {
                 switchFragment(finishFragment).commit();
-                presenter.deleteDb(pincheOrder.orderId, pincheOrder.orderType);
             }
 
             @Override
@@ -600,8 +438,8 @@ public class FlowActivity extends RxPayActivity implements
             }
 
             @Override
-            public void changeToolbar(int flag) {
-                FlowActivity.this.changeToolbar(flag);
+            public void changeToolbar(int flag, int index) {
+                FlowActivity.this.changeToolbar(flag, index);
             }
 
             @Override
@@ -628,6 +466,7 @@ public class FlowActivity extends RxPayActivity implements
             @Override
             public void startOutSet() {
                 //时间到了 开始出发接人
+//                ToastUtil.showMessage(FlowActivity.this,"行程开始");
                 presenter.startOutSet(pincheOrder.orderId);
             }
 
@@ -656,7 +495,6 @@ public class FlowActivity extends RxPayActivity implements
 
             @Override
             public void arriveEnd(CarpoolOrder carpoolOrder) {
-
                 presenter.arriveEnd(carpoolOrder);
             }
 
@@ -687,12 +525,23 @@ public class FlowActivity extends RxPayActivity implements
             @Override
             public void toPasTickets() {
                 pasTicketsFragment.setParam(bridge);
+                pasTicketsFragment.setAllStation(myAllStation);
                 switchFragment(pasTicketsFragment).commit();
             }
 
             @Override
             public void onDialogClick(int type, long orderId, double money) {
                 createDialog(type, orderId, money);
+            }
+
+            @Override
+            public void changeOrderSequence(String orderIdSequence) {
+                presenter.changeOrderSequence(orderIdSequence);
+            }
+
+            @Override
+            public void finishTask(long scheduleId) {
+                presenter.finishTask(scheduleId);
             }
         };
     }
@@ -775,36 +624,33 @@ public class FlowActivity extends RxPayActivity implements
     }
 
     /**
-     * 加载圆形头像
-     */
-    RequestOptions options = new RequestOptions()
-            .centerCrop()
-            .transform(new GlideCircleTransform())
-            .placeholder(R.mipmap.photo_default)
-            .diskCacheStrategy(DiskCacheStrategy.ALL);
-
-    /**
      * 添加数字标号种类的marker
      *
      * @param latLng
      * @param flag
      */
     @Override
-    public void addMarker(LatLng latLng, int flag, int num, int ticketNumber, String photo) {
+    public void addMarker(LatLng latLng, int flag, int num, int ticketNumber, String phone) {
         MarkerOptions markerOption = new MarkerOptions();
         markerOption.position(latLng);
-        markerOption.draggable(false);//设置Marker可拖动
+        //设置Marker可拖动
+        markerOption.draggable(false);
 
-        View view = LayoutInflater.from(this).inflate(R.layout.sequence_marker, null);
+        View view = LayoutInflater.from(this).inflate(R.layout.pc_sequence_marker, null);
 
-        TextView tv = view.findViewById(R.id.seq_num);
-        ImageView avater = view.findViewById(R.id.iv_avater_marker);
+        TextView tv_seq_num = view.findViewById(R.id.tv_seq_num);
+        TextView tv_name = view.findViewById(R.id.tv_name);
+        TextView tv_ticket_num = view.findViewById(R.id.tv_ticket_num);
 
-        tv.setText("车票:" + ticketNumber);
-        Glide.with(this)
-                .load(Config.IMG_SERVER + photo)
-                .apply(options)
-                .into(avater);
+        tv_seq_num.setText(num + "");
+        tv_name.setText("尾号" + phone.substring(phone.length() - 4, phone.length()));
+        tv_ticket_num.setText("车票:" + ticketNumber);
+
+        if (flag == StaticVal.MARKER_FLAG_PASS_ENABLE) {
+            tv_seq_num.setBackgroundResource(R.drawable.circle_dark_22);
+        } else if (flag == StaticVal.MARKER_FLAG_PASS_DISABLE) {
+            tv_seq_num.setBackgroundResource(R.drawable.circle_dark_22);
+        }
 
         markerOption.icon(BitmapDescriptorFactory.fromView(view));
 
@@ -952,123 +798,58 @@ public class FlowActivity extends RxPayActivity implements
 
     @Override
     public void gotoStartSuc(CarpoolOrder carpoolOrder) {
-        carpoolOrder.subStatus = 1;
-        carpoolOrder.updateSubStatus();
-        acceptSendFragment.showWhatByStatus();
+        presenter.queryOrderInTime(pincheOrder.scheduleId);
     }
 
     @Override
     public void arriveStartSuc(CarpoolOrder carpoolOrder) {
-        carpoolOrder.subStatus = 2;
-        carpoolOrder.bookTime = System.currentTimeMillis() + carpoolOrder.waitMinute * 60 * 1000;
-        carpoolOrder.updateSubStatus();
-        acceptSendFragment.showWhatByStatus();
+        /**
+         * 存下预约订单的时间戳
+         */
+        XApp.getEditor().putLong(Config.PC_BOOKTIME, System.currentTimeMillis() + carpoolOrder.waitMinute * 60 * 1000).apply();
+
+        presenter.queryOrderInTime(pincheOrder.scheduleId);
     }
 
     @Override
     public void acceptCustomerSuc(CarpoolOrder carpoolOrder) {
-        List<CarpoolOrder> customers = CarpoolOrder.findByIDTypeOrderByAcceptSeq(pincheOrder.orderId, pincheOrder.orderType);
-        carpoolOrder.customeStatus = 3;
-        carpoolOrder.updateStatus();
-        if (carpoolOrder.acceptSequence == customers.size() - 1) {
-            //接完最后一个更新订单状态
-            presenter.startSend(pincheOrder.orderId);
-        } else {
-            acceptSendFragment.showWhatByStatus();
-            acceptSendFragment.resetSpeakedHint();
-        }
+        presenter.queryOrderInTime(pincheOrder.scheduleId);
     }
 
 
     @Override
     public void jumpAcceptSuc(CarpoolOrder carpoolOrder) {
-        carpoolOrder.customeStatus = 2;
-        carpoolOrder.updateStatus();
-        List<CarpoolOrder> customers = CarpoolOrder.findByIDTypeOrderByAcceptSeq(pincheOrder.orderId, pincheOrder.orderType);
-
-        if (carpoolOrder.id == customers.get(customers.size() - 1).id) {
-            //接完最后一个更新订单状态
-            if (customers.size() == 1) {
-                //add hf  只有一个客户，并且跳过了。直接结束
-                presenter.finishTask(pincheOrder.orderId);
-            } else {
-                //多个客户全部跳过问题
-                boolean isAllJump = true;
-                for (int i = 0; i < (customers.size() - 1); i++) {
-                    if (customers.get(i).customeStatus != 2) {
-                        isAllJump = false;
-                    }
-                }
-                if (!isAllJump) {
-                    presenter.startSend(pincheOrder.orderId);
-                } else {
-                    presenter.finishTask(pincheOrder.orderId);
-                }
-            }
-        } else {
-            acceptSendFragment.showWhatByStatus();
-            acceptSendFragment.resetSpeakedHint();
-        }
+        presenter.queryOrderInTime(pincheOrder.scheduleId);
     }
 
     @Override
     public void arriveEndSuc(CarpoolOrder carpoolOrder) {
-        carpoolOrder.customeStatus = 4;
-        carpoolOrder.updateStatus();
-        List<CarpoolOrder> customers = CarpoolOrder.findByIDTypeOrderBySendSeq(pincheOrder.orderId, pincheOrder.orderType);
-        if (carpoolOrder.id == customers.get(customers.size() - 1).id) {
-            //送完最后一个更新订单状态
-            presenter.finishTask(pincheOrder.orderId);
-        } else {
-            acceptSendFragment.showWhatByStatus();
-            acceptSendFragment.resetSpeakedHint();
-        }
+        presenter.queryOrderInTime(pincheOrder.scheduleId);
     }
 
     @Override
     public void jumpSendSuc(CarpoolOrder carpoolOrder) {
-        carpoolOrder.customeStatus = 5;
-        carpoolOrder.updateStatus();
-        List<CarpoolOrder> customers = CarpoolOrder.findByIDTypeOrderBySendSeq(pincheOrder.orderId, pincheOrder.orderType);
-        if (carpoolOrder.sendSequence == customers.size() - 1) {
-            //送完最后一个更新订单状态
-            presenter.finishTask(pincheOrder.orderId);
-        } else {
-            acceptSendFragment.showWhatByStatus();
-            acceptSendFragment.resetSpeakedHint();
-        }
+        presenter.queryOrderInTime(pincheOrder.scheduleId);
     }
 
     @Override
     public void showFragmentByStatus() {
-        DymOrder dymOrder = DymOrder.findByIDType(pincheOrder.orderId, pincheOrder.orderType);
-        if (null != dymOrder) {
-            if (dymOrder.orderStatus <= ZXOrderStatus.WAIT_START) {
-                if (needJump) {
-                    needJump = false;
-                    bridge.toPasTickets();
-                } else {
+        if (myAllStation.scheduleStatus == PincheOrder.SCHEDULE_STATUS_NEW) {
+            //未开始
+            if (needJump) {
+                needJump = false;
+                bridge.toPasTickets();
+            } else {
+                if (currentFragment instanceof ChangeSeqFragment){
+                    bridge.toChangeSeq(((ChangeSeqFragment)currentFragment).getFlag());
+                }else{
                     bridge.toNotStart();
                 }
-            } else {
-                needJump = false;
-                if (dymOrder.orderStatus == ZXOrderStatus.ACCEPT_PLAN) {
-                    bridge.toChangeSeq(StaticVal.PLAN_ACCEPT);
-                } else if (dymOrder.orderStatus == ZXOrderStatus.SEND_PLAN) {
-                    bridge.toChangeSeq(StaticVal.PLAN_SEND);
-                } else if (dymOrder.orderStatus == ZXOrderStatus.ACCEPT_ING
-                        || dymOrder.orderStatus == ZXOrderStatus.SEND_ING) {
-                    bridge.toAcSend();
-                } else if (dymOrder.orderStatus == ZXOrderStatus.SEND_OVER) {
-                    presenter.finishTask(pincheOrder.orderId);
-                } else {
-                    ToastUtil.showMessage(this, "订单状态出现错误");
-                    finish();
-                }
             }
-        } else {
-            ToastUtil.showMessage(this, "订单状态出现错误");
-            finish();
+        } else if (myAllStation.scheduleStatus == PincheOrder.SCHEDULE_STATUS_RUNNING) {
+            bridge.toAcSend();
+        } else if (myAllStation.scheduleStatus == PincheOrder.SCHEDULE_STATUS_FINISH) {
+            bridge.toFinished();
         }
     }
 
@@ -1088,6 +869,9 @@ public class FlowActivity extends RxPayActivity implements
         IntentFilter filter1 = new IntentFilter();
         filter1.addAction(Config.SCHEDULE_FINISH);
         registerReceiver(scheduleTurnReceiver, filter1, EmUtil.getBroadCastPermission(), null);
+
+        orderRefreshReceiver = new OrderRefreshReceiver(this);
+        registerReceiver(orderRefreshReceiver, new IntentFilter(Config.ORDER_REFRESH), EmUtil.getBroadCastPermission(), null);
     }
 
     @Override
@@ -1098,14 +882,15 @@ public class FlowActivity extends RxPayActivity implements
 
         unregisterReceiver(cancelOrderReceiver);
         unregisterReceiver(scheduleTurnReceiver);
+        unregisterReceiver(orderRefreshReceiver);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mapView.onPause();
+        presenter.cancelQueryInTime();
     }
-
 
     @Override
     protected void onDestroy() {
@@ -1118,19 +903,7 @@ public class FlowActivity extends RxPayActivity implements
     @Override
     public void onPaySuc() {
         ToastUtil.showMessage(this, "代付成功");
-        List<CarpoolOrder> carpoolOrders = CarpoolOrder.findByIDTypeOrderByAcceptSeq(pincheOrder.orderId, pincheOrder.orderType);
-        for (CarpoolOrder carpoolOrder : carpoolOrders) {
-            if (carpoolOrder.id == payOrderId) {
-                carpoolOrder.advanceAssign = 2;
-                carpoolOrder.updateAdvanceAssign();
-                break;
-            }
-        }
-        if (currentFragment instanceof PasTicketsFragment || currentFragment instanceof CusListFragment) {
-            currentFragment.onHiddenChanged(false);
-        } else if (currentFragment instanceof AcceptSendFragment) {
-            ((AcceptSendFragment) currentFragment).showWhatByStatus();
-        }
+        presenter.qureyScheduleInfo(pincheOrder.scheduleId);
     }
 
     @Override
@@ -1149,6 +922,7 @@ public class FlowActivity extends RxPayActivity implements
             }
         }
     }
+
 
     boolean delayAnimate = true;
 
@@ -1182,23 +956,18 @@ public class FlowActivity extends RxPayActivity implements
             smoothMoveMarker.startMove(latLng, 3000, true);
         }
 
-        if (null != dymOrder) {
-            if (dymOrder.orderStatus == ZXOrderStatus.ACCEPT_ING
-                    || dymOrder.orderStatus == ZXOrderStatus.SEND_ING) {
-                if (!isMapTouched && currentFragment instanceof AcceptSendFragment) {
-                    aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 19), delayAnimate ? Config.NORMAL_LOC_TIME : 0, null);
-                    delayAnimate = true;
-                }
+        if (pincheOrder.status == PincheOrder.SCHEDULE_STATUS_RUNNING) {
+            if (!isMapTouched && currentFragment instanceof AcceptSendFragment) {
+                aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 19), delayAnimate ? Config.NORMAL_LOC_TIME : 0, null);
+                delayAnimate = true;
             }
         }
-
         lastLatlng = latLng;
     }
 
     @Override
     public void onFinishOrder(long orderId, String orderType) {
-        presenter.deleteDb(orderId, orderType);
-        finish();
+        presenter.queryOrderInTime(pincheOrder.scheduleId);
     }
 
     /**
@@ -1213,7 +982,6 @@ public class FlowActivity extends RxPayActivity implements
 //                        .setMessage(msg)
 //                        .setPositiveButton(R.string.ok, (dialog1, which) -> {
 //                            dialog1.dismiss();
-//                            presenter.deleteDb(orderId, orderType);
 //                            finish();
 //                        })
 //                        .setOnDismissListener(dialog12 -> finish())
@@ -1221,9 +989,7 @@ public class FlowActivity extends RxPayActivity implements
 //                cancelDialog.show();
 //            }
 //            XApp.getInstance().syntheticVoice("您有订单被取消或者收回");
-            presenter.deleteDb(orderId, orderType);
-            finish();
-//            getCustomers(pincheOrder.scheduleId);
+            presenter.queryOrderInTime(pincheOrder.scheduleId);
         }
     }
 
@@ -1279,8 +1045,49 @@ public class FlowActivity extends RxPayActivity implements
     @Override
     public void onTurnOrder(long scheduleId, String orderType, String msg) {
         if (scheduleId == pincheOrder.scheduleId) {
-            getCustomers(pincheOrder.scheduleId);
-//            finish();
+            presenter.queryOrderInTime(pincheOrder.scheduleId);
         }
+    }
+
+
+////////////////
+
+    List<MyStation> stations = new ArrayList<>();
+
+    AllStation myAllStation;
+
+    @Override
+    public void scheduleInfo(AllStation allStation) {
+        if (allStation == null) {
+            ToastUtil.showMessage(this, "未查询到班次信息");
+            return;
+        }
+        if (allStation.scheduleStationVoList == null || allStation.scheduleStationVoList.size() == 0) {
+            ToastUtil.showMessage(this, "此班次没有任何站点");
+            return;
+        }
+        myAllStation = allStation;
+        stations = allStation.scheduleStationVoList;
+        showFragmentByStatus();
+    }
+
+    @Override
+    public void changeSequenceSuc() {
+        presenter.qureyScheduleInfo(pincheOrder.scheduleId);
+    }
+
+    /**
+     * 选择站点后的处理
+     *
+     * @param index
+     */
+    public void switchCompany(int index) {
+        bridge.toChangeSeq(index);
+    }
+
+    @Override
+    public void onRefreshOrder() {
+        //新指派拼车订单后的推送，收到后刷新数据
+        presenter.qureyScheduleInfo(pincheOrder.scheduleId);
     }
 }

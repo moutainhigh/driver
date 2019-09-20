@@ -57,7 +57,7 @@ public class FinishFragment extends RxBaseFragment {
 
     @Override
     public void finishCreateView(Bundle state) {
-        bridge.changeToolbar(StaticVal.TOOLBAR_FINISH);
+        bridge.changeToolbar(StaticVal.TOOLBAR_FINISH,-1);
         countDown = $(R.id.count_down);
         back = $(R.id.btn);
 

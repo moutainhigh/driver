@@ -14,14 +14,7 @@ import java.util.List;
  */
 
 public class StationResult extends EmResult {
-//    /**
-//     * 起点站点
-//     */
-//    public Station startStationVo;
-//    /**
-//     * 终点站点
-//     */
-//    public Station endStationVo;
+
 
     public List<Station> data;
 

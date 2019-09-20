@@ -69,7 +69,8 @@
             android:layout_marginBottom="15dp"
             android:background="@drawable/corners_button_selector"
             android:text="确定"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:visibility="visible"/>
 
     </LinearLayout>
 

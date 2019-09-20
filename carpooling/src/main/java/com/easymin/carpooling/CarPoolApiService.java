@@ -3,6 +3,7 @@ package com.easymin.carpooling;
 import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.result.EmResult2;
+import com.easymin.carpooling.entity.AllStation;
 import com.easymin.carpooling.entity.PincheOrder;
 import com.easymin.carpooling.entity.PriceResult;
 import com.easymin.carpooling.entity.StationResult;
@@ -196,13 +197,34 @@ public interface CarPoolApiService {
     @FormUrlEncoded
     @POST("api/v1/carpool/driver/order/assign")
     Observable<EmResult> assginOrder(@Field("orderIds") long orderIds,
-                                              @Field("timeSlotId") long timeSlotId,
-                                              @Field("driverId") long driverId,
-                                              @Field("seats") long seats,
-                                              @Field("totalMoney") double totalMoney,
-                                              @Field("saleSeat") long saleSeat,
-                                              @Field("source") long source,
-                                              @Field("appKey") String appKey);
+                                     @Field("timeSlotId") long timeSlotId,
+                                     @Field("driverId") long driverId,
+                                     @Field("seats") long seats,
+                                     @Field("totalMoney") double totalMoney,
+                                     @Field("saleSeat") long saleSeat,
+                                     @Field("source") long source,
+                                     @Field("appKey") String appKey);
 
 
+////////////////流程更改迭代新增接口
+
+    /**
+     * 查询当前站点的全部信息
+     *
+     * @param scheduleId
+     * @return
+     */
+    @GET("api/v1/carpool/driver/schedule/allStationData")
+    Observable<EmResult2<AllStation>> qureyScheduleInfo(@Query("scheduleId") long scheduleId);
+
+
+
+    /**
+     * 司机端修改订单执行顺序
+     *
+     * @param orderIdSequence
+     * @return
+     */
+    @GET("api/v1/carpool/driver/schedule/changeOrderSequence")
+    Observable<EmResult2<Object>> changeOrderSequence(@Query("orderIdSequence") String orderIdSequence);
 }

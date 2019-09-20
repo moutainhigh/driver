@@ -191,12 +191,12 @@ public class OrderCustomer implements Serializable {
         values.put("orderType", orderType);
         values.put("name", name);
         values.put("phone", phone);
-        values.put("startAddr", startAddr);
-        values.put("endAddr", endAddr);
-        values.put("startLat", startLat);
-        values.put("startLng", startLng);
-        values.put("endLat", endLat);
-        values.put("endLng", endLng);
+        values.put("startAddress", startAddr);
+        values.put("endAddress", endAddr);
+        values.put("startLatitude", startLat);
+        values.put("startLongitude", startLng);
+        values.put("endLatitude", endLat);
+        values.put("endLongitude", endLng);
         values.put("appointTime", appointTime);
         values.put("acceptSequence", acceptSequence);
         values.put("sendSequence", sendSequence);
@@ -380,12 +380,12 @@ public class OrderCustomer implements Serializable {
         orderCustomer.orderType = cursor.getString(cursor.getColumnIndex("orderType"));
         orderCustomer.name = cursor.getString(cursor.getColumnIndex("name"));
         orderCustomer.phone = cursor.getString(cursor.getColumnIndex("phone"));
-        orderCustomer.startAddr = cursor.getString(cursor.getColumnIndex("startAddr"));
-        orderCustomer.endAddr = cursor.getString(cursor.getColumnIndex("endAddr"));
-        orderCustomer.startLat = cursor.getDouble(cursor.getColumnIndex("startLat"));
-        orderCustomer.startLng = cursor.getDouble(cursor.getColumnIndex("startLng"));
-        orderCustomer.endLat = cursor.getDouble(cursor.getColumnIndex("endLat"));
-        orderCustomer.endLng = cursor.getDouble(cursor.getColumnIndex("endLng"));
+        orderCustomer.startAddr = cursor.getString(cursor.getColumnIndex("startAddress"));
+        orderCustomer.endAddr = cursor.getString(cursor.getColumnIndex("endAddress"));
+        orderCustomer.startLat = cursor.getDouble(cursor.getColumnIndex("startLatitude"));
+        orderCustomer.startLng = cursor.getDouble(cursor.getColumnIndex("startLongitude"));
+        orderCustomer.endLat = cursor.getDouble(cursor.getColumnIndex("endLatitude"));
+        orderCustomer.endLng = cursor.getDouble(cursor.getColumnIndex("endLongitude"));
         orderCustomer.appointTime = cursor.getLong(cursor.getColumnIndex("appointTime"));
         orderCustomer.acceptSequence = cursor.getInt(cursor.getColumnIndex("acceptSequence"));
         orderCustomer.sendSequence = cursor.getInt(cursor.getColumnIndex("sendSequence"));
@@ -453,12 +453,12 @@ public class OrderCustomer implements Serializable {
         values.put("name", name);
         values.put("phone", phone);
         values.put("photo", photo);
-        values.put("startAddr", startAddr);
-        values.put("endAddr", endAddr);
-        values.put("startLat", startLat);
-        values.put("startLng", startLng);
-        values.put("endLat", endLat);
-        values.put("endLng", endLng);
+        values.put("startAddress", startAddr);
+        values.put("endAddress", endAddr);
+        values.put("startLatitude", startLat);
+        values.put("startLongitude", startLng);
+        values.put("endLatitude", endLat);
+        values.put("endLongitude", endLng);
 //        values.put("appointTime", appointTime);
 
         //hf add

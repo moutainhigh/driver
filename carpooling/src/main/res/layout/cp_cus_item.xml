@@ -63,7 +63,8 @@
                 android:paddingRight="3dp"
                 android:text="已联系"
                 android:textColor="#0099E9"
-                android:textSize="@dimen/sizeSmall" />
+                android:textSize="@dimen/sizeSmall"
+                android:visibility="gone"/>
         </RelativeLayout>
 
         <Space

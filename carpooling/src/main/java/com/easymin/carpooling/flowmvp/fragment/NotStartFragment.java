@@ -7,7 +7,7 @@ import android.widget.TextView;
 import com.amap.api.maps.model.LatLng;
 import com.easymi.component.ZXOrderStatus;
 import com.easymi.component.base.RxBaseFragment;
-import com.easymi.component.entity.DymOrder;
+//import com.easymi.component.entity.DymOrder;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.TimeUtil;
 import com.easymin.carpooling.R;
@@ -38,7 +38,7 @@ public class NotStartFragment extends RxBaseFragment {
     TextView timeCountDown;
     Button bottomBtn;
     /**
-     * 专线班次
+     * 拼车班次
      */
     PincheOrder pincheOrder;
 
@@ -102,7 +102,7 @@ public class NotStartFragment extends RxBaseFragment {
             latLngs.add(endLatlng);
 
             bridge.showBounds(latLngs);
-            bridge.changeToolbar(StaticVal.TOOLBAR_NOT_START);
+            bridge.changeToolbar(StaticVal.TOOLBAR_NOT_START,-1);
         }
     }
 
@@ -225,12 +225,12 @@ public class NotStartFragment extends RxBaseFragment {
         } else {
             bottomBtn.setText("规划线路");
             bottomBtn.setOnClickListener(view -> {
-                DymOrder dymOrder = DymOrder.findByIDType(pincheOrder.orderId, pincheOrder.orderType);
-                if (null != dymOrder) {
-                    dymOrder.orderStatus = ZXOrderStatus.ACCEPT_PLAN;
-                    dymOrder.updateStatus();
-                }
-                bridge.toChangeSeq(StaticVal.PLAN_ACCEPT);
+//                DymOrder dymOrder = DymOrder.findByIDType(pincheOrder.orderId, pincheOrder.orderType);
+//                if (null != dymOrder) {
+//                    dymOrder.orderStatus = ZXOrderStatus.ACCEPT_PLAN;
+//                    dymOrder.updateStatus();
+//                }
+                bridge.toChangeSeq(0);
             });
         }
     }
