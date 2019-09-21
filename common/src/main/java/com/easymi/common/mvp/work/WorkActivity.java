@@ -151,6 +151,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     private TextView tvTitle;
     private TextView moneyDesc;
     private ImageView workIvManual;
+    private TextView workTvOffline;
 
     @Override
     public int getLayoutId() {
@@ -184,7 +185,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
             onLineBtn.setStatus(LoadingButton.STATUS_LOADING);
             presenter.online(onLineBtn);
         });
-        listenOrderCon.setOnClickListener(v -> {
+        workTvOffline.setOnClickListener(v -> {
             if (Config.IS_ENCRYPT && TextUtils.equals(Config.APP_KEY, "1HAcient1kLqfeX7DVTV0dklUkpGEnUC")) {
                 presenter.doLogOut();
             } else {
@@ -226,6 +227,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         tvTitle = findViewById(R.id.tv_title);
         tvTitle.setSelected(true);
         listenOrderCon = findViewById(R.id.listen_order_con);
+        workTvOffline = findViewById(R.id.workTvOffline);
         onLineBtn = findViewById(R.id.online_btn);
 
         loadingFrame = findViewById(R.id.loading_frame);
@@ -327,6 +329,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
             workIvManual.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.e("WorkActivity", "onClick");
                     ARouter.getInstance().build("/custombus/ManualCreateActivity").navigation();
                 }
             });

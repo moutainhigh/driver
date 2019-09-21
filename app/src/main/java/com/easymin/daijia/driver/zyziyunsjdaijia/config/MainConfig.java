@@ -8,6 +8,7 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.entity.EnvironmentPojo;
 import com.easymi.component.utils.StringUtils;
 import com.easymin.daijia.driver.zyziyunsjdaijia.BuildConfig;
+import com.easymin.driver.securitycenter.CenterConfig;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -40,6 +41,10 @@ public class MainConfig {
                     Config.H5_HOST = BuildConfig.H5_HOST;
                     Config.APP_KEY = jb.optString("APP_KEY");
                 }
+                
+                CenterConfig.HOST = Config.HOST;
+                CenterConfig.H5_HOST = Config.H5_HOST;
+                CenterConfig.IMG_SERVER = Config.IMG_SERVER;
                 Config.VERSION_DATA = BuildConfig.VERSION_DATA;
                 Config.VERSION_NAME = BuildConfig.VERSION_NAME;
                 Config.IMG_SERVER = BuildConfig.IMG_SERVER;

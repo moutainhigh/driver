@@ -286,20 +286,16 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
     }
 
     public void goToNextStation() {
-        if (inspectTicket == 2) {
-            if (uncheck == 0) {
-                presenter.toNextStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position + 1).stationId);
-            } else {
-                GoNextDialog dialog = new GoNextDialog(this);
-                dialog.setOnMyClickListener((view, string) -> {
-                    presenter.toNextStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position + 1).stationId);
-                });
-                dialog.show();
-            }
-        } else if (uncheck == 0) {
+        if (uncheck == 0) {
             presenter.toNextStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position + 1).stationId);
+        } else {
+            GoNextDialog dialog = new GoNextDialog(this);
+            dialog.setOnMyClickListener((view, string) -> {
+                presenter.toNextStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position + 1).stationId);
+            });
+            dialog.show();
         }
-    }
+}
 
     /**
      * 倒计时计时器
@@ -498,18 +494,23 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
     public void checkNumber(List<Customer> customers) {
         check = 0;
         uncheck = 0;
+        int count = 0;
         for (int i = 0; i < customers.size(); i++) {
             if (customers.get(i).status <= Customer.CITY_COUNTRY_STATUS_ARRIVED || customers.get(i).status == Customer.CITY_COUNTRY_STATUS_INVALID) {
                 uncheck = uncheck + customers.get(i).ticketNumber;
             } else if (customers.get(i).status > Customer.CITY_COUNTRY_STATUS_ARRIVED && customers.get(i).status != Customer.CITY_COUNTRY_STATUS_INVALID) {
                 check = check + customers.get(i).ticketNumber;
             }
+
+            if (customers.get(i).status == Customer.CITY_COUNTRY_STATUS_ARRIVED) {
+                count++;
+            }
         }
+
         tv_status_yes.setText(getResources().getString(R.string.cb_alredy_check) + " " + check);
         tv_status_no.setText(getResources().getString(R.string.cb_no_check) + " " + uncheck);
 
-
-        if (inspectTicket == 2 && uncheck > 0 && booktime > 0) {
+        if (inspectTicket == 2 && count > 0 && booktime > 0) {
             passengerLl.setVisibility(View.VISIBLE);
             TextView passengerTvManualAction = findViewById(R.id.passengerTvManualAction);
             passengerTvManualAction.setOnClickListener(new View.OnClickListener() {
@@ -681,25 +682,26 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
     }
 
     private void confirmBoarding(List<String> ids) {
+        if (!ids.isEmpty()) {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (String id : ids) {
+                stringBuilder.append(id);
+                stringBuilder.append(",");
+            }
 
-        StringBuilder stringBuilder = new StringBuilder();
-        for (String id : ids) {
-            stringBuilder.append(id);
-            stringBuilder.append(",");
+            stringBuilder.delete(stringBuilder.length() - 1, stringBuilder.length());
+
+            ApiManager.getInstance().createApi(Config.HOST, DZBusApiService.class)
+                    .confirmBoarding(stringBuilder.toString())
+                    .filter(new HttpResultFunc<>())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new MySubscriber<EmResult>(this, true, false, new NoErrSubscriberListener<EmResult>() {
+                        @Override
+                        public void onNext(EmResult emResult) {
+                            getData();
+                        }
+                    }));
         }
-        stringBuilder.delete(stringBuilder.length() - 1, stringBuilder.length());
-
-        ApiManager.getInstance().createApi(Config.HOST, DZBusApiService.class)
-                .confirmBoarding(stringBuilder.toString())
-                .filter(new HttpResultFunc<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MySubscriber<EmResult>(this, true, false, new NoErrSubscriberListener<EmResult>() {
-                    @Override
-                    public void onNext(EmResult emResult) {
-                        getData();
-                    }
-                }));
     }
-
 }

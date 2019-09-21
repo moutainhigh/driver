@@ -285,9 +285,11 @@
                 android:layout_centerVertical="true"
                 android:orientation="horizontal"
                 android:padding="12dp"
-                android:src="@mipmap/icon_manual_create" />
+                android:src="@mipmap/icon_manual_create"
+                android:visibility="gone" />
 
             <TextView
+                android:id="@+id/workTvOffline"
                 android:layout_width="90dp"
                 android:layout_height="90dp"
                 android:layout_centerInParent="true"

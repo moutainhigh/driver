@@ -77,11 +77,13 @@ public class ManualCreateActivity extends RxBaseActivity {
         manualCreateTvTimeSelect = findViewById(R.id.manualCreateTvTimeSelect);
         manualCreateTvCreate = findViewById(R.id.manualCreateTvCreate);
         manualCreateSb = findViewById(R.id.manualCreateSb);
+        manualCreateSb.setChecked(true);
         manualCreateFl = findViewById(R.id.manualCreateFl);
         String content = XApp.getMyPreferences().getString(Config.SP_MANUAL_DATA, "");
         if (!TextUtils.isEmpty(content)) {
             ManualConfigBean manualConfigBean = new Gson().fromJson(content, ManualConfigBean.class);
             day = manualConfigBean.day;
+            day--;
             isShow = manualConfigBean.isShow;
             manualCreateFl.setVisibility(isShow == 1 ? View.VISIBLE : View.GONE);
         } else {
@@ -142,8 +144,7 @@ public class ManualCreateActivity extends RxBaseActivity {
         data.put("day", manualCreateTvDateSelect.getText().toString());
         data.put("hour", manualCreateTvTimeSelect.getText().toString());
         data.put("endTimeType", String.valueOf(1));
-        data.put("isShow", isShow == 1 ? String.valueOf(manualCreateSb.isChecked() ? 1 : 2) : String.valueOf(1));
-        data.put("vehicleNo", "K2596");
+        data.put("isShow", String.valueOf(manualCreateSb.isChecked() ? 1 : 2));
 
         ApiManager.getInstance().createApi(Config.HOST, DZBusApiService.class)
                 .manualOrderCreate(data)
@@ -195,7 +196,6 @@ public class ManualCreateActivity extends RxBaseActivity {
     }
 
     public void showTimePicker(Type type) {
-
         TimePickerDialog.Builder builder = new TimePickerDialog.Builder()
                 .setCallBack((timePickerView, millseconds) -> {
                     if (type == Type.YEAR_MONTH_DAY) {
@@ -226,6 +226,8 @@ public class ManualCreateActivity extends RxBaseActivity {
             int currentDayInYear = currentCalendar.get(Calendar.DAY_OF_YEAR);
             if (chooseDayInYear != currentDayInYear) {
                 builder.setMinMillseconds(0);
+            } else {
+                builder.setMaxMillseconds(System.currentTimeMillis() + 24 * 60 * 60 * 1000);
             }
         }
 

@@ -106,12 +106,12 @@
     </LinearLayout>
 
     <com.easymin.custombus.MyScrollVIew
-        android:overScrollMode="never"
         android:id="@+id/scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="40dp"
         android:fillViewport="true"
+        android:overScrollMode="never"
         android:scrollbars="none">
 
         <LinearLayout
@@ -175,51 +175,44 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/color_f2f2f2"
                 android:descendantFocusability="blocksDescendants"
-                android:orientation="vertical">
+                android:overScrollMode="never"
+                android:scrollbars="none" />
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recyclerView"
+            <LinearLayout
+                android:id="@+id/passengerLl"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="@color/color_f2f2f2"
+                android:orientation="vertical"
+                android:paddingTop="12dp"
+                android:visibility="gone">
+
+                <FrameLayout
+                    android:id="@+id/passengerFl"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/color_f2f2f2"
-                    android:overScrollMode="never"
-                    android:scrollbars="none" />
-
-                <LinearLayout
-                    android:id="@+id/passengerLl"
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:background="@color/color_f2f2f2"
-                    android:orientation="vertical"
+                    android:background="@android:color/white"
+                    android:paddingStart="12dp"
                     android:paddingTop="12dp"
-                    android:visibility="gone">
+                    android:paddingEnd="12dp">
 
-                    <FrameLayout
-                        android:id="@+id/passengerFl"
+                    <TextView
+                        android:id="@+id/passengerTvManualAction"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/white"
-                        android:paddingStart="12dp"
-                        android:paddingTop="12dp"
-                        android:paddingEnd="12dp">
-
-                        <TextView
-                            android:id="@+id/passengerTvManualAction"
-                            android:layout_width="match_parent"
-                            android:layout_height="44dp"
-                            android:background="@drawable/cor4_solid_blue"
-                            android:gravity="center"
-                            android:text="确认全部上车"
-                            android:textColor="@android:color/white"
-                            android:textSize="@dimen/sizeButton" />
-                    </FrameLayout>
-                </LinearLayout>
-
+                        android:layout_height="44dp"
+                        android:background="@drawable/cor4_solid_blue"
+                        android:gravity="center"
+                        android:text="确认全部上车"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/sizeButton" />
+                </FrameLayout>
             </LinearLayout>
         </LinearLayout>
     </com.easymin.custombus.MyScrollVIew>
