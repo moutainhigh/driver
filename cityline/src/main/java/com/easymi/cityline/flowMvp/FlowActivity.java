@@ -611,9 +611,10 @@ public class FlowActivity extends RxBaseActivity implements
             @Override
             public void clearMap() {
                 aMap.clear();
-                if (driverMarker!=null) {
+                if (driverMarker != null) {
                     driverMarker.destory();
                 }
+                driverMarker = null;
                 initMap();
                 receiveLoc(EmUtil.getLastLoc());//第一时间加上自身位置
             }
@@ -1016,6 +1017,9 @@ public class FlowActivity extends RxBaseActivity implements
     protected void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
+        if (driverMarker != null) {
+            driverMarker.destory();
+        }
     }
 
     @Override
