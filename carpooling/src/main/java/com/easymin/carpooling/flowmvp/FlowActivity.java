@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
@@ -220,6 +221,7 @@ public class FlowActivity extends RxPayActivity implements
             cusToolbar.setRightText("购票乘客", v -> bridge.toPasTickets());
         } else if (flag == StaticVal.TOOLBAR_CHANGE_ACCEPT) {
             cusToolbar.setLeftBack(view -> {
+                presenter.qureyScheduleInfo(pincheOrder.scheduleId);
                 if (myAllStation.scheduleStatus == PincheOrder.SCHEDULE_STATUS_NEW) {
                     bridge.toNotStart();
                 } else if (myAllStation.scheduleStatus == PincheOrder.SCHEDULE_STATUS_RUNNING) {
@@ -451,7 +453,7 @@ public class FlowActivity extends RxPayActivity implements
 
             @Override
             public void routePath(LatLng toLatlng) {
-                Log.e("hufeng/routePath","routePath22222");
+                Log.e("hufeng/routePath", "routePath22222");
                 presenter.routePlanByRouteSearch(lastLatlng, null, toLatlng);
             }
 
@@ -538,7 +540,7 @@ public class FlowActivity extends RxPayActivity implements
 
             @Override
             public void finishTask(long scheduleId) {
-                Log.e("hufeng/finishTask","finishTask");
+                Log.e("hufeng/finishTask", "finishTask");
                 presenter.finishTask(scheduleId);
             }
         };
@@ -647,7 +649,7 @@ public class FlowActivity extends RxPayActivity implements
         if (flag == StaticVal.MARKER_FLAG_PASS_ENABLE) {
             tv_seq_num.setBackgroundResource(R.drawable.circle_dark_22);
         } else if (flag == StaticVal.MARKER_FLAG_PASS_DISABLE) {
-            tv_seq_num.setBackgroundResource(R.drawable.circle_dark_22);
+            tv_seq_num.setBackgroundResource(R.drawable.circle_accent);
         }
 
         markerOption.icon(BitmapDescriptorFactory.fromView(view));
@@ -832,7 +834,6 @@ public class FlowActivity extends RxPayActivity implements
 
     @Override
     public void showFragmentByStatus() {
-
         if (myAllStation.scheduleStatus == PincheOrder.SCHEDULE_STATUS_NEW) {
             //未开始
             if (needJump) {
@@ -846,7 +847,12 @@ public class FlowActivity extends RxPayActivity implements
                 }
             }
         } else if (myAllStation.scheduleStatus == PincheOrder.SCHEDULE_STATUS_RUNNING) {
-            bridge.toAcSend();
+//            if (currentFragment instanceof ChangeSeqFragment) {
+//                bridge.toChangeSeq(((ChangeSeqFragment) currentFragment).getFlag());
+//            } else {
+                bridge.toAcSend();
+//            }
+
         } else if (myAllStation.scheduleStatus == PincheOrder.SCHEDULE_STATUS_FINISH) {
             bridge.toFinished();
         }
@@ -1042,6 +1048,8 @@ public class FlowActivity extends RxPayActivity implements
 ////////////////
 
 
+    public boolean isRunning = false;
+
     AllStation myAllStation;
 
     @Override
@@ -1060,7 +1068,7 @@ public class FlowActivity extends RxPayActivity implements
 
     @Override
     public void changeSequenceSuc() {
-        presenter.qureyScheduleInfo(pincheOrder.scheduleId);
+//        presenter.qureyScheduleInfo(pincheOrder.scheduleId);
     }
 
     /**

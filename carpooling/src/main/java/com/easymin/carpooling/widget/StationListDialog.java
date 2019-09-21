@@ -44,8 +44,9 @@ public class StationListDialog extends BottomSheetDialog {
         initViews(context, stations);
     }
 
-
-
+    /**
+     * 去掉已过站点
+     */
     public void checkStations(){
         int index = 0;
         for (int i = 0;i<stations.size();i++){
@@ -55,7 +56,6 @@ public class StationListDialog extends BottomSheetDialog {
         }
 
         Iterator iterator = stations.iterator();
-
         while (iterator.hasNext()) {
             MyStation station = (MyStation) iterator.next();
             if (station.stationSequence < index)  {

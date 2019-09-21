@@ -158,20 +158,24 @@ public class SequenceAdapter extends RecyclerView.Adapter<SequenceAdapter.ViewHo
             } else {
                 holder.seqTxt.setVisibility(View.GONE);
                 holder.seqImg.setVisibility(View.GONE);
-                holder.tvStatus.setVisibility(View.VISIBLE);
                 holder.linSeqNum.getBackground().setAlpha(255);
+
+                if (sequence.isStartOrEnd){
+                    holder.tvStatus.setVisibility(View.GONE);
+                }else {
+                    holder.tvStatus.setVisibility(View.VISIBLE);
+                }
 
                 holder.tvSeqNum.setText(sequence.sort + "");
 
                 if (sequence.stationStatus == StaticVal.GO_ON_CAR) {
                     holder.tvSeqNum.setBackgroundResource(R.drawable.circle_dark_22);
                     holder.tvStatus.setText("上车");
-                    holder.tvStatus.setVisibility(View.VISIBLE);
+
 
                 } else if (sequence.stationStatus == StaticVal.GET_OFF_CAR) {
                     holder.tvSeqNum.setBackgroundResource(R.drawable.circle_accent);
                     holder.tvStatus.setText("下车");
-                    holder.tvStatus.setVisibility(View.VISIBLE);
                 } else {
                     holder.tvStatus.setVisibility(View.GONE);
                     holder.linSeqNum.getBackground().setAlpha(128);
@@ -229,6 +233,9 @@ public class SequenceAdapter extends RecyclerView.Adapter<SequenceAdapter.ViewHo
         notifyItemMoved(fromPosition, toPosition);
         //注意此处只是notifyItemMoved并没有notifyDataSetChanged
         //原因下面会说明
+        if (onItemMoveListener != null){
+            onItemMoveListener.onMove();
+        }
         return true;
     }
 
@@ -274,5 +281,29 @@ public class SequenceAdapter extends RecyclerView.Adapter<SequenceAdapter.ViewHo
      */
     public List<Sequence> getLists() {
         return lists;
+    }
+
+
+
+    OnItemMoveListener onItemMoveListener;
+
+    /**
+     * 设置列表点击监听
+     *
+     * @param onItemMoveListener
+     */
+    public void setOnItemMoveListener(OnItemMoveListener onItemMoveListener) {
+        this.onItemMoveListener = onItemMoveListener;
+    }
+
+    /**
+     * 子项点击接口
+     */
+    public interface OnItemMoveListener {
+        /**
+         * 移动监听
+         *
+         */
+        void onMove();
     }
 }

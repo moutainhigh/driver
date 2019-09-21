@@ -221,15 +221,10 @@ public class NotStartFragment extends RxBaseFragment {
 
         if (leftSec > 0) {
             bottomBtn.setText("规划线路");
-            bottomBtn.setOnClickListener(view -> bridge.toChangeSeq(StaticVal.PLAN_ACCEPT));
+            bottomBtn.setOnClickListener(view -> bridge.toChangeSeq(0));
         } else {
             bottomBtn.setText("规划线路");
             bottomBtn.setOnClickListener(view -> {
-//                DymOrder dymOrder = DymOrder.findByIDType(pincheOrder.orderId, pincheOrder.orderType);
-//                if (null != dymOrder) {
-//                    dymOrder.orderStatus = ZXOrderStatus.ACCEPT_PLAN;
-//                    dymOrder.updateStatus();
-//                }
                 bridge.toChangeSeq(0);
             });
         }

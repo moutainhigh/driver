@@ -280,7 +280,7 @@ public class CreateOrderActivity extends RxPayActivity {
                     pcOrder = newPcOrder;
                     initViewByPcOrder();
                 }
-                banci_select.setText(pcOrder.lineName);
+                banci_select.setText(pcOrder.startStation+" 到 "+pcOrder.endStation);
                 setBtnEnable();
             } else if (requestCode == 1) {
                 //起点

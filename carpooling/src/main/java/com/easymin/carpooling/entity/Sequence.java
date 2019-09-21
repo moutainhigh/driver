@@ -66,4 +66,10 @@ public class Sequence implements Serializable{
      * 下车下标
      */
     public int endIndex;
+
+    /**
+     * 是否是终点或者起点
+     */
+    public boolean isStartOrEnd;
+
 }

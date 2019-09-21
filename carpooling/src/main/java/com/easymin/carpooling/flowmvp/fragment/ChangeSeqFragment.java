@@ -126,7 +126,7 @@ public class ChangeSeqFragment extends RxBaseFragment {
     }
 
     public int getFlag(){
-        return flag;
+        return this.flag;
     }
 
     /**
@@ -176,41 +176,6 @@ public class ChangeSeqFragment extends RxBaseFragment {
             });
         }
 
-
-//        if (flag == StaticVal.PLAN_ACCEPT) {
-//            bridge.changeToolbar(StaticVal.TOOLBAR_CHANGE_ACCEPT);
-//            hintText.setText("接人路线规划：");
-//            bottomBtn.setText("下一步");
-//            bottomBtn.setOnClickListener(view -> {
-//                flag = StaticVal.PLAN_SEND;
-//                DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
-//                if (dymOrder != null && dymOrder.orderStatus == ZXOrderStatus.ACCEPT_PLAN) {
-//                    dymOrder.orderStatus = ZXOrderStatus.SEND_PLAN;
-//                    dymOrder.updateStatus();
-//                }
-//                changeUi();
-//            });
-//        } else {
-//            bridge.changeToolbar(StaticVal.TOOLBAR_CHANGE_SEND);
-//            hintText.setText("送人路线规划：");
-//            bottomBtn.setText("行程开始");
-//            DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
-//            if (null != dymOrder) {
-//                if (dymOrder.orderStatus <= ZXOrderStatus.WAIT_START) {
-//                    // TODO: 2019-08-30 暂时取消判断
-////                    if (!countStratOver) {
-////                        bottomBtn.setEnabled(false);
-////                        bottomBtn.setBackgroundResource(R.drawable.corners_button_press_bg);
-////                    } else {
-//                    bottomBtn.setOnClickListener(view -> bridge.startOutSet());
-////                    }
-//                } else if (dymOrder.orderStatus == ZXOrderStatus.SEND_PLAN) {
-//                    bottomBtn.setOnClickListener(view -> bridge.startOutSet());
-//                } else {
-//                    bottomBtn.setOnClickListener(view -> bridge.toAcSend());
-//                }
-//            }
-//        }
         adapter.setSequences(buildData());
         showInMap();
     }
@@ -244,7 +209,6 @@ public class ChangeSeqFragment extends RxBaseFragment {
         hintText = $(R.id.hint_text);
         recyclerView = $(R.id.recycler_view);
         bottomBtn = $(R.id.bottom_btn);
-
         initRecycler();
         changeUi();
     }
@@ -260,10 +224,7 @@ public class ChangeSeqFragment extends RxBaseFragment {
 
         recyclerView.setAdapter(adapter);
 
-        recyclerView.setOnTouchListener((view, event) -> {
-            if (event.getAction() != MotionEvent.ACTION_UP) {
-                return false;
-            }
+        adapter.setOnItemMoveListener(() -> {
             List<Sequence> list = new ArrayList<>();
             list.addAll(adapter.getLists());
             Iterator iterator = list.iterator();
@@ -307,7 +268,6 @@ public class ChangeSeqFragment extends RxBaseFragment {
             if (!TextUtils.isEmpty(orderIdSequence)){
                 bridge.changeOrderSequence(orderIdSequence);
             }
-            return false;
         });
 
         ItemDragCallback touchHelper = new ItemDragCallback(adapter);
@@ -333,6 +293,7 @@ public class ChangeSeqFragment extends RxBaseFragment {
         MyStation currentStation = allStation.scheduleStationVoList.get(flag);
         orderCustomers = currentStation.stationOrderVoList;
 
+
         //根据index排序
         Collections.sort(orderCustomers, (o1, o2) -> {
             if (o1.index < o2.index) {
@@ -357,6 +318,13 @@ public class ChangeSeqFragment extends RxBaseFragment {
             sequence.status = customer.status;
             sequence.sort = customer.sequence;
 
+            //判断是否是起点或者终点
+            if (flag == 0 || flag == (allStation.scheduleStationVoList.size()-1)){
+                sequence.isStartOrEnd = true;
+            }else {
+                sequence.isStartOrEnd = false;
+            }
+
             if (customer.startStationId == currentStation.stationId) {
                 //上车点
                 sequence.stationStatus = 1;
@@ -372,7 +340,6 @@ public class ChangeSeqFragment extends RxBaseFragment {
                 if (customer.status >= CarpoolOrder.CARPOOL_STATUS_FINISH) {
                     min = i + 1;
                 }
-
             } else {
                 //途径点
                 sequence.stationStatus = 3;
