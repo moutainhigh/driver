@@ -41,7 +41,6 @@ android {
 
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
-    api rootProject.ext.lifecycle
     api rootProject.ext.appcompat
     api rootProject.ext.multidex
     api rootProject.ext.design
@@ -72,12 +71,6 @@ dependencies {
 
     api "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
-    debugApi("com.github.whataa:pandora:v2.0.4") {
-        exclude group: 'com.android.support'
-        exclude group: 'com.squareup.okhttp3'
-    }
-    releaseApi("com.github.whataa:pandora-no-op:v2.0.3") {
-        exclude group: 'com.android.support'
-        exclude group: 'com.squareup.okhttp3'
-    }
+    debugApi rootProject.ext.pandora
+    releaseApi rootProject.ext.pandoraNoOp
 }
