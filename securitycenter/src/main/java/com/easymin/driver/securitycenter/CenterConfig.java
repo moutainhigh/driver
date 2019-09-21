@@ -17,6 +17,9 @@ public class CenterConfig {
     public static String HOST;
     public static String H5_HOST;
     public static String IMG_SERVER;
+
+
+    public static boolean IS_ENCRYPT;
     /**
      * aes加密key
      */

@@ -33,6 +33,7 @@ public class SettingActivity extends RxBaseActivity {
         RadioGroup settingRgKey = findViewById(R.id.setting_rg_key);
         EditText settingEtHost = findViewById(R.id.setting_et_host);
         EditText settingEtH5 = findViewById(R.id.setting_et_h5);
+        EditText settingEtImgServer = findViewById(R.id.setting_et_img_server);
         RadioGroup settingRg = findViewById(R.id.setting_rg);
         TextView settingTv = findViewById(R.id.setting_tv);
 
@@ -64,6 +65,7 @@ public class SettingActivity extends RxBaseActivity {
         }
         settingEtHost.setText(Config.HOST);
         settingEtH5.setText(Config.H5_HOST);
+        settingEtImgServer.setText(Config.IMG_SERVER);
         settingRg.check(Config.IS_ENCRYPT ? R.id.setting_rb_en : R.id.setting_rb_de);
 
         settingTv.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +85,7 @@ public class SettingActivity extends RxBaseActivity {
                 }
                 environmentPojo.host = settingEtHost.getText().toString();
                 environmentPojo.h5Host = settingEtH5.getText().toString();
+                environmentPojo.server = settingEtImgServer.getText().toString();
                 environmentPojo.encryption = settingRg.getCheckedRadioButtonId() == R.id.setting_rb_en;
                 XApp.getEditor().putString("environment_setting", new Gson().toJson(environmentPojo)).apply();
                 ToastUtil.showMessage(SettingActivity.this, "保存成功,请重启APP再试。");

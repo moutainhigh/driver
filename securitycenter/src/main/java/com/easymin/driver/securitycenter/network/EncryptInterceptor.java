@@ -29,7 +29,7 @@ public class EncryptInterceptor implements Interceptor {
 
         EncryptSet encryptSet = hookRequest(originRequest);
 
-        if (encryptSet == null || encryptSet.request == null) {
+        if (encryptSet == null || encryptSet.request == null||!CenterConfig.IS_ENCRYPT) {
             return chain.proceed(originRequest);
         }
 
