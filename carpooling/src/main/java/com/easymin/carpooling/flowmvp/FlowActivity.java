@@ -237,7 +237,7 @@ public class FlowActivity extends RxPayActivity implements
             cusToolbar.setRightText("查看规划", view -> {
                 StationListDialog dialog = null;
                 if (dialog == null) {
-                    dialog = new StationListDialog(this, stations);
+                    dialog = new StationListDialog(this, myAllStation);
                 }
                 dialog.setOnSelectListener(this::switchCompany).show();
             });
@@ -1041,7 +1041,6 @@ public class FlowActivity extends RxPayActivity implements
 
 ////////////////
 
-    List<MyStation> stations = new ArrayList<>();
 
     AllStation myAllStation;
 
@@ -1056,7 +1055,6 @@ public class FlowActivity extends RxPayActivity implements
             return;
         }
         myAllStation = allStation;
-        stations = allStation.scheduleStationVoList;
         showFragmentByStatus();
     }
 

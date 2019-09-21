@@ -7,11 +7,16 @@ import android.support.design.widget.BottomSheetDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.component.widget.wheelview.WheelView;
 import com.easymi.component.widget.wheelview.adapter.AbstractWheelTextAdapter;
 import com.easymin.carpooling.R;
+import com.easymin.carpooling.entity.AllStation;
 import com.easymin.carpooling.entity.MyStation;
+import com.easymin.carpooling.entity.Sequence;
+import com.easymin.carpooling.entity.Station;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -29,11 +34,34 @@ public class StationListDialog extends BottomSheetDialog {
     private WheelView wheelView;
     private OnSelectListener onSelectListener;
     private List<MyStation> stations;
+    private AllStation allStation;
 
-    public StationListDialog(@NonNull Context context, @NonNull List<MyStation> stations) {
+    public StationListDialog(@NonNull Context context, @NonNull AllStation allStation) {
         super(context);
-        this.stations = stations;
+        this.allStation = allStation;
+        stations = allStation.scheduleStationVoList;
+        checkStations();
         initViews(context, stations);
+    }
+
+
+
+    public void checkStations(){
+        int index = 0;
+        for (int i = 0;i<stations.size();i++){
+            if(allStation.scheduleStationVoList.get(i).stationId == allStation.currentStationId){
+                index = allStation.scheduleStationVoList.get(i).stationSequence;
+            }
+        }
+
+        Iterator iterator = stations.iterator();
+
+        while (iterator.hasNext()) {
+            MyStation station = (MyStation) iterator.next();
+            if (station.stationSequence < index)  {
+                iterator.remove();
+            }
+        }
     }
 
     @Override
