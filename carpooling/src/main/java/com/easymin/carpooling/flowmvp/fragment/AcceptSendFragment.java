@@ -103,9 +103,6 @@ public class AcceptSendFragment extends RxBaseFragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden) {
-            showWhatByStatus();
-        }
     }
 
     @Override
@@ -149,6 +146,7 @@ public class AcceptSendFragment extends RxBaseFragment {
             bridge.doRefresh();
             refreshImg.setVisibility(View.GONE);
         });
+        Log.e("hufeng/showWhatByStatus","222");
         showWhatByStatus();
     }
 
@@ -186,6 +184,7 @@ public class AcceptSendFragment extends RxBaseFragment {
         if (mainLlAction == null){
             return;
         }
+        Log.e("hufeng/showWhatByStatus","11111");
         showWhatByStatus();
     }
 
@@ -236,6 +235,7 @@ public class AcceptSendFragment extends RxBaseFragment {
         }
 
         mainLlAction.setVisibility(View.GONE);
+        Log.e("hufeng/zzzzz","zzzzz");
         if (carpoolOrders.size() != 0) {
             current = carpoolOrders.get(0);
 
@@ -243,22 +243,12 @@ public class AcceptSendFragment extends RxBaseFragment {
 
             if (current.advanceAssign == 1) {
                 mainLlAction.setVisibility(View.VISIBLE);
-                mainCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        bridge.onDialogClick(2, current.id, current.money);
-                    }
-                });
-                mainPay.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        bridge.onDialogClick(3, current.id, current.money);
-                    }
-                });
+                mainCancel.setOnClickListener(v -> bridge.onDialogClick(2, current.orderId, current.money));
+                mainPay.setOnClickListener(v -> bridge.onDialogClick(3, current.orderId, current.money));
             } else {
                 mainLlAction.setVisibility(View.GONE);
             }
-
+            Log.e("hufeng/sssssss","sssssss");
             if (current.status < CarpoolOrder.CARPOOL_STATUS_RUNNING) {
                 //未接
                 if (current.status < CarpoolOrder.CARPOOL_STATUS_START) {
@@ -314,7 +304,7 @@ public class AcceptSendFragment extends RxBaseFragment {
                         @Override
                         public void onUnlocked() {
                             if (current.advanceAssign == 1) {
-                                bridge.onDialogClick(1, current.id, current.money);
+                                bridge.onDialogClick(1, current.orderId, current.money);
                             } else {
                                 bridge.acceptCustomer(current);
                             }
@@ -342,9 +332,8 @@ public class AcceptSendFragment extends RxBaseFragment {
                         resetView();
                     }
                 });
+                Log.e("hufeng/showInMap",current.status+"");
                 showInMap(new LatLng(current.endLatitude, current.endLongitude), StaticVal.MARKER_FLAG_END);
-            }else {
-
             }
             RequestOptions options = new RequestOptions()
                     .centerCrop()
@@ -369,6 +358,7 @@ public class AcceptSendFragment extends RxBaseFragment {
             toPlace.setText(current.status < CarpoolOrder.CARPOOL_STATUS_ARRIVED ? current.startAddress : current.endAddress);
         } else {
             if (getCurrentIndex() == allStation.scheduleStationVoList.size()-1){
+                Log.e("hufeng/11111","1111111");
                 bridge.finishTask(allStation.scheduleId);
             }
         }
@@ -391,11 +381,10 @@ public class AcceptSendFragment extends RxBaseFragment {
      * @param flag
      */
     private void showInMap(LatLng toLatlng, int flag) {
-
+        Log.e("hufeng/showInMap","showInMap");
         bridge.clearMap();
         bridge.addMarker(toLatlng, flag);
         bridge.routePath(toLatlng);
-
     }
 
     /**
@@ -522,7 +511,7 @@ public class AcceptSendFragment extends RxBaseFragment {
                 @Override
                 public void onUnlocked() {
                     if (current.advanceAssign == 1) {
-                        bridge.onDialogClick(1, current.id, current.money);
+                        bridge.onDialogClick(1, current.orderId, current.money);
                     } else {
                         bridge.acceptCustomer(current);
                     }

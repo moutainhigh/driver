@@ -102,7 +102,6 @@ public class FlowPresenter implements FlowContract.Presenter {
 
                 @Override
                 public void onDriveRouteSearched(DriveRouteResult driveRouteResult, int code) {
-                    Log.e("hufeng/code", code + "");
                     if (code == 1000) {
                         view.showPath(driveRouteResult);
                     }
@@ -232,7 +231,7 @@ public class FlowPresenter implements FlowContract.Presenter {
      */
     @Override
     public void qureyScheduleInfo(long scheduleId) {
-        view.getManager().add(model.qureyScheduleInfo(scheduleId).subscribe(new MySubscriber<>(context, true,
+        view.getManager().add(model.qureyScheduleInfo(scheduleId).subscribe(new MySubscriber<>(context, false,
                 true, allStation -> view.scheduleInfo(allStation))));
     }
 

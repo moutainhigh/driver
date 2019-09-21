@@ -131,13 +131,13 @@ public class CusListAdapter extends RecyclerView.Adapter<CusListAdapter.ViewHold
         holder.cusRl.setVisibility(carpoolOrder.advanceAssign == 1 ? View.VISIBLE : View.GONE);
         holder.cusTvPay.setOnClickListener(v -> {
             if (onShowDialogListener != null) {
-                onShowDialogListener.onDialogClick(true, carpoolOrder.id, carpoolOrder.money);
+                onShowDialogListener.onDialogClick(true, carpoolOrder.orderId, carpoolOrder.money);
             }
         });
 
         holder.cusTvCancel.setOnClickListener(v -> {
             if (onShowDialogListener != null) {
-                onShowDialogListener.onDialogClick(false, carpoolOrder.id, carpoolOrder.money);
+                onShowDialogListener.onDialogClick(false, carpoolOrder.orderId, carpoolOrder.money);
             }
         });
 

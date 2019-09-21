@@ -13,7 +13,8 @@ public class CenterConfig {
     /**
      * 主机地址
      */
-    public static String HOST = "http://api.xiaokakj.com/";//线上测试
+//    public static String HOST = "http://api.xiaokakj.com/";//线上测试
+    public static String HOST = "http://v6api.rvaka.cn/";//线上测试
     public static String H5_HOST = "http://h5.xiaokakj.com/";//线上测试
     public static String IMG_SERVER = "http://assets.xiaokakj.com/";
     /**

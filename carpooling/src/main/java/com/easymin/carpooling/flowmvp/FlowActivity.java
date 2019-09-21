@@ -95,7 +95,7 @@ public class FlowActivity extends RxPayActivity implements
         OrderFinishReceiver.OnFinishListener,
         AMap.OnMarkerClickListener,
         AMap.OnMapClickListener,
-        OrderRefreshReceiver.OnRefreshOrderListener{
+        OrderRefreshReceiver.OnRefreshOrderListener {
 
     CusToolbar cusToolbar;
     MapView mapView;
@@ -165,7 +165,6 @@ public class FlowActivity extends RxPayActivity implements
     }
 
 
-
     @Override
     public void initViews(Bundle savedInstanceState) {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -233,8 +232,7 @@ public class FlowActivity extends RxPayActivity implements
                 cusToolbar.setTitle("站点名");
             }
             cusToolbar.setRightGone();
-        }
-        else if (flag == StaticVal.TOOLBAR_FLOW) {
+        } else if (flag == StaticVal.TOOLBAR_FLOW) {
             cusToolbar.setLeftBack(view -> finish());
             cusToolbar.setRightText("查看规划", view -> {
                 StationListDialog dialog = null;
@@ -445,6 +443,7 @@ public class FlowActivity extends RxPayActivity implements
                 if (smoothMoveMarker != null) {
                     smoothMoveMarker.destory();
                 }
+                smoothMoveMarker = null;
                 initMap();
                 //第一时间加上自身位置
                 receiveLoc(EmUtil.getLastLoc());
@@ -452,6 +451,7 @@ public class FlowActivity extends RxPayActivity implements
 
             @Override
             public void routePath(LatLng toLatlng) {
+                Log.e("hufeng/routePath","routePath22222");
                 presenter.routePlanByRouteSearch(lastLatlng, null, toLatlng);
             }
 
@@ -538,6 +538,7 @@ public class FlowActivity extends RxPayActivity implements
 
             @Override
             public void finishTask(long scheduleId) {
+                Log.e("hufeng/finishTask","finishTask");
                 presenter.finishTask(scheduleId);
             }
         };
@@ -831,15 +832,16 @@ public class FlowActivity extends RxPayActivity implements
 
     @Override
     public void showFragmentByStatus() {
+
         if (myAllStation.scheduleStatus == PincheOrder.SCHEDULE_STATUS_NEW) {
             //未开始
             if (needJump) {
                 needJump = false;
                 bridge.toPasTickets();
             } else {
-                if (currentFragment instanceof ChangeSeqFragment){
-                    bridge.toChangeSeq(((ChangeSeqFragment)currentFragment).getFlag());
-                }else{
+                if (currentFragment instanceof ChangeSeqFragment) {
+                    bridge.toChangeSeq(((ChangeSeqFragment) currentFragment).getFlag());
+                } else {
                     bridge.toNotStart();
                 }
             }
@@ -894,6 +896,9 @@ public class FlowActivity extends RxPayActivity implements
         super.onDestroy();
         if (mapView != null) {
             mapView.onDestroy();
+        }
+        if (smoothMoveMarker != null) {
+            smoothMoveMarker.destory();
         }
     }
 
@@ -968,24 +973,11 @@ public class FlowActivity extends RxPayActivity implements
     }
 
     /**
-     * 取消订单弹窗
+     * 取消订单
      */
-//    private AlertDialog cancelDialog;
     @Override
     public void onCancelOrder(long orderId, String orderType, String msg) {
         if (orderType.equals(Config.CARPOOL)) {
-//            if (cancelDialog == null) {
-//                cancelDialog = new AlertDialog.Builder(this)
-//                        .setMessage(msg)
-//                        .setPositiveButton(R.string.ok, (dialog1, which) -> {
-//                            dialog1.dismiss();
-//                            finish();
-//                        })
-//                        .setOnDismissListener(dialog12 -> finish())
-//                        .create();
-//                cancelDialog.show();
-//            }
-//            XApp.getInstance().syntheticVoice("您有订单被取消或者收回");
             presenter.queryOrderInTime(pincheOrder.scheduleId);
         }
     }
