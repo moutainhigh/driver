@@ -43,7 +43,7 @@ dependencies {
     api rootProject.ext.viewPagerIndicator
     api rootProject.ext.magicIndicator
     api rootProject.ext.gifDrawable
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    api rootProject.ext.constraintLayout
     annotationProcessor rootProject.ext.aroutercompiler
     api project(path: ':securitycenter')
 

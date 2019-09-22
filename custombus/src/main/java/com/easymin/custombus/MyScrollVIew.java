@@ -1,11 +1,12 @@
 package com.easymin.custombus;
 
 import android.content.Context;
+import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
-import com.easymi.component.utils.Log;
-import android.widget.ScrollView;
 
-public class MyScrollVIew extends ScrollView {
+import com.easymi.component.utils.Log;
+
+public class MyScrollVIew extends NestedScrollView {
 
     private OnScrollListener onScrollListener;
 

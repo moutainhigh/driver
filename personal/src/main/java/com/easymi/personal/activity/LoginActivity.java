@@ -35,7 +35,6 @@ import com.easymi.component.network.ErrCode;
 import com.easymi.component.network.ErrCodeTran;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
-import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.AlexStatusBarUtils;
 import com.easymi.component.utils.CsEditor;
@@ -61,7 +60,6 @@ import java.util.Locale;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -282,24 +280,25 @@ public class LoginActivity extends RxBaseActivity {
         account = editAccount.getText().toString();
         password = editPsw.getText().toString();
 
-        Observable<LoginResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .getIsLogin(2, account)
-                .map(new HttpResultFunc2<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(new Func1<Boolean, Observable<LoginResult>>() {
-                    @Override
-                    public Observable<LoginResult> call(Boolean aBoolean) {
-                        if (!aBoolean) {
-                            return getLoginObservable(account, password);
-                        } else {
-                            showDialog();
-                            return Observable.error(new RuntimeException());
-                        }
-                    }
-                });
-
-        subscribeObservable(observable);
+//        Observable<LoginResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
+//                .getIsLogin(2, account)
+//                .map(new HttpResultFunc2<>())
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .flatMap(new Func1<Boolean, Observable<LoginResult>>() {
+//                    @Override
+//                    public Observable<LoginResult> call(Boolean aBoolean) {
+//                        if (!aBoolean) {
+//                            return getLoginObservable(account, password);
+//                        } else {
+//                            showDialog();
+//                            return Observable.error(new RuntimeException());
+//                        }
+//                    }
+//                });
+//
+//        subscribeObservable(observable);
+        subscribeObservable(getLoginObservable(account, password));
     }
 
     private void showDialog() {

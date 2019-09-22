@@ -26,6 +26,8 @@ import com.easymin.custombus.entity.Customer;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.easymin.custombus.entity.Customer.CITY_COUNTRY_STATUS_PAY;
+
 /**
  * @Copyright (C), 2012-2019, Sichuan Xiaoka Technology Co., Ltd.
  * @FileName: PassengerAdapter
@@ -47,9 +49,16 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
             .diskCacheStrategy(DiskCacheStrategy.ALL);
 
     private OnDialogShowingListener onDialogShowingListener;
+    private int inspectTicket;
 
     public void setOnDialogShowingListener(OnDialogShowingListener onDialogShowingListener) {
         this.onDialogShowingListener = onDialogShowingListener;
+    }
+
+    private OnConfirmBoardingListener onConfirmBoardingListener;
+
+    public void setOnConfirmBoarding(OnConfirmBoardingListener onConfirmBoardingListener) {
+        this.onConfirmBoardingListener = onConfirmBoardingListener;
     }
 
     /**
@@ -57,9 +66,10 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
      *
      * @param context
      */
-    public PassengerAdapter(Context context) {
+    public PassengerAdapter(Context context, int inspectTicket) {
         this.context = context;
         listPassenger = new ArrayList<>();
+        this.inspectTicket = inspectTicket;
     }
 
     /**
@@ -118,12 +128,34 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
         });
         holder.cusDesc.setText("备注: " + (TextUtils.isEmpty(customer.orderRemark) ? "暂无备注" : customer.orderRemark));
 
-        holder.cusRl.setVisibility(customer.status == 1 ? View.VISIBLE : View.GONE);
+        if (inspectTicket == 2) {
+            holder.cusRl.setVisibility(customer.status == CITY_COUNTRY_STATUS_PAY
+                    || customer.status == Customer.CITY_COUNTRY_STATUS_ARRIVED ? View.VISIBLE : View.GONE);
+        } else {
+            holder.cusRl.setVisibility(customer.status == CITY_COUNTRY_STATUS_PAY ? View.VISIBLE : View.GONE);
+        }
+
+        if (inspectTicket == 2 && customer.status == Customer.CITY_COUNTRY_STATUS_ARRIVED) {
+            holder.cusTvCancel.setVisibility(View.GONE);
+            holder.cusTvPay.setVisibility(View.VISIBLE);
+            holder.cusTvPay.setText("确认上车");
+        } else {
+            holder.cusTvCancel.setVisibility(View.VISIBLE);
+            holder.cusTvPay.setVisibility(View.VISIBLE);
+            holder.cusTvPay.setText("代付");
+        }
+
         holder.cusTvPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onDialogShowingListener != null) {
-                    onDialogShowingListener.onShowing(true, customer.id, customer.money);
+                if (inspectTicket == 2 && customer.status == Customer.CITY_COUNTRY_STATUS_ARRIVED) {
+                    if (onConfirmBoardingListener != null) {
+                        onConfirmBoardingListener.onConfirm(customer.id);
+                    }
+                } else {
+                    if (onDialogShowingListener != null) {
+                        onDialogShowingListener.onShowing(true, customer.id, customer.money);
+                    }
                 }
             }
         });
@@ -180,6 +212,10 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
 
     public interface OnDialogShowingListener {
         void onShowing(boolean isPay, long orderId, double money);
+    }
+
+    public interface OnConfirmBoardingListener {
+        void onConfirm(long orderId);
     }
 
 }

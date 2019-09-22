@@ -75,6 +75,7 @@ public class Config {
      * SharedPrefence 常量配置
      */
     public static final String SP_DRIVERID = "driverId";
+    public static final String SP_MANUAL_DATA = "manualData";
     public static final String SP_ISLOGIN = "isLogin";
     public static final String SP_DZBUS_ORDER = "isLogin";
     public static final String SP_LAST_LOC = "lastLoc";
