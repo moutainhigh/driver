@@ -126,10 +126,6 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
      * 当前位置经纬度
      */
     private float mLongitude, mLatitude;
-    /**
-     * 是否是第一次加载
-     */
-    private boolean mIsFirstIn = true;
 
     private LongSparseArray<Polygon> polygonMap;
 
@@ -713,11 +709,9 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
         String formatAddress = regeocodeAddress.getFormatAddress();
         String simpleAddress = formatAddress.substring(9);
         Log.e("tagTest", "查询经纬度对应详细地址：\n" + simpleAddress);
-        if (mIsFirstIn) {
-            mLongitude = (float) regeocodeResult.getRegeocodeQuery().getPoint().getLongitude();
-            mLatitude = (float) regeocodeResult.getRegeocodeQuery().getPoint().getLatitude();
-            mIsFirstIn = false;
-        }
+
+        mLongitude = (float) regeocodeResult.getRegeocodeQuery().getPoint().getLongitude();
+        mLatitude = (float) regeocodeResult.getRegeocodeQuery().getPoint().getLatitude();
         mInputEt.setText(simpleAddress);
     }
 
