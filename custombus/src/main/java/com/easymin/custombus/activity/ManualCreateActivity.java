@@ -25,12 +25,18 @@ import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.switchButton.SwitchButton;
 import com.easymin.custombus.DZBusApiService;
 import com.easymin.custombus.R;
+import com.easymin.custombus.dialog.ColorTimePickerDialog;
+import com.easymin.custombus.dialog.DateSelectDialog;
 import com.easymin.custombus.dialog.ManualCreateDialog;
 import com.easymin.custombus.entity.ManualCreateLineBean;
+import com.easymin.custombus.entity.TimeBean;
 import com.google.gson.Gson;
-import com.jzxiang.pickerview.TimePickerDialog;
+import com.jzxiang.pickerview.config.PickerConfig;
 import com.jzxiang.pickerview.data.Type;
+import com.jzxiang.pickerview.data.WheelCalendar;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -55,6 +61,7 @@ public class ManualCreateActivity extends RxBaseActivity {
     private ManualCreateLineBean manualCreateLineBean;
     private long ChooseDayTimeMillSeconds;
     private long chooseHourTimeMillSecond;
+    private List<TimeBean> timeBeans;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,10 +88,14 @@ public class ManualCreateActivity extends RxBaseActivity {
         manualCreateSb.setChecked(true);
         manualCreateFl = findViewById(R.id.manualCreateFl);
         String content = XApp.getMyPreferences().getString(Config.SP_MANUAL_DATA, "");
+        timeBeans = new ArrayList<>();
         if (!TextUtils.isEmpty(content)) {
             ManualConfigBean manualConfigBean = new Gson().fromJson(content, ManualConfigBean.class);
             day = manualConfigBean.day;
             day--;
+            for (int i = 0; i < day; i++) {
+                timeBeans.add(new TimeBean(i));
+            }
             isShow = manualConfigBean.isShow;
             manualCreateFl.setVisibility(isShow == 1 ? View.VISIBLE : View.GONE);
         } else {
@@ -110,16 +121,29 @@ public class ManualCreateActivity extends RxBaseActivity {
         if (v.getId() == R.id.manualCreateTvLineSelect) {
             getDataList();
         } else if (v.getId() == R.id.manualCreateTvDateSelect) {
-            showTimePicker(Type.YEAR_MONTH_DAY);
+            showDatePick();
         } else if (v.getId() == R.id.manualCreateTvTimeSelect) {
             if (ChooseDayTimeMillSeconds == 0) {
                 ToastUtil.showMessage(this, "请先选择发车日期");
                 return;
             }
-            showTimePicker(Type.HOURS_MINS);
+            showTimePicker();
         } else if (v.getId() == R.id.manualCreateTvCreate) {
             createManualOrder();
         }
+    }
+
+    private void showDatePick() {
+        DateSelectDialog dateSelectDialog = new DateSelectDialog(this, timeBeans, new DateSelectDialog.OnDateSelectDialogClickListener() {
+            @Override
+            public void onClick(TimeBean content) {
+                ChooseDayTimeMillSeconds = content.getTimeStamp();
+                manualCreateTvDateSelect.setText(TimeUtil.getTime("yyyy-MM-dd", content.getTimeStamp()));
+                manualCreateTvTimeSelect.setText("");
+                chooseHourTimeMillSecond = 0;
+            }
+        });
+        dateSelectDialog.show();
     }
 
     private void createManualOrder() {
@@ -196,52 +220,50 @@ public class ManualCreateActivity extends RxBaseActivity {
         dialog.show();
     }
 
-    public void showTimePicker(Type type) {
-        TimePickerDialog.Builder builder = new TimePickerDialog.Builder()
-                .setCallBack((timePickerView, millseconds) -> {
-                    if (type == Type.YEAR_MONTH_DAY) {
-                        ChooseDayTimeMillSeconds = millseconds;
-                        manualCreateTvDateSelect.setText(TimeUtil.getTime("yyyy-MM-dd", millseconds));
-                        manualCreateTvTimeSelect.setText("");
-                        chooseHourTimeMillSecond = 0;
-                    } else {
-                        chooseHourTimeMillSecond = millseconds;
-                        manualCreateTvTimeSelect.setText(TimeUtil.getTime("HH:mm", millseconds));
-                    }
-                })
-                .setCancelStringId("取消")
-                .setSureStringId("确定")
-                .setTitleStringId(type == Type.YEAR_MONTH_DAY ? "发车日期" : "发车时间")
-                .setCyclic(false)
-                .setMinMillseconds(System.currentTimeMillis())
-                .setMaxMillseconds(System.currentTimeMillis() + day * 24 * 60 * 60 * 1000)
-                .setCurrentMillseconds(System.currentTimeMillis())
-                .setThemeColor(ContextCompat.getColor(this, R.color.colorBlue))
-                .setType(type)
-                .setWheelItemTextSize(12);
+    public void showTimePicker() {
+        PickerConfig pickerConfig = new PickerConfig();
 
-        if (type == Type.HOURS_MINS) {
-            Calendar chooseCalendar = Calendar.getInstance();
-            chooseCalendar.setTimeInMillis(ChooseDayTimeMillSeconds);
-            Calendar currentCalendar = Calendar.getInstance();
-            currentCalendar.setTimeInMillis(System.currentTimeMillis());
-            int chooseDayInYear = chooseCalendar.get(Calendar.DAY_OF_YEAR);
-            int currentDayInYear = currentCalendar.get(Calendar.DAY_OF_YEAR);
-            if (chooseDayInYear != currentDayInYear) {
-                builder.setMinMillseconds(0);
-            } else {
-                builder.setMaxMillseconds(System.currentTimeMillis() + 24 * 60 * 60 * 1000);
-            }
-            if (chooseHourTimeMillSecond != 0) {
-                builder.setCurrentMillseconds(chooseHourTimeMillSecond);
-            }
+        pickerConfig.mCallBack = (timePickerView, millseconds) -> {
+            chooseHourTimeMillSecond = millseconds;
+            manualCreateTvTimeSelect.setText(TimeUtil.getTime("HH:mm", millseconds));
+        };
+        pickerConfig.mCancelString = "取消";
+        pickerConfig.mSureString = "确定";
+        pickerConfig.mTitleString = "发车时间";
+        pickerConfig.cyclic = false;
+        pickerConfig.mMinCalendar = new WheelCalendar(System.currentTimeMillis());
+        pickerConfig.mMaxCalendar = new WheelCalendar(System.currentTimeMillis() + day * 24 * 60 * 60 * 1000);
+        pickerConfig.mCurrentCalendar = new WheelCalendar(System.currentTimeMillis());
+        pickerConfig.mThemeColor = (ContextCompat.getColor(this, R.color.white));
+        pickerConfig.mType = Type.HOURS_MINS;
+        pickerConfig.mWheelTVSize = 12;
+
+        Calendar chooseCalendar = Calendar.getInstance();
+        chooseCalendar.setTimeInMillis(ChooseDayTimeMillSeconds);
+        Calendar currentCalendar = Calendar.getInstance();
+        currentCalendar.setTimeInMillis(System.currentTimeMillis());
+        int chooseDayInYear = chooseCalendar.get(Calendar.DAY_OF_YEAR);
+        int currentDayInYear = currentCalendar.get(Calendar.DAY_OF_YEAR);
+        if (chooseDayInYear != currentDayInYear) {
+            pickerConfig.mMinCalendar = new WheelCalendar(0);
         } else {
-            if (ChooseDayTimeMillSeconds != 0) {
-                builder.setCurrentMillseconds(ChooseDayTimeMillSeconds);
-            }
+            pickerConfig.mMaxCalendar = new WheelCalendar(System.currentTimeMillis() + 24 * 60 * 60 * 1000);
+        }
+        if (chooseHourTimeMillSecond != 0) {
+            pickerConfig.mCurrentCalendar = new WheelCalendar(chooseHourTimeMillSecond);
+        }
+        ColorTimePickerDialog colorTimePickerDialog = new ColorTimePickerDialog();
+
+        try {
+            Field field = ColorTimePickerDialog.class.getSuperclass().getDeclaredField("mPickerConfig");
+            field.setAccessible(true);
+            field.set(colorTimePickerDialog, pickerConfig);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
 
-        builder.build()
-                .show(getSupportFragmentManager(), "");
+        colorTimePickerDialog.show(getSupportFragmentManager(), "");
     }
 }

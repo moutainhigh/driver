@@ -18,45 +18,46 @@ import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.UIDisplayHelper;
 import com.easymin.custombus.R;
-import com.easymin.custombus.entity.ManualCreateLineBean;
+import com.easymin.custombus.entity.TimeBean;
 
 import java.util.List;
 
-public class ManualCreateDialog extends BottomSheetDialog implements View.OnClickListener {
+public class DateSelectDialog extends BottomSheetDialog implements View.OnClickListener {
 
     private BottomSheetBehavior<View> behavior;
-    private ImageView dialogManualCreateIv;
-    private RecyclerView dialogManualCreateRv;
-    private List<ManualCreateLineBean> data;
+    private ImageView dialogDateSelectIv;
+    private RecyclerView dialogDateSelectRv;
+    private List<TimeBean> data;
 
-    public ManualCreateDialog(@NonNull Context context, List<ManualCreateLineBean> manualCreateBeans, OnManualCreateDialogClickListener onManualCreateDialogClickListener) {
+    public DateSelectDialog(@NonNull Context context, List<TimeBean> timeBeans, OnDateSelectDialogClickListener onDateSelectDialogClickListener) {
         super(context);
-        View view = LayoutInflater.from(context).inflate(R.layout.dialog_manual_create, null);
-        this.data = manualCreateBeans;
-        dialogManualCreateIv = view.findViewById(R.id.dialogManualCreateIv);
-        dialogManualCreateIv.setOnClickListener(this);
-        dialogManualCreateRv = view.findViewById(R.id.dialogManualCreateRv);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_date_select, null);
+        this.data = timeBeans;
+        dialogDateSelectIv = view.findViewById(R.id.dialogDateSelectIv);
+        dialogDateSelectIv.setOnClickListener(this);
+        dialogDateSelectRv = view.findViewById(R.id.dialogDateSelectRv);
         setContentView(view);
-        dialogManualCreateRv.setLayoutManager(new LinearLayoutManager(context));
-        BaseQuickAdapter<ManualCreateLineBean, BaseViewHolder> adapter =
-                new BaseQuickAdapter<ManualCreateLineBean, BaseViewHolder>(R.layout.dialog_manual_create_item, data) {
-            @Override
-            protected void convert(BaseViewHolder helper, ManualCreateLineBean item) {
-                helper.setText(R.id.dialogManualCreateItemTv, item.name);
-            }
-        };
+        dialogDateSelectRv.setLayoutManager(new LinearLayoutManager(context));
+        BaseQuickAdapter<TimeBean, BaseViewHolder> adapter =
+                new BaseQuickAdapter<TimeBean, BaseViewHolder>(R.layout.dialog_date_select_item, data) {
+                    @Override
+                    protected void convert(BaseViewHolder helper, TimeBean item) {
+                        helper.setText(R.id.dialogDataSelectItemTv, TimeUtil.getTime("MM月dd日", item.getTimeStamp()) + " " + item.getDesc());
+                    }
+                };
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (onManualCreateDialogClickListener != null) {
-                    onManualCreateDialogClickListener.onClick((ManualCreateLineBean) adapter.getData().get(position));
+                if (onDateSelectDialogClickListener != null) {
+                    onDateSelectDialogClickListener.onClick((TimeBean) adapter.getData().get(position));
                 }
                 dismiss();
             }
         });
-        dialogManualCreateRv.setAdapter(adapter);
+        dialogDateSelectRv.setAdapter(adapter);
     }
 
     private int getHeight() {
@@ -103,13 +104,13 @@ public class ManualCreateDialog extends BottomSheetDialog implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.dialogManualCreateIv) {
+        if (v.getId() == R.id.dialogDateSelectIv) {
             dismiss();
         }
     }
 
-    public interface OnManualCreateDialogClickListener {
-        void onClick(ManualCreateLineBean str);
+    public interface OnDateSelectDialogClickListener {
+        void onClick(TimeBean str);
     }
 
 }
