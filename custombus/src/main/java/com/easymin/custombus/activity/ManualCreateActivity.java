@@ -231,7 +231,7 @@ public class ManualCreateActivity extends RxBaseActivity {
         pickerConfig.mSureString = "确定";
         pickerConfig.mTitleString = "发车时间";
         pickerConfig.cyclic = false;
-        pickerConfig.mMinCalendar = new WheelCalendar(System.currentTimeMillis());
+        pickerConfig.mMinCalendar = new WheelCalendar(0);
         pickerConfig.mMaxCalendar = new WheelCalendar(System.currentTimeMillis() + day * 24 * 60 * 60 * 1000);
         pickerConfig.mCurrentCalendar = new WheelCalendar(System.currentTimeMillis());
         pickerConfig.mThemeColor = (ContextCompat.getColor(this, R.color.white));
@@ -244,9 +244,8 @@ public class ManualCreateActivity extends RxBaseActivity {
         currentCalendar.setTimeInMillis(System.currentTimeMillis());
         int chooseDayInYear = chooseCalendar.get(Calendar.DAY_OF_YEAR);
         int currentDayInYear = currentCalendar.get(Calendar.DAY_OF_YEAR);
-        if (chooseDayInYear != currentDayInYear) {
-            pickerConfig.mMinCalendar = new WheelCalendar(0);
-        } else {
+        if (chooseDayInYear == currentDayInYear) {
+            pickerConfig.mMinCalendar = new WheelCalendar(System.currentTimeMillis());
             pickerConfig.mMaxCalendar = new WheelCalendar(System.currentTimeMillis() + 24 * 60 * 60 * 1000);
         }
         if (chooseHourTimeMillSecond != 0) {
