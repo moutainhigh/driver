@@ -176,6 +176,14 @@
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/sizeContent" />
 
+            <RadioButton
+                android:id="@+id/setting_rb_g0"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:text="G0UMxxxxxxxxxxxxxxxxxxxxx"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/sizeContent" />
+
         </RadioGroup>
     </LinearLayout>
 
