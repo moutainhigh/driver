@@ -1,4 +1,4 @@
-package com.easymi.personal.wxapi;
+package com.easymin.daijia.driver.zyziyunsjdaijia.wxapi;
 
 
 import android.content.Intent;
@@ -7,10 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import com.easymi.component.Config;
-import com.easymi.component.utils.Log;
-import com.easymi.component.utils.ToastUtil;
-import com.easymi.personal.R;
 import com.easymi.component.entity.PayEvent;
+import com.easymi.component.utils.Log;
 import com.tencent.mm.sdk.modelbase.BaseReq;
 import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.openapi.IWXAPI;
@@ -37,9 +35,8 @@ public class WXPayEntryActivity extends AppCompatActivity implements IWXAPIEvent
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-
+        Log.e("WXPayEntryActivity", "onCreate");
         api = WXAPIFactory.createWXAPI(this, Config.WX_APP_ID);
         api.handleIntent(getIntent(), this);
     }
@@ -59,13 +56,12 @@ public class WXPayEntryActivity extends AppCompatActivity implements IWXAPIEvent
     @Override
     public void onResp(BaseResp resp) {
         errcode = resp.errCode;
-        Log.e("datadata", "resp.code--->" + resp.errCode);
         PayEvent payEvent = new PayEvent();
         if (errcode == 0) {
-            ToastUtil.showMessage(this, getString(R.string.wx_pay_success));
+//            ToastUtil.showMessage(this, getString(R.string.wx_pay_success));
             payEvent.setSuccess(true);
         } else {
-            ToastUtil.showMessage(this, getString(R.string.wx_pay_fail));
+//            ToastUtil.showMessage(this, getString(R.string.wx_pay_fail));
             payEvent.setSuccess(false);
         }
         EventBus.getDefault().post(payEvent);

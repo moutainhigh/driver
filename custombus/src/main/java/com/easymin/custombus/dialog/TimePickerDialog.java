@@ -130,8 +130,15 @@ public class TimePickerDialog extends BottomSheetDialog {
         dismiss();
         int hourIndex = hourWheelView.getCurrentItem();
         int minuteIndex = minuteWheelView.getCurrentItem();
-        String hour = hourList.get(hourIndex);
-        String minute = minuteList.get(minuteIndex);
+        String hour = hourList.get(hourIndex).replace("点", "");
+        if (hour.length() == 1) {
+            hour = "0" + hour;
+        }
+        hour += ":";
+        String minute = minuteList.get(minuteIndex).replace("分", "");
+        if (minute.length() == 1) {
+            minute = "0" + minute;
+        }
         String time = hour + minute;
         long t = parseData(time);
         if (onSelectListener != null) {
@@ -142,7 +149,7 @@ public class TimePickerDialog extends BottomSheetDialog {
     private long parseData(String source) {
         Calendar dayCalendar = Calendar.getInstance();
         dayCalendar.setTimeInMillis(chooseDayTimeStamp);
-        SimpleDateFormat mFormat = new SimpleDateFormat("HH点mm分", Locale.getDefault());
+        SimpleDateFormat mFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
         try {
             Calendar timeCalendar = Calendar.getInstance();
             timeCalendar.setTime(mFormat.parse(source));
@@ -190,11 +197,11 @@ public class TimePickerDialog extends BottomSheetDialog {
             }
         } else {
             mCalendar.setTimeInMillis(System.currentTimeMillis());
-           int minute = mCalendar.get(Calendar.MINUTE);
+            int minute = mCalendar.get(Calendar.MINUTE);
             int extra = 55 - minute;
             if (extra > 0) {
-               int times = extra / 5;
-             int offset = extra % 5;
+                int times = extra / 5;
+                int offset = extra % 5;
                 if (offset > 0) {
                     minute += offset;
                     times++;

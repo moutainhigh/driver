@@ -2,6 +2,8 @@ package com.easymin.custombus.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -64,6 +66,9 @@ public class CreateOrderActivity extends RxPayActivity {
     private long orderId;
     private boolean request;
     private double currentMoney;
+    private int time;
+    private TextView count_down;
+    private Handler timeHandler;
 
     @Override
     public boolean isEnableSwipe() {
@@ -93,8 +98,7 @@ public class CreateOrderActivity extends RxPayActivity {
         create_suc_con = findViewById(R.id.create_suc);
         hint_1 = findViewById(R.id.hint_1);
         hint_1.setText("代付成功");
-        TextView count_down = findViewById(R.id.count_down);
-        count_down.setText("请提醒乘客查看订单信息");
+        count_down = findViewById(R.id.count_down);
         btn = findViewById(R.id.btn);
         btn.setText("返回我的订单");
         btn.setOnClickListener(view -> finish());
@@ -348,7 +352,31 @@ public class CreateOrderActivity extends RxPayActivity {
 
     @Override
     public void onPaySuc() {
+        timeHandler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                time--;
+                if (time == 0) {
+                    finish();
+                } else {
+                    count_down.setText(time + "秒后自动返回订单列表");
+                    timeHandler.sendEmptyMessageDelayed(0, 1000);
+                }
+                return true;
+            }
+        });
+        time = 5;
         create_suc_con.setVisibility(View.VISIBLE);
+        timeHandler.sendEmptyMessageDelayed(0, 1000);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (timeHandler != null) {
+            timeHandler.removeCallbacksAndMessages(null);
+        }
+        timeHandler = null;
     }
 
     @Override

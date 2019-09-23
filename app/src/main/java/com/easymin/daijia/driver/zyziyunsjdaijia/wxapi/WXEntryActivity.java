@@ -1,4 +1,4 @@
-package com.easymi.personal.wxapi;
+package com.easymin.daijia.driver.zyziyunsjdaijia.wxapi;
 
 
 import android.os.Bundle;
@@ -47,9 +47,9 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
 
     @Override
     public void onResp(BaseResp baseResp) {
-        if (baseResp.errCode != BaseResp.ErrCode.ERR_OK) {
+        if (baseResp.errCode == BaseResp.ErrCode.ERR_OK) {
             //非正常返回,分享失败
-            Toast.makeText(this, getResources().getString(R.string.wx_share_suc), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, getResources().getString(R.string.wx_share_suc), Toast.LENGTH_SHORT).show();
         } else {
             //分享成功
             Toast.makeText(this, getResources().getString(R.string.wx_share_failed), Toast.LENGTH_SHORT).show();

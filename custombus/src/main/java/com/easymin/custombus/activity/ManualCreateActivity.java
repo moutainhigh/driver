@@ -87,7 +87,6 @@ public class ManualCreateActivity extends RxBaseActivity {
         if (!TextUtils.isEmpty(content)) {
             ManualConfigBean manualConfigBean = new Gson().fromJson(content, ManualConfigBean.class);
             day = manualConfigBean.day;
-            day--;
             for (int i = 0; i < day; i++) {
                 timeBeans.add(new TimeBean(i));
             }
@@ -236,7 +235,7 @@ public class ManualCreateActivity extends RxBaseActivity {
             @Override
             public void onSelect(long time, String timeStr) {
                 chooseHourTimeMillSecond = time;
-                manualCreateTvTimeSelect.setText(timeStr.replace("点", ":").replace("分", ""));
+                manualCreateTvTimeSelect.setText(timeStr);
             }
         });
         timePickerDialog.show();

@@ -55,6 +55,19 @@
             </intent-filter>
         </activity>
 
+        <!-- 微信回调activity -->
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:exported="true"
+            android:theme="@style/TranslucentTheme" />
+
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:theme="@style/TranslucentTheme" />
+
         <!-- 兼容全面屏-->
         <meta-data
             android:name="android.max_aspect"
