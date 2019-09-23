@@ -1,7 +1,6 @@
 package com.easymin.custombus.activity;
 
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -25,17 +24,13 @@ import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.switchButton.SwitchButton;
 import com.easymin.custombus.DZBusApiService;
 import com.easymin.custombus.R;
-import com.easymin.custombus.dialog.ColorTimePickerDialog;
 import com.easymin.custombus.dialog.DateSelectDialog;
 import com.easymin.custombus.dialog.ManualCreateDialog;
+import com.easymin.custombus.dialog.TimePickerDialog;
 import com.easymin.custombus.entity.ManualCreateLineBean;
 import com.easymin.custombus.entity.TimeBean;
 import com.google.gson.Gson;
-import com.jzxiang.pickerview.config.PickerConfig;
-import com.jzxiang.pickerview.data.Type;
-import com.jzxiang.pickerview.data.WheelCalendar;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -221,22 +216,6 @@ public class ManualCreateActivity extends RxBaseActivity {
     }
 
     public void showTimePicker() {
-        PickerConfig pickerConfig = new PickerConfig();
-
-        pickerConfig.mCallBack = (timePickerView, millseconds) -> {
-            chooseHourTimeMillSecond = millseconds;
-            manualCreateTvTimeSelect.setText(TimeUtil.getTime("HH:mm", millseconds));
-        };
-        pickerConfig.mCancelString = "取消";
-        pickerConfig.mSureString = "确定";
-        pickerConfig.mTitleString = "发车时间";
-        pickerConfig.cyclic = false;
-        pickerConfig.mMinCalendar = new WheelCalendar(0);
-        pickerConfig.mMaxCalendar = new WheelCalendar(System.currentTimeMillis() + day * 24 * 60 * 60 * 1000);
-        pickerConfig.mCurrentCalendar = new WheelCalendar(System.currentTimeMillis());
-        pickerConfig.mThemeColor = (ContextCompat.getColor(this, R.color.white));
-        pickerConfig.mType = Type.HOURS_MINS;
-        pickerConfig.mWheelTVSize = 12;
 
         Calendar chooseCalendar = Calendar.getInstance();
         chooseCalendar.setTimeInMillis(ChooseDayTimeMillSeconds);
@@ -244,25 +223,22 @@ public class ManualCreateActivity extends RxBaseActivity {
         currentCalendar.setTimeInMillis(System.currentTimeMillis());
         int chooseDayInYear = chooseCalendar.get(Calendar.DAY_OF_YEAR);
         int currentDayInYear = currentCalendar.get(Calendar.DAY_OF_YEAR);
-        if (chooseDayInYear == currentDayInYear) {
-            pickerConfig.mMinCalendar = new WheelCalendar(System.currentTimeMillis());
-            pickerConfig.mMaxCalendar = new WheelCalendar(System.currentTimeMillis() + 24 * 60 * 60 * 1000);
-        }
-        if (chooseHourTimeMillSecond != 0) {
-            pickerConfig.mCurrentCalendar = new WheelCalendar(chooseHourTimeMillSecond);
-        }
-        ColorTimePickerDialog colorTimePickerDialog = new ColorTimePickerDialog();
 
-        try {
-            Field field = ColorTimePickerDialog.class.getSuperclass().getDeclaredField("mPickerConfig");
-            field.setAccessible(true);
-            field.set(colorTimePickerDialog, pickerConfig);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        if (chooseDayInYear == currentDayInYear
+                && currentCalendar.get(Calendar.HOUR_OF_DAY) == 23
+                && currentCalendar.get(Calendar.MINUTE) >= 55) {
+            ToastUtil.showMessage(this, "无可选时间,请选择其他日期");
+            return;
         }
-
-        colorTimePickerDialog.show(getSupportFragmentManager(), "");
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, ChooseDayTimeMillSeconds, chooseHourTimeMillSecond,
+                chooseDayInYear == currentDayInYear);
+        timePickerDialog.setOnSelectListener(new TimePickerDialog.OnSelectListener() {
+            @Override
+            public void onSelect(long time, String timeStr) {
+                chooseHourTimeMillSecond = time;
+                manualCreateTvTimeSelect.setText(timeStr);
+            }
+        });
+        timePickerDialog.show();
     }
 }
