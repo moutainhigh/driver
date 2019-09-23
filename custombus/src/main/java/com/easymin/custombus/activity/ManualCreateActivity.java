@@ -236,7 +236,7 @@ public class ManualCreateActivity extends RxBaseActivity {
             @Override
             public void onSelect(long time, String timeStr) {
                 chooseHourTimeMillSecond = time;
-                manualCreateTvTimeSelect.setText(timeStr);
+                manualCreateTvTimeSelect.setText(timeStr.replace("点", ":").replace("分", ""));
             }
         });
         timePickerDialog.show();
