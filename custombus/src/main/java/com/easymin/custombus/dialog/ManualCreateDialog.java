@@ -109,7 +109,7 @@ public class ManualCreateDialog extends BottomSheetDialog implements View.OnClic
     }
 
     public interface OnManualCreateDialogClickListener {
-        void onClick(ManualCreateLineBean str);
+        void onClick(ManualCreateLineBean manualCreateLineBean);
     }
 
 }

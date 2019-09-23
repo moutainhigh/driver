@@ -110,7 +110,7 @@ public class DateSelectDialog extends BottomSheetDialog implements View.OnClickL
     }
 
     public interface OnDateSelectDialogClickListener {
-        void onClick(TimeBean str);
+        void onClick(TimeBean timeBean);
     }
 
 }

@@ -21,7 +21,6 @@ public class ColorTimePickerDialog extends TimePickerDialog {
         sure.setTextColor(ContextCompat.getColor(getContext(), R.color.colorBlue));
         TextView title = dialog.findViewById(R.id.tv_title);
         title.setTextColor(ContextCompat.getColor(getContext(), R.color.colorBlack));
-        title.getPaint().setFakeBoldText(true);
         return dialog;
     }
 }
