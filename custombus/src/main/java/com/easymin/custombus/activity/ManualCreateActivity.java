@@ -54,6 +54,7 @@ public class ManualCreateActivity extends RxBaseActivity {
     private int isShow;
     private ManualCreateLineBean manualCreateLineBean;
     private long ChooseDayTimeMillSeconds;
+    private long chooseHourTimeMillSecond;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -202,7 +203,9 @@ public class ManualCreateActivity extends RxBaseActivity {
                         ChooseDayTimeMillSeconds = millseconds;
                         manualCreateTvDateSelect.setText(TimeUtil.getTime("yyyy-MM-dd", millseconds));
                         manualCreateTvTimeSelect.setText("");
+                        chooseHourTimeMillSecond = 0;
                     } else {
+                        chooseHourTimeMillSecond = millseconds;
                         manualCreateTvTimeSelect.setText(TimeUtil.getTime("HH:mm", millseconds));
                     }
                 })
@@ -228,6 +231,13 @@ public class ManualCreateActivity extends RxBaseActivity {
                 builder.setMinMillseconds(0);
             } else {
                 builder.setMaxMillseconds(System.currentTimeMillis() + 24 * 60 * 60 * 1000);
+            }
+            if (chooseHourTimeMillSecond != 0) {
+                builder.setCurrentMillseconds(chooseHourTimeMillSecond);
+            }
+        } else {
+            if (ChooseDayTimeMillSeconds != 0) {
+                builder.setCurrentMillseconds(ChooseDayTimeMillSeconds);
             }
         }
 

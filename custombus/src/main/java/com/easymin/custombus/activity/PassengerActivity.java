@@ -296,6 +296,7 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
         intent.putExtra("isUnCheck", ticketCount);
         startActivityForResult(intent, 0x00);
     }
+
     public void goToNextStation() {
         if (uncheck == 0) {
             presenter.toNextStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position + 1).stationId);
@@ -306,7 +307,7 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
             });
             dialog.show();
         }
-}
+    }
 
     /**
      * 倒计时计时器
