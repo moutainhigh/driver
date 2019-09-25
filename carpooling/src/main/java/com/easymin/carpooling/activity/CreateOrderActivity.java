@@ -415,7 +415,7 @@ public class CreateOrderActivity extends RxPayActivity {
                     initViewByPcOrder();
                     queryStation(pcOrder.id);
                 }
-                carPoolCreateOrderTvLine.setText(pcOrder.lineName);
+                carPoolCreateOrderTvLine.setText(pcOrder.startStation + " 到 " + pcOrder.endStation);
                 setBtnEnable();
             } else if (requestCode == 1) {
                 //起点
