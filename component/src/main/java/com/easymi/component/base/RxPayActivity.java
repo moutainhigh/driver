@@ -66,7 +66,7 @@ public abstract class RxPayActivity extends RxBaseActivity {
     /**
      * 各种支付回调处理
      */
-    protected Handler handler = new Handler(msg -> {
+    protected Handler payHandler = new Handler(msg -> {
         if (msg.what == 0) {
             PayResult result = new PayResult((String) msg.obj);
             if (result.resultStatus.equals("9000")) {
@@ -97,7 +97,7 @@ public abstract class RxPayActivity extends RxBaseActivity {
                 Message msg = new Message();
                 msg.what = 0;
                 msg.obj = result;
-                handler.sendMessage(msg);
+                payHandler.sendMessage(msg);
             }
         });
     }

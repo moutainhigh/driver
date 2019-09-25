@@ -180,7 +180,9 @@ public interface CarPoolApiService {
                                             @Field("ticketNumber") int ticketNumber,
                                             @Field("passengerPhone") String passengerPhone,
                                             @Field("channelAlias") String channelAlias,
-                                            @Field("timeSlotId") long timeSlotId);
+                                            @Field("timeSlotId") long timeSlotId,
+                                            @Field("passengerInfos")String passengerInfos,
+                                            @Field("sorts")String sorts);
 
     /**
      * 指派订单

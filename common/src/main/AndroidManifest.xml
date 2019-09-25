@@ -16,6 +16,9 @@
     <uses-permission android:name="android.permission.REORDER_TASKS" />
 
     <application>
+        <activity android:name=".activity.SeatSelectActivity"></activity>
+        <activity android:name=".activity.PassengerAddActivity" />
+        <activity android:name=".activity.PassengerSelectActivity" />
         <activity
             android:name=".activity.LiuShuiDetailActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"

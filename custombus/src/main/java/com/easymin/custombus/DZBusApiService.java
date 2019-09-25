@@ -47,7 +47,9 @@ public interface DZBusApiService {
                                             @Field("scheduleId") long scheduleId,
                                             @Field("ticketNumber") int ticketNumber,
                                             @Field("passengerPhone") String passengerPhone,
-                                            @Field("channelAlias") String channelAlias);
+                                            @Field("channelAlias") String channelAlias,
+                                            @Field("passengerInfos")String passengerInfos,
+                                            @Field("sorts")String sorts);
 
     @POST("api/v1/bus/country/driver/order/confirmBoarding")
     @FormUrlEncoded

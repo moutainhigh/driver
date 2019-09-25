@@ -1,30 +1,49 @@
 package com.easymin.carpooling.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Parcelable;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.InputType;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.easymi.common.CommApiService;
+import com.easymi.common.activity.PassengerSelectActivity;
+import com.easymi.common.activity.SeatSelectActivity;
+import com.easymi.common.adapter.PassengerAdapter;
+import com.easymi.common.entity.PassengerBean;
+import com.easymi.common.entity.SeatBean;
+import com.easymi.common.entity.SeatQueryBean;
 import com.easymi.component.Config;
 import com.easymi.component.base.RxPayActivity;
+import com.easymi.component.entity.Employ;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.network.MySubscriber;
-import com.easymi.component.result.EmResult;
+import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
+import com.easymi.component.widget.SwipeMenuLayout;
 import com.easymin.carpooling.CarPoolApiService;
 import com.easymin.carpooling.R;
 import com.easymin.carpooling.entity.MapPositionModel;
@@ -51,20 +70,21 @@ import rx.schedulers.Schedulers;
  */
 @Route(path = "/carpooling/CreateOrderActivity")
 public class CreateOrderActivity extends RxPayActivity {
-    TextView banci_select;
-    TextView start_place;
-    TextView end_place;
-    EditText edit_phone;
-    TextView sub;
-    TextView add;
-    TextView num;
-    TextView money;
-    Button create_order;
-    LinearLayout money_con;
+    TextView carPoolCreateOrderTvLine;
+    TextView carPoolCreateOrderTvStart;
+    TextView carPoolCreateOrderTvEnd;
+    EditText carPoolCreateOrderEtPhone;
+    TextView carPoolCreateOrderTvSub;
+    TextView carPoolCreateOrderTvAdd;
+    TextView carPoolCreateOrderTvNum;
+    TextView carPoolCreateOrderTvMoney;
+    Button carPoolCreateOrderBtCreate;
+    LinearLayout carPoolCreateOrderLlMoney;
 
-    LinearLayout create_suc_con;
-    TextView hint_1;
-    Button btn;
+    LinearLayout carPoolCreateOrderLlPaySuc;
+    TextView carPoolCreateOrderTvPaySucDesc;
+    Button carPoolCreateOrderBtPaySuc;
+    TextView carPoolCreateOrderTvPaySucCountDown;
 
     /**
      * 专线订单
@@ -98,6 +118,18 @@ public class CreateOrderActivity extends RxPayActivity {
     private long orderId;
     private double calMoney;
 
+    private Handler handler;
+    private int time;
+    private int currentModel;
+    private LinearLayout carPoolCreateOrderLvSeatSelect;
+    private LinearLayout carPoolCreateOrderLlCount;
+    private RecyclerView carPoolCreateOrderRv;
+    private PassengerAdapter adapter;
+    private ArrayList<SeatBean> chooseSeatList;
+    private View passengerFooterView;
+    private TextView carPoolCreateOrderTvSeatSelect;
+    private long passengerId;
+
     @Override
     public boolean isEnableSwipe() {
         return false;
@@ -110,31 +142,41 @@ public class CreateOrderActivity extends RxPayActivity {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
-        banci_select = findViewById(R.id.banci_select);
-        start_place = findViewById(R.id.start_place);
-        end_place = findViewById(R.id.end_place);
-        edit_phone = findViewById(R.id.edit_phone);
-        sub = findViewById(R.id.sub);
-        add = findViewById(R.id.add);
-        num = findViewById(R.id.num);
-        money = findViewById(R.id.money);
-        create_order = findViewById(R.id.create_order);
-        money_con = findViewById(R.id.money_con);
-
-        create_suc_con = findViewById(R.id.create_suc);
-        hint_1 = findViewById(R.id.hint_1);
-        hint_1.setText("支付成功");
-
-        btn = findViewById(R.id.btn);
-        btn.setText("返回我的订单");
-        btn.setOnClickListener(view -> finish());
-
-        banci_select.setOnClickListener(view -> {
+        currentModel = 1;
+        passengerId = 0;
+        carPoolCreateOrderTvLine = findViewById(R.id.carPoolCreateOrderTvLine);
+        carPoolCreateOrderTvStart = findViewById(R.id.carPoolCreateOrderTvStart);
+        carPoolCreateOrderTvEnd = findViewById(R.id.carPoolCreateOrderTvEnd);
+        carPoolCreateOrderEtPhone = findViewById(R.id.carPoolCreateOrderEtPhone);
+        carPoolCreateOrderTvSub = findViewById(R.id.carPoolCreateOrderTvSub);
+        carPoolCreateOrderTvAdd = findViewById(R.id.carPoolCreateOrderTvAdd);
+        carPoolCreateOrderTvNum = findViewById(R.id.carPoolCreateOrderTvNum);
+        carPoolCreateOrderTvMoney = findViewById(R.id.carPoolCreateOrderTvMoney);
+        carPoolCreateOrderBtCreate = findViewById(R.id.carPoolCreateOrderBtCreate);
+        carPoolCreateOrderLlMoney = findViewById(R.id.carPoolCreateOrderLlMoney);
+        carPoolCreateOrderRv = findViewById(R.id.carPoolCreateOrderRv);
+        carPoolCreateOrderLlPaySuc = findViewById(R.id.create_suc);
+        carPoolCreateOrderTvPaySucDesc = findViewById(R.id.hint_1);
+        carPoolCreateOrderTvPaySucDesc.setText("支付成功");
+        carPoolCreateOrderTvPaySucCountDown = findViewById(R.id.count_down);
+        carPoolCreateOrderBtPaySuc = findViewById(R.id.btn);
+        carPoolCreateOrderBtPaySuc.setText("返回我的订单");
+        carPoolCreateOrderBtPaySuc.setOnClickListener(view -> finish());
+        carPoolCreateOrderLvSeatSelect = findViewById(R.id.carPoolCreateOrderLvSeatSelect);
+        carPoolCreateOrderTvSeatSelect = findViewById(R.id.carPoolCreateOrderTvSeatSelect);
+        carPoolCreateOrderTvSeatSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goSeatSelect();
+            }
+        });
+        carPoolCreateOrderLlCount = findViewById(R.id.carPoolCreateOrderLlCount);
+        carPoolCreateOrderTvLine.setOnClickListener(view -> {
             Intent intent = new Intent(CreateOrderActivity.this, BanciSelectActivity.class);
             startActivityForResult(intent, 0);
         });
-        start_place.setOnClickListener(view -> {
 
+        carPoolCreateOrderTvStart.setOnClickListener(view -> {
             if (pcOrder == null) {
                 ToastUtil.showMessage(CreateOrderActivity.this, "请先选择班次");
                 return;
@@ -143,29 +185,14 @@ public class CreateOrderActivity extends RxPayActivity {
                 ToastUtil.showMessage(CreateOrderActivity.this, "未查询到站点信息");
                 return;
             }
-
-
             Intent intent = new Intent(CreateOrderActivity.this, SelectPlaceOnMapActivity.class);
             intent.putExtra("select_place_type", 1);
-//            if (stationResult.data.size() == 0) {
-//                List<MapPositionModel> list = new ArrayList<>();
-//                MapPositionModel model = new MapPositionModel();
-//                model.setLatitude(stationResult.data.get(0).latitude);
-//                model.setLongitude(stationResult.data.get(0).longitude);
-//                list.add(model);
-
-
             intent.putParcelableArrayListExtra("pos_list",
                     (ArrayList<? extends Parcelable>) stationResult.data);
-//            }
-//            else {
-//                intent.putParcelableArrayListExtra("pos_list",
-//                        (ArrayList<? extends Parcelable>) stationResult.data.get(0).coordinate);
-//            }
             startActivityForResult(intent, 1);
         });
-        end_place.setOnClickListener(view -> {
 
+        carPoolCreateOrderTvEnd.setOnClickListener(view -> {
             if (pcOrder == null) {
                 ToastUtil.showMessage(CreateOrderActivity.this, "请先选择班次");
                 return;
@@ -176,24 +203,12 @@ public class CreateOrderActivity extends RxPayActivity {
             }
             Intent intent = new Intent(CreateOrderActivity.this, SelectPlaceOnMapActivity.class);
             intent.putExtra("select_place_type", 3);
-//            if (stationResult.data.size() == 0) {
-//                List<MapPositionModel> list = new ArrayList<>();
-//                MapPositionModel model = new MapPositionModel();
-//                model.setLatitude(stationResult.data.get(1).latitude);
-//                model.setLongitude(stationResult.data.get(1).longitude);
-//                list.add(model);
-//
-//                intent.putParcelableArrayListExtra("pos_list",
-//                        (ArrayList<? extends Parcelable>) list);
-//            } else {
             intent.putParcelableArrayListExtra("pos_list",
                     (ArrayList<? extends Parcelable>) stationResult.data);
-//            }
-
             startActivityForResult(intent, 3);
         });
-
-        edit_phone.addTextChangedListener(new TextWatcher() {
+        carPoolCreateOrderEtPhone.setInputType(InputType.TYPE_NULL);
+        carPoolCreateOrderEtPhone.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -208,34 +223,159 @@ public class CreateOrderActivity extends RxPayActivity {
             public void afterTextChanged(Editable editable) {
                 if (StringUtils.isNotBlank(editable.toString())
                         && editable.toString().length() == 11) {
-                    edit_phone.clearFocus();
+                    carPoolCreateOrderEtPhone.clearFocus();
                     PhoneUtil.hideKeyboard(CreateOrderActivity.this);
+                    if (currentModel == 2) {
+                        getPassengerId();
+                    }
+                } else {
+                    passengerId = 0;
                 }
                 setBtnEnable();
             }
         });
-        sub.setOnClickListener(view -> {
-
+        carPoolCreateOrderTvSub.setOnClickListener(view -> {
             seatNo--;
-            num.setText("" + seatNo);
+            carPoolCreateOrderTvNum.setText("" + seatNo);
 
             setBtnEnable();
             calcPrice();
         });
-        add.setOnClickListener(view -> {
+        carPoolCreateOrderTvAdd.setOnClickListener(view -> {
 
             seatNo++;
-            num.setText("" + seatNo);
+            carPoolCreateOrderTvNum.setText("" + seatNo);
 
             setBtnEnable();
             calcPrice();
         });
-        create_order.setOnClickListener(new View.OnClickListener() {
+        carPoolCreateOrderBtCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 createOrder();
             }
         });
+        setRecyclerView();
+    }
+
+    private void getPassengerId() {
+        ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .getPassengerId(carPoolCreateOrderEtPhone.getText().toString(), EmUtil.getEmployInfo().companyId)
+                .map(new HttpResultFunc2<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MySubscriber<Employ>(this, true, false, new HaveErrSubscriberListener<Employ>() {
+                    @Override
+                    public void onNext(Employ employ) {
+                        if (employ != null) {
+                            passengerId = employ.id;
+                            setBtnEnable();
+                        } else {
+                            passengerId = 0;
+                            carPoolCreateOrderEtPhone.setText("");
+                        }
+                    }
+
+                    @Override
+                    public void onError(int code) {
+                        passengerId = 0;
+                        carPoolCreateOrderEtPhone.setText("");
+                    }
+                }));
+    }
+
+    public void goSeatSelect() {
+        if (pcOrder == null) {
+            ToastUtil.showMessage(CreateOrderActivity.this, "请先选择班次");
+            return;
+        }
+        if (startSite == null) {
+            ToastUtil.showMessage(CreateOrderActivity.this, "请先选择上车点");
+            return;
+        }
+        if (endSite == null) {
+            ToastUtil.showMessage(CreateOrderActivity.this, "请先选择下车点");
+            return;
+        }
+        Intent intent = new Intent(CreateOrderActivity.this, SeatSelectActivity.class);
+        SeatQueryBean seatQueryBean = new SeatQueryBean();
+        seatQueryBean.type = Config.CARPOOL;
+        seatQueryBean.startId = startSite.getId();
+        seatQueryBean.endId = endSite.getId();
+        seatQueryBean.timeSlotId = pcOrder.timeSlotId;
+        intent.putExtra("seatQueryBean", seatQueryBean);
+        startActivityForResult(intent, 0x20);
+    }
+
+    private void setRecyclerView() {
+        carPoolCreateOrderRv = findViewById(R.id.carPoolCreateOrderRv);
+        carPoolCreateOrderRv.setLayoutManager(new LinearLayoutManager(this));
+
+        adapter = new PassengerAdapter(false);
+
+        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if (view.getId() == com.easymi.common.R.id.itemPassengerSelectContentTvDelete) {
+                    adapter.getData().remove(adapter.getData().get(position));
+                    if (adapter.getData().size() == 0 && passengerFooterView != null) {
+                        adapter.removeFooterView(passengerFooterView);
+                        passengerFooterView = null;
+                    }
+                    SwipeMenuLayout itemPassengerSelectContentSml = (SwipeMenuLayout)
+                            adapter.getViewByPosition(carPoolCreateOrderRv, position + adapter.getHeaderLayoutCount(), com.easymi.common.R.id.itemPassengerSelectContentSml);
+                    itemPassengerSelectContentSml.quickClose();
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+
+        adapter.setEmptyView(getPassengerView(true));
+        adapter.setHeaderFooterEmpty(true, true);
+        carPoolCreateOrderRv.setAdapter(adapter);
+    }
+
+    public View getPassengerView(boolean isEmpty) {
+        View emptyView = getLayoutInflater().inflate(R.layout.item_passenger_select_header, carPoolCreateOrderRv, false);
+        View itemPassengerSelectHeaderV = emptyView.findViewById(R.id.itemPassengerSelectHeaderV);
+        TextView itemPassengerSelectHeaderTv = emptyView.findViewById(R.id.itemPassengerSelectHeaderTv);
+        if (!isEmpty) {
+            itemPassengerSelectHeaderV.setVisibility(View.VISIBLE);
+        }
+        ViewGroup.LayoutParams layoutParams = emptyView.getLayoutParams();
+        Drawable drawable = ContextCompat.getDrawable(this, isEmpty ? R.mipmap.ic_add_passenger_sub : R.mipmap.ic_add_passenger);
+        if (isEmpty) {
+            itemPassengerSelectHeaderTv.setTextColor(ContextCompat.getColor(this, R.color.colorSub));
+            layoutParams.height = DensityUtil.dp2px(this, 100);
+        } else {
+            itemPassengerSelectHeaderTv.setTextColor(ContextCompat.getColor(this, R.color.colorBlue));
+        }
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+        itemPassengerSelectHeaderTv.setCompoundDrawables(drawable, null, null, null);
+        emptyView.setLayoutParams(layoutParams);
+        emptyView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (pcOrder == null) {
+                    ToastUtil.showMessage(CreateOrderActivity.this, "请先选择班次");
+                } else if (startSite == null) {
+                    ToastUtil.showMessage(CreateOrderActivity.this, "请先选择上车点");
+                } else if (endSite == null) {
+                    ToastUtil.showMessage(CreateOrderActivity.this, "请先选择下车点");
+                } else if (chooseSeatList == null || chooseSeatList.isEmpty()) {
+                    ToastUtil.showMessage(CreateOrderActivity.this, "请先选择乘客座位");
+                } else if (passengerId == 0) {
+                    ToastUtil.showMessage(CreateOrderActivity.this, "请先输入乘客联系电话");
+                } else {
+                    Intent intent = new Intent(CreateOrderActivity.this, PassengerSelectActivity.class);
+                    intent.putExtra("passengerId", passengerId);
+                    intent.putExtra("data", chooseSeatList);
+                    intent.putExtra("chooseList", new ArrayList<>(adapter.getData()));
+                    startActivityForResult(intent, 0x10);
+                }
+            }
+        });
+        return emptyView;
     }
 
     /**
@@ -248,18 +388,18 @@ public class CreateOrderActivity extends RxPayActivity {
         } else {
             money = 0;
         }
-        this.money.setText("" + new DecimalFormat("######0.00").format(money));
+        this.carPoolCreateOrderTvMoney.setText(new DecimalFormat("######0.00").format(money));
         if (money != 0) {
-            money_con.setVisibility(View.VISIBLE);
+            carPoolCreateOrderLlMoney.setVisibility(View.VISIBLE);
         } else {
-            money_con.setVisibility(View.GONE);
+            carPoolCreateOrderLlMoney.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void initToolBar() {
         super.initToolBar();
-        CusToolbar cusToolbar = findViewById(R.id.cus_toolbar);
+        CusToolbar cusToolbar = findViewById(R.id.carPoolCreateOrderCtb);
         cusToolbar.setLeftBack(view -> finish());
         cusToolbar.setTitle("司机补单");
     }
@@ -268,50 +408,70 @@ public class CreateOrderActivity extends RxPayActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             if (requestCode == 0) {
-                //班次
                 PincheOrder newPcOrder = (PincheOrder) data.getSerializableExtra("pincheOrder");
-                if (null != pcOrder) {
-                    if (pcOrder.id != newPcOrder.id) {
-                        //班次变化后  重新键入
-                        pcOrder = newPcOrder;
-                        initViewByPcOrder();
-                    }
-                } else {
+                if (null == pcOrder || pcOrder.id != newPcOrder.id) {
+                    currentModel = newPcOrder.model;
                     pcOrder = newPcOrder;
                     initViewByPcOrder();
+                    queryStation(pcOrder.id);
                 }
-                banci_select.setText(pcOrder.startStation+" 到 "+pcOrder.endStation);
+                carPoolCreateOrderTvLine.setText(pcOrder.lineName);
                 setBtnEnable();
             } else if (requestCode == 1) {
                 //起点
                 startSite = data.getParcelableExtra("pos_model");
-                start_place.setText(startSite.getAddress());
+                carPoolCreateOrderTvStart.setText(startSite.getAddress());
                 endSite = null;
-                end_place.setText("");
+                carPoolCreateOrderTvEnd.setText("");
                 setBtnEnable();
-                money_con.setVisibility(View.GONE);
+                carPoolCreateOrderLlMoney.setVisibility(View.GONE);
                 orderId = 0;
             } else if (requestCode == 3) {
                 //终点
                 orderId = 0;
-                money_con.setVisibility(View.GONE);
+                carPoolCreateOrderLlMoney.setVisibility(View.GONE);
                 endSite = data.getParcelableExtra("pos_model");
                 if (startSite != null) {
                     if (startSite.getId() == endSite.getId()) {
                         endSite = null;
-                        end_place.setText("");
+                        carPoolCreateOrderTvEnd.setText("");
                         ToastUtil.showMessage(this, "上车点和下车点是同一站点");
                     } else if (startSite.getSequence() > endSite.getSequence()) {
                         endSite = null;
-                        end_place.setText("");
+                        carPoolCreateOrderTvEnd.setText("");
                         ToastUtil.showMessage(this, "下车点在上车点之前");
                     } else {
-                        end_place.setText(endSite.getAddress());
+                        carPoolCreateOrderTvEnd.setText(endSite.getAddress());
                         setBtnEnable();
-                        queryPrice(pcOrder.lineId, startSite.getId(), endSite.getId());
+                        if (currentModel == 1) {
+                            queryPrice(pcOrder.lineId, startSite.getId(), endSite.getId());
+                        }
                     }
                 } else {
-                    end_place.setText(endSite.getAddress());
+                    carPoolCreateOrderTvEnd.setText(endSite.getAddress());
+                    setBtnEnable();
+                }
+            } else if (requestCode == 0x20) {
+                if (data != null) {
+                    double prise = data.getDoubleExtra("prise", 0);
+                    carPoolCreateOrderTvMoney.setText(new DecimalFormat("######0.00").format(prise));
+                    carPoolCreateOrderLlMoney.setVisibility(View.VISIBLE);
+                    chooseSeatList = (ArrayList<SeatBean>) data.getSerializableExtra("data");
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (SeatBean seatBean : chooseSeatList) {
+                        stringBuilder.append(seatBean.getDesc());
+                    }
+                    carPoolCreateOrderTvSeatSelect.setText(stringBuilder.toString());
+                    setBtnEnable();
+                }
+            } else if (requestCode == 0x10) {
+                if (data != null) {
+                    List<PassengerBean> newData = (List<PassengerBean>) data.getSerializableExtra("data");
+                    adapter.setNewData(newData);
+                    if (passengerFooterView == null) {
+                        passengerFooterView = getPassengerView(false);
+                        adapter.addFooterView(passengerFooterView, 0);
+                    }
                     setBtnEnable();
                 }
             }
@@ -322,54 +482,78 @@ public class CreateOrderActivity extends RxPayActivity {
      * 加载专线数据
      */
     private void initViewByPcOrder() {
+        carPoolCreateOrderEtPhone.setInputType(InputType.TYPE_CLASS_PHONE);
         stationResult = null;
-
-        start_place.setText(null);
+        orderId = 0;
+        carPoolCreateOrderTvStart.setText(null);
         startSite = null;
-        end_place.setText(null);
+        carPoolCreateOrderTvEnd.setText(null);
         endSite = null;
-
         seatNo = 1;
-        num.setText("" + seatNo);
-        sub.setEnabled(false);
-        if (pcOrder.seats > seatNo) {
-            add.setEnabled(true);
+        carPoolCreateOrderLlMoney.setVisibility(View.GONE);
+        if (currentModel == 2) {
+            carPoolCreateOrderLvSeatSelect.setVisibility(View.VISIBLE);
+            carPoolCreateOrderLlCount.setVisibility(View.GONE);
+            carPoolCreateOrderRv.setVisibility(View.VISIBLE);
+        } else {
+            carPoolCreateOrderRv.setVisibility(View.GONE);
+            carPoolCreateOrderTvNum.setText("" + seatNo);
+            carPoolCreateOrderTvSub.setEnabled(false);
+            if (pcOrder.seats > seatNo) {
+                carPoolCreateOrderTvAdd.setEnabled(true);
+            }
+            carPoolCreateOrderLvSeatSelect.setVisibility(View.GONE);
+            carPoolCreateOrderLlCount.setVisibility(View.VISIBLE);
         }
-
-        money_con.setVisibility(View.GONE);
-
-        queryStation(pcOrder.id);
     }
 
     /**
      * 设置按钮能否点击
      */
     private void setBtnEnable() {
-        if (pcOrder != null
-                && stationResult != null
-                && stationResult.data != null
-                && stationResult.data.size() >= 2
-                && startSite != null
-                && endSite != null
-                && StringUtils.isNotBlank(edit_phone.getText().toString())
-                && edit_phone.getText().toString().length() == 11
-                && seatNo > 0) {
-            create_order.setEnabled(true);
-            create_order.setBackgroundResource(R.drawable.corners_button_selector);
-        } else {
-            create_order.setEnabled(false);
-            create_order.setBackgroundResource(R.drawable.pc_btn_unpress_999999_bg);
-        }
-        if (seatNo == 1) {
-            sub.setEnabled(false);
-        } else {
-            sub.setEnabled(true);
-        }
+        if (currentModel == 1) {
+            if (pcOrder != null
+                    && stationResult != null
+                    && stationResult.data != null
+                    && stationResult.data.size() >= 2
+                    && startSite != null
+                    && endSite != null
+                    && StringUtils.isNotBlank(carPoolCreateOrderEtPhone.getText().toString())
+                    && carPoolCreateOrderEtPhone.getText().toString().length() == 11
+                    && seatNo > 0) {
+                carPoolCreateOrderBtCreate.setEnabled(true);
+                carPoolCreateOrderBtCreate.setBackgroundResource(R.drawable.cor4_solid_blue);
+            } else {
+                carPoolCreateOrderBtCreate.setEnabled(false);
+                carPoolCreateOrderBtCreate.setBackgroundResource(R.drawable.cor4_solid_sub);
+            }
+            if (seatNo == 1) {
+                carPoolCreateOrderTvSub.setEnabled(false);
+            } else {
+                carPoolCreateOrderTvSub.setEnabled(true);
+            }
 
-        if (pcOrder != null && seatNo < pcOrder.seats) {
-            add.setEnabled(true);
+            if (pcOrder != null && seatNo < pcOrder.seats) {
+                carPoolCreateOrderTvAdd.setEnabled(true);
+            } else {
+                carPoolCreateOrderTvAdd.setEnabled(false);
+            }
         } else {
-            add.setEnabled(false);
+            if (pcOrder != null
+                    && stationResult != null
+                    && stationResult.data != null
+                    && stationResult.data.size() >= 2
+                    && startSite != null
+                    && endSite != null
+                    && passengerId != 0
+                    && !TextUtils.isEmpty(carPoolCreateOrderTvSeatSelect.getText())
+                    && adapter.getData().size() > 0) {
+                carPoolCreateOrderBtCreate.setEnabled(true);
+                carPoolCreateOrderBtCreate.setBackgroundResource(R.drawable.cor4_solid_blue);
+            } else {
+                carPoolCreateOrderBtCreate.setEnabled(false);
+                carPoolCreateOrderBtCreate.setBackgroundResource(R.drawable.cor4_solid_sub);
+            }
         }
     }
 
@@ -382,8 +566,8 @@ public class CreateOrderActivity extends RxPayActivity {
         Observable<StationResult> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
                 .getStationResult(scheduleId)
                 .filter(new HttpResultFunc<>())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io());
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(CreateOrderActivity.this,
                 true,
@@ -396,7 +580,9 @@ public class CreateOrderActivity extends RxPayActivity {
 
                     @Override
                     public void onError(int code) {
-                        stationResult = null;
+                        pcOrder = null;
+                        carPoolCreateOrderTvLine.setText("");
+                        initViewByPcOrder();
                         setBtnEnable();
                     }
                 })));
@@ -429,6 +615,8 @@ public class CreateOrderActivity extends RxPayActivity {
                     @Override
                     public void onError(int code) {
                         priceResult = null;
+                        endSite = null;
+                        carPoolCreateOrderTvEnd.setText("");
                         setBtnEnable();
                     }
                 })));
@@ -440,7 +628,7 @@ public class CreateOrderActivity extends RxPayActivity {
     private void createOrder() {
         calMoney = 0;
         try {
-            calMoney = Double.parseDouble(money.getText().toString());
+            calMoney = Double.parseDouble(carPoolCreateOrderTvMoney.getText().toString());
         } catch (NumberFormatException e) {
             e.fillInStackTrace();
         }
@@ -455,10 +643,12 @@ public class CreateOrderActivity extends RxPayActivity {
                             startSite.getId(),
                             endSite.getId(),
                             pcOrder.id,
-                            seatNo,
-                            edit_phone.getText().toString(),
+                            currentModel == 1 ? seatNo : 1,
+                            carPoolCreateOrderEtPhone.getText().toString(),
                             "driver",
-                            pcOrder.timeSlotId
+                            pcOrder.timeSlotId,
+                            currentModel == 1 ? "" : new Gson().toJson(adapter.getData()),
+                            currentModel == 1 ? "" : new Gson().toJson(chooseSeatList)
                     )
                     .map(new HttpResultFunc2<>())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -483,29 +673,35 @@ public class CreateOrderActivity extends RxPayActivity {
         }
     }
 
-    public void assginOrder() {
-        Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
-                .assginOrder(orderId, pcOrder.timeSlotId, EmUtil.getEmployId(), pcOrder.seats, priceResult.data.money * seatNo, pcOrder.saleSeat, 1, EmUtil.getAppKey())
-                .filter(new HttpResultFunc<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, emResult -> {
-            if (emResult.getCode() == 1) {
-                ToastUtil.showMessage(this, "补单成功");
-            } else {
-                ToastUtil.showMessage(this, "指派订单失败，请联系客服重新指派");
-            }
-            finish();
-        })));
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
+        }
+        handler = null;
     }
-
 
     @Override
     public void onPaySuc() {
-//        assginOrder();
-        ToastUtil.showMessage(this, "支付成功");
-        finish();
+        carPoolCreateOrderLlPaySuc.setVisibility(View.VISIBLE);
+        if (handler == null) {
+            handler = new Handler(new Handler.Callback() {
+                @Override
+                public boolean handleMessage(Message msg) {
+                    time--;
+                    if (time == 0) {
+                        finish();
+                    } else {
+                        carPoolCreateOrderTvPaySucCountDown.setText(time + "秒后自动返回订单列表");
+                        handler.sendEmptyMessageDelayed(0, 1000);
+                    }
+                    return true;
+                }
+            });
+        }
+        time = 5;
+        handler.sendEmptyMessageDelayed(0, 1000);
     }
 
     @Override
