@@ -109,7 +109,7 @@ public class SeatSelectActivity extends RxBaseActivity {
     }
 
     private void getData() {
-        Observable<EmResult2<List<SeatBean>>> observable = null;
+        Observable<EmResult2<List<SeatBean>>> observable;
         if (TextUtils.equals(seatQueryBean.type, Config.COUNTRY)) {
             observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                     .queryBusSeats(seatQueryBean.id, seatQueryBean.startId, seatQueryBean.endId);

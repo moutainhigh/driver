@@ -410,7 +410,8 @@ public class CreateOrderActivity extends RxPayActivity {
             if (requestCode == 0) {
                 PincheOrder newPcOrder = (PincheOrder) data.getSerializableExtra("pincheOrder");
                 if (null == pcOrder || pcOrder.id != newPcOrder.id) {
-                    currentModel = newPcOrder.model;
+//                    currentModel = newPcOrder.model;
+                    currentModel = 1;
                     pcOrder = newPcOrder;
                     initViewByPcOrder();
                     queryStation(pcOrder.id);

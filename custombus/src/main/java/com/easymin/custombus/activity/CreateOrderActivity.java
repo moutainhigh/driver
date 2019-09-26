@@ -149,8 +149,8 @@ public class CreateOrderActivity extends RxPayActivity {
                 Intent intent = new Intent(CreateOrderActivity.this, SeatSelectActivity.class);
                 SeatQueryBean seatQueryBean = new SeatQueryBean();
                 seatQueryBean.type = Config.COUNTRY;
-                seatQueryBean.startId = startBean.id;
-                seatQueryBean.endId = endBean.id;
+                seatQueryBean.startId = startBean.stationId;
+                seatQueryBean.endId = endBean.stationId;
                 seatQueryBean.id = dzBusLine.id;
                 intent.putExtra("seatQueryBean", seatQueryBean);
                 startActivityForResult(intent, 0x20);
@@ -432,9 +432,10 @@ public class CreateOrderActivity extends RxPayActivity {
     }
 
     private void buttonAction() {
-        if (currentModeType == 1) {
+        if (currentModeType == 2) {
             if (!TextUtils.isEmpty(customBusCreateOrderTvStart.getText()) && !TextUtils.isEmpty(customBusCreateOrderTvEnd.getText()) &&
-                    !TextUtils.isEmpty(customBusCreateOrderTvLine.getText()) && customBusCreateOrderEtPhone.getText().length() == 11) {
+                    !TextUtils.isEmpty(customBusCreateOrderTvLine.getText()) && customBusCreateOrderEtPhone.getText().length() == 11
+                    && passengerId != 0 && !TextUtils.isEmpty(customBusCreateOrderTvSeatSelect.getText()) && adapter.getData().size() > 0) {
                 customBusCreateOrderBtCreate.setEnabled(true);
                 customBusCreateOrderBtCreate.setBackgroundResource(R.drawable.cor4_solid_blue);
             } else {
@@ -443,8 +444,7 @@ public class CreateOrderActivity extends RxPayActivity {
             }
         } else {
             if (!TextUtils.isEmpty(customBusCreateOrderTvStart.getText()) && !TextUtils.isEmpty(customBusCreateOrderTvEnd.getText()) &&
-                    !TextUtils.isEmpty(customBusCreateOrderTvLine.getText()) && customBusCreateOrderEtPhone.getText().length() == 11
-                    && passengerId != 0 && !TextUtils.isEmpty(customBusCreateOrderTvSeatSelect.getText()) && adapter.getData().size() > 0) {
+                    !TextUtils.isEmpty(customBusCreateOrderTvLine.getText()) && customBusCreateOrderEtPhone.getText().length() == 11) {
                 customBusCreateOrderBtCreate.setEnabled(true);
                 customBusCreateOrderBtCreate.setBackgroundResource(R.drawable.cor4_solid_blue);
             } else {
@@ -475,16 +475,15 @@ public class CreateOrderActivity extends RxPayActivity {
                     dzBusLine = newDzBusLine;
                     currentModeType = dzBusLine.model;
                     customBusCreateOrderEtPhone.setInputType(InputType.TYPE_CLASS_PHONE);
-                    if (currentModeType == 1) {
-                        customBusCreateOrderLlSeatSelect.setVisibility(View.GONE);
-                        customBusCreateOrderLlCount.setVisibility(View.VISIBLE);
-                        customBusCreateOrderRv.setVisibility(View.INVISIBLE);
-                    } else {
+                    if (currentModeType == 2) {
                         customBusCreateOrderLlSeatSelect.setVisibility(View.VISIBLE);
                         customBusCreateOrderLlCount.setVisibility(View.GONE);
                         customBusCreateOrderRv.setVisibility(View.VISIBLE);
+                    } else {
+                        customBusCreateOrderLlSeatSelect.setVisibility(View.GONE);
+                        customBusCreateOrderLlCount.setVisibility(View.VISIBLE);
+                        customBusCreateOrderRv.setVisibility(View.INVISIBLE);
                     }
-
                     adapter.setNewData(null);
                     if (passengerFooterView != null) {
                         adapter.removeFooterView(passengerFooterView);
@@ -552,11 +551,11 @@ public class CreateOrderActivity extends RxPayActivity {
                             startBean.stationId,
                             endBean.stationId,
                             dzBusLine.id,
-                            currentModeType == 1 ? currentNum : 1,
+                            currentModeType == 2 ? 1 : currentNum,
                             customBusCreateOrderEtPhone.getText().toString(),
                             "driver",
-                            currentModeType == 1 ? "" : new Gson().toJson(adapter.getData()),
-                            currentModeType == 1 ? "" : new Gson().toJson(chooseSeatList)
+                            currentModeType == 2 ? new Gson().toJson(adapter.getData()) : "",
+                            currentModeType == 2 ? new Gson().toJson(chooseSeatList) : ""
                     )
                     .map(new HttpResultFunc2<>())
                     .observeOn(AndroidSchedulers.mainThread())
