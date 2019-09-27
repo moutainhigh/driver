@@ -59,6 +59,8 @@ public class SeatSelectActivity extends RxBaseActivity {
     private double total;
     private float itemMainWidth;
     private float itemSubWidth;
+    private List<SeatBean> chooseSeatList;
+    private boolean needRefresh;
 
 
     @Override
@@ -104,6 +106,7 @@ public class SeatSelectActivity extends RxBaseActivity {
             finish();
         }
         decimalFormat = new DecimalFormat("0.00");
+        chooseSeatList = (List<SeatBean>) getIntent().getSerializableExtra("chooseSeatList");
         initRecyclerView();
         getData();
     }
@@ -140,7 +143,7 @@ public class SeatSelectActivity extends RxBaseActivity {
         if (childSeats.size() > 0) {
             itemSeatSelectHeaderTvChildSelect.setHint("点击可选择儿童座");
         } else {
-            itemSeatSelectHeaderTvChildSelect.setHint("暂不支持儿童座");
+            itemSeatSelectHeaderTvChildSelect.setHint("暂无儿童座");
         }
         itemSeatSelectHeaderRlChildSelect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,9 +151,28 @@ public class SeatSelectActivity extends RxBaseActivity {
                 createDialog();
             }
         });
+
+        if (needRefresh) {
+            changeData();
+        }
     }
 
     private void bindData(List<SeatBean> seatBeans) {
+        needRefresh = false;
+        if (chooseSeatList != null && !chooseSeatList.isEmpty()) {
+            for (SeatBean seatBean : chooseSeatList) {
+                for (SeatBean bean : seatBeans) {
+                    if (seatBean.sort == bean.sort) {
+                        bean.isChoose = seatBean.isChoose;
+                        bean.isChild = seatBean.isChild;
+                        if (bean.isChoose && bean.isChild == 1) {
+                            bean.isDialogSelect = true;
+                        }
+                        needRefresh = true;
+                    }
+                }
+            }
+        }
         int size16 = DensityUtil.dp2px(this, 16);
         size8 = DensityUtil.dp2px(this, 8);
         itemMainWidth = ((float) Resources.getSystem().getDisplayMetrics().widthPixels) / 3 - size16 - size8;

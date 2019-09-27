@@ -153,6 +153,7 @@ public class CreateOrderActivity extends RxPayActivity {
                 seatQueryBean.endId = endBean.stationId;
                 seatQueryBean.id = dzBusLine.id;
                 intent.putExtra("seatQueryBean", seatQueryBean);
+                intent.putExtra("chooseSeatList", chooseSeatList);
                 startActivityForResult(intent, 0x20);
             }
         });
@@ -384,11 +385,13 @@ public class CreateOrderActivity extends RxPayActivity {
                         customBusCreateOrderTvStart.setText(startBean.name);
                         currentMoney = -1;
                         customBusCreateOrderTvMoney.setText("0.00");
+                        resetChooseSeatList();
                     } else if (stationBean.chooseStatus == 2) {
                         orderId = 0;
                         endBean = stationBean;
                         customBusCreateOrderTvEnd.setText(endBean.name);
                         currentMoney = -1;
+                        resetChooseSeatList();
                     }
                     buttonAction();
                 }
@@ -396,6 +399,11 @@ public class CreateOrderActivity extends RxPayActivity {
             }
         });
         bottomSheetDialog.show();
+    }
+
+    private void resetChooseSeatList() {
+        chooseSeatList = null;
+        customBusCreateOrderTvSeatSelect.setText("");
     }
 
     private void setMoney() {
@@ -504,6 +512,7 @@ public class CreateOrderActivity extends RxPayActivity {
                     currentNum = 1;
                     customBusCreateOrderTvNum.setText("" + currentNum);
                     customBusCreateOrderTvSub.setEnabled(false);
+                    resetChooseSeatList();
                     buttonAction();
                     if (dzBusLine.restrict == 1) {
                         customBusCreateOrderTvAdd.setEnabled(true);

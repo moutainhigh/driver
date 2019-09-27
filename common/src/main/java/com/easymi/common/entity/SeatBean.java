@@ -39,6 +39,8 @@ public class SeatBean implements Serializable {
         stringBuilder.append(CommonUtil.getPassengerDesc(type, sort));
         if (isChild == 1) {
             stringBuilder.append("(儿童座)");
+        } else {
+            stringBuilder.append("(成人座)");
         }
         return stringBuilder.toString();
     }
