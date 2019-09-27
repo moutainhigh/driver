@@ -1,11 +1,6 @@
 package com.easymi.component.network;
 
-import android.content.res.Configuration;
-
-import com.easymi.component.app.XApp;
 import com.easymi.component.result.EmResult;
-
-import java.util.Locale;
 
 import rx.functions.Func1;
 
@@ -26,20 +21,10 @@ public class HttpResultFunc<T extends EmResult> implements Func1<T, Boolean> {
         if (t.getCode() != 1) {
             String msg = t.getMessage();
             //获取默认配置
-            Configuration config = XApp.getInstance().getResources().getConfiguration();
-            if(config.locale == Locale.TAIWAN || config.locale == Locale.TRADITIONAL_CHINESE){
-                for (ErrCodeTran errCode : ErrCodeTran.values()) {
-                    if (t.getCode() == errCode.getCode()) {
-                        msg = errCode.getShowMsg();
-                        break;
-                    }
-                }
-            } else {
-                for (ErrCode errCode : ErrCode.values()) {
-                    if (t.getCode() == errCode.getCode()) {
-                        msg = errCode.getShowMsg();
-                        break;
-                    }
+            for (ErrCode errCode : ErrCode.values()) {
+                if (t.getCode() == errCode.getCode()) {
+                    msg = errCode.getShowMsg();
+                    break;
                 }
             }
             throw new ApiException(t.getCode(), msg);

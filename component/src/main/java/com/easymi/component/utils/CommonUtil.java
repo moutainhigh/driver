@@ -215,4 +215,34 @@ public class CommonUtil {
         }
         return hex.toString();
     }
+
+    public static String getPassengerDesc(int type, int sort) {
+        if (type == 1) {
+            if (sort == 1) {
+                return "前右";
+            } else if (sort == 2) {
+                return "后左";
+            } else if (sort == 3) {
+                return "后中";
+            } else if (sort == 4) {
+                return "后右";
+            }
+        } else if (type == 2) {
+            if (sort == 1) {
+                return "前右";
+            } else if (sort == 2) {
+                return "中左";
+            } else if (sort == 3) {
+                return "中右";
+            } else if (sort == 4) {
+                return "后左";
+            } else if (sort == 5) {
+                return "后中";
+            } else if (sort == 6) {
+                return "后右";
+            }
+        }
+        return "";
+    }
+
 }

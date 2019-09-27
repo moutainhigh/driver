@@ -169,7 +169,7 @@ public class SeatSelectActivity extends RxBaseActivity {
         if (seatBeans.size() == 7) {
             for (int i = 0; i < 7; i++) {
                 seatBean = seatBeans.get(i);
-                seatBean.listSize = 7;
+                seatBean.type = 2;
                 if (seatBean.child == 1 && seatBean.status == 1) {
                     childSeats.add(seatBean);
                 }
@@ -189,7 +189,7 @@ public class SeatSelectActivity extends RxBaseActivity {
         } else if (seatBeans.size() == 5) {
             for (int i = 0; i < 5; i++) {
                 seatBean = seatBeans.get(i);
-                seatBean.listSize = 5;
+                seatBean.type = 1;
                 if (seatBean.child == 1 && seatBean.status == 1) {
                     childSeats.add(seatBean);
                 }
@@ -216,9 +216,13 @@ public class SeatSelectActivity extends RxBaseActivity {
     private void changeData() {
         List<SeatBean> currentList = baseQuickAdapter.getData();
         StringBuilder stringBuilder = new StringBuilder();
-        for (SeatBean childSeat : childSeats) {
+        for (int i = 0; i < childSeats.size(); i++) {
+            SeatBean childSeat = childSeats.get(i);
             if (childSeat.isDialogSelect) {
                 stringBuilder.append(childSeat.getDesc());
+                if (i != childSeats.size() - 1) {
+                    stringBuilder.append("; ");
+                }
                 for (SeatBean seatBean : currentList) {
                     if (seatBean.sort == childSeat.sort) {
                         seatBean.isChild = 1;
@@ -378,7 +382,9 @@ public class SeatSelectActivity extends RxBaseActivity {
                 seatBean.isChoose = !seatBean.isChoose;
                 seatBean.isChild = 0;
                 String currentText = itemSeatSelectHeaderTvChildSelect.getText().toString();
-                if (currentText.contains(seatBean.getDesc())) {
+                if (currentText.contains(seatBean.getDesc() + "; ")) {
+                    itemSeatSelectHeaderTvChildSelect.setText(currentText.replace(seatBean.getDesc() + "; ", ""));
+                } else if (currentText.contains(seatBean.getDesc())) {
                     itemSeatSelectHeaderTvChildSelect.setText(currentText.replace(seatBean.getDesc(), ""));
                 }
                 calculateTotal();
@@ -464,13 +470,13 @@ public class SeatSelectActivity extends RxBaseActivity {
         if (!isDialog) {
             if (seatBean.sort != 0) {
                 if (seatBean.isChoose && seatBean.isChild == 1) {
-                    textView.setText(" ¥" + decimalFormat.format(seatBean.childPrice));
+                    textView.setText(" ¥" + seatBean.childPrice);
                 } else {
-                    textView.setText(" ¥" + decimalFormat.format(seatBean.price));
+                    textView.setText(" ¥" + seatBean.price);
                 }
             }
         } else {
-            textView.setText(" ¥" + decimalFormat.format(seatBean.childPrice));
+            textView.setText(" ¥" + seatBean.childPrice);
         }
     }
 

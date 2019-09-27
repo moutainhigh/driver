@@ -1,5 +1,7 @@
 package com.easymi.common.entity;
 
+import com.easymi.component.utils.CommonUtil;
+
 import java.io.Serializable;
 
 public class SeatBean implements Serializable {
@@ -15,7 +17,7 @@ public class SeatBean implements Serializable {
     public double price;
     public double childPrice;
     public int child;
-    public int listSize;
+    public int type;
 
     @Override
     public boolean equals(Object o) {
@@ -32,33 +34,17 @@ public class SeatBean implements Serializable {
         return sort;
     }
 
-    public String getDesc() {
-        if (listSize == 5) {
-            if (sort == 1) {
-                return "前右; ";
-            } else if (sort == 2) {
-                return "后左; ";
-            } else if (sort == 3) {
-                return "后中; ";
-            } else if (sort == 4) {
-                return "后右; ";
-            }
-        } else if (listSize == 7) {
-            if (sort == 1) {
-                return "前右; ";
-            } else if (sort == 2) {
-                return "中左; ";
-            } else if (sort == 3) {
-                return "中右; ";
-            } else if (sort == 4) {
-                return "后左; ";
-            } else if (sort == 5) {
-                return "后中; ";
-            } else if (sort == 6) {
-                return "后右; ";
-            }
+    public String getDescAndSeatInfo() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(CommonUtil.getPassengerDesc(type, sort));
+        if (isChild == 1) {
+            stringBuilder.append("(儿童座)");
         }
-        return "";
+        return stringBuilder.toString();
+    }
+
+    public String getDesc() {
+        return CommonUtil.getPassengerDesc(type, sort);
     }
 
 }

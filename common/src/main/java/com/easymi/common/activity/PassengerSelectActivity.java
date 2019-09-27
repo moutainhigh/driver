@@ -186,7 +186,8 @@ public class PassengerSelectActivity extends RxBaseActivity {
         adapter.addHeaderView(headerSpaceView);
 
         View headerView = getLayoutInflater().inflate(R.layout.item_passenger_select_header, passengerSelectRv, false);
-
+        TextView itemPassengerSelectHeaderTv = headerView.findViewById(R.id.itemPassengerSelectHeaderTv);
+        itemPassengerSelectHeaderTv.setText("新增乘车人");
         headerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

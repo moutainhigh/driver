@@ -459,10 +459,15 @@ public class CreateOrderActivity extends RxPayActivity {
                     carPoolCreateOrderLlMoney.setVisibility(View.VISIBLE);
                     chooseSeatList = (ArrayList<SeatBean>) data.getSerializableExtra("data");
                     StringBuilder stringBuilder = new StringBuilder();
-                    for (SeatBean seatBean : chooseSeatList) {
-                        stringBuilder.append(seatBean.getDesc());
+                    for (int i = 0; i < chooseSeatList.size(); i++) {
+                        SeatBean seatBean = chooseSeatList.get(i);
+                        stringBuilder.append(seatBean.getDescAndSeatInfo());
+                        if (i != chooseSeatList.size() - 1) {
+                            stringBuilder.append("; ");
+                        }
                     }
                     carPoolCreateOrderTvSeatSelect.setText(stringBuilder.toString());
+                    carPoolCreateOrderTvSeatSelect.setSelected(true);
                     setBtnEnable();
                 }
             } else if (requestCode == 0x10) {

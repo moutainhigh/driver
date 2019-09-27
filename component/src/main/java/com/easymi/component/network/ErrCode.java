@@ -627,7 +627,7 @@ public enum ErrCode {
     /**
      * 此途径站点不允许下车
      */
-     STATION_NOT_ALLOW_GET_OFF(40211,"此途径站点不允许下车"),
+    STATION_NOT_ALLOW_GET_OFF(40211, "此途径站点不允许下车"),
 
     /**
      * 班次发车时间已过期
@@ -650,7 +650,9 @@ public enum ErrCode {
     /**
      * 班次还有订单未执行
      */
-    SCHEDULE_STILL_ORDER(40606,"班次还有订单未执行");
+    SCHEDULE_STILL_ORDER(40606, "班次还有订单未执行"),
+
+    SEAT_INFO_ERROR(40601, "座位信息出错,请重新选择");
 
     private int code;
     private String showMsg;

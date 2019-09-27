@@ -520,11 +520,21 @@ public class CreateOrderActivity extends RxPayActivity {
                     double prise = data.getDoubleExtra("prise", 0);
                     customBusCreateOrderTvMoney.setText(String.valueOf(prise));
                     chooseSeatList = (ArrayList<SeatBean>) data.getSerializableExtra("data");
+                    adapter.setNewData(null);
+                    if (passengerFooterView != null) {
+                        adapter.removeFooterView(passengerFooterView);
+                        passengerFooterView = null;
+                    }
                     StringBuilder stringBuilder = new StringBuilder();
-                    for (SeatBean seatBean : chooseSeatList) {
-                        stringBuilder.append(seatBean.getDesc());
+                    for (int i = 0; i < chooseSeatList.size(); i++) {
+                        SeatBean seatBean = chooseSeatList.get(i);
+                        stringBuilder.append(seatBean.getDescAndSeatInfo());
+                        if (i != chooseSeatList.size() - 1) {
+                            stringBuilder.append("; ");
+                        }
                     }
                     customBusCreateOrderTvSeatSelect.setText(stringBuilder.toString());
+                    customBusCreateOrderTvSeatSelect.setSelected(true);
                     buttonAction();
                 }
             } else if (requestCode == 0x10) {
