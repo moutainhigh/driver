@@ -243,6 +243,10 @@ public class CreateOrderActivity extends RxPayActivity {
         customBusCreateOrderBtCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (adapter.getData().size() != chooseSeatList.size()) {
+                    ToastUtil.showMessage(CreateOrderActivity.this, "请选择" + chooseSeatList.size() + "位乘客");
+                    return;
+                }
                 createOrder();
             }
         });
@@ -294,6 +298,7 @@ public class CreateOrderActivity extends RxPayActivity {
                             adapter.getViewByPosition(customBusCreateOrderRv, position + adapter.getHeaderLayoutCount(), com.easymi.common.R.id.itemPassengerSelectContentSml);
                     itemPassengerSelectContentSml.quickClose();
                     adapter.notifyDataSetChanged();
+                    buttonAction();
                 }
             }
         });
@@ -385,12 +390,14 @@ public class CreateOrderActivity extends RxPayActivity {
                         customBusCreateOrderTvStart.setText(startBean.name);
                         currentMoney = -1;
                         customBusCreateOrderTvMoney.setText("0.00");
+                        resetData();
                         resetChooseSeatList();
                     } else if (stationBean.chooseStatus == 2) {
                         orderId = 0;
                         endBean = stationBean;
                         customBusCreateOrderTvEnd.setText(endBean.name);
                         currentMoney = -1;
+                        resetData();
                         resetChooseSeatList();
                     }
                     buttonAction();
@@ -492,11 +499,7 @@ public class CreateOrderActivity extends RxPayActivity {
                         customBusCreateOrderLlCount.setVisibility(View.VISIBLE);
                         customBusCreateOrderRv.setVisibility(View.INVISIBLE);
                     }
-                    adapter.setNewData(null);
-                    if (passengerFooterView != null) {
-                        adapter.removeFooterView(passengerFooterView);
-                        passengerFooterView = null;
-                    }
+                    resetData();
                     orderId = 0;
                     request = false;
                     startList.clear();
@@ -529,11 +532,7 @@ public class CreateOrderActivity extends RxPayActivity {
                     double prise = data.getDoubleExtra("prise", 0);
                     customBusCreateOrderTvMoney.setText(String.valueOf(prise));
                     chooseSeatList = (ArrayList<SeatBean>) data.getSerializableExtra("data");
-                    adapter.setNewData(null);
-                    if (passengerFooterView != null) {
-                        adapter.removeFooterView(passengerFooterView);
-                        passengerFooterView = null;
-                    }
+                    resetData();
                     StringBuilder stringBuilder = new StringBuilder();
                     for (int i = 0; i < chooseSeatList.size(); i++) {
                         SeatBean seatBean = chooseSeatList.get(i);
@@ -557,6 +556,14 @@ public class CreateOrderActivity extends RxPayActivity {
                     buttonAction();
                 }
             }
+        }
+    }
+
+    private void resetData() {
+        adapter.setNewData(null);
+        if (passengerFooterView != null) {
+            adapter.removeFooterView(passengerFooterView);
+            passengerFooterView = null;
         }
     }
 

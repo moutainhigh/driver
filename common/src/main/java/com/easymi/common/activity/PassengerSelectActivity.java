@@ -46,6 +46,7 @@ public class PassengerSelectActivity extends RxBaseActivity {
     private ArrayList<PassengerBean> chooseList;
     private int adultSeatCount;
     private int childSeatCount;
+    private TextView passengerSelectTvDesc;
 
     @Override
     public boolean isEnableSwipe() {
@@ -77,7 +78,7 @@ public class PassengerSelectActivity extends RxBaseActivity {
         passengerSelectRv.setLoadMoreEnable(false);
         passengerSelectRv.setLayoutManager(new LinearLayoutManager(this));
         ((DefaultItemAnimator) passengerSelectRv.getRecyclerView().getItemAnimator()).setSupportsChangeAnimations(false);
-        TextView passengerSelectTvDesc = findViewById(R.id.passengerSelectTvDesc);
+        passengerSelectTvDesc = findViewById(R.id.passengerSelectTvDesc);
 
         chooseSeatList = (ArrayList<SeatBean>) getIntent().getSerializableExtra("data");
         chooseList = (ArrayList<PassengerBean>) getIntent().getSerializableExtra("chooseList");
@@ -141,7 +142,7 @@ public class PassengerSelectActivity extends RxBaseActivity {
 
     private void goAction() {
         List<PassengerBean> listData = adapter.getData();
-        ArrayList<PassengerBean> chooseData = new ArrayList<>(listData);
+        ArrayList<PassengerBean> chooseData = new ArrayList<>();
         int chooseAdultCount = 0;
         int chooseChildCount = 0;
         for (PassengerBean listDatum : listData) {
@@ -151,23 +152,14 @@ public class PassengerSelectActivity extends RxBaseActivity {
                 } else {
                     chooseChildCount++;
                 }
+                chooseData.add(listDatum);
             }
         }
-        if (chooseData.isEmpty()) {
-            ToastUtil.showMessage(PassengerSelectActivity.this, "请选择乘客");
+        if (chooseAdultCount + chooseChildCount != chooseSeatList.size()
+                || chooseAdultCount != adultSeatCount
+                || chooseChildCount != childSeatCount) {
+            ToastUtil.showMessage(PassengerSelectActivity.this, passengerSelectTvDesc.getText().toString());
         } else {
-            if (chooseData.size() != chooseSeatList.size()) {
-                ToastUtil.showMessage(PassengerSelectActivity.this, "仅能选择" + chooseSeatList.size() + "位乘客");
-                return;
-            }
-            if (chooseAdultCount != adultSeatCount) {
-                ToastUtil.showMessage(PassengerSelectActivity.this, "仅能选择" + adultSeatCount + "位成人");
-                return;
-            }
-            if (chooseChildCount != childSeatCount) {
-                ToastUtil.showMessage(PassengerSelectActivity.this, "仅能选择" + childSeatCount + "位儿童");
-                return;
-            }
             Intent intent = new Intent();
             intent.putExtra("data", chooseData);
             setResult(RESULT_OK, intent);

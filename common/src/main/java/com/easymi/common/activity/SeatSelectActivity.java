@@ -268,19 +268,13 @@ public class SeatSelectActivity extends RxBaseActivity {
     private void createDialog() {
         if (childSeats.size() > 0) {
             List<SeatBean> currentList = baseQuickAdapter.getData();
-            List<SeatBean> chooseChildSeats = new ArrayList<>();
-            for (SeatBean seatBean : currentList) {
-                if (seatBean.isChild == 1 && seatBean.isChoose) {
-                    chooseChildSeats.add(seatBean);
-                }
-            }
 
             for (SeatBean childSeat : childSeats) {
                 childSeat.isDialogSelect = false;
             }
             for (SeatBean childSeat : childSeats) {
-                for (SeatBean chooseChildSeat : chooseChildSeats) {
-                    if (childSeat.sort == chooseChildSeat.sort) {
+                for (SeatBean chooseChildSeat : currentList) {
+                    if (chooseChildSeat.isChild == 1 && chooseChildSeat.isChoose && childSeat.sort == chooseChildSeat.sort) {
                         childSeat.isDialogSelect = true;
                     }
                 }
@@ -490,7 +484,9 @@ public class SeatSelectActivity extends RxBaseActivity {
             }
         }
         if (!isDialog) {
-            if (seatBean.sort != 0) {
+            if (seatBean.status == 2) {
+                textView.setText("禁售");
+            } else if (seatBean.sort != 0) {
                 if (seatBean.isChoose && seatBean.isChild == 1) {
                     textView.setText(" ¥" + seatBean.childPrice);
                 } else {
