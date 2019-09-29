@@ -247,7 +247,7 @@ public class CommonUtil {
 
     public static String getPassengerDescAndType(int type, String sorts, String sortsType) {
         StringBuilder stringBuilder = new StringBuilder();
-        if (sorts != null && sortsType != null) {
+        if (!TextUtils.isEmpty(sorts) && !TextUtils.isEmpty(sortsType)) {
             String[] sortsData = sorts.split("\\,");
             String[] typeData = sortsType.split("\\,");
             if (sortsData.length == typeData.length) {
