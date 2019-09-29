@@ -241,9 +241,14 @@ public class SeatSelectActivity extends RxBaseActivity {
         for (int i = 0; i < childSeats.size(); i++) {
             SeatBean childSeat = childSeats.get(i);
             if (childSeat.isDialogSelect) {
-                stringBuilder.append(childSeat.getDesc());
-                if (i != childSeats.size() - 1) {
+
+                if (TextUtils.isEmpty(stringBuilder)) {
+                    stringBuilder.append(childSeat.getDesc());
+                } else {
+
                     stringBuilder.append("; ");
+
+                    stringBuilder.append(childSeat.getDesc());
                 }
                 for (SeatBean seatBean : currentList) {
                     if (seatBean.sort == childSeat.sort) {
@@ -398,11 +403,19 @@ public class SeatSelectActivity extends RxBaseActivity {
                 seatBean.isChoose = !seatBean.isChoose;
                 seatBean.isChild = 0;
                 String currentText = itemSeatSelectHeaderTvChildSelect.getText().toString();
-                if (currentText.contains(seatBean.getDesc() + "; ")) {
-                    itemSeatSelectHeaderTvChildSelect.setText(currentText.replace(seatBean.getDesc() + "; ", ""));
-                } else if (currentText.contains(seatBean.getDesc())) {
-                    itemSeatSelectHeaderTvChildSelect.setText(currentText.replace(seatBean.getDesc(), ""));
-                }
+
+//                if (TextUtils.isEmpty(currentText)){
+//                    itemSeatSelectHeaderTvChildSelect.setText(currentText);
+//                }else {
+//                    itemSeatSelectHeaderTvChildSelect.setText(currentText);
+//                }
+//
+//                if (currentText.contains(seatBean.getDesc() + "; ")) {
+//                    itemSeatSelectHeaderTvChildSelect.setText(currentText.replace(seatBean.getDesc() + "; ", ""));
+//                } else if (currentText.contains(seatBean.getDesc())) {
+//                    itemSeatSelectHeaderTvChildSelect.setText(currentText.replace(seatBean.getDesc(), ""));
+//                }
+                changeData();
                 calculateTotal();
                 adapter.notifyItemChanged(position + adapter.getHeaderLayoutCount());
             }
