@@ -245,9 +245,7 @@ public class SeatSelectActivity extends RxBaseActivity {
                 if (TextUtils.isEmpty(stringBuilder)) {
                     stringBuilder.append(childSeat.getDesc());
                 } else {
-
                     stringBuilder.append("; ");
-
                     stringBuilder.append(childSeat.getDesc());
                 }
                 for (SeatBean seatBean : currentList) {
@@ -404,18 +402,18 @@ public class SeatSelectActivity extends RxBaseActivity {
                 seatBean.isChild = 0;
                 String currentText = itemSeatSelectHeaderTvChildSelect.getText().toString();
 
-//                if (TextUtils.isEmpty(currentText)){
-//                    itemSeatSelectHeaderTvChildSelect.setText(currentText);
-//                }else {
-//                    itemSeatSelectHeaderTvChildSelect.setText(currentText);
-//                }
+                if (TextUtils.isEmpty(currentText)){
+                    itemSeatSelectHeaderTvChildSelect.setText(currentText);
+                }else {
+                    itemSeatSelectHeaderTvChildSelect.setText(currentText);
+                }
 //
-//                if (currentText.contains(seatBean.getDesc() + "; ")) {
-//                    itemSeatSelectHeaderTvChildSelect.setText(currentText.replace(seatBean.getDesc() + "; ", ""));
-//                } else if (currentText.contains(seatBean.getDesc())) {
-//                    itemSeatSelectHeaderTvChildSelect.setText(currentText.replace(seatBean.getDesc(), ""));
-//                }
-                changeData();
+                if (currentText.contains(seatBean.getDesc() + "; ")) {
+                    itemSeatSelectHeaderTvChildSelect.setText(currentText.replace(seatBean.getDesc() + "; ", ""));
+                } else if (currentText.contains(seatBean.getDesc())) {
+                    itemSeatSelectHeaderTvChildSelect.setText(currentText.replace(seatBean.getDesc(), ""));
+                }
+//                changeData();
                 calculateTotal();
                 adapter.notifyItemChanged(position + adapter.getHeaderLayoutCount());
             }
