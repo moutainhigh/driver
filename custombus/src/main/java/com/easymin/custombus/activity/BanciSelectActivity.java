@@ -20,6 +20,7 @@ import com.easymin.custombus.R;
 import com.easymin.custombus.adapter.BanciAdapter;
 import com.easymin.custombus.entity.DZBusLine;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
@@ -104,6 +105,8 @@ public class BanciSelectActivity extends RxBaseActivity {
             @Override
             public void onNext(List<DZBusLine> cbBusOrders) {
                 if (cbBusOrders == null || cbBusOrders.size() == 0) {
+                    List<DZBusLine>  list =  new ArrayList<>();
+                    adapter.setBaseOrders(list);
                     showErr(0);
                 } else {
                     hideErr();
