@@ -12,10 +12,7 @@
     <string name="start_drive"> click to leave </string>
     <string name="start_wait">waiting</string>
 
-    <string name="huadongdaoda"> slide to reach the reservation </string>
 
-
-    <string name="zc_click_wait"> click wait </string>
     <string name="click_start">Click to leave </string>
     <string name="settle">clear </string>
     <string name="service_fee"> service cost </string>
@@ -34,19 +31,14 @@
     <string name="cancel"> cancel </string>
 
     <string name="confirm_money"> confirm the cost </string>
-    <string name="consumer_prepay"> customer prepaid </string>
     <string name="more_pay"> also need to pay </string>
-    <string name="dai_fu"> payment </string>
 
     <string name="watch_detail">View Charge Details ></string>
     <string name="extra_fee"> additional service charge</string>
     <string name="help_pay_fee"> pad payment </string>
-    <string name="hint_edit"> click on the price text can be directly entered </string>
     <string name="please_remark">Please enter the comment information</string>
 
     <string name="minest_fee">minimum amount spent</string>
-    <string name="xianjin_coupon"> yuan cash coupons </string>
-    <string name="zhekou_coupon"> discount discount coupons </string>
 
     <string name="fee_detail">Expense Details</string>
 
@@ -68,8 +60,6 @@
 
     <string name="cancel_cancel"> does not cancel temporarily </string>
     <string name="cancel_order"> cancel orders </string>
-
-    <string name="order_not_exist">Order does not exist</string>
 
     <string name="where_start">Please select the departure </string>
     <string name="where_end"> Please select the destination </string>
@@ -99,11 +89,8 @@
     <string name="lc_fee">mileage cost</string>
     <string name="time_fee"> time cost </string>
     <string name="dh_fee"> waiting for the cost </string>
-    <string name="coupon_text">Coupons</string>
     <string name="prepay_text"> prepaid amount </string>
     <string name="no_coupon">No Coupon </string>
-
-    <string name="route_failed"> path planning failed </string>
 
     <string name="loc_failed"> positioning failed, unable to continue </string>
 
@@ -111,10 +98,7 @@
     <string name="status_jie"> Ordered </string>
     <string name="status_to_start"> go to the reservation </string>
     <string name="status_arrive_start"> has reached the reservation </string>
-    <string name="status_wait">waiting </string>
     <string name="zc_status_to_end"> goes to destination </string>
-    <string name="status_cheating">hook </string>
-    <string name="status_confirm"> confirm the cost </string>
 
     <string name="canceled_order"> The current order has been cancelled :)</string>
     <string name="backed_order"> The current order has been reclaimed :)</string>
@@ -124,14 +108,12 @@
     <string name="pay_suc"> settlement is completed </string>
 
     <string name="k_k_meter">kilometer</string>
-    <string name="yuan_coupon"> meta coupons </string>
 
     <string name="cus_pay">Customer Online Payment</string>
     <string name="help_pay">receive cash</string>
     <string name="cus_balance">balance payment</string>
     <string name="qiandan"> sign payment </string>
 
-    <string name="pay_title">Select Payment Type</string>
     <string name="please_pay_title">Please select payment type</string>
 
     <string name="fee_hint"> Note: pad payment does not participate in coupon calculation </string>
@@ -212,11 +194,11 @@
 
 
         
-    <string name="personal_consumer">personal client</string>
+    <string name="personal_consumer">personal client</string><![CDATA[
         
-    <string name="qiye_consumer"> enterprise customers </string>
 
         
+    ]]>
     <string name="left"> remaining </string>
         
     <string name="meter">m</string>

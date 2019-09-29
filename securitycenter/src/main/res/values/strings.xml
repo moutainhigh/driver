@@ -8,7 +8,6 @@
     <string name="parse_error">数据异常，解析失败</string>
 
     <string name="no_gps">该设备未发现GPS定位芯片，无法准确定位</string>
-    <string name="closed_wifi">请打开你的WiFi，有助于精确定位</string>
 
     <string name="please_open_gps">请开启GPS定位服务</string>
     <string name="ok">确定</string>

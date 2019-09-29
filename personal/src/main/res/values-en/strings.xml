@@ -15,9 +15,7 @@
     <string name="login_agreement"> service personnel agreement </string>
 
     <!-- Personal Center str -->
-    <string name="person_order">My Order</string>
     <string name="person_money">My Wallet</string>
-    <string name="person_jiangli"> Recommended Reward </string>
     <string name="person_pingjia">passenger evaluation</string>
     <string name="person_message">Message Center</string>
     <string name="my_message">My Message</string>
@@ -56,19 +54,9 @@
     <string name="register_please_name">Please enter your name</string>
     <string name="register_please_phone"> Please enter the phone number </string>
     <string name="register_please_id_card"> Please enter the ID number </string>
-    <string name="register_please_contract">Emergency Contact (name + phone + relationship)</string>
-
-    <string name="register_business"> carry out business </string>
-
-    <string name="register_daijia"> on behalf of the driver </string>
-    <string name="register_zhuanche"> special car </string>
-    <string name="register_errand">Running Legs</string>
-    <string name="register_freight">Cargo</string>
-    <string name="register_zhuanxian"> dedicated line </string>
 
     <string name="register_refer">Recommended manual number</string>
     <string name="register_refer_no">Enter the recommended manual number</string>
-    <string name="register_agree"> agrees to "service personnel service agreement" </string>
     <string name="register_next_step">Next </string>
 
     <string name="register_upload_card">Upload ID</string>
@@ -83,20 +71,12 @@
     <string name="register_known"> know </string>
     <string name="register_apply"> submit data </string>
 
-    <string name="register_title">service staff registration</string>
-    <string name="register_no_loc"> did not get the positioning information </string>
-    <string name="register_re_company"> failed to load company information, retrying </string>
-    <string name="register_re_business"> failed to load the business type, retrying </string>
-
-    <string name="register_finish"> Failed to get company information. Please try again later</string>
-
 
     <!-- Set password str-->
     <string name="reset_login_psw"> set the login password </string>
     <string name="reset_please_6">Please enter 6–16 new password </string>
     <string name="reset_login_phone"> set the login phone number </string>
     <string name="reset_please_11">Please enter 11 digit phone number</string>
-    <string name="reset_please_code">Please enter the verification code</string>
     <string name="reset_confirm"> OK </string>
     <string name="reset_edit_words"> input picture text </string>
     <string name="reset_refresh">Click Refresh</string>
@@ -104,7 +84,6 @@
     <string name="reset_code_to_where"> verification code sent to </string>
     <string name="reset_sec_resend"> seconds to reissue </string>
     <string name="reset_resend_code">reacquire></string>
-    <string name="reset_error_auth">Graph verification code error</string>
     <string name="reset_change_suc"> modify the password is successful </string>
 
     <!-- recharge str -->
@@ -165,7 +144,6 @@
     <string name="tixian_confirm"> Confirm Withdrawal</string>
     <string name="tixian_rule">Acquisition Rules</string>
     <string name="tixian_record"> withdrawal record </string>
-    <string name="tixian_this_most"> this time can be withdrawal </string>
     <string name="tixian_my_balance">My balance (meta)</string>
 
     <!-- Withdrawal rule str-->
@@ -186,12 +164,9 @@
     <!--Feedback str-->
     <string name="feedback_please">Please leave your valuable comments</string>
     <string name="feedback_apply">submit</string>
-    <string name="feedback_please_msg">Please fill in your comments</string>
     <string name="feedback_suc">We have received your valuable comments</string>
 
     <!-- evaluation str-->
-    <string name="total_score">Cumulative Score</string>
-    <string name="total_order"> cumulative orders </string>
     <string name="total_score_dis"> cumulative star distribution</string>
     <string name="star_5">5 stars</string>
     <string name="star_4">4 stars</string>
@@ -238,15 +213,7 @@
     <string name="same_old_new">new password is the same as old password</string>
     <string name="not_same_old"> The old password you entered doesn\'t match the password of the logged in account </string>
 
-    <string name="wx_pay_success"> WeChat recharge success </string>
-    <string name="wx_pay_fail">WeChat failed to reload</string>
-    <string name="wx_share_suc"> WeChat share success </string>
     <string name="wx_share_failed"> WeChat sharing failed </string>
-
-    <string name="wx_pay_failed"> WeChat payment data error: </string>
-
-    <string name="alipay_success"> Alipay recharge success </string>
-    <string name="alipay_failed">Pay Ali failed to recharge</string>
 
     <string name="near_no_wc"> near the toilet </string>
     <string name="change_psw_suc"> modify the password is successful </string>
@@ -280,7 +247,6 @@
 
     <string name="help_daijia">Driving</string>
     <string name="help_zhuanche">Special car</string>
-    <string name="be_busy">You are busy, unable to change password</string>
 
     <string name="tixian_1"> withdrawal rules, minimum </string>
          <string name="tixian_2"> yuan, maximum </string>

@@ -104,9 +104,6 @@ public interface ZCApiService {
                                      @Field("employ_id") long employId,
                                      @Field("app_key") String appKey);
 
-
-//hf
-
     /**
      * 专车 --> 查询单个订单
      *
@@ -280,6 +277,8 @@ public interface ZCApiService {
                                               @Field("onePrice") boolean onePrice,
                                               @Field("time") Integer time,
                                               @Field("distance") Double distance);
+
+/////////////////// 出租车相关接口
 
 
 }

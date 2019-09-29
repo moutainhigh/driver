@@ -181,48 +181,7 @@ public interface TaxiApiService {
                                   @Field("app_key") String appKey,
                                   @Field("pay_type") String payType);
 
-    /**
-     * 补单
-     *
-     * @param passengerId
-     * @param passengerName
-     * @param passengerPhone
-     * @param bookTime
-     * @param bookAddress
-     * @param bookAddressLat
-     * @param bookAddressLng
-     * @param destination
-     * @param destinationLat
-     * @param destinationLng
-     * @param companyId
-     * @param companyName
-     * @param budgetFee
-     * @param appKey
-     * @param cid            订单类型id
-     * @param orderPerson
-     * @param orderPersonId
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("driver/api/v1/createSpecialOrder")
-    Observable<TaxiOrderResult> createOrder(@Field("passenger_id") Long passengerId,
-                                            @Field("passenger_name") String passengerName,
-                                            @Field("passenger_phone") String passengerPhone,
-                                            @Field("book_time") Long bookTime,
-                                            @Field("book_address") String bookAddress,
-                                            @Field("book_address_lat") Double bookAddressLat,
-                                            @Field("book_address_lng") Double bookAddressLng,
-                                            @Field("destination") String destination,
-                                            @Field("destination_lat") Double destinationLat,
-                                            @Field("destination_lng") Double destinationLng,
-                                            @Field("company_id") Long companyId,
-                                            @Field("company_name") String companyName,
-                                            @Field("budget_fee") Double budgetFee,
-                                            @Field("app_key") String appKey,
-                                            @Field("cid") Long cid,
-                                            @Field("order_person") String orderPerson,
-                                            @Field("order_person_id") Long orderPersonId,
-                                            @Field("car_type") Long carType);
+
 
     /**
      * 预估价格

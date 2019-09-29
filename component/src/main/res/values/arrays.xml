@@ -396,17 +396,4 @@
         <item>遵义市</item>
     </string-array>
 
-    <string-array name="test">
-
-        <item>item1</item>
-        <item>item2</item>
-        <item>item3</item>
-        <item>item4 is very very long </item>
-        <item>item5</item>
-        <item>item6</item>
-        <item>item7</item>
-        <item>item8</item>
-
-    </string-array>
-
 </resources>

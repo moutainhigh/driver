@@ -231,7 +231,6 @@
                 android:layout_height="10dp" />
 
             <RadioButton
-                android:id="@+id/noCar"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
@@ -246,7 +245,6 @@
 
 
         <LinearLayout
-            android:id="@+id/llAgreement"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

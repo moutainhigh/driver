@@ -10,8 +10,6 @@
 
     <color name="yellow">#efae3e</color>
 
-    <color name="deep_blue">#181a22</color>
-
     <color name="blue">#3c98e3</color>
     <color name="green">#5abf98</color>
 
@@ -22,8 +20,6 @@
     <color name="ff7c7c7c">#ff7c7c7c</color>
 
     <color name="color_50b8da">#50b8da</color>
-
-    <color name="black_p50">#7f000000</color>
 
 
     <color name="bar_grey">#393a3e</color>
@@ -56,15 +52,12 @@
     <color name="deepDark">#222222</color>
     <color name="keyboardBackColor">#212121</color>
     <color name="keyboardKeyBack">#474749</color>
-    <color name="darkGray">#A9A9A9</color>
     <color name="lightGray">#D3D3D3</color>
     <color name="keyboardNormal">#1c69ac</color>
-    <color name="keyboardDeep">#991c69ac</color>
     <color name="keyboardPress">#1296db</color>
 
     <color name="colorGreen">#089A55</color>
     <color name="colorBlue">#3C98E3</color>
-    <color name="colorLightGreen">#ecf7f2</color>
     <color name="colorRed">#E05E68</color>
     <color name="colorYellow">#F5A623</color>
     <color name="colorBlack">#222222</color>
@@ -72,6 +65,5 @@
     <color name="colorSub">#999999</color>
     <color name="colorDesc">#CCCCCC</color>
     <color name="colorLine">#EBEBEB</color>
-    <color name="colorBg">#F2F2F2</color>
 
 </resources>

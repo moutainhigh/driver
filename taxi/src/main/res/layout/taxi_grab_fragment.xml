@@ -53,7 +53,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/order_dis_con"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/rl_time"

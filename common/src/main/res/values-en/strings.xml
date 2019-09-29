@@ -5,9 +5,10 @@
         <string name="work_fin_order">Complete orders</string>
         <string name="work_hour"> hour</string>
         <string name="work_minute"> minute </string>
-        <string name="work_online_time"> listening time length</string>
-        <string name="work_today_income">today\'s revenue</string>
-        <string name="work_driver">driver</string>
+        <string name="work_online_time"> listening time length</string><![CDATA[
+        
+        ]]>
+    <string name="work_driver">driver</string>
         <string name="work_order">Order</string>
         <string name="work_online"> start listening list </string>
         <string name="work_create">Create Order</string>
@@ -22,18 +23,20 @@
         <string name="liushui_baoxiao_done"> reimbursed </string>
 
         <string name="create_daijia"> drive </string>
-        <string name="create_zhuanche"> special car </string>
-        <string name="create_paotui">Running Legs</string>
-        <string name="create_huoyun">Cargo</string>
-        <string name="create_zhuanxian"> Intercity Line </string>
+        <string name="create_zhuanche"> special car </string><![CDATA[
+        
+        
+        ]]>
+    <string name="create_zhuanxian"> Intercity Line </string>
 
-        <string name="hint">Prompt</string>
-        <string name="sure"> OK </string>
-        <string name="message"> dear driver master, we need to obtain the following permissions to ensure that the application is running normally, please grant </string>
+        <string name="hint">Prompt</string><![CDATA[
+        
+        
 
-        <string name="exit"> Failed to get necessary app permissions, exit soon</string>
+        
 
-        <string name="liushui_today">today</string>
+        ]]>
+    <string name="liushui_today">today</string>
         <string name="liushui_yesterday">yesterday</string>
         <string name="liushui_this_week">this week</string>
         <string name="liushui_this_month">this month</string>
@@ -41,12 +44,13 @@
         <string name="liushui_all"> all </string>
 
         <string name="new_ann">new announcement:</string>
-        <string name="new_notify"> new notification:</string>
+        <string name="new_notify"> new notification:</string><![CDATA[
 
-        <string name="start_lis_order"> Start listening! </string>
-        <string name="stop_lis_order"> Stop listening! </string>
+        
+        
 
-        <string name="current_place"> current address: </string>
+        ]]>
+    <string name="current_place"> current address: </string>
 
         <string name="grab_order_content"> grab single </string>
         <string name="send_order"> send a single </string>
@@ -74,28 +78,30 @@
         <string name="to_you"> away from you</string>
 
         <string name="meter">m</string>
-        <string name="k_meter"> Kilometers </string>
+        <string name="k_meter"> Kilometers </string><![CDATA[
 
-        <string name="jishi_order"> instant order </string>
-        <string name="yuyue_order"> appointment order </string>
-        <string name="time_format">MM on dd HH:mm</string>
+        
+        
+        ]]>
+    <string name="time_format">MM on dd HH:mm</string>
 
 
         <string name="baoxiao_hint_1">Please enter the reimbursement amount</string>
         <string name="baoxiao_hint_2"> Please enter reimbursement reason (cannot exceed 100 characters)</string>
 
         <string name="baoxiao_apply">submit</string>
-        <string name="baoxiao_suc"> Your reimbursement request has been submitted for review</string>
+        <string name="baoxiao_suc"> Your reimbursement request has been submitted for review</string><![CDATA[
 
-        <string name="jump_gif">skip </string>
+        
 
-        <string name="please_admin"> Your account has been frozen, please contact the administrator </string>
-        <string name="force_offline_please_admin"> You have been forced offline, please contact the administrator </string>
+        ]]><string name="please_admin"> Your account has been frozen, please contact the administrator </string><![CDATA[
+        
 
-        <string name="baoxiao_shenhe"> current order reimbursement application has been submitted, is under review </string>
-        <string name="baoxiao_done"> current order has been reimbursed </string>
+        
+        
 
-        <string name="no_order">No order, please go to order!</string>
+        ]]>
+    <string name="no_order">No order, please go to order!</string>
 
         <string name="freezed"> Your account has been frozen, please contact the administrator </string>
         <string name="unbunding"> Your account has been tied by the administrator sister </string>
@@ -119,14 +125,10 @@
     <string name="rate_order"> completed</string>
 
 
-    <string name="com_perfect_info">亲爱的师傅您好：\n&#160;&#160;&#160;&#160;您的资料还未完善，请尽快完善提交资料，管理员审核通过之后您就可以开启接单旅程了。</string>
-    <string name="com_perfect">完善资料</string>
     <string name="com_perfect2">信息完善</string>
     <string name="com_head_img">头像</string>
     <string name="com_name">*姓名</string>
-    <string name="com_input_name">请输入您的真实姓名</string>
     <string name="com_phone">*手机号</string>
-    <string name="com_input_phone">请输入手机号</string>
     <string name="com_card">*身份证号</string>
     <string name="com_input_card">请输入身份证号</string>
     <string name="com_contacts">*紧急联系人</string>
@@ -173,6 +175,5 @@
     <string name="com_card2">身份证反面（必填）</string>
     <string name="com_license">驾驶证（必填）</string>
     <string name="com_full">手持身份证照片</string>
-    <string name="com_complete_info">亲爱的师傅您好：\n&#160;&#160;&#160;&#160;您的资料已提交成功，管理人员正在审核，如有疑问请及时联后台管理人员，审核通过后您可开启接单旅程了。</string>
 
 </resources>
