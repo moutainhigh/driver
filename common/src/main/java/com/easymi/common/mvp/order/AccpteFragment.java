@@ -123,13 +123,15 @@ public class AccpteFragment extends RxBaseFragment implements MyOrderContract.Vi
                                 ToastUtil.showMessage(getContext(),"未开启司机代付");
                             }
                         }
-                    } else if (baseOrder.serviceType.equals(Config.TAXI)) {
-                        if (baseOrder.status < 35) {
-                            ARouter.getInstance()
-                                    .build("/taxi/FlowActivity")
-                                    .withLong("orderId", baseOrder.id).navigation();
-                        }
-                    }else if (baseOrder.serviceType.equals(Config.CARPOOL)){
+                    }
+//                    else if (baseOrder.serviceType.equals(Config.TAXI)) {
+//                        if (baseOrder.status < 35) {
+//                            ARouter.getInstance()
+//                                    .build("/taxi/FlowActivity")
+//                                    .withLong("orderId", baseOrder.id).navigation();
+//                        }
+//                    }
+                    else if (baseOrder.serviceType.equals(Config.CARPOOL)){
                         if (baseOrder.status < CarpoolOrder.CARPOOL_STATUS_FINISH){
                             ARouter.getInstance()
                                     .build("/carpooling/FlowActivity")

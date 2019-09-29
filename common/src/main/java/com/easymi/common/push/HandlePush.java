@@ -303,11 +303,12 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                                         .withBoolean("flashAssign", true)
                                         .withLong("orderId", order.orderId).navigation();
                             });
-                        } else if (order.serviceType.equals(Config.TAXI)) {
-                            ARouter.getInstance()
-                                    .build("/taxi/FlowActivity")
-                                    .withLong("orderId", order.orderId).navigation();
                         }
+//                        else if (order.serviceType.equals(Config.TAXI)) {
+//                            ARouter.getInstance()
+//                                    .build("/taxi/FlowActivity")
+//                                    .withLong("orderId", order.orderId).navigation();
+//                        }
                     }
                 }
             } else if (msg.equals("chartered")) {

@@ -65,6 +65,7 @@ import com.easymi.component.push.PushEvent;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.LogUtil;
 import com.easymi.component.utils.MapUtil;
 import com.easymi.component.utils.SensorEventHelper;
 import com.easymi.component.utils.StringUtils;
@@ -1257,6 +1258,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 settleFragmentDialog.dismiss();
             }
             finish();
+
         }
     }
 

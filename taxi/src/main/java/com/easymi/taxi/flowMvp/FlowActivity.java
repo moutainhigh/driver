@@ -166,7 +166,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     private long orderId;
 
-    private AlbumOrientationEventListener mAlbumOrientationEventListener;
     private MySmoothMarker smoothMarker;
 
     @Override
@@ -178,11 +177,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     public void initViews(Bundle savedInstanceState) {
         // 屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-        mAlbumOrientationEventListener = new AlbumOrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL);
-        if (mAlbumOrientationEventListener.canDetectOrientation()) {
-            mAlbumOrientationEventListener.enable();
-        }
 
         orderId = getIntent().getLongExtra("orderId", -1);
         if (orderId == -1) {
@@ -455,15 +449,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.commit();
         } else if (taxiOrder.status == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
             showToEndFragment();
-//            if (isToFeeDetail) {
-//                if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
-//                    settleFragmentDialog.setDjOrder(taxiOrder);
-//                } else {
-//                    settleFragmentDialog = new SettleFragmentDialog(FlowActivity.this, taxiOrder, bridge);
-//                    settleFragmentDialog.show();
-//                }
-//                isToFeeDetail = false;
-//            }
+
         } else if (taxiOrder.status == ZCOrderStatus.ARRIVAL_DESTINATION_ORDER) {
             toolbar.setTitle(R.string.settle);
             runningFragment = new RunningFragment();
@@ -478,28 +464,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.replace(R.id.flow_frame, runningFragment);
             transaction.commit();
 
-//            if (settleFragmentDialog != null && settleFragmentDialog.isShowing() && !isToFeeDetail) {
-//                settleFragmentDialog.setDjOrder(taxiOrder);
-//
-//                DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.ZHUANCHE);//确认费用后直接弹出支付页面
-//                if (null != dymOrder) {
-//                    bridge.doPay(dymOrder.orderShouldPay);
-//                }
-//            } else {
-//                if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
-//                    settleFragmentDialog.setDjOrder(taxiOrder);
-//                } else {
-//                    settleFragmentDialog = new SettleFragmentDialog(FlowActivity.this, taxiOrder, bridge);
-//                    settleFragmentDialog.show();
-//                }
-//                isToFeeDetail = false;
-//            }
         }
 
         boolean forceOre = XApp.getMyPreferences().getBoolean(Config.SP_ALWAYS_OREN, false);
-//        if (forceOre && !fromOld) {//始终横屏计价将自动跳转到横屏界面
-//            toWhatOldByOrder(taxiOrder);
-//        }
+
     }
 
     @Override
@@ -1124,7 +1092,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     protected void onDestroy() {
-        mAlbumOrientationEventListener.disable();
         mapView.onDestroy();
         presenter.stopNavi();
         if (smoothMarker!=null){
@@ -1325,45 +1292,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
     }
 
-//    @Override
-//    public void onConfigurationChanged(Configuration newConfig) {
-//        com.easymi.component.utils.Log.e("lifecycle", "onConfigurationChanged()");
-//        super.onConfigurationChanged(newConfig);
-//        if (System.currentTimeMillis() - lastChangeTime > 1000) {
-//            lastChangeTime = System.currentTimeMillis();
-//        } else {//有的胎神手机这个方法要回调两次
-//            return;
-//        }
-//        DisplayMetrics dm = new DisplayMetrics();
-//        getWindowManager().getDefaultDisplay().getMetrics(dm);
-//        int width = dm.widthPixels;
-//        int height = dm.heightPixels;
-//        if (width > height) {//横屏
-//            toWhatOldByOrder(taxiOrder);
-//        } else {//竖屏
-//
-//        }
-//    }
-
-    private void toWhatOldByOrder(TaxiOrder taxiOrder) {
-        if (taxiOrder == null || !canGoOld) {
-            return;
-        }
-        if (taxiOrder.status == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-            canGoOld = false;
-            Intent intent = new Intent(FlowActivity.this, OldRunningActivity.class);
-            intent.putExtra("orderId", taxiOrder.id);
-            startActivity(intent);
-            finish();
-        } else if (taxiOrder.status == ZCOrderStatus.START_WAIT_ORDER) {
-            canGoOld = false;
-            Intent intent = new Intent(FlowActivity.this, OldWaitActivity.class);
-            intent.putExtra("orderId", taxiOrder.id);
-            startActivity(intent);
-            finish();
-        }
-    }
-
     @Override
     public void onFinishOrder(long orderId, String orderType) {
         if (orderId == this.orderId && orderType.equals(Config.ZHUANCHE)) {
@@ -1376,29 +1304,5 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     public boolean isEnableSwipe() {
         return false;
     }
-
-    private class AlbumOrientationEventListener extends OrientationEventListener {
-        private int mOrientation;
-
-        public AlbumOrientationEventListener(Context context, int rate) {
-            super(context, rate);
-        }
-
-        @Override
-        public void onOrientationChanged(int orientation) {
-//            if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
-//                //已经显示结算对话框不显示
-//                return;
-//            }
-//            if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN || !canGoOld) {
-//                return;
-//            }
-//            com.easymi.component.utils.Log.e("TAG", "orientation = " + orientation);
-//            if ((orientation > 70 && orientation < 110) || (orientation > 250 && orientation < 290)) {
-//                toWhatOldByOrder(taxiOrder);
-//            }
-        }
-    }
-
 
 }

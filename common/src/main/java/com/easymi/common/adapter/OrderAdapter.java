@@ -96,11 +96,13 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
                         ARouter.getInstance()
                                 .build("/zhuanche/FlowActivity")
                                 .withLong("orderId", baseOrder.orderId).navigation();
-                    } else if (baseOrder.serviceType.equals(Config.TAXI)) {
+                    }
+                    else if (baseOrder.serviceType.equals(Config.TAXI)) {
                         ARouter.getInstance()
                                 .build("/taxi/FlowActivity")
                                 .withLong("orderId", baseOrder.orderId).navigation();
-                    } else if (baseOrder.serviceType.equals(Config.CITY_LINE)) {
+                    }
+                    else if (baseOrder.serviceType.equals(Config.CITY_LINE)) {
                         ARouter.getInstance()
                                 .build("/cityline/FlowActivity")
                                 .withSerializable("baseOrder", baseOrder).navigation();

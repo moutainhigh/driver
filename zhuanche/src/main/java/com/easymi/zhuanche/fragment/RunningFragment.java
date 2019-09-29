@@ -56,6 +56,7 @@ public class RunningFragment extends RxBaseFragment {
     ImageView quanlanImg;
     TextView quanlanText;
     ImageView refreshImg;
+    LinearLayout ll_con;
 
     @Override
     public void setArguments(Bundle args) {
@@ -91,6 +92,7 @@ public class RunningFragment extends RxBaseFragment {
         quanlanText = $(R.id.quanlan_text);
 
         refreshImg = $(R.id.ic_refresh);
+        ll_con = $(R.id.ll_con);
 
         feeCon = $(R.id.fee_con);
 
