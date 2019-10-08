@@ -313,7 +313,7 @@ public class FlowActivity extends RxPayActivity implements
         cusListFragment = new CusListFragment();
         Bundle bundle = new Bundle();
         bundle.putLong("orderId", pincheOrder.orderId);
-        bundle.putString("orderType", pincheOrder.orderType);
+        bundle.putString("serviceType", pincheOrder.orderType);
         cusListFragment.setArguments(bundle);
 
         pasTicketsFragment = new PasTicketsFragment();

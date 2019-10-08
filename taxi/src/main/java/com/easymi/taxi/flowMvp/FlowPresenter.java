@@ -158,7 +158,7 @@ public class FlowPresenter implements FlowContract.Presenter {
         intent.putExtra("startLatlng", start);
         intent.putExtra("endLatlng", end);
         intent.putExtra("orderId", orderId);
-        intent.putExtra("orderType", Config.ZHUANCHE);
+        intent.putExtra("serviceType", Config.ZHUANCHE);
 //        TaxiOrder zcOrder = view.getOrder();
 //        if (zcOrder != null && (zcOrder.orderStatus < DJOrderStatus.ARRIVAL_BOOKPLACE_ORDER)) {
 //            intent.putExtra(Config.NAVI_MODE, Config.WALK_TYPE);
@@ -284,12 +284,12 @@ public class FlowPresenter implements FlowContract.Presenter {
 //            if (null != taxiOrder.orderFee) {
 //                dymOrder = taxiOrder.orderFee;
 //                dymOrder.orderId = taxiOrder.id;
-//                dymOrder.orderType = taxiOrder.serviceType;
+//                dymOrder.serviceType = taxiOrder.serviceType;
 //                dymOrder.passengerId = taxiOrder.passengerId;
 //                dymOrder.orderStatus = taxiOrder.status;
 //            } else {
             dymOrder = new DymOrder(taxiOrder.id, taxiOrder.serviceType,
-                    taxiOrder.passengerId, taxiOrder.status);
+                    taxiOrder.passengerId, taxiOrder.status,taxiOrder.orderType);
 //            }
             dymOrder.save();
         } else {

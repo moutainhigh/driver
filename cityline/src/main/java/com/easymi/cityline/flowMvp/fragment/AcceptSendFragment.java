@@ -110,7 +110,7 @@ public class AcceptSendFragment extends RxBaseFragment {
             return;
         }
         orderId = args.getLong("orderId", 0);
-        orderType = args.getString("orderType", "");
+        orderType = args.getString("serviceType", "");
     }
 
     @Override

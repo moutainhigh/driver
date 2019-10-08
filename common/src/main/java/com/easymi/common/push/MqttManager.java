@@ -231,7 +231,7 @@ public class MqttManager implements LocObserver {
         if (data.size() > 0) {
             long orderId = 0;
             for (DymOrder datum : data) {
-                if (TextUtils.equals(datum.orderType, Config.ZHUANCHE) && (datum.orderStatus == ZCOrderStatus.PAIDAN_ORDER
+                if (TextUtils.equals(datum.serviceType, Config.ZHUANCHE) && (datum.orderStatus == ZCOrderStatus.PAIDAN_ORDER
                         || datum.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER)) {
                     orderId = datum.orderId;
                     break;

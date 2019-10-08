@@ -170,7 +170,7 @@ public class DistanceManager {
 //        rxManager.add();
         LatLng lastLatlng = latLngs.get(latLngs.size() - 1); //上次位置信息
         latLngs.clear();
-        if (!dymOrder.orderType.equals(Config.DAIJIA)) {
+        if (!dymOrder.serviceType.equals(Config.DAIJIA)) {
             return;
         }
         int state = 0;
@@ -227,7 +227,7 @@ public class DistanceManager {
                         PullFeeEntity entity = new PullFeeEntity();
                         entity.msg = "pull_fee";
 //                        entity.orderId = dymOrder.orderId;
-//                        entity.orderType = dymOrder.orderType;
+//                        entity.serviceType = dymOrder.serviceType;
                         HandlePush.getInstance().handPush(new Gson().toJson(entity));
                     }
 

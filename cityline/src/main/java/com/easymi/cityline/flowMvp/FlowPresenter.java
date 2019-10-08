@@ -58,7 +58,7 @@ public class FlowPresenter implements FlowContract.Presenter {
         intent.putExtra("startLatlng", start);
         intent.putExtra("endLatlng", end);
         intent.putExtra("orderId", orderId);
-        intent.putExtra("orderType", Config.CITY_LINE);
+        intent.putExtra("serviceType", Config.CITY_LINE);
 
         intent.putExtra(Config.NAVI_MODE, Config.DRIVE_TYPE);
         context.startActivity(intent);

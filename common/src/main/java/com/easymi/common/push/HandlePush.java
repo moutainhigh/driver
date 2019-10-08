@@ -226,7 +226,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 String data = jb.optString("data");
                 JSONObject jbData = new JSONObject(data.replaceAll("\\\\\\\"", "--"));
                 long orderId = jbData.optLong("orderId");
-                String orderType = jbData.optString("orderType");
+                String orderType = jbData.optString("serviceType");
                 DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
                 if (dymOrder != null) {
                     double currentDistance = new BigDecimal(jbData.optDouble("distance") / 1000).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
@@ -639,7 +639,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                     Intent intent1 = new Intent();
                     intent1.setAction(Config.BROAD_FINISH_ORDER);
                     intent1.putExtra("orderId", order.id);
-                    intent1.putExtra("orderType", order.serviceType);
+                    intent1.putExtra("serviceType", order.serviceType);
                     XApp.getInstance().sendBroadcast(intent1);
                     return;
                 }
@@ -729,7 +729,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                     Intent intent1 = new Intent();
                     intent1.setAction(Config.BROAD_CANCEL_ORDER);
                     intent1.putExtra("orderId", order1.orderId);
-                    intent1.putExtra("orderType", order1.serviceType);
+                    intent1.putExtra("serviceType", order1.serviceType);
                     XApp.getInstance().sendBroadcast(intent1);
                 }
                 XApp.getInstance().shake();
@@ -770,7 +770,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                     Intent intent3 = new Intent();
                     intent3.setAction(Config.BROAD_BACK_ORDER);
                     intent3.putExtra("orderId", order3.orderId);
-                    intent3.putExtra("orderType", order3.serviceType);
+                    intent3.putExtra("serviceType", order3.serviceType);
                     XApp.getInstance().sendBroadcast(intent3);
                 }
                 XApp.getInstance().shake();
@@ -786,7 +786,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                     Intent intent3 = new Intent();
                     intent3.setAction(Config.SCHEDULE_FINISH);
                     intent3.putExtra("scheduleId", order4.scheduleId);
-                    intent3.putExtra("orderType", order4.serviceType);
+                    intent3.putExtra("serviceType", order4.serviceType);
                     XApp.getInstance().sendBroadcast(intent3);
                 }
                 break;

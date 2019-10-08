@@ -164,9 +164,9 @@ public class FlowModel implements FlowContract.Model {
         List<PushDataOrder> orderList = new ArrayList<>();
         for (DymOrder dymOrder : DymOrder.findAll()) {
             PushDataOrder dataOrder = new PushDataOrder();
-            if (dymOrder.orderId == order.orderId && dymOrder.orderType.equals(Config.ZHUANCHE)) {
+            if (dymOrder.orderId == order.orderId && dymOrder.serviceType.equals(Config.ZHUANCHE)) {
                 dataOrder.orderId = dymOrder.orderId;
-                dataOrder.orderType = dymOrder.orderType;
+                dataOrder.orderType = dymOrder.serviceType;
                 dataOrder.status = 0;
                 dataOrder.addedKm = dymOrder.addedKm;
                 dataOrder.addedFee = dymOrder.addedFee;
@@ -251,6 +251,17 @@ public class FlowModel implements FlowContract.Model {
         return ApiManager.getInstance().createApi(Config.HOST, ComponentService.class)
                 .payOrder(true, orderId, payType)
                 .map(new HttpResultFunc2<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<EmResult> taxiSettlement(Long orderId, String orderNo, double fee) {
+        EmLoc emLoc = EmUtil.getLastLoc();
+        return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
+                .taxiSettlement(orderId, orderNo,
+                        emLoc.longitude, emLoc.latitude, emLoc.address, fee)
+                .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

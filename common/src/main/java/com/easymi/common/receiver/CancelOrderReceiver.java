@@ -30,7 +30,7 @@ public class CancelOrderReceiver extends BroadcastReceiver {
             if (action.equals(Config.BROAD_CANCEL_ORDER) || action.equals(Config.BROAD_BACK_ORDER)) {
                 if (null != cancelListener) {
                     Long orderId = intent.getLongExtra("orderId", -1);
-                    String orderType = intent.getStringExtra("orderType");
+                    String orderType = intent.getStringExtra("serviceType");
                     cancelListener.onCancelOrder(orderId, orderType);
                 }
             }

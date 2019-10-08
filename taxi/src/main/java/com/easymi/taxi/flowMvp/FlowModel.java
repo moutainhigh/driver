@@ -163,9 +163,9 @@ public class FlowModel implements FlowContract.Model {
         List<PushDataOrder> orderList = new ArrayList<>();
         for (DymOrder dymOrder : DymOrder.findAll()) {
             PushDataOrder dataOrder = new PushDataOrder();
-            if (dymOrder.orderId == order.orderId && dymOrder.orderType.equals(Config.TAXI)) {
+            if (dymOrder.orderId == order.orderId && dymOrder.serviceType.equals(Config.TAXI)) {
                 dataOrder.orderId = dymOrder.orderId;
-                dataOrder.orderType = dymOrder.orderType;
+                dataOrder.orderType = dymOrder.serviceType;
                 dataOrder.status = 0;
                 dataOrder.addedKm = dymOrder.addedKm;
                 dataOrder.addedFee = dymOrder.addedFee;
@@ -202,7 +202,7 @@ public class FlowModel implements FlowContract.Model {
                         if (pullFeeResult != null) {
                             try {
                                 HandlePush.getInstance().handPush(pullFeeResult.fee);
-                                finalOrder = DymOrder.findByIDType(order.orderId, order.orderType);
+                                finalOrder = DymOrder.findByIDType(order.orderId, order.serviceType);
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }

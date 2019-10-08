@@ -188,7 +188,7 @@ public class OrderCustomer implements Serializable {
         values.put("id", id);
         values.put("customerId", customerId);
         values.put("orderId", orderId);
-        values.put("orderType", orderType);
+        values.put("serviceType", orderType);
         values.put("name", name);
         values.put("phone", phone);
         values.put("startAddress", startAddr);
@@ -377,7 +377,7 @@ public class OrderCustomer implements Serializable {
         orderCustomer.id = cursor.getLong(cursor.getColumnIndex("id"));
         orderCustomer.customerId = cursor.getLong(cursor.getColumnIndex("customerId"));
         orderCustomer.orderId = cursor.getLong(cursor.getColumnIndex("orderId"));
-        orderCustomer.orderType = cursor.getString(cursor.getColumnIndex("orderType"));
+        orderCustomer.orderType = cursor.getString(cursor.getColumnIndex("serviceType"));
         orderCustomer.name = cursor.getString(cursor.getColumnIndex("name"));
         orderCustomer.phone = cursor.getString(cursor.getColumnIndex("phone"));
         orderCustomer.startAddr = cursor.getString(cursor.getColumnIndex("startAddress"));
@@ -407,7 +407,7 @@ public class OrderCustomer implements Serializable {
     public static void delete(long orderId, String orderType) {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
-        db.delete("t_zx_order_customer", "orderId = ? and orderType = ? ",
+        db.delete("t_zx_order_customer", "orderId = ? and serviceType = ? ",
                 new String[]{String.valueOf(orderId), orderType});
     }
 
@@ -466,7 +466,7 @@ public class OrderCustomer implements Serializable {
         values.put("photo", photo);
         values.put("subStatus", subStatus);
         values.put("orderId",orderId);
-        values.put("orderType", orderType);
+        values.put("serviceType", orderType);
 
         values.put("acceptSequence", acceptSequence);
         values.put("sendSequence", sendSequence);

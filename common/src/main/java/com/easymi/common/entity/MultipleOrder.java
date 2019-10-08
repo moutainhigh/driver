@@ -67,7 +67,7 @@ public class MultipleOrder extends BaseOrder implements Serializable, MultiItemE
         return "MultipleOrder{" +
                 "orderId=" + id +
 //                ", orderDetailType='" + orderDetailType + '\'' +
-//                ", orderType='" + orderType + '\'' +
+//                ", serviceType='" + serviceType + '\'' +
 //                ", orderTime=" + orderTime +
 //                ", isBookOrder=" + isBookOrder +
 //                ", orderStatus=" + orderStatus +

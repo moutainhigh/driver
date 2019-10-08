@@ -279,6 +279,21 @@ public interface ZCApiService {
                                               @Field("distance") Double distance);
 
 /////////////////// 出租车相关接口
-
+    /**
+     * 出租车结算接口
+     *
+     * @param orderId
+     * @param orderNo
+     * @param fee
+     * @return
+     */
+    @FormUrlEncoded
+    @PUT("api/v1/taxi_online/order/settlement")
+    Observable<EmResult> taxiSettlement(@Field("orderId") Long orderId,
+                                        @Field("orderNo") String orderNo,
+                                        @Field("longitude") Double longitude,
+                                        @Field("latitude") Double latitude,
+                                        @Field("detailAddress") String detailAddress,
+                                        @Field("fee") double fee);
 
 }

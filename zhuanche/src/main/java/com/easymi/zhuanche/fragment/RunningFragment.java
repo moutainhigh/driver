@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseFragment;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.ZCSetting;
@@ -96,6 +97,12 @@ public class RunningFragment extends RxBaseFragment {
 
         feeCon = $(R.id.fee_con);
 
+        if (Config.TAXI.equals(zcOrder.orderType)){
+            ll_con.setVisibility(View.GONE);
+        }else {
+            ll_con.setVisibility(View.VISIBLE);
+        }
+
         serviceMoneyText.setText(df.format(zcOrder.totalFee));
         distanceText.setText(zcOrder.distance + "");
         driveTimeText.setText(zcOrder.travelTime + "");
@@ -109,7 +116,11 @@ public class RunningFragment extends RxBaseFragment {
 
             @Override
             public void onUnlocked() {
-                bridge.showSettleDialog();
+                if (Config.TAXI.equals(zcOrder.orderType)){
+                    bridge.showTaixDialog();
+                }else {
+                    bridge.showSettleDialog();
+                }
                 resetView();
             }
         });

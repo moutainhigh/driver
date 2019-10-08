@@ -32,10 +32,16 @@ public class ZCOrder implements Serializable {
     @SerializedName("orderTypeName")
     public String orderDetailType;
 
-    @SerializedName("orderNo")
-    public String orderNumber;
+    public String orderNo;
 
-    @SerializedName("serviceType")
+    /**
+     * 专车类型
+     */
+    public String serviceType;
+
+    /**
+     * 专车订单子业务类型（出租车）
+     */
     public String orderType;
 
     @SerializedName("status")

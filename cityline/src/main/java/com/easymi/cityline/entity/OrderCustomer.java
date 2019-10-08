@@ -61,7 +61,7 @@
 //
 //    public long orderId;//订单Id 外键
 //
-//    public String orderType;//订单类型
+//    public String serviceType;//订单类型
 //
 //    @SerializedName("passengerName")
 //    public String name;//客户姓名
@@ -124,7 +124,7 @@
 //        values.put("id", id);
 //        values.put("customerId", customerId);
 //        values.put("orderId", orderId);
-//        values.put("orderType", orderType);
+//        values.put("serviceType", serviceType);
 //        values.put("name", name);
 //        values.put("phone", phone);
 //        values.put("startAddress", startAddress);
@@ -214,12 +214,12 @@
 //    /**
 //     * 判断数据库中是否已保存订单相关的OrderCustomer
 //     */
-//    public static boolean exists(long orderId, String orderType) {
+//    public static boolean exists(long orderId, String serviceType) {
 //        SqliteHelper helper = SqliteHelper.getInstance();
 //        SQLiteDatabase db = helper.openSqliteDatabase();
 //        Cursor cursor = db.rawQuery(
-//                "select count(*) from t_zx_order_customer where orderId = ? and orderType = ?",
-//                new String[]{String.valueOf(orderId), orderType});
+//                "select count(*) from t_zx_order_customer where orderId = ? and serviceType = ?",
+//                new String[]{String.valueOf(orderId), serviceType});
 //        boolean flag = false;
 //        try {
 //            if (cursor.moveToNext()) {
@@ -234,12 +234,12 @@
 //    /**
 //     * 判断数据库中是否已保存订单相关的OrderCustomer
 //     */
-//    public static boolean existsById(long id, String orderType) {
+//    public static boolean existsById(long id, String serviceType) {
 //        SqliteHelper helper = SqliteHelper.getInstance();
 //        SQLiteDatabase db = helper.openSqliteDatabase();
 //        Cursor cursor = db.rawQuery(
-//                "select count(*) from t_zx_order_customer where id = ? and orderType = ?",
-//                new String[]{String.valueOf(id), orderType});
+//                "select count(*) from t_zx_order_customer where id = ? and serviceType = ?",
+//                new String[]{String.valueOf(id), serviceType});
 //        boolean flag = false;
 //        try {
 //            if (cursor.moveToNext()) {
@@ -253,14 +253,14 @@
 //    /**
 //     * 根据ID和type查询数据
 //     */
-//    public static List<OrderCustomer> findByIDTypeOrderByAcceptSeq(long orderId, String orderType) {
+//    public static List<OrderCustomer> findByIDTypeOrderByAcceptSeq(long orderId, String serviceType) {
 //        List<OrderCustomer> orderCustomers = new ArrayList<>();
 //
 //        SqliteHelper helper = SqliteHelper.getInstance();
 //        SQLiteDatabase db = helper.openSqliteDatabase();
 //
-//        Cursor cursor = db.rawQuery("select * from t_zx_order_customer where orderId = ? and orderType = ? order by acceptSequence"
-//                , new String[]{String.valueOf(orderId), orderType});
+//        Cursor cursor = db.rawQuery("select * from t_zx_order_customer where orderId = ? and serviceType = ? order by acceptSequence"
+//                , new String[]{String.valueOf(orderId), serviceType});
 //
 //        try {
 //            while (cursor.moveToNext()) {
@@ -275,14 +275,14 @@
 //    /**
 //     * 根据ID和type查询数据
 //     */
-//    public static List<OrderCustomer> findByIDTypeOrderBySendSeq(long orderId, String orderType) {
+//    public static List<OrderCustomer> findByIDTypeOrderBySendSeq(long orderId, String serviceType) {
 //        List<OrderCustomer> orderCustomers = new ArrayList<>();
 //
 //        SqliteHelper helper = SqliteHelper.getInstance();
 //        SQLiteDatabase db = helper.openSqliteDatabase();
 //
-//        Cursor cursor = db.rawQuery("select * from t_zx_order_customer where orderId = ? and orderType = ? order by sendSequence"
-//                , new String[]{String.valueOf(orderId), orderType});
+//        Cursor cursor = db.rawQuery("select * from t_zx_order_customer where orderId = ? and serviceType = ? order by sendSequence"
+//                , new String[]{String.valueOf(orderId), serviceType});
 //
 //        try {
 //            while (cursor.moveToNext()) {
@@ -312,7 +312,7 @@
 //        orderCustomer.id = cursor.getLong(cursor.getColumnIndex("id"));
 //        orderCustomer.customerId = cursor.getLong(cursor.getColumnIndex("customerId"));
 //        orderCustomer.orderId = cursor.getLong(cursor.getColumnIndex("orderId"));
-//        orderCustomer.orderType = cursor.getString(cursor.getColumnIndex("orderType"));
+//        orderCustomer.serviceType = cursor.getString(cursor.getColumnIndex("serviceType"));
 //        orderCustomer.name = cursor.getString(cursor.getColumnIndex("name"));
 //        orderCustomer.phone = cursor.getString(cursor.getColumnIndex("phone"));
 //        orderCustomer.startAddress = cursor.getString(cursor.getColumnIndex("startAddress"));
@@ -336,13 +336,13 @@
 //     * 通过订单id和订单类型删除
 //     *
 //     * @param orderId
-//     * @param orderType
+//     * @param serviceType
 //     */
-//    public static void delete(long orderId, String orderType) {
+//    public static void delete(long orderId, String serviceType) {
 //        SqliteHelper helper = SqliteHelper.getInstance();
 //        SQLiteDatabase db = helper.openSqliteDatabase();
-//        db.delete("t_zx_order_customer", "orderId = ? and orderType = ? ",
-//                new String[]{String.valueOf(orderId), orderType});
+//        db.delete("t_zx_order_customer", "orderId = ? and serviceType = ? ",
+//                new String[]{String.valueOf(orderId), serviceType});
 //    }
 //
 //    public class OrderAddressVo {
@@ -388,7 +388,7 @@
 //        values.put("photo", photo);
 //        values.put("subStatus", subStatus);
 //        values.put("orderId",orderId);
-//        values.put("orderType", orderType);
+//        values.put("serviceType", serviceType);
 ////        values.put("acceptSequence", acceptSequence);
 ////        values.put("sendSequence", sendSequence);
 ////        values.put("num", num);

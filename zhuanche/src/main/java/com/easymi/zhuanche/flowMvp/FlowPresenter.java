@@ -154,7 +154,7 @@ public class FlowPresenter implements FlowContract.Presenter {
         intent.putExtra("startLatlng", start);
         intent.putExtra("endLatlng", end);
         intent.putExtra("orderId", orderId);
-        intent.putExtra("orderType", Config.ZHUANCHE);
+        intent.putExtra("serviceType", Config.ZHUANCHE);
         intent.putExtra(Config.NAVI_MODE, Config.DRIVE_TYPE);
         context.startActivity(intent);
     }
@@ -255,11 +255,12 @@ public class FlowPresenter implements FlowContract.Presenter {
 
     @Override
     public void updateDymOrder(ZCOrder zcOrder) {
-        DymOrder dymOrder = DymOrder.findByIDType(zcOrder.orderId, zcOrder.orderType);
+        DymOrder dymOrder = DymOrder.findByIDType(zcOrder.orderId, zcOrder.serviceType);
         if (null == dymOrder) {
             if (null != zcOrder.orderFee) {
                 dymOrder = zcOrder.orderFee;
                 dymOrder.orderId = zcOrder.orderId;
+                dymOrder.serviceType = zcOrder.serviceType;
                 dymOrder.orderType = zcOrder.orderType;
                 dymOrder.passengerId = zcOrder.passengerId;
                 dymOrder.orderStatus = zcOrder.orderStatus;
@@ -270,10 +271,10 @@ public class FlowPresenter implements FlowContract.Presenter {
                 dymOrder.lowSpeedTime = zcOrder.orderFee.lowSpeedTime / 60;
                 dymOrder.nightTime = zcOrder.orderFee.nightTime / 60;
 
-                dymOrder.orderNo = zcOrder.orderNumber;
+                dymOrder.orderNo = zcOrder.orderNo;
             } else {
-                dymOrder = new DymOrder(zcOrder.orderId, zcOrder.orderType,
-                        zcOrder.passengerId, zcOrder.orderStatus);
+                dymOrder = new DymOrder(zcOrder.orderId, zcOrder.serviceType,
+                        zcOrder.passengerId, zcOrder.orderStatus,zcOrder.orderType);
             }
             dymOrder.orderStatus = zcOrder.orderStatus;
             dymOrder.save();
@@ -283,6 +284,7 @@ public class FlowPresenter implements FlowContract.Presenter {
                 dymOrder = zcOrder.orderFee;
                 dymOrder.id = id;
                 dymOrder.orderId = zcOrder.orderId;
+                dymOrder.serviceType = zcOrder.serviceType;
                 dymOrder.orderType = zcOrder.orderType;
                 dymOrder.passengerId = zcOrder.passengerId;
                 dymOrder.orderStatus = zcOrder.orderStatus;
@@ -293,7 +295,7 @@ public class FlowPresenter implements FlowContract.Presenter {
                 dymOrder.lowSpeedTime = zcOrder.orderFee.lowSpeedTime / 60;
                 dymOrder.nightTime = zcOrder.orderFee.nightTime / 60;
 
-                dymOrder.orderNo = zcOrder.orderNumber;
+                dymOrder.orderNo = zcOrder.orderNo;
             }
             dymOrder.orderStatus = zcOrder.orderStatus;
             dymOrder.updateAll();
@@ -323,5 +325,13 @@ public class FlowPresenter implements FlowContract.Presenter {
     public void getConsumerInfo(Long orderId) {
         view.getManager().add(model.consumerInfo(orderId).subscribe(new MySubscriber<>(context, true,
                 false, consumerResult -> view.showConsumer(consumerResult.consumerInfo))));
+    }
+
+    @Override
+    public void taxiSettlement(Long orderId, String orderNo, double fee) {
+        Observable<EmResult> observable = model.taxiSettlement(orderId, orderNo, fee);
+        view.getManager().add(observable.subscribe(new MySubscriber<>(context, true, true, zcOrderResult -> {
+            view.settleSuc();
+        })));
     }
 }

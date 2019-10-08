@@ -126,7 +126,7 @@ public class CusListFragment extends RxBaseFragment {
             return;
         }
         orderId = args.getLong("orderId", 0);
-        orderType = args.getString("orderType", "");
+        orderType = args.getString("serviceType", "");
         dymOrder = DymOrder.findByIDType(orderId, orderType);
     }
 
@@ -169,7 +169,7 @@ public class CusListFragment extends RxBaseFragment {
         if (flag == StaticVal.PLAN_ACCEPT) {
             carpoolOrderList = CarpoolOrder.findByIDTypeOrderByAcceptSeq(orderId, orderType);
         } else {
-//            carpoolOrderList = CarpoolOrder.findByIDTypeOrderBySendSeq(orderId, orderType);
+//            carpoolOrderList = CarpoolOrder.findByIDTypeOrderBySendSeq(orderId, serviceType);
         }
         cusListAdapter.setOrderCustomers(carpoolOrderList);
     }

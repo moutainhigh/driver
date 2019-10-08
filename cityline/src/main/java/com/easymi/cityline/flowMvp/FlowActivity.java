@@ -488,7 +488,7 @@ public class FlowActivity extends RxBaseActivity implements
         cusListFragment = new CusListFragment();
         Bundle bundle = new Bundle();
         bundle.putLong("orderId", zxOrder.orderId);
-        bundle.putString("orderType", zxOrder.orderType);
+        bundle.putString("serviceType", zxOrder.orderType);
         cusListFragment.setArguments(bundle);
 
         changeSeqFragment = new ChangeSeqFragment();
@@ -636,31 +636,31 @@ public class FlowActivity extends RxBaseActivity implements
 
             @Override
             public void arriveStart(OrderCustomer orderCustomer) {
-                //TODO 到达预约地
+                // 到达预约地
                 presenter.arriveStart(orderCustomer);
             }
 
             @Override
             public void acceptCustomer(OrderCustomer orderCustomer) {
-                //TODO 接到客户
+                // 接到客户
                 presenter.acceptCustomer(orderCustomer);
             }
 
             @Override
             public void jumpAccept(OrderCustomer orderCustomer) {
-                //TODO 跳过接
+                // 跳过接
                 presenter.jumpAccept(orderCustomer);
             }
 
             @Override
             public void arriveEnd(OrderCustomer orderCustomer) {
-                //TODO 到达目的地
+                // 到达目的地
                 presenter.arriveEnd(orderCustomer);
             }
 
             @Override
             public void jumpSend(OrderCustomer orderCustomer) {
-                //TODO 跳过送
+                // 跳过送
                 presenter.jumpSend(orderCustomer);
             }
 

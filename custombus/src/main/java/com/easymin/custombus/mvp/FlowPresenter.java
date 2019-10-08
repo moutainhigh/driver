@@ -163,7 +163,7 @@ public class FlowPresenter implements FlowContract.Presenter {
 //                            for (StationResult busStation : result.getData().stationVos) {
 //                                if (!StationResult.existsById(busStation.id, result.getData().id)) {
 //                                    busStation.scheduleId = result.getData().id;
-//                                    busStation.orderType = Config.COUNTRY;
+//                                    busStation.serviceType = Config.COUNTRY;
 //                                    busStation.save();
 //                                }
 //                            }

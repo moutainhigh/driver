@@ -228,7 +228,7 @@ public class CarpoolOrder implements Serializable {
         values.put("timeSlot", timeSlot);
         values.put("status", status);
         values.put("scheduleId", scheduleId);
-        values.put("orderType", orderType);
+        values.put("serviceType", orderType);
         values.put("startAddress", startAddress);
         values.put("endAddress", endAddress);
         values.put("startLatitude", startLatitude);
@@ -335,14 +335,14 @@ public class CarpoolOrder implements Serializable {
 //    /**
 //     * 根据ID和type查询数据
 //     */
-//    public static List<CarpoolOrder> findByIDTypeOrderBySendSeq(long orderId, String orderType) {
+//    public static List<CarpoolOrder> findByIDTypeOrderBySendSeq(long orderId, String serviceType) {
 //        List<CarpoolOrder> carpoolOrders = new ArrayList<>();
 //
 //        SqliteHelper helper = SqliteHelper.getInstance();
 //        SQLiteDatabase db = helper.openSqliteDatabase();
 //
-//        Cursor cursor = db.rawQuery("select * from t_cp_order_customer where orderId = ? and orderType = ? order by sendSequence"
-//                , new String[]{String.valueOf(orderId), orderType});
+//        Cursor cursor = db.rawQuery("select * from t_cp_order_customer where orderId = ? and serviceType = ? order by sendSequence"
+//                , new String[]{String.valueOf(orderId), serviceType});
 //
 //        try {
 //            while (cursor.moveToNext()) {
@@ -384,7 +384,7 @@ public class CarpoolOrder implements Serializable {
         carpoolOrder.timeSlot = cursor.getString(cursor.getColumnIndex("timeSlot"));
         carpoolOrder.status = cursor.getInt(cursor.getColumnIndex("status"));
         carpoolOrder.scheduleId = cursor.getLong(cursor.getColumnIndex("scheduleId"));
-        carpoolOrder.orderType = cursor.getString(cursor.getColumnIndex("orderType"));
+        carpoolOrder.orderType = cursor.getString(cursor.getColumnIndex("serviceType"));
         carpoolOrder.startAddress = cursor.getString(cursor.getColumnIndex("startAddress"));
         carpoolOrder.endAddress = cursor.getString(cursor.getColumnIndex("endAddress"));
         carpoolOrder.startLatitude = cursor.getDouble(cursor.getColumnIndex("startLatitude"));
@@ -408,7 +408,7 @@ public class CarpoolOrder implements Serializable {
     public static void delete(long id, String orderType) {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
-        db.delete("t_cp_order_customer", "id = ? and orderType = ? ",
+        db.delete("t_cp_order_customer", "id = ? and serviceType = ? ",
                 new String[]{String.valueOf(id), orderType});
     }
 
@@ -452,7 +452,7 @@ public class CarpoolOrder implements Serializable {
         values.put("timeSlot", timeSlot);
         values.put("status", status);
         values.put("scheduleId", scheduleId);
-        values.put("orderType", orderType);
+        values.put("serviceType", orderType);
 
         values.put("startAddress", startAddress);
         values.put("endAddress", endAddress);

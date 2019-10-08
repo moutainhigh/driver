@@ -146,8 +146,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                                             dymOrder.updateAll();
                                         } else {
                                             //非专线  本地没有
-                                            dymOrder = new DymOrder(order.orderId, order.serviceType,
-                                                    order.passengerId, order.status);
+                                            dymOrder = new DymOrder(order.orderId, order.serviceType, order.passengerId, order.status,order.orderType);
                                             dymOrder.id = order.id;
 
                                             dymOrder.orderNo = order.orderNo;
@@ -174,7 +173,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                                             dymOrder.id = order.id;
                                             dymOrder.orderStatus = ZXOrderStatus.WAIT_START;
                                             dymOrder.orderId = order.scheduleId;
-                                            dymOrder.orderType = order.serviceType;
+                                            dymOrder.serviceType = order.serviceType;
                                             dymOrder.saveOrUpdate();
                                         }
                                     } else if (TextUtils.equals(order.serviceType, Config.CARPOOL)) {
@@ -195,7 +194,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                                             dymOrder.id = order.id;
                                             dymOrder.orderStatus = ZXOrderStatus.WAIT_START;
                                             dymOrder.orderId = order.scheduleId;
-                                            dymOrder.orderType = order.serviceType;
+                                            dymOrder.serviceType = order.serviceType;
                                             dymOrder.saveOrUpdate();
                                         }
                                     }
@@ -207,14 +206,14 @@ public class WorkPresenter implements WorkContract.Presenter {
                                 for (DymOrder dymOrder : allDym) {
                                     boolean isExist = false;
                                     for (MultipleOrder order : orders) {
-                                        if (dymOrder.orderType.equals(Config.CITY_LINE)
-                                                || dymOrder.orderType.equals(Config.CARPOOL)) {
+                                        if (dymOrder.serviceType.equals(Config.CITY_LINE)
+                                                || dymOrder.serviceType.equals(Config.CARPOOL)) {
                                             if ((dymOrder.orderId == order.scheduleId)) {
                                                 isExist = true;
                                                 break;
                                             }
-                                        } else if (dymOrder.orderType.equals(Config.ZHUANCHE)
-                                                || dymOrder.orderType.equals(Config.TAXI)
+                                        } else if (dymOrder.serviceType.equals(Config.ZHUANCHE)
+                                                || dymOrder.serviceType.equals(Config.TAXI)
                                                 || TextUtils.equals(order.serviceType, Config.CHARTERED)
                                                 || TextUtils.equals(order.serviceType, Config.RENTAL)
                                                 || TextUtils.equals(order.serviceType, Config.GOV)

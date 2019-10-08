@@ -67,7 +67,7 @@ public class SettleFragmentDialog {
         this.context = context;
         this.zcOrder = zcOrder;
         this.bridge = bridge;
-        dymOrder = DymOrder.findByIDType(zcOrder.orderId, zcOrder.orderType);
+        dymOrder = DymOrder.findByIDType(zcOrder.orderId, zcOrder.serviceType);
         if (null == dymOrder) {
             if (zcOrder.orderFee != null) {
                 dymOrder = zcOrder.orderFee;
@@ -160,7 +160,7 @@ public class SettleFragmentDialog {
     private void initView() {
         initEdit();
         if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-            DymOrder dOrder = DymOrder.findByIDType(zcOrder.orderId, zcOrder.orderType);
+            DymOrder dOrder = DymOrder.findByIDType(zcOrder.orderId, zcOrder.serviceType);
             if (dOrder == null) {
                 return;
             }

@@ -92,9 +92,9 @@ public class BuildPushUtil {
 
         for (DymOrder dymOrder : DymOrder.findAll()) {
             PushDataOrder dataOrder = new PushDataOrder();
-            if (dymOrder.orderType.equals(Config.CITY_LINE)) {
+            if (dymOrder.serviceType.equals(Config.CITY_LINE)) {
                 if (dymOrder.orderStatus == 30 || dymOrder.orderStatus == 35) {
-                    for (OrderCustomer orderCustomer : OrderCustomer.findByIDTypeOrderByAcceptSeq(dymOrder.orderId, dymOrder.orderType)) {
+                    for (OrderCustomer orderCustomer : OrderCustomer.findByIDTypeOrderByAcceptSeq(dymOrder.orderId, dymOrder.serviceType)) {
                         dataOrder.orderId = orderCustomer.orderId;
                         dataOrder.orderType = orderCustomer.orderType;
 
@@ -103,9 +103,9 @@ public class BuildPushUtil {
                     }
                     orderList.add(dataOrder);
                 }
-            } else if (dymOrder.orderType.equals(Config.CARPOOL)) {
+            } else if (dymOrder.serviceType.equals(Config.CARPOOL)) {
                 if (dymOrder.orderStatus >= 10 && dymOrder.orderStatus <= 30) {
-                    for (CarpoolOrder carpoolOrder : CarpoolOrder.findByIDTypeOrderByAcceptSeq(dymOrder.orderId, dymOrder.orderType)) {
+                    for (CarpoolOrder carpoolOrder : CarpoolOrder.findByIDTypeOrderByAcceptSeq(dymOrder.orderId, dymOrder.serviceType)) {
                         dataOrder.orderId = carpoolOrder.id;
                         dataOrder.orderType = carpoolOrder.orderType;
 
@@ -118,19 +118,19 @@ public class BuildPushUtil {
                 }
             } else {
                 dataOrder.orderId = dymOrder.orderId;
-                dataOrder.orderType = dymOrder.orderType;
+                dataOrder.orderType = dymOrder.serviceType;
                 dataOrder.status = dymOrder.orderStatus;
                 dataOrder.addedKm = dymOrder.addedKm;
                 dataOrder.addedFee = dymOrder.addedFee;
 
-                dataOrder.business = dymOrder.orderType;
+                dataOrder.business = dymOrder.serviceType;
                 dataOrder.passengerId = dymOrder.passengerId;
 
-                if (dymOrder.orderType.equals(Config.DAIJIA)) {
+                if (dymOrder.serviceType.equals(Config.DAIJIA)) {
 
-                } else if (dymOrder.orderType.equals(Config.ZHUANCHE)
-                        || dymOrder.orderType.equals(Config.TAXI)
-                        || dymOrder.orderType.equals(Config.GOV)) {
+                } else if (dymOrder.serviceType.equals(Config.ZHUANCHE)
+                        || dymOrder.serviceType.equals(Config.TAXI)
+                        || dymOrder.serviceType.equals(Config.GOV)) {
 
                     dataOrder.status = dymOrder.orderStatus;
 

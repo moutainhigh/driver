@@ -135,6 +135,11 @@ public interface FlowContract {
         void showConsumer(ConsumerInfo consumerInfo);
 
         /**
+         * 出租车结算成功
+         */
+        void settleSuc();
+
+        /**
          * 获取 RxManager
          * @return
          */
@@ -271,6 +276,14 @@ public interface FlowContract {
          */
         void getConsumerInfo(Long orderId);
 
+        /**
+         * 订单结算
+         * @param orderId
+         * @param orderNo
+         * @param fee
+         */
+        void taxiSettlement(Long orderId, String orderNo,double fee);
+
     }
 
     interface Model {
@@ -371,5 +384,15 @@ public interface FlowContract {
          * @return
          */
         Observable<JsonElement> payOrder(Long orderId, String payType, Long version);
+
+
+        /**
+         * 结算订单
+         * @param orderId
+         * @param orderNo
+         * @param fee  输入费用
+         * @return
+         */
+        Observable<EmResult> taxiSettlement(Long orderId, String orderNo,double fee);
     }
 }

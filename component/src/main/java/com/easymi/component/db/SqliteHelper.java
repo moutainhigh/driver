@@ -13,7 +13,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "data.db";
 
-    private static final int VERSION = 190;
+    private static final int VERSION = 191;
 
     private StringBuffer sqlBuf;
 
@@ -119,7 +119,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("orderId").append(" ").append("LONG").append(",")
                 .append("bookTime").append(" ").append("LONG").append(",")
                 .append("passengerId").append(" ").append("LONG").append(",")
-                .append("orderType").append(" ").append("TEXT").append(",")
+                .append("serviceType").append(" ").append("TEXT").append(",")
                 .append("passengerName").append(" ").append("TEXT").append(",")
                 .append("passengerPhone").append(" ").append("TEXT").append(",")
                 .append("avatar").append(" ").append("TEXT").append(",")
@@ -201,7 +201,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
         sqlBuf.append("CREATE TABLE ").append("t_dyminfo").append(" (")
                 .append("id").append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
                 .append("orderId").append(" ").append("LONG").append(",")
-                .append("orderType").append(" ").append("TEXT").append(",")
+                .append("serviceType").append(" ").append("TEXT").append(",")
                 .append("startFee").append(" ").append("DOUBLE").append(",")
                 .append("waitTime").append(" ").append("INTEGER").append(",")
                 .append("waitTimeFee").append(" ").append("DOUBLE").append(",")
@@ -239,6 +239,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("stageArrays").append(" ").append("TEXT").append(",")
 
                 .append("orderNo").append(" ").append("TEXT").append(",")
+                .append("orderType").append(" ").append("TEXT").append(",")
 
                 .append("orderStatus").append(" ").append("INTEGER")
                 .append(");");
@@ -343,7 +344,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("id").append(" INTEGER PRIMARY KEY, ")
                 .append("customerId").append(" ").append("LONG").append(",")
                 .append("orderId").append(" ").append("LONG").append(",")
-                .append("orderType").append(" ").append("TEXT").append(",")
+                .append("serviceType").append(" ").append("TEXT").append(",")
                 .append("name").append(" ").append("TEXT").append(",")
                 .append("phone").append(" ").append("TEXT").append(",")
                 .append("startAddr").append(" ").append("TEXT").append(",")
@@ -373,7 +374,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("longitude").append(" ").append("DOUBLE").append(",")
                 .append("latitude").append(" ").append("DOUBLE").append(",")
                 .append("scheduleId").append(" ").append("LONG").append(",")
-                .append("orderType").append(" ").append("TEXT").append(",")
+                .append("serviceType").append(" ").append("TEXT").append(",")
                 .append("status").append(" ").append("INTEGER").append(",")
                 .append("waitTime").append(" ").append("LONG")
                 .append(");");

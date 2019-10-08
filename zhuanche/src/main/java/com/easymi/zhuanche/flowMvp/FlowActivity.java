@@ -65,7 +65,6 @@ import com.easymi.component.push.PushEvent;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.LogUtil;
 import com.easymi.component.utils.MapUtil;
 import com.easymi.component.utils.SensorEventHelper;
 import com.easymi.component.utils.StringUtils;
@@ -89,6 +88,7 @@ import com.easymi.zhuanche.fragment.WaitFragment;
 import com.easymi.zhuanche.receiver.CancelOrderReceiver;
 import com.easymi.zhuanche.receiver.OrderFinishReceiver;
 import com.easymi.zhuanche.widget.RefuseOrderDialog;
+import com.easymi.zhuanche.widget.TaxiSettleDialog;
 import com.google.gson.Gson;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
@@ -372,7 +372,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         } else {
             tvMark.setText(zcOrder.remark);
         }
-        orderNumberText.setText(zcOrder.orderNumber);
+        orderNumberText.setText(zcOrder.orderNo);
         orderTypeText.setText(zcOrder.orderDetailType);
         tagContainerLayout.removeAllTags();
         if (StringUtils.isNotBlank(zcOrder.passengerTags)) {
@@ -1110,14 +1110,14 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 //                CenterUtil centerUtil = new CenterUtil(FlowActivity.this,Config.APP_KEY,
 //                        XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
 //                        XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
-//                centerUtil.smsShareAuto( zcOrder.orderId, EmUtil.getEmployInfo().companyId,  zcOrder.passengerId,  zcOrder.passengerPhone,  zcOrder.orderType);
+//                centerUtil.smsShareAuto( zcOrder.orderId, EmUtil.getEmployInfo().companyId,  zcOrder.passengerId,  zcOrder.passengerPhone,  zcOrder.serviceType);
 //                centerUtil.checkingAuth( zcOrder.passengerId);
             }
 
             @Override
             public void doRefuse() {
                 RefuseOrderDialog.Builder builder = new RefuseOrderDialog.Builder(FlowActivity.this);
-                builder.setApplyClick(reason -> presenter.refuseOrder(zcOrder.orderId, zcOrder.orderType, reason));
+                builder.setApplyClick(reason -> presenter.refuseOrder(zcOrder.orderId, zcOrder.serviceType, reason));
                 RefuseOrderDialog dialog1 = builder.create();
                 dialog1.setCanceledOnTouchOutside(true);
                 dialog1.show();
@@ -1206,6 +1206,23 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             }
 
             @Override
+            public void showTaixDialog() {
+                TaxiSettleDialog dialog = new TaxiSettleDialog(FlowActivity.this);
+                dialog.setOnMyClickListener((view, string) -> {
+                    if (TextUtils.isEmpty(string)) {
+                        ToastUtil.showMessage(FlowActivity.this, "请输入结算金额");
+                    } else if (Double.parseDouble(string) <= 0) {
+                        ToastUtil.showMessage(FlowActivity.this, "请输入正确结算金额");
+                    } else if (Double.parseDouble(string) > 10000) {
+                        ToastUtil.showMessage(FlowActivity.this, "请输入正确结算金额");
+                    } else {
+                        presenter.taxiSettlement(orderId, zcOrder.orderNo, Double.parseDouble(string));
+                    }
+                });
+                dialog.show();
+            }
+
+            @Override
             public void doConfirmMoney(LoadingButton btn, DymOrder dymOrder) {
             }
 
@@ -1262,6 +1279,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
     }
 
+    @Override
+    public void settleSuc() {
+        finish();
+    }
 
     @Override
     protected void onStart() {
@@ -1421,7 +1442,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             return;
         }
         if (orderId == zcOrder.orderId
-                && orderType.equals(zcOrder.orderType)) {
+                && orderType.equals(zcOrder.serviceType)) {
             //todo 一键报警
 //            AudioUtil audioUtil = new AudioUtil();
 //            audioUtil.onRecord(this, false);

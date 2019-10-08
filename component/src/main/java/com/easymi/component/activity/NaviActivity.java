@@ -141,7 +141,7 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
         EventBus.getDefault().register(this);
         mStartLatlng = getIntent().getParcelableExtra("startLatlng");
         mEndLatlng = getIntent().getParcelableExtra("endLatlng");
-        orderType = getIntent().getStringExtra("orderType");
+        orderType = getIntent().getStringExtra("serviceType");
         orderId = getIntent().getLongExtra("orderId", -1);
         if (TextUtils.equals(Config.ZHUANCHE, orderType)) {
             passengerLoc(orderId);
@@ -168,44 +168,6 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     }
 
-    /**
-     * 定时器
-     */
-    private Timer timer;
-    private TimerTask timerTask;
-
-    /**
-     * 显示费用 已废弃
-     */
-    private void showFee() {
-        simpleFeeCon = findViewById(R.id.simple_fee_con);
-        lcTxt = findViewById(R.id.lc);
-        feeTxt = findViewById(R.id.fee);
-        DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
-        if (dymOrder != null && dymOrder.orderType.equals(Config.DAIJIA)) {
-            if (dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
-                simpleFeeCon.setVisibility(View.VISIBLE);
-                lcTxt.setText(getString(R.string.order_dis) + dymOrder.distance + getString(R.string.dis_unit));
-                feeTxt.setText(getString(R.string.order_fee) + dymOrder.totalFee + getString(R.string.money_unit));
-
-                timer = new Timer();
-                timerTask = new TimerTask() {
-                    @Override
-                    public void run() {
-                        runOnUiThread(() -> {
-                            DymOrder dymOrder1 = DymOrder.findByIDType(orderId, orderType);
-                            lcTxt.setText(getString(R.string.order_dis) + dymOrder1.distance + getString(R.string.dis_unit));
-                            feeTxt.setText(getString(R.string.order_fee) + dymOrder1.totalFee + getString(R.string.money_unit));
-                        });
-                    }
-                };
-                timer.schedule(timerTask, 2000, 2000);
-            } else {
-                simpleFeeCon.setVisibility(View.GONE);
-            }
-        }
-    }
-
     @Override
     public boolean isEnableSwipe() {
         return false;
@@ -214,20 +176,12 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
     @Override
     protected void onStart() {
         super.onStart();
-        if (orderId != -1 && StringUtils.isNotBlank(orderType)) {
-            showFee();
-        }
+
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (null != timer) {
-            timer.cancel();
-        }
-        if (null != timerTask) {
-            timerTask.cancel();
-        }
     }
 
     @Override

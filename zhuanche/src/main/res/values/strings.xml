@@ -204,4 +204,9 @@
 
 
     <string name="zc_jietifei">阶梯费</string>
+
+    <string name="input_settle">结算金额</string>
+    <string name="hint_settle">请输入结算金额</string>
+    <string name="com_cancel">取消</string>
+    <string name="com_sure">确认</string>
 </resources>

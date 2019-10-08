@@ -24,8 +24,6 @@ public class BaseOrder implements Serializable {
 
     public String passengerTags;
 
-//hf
-
     /**
      * 热订单id
      */
