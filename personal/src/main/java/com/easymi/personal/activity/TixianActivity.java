@@ -83,11 +83,9 @@ public class TixianActivity extends RxBaseActivity {
         tixianRecord = findViewById(R.id.tixian_record);
 
         tixianRuleText.setOnClickListener(view -> {
-                    //                startActivity(new Intent(TixianActivity.this, TixianRuleActivity.class))
-                    Intent intent = new Intent(this, WebActivity.class);
-                    intent.putExtra("url", Config.H5_HOST + "#/protocol?articleName=driverPutForward&appKey=" + Config.APP_KEY);
-                    intent.putExtra("title", getString(R.string.tixian_rule));
-                    startActivity(intent);
+                    WebActivity.goWebActivity(this
+                            , R.string.tixian_rule
+                            , WebActivity.IWebVariable.DRIVER_PUT_FORWARD);
                 }
         );
         tixianRecord.setOnClickListener(view -> startActivity(new Intent(TixianActivity.this, TixianRecordActivity.class)));

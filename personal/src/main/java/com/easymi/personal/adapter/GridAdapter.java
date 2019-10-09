@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.easymi.component.Config;
 import com.easymi.component.activity.WebActivity;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
@@ -25,6 +24,7 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: GridAdapter
+ *
  * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
@@ -43,6 +43,7 @@ public class GridAdapter extends BaseAdapter {
 
     /**
      * 设置数据
+     *
      * @param stringList
      */
     public void setStringList(List<String> stringList) {
@@ -108,8 +109,8 @@ public class GridAdapter extends BaseAdapter {
             holder.item_pic.setImageResource(R.mipmap.contract_service);
             holder.item_root.setOnClickListener(v ->
 //                    PhoneUtil.call(context, EmUtil.getEmployInfo().company_phone));
-            PhoneUtil.call(context, "1111111"));
-        }else if (str.equals(context.getString(R.string.help_center))) {
+                    PhoneUtil.call(context, "1111111"));
+        } else if (str.equals(context.getString(R.string.help_center))) {
             holder.item_pic.setImageResource(R.mipmap.p_help);
             holder.item_root.setOnClickListener(view -> {
 //                Intent intent = new Intent(context, HelpCenterActivity.class);
@@ -118,12 +119,12 @@ public class GridAdapter extends BaseAdapter {
 //                intent.putExtra("tag", "driverHelp");
 //                intent.putExtra("title", context.getString(R.string.set_help));
 //                context.startActivity(intent);
-                Intent intent = new Intent(context, WebActivity.class);
-                intent.putExtra("url", Config.H5_HOST+"#/protocol?articleName=driverHelp&appKey="+ Config.APP_KEY);
-                intent.putExtra("title", context.getString(R.string.set_help));
-                context.startActivity(intent);
+
+                WebActivity.goWebActivity(context
+                        , R.string.set_help
+                        , WebActivity.IWebVariable.DRIVER_HELP);
             });
-        }else if (str.equals(context.getString(R.string.sys_check))) {
+        } else if (str.equals(context.getString(R.string.sys_check))) {
             holder.item_pic.setImageResource(R.mipmap.p_sys_check);
             holder.item_root.setOnClickListener(view -> {
                 Intent intent = new Intent(context, SysCheckActivity.class);

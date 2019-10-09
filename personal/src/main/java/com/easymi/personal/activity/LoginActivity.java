@@ -157,10 +157,9 @@ public class LoginActivity extends RxBaseActivity {
      */
     private void initBox() {
         textAgreement.setOnClickListener(view -> {
-            Intent intent = new Intent(LoginActivity.this, WebActivity.class);
-            intent.putExtra("url", Config.H5_HOST + "#/protocol?articleName=driverLogin&appKey=" + Config.APP_KEY);
-            intent.putExtra("title", getString(R.string.login_agreement));
-            startActivity(intent);
+            WebActivity.goWebActivity(this
+                    , R.string.login_agreement
+                    , WebActivity.IWebVariable.DRIVER_LOGIN);
         });
     }
 

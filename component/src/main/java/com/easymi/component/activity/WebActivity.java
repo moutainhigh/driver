@@ -1,11 +1,14 @@
 package com.easymi.component.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.StringDef;
+import android.support.annotation.StringRes;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -17,13 +20,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.easymi.component.Config;
 import com.easymi.component.R;
 import com.easymi.component.base.RxBaseActivity;
-import com.easymi.component.utils.Log;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName:
+ *
  * @Author: shine
  * Date: 2018/12/24 下午5:00
  * Description:
@@ -31,7 +35,7 @@ import com.easymi.component.utils.Log;
  */
 @Route(path = "/component/WebActivity")
 public class WebActivity extends RxBaseActivity implements View.OnClickListener {
-    public String name, url;
+    public String name;
 
     WebView webView;
 
@@ -43,6 +47,7 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
      * 进度条
      */
     private ProgressBar myProgressBar;
+    private String url;
 
     @Override
     public int getLayoutId() {
@@ -78,7 +83,6 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
     @Override
     public void onPause() {
         super.onPause();
-//        webView.loadData("about:blank", "text/html", "UTF-8");
         webView.onPause();
     }
 
@@ -100,8 +104,9 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
     public void init() {
 
         Intent localIntent = getIntent();
-        url = localIntent.getStringExtra("url");
-        if (url != null && !url.contains("http")) {
+        String articleName = getIntent().getStringExtra("articleName");
+        url = Config.H5_HOST + "#/protocol?articleName==" + articleName + "&appKey=" + Config.APP_KEY;
+        if (!url.contains("http") || !url.contains("https")) {
             url = "http://" + url;
         }
         String titleStr = localIntent.getStringExtra("title");
@@ -203,6 +208,7 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
 
     /**
      * 设置返回键事件
+     *
      * @param view
      */
     public void backAction(View view) {
@@ -223,5 +229,22 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
             }
         }
         return false;
+    }
+
+    public static void goWebActivity(Context context, @StringRes int res, @IWebVariableType String articleName) {
+        Intent intent = new Intent(context, WebActivity.class);
+        intent.putExtra("name", context.getString(res));
+        intent.putExtra("articleName", articleName);
+        context.startActivity(intent);
+    }
+
+    public interface IWebVariable {
+        String DRIVER_HELP = "driverHelp";
+        String DRIVER_LOGIN = "driverLogin";
+        String DRIVER_PUT_FORWARD = "driverPutForward";
+    }
+
+    @StringDef({IWebVariable.DRIVER_HELP, IWebVariable.DRIVER_LOGIN, IWebVariable.DRIVER_PUT_FORWARD})
+    @interface IWebVariableType {
     }
 }
