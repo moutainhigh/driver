@@ -220,10 +220,10 @@ public class NotStartFragment extends RxBaseFragment {
         timeCountDown.setText(sb.toString());
 
         if (leftSec > 0) {
-            bottomBtn.setText("规划线路");
+            bottomBtn.setText("规划路径");
             bottomBtn.setOnClickListener(view -> bridge.toChangeSeq(0));
         } else {
-            bottomBtn.setText("规划线路");
+            bottomBtn.setText("规划路径");
             bottomBtn.setOnClickListener(view -> {
                 bridge.toChangeSeq(0);
             });

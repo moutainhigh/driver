@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/cus_name"
                 android:layout_marginTop="3dp"
-                android:text="车票:1"
+                android:text="人数:1"
                 android:textColor="#999999"
                 android:textSize="12sp" />
 

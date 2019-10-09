@@ -178,11 +178,11 @@ public class CreateOrderActivity extends RxPayActivity {
 
         carPoolCreateOrderTvStart.setOnClickListener(view -> {
             if (pcOrder == null) {
-                ToastUtil.showMessage(CreateOrderActivity.this, "请先选择班次");
+                ToastUtil.showMessage(CreateOrderActivity.this, "请先选择时段");
                 return;
             }
             if (stationResult == null || stationResult.data == null || stationResult.data.size() < 2) {
-                ToastUtil.showMessage(CreateOrderActivity.this, "未查询到站点信息");
+                ToastUtil.showMessage(CreateOrderActivity.this, "未查询到上下车点信息");
                 return;
             }
             Intent intent = new Intent(CreateOrderActivity.this, SelectPlaceOnMapActivity.class);
@@ -194,11 +194,11 @@ public class CreateOrderActivity extends RxPayActivity {
 
         carPoolCreateOrderTvEnd.setOnClickListener(view -> {
             if (pcOrder == null) {
-                ToastUtil.showMessage(CreateOrderActivity.this, "请先选择班次");
+                ToastUtil.showMessage(CreateOrderActivity.this, "请先选择时段");
                 return;
             }
             if (stationResult == null || stationResult.data.get(1) == null) {
-                ToastUtil.showMessage(CreateOrderActivity.this, "未查询到站点信息");
+                ToastUtil.showMessage(CreateOrderActivity.this, "未查询到上下车点信息");
                 return;
             }
             Intent intent = new Intent(CreateOrderActivity.this, SelectPlaceOnMapActivity.class);
@@ -286,7 +286,7 @@ public class CreateOrderActivity extends RxPayActivity {
 
     public void goSeatSelect() {
         if (pcOrder == null) {
-            ToastUtil.showMessage(CreateOrderActivity.this, "请先选择班次");
+            ToastUtil.showMessage(CreateOrderActivity.this, "请先选择时段");
             return;
         }
         if (startSite == null) {
@@ -357,7 +357,7 @@ public class CreateOrderActivity extends RxPayActivity {
             @Override
             public void onClick(View v) {
                 if (pcOrder == null) {
-                    ToastUtil.showMessage(CreateOrderActivity.this, "请先选择班次");
+                    ToastUtil.showMessage(CreateOrderActivity.this, "请先选择时段");
                 } else if (startSite == null) {
                     ToastUtil.showMessage(CreateOrderActivity.this, "请先选择上车点");
                 } else if (endSite == null) {
@@ -436,7 +436,7 @@ public class CreateOrderActivity extends RxPayActivity {
                     if (startSite.getId() == endSite.getId()) {
                         endSite = null;
                         carPoolCreateOrderTvEnd.setText("");
-                        ToastUtil.showMessage(this, "上车点和下车点是同一站点");
+                        ToastUtil.showMessage(this, "上车点和下车点是同一地点");
                     } else if (startSite.getSequence() > endSite.getSequence()) {
                         endSite = null;
                         carPoolCreateOrderTvEnd.setText("");

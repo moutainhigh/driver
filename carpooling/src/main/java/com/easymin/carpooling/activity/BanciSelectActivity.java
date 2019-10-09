@@ -93,7 +93,7 @@ public class BanciSelectActivity extends RxBaseActivity {
             }
 
             if (pincheOrder.seats == 0){
-                ToastUtil.showMessage(BanciSelectActivity.this, "该班次没有余票，不能补单");
+                ToastUtil.showMessage(BanciSelectActivity.this, "该时段没有余票，不能补单");
                 return;
             }
 
@@ -122,7 +122,7 @@ public class BanciSelectActivity extends RxBaseActivity {
     @Override
     public void initToolBar() {
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("班次选择");
+        toolbar.setTitle("时段选择");
         toolbar.setLeftIcon(R.drawable.ic_arrow_back, v -> finish());
     }
 
