@@ -14,6 +14,7 @@ import com.easymi.common.adapter.VpAdapter;
 import com.easymi.common.widget.CreatOrderDialog;
 import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.entity.Vehicle;
 import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.widget.CusToolbar;
@@ -57,7 +58,7 @@ public class OrderActivity extends RxBaseActivity {
         toolbar.setLeftIcon(R.drawable.ic_arrow_back, v -> finish());
 
         if (EmUtil.getEmployInfo().serviceType.equals(Config.CITY_LINE) ||
-                (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)) ||
+                (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE) &&  Vehicle.findByEmployId(EmUtil.getEmployId()).isTaxiNormal != 1) ||
                 (EmUtil.getEmployInfo().serviceType.equals(Config.CARPOOL) && ZCSetting.findOne().isRepairOrder == 1) ||
                 EmUtil.getEmployInfo().serviceType.equals(Config.COUNTRY) && ZCSetting.findOne().driverOrder == 1) {
             toolbar.setRightText(R.string.com_make_order, v -> {

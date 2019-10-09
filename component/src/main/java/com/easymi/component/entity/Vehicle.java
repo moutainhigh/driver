@@ -50,7 +50,12 @@ public class Vehicle {
     public int commercialType; // 开展业务
 
     @SerializedName("serviceType")
-    public String serviceType;// 车辆类型
+    public String serviceType;// 服务类型
+
+    /**
+     * 车辆是否是出租车车辆
+     */
+    public int isTaxiNormal;
 
     /**
      * 保存数据
@@ -70,6 +75,7 @@ public class Vehicle {
         values.put("vehicleType", vehicleType);
         values.put("commercialType", commercialType);
         values.put("serviceType", serviceType);
+        values.put("isTaxiNormal", isTaxiNormal);
 
         /*
          * values.put("age", age); values.put("jialing", jialing);
@@ -96,6 +102,7 @@ public class Vehicle {
         values.put("vehicleType", vehicleType);
         values.put("commercialType", commercialType);
         values.put("serviceType", serviceType);
+        values.put("isTaxiNormal", isTaxiNormal);
 
         /*
          * values.put("age", age); values.put("jialing", jialing);
@@ -126,6 +133,7 @@ public class Vehicle {
 
                 vehicle.commercialType = cursor.getInt(cursor.getColumnIndex("commercialType"));
                 vehicle.serviceType = cursor.getString(cursor.getColumnIndex("serviceType"));
+                vehicle.isTaxiNormal = cursor.getInt(cursor.getColumnIndex("isTaxiNormal"));
             }
         } finally {
             cursor.close();

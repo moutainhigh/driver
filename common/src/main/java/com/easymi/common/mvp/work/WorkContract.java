@@ -147,6 +147,11 @@ public interface WorkContract {
          */
         RxManager getRxManager();
 
+        /**
+         * 出租车类型隐藏补单按钮
+         */
+        void hintCreatOrder();
+
         void setTitleStatus(String content);
     }
 

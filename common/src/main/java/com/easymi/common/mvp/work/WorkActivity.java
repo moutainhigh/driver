@@ -55,6 +55,7 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
+import com.easymi.component.entity.Vehicle;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.rxmvp.RxManager;
@@ -519,6 +520,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
          */
         if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)) {
             btCreate.setVisibility(View.VISIBLE);
+            if (Vehicle.exists(EmUtil.getEmployId()) && (Vehicle.findByEmployId(EmUtil.getEmployId()).isTaxiNormal == 1)){
+                btCreate.setVisibility(View.GONE);
+            }
         } else {
             btCreate.setVisibility(View.GONE);
         }
@@ -599,6 +603,11 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     @Override
     public RxManager getRxManager() {
         return mRxManager;
+    }
+
+    @Override
+    public void hintCreatOrder() {
+
     }
 
     private boolean isFront = false;

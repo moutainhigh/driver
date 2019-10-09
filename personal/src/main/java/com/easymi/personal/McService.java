@@ -225,8 +225,6 @@ public interface McService {
                                    @Query("app_key") String appKey);
 
 
-    //add hufeng
-
     /**
      * 账号密码登录
      *
