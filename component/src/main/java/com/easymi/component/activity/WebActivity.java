@@ -103,15 +103,21 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
      */
     public void init() {
 
-        Intent localIntent = getIntent();
         String articleName = getIntent().getStringExtra("articleName");
         url = Config.H5_HOST + "#/protocol?articleName==" + articleName + "&appKey=" + Config.APP_KEY;
-        if (!url.contains("http") || !url.contains("https")) {
+        if (!url.contains("http") && !url.contains("https")) {
             url = "http://" + url;
         }
-        String titleStr = localIntent.getStringExtra("title");
         title = findViewById(R.id.title);
-        title.setText(titleStr);
+        int titleRes = getIntent().getIntExtra("titleRes", 0);
+        if (titleRes > 0) {
+            title.setText(titleRes);
+        } else {
+            title.setText("网页");
+        }
+        title.getPaint().setFakeBoldText(true);
+        title.postInvalidate();
+
         webView = findViewById(R.id.web_view);
         closeAll = findViewById(R.id.close_all);
         closeAll.setOnClickListener(this);
@@ -233,7 +239,7 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
 
     public static void goWebActivity(Context context, @StringRes int res, @IWebVariableType String articleName) {
         Intent intent = new Intent(context, WebActivity.class);
-        intent.putExtra("name", context.getString(res));
+        intent.putExtra("titleRes", res);
         intent.putExtra("articleName", articleName);
         context.startActivity(intent);
     }
@@ -244,7 +250,9 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
         String DRIVER_PUT_FORWARD = "driverPutForward";
     }
 
-    @StringDef({IWebVariable.DRIVER_HELP, IWebVariable.DRIVER_LOGIN, IWebVariable.DRIVER_PUT_FORWARD})
+    @StringDef({IWebVariable.DRIVER_HELP
+            , IWebVariable.DRIVER_LOGIN
+            , IWebVariable.DRIVER_PUT_FORWARD})
     @interface IWebVariableType {
     }
 }
