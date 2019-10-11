@@ -243,7 +243,7 @@ public class CreateOrderActivity extends RxPayActivity {
         customBusCreateOrderBtCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (adapter.getData().size() != chooseSeatList.size()) {
+                if (chooseSeatList != null && adapter.getData().size() != chooseSeatList.size()) {
                     ToastUtil.showMessage(CreateOrderActivity.this, "请选择" + chooseSeatList.size() + "位乘客");
                     return;
                 }
