@@ -299,6 +299,8 @@ public class WorkPresenter implements WorkContract.Presenter {
                         Config.ACK_TOPIC = mqttConfig.ackTopic;
                         Config.MQTT_CONNECTION_URL = mqttConfig.connectionsUrl;
                         Config.MQTT_CLIENT_ID = mqttConfig.clientId;
+                        Config.MQTT_GROUP_ID = mqttConfig.groupId;
+                        Config.MQTT_PARENT_TOPIC = mqttConfig.parentTopic;
                         MqttManager.getInstance().creatConnect();
                         checkTopic();
                     }
