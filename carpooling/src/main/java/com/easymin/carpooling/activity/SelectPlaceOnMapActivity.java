@@ -11,7 +11,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 import android.util.LongSparseArray;
 import android.view.View;
 import android.widget.Button;
