@@ -81,7 +81,7 @@ public class PhoneUtil {
      */
     public static UserPhone handleResult(Context context, int resultCode, Intent data) {
         if (resultCode != Activity.RESULT_OK || data == null || context == null) {
-            LogUtil.e(TAG, "getContacts fail, context is null or intent data is null");
+            Log.e(TAG, "getContacts fail, context is null or intent data is null");
             return null;
         }
 
@@ -103,7 +103,7 @@ public class PhoneUtil {
                 if (phoneCursor != null) {
 //                    while (phoneCursor.moveToNext()) {  //遍历该联系人所有号码
 //                        String phoneNo = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-//                        LogUtil.d(TAG, phoneNo + " (" + userName + ")");
+//                        Log.d(TAG, phoneNo + " (" + userName + ")");
 //                    }
 
                     //获取第一个电话

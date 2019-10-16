@@ -5,6 +5,7 @@ import com.easymi.component.BuildConfig;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName:
+ *
  * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
@@ -32,9 +33,9 @@ public class Log {
         }
     }
 
-    public static void e(String tag, String msg,Throwable e) {
+    public static void e(String tag, String msg, Throwable e) {
         if (BuildConfig.DEBUG) {
-            android.util.Log.e(tag, msg,e);
+            android.util.Log.e(tag, msg, e);
         }
     }
 }

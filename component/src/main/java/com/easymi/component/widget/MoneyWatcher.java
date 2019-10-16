@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
-import com.easymi.component.utils.LogUtil;
+import com.easymi.component.utils.Log;
 
 /**
  * Created by xyin on 2017/1/20.
@@ -89,7 +89,7 @@ public class MoneyWatcher implements TextWatcher {
         } catch (NumberFormatException ex) {
             ex.printStackTrace();
             editText.setText(null);
-            LogUtil.e(TAG, "parse double error, string --> " + s);
+            Log.e(TAG, "parse double error, string --> " + s);
         }
         return number;
     }
