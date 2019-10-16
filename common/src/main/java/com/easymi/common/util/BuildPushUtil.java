@@ -1,6 +1,5 @@
 package com.easymi.common.util;
 
-import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.common.entity.OrderCustomer;
 import com.easymi.common.entity.PushBean;
@@ -31,15 +30,9 @@ import java.util.List;
 
 public class BuildPushUtil {
 
-    /**
-     * @param buildPushData 需要推送的数据
-     */
-    public static PushBean buildPush(BuildPushData buildPushData) {
-
-        EmLoc emLoc = buildPushData.emLoc;
+    public static PushBean buildPush(EmLoc emLoc) {
 
         PushData pushData = new PushData();
-
         //转换一下
         Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, 0));
         PushEmploy pe;

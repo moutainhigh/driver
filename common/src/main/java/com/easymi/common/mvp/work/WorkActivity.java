@@ -35,7 +35,6 @@ import com.easymi.common.R;
 import com.easymi.common.activity.CreateActivity;
 import com.easymi.common.adapter.OrderAdapter;
 import com.easymi.common.entity.AnnAndNotice;
-import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.entity.ManualConfigBean;
 import com.easymi.common.entity.MqttReconnectEvent;
 import com.easymi.common.entity.MultipleOrder;
@@ -382,7 +381,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         listenOrderCon.setVisibility(View.VISIBLE);
         rippleBackground.startRippleAnimation();
         bottomBtnCon.setVisibility(View.GONE);
-        MqttManager.getInstance().pushLoc(new BuildPushData(EmUtil.getLastLoc()));
+        MqttManager.getInstance().savePushMessage(EmUtil.getLastLoc());
         refreshData();
 //        hideEmpty();
     }

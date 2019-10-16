@@ -5,7 +5,6 @@ import android.os.Message;
 import android.text.TextUtils;
 
 import com.easymi.common.CommApiService;
-import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.entity.MqttReconnectEvent;
 import com.easymi.common.entity.PushBean;
 import com.easymi.common.entity.PushMessage;
@@ -452,11 +451,7 @@ public class MqttManager implements LocObserver {
 
     @Override
     public void receiveLoc(EmLoc loc) {
-        pushLoc(new BuildPushData(loc));
-    }
-
-    public void pushLoc(BuildPushData data) {
-        pushInternalLoc(data);
+        savePushMessage(loc);
     }
 
     /**
@@ -464,7 +459,7 @@ public class MqttManager implements LocObserver {
      *
      * @param data
      */
-    private void pushInternalLoc(BuildPushData data) {
+    public void savePushMessage(EmLoc data) {
         if (data != null) {
             PushBean pushBean = BuildPushUtil.buildPush(data);
             if (pushBean == null) {

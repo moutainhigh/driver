@@ -11,7 +11,6 @@ import com.amap.api.services.route.DriveRouteResult;
 import com.amap.api.services.route.RideRouteResult;
 import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
-import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.push.MqttManager;
 import com.easymi.component.Config;
 import com.easymi.component.activity.NaviActivity;
@@ -232,7 +231,6 @@ public class FlowPresenter implements FlowContract.Presenter {
     }
 
 
-
     @Override
     public void routePlanByNavi(Double endLat, Double endLng) {
 
@@ -296,7 +294,7 @@ public class FlowPresenter implements FlowContract.Presenter {
             dymOrder.orderStatus = taxiOrder.status;
             dymOrder.updateStatus();
         }
-        MqttManager.getInstance().pushLoc(new BuildPushData(EmUtil.getLastLoc()));
+        MqttManager.getInstance().savePushMessage(EmUtil.getLastLoc());
     }
 
     @Override
