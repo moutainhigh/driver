@@ -104,7 +104,7 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
     public void init() {
 
         String articleName = getIntent().getStringExtra("articleName");
-        url = Config.H5_HOST + "#/protocol?articleName==" + articleName + "&appKey=" + Config.APP_KEY;
+        url = Config.H5_HOST + "#/protocol?articleName=" + articleName + "&appKey=" + Config.APP_KEY;
         if (!url.contains("http") && !url.contains("https")) {
             url = "http://" + url;
         }
@@ -154,6 +154,11 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setAllowFileAccess(false);
         webView.getSettings().setSavePassword(false);
+
+        webView.removeJavascriptInterface("searchBoxJavaBridge_");
+        webView.removeJavascriptInterface("accessibility");
+        webView.removeJavascriptInterface("accessibilityTraversal");
+
 
         //解决部分H5中的一些控件标签可能使用后android中不支持 造成的白屏不显示问题
         webView.getSettings().setDomStorageEnabled(true);
