@@ -3,7 +3,6 @@ package com.easymi.component.activity;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,12 +17,14 @@ import com.amap.api.navi.AMapNaviView;
 import com.amap.api.navi.AMapNaviViewListener;
 import com.amap.api.navi.enums.AMapNaviRingType;
 import com.amap.api.navi.enums.NaviType;
+import com.amap.api.navi.model.AMapCalcRouteResult;
 import com.amap.api.navi.model.AMapLaneInfo;
 import com.amap.api.navi.model.AMapModelCross;
 import com.amap.api.navi.model.AMapNaviCameraInfo;
 import com.amap.api.navi.model.AMapNaviCross;
 import com.amap.api.navi.model.AMapNaviInfo;
 import com.amap.api.navi.model.AMapNaviLocation;
+import com.amap.api.navi.model.AMapNaviRouteNotifyData;
 import com.amap.api.navi.model.AMapNaviTrafficFacilityInfo;
 import com.amap.api.navi.model.AMapServiceAreaInfo;
 import com.amap.api.navi.model.AimLessModeCongestionInfo;
@@ -33,17 +34,14 @@ import com.amap.api.navi.model.NaviLatLng;
 import com.autonavi.tbt.TrafficFacilityInfo;
 import com.easymi.component.ComponentService;
 import com.easymi.component.Config;
-import com.easymi.component.DJOrderStatus;
 import com.easymi.component.R;
 import com.easymi.component.base.RxBaseActivity;
-import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.PassengerLcResult;
 import com.easymi.component.entity.PassengerLocation;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.push.PushEvent;
 import com.easymi.component.utils.Log;
-import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -52,8 +50,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -165,69 +161,11 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
         mAMapNavi = AMapNavi.getInstance(getApplicationContext());
         mAMapNavi.addAMapNaviListener(this);
         mAMapNavi.setUseInnerVoice(true);
-
-    }
-
-    /**
-     * 定时器
-     */
-    private Timer timer;
-    private TimerTask timerTask;
-
-    /**
-     * 显示费用 已废弃
-     */
-    private void showFee() {
-        simpleFeeCon = findViewById(R.id.simple_fee_con);
-        lcTxt = findViewById(R.id.lc);
-        feeTxt = findViewById(R.id.fee);
-        DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
-        if (dymOrder != null && dymOrder.orderType.equals(Config.DAIJIA)) {
-            if (dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
-                simpleFeeCon.setVisibility(View.VISIBLE);
-                lcTxt.setText(getString(R.string.order_dis) + dymOrder.distance + getString(R.string.dis_unit));
-                feeTxt.setText(getString(R.string.order_fee) + dymOrder.totalFee + getString(R.string.money_unit));
-
-                timer = new Timer();
-                timerTask = new TimerTask() {
-                    @Override
-                    public void run() {
-                        runOnUiThread(() -> {
-                            DymOrder dymOrder1 = DymOrder.findByIDType(orderId, orderType);
-                            lcTxt.setText(getString(R.string.order_dis) + dymOrder1.distance + getString(R.string.dis_unit));
-                            feeTxt.setText(getString(R.string.order_fee) + dymOrder1.totalFee + getString(R.string.money_unit));
-                        });
-                    }
-                };
-                timer.schedule(timerTask, 2000, 2000);
-            } else {
-                simpleFeeCon.setVisibility(View.GONE);
-            }
-        }
     }
 
     @Override
     public boolean isEnableSwipe() {
         return false;
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (orderId != -1 && StringUtils.isNotBlank(orderType)) {
-            showFee();
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (null != timer) {
-            timer.cancel();
-        }
-        if (null != timerTask) {
-            timerTask.cancel();
-        }
     }
 
     @Override
@@ -468,6 +406,21 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
     }
 
     @Override
+    public void onCalculateRouteSuccess(AMapCalcRouteResult aMapCalcRouteResult) {
+
+    }
+
+    @Override
+    public void onCalculateRouteFailure(AMapCalcRouteResult aMapCalcRouteResult) {
+
+    }
+
+    @Override
+    public void onNaviRouteNotify(AMapNaviRouteNotifyData aMapNaviRouteNotifyData) {
+
+    }
+
+    @Override
     public void onNaviSetting() {
 
     }
@@ -512,10 +465,22 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     }
 
+    @Override
+    public void onMapTypeChanged(int i) {
+
+    }
+
+    @Override
+    public void onNaviViewShowMode(int i) {
+
+    }
+
+    @Override
     public void showLaneInfo(AMapLaneInfo info) {
 
     }
 
+    @Override
     public void updateIntervalCameraInfo(AMapNaviCameraInfo info1, AMapNaviCameraInfo info2, int i) {
 
     }
