@@ -2,6 +2,7 @@ package com.easymi.personal.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -13,11 +14,15 @@ import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
+import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.network.NoErrSubscriberListener;
+import com.easymi.component.pay.PayType;
 import com.easymi.component.utils.CsEditor;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
 import com.easymi.component.widget.CusToolbar;
+import com.easymi.personal.McService;
 import com.easymi.personal.R;
 
 import rx.Observable;
@@ -54,6 +59,8 @@ public class PocketActivity extends RxBaseActivity {
         rechargeCon.setOnClickListener(v -> startActivity(new Intent(PocketActivity.this, RechargeActivity.class)));
 
         detailCon.setOnClickListener(v -> startActivity(new Intent(PocketActivity.this, DetailActivity.class)));
+
+        getState();
     }
 
     @Override
@@ -63,6 +70,29 @@ public class PocketActivity extends RxBaseActivity {
         toolbar.setTitle(R.string.pocket_title);
         toolbar.setRightText(R.string.ti_xian,
                 view -> startActivity(new Intent(PocketActivity.this, TixianActivity.class)));
+    }
+
+
+    private void getState() {
+        Observable<PayType> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
+                .getPayType()
+                .map(new HttpResultFunc2<>())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this,
+                false,
+                false, new NoErrSubscriberListener<PayType>() {
+            @Override
+            public void onNext(PayType payType) {
+                if (payType.aliPay || payType.weChat) {
+                    rechargeCon.setVisibility(View.VISIBLE);
+                } else {
+                    rechargeCon.setVisibility(View.GONE);
+                }
+            }
+        }
+        )));
     }
 
     @Override
