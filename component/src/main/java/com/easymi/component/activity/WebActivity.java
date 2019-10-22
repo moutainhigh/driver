@@ -104,7 +104,7 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
     public void init() {
 
         String articleName = getIntent().getStringExtra("articleName");
-        url = Config.H5_HOST + "#/protocol?articleName==" + articleName + "&appKey=" + Config.APP_KEY;
+        url = Config.H5_HOST + "#/protocol?articleName=" + articleName + "&appKey=" + Config.APP_KEY;
         if (!url.contains("http") && !url.contains("https")) {
             url = "http://" + url;
         }
