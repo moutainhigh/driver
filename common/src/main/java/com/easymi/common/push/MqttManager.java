@@ -141,12 +141,11 @@ public class MqttManager implements LocObserver {
             client.unregisterResources();
         }
 
-        Log.e("MqttManager", "creatConnect");
-
-        pullTopic = Config.MQTT_PARENT_TOPIC + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
+        pullTopic = Config.MQTT_PARENT_TOPIC + "/driver/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
         String brokerUrl = "tcp://" + Config.MQTT_HOST + ":" + Config.PORT_TCP;
         //身份唯一码
         String clientId = Config.MQTT_GROUP_ID + "@@@driver-" + EmUtil.getEmployId();
+        Log.e("MqttManager", "creatConnect   " + pullTopic + "      " + brokerUrl + "     " + clientId);
 
         if (conOpt == null) {
             conOpt = new MqttConnectOptions();
