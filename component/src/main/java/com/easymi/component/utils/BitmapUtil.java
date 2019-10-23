@@ -59,19 +59,19 @@ public class BitmapUtil {
      */
     public static void saveBitmap(Context context, String path, String picName, Bitmap bm) {
         if (context == null || TextUtils.isEmpty(path) || TextUtils.isEmpty(picName) || bm == null) {
-            LogUtil.e(TAG, "some parameter invalid");
+            Log.e(TAG, "some parameter invalid");
             return;
         }
 
         if (!TextUtils.equals(Environment.getExternalStorageState(), Environment.MEDIA_MOUNTED)) {
-            LogUtil.e(TAG, "没有存储空间");
+            Log.e(TAG, "没有存储空间");
             return;
         }
 
         File dir = new File(path);
         if (!dir.exists()) {
             if (!dir.mkdirs()) {
-                LogUtil.e(TAG, "create dir fail");
+                Log.e(TAG, "create dir fail");
                 return;
             }
         }
@@ -79,7 +79,7 @@ public class BitmapUtil {
         File f = new File(dir, picName);
         if (f.exists()) {
             if (!f.delete()) {
-                LogUtil.e(TAG, "delete fail");
+                Log.e(TAG, "delete fail");
                 return;
             }
         }
@@ -88,7 +88,7 @@ public class BitmapUtil {
             bm.compress(Bitmap.CompressFormat.PNG, 90, out);
             out.flush();
             out.close();
-            LogUtil.d(TAG, "save bitmap succeed");
+            Log.d(TAG, "save bitmap succeed");
         } catch (IOException ex) {
             ex.printStackTrace();
         }

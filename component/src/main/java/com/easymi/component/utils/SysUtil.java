@@ -73,12 +73,12 @@ public class SysUtil {
             String driverData = new String(data);
             for (String known_qemu_driver : known_qemu_drivers) {
                 if (driverData.contains(known_qemu_driver)) {
-                    LogUtil.d("Result:", "Find known_qemu_drivers!");
+                    Log.d("Result:", "Find known_qemu_drivers!");
                     return true;    //基于qemu模拟器
                 }
             }
         }
-        LogUtil.d("Result:", "Not Find known_qemu_drivers!");
+        Log.d("Result:", "Not Find known_qemu_drivers!");
         return false;
     }
 

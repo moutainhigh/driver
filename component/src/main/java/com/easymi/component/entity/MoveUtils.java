@@ -1,6 +1,6 @@
 package com.easymi.component.entity;
 
-import android.util.Log;
+import com.easymi.component.utils.Log;
 
 import com.amap.api.maps.model.LatLng;
 import com.autonavi.amap.mapcore.DPoint;

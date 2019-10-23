@@ -2,7 +2,7 @@ package com.easymi.component.tts;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 
 import java.io.File;
 import java.io.IOException;

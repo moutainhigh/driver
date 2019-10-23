@@ -1,7 +1,7 @@
 package com.easymi.component.tts;
 
 import android.content.Context;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 import android.util.Pair;
 
 import com.baidu.tts.auth.AuthInfo;

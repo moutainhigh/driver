@@ -4,7 +4,7 @@ package com.easymi.component.entity;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 
 import com.easymi.component.db.SqliteHelper;
 import com.google.gson.annotations.SerializedName;

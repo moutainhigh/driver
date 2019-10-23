@@ -1,6 +1,6 @@
 package com.easymi.component.share;
 
-import com.easymi.component.utils.LogUtil;
+import com.easymi.component.utils.Log;
 import com.tencent.tauth.IUiListener;
 
 /**
@@ -13,6 +13,6 @@ public abstract class QQShareListener implements IUiListener {
 
     @Override
     public void onCancel() {
-        LogUtil.d(TAG, "QQ share on cancel");
+        Log.d(TAG, "QQ share on cancel");
     }
 }
