@@ -18,7 +18,10 @@ import com.easymi.component.base.RxPayActivity;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
+import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.network.MySubscriber;
+import com.easymi.component.network.NoErrSubscriberListener;
+import com.easymi.component.pay.PayType;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
@@ -53,7 +56,6 @@ public class RechargeActivity extends RxPayActivity {
     CusToolbar cusToolbar;
     RelativeLayout payWx;
     RelativeLayout payZfb;
-    RelativeLayout payUnion;
     Space id_space1;
     Space id_space2;
     LinearLayout lin_check_box;
@@ -66,6 +68,33 @@ public class RechargeActivity extends RxPayActivity {
     @Override
     public int getLayoutId() {
         return R.layout.activity_recharge;
+    }
+
+    private void getState() {
+        Observable<PayType> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
+                .getPayType()
+                .map(new HttpResultFunc2<>())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this,
+                false,
+                false, new NoErrSubscriberListener<PayType>() {
+            @Override
+            public void onNext(PayType payType) {
+                if (payType.aliPay) {
+                    payZfb.setVisibility(View.VISIBLE);
+                } else {
+                    payZfb.setVisibility(View.GONE);
+                }
+                if (payType.weChat) {
+                    payWx.setVisibility(View.VISIBLE);
+                } else {
+                    payWx.setVisibility(View.GONE);
+                }
+            }
+        }
+        )));
     }
 
     @Override
@@ -257,7 +286,6 @@ public class RechargeActivity extends RxPayActivity {
 
         payWx = findViewById(R.id.pay_wenXin);
         payZfb = findViewById(R.id.pay_zfb);
-        payUnion = findViewById(R.id.pay_union);
 
         cusToolbar = findViewById(R.id.cus_toolbar);
 

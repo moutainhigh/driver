@@ -3,6 +3,7 @@ package com.easymi.personal;
 import com.easymi.common.entity.CompanyList;
 import com.easymi.common.entity.RegisterRes;
 import com.easymi.component.Config;
+import com.easymi.component.pay.PayType;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.result.EmResult2;
 import com.easymi.personal.entity.CarInfo;
@@ -49,6 +50,10 @@ import rx.Observable;
 
 public interface McService {
 
+
+
+    @GET("api/v1/system/config/payment")
+    Observable<EmResult2<PayType>> getPayType();
 
     @Headers(Config.TYPE_RSA)
     @GET("api/v1/resources/isLogin")
