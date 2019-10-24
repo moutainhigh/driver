@@ -1211,7 +1211,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 dialog.setOnMyClickListener((view, string) -> {
                     if (TextUtils.isEmpty(string)) {
                         ToastUtil.showMessage(FlowActivity.this, "请输入结算金额");
-                    } else if (Double.parseDouble(string) <= 0) {
+                    } else if (Double.parseDouble(string) <1) {
                         ToastUtil.showMessage(FlowActivity.this, "请输入正确结算金额");
                     } else if (Double.parseDouble(string) > 10000) {
                         ToastUtil.showMessage(FlowActivity.this, "请输入正确结算金额");
