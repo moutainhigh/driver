@@ -65,5 +65,6 @@
     <color name="colorSub">#999999</color>
     <color name="colorDesc">#CCCCCC</color>
     <color name="colorLine">#EBEBEB</color>
+    <color name="colorBg">#F2F2F2</color>
 
 </resources>
