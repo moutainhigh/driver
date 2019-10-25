@@ -226,7 +226,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 String data = jb.optString("data");
                 JSONObject jbData = new JSONObject(data.replaceAll("\\\\\\\"", "--"));
                 long orderId = jbData.optLong("orderId");
-                String orderType = jbData.optString("serviceType");
+                String orderType = jbData.optString("orderType");
                 DymOrder dymOrder = DymOrder.findByIDType(orderId, orderType);
                 if (dymOrder != null) {
                     double currentDistance = new BigDecimal(jbData.optDouble("distance") / 1000).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();

@@ -15,7 +15,6 @@ public class PushDataOrder {
     @SerializedName("orderId")
     public long orderId;
 
-    @SerializedName("serviceType")
     public String orderType;
 
     /**
