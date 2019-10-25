@@ -13,7 +13,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.easymi.component.utils.BitmapUtil;
-import com.easymi.component.utils.LogUtil;
+import com.easymi.component.utils.Log;
 import com.tencent.connect.share.QQShare;
 import com.tencent.connect.share.QzoneShare;
 import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
@@ -126,7 +126,7 @@ public class Sharer {
         if (mTencent != null) {
             mTencent.shareToQQ(activity, params, qqListener);
         } else {
-            LogUtil.e(TAG, "mTencent is null");
+            Log.e(TAG, "mTencent is null");
         }
     }
 
@@ -155,7 +155,7 @@ public class Sharer {
         if (mTencent != null) {
             mTencent.shareToQzone(activity, params, qqListener);
         } else {
-            LogUtil.e(TAG, "mTencent is null");
+            Log.e(TAG, "mTencent is null");
         }
     }
 
@@ -242,12 +242,12 @@ public class Sharer {
         //分享到朋友圈
         wxReq.scene = scene;
 
-        LogUtil.d(TAG, "invoke wechat share succeed!");
+        Log.d(TAG, "invoke wechat share succeed!");
 
         if (iwxapi != null) {
             iwxapi.sendReq(wxReq);  // 调用api接口发送数据到微信
         } else {
-            LogUtil.e(TAG, "iwxapi is null");
+            Log.e(TAG, "iwxapi is null");
         }
     }
 

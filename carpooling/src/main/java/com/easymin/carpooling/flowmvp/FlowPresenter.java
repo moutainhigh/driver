@@ -23,7 +23,7 @@ import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
-import com.easymi.component.utils.LogUtil;
+import com.easymi.component.utils.Log;
 import com.easymin.carpooling.entity.AllStation;
 import com.easymin.carpooling.entity.StationResult;
 

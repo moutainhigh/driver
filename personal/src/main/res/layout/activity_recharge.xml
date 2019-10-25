@@ -122,6 +122,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/white_stroke"
+                android:divider="@drawable/divider"
+                android:dividerPadding="12dp"
+                android:showDividers="middle"
                 android:orientation="vertical">
 
                 <RelativeLayout
@@ -132,9 +135,10 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginRight="10dp"
                     android:clickable="true"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <TextView
+                        android:id="@+id/wenXin_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -162,13 +166,6 @@
 
                 </RelativeLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:background="#dcdcdc" />
-
                 <RelativeLayout
                     android:id="@+id/pay_zfb"
                     android:layout_width="match_parent"
@@ -177,9 +174,10 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="16dp"
                     android:clickable="true"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <TextView
+                        android:id="@+id/zfb_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -207,55 +205,9 @@
 
                 </RelativeLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:background="#dcdcdc" />
 
-                <RelativeLayout
-                    android:id="@+id/pay_union"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="16dp"
-                    android:clickable="true"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="15dp"
-                        android:layout_toRightOf="@+id/union_icon"
-                        android:gravity="center"
-                        android:text="@string/recharge_pay_union"
-                        android:textSize="14sp" />
-
-                    <ImageView
-                        android:id="@+id/union_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="15dp"
-                        android:src="@mipmap/ic_union" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="15dp"
-                        android:src="@mipmap/ic_row" />
-
-                </RelativeLayout>
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="60dp" />
         </LinearLayout>
     </ScrollView>
 

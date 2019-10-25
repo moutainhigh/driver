@@ -18,7 +18,7 @@ package com.easymi.component.pay;
 //import com.tencent.mm.sdk.openapi.WXAPIFactory;
 //import com.unionpay.UPPayAssistEx;
 //import com.easymi.component.app.XApp;
-//import com.easymi.component.utils.LogUtil;
+//import com.easymi.component.utils.Log;
 //
 //import org.json.JSONException;
 //import org.json.JSONObject;
@@ -162,18 +162,18 @@ public class Payer {
 //                et.apply();
 //
 //                Toast.makeText(context, "正在启动微信支付...", Toast.LENGTH_SHORT).show();
-//                LogUtil.d(TAG, "invoke wechat pay succeed");
+//                Log.d(TAG, "invoke wechat pay succeed");
 //
 //                //调起支付,支付的结果回调在WXPayEntryActivity中处理
 //                IWXAPI api = WXAPIFactory.createWXAPI(context, req.appId);
 //                api.sendReq(req);
 //
 //            } else {
-//                LogUtil.e(TAG, "wxPay error -->" + jsonObject.getString("retmsg"));
+//                Log.e(TAG, "wxPay error -->" + jsonObject.getString("retmsg"));
 //            }
 //        } catch (JSONException e) {
 //            e.printStackTrace();
-//            LogUtil.e(TAG, "json fail,json -->" + jsonObject.toString());
+//            Log.e(TAG, "json fail,json -->" + jsonObject.toString());
 //        }
 //    }
 //
@@ -185,7 +185,7 @@ public class Payer {
 //    private void handleAlipay(Map<String, String> result) {
 //        AlipayResult alipayResult = new AlipayResult(result);
 //        String resultStatus = alipayResult.getResultStatus();
-//        LogUtil.d(TAG, "alipay result --> " + resultStatus);
+//        Log.d(TAG, "alipay result --> " + resultStatus);
 //        if (alipayListener != null) {
 //            alipayListener.payResult(resultStatus);
 //        }

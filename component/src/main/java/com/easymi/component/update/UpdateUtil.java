@@ -46,7 +46,7 @@ public class UpdateUtil {
     private static final String KEY_IGNORE = "ezy.update.prefs.ignore";
     private static final String KEY_UPDATE = "ezy.update.prefs.update";
 
-    static boolean DEBUG = true;
+    static boolean DEBUG = false;
 
     public static void log(String content) {
         if (DEBUG) {

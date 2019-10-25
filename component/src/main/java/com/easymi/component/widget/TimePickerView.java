@@ -323,7 +323,7 @@ public class TimePickerView extends LinearLayout {
     public static long getTime(String day, String hour, String min) {
         if (hour.equals("现在") || hour.equals("現在")) {
             long time = System.currentTimeMillis();
-//            LogUtil.e("getTime",""+ time  + DateFormatUtils.format(time,"yyyy-MM--dd HH:mm"));
+//            Log.e("getTime",""+ time  + DateFormatUtils.format(time,"yyyy-MM--dd HH:mm"));
             return time;
         } else {
             int hourNum = Integer.parseInt(hour.substring(0, hour.length() - 1));

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Environment;
 import android.text.TextUtils;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;

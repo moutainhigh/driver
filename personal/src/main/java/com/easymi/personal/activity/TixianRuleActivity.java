@@ -61,6 +61,13 @@ public class TixianRuleActivity extends RxBaseActivity {
         tixianRule.getSettings().setJavaScriptEnabled(true);
         tixianRule.getSettings().setUseWideViewPort(true);
         tixianRule.getSettings().setLoadWithOverviewMode(true);
+        tixianRule.getSettings().setSavePassword(false);
+        tixianRule.getSettings().setAllowFileAccess(false);
+
+        tixianRule.removeJavascriptInterface("searchBoxJavaBridge_");
+        tixianRule.removeJavascriptInterface("accessibility");
+        tixianRule.removeJavascriptInterface("accessibilityTraversal");
+
 
         tixianRule.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 
