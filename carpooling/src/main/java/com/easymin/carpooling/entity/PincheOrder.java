@@ -1,9 +1,6 @@
 package com.easymin.carpooling.entity;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 /**
  * @Copyright (C), 2012-2019, Sichuan Xiaoka Technology Co., Ltd.
@@ -194,6 +191,7 @@ public class PincheOrder implements Serializable {
      */
     public double money;
 
+    public int model;
 
     public PincheOrder() {
 

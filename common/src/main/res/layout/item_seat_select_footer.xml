@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@android:color/white" />
+
+    <RelativeLayout
+        android:id="@+id/itemSeatSelectHeaderRlChildSelect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sizeLine"
+            android:background="@color/colorLine" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:text="儿童座"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/sizeButton" />
+
+        <TextView
+            android:id="@+id/itemSeatSelectHeaderTvChildSelect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:drawableEnd="@mipmap/com_right_arrow"
+            android:drawablePadding="6dp"
+            android:gravity="end"
+            android:hint="暂不支持儿童座"
+            android:textColor="@color/colorBlackLight"
+            android:textColorHint="@color/colorSub"
+            android:textSize="@dimen/sizeHint"
+            android:visibility="visible" />
+
+    </RelativeLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="32dp" />
+</LinearLayout>

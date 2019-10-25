@@ -3,7 +3,6 @@ package com.easymi.personal.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,7 +31,6 @@ import com.easymi.component.entity.Employ;
 import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.ErrCode;
-import com.easymi.component.network.ErrCodeTran;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
@@ -55,8 +53,6 @@ import com.easymi.personal.R;
 import com.easymi.personal.activity.register.RegisterAcitivty;
 import com.easymi.personal.activity.register.RegisterNoticeActivity;
 import com.easymi.personal.result.LoginResult;
-
-import java.util.Locale;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -161,10 +157,9 @@ public class LoginActivity extends RxBaseActivity {
      */
     private void initBox() {
         textAgreement.setOnClickListener(view -> {
-            Intent intent = new Intent(LoginActivity.this, WebActivity.class);
-            intent.putExtra("url", Config.H5_HOST + "#/protocol?articleName=driverLogin&appKey=" + Config.APP_KEY);
-            intent.putExtra("title", getString(R.string.login_agreement));
-            startActivity(intent);
+            WebActivity.goWebActivity(this
+                    , R.string.login_agreement
+                    , WebActivity.IWebVariable.DRIVER_LOGIN);
         });
     }
 
@@ -352,23 +347,13 @@ public class LoginActivity extends RxBaseActivity {
                     startActivity(intent);
                 } else {
                     String msg = loginResult.getMessage();
-                    //获取默认配置
-                    Configuration config = XApp.getInstance().getResources().getConfiguration();
-                    if (config.locale == Locale.TAIWAN || config.locale == Locale.TRADITIONAL_CHINESE) {
-                        for (ErrCodeTran errCode : ErrCodeTran.values()) {
-                            if (loginResult.getCode() == errCode.getCode()) {
-                                msg = errCode.getShowMsg();
-                                break;
-                            }
-                        }
-                    } else {
-                        for (ErrCode errCode : ErrCode.values()) {
-                            if (loginResult.getCode() == errCode.getCode()) {
-                                msg = errCode.getShowMsg();
-                                break;
-                            }
+                    for (ErrCode errCode : ErrCode.values()) {
+                        if (loginResult.getCode() == errCode.getCode()) {
+                            msg = errCode.getShowMsg();
+                            break;
                         }
                     }
+
                     ToastUtil.showMessage(LoginActivity.this, msg);
                 }
             }

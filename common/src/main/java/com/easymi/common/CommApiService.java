@@ -8,10 +8,12 @@ import com.easymi.common.entity.MqttConfig;
 import com.easymi.common.entity.MqttResult;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.entity.NewToken;
+import com.easymi.common.entity.PassengerBean;
 import com.easymi.common.entity.PushAnnouncement;
 import com.easymi.common.entity.PushPojo;
 import com.easymi.common.entity.QiNiuToken;
 import com.easymi.common.entity.RegisterRes;
+import com.easymi.common.entity.SeatBean;
 import com.easymi.common.entity.Vehicles;
 import com.easymi.common.result.AnnouncementResult;
 import com.easymi.common.result.CityLineResult;
@@ -27,13 +29,16 @@ import com.easymi.common.result.SystemResult;
 import com.easymi.common.result.VehicleResult;
 import com.easymi.common.result.WorkStatisticsResult;
 import com.easymi.component.entity.BaseOrder;
+import com.easymi.component.entity.Employ;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.result.EmResult2;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
+import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -70,6 +75,17 @@ public interface CommApiService {
                                                            @Query("range") Double range,
                                                            @Query("serviceType") String serviceType);
 
+    @GET("api/v1/carpool/driver/schedule/querySeats")
+    Observable<EmResult2<List<SeatBean>>> queryCarpoolSeats(@Query("timeSlotId") long timeSlotId,
+                                                            @Query("startStationId") long startStationId,
+                                                            @Query("endStationId") long endStationId);
+
+
+    @GET("api/v1/bus/country/driver/schedule/querySeats")
+    Observable<EmResult2<List<SeatBean>>> queryBusSeats(@Query("scheduleId") long scheduleId,
+                                                        @Query("startStationId") long startStationId,
+                                                        @Query("endStationId") long endStationId);
+
     /**
      * 注销
      *
@@ -83,6 +99,20 @@ public interface CommApiService {
     @GET("api/v1/taxi_online/config/app/driver")
     Observable<EmResult2<String>> getTitleStatus();
 
+
+    @GET("api/v1/resources/passenger/rider")
+    Observable<EmResult2<List<PassengerBean>>> getPassengerList(@Query("passengerId") long passengerId);
+
+    @DELETE("api/v1/resources/passenger/rider/{id}")
+    Observable<EmResult> deletePassenger(@Path("id") long id);
+
+    @FormUrlEncoded
+    @POST("api/v1/resources/passenger/rider")
+    Observable<EmResult> addPassenger(@FieldMap Map<String, String> data);
+
+    @GET("api/v1/resources/passenger/by_phone")
+    Observable<EmResult2<Employ>> getPassengerId(@Query("phone") String phone,
+                                                 @Query("companyId") long companyId);
 
     /**
      * 查询所有通知

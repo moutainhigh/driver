@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.easymi.component.widget.SwipeMenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/itemPassengerSelectContentSml"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/itemPassengerSelectContentRl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
+
+        <View
+            android:id="@+id/itemPassengerSelectContentV"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sizeLine"
+            android:background="@color/colorLine" />
+
+        <TextView
+            android:id="@+id/itemPassengerSelectContentTvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            android:paddingStart="18dp"
+            android:paddingTop="17dp"
+            android:text="杨洪瑞"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/sizeTitle" />
+
+        <TextView
+            android:id="@+id/itemPassengerSelectContentTvDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/itemPassengerSelectContentTvName"
+            android:layout_marginStart="6dp"
+            android:layout_toEndOf="@id/itemPassengerSelectContentTvName"
+            android:background="@drawable/cor4_st1_line"
+            android:paddingStart="10dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="2dp"
+            android:text="儿童"
+            android:textColor="@color/colorSub"
+            android:textSize="@dimen/sizeSmall" />
+
+        <TextView
+            android:id="@+id/itemPassengerSelectContentTvGuardianName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/itemPassengerSelectContentTvName"
+            android:paddingStart="18dp"
+            android:paddingBottom="8dp"
+            android:text="乘车人姓名：13587987653"
+            android:textColor="@color/colorSub"
+            android:textSize="@dimen/sizeHint" />
+
+        <TextView
+            android:id="@+id/itemPassengerSelectContentTvPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/itemPassengerSelectContentTvGuardianName"
+            android:paddingStart="18dp"
+            android:paddingBottom="8dp"
+            android:text="乘车人电话：13587987653"
+            android:textColor="@color/colorSub"
+            android:textSize="@dimen/sizeHint" />
+
+        <TextView
+            android:id="@+id/itemPassengerSelectContentTvId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/itemPassengerSelectContentTvPhone"
+            android:paddingStart="18dp"
+            android:paddingBottom="17dp"
+            android:text="乘车人身份证号：13587987653"
+            android:textColor="@color/colorSub"
+            android:textSize="@dimen/sizeHint" />
+
+        <ImageView
+            android:id="@+id/itemPassengerSelectContentIv"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="22dp"
+            android:src="@drawable/common_ic_select" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/itemPassengerSelectContentTvDelete"
+        android:layout_width="72dp"
+        android:layout_height="match_parent"
+        android:background="@color/colorRed"
+        android:gravity="center"
+        android:text="删除"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/sizeButton" />
+</com.easymi.component.widget.SwipeMenuLayout>

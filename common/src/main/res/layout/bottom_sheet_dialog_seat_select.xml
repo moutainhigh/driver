@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/cor10_white_top"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingTop="12dp"
+            android:paddingBottom="16dp"
+            android:text="选择儿童座"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/sizeContent"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/bottomSheetDialogSeatSelectIv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center"
+            android:paddingStart="16dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="24dp"
+            android:paddingBottom="16dp"
+            android:src="@mipmap/ic_close" />
+    </FrameLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/bottomSheetDialogSeatSelectRv"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp" />
+
+    <TextView
+        android:id="@+id/bottomSheetDialogSeatSelectTv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sizeButtonHeight"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/cor4_solid_blue"
+        android:gravity="center"
+        android:text="确定"
+        android:textColor="@android:color/white" />
+
+</LinearLayout>

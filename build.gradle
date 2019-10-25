@@ -41,10 +41,8 @@ allprojects {
                             }
                         } else if (requested.group == 'com.google.code.gson' &&
                                 requested.name == 'gson') {
-                            if (!requested.name.startsWith("multidex")) {
-                                details.useVersion '2.8.2'
-                                details.because 'Unified Version'
-                            }
+                            details.useVersion '2.8.2'
+                            details.because 'Unified Version'
                         }
                 }
             }

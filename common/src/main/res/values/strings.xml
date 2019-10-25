@@ -29,7 +29,7 @@
     <string name="create_rental">包车租车</string>
     <string name="create_bus_country">客运班车</string>
     <string name="create_custombus">客运班车</string>
-    <string name="create_carpool">城际拼车</string>
+    <string name="create_carpool">定制拼车</string>
     <string name="create_gov">公务用车</string>
 
     <string name="hint">提示</string>

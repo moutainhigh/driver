@@ -49,6 +49,12 @@ public class Customer {
 
     public double money;
 
+    public String sorts;
+
+    public int type;
+
+    public String sortsType;
+
     /**
      * 客运班车订单未支付
      */

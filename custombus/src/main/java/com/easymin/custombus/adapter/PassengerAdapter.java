@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.easymi.component.Config;
+import com.easymi.component.utils.CommonUtil;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.GlideCircleTransform;
 import com.easymin.custombus.R;
@@ -119,7 +120,11 @@ public class PassengerAdapter extends RecyclerView.Adapter<PassengerAdapter.Hold
                 .into(holder.iv_head);
 
         holder.tv_pass_name.setText(customer.passengerName);
-        holder.tv_pass_number.setText("车票数量: " + customer.ticketNumber);
+        if (TextUtils.isEmpty(customer.sorts)) {
+            holder.tv_pass_number.setText("车票数量: " + customer.ticketNumber);
+        } else {
+            holder.tv_pass_number.setText(CommonUtil.getPassengerDescAndType(customer.type, customer.sorts, customer.sortsType));
+        }
 
         holder.iv_call_phone.setOnClickListener(v -> {
             //跳转到拨号界面，同时传递电话号码

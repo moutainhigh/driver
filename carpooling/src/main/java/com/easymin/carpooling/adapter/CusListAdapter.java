@@ -82,7 +82,7 @@ public class CusListAdapter extends RecyclerView.Adapter<CusListAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CarpoolOrder carpoolOrder = carpoolOrders.get(position);
         holder.cusName.setText(carpoolOrder.passengerName);
-        holder.ticketNum.setText("车票数量:" + carpoolOrder.ticketNumber);
+        holder.ticketNum.setText("乘车人数:" + carpoolOrder.ticketNumber);
         holder.cusDesc.setText("备注: " + (TextUtils.isEmpty(carpoolOrder.orderRemark) ? "暂无备注" : carpoolOrder.orderRemark));
         if (flag == 0) {//PasTickets
 //            if (carpoolOrder.isContract == 1) {

@@ -1,7 +1,6 @@
 package com.easymi.personal.activity.register;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -19,10 +18,8 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.bumptech.glide.Glide;
 import com.easymi.component.Config;
 import com.easymi.component.activity.WebActivity;
-import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.ErrCode;
-import com.easymi.component.network.ErrCodeTran;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.AlexStatusBarUtils;
@@ -35,8 +32,6 @@ import com.easymi.component.widget.LoadingButton;
 import com.easymi.component.widget.keyboard.SafeKeyboard;
 import com.easymi.personal.R;
 import com.easymi.personal.entity.Register;
-
-import java.util.Locale;
 
 import rx.Observable;
 
@@ -319,10 +314,9 @@ public class RegisterAcitivty extends RxBaseActivity {
      */
     private void initBox() {
         text_agreement.setOnClickListener(view -> {
-            Intent intent = new Intent(this, WebActivity.class);
-            intent.putExtra("url", Config.H5_HOST + "#/protocol?articleName=driverLogin&appKey=" + Config.APP_KEY);
-            intent.putExtra("title", getString(R.string.login_agreement));
-            startActivity(intent);
+            WebActivity.goWebActivity(this
+                    , R.string.login_agreement
+                    , WebActivity.IWebVariable.DRIVER_LOGIN);
         });
     }
 
@@ -451,20 +445,10 @@ public class RegisterAcitivty extends RxBaseActivity {
             } else {
                 String msg = register.getMessage();
                 //获取默认配置
-                Configuration config = XApp.getInstance().getResources().getConfiguration();
-                if (config.locale == Locale.TAIWAN || config.locale == Locale.TRADITIONAL_CHINESE) {
-                    for (ErrCodeTran errCode : ErrCodeTran.values()) {
-                        if (register.getCode() == errCode.getCode()) {
-                            msg = errCode.getShowMsg();
-                            break;
-                        }
-                    }
-                } else {
-                    for (ErrCode errCode : ErrCode.values()) {
-                        if (register.getCode() == errCode.getCode()) {
-                            msg = errCode.getShowMsg();
-                            break;
-                        }
+                for (ErrCode errCode : ErrCode.values()) {
+                    if (register.getCode() == errCode.getCode()) {
+                        msg = errCode.getShowMsg();
+                        break;
                     }
                 }
                 ToastUtil.showMessage(this, msg);

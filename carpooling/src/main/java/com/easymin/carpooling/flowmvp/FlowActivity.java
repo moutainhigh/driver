@@ -230,8 +230,6 @@ public class FlowActivity extends RxPayActivity implements
             });
             if (!TextUtils.isEmpty(myAllStation.scheduleStationVoList.get(index).stationName)) {
                 cusToolbar.setTitle(myAllStation.scheduleStationVoList.get(index).stationName);
-            } else {
-                cusToolbar.setTitle("站点名");
             }
             cusToolbar.setRightGone();
         } else if (flag == StaticVal.TOOLBAR_FLOW) {
@@ -644,7 +642,7 @@ public class FlowActivity extends RxPayActivity implements
 
         tv_seq_num.setText(num + "");
         tv_name.setText("尾号" + phone.substring(phone.length() - 4, phone.length()));
-        tv_ticket_num.setText("车票:" + ticketNumber);
+        tv_ticket_num.setText("人数:" + ticketNumber);
 
         if (flag == StaticVal.MARKER_FLAG_PASS_ENABLE) {
             tv_seq_num.setBackgroundResource(R.drawable.circle_dark_22);
@@ -1055,11 +1053,11 @@ public class FlowActivity extends RxPayActivity implements
     @Override
     public void scheduleInfo(AllStation allStation) {
         if (allStation == null) {
-            ToastUtil.showMessage(this, "未查询到班次信息");
+            ToastUtil.showMessage(this, "未查询到时段信息");
             return;
         }
         if (allStation.scheduleStationVoList == null || allStation.scheduleStationVoList.size() == 0) {
-            ToastUtil.showMessage(this, "此班次没有任何站点");
+            ToastUtil.showMessage(this, "此时段没有任何上下车点");
             return;
         }
         myAllStation = allStation;
