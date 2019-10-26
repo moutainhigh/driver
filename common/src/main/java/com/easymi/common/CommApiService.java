@@ -450,13 +450,13 @@ public interface CommApiService {
                                           @Query("appKey") String appKey);
 
     /**
-     * 通过http上传位置信息，30秒一次
+     * 
      *
      * @param appKey
      * @param json
      * @return
      */
-    @POST("api/v1/message/location/driver")
+    @POST("api/v1/message/push/location/driver")
     @FormUrlEncoded
     Observable<GetFeeResult> gpsPush(@Field("app_key") String appKey,
                                      @Field("json") String json);

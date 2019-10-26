@@ -18,4 +18,6 @@ public class MqttConfig {
     public String ackTopic;
     public String connectionsUrl;
     public String clientId;
+    public String parentTopic;
+    public String groupId;
 }
