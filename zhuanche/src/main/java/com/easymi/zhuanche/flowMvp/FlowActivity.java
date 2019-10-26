@@ -36,7 +36,6 @@ import com.amap.api.navi.model.AMapNaviPath;
 import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.route.DriveRouteResult;
 import com.amap.api.services.route.DriveStep;
-import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.push.FeeChangeObserver;
 import com.easymi.common.push.HandlePush;
 import com.easymi.common.push.MqttManager;
@@ -1186,8 +1185,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void doUploadOrder() {
-                BuildPushData pushData = new BuildPushData(EmUtil.getLastLoc());
-                MqttManager.getInstance().pushLoc(pushData);
+                MqttManager.getInstance().savePushMessage(EmUtil.getLastLoc());
                 showDrive();
             }
 

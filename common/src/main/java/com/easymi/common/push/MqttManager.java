@@ -5,7 +5,6 @@ import android.os.Message;
 import android.text.TextUtils;
 
 import com.easymi.common.CommApiService;
-import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.entity.MqttReconnectEvent;
 import com.easymi.common.entity.PushBean;
 import com.easymi.common.entity.PushMessage;
@@ -142,12 +141,13 @@ public class MqttManager implements LocObserver {
             client.unregisterResources();
         }
 
-        Log.e("MqttManager", "creatConnect");
-
         pullTopic = "/trip/driver" + "/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
+        String clientId = "driver-" + EmUtil.getEmployId();
+//        pullTopic = Config.MQTT_PARENT_TOPIC + "/driver/" + EmUtil.getAppKey() + "/" + EmUtil.getEmployId();
         String brokerUrl = "tcp://" + Config.MQTT_HOST + ":" + Config.PORT_TCP;
         //身份唯一码
-        String clientId = "driver-" + EmUtil.getEmployId();
+//        String clientId = Config.MQTT_GROUP_ID + "@@@driver-" + EmUtil.getEmployId();
+        Log.e("MqttManager", "creatConnect   " + pullTopic + "      " + brokerUrl + "     " + clientId);
 
         if (conOpt == null) {
             conOpt = new MqttConnectOptions();
@@ -452,11 +452,7 @@ public class MqttManager implements LocObserver {
 
     @Override
     public void receiveLoc(EmLoc loc) {
-        pushLoc(new BuildPushData(loc));
-    }
-
-    public void pushLoc(BuildPushData data) {
-        pushInternalLoc(data);
+        savePushMessage(loc);
     }
 
     /**
@@ -464,7 +460,7 @@ public class MqttManager implements LocObserver {
      *
      * @param data
      */
-    private void pushInternalLoc(BuildPushData data) {
+    public void savePushMessage(EmLoc data) {
         if (data != null) {
             PushBean pushBean = BuildPushUtil.buildPush(data);
             if (pushBean == null) {
