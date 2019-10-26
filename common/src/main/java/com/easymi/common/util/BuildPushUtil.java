@@ -105,15 +105,15 @@ public class BuildPushUtil {
                 }
             } else if (dymOrder.serviceType.equals(Config.CARPOOL)) {
                 if (dymOrder.orderStatus >= 10 && dymOrder.orderStatus <= 30) {
-                    for (CarpoolOrder carpoolOrder : CarpoolOrder.findByIDTypeOrderByAcceptSeq(dymOrder.orderId, dymOrder.serviceType)) {
-                        dataOrder.orderId = carpoolOrder.id;
-                        dataOrder.orderType = carpoolOrder.orderType;
+//                    for (CarpoolOrder carpoolOrder : CarpoolOrder.findByIDTypeOrderByAcceptSeq(dymOrder.orderId, dymOrder.serviceType)) {
+                        dataOrder.orderId = dymOrder.id;
+                        dataOrder.orderType = dymOrder.serviceType;
 
-                        dataOrder.business = carpoolOrder.orderType;
-                        dataOrder.passengerId = carpoolOrder.passengerId;
+                        dataOrder.business = dymOrder.orderType;
+                        dataOrder.passengerId = dymOrder.passengerId;
 
-                        dataOrder.status = carpoolOrder.status;
-                    }
+//                        dataOrder.status = dymOrder.status;
+//                    }
                     orderList.add(dataOrder);
                 }
             } else {

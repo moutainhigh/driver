@@ -228,7 +228,7 @@ public class CarpoolOrder implements Serializable {
         values.put("timeSlot", timeSlot);
         values.put("status", status);
         values.put("scheduleId", scheduleId);
-        values.put("serviceType", orderType);
+        values.put("orderType", orderType);
         values.put("startAddress", startAddress);
         values.put("endAddress", endAddress);
         values.put("startLatitude", startLatitude);
@@ -384,7 +384,7 @@ public class CarpoolOrder implements Serializable {
         carpoolOrder.timeSlot = cursor.getString(cursor.getColumnIndex("timeSlot"));
         carpoolOrder.status = cursor.getInt(cursor.getColumnIndex("status"));
         carpoolOrder.scheduleId = cursor.getLong(cursor.getColumnIndex("scheduleId"));
-        carpoolOrder.orderType = cursor.getString(cursor.getColumnIndex("serviceType"));
+        carpoolOrder.orderType = cursor.getString(cursor.getColumnIndex("orderType"));
         carpoolOrder.startAddress = cursor.getString(cursor.getColumnIndex("startAddress"));
         carpoolOrder.endAddress = cursor.getString(cursor.getColumnIndex("endAddress"));
         carpoolOrder.startLatitude = cursor.getDouble(cursor.getColumnIndex("startLatitude"));
@@ -408,7 +408,7 @@ public class CarpoolOrder implements Serializable {
     public static void delete(long id, String orderType) {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
-        db.delete("t_cp_order_customer", "id = ? and serviceType = ? ",
+        db.delete("t_cp_order_customer", "id = ? and orderType = ? ",
                 new String[]{String.valueOf(id), orderType});
     }
 
@@ -452,7 +452,7 @@ public class CarpoolOrder implements Serializable {
         values.put("timeSlot", timeSlot);
         values.put("status", status);
         values.put("scheduleId", scheduleId);
-        values.put("serviceType", orderType);
+        values.put("orderType", orderType);
 
         values.put("startAddress", startAddress);
         values.put("endAddress", endAddress);
