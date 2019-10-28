@@ -1,14 +1,11 @@
 package com.easymi.zhuanche.flowMvp;
 
 import com.easymi.common.CommApiService;
-import com.easymi.common.result.GetFeeResult;
-import com.easymi.common.util.BuildPushUtil;
 import com.easymi.component.ComponentService;
 import com.easymi.component.Config;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.network.ApiManager;
-import com.easymi.component.network.GsonUtil;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.result.EmResult;
@@ -21,7 +18,6 @@ import com.google.gson.JsonElement;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -105,32 +101,16 @@ public class FlowModel implements FlowContract.Model {
     @Override
     public Observable<ZCOrderResult> arriveDes(ZCOrder zcOrder, DymOrder order, Long version) {
         EmLoc emLoc = EmUtil.getLastLoc();
-        String json = GsonUtil.toJson(BuildPushUtil.buildPush(emLoc));
-        return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .gpsPush(EmUtil.getAppKey(), json)
-                .flatMap(new Func1<GetFeeResult, Observable<ZCOrderResult>>() {
-                    @Override
-                    public Observable<ZCOrderResult> call(GetFeeResult getFeeResult) {
-
-                        return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
-                                .arrivalDistination(
-                                        zcOrder.orderId,
-                                        EmUtil.getAppKey(),
-                                        version,
-                                        emLoc.longitude,
-                                        emLoc.latitude,
-                                        emLoc.address
-                                )
-                                .filter(new HttpResultFunc<>())
-                                .map(new Func1<ZCOrderResult, ZCOrderResult>() {
-                                    @Override
-                                    public ZCOrderResult call(ZCOrderResult zcOrderResult) {
-//                                        finalOrder1.updateConfirm();
-                                        return zcOrderResult;
-                                    }
-                                });
-                    }
-                })
+        return ApiManager.getInstance().createApi(Config.HOST, ZCApiService.class)
+                .arrivalDistination(
+                        zcOrder.orderId,
+                        EmUtil.getAppKey(),
+                        version,
+                        emLoc.longitude,
+                        emLoc.latitude,
+                        emLoc.address
+                )
+                .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
