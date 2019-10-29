@@ -80,32 +80,32 @@ public class CusListFragment extends RxBaseFragment {
         CarpoolOrder current = null;
         for (int i = 0; i < carpoolOrderList.size(); i++) {
             CarpoolOrder carpoolOrder = carpoolOrderList.get(i);
-            if (current == null) {
-                if (carpoolOrder.customeStatus == 0 || carpoolOrder.customeStatus == 3) {
-                    current = carpoolOrder;
-                    break;
-                }
-            } else {
-                if (current.customeStatus != 0 && current.customeStatus != 3) {
-                    if (carpoolOrder.customeStatus == 0 || carpoolOrder.customeStatus == 3) {
-                        current = carpoolOrder;
-                        break;
-                    }
-                }
-            }
+//            if (current == null) {
+//                if (carpoolOrder.customeStatus == 0 || carpoolOrder.customeStatus == 3) {
+//                    current = carpoolOrder;
+//                    break;
+//                }
+//            } else {
+//                if (current.customeStatus != 0 && current.customeStatus != 3) {
+//                    if (carpoolOrder.customeStatus == 0 || carpoolOrder.customeStatus == 3) {
+//                        current = carpoolOrder;
+//                        break;
+//                    }
+//                }
+//            }
             current = carpoolOrder;
             if (i == carpoolOrderList.size() - 1) {
                 current = null;
             }
         }
         boolean isJie = false;
-        if (flag == StaticVal.PLAN_ACCEPT) {
-            bridge.changeToolbar(StaticVal.TOOLBAR_ACCEPT_ING);
-            isJie = true;
-        } else if (flag == StaticVal.PLAN_SEND) {
-            bridge.changeToolbar(StaticVal.TOOLBAR_SEND_ING);
-            isJie = false;
-        }
+//        if (flag == StaticVal.PLAN_ACCEPT) {
+//            bridge.changeToolbar(StaticVal.TOOLBAR_ACCEPT_ING,-1);
+//            isJie = true;
+//        } else if (flag == StaticVal.PLAN_SEND) {
+//            bridge.changeToolbar(StaticVal.TOOLBAR_SEND_ING,-1);
+//            isJie = false;
+//        }
         if (current != null) {
             button.setVisibility(View.VISIBLE);
             button.setText("正在"
@@ -126,7 +126,7 @@ public class CusListFragment extends RxBaseFragment {
             return;
         }
         orderId = args.getLong("orderId", 0);
-        orderType = args.getString("orderType", "");
+        orderType = args.getString("serviceType", "");
         dymOrder = DymOrder.findByIDType(orderId, orderType);
     }
 
@@ -169,7 +169,7 @@ public class CusListFragment extends RxBaseFragment {
         if (flag == StaticVal.PLAN_ACCEPT) {
             carpoolOrderList = CarpoolOrder.findByIDTypeOrderByAcceptSeq(orderId, orderType);
         } else {
-            carpoolOrderList = CarpoolOrder.findByIDTypeOrderBySendSeq(orderId, orderType);
+//            carpoolOrderList = CarpoolOrder.findByIDTypeOrderBySendSeq(orderId, serviceType);
         }
         cusListAdapter.setOrderCustomers(carpoolOrderList);
     }

@@ -11,13 +11,10 @@
     <string name="cb_hour">时</string>
     <string name="cb_fen">分</string>
     <string name="cb_start_countdown">行程开始倒计时</string>
-    <string name="cb_slider_start">滑动开始行程</string>
     <string name="cb_check_ticket">验票</string>
-    <string name="cb_go_next">前往下一站</string>
     <string name="cb_wait_timeout">等待已超时</string>
     <string name="cb_passenger_info">乘客信息</string>
     <string name="cb_already_get_on">已上车</string>
-    <string name="cb_input_ticket_code">请输入车票码</string>
     <string name="cb_name">姓名</string>
     <string name="cb_start_site">起点</string>
     <string name="cb_end_site">终点</string>
@@ -27,7 +24,6 @@
     <string name="cb_go_to">去</string>
     <string name="cb_finish">滑动结束行程</string>
     <string name="cb_cancel">取消</string>
-    <string name="cb_code_hint">请输入车票码开始验票</string>
     <string name="cb_code">请输入车票码</string>
     <string name="cb_slider_check">滑动开始验票</string>
     <string name="cb_slider_arrive">滑动到达站点</string>
@@ -43,8 +39,7 @@
     <string name="cb_arrive_end_station">到达终点站</string>
 
     <string name="cb_go_next_station">前往\n下一站</string>
-    <string name="cb_dialog_title">是否前往下一站</string>
-    <string name="cb_dialog_hint">前往下一站后，未验票乘客将不能再验票</string>
+    <string name="cb_dialog_hint">还有乘客订单未支付或未确认，前往下一站将会自动跳过这些订单，未支付订单将自动取消，是否前往？</string>
 
 
     <string name="canceled_order">当前订单已被取消:)</string>

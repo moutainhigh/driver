@@ -5,8 +5,6 @@
     <string name="login_title">服務端登錄</string>
     <string name="login_pl_phone">請輸入手機號碼</string>
     <string name="login_pl_psw">請輸入密碼</string>
-    <string name="login_pl_choice_qiye">請選擇企業編號</string>
-    <string name="login_pl_edit_qiye">請輸入企業編號</string>
     <string name="login_agg">同意《服務人員合作協議》</string>
     <string name="login_rem_psw">記住密碼</string>
     <string name="login">登錄</string>
@@ -19,12 +17,9 @@
 
 
     <!-- 個人中心str -->
-    <string name="person_order">我的訂單</string>
     <string name="person_money">我的錢包</string>
-    <string name="person_jiangli">推薦獎勵</string>
     <string name="person_pingjia">乘客評價</string>
     <string name="person_message">消息中心</string>
-    <string name="person_driver">成為司機</string>
     <string name="my_message">我的消息</string>
     <string name="person_set">設置</string>
     <string name="person_tuiguang">推廣</string>
@@ -56,14 +51,12 @@
     <string name="register_send_succed">發送成功</string>
     <string name="register_code_hint">請輸入驗證碼</string>
     <string name="rg_iamge_code">請輸入圖形驗證碼</string>
-    <string name="register_password_hint">設置登錄密碼</string>
     <string name="register_agg">已閱讀並同意《服務人員合作協議》</string>
     <string name="register">註冊</string>
     <string name="register_cheack_phone">請輸入正確的手機號</string>
     <string name="register_input_ps">請輸入登錄密碼</string>
     <string name="register_contract_phone">聯系人電話</string>
     <string name="register_contract_hint">緊急聯系人電話</string>
-    <string name="register_contract_phone_hint">請輸入正確的緊急聯系人電話</string>
 
     <string name="register_base_msg">基本信息</string>
     <string name="register_pic_msg">圖像信息</string>
@@ -90,19 +83,9 @@
     <string name="register_please_name">請輸入您的姓名</string>
     <string name="register_please_phone">請輸入手機號碼</string>
     <string name="register_please_id_card">請輸入身份證號</string>
-    <string name="register_please_contract">緊急聯系人（姓名+電話+關系）</string>
-
-    <string name="register_business">開展業務</string>
-
-    <string name="register_daijia">代駕</string>
-    <string name="register_zhuanche">專車</string>
-    <string name="register_errand">跑腿</string>
-    <string name="register_freight">貨運</string>
-    <string name="register_zhuanxian">專線</string>
 
     <string name="register_refer">推薦人工號</string>
     <string name="register_refer_no">輸入推薦人工號</string>
-    <string name="register_agree">同意《服務人員服務協議》</string>
     <string name="register_next_step">下壹步</string>
 
     <string name="register_upload_card">上傳身份證</string>
@@ -117,20 +100,12 @@
     <string name="register_known">知道了</string>
     <string name="register_apply">提交資料</string>
 
-    <string name="register_title">服務人員註冊</string>
-    <string name="register_no_loc">未獲取到定位信息</string>
-    <string name="register_re_company">加載公司信息失敗，正在重試</string>
-    <string name="register_re_business">加載業務類型失敗，正在重試</string>
-
-    <string name="register_finish">獲取公司信息失敗,請稍候再試</string>
-
 
     <!-- 設置密碼str-->
     <string name="reset_login_psw">設置登錄密碼</string>
     <string name="reset_please_6">請輸入6–16新位密碼</string>
     <string name="reset_login_phone">設置登錄手機號</string>
     <string name="reset_please_11">請輸入11位手機號碼</string>
-    <string name="reset_please_code">請輸入驗證碼</string>
     <string name="reset_confirm">確定</string>
     <string name="reset_edit_words">輸入圖片文字</string>
     <string name="reset_refresh">點擊刷新</string>
@@ -138,7 +113,6 @@
     <string name="reset_code_to_where">驗證碼發送至</string>
     <string name="reset_sec_resend">秒後重發</string>
     <string name="reset_resend_code">重新獲取></string>
-    <string name="reset_error_auth">圖形驗證碼錯誤</string>
     <string name="reset_change_suc">修改密碼成功</string>
 
     <!--充值str -->
@@ -199,7 +173,6 @@
     <string name="tixian_confirm">確認提現</string>
     <string name="tixian_rule">提現規則</string>
     <string name="tixian_record">提現記錄</string>
-    <string name="tixian_this_most">本次可提現</string>
     <string name="tixian_my_balance">我的余額(元)</string>
 
     <!-- 提現規則str-->
@@ -220,12 +193,9 @@
     <!--意見反饋str-->
     <string name="feedback_please">請留下您的寶貴意見</string>
     <string name="feedback_apply">提交</string>
-    <string name="feedback_please_msg">請填寫您的意見</string>
     <string name="feedback_suc">我們已收到您的寶貴意見</string>
 
     <!--評價str-->
-    <string name="total_score">累計得分</string>
-    <string name="total_order">累計接單</string>
     <string name="total_score_dis">累計星級分布</string>
     <string name="star_5">5星</string>
     <string name="star_4">4星</string>
@@ -274,15 +244,7 @@
     <string name="same_old_new">新密碼與舊密碼相同</string>
     <string name="not_same_old">您輸入的舊密碼與所登錄的賬戶密碼不匹配</string>
 
-    <string name="wx_pay_success">微信充值成功</string>
-    <string name="wx_pay_fail">微信充值失敗</string>
-    <string name="wx_share_suc">微信分享成功</string>
     <string name="wx_share_failed">微信分享失敗</string>
-
-    <string name="wx_pay_failed">微信支付數據錯誤:</string>
-
-    <string name="alipay_success">支付寶充值成功</string>
-    <string name="alipay_failed">支付寶充值失敗</string>
 
     <string name="near_no_wc">附近暫無廁所</string>
     <string name="change_psw_suc">修改密碼成功</string>
@@ -316,7 +278,6 @@
 
     <string name="help_daijia">代駕</string>
     <string name="help_zhuanche">專車</string>
-    <string name="be_busy">您正處於忙碌狀態，無法修改密碼</string>
 
     <string name="tixian_1">提現規則，最小</string>
     <string name="tixian_2">元，最大</string>
@@ -345,15 +306,11 @@
     <string name="please_kaikuo">請行駛到開闊地帶 </string>
     <string name="please_wifi">請打開WIFI有助於精準定位 </string>
     <string name="loc_ok">定位狀態良好</string>
-    <string name="loc_err">定位失敗</string>
 
     <string name="notice_ok">通知消息正常</string>
     <string name="notice_err">通知消息異常，請退出重新登錄</string>
 
-    <string name="get_set_failed">獲取配置信息失敗，請稍後再試</string>
     <string name="get_sms_suc">獲取驗證碼成功</string>
-
-    <string name="balance_personal">余額(元)</string>
 
     <string name="renminbi">¥</string>
     <string name="p_car_info">車輛信息</string>

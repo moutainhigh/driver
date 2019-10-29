@@ -24,7 +24,6 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
-import com.amap.api.maps.utils.overlay.SmoothMoveMarker;
 import com.amap.api.navi.model.AMapNaviPath;
 import com.amap.api.services.route.DriveRouteResult;
 import com.amap.api.services.route.DriveStep;
@@ -52,6 +51,7 @@ import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
+import com.easymi.component.entity.MySmoothMarker;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
 import com.easymi.component.network.ApiManager;
@@ -73,7 +73,6 @@ import com.google.gson.Gson;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
@@ -107,11 +106,6 @@ public class FlowActivity extends RxBaseActivity implements
      * 司机位置
      */
     private LatLng lastLatlng;
-    /**
-     * 首次进入司机marker
-     */
-    private Marker myFirstMarker;
-
 
     FlowPresenter presenter;
 
@@ -156,6 +150,7 @@ public class FlowActivity extends RxBaseActivity implements
             .transform(new GlideCircleTransform())
             .placeholder(R.mipmap.photo_default)
             .diskCacheStrategy(DiskCacheStrategy.ALL);
+    private MySmoothMarker driverMarker;
 
     @Override
     public boolean isEnableSwipe() {
@@ -493,7 +488,7 @@ public class FlowActivity extends RxBaseActivity implements
         cusListFragment = new CusListFragment();
         Bundle bundle = new Bundle();
         bundle.putLong("orderId", zxOrder.orderId);
-        bundle.putString("orderType", zxOrder.orderType);
+        bundle.putString("serviceType", zxOrder.orderType);
         cusListFragment.setArguments(bundle);
 
         changeSeqFragment = new ChangeSeqFragment();
@@ -549,15 +544,6 @@ public class FlowActivity extends RxBaseActivity implements
             lastLatlng = new LatLng(emLoc.latitude, emLoc.longitude);
             receiveLoc(emLoc);//手动调用上次位置 减少从北京跳过来的时间
             aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLatlng, 19));//移动镜头，首次镜头快速跳到指定位置
-
-            MarkerOptions markerOption = new MarkerOptions();
-            markerOption.position(new LatLng(emLoc.latitude, emLoc.longitude));
-            markerOption.draggable(false);//设置Marker可拖动
-            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                    .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
-            // 将Marker设置为贴地显示，可以双指下拉地图查看效果
-            markerOption.setFlat(true);//设置marker平贴地图效果
-            myFirstMarker = aMap.addMarker(markerOption);
         }
     }
 
@@ -625,7 +611,10 @@ public class FlowActivity extends RxBaseActivity implements
             @Override
             public void clearMap() {
                 aMap.clear();
-                smoothMoveMarker = null;
+                if (driverMarker != null) {
+                    driverMarker.destory();
+                }
+                driverMarker = null;
                 initMap();
                 receiveLoc(EmUtil.getLastLoc());//第一时间加上自身位置
             }
@@ -647,31 +636,31 @@ public class FlowActivity extends RxBaseActivity implements
 
             @Override
             public void arriveStart(OrderCustomer orderCustomer) {
-                //TODO 到达预约地
+                // 到达预约地
                 presenter.arriveStart(orderCustomer);
             }
 
             @Override
             public void acceptCustomer(OrderCustomer orderCustomer) {
-                //TODO 接到客户
+                // 接到客户
                 presenter.acceptCustomer(orderCustomer);
             }
 
             @Override
             public void jumpAccept(OrderCustomer orderCustomer) {
-                //TODO 跳过接
+                // 跳过接
                 presenter.jumpAccept(orderCustomer);
             }
 
             @Override
             public void arriveEnd(OrderCustomer orderCustomer) {
-                //TODO 到达目的地
+                // 到达目的地
                 presenter.arriveEnd(orderCustomer);
             }
 
             @Override
             public void jumpSend(OrderCustomer orderCustomer) {
-                //TODO 跳过送
+                // 跳过送
                 presenter.jumpSend(orderCustomer);
             }
 
@@ -818,19 +807,16 @@ public class FlowActivity extends RxBaseActivity implements
     @Override
     public void showPath(DriveRouteResult result) {
 
-        DrivingRouteOverlay overlayout = new DrivingRouteOverlay(this, aMap,
-                result.getPaths().get(0), result.getStartPos()
-                , result.getTargetPos(), null);
-//        overlayout.setRouteWidth(5);
-        overlayout.setIsColorfulline(false);
-        overlayout.setNodeIconVisibility(false);//隐藏转弯的节点
-        overlayout.addToMap();
-
         if (drivingRouteOverlay != null) {
             drivingRouteOverlay.removeFromMap();
         }
-
-        drivingRouteOverlay = overlayout;
+        drivingRouteOverlay = new DrivingRouteOverlay(this, aMap,
+                result.getPaths().get(0), result.getStartPos()
+                , result.getTargetPos(), null);
+//        drivingRouteOverlay.setRouteWidth(5);
+        drivingRouteOverlay.setIsColorfulline(false);
+        drivingRouteOverlay.setNodeIconVisibility(false);//隐藏转弯的节点
+        drivingRouteOverlay.addToMap();
 
         float dis = 0;
         float time = 0;
@@ -882,8 +868,8 @@ public class FlowActivity extends RxBaseActivity implements
                     getString(R.string.minute_) +
                     "到达";
         }
-        if (null != smoothMoveMarker) {
-            Marker marker = smoothMoveMarker.getMarker();
+        if (null != driverMarker) {
+            Marker marker = driverMarker.getMarker();
             marker.setSnippet(leftDis);//leftDis
             marker.setTitle(leftTime);//leftTime
             marker.showInfoWindow();
@@ -986,7 +972,13 @@ public class FlowActivity extends RxBaseActivity implements
                 bridge.toAcSend();
             } else if (dymOrder.orderStatus == ZXOrderStatus.SEND_OVER) {
                 presenter.finishTask(zxOrder.orderId);
+            } else {
+                ToastUtil.showMessage(this, "订单状态出现错误");
+                finish();
             }
+        } else {
+            ToastUtil.showMessage(this, "订单状态出现错误");
+            finish();
         }
     }
 
@@ -1025,6 +1017,9 @@ public class FlowActivity extends RxBaseActivity implements
     protected void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
+        if (driverMarker != null) {
+            driverMarker.destory();
+        }
     }
 
     @Override
@@ -1039,8 +1034,6 @@ public class FlowActivity extends RxBaseActivity implements
         }
     }
 
-    SmoothMoveMarker smoothMoveMarker;
-
     boolean delayAnimate = true;
 
     @Override
@@ -1051,44 +1044,26 @@ public class FlowActivity extends RxBaseActivity implements
         Log.e("locPos", "bearing 2 >>>>" + location.bearing);
         LatLng latLng = new LatLng(location.latitude, location.longitude);
 
-        if (null == smoothMoveMarker) {
-            //首次进入
-            smoothMoveMarker = new SmoothMoveMarker(aMap);
-            smoothMoveMarker.setDescriptor(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+        if (null == driverMarker) { //首次进入
+            MarkerOptions markerOption = new MarkerOptions();
+            markerOption.position(latLng);
+            markerOption.draggable(false);
+            markerOption.anchor(0.5f, 0.5f);
+            markerOption.infoWindowEnable(true);
+            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                     .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
-            smoothMoveMarker.setPosition(lastLatlng);
-            smoothMoveMarker.setRotate(location.bearing);
-//            smoothMoveMarker.getMarker().
-        } else {
-            //去除掉首次的位置marker
-            if (null != myFirstMarker) {
-                myFirstMarker.remove();
-            }
-            List<LatLng> latLngs = new ArrayList<>();
-            latLngs.add(lastLatlng);
-            latLngs.add(latLng);
-            smoothMoveMarker.setPosition(lastLatlng);
-            smoothMoveMarker.setPoints(latLngs);
-            smoothMoveMarker.setTotalDuration(Config.NORMAL_LOC_TIME / 1000);
-            smoothMoveMarker.setRotate(location.bearing);
-            smoothMoveMarker.startSmoothMove();
-            Marker marker = smoothMoveMarker.getMarker();
-            if (null != marker) {
-                marker.setDraggable(false);
-
-//                if ((dymOrder.orderStatus == ZXOrderStatus.SEND_ING
-//                        || dymOrder.orderStatus == ZXOrderStatus.ACCEPT_ING)
-//                        && currentFragment instanceof AcceptSendFragment) {
-//                    marker.setSnippet(leftDis);//leftDis
-//                    marker.setTitle(leftTime);//leftTime
-                marker.setInfoWindowEnable(true);
-//                    marker.setClickable(true);
-//                } else {
-//                    marker.setInfoWindowEnable(false);
+            markerOption.rotateAngle(360.0F - location.bearing + aMap.getCameraPosition().bearing);
+            driverMarker = new MySmoothMarker(aMap, markerOption);
+            Marker marker = driverMarker.getMarker();
+            if (marker != null) {
                 marker.setClickable(false);
-//                }
-                marker.setAnchor(0.5f, 0.5f);
             }
+        } else {
+            Marker marker = driverMarker.getMarker();
+            if (null != marker) {
+                marker.setRotateAngle(360.0F - location.bearing + aMap.getCameraPosition().bearing);
+            }
+            driverMarker.startMove(latLng, 3000, true);
         }
 
         if (dymOrder == null) {

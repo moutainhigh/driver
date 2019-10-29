@@ -28,6 +28,8 @@ public class Config {
     public static String MQTT_USER_NAME;
     public static String MQTT_PSW;
     public static String MQTT_CONNECTION_URL;
+    public static String MQTT_PARENT_TOPIC;
+    public static String MQTT_GROUP_ID;
     public static String APP_KEY;
 
 
@@ -67,6 +69,7 @@ public class Config {
     public static String IMG_SERVER;
     public static String IMG_PATH;
     public static String VERSION_NAME;
+    public static String VERSION_DATA;
 
     public static final String MQTT_PUSH_TOPIC = "/driver/gps";
 
@@ -74,10 +77,13 @@ public class Config {
      * SharedPrefence 常量配置
      */
     public static final String SP_DRIVERID = "driverId";
+    public static final String SP_MANUAL_DATA = "manualData";
     public static final String SP_ISLOGIN = "isLogin";
     public static final String SP_DZBUS_ORDER = "isLogin";
     public static final String SP_LAST_LOC = "lastLoc";
     public static final String SP_NAME = "em";
+
+    public static final String PC_BOOKTIME = "pc_booktime";
 
     public static final String SP_QIYE_CODE = "qiye_code"; //企业编码
     public static final String SP_APP_KEY = "app_key"; //app_key
@@ -169,6 +175,10 @@ public class Config {
     public static final String SP_TOKEN = "sp_token";
 
     public static final String AES_PASSWORD = "aes_password";
+
+    public static final String TYPE_RSA = "type:rsa";
+    public static final String RSA = "rsa";
+    public static final String TYPE = "type";
 
     public static final String ONLINE_TIME = "online_time";
 

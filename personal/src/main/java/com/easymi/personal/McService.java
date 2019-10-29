@@ -2,7 +2,10 @@ package com.easymi.personal;
 
 import com.easymi.common.entity.CompanyList;
 import com.easymi.common.entity.RegisterRes;
+import com.easymi.component.Config;
+import com.easymi.component.pay.PayType;
 import com.easymi.component.result.EmResult;
+import com.easymi.component.result.EmResult2;
 import com.easymi.personal.entity.CarInfo;
 import com.easymi.personal.entity.Register;
 import com.easymi.personal.result.AnnouncementResult;
@@ -28,6 +31,7 @@ import com.easymi.personal.result.TixianRuleResult;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -45,6 +49,16 @@ import rx.Observable;
  */
 
 public interface McService {
+
+
+
+    @GET("api/v1/system/config/payment")
+    Observable<EmResult2<PayType>> getPayType();
+
+    @Headers(Config.TYPE_RSA)
+    @GET("api/v1/resources/isLogin")
+    Observable<EmResult2<Boolean>> getIsLogin(@Query("userType") int userType,
+                                              @Query("phone") String phone);
 
     @FormUrlEncoded
     @POST("driver/api/v1/employLogin")
@@ -216,8 +230,6 @@ public interface McService {
                                    @Query("app_key") String appKey);
 
 
-    //add hufeng
-
     /**
      * 账号密码登录
      *
@@ -225,6 +237,7 @@ public interface McService {
      * @param password
      * @return
      */
+    @Headers(Config.TYPE_RSA)
     @FormUrlEncoded
     @POST("api/v1/resources/driver/login")
     Observable<LoginResult> loginByPW(@Field("phone") String phone,
@@ -433,6 +446,7 @@ public interface McService {
      * @param userType
      * @return
      */
+    @Headers(Config.TYPE_RSA)
     @FormUrlEncoded
     @POST("api/v1/system/captcha/send/sms")
     Observable<EmResult> sendSms(@Field("code") String code,
@@ -449,6 +463,7 @@ public interface McService {
      * @param smsCode
      * @return
      */
+    @Headers(Config.TYPE_RSA)
     @FormUrlEncoded
     @POST("api/v1/resources/driver/register")
     Observable<Register> register(@Field("password") String password,
@@ -478,6 +493,7 @@ public interface McService {
      * @param driveLicensePath
      * @return
      */
+    @Headers(Config.TYPE_RSA)
     @FormUrlEncoded
     @POST("api/v1/resources/driver/register/last")
     Observable<RegisterRes> applyDriver(@Field("id") String id,
@@ -508,6 +524,7 @@ public interface McService {
      * @param phone
      * @return
      */
+    @Headers(Config.TYPE_RSA)
     @GET("api/v1/resources/driver/register/getByDriverPhone")
     Observable<RegisterResult> getDriverInfo(@Query("phone") String phone);
 

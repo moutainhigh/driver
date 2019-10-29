@@ -1,16 +1,12 @@
 package com.easymin.driver.securitycenter.network;
 
 
-import java.io.File;
 import java.util.concurrent.TimeUnit;
 
-import com.easymin.driver.securitycenter.CenterConfig;
-import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by xyin on 2016/10/11.
@@ -20,6 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiManager {
 
     private OkHttpClient mOkHttpClient;
+
     /**
      * 内部静态类实现单例,且在第一次使用时才加载.
      */

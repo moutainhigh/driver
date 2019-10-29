@@ -57,7 +57,6 @@
             android:clickable="true">
 
             <TextView
-                android:id="@+id/recharge_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -99,7 +98,6 @@
             android:clickable="true">
 
             <TextView
-                android:id="@+id/detail_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"

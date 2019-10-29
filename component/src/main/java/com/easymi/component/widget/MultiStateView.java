@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.easymi.component.R;
-import com.easymi.component.utils.LogUtil;
+import com.easymi.component.utils.Log;
 
 /**
  * Created by xyin on 2016/11/2.
@@ -130,7 +130,7 @@ public class MultiStateView extends FrameLayout implements View.OnClickListener 
                     view.setOnClickListener(this);
                 }
             } else {
-                LogUtil.e(TAG, "resLayoutId does not exist");
+                Log.e(TAG, "resLayoutId does not exist");
             }
         }
     }

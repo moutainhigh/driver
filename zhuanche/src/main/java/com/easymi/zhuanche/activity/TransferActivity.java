@@ -63,7 +63,7 @@ public class TransferActivity extends RxBaseActivity {
         if (order == null) {
             return;
         }
-        tvNo.setText(order.orderNumber);
+        tvNo.setText(order.orderNo);
         tvTime.setText(CommonUtil.dateFormat(order.bookTime * 1000, "yyyy-MM-dd HH:mm"));
         tvStart.setText(order.startPlace);
         tvEnd.setText(order.endPlace);

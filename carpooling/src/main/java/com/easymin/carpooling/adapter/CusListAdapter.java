@@ -82,68 +82,62 @@ public class CusListAdapter extends RecyclerView.Adapter<CusListAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CarpoolOrder carpoolOrder = carpoolOrders.get(position);
         holder.cusName.setText(carpoolOrder.passengerName);
-        holder.ticketNum.setText("车票数量:" + carpoolOrder.ticketNumber);
+        holder.ticketNum.setText("乘车人数:" + carpoolOrder.ticketNumber);
         holder.cusDesc.setText("备注: " + (TextUtils.isEmpty(carpoolOrder.orderRemark) ? "暂无备注" : carpoolOrder.orderRemark));
         if (flag == 0) {//PasTickets
-            if (carpoolOrder.isContract == 1) {
-                holder.status.setVisibility(View.VISIBLE);
-                holder.status.setText("已联系");
-                holder.status.setBackgroundResource(R.drawable.corner_status_called);
-                holder.status.setTextColor(Color.parseColor("#0099E9"));
-            } else {
-                holder.status.setVisibility(View.GONE);
-            }
+//            if (carpoolOrder.isContract == 1) {
+//                holder.status.setVisibility(View.VISIBLE);
+//                holder.status.setText("已联系");
+//                holder.status.setBackgroundResource(R.drawable.corner_status_called);
+//                holder.status.setTextColor(Color.parseColor("#0099E9"));
+//            } else {
+//                holder.status.setVisibility(View.GONE);
+//            }
             holder.callPhone.setVisibility(View.VISIBLE);
         } else if (flag == 1) { //CusList
             holder.status.setVisibility(View.VISIBLE);
             holder.status.setText(carpoolOrder.getOrderStatus());
             holder.callPhone.setVisibility(View.GONE);
-            if (carpoolOrder.customeStatus == 0 || carpoolOrder.customeStatus == 3) {
-                holder.status.setBackgroundResource(R.drawable.corner_status_called);
-                holder.status.setTextColor(Color.parseColor("#0099E9"));
-                if (carpoolOrder.customeStatus == 0) {
-                    holder.callPhone.setVisibility(View.VISIBLE);
-                }
-            } else if (carpoolOrder.customeStatus == 1 || carpoolOrder.customeStatus == 4) {
-                holder.status.setBackgroundResource(R.drawable.corner_status_called);
-                holder.status.setTextColor(Color.parseColor("#0099E9"));
-            } else if (carpoolOrder.customeStatus == 2 || carpoolOrder.customeStatus == 5) {
-                holder.status.setBackgroundResource(R.drawable.corner_status_called);
-                holder.status.setTextColor(Color.parseColor("#0099E9"));
-            }
-
-            if (lastCustomer == null) {
-                if (carpoolOrder.customeStatus == 0 || carpoolOrder.customeStatus == 3) {
-                    holder.status.setText("当前");
-                    holder.status.setBackgroundResource(R.drawable.corner_status_current);
-                    holder.status.setTextColor(Color.parseColor("#FFFFFF"));
-                }
-            } else {
-                if (lastCustomer.customeStatus != 0 && lastCustomer.customeStatus != 3) {
-                    if (carpoolOrder.customeStatus == 0 || carpoolOrder.customeStatus == 3) {
-                        holder.status.setText("当前");
-                        holder.status.setBackgroundResource(R.drawable.corner_status_current);
-                        holder.status.setTextColor(Color.parseColor("#FFFFFF"));
-                    }
-                }
-            }
+//            if (carpoolOrder.customeStatus == 0 || carpoolOrder.customeStatus == 3) {
+//                holder.status.setBackgroundResource(R.drawable.corner_status_called);
+//                holder.status.setTextColor(Color.parseColor("#0099E9"));
+//                if (carpoolOrder.customeStatus == 0) {
+//                    holder.callPhone.setVisibility(View.VISIBLE);
+//                }
+//            } else if (carpoolOrder.customeStatus == 1 || carpoolOrder.customeStatus == 4) {
+//                holder.status.setBackgroundResource(R.drawable.corner_status_called);
+//                holder.status.setTextColor(Color.parseColor("#0099E9"));
+//            } else if (carpoolOrder.customeStatus == 2 || carpoolOrder.customeStatus == 5) {
+//                holder.status.setBackgroundResource(R.drawable.corner_status_called);
+//                holder.status.setTextColor(Color.parseColor("#0099E9"));
+//            }
+//
+//            if (lastCustomer == null) {
+//                if (carpoolOrder.customeStatus == 0 || carpoolOrder.customeStatus == 3) {
+//                    holder.status.setText("当前");
+//                    holder.status.setBackgroundResource(R.drawable.corner_status_current);
+//                    holder.status.setTextColor(Color.parseColor("#FFFFFF"));
+//                }
+//            } else {
+//                if (lastCustomer.customeStatus != 0 && lastCustomer.customeStatus != 3) {
+//                    if (carpoolOrder.customeStatus == 0 || carpoolOrder.customeStatus == 3) {
+//                        holder.status.setText("当前");
+//                        holder.status.setBackgroundResource(R.drawable.corner_status_current);
+//                        holder.status.setTextColor(Color.parseColor("#FFFFFF"));
+//                    }
+//                }
+//            }
         }
         holder.cusRl.setVisibility(carpoolOrder.advanceAssign == 1 ? View.VISIBLE : View.GONE);
-        holder.cusTvPay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onShowDialogListener != null) {
-                    onShowDialogListener.onDialogClick(true, carpoolOrder.id, carpoolOrder.money);
-                }
+        holder.cusTvPay.setOnClickListener(v -> {
+            if (onShowDialogListener != null) {
+                onShowDialogListener.onDialogClick(true, carpoolOrder.orderId, carpoolOrder.money);
             }
         });
 
-        holder.cusTvCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onShowDialogListener != null) {
-                    onShowDialogListener.onDialogClick(false, carpoolOrder.id, carpoolOrder.money);
-                }
+        holder.cusTvCancel.setOnClickListener(v -> {
+            if (onShowDialogListener != null) {
+                onShowDialogListener.onDialogClick(false, carpoolOrder.orderId, carpoolOrder.money);
             }
         });
 

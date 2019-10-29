@@ -36,13 +36,11 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
-import com.amap.api.maps.utils.overlay.SmoothMoveMarker;
 import com.amap.api.navi.model.AMapNaviPath;
 import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.route.DriveRouteResult;
 import com.amap.api.services.route.DriveStep;
 import com.easymi.common.entity.Address;
-import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.push.FeeChangeObserver;
 import com.easymi.common.push.HandlePush;
 import com.easymi.common.push.MqttManager;
@@ -56,6 +54,7 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
+import com.easymi.component.entity.MySmoothMarker;
 import com.easymi.component.entity.PassengerLocation;
 import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.loc.LocObserver;
@@ -166,7 +165,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     private long orderId;
 
-    private AlbumOrientationEventListener mAlbumOrientationEventListener;
+    private MySmoothMarker smoothMarker;
 
     @Override
     public int getLayoutId() {
@@ -177,11 +176,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     public void initViews(Bundle savedInstanceState) {
         // 屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-        mAlbumOrientationEventListener = new AlbumOrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL);
-        if (mAlbumOrientationEventListener.canDetectOrientation()) {
-            mAlbumOrientationEventListener.enable();
-        }
 
         orderId = getIntent().getLongExtra("orderId", -1);
         if (orderId == -1) {
@@ -454,15 +448,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.commit();
         } else if (taxiOrder.status == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
             showToEndFragment();
-//            if (isToFeeDetail) {
-//                if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
-//                    settleFragmentDialog.setDjOrder(taxiOrder);
-//                } else {
-//                    settleFragmentDialog = new SettleFragmentDialog(FlowActivity.this, taxiOrder, bridge);
-//                    settleFragmentDialog.show();
-//                }
-//                isToFeeDetail = false;
-//            }
+
         } else if (taxiOrder.status == ZCOrderStatus.ARRIVAL_DESTINATION_ORDER) {
             toolbar.setTitle(R.string.settle);
             runningFragment = new RunningFragment();
@@ -477,28 +463,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.replace(R.id.flow_frame, runningFragment);
             transaction.commit();
 
-//            if (settleFragmentDialog != null && settleFragmentDialog.isShowing() && !isToFeeDetail) {
-//                settleFragmentDialog.setDjOrder(taxiOrder);
-//
-//                DymOrder dymOrder = DymOrder.findByIDType(orderId, Config.ZHUANCHE);//确认费用后直接弹出支付页面
-//                if (null != dymOrder) {
-//                    bridge.doPay(dymOrder.orderShouldPay);
-//                }
-//            } else {
-//                if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
-//                    settleFragmentDialog.setDjOrder(taxiOrder);
-//                } else {
-//                    settleFragmentDialog = new SettleFragmentDialog(FlowActivity.this, taxiOrder, bridge);
-//                    settleFragmentDialog.show();
-//                }
-//                isToFeeDetail = false;
-//            }
         }
 
         boolean forceOre = XApp.getMyPreferences().getBoolean(Config.SP_ALWAYS_OREN, false);
-//        if (forceOre && !fromOld) {//始终横屏计价将自动跳转到横屏界面
-//            toWhatOldByOrder(taxiOrder);
-//        }
+
     }
 
     @Override
@@ -531,22 +499,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             lastLatlng = new LatLng(emLoc.latitude, emLoc.longitude);
             receiveLoc(emLoc);//手动调用上次位置 减少从北京跳过来的时间
             aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLatlng, 19));//移动镜头，首次镜头快速跳到指定位置
-
-            MarkerOptions markerOption = new MarkerOptions();
-            markerOption.position(new LatLng(emLoc.latitude, emLoc.longitude));
-            markerOption.draggable(false);//设置Marker可拖动
-            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                    .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
-            // 将Marker设置为贴地显示，可以双指下拉地图查看效果
-            markerOption.setFlat(true);//设置marker平贴地图效果
-            myFirstMarker = aMap.addMarker(markerOption);
         }
     }
 
     private Marker startMarker;
     private Marker endMarker;
 
-    private Marker myFirstMarker;//首次进入时默认位置的marker
 
     @Override
     public void showMapBounds() {
@@ -646,19 +604,17 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void showPath(DriveRouteResult result) {
-
-        DrivingRouteOverlay overlay = new DrivingRouteOverlay(this, aMap,
-                result.getPaths().get(0), result.getStartPos()
-                , result.getTargetPos(), null);
-        overlay.setRouteWidth(0);
-        overlay.setIsColorfulline(false);
-        overlay.setNodeIconVisibility(false);//隐藏转弯的节点
-        overlay.addToMap();
-
         if (drivingRouteOverlay != null) {
             drivingRouteOverlay.removeFromMap();
         }
-        drivingRouteOverlay = overlay;
+        drivingRouteOverlay = new DrivingRouteOverlay(this, aMap,
+                result.getPaths().get(0), result.getStartPos()
+                , result.getTargetPos(), null);
+        drivingRouteOverlay.setRouteWidth(0);
+        drivingRouteOverlay.setIsColorfulline(false);
+        drivingRouteOverlay.setNodeIconVisibility(false);//隐藏转弯的节点
+        drivingRouteOverlay.addToMap();
+
 
         List<LatLng> latLngs = new ArrayList<>();
         latLngs.add(new LatLng(result.getStartPos().getLatitude(), result.getStartPos().getLongitude()));
@@ -1001,8 +957,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void doUploadOrder() {
-                BuildPushData pushData = new BuildPushData(EmUtil.getLastLoc());
-                MqttManager.getInstance().pushLoc(pushData);
+                MqttManager.getInstance().savePushMessage(EmUtil.getLastLoc());
                 showDrive();
             }
 
@@ -1034,7 +989,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 dialog.setOnMyClickListener((view, string) -> {
                     if (TextUtils.isEmpty(string)) {
                         ToastUtil.showMessage(FlowActivity.this, "请输入结算金额");
-                    } else if (Double.parseDouble(string) == 0) {
+                    } else if (Double.parseDouble(string) <= 0) {
+                        ToastUtil.showMessage(FlowActivity.this, "请输入正确结算金额");
+                    } else if (Double.parseDouble(string) > 10000) {
                         ToastUtil.showMessage(FlowActivity.this, "请输入正确结算金额");
                     } else {
                         presenter.taxiSettlement(orderId, taxiOrder.orderNo, Double.parseDouble(string));
@@ -1133,9 +1090,11 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     protected void onDestroy() {
-        mAlbumOrientationEventListener.disable();
         mapView.onDestroy();
         presenter.stopNavi();
+        if (smoothMarker!=null){
+            smoothMarker.destory();
+        }
         super.onDestroy();
     }
 
@@ -1151,7 +1110,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         unregisterReceiver(orderFinishReceiver);
     }
 
-    SmoothMoveMarker smoothMoveMarker;
 
     private LatLng lastLatlng;
 
@@ -1163,32 +1121,25 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         Log.e("locPos", "bearing 2 >>>>" + location.bearing);
         LatLng latLng = new LatLng(location.latitude, location.longitude);
 
-        if (null == smoothMoveMarker) {//首次进入
-            smoothMoveMarker = new SmoothMoveMarker(aMap);
-            smoothMoveMarker.setDescriptor(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+        if (null == smoothMarker) { //首次进入
+            MarkerOptions markerOption = new MarkerOptions();
+            markerOption.position(latLng);
+            markerOption.draggable(false);
+            markerOption.anchor(0.5f, 0.5f);
+            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                     .decodeResource(getResources(), R.mipmap.ic_flow_my_pos)));
-            smoothMoveMarker.setPosition(lastLatlng);
-            smoothMoveMarker.setRotate(location.bearing);
-        } else {
-            if (null != myFirstMarker) {//去除掉首次的位置marker
-                myFirstMarker.remove();
-            }
-            List<LatLng> latLngs = new ArrayList<>();
-            latLngs.add(lastLatlng);
-            latLngs.add(latLng);
-            smoothMoveMarker.setPosition(lastLatlng);
-            smoothMoveMarker.setPoints(latLngs);
-
-            smoothMoveMarker.setTotalDuration(Config.NORMAL_LOC_TIME / 1000);
-
-            smoothMoveMarker.setRotate(location.bearing);
-            smoothMoveMarker.startSmoothMove();
-            Marker marker = smoothMoveMarker.getMarker();
+            markerOption.rotateAngle(360.0F - location.bearing + aMap.getCameraPosition().bearing);
+            smoothMarker = new MySmoothMarker(aMap, markerOption);
+            Marker marker = smoothMarker.getMarker();
             if (null != marker) {
-                marker.setDraggable(false);
                 marker.setClickable(false);
-                marker.setAnchor(0.5f, 0.5f);
             }
+        } else {
+            Marker marker = smoothMarker.getMarker();
+            if (null != marker) {
+                marker.setRotateAngle(360.0F - location.bearing + aMap.getCameraPosition().bearing);
+            }
+            smoothMarker.startMove(latLng, 3000, true);
         }
 
         if (null != taxiOrder) {
@@ -1339,45 +1290,6 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         }
     }
 
-//    @Override
-//    public void onConfigurationChanged(Configuration newConfig) {
-//        com.easymi.component.utils.Log.e("lifecycle", "onConfigurationChanged()");
-//        super.onConfigurationChanged(newConfig);
-//        if (System.currentTimeMillis() - lastChangeTime > 1000) {
-//            lastChangeTime = System.currentTimeMillis();
-//        } else {//有的胎神手机这个方法要回调两次
-//            return;
-//        }
-//        DisplayMetrics dm = new DisplayMetrics();
-//        getWindowManager().getDefaultDisplay().getMetrics(dm);
-//        int width = dm.widthPixels;
-//        int height = dm.heightPixels;
-//        if (width > height) {//横屏
-//            toWhatOldByOrder(taxiOrder);
-//        } else {//竖屏
-//
-//        }
-//    }
-
-    private void toWhatOldByOrder(TaxiOrder taxiOrder) {
-        if (taxiOrder == null || !canGoOld) {
-            return;
-        }
-        if (taxiOrder.status == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-            canGoOld = false;
-            Intent intent = new Intent(FlowActivity.this, OldRunningActivity.class);
-            intent.putExtra("orderId", taxiOrder.id);
-            startActivity(intent);
-            finish();
-        } else if (taxiOrder.status == ZCOrderStatus.START_WAIT_ORDER) {
-            canGoOld = false;
-            Intent intent = new Intent(FlowActivity.this, OldWaitActivity.class);
-            intent.putExtra("orderId", taxiOrder.id);
-            startActivity(intent);
-            finish();
-        }
-    }
-
     @Override
     public void onFinishOrder(long orderId, String orderType) {
         if (orderId == this.orderId && orderType.equals(Config.ZHUANCHE)) {
@@ -1390,29 +1302,5 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     public boolean isEnableSwipe() {
         return false;
     }
-
-    private class AlbumOrientationEventListener extends OrientationEventListener {
-        private int mOrientation;
-
-        public AlbumOrientationEventListener(Context context, int rate) {
-            super(context, rate);
-        }
-
-        @Override
-        public void onOrientationChanged(int orientation) {
-//            if (settleFragmentDialog != null && settleFragmentDialog.isShowing()) {
-//                //已经显示结算对话框不显示
-//                return;
-//            }
-//            if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN || !canGoOld) {
-//                return;
-//            }
-//            com.easymi.component.utils.Log.e("TAG", "orientation = " + orientation);
-//            if ((orientation > 70 && orientation < 110) || (orientation > 250 && orientation < 290)) {
-//                toWhatOldByOrder(taxiOrder);
-//            }
-        }
-    }
-
 
 }

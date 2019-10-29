@@ -4,8 +4,10 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.navi.model.AMapNaviPath;
 import com.amap.api.services.route.DriveRouteResult;
 import com.easymi.common.entity.CarpoolOrder;
-import com.easymi.component.result.EmResult2;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymin.carpooling.entity.AllStation;
+import com.easymin.carpooling.entity.Station;
+import com.easymin.carpooling.entity.StationResult;
 
 import java.util.List;
 
@@ -143,7 +145,7 @@ public interface FlowContract {
          *
          * @param flag
          */
-        void changeToolbar(int flag);
+        void changeToolbar(int flag,int index);
 
         /**
          * 开始接人
@@ -161,18 +163,24 @@ public interface FlowContract {
          */
         void finishTaskSuc();
 
+///////////迭代新增
+
+        /**
+         * 获取当前班次的信息
+         * @param allStation
+         */
+        void scheduleInfo(AllStation allStation);
+
+        /**
+         * 改变当前站点的订单信息成功
+         */
+        void changeSequenceSuc();
+
+
         RxManager getManager();
     }
 
     interface Presenter {
-        /**
-         * 通过导航获取路径
-         *
-         * @param start
-         * @param latLngs
-         * @param end
-         */
-        void routeLineByNavi(LatLng start, List<LatLng> latLngs, LatLng end);
 
         /**
          * 通过线路规划获取路径
@@ -182,11 +190,6 @@ public interface FlowContract {
          * @param end
          */
         void routePlanByRouteSearch(LatLng start, List<LatLng> latLngs, LatLng end);
-
-        /**
-         * 停止导航
-         */
-        void stopNavi();
 
         /**
          * 开始接人
@@ -266,6 +269,21 @@ public interface FlowContract {
          * @param orderId
          */
         void finishTask(long orderId);
+
+///////////迭代新增
+
+        /**
+         * 查询班次详情
+         * @param scheduleId
+         */
+        void qureyScheduleInfo(long scheduleId);
+
+        /**
+         * 司机端修改订单执行顺序
+         * @param orderIdSequence
+         */
+        void changeOrderSequence(String orderIdSequence);
+
     }
 
     interface Model {
@@ -332,5 +350,19 @@ public interface FlowContract {
          * @return
          */
         Observable<Object> sendCustomer(long id);
+
+///////////迭代新增
+
+        /**
+         * 查询班次详情
+         * @param scheduleId
+         */
+        Observable<AllStation> qureyScheduleInfo(long scheduleId);
+
+        /**
+         * 司机端修改订单执行顺序
+         * @param orderIdSequence
+         */
+        Observable<Object> changeOrderSequence(String orderIdSequence);
     }
 }

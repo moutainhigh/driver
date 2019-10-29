@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBg"
+    android:orientation="vertical"
+    tools:context=".activity.PassengerAddActivity">
+
+    <com.easymi.component.widget.CusToolbar
+        android:id="@+id/passengerAddCtb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/passengerAddLl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/passengerAddCtb"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/white"
+        android:divider="@drawable/divider"
+        android:dividerPadding="12dp"
+        android:orientation="vertical"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:showDividers="middle">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="乘客类型"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/sizeHint" />
+
+            <RadioGroup
+                android:id="@+id/passengerAddRg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="98dp">
+
+                <RadioButton
+                    android:id="@+id/passengerAddRbAdult"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/cor4_st1_blue_line_check"
+                    android:button="@null"
+                    android:checked="true"
+                    android:paddingStart="15dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="15dp"
+                    android:paddingBottom="4dp"
+                    android:text="成人"
+                    android:textColor="@color/blue_desc_check"
+                    android:textSize="@dimen/sizeHint" />
+
+                <RadioButton
+                    android:id="@+id/passengerAddRbChild"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:background="@drawable/cor4_st1_blue_line_check"
+                    android:button="@null"
+                    android:paddingStart="15dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="15dp"
+                    android:paddingBottom="4dp"
+                    android:text="儿童"
+                    android:textColor="@color/blue_desc_check"
+                    android:textSize="@dimen/sizeHint" />
+            </RadioGroup>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="乘客姓名"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/sizeHint" />
+
+            <EditText
+                android:id="@+id/passengerAddEtName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:hint="请输入乘客姓名"
+                android:maxLength="12"
+                android:paddingStart="98dp"
+                android:textColor="@color/colorBlack"
+                android:textColorHint="@color/colorDesc"
+                android:textSize="@dimen/sizeHint" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/passengerAddFlGuardian"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="监护人姓名"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/sizeHint" />
+
+            <EditText
+                android:id="@+id/passengerAddEtGuardianName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:hint="请输入监护人姓名"
+                android:maxLength="12"
+                android:paddingStart="98dp"
+                android:textColor="@color/colorBlack"
+                android:textColorHint="@color/colorDesc"
+                android:textSize="@dimen/sizeHint" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/passengerAddTvNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="电话号码"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/sizeHint" />
+
+            <EditText
+                android:id="@+id/passengerAddEtNum"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:hint="请输入电话号码"
+                android:inputType="number"
+                android:maxLength="11"
+                android:paddingStart="98dp"
+                android:textColor="@color/colorBlack"
+                android:textColorHint="@color/colorDesc"
+                android:textSize="@dimen/sizeHint" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/passengerAddTvId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="身份证号码"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/sizeHint" />
+
+            <EditText
+                android:maxLength="18"
+                android:id="@+id/passengerAddEtId"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:digits="0123456789Xx"
+                android:hint="请输入身份证号码"
+                android:paddingStart="98dp"
+                android:textColor="@color/colorBlack"
+                android:textColorHint="@color/colorDesc"
+                android:textSize="@dimen/sizeHint" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/passengerAddTvSave"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sizeButtonHeight"
+        android:layout_below="@id/passengerAddLl"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/cor4_solid_blue"
+        android:gravity="center"
+        android:text="保存"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/sizeButton" />
+
+</RelativeLayout>

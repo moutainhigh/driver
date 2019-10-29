@@ -105,6 +105,7 @@ public class CommonUtil {
 
     private static Pattern NUMBER_PATTERN = Pattern.compile("[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]|[\ud800\udc00-\udbff\udfff\ud800-\udfff]",
             Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
+
     /**
      * 判断一个字符串是否含有emoji表情.
      *
@@ -186,13 +187,12 @@ public class CommonUtil {
     }
 
     /**
-     * @author I321533
      * @param json
      * @param clazz
      * @return
+     * @author I321533
      */
-    public static <T> List<T> jsonToList(String json, Class<T[]> clazz)
-    {
+    public static <T> List<T> jsonToList(String json, Class<T[]> clazz) {
         Gson gson = new Gson();
         T[] array = gson.fromJson(json, clazz);
         return Arrays.asList(array);
@@ -214,5 +214,84 @@ public class CommonUtil {
             hex.append(Integer.toHexString(b & 0xFF));
         }
         return hex.toString();
+    }
+
+    public static String getPassengerDesc(int type, int sort) {
+        if (type == 1) {
+            if (sort == 1) {
+                return "前右";
+            } else if (sort == 2) {
+                return "后左";
+            } else if (sort == 3) {
+                return "后中";
+            } else if (sort == 4) {
+                return "后右";
+            }
+        } else if (type == 2) {
+            if (sort == 1) {
+                return "前右";
+            } else if (sort == 2) {
+                return "中左";
+            } else if (sort == 3) {
+                return "中右";
+            } else if (sort == 4) {
+                return "后左";
+            } else if (sort == 5) {
+                return "后中";
+            } else if (sort == 6) {
+                return "后右";
+            }
+        }
+        return "";
+    }
+
+    public static String getPassengerDescAndType(int type, String sorts, String sortsType) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (!TextUtils.isEmpty(sorts) && !TextUtils.isEmpty(sortsType)) {
+            String[] sortsData = sorts.split("\\,");
+            String[] typeData = sortsType.split("\\,");
+            if (sortsData.length == typeData.length) {
+                for (int i = 0; i < sortsData.length; i++) {
+                    int sort = Integer.parseInt(sortsData[i]);
+                    int sortType = Integer.parseInt(typeData[i]);
+                    if (type == 1) {
+                        if (sort == 1) {
+                            stringBuilder.append("前右");
+                        } else if (sort == 2) {
+                            stringBuilder.append("后左");
+                        } else if (sort == 3) {
+                            stringBuilder.append("后中");
+                        } else if (sort == 4) {
+                            stringBuilder.append("后右");
+                        }
+                    } else if (type == 2) {
+                        if (sort == 1) {
+                            stringBuilder.append("前右");
+                        } else if (sort == 2) {
+                            stringBuilder.append("中左");
+                        } else if (sort == 3) {
+                            stringBuilder.append("中右");
+                        } else if (sort == 4) {
+                            stringBuilder.append("后左");
+                        } else if (sort == 5) {
+                            stringBuilder.append("后中");
+                        } else if (sort == 6) {
+                            stringBuilder.append("后右");
+                        }
+                    }
+
+                    if (sortType == 1) {
+                        stringBuilder.append("(儿童座)");
+                    } else if (sortType == 2) {
+                        stringBuilder.append("(成人座)");
+                    }
+
+                    if (i != sortsData.length - 1) {
+                        stringBuilder.append(" ");
+                    }
+                }
+            }
+        }
+        return stringBuilder.toString();
     }
 }

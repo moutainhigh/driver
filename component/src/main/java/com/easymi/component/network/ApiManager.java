@@ -82,6 +82,7 @@ public class ApiManager {
     public <T> T createApi(String hostUrl, Class<T> service) {
         Retrofit retrofit = new Retrofit.Builder()
                 .client(mOkHttpClient)
+                .addConverterFactory(new NullOnEmptyConverterFactory())
                 .addConverterFactory(GsonConverterFactory.create()) //添加一个Gson转化
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create()) //添加一个rxjava转换
                 .baseUrl(hostUrl)

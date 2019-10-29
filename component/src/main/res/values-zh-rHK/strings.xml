@@ -31,7 +31,6 @@
 
     <string name="input_pingyin">請輸入名字或者拼音</string>
 
-    <string name="err_empty">john snow,you have nothing</string>
     <string name="err_error">網絡請求錯誤,錯誤碼</string>
 
     <string name="new_order">新單</string>
@@ -46,20 +45,14 @@
     <string name="exculated">已評價</string>
     <string name="canceled">已消單</string>
 
-    <string name="des_place">[未知目的地]</string>
-
     <string name="no_gps">該設備未發現GPS定位芯片，無法準確定位</string>
-    <string name="closed_wifi">請打開妳的WiFi，有助於精確定位</string>
 
     <string name="please_open_gps">請開啟GPS定位服務</string>
     <string name="ok">確定</string>
 
     <string name="lost_net_work">網絡連接已斷開</string>
 
-    <string name="succeed">成功</string>
     <string name="empty_hint">這裏空空如也</string>
-
-    <string name="empty_string"> </string>
 
     <string name="get_wifi_fail">獲取wifi環境下ip地址失敗\n</string>
 

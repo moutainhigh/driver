@@ -51,11 +51,11 @@
     <string name="please_edit_place">Where are you going </string>
 
         
-    <string name="input_pingyin"> Please enter the name or pinyin </string>
+    <string name="input_pingyin"> Please enter the name or pinyin </string><![CDATA[
 
         
-    <string name="err_empty">john snow, you have nothing</string>
         
+    ]]>
     <string name="err_error"> network request error, error code </string>
 
         
@@ -79,33 +79,31 @@
         
     <string name="exculated">evaluated</string>
         
-    <string name="canceled"> canceled </string>
+    <string name="canceled"> canceled </string><![CDATA[
 
         
-    <string name="des_place">[unknown destination]</string>
 
         
-    <string name="no_gps">The device did not find GPS positioning chip, can not be accurately positioned </string>
+    ]]><string name="no_gps">The device did not find GPS positioning chip, can not be accurately positioned </string><![CDATA[
         
-    <string name="closed_wifi"> Please open your WiFi, help accurate positioning </string>
 
         
+    ]]>
     <string name="please_open_gps">Please enable GPS location service</string>
         
     <string name="ok"> OK </string>
 
         
-    <string name="lost_net_work"> network connection has been broken </string>
+    <string name="lost_net_work"> network connection has been broken </string><![CDATA[
 
         
-    <string name="succeed">success </string>
         
-    <string name="empty_hint"> is empty here</string>
+    ]]><string name="empty_hint"> is empty here</string><![CDATA[
 
         
-    <string name="empty_string"> </string>
 
         
+    ]]>
     <string name="get_wifi_fail"> Failed to get ip address in wifi environment\n</string>
 
         

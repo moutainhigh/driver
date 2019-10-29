@@ -40,4 +40,36 @@ public class Sequence implements Serializable{
      * 状态   0 未接 1 已接 2 跳过接 3 未送 4 已送 5 跳过送
      */
     public int status;
+
+    /**
+     * 订单顺序序号
+     */
+    public int sort;
+
+    /**
+     * 站点状态 1上车站点  2 下车站点 3途径点
+     */
+    public int stationStatus;
+
+    /**
+     * 订单id
+     */
+    public long orderId;
+
+    /**
+     * 上车下标
+     */
+    public int startIndex;
+
+
+    /**
+     * 下车下标
+     */
+    public int endIndex;
+
+    /**
+     * 是否是终点或者起点
+     */
+    public boolean isStartOrEnd;
+
 }

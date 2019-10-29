@@ -7,12 +7,14 @@ import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.utils.AesUtil;
 import com.easymi.component.utils.EncApi;
+import com.easymi.component.utils.RsaUtils;
 import com.easymi.component.utils.URLDecoderUtil;
 
 import java.io.IOException;
 import java.net.URLEncoder;
 
 import okhttp3.FormBody;
+import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -36,29 +38,19 @@ public class EncryptInterceptor implements Interceptor {
         Request originRequest = chain.request();
 
 
-        if (!Config.IS_ENCRYPT) {
-            return chain.proceed(originRequest);
-        }
-
         //排除登录及其之前接口，其余接口使用拦截器进行aes加密。
         String url = chain.request().url().toString();
-        if (url.contains("api/v1/resources/driver/login")
-                || url.contains("api/v1/resources/driver/register")
-                || url.contains("api/v1/system/captcha/send/sms")
-                || url.contains("api/v1/resources/driver/register/getByDriverPhone")
-                || url.contains("api/v1/resources/driver/register/last")
-                || url.contains("http://up-z2.qiniu.com")
-                || ((!TextUtils.isEmpty(Config.MQTT_CONNECTION_URL) && url.contains(Config.MQTT_CONNECTION_URL)))) {
+        if (!Config.IS_ENCRYPT
+                || url.contains(Config.HOST_UP_PIC)
+                || (!TextUtils.isEmpty(Config.MQTT_CONNECTION_URL) && url.contains(Config.MQTT_CONNECTION_URL))) {
             return chain.proceed(originRequest);
         }
-        EncryptSet encryptSet = hookRequest(originRequest);
+        Request request = hookRequest(originRequest, TextUtils.equals(originRequest.header(Config.TYPE), Config.RSA));
 
-        if (encryptSet == null || encryptSet.request == null) {
+        if (request == null) {
             return chain.proceed(originRequest);
         }
-
-        return chain.proceed(encryptSet.request.newBuilder()
-                .build());
+        return chain.proceed(request);
     }
 
     /**
@@ -67,12 +59,12 @@ public class EncryptInterceptor implements Interceptor {
      * @param originRequest 原始请求.
      * @return 处理后的新请求
      */
-    private EncryptSet hookRequest(@NonNull Request originRequest) {
+    private Request hookRequest(@NonNull Request originRequest, boolean isRsa) {
         RequestBody requestBody = originRequest.body();
         if (requestBody == null) {
-            return handleGet(originRequest);
+            return handleGet(originRequest, isRsa);
         } else if (requestBody instanceof FormBody) {
-            return handlePost(originRequest, (FormBody) requestBody);
+            return handlePost(originRequest, (FormBody) requestBody, isRsa);
         }
         return null;
     }
@@ -84,23 +76,19 @@ public class EncryptInterceptor implements Interceptor {
      * @param originBody
      * @return
      */
-    private EncryptSet handlePost(@NonNull Request originRequest, FormBody originBody) {
+    private Request handlePost(@NonNull Request originRequest, FormBody originBody, boolean isRsa) {
 
-        EncryptSet encryptSet = new EncryptSet();
 
         FormBody.Builder newFormBody = new FormBody.Builder();
         for (int i = 0; i < originBody.size(); i++) {
-            String name = originBody.encodedName(i);
-            String value = originBody.encodedValue(i);
-            value = encrypt(value);
-            newFormBody.addEncoded(name, value);
+
+            newFormBody.addEncoded(originBody.encodedName(i),
+                    isRsa ? RsaEncrypt(originBody.encodedValue(i)) : encrypt(originBody.encodedValue(i)));
         }
 
-        encryptSet.request = originRequest.newBuilder()
+        return originRequest.newBuilder()
                 .method(originRequest.method(), newFormBody.build())
                 .build();
-
-        return encryptSet;
 
     }
 
@@ -110,31 +98,17 @@ public class EncryptInterceptor implements Interceptor {
      * @param originRequest
      * @return
      */
-    private EncryptSet handleGet(@NonNull Request originRequest) {
-        String originUrl = "" + originRequest.url();
-
-        //截取路由和参数列表计算sign
-        String[] result = originUrl.split("[?]");
-        if (result.length <= 1) {
-            return null;
+    private Request handleGet(@NonNull Request originRequest, boolean isRsa) {
+        HttpUrl httpUrl = originRequest.url();
+        HttpUrl.Builder builder = httpUrl.newBuilder();
+        for (String queryParameterName : httpUrl.queryParameterNames()) {
+            builder.setEncodedQueryParameter(queryParameterName,
+                    isRsa ? RsaEncrypt(httpUrl.queryParameter(queryParameterName)) :
+                            encrypt(httpUrl.queryParameter(queryParameterName)));
         }
-
-        EncryptSet encryptSet = new EncryptSet();
-        StringBuilder newUrl = new StringBuilder().append(result[0]).append("?");
-        String[] params = result[1].split("&"); //参数
-        for (String p : params) {
-            String[] ps = p.split("=");
-            String name = ps[0];
-            String value = "";
-            if (ps.length == 2) {
-                value = ps[1];
-                value = encrypt(value);
-            }
-            newUrl.append(name).append("=").append(value).append("&");
-        }
-        newUrl.deleteCharAt(newUrl.length() - 1);
-        encryptSet.request = originRequest.newBuilder().url(newUrl.toString()).build();
-        return encryptSet;
+        return originRequest.newBuilder()
+                .url(builder.build())
+                .build();
     }
 
 //    /**
@@ -164,5 +138,18 @@ public class EncryptInterceptor implements Interceptor {
         return value;
     }
 
+
+    private String RsaEncrypt(String content) {
+        String value = content;
+        try {
+            //将默认的url编码还原后加密在url编码
+            String decoderStr = URLDecoderUtil.decode(content);
+            value = RsaUtils.rsaEncode(decoderStr);
+            value = URLEncoder.encode(value, "utf-8");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return value;
+    }
 
 }

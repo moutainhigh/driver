@@ -10,7 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Html;
 import android.text.TextUtils;
-import android.util.Log;
+import com.easymi.component.utils.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -36,7 +36,6 @@ import com.amap.api.navi.model.AMapNaviPath;
 import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.route.DriveRouteResult;
 import com.amap.api.services.route.DriveStep;
-import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.push.FeeChangeObserver;
 import com.easymi.common.push.HandlePush;
 import com.easymi.common.push.MqttManager;
@@ -52,6 +51,7 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
+import com.easymi.component.entity.MySmoothMarker;
 import com.easymi.component.entity.PassengerLcResult;
 import com.easymi.component.entity.PassengerLocation;
 import com.easymi.component.entity.ZCSetting;
@@ -87,6 +87,7 @@ import com.easymi.zhuanche.fragment.WaitFragment;
 import com.easymi.zhuanche.receiver.CancelOrderReceiver;
 import com.easymi.zhuanche.receiver.OrderFinishReceiver;
 import com.easymi.zhuanche.widget.RefuseOrderDialog;
+import com.easymi.zhuanche.widget.TaxiSettleDialog;
 import com.google.gson.Gson;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
@@ -205,10 +206,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     private double payMoney;
 
 
-    private Marker myLocationMarker;
     private MapView mapView;
     private SensorEventHelper helper;
     private boolean flashAssign;
+    private MySmoothMarker smoothMarker;
 
     @Override
     public int getLayoutId() {
@@ -370,7 +371,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         } else {
             tvMark.setText(zcOrder.remark);
         }
-        orderNumberText.setText(zcOrder.orderNumber);
+        orderNumberText.setText(zcOrder.orderNo);
         orderTypeText.setText(zcOrder.orderDetailType);
         tagContainerLayout.removeAllTags();
         if (StringUtils.isNotBlank(zcOrder.passengerTags)) {
@@ -586,17 +587,20 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     private void addLocationMarker() {
         LatLng latLng = new LatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
-        if (null == myLocationMarker) {
+        if (null == smoothMarker) { //首次进入
             MarkerOptions markerOption = new MarkerOptions();
-            markerOption.anchor(0.5f, 0.5f);
             markerOption.position(latLng);
             markerOption.draggable(false);
             markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                     .decodeResource(getResources(), R.mipmap.location_mine)));
-            myLocationMarker = aMap.addMarker(markerOption);
-            helper.setMarker(myLocationMarker);
+            markerOption.anchor(0.5f, 0.5f);
+            smoothMarker = new MySmoothMarker(aMap, markerOption);
+            Marker marker = smoothMarker.getMarker();
+            if (null != marker) {
+                marker.setClickable(false);
+            }
         } else {
-            myLocationMarker.setPosition(latLng);
+            smoothMarker.startMove(latLng, 3000, true);
         }
     }
 
@@ -792,17 +796,16 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void showPath(DriveRouteResult result) {
-        DrivingRouteOverlay drivingRouteOverlay = new DrivingRouteOverlay(this, aMap,
+        if (this.drivingRouteOverlay != null) {
+            this.drivingRouteOverlay.removeFromMap();
+        }
+        drivingRouteOverlay = new DrivingRouteOverlay(this, aMap,
                 result.getPaths().get(0), result.getStartPos()
                 , result.getTargetPos(), null);
         drivingRouteOverlay.setIsColorfulline(false);
         drivingRouteOverlay.setNodeIconVisibility(false);//隐藏转弯的节点
         drivingRouteOverlay.addToMap();
 
-        if (this.drivingRouteOverlay != null) {
-            this.drivingRouteOverlay.removeFromMap();
-        }
-        this.drivingRouteOverlay = drivingRouteOverlay;
 
         float dis = 0;
         float time = 0;
@@ -1106,14 +1109,14 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 //                CenterUtil centerUtil = new CenterUtil(FlowActivity.this,Config.APP_KEY,
 //                        XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
 //                        XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
-//                centerUtil.smsShareAuto( zcOrder.orderId, EmUtil.getEmployInfo().companyId,  zcOrder.passengerId,  zcOrder.passengerPhone,  zcOrder.orderType);
+//                centerUtil.smsShareAuto( zcOrder.orderId, EmUtil.getEmployInfo().companyId,  zcOrder.passengerId,  zcOrder.passengerPhone,  zcOrder.serviceType);
 //                centerUtil.checkingAuth( zcOrder.passengerId);
             }
 
             @Override
             public void doRefuse() {
                 RefuseOrderDialog.Builder builder = new RefuseOrderDialog.Builder(FlowActivity.this);
-                builder.setApplyClick(reason -> presenter.refuseOrder(zcOrder.orderId, zcOrder.orderType, reason));
+                builder.setApplyClick(reason -> presenter.refuseOrder(zcOrder.orderId, zcOrder.serviceType, reason));
                 RefuseOrderDialog dialog1 = builder.create();
                 dialog1.setCanceledOnTouchOutside(true);
                 dialog1.show();
@@ -1182,8 +1185,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void doUploadOrder() {
-                BuildPushData pushData = new BuildPushData(EmUtil.getLastLoc());
-                MqttManager.getInstance().pushLoc(pushData);
+                MqttManager.getInstance().savePushMessage(EmUtil.getLastLoc());
                 showDrive();
             }
 
@@ -1199,6 +1201,23 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
             @Override
             public void toFeeDetail() {
+            }
+
+            @Override
+            public void showTaixDialog() {
+                TaxiSettleDialog dialog = new TaxiSettleDialog(FlowActivity.this);
+                dialog.setOnMyClickListener((view, string) -> {
+                    if (TextUtils.isEmpty(string)) {
+                        ToastUtil.showMessage(FlowActivity.this, "请输入结算金额");
+                    } else if (Double.parseDouble(string) <1) {
+                        ToastUtil.showMessage(FlowActivity.this, "请输入正确结算金额");
+                    } else if (Double.parseDouble(string) > 10000) {
+                        ToastUtil.showMessage(FlowActivity.this, "请输入正确结算金额");
+                    } else {
+                        presenter.taxiSettlement(orderId, zcOrder.orderNo, Double.parseDouble(string));
+                    }
+                });
+                dialog.show();
             }
 
             @Override
@@ -1254,9 +1273,14 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 settleFragmentDialog.dismiss();
             }
             finish();
+
         }
     }
 
+    @Override
+    public void settleSuc() {
+        finish();
+    }
 
     @Override
     protected void onStart() {
@@ -1321,6 +1345,9 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         if (helper != null) {
             helper.unRegisterSensorListener();
             helper = null;
+        }
+        if (smoothMarker != null) {
+            smoothMarker.destory();
         }
 
         super.onDestroy();
@@ -1413,7 +1440,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             return;
         }
         if (orderId == zcOrder.orderId
-                && orderType.equals(zcOrder.orderType)) {
+                && orderType.equals(zcOrder.serviceType)) {
             //todo 一键报警
 //            AudioUtil audioUtil = new AudioUtil();
 //            audioUtil.onRecord(this, false);

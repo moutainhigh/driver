@@ -30,7 +30,7 @@ public class ScheduleTurnReceiver extends BroadcastReceiver {
             if (action.equals(Config.SCHEDULE_FINISH)) {
                 if (null != turnListener) {
                     Long scheduleId = intent.getLongExtra("scheduleId", -1);
-                    String orderType = intent.getStringExtra("orderType");
+                    String orderType = intent.getStringExtra("serviceType");
 
                     turnListener.onTurnOrder(scheduleId, orderType,"");
                 }

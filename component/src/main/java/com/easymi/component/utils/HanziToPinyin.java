@@ -292,7 +292,7 @@ public class HanziToPinyin {
             // Check if zh_CN collation data is available
 //            final Locale locale[] = Collator.getAvailableLocales();
 //            for (int i = 0; i < locale.length; i++) {
-//                LogUtil.e("123456",locale[i]+"===="+locale[i].equals("zh_HANS"));
+//                Log.e("123456",locale[i]+"===="+locale[i].equals("zh_HANS"));
 //                if (locale[i].equals(Locale.CHINA)) {
 //                    // 做自我验证一次。
             sInstance = new HanziToPinyin(true);

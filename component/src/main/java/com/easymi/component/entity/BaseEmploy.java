@@ -6,7 +6,7 @@
 //import com.easymi.component.Config;
 //import com.easymi.component.app.XApp;
 //import com.easymi.component.db.SqliteHelper;
-//import com.easymi.component.utils.LogUtil;
+//import com.easymi.component.utils.Log;
 //import com.google.gson.annotations.SerializedName;
 //
 ///**
@@ -51,7 +51,7 @@
 //    public BaseEmploy employ2This() {
 //        return Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, -1));
 ////        if (employ == null) {
-////            LogUtil.e("TAG", "查询为null");
+////            Log.e("TAG", "查询为null");
 ////            return null;
 ////        } else {
 ////            id = employ.id;

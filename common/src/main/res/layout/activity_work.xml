@@ -234,7 +234,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"></com.easymi.component.widget.SwipeRecyclerView>
+                android:layout_marginRight="10dp" />
         </FrameLayout>
 
         <LinearLayout
@@ -272,22 +272,29 @@
 
         <RelativeLayout
             android:id="@+id/listen_order_con"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="5dp"
             android:visibility="gone">
 
             <ImageView
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:padding="2dp"
-                android:src="@mipmap/listen_work" />
-
-            <TextView
+                android:id="@+id/workIvManual"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:orientation="horizontal"
+                android:padding="12dp"
+                android:src="@mipmap/icon_manual_create"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/workTvOffline"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
                 android:layout_centerInParent="true"
+                android:background="@mipmap/listen_work"
+                android:gravity="center"
                 android:text="听单中"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
@@ -383,7 +390,6 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/peek_con"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:onClick="mapHideShow"

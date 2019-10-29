@@ -40,7 +40,6 @@ public class FinishFragment extends RxBaseFragment {
      * 倒计时5s
      */
     int time = 5;
-    private boolean pause;
 
     /**
      * 设置bridge
@@ -58,7 +57,7 @@ public class FinishFragment extends RxBaseFragment {
 
     @Override
     public void finishCreateView(Bundle state) {
-        bridge.changeToolbar(StaticVal.TOOLBAR_FINISH);
+        bridge.changeToolbar(StaticVal.TOOLBAR_FINISH,-1);
         countDown = $(R.id.count_down);
         back = $(R.id.btn);
 
@@ -69,7 +68,7 @@ public class FinishFragment extends RxBaseFragment {
                 if (!isAdded()) {
                     return;
                 }
-                if (pause) {
+                if (bridge == null || getActivity() == null) {
                     return;
                 }
                 time--;
@@ -94,10 +93,6 @@ public class FinishFragment extends RxBaseFragment {
         cancelTimer();
     }
 
-
-    public void setPause(boolean isPause) {
-        pause = isPause;
-    }
 
 
     /**

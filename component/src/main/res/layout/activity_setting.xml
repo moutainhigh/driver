@@ -79,6 +79,33 @@
                 android:textSize="@dimen/sizeContent" />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="@android:color/white"
+            android:orientation="horizontal"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="IMG_SERVER"
+                android:textColor="@color/colorBlackLight"
+                android:textSize="@dimen/sizeContent" />
+
+            <EditText
+                android:id="@+id/setting_et_img_server"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:gravity="start|center_vertical"
+                android:paddingStart="12dp"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/sizeContent" />
+        </LinearLayout>
+
         <RadioGroup
             android:id="@+id/setting_rg"
             android:layout_width="match_parent"
@@ -121,7 +148,7 @@
                 android:id="@+id/setting_rb_1h"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:text="1HAcient1kLqfeX7DVTV0dklUkpGEnUC"
+                android:text="1HAxxxxxxxxxxxxxxxxxxxxx"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/sizeContent" />
 
@@ -129,9 +156,34 @@
                 android:id="@+id/setting_rb_4j"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:text="4ji3EvuwNziPKF8QXqXMTukGqPmlwOFJ"
+                android:text="4ji3xxxxxxxxxxxxxxxxxxxxx"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/sizeContent" />
+
+            <RadioButton
+                android:id="@+id/setting_rb_95"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:text="955BFxxxxxxxxxxxxxxxxxxxxx"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/sizeContent" />
+
+            <RadioButton
+                android:id="@+id/setting_rb_7o"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:text="7Oa3xxxxxxxxxxxxxxxxxxxxx"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/sizeContent" />
+
+            <RadioButton
+                android:id="@+id/setting_rb_g0"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:text="G0UMxxxxxxxxxxxxxxxxxxxxx"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/sizeContent" />
+
         </RadioGroup>
     </LinearLayout>
 

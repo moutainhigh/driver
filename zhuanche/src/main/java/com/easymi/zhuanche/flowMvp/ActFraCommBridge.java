@@ -48,7 +48,6 @@ public interface ActFraCommBridge {
 
     /**
      * 开始出发
-     * @param btn
      */
     void doStartDrive();
 
@@ -109,5 +108,10 @@ public interface ActFraCommBridge {
      * 显示费用详情
      */
     void toFeeDetail();
+
+    /**
+     * 显示出租车结算输入弹窗
+     */
+    void showTaixDialog();
 
 }

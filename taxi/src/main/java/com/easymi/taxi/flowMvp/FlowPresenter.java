@@ -11,7 +11,6 @@ import com.amap.api.services.route.DriveRouteResult;
 import com.amap.api.services.route.RideRouteResult;
 import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
-import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.push.MqttManager;
 import com.easymi.component.Config;
 import com.easymi.component.activity.NaviActivity;
@@ -158,7 +157,7 @@ public class FlowPresenter implements FlowContract.Presenter {
         intent.putExtra("startLatlng", start);
         intent.putExtra("endLatlng", end);
         intent.putExtra("orderId", orderId);
-        intent.putExtra("orderType", Config.ZHUANCHE);
+        intent.putExtra("serviceType", Config.ZHUANCHE);
 //        TaxiOrder zcOrder = view.getOrder();
 //        if (zcOrder != null && (zcOrder.orderStatus < DJOrderStatus.ARRIVAL_BOOKPLACE_ORDER)) {
 //            intent.putExtra(Config.NAVI_MODE, Config.WALK_TYPE);
@@ -232,7 +231,6 @@ public class FlowPresenter implements FlowContract.Presenter {
     }
 
 
-
     @Override
     public void routePlanByNavi(Double endLat, Double endLng) {
 
@@ -273,7 +271,7 @@ public class FlowPresenter implements FlowContract.Presenter {
 
         RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(start, end);
         RouteSearch.DriveRouteQuery query = new RouteSearch.DriveRouteQuery(fromAndTo,
-                RouteSearch.DRIVING_MULTI_STRATEGY_FASTEST_SHORTEST, null, null, "");
+                RouteSearch.DRIVING_SINGLE_SHORTEST, null, null, "");
         routeSearch.calculateDriveRouteAsyn(query);
     }
 
@@ -284,19 +282,19 @@ public class FlowPresenter implements FlowContract.Presenter {
 //            if (null != taxiOrder.orderFee) {
 //                dymOrder = taxiOrder.orderFee;
 //                dymOrder.orderId = taxiOrder.id;
-//                dymOrder.orderType = taxiOrder.serviceType;
+//                dymOrder.serviceType = taxiOrder.serviceType;
 //                dymOrder.passengerId = taxiOrder.passengerId;
 //                dymOrder.orderStatus = taxiOrder.status;
 //            } else {
             dymOrder = new DymOrder(taxiOrder.id, taxiOrder.serviceType,
-                    taxiOrder.passengerId, taxiOrder.status);
+                    taxiOrder.passengerId, taxiOrder.status,taxiOrder.orderType);
 //            }
             dymOrder.save();
         } else {
             dymOrder.orderStatus = taxiOrder.status;
             dymOrder.updateStatus();
         }
-        MqttManager.getInstance().pushLoc(new BuildPushData(EmUtil.getLastLoc()));
+        MqttManager.getInstance().savePushMessage(EmUtil.getLastLoc());
     }
 
     @Override

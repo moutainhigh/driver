@@ -292,6 +292,11 @@ public class ArticleActivity extends RxBaseActivity implements View.OnClickListe
         webView.getSettings().setAllowFileAccess(false);
         webView.getSettings().setSavePassword(false);
 
+        webView.removeJavascriptInterface("searchBoxJavaBridge_");
+        webView.removeJavascriptInterface("accessibility");
+        webView.removeJavascriptInterface("accessibilityTraversal");
+
+
         webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 
 

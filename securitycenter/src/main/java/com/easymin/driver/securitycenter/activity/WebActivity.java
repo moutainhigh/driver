@@ -108,6 +108,11 @@ public class WebActivity extends AppCompatActivity {
         webView.getSettings().setAllowFileAccess(false);
         webView.getSettings().setSavePassword(false);
 
+        webView.removeJavascriptInterface("searchBoxJavaBridge_");
+        webView.removeJavascriptInterface("accessibility");
+        webView.removeJavascriptInterface("accessibilityTraversal");
+
+
         //解决部分H5中的一些控件标签可能使用后android中不支持 造成的白屏不显示问题
         webView.getSettings().setDomStorageEnabled(true);
 

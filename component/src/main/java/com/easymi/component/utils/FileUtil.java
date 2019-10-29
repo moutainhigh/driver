@@ -42,18 +42,18 @@ public class FileUtil {
      * @return 是否复制成功
      */
     public static boolean copyFile(String srcPath, String targetPath) {
-        LogUtil.d(TAG, "copy file begin");
+        Log.d(TAG, "copy file begin");
         boolean isSucceed = false;  //操作文件是否成功
         File srcFile = new File(srcPath);
         if (!srcFile.exists() || !srcFile.isFile()) {
-            LogUtil.e(TAG, "src file not exists or not be file");
+            Log.e(TAG, "src file not exists or not be file");
             return false;
         }
 
         File targetFile = new File(targetPath);
         if (targetFile.exists()) {
             if (targetFile.delete()) {
-                LogUtil.e(TAG, "delete targetFile fail");
+                Log.e(TAG, "delete targetFile fail");
                 return false;
             }
         }
@@ -85,7 +85,7 @@ public class FileUtil {
             }
         }
 
-        LogUtil.d(TAG, "copy file succeed ? -->" + isSucceed);
+        Log.d(TAG, "copy file succeed ? -->" + isSucceed);
 
         return isSucceed;
     }
@@ -129,7 +129,7 @@ public class FileUtil {
             File file = new File(path);
             return file.exists() && file.delete();
         }
-        LogUtil.e(TAG, "path is null");
+        Log.e(TAG, "path is null");
         return false;
     }
 
@@ -179,7 +179,7 @@ public class FileUtil {
      */
     public static String getOriginalPath(Context context, final Uri uri) {
         if (context == null || uri == null) {
-            LogUtil.e(TAG, "context is null or uri is null");
+            Log.e(TAG, "context is null or uri is null");
             return null;
         }
 

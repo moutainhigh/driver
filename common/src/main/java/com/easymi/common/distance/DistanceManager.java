@@ -10,7 +10,6 @@ import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
 import com.easymi.common.CommApiService;
 import com.easymi.common.entity.PullFeeEntity;
-import com.easymi.common.entity.PullFeeResult;
 import com.easymi.common.push.HandlePush;
 import com.easymi.common.result.GetFeeResult;
 import com.easymi.component.Config;
@@ -156,7 +155,7 @@ public class DistanceManager {
 
             RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(start, end);
             RouteSearch.DriveRouteQuery query = new RouteSearch.DriveRouteQuery(fromAndTo,
-                    RouteSearch.DRIVING_MULTI_STRATEGY_FASTEST_SHORTEST,
+                    RouteSearch.DRIVING_SINGLE_SHORTEST,
                     latLonPoints,//途经点
                     null,//避让点
                     "");
@@ -171,7 +170,7 @@ public class DistanceManager {
 //        rxManager.add();
         LatLng lastLatlng = latLngs.get(latLngs.size() - 1); //上次位置信息
         latLngs.clear();
-        if (!dymOrder.orderType.equals(Config.DAIJIA)) {
+        if (!dymOrder.serviceType.equals(Config.DAIJIA)) {
             return;
         }
         int state = 0;
@@ -228,7 +227,7 @@ public class DistanceManager {
                         PullFeeEntity entity = new PullFeeEntity();
                         entity.msg = "pull_fee";
 //                        entity.orderId = dymOrder.orderId;
-//                        entity.orderType = dymOrder.orderType;
+//                        entity.serviceType = dymOrder.serviceType;
                         HandlePush.getInstance().handPush(new Gson().toJson(entity));
                     }
 

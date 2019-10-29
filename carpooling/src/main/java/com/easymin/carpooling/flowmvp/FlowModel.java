@@ -2,15 +2,13 @@ package com.easymin.carpooling.flowmvp;
 
 import android.content.Context;
 
-import com.easymi.common.entity.OrderCustomer;
 import com.easymi.component.Config;
 import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.HttpResultFunc2;
-import com.easymi.component.network.HttpResultFunc3;
-import com.easymi.component.result.EmResult2;
 import com.easymin.carpooling.CarPoolApiService;
-
-import java.util.List;
+import com.easymin.carpooling.entity.AllStation;
+import com.easymin.carpooling.entity.StationResult;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -19,6 +17,7 @@ import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName:
+ *
  * @Author: hufeng
  * Date: 2018/12/24 下午1:10
  * Description:
@@ -100,6 +99,24 @@ public class FlowModel implements FlowContract.Model {
     public Observable<Object> sendCustomer(long id) {
         return ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
                 .sendCustomer(id)
+                .map(new HttpResultFunc2<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<AllStation> qureyScheduleInfo(long scheduleId) {
+        return ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
+                .qureyScheduleInfo(scheduleId)
+                .map(new HttpResultFunc2<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<Object> changeOrderSequence(String orderIdSequence) {
+        return ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
+                .changeOrderSequence(orderIdSequence)
                 .map(new HttpResultFunc2<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

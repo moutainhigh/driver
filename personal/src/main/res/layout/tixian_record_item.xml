@@ -36,7 +36,6 @@
         android:src="@drawable/circle_e5e5e5"/>
 
     <ImageView
-        android:id="@+id/ic_dian_5"
         android:layout_width="5dp"
         android:layout_height="5dp"
         android:layout_marginLeft="12.5dp"

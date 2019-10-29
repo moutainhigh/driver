@@ -1,9 +1,6 @@
 package com.easymin.carpooling.entity;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 /**
  * @Copyright (C), 2012-2019, Sichuan Xiaoka Technology Co., Ltd.
@@ -20,13 +17,9 @@ public class PincheOrder implements Serializable {
      */
     public static final int SCHEDULE_STATUS_NEW = 1;
     /**
-     * 司机接人
+     * 行程中
      */
-    public static final int SCHEDULE_STATUS_TAKE = 5;
-    /**
-     * 司机送人
-     */
-    public static final int SCHEDULE_STATUS_RUN = 10;
+    public static final int SCHEDULE_STATUS_RUNNING = 12;
     /**
      * 已结束
      */
@@ -40,10 +33,8 @@ public class PincheOrder implements Serializable {
     public String getOrderStatusStr() {
         if (status == SCHEDULE_STATUS_NEW) {
             return "未开始";
-        } else if (status == SCHEDULE_STATUS_TAKE) {
-            return "正在接人";
-        } else if (status == SCHEDULE_STATUS_RUN) {
-            return "正在送人";
+        } else if (status == SCHEDULE_STATUS_RUNNING) {
+            return "行程中";
         } else if (status == SCHEDULE_STATUS_FINISH) {
             return "已完成";
         } else {
@@ -200,6 +191,7 @@ public class PincheOrder implements Serializable {
      */
     public double money;
 
+    public int model;
 
     public PincheOrder() {
 

@@ -1,7 +1,6 @@
 package com.easymi.personal.activity.register;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -19,16 +18,13 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.bumptech.glide.Glide;
 import com.easymi.component.Config;
 import com.easymi.component.activity.WebActivity;
-import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.ErrCode;
-import com.easymi.component.network.ErrCodeTran;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.AlexStatusBarUtils;
 import com.easymi.component.utils.CommonUtil;
 import com.easymi.component.utils.PhoneUtil;
-import com.easymi.component.utils.RsaUtils;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.utils.UIStatusBarHelper;
@@ -36,8 +32,6 @@ import com.easymi.component.widget.LoadingButton;
 import com.easymi.component.widget.keyboard.SafeKeyboard;
 import com.easymi.personal.R;
 import com.easymi.personal.entity.Register;
-
-import java.util.Locale;
 
 import rx.Observable;
 
@@ -320,10 +314,9 @@ public class RegisterAcitivty extends RxBaseActivity {
      */
     private void initBox() {
         text_agreement.setOnClickListener(view -> {
-            Intent intent = new Intent(this, WebActivity.class);
-            intent.putExtra("url", Config.H5_HOST + "#/protocol?articleName=driverLogin&appKey=" + Config.APP_KEY);
-            intent.putExtra("title", getString(R.string.login_agreement));
-            startActivity(intent);
+            WebActivity.goWebActivity(this
+                    , R.string.login_agreement
+                    , WebActivity.IWebVariable.DRIVER_LOGIN);
         });
     }
 
@@ -400,22 +393,9 @@ public class RegisterAcitivty extends RxBaseActivity {
      * 发送验证码
      */
     private void sendSms() {
-        String code_rsa = null;
-        String phone_rsa = null;
-        String randomNum_rsa = null;
-        String type_rsa = null;
-        String userType_rsa = null;
-        try {
-            code_rsa = RsaUtils.rsaEncode(et_img_code.getText().toString());
-            phone_rsa = RsaUtils.rsaEncode(et_phone.getText().toString());
-            randomNum_rsa = RsaUtils.rsaEncode(randomNum);
-            type_rsa = RsaUtils.rsaEncode("PASSENGER_LOGIN_CODE");
-            userType_rsa = RsaUtils.rsaEncode("2");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Observable<EmResult> observable = RegisterModel.getSms(et_img_code.getText().toString(), et_phone.getText().toString(), randomNum,
+                "PASSENGER_LOGIN_CODE", "2");
 
-        Observable<EmResult> observable = RegisterModel.getSms(code_rsa, phone_rsa, randomNum_rsa, type_rsa, userType_rsa);
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, emResult -> {
             if (emResult.getCode() == 1) {
                 ToastUtil.showMessage(this, getResources().getString(R.string.register_send_succed));
@@ -444,20 +424,10 @@ public class RegisterAcitivty extends RxBaseActivity {
      * 调用注册接口
      */
     private void register() {
-        String password_rsa = null;
-        String phone_rsa = null;
-        String smsCode_rsa = null;
-        String random_rsa = null;
-        try {
-            password_rsa = RsaUtils.rsaEncode(et_password.getText().toString());
-            phone_rsa = RsaUtils.rsaEncode(et_phone.getText().toString());
-            smsCode_rsa = RsaUtils.rsaEncode(et_code.getText().toString());
-            random_rsa = RsaUtils.rsaEncode(randomNum);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        Observable<Register> observable = RegisterModel.register(password_rsa, phone_rsa, smsCode_rsa, random_rsa);
+        Observable<Register> observable = RegisterModel.register(et_password.getText().toString(), et_phone.getText().toString(),
+                et_code.getText().toString(), randomNum);
+
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, register_button, register -> {
             if (register.getCode() == 1) {
                 startBase(register.data);
@@ -475,20 +445,10 @@ public class RegisterAcitivty extends RxBaseActivity {
             } else {
                 String msg = register.getMessage();
                 //获取默认配置
-                Configuration config = XApp.getInstance().getResources().getConfiguration();
-                if (config.locale == Locale.TAIWAN || config.locale == Locale.TRADITIONAL_CHINESE) {
-                    for (ErrCodeTran errCode : ErrCodeTran.values()) {
-                        if (register.getCode() == errCode.getCode()) {
-                            msg = errCode.getShowMsg();
-                            break;
-                        }
-                    }
-                } else {
-                    for (ErrCode errCode : ErrCode.values()) {
-                        if (register.getCode() == errCode.getCode()) {
-                            msg = errCode.getShowMsg();
-                            break;
-                        }
+                for (ErrCode errCode : ErrCode.values()) {
+                    if (register.getCode() == errCode.getCode()) {
+                        msg = errCode.getShowMsg();
+                        break;
                     }
                 }
                 ToastUtil.showMessage(this, msg);

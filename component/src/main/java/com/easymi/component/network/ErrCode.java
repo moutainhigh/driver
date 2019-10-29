@@ -580,7 +580,7 @@ public enum ErrCode {
      * 评论包含敏感词
      */
     MOMO_SENSITIVE_ERROR(40205, "评论包含敏感词"),
-    
+
     START_NO_SERVICE(40300, "当前起始地未开通服务机构"),
 
     /**
@@ -613,8 +613,46 @@ public enum ErrCode {
     /**
      * 电话号码格式错误
      */
-    PHONE_ERR(10016, "电话号码格式错误");
+    PHONE_ERR(10016, "电话号码格式错误"),
 
+    /**
+     * 服务机构被禁用
+     */
+    COMPANY_NDISABLE_ERROR(40402, "服务机构被禁用"),
+    /**
+     * 平台级账号的级别不能被修改
+     */
+    ADMIN_MAIN_NOT_UPDATE(40403, "平台级账号的级别不能被修改"),
+
+    /**
+     * 此途径站点不允许下车
+     */
+    STATION_NOT_ALLOW_GET_OFF(40211, "此途径站点不允许下车"),
+
+    /**
+     * 班次发车时间已过期
+     */
+    SCHEDULE_OBSOLETED(40184, "班次发车时间已过期"),
+    /**
+     * 班次已经存在
+     */
+    SCHEDULE_HAS_EXIST(40605, "班次已经存在"),
+
+    /**
+     * 客车已经前往下一站点
+     */
+    CURRENDSTATION_ERROR(40604, "客车已经前往下一站点"),
+    /**
+     * 班次已经售票
+     */
+    SCHEDULE_HAS_TICKET(40603, "班次已经售票"),
+
+    /**
+     * 班次还有订单未执行
+     */
+    SCHEDULE_STILL_ORDER(40606, "班次还有订单未执行"),
+
+    SEAT_INFO_ERROR(40601, "座位信息出错,请重新选择");
 
     private int code;
     private String showMsg;

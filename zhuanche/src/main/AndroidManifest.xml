@@ -30,17 +30,6 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeSwipeBack"/>
-        <activity
-            android:name=".flowMvp.oldCalc.OldRunningActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="sensor"
-            android:theme="@style/FullscreenTheme"
-            />
-        <activity
-            android:name=".flowMvp.oldCalc.OldWaitActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="sensor"
-            android:theme="@style/FullscreenTheme" />
 
         <activity
             android:name="com.amap.api.navi.AmapRouteActivity"

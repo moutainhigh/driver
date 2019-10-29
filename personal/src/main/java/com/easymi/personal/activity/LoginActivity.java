@@ -1,12 +1,13 @@
 package com.easymi.personal.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputType;
@@ -30,7 +31,6 @@ import com.easymi.component.entity.Employ;
 import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.ErrCode;
-import com.easymi.component.network.ErrCodeTran;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
@@ -53,8 +53,6 @@ import com.easymi.personal.R;
 import com.easymi.personal.activity.register.RegisterAcitivty;
 import com.easymi.personal.activity.register.RegisterNoticeActivity;
 import com.easymi.personal.result.LoginResult;
-
-import java.util.Locale;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -86,6 +84,8 @@ public class LoginActivity extends RxBaseActivity {
 
 
     SafeKeyboard safeKeyboard;
+    private String account;
+    private String password;
 
     @Override
     public int getLayoutId() {
@@ -105,7 +105,7 @@ public class LoginActivity extends RxBaseActivity {
             }
             PhoneUtil.hideKeyboard(this);
 
-            login(editAccount.getText().toString(), editPsw.getText().toString());
+            login();
 
         });
         editAccount = findViewById(R.id.login_et_account);
@@ -157,10 +157,9 @@ public class LoginActivity extends RxBaseActivity {
      */
     private void initBox() {
         textAgreement.setOnClickListener(view -> {
-            Intent intent = new Intent(LoginActivity.this, WebActivity.class);
-            intent.putExtra("url", Config.H5_HOST + "#/protocol?articleName=driverLogin&appKey=" + Config.APP_KEY);
-            intent.putExtra("title", getString(R.string.login_agreement));
-            startActivity(intent);
+            WebActivity.goWebActivity(this
+                    , R.string.login_agreement
+                    , WebActivity.IWebVariable.DRIVER_LOGIN);
         });
     }
 
@@ -267,17 +266,105 @@ public class LoginActivity extends RxBaseActivity {
         }
     }
 
-    /**
-     * 登陆
-     *
-     * @param name
-     * @param psw
-     */
-    private void login(String name, String psw) {
+    private void login() {
         if (EmUtil.getLastLoc() == null) {
             ToastUtil.showMessage(this, "获取当前位置失败,请重试");
             return;
         }
+
+        account = editAccount.getText().toString();
+        password = editPsw.getText().toString();
+
+//        Observable<LoginResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
+//                .getIsLogin(2, account)
+//                .map(new HttpResultFunc2<>())
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .flatMap(new Func1<Boolean, Observable<LoginResult>>() {
+//                    @Override
+//                    public Observable<LoginResult> call(Boolean aBoolean) {
+//                        if (!aBoolean) {
+//                            return getLoginObservable(account, password);
+//                        } else {
+//                            showDialog();
+//                            return Observable.error(new RuntimeException());
+//                        }
+//                    }
+//                });
+//
+//        subscribeObservable(observable);
+        subscribeObservable(getLoginObservable(account, password));
+    }
+
+    private void showDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("系统提示")
+                .setMessage("当前账号已经登录,是否继续登录?")
+                .setCancelable(false)
+                .setPositiveButton("确定", (dialog, which) -> {
+                    subscribeObservable(getLoginObservable(account, password));
+                    dialog.dismiss();
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    private void subscribeObservable(Observable<LoginResult> observable) {
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, loginBtn, new HaveErrSubscriberListener<LoginResult>() {
+            @Override
+            public void onNext(LoginResult loginResult) {
+                if (loginResult.getCode() == 1) {
+                    Employ employ = loginResult.data;
+                    XApp.getEditor()
+                            .putLong(Config.SP_DRIVERID, employ.id)
+                            .putString(Config.SP_TOKEN, employ.token)
+                            .apply();
+                    employ.saveOrUpdate();
+                    employ.updateDriverCompanyId();
+                    getSetting(employ, account, password);
+                } else if (loginResult.getCode() == APPLYING) {
+                    Intent intent = new Intent(LoginActivity.this, RegisterNoticeActivity.class);
+                    intent.putExtra("type", 2);
+                    startActivity(intent);
+                } else if (loginResult.getCode() == APPLY_PASS) {
+                    Employ employ = loginResult.data;
+                    XApp.getEditor()
+                            .putLong(Config.SP_DRIVERID, employ.id)
+                            .putString(Config.SP_TOKEN, employ.token)
+                            .apply();
+                    employ.saveOrUpdate();
+                    employ.updateDriverCompanyId();
+                    getSetting(employ, account, password);
+                } else if (loginResult.getCode() == APPLY_REJECT) {
+                    Intent intent = new Intent(LoginActivity.this, RegisterNoticeActivity.class);
+                    intent.putExtra("type", 3);
+                    intent.putExtra("phone", account);
+                    startActivity(intent);
+                } else {
+                    String msg = loginResult.getMessage();
+                    for (ErrCode errCode : ErrCode.values()) {
+                        if (loginResult.getCode() == errCode.getCode()) {
+                            msg = errCode.getShowMsg();
+                            break;
+                        }
+                    }
+
+                    ToastUtil.showMessage(LoginActivity.this, msg);
+                }
+            }
+
+            @Override
+            public void onError(int code) {
+            }
+        })));
+    }
+
+    private Observable<LoginResult> getLoginObservable(String name, String psw) {
         TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         String operatorName = "其他";
         String operator = tm.getSimOperator();
@@ -291,108 +378,32 @@ public class LoginActivity extends RxBaseActivity {
             }
         }
 
-
         XApp.getEditor().putString(Config.SP_TOKEN, "").apply();
 
         String randomStr = RsaUtils.getRandomString(16);
         XApp.getEditor().putString(Config.AES_PASSWORD, randomStr).apply();
 
-        String name_rsa = null;
-        String pws_rsa = null;
-        String randomStr_rsa = null;
-
-        String mac_rsa = null;
-        String imei_rsa = null;
-        String imsi_rsa = null;
-        String loginType_rsa = null;
-        String longitude_rsa = null;
-        String latitude_rsa = null;
-
-        String mobileOperators_rsa = null;
-        String appVersion_rsa = null;
-        String mapType_rsa = null;
+        String mac = "";
+        String imei = "";
+        String imsi = "";
+        String appVersion = "";
         try {
-            name_rsa = RsaUtils.rsaEncode(name);
-            pws_rsa = RsaUtils.rsaEncode(SHA256Util.getSHA256StrJava(psw));
-            randomStr_rsa = RsaUtils.rsaEncode(randomStr);
-
-            mac_rsa = RsaUtils.rsaEncode(MacUtils.getMobileMAC(this));
-            imei_rsa = RsaUtils.rsaEncode(MobileInfoUtil.getIMEI(this));
-            imsi_rsa = RsaUtils.rsaEncode(MobileInfoUtil.getIMSI(this));
-            loginType_rsa = RsaUtils.rsaEncode(Build.MODEL);
-            longitude_rsa = RsaUtils.rsaEncode(EmUtil.getLastLoc().latitude + "");
-            latitude_rsa = RsaUtils.rsaEncode(EmUtil.getLastLoc().longitude + "");
-
-            appVersion_rsa = RsaUtils.rsaEncode(SysUtil.getVersionName(this));
-            mobileOperators_rsa = RsaUtils.rsaEncode(operatorName);
-            mapType_rsa = RsaUtils.rsaEncode("2");
-
+            mac = MacUtils.getMobileMAC(this);
+            imei = MobileInfoUtil.getIMEI(this);
+            imsi = MobileInfoUtil.getIMSI(this);
+            appVersion = SysUtil.getVersionName(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Observable<LoginResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .loginByPW(name_rsa, pws_rsa, randomStr_rsa,
-                        mac_rsa, imei_rsa, imsi_rsa, loginType_rsa,
-                        longitude_rsa, latitude_rsa, appVersion_rsa, mobileOperators_rsa, mapType_rsa)
+
+        return ApiManager.getInstance().createApi(Config.HOST, McService.class)
+                .loginByPW(name, SHA256Util.getSHA256StrJava(psw), randomStr,
+                        mac, imei, imsi,
+                        Build.MODEL, String.valueOf(EmUtil.getLastLoc().latitude), String.valueOf(EmUtil.getLastLoc().longitude), appVersion,
+                        operatorName, "2")
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, loginBtn, new HaveErrSubscriberListener<LoginResult>() {
-            @Override
-            public void onNext(LoginResult loginResult) {
-                if (loginResult.getCode() == 1) {
-                    Employ employ = loginResult.data;
-                    XApp.getEditor()
-                            .putLong(Config.SP_DRIVERID, employ.id)
-                            .putString(Config.SP_TOKEN, employ.token)
-                            .apply();
-                    employ.saveOrUpdate();
-                    getSetting(employ, name, psw);
-                } else if (loginResult.getCode() == APPLYING) {
-                    Intent intent = new Intent(LoginActivity.this, RegisterNoticeActivity.class);
-                    intent.putExtra("type", 2);
-                    startActivity(intent);
-                } else if (loginResult.getCode() == APPLY_PASS) {
-                    Employ employ = loginResult.data;
-                    XApp.getEditor()
-                            .putLong(Config.SP_DRIVERID, employ.id)
-                            .putString(Config.SP_TOKEN, employ.token)
-                            .apply();
-                    employ.saveOrUpdate();
-                    getSetting(employ, name, psw);
-                } else if (loginResult.getCode() == APPLY_REJECT) {
-                    Intent intent = new Intent(LoginActivity.this, RegisterNoticeActivity.class);
-                    intent.putExtra("type", 3);
-                    intent.putExtra("phone", name);
-                    startActivity(intent);
-                } else {
-                    String msg = loginResult.getMessage();
-                    //获取默认配置
-                    Configuration config = XApp.getInstance().getResources().getConfiguration();
-                    if (config.locale == Locale.TAIWAN || config.locale == Locale.TRADITIONAL_CHINESE) {
-                        for (ErrCodeTran errCode : ErrCodeTran.values()) {
-                            if (loginResult.getCode() == errCode.getCode()) {
-                                msg = errCode.getShowMsg();
-                                break;
-                            }
-                        }
-                    } else {
-                        for (ErrCode errCode : ErrCode.values()) {
-                            if (loginResult.getCode() == errCode.getCode()) {
-                                msg = errCode.getShowMsg();
-                                break;
-                            }
-                        }
-                    }
-                    ToastUtil.showMessage(LoginActivity.this, msg);
-                }
-            }
-
-            @Override
-            public void onError(int code) {
-            }
-        })));
     }
 
     /**

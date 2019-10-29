@@ -1,5 +1,6 @@
 package com.easymin.custombus;
 
+import com.easymi.component.result.EmResult;
 import com.easymi.component.result.EmResult2;
 import com.easymin.custombus.entity.Customer;
 import com.easymin.custombus.entity.DZBusLine;
@@ -7,10 +8,13 @@ import com.easymin.custombus.entity.OrdersResult;
 import com.easymin.custombus.entity.StationMainBean;
 import com.easymin.custombus.entity.StationResult;
 import com.easymin.custombus.entity.TimeResult;
+import com.easymin.custombus.entity.ManualCreateLineBean;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.http.Field;
+import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -33,6 +37,9 @@ public interface DZBusApiService {
     @GET("api/v1/bus/country/driver/order/querySchedule")
     Observable<StationResult> findBusInfoById(@Query("scheduleId") long scheduleId);
 
+    @GET("api/v1/bus/country/driver/line/findLineListByDriverId")
+    Observable<EmResult2<List<ManualCreateLineBean>>> findLineListByDriverId(@Query("driverId") long driverId);
+
     @POST("api/v1/bus/country/driver/order/create")
     @FormUrlEncoded
     Observable<EmResult2<Long>> createOrder(@Field("startStationId") long startStationId,
@@ -40,7 +47,17 @@ public interface DZBusApiService {
                                             @Field("scheduleId") long scheduleId,
                                             @Field("ticketNumber") int ticketNumber,
                                             @Field("passengerPhone") String passengerPhone,
-                                            @Field("channelAlias") String channelAlias);
+                                            @Field("channelAlias") String channelAlias,
+                                            @Field("passengerInfos")String passengerInfos,
+                                            @Field("sorts")String sorts);
+
+    @POST("api/v1/bus/country/driver/order/confirmBoarding")
+    @FormUrlEncoded
+    Observable<EmResult> confirmBoarding(@Field("orderIds") String orderIds);
+
+    @POST("api/v1/bus/country/driver/schedule")
+    @FormUrlEncoded
+    Observable<EmResult> manualOrderCreate(@FieldMap Map<String,String> data);
 
 
     @GET("api/v1/bus/country/driver/schedule/priceOrder")

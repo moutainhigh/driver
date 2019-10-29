@@ -7,7 +7,6 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/keyboardHeader"
         android:layout_width="match_parent"
         android:layout_height="@dimen/keyboard_tip_height"
         android:background="@color/keyboardBackColor">
@@ -27,7 +26,6 @@
                 android:src="@drawable/shield" />
 
             <TextView
-                android:id="@+id/keyboardTip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -58,7 +56,6 @@
     </RelativeLayout>
 
     <FrameLayout
-        android:id="@+id/keyboardLayer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10sp"

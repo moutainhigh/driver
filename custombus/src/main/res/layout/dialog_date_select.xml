@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/corners_white_top_4dp"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/dialogDateSelectIv"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="end"
+        android:paddingTop="10dp"
+        android:paddingEnd="10dp"
+        android:src="@mipmap/common_cancel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:text="发车日期"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/sizeContent"
+        android:textStyle="bold" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/dialogDateSelectRv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="12dp" />
+</LinearLayout>

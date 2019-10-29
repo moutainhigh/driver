@@ -7,7 +7,7 @@ import android.widget.TextView;
 import com.amap.api.maps.model.LatLng;
 import com.easymi.component.ZXOrderStatus;
 import com.easymi.component.base.RxBaseFragment;
-import com.easymi.component.entity.DymOrder;
+//import com.easymi.component.entity.DymOrder;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.TimeUtil;
 import com.easymin.carpooling.R;
@@ -38,7 +38,7 @@ public class NotStartFragment extends RxBaseFragment {
     TextView timeCountDown;
     Button bottomBtn;
     /**
-     * 专线班次
+     * 拼车班次
      */
     PincheOrder pincheOrder;
 
@@ -46,7 +46,6 @@ public class NotStartFragment extends RxBaseFragment {
      * 通信接口
      */
     ActFraCommBridge bridge;
-    private boolean pause;
 
     /**
      * 设置bridge
@@ -103,7 +102,7 @@ public class NotStartFragment extends RxBaseFragment {
             latLngs.add(endLatlng);
 
             bridge.showBounds(latLngs);
-            bridge.changeToolbar(StaticVal.TOOLBAR_NOT_START);
+            bridge.changeToolbar(StaticVal.TOOLBAR_NOT_START,-1);
         }
     }
 
@@ -136,7 +135,7 @@ public class NotStartFragment extends RxBaseFragment {
                     if (!isAdded()) {
                         return;
                     }
-                    if (pause) {
+                    if (bridge == null || getActivity() == null) {
                         return;
                     }
                     jieRenTimeLeftSec--;
@@ -167,10 +166,6 @@ public class NotStartFragment extends RxBaseFragment {
         cancelTimer();
     }
 
-
-    public void setPause(boolean isPause) {
-        pause = isPause;
-    }
 
     /**
      * 取消计时器
@@ -225,17 +220,12 @@ public class NotStartFragment extends RxBaseFragment {
         timeCountDown.setText(sb.toString());
 
         if (leftSec > 0) {
-            bottomBtn.setText("行程规划");
-            bottomBtn.setOnClickListener(view -> bridge.toChangeSeq(StaticVal.PLAN_ACCEPT));
+            bottomBtn.setText("规划路径");
+            bottomBtn.setOnClickListener(view -> bridge.toChangeSeq(0));
         } else {
-            bottomBtn.setText("行程规划");
+            bottomBtn.setText("规划路径");
             bottomBtn.setOnClickListener(view -> {
-                DymOrder dymOrder = DymOrder.findByIDType(pincheOrder.orderId, pincheOrder.orderType);
-                if (null != dymOrder) {
-                    dymOrder.orderStatus = ZXOrderStatus.ACCEPT_PLAN;
-                    dymOrder.updateStatus();
-                }
-                bridge.toChangeSeq(StaticVal.PLAN_ACCEPT);
+                bridge.toChangeSeq(0);
             });
         }
     }

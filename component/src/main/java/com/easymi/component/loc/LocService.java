@@ -253,7 +253,7 @@ public class LocService extends Service implements AMapLocationListener {
             if (null == notificationManager) {
                 notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             }
-            String channelId = getPackageName()+"/locChannel";
+            String channelId = getPackageName() + "/locChannel";
             if (!isCreateChannel) {
                 NotificationChannel notificationChannel = new NotificationChannel(channelId,
                         NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_MIN);
@@ -298,7 +298,7 @@ public class LocService extends Service implements AMapLocationListener {
         List<DymOrder> dymOrders = DymOrder.findAll();
         boolean needTrace = false;
         for (DymOrder dymOrder : dymOrders) {
-            if (dymOrder.orderType.equals(Config.DAIJIA)) {
+            if (dymOrder.serviceType.equals(Config.DAIJIA)) {
                 if (dymOrder.orderStatus == DJOrderStatus.GOTO_DESTINATION_ORDER) {
                     needTrace = true;
                 }

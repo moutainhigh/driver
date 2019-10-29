@@ -22,9 +22,15 @@ import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.Log;
+import com.easymi.component.utils.Log;
+import com.easymin.carpooling.entity.AllStation;
+import com.easymin.carpooling.entity.StationResult;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
@@ -58,7 +64,7 @@ public class FlowPresenter implements FlowContract.Presenter {
         intent.putExtra("startLatlng", start);
         intent.putExtra("endLatlng", end);
         intent.putExtra("orderId", orderId);
-        intent.putExtra("orderType", Config.CITY_LINE);
+        intent.putExtra("serviceType", Config.CITY_LINE);
 
         intent.putExtra(Config.NAVI_MODE, Config.DRIVE_TYPE);
         context.startActivity(intent);
@@ -78,10 +84,6 @@ public class FlowPresenter implements FlowContract.Presenter {
                 true,
                 true,
                 o -> view.finishTaskSuc())));
-    }
-
-    @Override
-    public void routeLineByNavi(LatLng start, List<LatLng> latLngs, LatLng end) {
     }
 
 
@@ -128,15 +130,9 @@ public class FlowPresenter implements FlowContract.Presenter {
 
         RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(startPoint, endPoint);
         RouteSearch.DriveRouteQuery query = new RouteSearch.DriveRouteQuery(fromAndTo,
-                RouteSearch.DRIVING_MULTI_STRATEGY_FASTEST_SHORTEST, latLonPoints, null, "");
+                RouteSearch.DRIVING_SINGLE_SHORTEST, latLonPoints, null, "");
         routeSearch.calculateDriveRouteAsyn(query);
     }
-
-    @Override
-    public void stopNavi() {
-
-    }
-
 
     @Override
     public void startOutSet(long orderId) {
@@ -150,7 +146,7 @@ public class FlowPresenter implements FlowContract.Presenter {
 
     @Override
     public void gotoStart(CarpoolOrder carpoolOrder) {
-        view.getManager().add(model.gotoStart(carpoolOrder.id).subscribe(new MySubscriber<Object>(context, true, true, new NoErrSubscriberListener<Object>() {
+        view.getManager().add(model.gotoStart(carpoolOrder.orderId).subscribe(new MySubscriber<Object>(context, true, true, new NoErrSubscriberListener<Object>() {
             @Override
             public void onNext(Object o) {
                 view.gotoStartSuc(carpoolOrder);
@@ -160,7 +156,7 @@ public class FlowPresenter implements FlowContract.Presenter {
 
     @Override
     public void arriveStart(CarpoolOrder carpoolOrder) {
-        view.getManager().add(model.arriveStart(carpoolOrder.id).subscribe(new MySubscriber<>(context,
+        view.getManager().add(model.arriveStart(carpoolOrder.orderId).subscribe(new MySubscriber<>(context,
                 true,
                 true,
                 new HaveErrSubscriberListener<Object>() {
@@ -189,7 +185,7 @@ public class FlowPresenter implements FlowContract.Presenter {
 
     @Override
     public void acceptCustomer(CarpoolOrder carpoolOrder) {
-        view.getManager().add(model.acceptCustomer(carpoolOrder.id).subscribe(new MySubscriber<>(context,
+        view.getManager().add(model.acceptCustomer(carpoolOrder.orderId).subscribe(new MySubscriber<>(context,
                 true,
                 true,
                 o -> view.acceptCustomerSuc(carpoolOrder))));
@@ -197,7 +193,7 @@ public class FlowPresenter implements FlowContract.Presenter {
 
     @Override
     public void jumpAccept(CarpoolOrder carpoolOrder) {
-        view.getManager().add(model.jumpCustomer(carpoolOrder.id).subscribe(new MySubscriber<>(context,
+        view.getManager().add(model.jumpCustomer(carpoolOrder.orderId).subscribe(new MySubscriber<>(context,
                 true,
                 true,
                 o -> view.jumpAcceptSuc(carpoolOrder))));
@@ -205,7 +201,7 @@ public class FlowPresenter implements FlowContract.Presenter {
 
     @Override
     public void arriveEnd(CarpoolOrder carpoolOrder) {
-        view.getManager().add(model.sendCustomer(carpoolOrder.id).subscribe(new MySubscriber<>(context,
+        view.getManager().add(model.sendCustomer(carpoolOrder.orderId).subscribe(new MySubscriber<>(context,
                 true,
                 true,
                 o -> view.arriveEndSuc(carpoolOrder))));
@@ -224,4 +220,59 @@ public class FlowPresenter implements FlowContract.Presenter {
         }
         CarpoolOrder.delete(orderId, orderType);
     }
+
+
+////////////////
+
+    /**
+     * 查询班次下所有信息
+     *
+     * @param scheduleId
+     */
+    @Override
+    public void qureyScheduleInfo(long scheduleId) {
+        view.getManager().add(model.qureyScheduleInfo(scheduleId).subscribe(new MySubscriber<>(context, false,
+                true, allStation -> view.scheduleInfo(allStation))));
+    }
+
+    @Override
+    public void changeOrderSequence(String orderIdSequence) {
+        view.getManager().add(model.changeOrderSequence(orderIdSequence).subscribe(new MySubscriber<>(context, false,
+                false, object -> view.changeSequenceSuc())));
+    }
+
+    private Timer timer;
+    private TimerTask timerTask;
+
+    /**
+     * 定时查询班次 60秒查询一次
+     *
+     * @param scheduleId
+     */
+    public void queryOrderInTime(long scheduleId) {
+        cancelQueryInTime();
+        timer = new Timer();
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                qureyScheduleInfo(scheduleId);
+            }
+        };
+        timer.schedule(timerTask, 0, 60 * 1000);
+    }
+
+    /**
+     * 取消轮训
+     */
+    public void cancelQueryInTime() {
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+        if (timerTask != null) {
+            timerTask.cancel();
+            timerTask = null;
+        }
+    }
+
 }

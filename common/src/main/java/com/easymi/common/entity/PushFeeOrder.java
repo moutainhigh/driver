@@ -19,7 +19,6 @@ public class PushFeeOrder {
     /**
      * 订单类型
      */
-    @SerializedName("orderType")
     public String orderType;
 
     /**

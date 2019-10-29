@@ -116,49 +116,47 @@
 
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:background="@color/dark_gray" />
-
             <LinearLayout
+                android:id="@+id/zcSettleDialogLl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="15dp"
-                android:orientation="horizontal">
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/sizeLine"
+                    android:background="@color/dark_gray" />
 
                 <EditText
                     android:id="@+id/remark"
-                    android:layout_width="0.0dp"
-                    android:maxLength="100"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="5dp"
                     android:layout_weight="1"
                     android:background="@null"
+                    android:hint="@string/please_remark"
+                    android:maxLength="100"
+                    android:paddingLeft="5dp"
                     android:paddingTop="8dp"
-                    android:paddingBottom="5dp"
-                    android:hint="@string/please_remark" />
+                    android:paddingRight="5dp"
+                    android:paddingBottom="5dp" />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/sizeLine"
+                    android:background="@color/text_default" />
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:background="@color/text_default"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"/>
 
             <com.easymi.component.widget.LoadingButton
                 android:id="@+id/confirm_button"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/btn_height"
-                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/corners_accent"
                 android:gravity="center"
                 android:text="@string/confirm_money"
@@ -168,10 +166,10 @@
                 android:id="@+id/pay_button"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/btn_height"
-                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/corners_accent"
                 android:gravity="center"
                 android:text="@string/settle"

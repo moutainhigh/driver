@@ -100,7 +100,7 @@ public class PhoneUtil {
                 if (phoneCursor != null) {
 //                    while (phoneCursor.moveToNext()) {  //遍历该联系人所有号码
 //                        String phoneNo = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-//                        LogUtil.d(TAG, phoneNo + " (" + userName + ")");
+//                        Log.d(TAG, phoneNo + " (" + userName + ")");
 //                    }
 
                     //获取第一个电话

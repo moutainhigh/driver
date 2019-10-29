@@ -26,6 +26,11 @@ public class DymOrder implements Serializable {
 
     public long orderId;
 
+    public String serviceType;
+
+    /**
+     * 专车的子业务类型（出租车）
+     */
     public String orderType;
 
     public long passengerId;
@@ -180,11 +185,12 @@ public class DymOrder implements Serializable {
     public String orderNo;
 
 
-    public DymOrder(long orderId, String orderType, long passengerId, int orderStatus) {
+    public DymOrder(long orderId, String serviceType, long passengerId, int orderStatus,String orderType) {
         this.orderId = orderId;
-        this.orderType = orderType;
+        this.serviceType = serviceType;
         this.passengerId = passengerId;
         this.orderStatus = orderStatus;
+        this.orderType = orderType;
     }
 
     public DymOrder() {
@@ -202,7 +208,7 @@ public class DymOrder implements Serializable {
         ContentValues values = new ContentValues();
         values.put("id", id);
         values.put("orderId", orderId);
-        values.put("orderType", orderType);
+        values.put("serviceType", serviceType);
         values.put("passengerId", passengerId);
         values.put("startFee", startFee);
         values.put("waitTime", waitTime);
@@ -238,6 +244,7 @@ public class DymOrder implements Serializable {
 
         values.put("stageArrays", stageArrays);
         values.put("orderNo",orderNo);
+        values.put("orderType",orderType);
 
         boolean flag = db.insert("t_dyminfo", null, values) != -1;
         return flag;
@@ -286,12 +293,12 @@ public class DymOrder implements Serializable {
     /**
      * 判断订单是否存在
      */
-    public static boolean exists(long orderId, String orderType) {
+    public static boolean exists(long orderId, String serviceType) {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
         Cursor cursor = db.rawQuery(
-                "select count(*) from t_dyminfo where orderId = ? and orderType = ?",
-                new String[]{String.valueOf(orderId), orderType});
+                "select count(*) from t_dyminfo where orderId = ? and serviceType = ?",
+                new String[]{String.valueOf(orderId), serviceType});
         boolean flag = false;
         try {
             if (cursor.moveToNext()) {
@@ -306,13 +313,13 @@ public class DymOrder implements Serializable {
     /**
      * 根据ID和type查询数据
      */
-    public static DymOrder findByIDType(long orderId, String orderType) {
+    public static DymOrder findByIDType(long orderId, String serviceType) {
 
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
 
-        Cursor cursor = db.rawQuery("select * from t_dyminfo where orderId = ? and orderType = ? "
-                , new String[]{String.valueOf(orderId), orderType});
+        Cursor cursor = db.rawQuery("select * from t_dyminfo where orderId = ? and serviceType = ? "
+                , new String[]{String.valueOf(orderId), serviceType});
 
         try {
             if (cursor.moveToNext()) {
@@ -347,7 +354,7 @@ public class DymOrder implements Serializable {
         DymOrder orderInfo = new DymOrder();
         orderInfo.id = cursor.getLong(cursor.getColumnIndex("id"));
         orderInfo.orderId = cursor.getLong(cursor.getColumnIndex("orderId"));
-        orderInfo.orderType = cursor.getString(cursor.getColumnIndex("orderType"));
+        orderInfo.serviceType = cursor.getString(cursor.getColumnIndex("serviceType"));
         orderInfo.startFee = cursor.getDouble(cursor.getColumnIndex("startFee"));
         orderInfo.waitTime = cursor.getInt(cursor.getColumnIndex("waitTime"));
         orderInfo.waitTimeFee = cursor.getDouble(cursor.getColumnIndex("waitTimeFee"));
@@ -386,6 +393,7 @@ public class DymOrder implements Serializable {
         orderInfo.stageArrays = cursor.getString(cursor.getColumnIndex("stageArrays"));
 
         orderInfo.orderNo = cursor.getString(cursor.getColumnIndex("orderNo"));
+        orderInfo.orderType = cursor.getString(cursor.getColumnIndex("orderType"));
 
         return orderInfo;
     }
@@ -407,7 +415,7 @@ public class DymOrder implements Serializable {
         ContentValues values = new ContentValues();
         values.put("id", id);
         values.put("orderId", orderId);
-        values.put("orderType", orderType);
+        values.put("serviceType", serviceType);
         values.put("startFee", startFee);
         values.put("waitTime", waitTime);
         values.put("waitTimeFee", waitTimeFee);
@@ -443,12 +451,8 @@ public class DymOrder implements Serializable {
         values.put("stageArrays", stageArrays);
 
         values.put("orderNo",orderNo);
+        values.put("orderType",orderType);
 
-//        values.put("addedKm", addedKm);
-//        values.put("addedFee", addedFee);
-        /*
-         * values.put("age", age); values.put("jialing", jialing);
-         */
         boolean flag = db.update("t_dyminfo", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
         return flag;
@@ -484,11 +488,6 @@ public class DymOrder implements Serializable {
 
         values.put("orderNo",orderNo);
 
-//        values.put("addedKm", addedKm);
-//        values.put("addedFee", addedFee);
-        /*
-         * values.put("age", age); values.put("jialing", jialing);
-         */
         boolean flag = db.update("t_dyminfo", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
         return flag;
@@ -505,9 +504,7 @@ public class DymOrder implements Serializable {
         values.put("orderTotalFee", orderTotalFee);
         values.put("orderShouldPay", orderShouldPay);
         values.put("prepay", prepay);
-        /*
-         * values.put("age", age); values.put("jialing", jialing);
-         */
+
         boolean flag = db.update("t_dyminfo", values, " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
         return flag;

@@ -23,7 +23,6 @@ import com.easymi.common.entity.PushAnnouncement;
 import com.easymi.common.mvp.grab.GrabActivity2;
 import com.easymi.common.mvp.work.WorkActivity;
 import com.easymi.common.result.MultipleOrderResult;
-import com.easymi.common.result.NotitfyResult;
 import com.easymi.common.result.SettingResult;
 import com.easymi.component.Config;
 import com.easymi.component.DJOrderStatus;
@@ -109,9 +108,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 if (needSend) {
                     MqttManager.getInstance().publishAck(order.orderId, 1);
                 }
-                if (!HandleBean.exists(order.orderId, order.serviceType, "robbing") &&
-                        !HandleBean.exists(order.orderId, order.serviceType, "cancel")) {
-                    HandleBean.save(order.orderId, order.serviceType, "robbing");
+                if (!HandleBean.exists(order.orderId, order.serviceType, "cancel")) {
                     loadOrder(order);
                 }
             } else if (msg.equals("sendorders")) {
@@ -171,10 +168,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 loadAnn(id);
             } else if (msg.equals("message")) {
                 //公告    （改为通知）
-                String data = jb.optString("data");
-                JSONObject dt = new JSONObject(data);
-
-                loadNotice(dt.optLong("id"));
+                sendNotification(jb);
             } else if (msg.equals("thaw")) {
                 //冻结
                 XApp.getInstance().shake();
@@ -305,11 +299,12 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                                         .withBoolean("flashAssign", true)
                                         .withLong("orderId", order.orderId).navigation();
                             });
-                        } else if (order.serviceType.equals(Config.TAXI)) {
-                            ARouter.getInstance()
-                                    .build("/taxi/FlowActivity")
-                                    .withLong("orderId", order.orderId).navigation();
                         }
+//                        else if (order.serviceType.equals(Config.TAXI)) {
+//                            ARouter.getInstance()
+//                                    .build("/taxi/FlowActivity")
+//                                    .withLong("orderId", order.orderId).navigation();
+//                        }
                     }
                 }
             } else if (msg.equals("chartered")) {
@@ -322,7 +317,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 refreshWork();
             } else if (msg.equals("order_hot_create")) {
                 XApp.getInstance().shake();
-                XApp.getInstance().syntheticVoice("您有城际拼车订单需要处理");
+                XApp.getInstance().syntheticVoice("您有定制拼车订单需要处理");
                 refreshWork();
             } else if (msg.equals("country") || msg.equals("custombus")) {
                 XApp.getInstance().shake();
@@ -371,6 +366,18 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private void sendNotification(JSONObject jb) throws JSONException {
+        String data = jb.optString("data");
+        JSONObject dt = new JSONObject(data);
+        XApp.getInstance().shake();
+        XApp.getInstance().syntheticVoice(dt.getString("noticeContent"), XApp.NEW_MSG);
+        Intent intent = new Intent();
+        intent.setAction(Config.BROAD_NOTICE);
+        intent.putExtra("notice", dt.getString("noticeContent"));
+        intent.setPackage(XApp.getInstance().getPackageName());
+        XApp.getInstance().sendBroadcast(intent);
     }
 
     public void refreshWork() {
@@ -519,38 +526,6 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
     }
 
     /**
-     * 加载通知
-     *
-     * @param id
-     */
-    private void loadNotice(long id) {
-        Observable<NotitfyResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .loadNotice(id, EmUtil.getAppKey())
-                .filter(new HttpResultFunc<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        rxManager.add(observable.subscribe(new MySubscriber<>(XApp.getInstance(), false,
-                false, new HaveErrSubscriberListener<NotitfyResult>() {
-            @Override
-            public void onNext(NotitfyResult multipleOrderResult) {
-                XApp.getInstance().shake();
-                XApp.getInstance().syntheticVoice(multipleOrderResult.data.noticeContent, XApp.NEW_MSG);
-                Intent intent = new Intent();
-                intent.setAction(Config.BROAD_NOTICE);
-                intent.putExtra("notice", multipleOrderResult.data.noticeContent);
-                intent.setPackage(XApp.getInstance().getPackageName());
-                XApp.getInstance().sendBroadcast(intent);
-            }
-
-            @Override
-            public void onError(int code) {
-                rxManager.clear();
-            }
-        })));
-    }
-
-    /**
      * 查询公告
      *
      * @param id
@@ -606,7 +581,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
         builder.setContentText(content);
         builder.setContentIntent(contentIntent);
         if (Build.VERSION.SDK_INT >= 26) {
-            String channelId = context.getPackageName()+"/pushChannel";
+            String channelId = context.getPackageName() + "/pushChannel";
             builder.setChannelId(channelId);
         }
 
@@ -640,7 +615,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                     Intent intent1 = new Intent();
                     intent1.setAction(Config.BROAD_FINISH_ORDER);
                     intent1.putExtra("orderId", order.id);
-                    intent1.putExtra("orderType", order.serviceType);
+                    intent1.putExtra("serviceType", order.serviceType);
                     XApp.getInstance().sendBroadcast(intent1);
                     return;
                 }
@@ -730,7 +705,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                     Intent intent1 = new Intent();
                     intent1.setAction(Config.BROAD_CANCEL_ORDER);
                     intent1.putExtra("orderId", order1.orderId);
-                    intent1.putExtra("orderType", order1.serviceType);
+                    intent1.putExtra("serviceType", order1.serviceType);
                     XApp.getInstance().sendBroadcast(intent1);
                 }
                 XApp.getInstance().shake();
@@ -771,7 +746,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                     Intent intent3 = new Intent();
                     intent3.setAction(Config.BROAD_BACK_ORDER);
                     intent3.putExtra("orderId", order3.orderId);
-                    intent3.putExtra("orderType", order3.serviceType);
+                    intent3.putExtra("serviceType", order3.serviceType);
                     XApp.getInstance().sendBroadcast(intent3);
                 }
                 XApp.getInstance().shake();
@@ -787,7 +762,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                     Intent intent3 = new Intent();
                     intent3.setAction(Config.SCHEDULE_FINISH);
                     intent3.putExtra("scheduleId", order4.scheduleId);
-                    intent3.putExtra("orderType", order4.serviceType);
+                    intent3.putExtra("serviceType", order4.serviceType);
                     XApp.getInstance().sendBroadcast(intent3);
                 }
                 break;

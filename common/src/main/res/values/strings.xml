@@ -6,7 +6,6 @@
     <string name="work_hour">时</string>
     <string name="work_minute">分</string>
     <string name="work_online_time">听单时长</string>
-    <string name="work_today_income">今日收入</string>
     <string name="work_driver">司机</string>
     <string name="work_order">订单</string>
     <string name="work_online">开始听单</string>
@@ -25,21 +24,15 @@
     <string name="create_daijia">代驾</string>
     <string name="create_zhuanche">城内打车</string>
     <string name="create_taxi">出租车</string>
-    <string name="create_paotui">跑腿</string>
-    <string name="create_huoyun">货运</string>
     <string name="create_zhuanxian">城际专线</string>
     <string name="create_chartered">定制包车</string>
     <string name="create_rental">包车租车</string>
     <string name="create_bus_country">客运班车</string>
     <string name="create_custombus">客运班车</string>
-    <string name="create_carpool">城际拼车</string>
+    <string name="create_carpool">定制拼车</string>
     <string name="create_gov">公务用车</string>
 
     <string name="hint">提示</string>
-    <string name="sure">确定</string>
-    <string name="message">亲爱的司机师傅，我们需要获取以下权限来保证应用正常运行，请授予</string>
-
-    <string name="exit">未能获得必要应用权限，即将退出</string>
 
     <string name="liushui_today">今天</string>
     <string name="liushui_yesterday">昨天</string>
@@ -51,15 +44,11 @@
     <string name="new_ann">新公告：</string>
     <string name="new_notify">新通知：</string>
 
-    <string name="start_lis_order">开始听单啦！</string>
-    <string name="stop_lis_order">停止听单啦！</string>
-
     <string name="current_place">当前地址:</string>
 
     <string name="grab_order_content">抢单</string>
     <string name="send_order">派单</string>
     <string name="accept_order">接单</string>
-    <string name="accept_order_refuse">拒单</string>
     <string name="send_order_content">您有新的订单了，快去接单吧</string>
 
     <string name="cancel_order">消单</string>
@@ -85,8 +74,6 @@
     <string name="meter">米</string>
     <string name="k_meter">千米</string>
 
-    <string name="jishi_order">即时订单</string>
-    <string name="yuyue_order">预约订单</string>
     <string name="time_format">MM月dd日 HH:mm</string>
 
     <string name="time_five_format">yyyy-MM-dd HH:mm</string>
@@ -98,16 +85,9 @@
     <string name="baoxiao_apply">提交</string>
     <string name="baoxiao_suc">您的报销请求已提交，等待审核</string>
 
-    <string name="jump_gif">跳过</string>
-
     <string name="please_admin">您的账户已被冻结，请联系管理员</string>
-    <string name="force_offline_please_admin">您已被强制下线，请联系管理员</string>
-
-    <string name="baoxiao_shenhe">当前订单报销申请已经提交，正在审核中</string>
-    <string name="baoxiao_done">当前订单已经报销过</string>
 
     <string name="no_order">暂无订单，赶快去接单吧</string>
-    <string name="no_ann_and_notice">暂无通知和公告</string>
     <string name="no_work">空闲中,快上线接单吧</string>
 
     <string name="freezed">您的账户已被冻结，请联系管理员</string>
@@ -131,17 +111,6 @@
     <string name="des_order">已销单 ></string>
     <string name="rate_order">已完成</string>
 
-    <string name="zx_new_order">新单</string>
-    <string name="zx_pai_order">已派单</string>
-    <string name="zx_accept_order">已接单</string>
-    <string name="zx_wait_start">等待开始行程</string>
-    <string name="zx_accept_plan">接人规划</string>
-    <string name="zx_send_plan">送人规划</string>
-    <string name="zx_accepting">接人中</string>
-    <string name="zx_sending">送人中</string>
-    <string name="zx_send_over">送完客户</string>
-    <string name="zx_line_over">行程结束</string>
-
     <string name="zx_no_pay">未支付</string>
     <string name="zx_pay">已支付</string>
     <string name="zx_accpet">接人中</string>
@@ -153,22 +122,14 @@
 
     <string name="reject_net">网络连接不可用，可能是由于您主动设置了禁用网络，请前往应用管理中打开。设置完毕后请重新启动程序</string>
 
-    <string name="date_unit">MM月dd日 HH:mm</string>
-
-    <string name="home_gonggao">公告</string>
-    <string name="home_notice">通知</string>
     <string name="listen_order_set">模式设置</string>
     <string name="listen_order_set_2">听单设置</string>
     <string name="listen_order_more_one">至少选择一种听单业务</string>
 
-    <string name="com_perfect_info">亲爱的师傅您好：\n&#160;&#160;&#160;&#160;您的资料还未完善，请尽快完善提交资料，管理员审核通过之后您就可以开启接单旅程了。</string>
-    <string name="com_perfect">完善资料</string>
     <string name="com_perfect2">信息完善</string>
     <string name="com_head_img">头像</string>
     <string name="com_name">*姓名</string>
-    <string name="com_input_name">请输入您的真实姓名</string>
     <string name="com_phone">*手机号</string>
-    <string name="com_input_phone">请输入手机号</string>
     <string name="com_card">*身份证号</string>
     <string name="com_input_card">请输入身份证号</string>
     <string name="com_contacts">*紧急联系人</string>
@@ -215,7 +176,6 @@
     <string name="com_card2">身份证反面（必填）</string>
     <string name="com_license">驾驶证（必填）</string>
     <string name="com_full">手持身份证照片</string>
-    <string name="com_complete_info">亲爱的师傅您好：\n&#160;&#160;&#160;&#160;您的资料已提交成功，管理人员正在审核，如有疑问请及时联后台管理人员，审核通过后您可开启接单旅程了。</string>
 
 
     <!--hf 我的订单相关-->
@@ -223,7 +183,6 @@
     <string name="com_make_order">司机补单</string>
     <string name="com_accept_order">我接的单</string>
     <string name="com_assign_order">指派订单</string>
-    <string name="com_grab_order">可抢订单</string>
 
     <string name="empty_text"></string>
     <string name="com_no_read">全部都已读了哦</string>
@@ -241,8 +200,5 @@
 
     <string name="com_turn_order">转单</string>
 
-
-    <string name="com_alipay_success">支付宝支付成功</string>
-    <string name="com_alipay_failed">支付宝支付失败</string>
 
 </resources>

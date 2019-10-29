@@ -1,6 +1,5 @@
 package com.easymi.common.util;
 
-import com.easymi.common.entity.BuildPushData;
 import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.common.entity.OrderCustomer;
 import com.easymi.common.entity.PushBean;
@@ -31,15 +30,9 @@ import java.util.List;
 
 public class BuildPushUtil {
 
-    /**
-     * @param buildPushData 需要推送的数据
-     */
-    public static PushBean buildPush(BuildPushData buildPushData) {
-
-        EmLoc emLoc = buildPushData.emLoc;
+    public static PushBean buildPush(EmLoc emLoc) {
 
         PushData pushData = new PushData();
-
         //转换一下
         Employ employ = Employ.findByID(XApp.getMyPreferences().getLong(Config.SP_DRIVERID, 0));
         PushEmploy pe;
@@ -52,6 +45,7 @@ public class BuildPushUtil {
             pe.phone = employ.phone;
             pe.business = employ.serviceType;
             pe.sex = employ.sex;
+            pe.driverCompanyId = employ.driverCompanyId;
             if (Vehicle.exists(employ.id)) {
                 Vehicle vehicle = Vehicle.findByEmployId(employ.id);
                 pe.vehicleNo = vehicle.vehicleNo;
@@ -91,9 +85,9 @@ public class BuildPushUtil {
 
         for (DymOrder dymOrder : DymOrder.findAll()) {
             PushDataOrder dataOrder = new PushDataOrder();
-            if (dymOrder.orderType.equals(Config.CITY_LINE)) {
+            if (dymOrder.serviceType.equals(Config.CITY_LINE)) {
                 if (dymOrder.orderStatus == 30 || dymOrder.orderStatus == 35) {
-                    for (OrderCustomer orderCustomer : OrderCustomer.findByIDTypeOrderByAcceptSeq(dymOrder.orderId, dymOrder.orderType)) {
+                    for (OrderCustomer orderCustomer : OrderCustomer.findByIDTypeOrderByAcceptSeq(dymOrder.orderId, dymOrder.serviceType)) {
                         dataOrder.orderId = orderCustomer.orderId;
                         dataOrder.orderType = orderCustomer.orderType;
 
@@ -102,34 +96,34 @@ public class BuildPushUtil {
                     }
                     orderList.add(dataOrder);
                 }
-            } else if (dymOrder.orderType.equals(Config.CARPOOL)) {
+            } else if (dymOrder.serviceType.equals(Config.CARPOOL)) {
                 if (dymOrder.orderStatus >= 10 && dymOrder.orderStatus <= 30) {
-                    for (CarpoolOrder carpoolOrder : CarpoolOrder.findByIDTypeOrderByAcceptSeq(dymOrder.orderId, dymOrder.orderType)) {
-                        dataOrder.orderId = carpoolOrder.id;
-                        dataOrder.orderType = carpoolOrder.orderType;
+//                    for (CarpoolOrder carpoolOrder : CarpoolOrder.findByIDTypeOrderByAcceptSeq(dymOrder.orderId, dymOrder.serviceType)) {
+                        dataOrder.orderId = dymOrder.id;
+                        dataOrder.orderType = dymOrder.serviceType;
 
-                        dataOrder.business = carpoolOrder.orderType;
-                        dataOrder.passengerId = carpoolOrder.passengerId;
+                        dataOrder.business = dymOrder.orderType;
+                        dataOrder.passengerId = dymOrder.passengerId;
 
-                        dataOrder.status = carpoolOrder.status;
-                    }
+//                        dataOrder.status = dymOrder.status;
+//                    }
                     orderList.add(dataOrder);
                 }
             } else {
                 dataOrder.orderId = dymOrder.orderId;
-                dataOrder.orderType = dymOrder.orderType;
+                dataOrder.orderType = dymOrder.serviceType;
                 dataOrder.status = dymOrder.orderStatus;
                 dataOrder.addedKm = dymOrder.addedKm;
                 dataOrder.addedFee = dymOrder.addedFee;
 
-                dataOrder.business = dymOrder.orderType;
+                dataOrder.business = dymOrder.serviceType;
                 dataOrder.passengerId = dymOrder.passengerId;
 
-                if (dymOrder.orderType.equals(Config.DAIJIA)) {
+                if (dymOrder.serviceType.equals(Config.DAIJIA)) {
 
-                } else if (dymOrder.orderType.equals(Config.ZHUANCHE)
-                        || dymOrder.orderType.equals(Config.TAXI)
-                        || dymOrder.orderType.equals(Config.GOV)) {
+                } else if (dymOrder.serviceType.equals(Config.ZHUANCHE)
+                        || dymOrder.serviceType.equals(Config.TAXI)
+                        || dymOrder.serviceType.equals(Config.GOV)) {
 
                     dataOrder.status = dymOrder.orderStatus;
 

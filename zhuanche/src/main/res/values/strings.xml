@@ -12,10 +12,8 @@
     <string name="start_drive">点击出发</string>
     <string name="start_wait">等待</string>
 
-    <string name="huadongdaoda">滑动到达预约地</string>
     <string name="slider_destance">滑动到达目的地</string>
 
-    <string name="zc_click_wait">中途等待</string>
     <string name="click_start">点击出发</string>
     <string name="settle">结算</string>
     <string name="service_fee">服务费用</string>
@@ -34,19 +32,14 @@
     <string name="cancel">取消</string>
 
     <string name="confirm_money">确认费用</string>
-    <string name="consumer_prepay">客户预付</string>
     <string name="more_pay">还需支付</string>
-    <string name="dai_fu">代付</string>
 
     <string name="watch_detail">查看费用详情 ></string>
     <string name="extra_fee">附加服务费</string>
     <string name="help_pay_fee">垫付费用</string>
-    <string name="hint_edit">点击价格文字可以直接输入</string>
     <string name="please_remark">请输入备注信息</string>
 
     <string name="minest_fee">最低消费金额</string>
-    <string name="xianjin_coupon">元现金优惠券</string>
-    <string name="zhekou_coupon">折折扣优惠券</string>
 
     <string name="fee_detail">费用详情</string>
 
@@ -68,8 +61,6 @@
 
     <string name="cancel_cancel">暂不取消</string>
     <string name="cancel_order">取消订单</string>
-
-    <string name="order_not_exist">订单不存在</string>
 
     <string name="where_start">请选择出发地</string>
     <string name="where_end">请选择目的地</string>
@@ -100,11 +91,8 @@
     <string name="lc_fee">里程费用</string>
     <string name="time_fee">时间费用</string>
     <string name="dh_fee">等候费用</string>
-    <string name="coupon_text">优惠券</string>
     <string name="prepay_text">预付金额</string>
     <string name="no_coupon">未使用优惠券</string>
-
-    <string name="route_failed">路径规划失败</string>
 
     <string name="loc_failed">定位失败,无法继续操作</string>
 
@@ -112,10 +100,7 @@
     <string name="status_jie">已接单</string>
     <string name="status_to_start">前往预约地</string>
     <string name="status_arrive_start">等待上车</string>
-    <string name="status_wait">等待中</string>
     <string name="zc_status_to_end">执行中</string>
-    <string name="status_cheating">作弊器</string>
-    <string name="status_confirm">确认费用</string>
 
     <string name="canceled_order">当前订单已被取消:)</string>
     <string name="backed_order">当前订单已被收回:)</string>
@@ -125,7 +110,6 @@
     <string name="pay_suc">结算完成</string>
 
     <string name="k_k_meter">公里</string>
-    <string name="yuan_coupon">元优惠券</string>
 
     <string name="cus_pay">客户在线支付</string>
     <!--<string name="help_pay">收取现金</string>-->
@@ -133,7 +117,6 @@
     <string name="cus_balance">余额支付</string>
     <string name="qiandan">签单支付</string>
 
-    <string name="pay_title">选择支付类型</string>
     <string name="please_pay_title">请选择支付类型</string>
 
     <string name="fee_hint">注:垫付费用不参与优惠券计算</string>
@@ -192,7 +175,6 @@
 
 
     <string name="personal_consumer">个人客户</string>
-    <string name="qiye_consumer">企业客户</string>
 
     <string name="left">剩余</string>
     <string name="meter">米</string>
@@ -207,12 +189,7 @@
     <string name="user_phone">使用人</string>
     <string name="passenger_phone">下单人</string>
 
-    <string name="middle_wait_text">已出发，中途等待乘客</string>
-
-    <string name="arrive_start_wait_text">已到达乘客起点，正等候乘客上车</string>
-
     <string name="to_start_about">去乘客起点约</string>
-    <string name="please_start_at">请在</string>
 
     <string name="no_car">暂无车辆，不能创建专车订单，请联系管理员</string>
 
@@ -227,4 +204,9 @@
 
 
     <string name="zc_jietifei">阶梯费</string>
+
+    <string name="input_settle">结算金额</string>
+    <string name="hint_settle">请输入结算金额</string>
+    <string name="com_cancel">取消</string>
+    <string name="com_sure">确认</string>
 </resources>

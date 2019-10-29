@@ -29,7 +29,7 @@ public class OrderFinishReceiver extends BroadcastReceiver {
             if (action.equals(Config.BROAD_FINISH_ORDER)) {
                 if (null != finishListener) {
                     Long orderId = intent.getLongExtra("orderId", -1);
-                    String orderType = intent.getStringExtra("orderType");
+                    String orderType = intent.getStringExtra("serviceType");
                     finishListener.onFinishOrder(orderId, orderType);
                 }
             }

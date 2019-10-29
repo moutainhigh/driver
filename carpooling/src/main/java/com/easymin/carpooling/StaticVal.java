@@ -13,9 +13,9 @@ public class StaticVal {
     public static final int MARKER_FLAG_START = 20;
     //终点
     public static final int MARKER_FLAG_END = 21;
-    //途经点 -- 亮色
+    //上车
     public static final int MARKER_FLAG_PASS_ENABLE = 0x19;
-    //途经点 -- 灰色
+    //下车
     public static final int MARKER_FLAG_PASS_DISABLE = 0x18;
 
     //规划送人
@@ -25,11 +25,29 @@ public class StaticVal {
 
     public static final int TOOLBAR_PAS_TICKET = 0x21;
     public static final int TOOLBAR_NOT_START = 0x15;
+
     public static final int TOOLBAR_CHANGE_ACCEPT = 0x14;
     public static final int TOOLBAR_CHANGE_SEND = 0x13;
-    public static final int TOOLBAR_ACCEPT_ING = 0x12;
-    public static final int TOOLBAR_SEND_ING = 0x11;
+
+//    public static final int TOOLBAR_ACCEPT_ING = 0x12;
+//    public static final int TOOLBAR_SEND_ING = 0x11;
+
+    public static final int TOOLBAR_RUNNING = 0x12;
+
+
     public static final int TOOLBAR_FLOW = 0x10;
     public static final int TOOLBAR_FINISH = 0x9;
 
+
+//////////////
+
+    /**
+     * 站点状态 1上车站点  3途径点
+     */
+    public static final int GO_ON_CAR = 1;
+
+    /**
+     * 2 下车站点
+     */
+    public static final int GET_OFF_CAR = 2;
 }

@@ -31,16 +31,14 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
-import com.easymi.common.CommApiService;
 import com.easymi.common.R;
 import com.easymi.common.activity.CreateActivity;
 import com.easymi.common.adapter.OrderAdapter;
 import com.easymi.common.entity.AnnAndNotice;
-import com.easymi.common.entity.BuildPushData;
+import com.easymi.common.entity.ManualConfigBean;
 import com.easymi.common.entity.MqttReconnectEvent;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
-import com.easymi.common.entity.PushMessage;
 import com.easymi.common.mvp.order.OrderActivity;
 import com.easymi.common.push.CountEvent;
 import com.easymi.common.push.MqttManager;
@@ -56,14 +54,9 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.EmLoc;
 import com.easymi.component.entity.Employ;
-import com.easymi.component.entity.HandleBean;
+import com.easymi.component.entity.Vehicle;
 import com.easymi.component.loc.LocObserver;
 import com.easymi.component.loc.LocReceiver;
-import com.easymi.component.network.ApiManager;
-import com.easymi.component.network.HaveErrSubscriberListener;
-import com.easymi.component.network.HttpResultFunc;
-import com.easymi.component.network.MySubscriber;
-import com.easymi.component.result.EmResult;
 import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.Log;
@@ -74,6 +67,7 @@ import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.LoadingButton;
 import com.easymi.component.widget.SwipeRecyclerView;
 import com.easymi.component.widget.pinned.PinnedHeaderDecoration;
+import com.google.gson.Gson;
 import com.skyfishjy.library.RippleBackground;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
@@ -84,10 +78,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 
 /**
@@ -160,6 +150,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     private WorkPresenter presenter;
     private TextView tvTitle;
     private TextView moneyDesc;
+    private ImageView workIvManual;
+    private TextView workTvOffline;
 
     @Override
     public int getLayoutId() {
@@ -193,8 +185,12 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
             onLineBtn.setStatus(LoadingButton.STATUS_LOADING);
             presenter.online(onLineBtn);
         });
-        listenOrderCon.setOnClickListener(v -> {
-            presenter.offline();
+        workTvOffline.setOnClickListener(v -> {
+            if (Config.IS_ENCRYPT && TextUtils.equals(Config.APP_KEY, "1HAcient1kLqfeX7DVTV0dklUkpGEnUC")) {
+                presenter.doLogOut();
+            } else {
+                presenter.offline();
+            }
 //            presenter.resetMqtt();
         });
         EmLoc emLoc = EmUtil.getLastLoc();
@@ -202,7 +198,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
             receiveLoc(emLoc);
         }
     }
-
 
 
     @Override
@@ -222,6 +217,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
 
     @Override
     public void findById() {
+        workIvManual = findViewById(R.id.workIvManual);
         bottomBar = findViewById(R.id.bottom_bar);
         mapView = findViewById(R.id.map_view);
         rippleBackground = findViewById(R.id.ripple_ground);
@@ -231,6 +227,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         tvTitle = findViewById(R.id.tv_title);
         tvTitle.setSelected(true);
         listenOrderCon = findViewById(R.id.listen_order_con);
+        workTvOffline = findViewById(R.id.workTvOffline);
         onLineBtn = findViewById(R.id.online_btn);
 
         loadingFrame = findViewById(R.id.loading_frame);
@@ -324,6 +321,24 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         swipeRefreshLayout.getRecyclerView().addItemDecoration(pinnedHeaderDecoration);
     }
 
+    @Override
+    public void onManualCreateConfigSuc(ManualConfigBean manualConfigBean) {
+        if (manualConfigBean.showView == 1) {
+            XApp.getEditor().putString(Config.SP_MANUAL_DATA, new Gson().toJson(manualConfigBean)).apply();
+            workIvManual.setVisibility(View.VISIBLE);
+            workIvManual.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.e("WorkActivity", "onClick");
+                    ARouter.getInstance().build("/custombus/ManualCreateActivity").navigation();
+                }
+            });
+        } else {
+            XApp.getEditor().remove(Config.SP_MANUAL_DATA).apply();
+            workIvManual.setVisibility(View.GONE);
+        }
+    }
+
     private void setHeaderView(RecyclerView view) {
         View header = LayoutInflater.from(this).inflate(R.layout.order_pinned_layout, view, false);
         header.setOnClickListener(v -> {
@@ -367,49 +382,19 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         listenOrderCon.setVisibility(View.VISIBLE);
         rippleBackground.startRippleAnimation();
         bottomBtnCon.setVisibility(View.GONE);
-        MqttManager.getInstance().pushLoc(new BuildPushData(EmUtil.getLastLoc()));
+        MqttManager.getInstance().savePushMessage(EmUtil.getLastLoc());
         refreshData();
 //        hideEmpty();
     }
 
-    private void doLogOut() {
-        if (null != WorkPresenter.timeCounter) {
-            WorkPresenter.timeCounter.forceUpload(-1);
-        }
-        CommApiService mcService = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class);
-        Observable<EmResult> observable = mcService
-                .employLoginOut(EmUtil.getEmployId())
-                .filter(new HttpResultFunc<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,
-                true, new HaveErrSubscriberListener<EmResult>() {
-            @Override
-            public void onNext(EmResult emResult) {
-                HandleBean.deleteAll();
-                PushMessage.deleteAll();
-                EmUtil.employLogout(WorkActivity.this);
-            }
-
-            @Override
-            public void onError(int code) {
-
-            }
-        })));
-    }
 
     @Override
     public void offlineSuc() {
-        if (Config.IS_ENCRYPT && TextUtils.equals(Config.APP_KEY, "1HAcient1kLqfeX7DVTV0dklUkpGEnUC")) {
-            doLogOut();
-        } else {
-            XApp.getInstance().syntheticVoice("", XApp.OFF_LINE);
-            listenOrderCon.setVisibility(View.GONE);
-            rippleBackground.stopRippleAnimation();
-            bottomBtnCon.setVisibility(View.VISIBLE);
-            refreshData();
-        }
+        XApp.getInstance().syntheticVoice("", XApp.OFF_LINE);
+        listenOrderCon.setVisibility(View.GONE);
+        rippleBackground.stopRippleAnimation();
+        bottomBtnCon.setVisibility(View.VISIBLE);
+        refreshData();
     }
 
     @Override
@@ -534,6 +519,9 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
          */
         if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)) {
             btCreate.setVisibility(View.VISIBLE);
+            if (Vehicle.exists(EmUtil.getEmployId()) && (Vehicle.findByEmployId(EmUtil.getEmployId()).isTaxiNormal == 1)){
+                btCreate.setVisibility(View.GONE);
+            }
         } else {
             btCreate.setVisibility(View.GONE);
         }
@@ -557,6 +545,12 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
             } else {
                 showOnline();//听单状态
             }
+        }
+
+        if (TextUtils.equals(EmUtil.getEmployInfo().serviceType, Config.COUNTRY)) {
+            presenter.getManualConfig();
+        } else {
+            XApp.getEditor().remove(Config.SP_MANUAL_DATA).apply();
         }
     }
 
@@ -608,6 +602,11 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     @Override
     public RxManager getRxManager() {
         return mRxManager;
+    }
+
+    @Override
+    public void hintCreatOrder() {
+
     }
 
     private boolean isFront = false;

@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.easymi.common.CommApiService;
 import com.easymi.common.R;
+import com.easymi.common.entity.ManualConfigBean;
 import com.easymi.common.entity.MqttConfig;
 import com.easymi.common.entity.MqttResult;
 import com.easymi.common.entity.MultipleOrder;
@@ -46,6 +47,7 @@ import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.LoadingButton;
 import com.easymin.driver.securitycenter.utils.CenterUtil;
+import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -89,6 +91,26 @@ public class WorkPresenter implements WorkContract.Presenter {
         model = new WorkModel();
     }
 
+    public void getManualConfig() {
+        Observable<ManualConfigBean> observable = model.getManualCreateConfig(EmUtil.getEmployId());
+        view.getRxManager().add(observable.subscribe(new MySubscriber<ManualConfigBean>(context, false, false, new HaveErrSubscriberListener<ManualConfigBean>() {
+            @Override
+            public void onNext(ManualConfigBean manualConfigBean) {
+                view.onManualCreateConfigSuc(manualConfigBean);
+                if (manualConfigBean.showView == 1) {
+                    XApp.getEditor().putString(Config.SP_MANUAL_DATA, new Gson().toJson(manualConfigBean)).apply();
+                } else {
+                    XApp.getEditor().remove(Config.SP_MANUAL_DATA).apply();
+                }
+            }
+
+            @Override
+            public void onError(int code) {
+                XApp.getEditor().remove(Config.SP_MANUAL_DATA).apply();
+            }
+        })));
+    }
+
     @Override
     public void indexOrders() {
         Observable<QueryOrdersResult> observable = model.indexOrders(EmUtil.getEmployId(), EmUtil.getAppKey());
@@ -124,8 +146,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                                             dymOrder.updateAll();
                                         } else {
                                             //非专线  本地没有
-                                            dymOrder = new DymOrder(order.orderId, order.serviceType,
-                                                    order.passengerId, order.status);
+                                            dymOrder = new DymOrder(order.orderId, order.serviceType, order.passengerId, order.status,order.orderType);
                                             dymOrder.id = order.id;
 
                                             dymOrder.orderNo = order.orderNo;
@@ -152,19 +173,17 @@ public class WorkPresenter implements WorkContract.Presenter {
                                             dymOrder.id = order.id;
                                             dymOrder.orderStatus = ZXOrderStatus.WAIT_START;
                                             dymOrder.orderId = order.scheduleId;
-                                            dymOrder.orderType = order.serviceType;
+                                            dymOrder.serviceType = order.serviceType;
                                             dymOrder.saveOrUpdate();
                                         }
                                     } else if (TextUtils.equals(order.serviceType, Config.CARPOOL)) {
                                         if (DymOrder.exists(order.scheduleId, order.serviceType)) {
-                                            //专线 本地有 状态同步
+                                            //拼车 本地有 状态同步
                                             dymOrder = DymOrder.findByIDType(order.scheduleId, order.serviceType);
                                             if (order.scheduleStatus <= BaseOrder.PC_SCHEDULE_STATUS_NEW) {
                                                 dymOrder.orderStatus = ZXOrderStatus.WAIT_START;
-                                            } else if (order.scheduleStatus == BaseOrder.PC_SCHEDULE_STATUS_TAKE) {
+                                            } else if (order.scheduleStatus == BaseOrder.PC_SCHEDULE_RUNNING) {
                                                 dymOrder.orderStatus = ZXOrderStatus.ACCEPT_ING;
-                                            } else if (order.scheduleStatus == BaseOrder.PC_SCHEDULE_STATUS_RUN) {
-                                                dymOrder.orderStatus = ZXOrderStatus.SEND_ING;
                                             } else if (order.scheduleStatus == BaseOrder.PC_SCHEDULE_STATUS_FINISH) {
                                                 dymOrder.orderStatus = ZXOrderStatus.SEND_OVER;
                                             }
@@ -175,7 +194,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                                             dymOrder.id = order.id;
                                             dymOrder.orderStatus = ZXOrderStatus.WAIT_START;
                                             dymOrder.orderId = order.scheduleId;
-                                            dymOrder.orderType = order.serviceType;
+                                            dymOrder.serviceType = order.serviceType;
                                             dymOrder.saveOrUpdate();
                                         }
                                     }
@@ -187,14 +206,14 @@ public class WorkPresenter implements WorkContract.Presenter {
                                 for (DymOrder dymOrder : allDym) {
                                     boolean isExist = false;
                                     for (MultipleOrder order : orders) {
-                                        if (dymOrder.orderType.equals(Config.CITY_LINE)
-                                                || dymOrder.orderType.equals(Config.CARPOOL)) {
+                                        if (dymOrder.serviceType.equals(Config.CITY_LINE)
+                                                || dymOrder.serviceType.equals(Config.CARPOOL)) {
                                             if ((dymOrder.orderId == order.scheduleId)) {
                                                 isExist = true;
                                                 break;
                                             }
-                                        } else if (dymOrder.orderType.equals(Config.ZHUANCHE)
-                                                || dymOrder.orderType.equals(Config.TAXI)
+                                        } else if (dymOrder.serviceType.equals(Config.ZHUANCHE)
+                                                || dymOrder.serviceType.equals(Config.TAXI)
                                                 || TextUtils.equals(order.serviceType, Config.CHARTERED)
                                                 || TextUtils.equals(order.serviceType, Config.RENTAL)
                                                 || TextUtils.equals(order.serviceType, Config.GOV)
@@ -264,7 +283,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                         }
                     }
                 })
-                .retryWhen(observable -> observable.delay(5, TimeUnit.SECONDS))
+                .retryWhen(observable -> observable.delay(3, TimeUnit.SECONDS))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MySubscriber<MqttConfig>(context, false, false, new NoErrSubscriberListener<MqttConfig>() {
@@ -279,6 +298,8 @@ public class WorkPresenter implements WorkContract.Presenter {
                         Config.ACK_TOPIC = mqttConfig.ackTopic;
                         Config.MQTT_CONNECTION_URL = mqttConfig.connectionsUrl;
                         Config.MQTT_CLIENT_ID = mqttConfig.clientId;
+                        Config.MQTT_GROUP_ID = mqttConfig.groupId;
+                        Config.MQTT_PARENT_TOPIC = mqttConfig.parentTopic;
                         MqttManager.getInstance().creatConnect();
                         checkTopic();
                     }
@@ -341,6 +362,41 @@ public class WorkPresenter implements WorkContract.Presenter {
         })));
     }
 
+    public void doLogOut() {
+        if (null != WorkPresenter.timeCounter) {
+            WorkPresenter.timeCounter.forceUpload(-1);
+        }
+        CommApiService mcService = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class);
+        Observable<EmResult> observable = mcService
+                .employLoginOut(EmUtil.getEmployId())
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, true,
+                true, new HaveErrSubscriberListener<EmResult>() {
+            @Override
+            public void onNext(EmResult emResult) {
+                CenterUtil centerUtil = new CenterUtil(context, Config.APP_KEY,
+                        XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
+                        XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
+                centerUtil.driverDown(EmUtil.getEmployId(), EmUtil.getEmployInfo().companyId, EmUtil.getEmployInfo().userName, EmUtil.getEmployInfo().realName,
+                        EmUtil.getEmployInfo().phone, System.currentTimeMillis() / 1000, EmUtil.getEmployInfo().serviceType);
+                HandleBean.deleteAll();
+                PushMessage.deleteAll();
+                XApp.getEditor()
+                        .putLong(Config.ONLINE_TIME, 0)
+                        .apply();
+                EmUtil.employLogout(context);
+            }
+
+            @Override
+            public void onError(int code) {
+
+            }
+        })));
+    }
+
     @Override
     public void offline() {
         long driverId = EmUtil.getEmployId();
@@ -358,10 +414,7 @@ public class WorkPresenter implements WorkContract.Presenter {
             XApp.getEditor()
                     .putLong(Config.ONLINE_TIME, 0)
                     .apply();
-            if (Config.IS_ENCRYPT && TextUtils.equals(Config.APP_KEY, "1HAcient1kLqfeX7DVTV0dklUkpGEnUC")) {
-            } else {
-                uploadTime(1);
-            }
+            uploadTime(1);
             view.offlineSuc();
 
         })));

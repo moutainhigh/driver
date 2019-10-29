@@ -11,17 +11,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.component.Config;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.GlideCircleTransform;
 import com.easymi.component.utils.Log;
 import com.easymin.carpooling.R;
+import com.easymin.carpooling.StaticVal;
+import com.easymin.carpooling.entity.PincheOrder;
 import com.easymin.carpooling.entity.Sequence;
 import com.easymin.carpooling.widget.OnItemTouchListener;
 
@@ -32,6 +36,7 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName:SequenceAdapter
+ *
  * @Author: hufeng
  * Date: 2018/12/24 下午1:10
  * Description:
@@ -47,12 +52,6 @@ public class SequenceAdapter extends RecyclerView.Adapter<SequenceAdapter.ViewHo
 
     private ItemTouchHelper itemTouchHelper;
 
-    RequestOptions options = new RequestOptions()
-            .centerCrop()
-            .transform(new GlideCircleTransform())
-            .placeholder(R.mipmap.photo_default)
-            .diskCacheStrategy(DiskCacheStrategy.ALL);
-
     /**
      * 最大最小位置
      */
@@ -61,6 +60,7 @@ public class SequenceAdapter extends RecyclerView.Adapter<SequenceAdapter.ViewHo
 
     /**
      * 构造器
+     *
      * @param context
      */
     public SequenceAdapter(Context context) {
@@ -70,6 +70,7 @@ public class SequenceAdapter extends RecyclerView.Adapter<SequenceAdapter.ViewHo
 
     /**
      * 设置排序列表
+     *
      * @param sequences
      */
     public void setSequences(List<Sequence> sequences) {
@@ -79,6 +80,7 @@ public class SequenceAdapter extends RecyclerView.Adapter<SequenceAdapter.ViewHo
 
     /**
      * 拖动排序帮助类
+     *
      * @param itemTouchHelper
      */
     public void setItemTouchHelper(ItemTouchHelper itemTouchHelper) {
@@ -87,19 +89,11 @@ public class SequenceAdapter extends RecyclerView.Adapter<SequenceAdapter.ViewHo
 
     /**
      * 设置最小最大数
+     *
      * @param min
      * @param max
      */
     public void setMinAndMax(int min, int max) {
-
-//        if (min > lists.size() - 1
-//                || min < 0) {
-//            min = -1;
-//        }
-//        if (max > lists.size() - 1
-//                || max < 0) {
-//            max = -1;
-//        }
         minPos = min;
         maxPos = max;
 
@@ -124,8 +118,8 @@ public class SequenceAdapter extends RecyclerView.Adapter<SequenceAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Sequence sequence = lists.get(position);
 
-        holder.rl_person.setOnTouchListener((v, event) -> {
-            Log.e(TAG,"----"+event.getAction()+"\n-----"+event.getActionMasked());
+        holder.linSeqNum.setOnTouchListener((v, event) -> {
+            Log.e(TAG, "----" + event.getAction() + "\n-----" + event.getActionMasked());
 
             if (position > minPos) {
                 if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
@@ -136,43 +130,69 @@ public class SequenceAdapter extends RecyclerView.Adapter<SequenceAdapter.ViewHo
         });
 
         if (sequence.type == 1) {
-            holder.rl_person.setVisibility(View.VISIBLE);
-            holder.iv_avater.setVisibility(View.VISIBLE);
+            holder.linSeqNum.setVisibility(View.VISIBLE);
 
-            Glide.with(context)
-                    .load(Config.IMG_SERVER + sequence.photo)
-                    .apply(options)
-                    .into(holder.iv_avater);
+            holder.tvSeqNum.setText(sequence.sort + "");
 
-            if (position > minPos) {
+            if (position < minPos) {
                 holder.seqTxt.setVisibility(View.GONE);
                 holder.seqImg.setVisibility(View.GONE);
-                holder.tv_get.setVisibility(View.GONE);
+                holder.tvStatus.setVisibility(View.GONE);
+                holder.linSeqNum.getBackground().setAlpha(128);
+
+                holder.tv_get.setVisibility(View.VISIBLE);
+
+                if (sequence.stationStatus == StaticVal.GO_ON_CAR && sequence.status  >= CarpoolOrder.CARPOOL_STATUS_RUNNING) {
+
+                    holder.tvSeqNum.setBackgroundResource(R.drawable.circle_dark_22);
+                    holder.tv_get.setText("已接");
+                }else if (sequence.stationStatus == StaticVal.GET_OFF_CAR && sequence.status  >= CarpoolOrder.CARPOOL_STATUS_FINISH){
+
+                    holder.tvSeqNum.setBackgroundResource(R.drawable.circle_accent);
+                    holder.tv_get.setText("已送");
+                }
+                if (sequence.status  == CarpoolOrder.CARPOOL_STATUS_SKIP){
+                    holder.tv_get.setText("已跳过");
+                }
+
             } else {
                 holder.seqTxt.setVisibility(View.GONE);
                 holder.seqImg.setVisibility(View.GONE);
-                holder.tv_get.setVisibility(View.VISIBLE);
+                holder.linSeqNum.getBackground().setAlpha(255);
 
-                // 0 未接 1 已接 2 跳过接 3 未送 4 已送 5 跳过送
-                if (sequence.status == 1){
-                    holder.tv_get.setText("已接");
-                }else if (sequence.status == 2){
-                    holder.tv_get.setText("已跳过");
-                }else if (sequence.status == 4){
-                    holder.tv_get.setText("已送");
-                }else if (sequence.status == 5){
-                    holder.tv_get.setText("跳过送");
+                if (sequence.isStartOrEnd){
+                    holder.tvStatus.setVisibility(View.GONE);
+                }else {
+                    holder.tvStatus.setVisibility(View.VISIBLE);
                 }
+
+                holder.tvSeqNum.setText(sequence.sort + "");
+
+                if (sequence.stationStatus == StaticVal.GO_ON_CAR) {
+                    holder.tvSeqNum.setBackgroundResource(R.drawable.circle_dark_22);
+                    holder.tvStatus.setText("上车");
+
+
+                } else if (sequence.stationStatus == StaticVal.GET_OFF_CAR) {
+                    holder.tvSeqNum.setBackgroundResource(R.drawable.circle_accent);
+                    holder.tvStatus.setText("下车");
+                } else {
+                    holder.tvStatus.setVisibility(View.GONE);
+                    holder.linSeqNum.getBackground().setAlpha(128);
+                }
+
+                holder.tv_get.setVisibility(View.GONE);
+
             }
         } else if (sequence.type == 2) {
             holder.seqTxt.setVisibility(View.VISIBLE);
             holder.seqImg.setVisibility(View.GONE);
-            holder.rl_person.setVisibility(View.GONE);
+            holder.linSeqNum.setVisibility(View.GONE);
             holder.seqTxt.setText(sequence.text);
         } else {
             holder.seqTxt.setVisibility(View.GONE);
             holder.seqImg.setVisibility(View.VISIBLE);
-            holder.rl_person.setVisibility(View.GONE);
+            holder.linSeqNum.setVisibility(View.GONE);
         }
     }
 
@@ -213,6 +233,9 @@ public class SequenceAdapter extends RecyclerView.Adapter<SequenceAdapter.ViewHo
         notifyItemMoved(fromPosition, toPosition);
         //注意此处只是notifyItemMoved并没有notifyDataSetChanged
         //原因下面会说明
+        if (onItemMoveListener != null){
+            onItemMoveListener.onMove();
+        }
         return true;
     }
 
@@ -227,8 +250,12 @@ public class SequenceAdapter extends RecyclerView.Adapter<SequenceAdapter.ViewHo
         TextView seqTxt;
         ImageView seqImg;
 
-        RelativeLayout rl_person;
-        ImageView iv_avater;
+        RelativeLayout linSeqNum;
+        TextView tvStatus;
+        TextView tvSeqNum;
+
+//        RelativeLayout rl_person;
+//        ImageView iv_avater;
         TextView tv_get;
 
         public ViewHolder(View itemView) {
@@ -237,17 +264,46 @@ public class SequenceAdapter extends RecyclerView.Adapter<SequenceAdapter.ViewHo
             seqImg = itemView.findViewById(R.id.seq_car_img);
             seqTxt = itemView.findViewById(R.id.seq_text);
 
-            rl_person = itemView.findViewById(R.id.rl_person);
-            iv_avater = itemView.findViewById(R.id.iv_avater);
+            linSeqNum = itemView.findViewById(R.id.lin_seq_num);
+            tvStatus = itemView.findViewById(R.id.tv_status);
+            tvSeqNum = itemView.findViewById(R.id.tv_seq_num);
+
+//            rl_person = itemView.findViewById(R.id.rl_person);
+//            iv_avater = itemView.findViewById(R.id.iv_avater);
             tv_get = itemView.findViewById(R.id.tv_get);
         }
     }
 
     /**
      * 获取当前排序列表
+     *
      * @return
      */
-    public List<Sequence> getLists(){
+    public List<Sequence> getLists() {
         return lists;
+    }
+
+
+
+    OnItemMoveListener onItemMoveListener;
+
+    /**
+     * 设置列表点击监听
+     *
+     * @param onItemMoveListener
+     */
+    public void setOnItemMoveListener(OnItemMoveListener onItemMoveListener) {
+        this.onItemMoveListener = onItemMoveListener;
+    }
+
+    /**
+     * 子项点击接口
+     */
+    public interface OnItemMoveListener {
+        /**
+         * 移动监听
+         *
+         */
+        void onMove();
     }
 }

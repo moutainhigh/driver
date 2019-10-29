@@ -17,18 +17,12 @@
     <string name="user_phone">使用人</string>
     <string name="passenger_phone">下单人</string>
 
-    <string name="middle_wait_text">已出发，中途等待乘客</string>
-
-    <string name="arrive_start_wait_text">已到达乘客起点，正等候乘客上车</string>
-
     <string name="to_start_about">去乘客起点约</string>
-    <string name="please_start_at">请在</string>
 
     <string name="no_car">暂无车辆，不能创建专车订单，请联系管理员</string>
 
     <string name="wait_consumer">等待乘客</string>
     <string name="change_sequence">修改顺序</string>
-    <string name="look_rule">查看规划</string>
     <string name="km">公里</string>
 
     <string name="pc_select_place_map_hint_1">请选择地图中有色块的区域范围</string>
