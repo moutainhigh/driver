@@ -33,6 +33,10 @@
 
     <string name="pc_select_aboard_place">选择上车点</string>
     <string name="pc_select_debus_place">选择下车点</string>
+    <string name="cp_choose_line">选择线路</string>
+    <string name="pc_hint_choose_line">请选择线路</string>
+    <string name="pc_choose_time">选择时段</string>
+    <string name="pc_hint_choose_time">请选择时段</string>
 
 
 </resources>

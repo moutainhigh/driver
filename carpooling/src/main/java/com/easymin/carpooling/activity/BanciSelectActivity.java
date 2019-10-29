@@ -22,6 +22,7 @@ import com.easymin.carpooling.CarPoolApiService;
 import com.easymin.carpooling.R;
 import com.easymin.carpooling.adapter.BanciAdapter;
 import com.easymin.carpooling.entity.PincheOrder;
+import com.easymin.carpooling.widget.BottomListDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ import rx.schedulers.Schedulers;
  * @History:
  */
 
-public class BanciSelectActivity extends RxBaseActivity {
+public class BanciSelectActivity extends RxBaseActivity implements View.OnClickListener {
 
     SwipeRecyclerView recyclerView;
 
@@ -50,6 +51,11 @@ public class BanciSelectActivity extends RxBaseActivity {
     CusErrLayout errLayout;
 
     TextView tv_hint;
+
+    TextView tv_line_name;
+    TextView tv_time_sort;
+    TextView tv_sure;
+
 
     private List<PincheOrder> orders;
 
@@ -68,6 +74,15 @@ public class BanciSelectActivity extends RxBaseActivity {
         recyclerView = findViewById(R.id.recyclerView);
         errLayout = findViewById(R.id.cus_err_layout);
         tv_hint = findViewById(R.id.tv_hint);
+
+        tv_line_name = findViewById(R.id.tv_line_name);
+        tv_time_sort = findViewById(R.id.tv_time_sort);
+        tv_sure = findViewById(R.id.tv_sure);
+
+        tv_line_name.setOnClickListener(this);
+        tv_time_sort.setOnClickListener(this);
+        tv_sure.setOnClickListener(this);
+
         orders = new ArrayList<>();
 
         initToolBar();
@@ -92,7 +107,7 @@ public class BanciSelectActivity extends RxBaseActivity {
                 return;
             }
 
-            if (pincheOrder.seats == 0){
+            if (pincheOrder.seats == 0) {
                 ToastUtil.showMessage(BanciSelectActivity.this, "该时段没有余票，不能补单");
                 return;
             }
@@ -186,5 +201,32 @@ public class BanciSelectActivity extends RxBaseActivity {
     private void hideErr() {
         errLayout.setVisibility(View.GONE);
         tv_hint.setVisibility(View.VISIBLE);
+    }
+
+
+    List<String> datas = new ArrayList<>();
+
+    @Override
+    public void onClick(View v) {
+        datas.add("ddddd");
+        datas.add("xxxxx");
+        datas.add("ccccc");
+
+        int i = v.getId();
+        if (i == R.id.tv_line_name) {
+            BottomListDialog dialog = new BottomListDialog(this,datas)
+                    .setOnSelectListener(index -> {
+
+                    });
+            dialog.show();
+        } else if (i == R.id.tv_time_sort) {
+            BottomListDialog dialog = new BottomListDialog(this,datas)
+                    .setOnSelectListener(index -> {
+
+                    });
+            dialog.show();
+        } else if (i == R.id.tv_sure) {
+            ToastUtil.showMessage(this,"请先选择线路");
+        }
     }
 }
