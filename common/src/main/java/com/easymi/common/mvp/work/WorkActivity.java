@@ -325,6 +325,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     public void onManualCreateConfigSuc(ManualConfigBean manualConfigBean) {
         if (manualConfigBean.showView == 1) {
             XApp.getEditor().putString(Config.SP_MANUAL_DATA, new Gson().toJson(manualConfigBean)).apply();
+
             workIvManual.setVisibility(View.VISIBLE);
             workIvManual.setOnClickListener(new View.OnClickListener() {
                 @Override

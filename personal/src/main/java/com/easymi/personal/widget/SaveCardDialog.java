@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.easymi.component.widget.BaseBottomDialog;
+import com.easymi.component.widget.dialog.BaseBottomDialog;
 import com.easymi.personal.R;
 
 /**

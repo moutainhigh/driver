@@ -1,4 +1,4 @@
-package com.easymi.component.widget;
+package com.easymi.component.widget.dialog;
 
 import android.app.Dialog;
 import android.content.Context;

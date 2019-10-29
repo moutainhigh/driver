@@ -102,6 +102,12 @@ public class WorkPresenter implements WorkContract.Presenter {
                 } else {
                     XApp.getEditor().remove(Config.SP_MANUAL_DATA).apply();
                 }
+                if (manualConfigBean.operationMode != 0) {
+                    XApp.getEditor().putInt(Config.PC_IS_BUTTON, manualConfigBean.operationMode).apply();
+                } else {
+                    //没有配置或者配置为空。默认滑动显示
+                    XApp.getEditor().putInt(Config.PC_IS_BUTTON, 1).apply();
+                }
             }
 
             @Override

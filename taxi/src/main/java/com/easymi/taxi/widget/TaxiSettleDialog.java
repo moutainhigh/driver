@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.easymi.component.widget.BaseCenterDialog;
+import com.easymi.component.widget.dialog.BaseCenterDialog;
 import com.easymi.taxi.R;
 
 /**
