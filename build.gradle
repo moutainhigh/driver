@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.2.51'
+    ext.kotlin_version = '1.2.71'
     repositories {
         google()
         jcenter()
@@ -58,7 +58,7 @@ task clean(type: Delete) {
 ext {
     supportLibraryVersion = '27.1.1'    //support库的版本
     compileSdkVersion = 27
-    minSdkVersion = 17
+    minSdkVersion = 15
     targetSdkVersion = 27
 
     pandora = "com.github.whataa:pandora:v2.0.4"

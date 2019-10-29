@@ -184,4 +184,9 @@ public class Config {
 
     public static final String DOWN_TIME = "down_time";
 
+
+
+    /////昭通
+    public static final boolean PC_IS_BUTTON = false;
+
 }
