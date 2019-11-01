@@ -1,9 +1,13 @@
 package com.easymi.component.network;
 
 import android.content.Context;
+import android.text.TextUtils;
+
+import com.easymi.component.utils.Loader;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.SecureRandom;
@@ -11,6 +15,7 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -130,6 +135,27 @@ public class Ssl {
                     @Override
                     public void checkServerTrusted(X509Certificate[] chain, String authType) throws
                             CertificateException {
+                        if (chain == null) {
+                            throw new IllegalArgumentException("checkServerTrusted:x509Certificate array isnull");
+                        }
+
+                        if (chain.length == 0) {
+                            throw new IllegalArgumentException("checkServerTrusted: X509Certificate is empty");
+                        }
+
+                        RSAPublicKey pubkey = (RSAPublicKey) chain[0].getPublicKey();
+
+                        String encoded = new BigInteger(1, pubkey.getEncoded()).toString(16);
+
+                        String pubKey = new Loader().getPubKey();
+
+                        if (!TextUtils.isEmpty(pubKey)) {
+                            final boolean expected = pubKey.equalsIgnoreCase(encoded);
+                            if (!expected) {
+                                throw new CertificateException("checkServerTrusted: Expected public key: "
+                                        + pubKey + ", got public key:" + encoded);
+                            }
+                        }
                     }
 
                     @Override

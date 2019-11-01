@@ -13,7 +13,6 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.provider.Settings;
 
@@ -286,24 +285,24 @@ public class SysUtil {
         return localLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
-    /**
-     * 安装APK.
-     *
-     * @param context context
-     * @param apkPath 安装包的路径
-     */
-    public static void installApk(Context context, Uri apkPath) {
-        if (apkPath != null && context != null) {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(apkPath, "application/vnd.android.package-archive");
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                //添加临时权限,前提是已经处理了7.0文件读写的权限
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            }
-            context.startActivity(intent);
-        }
-    }
+//    /**
+//     * 安装APK.
+//     *
+//     * @param context context
+//     * @param apkPath 安装包的路径
+//     */
+//    public static void installApk(Context context, Uri apkPath) {
+//        if (apkPath != null && context != null) {
+//            Intent intent = new Intent(Intent.ACTION_VIEW);
+//            intent.setDataAndType(apkPath, "application/vnd.android.package-archive");
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                //添加临时权限,前提是已经处理了7.0文件读写的权限
+//                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//            }
+//            context.startActivity(intent);
+//        }
+//    }
 
     /**
      * 卸载APP

@@ -1,13 +1,13 @@
 package com.marswin89.marsdaemon;
 
+import android.content.Context;
+
+import com.easymi.component.app.XApp;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 
 /**
  * 
@@ -96,15 +96,9 @@ public class DaemonClient implements IDaemonClient{
 	}
 	
 	private boolean isDaemonPermitting(Context context){
-		SharedPreferences sp = context.getSharedPreferences(DAEMON_PERMITTING_SP_FILENAME, Context.MODE_PRIVATE);
-		return sp.getBoolean(DAEMON_PERMITTING_SP_KEY, true);
+		return XApp.getMyPreferences().getBoolean(DAEMON_PERMITTING_SP_KEY, true);
 	}
 	
-	protected boolean setDaemonPermiiting(Context context, boolean isPermitting) {
-		SharedPreferences sp = context.getSharedPreferences(DAEMON_PERMITTING_SP_FILENAME, Context.MODE_PRIVATE);
-		Editor editor = sp.edit();
-		editor.putBoolean(DAEMON_PERMITTING_SP_KEY, isPermitting);
-		return editor.commit();
-	}
+
 
 }

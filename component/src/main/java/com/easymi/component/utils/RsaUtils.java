@@ -4,7 +4,6 @@ package com.easymi.component.utils;
 import com.easymi.component.Config;
 
 import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.Key;
 import java.security.KeyFactory;
@@ -342,32 +341,32 @@ public class RsaUtils {
         return doFinal(cipher, data, MAX_ENCRYPT_BLOCK);
     }
 
-    private static void test() throws UnsupportedEncodingException {
-        Pair<RSAPublicKey, RSAPrivateKey> pair = RsaUtils.genKeyPair(RAS_KEY_SIZE);
-        //生成公钥和私钥
-        RSAPublicKey publicKey = pair.key;
-        RSAPrivateKey privateKey = pair.value;
-        //模
-        String modulus = publicKey.getModulus().toString();
-        //公钥指数
-        String publicExponent = publicKey.getPublicExponent().toString();
-        //私钥指数
-        String privateExponent = privateKey.getPrivateExponent().toString();
-        //明文
-        byte[] ming = "123456789".getBytes("UTF-8");
-        System.out.println("明文：" + new String(ming, "UTF-8"));
-        //使用模和指数生成公钥和私钥
-        RSAPrivateKey priKey = RsaUtils.getPrivateKey(modulus, privateExponent);
-        RSAPublicKey pubKey = RsaUtils.getPublicKey(modulus, publicExponent);
-        System.out.println("privateKey=" + priKey);
-        System.out.println("publicKey=" + pubKey);
-        //加密后的密文
-        byte[] mi = RsaUtils.encryptByPublicKey(ming, pubKey);
-        System.out.println("密文：" + new String(mi, "UTF-8"));
-        //解密后的明文
-        ming = RsaUtils.decryptByPrivateKey(mi, priKey);
-        System.out.println("解密：" + new String(ming, "UTF-8"));
-    }
+//    private static void test() throws UnsupportedEncodingException {
+//        Pair<RSAPublicKey, RSAPrivateKey> pair = RsaUtils.genKeyPair(RAS_KEY_SIZE);
+//        //生成公钥和私钥
+//        RSAPublicKey publicKey = pair.key;
+//        RSAPrivateKey privateKey = pair.value;
+//        //模
+//        String modulus = publicKey.getModulus().toString();
+//        //公钥指数
+//        String publicExponent = publicKey.getPublicExponent().toString();
+//        //私钥指数
+//        String privateExponent = privateKey.getPrivateExponent().toString();
+//        //明文
+//        byte[] ming = "123456789".getBytes("UTF-8");
+//        System.out.println("明文：" + new String(ming, "UTF-8"));
+//        //使用模和指数生成公钥和私钥
+//        RSAPrivateKey priKey = RsaUtils.getPrivateKey(modulus, privateExponent);
+//        RSAPublicKey pubKey = RsaUtils.getPublicKey(modulus, publicExponent);
+//        System.out.println("privateKey=" + priKey);
+//        System.out.println("publicKey=" + pubKey);
+//        //加密后的密文
+//        byte[] mi = RsaUtils.encryptByPublicKey(ming, pubKey);
+//        System.out.println("密文：" + new String(mi, "UTF-8"));
+//        //解密后的明文
+//        ming = RsaUtils.decryptByPrivateKey(mi, priKey);
+//        System.out.println("解密：" + new String(ming, "UTF-8"));
+//    }
 
     /**
      * 获取16位随机字符串
@@ -417,6 +416,7 @@ public class RsaUtils {
             str = Base64Utils.encode(decryptByPublicKey(content.getBytes("UTF-8"), new Loader().getRsaPs()));
         } catch (Exception e) {
             e.printStackTrace();
+            Log.e("RsaUtils", "rsaDecode " + e.getMessage());
         }
         return str;
     }

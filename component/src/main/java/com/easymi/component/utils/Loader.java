@@ -37,4 +37,7 @@ public class Loader {
      * @return String
      */
     public native String getRsaPs();
+
+    public native String getPubKey();
+
 }

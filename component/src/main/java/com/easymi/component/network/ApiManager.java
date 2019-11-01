@@ -1,5 +1,7 @@
 package com.easymi.component.network;
 
+import android.util.Log;
+
 import com.easymi.component.BuildConfig;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
@@ -62,6 +64,8 @@ public class ApiManager {
             builder.addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS));
         }
         builder.cache(cache);
+
+        Log.e("ApiManager", "ApiManager " + Config.HOST);
 
         if (Config.HOST.contains("https://")) {
             builder.sslSocketFactory(ssl.getSslSocketFactory(), ssl.getTrustManager());

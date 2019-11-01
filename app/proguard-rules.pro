@@ -192,6 +192,14 @@ public static ** valueOf(java.lang.String);
     public static *** e(...);
 }
 
+-assumenosideeffects class android.util.Log{
+    public static *** v(...);
+    public static *** i(...);
+    public static *** d(...);
+    public static *** w(...);
+    public static *** e(...);
+}
+
 #但是如果使用Gson进行数据解析的时候要注意Gson自身的混淆
 -keep class com.google.gson.stream.** { *; }
 -keep class com.google.gson.examples.android.model.** { *; }

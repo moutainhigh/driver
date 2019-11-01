@@ -18,7 +18,6 @@ package com.easymi.component.update;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -29,6 +28,7 @@ import android.os.Build;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 
+import com.easymi.component.app.XApp;
 import com.easymi.component.utils.Log;
 
 import java.io.ByteArrayOutputStream;
@@ -54,22 +54,12 @@ public class UpdateUtil {
         }
     }
 
-    public static void clean(Context context) {
-        SharedPreferences sp = context.getSharedPreferences(PREFS, 0);
-        File file = new File(context.getExternalCacheDir(), sp.getString(KEY_UPDATE, "") + ".apk");
-        UpdateUtil.log("apk ==> " + file.toString());
-        if (file.exists()) {
-            file.delete();
-        }
-        sp.edit().clear().apply();
-    }
 
     public static void setUpdate(Context context, String md5) {
         if (TextUtils.isEmpty(md5)) {
             return;
         }
-        SharedPreferences sp = context.getSharedPreferences(PREFS, 0);
-        String old = sp.getString(KEY_UPDATE, "");
+        String old = XApp.getMyPreferences().getString(KEY_UPDATE, "");
         if (md5.equals(old)) {
             UpdateUtil.log("same md5");
             return;
@@ -78,7 +68,7 @@ public class UpdateUtil {
         if (oldFile.exists()) {
             oldFile.delete();
         }
-        sp.edit().putString(KEY_UPDATE, md5).apply();
+        XApp.getEditor().putString(KEY_UPDATE, md5).apply();
         File file = new File(context.getExternalCacheDir(), md5);
         if (!file.exists()) {
             try {
@@ -104,15 +94,15 @@ public class UpdateUtil {
     }
 
     public static void setIgnore(Context context, String md5) {
-        context.getSharedPreferences(PREFS, 0).edit().putString(KEY_IGNORE, md5).apply();
+        XApp.getEditor().putString(KEY_IGNORE, md5).apply();
     }
 
     public static boolean isIgnore(Context context, String md5) {
-        return !TextUtils.isEmpty(md5) && md5.equals(context.getSharedPreferences(PREFS, 0).getString(KEY_IGNORE, ""));
+        return !TextUtils.isEmpty(md5) && md5.equals(XApp.getMyPreferences().getString(KEY_IGNORE, ""));
     }
 
     public static void install(Context context, boolean force) {
-        String md5 = context.getSharedPreferences(PREFS, 0).getString(KEY_UPDATE, "");
+        String md5 = XApp.getMyPreferences().getString(KEY_UPDATE, "");
         File apk = new File(context.getExternalCacheDir(), md5 + ".apk");
         if (UpdateUtil.exist(apk, md5)) {
             install(context, apk, force);
