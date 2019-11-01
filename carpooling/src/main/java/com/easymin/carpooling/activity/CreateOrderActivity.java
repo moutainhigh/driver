@@ -50,6 +50,7 @@ import com.easymin.carpooling.entity.MapPositionModel;
 import com.easymin.carpooling.entity.PincheOrder;
 import com.easymin.carpooling.entity.PriceResult;
 import com.easymin.carpooling.entity.StationResult;
+import com.easymin.carpooling.entity.TimeSlotBean;
 import com.google.gson.Gson;
 
 import java.text.DecimalFormat;
@@ -164,12 +165,9 @@ public class CreateOrderActivity extends RxPayActivity {
         carPoolCreateOrderBtPaySuc.setOnClickListener(view -> finish());
         carPoolCreateOrderLvSeatSelect = findViewById(R.id.carPoolCreateOrderLvSeatSelect);
         carPoolCreateOrderTvSeatSelect = findViewById(R.id.carPoolCreateOrderTvSeatSelect);
-        carPoolCreateOrderTvSeatSelect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goSeatSelect();
-            }
-        });
+
+        carPoolCreateOrderTvSeatSelect.setOnClickListener(v -> goSeatSelect());
+
         carPoolCreateOrderLlCount = findViewById(R.id.carPoolCreateOrderLlCount);
         carPoolCreateOrderTvLine.setOnClickListener(view -> {
             Intent intent = new Intent(CreateOrderActivity.this, BanciSelectActivity.class);
@@ -252,12 +250,69 @@ public class CreateOrderActivity extends RxPayActivity {
         carPoolCreateOrderBtCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createOrder();
+                if (currentModel == 2){
+                    if (goAction()){
+                        createOrder();
+                    }
+                }else {
+                    createOrder();
+                }
             }
         });
         setRecyclerView();
     }
 
+    /**
+     * 判读选择的乘客信息是否正确
+     * @return
+     */
+    private boolean goAction() {
+        boolean passengerCheck = true;
+        List<PassengerBean> listData = adapter.getData();
+        int chooseAdultCount = 0;
+        int chooseChildCount = 0;
+
+        int adultSeatCount = 0;
+        int childSeatCount = 0;
+
+        for (PassengerBean listDatum : listData) {
+            if (listDatum.isSelect) {
+                if (listDatum.riderType == 1) {
+                    chooseAdultCount++;
+                } else {
+                    chooseChildCount++;
+                }
+            }
+        }
+        for (SeatBean seatBean : chooseSeatList) {
+            if (seatBean.isChild == 1) {
+                childSeatCount++;
+            } else {
+                adultSeatCount++;
+            }
+        }
+
+        if (chooseAdultCount + chooseChildCount != chooseSeatList.size()){
+            ToastUtil.showMessage(this, "乘客数量错误");
+            passengerCheck = false;
+        }
+
+        if (chooseAdultCount != adultSeatCount){
+            ToastUtil.showMessage(this, "成人乘客数量错误");
+            passengerCheck = false;
+        }
+
+        if (chooseChildCount != childSeatCount){
+            ToastUtil.showMessage(this, "儿童乘客数量错误");
+            passengerCheck = false;
+        }
+
+        return passengerCheck;
+    }
+
+    /**
+     * 获取乘客id
+     */
     private void getPassengerId() {
         ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .getPassengerId(carPoolCreateOrderEtPhone.getText().toString(), EmUtil.getEmployInfo().companyId)
@@ -409,14 +464,33 @@ public class CreateOrderActivity extends RxPayActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == 0) {
                 PincheOrder newPcOrder = (PincheOrder) data.getSerializableExtra("pincheOrder");
-                if (null == pcOrder || pcOrder.id != newPcOrder.id) {
-//                    currentModel = newPcOrder.model;
-                    currentModel = 1;
-                    pcOrder = newPcOrder;
-                    initViewByPcOrder();
-                    queryStation(pcOrder.id);
+                if (newPcOrder == null) {
+                    TimeSlotBean selctTimeSort = (TimeSlotBean) data.getSerializableExtra("selctTimeSort");
+                    if (null == pcOrder || pcOrder.timeSlotId != selctTimeSort.id) {
+                        PincheOrder pincheOrder = new PincheOrder();
+                        pincheOrder.timeSlotId = selctTimeSort.id;
+                        pincheOrder.lineId = selctTimeSort.lineId;
+                        if (selctTimeSort.tickets == null){
+                            //余票充足
+                            pincheOrder.seats = 9999;
+                        }else {
+                            pincheOrder.seats = selctTimeSort.tickets;
+                        }
+                        currentModel = selctTimeSort.model;
+                        pcOrder = pincheOrder;
+                        initViewByPcOrder();
+                        queryStationByTime(pcOrder.timeSlotId);
+                    }
+                    carPoolCreateOrderTvLine.setText(selctTimeSort.lineName);
+                } else {
+                    if (null == pcOrder || pcOrder.id != newPcOrder.id) {
+                        currentModel = newPcOrder.model;
+                        pcOrder = newPcOrder;
+                        initViewByPcOrder();
+                        queryStation(pcOrder.id);
+                    }
+                    carPoolCreateOrderTvLine.setText(pcOrder.startStation + " 到 " + pcOrder.endStation);
                 }
-                carPoolCreateOrderTvLine.setText(pcOrder.startStation + " 到 " + pcOrder.endStation);
                 setBtnEnable();
             } else if (requestCode == 1) {
                 //起点
@@ -593,6 +667,41 @@ public class CreateOrderActivity extends RxPayActivity {
                     }
                 })));
     }
+
+
+    /**
+     * 查询起终站点
+     *
+     * @param timeSlotId
+     */
+    private void queryStationByTime(long timeSlotId) {
+        Observable<StationResult> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
+                .qureyStationResult(timeSlotId)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(CreateOrderActivity.this,
+                true,
+                false,
+                new HaveErrSubscriberListener<StationResult>() {
+                    @Override
+                    public void onNext(StationResult stationResult) {
+                        CreateOrderActivity.this.stationResult = stationResult;
+                    }
+
+                    @Override
+                    public void onError(int code) {
+                        pcOrder = null;
+                        carPoolCreateOrderTvLine.setText("");
+                        initViewByPcOrder();
+                        setBtnEnable();
+                    }
+                })));
+    }
+
+
+
 
     /**
      * 查询单价

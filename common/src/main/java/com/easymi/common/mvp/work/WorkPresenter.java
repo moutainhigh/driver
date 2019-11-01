@@ -103,10 +103,10 @@ public class WorkPresenter implements WorkContract.Presenter {
                     XApp.getEditor().remove(Config.SP_MANUAL_DATA).apply();
                 }
                 if (manualConfigBean.operationMode != 0) {
-                    XApp.getEditor().putInt(Config.PC_IS_BUTTON, manualConfigBean.operationMode).apply();
+                    XApp.getEditor().putInt(Config.BUS_IS_BUTTON, manualConfigBean.operationMode).apply();
                 } else {
                     //没有配置或者配置为空。默认滑动显示
-                    XApp.getEditor().putInt(Config.PC_IS_BUTTON, 1).apply();
+                    XApp.getEditor().putInt(Config.BUS_IS_BUTTON, 1).apply();
                 }
             }
 
@@ -518,7 +518,9 @@ public class WorkPresenter implements WorkContract.Presenter {
                     }
                 }
                 employ.saveOrUpdate();
-                getTitleStatus();
+                if (TextUtils.equals(employ.serviceType,Config.ZHUANCHE)){
+                    getTitleStatus();
+                }
                 XApp.getEditor()
                         .putLong(Config.SP_DRIVERID, employ.id)
                         .apply();

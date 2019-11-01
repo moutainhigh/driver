@@ -12,7 +12,9 @@ import com.easymi.component.widget.wheelview.WheelView;
 import com.easymi.component.widget.wheelview.adapter.AbstractWheelTextAdapter;
 import com.easymin.carpooling.R;
 import com.easymin.carpooling.entity.AllStation;
+import com.easymin.carpooling.entity.LineBean;
 import com.easymin.carpooling.entity.MyStation;
+import com.easymin.carpooling.entity.TimeSlotBean;
 
 import java.util.Iterator;
 import java.util.List;
@@ -31,11 +33,13 @@ public class BottomListDialog extends BottomSheetDialog {
     private View mView;
     private WheelView wheelView;
     private OnSelectListener onSelectListener;
-    private List<String> datas;
+    private List<?> datas;
+
+    String title;
 
     TextView tv_title;
 
-    public BottomListDialog(Context context,List<String> datas) {
+    public BottomListDialog(Context context,List<?> datas) {
         super(context);
         this.datas = datas;
         initViews(context, datas);
@@ -50,14 +54,18 @@ public class BottomListDialog extends BottomSheetDialog {
         super.show();
     }
 
-    private void initViews(Context context, List<String> datas) {
+    public void setTitle(String title){
+        this.title = title;
+    }
+
+    private void initViews(Context context, List<?> datas) {
         mView = LayoutInflater.from(context).inflate(R.layout.pc_dialog_station_list, null);
         mView.findViewById(R.id.iv_cancel).setOnClickListener(v -> dismiss());
         mView.findViewById(R.id.tv_sure).setOnClickListener(v -> ensure());
 
         tv_title = mView.findViewById(R.id.tv_title);
 
-        tv_title.setText("用车时段");
+        tv_title.setText(this.title);
 
         wheelView = mView.findViewById(R.id.wheelView);
 
@@ -76,11 +84,7 @@ public class BottomListDialog extends BottomSheetDialog {
     private void ensure() {
         dismiss();
         int index = wheelView.getCurrentItem();
-        String  string = null;
-        if (index >= 0 && index < datas.size()) {
-            string = datas.get(index);
-        }
-        if (onSelectListener != null && string != null) {
+        if (onSelectListener != null) {
             onSelectListener.onSelect(index);
         }
     }
@@ -96,16 +100,26 @@ public class BottomListDialog extends BottomSheetDialog {
 
     private class TimeWheelAdapter extends AbstractWheelTextAdapter {
 
-        private List<String> datas;
+        private List<?> datas;
 
-        TimeWheelAdapter(List<String> datas, Context context) {
+        TimeWheelAdapter(List<?> datas, Context context) {
             super(context);
             this.datas = datas;
         }
 
         @Override
         protected CharSequence getItemText(int index) {
-            return datas != null ? datas.get(index) : "";
+            String item = "";
+            if (datas != null){
+                if (datas.get(index) instanceof  LineBean){
+                    LineBean lineBean = (LineBean) datas.get(index);
+                    item =  datas != null ? lineBean.lineName : "";
+                }else if (datas.get(index) instanceof TimeSlotBean){
+                    TimeSlotBean timeSlotBean = (TimeSlotBean) datas.get(index);
+                    item =  timeSlotBean.day +" "+ timeSlotBean.timeSlot+" 余票："+(timeSlotBean.tickets == null ? "充足":timeSlotBean.tickets);
+                }
+            }
+            return item;
         }
 
         @Override

@@ -69,8 +69,15 @@ public class ZCSetting {
      */
     public int isRepairOrder;
 
+    /**
+     * 拼车操纵是按钮还是滑动
+     */
+    public int operationMode;
+
 
     public int driverOrder;
+
+
 
 
     public static void deleteAll() {
@@ -107,6 +114,8 @@ public class ZCSetting {
         values.put("driverOrder",driverOrder);
         values.put("emploiesKm", emploiesKm);
 
+        values.put("operationMode", operationMode);
+
         db.insert("t_zc_settinginfo", null, values);
     }
 
@@ -139,6 +148,8 @@ public class ZCSetting {
                 settingInfo.isRepairOrder = cursor.getInt(cursor.getColumnIndex("isRepairOrder"));
                 settingInfo.driverOrder = cursor.getInt(cursor.getColumnIndex("driverOrder"));
                 settingInfo.emploiesKm = cursor.getInt(cursor.getColumnIndex("emploiesKm"));
+
+                settingInfo.operationMode = cursor.getInt(cursor.getColumnIndex("operationMode"));
             }
         } catch (Exception e) {
             e.fillInStackTrace();

@@ -20,10 +20,12 @@ import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseFragment;
 //import com.easymi.component.entity.DymOrder;
+import com.easymi.component.entity.ZCSetting;
 import com.easymi.component.utils.GlideCircleTransform;
 import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.widget.CustomSlideToUnlockView;
+import com.easymi.component.widget.LoadingButton;
 import com.easymin.carpooling.R;
 import com.easymin.carpooling.StaticVal;
 import com.easymin.carpooling.entity.AllStation;
@@ -65,6 +67,10 @@ public class AcceptSendFragment extends RxBaseFragment {
     Button acceptedBtn;
     ImageView refreshImg;
     TextView back;
+
+    LinearLayout ll_btn_con;
+    TextView btn_back;
+    LoadingButton btn_sure;
 
     /**
      * 订单id，类型
@@ -142,11 +148,15 @@ public class AcceptSendFragment extends RxBaseFragment {
         mainLlAction = getActivity().findViewById(R.id.main_ll_action);
         mainCancel = getActivity().findViewById(R.id.main_cancel);
         mainPay = getActivity().findViewById(R.id.main_pay);
+
+        ll_btn_con = getActivity().findViewById(R.id.ll_btn_con);
+        btn_back = getActivity().findViewById(R.id.btn_back);
+        btn_sure = getActivity().findViewById(R.id.btn_sure);
+
         refreshImg.setOnClickListener(v -> {
             bridge.doRefresh();
             refreshImg.setVisibility(View.GONE);
         });
-        Log.e("hufeng/showWhatByStatus","222");
         showWhatByStatus();
     }
 
@@ -181,10 +191,9 @@ public class AcceptSendFragment extends RxBaseFragment {
 
     public void setOrders(AllStation allStation) {
         this.allStation = allStation;
-        if (mainLlAction == null){
+        if (mainLlAction == null) {
             return;
         }
-        Log.e("hufeng/showWhatByStatus","11111");
         showWhatByStatus();
     }
 
@@ -235,7 +244,6 @@ public class AcceptSendFragment extends RxBaseFragment {
         }
 
         mainLlAction.setVisibility(View.GONE);
-        Log.e("hufeng/zzzzz","zzzzz");
         if (carpoolOrders.size() != 0) {
             current = carpoolOrders.get(0);
 
@@ -248,91 +256,134 @@ public class AcceptSendFragment extends RxBaseFragment {
             } else {
                 mainLlAction.setVisibility(View.GONE);
             }
-            Log.e("hufeng/sssssss","sssssss");
             if (current.status < CarpoolOrder.CARPOOL_STATUS_RUNNING) {
                 //未接
                 if (current.status < CarpoolOrder.CARPOOL_STATUS_START) {
                     countTimeCon.setVisibility(View.GONE);
-                    sliderCon.setVisibility(View.VISIBLE);
+                    sliderCon.setVisibility(ZCSetting.findOne().operationMode == 1 ? View.VISIBLE : View.GONE);
+                    ll_btn_con.setVisibility(ZCSetting.findOne().operationMode == 2 ? View.VISIBLE : View.GONE);
                     chaoshiCon.setVisibility(View.GONE);
                     back.setVisibility(View.GONE);
-                    slider.setHint("滑动前往预约地");
-                    slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
-                        @Override
-                        public void onSlide(int distance) {
+                    btn_back.setVisibility(View.GONE);
 
-                        }
+                    if (ZCSetting.findOne().operationMode == 1){
+                        slider.setHint("滑动前往预约地");
+                        slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
+                            @Override
+                            public void onSlide(int distance) {
 
-                        @Override
-                        public void onUnlocked() {
+                            }
+
+                            @Override
+                            public void onUnlocked() {
+                                bridge.gotoStart(current);
+                                resetView();
+                            }
+                        });
+                    }else {
+                        btn_sure.setText("前往预约地");
+                        btn_sure.setOnClickListener(v -> {
                             bridge.gotoStart(current);
-                            resetView();
-                        }
-                    });
+                        });
+                    }
                 } else if (current.status == CarpoolOrder.CARPOOL_STATUS_START) {
                     //未到达预约地
                     countTimeCon.setVisibility(View.GONE);
-                    sliderCon.setVisibility(View.VISIBLE);
+                    sliderCon.setVisibility(ZCSetting.findOne().operationMode == 1 ? View.VISIBLE : View.GONE);
+                    ll_btn_con.setVisibility(ZCSetting.findOne().operationMode == 2 ? View.VISIBLE : View.GONE);
                     chaoshiCon.setVisibility(View.GONE);
                     back.setVisibility(View.GONE);
+                    btn_back.setVisibility(View.GONE);
 
-                    slider.setHint("滑动到达乘客位置");
-                    slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
-                        @Override
-                        public void onSlide(int distance) {
+                    if (ZCSetting.findOne().operationMode == 1){
+                        slider.setHint("滑动到达乘客位置");
+                        slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
+                            @Override
+                            public void onSlide(int distance) {
 
-                        }
+                            }
 
-                        @Override
-                        public void onUnlocked() {
+                            @Override
+                            public void onUnlocked() {
+                                bridge.arriveStart(current);
+                                resetView();
+                            }
+                        });
+                    }else {
+                        btn_sure.setText("到达乘客位置");
+                        btn_sure.setOnClickListener(v -> {
                             bridge.arriveStart(current);
-                            resetView();
-                        }
-                    });
+                        });
+                    }
                 } else if (current.status == CarpoolOrder.CARPOOL_STATUS_ARRIVED) {
+                    //到达预约地
                     countTimeCon.setVisibility(View.VISIBLE);
                     sliderCon.setVisibility(View.GONE);
+                    ll_btn_con.setVisibility(View.GONE);
+
                     chaoshiCon.setVisibility(View.GONE);
                     back.setVisibility(View.GONE);
-                    slider.setHint("滑动确认接到乘客");
-                    slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
-                        @Override
-                        public void onSlide(int distance) {
+                    btn_back.setVisibility(View.GONE);
 
-                        }
+                    if (ZCSetting.findOne().operationMode == 1){
+                        slider.setHint("滑动确认接到乘客");
+                        slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
+                            @Override
+                            public void onSlide(int distance) {
 
-                        @Override
-                        public void onUnlocked() {
+                            }
+
+                            @Override
+                            public void onUnlocked() {
+                                if (current.advanceAssign == 1) {
+                                    bridge.onDialogClick(1, current.orderId, current.money);
+                                } else {
+                                    bridge.acceptCustomer(current);
+                                }
+                                resetView();
+                            }
+                        });
+                    }else {
+                        btn_sure.setText("确认接到乘客");
+                        btn_sure.setOnClickListener(v -> {
                             if (current.advanceAssign == 1) {
                                 bridge.onDialogClick(1, current.orderId, current.money);
                             } else {
                                 bridge.acceptCustomer(current);
                             }
-                            resetView();
-                        }
-                    });
+                        });
+                    }
                     initTimer(current);
                 }
                 showInMap(new LatLng(current.startLatitude, current.startLongitude), StaticVal.MARKER_FLAG_START);
             } else if (current.status == CarpoolOrder.CARPOOL_STATUS_RUNNING) {
                 countTimeCon.setVisibility(View.GONE);
-                sliderCon.setVisibility(View.VISIBLE);
+                sliderCon.setVisibility(ZCSetting.findOne().operationMode == 1 ? View.VISIBLE : View.GONE);
+                ll_btn_con.setVisibility(ZCSetting.findOne().operationMode == 2 ? View.VISIBLE : View.GONE);
                 chaoshiCon.setVisibility(View.GONE);
                 back.setVisibility(View.GONE);
-                slider.setHint("滑动到达下车点");
-                slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
-                    @Override
-                    public void onSlide(int distance) {
+                btn_back.setVisibility(View.GONE);
 
-                    }
+                if (ZCSetting.findOne().operationMode == 1){
+                    slider.setHint("滑动到达下车点");
+                    slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
+                        @Override
+                        public void onSlide(int distance) {
 
-                    @Override
-                    public void onUnlocked() {
+                        }
+
+                        @Override
+                        public void onUnlocked() {
+                            bridge.arriveEnd(current);
+                            resetView();
+                        }
+                    });
+                }else {
+                    btn_sure.setText("到达下车点");
+                    btn_sure.setOnClickListener(v -> {
                         bridge.arriveEnd(current);
-                        resetView();
-                    }
-                });
-                Log.e("hufeng/showInMap",current.status+"");
+                    });
+                }
                 showInMap(new LatLng(current.endLatitude, current.endLongitude), StaticVal.MARKER_FLAG_END);
             }
             RequestOptions options = new RequestOptions()
@@ -357,8 +408,7 @@ public class AcceptSendFragment extends RxBaseFragment {
             customerPhone.setText("手机尾号:" + weihao + "  购票数:" + current.ticketNumber);
             toPlace.setText(current.status < CarpoolOrder.CARPOOL_STATUS_ARRIVED ? current.startAddress : current.endAddress);
         } else {
-            if (getCurrentIndex() == allStation.scheduleStationVoList.size()-1){
-                Log.e("hufeng/11111","1111111");
+            if (getCurrentIndex() == allStation.scheduleStationVoList.size() - 1) {
                 bridge.finishTask(allStation.scheduleId);
             }
         }
@@ -381,7 +431,6 @@ public class AcceptSendFragment extends RxBaseFragment {
      * @param flag
      */
     private void showInMap(LatLng toLatlng, int flag) {
-        Log.e("hufeng/showInMap","showInMap");
         bridge.clearMap();
         bridge.addMarker(toLatlng, flag);
         bridge.routePath(toLatlng);
@@ -413,7 +462,7 @@ public class AcceptSendFragment extends RxBaseFragment {
             timerTask.cancel();
             timerTask = null;
         }
-        long appoint = XApp.getMyPreferences().getLong(Config.PC_BOOKTIME,0);
+        long appoint = XApp.getMyPreferences().getLong(Config.PC_BOOKTIME, 0);
         timeSeq = (appoint - System.currentTimeMillis()) / 1000;
         timer = new Timer();
         timerTask = new TimerTask() {
@@ -459,6 +508,7 @@ public class AcceptSendFragment extends RxBaseFragment {
                 countTime.setText(sb.toString());
                 countTime.setTextColor(getResources().getColor(R.color.color_red));
                 sliderCon.setVisibility(View.GONE);
+                ll_btn_con.setVisibility(View.GONE);
                 chaoshiCon.setVisibility(View.VISIBLE);
                 jumpBtn.setOnClickListener(view -> showConfirmFlag(true));
                 acceptedBtn.setOnClickListener(view -> showConfirmFlag(false));
@@ -467,8 +517,10 @@ public class AcceptSendFragment extends RxBaseFragment {
                 countHint.setText("等候倒计时");
                 countTime.setText(sb.toString());
                 countTime.setTextColor(getResources().getColor(R.color.color_orange));
-                sliderCon.setVisibility(View.VISIBLE);
+                sliderCon.setVisibility(ZCSetting.findOne().operationMode == 1 ? View.VISIBLE : View.GONE);
+                ll_btn_con.setVisibility(ZCSetting.findOne().operationMode == 2 ? View.VISIBLE : View.GONE);
                 back.setVisibility(View.GONE);
+                btn_back.setVisibility(View.GONE);
                 chaoshiCon.setVisibility(View.GONE);
             }
         });
@@ -481,43 +533,69 @@ public class AcceptSendFragment extends RxBaseFragment {
      */
     private void showConfirmFlag(boolean jump) {
         cancelTimer();
-        sliderCon.setVisibility(View.VISIBLE);
+        sliderCon.setVisibility(ZCSetting.findOne().operationMode == 1 ? View.VISIBLE : View.GONE);
+        ll_btn_con.setVisibility(ZCSetting.findOne().operationMode == 2 ? View.VISIBLE : View.GONE);
+
         countTimeCon.setVisibility(View.GONE);
         chaoshiCon.setVisibility(View.GONE);
         back.setVisibility(View.VISIBLE);
+        btn_back.setVisibility(View.VISIBLE);
+
         back.setOnClickListener(view -> showWhatByStatus());
+        btn_back.setOnClickListener(view -> showWhatByStatus());
+
         if (jump) {
-            slider.setHint("滑动跳过乘客");
-            slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
-                @Override
-                public void onSlide(int distance) {
+            if (ZCSetting.findOne().operationMode == 1){
+                //滑动
+                slider.setHint("滑动跳过乘客");
+                slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
+                    @Override
+                    public void onSlide(int distance) {
 
-                }
+                    }
 
-                @Override
-                public void onUnlocked() {
+                    @Override
+                    public void onUnlocked() {
+                        bridge.jumpAccept(current);
+                        resetView();
+                    }
+                });
+            }else {
+                //按钮
+                btn_sure.setText("跳过乘客");
+                btn_sure.setOnClickListener(v -> {
                     bridge.jumpAccept(current);
-                    resetView();
-                }
-            });
+                });
+            }
         } else {
-            slider.setHint("滑动接到乘客");
-            slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
-                @Override
-                public void onSlide(int distance) {
+            if (ZCSetting.findOne().operationMode == 1){
+                slider.setHint("滑动接到乘客");
+                slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
+                    @Override
+                    public void onSlide(int distance) {
 
-                }
+                    }
 
-                @Override
-                public void onUnlocked() {
+                    @Override
+                    public void onUnlocked() {
+                        if (current.advanceAssign == 1) {
+                            bridge.onDialogClick(1, current.orderId, current.money);
+                        } else {
+                            bridge.acceptCustomer(current);
+                        }
+                        resetView();
+                    }
+                });
+            }else {
+                btn_sure.setText("接到乘客");
+                btn_sure.setOnClickListener(v -> {
                     if (current.advanceAssign == 1) {
                         bridge.onDialogClick(1, current.orderId, current.money);
                     } else {
                         bridge.acceptCustomer(current);
                     }
-                    resetView();
-                }
-            });
+                });
+            }
         }
     }
 
@@ -578,5 +656,4 @@ public class AcceptSendFragment extends RxBaseFragment {
             slider.setVisibility(View.VISIBLE);
         }), 1000);
     }
-
 }

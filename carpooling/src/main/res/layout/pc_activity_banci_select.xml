@@ -38,7 +38,8 @@
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:hint="@string/pc_hint_choose_line"
-                android:textColor="@color/color_cccccc"
+                android:textColorHint="@color/color_cccccc"
+                android:textColor="@color/colorBlack"
                 android:textSize="15sp"
                 android:drawableRight="@mipmap/ic_right"
                 android:drawablePadding="8dp"/>
@@ -69,7 +70,8 @@
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:hint="@string/pc_hint_choose_time"
-                android:textColor="@color/color_cccccc"
+                android:textColorHint="@color/color_cccccc"
+                android:textColor="@color/colorBlack"
                 android:textSize="15sp"
                 android:drawableRight="@mipmap/ic_right"
                 android:drawablePadding="8dp"/>

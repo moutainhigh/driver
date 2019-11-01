@@ -406,7 +406,7 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View,
             stationAdapter.setCheckStatus(false);
         }
 
-        if (XApp.getMyPreferences().getInt(Config.PC_IS_BUTTON,1) == 2){
+        if (XApp.getMyPreferences().getInt(Config.BUS_IS_BUTTON,1) == 2){
             slider.setVisibility(View.GONE);
             button_sure.setVisibility(View.VISIBLE);
         }else {
@@ -422,7 +422,7 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View,
         if (cbBusOrder.driverStationVos.get(position).status == 2) {
             tv_stauts.setText(getResources().getString(R.string.cb_go_to));
             tv_station_name.setText(cbBusOrder.driverStationVos.get(position).name);
-            if (XApp.getMyPreferences().getInt(Config.PC_IS_BUTTON,1) == 2){
+            if (XApp.getMyPreferences().getInt(Config.BUS_IS_BUTTON,1) == 2){
                 button_sure.setText("到达站点");
             }else {
                 slider.setHint(getResources().getString(R.string.cb_slider_arrive));
@@ -435,7 +435,7 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View,
 
             if (position == cbBusOrder.driverStationVos.size() - 1) {
                 tv_left.setText(getResources().getString(R.string.cb_arrive_end_station));
-                if (XApp.getMyPreferences().getInt(Config.PC_IS_BUTTON,1) == 2){
+                if (XApp.getMyPreferences().getInt(Config.BUS_IS_BUTTON,1) == 2){
                     button_sure.setText("结束行程");
                 }else {
                     slider.setHint(getResources().getString(R.string.cb_finish));
@@ -443,14 +443,14 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View,
             } else {
                 if ((cbBusOrder.driverStationVos.get(position).checkNumber + cbBusOrder.driverStationVos.get(position).unCheckNumber) == 0) {
                     tv_left.setText(getResources().getString(R.string.cb_not_check));
-                    if (XApp.getMyPreferences().getInt(Config.PC_IS_BUTTON,1) == 2){
+                    if (XApp.getMyPreferences().getInt(Config.BUS_IS_BUTTON,1) == 2){
                         button_sure.setText("前往下一站");
                     }else {
                         slider.setHint(getResources().getString(R.string.cb_slider_go_next));
                     }
                 } else {
                     tv_left.setText(getResources().getString(R.string.cb_please_check));
-                    if (XApp.getMyPreferences().getInt(Config.PC_IS_BUTTON,1) == 2){
+                    if (XApp.getMyPreferences().getInt(Config.BUS_IS_BUTTON,1) == 2){
                         button_sure.setText("开始验票");
                     }else {
                         slider.setHint(getResources().getString(R.string.cb_slider_check));

@@ -185,9 +185,7 @@ public class Config {
     public static final String DOWN_TIME = "down_time";
 
 
-
     /////昭通(班车司机端操作方式 1-滑动 2-点击)
-    public static final String PC_IS_BUTTON = "pc_is_buttom";
-
+    public static final String BUS_IS_BUTTON = "bus_is_buttom";
 
 }
