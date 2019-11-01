@@ -48,7 +48,7 @@ import rx.schedulers.Schedulers;
  * Description:
  * History:
  */
-public class EmergeActivity extends CheckPermissionsActivity {
+public class EmergeActivity extends AppCompatActivity {
 
     private RecyclerViewAdapter mAdapter;
     private ArrayList<Contact> mDataSet = new ArrayList<>();

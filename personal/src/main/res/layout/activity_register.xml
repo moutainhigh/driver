@@ -200,19 +200,19 @@
                 android:background="@color/dark_gray" />
 
             <RelativeLayout
-                android:layout_width="match_parent"
+                android:id="@+id/agreement_container"
+                android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="10dp">
 
-                <CheckBox
+                <ImageView
                     android:id="@+id/checkbox_agreement"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
-                    android:button="@drawable/checkbox_button_bg_selector"
-                    android:checked="false"
+                    android:src="@drawable/ic_checkbox_empty"
                     android:paddingRight="5dp" />
 
                 <TextView

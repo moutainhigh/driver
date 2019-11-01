@@ -169,26 +169,34 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp">
 
-                <CheckBox
-                    android:id="@+id/checkbox_agreement"
+                <LinearLayout
+                    android:id="@+id/agreement_container"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:button="@drawable/checkbox_button_bg_selector"
-                    android:checked="true"
-                    android:paddingRight="5dp" />
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:id="@+id/checkbox_agreement"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_checkbox_empty"
+                        android:layout_marginRight="5dp" />
 
-                <TextView
-                    android:id="@+id/text_agreement"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_toLeftOf="@+id/checkbox_remember"
-                    android:layout_toRightOf="@id/checkbox_agreement"
-                    android:ellipsize="middle"
-                    android:gravity="left|center_vertical"
-                    android:singleLine="true"
-                    android:text="@string/login_agg"
-                    android:textSize="@dimen/login_little_text_size" />
+                    <TextView
+                        android:id="@+id/text_agreement"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:ellipsize="middle"
+                        android:gravity="left|center_vertical"
+                        android:singleLine="true"
+                        android:text="@string/login_agg"
+                        android:textSize="@dimen/login_little_text_size" />
+
+                </LinearLayout>
+
+
 
                 <CheckBox
                     android:id="@+id/checkbox_remember"
