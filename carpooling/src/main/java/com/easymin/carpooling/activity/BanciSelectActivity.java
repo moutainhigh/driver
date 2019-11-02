@@ -167,7 +167,8 @@ public class BanciSelectActivity extends RxBaseActivity implements View.OnClickL
                         recyclerView.setLoadMoreEnable(false);
 
                         if (orders.size() == 0) {
-                            showErr(0);
+                            errLayout.setVisibility(View.GONE);
+                            tv_hint.setVisibility(View.GONE);
                         } else {
                             hideErr();
                         }
@@ -192,7 +193,7 @@ public class BanciSelectActivity extends RxBaseActivity implements View.OnClickL
         errLayout.setVisibility(View.VISIBLE);
         tv_hint.setVisibility(View.GONE);
         errLayout.setOnClickListener(v -> {
-            hideErr();
+//            hideErr();
             recyclerView.setRefreshing(true);
         });
     }
