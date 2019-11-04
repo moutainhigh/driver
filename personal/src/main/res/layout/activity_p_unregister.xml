@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f6f6f6"
+    android:orientation="vertical">
+
+    <com.easymi.component.widget.CusToolbar
+        android:id="@+id/cus_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="8dp"
+        android:gravity="center_horizontal"
+        android:background="@color/white">
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/once_hint_img"/>
+
+        <TextView
+            android:id="@+id/account_info"
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            android:text="将181****0090所绑定的账号注销"/>
+
+        <TextView
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:textColor="#999999"
+            android:layout_marginTop="10dp"
+            android:text="如果你注销本账号，\n则你APP中保留的信息均将被清空且无法找回。"/>
+
+        <View
+            android:layout_width="270dp"
+            android:layout_height="1px"
+            android:background="#999999"
+            android:layout_marginTop="32dp"
+            />
+
+        <TextView
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:textColor="#333333"
+            android:text="具体包括如下信息："/>
+
+        <TextView
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/dot_6_yellow"
+            android:layout_marginTop="16dp"
+            android:textColor="#666666"
+            android:drawablePadding="6dp"
+            android:text="个人资料信息"
+            android:textSize="12sp"
+            />
+
+        <TextView
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/dot_6_yellow"
+            android:layout_marginTop="13dp"
+            android:textColor="#666666"
+            android:drawablePadding="6dp"
+            android:text="行程信息"
+            android:textSize="12sp"
+            />
+
+        <TextView
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/dot_6_yellow"
+            android:layout_marginTop="13dp"
+            android:textColor="#666666"
+            android:drawablePadding="6dp"
+            android:text="以及你在平台中留存的其他信息"
+            android:textSize="12sp"
+            />
+
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="3"/>
+        
+        <Button
+            android:id="@+id/unregister"
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/corners_yellow_22dp"
+            android:text="注销账号"
+            android:textColor="@color/white"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
+
+</LinearLayout>

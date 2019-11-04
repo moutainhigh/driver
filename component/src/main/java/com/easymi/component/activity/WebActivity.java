@@ -16,6 +16,8 @@ import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -48,6 +50,10 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
      */
     private ProgressBar myProgressBar;
     private String url;
+
+    LinearLayout agreeContainer;
+    Button dis_agree;
+    Button agree;
 
     @Override
     public int getLayoutId() {
@@ -123,6 +129,25 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
         closeAll.setOnClickListener(this);
         myProgressBar = findViewById(R.id.myProgressBar);
 
+        agreeContainer = findViewById(R.id.agree_container);
+        dis_agree = findViewById(R.id.dis_agree);
+        agree = findViewById(R.id.agree);
+
+        if(articleName.equals(IWebVariable.DRIVER_LOGIN)){
+            agreeContainer.setVisibility(View.VISIBLE);
+            dis_agree.setOnClickListener(v -> {
+                Intent intent = new Intent();
+                intent.putExtra("agree",false);
+                setResult(RESULT_OK,intent);
+                finish();
+            });
+            agree.setOnClickListener(v -> {
+                Intent intent = new Intent();
+                intent.putExtra("agree",true);
+                setResult(RESULT_OK,intent);
+                finish();
+            });
+        }
     }
 
     /**

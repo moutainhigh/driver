@@ -12,6 +12,8 @@ import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -78,14 +80,18 @@ public class LoginActivity extends RxBaseActivity {
     EditText editAccount;
     EditText editPsw;
     ImageView eye;
-    CheckBox checkboxAgreement;
     CheckBox checkboxRemember;
-    TextView textAgreement;
+
+    ImageView checkbox_agreement;
+
+    LinearLayout agreement_container;
 
 
     SafeKeyboard safeKeyboard;
     private String account;
     private String password;
+
+    private boolean isAgreed = false;
 
     @Override
     public int getLayoutId() {
@@ -99,7 +105,7 @@ public class LoginActivity extends RxBaseActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);//禁止截屏
         loginBtn = findViewById(R.id.login_button);
         loginBtn.setOnClickListener(v -> {
-            if (!checkboxAgreement.isChecked()) {
+            if (!isAgreed) {
                 ToastUtil.showMessage(LoginActivity.this, getString(R.string.please_agree_agreement));
                 return;
             }
@@ -110,6 +116,7 @@ public class LoginActivity extends RxBaseActivity {
         });
         editAccount = findViewById(R.id.login_et_account);
         editPsw = findViewById(R.id.login_et_password);
+        checkbox_agreement = findViewById(R.id.checkbox_agreement);
 
         loginBtn.setEnabled(false);
 
@@ -124,9 +131,8 @@ public class LoginActivity extends RxBaseActivity {
 
         eye = findViewById(R.id.eye);
 
-        checkboxAgreement = findViewById(R.id.checkbox_agreement);
         checkboxRemember = findViewById(R.id.checkbox_remember);
-        textAgreement = findViewById(R.id.text_agreement);
+        agreement_container = findViewById(R.id.agreement_container);
 
         initEdit();
 
@@ -156,11 +162,30 @@ public class LoginActivity extends RxBaseActivity {
      * 服务协议跳转
      */
     private void initBox() {
-        textAgreement.setOnClickListener(view -> {
-            WebActivity.goWebActivity(this
-                    , R.string.login_agreement
-                    , WebActivity.IWebVariable.DRIVER_LOGIN);
+        agreement_container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, WebActivity.class);
+                intent.putExtra("titleRes", R.string.login_agreement);
+                intent.putExtra("articleName", WebActivity.IWebVariable.DRIVER_LOGIN);
+                startActivityForResult(intent, 0x11);
+            }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 0x11) {
+                isAgreed = data.getBooleanExtra("agree", false);
+                if (isAgreed) {
+                    checkbox_agreement.setImageResource(R.drawable.ic_checkbox_full);
+                } else {
+                    checkbox_agreement.setImageResource(R.drawable.ic_checkbox_empty);
+                }
+            }
+        }
     }
 
     private boolean eyeOn = false;

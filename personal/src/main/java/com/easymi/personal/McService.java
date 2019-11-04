@@ -28,6 +28,7 @@ import com.easymi.personal.result.StatisResult;
 import com.easymi.personal.result.TixianResult;
 import com.easymi.personal.result.TixianRuleResult;
 
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -537,6 +538,14 @@ public interface McService {
      */
     @GET("api/v1/resources/driver/card")
     Observable<LoginResult> queryCardHost(@Query("driverId") String driverId);
+
+    /**
+     * 注销账号
+     * @param id
+     * @return
+     */
+    @DELETE("/api/v1/resources/driver/{id} ")
+    Observable<EmResult> unregisterAccount(@Path("id") Long id);
 
 
 }

@@ -1,7 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.easymi.personal">
 
-    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <application>
 
         <activity
@@ -249,5 +248,16 @@
             android:screenOrientation="portrait"
             android:theme="@style/ThemeSwipeBack" />
 
+        <activity
+            android:name=".activity.UnregisterActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSwipeBack" />
+
+        <activity
+            android:name=".activity.AccountAndSafeActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSwipeBack" />
     </application>
 </manifest>

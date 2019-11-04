@@ -7,11 +7,14 @@ import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -53,10 +56,11 @@ public class RegisterAcitivty extends RxBaseActivity {
     EditText et_code;
     EditText et_password;
     ImageView eye;
-    CheckBox checkbox_agreement;
+    ImageView checkbox_agreement;
     TextView text_agreement;
     ImageView iv_image_code;
     EditText et_img_code;
+    RelativeLayout agreement_container;
 
     /**
      * 唯一标示符 用于获取图形验证码
@@ -64,6 +68,8 @@ public class RegisterAcitivty extends RxBaseActivity {
     private String randomNum;
 
     SafeKeyboard safeKeyboard;
+
+    private boolean isAgreed = false;
 
     @Override
     public boolean isEnableSwipe() {
@@ -128,7 +134,7 @@ public class RegisterAcitivty extends RxBaseActivity {
                 ToastUtil.showMessage(RegisterAcitivty.this, getString(R.string.register_input_ps));
                 return;
             }
-            if (!checkbox_agreement.isChecked()) {
+            if (!isAgreed) {
                 ToastUtil.showMessage(RegisterAcitivty.this, getString(R.string.please_agree_agreement));
                 return;
             }
@@ -176,6 +182,7 @@ public class RegisterAcitivty extends RxBaseActivity {
         text_agreement = findViewById(R.id.text_agreement);
         iv_image_code = findViewById(R.id.iv_image_code);
         et_img_code = findViewById(R.id.et_img_code);
+        agreement_container = findViewById(R.id.agreement_container);
     }
 
     /**
@@ -313,11 +320,27 @@ public class RegisterAcitivty extends RxBaseActivity {
      * 设置服务人员协议跳转
      */
     private void initBox() {
-        text_agreement.setOnClickListener(view -> {
-            WebActivity.goWebActivity(this
-                    , R.string.login_agreement
-                    , WebActivity.IWebVariable.DRIVER_LOGIN);
+        agreement_container.setOnClickListener(v -> {
+            Intent intent = new Intent(RegisterAcitivty.this, WebActivity.class);
+            intent.putExtra("titleRes", R.string.login_agreement);
+            intent.putExtra("articleName", WebActivity.IWebVariable.DRIVER_LOGIN);
+            startActivityForResult(intent, 0x12);
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 0x12) {
+                isAgreed = data.getBooleanExtra("agree", false);
+                if (isAgreed) {
+                    checkbox_agreement.setImageResource(R.drawable.ic_checkbox_full);
+                } else {
+                    checkbox_agreement.setImageResource(R.drawable.ic_checkbox_empty);
+                }
+            }
+        }
     }
 
     /**

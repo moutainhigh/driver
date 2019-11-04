@@ -244,6 +244,14 @@ public class SetActivity extends RxBaseActivity {
     }
 
     /**
+     * 账号注销
+     * @param view
+     */
+    public void toAccountSec(View view){
+        startActivity(new Intent(SetActivity.this,AccountAndSafeActivity.class));
+    }
+
+    /**
      * 注销接口
      */
     private void doLogOut() {

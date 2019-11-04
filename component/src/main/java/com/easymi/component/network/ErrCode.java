@@ -557,6 +557,11 @@ public enum ErrCode {
     IS_COMMON_VEHICLE_ERR(40133, "同车司机正在线上不能登录"),
 
     /**
+     * 上线状态，不能注销
+     */
+    CAN_NOT_DELETE_ONLINE(40135, "您处于听单状态，请停止听单后再注销"),
+
+    /**
      * 还有未完成的订单
      */
     ORDER_NOT_FINISH(40138, "还有未完成的订单"),
