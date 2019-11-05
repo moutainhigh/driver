@@ -76,19 +76,19 @@ public class SplashActivity extends RxBaseActivity {
                 || !rxPermissions.isGranted(Manifest.permission.ACCESS_FINE_LOCATION)
                 || !rxPermissions.isGranted(Manifest.permission.ACCESS_COARSE_LOCATION)) {
             Log.e(TAG, "showDialog");
-//            showDialog();
-            rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.READ_PHONE_STATE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    .subscribe(granted -> {
-                        if (granted) {
-                            checkForUpdate();
-                        } else {
-                            ToastUtil.showMessage(this, "未能获得必要权限，即将退出..");
-                            delayExit();
-                        }
-                    });
+            showDialog();
+//            rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION,
+//                    Manifest.permission.ACCESS_COARSE_LOCATION,
+//                    Manifest.permission.READ_PHONE_STATE,
+//                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//                    .subscribe(granted -> {
+//                        if (granted) {
+//                            checkForUpdate();
+//                        } else {
+//                            ToastUtil.showMessage(this, "未能获得必要权限，即将退出..");
+//                            delayExit();
+//                        }
+//                    });
         } else {
             Log.e(TAG, "checkForUpdate");
             checkForUpdate();
