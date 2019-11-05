@@ -76,19 +76,19 @@ public class SplashActivity extends RxBaseActivity {
                 || !rxPermissions.isGranted(Manifest.permission.ACCESS_FINE_LOCATION)
                 || !rxPermissions.isGranted(Manifest.permission.ACCESS_COARSE_LOCATION)) {
             Log.e(TAG, "showDialog");
-//            showDialog();
-            rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.READ_PHONE_STATE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    .subscribe(granted -> {
-                        if (granted) {
-                            checkForUpdate();
-                        } else {
-                            ToastUtil.showMessage(this, "未能获得必要权限，即将退出..");
-                            delayExit();
-                        }
-                    });
+            showDialog();
+//            rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION,
+//                    Manifest.permission.ACCESS_COARSE_LOCATION,
+//                    Manifest.permission.READ_PHONE_STATE,
+//                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//                    .subscribe(granted -> {
+//                        if (granted) {
+//                            checkForUpdate();
+//                        } else {
+//                            ToastUtil.showMessage(this, "未能获得必要权限，即将退出..");
+//                            delayExit();
+//                        }
+//                    });
         } else {
             Log.e(TAG, "checkForUpdate");
             checkForUpdate();
@@ -249,9 +249,9 @@ public class SplashActivity extends RxBaseActivity {
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("温馨提示")
                 .setMessage("亲爱的司机师傅，为了您能正常使用软件，我们需要下列权限:\n"
-                        + "获取位置权限-->方便管理人员根据位置为您派单\n"
-                        + "读取手机状态权限-->司机与手机完成绑定防止他人登录\n"
-                        + "读写外部存储权限-->存放一些资源在外部存储")
+                        + "获取位置权限-->获取实时位置，为您精准派单\n"
+                        + "读取手机状态权限-->保障账户安全\n"
+                        + "读写外部存储权限-->存储一些文件到磁盘")
                 .setPositiveButton("好", (dialog1, which) -> {
                     rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION,
                             Manifest.permission.ACCESS_COARSE_LOCATION,
