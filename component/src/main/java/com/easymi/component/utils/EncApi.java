@@ -33,4 +33,7 @@ public class EncApi {
 
     public native String dec(String password ,String content);
 
+    public native String getPubKey();
+
+
 }

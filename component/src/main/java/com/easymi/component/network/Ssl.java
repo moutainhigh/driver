@@ -3,7 +3,7 @@ package com.easymi.component.network;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.easymi.component.utils.Loader;
+import com.easymi.component.utils.EncApi;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -147,7 +147,7 @@ public class Ssl {
 
                         String encoded = new BigInteger(1, pubkey.getEncoded()).toString(16);
 
-                        String pubKey = new Loader().getPubKey();
+                        String pubKey = EncApi.getInstance().getPubKey();
 
                         if (!TextUtils.isEmpty(pubKey)) {
                             final boolean expected = pubKey.equalsIgnoreCase(encoded);

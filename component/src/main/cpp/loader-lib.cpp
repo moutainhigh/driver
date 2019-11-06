@@ -28,10 +28,3 @@ Java_com_easymi_component_utils_Loader_getRsaPs(JNIEnv *env, jobject instance) {
     std::string value = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCCaYfJgPjUXWXoifblGGZSFPsP1JYe758iLuRYUNS06MyAwuM+nlM6lC5QbnCOkj5khslbcMvT0+MtoSpe+neGI+oEKU/p203ENqD+I2PxjfTu7AZc+C2Ccw48PlTNVqH/juyhg4Cch7eETPclCdR4XPqO5lI9voDgjvTR/FhJXwIDAQAB";
     return env->NewStringUTF(value.c_str());
 }
-
-extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_easymi_component_utils_Loader_getPubKey(JNIEnv *env, jobject instance) {
-    std::string value = "30820122300d06092a864886f70d01010105000382010f003082010a0282010100c7a9678f07f018dd8ec1dc6b24be520bce1662ad26651397469d9c986a91032c6da2c87a90cca28581cb4f8a8f1cb35fb4b1e4c30ba8ecb24ae03a466cf0efd3453d27c2b0600e55308b09b16c0aea9d693e028346a8f5fe684dd1544fde9c0acb3052803cfd63f9759f48c3fc8761ed474c18c0dd4b3f5425fd82e13dcb93b73637a2551322275498fac0ff6d023fead9aa04c5b89d130e5684f19e4bc0e2a7461d4b4f469281564400c1fda78211a16f49f69a0d8f17f10c86105ab27910be0a59a805643535aee7175b5a2083d0c4a53ab97ec97a088f036252b30f5337e0c18355874d61fe8d4a255eb5665c17be62cbba7607d6a40a7372243567b7b6b70203010001";
-    return env->NewStringUTF(value.c_str());
-}

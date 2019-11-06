@@ -38,6 +38,4 @@ public class Loader {
      */
     public native String getRsaPs();
 
-    public native String getPubKey();
-
 }
