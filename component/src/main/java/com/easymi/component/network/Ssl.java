@@ -135,21 +135,21 @@ public class Ssl {
                     @Override
                     public void checkServerTrusted(X509Certificate[] chain, String authType) throws
                             CertificateException {
-                        if (chain == null) {
-                            throw new IllegalArgumentException("checkServerTrusted:x509Certificate array isnull");
-                        }
-
-                        if (chain.length == 0) {
-                            throw new IllegalArgumentException("checkServerTrusted: X509Certificate is empty");
-                        }
-
-                        RSAPublicKey pubkey = (RSAPublicKey) chain[0].getPublicKey();
-
-                        String encoded = new BigInteger(1, pubkey.getEncoded()).toString(16);
-
                         String pubKey = EncApi.getInstance().getPubKey();
 
                         if (!TextUtils.isEmpty(pubKey)) {
+                            if (chain == null) {
+                                throw new IllegalArgumentException("checkServerTrusted:x509Certificate array isnull");
+                            }
+
+                            if (chain.length == 0) {
+                                throw new IllegalArgumentException("checkServerTrusted: X509Certificate is empty");
+                            }
+
+                            RSAPublicKey pubkey = (RSAPublicKey) chain[0].getPublicKey();
+
+                            String encoded = new BigInteger(1, pubkey.getEncoded()).toString(16);
+
                             final boolean expected = pubKey.equalsIgnoreCase(encoded);
                             if (!expected) {
                                 throw new CertificateException("checkServerTrusted: Expected public key: "
