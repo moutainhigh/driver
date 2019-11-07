@@ -26,7 +26,6 @@ import com.easymi.component.app.XApp;
 import com.easymi.component.db.SqliteHelper;
 import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.EmLoc;
-import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.GPSUtils;
 import com.easymi.component.utils.Log;
 import com.google.gson.Gson;
@@ -149,28 +148,6 @@ public class LocService extends Service implements AMapLocationListener {
 
     LBSTraceClient lbsTraceClient;
 
-    private void startTrace() {
-
-        Log.e("trace", "开始纠偏");
-        if (null == lbsTraceClient) {
-            lbsTraceClient = LBSTraceClient.getInstance(this);
-            lbsTraceClient.startTrace((list, list1, s) -> {
-                if (list1 != null && list1.size() != 0
-                        && list != null && list.size() != 0) {
-                    EmLoc emLoc = EmUtil.getLastLoc();
-                    emLoc.speed = list.get(list1.size() - 1).getSpeed();
-                    emLoc.accuracy = list.get(list1.size() - 1).getBearing();
-                    emLoc.latitude = list1.get(list1.size() - 1).latitude;
-                    emLoc.longitude = list1.get(list1.size() - 1).longitude;
-                    Intent intent = new Intent();
-                    intent.setAction(BROAD_TRACE_SUC);
-                    intent.putExtra("traceLoc", new Gson().toJson(emLoc));
-                    sendBroadcast(intent);
-                    Log.e("TraceLoc", "纠偏后的最后一个点" + emLoc.toString());
-                }
-            });
-        }
-    }
 
     private void stopTrace() {
         Log.e("trace", "停止纠偏");
@@ -203,6 +180,7 @@ public class LocService extends Service implements AMapLocationListener {
                 Log.e("locService", "emLoc>>>>" + locationInfo.toString());
                 Intent intent = new Intent(LocService.this, LocReceiver.class);
                 intent.setAction(LOC_CHANGED);
+                intent.setPackage(getPackageName());
                 intent.putExtra("locPos", new Gson().toJson(locationInfo));
                 sendBroadcast(intent);//发送位置变化广播
 
@@ -221,6 +199,7 @@ public class LocService extends Service implements AMapLocationListener {
                 emLoc.isOffline = true;
                 Intent intent = new Intent(LocService.this, LocReceiver.class);
                 intent.setAction(LOC_CHANGED);
+                intent.setPackage(getPackageName());
                 intent.putExtra("locPos", new Gson().toJson(emLoc));
                 sendBroadcast(intent);//发送位置变化广播
 

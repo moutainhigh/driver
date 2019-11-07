@@ -104,30 +104,30 @@ public class XApp extends MultiDexApplication {
         if (BuildConfig.DEBUG) {
             ARouter.openDebug();   //非打包情况下,必须调用调用
             ARouter.openLog();
+
+            IFunc customFunc = new IFunc() {
+                @Override
+                public int getIcon() {
+                    return android.R.drawable.ic_menu_set_as;
+                }
+
+                @Override
+                public String getName() {
+                    return "环境配置";
+                }
+
+                @Override
+                public boolean onClick() {
+                    Intent intent = new Intent(XApp.this, SettingActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    return false;
+                }
+            };
+
+            Pandora.get().addFunction(customFunc);
         }
 
-        IFunc customFunc = new IFunc() {
-            @Override
-            public int getIcon() {
-                return android.R.drawable.ic_menu_set_as;
-            }
-
-            @Override
-            public String getName() {
-                return "环境配置";
-            }
-
-            @Override
-            public boolean onClick() {
-                Intent intent = new Intent(XApp.this, SettingActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                return false;
-            }
-        };
-
-
-        Pandora.get().addFunction(customFunc);
 
         ARouter.init(this);
         SqliteHelper.init(this);

@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
 import com.easymi.component.entity.EnvironmentPojo;
+import com.easymi.component.utils.Base64Utils;
 import com.easymi.component.utils.StringUtils;
 import com.easymin.daijia.driver.zyziyunsjdaijia.BuildConfig;
 import com.easymin.driver.securitycenter.CenterConfig;
@@ -23,11 +24,11 @@ import java.io.InputStreamReader;
 
 public class MainConfig {
     public MainConfig(Context context) {
-        String config = getFromAssets(context, "config.json");
-        if (StringUtils.isNotBlank(config)) {
+        String config = getFromAssets(context, "config.txt");
+        String content = new String(Base64Utils.decode(config));
+        if (StringUtils.isNotBlank(content)) {
             try {
-                JSONObject jb = new JSONObject(config);
-
+                JSONObject jb = new JSONObject(content);
                 String data = XApp.getMyPreferences().getString("environment_setting", "");
                 if (!TextUtils.isEmpty(data) && BuildConfig.DEBUG) {
                     EnvironmentPojo environmentPojo = new Gson().fromJson(data, EnvironmentPojo.class);

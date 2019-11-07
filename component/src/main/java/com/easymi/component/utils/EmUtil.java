@@ -1,6 +1,5 @@
 package com.easymi.component.utils;
 
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 
@@ -69,10 +68,6 @@ public class EmUtil {
 
         stopAllService(context);
 
-//        ActivityManager activityMgr = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-//        if (activityMgr != null) {
-//            activityMgr.killBackgroundProcesses(context.getPackageName());
-//        }
         Intent i = context.getPackageManager()
                 .getLaunchIntentForPackage(context.getPackageName());
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -83,6 +78,7 @@ public class EmUtil {
 
         Intent locIntent = new Intent(context, LocService.class);
         locIntent.setAction(LocService.STOP_LOC);
+        locIntent.setPackage(context.getPackageName());
         context.startService(locIntent);
 
 //        Intent locHelpIntent = new Intent(context, LocationHelperService.class);

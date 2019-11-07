@@ -131,6 +131,8 @@ public class RechargeActivity extends RxPayActivity {
                 payZfb(money);
             }
         });
+        //先加上吧 后期有需要再注销即可。
+        getState();
     }
 
     MoneyConfig moneyConfig;

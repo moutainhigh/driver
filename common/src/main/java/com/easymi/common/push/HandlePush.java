@@ -268,6 +268,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 String data = jb.optString("data");
                 Intent intent = new Intent();
                 intent.setAction(Config.TIRED_NOTICE);
+                intent.setPackage(XApp.getInstance().getPackageName());
                 intent.putExtra("data", data);
                 XApp.getInstance().sendBroadcast(intent);
             } else if (msg.equals("passenger_gps")) {
@@ -383,6 +384,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
     public void refreshWork() {
         Intent intent = new Intent();
         intent.setAction(Config.ORDER_REFRESH);
+        intent.setPackage(XApp.getInstance().getPackageName());
         XApp.getInstance().sendBroadcast(intent);
     }
 
@@ -614,6 +616,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
 
                     Intent intent1 = new Intent();
                     intent1.setAction(Config.BROAD_FINISH_ORDER);
+                    intent1.setPackage(XApp.getInstance().getPackageName());
                     intent1.putExtra("orderId", order.id);
                     intent1.putExtra("serviceType", order.serviceType);
                     XApp.getInstance().sendBroadcast(intent1);
@@ -704,6 +707,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 if (order1 != null) {
                     Intent intent1 = new Intent();
                     intent1.setAction(Config.BROAD_CANCEL_ORDER);
+                    intent1.setPackage(XApp.getInstance().getPackageName());
                     intent1.putExtra("orderId", order1.orderId);
                     intent1.putExtra("serviceType", order1.serviceType);
                     XApp.getInstance().sendBroadcast(intent1);
@@ -733,6 +737,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                         } else {
                             Intent intent2 = new Intent();
                             intent2.setAction(Config.BROAD_EMPLOY_STATUS_CHANGE);
+                            intent2.setPackage(XApp.getInstance().getPackageName());
                             intent2.putExtra("status", employ.status + "");
                             XApp.getInstance().sendBroadcast(intent2);
                         }
@@ -745,6 +750,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 if (order3 != null) {
                     Intent intent3 = new Intent();
                     intent3.setAction(Config.BROAD_BACK_ORDER);
+                    intent3.setPackage(XApp.getInstance().getPackageName());
                     intent3.putExtra("orderId", order3.orderId);
                     intent3.putExtra("serviceType", order3.serviceType);
                     XApp.getInstance().sendBroadcast(intent3);
@@ -761,6 +767,7 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
                 if (order4 != null) {
                     Intent intent3 = new Intent();
                     intent3.setAction(Config.SCHEDULE_FINISH);
+                    intent3.setPackage(XApp.getInstance().getPackageName());
                     intent3.putExtra("scheduleId", order4.scheduleId);
                     intent3.putExtra("serviceType", order4.serviceType);
                     XApp.getInstance().sendBroadcast(intent3);

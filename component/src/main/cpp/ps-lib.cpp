@@ -1,4 +1,5 @@
 #include <jni.h>
+#include <string>
 
 void qS(unsigned char array[], int size);
 
@@ -127,5 +128,13 @@ int findPivotIndex(unsigned char array[], int low, int high) {
     }
     array[low] = pivot;
     return low;
+}
+
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_easymi_component_utils_EncApi_getPubKey(JNIEnv *env, jobject instance) {
+    std::string value = "";
+    return env->NewStringUTF(value.c_str());
 }
 

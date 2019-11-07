@@ -11,12 +11,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import com.easymi.component.utils.Log;
 import android.util.LongSparseArray;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.amap.api.fence.GeoFence;
 import com.amap.api.fence.GeoFenceClient;
@@ -52,13 +50,13 @@ import com.amap.api.services.geocoder.RegeocodeResult;
 import com.easymi.component.activity.PlaceActivity;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymin.carpooling.R;
 import com.easymin.carpooling.entity.MapPositionModel;
 import com.easymin.carpooling.entity.Station;
-import com.jaredrummler.android.processes.models.Stat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -231,7 +229,7 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
         }
         IntentFilter filter = new IntentFilter();
         filter.addAction(GEOFENCE_BROADCAST_ACTION);
-        registerReceiver(mGeoFenceReceiver, filter);
+        registerReceiver(mGeoFenceReceiver, filter,EmUtil.getBroadCastPermission(),null);
         /*
          * 创建pendingIntent
          */
