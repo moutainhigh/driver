@@ -69,7 +69,7 @@ public class RegisterAcitivty extends RxBaseActivity {
 
     SafeKeyboard safeKeyboard;
 
-    private boolean isAgreed = false;
+    private boolean isAgreed = true;// 服务条款位置变更为首页了，这里不再显示，所以默认设为true
 
     @Override
     public boolean isEnableSwipe() {

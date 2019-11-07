@@ -184,4 +184,6 @@ public class Config {
 
     public static final String DOWN_TIME = "down_time";
 
+    public static final String SP_YINSI_AGREED = "SP_YINSI_AGREED";
+
 }

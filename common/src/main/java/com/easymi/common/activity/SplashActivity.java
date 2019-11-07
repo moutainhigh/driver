@@ -7,6 +7,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -14,6 +21,7 @@ import com.easymi.common.BuildConfig;
 import com.easymi.common.R;
 import com.easymi.common.mvp.work.WorkActivity;
 import com.easymi.component.Config;
+import com.easymi.component.activity.WebActivity;
 import com.easymi.component.app.ActManager;
 import com.easymi.component.app.XApp;
 import com.easymi.component.base.RxBaseActivity;
@@ -27,6 +35,7 @@ import com.easymi.component.utils.RootUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.utils.emulator.EmulatorCheckUtil;
+import com.easymi.component.widget.NoUnderLineSpan;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -66,7 +75,123 @@ public class SplashActivity extends RxBaseActivity {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
+        checkYinSi();
+    }
 
+
+    AlertDialog yinSiDialog;
+
+    /**
+     * 检查隐私设置
+     */
+    private void checkYinSi() {
+        boolean agreed = XApp.getMyPreferences().getBoolean(Config.SP_YINSI_AGREED, false);
+
+        if (!agreed) {
+            View view = LayoutInflater.from(SplashActivity.this).inflate(R.layout.yinsi_dialog, null, false);
+
+            TextView textView = view.findViewById(R.id.textView);
+
+            String s0 = "亲，感谢您的使用！\n\n" +
+                    "我们非常重视您的个人信息和隐私保护。" +
+                    "为了可以更好地保障您的个人权益，在您使用我们的产品前，请您认真仔细的阅读";
+
+            String s1 = "《服务人员合作协议》";
+            NoUnderLineSpan noUnderLineSpan = new NoUnderLineSpan(this, WebActivity.IWebVariable.DRIVER_LOGIN, R.string.driver_login);
+
+            String s2 = "和";
+
+            String s3 = "《隐私权政策》";
+            NoUnderLineSpan noUnderLineSpan3 = new NoUnderLineSpan(this, WebActivity.IWebVariable.DRIVER_PRIVACY_POLICY, R.string.driver_policy);
+
+            String s4 = "的全部内容，同意并接受全部条款后开始使用我们的产品，以及享受我们提供的服务。";
+
+            SpannableString text5 = new SpannableString(s0 + s1 + s2 + s3 + s4);
+            text5.setSpan(noUnderLineSpan, s0.length(), s0.length() + s1.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            text5.setSpan(noUnderLineSpan3, s0.length() + s1.length() + 1, s0.length() + s1.length() + 1 + s3.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            textView.setText(text5);
+
+            textView.setMovementMethod(LinkMovementMethod.getInstance());
+
+
+            Button agree = view.findViewById(R.id.agree_yinsi);
+            Button disagree = view.findViewById(R.id.dis_agree_yinsi);
+
+            agree.setOnClickListener(v -> {
+                XApp.getEditor().putBoolean(Config.SP_YINSI_AGREED, true).apply();
+                yinSiDialog.dismiss();
+                initData();
+            });
+            disagree.setOnClickListener(v -> {
+                yinSiDialog.dismiss();
+                showOnceHint();
+            });
+
+            yinSiDialog = new AlertDialog.Builder(this).setView(view).create();
+            yinSiDialog.setCanceledOnTouchOutside(false);
+            yinSiDialog.setCancelable(false);
+            yinSiDialog.show();
+        } else {
+            initData();
+        }
+    }
+
+    AlertDialog onceHintDialog;
+
+    /**
+     * 第一次提醒同意隐私协议
+     */
+    private void showOnceHint() {
+        View view = LayoutInflater.from(this).inflate(R.layout.once_hint_dialog, null, false);
+
+        Button once_dis_agree = view.findViewById(R.id.once_dis_agree);
+        Button once_show_yinsi = view.findViewById(R.id.once_show_yinsi);
+
+        once_dis_agree.setOnClickListener(v -> {
+            onceHintDialog.dismiss();
+            showTwiceHint();
+        });
+
+        once_show_yinsi.setOnClickListener(v -> {
+            onceHintDialog.dismiss();
+            yinSiDialog.show();
+        });
+
+        onceHintDialog = new AlertDialog.Builder(this).setView(view).create();
+        onceHintDialog.setCanceledOnTouchOutside(false);
+        onceHintDialog.setCancelable(false);
+        onceHintDialog.show();
+    }
+
+    AlertDialog twiceHintDialog;
+
+    /**
+     * 第二次提醒同意隐私协议
+     */
+    private void showTwiceHint() {
+        View view = LayoutInflater.from(this).inflate(R.layout.twice_hint_dialog, null, false);
+
+        Button twice_dis_agree = view.findViewById(R.id.twice_dis_agree);
+        Button twice_show_yinsi = view.findViewById(R.id.twice_show_yinsi);
+
+        twice_dis_agree.setOnClickListener(v -> {
+            twiceHintDialog.dismiss();
+            finish();//退出应用
+        });
+
+        twice_show_yinsi.setOnClickListener(v -> {
+            twiceHintDialog.dismiss();
+            yinSiDialog.show();
+        });
+
+        twiceHintDialog = new AlertDialog.Builder(this).setView(view).create();
+        twiceHintDialog.setCanceledOnTouchOutside(false);
+        twiceHintDialog.setCancelable(false);
+        twiceHintDialog.show();
+    }
+
+    private void initData(){
         rxPermissions = new RxPermissions(this);
 
         loadLanguage();
@@ -77,18 +202,6 @@ public class SplashActivity extends RxBaseActivity {
                 || !rxPermissions.isGranted(Manifest.permission.ACCESS_COARSE_LOCATION)) {
             Log.e(TAG, "showDialog");
             showDialog();
-//            rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION,
-//                    Manifest.permission.ACCESS_COARSE_LOCATION,
-//                    Manifest.permission.READ_PHONE_STATE,
-//                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//                    .subscribe(granted -> {
-//                        if (granted) {
-//                            checkForUpdate();
-//                        } else {
-//                            ToastUtil.showMessage(this, "未能获得必要权限，即将退出..");
-//                            delayExit();
-//                        }
-//                    });
         } else {
             Log.e(TAG, "checkForUpdate");
             checkForUpdate();

@@ -9,6 +9,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.StringDef;
 import android.support.annotation.StringRes;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -25,6 +28,8 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.easymi.component.Config;
 import com.easymi.component.R;
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.utils.StringUtils;
+import com.easymi.component.widget.NoUnderLineSpan;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
@@ -50,10 +55,6 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
      */
     private ProgressBar myProgressBar;
     private String url;
-
-    LinearLayout agreeContainer;
-    Button dis_agree;
-    Button agree;
 
     @Override
     public int getLayoutId() {
@@ -128,26 +129,6 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
         closeAll = findViewById(R.id.close_all);
         closeAll.setOnClickListener(this);
         myProgressBar = findViewById(R.id.myProgressBar);
-
-        agreeContainer = findViewById(R.id.agree_container);
-        dis_agree = findViewById(R.id.dis_agree);
-        agree = findViewById(R.id.agree);
-
-        if(articleName.equals(IWebVariable.DRIVER_LOGIN)){
-            agreeContainer.setVisibility(View.VISIBLE);
-            dis_agree.setOnClickListener(v -> {
-                Intent intent = new Intent();
-                intent.putExtra("agree",false);
-                setResult(RESULT_OK,intent);
-                finish();
-            });
-            agree.setOnClickListener(v -> {
-                Intent intent = new Intent();
-                intent.putExtra("agree",true);
-                setResult(RESULT_OK,intent);
-                finish();
-            });
-        }
     }
 
     /**
@@ -278,11 +259,13 @@ public class WebActivity extends RxBaseActivity implements View.OnClickListener 
         String DRIVER_HELP = "driverHelp";
         String DRIVER_LOGIN = "driverLogin";
         String DRIVER_PUT_FORWARD = "driverPutForward";
+        String DRIVER_PRIVACY_POLICY = "privacyPolicyDriver";
     }
 
     @StringDef({IWebVariable.DRIVER_HELP
             , IWebVariable.DRIVER_LOGIN
-            , IWebVariable.DRIVER_PUT_FORWARD})
+            , IWebVariable.DRIVER_PUT_FORWARD
+            , IWebVariable.DRIVER_PRIVACY_POLICY})
     @interface IWebVariableType {
     }
 }

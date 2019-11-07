@@ -6,6 +6,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -19,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.easymi.component.Config;
+import com.easymi.component.activity.WebActivity;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
@@ -29,6 +33,7 @@ import com.easymi.component.utils.GlideCircleTransform;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.CusToolbar;
+import com.easymi.component.widget.NoUnderLineSpan;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
 import com.easymi.personal.result.ArticleResult;
@@ -40,6 +45,7 @@ import rx.schedulers.Schedulers;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: AboutUsActivity
+ *
  * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description: 关于我们
@@ -57,7 +63,9 @@ public class AboutUsActivity extends RxBaseActivity {
 
     private ImageView logo;
 
-    public String  url;
+    public String url;
+
+    TextView bottomText;
 
     @Override
     public int getLayoutId() {
@@ -101,9 +109,29 @@ public class AboutUsActivity extends RxBaseActivity {
             }
         });
 
-        url = Config.H5_HOST+"#/protocol?articleName=driverAboutUs&appKey="+Config.APP_KEY;
+        url = Config.H5_HOST + "#/protocol?articleName=driverAboutUs&appKey=" + Config.APP_KEY;
 
         initWeb();
+
+        bottomText = findViewById(R.id.bottom_agreement_text);
+
+        bottomText.setVisibility(View.VISIBLE);
+
+        String s1 = "《隐私权政策》";
+
+        NoUnderLineSpan noUnderLineSpan = new NoUnderLineSpan(this, WebActivity.IWebVariable.DRIVER_PRIVACY_POLICY, R.string.driver_policy);
+
+        String s2 = "    和    ";
+
+        String s3 = "《服务人员合作协议》";
+        NoUnderLineSpan noUnderLineSpan3 = new NoUnderLineSpan(this, WebActivity.IWebVariable.DRIVER_LOGIN, R.string.driver_login);
+
+        SpannableString text5 = new SpannableString(s1 + s2 + s3);
+        text5.setSpan(noUnderLineSpan, 0, s1.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        text5.setSpan(noUnderLineSpan3, s2.length() + s1.length(), s2.length() + s1.length() + s3.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        bottomText.setText(text5);
+        bottomText.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     /**

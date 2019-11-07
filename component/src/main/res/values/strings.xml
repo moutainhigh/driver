@@ -136,4 +136,6 @@
     <string name="keyboard_key5">"&#62;"</string>
     <string name="mLabelTextSize">mLabelTextSize</string>
 
+    <string name="driver_login">服务人员合作协议</string>
+    <string name="driver_policy">隐私权政策</string>
 </resources>
