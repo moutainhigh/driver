@@ -297,7 +297,7 @@ public enum ErrCode {
     /**
      * 班次票数不足
      */
-    SCHEDULE_TICKET_DEFICIENCY(40074, "班次票数不足"),
+    SCHEDULE_TICKET_DEFICIENCY(40074, "班次票数不足,请联系平台客服补充余票"),
 
     /**
      * 当前司机未冻结
@@ -661,6 +661,10 @@ public enum ErrCode {
      * 班次还有订单未执行
      */
     SCHEDULE_STILL_ORDER(40606, "班次还有订单未执行"),
+    /**
+     * 当前班次已经指派
+     */
+    SCHEDULE_HAS_ASSIGN(40629,"当前班次已经指派"),
 
     SEAT_INFO_ERROR(40601, "座位信息出错,请重新选择");
 

@@ -138,7 +138,6 @@ public class CreateOrderActivity extends RxPayActivity {
     private long passengerId;
 
 
-
     @Override
     public boolean isEnableSwipe() {
         return false;
@@ -229,9 +228,9 @@ public class CreateOrderActivity extends RxPayActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (StringUtils.isNotBlank(editable.toString())){
-                    if (!editable.toString().substring(0,1).equals("1")){
-                        ToastUtil.showMessage(CreateOrderActivity.this,"请输入正确的电话号码");
+                if (StringUtils.isNotBlank(editable.toString())) {
+                    if (!editable.toString().substring(0, 1).equals("1")) {
+                        ToastUtil.showMessage(CreateOrderActivity.this, "请输入正确的电话号码");
                     }
                 }
 
@@ -279,11 +278,11 @@ public class CreateOrderActivity extends RxPayActivity {
         carPoolCreateOrderBtCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (currentModel == 2){
-                    if (goAction()){
+                if (currentModel == 2) {
+                    if (goAction()) {
                         createOrder();
                     }
-                }else {
+                } else {
                     createOrder();
                 }
             }
@@ -309,6 +308,7 @@ public class CreateOrderActivity extends RxPayActivity {
 
     /**
      * 判读选择的乘客信息是否正确
+     *
      * @return
      */
     private boolean goAction() {
@@ -337,17 +337,17 @@ public class CreateOrderActivity extends RxPayActivity {
             }
         }
 
-        if (chooseAdultCount + chooseChildCount != chooseSeatList.size()){
+        if (chooseAdultCount + chooseChildCount != chooseSeatList.size()) {
             ToastUtil.showMessage(this, "乘客数量错误");
             passengerCheck = false;
         }
 
-        if (chooseAdultCount != adultSeatCount){
+        if (chooseAdultCount != adultSeatCount) {
             ToastUtil.showMessage(this, "成人乘客数量错误");
             passengerCheck = false;
         }
 
-        if (chooseChildCount != childSeatCount){
+        if (chooseChildCount != childSeatCount) {
             ToastUtil.showMessage(this, "儿童乘客数量错误");
             passengerCheck = false;
         }
@@ -511,31 +511,31 @@ public class CreateOrderActivity extends RxPayActivity {
                 PincheOrder newPcOrder = (PincheOrder) data.getSerializableExtra("pincheOrder");
                 if (newPcOrder == null) {
                     TimeSlotBean selctTimeSort = (TimeSlotBean) data.getSerializableExtra("selctTimeSort");
-                    if (null == pcOrder ) {
-                        PincheOrder pincheOrder = new PincheOrder();
-                        pincheOrder.timeSlotId = selctTimeSort.id;
-                        pincheOrder.lineId = selctTimeSort.lineId;
-                        if (selctTimeSort.tickets == null){
-                            //余票充足
-                            pincheOrder.seats = 9999;
-                        }else {
-                            pincheOrder.seats = selctTimeSort.tickets;
-                        }
-                        currentModel = selctTimeSort.model;
-                        pcOrder = pincheOrder;
-                        initViewByPcOrder();
-                        queryStationByTime(pcOrder.timeSlotId);
-                        getMaxSeats(null);
+
+                    PincheOrder pincheOrder = new PincheOrder();
+                    pincheOrder.timeSlotId = selctTimeSort.id;
+                    pincheOrder.lineId = selctTimeSort.lineId;
+                    if (selctTimeSort.tickets == null) {
+                        //余票充足
+                        pincheOrder.seats = 9999;
+                    } else {
+                        pincheOrder.seats = selctTimeSort.tickets;
                     }
+                    currentModel = selctTimeSort.model;
+                    pcOrder = pincheOrder;
+                    initViewByPcOrder();
+                    queryStationByTime(pcOrder.timeSlotId);
+                    getMaxSeats(null);
+
                     carPoolCreateOrderTvLine.setText(selctTimeSort.lineName);
                 } else {
-                    if (null == pcOrder ) {
-                        currentModel = newPcOrder.model;
-                        pcOrder = newPcOrder;
-                        initViewByPcOrder();
-                        queryStation(pcOrder.id);
-                        getMaxSeats(pcOrder.id);
-                    }
+
+                    currentModel = newPcOrder.model;
+                    pcOrder = newPcOrder;
+                    initViewByPcOrder();
+                    queryStation(pcOrder.id);
+                    getMaxSeats(pcOrder.id);
+
                     carPoolCreateOrderTvLine.setText(pcOrder.startStation + " 到 " + pcOrder.endStation);
                 }
                 setBtnEnable();
@@ -876,7 +876,7 @@ public class CreateOrderActivity extends RxPayActivity {
     /**
      * 获取最大乘客数量
      */
-    public void getMaxSeats(Long scheduleId){
+    public void getMaxSeats(Long scheduleId) {
         Observable<Integer> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
                 .getSeats(scheduleId)
                 .map(new HttpResultFunc2<>())
