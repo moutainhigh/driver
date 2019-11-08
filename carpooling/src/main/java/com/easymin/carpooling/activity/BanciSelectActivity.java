@@ -14,6 +14,7 @@ import com.easymi.component.network.HttpResultFunc3;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult2;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.Log;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusErrLayout;
 import com.easymi.component.widget.CusToolbar;
@@ -27,7 +28,11 @@ import com.easymin.carpooling.entity.TimeSlotBean;
 import com.easymin.carpooling.widget.BottomListDialog;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -284,9 +289,7 @@ public class BanciSelectActivity extends RxBaseActivity implements View.OnClickL
                             setViewStatus(true);
                         } else {
                             setViewStatus(false);
-
-                            lineBeans.clear();
-                            lineBeans.addAll(result2.getData());
+                            removeEmptyTickets(result2.getData());
                         }
                     }
 
@@ -295,6 +298,34 @@ public class BanciSelectActivity extends RxBaseActivity implements View.OnClickL
 
                     }
                 })));
+    }
+
+
+    /**
+     * 移除掉
+     * @param list
+     */
+    public void removeEmptyTickets(List<LineBean> list){
+        for (LineBean lineBean : list){
+            Iterator iterator = lineBean.timeSlotVoList.iterator();
+            while (iterator.hasNext()) {
+                TimeSlotBean timeSlotBean = (TimeSlotBean) iterator.next();
+                if (timeSlotBean.tickets != null && timeSlotBean.tickets == 0){
+                    iterator.remove();
+                }
+            }
+        }
+
+        Iterator iterator = list.iterator();
+        while (iterator.hasNext()) {
+            LineBean lineBean = (LineBean) iterator.next();
+            if (lineBean.timeSlotVoList.size() == 0)  {
+                iterator.remove();
+            }
+        }
+
+        lineBeans.clear();
+        lineBeans.addAll(list);
     }
 
     //设置界面状态

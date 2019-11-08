@@ -43,17 +43,17 @@ public class TimeSlotBean implements Serializable {
     public String timeSlot;
 
     /**
-     * ?????
+     * 1限制票数 0 不限制
      */
     public int isLimitTicket;
 
     /**
-     * 是否限制余票 -1不限制
+     * 限制的票数 -1不限制 其余为后台设置的限制票数
      */
     public  int limitTicket;
 
     /**
-     * ?????
+     * 选座模式或者普通模式
      */
     public int model;
 

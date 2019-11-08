@@ -97,11 +97,8 @@ public class WorkPresenter implements WorkContract.Presenter {
             @Override
             public void onNext(ManualConfigBean manualConfigBean) {
                 view.onManualCreateConfigSuc(manualConfigBean);
-                if (manualConfigBean.showView == 1) {
-                    XApp.getEditor().putString(Config.SP_MANUAL_DATA, new Gson().toJson(manualConfigBean)).apply();
-                } else {
-                    XApp.getEditor().remove(Config.SP_MANUAL_DATA).apply();
-                }
+                XApp.getEditor().putString(Config.SP_MANUAL_DATA, new Gson().toJson(manualConfigBean)).apply();
+
                 if (manualConfigBean.operationMode != 0) {
                     XApp.getEditor().putInt(Config.BUS_IS_BUTTON, manualConfigBean.operationMode).apply();
                 } else {
@@ -281,12 +278,9 @@ public class WorkPresenter implements WorkContract.Presenter {
         configSubscription = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .getConfig()
                 .map(new HttpResultFunc2<>())
-                .doOnNext(new Action1<MqttConfig>() {
-                    @Override
-                    public void call(MqttConfig mqttConfig) {
-                        if (TextUtils.isEmpty(mqttConfig.connectionsUrl) || TextUtils.isEmpty(mqttConfig.clientId)) {
-                            throw new RuntimeException();
-                        }
+                .doOnNext(mqttConfig -> {
+                    if (TextUtils.isEmpty(mqttConfig.connectionsUrl) || TextUtils.isEmpty(mqttConfig.clientId)) {
+                        throw new RuntimeException();
                     }
                 })
                 .retryWhen(observable -> observable.delay(3, TimeUnit.SECONDS))
@@ -432,13 +426,8 @@ public class WorkPresenter implements WorkContract.Presenter {
             return;
         }
         subscription = model.queryNearDriver(lat, lng, ZCSetting.findOne().emploiesKm, employType)
-                .subscribe(new MySubscriber<List<NearDriver>>(context, false, false,
-                        new NoErrSubscriberListener<List<NearDriver>>() {
-                            @Override
-                            public void onNext(List<NearDriver> nearDrivers) {
-                                view.showDrivers(nearDrivers);
-                            }
-                        }));
+                .subscribe(new MySubscriber<>(context, false, false,
+                        nearDrivers -> view.showDrivers(nearDrivers)));
         view.getRxManager().add(subscription);
     }
 

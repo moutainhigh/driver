@@ -227,6 +227,9 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View,
 //            }
         });
 
+        /**
+         * 滑动操作
+         */
         slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
             @Override
             public void onSlide(int distance) {
@@ -283,6 +286,9 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View,
             }
         });
 
+        /**
+         * 按钮操作
+         */
         button_sure.setOnClickListener(v -> {
             if (cbBusOrder.status == BusOrderStatus.SCHEDULE_STATUS_RUNNING) {
                 if (cbBusOrder.driverStationVos.get(position).status == 2) {

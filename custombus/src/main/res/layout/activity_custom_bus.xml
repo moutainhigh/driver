@@ -261,7 +261,7 @@
             android:layout_marginBottom="5dp"
             android:background="@drawable/corners_btn_4dp_bg"
             android:gravity="center"
-            android:text="滑动开始行程"
+            android:text="开始行程"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:visibility="gone"/>

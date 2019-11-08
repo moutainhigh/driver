@@ -230,7 +230,6 @@ public interface CarPoolApiService {
     @GET("api/v1/carpool/driver/schedule/changeOrderSequence")
     Observable<EmResult2<Object>> changeOrderSequence(@Query("orderIdSequence") String orderIdSequence);
 
-
     /**
      * 查询司机可补单的线路及其班次
      * @param id
@@ -249,4 +248,13 @@ public interface CarPoolApiService {
      */
     @GET("api/v1/carpool/driver/schedule/getStationByTimeSlotId")
     Observable<StationResult> qureyStationResult(@Query("timeSlotId") long timeSlotId);
+
+    /**
+     * 根据班次id或者不传班次id查询当前班次或者司机可补单的最大票数
+     *
+     * @param scheduleId
+     * @return
+     */
+    @GET("api/v1/carpool/driver/schedule/getSeats")
+    Observable<EmResult2<Integer>> getSeats (@Query("scheduleId") Long scheduleId);
 }

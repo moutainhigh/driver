@@ -56,6 +56,7 @@ public class BottomListDialog extends BottomSheetDialog {
 
     public void setTitle(String title){
         this.title = title;
+        tv_title.setText(this.title);
     }
 
     private void initViews(Context context, List<?> datas) {

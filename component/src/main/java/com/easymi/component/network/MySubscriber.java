@@ -141,7 +141,6 @@ public class MySubscriber<T> extends Subscriber<T> implements ProgressDismissLis
             } else {
                 ToastUtil.showMessage(context, context.getString(R.string.unknown_error));//服务器定义的错误
             }
-
         }
         if (null != haveErrSubscriberListener) {
             if (e instanceof ApiException) {

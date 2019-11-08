@@ -151,13 +151,24 @@ public class CarpoolOrder implements Serializable {
     public int index;
 
 
+///选座模式新增字段  start
 
+    /**
+     * 座位信息（位置）
+     */
+    public String sorts;
 
+    /**
+     * 类型 1-五座 2-七座
+     */
+    public int type;
 
+    /**
+     * 座位类型信息（1儿童还是成人2）
+     */
+    public String sortsType;
 
-
-
-
+///选座模式新增字段  end
 
     /**
      * 等候过期分钟数

@@ -82,12 +82,7 @@ public class PasTicketsFragment extends RxBaseFragment {
         });
 
 
-        cusListAdapter.setOnShowDialogListener(new CusListAdapter.OnDialogClickListener() {
-            @Override
-            public void onDialogClick(boolean isPay, long orderId, double money) {
-                bridge.onDialogClick(isPay ? 3 : 2, orderId, money);
-            }
-        });
+        cusListAdapter.setOnShowDialogListener((isPay, orderId, money) -> bridge.onDialogClick(isPay ? 3 : 2, orderId, money));
 
         recyclerView.setAdapter(cusListAdapter);
 

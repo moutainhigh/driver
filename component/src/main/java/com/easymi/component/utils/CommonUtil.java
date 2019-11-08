@@ -281,9 +281,9 @@ public class CommonUtil {
                     }
 
                     if (sortType == 1) {
-                        stringBuilder.append("(儿童座)");
+                        stringBuilder.append("(儿童)");
                     } else if (sortType == 2) {
-                        stringBuilder.append("(成人座)");
+                        stringBuilder.append("(成人)");
                     }
 
                     if (i != sortsData.length - 1) {
