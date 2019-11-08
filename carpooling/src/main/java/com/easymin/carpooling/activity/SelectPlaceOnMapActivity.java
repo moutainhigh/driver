@@ -187,8 +187,6 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
         });
 
         createMarker();
-
-
     }
 
     /**

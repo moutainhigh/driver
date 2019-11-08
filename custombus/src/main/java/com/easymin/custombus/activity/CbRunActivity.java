@@ -19,8 +19,11 @@ import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.CountDownUtils;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.TimeUtil;
+import com.easymi.component.utils.ViewUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.CustomSlideToUnlockView;
+import com.easymi.component.widget.LoadingButton;
+import com.easymi.component.widget.dialog.SureBaseDialog;
 import com.easymin.custombus.R;
 import com.easymin.custombus.adapter.StationAdapter;
 import com.easymin.custombus.entity.CbBusOrder;
@@ -68,6 +71,8 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View,
     ExpandableLayout expand;
     TextView tv_left;
     LinearLayout control_con;
+
+    LoadingButton button_sure;
 
     /**
      * 倒计时工具类
@@ -185,6 +190,7 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View,
         expand = findViewById(R.id.expand);
         tv_left = findViewById(R.id.tv_left);
         control_con = findViewById(R.id.control_con);
+        button_sure = findViewById(R.id.button_sure);
     }
 
     /**
@@ -221,6 +227,9 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View,
 //            }
         });
 
+        /**
+         * 滑动操作
+         */
         slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
             @Override
             public void onSlide(int distance) {
@@ -239,7 +248,7 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View,
                         } else {
                             type = 4;
                         }
-                        presenter.arriveStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position).stationId);
+                        presenter.arriveStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position).stationId,null);
                     } else if (cbBusOrder.driverStationVos.get(position).status == 3) {
                         if (position == cbBusOrder.driverStationVos.size() - 1) {
                             /**
@@ -251,14 +260,14 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View,
                                 /**
                                  * 本站没有票
                                  */
-                                presenter.toNextStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position + 1).stationId);
+                                presenter.toNextStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position + 1).stationId,null);
                                 type = 2;
                             } else {
                                 /**
                                  * 验票
                                  */
                                 if (cbBusOrder.arrivedTime == 0) {
-                                    presenter.chechTickets(cbBusOrder.id);
+                                    presenter.chechTickets(cbBusOrder.id,null);
                                 } else {
                                     toPassenger(cbBusOrder.arrivedTime, position);
                                 }
@@ -276,6 +285,80 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View,
                 slider.resetView();
             }
         });
+
+        /**
+         * 按钮操作
+         */
+        button_sure.setOnClickListener(v -> {
+            if (cbBusOrder.status == BusOrderStatus.SCHEDULE_STATUS_RUNNING) {
+                if (cbBusOrder.driverStationVos.get(position).status == 2) {
+                    /**
+                     *  到达站点
+                     */
+                    SureBaseDialog dialog = new SureBaseDialog(this,"确认到达站点么？");
+                    dialog.setOnMyClickListener((view, string) -> {
+                        if (view.getId() == R.id.tv_sure){
+                            if (position != cbBusOrder.driverStationVos.size() - 1) {
+                                type = 3;
+                            } else {
+                                type = 4;
+                            }
+                            presenter.arriveStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position).stationId,button_sure);
+                        }
+                    });
+                    dialog.show();
+                } else if (cbBusOrder.driverStationVos.get(position).status == 3) {
+                    if (position == cbBusOrder.driverStationVos.size() - 1) {
+                        /**
+                         * 终点站结束行程
+                         */
+                        SureBaseDialog dialog = new SureBaseDialog(this,"确认结束行程么？");
+                        dialog.setOnMyClickListener((view, string) -> {
+                            if (view.getId() == R.id.tv_sure){
+                                presenter.endStation(cbBusOrder.id, null);
+                            }
+                        });
+                        dialog.show();
+                    } else {
+                        if ((cbBusOrder.driverStationVos.get(position).checkNumber + cbBusOrder.driverStationVos.get(position).unCheckNumber) == 0) {
+                            /**
+                             * 本站没有票
+                             */
+                            SureBaseDialog dialog = new SureBaseDialog(this,"确认前往下一站么？");
+                            dialog.setOnMyClickListener((view, string) -> {
+                                if (view.getId() == R.id.tv_sure){
+                                    presenter.toNextStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position + 1).stationId,button_sure);
+                                    type = 2;
+                                }
+                            });
+                            dialog.show();
+                        } else {
+                            /**
+                             * 验票
+                             */
+                            if (cbBusOrder.arrivedTime == 0) {
+                                presenter.chechTickets(cbBusOrder.id,button_sure);
+                            } else {
+                                toPassenger(cbBusOrder.arrivedTime, position);
+                            }
+                        }
+                    }
+                }
+            } else if (cbBusOrder.status == BusOrderStatus.SCHEDULE_STATUS_NEW) {
+                /**
+                 * 未开始状态（开始行程）
+                 */
+                SureBaseDialog dialog = new SureBaseDialog(this,"确认开始行程么？");
+                dialog.setOnMyClickListener((view, string) -> {
+                    if (view.getId() == R.id.tv_sure){
+                        expand.collapse();
+                        presenter.startStation(cbBusOrder.id, null);
+                        type = 1;
+                    }
+                });
+                dialog.show();
+            }
+        });
     }
 
     @Override
@@ -290,14 +373,15 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View,
      * 跳转乘客信息列表
      */
     public void toPassenger(long time, int item) {
-        Intent intent = new Intent(this, PassengerActivity.class);
-        intent.putExtra("cbBusOrder", cbBusOrder);
-        intent.putExtra("time", time);
-        intent.putExtra("position", item);
-        startActivityForResult(intent, 0x00);
+        //重复点击，事件不处理
+        if (ViewUtil.isFastClick()) {
+            Intent intent = new Intent(this, PassengerActivity.class);
+            intent.putExtra("cbBusOrder", cbBusOrder);
+            intent.putExtra("time", time);
+            intent.putExtra("position", item);
+            startActivityForResult(intent, 0x00);
+        }
 
-//        Intent intent1 = new Intent(this, TestActivity.class);
-//        startActivity(intent1);
     }
 
     /**
@@ -327,6 +411,14 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View,
         } else {
             stationAdapter.setCheckStatus(false);
         }
+
+        if (XApp.getMyPreferences().getInt(Config.BUS_IS_BUTTON,1) == 2){
+            slider.setVisibility(View.GONE);
+            button_sure.setVisibility(View.VISIBLE);
+        }else {
+            slider.setVisibility(View.VISIBLE);
+            button_sure.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -336,7 +428,11 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View,
         if (cbBusOrder.driverStationVos.get(position).status == 2) {
             tv_stauts.setText(getResources().getString(R.string.cb_go_to));
             tv_station_name.setText(cbBusOrder.driverStationVos.get(position).name);
-            slider.setHint(getResources().getString(R.string.cb_slider_arrive));
+            if (XApp.getMyPreferences().getInt(Config.BUS_IS_BUTTON,1) == 2){
+                button_sure.setText("到达站点");
+            }else {
+                slider.setHint(getResources().getString(R.string.cb_slider_arrive));
+            }
             presenter.routePlanByNavi(cbBusOrder.driverStationVos.get(position).latitude, cbBusOrder.driverStationVos.get(position).longitude);
             cus_toolbar.setTitle(R.string.cb_running);
         } else if (cbBusOrder.driverStationVos.get(position).status == 3) {
@@ -345,14 +441,26 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View,
 
             if (position == cbBusOrder.driverStationVos.size() - 1) {
                 tv_left.setText(getResources().getString(R.string.cb_arrive_end_station));
-                slider.setHint(getResources().getString(R.string.cb_finish));
+                if (XApp.getMyPreferences().getInt(Config.BUS_IS_BUTTON,1) == 2){
+                    button_sure.setText("结束行程");
+                }else {
+                    slider.setHint(getResources().getString(R.string.cb_finish));
+                }
             } else {
                 if ((cbBusOrder.driverStationVos.get(position).checkNumber + cbBusOrder.driverStationVos.get(position).unCheckNumber) == 0) {
                     tv_left.setText(getResources().getString(R.string.cb_not_check));
-                    slider.setHint(getResources().getString(R.string.cb_slider_go_next));
+                    if (XApp.getMyPreferences().getInt(Config.BUS_IS_BUTTON,1) == 2){
+                        button_sure.setText("前往下一站");
+                    }else {
+                        slider.setHint(getResources().getString(R.string.cb_slider_go_next));
+                    }
                 } else {
                     tv_left.setText(getResources().getString(R.string.cb_please_check));
-                    slider.setHint(getResources().getString(R.string.cb_slider_check));
+                    if (XApp.getMyPreferences().getInt(Config.BUS_IS_BUTTON,1) == 2){
+                        button_sure.setText("开始验票");
+                    }else {
+                        slider.setHint(getResources().getString(R.string.cb_slider_check));
+                    }
                 }
             }
             cus_toolbar.setTitle(R.string.cb_arrive_station);
@@ -388,6 +496,7 @@ public class CbRunActivity extends RxBaseActivity implements FlowContract.View,
         dealData();
         setData();
         initListenner();
+
     }
 
     @Override

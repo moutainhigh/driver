@@ -45,6 +45,16 @@ public class Station implements Parcelable {
      */
     public int sequence;
 
+    /**
+     * 1支持电子围栏 2不支持
+     */
+    public int autoReceive;
+
+    /**
+     * 站点是否允许上下车：1-仅上车  2- 上下车 3- 仅下车
+     */
+    public int onOff;
+
 
 //订单流程中的字段
     /**
@@ -57,7 +67,6 @@ public class Station implements Parcelable {
      */
     public boolean isPass;
 
-
     protected Station(Parcel in) {
         id = in.readLong();
         name = in.readString();
@@ -65,8 +74,29 @@ public class Station implements Parcelable {
         longitude = in.readDouble();
         coordinate = in.createTypedArrayList(MapPositionModel.CREATOR);
         sequence = in.readInt();
+        autoReceive = in.readInt();
+        onOff = in.readInt();
         current = in.readInt();
         isPass = in.readByte() != 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(name);
+        dest.writeDouble(latitude);
+        dest.writeDouble(longitude);
+        dest.writeTypedList(coordinate);
+        dest.writeInt(sequence);
+        dest.writeInt(autoReceive);
+        dest.writeInt(onOff);
+        dest.writeInt(current);
+        dest.writeByte((byte) (isPass ? 1 : 0));
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<Station> CREATOR = new Creator<Station>() {
@@ -80,21 +110,4 @@ public class Station implements Parcelable {
             return new Station[size];
         }
     };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(name);
-        dest.writeDouble(latitude);
-        dest.writeDouble(longitude);
-        dest.writeTypedList(coordinate);
-        dest.writeInt(sequence);
-        dest.writeInt(current);
-        dest.writeByte((byte) (isPass ? 1 : 0));
-    }
 }

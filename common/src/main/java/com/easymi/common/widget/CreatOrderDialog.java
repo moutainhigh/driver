@@ -9,7 +9,7 @@ import com.easymi.common.R;
 import com.easymi.component.Config;
 import com.easymi.component.entity.Employ;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.widget.BaseBottomDialog;
+import com.easymi.component.widget.dialog.BaseBottomDialog;
 
 /**
  * @Copyright (C), 2012-2019, Sichuan Xiaoka Technology Co., Ltd.

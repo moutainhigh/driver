@@ -593,6 +593,11 @@ public enum ErrCode {
      */
     APPLYING(50009, "申请中"),
 
+    /**
+     * 车辆座位不足
+     */
+    VEHICLE_NO_HAVE_SEATS(40194, "车辆座位不足"),
+
 //old
     /**
      * 数据不匹配

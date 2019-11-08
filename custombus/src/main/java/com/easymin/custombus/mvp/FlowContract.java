@@ -104,7 +104,7 @@ public interface FlowContract {
          * @param scheduleId
          * @param stationId
          */
-        void arriveStation(long scheduleId, long stationId);
+        void arriveStation(long scheduleId, long stationId, LoadingButton button);
 
         /**
          * 结束行程
@@ -124,13 +124,13 @@ public interface FlowContract {
          * @param scheduleId
          * @param stationId
          */
-        void toNextStation(long scheduleId, long stationId);
+        void toNextStation(long scheduleId, long stationId, LoadingButton button);
 
         /**
          * 开始验票
          * @param id
          */
-        void chechTickets(long id);
+        void chechTickets(long id, LoadingButton button);
 
         /**
          * 获取站点订单

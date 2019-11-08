@@ -323,8 +323,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
 
     @Override
     public void onManualCreateConfigSuc(ManualConfigBean manualConfigBean) {
+        XApp.getEditor().putString(Config.SP_MANUAL_DATA, new Gson().toJson(manualConfigBean)).apply();
         if (manualConfigBean.showView == 1) {
-            XApp.getEditor().putString(Config.SP_MANUAL_DATA, new Gson().toJson(manualConfigBean)).apply();
             workIvManual.setVisibility(View.VISIBLE);
             workIvManual.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -334,7 +334,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
                 }
             });
         } else {
-            XApp.getEditor().remove(Config.SP_MANUAL_DATA).apply();
             workIvManual.setVisibility(View.GONE);
         }
     }

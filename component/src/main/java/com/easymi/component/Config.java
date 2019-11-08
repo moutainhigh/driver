@@ -186,4 +186,8 @@ public class Config {
 
     public static final String SP_YINSI_AGREED = "SP_YINSI_AGREED";
 
+
+    /////昭通(班车司机端操作方式 1-滑动 2-点击)
+    public static final String BUS_IS_BUTTON = "bus_is_buttom";
+
 }

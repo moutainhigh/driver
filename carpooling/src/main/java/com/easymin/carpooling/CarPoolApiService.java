@@ -4,6 +4,7 @@ import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.result.EmResult2;
 import com.easymin.carpooling.entity.AllStation;
+import com.easymin.carpooling.entity.LineBean;
 import com.easymin.carpooling.entity.PincheOrder;
 import com.easymin.carpooling.entity.PriceResult;
 import com.easymin.carpooling.entity.StationResult;
@@ -181,8 +182,8 @@ public interface CarPoolApiService {
                                             @Field("passengerPhone") String passengerPhone,
                                             @Field("channelAlias") String channelAlias,
                                             @Field("timeSlotId") long timeSlotId,
-                                            @Field("passengerInfos")String passengerInfos,
-                                            @Field("sorts")String sorts);
+                                            @Field("passengerInfos") String passengerInfos,
+                                            @Field("sorts") String sorts);
 
     /**
      * 指派订单
@@ -220,7 +221,6 @@ public interface CarPoolApiService {
     Observable<EmResult2<AllStation>> qureyScheduleInfo(@Query("scheduleId") long scheduleId);
 
 
-
     /**
      * 司机端修改订单执行顺序
      *
@@ -229,4 +229,32 @@ public interface CarPoolApiService {
      */
     @GET("api/v1/carpool/driver/schedule/changeOrderSequence")
     Observable<EmResult2<Object>> changeOrderSequence(@Query("orderIdSequence") String orderIdSequence);
+
+    /**
+     * 查询司机可补单的线路及其班次
+     * @param id
+     * @param companyId
+     * @return
+     */
+    @GET("api/v1/carpool/driver/schedule/getLineDriverSchedule")
+    Observable<EmResult2<List<LineBean>>> getLineDriverSchedule(@Query("id") long id, @Query("companyId") long companyId);
+
+
+    /**
+     * 根据时间段id查询电子围栏
+     *
+     * @param timeSlotId
+     * @return
+     */
+    @GET("api/v1/carpool/driver/schedule/getStationByTimeSlotId")
+    Observable<StationResult> qureyStationResult(@Query("timeSlotId") long timeSlotId);
+
+    /**
+     * 根据班次id或者不传班次id查询当前班次或者司机可补单的最大票数
+     *
+     * @param scheduleId
+     * @return
+     */
+    @GET("api/v1/carpool/driver/schedule/getSeats")
+    Observable<EmResult2<Integer>> getSeats (@Query("scheduleId") Long scheduleId);
 }

@@ -17,6 +17,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.easymi.common.entity.CarpoolOrder;
 import com.easymi.component.Config;
+import com.easymi.component.utils.CommonUtil;
 import com.easymi.component.utils.GlideCircleTransform;
 import com.easymin.carpooling.R;
 
@@ -82,17 +83,23 @@ public class CusListAdapter extends RecyclerView.Adapter<CusListAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CarpoolOrder carpoolOrder = carpoolOrders.get(position);
         holder.cusName.setText(carpoolOrder.passengerName);
-        holder.ticketNum.setText("乘车人数:" + carpoolOrder.ticketNumber);
+
+        if (TextUtils.isEmpty(carpoolOrder.sorts)) {
+            holder.ticketNum.setText("乘车人数: " + carpoolOrder.ticketNumber);
+        } else {
+            holder.ticketNum.setText(CommonUtil.getPassengerDescAndType(carpoolOrder.type, carpoolOrder.sorts, carpoolOrder.sortsType));
+        }
+
         holder.cusDesc.setText("备注: " + (TextUtils.isEmpty(carpoolOrder.orderRemark) ? "暂无备注" : carpoolOrder.orderRemark));
         if (flag == 0) {//PasTickets
-//            if (carpoolOrder.isContract == 1) {
-//                holder.status.setVisibility(View.VISIBLE);
-//                holder.status.setText("已联系");
-//                holder.status.setBackgroundResource(R.drawable.corner_status_called);
-//                holder.status.setTextColor(Color.parseColor("#0099E9"));
-//            } else {
-//                holder.status.setVisibility(View.GONE);
-//            }
+            if (carpoolOrder.isContract == 1) {
+                holder.status.setVisibility(View.VISIBLE);
+                holder.status.setText("已联系");
+                holder.status.setBackgroundResource(R.drawable.corner_status_called);
+                holder.status.setTextColor(Color.parseColor("#0099E9"));
+            } else {
+                holder.status.setVisibility(View.GONE);
+            }
             holder.callPhone.setVisibility(View.VISIBLE);
         } else if (flag == 1) { //CusList
             holder.status.setVisibility(View.VISIBLE);

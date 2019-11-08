@@ -114,10 +114,9 @@ public class FlowPresenter implements FlowContract.Presenter {
     }
 
     @Override
-    public void arriveStation(long scheduleId, long stationId) {
+    public void arriveStation(long scheduleId, long stationId, LoadingButton button) {
         view.getManager().add(model.arriveStation(scheduleId, stationId).subscribe(new MySubscriber<>(context,
-                false,
-                false,
+                button,
                 new HaveErrSubscriberListener<EmResult2<Object>>() {
 
                     @Override
@@ -194,10 +193,9 @@ public class FlowPresenter implements FlowContract.Presenter {
     }
 
     @Override
-    public void toNextStation(long scheduleId, long stationId) {
+    public void toNextStation(long scheduleId, long stationId, LoadingButton button) {
         view.getManager().add(model.toNextStation(scheduleId, stationId).subscribe(new MySubscriber<>(context,
-                false,
-                false,
+                button,
                 new HaveErrSubscriberListener<EmResult2<Object>>() {
 
                     @Override
@@ -216,10 +214,9 @@ public class FlowPresenter implements FlowContract.Presenter {
      * @param id 班次id
      */
     @Override
-    public void chechTickets(long id) {
+    public void chechTickets(long id, LoadingButton button) {
         view.getManager().add(model.chechTickets(id).subscribe(new MySubscriber<>(context,
-                false,
-                false,
+                button,
                 new HaveErrSubscriberListener<TimeResult>() {
 
                     @Override

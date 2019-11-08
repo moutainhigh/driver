@@ -27,6 +27,7 @@ import com.easymi.component.rxmvp.RxManager;
 import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.ToastUtil;
+import com.easymi.component.utils.ViewUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymin.custombus.DZBusApiService;
 import com.easymin.custombus.MyScrollVIew;
@@ -284,26 +285,28 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
     }
 
     public void goCheckTicket() {
-        int ticketCount = 0;
-        if (customers != null && customers.size() > 0) {
-            for (Customer customer : customers) {
-                if (customer.status <= Customer.CITY_COUNTRY_STATUS_ARRIVED || customer.status == Customer.CITY_COUNTRY_STATUS_INVALID) {
-                    ticketCount++;
+        if (ViewUtil.isFastClick()) {
+            int ticketCount = 0;
+            if (customers != null && customers.size() > 0) {
+                for (Customer customer : customers) {
+                    if (customer.status <= Customer.CITY_COUNTRY_STATUS_ARRIVED || customer.status == Customer.CITY_COUNTRY_STATUS_INVALID) {
+                        ticketCount++;
+                    }
                 }
             }
+            Intent intent = new Intent(this, NewCheckTicketActivity.class);
+            intent.putExtra("isUnCheck", ticketCount);
+            startActivityForResult(intent, 0x00);
         }
-        Intent intent = new Intent(this, NewCheckTicketActivity.class);
-        intent.putExtra("isUnCheck", ticketCount);
-        startActivityForResult(intent, 0x00);
     }
 
     public void goToNextStation() {
         if (uncheck == 0) {
-            presenter.toNextStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position + 1).stationId);
+            presenter.toNextStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position + 1).stationId,null);
         } else {
             GoNextDialog dialog = new GoNextDialog(this);
             dialog.setOnMyClickListener((view, string) -> {
-                presenter.toNextStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position + 1).stationId);
+                presenter.toNextStation(cbBusOrder.id, cbBusOrder.driverStationVos.get(position + 1).stationId,null);
             });
             dialog.show();
         }

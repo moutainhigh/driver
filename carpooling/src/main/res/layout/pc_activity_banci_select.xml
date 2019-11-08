@@ -2,12 +2,98 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/color_f2f2f2">
 
     <com.easymi.component.widget.CusToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/corners_white_4dp_bg"
+        android:layout_marginLeft="@dimen/sp_12"
+        android:layout_marginRight="@dimen/sp_12"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal"
+            android:paddingLeft="12dp"
+            android:paddingRight="@dimen/sp_12">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/cp_choose_line"
+                android:textColor="@color/colorBlack"
+                android:textSize="15sp"/>
+            <TextView
+                android:id="@+id/tv_line_name"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:hint="@string/pc_hint_choose_line"
+                android:textColorHint="@color/color_cccccc"
+                android:textColor="@color/colorBlack"
+                android:textSize="15sp"
+                android:drawableRight="@mipmap/ic_right"
+                android:drawablePadding="8dp"/>
+        </LinearLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:src="@color/colorLine"
+            android:layout_marginLeft="@dimen/sp_12"
+            android:layout_marginRight="@dimen/sp_12"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal"
+            android:paddingLeft="12dp"
+            android:paddingRight="@dimen/sp_12">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/pc_choose_time"
+                android:textColor="@color/colorBlack"
+                android:textSize="15sp"/>
+            <TextView
+                android:id="@+id/tv_time_sort"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:hint="@string/pc_hint_choose_time"
+                android:textColorHint="@color/color_cccccc"
+                android:textColor="@color/colorBlack"
+                android:textSize="15sp"
+                android:drawableRight="@mipmap/ic_right"
+                android:drawablePadding="8dp"/>
+        </LinearLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:src="@color/colorLine"
+            android:layout_marginLeft="@dimen/sp_12"
+            android:layout_marginRight="@dimen/sp_12"/>
+
+        <TextView
+            android:id="@+id/tv_sure"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:text="确定添加"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:background="@drawable/shape_btn_4dp_bg"
+            android:gravity="center"
+            android:layout_margin="12dp"/>
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,7 +102,7 @@
             android:id="@+id/tv_hint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="余票为0的时段不可补票"
+            android:text="选择已有订单且有余票的时段"
             android:textSize="14sp"
             android:textColor="@color/color_999999"
             android:layout_marginLeft="12dp"

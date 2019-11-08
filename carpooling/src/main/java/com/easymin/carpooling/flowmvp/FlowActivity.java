@@ -1045,9 +1045,6 @@ public class FlowActivity extends RxPayActivity implements
 
 ////////////////
 
-
-    public boolean isRunning = false;
-
     AllStation myAllStation;
 
     @Override
@@ -1066,7 +1063,7 @@ public class FlowActivity extends RxPayActivity implements
 
     @Override
     public void changeSequenceSuc() {
-//        presenter.qureyScheduleInfo(pincheOrder.scheduleId);
+
     }
 
     /**
