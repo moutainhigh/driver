@@ -7,6 +7,10 @@ import com.easymi.component.pay.PayType;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.result.EmResult2;
 import com.easymi.personal.entity.CarInfo;
+import com.easymi.personal.entity.MyPopularizeFeeDetailBean;
+import com.easymi.personal.entity.MyPopularizeMainBean;
+import com.easymi.personal.entity.MyPopularizeRecordBean;
+import com.easymi.personal.entity.MyPopularizeUrlBean;
 import com.easymi.personal.entity.Register;
 import com.easymi.personal.result.AnnouncementResult;
 import com.easymi.personal.result.ArticleResult;
@@ -27,6 +31,8 @@ import com.easymi.personal.result.ShareResult;
 import com.easymi.personal.result.StatisResult;
 import com.easymi.personal.result.TixianResult;
 import com.easymi.personal.result.TixianRuleResult;
+
+import java.util.List;
 
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
@@ -50,6 +56,32 @@ import rx.Observable;
  */
 
 public interface McService {
+
+
+
+    @FormUrlEncoded
+    @POST("api/v1/resources/promote/apply")
+    Observable<EmResult> promoteApply(@Field("realName") String realName,
+                                      @Field("phone") String phone,
+                                      @Field("type") int type);
+
+    @GET("api/v1/resources/promoter")
+    Observable<EmResult2<MyPopularizeUrlBean>> getPromoteUrl(@Query("phone") String phone);
+
+    @GET("api/v1/resources/promoter/passenger/appList")
+    Observable<EmResult2<MyPopularizeMainBean>> getPromoteAppList(@Query("phone") String phone);
+
+    @GET("api/v1/resources/promote/settlement/records")
+    Observable<EmResult2<List<MyPopularizeRecordBean>>> getPromoteRecords(@Query("phone") String phone,
+                                                                          @Query("type") int type);
+
+    @FormUrlEncoded
+    @POST("api/v1/resources/promote/settlement/driverApply")
+    Observable<EmResult> promoteSettlementApply(@Field("settlementTotal") String settlementTotal,
+                                                @Field("promoterAppId") long promoterAppId);
+
+    @GET("api/v1/order/order_fee/commissionDetailApp")
+    Observable<EmResult2<List<MyPopularizeFeeDetailBean>>> getPromoteDetail(@Query("promoterPassengerId") long passengerId);
 
 
 

@@ -18,6 +18,7 @@ import java.util.List;
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
  * FileName: DetailAdapter
+ *
  * @Author: shine
  * Date: 2018/12/24 下午1:10
  * Description:
@@ -65,19 +66,26 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailHold
             holder.detailPurpose.setText("后台充值");
         } else if (TextUtils.equals(detail.purpose, "ALIPAY_DRIVER_RECHARGE")) {
             holder.detailPurpose.setText("支付宝充值");
-        }else if (TextUtils.equals(detail.purpose, "WECHAT_DRIVER_RECHARGE")) {
+        } else if (TextUtils.equals(detail.purpose, "WECHAT_DRIVER_RECHARGE")) {
             holder.detailPurpose.setText("微信充值");
-        }else if (TextUtils.equals(detail.purpose, "PAY_DRIVER_ROYALTY")){
+        } else if (TextUtils.equals(detail.purpose, "PAY_DRIVER_ROYALTY")) {
             holder.detailPurpose.setText("提成");
-        }else if (TextUtils.equals(detail.purpose, "DRIVER_PUT_FORWARD")) {
+        } else if (TextUtils.equals(detail.purpose, "DRIVER_PUT_FORWARD")) {
             holder.detailPurpose.setText("提现申請");
-        }else if (TextUtils.equals(detail.purpose, "REJECT_PUT_FORWARD")) {
+        } else if (TextUtils.equals(detail.purpose, "REJECT_PUT_FORWARD")) {
             holder.detailPurpose.setText("提现拒絕");
-        }else if (TextUtils.equals(detail.purpose, "ACCEPT_PUT_FORWARD")) {
+        } else if (TextUtils.equals(detail.purpose, "ACCEPT_PUT_FORWARD")) {
             holder.detailPurpose.setText("提现通过");
         } else if (TextUtils.equals(detail.purpose, "PAY_PASSENGER_BALANCE")) {
             holder.detailPurpose.setText("乘客支付");
-        }else {
+        } else if (TextUtils.equals(detail.purpose, "SETTLEMENT_APPLY")) {
+            holder.detailPurpose.setText("结算扣款");
+
+        } else if (TextUtils.equals(detail.purpose, "PAY_PASSENGER_COMMISSION")) {
+
+            holder.detailPurpose.setText("返佣佣金");
+
+        } else {
             holder.detailPurpose.setText("其他");
         }
 

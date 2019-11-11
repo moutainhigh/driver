@@ -4,6 +4,28 @@
     <application>
 
         <activity
+            android:name=".activity.MyPopularizeProcessActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MyPopularizeApplyRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MyPopularizeCountOnActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MyPopularizeFeeDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MyPopularizeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MyPopularizeCodeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PopularizeActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".activity.LoginActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="portrait"

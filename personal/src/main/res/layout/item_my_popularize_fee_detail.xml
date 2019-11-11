@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="52dp"
+    android:background="@android:color/white"
+    android:paddingStart="12dp"
+    android:paddingEnd="12dp">
+
+
+    <TextView
+        android:id="@+id/itemMyPopularizeFeeDetailTvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="2019-11-04 13:40"
+        android:textColor="@color/colorSub"
+        android:textSize="@dimen/sizeContent" />
+
+    <TextView
+        android:id="@+id/itemMyPopularizeFeeDetailTvPrize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|end"
+        android:text="¥21.00"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/sizeContent" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sizeLine"
+        android:layout_gravity="bottom"
+        android:background="@color/colorLine" />
+
+</FrameLayout>
