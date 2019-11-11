@@ -212,8 +212,8 @@ public class GrabActivity2 extends RxBaseActivity implements GrabContract.View {
             if (newOrder.orderId == order.orderId
                     && (newOrder.status == DJOrderStatus.NEW_ORDER || newOrder.status == DJOrderStatus.PAIDAN_ORDER)
                     ) {
-                //重置时间
-                order.countTime = GRAB_TOTAL_TIME;
+                //重置时间 （同一个订单连续来的时候有bug）
+//                order.countTime = GRAB_TOTAL_TIME;
                 haveSame = true;
             }
         }
