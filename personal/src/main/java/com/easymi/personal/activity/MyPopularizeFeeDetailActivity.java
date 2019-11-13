@@ -67,7 +67,6 @@ public class MyPopularizeFeeDetailActivity extends RxBaseActivity {
                         .setText(R.id.itemMyPopularizeFeeDetailTvPrize, "¥" + CommonUtil.d2s(item.commissionFee, "0.00"));
             }
         };
-        adapter.addHeaderView(getHeaderView());
         myPopularizeFeeDetailRv.getRecyclerView().setAdapter(adapter);
         myPopularizeFeeDetailRv.setOnLoadListener(new SwipeRecyclerView.OnLoadListener() {
             @Override
@@ -99,7 +98,9 @@ public class MyPopularizeFeeDetailActivity extends RxBaseActivity {
                         if (myPopularizeFeeDetailBeans.isEmpty()) {
                             adapter.setEmptyView(new CusErrLayout(MyPopularizeFeeDetailActivity.this));
                         } else {
-                            adapter.addHeaderView(getHeaderView());
+                            if (adapter.getHeaderLayoutCount() == 0) {
+                                adapter.addHeaderView(getHeaderView());
+                            }
                         }
                         myPopularizeFeeDetailRv.complete();
                     }

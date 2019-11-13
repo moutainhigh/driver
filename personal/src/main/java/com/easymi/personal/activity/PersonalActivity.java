@@ -187,7 +187,7 @@ public class PersonalActivity extends RxBaseActivity {
             personCenterLlPopularize.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ARouter.getInstance().build("/personal/PopularizeActivity").navigation();
+                    startActivity(new Intent(PersonalActivity.this,PopularizeActivity.class));
                 }
             });
             if (employ.promoteApplyStatus == 0) {

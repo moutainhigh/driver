@@ -11,6 +11,7 @@ import com.easymi.personal.entity.MyPopularizeFeeDetailBean;
 import com.easymi.personal.entity.MyPopularizeMainBean;
 import com.easymi.personal.entity.MyPopularizeRecordBean;
 import com.easymi.personal.entity.MyPopularizeUrlBean;
+import com.easymi.personal.entity.PromoteDetail;
 import com.easymi.personal.entity.Register;
 import com.easymi.personal.result.AnnouncementResult;
 import com.easymi.personal.result.ArticleResult;
@@ -83,6 +84,9 @@ public interface McService {
     @GET("api/v1/order/order_fee/commissionDetailApp")
     Observable<EmResult2<List<MyPopularizeFeeDetailBean>>> getPromoteDetail(@Query("promoterPassengerId") long passengerId);
 
+    @GET("api/v1/resources/promote/apply/details")
+    Observable<EmResult2<PromoteDetail>> getPromoteApplyDetail(@Query("phone") String phone,
+                                                               @Query("type") int type);
 
 
     @GET("api/v1/system/config/payment")
