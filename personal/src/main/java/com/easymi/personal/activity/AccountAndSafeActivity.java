@@ -8,10 +8,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.easymi.component.base.RxBaseActivity;
+import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.R;
 
 public class AccountAndSafeActivity extends RxBaseActivity {
+
+    TextView tv_status;
+
     @Override
     public boolean isEnableSwipe() {
         return false;
@@ -24,12 +28,9 @@ public class AccountAndSafeActivity extends RxBaseActivity {
 
     @Override
     public void initViews(Bundle savedInstanceState) {
-        findViewById(R.id.delete_account).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(AccountAndSafeActivity.this, UnregisterActivity.class));
-            }
-        });
+        tv_status = findViewById(R.id.tv_status);
+        findViewById(R.id.delete_account).setOnClickListener(v -> startActivity(new Intent(this, UnregisterActivity.class)));
+        findViewById(R.id.ll_face_check).setOnClickListener(v -> ToastUtil.showMessage(this,"点击了刷脸"));
     }
 
     @Override

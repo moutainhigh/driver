@@ -319,4 +319,10 @@
     <string name="renminbi">¥</string>
     <string name="p_car_info">车辆信息</string>
 
+
+    <string name="p_face_check">刷脸认证</string>
+    <string name="p_face_check_hint">认证后即可开始接单等操作</string>
+    <string name="p_no_check">未认证</string>
+    <string name="p_have_check">已认证</string>
+
 </resources>
