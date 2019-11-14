@@ -538,17 +538,18 @@ public class FlowActivity extends RxPayActivity implements
 
             @Override
             public void finishTask(long scheduleId) {
-                Log.e("hufeng/finishTask", "finishTask");
                 presenter.finishTask(scheduleId);
             }
         };
     }
-
+    Dialog dialog = null;
     private void createDialog(int type, long orderId, double money) {
         if (type == 3) {
             showDialog(orderId, money);
         } else {
-            Dialog dialog = new Dialog(this);
+            if (dialog == null){
+                dialog = new Dialog(this);
+            }
             View view = LayoutInflater.from(this).inflate(type == 2 ? R.layout.cus_list_dialog_order : R.layout.cus_list_dialog_pay, null);
             dialog.setContentView(view);
             TextView dialogTvCancel = view.findViewById(R.id.dialog_tv_cancel);

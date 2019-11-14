@@ -61,6 +61,8 @@ import com.google.gson.Gson;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -905,7 +907,17 @@ public class CreateOrderActivity extends RxPayActivity {
                 }
             }
         };
-        editText.setFilters(new InputFilter[]{filter});
+        InputFilter filter_speChat = new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence charSequence, int i, int i1, Spanned spanned, int i2, int i3) {
+                String speChat = "[`~!@#_$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）— +|{}【】‘；：”“’。，、？]";
+                Pattern pattern = Pattern.compile(speChat);
+                Matcher matcher = pattern.matcher(charSequence.toString());
+                if (matcher.find()) return "";
+                else return null;
+            }
+        };
+        editText.setFilters(new InputFilter[]{filter,filter_speChat});
     }
 
 }

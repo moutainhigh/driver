@@ -9,6 +9,8 @@ import android.widget.TextView;
 import com.easymi.component.R;
 import com.easymi.component.widget.dialog.BaseBottomDialog;
 
+import java.text.DecimalFormat;
+
 /**
  * @Copyright (C), 2012-2019, Sichuan Xiaoka Technology Co., Ltd.
  * @FileName: ComPayDialog
@@ -46,21 +48,24 @@ public class ComPayDialog extends BaseBottomDialog {
         tv_cancel = findViewById(R.id.tv_cancel);
         if (money >= 0) {
             tv_prise.setVisibility(View.VISIBLE);
-            tv_prise.setText("￥" + money);
+            tv_prise.setText("￥" + new DecimalFormat("######0.00").format(money));
         }
         pay_wenXin.setOnClickListener(view -> {
             if (onMyClickListener != null) {
                 onMyClickListener.onItemClick(view);
+                dismiss();
             }
         });
         pay_zfb.setOnClickListener(view -> {
             if (onMyClickListener != null) {
                 onMyClickListener.onItemClick(view);
+                dismiss();
             }
         });
         pay_balance.setOnClickListener(view -> {
             if (onMyClickListener != null) {
                 onMyClickListener.onItemClick(view);
+                dismiss();
             }
         });
         tv_cancel.setOnClickListener(view -> {

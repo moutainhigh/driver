@@ -144,18 +144,20 @@ public abstract class RxPayActivity extends RxBaseActivity {
 
 
     protected void showDialog(long orderId, double money) {
-        ComPayDialog comPayDialog = new ComPayDialog(this);
-        comPayDialog.setMoney(money);
-        comPayDialog.setOnMyClickListener(view -> {
-            comPayDialog.dismiss();
-            if (view.getId() == R.id.pay_wenXin) {
-                toPay("CHANNEL_APP_WECHAT", orderId);
-            } else if (view.getId() == R.id.pay_zfb) {
-                toPay("CHANNEL_APP_ALI", orderId);
-            } else if (view.getId() == R.id.pay_balance) {
-                toPay("PAY_DRIVER_BALANCE", orderId);
-            }
-        });
+        ComPayDialog comPayDialog = null;
+        if (comPayDialog == null){
+            comPayDialog = new ComPayDialog(this);
+            comPayDialog.setMoney(money);
+            comPayDialog.setOnMyClickListener(view -> {
+                if (view.getId() == R.id.pay_wenXin) {
+                    toPay("CHANNEL_APP_WECHAT", orderId);
+                } else if (view.getId() == R.id.pay_zfb) {
+                    toPay("CHANNEL_APP_ALI", orderId);
+                } else if (view.getId() == R.id.pay_balance) {
+                    toPay("PAY_DRIVER_BALANCE", orderId);
+                }
+            });
+        }
         comPayDialog.show();
     }
 

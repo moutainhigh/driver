@@ -536,15 +536,18 @@ public class WorkPresenter implements WorkContract.Presenter {
                 true, result -> {
             if (result == null || result.getCode() != 1) {
                 ToastUtil.showMessage(context, "未绑定该业务车辆，不能接单");
+                Vehicle.deleteAll();
             } else {
                 String driverService = EmUtil.getEmployInfo().serviceType;
                 if (result.data != null && result.data.size() > 0) {
                     for (Vehicle vehicle : result.data) {
                         if (TextUtils.equals(vehicle.serviceType, driverService)) {
+                            Vehicle.deleteAll();
                             vehicle.saveOrUpdate(employ.id);
                         }
                     }
                 } else {
+                    Vehicle.deleteAll();
                     if (employ.serviceType.contains(Config.ZHUANCHE)
                             || employ.serviceType.contains(Config.TAXI)
                     ) {

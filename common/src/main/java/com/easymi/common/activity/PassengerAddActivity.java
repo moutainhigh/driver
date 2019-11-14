@@ -1,8 +1,13 @@
 package com.easymi.common.activity;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RadioGroup;
 
 import com.easymi.common.CommApiService;
@@ -14,10 +19,13 @@ import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult;
+import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -99,6 +107,29 @@ public class PassengerAddActivity extends RxBaseActivity {
                 addPassenger();
             }
         });
+        setEditTextInputSpace(passengerAddEtNum);
+        passengerAddEtNum.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (StringUtils.isNotBlank(editable.toString())) {
+                    if (!editable.toString().substring(0, 1).equals("1")) {
+                        ToastUtil.showMessage(PassengerAddActivity.this, "请输入正确的电话号码");
+                    }
+                }
+            }
+        });
+
+
 
     }
 
@@ -118,6 +149,13 @@ public class PassengerAddActivity extends RxBaseActivity {
                             "请输入监护人电话" : "请输入电话号码");
             return;
         }
+        if (!passengerAddEtNum.getText().toString().substring(0, 1).equals("1")) {
+            ToastUtil.showMessage(PassengerAddActivity.this,
+                    passengerAddRg.getCheckedRadioButtonId() == R.id.passengerAddRbChild ?
+                            "请输入正确的监护人电话" : "请输入正确的电话号码");
+            return;
+        }
+
         if (TextUtils.isEmpty(passengerAddEtId.getText())) {
             ToastUtil.showMessage(PassengerAddActivity.this,
                     passengerAddRg.getCheckedRadioButtonId() == R.id.passengerAddRbChild ?
@@ -154,4 +192,33 @@ public class PassengerAddActivity extends RxBaseActivity {
                 })));
     }
 
+
+    /**
+     * 禁止EditText输入空格和换行符
+     *
+     * @param editText EditText输入框
+     */
+    public void setEditTextInputSpace(EditText editText) {
+        InputFilter filter = new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                if (source.equals(" ") || source.toString().contentEquals("\n")) {
+                    return "";
+                } else {
+                    return null;
+                }
+            }
+        };
+        InputFilter filter_speChat = new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence charSequence, int i, int i1, Spanned spanned, int i2, int i3) {
+                String speChat = "[`~!@#_$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）— +|{}【】‘；：”“’。，、？]";
+                Pattern pattern = Pattern.compile(speChat);
+                Matcher matcher = pattern.matcher(charSequence.toString());
+                if (matcher.find()) return "";
+                else return null;
+            }
+        };
+        editText.setFilters(new InputFilter[]{filter,filter_speChat});
+    }
 }

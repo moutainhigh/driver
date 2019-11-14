@@ -150,6 +150,12 @@ public class Vehicle {
         }
     }
 
+    public static void deleteAll() {
+        SqliteHelper helper = SqliteHelper.getInstance();
+        SQLiteDatabase db = helper.openSqliteDatabase();
+        db.delete("t_Vehicle", null, null);
+    }
+
     /**
      * 判断司机对应的车型是否存在
      */
