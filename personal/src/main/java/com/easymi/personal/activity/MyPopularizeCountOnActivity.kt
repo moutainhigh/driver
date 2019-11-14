@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.text.Editable
-import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import com.easymi.common.CommApiService
@@ -58,7 +57,7 @@ class MyPopularizeCountOnActivity : RxBaseActivity(), View.OnClickListener {
     }
 
     fun setText(s: Editable?) {
-        if (s?.isEmpty() == false && s.toString().toDouble() > employ?.balance ?: 0.0) {
+        if (!s.isNullOrBlank() && s.toString().toDouble() > employ?.balance ?: 0.0) {
             myPopularizeCountOnTvAll.visibility = View.GONE;
             myPopularizeCountOnTvCurrent.setTextColor(ContextCompat.getColor(this, R.color.colorRed));
             myPopularizeCountOnTvCurrent.text = "输入金额超过剩余金额";
@@ -88,25 +87,18 @@ class MyPopularizeCountOnActivity : RxBaseActivity(), View.OnClickListener {
     }
 
     private fun promoteApply() {
-        if (!TextUtils.isEmpty(myPopularizeCountOnEt.text)) {
-            val contentDouble = try {
-                myPopularizeCountOnEt.text.toString().toDouble()
-            } catch (e: Exception) {
-                0.00
-            }
-            if (contentDouble > 0 && myPopularizeCountOnTvAll.isShown) {
-                ApiManager.getInstance().createApi(Config.HOST, McService::class.java)
-                        .promoteSettlementApply(myPopularizeCountOnEt.text.toString(), EmUtil.getEmployId())
-                        .filter(HttpResultFunc())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(MySubscriber(this, true, false, NoErrSubscriberListener {
-                            ToastUtil.showMessage(this, "结算成功")
-                            finish()
-                        }))
-            } else {
-                ToastUtil.showMessage(this, "请输入正确的金额")
-            }
+        if (!myPopularizeCountOnEt.text.isNullOrBlank() &&
+                myPopularizeCountOnEt.text.toString().toDouble() > 0
+                && myPopularizeCountOnTvAll.isShown) {
+            ApiManager.getInstance().createApi(Config.HOST, McService::class.java)
+                    .promoteSettlementApply(myPopularizeCountOnEt.text.toString(), EmUtil.getEmployId())
+                    .filter(HttpResultFunc())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(MySubscriber(this, true, false, NoErrSubscriberListener {
+                        ToastUtil.showMessage(this, "结算成功")
+                        finish()
+                    }))
         } else {
             ToastUtil.showMessage(this, "请输入正确的金额")
         }

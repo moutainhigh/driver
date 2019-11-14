@@ -33,7 +33,7 @@ class MyPopularizeActivity : RxBaseActivity(), View.OnClickListener {
                 helper?.run {
                     item?.run {
                         setText(R.id.itemMyPopularizeTvName, passengerName)
-                        setText(R.id.itemMyPopularizeTvPhone, passengerPhone)
+                        setText(R.id.itemMyPopularizeTvPhone, passengerPhone.replaceRange(3, 7, "****"))
                         setText(R.id.itemMyPopularizeTvTime, TimeUtil.getTime("yyyy-MM-dd", created * 1000))
                         setText(R.id.itemMyPopularizeTvMoney, CommonUtil.d2s(commissionAmount, "0.00"))
                     }
@@ -55,12 +55,11 @@ class MyPopularizeActivity : RxBaseActivity(), View.OnClickListener {
         myPopularizeHeaderTvCountOn.setOnClickListener(this);
         myPopularizeRv.layoutManager = (LinearLayoutManager(this))
         adapter.setOnItemClickListener { adapter, view, position ->
-            startActivity(Intent().apply {
-                component = ComponentName(this@MyPopularizeActivity, MyPopularizeFeeDetailActivity::class.java)
+            startActivity(Intent(this, MyPopularizeFeeDetailActivity::class.java).apply {
                 putExtra("data", adapter.data[position] as? MyPopularizeBean)
             })
         }
-        myPopularizeRv.setAdapter(adapter)
+        myPopularizeRv.adapter = adapter
         getData()
     }
 

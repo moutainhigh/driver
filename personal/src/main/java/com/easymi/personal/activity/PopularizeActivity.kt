@@ -136,14 +136,17 @@ class PopularizeActivity : RxBaseActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        if (v?.id == R.id.popularizeTvActionGreen) {
-            if (promoteDetail?.status == 3) {
-                startActivity(Intent(this, MyPopularizeCodeActivity::class.java));
-            } else {
-                bePopularizer();
+        v?.run {
+            when (id) {
+                R.id.popularizeTvActionGreen -> {
+                    if (promoteDetail?.status == 3) {
+                        startActivity(Intent(this@PopularizeActivity, MyPopularizeCodeActivity::class.java));
+                    } else {
+                        bePopularizer();
+                    }
+                }
+                R.id.popularizeTvActionGreenLine -> startActivity(Intent(this@PopularizeActivity, MyPopularizeActivity::class.java));
             }
-        } else if (v?.id == R.id.popularizeTvActionGreenLine) {
-            startActivity(Intent(this, MyPopularizeActivity::class.java));
         }
     }
 

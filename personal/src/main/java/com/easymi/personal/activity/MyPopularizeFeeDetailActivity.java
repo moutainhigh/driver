@@ -50,7 +50,7 @@ public class MyPopularizeFeeDetailActivity extends RxBaseActivity {
         View headerView = getLayoutInflater().inflate(R.layout.item_my_popularize_fee_detail_header, myPopularizeFeeDetailRv, false);
         itemMyPopularizeFeeDetailHeaderTvContent = headerView.findViewById(R.id.itemMyPopularizeFeeDetailHeaderTvContent);
         itemMyPopularizeFeeDetailHeaderTvPrise = headerView.findViewById(R.id.itemMyPopularizeFeeDetailHeaderTvPrise);
-        itemMyPopularizeFeeDetailHeaderTvContent.setText(myPopularizeBean.passengerName + " " + myPopularizeBean.passengerPhone);
+        itemMyPopularizeFeeDetailHeaderTvContent.setText(myPopularizeBean.passengerName + " " + new StringBuilder(myPopularizeBean.passengerPhone).replace(3, 7, "****"));
         itemMyPopularizeFeeDetailHeaderTvPrise.setText("¥" + CommonUtil.d2s(myPopularizeBean.commissionAmount, "0.00"));
         return headerView;
     }
