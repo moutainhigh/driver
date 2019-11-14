@@ -144,7 +144,7 @@ public class BanciSelectActivity extends RxBaseActivity implements View.OnClickL
     @Override
     public void initToolBar() {
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("时段选择");
+        toolbar.setTitle("选择时段");
         toolbar.setLeftIcon(R.drawable.ic_arrow_back, v -> finish());
     }
 

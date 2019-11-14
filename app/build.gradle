@@ -70,7 +70,7 @@ android {
         //预发环境
         prepare {
             dimension "App"//同在App这个名字维度
-            buildConfigField "String", "HOST", '"http://shaoyangapi.rvaka.cn/"'
+            buildConfigField "String", "HOST", '"http://v6api.rvaka.cn/"'
             buildConfigField "String", "H5_HOST", '"http://v6h5.rvaka.cn/"'
             buildConfigField "String", "IMG_SERVER", '"https://prevassets.xiaokakj.com/"'
             buildConfigField "boolean", "IS_ENCRYPT", "true"

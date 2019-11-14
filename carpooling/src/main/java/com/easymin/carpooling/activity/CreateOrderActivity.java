@@ -10,7 +10,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
@@ -215,6 +217,7 @@ public class CreateOrderActivity extends RxPayActivity {
             startActivityForResult(intent, 3);
         });
         carPoolCreateOrderEtPhone.setInputType(InputType.TYPE_NULL);
+        setEditTextInputSpace(carPoolCreateOrderEtPhone);
         carPoolCreateOrderEtPhone.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -255,11 +258,7 @@ public class CreateOrderActivity extends RxPayActivity {
             setSubAddEnable();
             carPoolCreateOrderTvNum.setText("" + currentNo);
 
-//            seatNo--;
-//            carPoolCreateOrderTvNum.setText("" + seatNo);
-//
             setBtnEnable();
-//            calcPrice();
         });
         carPoolCreateOrderTvAdd.setOnClickListener(view -> {
             if (currentNo >= maxTicket) {
@@ -269,11 +268,8 @@ public class CreateOrderActivity extends RxPayActivity {
                 setSubAddEnable();
                 carPoolCreateOrderTvNum.setText("" + currentNo);
             }
-//            seatNo++;
-//            carPoolCreateOrderTvNum.setText("" + seatNo);
-//
+
             setBtnEnable();
-//            calcPrice();
         });
         carPoolCreateOrderBtCreate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -654,17 +650,17 @@ public class CreateOrderActivity extends RxPayActivity {
                 carPoolCreateOrderBtCreate.setEnabled(false);
                 carPoolCreateOrderBtCreate.setBackgroundResource(R.drawable.cor4_solid_sub);
             }
-            if (currentNo == 1) {
-                carPoolCreateOrderTvSub.setEnabled(false);
-            } else {
-                carPoolCreateOrderTvSub.setEnabled(true);
-            }
-
-            if (pcOrder != null && currentNo < pcOrder.seats) {
-                carPoolCreateOrderTvAdd.setEnabled(true);
-            } else {
-                carPoolCreateOrderTvAdd.setEnabled(false);
-            }
+//            if (currentNo == 1) {
+//                carPoolCreateOrderTvSub.setEnabled(false);
+//            } else {
+//                carPoolCreateOrderTvSub.setEnabled(true);
+//            }
+//
+//            if (pcOrder != null && currentNo < pcOrder.seats) {
+//                carPoolCreateOrderTvAdd.setEnabled(true);
+//            } else {
+//                carPoolCreateOrderTvAdd.setEnabled(false);
+//            }
         } else {
             if (pcOrder != null
                     && stationResult != null
@@ -889,6 +885,27 @@ public class CreateOrderActivity extends RxPayActivity {
                 aLong -> {
                     maxTicket = aLong;
                 })));
+    }
+
+
+
+    /**
+     * 禁止EditText输入空格和换行符
+     *
+     * @param editText EditText输入框
+     */
+    public void setEditTextInputSpace(EditText editText) {
+        InputFilter filter = new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                if (source.equals(" ") || source.toString().contentEquals("\n")) {
+                    return "";
+                } else {
+                    return null;
+                }
+            }
+        };
+        editText.setFilters(new InputFilter[]{filter});
     }
 
 }

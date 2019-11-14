@@ -359,13 +359,14 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
     }
 
     private long id;
+    boolean isIn = false;
 
     private void checkIsIn(LatLng latLng) {
         if (polygonMap.size() == 0) {
             mConfirmPosBtn.setEnabled(false);
             return;
         }
-        boolean isIn = false;
+
         for (int i = 0; i < polygonMap.size(); i++) {
             long currentId = polygonMap.keyAt(i);
             isIn = polygonMap.get(currentId).contains(latLng);
@@ -374,8 +375,11 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
                 break;
             }
         }
+        checkButton();
+    }
 
-        if (isIn) {
+    public void checkButton(){
+        if (isIn && isGeo) {
             mConfirmPosBtn.setEnabled(true);
             mConfirmPosBtn.setBackgroundResource(R.drawable.pc_shape_button_blue);
         } else {
@@ -383,6 +387,7 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
             mConfirmPosBtn.setBackgroundResource(R.drawable.pc_shape_button_gray);
         }
     }
+
 
     final Object lock = new Object();
 
@@ -621,7 +626,6 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
                 centerLatLng = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
                 getAddressByLatlng(centerLatLng);
                 checkIsIn(centerLatLng);
-
             }
         });// 对amap添加移动地图事件监听器
     }
@@ -654,6 +658,8 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
         return contains;
     }
 
+     boolean isGeo = false;
+
     /**
      * 逆地理编码
      *
@@ -665,6 +671,9 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
         RegeocodeQuery query = new RegeocodeQuery(latLonPoint, 500f, GeocodeSearch.AMAP);
         //异步查询
         mGeocodeSearch.getFromLocationAsyn(query);
+
+        isGeo = false;
+        checkButton();
     }
 
     /**
@@ -709,6 +718,9 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
         mLongitude = (float) regeocodeResult.getRegeocodeQuery().getPoint().getLongitude();
         mLatitude = (float) regeocodeResult.getRegeocodeQuery().getPoint().getLatitude();
         mInputEt.setText(simpleAddress);
+
+        isGeo = true;
+        checkButton();
     }
 
     @Override
