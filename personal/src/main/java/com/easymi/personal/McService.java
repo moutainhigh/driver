@@ -1,6 +1,8 @@
 package com.easymi.personal;
 
 import com.easymi.common.entity.CompanyList;
+import com.easymi.common.entity.FaceAuth;
+import com.easymi.common.entity.FaceConfig;
 import com.easymi.common.entity.RegisterRes;
 import com.easymi.component.Config;
 import com.easymi.component.pay.PayType;
@@ -547,5 +549,22 @@ public interface McService {
     @DELETE("/api/v1/resources/driver/{id} ")
     Observable<EmResult> unregisterAccount(@Path("id") Long id);
 
+
+
+    /**
+     * 获取当前司机人脸认证状态
+     *
+     */
+    @GET("api/v1/safe/face/authentication/record/state")
+    Observable<FaceAuth> faceState();
+
+
+
+    /**
+     * 获取当前司机人脸认证状态
+     *
+     */
+    @GET("api/v1/safe/face/config")
+    Observable<FaceConfig> faceConfig();
 
 }

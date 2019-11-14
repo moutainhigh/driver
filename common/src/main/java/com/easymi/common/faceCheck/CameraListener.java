@@ -1,4 +1,4 @@
-package com.easymi.component.faceCheck;
+package com.easymi.common.faceCheck;
 
 import android.hardware.Camera;
 

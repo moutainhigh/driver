@@ -1,4 +1,4 @@
-package com.easymi.component.faceCheck;
+package com.easymi.common.faceCheck;
 
 /**
  * @Copyright (C), 2012-2019, Sichuan Xiaoka Technology Co., Ltd.

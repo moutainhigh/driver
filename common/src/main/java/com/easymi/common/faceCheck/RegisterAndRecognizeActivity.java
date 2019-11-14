@@ -1,22 +1,19 @@
-package com.easymi.component.faceCheck;
+package com.easymi.common.faceCheck;
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.hardware.Camera;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.TextureView;
+import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
@@ -26,29 +23,45 @@ import com.arcsoft.face.FaceEngine;
 import com.arcsoft.face.FaceFeature;
 import com.arcsoft.face.LivenessInfo;
 import com.arcsoft.face.VersionInfo;
+import com.easymi.common.CommApiService;
+import com.easymi.common.entity.FaceConfig;
+import com.easymi.common.entity.QiNiuToken;
 import com.easymi.component.Config;
 import com.easymi.component.R;
 import com.easymi.component.base.RxBaseActivity;
-import com.easymi.component.network.ProgressDismissListener;
-import com.easymi.component.network.ProgressHandler;
+import com.easymi.component.entity.BaseOrder;
+import com.easymi.component.entity.EmLoc;
+import com.easymi.component.network.ApiManager;
+import com.easymi.component.network.HaveErrSubscriberListener;
+import com.easymi.component.network.HttpResultFunc;
+import com.easymi.component.network.HttpResultFunc2;
+import com.easymi.component.network.MySubscriber;
+import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.CsSharedPreferences;
+import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.RxProgressHUD;
+import com.easymin.driver.securitycenter.ComService;
+import com.easymin.driver.securitycenter.entity.Pic;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 import static com.easymi.component.Config.FT_ORIENT;
 
@@ -78,6 +91,11 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
             Manifest.permission.CAMERA,
             Manifest.permission.READ_PHONE_STATE
     };
+
+    /**
+     * 0 认证 1 对比
+     */
+    int flag = 0;
 
     /**
      * 优先打开的摄像头，本界面主要用于单目RGB摄像头设备，因此默认打开前置
@@ -130,7 +148,11 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
     public void initToolBar() {
         cusToolbar = findViewById(R.id.cus_toolbar);
         cusToolbar.setLeftBack(view -> finish());
-        cusToolbar.setTitle("刷脸认证");
+        if (flag == 0){
+            cusToolbar.setTitle("刷脸认证");
+        }else {
+            cusToolbar.setTitle("刷脸识别");
+        }
     }
 
     @Override
@@ -149,6 +171,9 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
         tv_hint = findViewById(R.id.tv_hint);
         //在布局结束后才做初始化操作
         texture_preview.getViewTreeObserver().addOnGlobalLayoutListener(this);
+
+        flag = getIntent().getIntExtra("flag",0);
+        getQiniuToken();
     }
 
     private FaceEngine faceEngine = new FaceEngine();
@@ -319,7 +344,6 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
                     } else if (liveness == LivenessInfo.UNKNOWN) {
                         Log.e(TAG, "未知");
                     }
-
                 } else {
                     if (increaseAndGetValue(livenessErrorRetryMap, requestId) > MAX_RETRY_TIME) {
                         livenessErrorRetryMap.put(requestId, 0);
@@ -397,6 +421,7 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
 
         PictureListener pictureListener = picturePath -> {
             Log.e(TAG, "弹窗关");
+            updateImage(new File(picturePath));
         };
 
         cameraHelper = new CameraHelper.Builder()
@@ -455,42 +480,6 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
     }
 
     /**
-     * 延迟 FAIL_RETRY_INTERVAL 重新进行人脸识别
-     *
-     * @param requestId 人脸ID
-     */
-    private void retryRecognizeDelayed(final Integer requestId) {
-        requestFeatureStatusMap.put(requestId, RequestFeatureStatus.FAILED);
-        Observable.timer(FAIL_RETRY_INTERVAL, TimeUnit.MILLISECONDS)
-                .subscribe(new Observer<Long>() {
-                    Disposable disposable;
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        disposable = d;
-                        delayFaceTaskCompositeDisposable.add(disposable);
-                    }
-
-                    @Override
-                    public void onNext(Long aLong) {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        // 将该人脸特征提取状态置为FAILED，帧回调处理时会重新进行活体检测
-                        requestFeatureStatusMap.put(requestId, RequestFeatureStatus.TO_RETRY);
-                        delayFaceTaskCompositeDisposable.remove(disposable);
-                    }
-                });
-    }
-
-    /**
      * 延迟 FAIL_RETRY_INTERVAL 重新进行活体检测
      *
      * @param requestId 人脸ID
@@ -525,5 +514,101 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
                 });
     }
 
+    /**
+     *  图片上传七牛云token
+     */
+    String qiniuToken;
 
+    /**
+     * 认证或者对比图片
+     */
+    String faceAuthPic;
+
+    /**
+     * 获取七牛云token
+     */
+    public void getQiniuToken() {
+        rx.Observable<QiNiuToken> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .getToken()
+                .subscribeOn(rx.schedulers.Schedulers.io())
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(rx.schedulers.Schedulers.io())
+                .observeOn(rx.android.schedulers.AndroidSchedulers.mainThread());;
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, qiNiuToken -> {
+            if (qiNiuToken.getCode() == 1) {
+                qiniuToken = qiNiuToken.qiNiu;
+                Log.e(TAG,"qiniuToken:"+qiniuToken);
+                if (qiniuToken == null) {
+                    throw new IllegalArgumentException("token无效");
+                }
+            }
+        })));
+    }
+
+
+    /**
+     * 上传图片
+     *
+     * @param file
+     */
+    public void updateImage(File file) {
+        if (TextUtils.isEmpty(qiniuToken)){
+            ToastUtil.showMessage(this,"配置获取错误，请稍后重试");
+            return;
+        }
+        RequestBody photoRequestBody = RequestBody.create(MediaType.parse("image/jpg"), file);
+        RequestBody tokenBody = RequestBody.create(MediaType.parse("multipart/form-data"), qiniuToken);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), photoRequestBody);
+
+        rx.Observable<Pic> observable = ApiManager.getInstance().createApi(Config.HOST, ComService.class)
+                .uploadPic(Config.HOST_UP_PIC, tokenBody, body)
+                .subscribeOn(rx.schedulers.Schedulers.io())
+                .observeOn(rx.android.schedulers.AndroidSchedulers.mainThread());
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, pic -> {
+            faceAuthPic = pic.hashCode;
+            if (flag == 0){
+                faceAuth(faceAuthPic);
+            }else {
+                faceCompar(faceAuthPic);
+            }
+        })));
+    }
+
+    /**
+     * 人脸认证
+     * @param picPath
+     */
+    public void faceAuth(String picPath){
+        EmLoc emLoc = EmUtil.getLastLoc();
+        rx.Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .faceAuth(picPath,emLoc.address,emLoc.longitude,emLoc.latitude)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(rx.schedulers.Schedulers.io())
+                .observeOn(rx.android.schedulers.AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,false, emResult -> {
+            ToastUtil.showMessage(RegisterAndRecognizeActivity.this, "认证成功");
+            setResult(RESULT_OK);
+            finish();
+        })));
+    }
+
+    /**
+     * 人脸识别
+     * @param picPath
+     */
+    public void faceCompar(String picPath){
+        EmLoc emLoc = EmUtil.getLastLoc();
+        rx.Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+                .faceCompar(picPath,emLoc.address,emLoc.longitude,emLoc.latitude)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(rx.schedulers.Schedulers.io())
+                .observeOn(rx.android.schedulers.AndroidSchedulers.mainThread());
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,false, emResult -> {
+            ToastUtil.showMessage(RegisterAndRecognizeActivity.this, "识别成功");
+            setResult(RESULT_OK);
+            finish();
+        })));
+    }
 }

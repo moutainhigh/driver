@@ -16,8 +16,9 @@
         android:orientation="horizontal"
         android:padding="15dp"
         android:gravity="center"
-        android:layout_margin="6dp"
-        android:background="@drawable/corners_white_4dp">
+        android:layout_marginTop="12dp"
+        android:background="@drawable/corners_white_4dp"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="28dp"
@@ -52,7 +53,7 @@
             android:layout_height="wrap_content"
             android:text="@string/p_no_check"
             android:drawablePadding="5dp"
-            android:textColor="@color/color_999999"
+            android:textColor="@color/color_red"
             android:textSize="14sp"
             android:drawableRight="@mipmap/com_right_arrow"/>
 
@@ -64,7 +65,7 @@
         android:orientation="horizontal"
         android:padding="15dp"
         android:gravity="center"
-        android:layout_margin="6dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/corners_white_4dp">
 
 

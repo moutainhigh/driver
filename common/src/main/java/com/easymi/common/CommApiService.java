@@ -450,8 +450,6 @@ public interface CommApiService {
                                           @Query("appKey") String appKey);
 
     /**
-     * 
-     *
      * @param appKey
      * @param json
      * @return
@@ -650,5 +648,40 @@ public interface CommApiService {
 
     @GET("api/v1/message/topic/driver_mqtt_config")
     Observable<EmResult2<MqttConfig>> getConfig();
+
+
+//////////人脸识别添加
+
+    /**
+     * 人脸认证
+     *
+     * @param imagePath 图片地址
+     * @param address   认证地址
+     * @param longitude 认证经度
+     * @param latitude  认证纬度
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/safe/face/authentication/record")
+    Observable<EmResult> faceAuth(@Field("imagePath") String imagePath,
+                                  @Field("address") String address,
+                                  @Field("longitude") double longitude,
+                                  @Field("latitude") double latitude);
+
+    /**
+     * 人脸对比
+     *
+     * @param imagePath 图片地址
+     * @param address   认证地址
+     * @param longitude 认证经度
+     * @param latitude  认证纬度
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/safe/face/identification/record")
+    Observable<EmResult> faceCompar(@Field("imagePath") String imagePath,
+                                    @Field("address") String address,
+                                    @Field("longitude") double longitude,
+                                    @Field("latitude") double latitude);
 
 }
