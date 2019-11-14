@@ -3,17 +3,21 @@ package com.easymi.personal.activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.easymi.common.entity.FaceAuth;
+import com.easymi.common.entity.FaceAuthResult;
 import com.easymi.common.entity.FaceConfig;
+import com.easymi.common.entity.FaceConfigResult;
 import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.common.faceCheck.RegisterAndRecognizeActivity;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
+import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.EmUtil;
@@ -64,7 +68,7 @@ public class AccountAndSafeActivity extends RxBaseActivity {
      * 司机当前人脸认证状态
      */
     public void faceState(){
-        Observable<FaceAuth> observable = ApiManager.getInstance()
+        Observable<FaceAuthResult> observable = ApiManager.getInstance()
                 .createApi(Config.HOST, McService.class)
                 .faceState()
                 .filter(new HttpResultFunc<>())
@@ -73,7 +77,7 @@ public class AccountAndSafeActivity extends RxBaseActivity {
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false,
                 false, faceAuth -> {
-            if (faceAuth.state == 1){
+            if (faceAuth.data.state == 1){
                 //已经认证
                 tv_status.setText(getResources().getString(R.string.p_have_check));
 
@@ -84,8 +88,8 @@ public class AccountAndSafeActivity extends RxBaseActivity {
                 //未认证
                 tv_status.setText(getResources().getString(R.string.p_no_check));
 
-                Drawable drawable = getResources().getDrawable(R.mipmap.com_right_arrow);
-                drawable.setBounds(5, 0, 0, 0);
+                Drawable drawable = ContextCompat.getDrawable(this,R.mipmap.com_right_arrow);
+                drawable.setBounds(drawable.getMinimumWidth(), 0, 0, 0);
                 tv_status.setCompoundDrawables(null, null, drawable, null);
 
                 tv_status.setTextColor(getResources().getColor(R.color.color_red));
@@ -99,7 +103,7 @@ public class AccountAndSafeActivity extends RxBaseActivity {
      * 获取人脸检测开关配置
      */
     public void faceConfig(){
-        Observable<FaceConfig> observable = ApiManager.getInstance()
+        Observable<FaceConfigResult> observable = ApiManager.getInstance()
                 .createApi(Config.HOST, McService.class)
                 .faceConfig()
                 .filter(new HttpResultFunc<>())
@@ -108,7 +112,7 @@ public class AccountAndSafeActivity extends RxBaseActivity {
 
         mRxManager.add(observable.subscribe(new MySubscriber<>(this, false,
                 false, faceConfig -> {
-            if (faceConfig.driverFaceState == 1){
+            if (faceConfig.data.driverFaceState == 1){
                 //开启
                 ll_face_check.setVisibility(View.VISIBLE);
                 faceState();

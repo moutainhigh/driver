@@ -46,5 +46,4 @@ dependencies {
     api rootProject.ext.constraintLayout
     annotationProcessor rootProject.ext.aroutercompiler
     api project(path: ':securitycenter')
-
 }

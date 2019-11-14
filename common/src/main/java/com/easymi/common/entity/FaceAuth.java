@@ -10,7 +10,7 @@ import com.easymi.component.result.EmResult;
  * @Description:
  * @History:
  */
-public class FaceAuth extends EmResult {
+public class FaceAuth {
 
     /**
      * id

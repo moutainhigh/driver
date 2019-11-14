@@ -4,16 +4,13 @@ import com.easymi.component.result.EmResult;
 
 /**
  * @Copyright (C), 2012-2019, Sichuan Xiaoka Technology Co., Ltd.
- * @FileName: FaceConfig
+ * @FileName: FaceConfigResult
  * @Author: hufeng
- * @Date: 2019/11/14 上午11:27
+ * @Date: 2019/11/14 下午6:12
  * @Description:
  * @History:
  */
-public class FaceConfig {
+public class FaceConfigResult extends EmResult{
 
-    /**
-     * 是否开启司机端人脸识别 1为开启 2为关闭
-     */
-    public int driverFaceState;
+    public FaceConfig data;
 }

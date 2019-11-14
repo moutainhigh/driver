@@ -2,7 +2,9 @@ package com.easymi.personal;
 
 import com.easymi.common.entity.CompanyList;
 import com.easymi.common.entity.FaceAuth;
+import com.easymi.common.entity.FaceAuthResult;
 import com.easymi.common.entity.FaceConfig;
+import com.easymi.common.entity.FaceConfigResult;
 import com.easymi.common.entity.RegisterRes;
 import com.easymi.component.Config;
 import com.easymi.component.pay.PayType;
@@ -556,7 +558,7 @@ public interface McService {
      *
      */
     @GET("api/v1/safe/face/authentication/record/state")
-    Observable<FaceAuth> faceState();
+    Observable<FaceAuthResult> faceState();
 
 
 
@@ -565,6 +567,6 @@ public interface McService {
      *
      */
     @GET("api/v1/safe/face/config")
-    Observable<FaceConfig> faceConfig();
+    Observable<FaceConfigResult> faceConfig();
 
 }
