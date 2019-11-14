@@ -580,10 +580,9 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
     private void toCenter() {
         switch (getIntent().getIntExtra("select_place_type", -1)) {
             case 1:
-                centerLatLng = new LatLng(EmUtil.getLastLoc().latitude, EmUtil.getLastLoc().longitude);
+                centerLatLng = new LatLng(mMapPosList.get(0).latitude, mMapPosList.get(0).longitude);
                 mAMap.animateCamera(CameraUpdateFactory.newLatLngZoom(centerLatLng, 14));
                 break;
-
             case 3:
                 centerLatLng = new LatLng(mMapPosList.get(mMapPosList.size() - 1).latitude, mMapPosList.get(mMapPosList.size() - 1).longitude);
                 mAMap.animateCamera(CameraUpdateFactory.newLatLngZoom(centerLatLng, 14));
