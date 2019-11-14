@@ -11,9 +11,14 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.support.annotation.StringRes;
 import android.support.multidex.MultiDexApplication;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.arcsoft.face.ActiveFileInfo;
+import com.arcsoft.face.ErrorInfo;
+import com.arcsoft.face.FaceEngine;
 import com.baidu.tts.client.SpeechError;
 import com.baidu.tts.client.SpeechSynthesizer;
 import com.baidu.tts.client.SpeechSynthesizerListener;
@@ -41,6 +46,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import tech.linjiang.pandora.Pandora;
 import tech.linjiang.pandora.function.IFunc;
 
@@ -598,5 +610,9 @@ public class XApp extends MultiDexApplication {
             return true;
         }
     }
+
+
+
+
 
 }

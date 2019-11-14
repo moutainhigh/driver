@@ -69,6 +69,11 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <activity
+            android:name=".faceCheck.RegisterAndRecognizeActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/ThemeSwipeBack" />
     </application>
 
 </manifest>

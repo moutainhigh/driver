@@ -63,6 +63,20 @@ public class Config {
      */
     public static String TTS_APP_SECRET;
 
+//// 人脸识别start
+
+    /**
+     * 人脸识别 appid  (虹软)
+     */
+    public static String FACE_APP_ID = "DdU5KdD96mNGpq949QLxzxa5nFvQoeVBnGkvdi1rXCfY";
+    /**
+     * 人脸识别 sdk_key  (虹软)
+     */
+    public static String FACE_SDK_KEY = "AeP1rPdQvo1bY1uL2H8mvPjofGfFwT2D5bR2iqPWH2L7";
+
+    public static String FT_ORIENT = "ftOrient";
+/////人脸识别end
+
     /**
      * 图片服务器地址  线上
      */
@@ -185,5 +199,6 @@ public class Config {
     public static final String DOWN_TIME = "down_time";
 
     public static final String SP_YINSI_AGREED = "SP_YINSI_AGREED";
+
 
 }

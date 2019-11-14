@@ -149,7 +149,7 @@
             android:gravity="left"
             android:hint="请输入其他取消订单原因"
             android:textSize="14sp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </LinearLayout>
     <LinearLayout

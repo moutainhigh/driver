@@ -59,8 +59,8 @@ dependencies {
     api rootProject.ext.viewanimator
     api rootProject.ext.BaseRecyclerViewAdapterHelper
     api rootProject.ext.androidProcesses
-//    api rootProject.ext.aliPush
-//    api rootProject.ext.aliThirdPush
+    //    api rootProject.ext.aliPush
+    //    api rootProject.ext.aliThirdPush
     api rootProject.ext.mqtt
     api rootProject.ext.mqttService
     api rootProject.ext.pictureSelector
@@ -68,8 +68,9 @@ dependencies {
     api rootProject.ext.buglyNativecrashreport
     api rootProject.ext.rxpermissions
     api rootProject.ext.eventbus
-
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     debugApi rootProject.ext.pandora
     releaseApi rootProject.ext.pandoraNoOp
+
+    implementation files('libs/arcsoft_face.jar')
 }
