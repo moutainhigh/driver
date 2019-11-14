@@ -600,7 +600,7 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
     public void faceCompar(String picPath){
         EmLoc emLoc = EmUtil.getLastLoc();
         rx.Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
-                .faceCompar(picPath,emLoc.address,emLoc.longitude,emLoc.latitude)
+                .faceCompar(picPath,emLoc.address,emLoc.longitude,emLoc.latitude,"DRIVER_ONLINE")
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(rx.schedulers.Schedulers.io())
                 .observeOn(rx.android.schedulers.AndroidSchedulers.mainThread());

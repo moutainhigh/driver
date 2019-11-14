@@ -682,6 +682,7 @@ public interface CommApiService {
     Observable<EmResult> faceCompar(@Field("imagePath") String imagePath,
                                     @Field("address") String address,
                                     @Field("longitude") double longitude,
-                                    @Field("latitude") double latitude);
+                                    @Field("latitude") double latitude,
+                                    @Field("reason") String reason);
 
 }
