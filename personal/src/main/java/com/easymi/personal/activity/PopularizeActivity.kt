@@ -7,7 +7,6 @@ import android.support.v4.content.ContextCompat
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextPaint
-import android.text.TextUtils
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
@@ -16,6 +15,7 @@ import com.easymi.component.base.RxBaseActivity
 import com.easymi.component.network.*
 import com.easymi.component.utils.EmUtil
 import com.easymi.component.utils.PhoneUtil
+import com.easymi.component.utils.ToastUtil
 import com.easymi.personal.McService
 import com.easymi.personal.R
 import com.easymi.personal.entity.PromoteDetail
@@ -112,27 +112,25 @@ class PopularizeActivity : RxBaseActivity(), View.OnClickListener {
     }
 
     private fun setSpan() {
-        val spannableStringBuilder = SpannableStringBuilder("平台联系电话:")
-        with(spannableStringBuilder) {
-            append(if (EmUtil.getEmployInfo() != null) EmUtil.getEmployInfo().companyPhone else "")
-            setSpan(object : ClickableSpan() {
-                override fun updateDrawState(ds: TextPaint) {
-                    ds.color = ContextCompat.getColor(this@PopularizeActivity, R.color.colorYellow)
-                }
-
-                override fun onClick(widget: View) {
-                    if (!TextUtils.isEmpty(EmUtil.getEmployInfo().companyPhone)) {
-                        PhoneUtil.call(this@PopularizeActivity, EmUtil.getEmployInfo().companyPhone)
-                    }
-                }
-            }, 7, spannableStringBuilder.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        }
-
-
         with(popularizeTvPhone) {
             visibility = View.VISIBLE
             highlightColor = Color.TRANSPARENT
-            text = spannableStringBuilder
+            text = SpannableStringBuilder("平台联系电话:").apply {
+                append(EmUtil.getEmployInfo()?.companyPhone ?: "读取联系电话失败")
+                setSpan(object : ClickableSpan() {
+                    override fun updateDrawState(ds: TextPaint) {
+                        ds.color = ContextCompat.getColor(this@PopularizeActivity, R.color.colorYellow)
+                    }
+
+                    override fun onClick(widget: View) {
+                        if (EmUtil.getEmployInfo()?.companyPhone?.length ?: 0 > 0) {
+                            PhoneUtil.call(this@PopularizeActivity, EmUtil.getEmployInfo().companyPhone)
+                        } else {
+                            ToastUtil.showMessage(this@PopularizeActivity, "读取联系电话失败");
+                        }
+                    }
+                }, 7, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
             movementMethod = LinkMovementMethod.getInstance()
         }
     }
@@ -173,5 +171,4 @@ class PopularizeActivity : RxBaseActivity(), View.OnClickListener {
                     }
                 })));
     }
-
 }
