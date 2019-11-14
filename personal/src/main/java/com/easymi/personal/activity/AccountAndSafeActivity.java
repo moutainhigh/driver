@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -34,6 +35,7 @@ public class AccountAndSafeActivity extends RxBaseActivity {
 
     TextView tv_status;
     LinearLayout ll_face_check;
+    ImageView iv_right;
 
     @Override
     public boolean isEnableSwipe() {
@@ -49,6 +51,7 @@ public class AccountAndSafeActivity extends RxBaseActivity {
     public void initViews(Bundle savedInstanceState) {
         tv_status = findViewById(R.id.tv_status);
         ll_face_check = findViewById(R.id.ll_face_check);
+        iv_right = findViewById(R.id.iv_right);
 
         findViewById(R.id.delete_account).setOnClickListener(v -> startActivity(new Intent(this, UnregisterActivity.class)));
 
@@ -80,18 +83,12 @@ public class AccountAndSafeActivity extends RxBaseActivity {
             if (faceAuth.data.state == 1){
                 //已经认证
                 tv_status.setText(getResources().getString(R.string.p_have_check));
-
-                tv_status.setCompoundDrawables(null, null, null, null);
-
+                iv_right.setVisibility(View.GONE);
                 tv_status.setTextColor(getResources().getColor(R.color.color_999999));
             }else {
                 //未认证
                 tv_status.setText(getResources().getString(R.string.p_no_check));
-
-                Drawable drawable = ContextCompat.getDrawable(this,R.mipmap.com_right_arrow);
-                drawable.setBounds(drawable.getMinimumWidth(), 0, 0, 0);
-                tv_status.setCompoundDrawables(null, null, drawable, null);
-
+                iv_right.setVisibility(View.VISIBLE);
                 tv_status.setTextColor(getResources().getColor(R.color.color_red));
 
                 ll_face_check.setOnClickListener(v -> startActivity(new Intent(this,RegisterAndRecognizeActivity.class).putExtra("flag",0)));

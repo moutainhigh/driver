@@ -12,6 +12,7 @@ package com.easymi.common.faceCheck;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
+import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
@@ -493,14 +494,28 @@ public class CameraHelper implements Camera.PreviewCallback {
         @Override
         public void run() {
             try {
-                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "faceCheck.png");
+                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "faceCheck.jpeg");
                 file.createNewFile();
 
                 FileOutputStream os = new FileOutputStream(file);
                 BufferedOutputStream bos = new BufferedOutputStream(os);
 
                 Bitmap bitmap = BitmapFactory.decodeByteArray(buffer, 0, buffer.length);
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+
+                // 获得图片的宽高
+                int width = bitmap.getWidth();
+                int height = bitmap.getHeight();
+                // 计算缩放比例
+                float scaleWidth = ((float) 1200) / width;
+                float scaleHeight = ((float) 1200) / height;
+                // 取得想要缩放的matrix参数
+                Matrix matrix = new Matrix();
+                matrix.postScale(scaleWidth, scaleHeight);
+
+                // 得到新的图片
+                Bitmap newbm = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+
+                rotateBitmap(newbm,-90).compress(Bitmap.CompressFormat.JPEG, 100, bos);
 
                 bos.flush();
                 bos.close();
@@ -516,6 +531,21 @@ public class CameraHelper implements Camera.PreviewCallback {
                 e.printStackTrace();
             }
         }
+    }
+
+
+    /**
+     * 旋转bitmap
+     *
+     * @param bitmap
+     * @param angle
+     * @return
+     */
+    public static Bitmap rotateBitmap(Bitmap bitmap, int angle) {
+        Matrix matrix = new Matrix();
+        matrix.reset();
+        matrix.setRotate(angle);
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     }
 
 }

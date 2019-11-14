@@ -54,8 +54,14 @@
             android:text="@string/p_no_check"
             android:drawablePadding="5dp"
             android:textColor="@color/color_red"
-            android:textSize="14sp"
-            android:drawableRight="@mipmap/com_right_arrow"/>
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/iv_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/com_right_arrow"
+            android:layout_marginLeft="5dp"/>
 
     </LinearLayout>
     <LinearLayout
