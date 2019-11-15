@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Handler;
 
 /**
  * Copyright (C), 2012-2018, Sichuan Xiaoka Technology Co., Ltd.
@@ -231,8 +232,8 @@ public class FlowPresenter implements FlowContract.Presenter {
      */
     @Override
     public void qureyScheduleInfo(long scheduleId) {
-        view.getManager().add(model.qureyScheduleInfo(scheduleId).subscribe(new MySubscriber<>(context, true,
-                true, allStation -> view.scheduleInfo(allStation))));
+        view.getManager().add(model.qureyScheduleInfo(scheduleId).subscribe(new MySubscriber<>(context, false,
+                false, allStation -> view.scheduleInfo(allStation))));
     }
 
     @Override
@@ -255,11 +256,13 @@ public class FlowPresenter implements FlowContract.Presenter {
         timerTask = new TimerTask() {
             @Override
             public void run() {
+
                 qureyScheduleInfo(scheduleId);
             }
         };
         timer.schedule(timerTask, 0, 60 * 1000);
     }
+
 
     /**
      * 取消轮训

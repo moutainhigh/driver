@@ -184,7 +184,7 @@ public class FlowActivity extends RxPayActivity implements
         initBridget();
         initFragment();
 
-        presenter.queryOrderInTime(pincheOrder.scheduleId);
+        presenter.qureyScheduleInfo(pincheOrder.scheduleId);
     }
 
     /**
