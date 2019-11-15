@@ -600,16 +600,18 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
         //map  地图添加   监听mark     必须的
         mAMap.setOnMapLoadedListener(() -> {
 
-            toCenter();
-
             for (int i = 0; i < polygonMap.size(); i++) {
                 Polygon polygon = polygonMap.valueAt(i);
                 polygon.remove();
             }
             polygonMap.clear();
             for (Station station : mMapPosList) {
-                addFenceAndDraw(station);
+                if (station.autoReceive == 1){
+                    addFenceAndDraw(station);
+                }
             }
+            toCenter();
+
             checkIsIn(centerLatLng);
 
         });
