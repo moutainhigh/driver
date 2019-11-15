@@ -121,4 +121,9 @@ public class AccountAndSafeActivity extends RxBaseActivity {
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        faceConfig();
+    }
 }

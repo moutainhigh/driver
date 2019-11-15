@@ -30,6 +30,7 @@ import com.arcsoft.face.LivenessInfo;
 import com.arcsoft.face.VersionInfo;
 import com.easymi.common.CommApiService;
 import com.easymi.common.R;
+import com.easymi.common.entity.FaceComparResult;
 import com.easymi.common.entity.FaceConfig;
 import com.easymi.common.entity.QiNiuToken;
 import com.easymi.common.widget.CommonDialog;
@@ -645,7 +646,7 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
      */
     public void faceCompar(String picPath) {
         EmLoc emLoc = EmUtil.getLastLoc();
-        rx.Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
+        rx.Observable<FaceComparResult> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .faceCompar(picPath, emLoc.address, emLoc.longitude, emLoc.latitude, "DRIVER_ONLINE")
                 .filter(new HttpResultFunc<>())
                 .subscribeOn(rx.schedulers.Schedulers.io())
@@ -656,9 +657,14 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
                 dialog.dismiss();
             }
             if (emResult.getCode() == 1) {
-                ToastUtil.showMessage(RegisterAndRecognizeActivity.this, "识别成功");
-                setResult(RESULT_OK);
-                finish();
+                if (emResult.data.identical){
+                    ToastUtil.showMessage(RegisterAndRecognizeActivity.this, "识别成功");
+                    setResult(RESULT_OK);
+                    finish();
+                }else {
+                    ToastUtil.showMessage(RegisterAndRecognizeActivity.this, "识别失败，请按照提示操作");
+                    cameraHelper.startPreview();
+                }
             } else if (emResult.getCode() == FACE_TIME_OUT_ERR) {
                 ToastUtil.showMessage(RegisterAndRecognizeActivity.this, "网络超时，请检查网络");
                 cameraHelper.startPreview();

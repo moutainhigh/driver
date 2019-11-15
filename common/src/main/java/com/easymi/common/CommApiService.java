@@ -3,6 +3,7 @@ package com.easymi.common;
 import com.easymi.common.entity.Brands;
 import com.easymi.common.entity.BusinessList;
 import com.easymi.common.entity.CompanyList;
+import com.easymi.common.entity.FaceComparResult;
 import com.easymi.common.entity.ManualConfigBean;
 import com.easymi.common.entity.MqttConfig;
 import com.easymi.common.entity.MqttResult;
@@ -679,10 +680,10 @@ public interface CommApiService {
      */
     @FormUrlEncoded
     @POST("api/v1/safe/face/identification/record")
-    Observable<EmResult> faceCompar(@Field("imagePath") String imagePath,
-                                    @Field("address") String address,
-                                    @Field("longitude") double longitude,
-                                    @Field("latitude") double latitude,
-                                    @Field("reason") String reason);
+    Observable<FaceComparResult> faceCompar(@Field("imagePath") String imagePath,
+                                            @Field("address") String address,
+                                            @Field("longitude") double longitude,
+                                            @Field("latitude") double latitude,
+                                            @Field("reason") String reason);
 
 }
