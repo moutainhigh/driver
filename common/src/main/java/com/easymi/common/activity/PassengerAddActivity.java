@@ -107,7 +107,7 @@ public class PassengerAddActivity extends RxBaseActivity {
                 addPassenger();
             }
         });
-        setEditTextInputSpace(passengerAddEtNum);
+        setEditTextInputSpace(passengerAddEtNum,11);
         passengerAddEtNum.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -149,7 +149,7 @@ public class PassengerAddActivity extends RxBaseActivity {
                             "请输入监护人电话" : "请输入电话号码");
             return;
         }
-        if (!passengerAddEtNum.getText().toString().substring(0, 1).equals("1")) {
+        if (!passengerAddEtNum.getText().toString().substring(0, 1).equals("1") || passengerAddEtNum.getText().toString().length() != 11) {
             ToastUtil.showMessage(PassengerAddActivity.this,
                     passengerAddRg.getCheckedRadioButtonId() == R.id.passengerAddRbChild ?
                             "请输入正确的监护人电话" : "请输入正确的电话号码");
@@ -198,7 +198,7 @@ public class PassengerAddActivity extends RxBaseActivity {
      *
      * @param editText EditText输入框
      */
-    public void setEditTextInputSpace(EditText editText) {
+    public void setEditTextInputSpace(EditText editText,int length) {
         InputFilter filter = new InputFilter() {
             @Override
             public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
@@ -219,6 +219,6 @@ public class PassengerAddActivity extends RxBaseActivity {
                 else return null;
             }
         };
-        editText.setFilters(new InputFilter[]{filter,filter_speChat});
+        editText.setFilters(new InputFilter[]{filter,filter_speChat,new InputFilter.LengthFilter(length)});
     }
 }
