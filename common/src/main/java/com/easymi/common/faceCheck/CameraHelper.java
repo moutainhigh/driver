@@ -465,6 +465,9 @@ public class CameraHelper implements Camera.PreviewCallback {
         }
     }
 
+    public void startPreview(){
+        mCamera.startPreview();
+    }
 
     public void take() {
         if(mCamera!=null){
