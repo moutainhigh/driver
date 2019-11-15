@@ -231,7 +231,7 @@ public class FlowPresenter implements FlowContract.Presenter {
      */
     @Override
     public void qureyScheduleInfo(long scheduleId) {
-        view.getManager().add(model.qureyScheduleInfo(scheduleId).subscribe(new MySubscriber<>(context, false,
+        view.getManager().add(model.qureyScheduleInfo(scheduleId).subscribe(new MySubscriber<>(context, true,
                 true, allStation -> view.scheduleInfo(allStation))));
     }
 
