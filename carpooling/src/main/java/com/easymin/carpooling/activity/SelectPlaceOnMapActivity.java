@@ -227,7 +227,7 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
         }
         IntentFilter filter = new IntentFilter();
         filter.addAction(GEOFENCE_BROADCAST_ACTION);
-        registerReceiver(mGeoFenceReceiver, filter,EmUtil.getBroadCastPermission(),null);
+        registerReceiver(mGeoFenceReceiver, filter, EmUtil.getBroadCastPermission(), null);
         /*
          * 创建pendingIntent
          */
@@ -378,7 +378,7 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
         checkButton();
     }
 
-    public void checkButton(){
+    public void checkButton() {
         if (isIn && isGeo) {
             mConfirmPosBtn.setEnabled(true);
             mConfirmPosBtn.setBackgroundResource(R.drawable.pc_shape_button_blue);
@@ -599,21 +599,16 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
     public void createMarker() {
         //map  地图添加   监听mark     必须的
         mAMap.setOnMapLoadedListener(() -> {
-
+            toCenter();
             for (int i = 0; i < polygonMap.size(); i++) {
                 Polygon polygon = polygonMap.valueAt(i);
                 polygon.remove();
             }
             polygonMap.clear();
             for (Station station : mMapPosList) {
-                if (station.autoReceive == 1){
-                    addFenceAndDraw(station);
-                }
+                addFenceAndDraw(station);
             }
-            toCenter();
-
             checkIsIn(centerLatLng);
-
         });
         //拖动地图  获取地图位置设置地图状态的监听接口。
         mAMap.setOnCameraChangeListener(new AMap.OnCameraChangeListener() {
@@ -659,7 +654,7 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements GeoFence
         return contains;
     }
 
-     boolean isGeo = false;
+    boolean isGeo = false;
 
     /**
      * 逆地理编码
