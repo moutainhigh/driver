@@ -172,6 +172,10 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
         //在布局结束后才做初始化操作
         texture_preview.getViewTreeObserver().addOnGlobalLayoutListener(this);
 
+        texture_preview.setOutlineProvider(new TextureVideoViewOutlineProvider(texture_preview.getWidth()/2));
+        texture_preview.setClipToOutline(true);
+
+
         flag = getIntent().getIntExtra("flag",0);
         getQiniuToken();
     }
