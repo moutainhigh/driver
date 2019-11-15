@@ -1,6 +1,7 @@
 package com.easymi.common.faceCheck;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.hardware.Camera;
@@ -14,7 +15,11 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.TextureView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arcsoft.face.ActiveFileInfo;
@@ -24,10 +29,11 @@ import com.arcsoft.face.FaceFeature;
 import com.arcsoft.face.LivenessInfo;
 import com.arcsoft.face.VersionInfo;
 import com.easymi.common.CommApiService;
+import com.easymi.common.R;
 import com.easymi.common.entity.FaceConfig;
 import com.easymi.common.entity.QiNiuToken;
+import com.easymi.common.widget.CommonDialog;
 import com.easymi.component.Config;
-import com.easymi.component.R;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.entity.BaseOrder;
 import com.easymi.component.entity.EmLoc;
@@ -77,9 +83,11 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
 
     private static final String TAG = "hufeng";
 
-    TextureView texture_preview;
+    RoundTextureView texture_preview;
     TextView tv_hint;
     CusToolbar cusToolbar;
+
+    RoundBorderView roundBorderView;
 
     private static final int MAX_DETECT_NUM = 10;
 
@@ -172,10 +180,6 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
         //在布局结束后才做初始化操作
         texture_preview.getViewTreeObserver().addOnGlobalLayoutListener(this);
 
-        texture_preview.setOutlineProvider(new TextureVideoViewOutlineProvider(texture_preview.getWidth()/2));
-        texture_preview.setClipToOutline(true);
-
-
         flag = getIntent().getIntExtra("flag",0);
         getQiniuToken();
     }
@@ -236,6 +240,22 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
     @Override
     public void onGlobalLayout() {
         texture_preview.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+        ViewGroup.LayoutParams layoutParams = texture_preview.getLayoutParams();
+        int sideLength = Math.min(texture_preview.getWidth(), texture_preview.getHeight()) *  3/ 5;
+        layoutParams.width = sideLength;
+        layoutParams.height = sideLength;
+        texture_preview.setLayoutParams(layoutParams);
+
+        texture_preview.setRadius(Math.min(texture_preview.getWidth(), texture_preview.getHeight()) / 2);
+        texture_preview.turnRound();
+
+        roundBorderView = new RoundBorderView(this);
+        ((RelativeLayout) texture_preview.getParent()).addView(roundBorderView, texture_preview.getLayoutParams());
+
+        roundBorderView.setRadius(Math.min(roundBorderView.getWidth(), roundBorderView.getHeight()) /2);
+        roundBorderView.turnRound();
+
         if (!checkPermissions(NEEDED_PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, NEEDED_PERMISSIONS, ACTION_REQUEST_PERMISSIONS);
         } else {
@@ -340,8 +360,6 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
                         Log.e(TAG, "非活体");
                     } else if (liveness == LivenessInfo.ALIVE) {
                         Log.e(TAG, "成功");
-                        initDialog("加载中...");
-                        showDialog();
                         cameraHelper.take();
                     } else if (liveness == LivenessInfo.FACE_NUM_MORE_THAN_ONE) {
                         Log.e(TAG, "不止一个");
@@ -357,7 +375,6 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
                     }
                 }
             }
-
         };
 
 
@@ -369,7 +386,6 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
                 previewSize = camera.getParameters().getPreviewSize();
                 // 切换相机的时候可能会导致预览尺寸发生变化
                 if (faceHelper == null || lastPreviewSize == null || lastPreviewSize.width != previewSize.width || lastPreviewSize.height != previewSize.height) {
-                    // 记录切换时的人脸序号
                     if (faceHelper != null) {
                         faceHelper.release();
                     }
@@ -423,8 +439,16 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
             }
         };
 
+        /**
+         * 图片保存成功后的回调
+         */
         PictureListener pictureListener = picturePath -> {
-            Log.e(TAG, "弹窗关");
+            runOnUiThread(() -> new CommonDialog(RegisterAndRecognizeActivity.this, R.layout.dialog_del) {
+                @Override
+                public void initData(View view) {
+
+                }
+            }.show());
             updateImage(new File(picturePath));
         };
 
@@ -442,27 +466,6 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
     }
 
 
-    private RxProgressHUD progressHUD;
-
-    public void initDialog(String strHint) {
-        progressHUD = new RxProgressHUD.Builder(this)
-                .setTitle("")
-                .setMessage(strHint)
-                .setCancelable(false)
-                .create();
-    }
-
-    private void showDialog() {
-        if (progressHUD != null) {
-            progressHUD.show();
-        }
-    }
-
-    private void dismissDialog() {
-        if (null != progressHUD && progressHUD.isShowing()) {
-            progressHUD.dismiss();
-        }
-    }
 
     /**
      * 将map中key对应的value增1回传
@@ -568,7 +571,7 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
                 .uploadPic(Config.HOST_UP_PIC, tokenBody, body)
                 .subscribeOn(rx.schedulers.Schedulers.io())
                 .observeOn(rx.android.schedulers.AndroidSchedulers.mainThread());
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, pic -> {
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, pic -> {
             faceAuthPic = pic.hashCode;
             if (flag == 0){
                 faceAuth(faceAuthPic);
@@ -590,7 +593,7 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
                 .subscribeOn(rx.schedulers.Schedulers.io())
                 .observeOn(rx.android.schedulers.AndroidSchedulers.mainThread());
 
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,false, emResult -> {
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false,false, emResult -> {
             ToastUtil.showMessage(RegisterAndRecognizeActivity.this, "认证成功");
             setResult(RESULT_OK);
             finish();
@@ -609,7 +612,7 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
                 .subscribeOn(rx.schedulers.Schedulers.io())
                 .observeOn(rx.android.schedulers.AndroidSchedulers.mainThread());
 
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true,false, emResult -> {
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false,false, emResult -> {
             ToastUtil.showMessage(RegisterAndRecognizeActivity.this, "识别成功");
             setResult(RESULT_OK);
             finish();

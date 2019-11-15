@@ -521,12 +521,12 @@ public class CameraHelper implements Camera.PreviewCallback {
                 bos.close();
                 os.close();
 
+//                mCamera.startPreview();
+
                 if (pictureListener != null){
                     pictureListener.pictureSaveSuccess(file.getAbsolutePath());
                 }
-                Log.d("hufeng/照片已保存", file.getAbsolutePath());
 
-//                mCamera.startPreview();
             } catch (Exception e) {
                 e.printStackTrace();
             }

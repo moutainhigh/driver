@@ -72,5 +72,7 @@ dependencies {
     debugApi rootProject.ext.pandora
     releaseApi rootProject.ext.pandoraNoOp
 
+    api rootProject.ext.circleprogressbar
+
     implementation files('libs/arcsoft_face.jar')
 }
