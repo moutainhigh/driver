@@ -244,6 +244,7 @@ public class AcceptSendFragment extends RxBaseFragment {
         }
 
         mainLlAction.setVisibility(View.GONE);
+        setBtnClick(true);
         if (carpoolOrders.size() != 0) {
             current = carpoolOrders.get(0);
 
@@ -266,7 +267,7 @@ public class AcceptSendFragment extends RxBaseFragment {
                     back.setVisibility(View.GONE);
                     btn_back.setVisibility(View.GONE);
 
-                    if (ZCSetting.findOne().operationMode == 1){
+                    if (ZCSetting.findOne().operationMode == 1) {
                         slider.setHint("滑动前往预约地");
                         slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
                             @Override
@@ -280,7 +281,7 @@ public class AcceptSendFragment extends RxBaseFragment {
                                 resetView();
                             }
                         });
-                    }else {
+                    } else {
                         btn_sure.setText("前往预约地");
                         btn_sure.setOnClickListener(v -> {
                             bridge.gotoStart(current);
@@ -295,7 +296,7 @@ public class AcceptSendFragment extends RxBaseFragment {
                     back.setVisibility(View.GONE);
                     btn_back.setVisibility(View.GONE);
 
-                    if (ZCSetting.findOne().operationMode == 1){
+                    if (ZCSetting.findOne().operationMode == 1) {
                         slider.setHint("滑动到达乘客位置");
                         slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
                             @Override
@@ -309,7 +310,7 @@ public class AcceptSendFragment extends RxBaseFragment {
                                 resetView();
                             }
                         });
-                    }else {
+                    } else {
                         btn_sure.setText("到达乘客位置");
                         btn_sure.setOnClickListener(v -> {
                             bridge.arriveStart(current);
@@ -325,7 +326,7 @@ public class AcceptSendFragment extends RxBaseFragment {
                     back.setVisibility(View.GONE);
                     btn_back.setVisibility(View.GONE);
 
-                    if (ZCSetting.findOne().operationMode == 1){
+                    if (ZCSetting.findOne().operationMode == 1) {
                         slider.setHint("滑动确认接到乘客");
                         slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
                             @Override
@@ -343,10 +344,11 @@ public class AcceptSendFragment extends RxBaseFragment {
                                 resetView();
                             }
                         });
-                    }else {
+                    } else {
                         btn_sure.setText("确认接到乘客");
                         btn_sure.setOnClickListener(v -> {
                             if (current.advanceAssign == 1) {
+                                setBtnClick(false);
                                 bridge.onDialogClick(1, current.orderId, current.money);
                             } else {
                                 bridge.acceptCustomer(current);
@@ -364,7 +366,7 @@ public class AcceptSendFragment extends RxBaseFragment {
                 back.setVisibility(View.GONE);
                 btn_back.setVisibility(View.GONE);
 
-                if (ZCSetting.findOne().operationMode == 1){
+                if (ZCSetting.findOne().operationMode == 1) {
                     slider.setHint("滑动到达下车点");
                     slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
                         @Override
@@ -378,7 +380,7 @@ public class AcceptSendFragment extends RxBaseFragment {
                             resetView();
                         }
                     });
-                }else {
+                } else {
                     btn_sure.setText("到达下车点");
                     btn_sure.setOnClickListener(v -> {
                         bridge.arriveEnd(current);
@@ -545,7 +547,7 @@ public class AcceptSendFragment extends RxBaseFragment {
         btn_back.setOnClickListener(view -> showWhatByStatus());
 
         if (jump) {
-            if (ZCSetting.findOne().operationMode == 1){
+            if (ZCSetting.findOne().operationMode == 1) {
                 //滑动
                 slider.setHint("滑动跳过乘客");
                 slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
@@ -560,7 +562,7 @@ public class AcceptSendFragment extends RxBaseFragment {
                         resetView();
                     }
                 });
-            }else {
+            } else {
                 //按钮
                 btn_sure.setText("跳过乘客");
                 btn_sure.setOnClickListener(v -> {
@@ -568,7 +570,7 @@ public class AcceptSendFragment extends RxBaseFragment {
                 });
             }
         } else {
-            if (ZCSetting.findOne().operationMode == 1){
+            if (ZCSetting.findOne().operationMode == 1) {
                 slider.setHint("滑动接到乘客");
                 slider.setmCallBack(new CustomSlideToUnlockView.CallBack() {
                     @Override
@@ -586,10 +588,11 @@ public class AcceptSendFragment extends RxBaseFragment {
                         resetView();
                     }
                 });
-            }else {
+            } else {
                 btn_sure.setText("接到乘客");
                 btn_sure.setOnClickListener(v -> {
                     if (current.advanceAssign == 1) {
+                        setBtnClick(false);
                         bridge.onDialogClick(1, current.orderId, current.money);
                     } else {
                         bridge.acceptCustomer(current);
@@ -598,6 +601,12 @@ public class AcceptSendFragment extends RxBaseFragment {
             }
         }
     }
+
+
+    public void setBtnClick(boolean enable) {
+        btn_sure.setClickable(enable);
+    }
+
 
     /**
      * 获取当前的订单

@@ -717,4 +717,9 @@ public class PassengerActivity extends RxPayActivity implements FlowContract.Vie
                     }));
         }
     }
+
+    @Override
+    public void onCancel() {
+
+    }
 }

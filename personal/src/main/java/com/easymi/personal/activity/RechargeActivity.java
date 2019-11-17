@@ -308,6 +308,11 @@ public class RechargeActivity extends RxPayActivity {
 
     }
 
+    @Override
+    public void onCancel() {
+
+    }
+
     /**
      * 选择框监听
      */

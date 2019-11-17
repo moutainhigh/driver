@@ -241,6 +241,7 @@ public class CreateOrderActivity extends RxPayActivity {
 
                 if (StringUtils.isNotBlank(editable.toString())
                         && editable.toString().length() == 11) {
+                    orderId = 0;
                     carPoolCreateOrderEtPhone.clearFocus();
                     PhoneUtil.hideKeyboard(CreateOrderActivity.this);
                     if (currentModel == 2) {
@@ -919,7 +920,11 @@ public class CreateOrderActivity extends RxPayActivity {
                 else return null;
             }
         };
-        editText.setFilters(new InputFilter[]{filter,filter_speChat});
+        editText.setFilters(new InputFilter[]{filter,filter_speChat,new InputFilter.LengthFilter(11)});
     }
 
+    @Override
+    public void onCancel() {
+
+    }
 }

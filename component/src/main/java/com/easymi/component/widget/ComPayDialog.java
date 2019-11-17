@@ -1,7 +1,9 @@
 package com.easymi.component.widget;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -28,6 +30,8 @@ public class ComPayDialog extends BaseBottomDialog {
     RelativeLayout pay_balance;
     private TextView tv_prise;
     private double money = -1;
+
+    private OnCancelListener onCancelListener;
 
     public ComPayDialog(Context context) {
         super(context);
@@ -69,7 +73,22 @@ public class ComPayDialog extends BaseBottomDialog {
             }
         });
         tv_cancel.setOnClickListener(view -> {
+            if (onCancelListener != null){
+                onCancelListener.onCancel();
+            }
             dismiss();
         });
+
+        setCanceledOnTouchOutside(false);
+        setCancelable(false);
+    }
+
+
+    public interface OnCancelListener {
+        void onCancel();
+    }
+
+    public void setOnCancelListener(OnCancelListener listener) {
+        this.onCancelListener = listener;
     }
 }

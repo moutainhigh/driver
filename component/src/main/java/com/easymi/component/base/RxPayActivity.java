@@ -1,5 +1,6 @@
 package com.easymi.component.base;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -34,7 +35,7 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public abstract class RxPayActivity extends RxBaseActivity {
+public abstract class RxPayActivity extends RxBaseActivity implements ComPayDialog.OnCancelListener{
 
     protected long payOrderId;
 
@@ -158,6 +159,7 @@ public abstract class RxPayActivity extends RxBaseActivity {
                 }
             });
         }
+        comPayDialog.setOnCancelListener(this);
         comPayDialog.show();
     }
 

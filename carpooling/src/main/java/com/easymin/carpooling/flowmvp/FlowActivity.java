@@ -1,6 +1,7 @@
 package com.easymin.carpooling.flowmvp;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
@@ -542,14 +543,13 @@ public class FlowActivity extends RxPayActivity implements
             }
         };
     }
-    Dialog dialog = null;
+
     private void createDialog(int type, long orderId, double money) {
         if (type == 3) {
             showDialog(orderId, money);
         } else {
-            if (dialog == null){
-                dialog = new Dialog(this);
-            }
+            Dialog dialog = new Dialog(this);
+
             View view = LayoutInflater.from(this).inflate(type == 2 ? R.layout.cus_list_dialog_order : R.layout.cus_list_dialog_pay, null);
             dialog.setContentView(view);
             TextView dialogTvCancel = view.findViewById(R.id.dialog_tv_cancel);
@@ -557,10 +557,14 @@ public class FlowActivity extends RxPayActivity implements
             dialogTvCancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    dialog.dismiss();
                     if (type == 1) {
                         createDialog(2, orderId, money);
+                    }else {
+                        if (currentFragment instanceof AcceptSendFragment){
+                            ((AcceptSendFragment) currentFragment).setBtnClick(true);
+                        }
                     }
-                    dialog.dismiss();
                 }
             });
             TextView dialogTvAction = view.findViewById(R.id.dialog_tv_action);
@@ -575,6 +579,7 @@ public class FlowActivity extends RxPayActivity implements
                     dialog.dismiss();
                 }
             });
+
             dialog.setCancelable(false);
             dialog.setCanceledOnTouchOutside(false);
             dialog.show();
@@ -1080,5 +1085,13 @@ public class FlowActivity extends RxPayActivity implements
     public void onRefreshOrder() {
         //新指派拼车订单后的推送，收到后刷新数据
         presenter.qureyScheduleInfo(pincheOrder.scheduleId);
+    }
+
+
+    @Override
+    public void onCancel() {
+        if (currentFragment instanceof AcceptSendFragment){
+            ((AcceptSendFragment) currentFragment).setBtnClick(true);
+        }
     }
 }

@@ -637,4 +637,9 @@ public class CreateOrderActivity extends RxPayActivity {
     public void onPayFail() {
         ToastUtil.showMessage(this, "支付失败,请重试");
     }
+
+    @Override
+    public void onCancel() {
+
+    }
 }
