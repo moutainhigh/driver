@@ -258,6 +258,7 @@ public class CreateOrderActivity extends RxPayActivity {
                 currentNo--;
             }
             setSubAddEnable();
+            calcPrice();
             carPoolCreateOrderTvNum.setText("" + currentNo);
 
             setBtnEnable();
@@ -268,6 +269,7 @@ public class CreateOrderActivity extends RxPayActivity {
             } else {
                 currentNo++;
                 setSubAddEnable();
+                calcPrice();
                 carPoolCreateOrderTvNum.setText("" + currentNo);
             }
 
@@ -801,7 +803,7 @@ public class CreateOrderActivity extends RxPayActivity {
                             new Gson().toJson(models),
                             startSite.getId(),
                             endSite.getId(),
-                            pcOrder.id,
+                            pcOrder.id == 0? null : pcOrder.id,
                             currentModel == 1 ? currentNo : 1,
                             carPoolCreateOrderEtPhone.getText().toString(),
                             "driver",

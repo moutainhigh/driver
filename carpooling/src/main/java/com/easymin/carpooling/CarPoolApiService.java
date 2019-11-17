@@ -177,7 +177,7 @@ public interface CarPoolApiService {
                                             @Field("orderAddress") String orderAddress,
                                             @Field("startStationId") long startStationId,
                                             @Field("endStationId") long endStationId,
-                                            @Field("scheduleId") long scheduleId,
+                                            @Field("scheduleId") Long scheduleId,
                                             @Field("ticketNumber") int ticketNumber,
                                             @Field("passengerPhone") String passengerPhone,
                                             @Field("channelAlias") String channelAlias,
