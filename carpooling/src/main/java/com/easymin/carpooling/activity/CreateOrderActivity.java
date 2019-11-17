@@ -369,7 +369,14 @@ public class CreateOrderActivity extends RxPayActivity {
                     @Override
                     public void onNext(Employ employ) {
                         if (employ != null) {
-                            passengerId = employ.id;
+                            if (passengerId != employ.id) {
+                                passengerId = employ.id;
+                                adapter.setNewData(null);
+                                if (passengerFooterView != null) {
+                                    adapter.removeFooterView(passengerFooterView);
+                                    passengerFooterView = null;
+                                }
+                            }
                             setBtnEnable();
                         } else {
                             passengerId = 0;
@@ -804,7 +811,7 @@ public class CreateOrderActivity extends RxPayActivity {
                             new Gson().toJson(models),
                             startSite.getId(),
                             endSite.getId(),
-                            pcOrder.id == 0? null : pcOrder.id,
+                            pcOrder.id == 0 ? null : pcOrder.id,
                             currentModel == 1 ? currentNo : 1,
                             carPoolCreateOrderEtPhone.getText().toString(),
                             "driver",
@@ -893,7 +900,6 @@ public class CreateOrderActivity extends RxPayActivity {
     }
 
 
-
     /**
      * 禁止EditText输入空格和换行符
      *
@@ -920,11 +926,12 @@ public class CreateOrderActivity extends RxPayActivity {
                 else return null;
             }
         };
-        editText.setFilters(new InputFilter[]{filter,filter_speChat,new InputFilter.LengthFilter(11)});
+        editText.setFilters(new InputFilter[]{filter, filter_speChat, new InputFilter.LengthFilter(11)});
     }
 
     @Override
     public void onCancel() {
-
+        ToastUtil.showMessage(this, "未支付订单已经发送到乘客端");
+        finish();
     }
 }
