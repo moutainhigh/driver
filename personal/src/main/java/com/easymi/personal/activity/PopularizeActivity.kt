@@ -165,6 +165,7 @@ class PopularizeActivity : RxBaseActivity(), View.OnClickListener {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(MySubscriber<PromoteDetail>(this, true, false, object : HaveErrSubscriberListener<PromoteDetail> {
                     override fun onNext(t: PromoteDetail?) {
+                        ToastUtil.showMessage(this@PopularizeActivity, "申请提交成功");
                         promoteDetail = t;
                         bindInfoResult();
                     }
