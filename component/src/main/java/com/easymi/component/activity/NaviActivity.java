@@ -3,7 +3,6 @@ package com.easymi.component.activity;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,17 +32,14 @@ import com.amap.api.navi.model.NaviLatLng;
 import com.autonavi.tbt.TrafficFacilityInfo;
 import com.easymi.component.ComponentService;
 import com.easymi.component.Config;
-import com.easymi.component.DJOrderStatus;
 import com.easymi.component.R;
 import com.easymi.component.base.RxBaseActivity;
-import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.PassengerLcResult;
 import com.easymi.component.entity.PassengerLocation;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.push.PushEvent;
 import com.easymi.component.utils.Log;
-import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -52,8 +48,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBg"
+    android:orientation="vertical"
+
+    tools:context=".activity.MyPopularizeActivity">
+
+    <com.easymi.component.widget.CusToolbar
+        android:id="@+id/myPopularizeCtb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/corners_white_4dp"
+        android:paddingStart="16dp"
+        android:paddingTop="32dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="32dp">
+
+        <TextView
+            android:id="@+id/myPopularizeHeaderTvCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/sizeContent" />
+
+        <TextView
+            android:id="@+id/myPopularizeHeaderTvMoney"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/myPopularizeHeaderTvCount"
+            android:layout_centerHorizontal="true"
+            android:paddingTop="6dp"
+            android:paddingBottom="40dp"
+            android:textColor="@color/colorYellow"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/myPopularizeHeaderTvMoney"
+            android:orientation="horizontal"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp">
+
+            <TextView
+                android:id="@+id/myPopularizeHeaderTvRecord"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/sizeButtonHeight"
+                android:layout_weight="1"
+                android:background="@drawable/corners_light_blue_4dp"
+                android:gravity="center"
+                android:text="申请记录"
+                android:textColor="@color/colorBlue"
+                android:textSize="@dimen/sizeButton" />
+
+            <TextView
+                android:id="@+id/myPopularizeHeaderTvCountOn"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/sizeButtonHeight"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:background="@drawable/cor4_solid_blue"
+                android:gravity="center"
+                android:text="我要结算"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sizeButton" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:visibility="gone"
+        android:id="@+id/myPopularizeRv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/corners_white_top_4dp" />
+
+</LinearLayout>

@@ -23,6 +23,9 @@ allprojects {
         maven { url "https://jitpack.io" }
         maven { url 'http://maven.aliyun.com/nexus/content/repositories/releases/' }
         maven { url "https://repo.eclipse.org/content/repositories/paho-releases/" }
+        flatDir {
+            dirs project(':component').file('libs')
+        }
     }
     configurations {
         all {

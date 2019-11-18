@@ -58,6 +58,7 @@
 
     <color name="colorGreen">#089A55</color>
     <color name="colorBlue">#3C98E3</color>
+    <color name="colorLightBlue">#1A3C98E3</color>
     <color name="colorRed">#E05E68</color>
     <color name="colorYellow">#F5A623</color>
     <color name="colorBlack">#222222</color>

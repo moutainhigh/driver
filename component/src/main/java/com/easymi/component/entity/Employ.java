@@ -3,6 +3,7 @@ package com.easymi.component.entity;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
 import com.easymi.component.utils.Log;
 
 import com.easymi.component.db.SqliteHelper;
@@ -109,6 +110,11 @@ public class Employ {
 
     public long driverCompanyId;
 
+    public int isOpenPromote;
+    public int promoteApplyStatus;
+
+    public String companyPhone;
+
 
     public void updateDriverCompanyId() {
         SqliteHelper helper = SqliteHelper.getInstance();
@@ -145,7 +151,9 @@ public class Employ {
         values.put("qrCodeUrl", qrCodeUrl);
         values.put("serviceTel", serviceTel);
         values.put("star", star);
-        Log.e("Employ", "save");
+        values.put("isOpenPromote", isOpenPromote);
+        values.put("promoteApplyStatus", promoteApplyStatus);
+        values.put("companyPhone", companyPhone);
         boolean flag = db.insert("t_driverinfo", null, encryptString(values)) != -1;
         Log.e("Employ", "save+  " + flag);
         return flag;
@@ -292,6 +300,9 @@ public class Employ {
         driverInfo.qrCodeUrl = cursor.getString(cursor.getColumnIndex("qrCodeUrl"));
         driverInfo.serviceTel = cursor.getString(cursor.getColumnIndex("serviceTel"));
         driverInfo.star = cursor.getLong(cursor.getColumnIndex("star"));
+        driverInfo.isOpenPromote = cursor.getInt(cursor.getColumnIndex("isOpenPromote"));
+        driverInfo.promoteApplyStatus = cursor.getInt(cursor.getColumnIndex("promoteApplyStatus"));
+        driverInfo.companyPhone = cursor.getString(cursor.getColumnIndex("companyPhone"));
         return decrptyString(driverInfo);
     }
 
@@ -321,7 +332,9 @@ public class Employ {
         values.put("serviceTel", serviceTel);
         values.put("qrCodeUrl", qrCodeUrl);
         values.put("star", star);
-        Log.e("Employ", "updateAll");
+        values.put("isOpenPromote", isOpenPromote);
+        values.put("promoteApplyStatus", promoteApplyStatus);
+        values.put("companyPhone", companyPhone);
 
         boolean flag = db.update("t_driverinfo", encryptString(values), " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
@@ -358,6 +371,7 @@ public class Employ {
         employ.token = AesUtil.aesDecrypt(AesUtil.AAAAA, employ.token);
         employ.qrCodeUrl = AesUtil.aesDecrypt(AesUtil.AAAAA, employ.qrCodeUrl);
         employ.serviceTel = AesUtil.aesDecrypt(AesUtil.AAAAA, employ.serviceTel);
+        employ.companyPhone = AesUtil.aesDecrypt(AesUtil.AAAAA, employ.companyPhone);
         return employ;
     }
 }

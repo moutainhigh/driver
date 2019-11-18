@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="12dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="12dp"
+    android:background="@drawable/corners_white_4dp"
+    android:paddingStart="12dp"
+    android:paddingTop="16dp"
+    android:paddingEnd="12dp">
+
+    <TextView
+        android:id="@+id/itemMyPopularizeApplyRecordTvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="4dp"
+        android:text="2018-12-25 13：40"
+        android:textColor="@color/colorBlackLight"
+        android:textSize="@dimen/sizeContent" />
+
+    <TextView
+        android:id="@+id/itemMyPopularizeApplyRecordTvPrize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/itemMyPopularizeApplyRecordTvTime"
+        android:paddingBottom="16dp"
+        android:text="¥5400.00"
+        android:textColor="@color/colorBlackLight"
+        android:textSize="@dimen/sizeContent" />
+
+    <TextView
+        android:id="@+id/itemMyPopularizeApplyRecordTvStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/itemMyPopularizeApplyRecordTvTime"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="-2dp"
+        android:drawableEnd="@drawable/more_1x"
+        android:paddingBottom="16dp"
+        android:text="已通过"
+        android:textColor="@color/colorBlackLight"
+        android:textSize="@dimen/sizeContent" />
+
+    <LinearLayout
+        android:id="@+id/itemMyPopularizeApplyRecordLl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/itemMyPopularizeApplyRecordTvStatus"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sizeLine"
+            android:background="@color/colorLine" />
+
+        <TextView
+            android:id="@+id/itemMyPopularizeApplyRecordTvContent"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:text="结算金额将在2个工作日抵达"
+            android:textColor="@color/colorBlackLight"
+            android:textSize="@dimen/sizeContent" />
+
+    </LinearLayout>
+
+</RelativeLayout>
