@@ -14,7 +14,6 @@ import com.easymi.component.network.HttpResultFunc3;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult2;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.Log;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusErrLayout;
 import com.easymi.component.widget.CusToolbar;
@@ -30,9 +29,6 @@ import com.easymin.carpooling.widget.BottomListDialog;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -48,7 +44,6 @@ import rx.schedulers.Schedulers;
  */
 
 public class BanciSelectActivity extends RxBaseActivity implements View.OnClickListener {
-
     SwipeRecyclerView recyclerView;
 
     BanciAdapter adapter;
@@ -95,11 +90,6 @@ public class BanciSelectActivity extends RxBaseActivity implements View.OnClickL
         recyclerView.setRefreshing(true);
 
         getLineDriverSchedule();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     /**
@@ -303,14 +293,15 @@ public class BanciSelectActivity extends RxBaseActivity implements View.OnClickL
 
     /**
      * 移除掉
+     *
      * @param list
      */
-    public void removeEmptyTickets(List<LineBean> list){
-        for (LineBean lineBean : list){
+    public void removeEmptyTickets(List<LineBean> list) {
+        for (LineBean lineBean : list) {
             Iterator iterator = lineBean.timeSlotVoList.iterator();
             while (iterator.hasNext()) {
                 TimeSlotBean timeSlotBean = (TimeSlotBean) iterator.next();
-                if (timeSlotBean.tickets != null && timeSlotBean.tickets == 0){
+                if (timeSlotBean.tickets != null && timeSlotBean.tickets == 0) {
                     iterator.remove();
                 }
             }
@@ -319,7 +310,7 @@ public class BanciSelectActivity extends RxBaseActivity implements View.OnClickL
         Iterator iterator = list.iterator();
         while (iterator.hasNext()) {
             LineBean lineBean = (LineBean) iterator.next();
-            if (lineBean.timeSlotVoList.size() == 0)  {
+            if (lineBean.timeSlotVoList.size() == 0) {
                 iterator.remove();
             }
         }
@@ -346,7 +337,6 @@ public class BanciSelectActivity extends RxBaseActivity implements View.OnClickL
             tv_time_sort.setHint("请选择时段");
             tv_time_sort.setHintTextColor(getResources().getColor(R.color.color_cccccc));
             tv_time_sort.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.mipmap.ic_right), null);
-
             tv_sure.setBackgroundResource(R.drawable.shape_btn_4dp_bg);
 
             tv_line_name.setOnClickListener(this);

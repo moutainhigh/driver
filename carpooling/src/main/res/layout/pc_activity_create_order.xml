@@ -16,17 +16,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:background="@android:color/white"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingTop="18dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="18dp">
 
         <LinearLayout
             android:id="@+id/carPoolCreateOrderLlMoney"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="bottom"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:visibility="gone">
+            android:visibility="invisible">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -45,13 +49,14 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/carPoolCreateOrderBtCreate"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/btn_height"
-            android:layout_marginTop="10dp"
+        <TextView
+            android:id="@+id/carPoolCreateOrderTvCreate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@drawable/cor4_solid_sub"
             android:enabled="false"
+            android:gravity="center"
+            android:padding="12dp"
             android:text="代乘客支付"
             android:textColor="@color/white" />
 
@@ -68,257 +73,275 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="12dp"
+                android:paddingTop="5dp"
+                android:text="请填写票务信息" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/btn_height"
+                android:background="@android:color/white"
+                android:gravity="center_vertical"
+                android:paddingLeft="12dp"
+                android:text="班次信息"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sizeContent"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/btn_height"
+                android:layout_marginBottom="8dp"
+                android:background="@android:color/white"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="选择班次"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/carPoolCreateOrderTvLine"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|right"
+                    android:hint="请选择班次"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/colorSub" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:src="@mipmap/ic_pc_right_row" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/btn_height"
+                android:background="@android:color/white"
+                android:gravity="center_vertical"
+                android:paddingLeft="12dp"
+                android:text="班次信息"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sizeContent"
+                android:textStyle="bold" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="5dp"
-                    android:text="请填写票务信息" />
+                android:background="@color/white"
+                android:divider="@drawable/divider"
+                android:dividerPadding="12dp"
+                android:orientation="vertical"
+                android:showDividers="middle">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:divider="@drawable/divider"
-                    android:dividerPadding="10dp"
-                    android:orientation="vertical"
-                    android:showDividers="middle">
+                    android:layout_height="@dimen/btn_height"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/btn_height"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="上车地点"
+                        android:textColor="@color/black" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="选择时段"
-                            android:textColor="@color/black" />
+                    <TextView
+                        android:id="@+id/carPoolCreateOrderTvStart"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical|right"
+                        android:hint="请选择乘客上车点"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/colorSub" />
 
-                        <TextView
-                            android:id="@+id/carPoolCreateOrderTvLine"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical|right"
-                            android:hint="请选择车辆时段"
-                            android:textColor="@color/black"
-                            android:textColorHint="@color/colorSub" />
+                    <ImageView
+                        android:id="@+id/iv_start"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:src="@mipmap/ic_pc_right_row" />
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:src="@mipmap/ic_pc_right_row" />
+                </LinearLayout>
 
-                    </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/btn_height"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/btn_height"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="下车地点"
+                        android:textColor="@color/black" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="上车地点"
-                            android:textColor="@color/black" />
+                    <TextView
+                        android:id="@+id/carPoolCreateOrderTvEnd"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical|right"
+                        android:hint="请选择乘客下车点"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/colorSub" />
 
-                        <TextView
-                            android:id="@+id/carPoolCreateOrderTvStart"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical|right"
-                            android:hint="请选择乘客上车点"
-                            android:textColor="@color/black"
-                            android:textColorHint="@color/colorSub" />
+                    <ImageView
+                        android:id="@+id/iv_end"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:src="@mipmap/ic_pc_right_row" />
 
-                        <ImageView
-                            android:id="@+id/iv_start"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:src="@mipmap/ic_pc_right_row" />
+                </LinearLayout>
 
-                    </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/carPoolCreateOrderLvSeatSelect"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/btn_height"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:visibility="gone">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="选择座位"
+                        android:textColor="@color/black" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/btn_height"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp">
+                    <TextView
+                        android:id="@+id/carPoolCreateOrderTvSeatSelect"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:ellipsize="marquee"
+                        android:gravity="center_vertical|right"
+                        android:hint="请选择座位"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:singleLine="true"
+                        android:textColor="@color/black" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="下车地点"
-                            android:textColor="@color/black" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:src="@mipmap/ic_pc_right_row" />
 
-                        <TextView
-                            android:id="@+id/carPoolCreateOrderTvEnd"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical|right"
-                            android:hint="请选择乘客下车点"
-                            android:textColor="@color/black"
-                            android:textColorHint="@color/colorSub" />
-
-                        <ImageView
-                            android:id="@+id/iv_end"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:src="@mipmap/ic_pc_right_row" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/carPoolCreateOrderLvSeatSelect"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/btn_height"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:visibility="gone">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="选择座位"
-                            android:textColor="@color/black" />
-
-                        <TextView
-                            android:id="@+id/carPoolCreateOrderTvSeatSelect"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:ellipsize="marquee"
-                            android:gravity="center_vertical|right"
-                            android:hint="请选择座位"
-                            android:marqueeRepeatLimit="marquee_forever"
-                            android:singleLine="true"
-                            android:textColor="@color/black" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:src="@mipmap/ic_pc_right_row" />
-
-                    </LinearLayout>
+                </LinearLayout>
 
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/btn_height"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/btn_height"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="联系电话"
-                            android:textColor="@color/black" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="联系电话"
+                        android:textColor="@color/black" />
 
-                        <EditText
-                            android:id="@+id/carPoolCreateOrderEtPhone"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@null"
-                            android:gravity="center_vertical|right"
-                            android:hint="请输入电话"
-                            android:inputType="number"
-                            android:maxLength="11"
-                            android:textColor="@color/black"
-                            android:textColorHint="@color/colorSub"
-                            android:textSize="14sp" />
+                    <EditText
+                        android:id="@+id/carPoolCreateOrderEtPhone"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:gravity="center_vertical|right"
+                        android:hint="请输入号码"
+                        android:inputType="number"
+                        android:maxLength="11"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/colorSub"
+                        android:textSize="14sp" />
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:src="@mipmap/ic_pc_right_row"
-                            android:visibility="invisible" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:src="@mipmap/ic_pc_right_row"
+                        android:visibility="invisible" />
 
-                    </LinearLayout>
+                </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/carPoolCreateOrderLlCount"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/btn_height"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp">
+                <LinearLayout
+                    android:id="@+id/carPoolCreateOrderLlCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/btn_height"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="乘车人数"
-                            android:textColor="@color/black" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="乘车人数"
+                        android:textColor="@color/black" />
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_weight="1"
-                            android:text="(儿童均购全票)" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1"
+                        android:text="(儿童均购全票)" />
 
-                        <TextView
-                            android:id="@+id/carPoolCreateOrderTvSub"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/pc_sub_selector"
-                            android:enabled="false" />
+                    <TextView
+                        android:id="@+id/carPoolCreateOrderTvSub"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/pc_sub_selector"
+                        android:enabled="false" />
 
-                        <TextView
-                            android:id="@+id/carPoolCreateOrderTvNum"
-                            android:layout_width="30dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="1"
-                            android:textColor="@color/black" />
+                    <TextView
+                        android:id="@+id/carPoolCreateOrderTvNum"
+                        android:layout_width="30dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="1"
+                        android:textColor="@color/black" />
 
-                        <TextView
-                            android:id="@+id/carPoolCreateOrderTvAdd"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/pc_add_selector"
-                            android:enabled="false" />
+                    <TextView
+                        android:id="@+id/carPoolCreateOrderTvAdd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/pc_add_selector"
+                        android:enabled="false" />
 
-                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/carPoolCreateOrderRv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:visibility="invisible" />
-
         </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/carPoolCreateOrderRv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="12dp"
+            android:visibility="gone" />
+
     </android.support.v4.widget.NestedScrollView>
 
     <include

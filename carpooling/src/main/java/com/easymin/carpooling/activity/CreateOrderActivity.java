@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -52,10 +51,8 @@ import com.easymin.carpooling.R;
 import com.easymin.carpooling.entity.MapPositionModel;
 import com.easymin.carpooling.entity.PincheOrder;
 import com.easymin.carpooling.entity.PriceResult;
-import com.easymin.carpooling.entity.Station;
 import com.easymin.carpooling.entity.StationResult;
 import com.easymin.carpooling.entity.TimeSlotBean;
-import com.easymin.carpooling.widget.BottomListDialog;
 import com.google.gson.Gson;
 
 import java.text.DecimalFormat;
@@ -86,7 +83,7 @@ public class CreateOrderActivity extends RxPayActivity {
     TextView carPoolCreateOrderTvAdd;
     TextView carPoolCreateOrderTvNum;
     TextView carPoolCreateOrderTvMoney;
-    Button carPoolCreateOrderBtCreate;
+    TextView carPoolCreateOrderTvCreate;
     LinearLayout carPoolCreateOrderLlMoney;
 
     LinearLayout carPoolCreateOrderLlPaySuc;
@@ -94,8 +91,6 @@ public class CreateOrderActivity extends RxPayActivity {
     Button carPoolCreateOrderBtPaySuc;
     TextView carPoolCreateOrderTvPaySucCountDown;
 
-    ImageView iv_start;
-    ImageView iv_end;
 
     /**
      * 专线订单
@@ -164,7 +159,7 @@ public class CreateOrderActivity extends RxPayActivity {
         carPoolCreateOrderTvAdd = findViewById(R.id.carPoolCreateOrderTvAdd);
         carPoolCreateOrderTvNum = findViewById(R.id.carPoolCreateOrderTvNum);
         carPoolCreateOrderTvMoney = findViewById(R.id.carPoolCreateOrderTvMoney);
-        carPoolCreateOrderBtCreate = findViewById(R.id.carPoolCreateOrderBtCreate);
+        carPoolCreateOrderTvCreate = findViewById(R.id.carPoolCreateOrderTvCreate);
         carPoolCreateOrderLlMoney = findViewById(R.id.carPoolCreateOrderLlMoney);
         carPoolCreateOrderRv = findViewById(R.id.carPoolCreateOrderRv);
         carPoolCreateOrderLlPaySuc = findViewById(R.id.create_suc);
@@ -186,7 +181,6 @@ public class CreateOrderActivity extends RxPayActivity {
         });
 
         carPoolCreateOrderTvStart.setOnClickListener(view -> {
-
             if (pcOrder == null) {
                 ToastUtil.showMessage(CreateOrderActivity.this, "请先选择时段");
                 return;
@@ -203,7 +197,6 @@ public class CreateOrderActivity extends RxPayActivity {
         });
 
         carPoolCreateOrderTvEnd.setOnClickListener(view -> {
-
             if (pcOrder == null) {
                 ToastUtil.showMessage(CreateOrderActivity.this, "请先选择时段");
                 return;
@@ -276,7 +269,7 @@ public class CreateOrderActivity extends RxPayActivity {
 
             setBtnEnable();
         });
-        carPoolCreateOrderBtCreate.setOnClickListener(new View.OnClickListener() {
+        carPoolCreateOrderTvCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (currentModel == 2) {
@@ -500,7 +493,7 @@ public class CreateOrderActivity extends RxPayActivity {
         if (money != 0) {
             carPoolCreateOrderLlMoney.setVisibility(View.VISIBLE);
         } else {
-            carPoolCreateOrderLlMoney.setVisibility(View.GONE);
+            carPoolCreateOrderLlMoney.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -554,12 +547,12 @@ public class CreateOrderActivity extends RxPayActivity {
                 endSite = null;
                 carPoolCreateOrderTvEnd.setText("");
                 setBtnEnable();
-                carPoolCreateOrderLlMoney.setVisibility(View.GONE);
+                carPoolCreateOrderLlMoney.setVisibility(View.INVISIBLE);
                 orderId = 0;
             } else if (requestCode == 3) {
                 //终点
                 orderId = 0;
-                carPoolCreateOrderLlMoney.setVisibility(View.GONE);
+                carPoolCreateOrderLlMoney.setVisibility(View.INVISIBLE);
                 endSite = data.getParcelableExtra("pos_model");
                 if (startSite != null) {
                     if (startSite.getId() == endSite.getId()) {
@@ -625,7 +618,7 @@ public class CreateOrderActivity extends RxPayActivity {
         carPoolCreateOrderTvEnd.setText(null);
         endSite = null;
         currentNo = 1;
-        carPoolCreateOrderLlMoney.setVisibility(View.GONE);
+        carPoolCreateOrderLlMoney.setVisibility(View.INVISIBLE);
         if (currentModel == 2) {
             carPoolCreateOrderLvSeatSelect.setVisibility(View.VISIBLE);
             carPoolCreateOrderLlCount.setVisibility(View.GONE);
@@ -656,11 +649,11 @@ public class CreateOrderActivity extends RxPayActivity {
                     && StringUtils.isNotBlank(carPoolCreateOrderEtPhone.getText().toString())
                     && carPoolCreateOrderEtPhone.getText().toString().length() == 11
                     && currentNo > 0) {
-                carPoolCreateOrderBtCreate.setEnabled(true);
-                carPoolCreateOrderBtCreate.setBackgroundResource(R.drawable.cor4_solid_blue);
+                carPoolCreateOrderTvCreate.setEnabled(true);
+                carPoolCreateOrderTvCreate.setBackgroundResource(R.drawable.cor4_solid_blue);
             } else {
-                carPoolCreateOrderBtCreate.setEnabled(false);
-                carPoolCreateOrderBtCreate.setBackgroundResource(R.drawable.cor4_solid_sub);
+                carPoolCreateOrderTvCreate.setEnabled(false);
+                carPoolCreateOrderTvCreate.setBackgroundResource(R.drawable.cor4_solid_sub);
             }
 //            if (currentNo == 1) {
 //                carPoolCreateOrderTvSub.setEnabled(false);
@@ -683,11 +676,11 @@ public class CreateOrderActivity extends RxPayActivity {
                     && passengerId != 0
                     && !TextUtils.isEmpty(carPoolCreateOrderTvSeatSelect.getText())
                     && adapter.getData().size() > 0) {
-                carPoolCreateOrderBtCreate.setEnabled(true);
-                carPoolCreateOrderBtCreate.setBackgroundResource(R.drawable.cor4_solid_blue);
+                carPoolCreateOrderTvCreate.setEnabled(true);
+                carPoolCreateOrderTvCreate.setBackgroundResource(R.drawable.cor4_solid_blue);
             } else {
-                carPoolCreateOrderBtCreate.setEnabled(false);
-                carPoolCreateOrderBtCreate.setBackgroundResource(R.drawable.cor4_solid_sub);
+                carPoolCreateOrderTvCreate.setEnabled(false);
+                carPoolCreateOrderTvCreate.setBackgroundResource(R.drawable.cor4_solid_sub);
             }
         }
     }
