@@ -18,6 +18,7 @@ import com.easymi.component.utils.PhoneUtil
 import com.easymi.component.utils.ToastUtil
 import com.easymi.personal.McService
 import com.easymi.personal.R
+import com.easymi.personal.entity.PopularizeBean
 import com.easymi.personal.entity.PromoteDetail
 import kotlinx.android.synthetic.main.activity_popularize.*
 import rx.Observable
@@ -83,7 +84,7 @@ class PopularizeActivity : RxBaseActivity(), View.OnClickListener {
             } else if (status == 2) {
                 popularizeTvContent.text = remark;
                 popularizeCtb.setTitle("成为推广者");
-                setSpan();
+                getPhoneNum();
                 with(popularizeTvActionGreen) {
                     visibility = View.VISIBLE;
                     text = "重新提交";
@@ -104,35 +105,52 @@ class PopularizeActivity : RxBaseActivity(), View.OnClickListener {
             } else if (status == 4) {
                 popularizeTvContent.text = "您已被管理员停权，您可以联系平台了解详细信息，也可以重新提交申请。";
                 popularizeCtb.setTitle("成为推广者");
-                setSpan();
+                getPhoneNum();
                 popularizeTvActionGreen.visibility = View.GONE;
                 popularizeTvActionGreenLine.visibility = View.GONE;
             }
         }
     }
 
-    private fun setSpan() {
+    private fun setPhoneNum(s: String?) {
         with(popularizeTvPhone) {
             visibility = View.VISIBLE
             highlightColor = Color.TRANSPARENT
             text = SpannableStringBuilder("平台联系电话:").apply {
-                append(EmUtil.getEmployInfo()?.companyPhone ?: "读取联系电话失败")
+                append(s ?: "读取联系电话失败")
                 setSpan(object : ClickableSpan() {
                     override fun updateDrawState(ds: TextPaint) {
                         ds.color = ContextCompat.getColor(this@PopularizeActivity, R.color.colorYellow)
                     }
 
                     override fun onClick(widget: View) {
-                        if (EmUtil.getEmployInfo()?.companyPhone?.length ?: 0 > 0) {
-                            PhoneUtil.call(this@PopularizeActivity, EmUtil.getEmployInfo().companyPhone)
+                        if (s?.length ?: 0 > 0) {
+                            PhoneUtil.call(this@PopularizeActivity, s)
                         } else {
-                            ToastUtil.showMessage(this@PopularizeActivity, "读取联系电话失败");
+                            getPhoneNum(needShowProgress = true)
                         }
                     }
                 }, 7, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
             movementMethod = LinkMovementMethod.getInstance()
         }
+    }
+
+    private fun getPhoneNum(needShowProgress: Boolean = false) {
+        mRxManager.add(ApiManager.getInstance().createApi(Config.HOST, McService::class.java)
+                .contactWay
+                .map(HttpResultFunc2<PopularizeBean>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(MySubscriber<PopularizeBean>(this, needShowProgress, false, object : HaveErrSubscriberListener<PopularizeBean> {
+                    override fun onError(code: Int) {
+                        setPhoneNum(null)
+                    }
+
+                    override fun onNext(t: PopularizeBean?) {
+                        setPhoneNum(t?.cantactWay)
+                    }
+                })))
     }
 
     override fun onClick(v: View?) {

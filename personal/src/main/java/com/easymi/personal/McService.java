@@ -11,6 +11,7 @@ import com.easymi.personal.entity.MyPopularizeFeeDetailBean;
 import com.easymi.personal.entity.MyPopularizeMainBean;
 import com.easymi.personal.entity.MyPopularizeRecordBean;
 import com.easymi.personal.entity.MyPopularizeUrlBean;
+import com.easymi.personal.entity.PopularizeBean;
 import com.easymi.personal.entity.PromoteDetail;
 import com.easymi.personal.entity.Register;
 import com.easymi.personal.result.AnnouncementResult;
@@ -65,6 +66,9 @@ public interface McService {
     Observable<EmResult> promoteApply(@Field("realName") String realName,
                                       @Field("phone") String phone,
                                       @Field("type") int type);
+
+    @GET("api/v1/system/platform")
+    Observable<EmResult2<PopularizeBean>> getContactWay();
 
     @GET("api/v1/resources/promoter")
     Observable<EmResult2<MyPopularizeUrlBean>> getPromoteUrl(@Query("phone") String phone);
