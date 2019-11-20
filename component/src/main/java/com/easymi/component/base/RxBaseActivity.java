@@ -31,6 +31,7 @@ import com.easymi.component.utils.SysUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.swipeback.ikew.SwipeBackActivityBase;
 import com.easymi.component.widget.swipeback.ikew.SwipeBackActivityHelper;
+import com.easymi.component.widget.swipeback.ikew.SwipeBackLayout;
 import com.easymi.component.widget.swipeback.ikew.Utils;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
@@ -114,7 +115,7 @@ public abstract class RxBaseActivity extends RxAppCompatActivity implements
     }
 
     @Override
-    public com.easymi.component.widget.swipeback.ikew.SwipeBackLayout getSwipeBackLayout() {
+    public SwipeBackLayout getSwipeBackLayout() {
         return mHelper.getSwipeBackLayout();
     }
 
