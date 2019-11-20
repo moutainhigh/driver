@@ -1,7 +1,6 @@
 package com.easymin.carpooling.widget;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.view.LayoutInflater;
@@ -11,12 +10,9 @@ import android.widget.TextView;
 import com.easymi.component.widget.wheelview.WheelView;
 import com.easymi.component.widget.wheelview.adapter.AbstractWheelTextAdapter;
 import com.easymin.carpooling.R;
-import com.easymin.carpooling.entity.AllStation;
 import com.easymin.carpooling.entity.LineBean;
-import com.easymin.carpooling.entity.MyStation;
 import com.easymin.carpooling.entity.TimeSlotBean;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -33,13 +29,13 @@ public class BottomListDialog extends BottomSheetDialog {
     private View mView;
     private WheelView wheelView;
     private OnSelectListener onSelectListener;
-    private List<?> datas;
+    private List datas;
 
     String title;
 
     TextView tv_title;
 
-    public BottomListDialog(Context context,List<?> datas) {
+    public BottomListDialog(Context context, List datas) {
         super(context);
         this.datas = datas;
         initViews(context, datas);
@@ -54,7 +50,7 @@ public class BottomListDialog extends BottomSheetDialog {
         super.show();
     }
 
-    public void setTitle(String title){
+    public void setTitle(String title) {
         this.title = title;
         tv_title.setText(this.title);
     }
@@ -70,7 +66,7 @@ public class BottomListDialog extends BottomSheetDialog {
 
         wheelView = mView.findViewById(R.id.wheelView);
 
-        wheelView.setShadowColor(255,255,255);
+        wheelView.setShadowColor(255, 255, 255);
         TimeWheelAdapter adapter = new TimeWheelAdapter(datas, wheelView.getContext());
         adapter.setItemResource(R.layout.com_item_picker);
         adapter.setItemTextResource(R.id.tvContent);
@@ -101,9 +97,9 @@ public class BottomListDialog extends BottomSheetDialog {
 
     private class TimeWheelAdapter extends AbstractWheelTextAdapter {
 
-        private List<?> datas;
+        private List datas;
 
-        TimeWheelAdapter(List<?> datas, Context context) {
+        TimeWheelAdapter(List datas, Context context) {
             super(context);
             this.datas = datas;
         }
@@ -111,13 +107,13 @@ public class BottomListDialog extends BottomSheetDialog {
         @Override
         protected CharSequence getItemText(int index) {
             String item = "";
-            if (datas != null){
-                if (datas.get(index) instanceof  LineBean){
+            if (datas != null) {
+                if (datas.get(index) instanceof LineBean) {
                     LineBean lineBean = (LineBean) datas.get(index);
-                    item =  datas != null ? lineBean.lineName : "";
-                }else if (datas.get(index) instanceof TimeSlotBean){
+                    item = lineBean.lineName;
+                } else if (datas.get(index) instanceof TimeSlotBean) {
                     TimeSlotBean timeSlotBean = (TimeSlotBean) datas.get(index);
-                    item =  timeSlotBean.day +" "+ timeSlotBean.timeSlot+" 余票："+(timeSlotBean.tickets == null ? "充足":timeSlotBean.tickets);
+                    item = timeSlotBean.day + " " + timeSlotBean.timeSlot + " 余票：" + (timeSlotBean.tickets == null ? "充足" : timeSlotBean.tickets);
                 }
             }
             return item;
