@@ -46,6 +46,7 @@ import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.utils.CsSharedPreferences;
+import com.easymi.component.utils.DensityUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
@@ -272,7 +273,7 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
         texture_preview.turnRound();
 
         roundBorderView = new RoundBorderView(this);
-        ((RelativeLayout) texture_preview.getParent()).addView(roundBorderView, texture_preview.getLayoutParams());
+        ((RelativeLayout) texture_preview.getParent()).addView(roundBorderView, layoutParams);
 
         roundBorderView.setRadius(Math.min(roundBorderView.getWidth(), roundBorderView.getHeight()) / 2);
         roundBorderView.turnRound();

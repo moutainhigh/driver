@@ -26,10 +26,10 @@ public class RoundTextureView extends TextureView {
             @Override
             public void getOutline(View view, Outline outline) {
                 Rect rect = new Rect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
-                outline.setRoundRect(rect, radius);
+                outline.setOval(rect);
+                setClipToOutline(true);
             }
         });
-        setClipToOutline(true);
     }
 
     public void turnRound() {
