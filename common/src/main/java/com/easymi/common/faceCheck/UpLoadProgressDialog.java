@@ -6,8 +6,7 @@ import android.widget.TextView;
 
 import com.dinuscxj.progressbar.CircleProgressBar;
 import com.easymi.common.R;
-import com.easymi.component.widget.BaseCenterDialog;
-
+import com.easymi.component.widget.dialog.BaseCenterDialog;
 /**
  * @Copyright (C), 2012-2019, Sichuan Xiaoka Technology Co., Ltd.
  * @FileName: UpLoadProgressDialog
