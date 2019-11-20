@@ -91,7 +91,7 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
     TextView tv_name_hint;
     TextView tv_name;
 
-    RoundBorderView roundBorderView;
+//    RoundBorderView roundBorderView;
 
     private static final int MAX_DETECT_NUM = 10;
 
@@ -272,11 +272,11 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
         texture_preview.setRadius(Math.min(texture_preview.getWidth(), texture_preview.getHeight()) / 2);
         texture_preview.turnRound();
 
-        roundBorderView = new RoundBorderView(this);
-        ((RelativeLayout) texture_preview.getParent()).addView(roundBorderView, layoutParams);
-
-        roundBorderView.setRadius(Math.min(roundBorderView.getWidth(), roundBorderView.getHeight()) / 2);
-        roundBorderView.turnRound();
+//        roundBorderView = new RoundBorderView(this);
+//        ((RelativeLayout) texture_preview.getParent()).addView(roundBorderView, layoutParams);
+//
+//        roundBorderView.setRadius(Math.min(roundBorderView.getWidth(), roundBorderView.getHeight()) / 2);
+//        roundBorderView.turnRound();
 
         if (!checkPermissions(NEEDED_PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, NEEDED_PERMISSIONS, ACTION_REQUEST_PERMISSIONS);

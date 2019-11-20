@@ -605,7 +605,7 @@ public enum ErrCode {
     /**
      * 当前身份证已认证
      */
-    CURRENT_ID_IS_AUTHENTICATED(40708,"当前身份证已认证"),
+    CURRENT_ID_IS_AUTHENTICATED(40708,"信息已认证，请不要重复认证"),
 
     /**
      * 申请中
