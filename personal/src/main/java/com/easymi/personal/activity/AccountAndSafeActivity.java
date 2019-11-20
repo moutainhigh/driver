@@ -78,7 +78,7 @@ public class AccountAndSafeActivity extends RxBaseActivity {
                 iv_right.setVisibility(View.GONE);
                 tv_status.setTextColor(getResources().getColor(R.color.color_999999));
 
-
+                ll_face_check.setOnClickListener(null);
             }else {
                 //未认证
                 tv_status.setText(getResources().getString(R.string.p_no_check));
