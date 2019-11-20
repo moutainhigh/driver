@@ -156,7 +156,7 @@ public class AuthenticationActivity extends RxBaseActivity {
                 .subscribeOn(rx.schedulers.Schedulers.io())
                 .observeOn(rx.android.schedulers.AndroidSchedulers.mainThread());
 
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, emResult -> {
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, true, true, emResult -> {
 
             Intent intent = new Intent(this, RegisterAndRecognizeActivity.class);
             intent.putExtra("flag", 0);
