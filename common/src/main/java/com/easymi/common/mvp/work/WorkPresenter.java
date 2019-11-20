@@ -351,32 +351,37 @@ public class WorkPresenter implements WorkContract.Presenter {
         long driverId = EmUtil.getEmployId();
         Observable<EmResult> observable = model.online(driverId, EmUtil.getAppKey());
         view.getRxManager().add(observable.subscribe(new MySubscriber<>(context, btn, emResult -> {
-
             if (emResult.getCode() == 1){
                 //一键报警 上线
-                CenterUtil centerUtil = new CenterUtil(context, Config.APP_KEY,
-                        XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
-                        XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
-                centerUtil.driverUp(driverId, EmUtil.getEmployInfo().companyId, EmUtil.getEmployInfo().userName, EmUtil.getEmployInfo().realName,
-                        EmUtil.getEmployInfo().phone, System.currentTimeMillis() / 1000, EmUtil.getEmployInfo().serviceType);
-
-                view.onlineSuc();
-                XApp.getEditor().putLong(Config.ONLINE_TIME, System.currentTimeMillis()).apply();
-                uploadTime(2);
+                online();
             }else if (emResult.getCode() == 406200){
-                //todo 未认证
+                // 未认证
                 Intent intent = new Intent(context,AuthenticationActivity.class);
                 context.startActivity(intent);
             }else if (emResult.getCode() == 406300){
-                //todo 要对比
+                // 要对比
                 Intent intent = new Intent(context,RegisterAndRecognizeActivity.class);
                 intent.putExtra("flag",1);
-                context.startActivity(intent);
+                ((WorkActivity)context).startActivityForResult(intent,0x99);
             }else {
                 observable .filter(new HttpResultFunc<>());
             }
         })));
     }
+
+    public void online(){
+        long driverId = EmUtil.getEmployId();
+        CenterUtil centerUtil = new CenterUtil(context, Config.APP_KEY,
+                XApp.getMyPreferences().getString(Config.AES_PASSWORD, AesUtil.AAAAA),
+                XApp.getMyPreferences().getString(Config.SP_TOKEN, ""));
+        centerUtil.driverUp(driverId, EmUtil.getEmployInfo().companyId, EmUtil.getEmployInfo().userName, EmUtil.getEmployInfo().realName,
+                EmUtil.getEmployInfo().phone, System.currentTimeMillis() / 1000, EmUtil.getEmployInfo().serviceType);
+
+        view.onlineSuc();
+        XApp.getEditor().putLong(Config.ONLINE_TIME, System.currentTimeMillis()).apply();
+        uploadTime(2);
+    }
+
 
     public void doLogOut() {
         if (null != WorkPresenter.timeCounter) {

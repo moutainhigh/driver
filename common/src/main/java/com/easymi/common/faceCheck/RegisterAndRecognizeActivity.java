@@ -56,6 +56,8 @@ import com.easymi.component.widget.RxProgressHUD;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -190,15 +192,15 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
 
         flag = getIntent().getIntExtra("flag", 0);
 
-        if (flag == 0){
+        if (flag == 0) {
             String name = getIntent().getStringExtra("name");
 
-            if (!TextUtils.isEmpty(name)){
-                tv_name.setText("*"+name.substring(1,name.length()));
+            if (!TextUtils.isEmpty(name)) {
+                tv_name.setText("*" + name.substring(1, name.length()));
                 tv_name.setVisibility(View.VISIBLE);
                 tv_name_hint.setVisibility(View.VISIBLE);
             }
-        }else {
+        } else {
             tv_name.setVisibility(View.INVISIBLE);
             tv_name_hint.setVisibility(View.INVISIBLE);
         }
@@ -212,7 +214,7 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
      * 激活引擎
      */
     public void activeEngine() {
-        Log.e(TAG,"faceEngine"+(faceEngine == null));
+        Log.e(TAG, "faceEngine" + (faceEngine == null));
         Observable.create((ObservableOnSubscribe<Integer>) emitter -> {
             int activeCode = faceEngine.activeOnline(RegisterAndRecognizeActivity.this, "DdU5KdD96mNGpq949QLxzxa5nFvQoeVBnGkvdi1rXCfY", "AeP1rPdQvo1bY1uL2H8mvPjofGfFwT2D5bR2iqPWH2L7");
             emitter.onNext(activeCode);
@@ -253,8 +255,60 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
 
                     }
                 });
-
     }
+
+
+
+    /**
+     * 倒计时计时器
+     */
+    Timer timer;
+    TimerTask timerTask;
+
+    /**
+     * 取消定时器
+     */
+    public void cancelTimer() {
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+        if (timerTask != null) {
+            timerTask.cancel();
+            timerTask = null;
+        }
+    }
+
+    int timeSeq = -1;
+
+    public void setCountTIme(){
+        timeSeq = 2;
+
+        if (null != timer) {
+            timer.cancel();
+            timer = null;
+        }
+        if (null != timerTask) {
+            timerTask.cancel();
+            timerTask = null;
+        }
+
+        timer = new Timer();
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                timeSeq--;
+                if (timeSeq == 0){
+                    cancelTimer();
+                }
+            }
+        };
+        timer.schedule(timerTask, 0, 1000);
+    }
+
+
+
+
 
     /**
      * 在{@link #texture_preview}第一次布局完成后，去除该监听，并且进行引擎和相机的初始化
@@ -271,12 +325,6 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
 
         texture_preview.setRadius(Math.min(texture_preview.getWidth(), texture_preview.getHeight()) / 2);
         texture_preview.turnRound();
-
-//        roundBorderView = new RoundBorderView(this);
-//        ((RelativeLayout) texture_preview.getParent()).addView(roundBorderView, layoutParams);
-//
-//        roundBorderView.setRadius(Math.min(roundBorderView.getWidth(), roundBorderView.getHeight()) / 2);
-//        roundBorderView.turnRound();
 
         if (!checkPermissions(NEEDED_PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, NEEDED_PERMISSIONS, ACTION_REQUEST_PERMISSIONS);
@@ -428,24 +476,27 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
                             .faceListener(faceListener)
                             .build();
                 }
+                setCountTIme();
             }
 
 
             @Override
             public void onPreview(final byte[] nv21, Camera camera) {
-                List<FacePreviewInfo> facePreviewInfoList = faceHelper.onPreviewFrame(nv21);
-                if (facePreviewInfoList != null && facePreviewInfoList.size() > 0 && previewSize != null) {
-                    for (int i = 0; i < facePreviewInfoList.size(); i++) {
-                        Integer status = requestFeatureStatusMap.get(facePreviewInfoList.get(i).getTrackId());
-                        /**
-                         * 在活体检测开启，在人脸识别状态不为成功或人脸活体状态不为处理中（ANALYZING）且不为处理完成（ALIVE、NOT_ALIVE）时重新进行活体检测
-                         */
-                        if ((status == null || status != RequestFeatureStatus.SUCCEED)) {
-                            Integer liveness = livenessMap.get(facePreviewInfoList.get(i).getTrackId());
-                            Log.e(TAG, "liveness:" + liveness);
-                            if (liveness == null || (liveness != LivenessInfo.ALIVE && liveness != LivenessInfo.NOT_ALIVE && liveness != RequestLivenessStatus.ANALYZING)) {
-                                livenessMap.put(facePreviewInfoList.get(i).getTrackId(), RequestLivenessStatus.ANALYZING);
-                                faceHelper.requestFaceLiveness(nv21, facePreviewInfoList.get(i).getFaceInfo(), previewSize.width, previewSize.height, FaceEngine.CP_PAF_NV21, facePreviewInfoList.get(i).getTrackId());
+                if (timeSeq == 0){
+                    List<FacePreviewInfo> facePreviewInfoList = faceHelper.onPreviewFrame(nv21);
+                    if (facePreviewInfoList != null && facePreviewInfoList.size() > 0 && previewSize != null) {
+                        for (int i = 0; i < facePreviewInfoList.size(); i++) {
+                            Integer status = requestFeatureStatusMap.get(facePreviewInfoList.get(i).getTrackId());
+                            /**
+                             * 在活体检测开启，在人脸识别状态不为成功或人脸活体状态不为处理中（ANALYZING）且不为处理完成（ALIVE、NOT_ALIVE）时重新进行活体检测
+                             */
+                            if ((status == null || status != RequestFeatureStatus.SUCCEED)) {
+                                Integer liveness = livenessMap.get(facePreviewInfoList.get(i).getTrackId());
+                                Log.e(TAG, "liveness:" + liveness);
+                                if (liveness == null || (liveness != LivenessInfo.ALIVE && liveness != LivenessInfo.NOT_ALIVE && liveness != RequestLivenessStatus.ANALYZING)) {
+                                    livenessMap.put(facePreviewInfoList.get(i).getTrackId(), RequestLivenessStatus.ANALYZING);
+                                    faceHelper.requestFaceLiveness(nv21, facePreviewInfoList.get(i).getFaceInfo(), previewSize.width, previewSize.height, FaceEngine.CP_PAF_NV21, facePreviewInfoList.get(i).getTrackId());
+                                }
                             }
                         }
                     }
@@ -662,7 +713,7 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
     }
 
     /**
-     *  网络超时，请检查网络
+     * 网络超时，请检查网络
      */
     int FACE_TIME_OUT_ERR = 40703;
 
@@ -689,9 +740,11 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
             } else if (emResult.getCode() == FACE_TIME_OUT_ERR) {
                 ToastUtil.showMessage(RegisterAndRecognizeActivity.this, "网络超时，请检查网络");
                 cameraHelper.startPreview();
-            }else {
+                setCountTIme();
+            } else {
                 ToastUtil.showMessage(RegisterAndRecognizeActivity.this, "认证失败，请重试");
                 cameraHelper.startPreview();
+                setCountTIme();
             }
         })));
     }
@@ -714,20 +767,23 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
                 dialog.dismiss();
             }
             if (emResult.getCode() == 1) {
-                if (emResult.data.identical){
+                if (emResult.data.identical) {
                     ToastUtil.showMessage(RegisterAndRecognizeActivity.this, "识别成功");
                     setResult(RESULT_OK);
                     finish();
-                }else {
+                } else {
                     ToastUtil.showMessage(RegisterAndRecognizeActivity.this, "识别失败，请按照提示操作");
                     cameraHelper.startPreview();
+                    setCountTIme();
                 }
             } else if (emResult.getCode() == FACE_TIME_OUT_ERR) {
                 ToastUtil.showMessage(RegisterAndRecognizeActivity.this, "网络超时，请检查网络");
                 cameraHelper.startPreview();
-            }else {
+                setCountTIme();
+            } else {
                 ToastUtil.showMessage(RegisterAndRecognizeActivity.this, "识别失败，请重试");
                 cameraHelper.startPreview();
+                setCountTIme();
             }
         })));
     }
