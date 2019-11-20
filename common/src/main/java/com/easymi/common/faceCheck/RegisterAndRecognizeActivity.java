@@ -661,16 +661,6 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
         })));
     }
 
-//    /**
-//     * 认证图片错误
-//     */
-//    int FACE_AUTHENTICATION_IMAGE_ERR = 40701;
-//
-//    /**
-//     * 识别图片错误
-//     */
-//    int FACE_IDENTIFICATION_IMAGE_ERR = 40702;
-
     /**
      *  网络超时，请检查网络
      */
@@ -700,7 +690,7 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
                 ToastUtil.showMessage(RegisterAndRecognizeActivity.this, "网络超时，请检查网络");
                 cameraHelper.startPreview();
             }else {
-                ToastUtil.showMessage(RegisterAndRecognizeActivity.this, "认证失败，请按照提示操作");
+                ToastUtil.showMessage(RegisterAndRecognizeActivity.this, "认证失败，请重试");
                 cameraHelper.startPreview();
             }
         })));
@@ -736,7 +726,7 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
                 ToastUtil.showMessage(RegisterAndRecognizeActivity.this, "网络超时，请检查网络");
                 cameraHelper.startPreview();
             }else {
-                ToastUtil.showMessage(RegisterAndRecognizeActivity.this, "识别失败，请按照提示操作");
+                ToastUtil.showMessage(RegisterAndRecognizeActivity.this, "识别失败，请重试");
                 cameraHelper.startPreview();
             }
         })));

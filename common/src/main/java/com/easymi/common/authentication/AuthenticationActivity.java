@@ -169,7 +169,6 @@ public class AuthenticationActivity extends RxBaseActivity {
 
     /**
      * 禁止EditText输入空格和换行符 限制长度18位
-     *
      * @param editText EditText输入框
      */
     public void setEditTextInputSpace(EditText editText) {
