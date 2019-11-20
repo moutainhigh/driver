@@ -1,14 +1,18 @@
 package com.easymi.common;
 
+import com.easymi.common.entity.AuthResult;
 import com.easymi.common.entity.Brands;
 import com.easymi.common.entity.BusinessList;
 import com.easymi.common.entity.CompanyList;
+import com.easymi.common.entity.FaceComparResult;
+import com.easymi.common.entity.IdCardResult;
 import com.easymi.common.entity.ManualConfigBean;
 import com.easymi.common.entity.MqttConfig;
 import com.easymi.common.entity.MqttResult;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.entity.NewToken;
 import com.easymi.common.entity.PassengerBean;
+import com.easymi.common.entity.Pic;
 import com.easymi.common.entity.PushAnnouncement;
 import com.easymi.common.entity.PushPojo;
 import com.easymi.common.entity.QiNiuToken;
@@ -36,13 +40,17 @@ import com.easymi.component.result.EmResult2;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
@@ -450,8 +458,6 @@ public interface CommApiService {
                                           @Query("appKey") String appKey);
 
     /**
-     * 
-     *
      * @param appKey
      * @param json
      * @return
@@ -651,4 +657,68 @@ public interface CommApiService {
     @GET("api/v1/message/topic/driver_mqtt_config")
     Observable<EmResult2<MqttConfig>> getConfig();
 
+
+//////////人脸识别添加
+
+    /**
+     * 人脸认证
+     *
+     * @param imagePath 图片地址
+     * @param address   认证地址
+     * @param longitude 认证经度
+     * @param latitude  认证纬度
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/safe/face/authentication/record")
+    Observable<EmResult> faceAuth(@Field("imagePath") String imagePath,
+                                  @Field("address") String address,
+                                  @Field("longitude") double longitude,
+                                  @Field("latitude") double latitude);
+
+    /**
+     * 人脸对比
+     *
+     * @param imagePath 图片地址
+     * @param address   认证地址
+     * @param longitude 认证经度
+     * @param latitude  认证纬度
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/safe/face/identification/record")
+    Observable<FaceComparResult> faceCompar(@Field("imagePath") String imagePath,
+                                            @Field("address") String address,
+                                            @Field("longitude") double longitude,
+                                            @Field("latitude") double latitude,
+                                            @Field("reason") String reason);
+
+
+    /**
+     * 实名认证
+     * @param verificationName  姓名
+     * @param verificationId  身份证号码
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/safe/real/name")
+    Observable<AuthResult> authentication(@Field("verificationName") String verificationName,
+                                          @Field("verificationId") String verificationId);
+
+
+    /**
+     * 识别身份证照片
+     * @param idCardImage
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/v1/safe/real/name/image")
+    Observable<IdCardResult> identifyIdCard(@Field("idCardImage") String idCardImage);
+
+
+    @Multipart
+    @POST
+    Observable<Pic> uploadPic(@Url String url,
+                              @Part("token") RequestBody token,
+                              @Part MultipartBody.Part audio);
 }

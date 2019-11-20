@@ -468,7 +468,9 @@ public static ** valueOf(java.lang.String);
 -dontwarn com.tencent.bugly.**
 -keep public class com.tencent.bugly.**{*;}
 
-
+#人脸识别
+-dontwarn com.arcsoft.face.**
+-keep class com.arcsoft.face.**{*;}
 
 
 

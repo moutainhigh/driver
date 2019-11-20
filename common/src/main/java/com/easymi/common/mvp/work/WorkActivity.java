@@ -850,4 +850,15 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     public void onRefreshOrder() {
         refreshData();
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK){
+            if (requestCode == 0x99){
+                presenter.online();
+            }
+        }
+    }
 }
