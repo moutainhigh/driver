@@ -199,5 +199,11 @@
     <string name="com_order_call_me">联系客服</string>
 
     <string name="com_turn_order">转单</string>
-
+    <string name="com_authentication_name">姓名</string>
+    <string name="com_certification_name_hint">请输入本人真实姓名</string>
+    <string name="com_certification_idcard">身份证号</string>
+    <string name="com_certification_idcard_hint">请输入本人真实身份证号</string>
+    <string name="com_certification_hint">该信息仅用于证明您的真实身份，保障您的合法权益，请放心填写</string>
+    <string name="com_certification_commit">提交</string>
+    <string name="camera_permission_required">本功能需要相机权限！</string>
 </resources>

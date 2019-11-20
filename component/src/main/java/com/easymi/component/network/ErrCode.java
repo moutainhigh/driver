@@ -589,6 +589,22 @@ public enum ErrCode {
     START_NO_SERVICE(40300, "当前起始地未开通服务机构"),
 
     /**
+     * 实名认证失败,请重新输入
+     */
+    ID_CARD_PARAMETER_ERR(40704,"实名认证参数错误"),
+
+    /**
+     * 实名认证失败,请重新输入
+     */
+    ID_CARD_RECOGNITION_FAILURE_ERR(40705,"实名认证失败,请重新输入"),
+
+    /**
+     * 身份证扫描失败
+     */
+    ID_CARD_SCAN_FAILED(40706,"身份证扫描失败"),
+
+
+    /**
      * 申请中
      */
     APPLYING(50009, "申请中"),

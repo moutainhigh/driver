@@ -32,6 +32,7 @@ import com.easymi.common.CommApiService;
 import com.easymi.common.R;
 import com.easymi.common.entity.FaceComparResult;
 import com.easymi.common.entity.FaceConfig;
+import com.easymi.common.entity.Pic;
 import com.easymi.common.entity.QiNiuToken;
 import com.easymi.common.widget.CommonDialog;
 import com.easymi.component.Config;
@@ -50,8 +51,6 @@ import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.RxProgressHUD;
-import com.easymin.driver.securitycenter.ComService;
-import com.easymin.driver.securitycenter.entity.Pic;
 
 import java.io.File;
 import java.util.List;
@@ -87,6 +86,9 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
     RoundTextureView texture_preview;
     TextView tv_hint;
     CusToolbar cusToolbar;
+
+    TextView tv_name_hint;
+    TextView tv_name;
 
     RoundBorderView roundBorderView;
 
@@ -178,21 +180,40 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
     public void initViews(Bundle savedInstanceState) {
         texture_preview = findViewById(R.id.texture_preview);
         tv_hint = findViewById(R.id.tv_hint);
+        tv_name = findViewById(R.id.tv_name);
+        tv_name_hint = findViewById(R.id.tv_name_hint);
+
+
         //在布局结束后才做初始化操作
         texture_preview.getViewTreeObserver().addOnGlobalLayoutListener(this);
 
         flag = getIntent().getIntExtra("flag", 0);
+
+        if (flag == 0){
+            String name = getIntent().getStringExtra("name");
+
+            if (!TextUtils.isEmpty(name)){
+                tv_name.setText("*"+name.substring(1,name.length()));
+                tv_name.setVisibility(View.VISIBLE);
+                tv_name_hint.setVisibility(View.VISIBLE);
+            }
+        }else {
+            tv_name.setVisibility(View.INVISIBLE);
+            tv_name_hint.setVisibility(View.INVISIBLE);
+        }
+
         getQiniuToken();
     }
 
-    private FaceEngine faceEngine = new FaceEngine();
+    FaceEngine faceEngine = new FaceEngine();
 
     /**
      * 激活引擎
      */
     public void activeEngine() {
+        Log.e(TAG,"faceEngine"+(faceEngine == null));
         Observable.create((ObservableOnSubscribe<Integer>) emitter -> {
-            int activeCode = faceEngine.activeOnline(getBaseContext(), Config.FACE_APP_ID, Config.FACE_SDK_KEY);
+            int activeCode = faceEngine.activeOnline(RegisterAndRecognizeActivity.this, "DdU5KdD96mNGpq949QLxzxa5nFvQoeVBnGkvdi1rXCfY", "AeP1rPdQvo1bY1uL2H8mvPjofGfFwT2D5bR2iqPWH2L7");
             emitter.onNext(activeCode);
         })
                 .subscribeOn(Schedulers.io())
@@ -216,7 +237,6 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
                         ActiveFileInfo activeFileInfo = new ActiveFileInfo();
                         int res = faceEngine.getActiveFileInfo(getBaseContext(), activeFileInfo);
                         if (res == ErrorInfo.MOK || res == ErrorInfo.MERR_ASF_ALREADY_ACTIVATED) {
-                            Log.i(TAG, activeFileInfo.toString());
                             initEngine();
                             initCamera();
                         }
@@ -527,6 +547,52 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
                 });
     }
 
+    @Override
+    protected void onDestroy() {
+
+        if (cameraHelper != null) {
+            cameraHelper.release();
+            cameraHelper = null;
+        }
+
+        unInitEngine();
+        if (faceHelper != null) {
+            faceHelper.release();
+            faceHelper = null;
+        }
+
+        if (delayFaceTaskCompositeDisposable != null) {
+            delayFaceTaskCompositeDisposable.clear();
+        }
+
+        super.onDestroy();
+    }
+
+    /**
+     * 销毁引擎，faceHelper中可能会有特征提取耗时操作仍在执行，加锁防止crash
+     */
+    private void unInitEngine() {
+        if (ftInitCode == ErrorInfo.MOK && ftEngine != null) {
+            synchronized (ftEngine) {
+                int ftUnInitCode = ftEngine.unInit();
+                Log.i(TAG, "unInitEngine: " + ftUnInitCode);
+            }
+        }
+        if (frInitCode == ErrorInfo.MOK && frEngine != null) {
+            synchronized (frEngine) {
+                int frUnInitCode = frEngine.unInit();
+                Log.i(TAG, "unInitEngine: " + frUnInitCode);
+            }
+        }
+        if (flInitCode == ErrorInfo.MOK && flEngine != null) {
+            synchronized (flEngine) {
+                int flUnInitCode = flEngine.unInit();
+                Log.i(TAG, "unInitEngine: " + flUnInitCode);
+            }
+        }
+    }
+
+
     /**
      * 图片上传七牛云token
      */
@@ -574,7 +640,7 @@ public class RegisterAndRecognizeActivity extends RxBaseActivity implements View
         RequestBody tokenBody = RequestBody.create(MediaType.parse("multipart/form-data"), qiniuToken);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), photoRequestBody);
 
-        rx.Observable<Pic> observable = ApiManager.getInstance().createApi(Config.HOST, ComService.class)
+        rx.Observable<Pic> observable = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .uploadPic(Config.HOST_UP_PIC, tokenBody, body)
                 .subscribeOn(rx.schedulers.Schedulers.io())
                 .observeOn(rx.android.schedulers.AndroidSchedulers.mainThread());

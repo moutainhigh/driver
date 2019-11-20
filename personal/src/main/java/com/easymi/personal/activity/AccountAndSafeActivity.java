@@ -1,31 +1,23 @@
 package com.easymi.personal.activity;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.easymi.common.entity.FaceAuth;
 import com.easymi.common.entity.FaceAuthResult;
-import com.easymi.common.entity.FaceConfig;
 import com.easymi.common.entity.FaceConfigResult;
+import com.easymi.common.authentication.AuthenticationActivity;
 import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
-import com.easymi.common.faceCheck.RegisterAndRecognizeActivity;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HttpResultFunc;
-import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.network.MySubscriber;
-import com.easymi.component.result.EmResult;
-import com.easymi.component.utils.EmUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
-import com.easymi.personal.result.LoginResult;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -85,13 +77,17 @@ public class AccountAndSafeActivity extends RxBaseActivity {
                 tv_status.setText(getResources().getString(R.string.p_have_check));
                 iv_right.setVisibility(View.GONE);
                 tv_status.setTextColor(getResources().getColor(R.color.color_999999));
+
+
             }else {
                 //未认证
                 tv_status.setText(getResources().getString(R.string.p_no_check));
                 iv_right.setVisibility(View.VISIBLE);
                 tv_status.setTextColor(getResources().getColor(R.color.color_red));
 
-                ll_face_check.setOnClickListener(v -> startActivity(new Intent(this,RegisterAndRecognizeActivity.class).putExtra("flag",0)));
+                ll_face_check.setOnClickListener(v -> {
+                    startActivity(new Intent(this,AuthenticationActivity.class));
+                });
             }
         })));
     }

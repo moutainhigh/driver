@@ -80,6 +80,15 @@
             android:name=".faceCheck.RegisterAndRecognizeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/ThemeSwipeBack" />
+        <activity
+            android:name=".authentication.AuthenticationActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/ThemeSwipeBack" />
+        <activity
+            android:name=".authentication.CameraActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/ThemeSwipeBack" />
+
     </application>
 
 </manifest>

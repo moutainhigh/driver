@@ -6,6 +6,7 @@ import android.text.TextUtils;
 
 import com.easymi.common.CommApiService;
 import com.easymi.common.R;
+import com.easymi.common.authentication.AuthenticationActivity;
 import com.easymi.common.entity.ManualConfigBean;
 import com.easymi.common.entity.MqttConfig;
 import com.easymi.common.entity.MqttResult;
@@ -364,8 +365,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                 uploadTime(2);
             }else if (emResult.getCode() == 406200){
                 //todo 未认证
-                Intent intent = new Intent(context,RegisterAndRecognizeActivity.class);
-                intent.putExtra("flag",0);
+                Intent intent = new Intent(context,AuthenticationActivity.class);
                 context.startActivity(intent);
             }else if (emResult.getCode() == 406300){
                 //todo 要对比
