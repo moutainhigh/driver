@@ -68,6 +68,7 @@ class PopularizeActivity : RxBaseActivity(), View.OnClickListener {
     private fun bindInfoResult() {
         promoteDetail?.run {
             if (status == 0) {
+                popularizeTvContent.text = "您可以申请成为平台推广员，申请后经审核您可成为平台的推广员，我们将与您精密合作，互帮互助共同发展。";
                 popularizeCtb.setTitle("成为推广者");
                 popularizeTvPhone.visibility = View.GONE;
                 with(popularizeTvActionGreen) {
@@ -103,7 +104,7 @@ class PopularizeActivity : RxBaseActivity(), View.OnClickListener {
                     text = "推广详情";
                 }
             } else if (status == 4) {
-                popularizeTvContent.text = "您已被管理员停权，您可以联系平台了解详细信息，也可以重新提交申请。";
+                popularizeTvContent.text = "您已被管理员停权，您可以联系平台了解详细信息，也可以联系平台。";
                 popularizeCtb.setTitle("成为推广者");
                 getPhoneNum();
                 popularizeTvActionGreen.visibility = View.GONE;

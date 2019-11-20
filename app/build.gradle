@@ -73,7 +73,7 @@ android {
             buildConfigField "String", "HOST", '"http://v6api.rvaka.cn/"'
             buildConfigField "String", "H5_HOST", '"http://v6h5.rvaka.cn/"'
             buildConfigField "String", "IMG_SERVER", '"https://prevassets.xiaokakj.com/"'
-            buildConfigField "boolean", "IS_ENCRYPT", "true"
+            buildConfigField "boolean", "IS_ENCRYPT", "false"
             buildConfigField "String", "VERSION_DATA", '""'
         }
         //局域网环境
