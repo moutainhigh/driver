@@ -55,7 +55,7 @@
                 android:layout_toEndOf="@id/myPopularizeCountOnCtbSymbol"
                 android:background="@null"
                 android:inputType="number|numberDecimal"
-                android:maxLength="6"
+                android:maxLength="8"
                 android:paddingStart="12dp"
                 android:textSize="36sp" />
 

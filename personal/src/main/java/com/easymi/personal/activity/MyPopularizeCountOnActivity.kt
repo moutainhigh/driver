@@ -45,7 +45,14 @@ class MyPopularizeCountOnActivity : RxBaseActivity(), View.OnClickListener {
         myPopularizeCountOnTvRecord.setOnClickListener(this)
         myPopularizeCountOnEt.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                setText(s);
+                s?.let {
+                    val position = it.toString().indexOf(".");
+                    if (position >= 0 && it.length - position - 1 > 2) {
+                        it.delete(position + 3, position + 4)
+                    } else {
+                        setText(s);
+                    }
+                }
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -57,7 +64,15 @@ class MyPopularizeCountOnActivity : RxBaseActivity(), View.OnClickListener {
     }
 
     fun setText(s: Editable?) {
-        if (!s.isNullOrBlank() && s.toString().toDouble() > employ?.balance ?: 0.0) {
+        var current = 0.0
+        if (!s.isNullOrBlank()) {
+            current = try {
+                s.toString().toDouble()
+            } catch (e: Exception) {
+                0.0
+            }
+        }
+        if (current > employ?.balance ?: 0.0) {
             myPopularizeCountOnTvAll.visibility = View.GONE;
             myPopularizeCountOnTvCurrent.setTextColor(ContextCompat.getColor(this, R.color.colorRed));
             myPopularizeCountOnTvCurrent.text = "输入金额超过剩余金额";
