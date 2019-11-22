@@ -55,7 +55,6 @@ import com.easymin.carpooling.entity.PriceResult;
 import com.easymin.carpooling.entity.Station;
 import com.easymin.carpooling.entity.StationResult;
 import com.easymin.carpooling.entity.TimeSlotBean;
-import com.easymin.carpooling.widget.BottomListDialog;
 import com.google.gson.Gson;
 
 import java.text.DecimalFormat;
@@ -408,8 +407,8 @@ public class CreateOrderActivity extends RxPayActivity {
         Intent intent = new Intent(CreateOrderActivity.this, SeatSelectActivity.class);
         SeatQueryBean seatQueryBean = new SeatQueryBean();
         seatQueryBean.type = Config.CARPOOL;
-        seatQueryBean.startId = startSite.getId();
-        seatQueryBean.endId = endSite.getId();
+        seatQueryBean.startId = startSite.stationId;
+        seatQueryBean.endId = endSite.stationId;
         seatQueryBean.timeSlotId = pcOrder.timeSlotId;
         intent.putExtra("seatQueryBean", seatQueryBean);
         startActivityForResult(intent, 0x20);
@@ -550,7 +549,7 @@ public class CreateOrderActivity extends RxPayActivity {
             } else if (requestCode == 1) {
                 //起点
                 startSite = data.getParcelableExtra("pos_model");
-                carPoolCreateOrderTvStart.setText(startSite.getAddress());
+                carPoolCreateOrderTvStart.setText(startSite.address);
                 endSite = null;
                 carPoolCreateOrderTvEnd.setText("");
                 setBtnEnable();
@@ -562,23 +561,23 @@ public class CreateOrderActivity extends RxPayActivity {
                 carPoolCreateOrderLlMoney.setVisibility(View.GONE);
                 endSite = data.getParcelableExtra("pos_model");
                 if (startSite != null) {
-                    if (startSite.getId() == endSite.getId()) {
+                    if (startSite.stationId == endSite.stationId) {
                         endSite = null;
                         carPoolCreateOrderTvEnd.setText("");
                         ToastUtil.showMessage(this, "上车点和下车点是同一地点");
-                    } else if (startSite.getSequence() > endSite.getSequence()) {
+                    } else if (startSite.sequence > endSite.sequence) {
                         endSite = null;
                         carPoolCreateOrderTvEnd.setText("");
                         ToastUtil.showMessage(this, "下车点在上车点之前");
                     } else {
-                        carPoolCreateOrderTvEnd.setText(endSite.getAddress());
+                        carPoolCreateOrderTvEnd.setText(endSite.address);
                         setBtnEnable();
                         if (currentModel == 1) {
-                            queryPrice(pcOrder.lineId, startSite.getId(), endSite.getId());
+                            queryPrice(pcOrder.lineId, startSite.stationId, endSite.stationId);
                         }
                     }
                 } else {
-                    carPoolCreateOrderTvEnd.setText(endSite.getAddress());
+                    carPoolCreateOrderTvEnd.setText(endSite.address);
                     setBtnEnable();
                 }
             } else if (requestCode == 0x20) {
@@ -710,6 +709,11 @@ public class CreateOrderActivity extends RxPayActivity {
                 new HaveErrSubscriberListener<StationResult>() {
                     @Override
                     public void onNext(StationResult stationResult) {
+                        for (Station datum : stationResult.data) {
+                            for (MapPositionModel mapPositionModel : datum.coordinate) {
+                                mapPositionModel.sequence = datum.sequence;
+                            }
+                        }
                         CreateOrderActivity.this.stationResult = stationResult;
 
                     }
@@ -809,8 +813,8 @@ public class CreateOrderActivity extends RxPayActivity {
                     .createOrder(
                             EmUtil.getEmployInfo().companyId,
                             new Gson().toJson(models),
-                            startSite.getId(),
-                            endSite.getId(),
+                            startSite.stationId,
+                            endSite.stationId,
                             pcOrder.id == 0 ? null : pcOrder.id,
                             currentModel == 1 ? currentNo : 1,
                             carPoolCreateOrderEtPhone.getText().toString(),
