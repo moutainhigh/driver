@@ -67,7 +67,7 @@
             android:layout_width="0dp"
             android:layout_height="44dp"
             android:layout_weight="1"
-            android:background="@drawable/com_corners_blue"
+            android:background="@drawable/pc_btn_unpress_999999_bg"
             android:text="立即听单"
             android:textColor="@color/white"/>
     </LinearLayout>

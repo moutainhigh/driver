@@ -13,6 +13,7 @@ import com.easymi.common.entity.PushAnnouncement;
 import com.easymi.common.entity.PushPojo;
 import com.easymi.common.entity.QiNiuToken;
 import com.easymi.common.entity.RegisterRes;
+import com.easymi.common.entity.ScrollSchedul;
 import com.easymi.common.entity.SeatBean;
 import com.easymi.common.entity.Vehicles;
 import com.easymi.common.result.AnnouncementResult;
@@ -33,6 +34,7 @@ import com.easymi.component.entity.Employ;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.result.EmResult2;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -651,4 +653,20 @@ public interface CommApiService {
     @GET("api/v1/message/topic/driver_mqtt_config")
     Observable<EmResult2<MqttConfig>> getConfig();
 
+
+////无排版司机听单下线相关接口
+
+    /**
+     * 查询无排版报班线路展示
+     * @return
+     */
+    @GET("api/v1/carpool/noSchedule/line")
+    Observable<EmResult2<ArrayList<ScrollSchedul>>> queryPCLine();
+
+    /**
+     * 司机听单排队/下线
+     * @return
+     */
+    @GET("api/v1/carpool/noSchedule/queue")
+    Observable<EmResult> queueOrOffline(@Query("lineId") Long lineId,@Query("isQueue") int isQueue);
 }

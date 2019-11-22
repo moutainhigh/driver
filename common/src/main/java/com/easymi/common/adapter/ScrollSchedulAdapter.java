@@ -1,4 +1,4 @@
-package com.easymi.personal.adapter;
+package com.easymi.common.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,7 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.easymi.personal.R;
+
+import com.easymi.common.R;
+import com.easymi.common.entity.ScrollSchedul;
 
 import java.util.ArrayList;
 
@@ -23,7 +25,7 @@ import java.util.ArrayList;
  */
 public class ScrollSchedulAdapter extends RecyclerView.Adapter<ScrollSchedulAdapter.Holder> {
 
-    public ArrayList<String> scheduls;
+    public ArrayList<ScrollSchedul> scheduls;
     public Context mContext;
 
     public ScrollSchedulAdapter(Context context) {
@@ -35,7 +37,7 @@ public class ScrollSchedulAdapter extends RecyclerView.Adapter<ScrollSchedulAdap
      * 设置数据
      * @param data
      */
-    public void setScheduls(ArrayList<String> data){
+    public void setScheduls(ArrayList<ScrollSchedul> data){
         this.scheduls = data;
         notifyDataSetChanged();
     }
@@ -48,13 +50,24 @@ public class ScrollSchedulAdapter extends RecyclerView.Adapter<ScrollSchedulAdap
 
     @Override
     public void onBindViewHolder(@NonNull ScrollSchedulAdapter.Holder holder, int position) {
-        if (position == 1 || position == 2){
+
+        ScrollSchedul schedul = scheduls.get(position);
+
+        holder.tv_schedul_name.setText(schedul.name);
+
+        if (schedul.select){
+            holder.iv_select.setImageResource(R.mipmap.icon_select);
+        }else {
+            holder.iv_select.setImageResource(R.mipmap.icon_no_select);
+        }
+
+        if (schedul.destance < 300){
             holder.tv_schedul_name.setTextColor(mContext.getResources().getColor(R.color.color_222222));
             holder.tv_hint.setVisibility(View.GONE);
 
             holder.root.setOnClickListener(v -> {
                 if (listener != null){
-                    listener.onClick();
+                    listener.onClick(position);
                 }
             });
         }else {
@@ -90,6 +103,10 @@ public class ScrollSchedulAdapter extends RecyclerView.Adapter<ScrollSchedulAdap
         /**
          * 点击监听
          */
-        void onClick();
+        void onClick(int position);
+    }
+
+    public void setOnItemOnClickListener(OnItemClickListener listener){
+        this.listener = listener;
     }
 }

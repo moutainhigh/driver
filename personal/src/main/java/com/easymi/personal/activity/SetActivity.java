@@ -28,7 +28,7 @@ import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.component.widget.switchButton.SwitchButton;
 import com.easymi.personal.R;
-import com.easymi.personal.widget.ScrollSchedulDialog;
+import com.easymi.common.widget.ScrollSchedulDialog;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -90,9 +90,6 @@ public class SetActivity extends RxBaseActivity {
             CsEditor editor = XApp.getEditor();
             editor.putBoolean(Config.SP_VOICE_ABLE, isChecked);
             editor.apply();
-
-            ScrollSchedulDialog dialog = new ScrollSchedulDialog(this);
-            dialog.show();
         });
         shakeAble.setOnCheckedChangeListener((buttonView, isChecked) -> {
             CsEditor editor = XApp.getEditor();
