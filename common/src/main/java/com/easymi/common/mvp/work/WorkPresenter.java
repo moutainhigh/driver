@@ -3,6 +3,8 @@ package com.easymi.common.mvp.work;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.amap.api.maps.AMapUtils;
+import com.amap.api.maps.model.LatLng;
 import com.easymi.common.CommApiService;
 import com.easymi.common.R;
 import com.easymi.common.entity.ManualConfigBean;
@@ -12,6 +14,7 @@ import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
 import com.easymi.common.entity.NewToken;
 import com.easymi.common.entity.PushMessage;
+import com.easymi.common.entity.ScrollSchedul;
 import com.easymi.common.push.CountEvent;
 import com.easymi.common.push.MqttManager;
 import com.easymi.common.push.WorkTimeCounter;
@@ -21,6 +24,7 @@ import com.easymi.common.result.SettingResult;
 import com.easymi.common.result.SystemResult;
 import com.easymi.common.result.VehicleResult;
 import com.easymi.common.result.WorkStatisticsResult;
+import com.easymi.common.widget.ScrollSchedulDialog;
 import com.easymi.component.Config;
 import com.easymi.component.ZXOrderStatus;
 import com.easymi.component.app.XApp;
@@ -40,8 +44,10 @@ import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult;
 import com.easymi.component.rxmvp.RxManager;
+import com.easymi.component.trace.DistanceHelper;
 import com.easymi.component.utils.AesUtil;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.Log;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
@@ -705,5 +711,90 @@ public class WorkPresenter implements WorkContract.Presenter {
             }
         })));
     }
+
+    /**
+     * 查询无排版报班线路展示
+     */
+    public void queryPCLine(int flag){
+        CommApiService api = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class);
+        Observable<ArrayList<ScrollSchedul>> observable = api
+                .queryPCLine()
+                .map(new HttpResultFunc2<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        new RxManager().add(observable.subscribe(new MySubscriber<>(context, false,
+                true, list -> {
+                getDriverDestance(list,flag);
+        })));
+    }
+
+    /**
+     * 获取各条线路和司机的当前位置距离
+     */
+    public void getDriverDestance(ArrayList<ScrollSchedul> list,int flag){
+        LatLng driverLoc = new LatLng(EmUtil.getLastLoc().latitude,EmUtil.getLastLoc().longitude);
+        for (ScrollSchedul schedul : list){
+            schedul.destance = AMapUtils.calculateLineDistance(driverLoc, new LatLng(schedul.startLatitude,schedul.startLongitude)) / 1000;
+            Log.e("destance:",schedul.destance+"");
+            schedul.select = false;
+        }
+        showDialog(list,flag);
+    }
+
+    /**
+     * 显示听单弹窗
+     * @param list
+     */
+    public void showDialog(ArrayList<ScrollSchedul> list,int flag){
+        ScrollSchedulDialog dialog = new ScrollSchedulDialog(context,flag);
+        dialog.show();
+        dialog.setDatas(list);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+
+        dialog.setOnMyClickListener((view1, string) -> {
+            if (view1.getId() == R.id.btn_cancel){
+                if (flag == 1){
+                    dialog.dismiss();
+                }else if (flag == 2){
+                    //下线
+                    queueOrOffline(null,2);
+                }
+            }else if (view1.getId() == R.id.btn_sure){
+                if (dialog.getSelectLineId() != 0){
+                    //上线
+                    queueOrOffline(dialog.getSelectLineId(),1);
+                }else {
+                    ToastUtil.showMessage(context,"请选择一条线路");
+                }
+            }
+        });
+    }
+
+
+
+    /**
+     * 列队或者下线接口
+     */
+    public void queueOrOffline(Long lineId,int isQueue){
+        CommApiService api = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class);
+        Observable<EmResult> observable = api
+                .queueOrOffline(lineId,isQueue)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        new RxManager().add(observable.subscribe(new MySubscriber<>(context, false,
+                true, result -> {
+                if (isQueue == 1){
+                    online(null);
+                }else {
+                    offline();
+                }
+        })));
+    }
+
+
 
 }

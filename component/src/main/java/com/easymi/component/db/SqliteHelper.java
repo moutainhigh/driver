@@ -192,6 +192,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("balance").append(" ").append("DOUBLE").append(",")
                 .append("qrCodeUrl").append(" ").append("TEXT").append(",")
                 .append("serviceTel").append(" ").append("TEXT").append(",")
+                .append("countNoSchedule").append(" ").append("INTEGER").append(",")
                 .append("star").append(" ").append("LONG")
                 .append(");");
         execCreateTableSQL(db);
