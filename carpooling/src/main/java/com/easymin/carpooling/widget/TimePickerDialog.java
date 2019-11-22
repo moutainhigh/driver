@@ -28,23 +28,28 @@ public class TimePickerDialog extends BottomSheetDialog {
     private WheelView MinuteWheelView;
     private BottomListDialog.OnSelectListener onSelectListener;
     private int offset;
-
+    private long offsetInMills;
     String title;
-
     TextView tv_title;
+
     private Calendar calendar;
-    private long currentTime;
-    private boolean containsToday;
     private String startTime;
     private String endTime;
+    private boolean containsToday;
+
+    private int startHour;
     private int endHour;
-    private int endMinute;
+
+    private long todayMinTime;
+
+    private long currentTime;
 
     public TimePickerDialog(Context context, String startTime, String endTime, int offset) {
         super(context);
         this.startTime = startTime;
         this.endTime = endTime;
         this.offset = offset;
+        this.offsetInMills = offset * 60 * 1000;
         initViews(context);
     }
 
@@ -62,24 +67,42 @@ public class TimePickerDialog extends BottomSheetDialog {
         tv_title.setText(this.title);
     }
 
-    private void setCurrent() {
-        calendar.setTimeInMillis(currentTime);
-        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTime.substring(0, 2)));
-        calendar.set(Calendar.MINUTE, Integer.parseInt(startTime.substring(startTime.length() - 2)));
-        long startTimeInMillis = calendar.getTimeInMillis();
-        currentTime = startTimeInMillis > currentTime ? startTimeInMillis : currentTime;
-    }
+    private void getTime() {
+        currentTime = System.currentTimeMillis();
 
-    private void getEndData(){
+        calendar.setTimeInMillis(currentTime);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        currentTime = calendar.getTimeInMillis();
+
+        long firstLaunchTime = currentTime + offsetInMills;
+
+        startHour = Integer.parseInt(startTime.substring(0, 2));
         endHour = Integer.parseInt(endTime.substring(0, 2));
-        endMinute = Integer.parseInt(endTime.substring(endTime.length() - 2));
+
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, startHour);
+        calendar.set(Calendar.MINUTE, Integer.parseInt(startTime.substring(startTime.length() - 2)));
+        todayMinTime = calendar.getTimeInMillis();
+
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, endHour);
+        calendar.set(Calendar.MINUTE, Integer.parseInt(endTime.substring(endTime.length() - 2)));
+        long todayMaxTime = calendar.getTimeInMillis();
+
+        if (todayMinTime > firstLaunchTime) {
+            containsToday = true;
+        } else if (firstLaunchTime < todayMaxTime) {
+            containsToday = true;
+            todayMinTime = firstLaunchTime;
+        } else {
+            containsToday = false;
+        }
     }
 
     private void initViews(Context context) {
-        currentTime = System.currentTimeMillis();
         calendar = Calendar.getInstance();
-        setCurrent();
-getEndData();
+        getTime();
         mView = LayoutInflater.from(context).inflate(R.layout.carpool_layout_time_picker, null);
         mView.findViewById(R.id.iv_cancel).setOnClickListener(v -> dismiss());
         mView.findViewById(R.id.tv_sure).setOnClickListener(v -> ensure());
@@ -126,24 +149,24 @@ getEndData();
         if (position < 0) {
             position = 0;
         }
-        ((Adapter) wheelView.getViewAdapter()).datas = data;
+        ((Adapter) wheelView.getViewAdapter()).datas.clear();
+        ((Adapter) wheelView.getViewAdapter()).datas.addAll(data);
         ((Adapter) wheelView.getViewAdapter()).notifyDataInvalidatedEvent();
-        wheelView.setCurrentItem(position);
+        int finalPosition = position;
+        wheelView.post(() -> wheelView.setCurrentItem(finalPosition));
     }
 
     private List<String> initMinutes(boolean isToday) {
         List<String> minutes = new ArrayList<>();
-        calendar.setTimeInMillis(currentTime);
-        int minute = calendar.get(Calendar.MINUTE);
-        for (int i = 0; i < 60; i++) {
-            if (i % offset == 0) {
-                if (isToday) {
-                    if (minute <= i) {
-                        minutes.add(i + "分");
-                    }
-                } else {
-                    minutes.add(i + "分");
-                }
+        if (isToday) {
+            calendar.setTimeInMillis(todayMinTime);
+            int minute = calendar.get(Calendar.MINUTE);
+            for (int i = minute; i < 60; i += offset) {
+                minutes.add(i + "分");
+            }
+        } else {
+            for (int i = 0; i < 60; i += offset) {
+                minutes.add(i + "分");
             }
         }
         return minutes;
@@ -151,14 +174,14 @@ getEndData();
 
     private List<String> initHour(boolean isToday) {
         List<String> hours = new ArrayList<>();
-        calendar.setTimeInMillis(currentTime);
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        for (int i = 0; i < 24; i++) {
-            if (isToday) {
-                if (hour <= i) {
-                    hours.add(i + "点");
-                }
-            } else {
+        if (isToday) {
+            calendar.setTimeInMillis(todayMinTime);
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            for (int i = hour; i < endHour; i++) {
+                hours.add(i + "点");
+            }
+        } else {
+            for (int i = startHour; i < endHour; i++) {
                 hours.add(i + "点");
             }
         }
@@ -166,26 +189,24 @@ getEndData();
     }
 
     private List<String> initDate() {
-        containsToday = true;
         List<String> dates = new ArrayList<>();
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < 30; i++) {
-            calendar.setTimeInMillis(currentTime);
+            if (containsToday) {
+                calendar.setTimeInMillis(todayMinTime);
+            } else {
+                calendar.setTimeInMillis(currentTime + 24 * 60 * 60 * 1000);
+            }
             calendar.add(Calendar.DAY_OF_YEAR, i);
             builder.delete(0, builder.length());
             int month = calendar.get(Calendar.MONTH) + 1;
             int day = calendar.get(Calendar.DAY_OF_MONTH);
             builder.append(calendar.get(Calendar.YEAR)).append("-").append(month > 9 ? month : "0" + month).append("-").append(day > 9 ? day : "0" + day);
-            if (i == 0) {
+
+            if (i == 0 && containsToday) {
                 builder.append("(今天)");
             }
             dates.add(builder.toString());
-        }
-
-        calendar.setTimeInMillis(currentTime);
-        if (calendar.get(Calendar.HOUR_OF_DAY) == 23 && calendar.get(Calendar.MINUTE) >= 60 - offset) {
-            containsToday = false;
-            dates.remove(0);
         }
         return dates;
     }
@@ -220,11 +241,12 @@ getEndData();
 
     private class Adapter extends AbstractWheelTextAdapter {
 
-        private List<String> datas;
+        private List<String> datas = new ArrayList<>();
 
         Adapter(List<String> datas, Context context) {
             super(context);
-            this.datas = datas;
+            this.datas.clear();
+            this.datas.addAll(datas);
         }
 
         @Override
