@@ -5,6 +5,7 @@ import com.easymi.component.result.EmResult;
 import com.easymi.component.result.EmResult2;
 import com.easymin.carpooling.entity.AllStation;
 import com.easymin.carpooling.entity.LineBean;
+import com.easymin.carpooling.entity.LineOffsetBean;
 import com.easymin.carpooling.entity.PincheOrder;
 import com.easymin.carpooling.entity.PriceResult;
 import com.easymin.carpooling.entity.StationResult;
@@ -232,12 +233,16 @@ public interface CarPoolApiService {
 
     /**
      * 查询司机可补单的线路及其班次
+     *
      * @param id
      * @param companyId
      * @return
      */
     @GET("api/v1/carpool/driver/schedule/getLineDriverSchedule")
     Observable<EmResult2<List<LineBean>>> getLineDriverSchedule(@Query("id") long id, @Query("companyId") long companyId);
+
+    @GET("api/v1/carpool/noSchedule/lineOffset")
+    Observable<EmResult2<LineOffsetBean>> getLineOffset(@Query("driverId") long driverId);
 
 
     /**
@@ -256,5 +261,5 @@ public interface CarPoolApiService {
      * @return
      */
     @GET("api/v1/carpool/driver/schedule/getSeats")
-    Observable<EmResult2<Integer>> getSeats (@Query("scheduleId") Long scheduleId);
+    Observable<EmResult2<Integer>> getSeats(@Query("scheduleId") Long scheduleId);
 }

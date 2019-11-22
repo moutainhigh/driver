@@ -27,7 +27,7 @@ public class TimePickerDialog extends BottomSheetDialog {
     private WheelView HourWheelView;
     private WheelView MinuteWheelView;
     private BottomListDialog.OnSelectListener onSelectListener;
-    private int offset = 5;
+    private int offset;
 
     String title;
 
@@ -35,9 +35,16 @@ public class TimePickerDialog extends BottomSheetDialog {
     private Calendar calendar;
     private long currentTime;
     private boolean containsToday;
+    private String startTime;
+    private String endTime;
+    private int endHour;
+    private int endMinute;
 
-    public TimePickerDialog(Context context) {
+    public TimePickerDialog(Context context, String startTime, String endTime, int offset) {
         super(context);
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.offset = offset;
         initViews(context);
     }
 
@@ -55,10 +62,24 @@ public class TimePickerDialog extends BottomSheetDialog {
         tv_title.setText(this.title);
     }
 
+    private void setCurrent() {
+        calendar.setTimeInMillis(currentTime);
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTime.substring(0, 2)));
+        calendar.set(Calendar.MINUTE, Integer.parseInt(startTime.substring(startTime.length() - 2)));
+        long startTimeInMillis = calendar.getTimeInMillis();
+        currentTime = startTimeInMillis > currentTime ? startTimeInMillis : currentTime;
+    }
+
+    private void getEndData(){
+        endHour = Integer.parseInt(endTime.substring(0, 2));
+        endMinute = Integer.parseInt(endTime.substring(endTime.length() - 2));
+    }
+
     private void initViews(Context context) {
         currentTime = System.currentTimeMillis();
         calendar = Calendar.getInstance();
-
+        setCurrent();
+getEndData();
         mView = LayoutInflater.from(context).inflate(R.layout.carpool_layout_time_picker, null);
         mView.findViewById(R.id.iv_cancel).setOnClickListener(v -> dismiss());
         mView.findViewById(R.id.tv_sure).setOnClickListener(v -> ensure());
