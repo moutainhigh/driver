@@ -52,7 +52,6 @@ public class WorkModel implements WorkContract.Model {
     public Observable<EmResult> online(Long driverId, String appKey) {
         return ApiManager.getInstance().createApi(Config.HOST, CommApiService.class)
                 .online(driverId, EmUtil.getEmployInfo().companyId)
-                .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

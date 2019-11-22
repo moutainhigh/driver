@@ -58,7 +58,8 @@
             android:background="@null"
             android:hint="@string/change_psw_confirm"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp" />
+            android:paddingRight="10dp"
+            />
 
         <View
             android:layout_width="match_parent"

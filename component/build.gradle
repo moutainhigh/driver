@@ -66,8 +66,8 @@ dependencies {
     api rootProject.ext.viewanimator
     api rootProject.ext.BaseRecyclerViewAdapterHelper
     api rootProject.ext.androidProcesses
-//    api rootProject.ext.aliPush
-//    api rootProject.ext.aliThirdPush
+    //    api rootProject.ext.aliPush
+    //    api rootProject.ext.aliThirdPush
     api rootProject.ext.mqtt
     api rootProject.ext.mqttService
     api rootProject.ext.pictureSelector
@@ -75,9 +75,12 @@ dependencies {
     api rootProject.ext.buglyNativecrashreport
     api rootProject.ext.rxpermissions
     api rootProject.ext.eventbus
-
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     api(name: 'alipaySdk-15.6.8-20191021122455-noUtdid', ext: 'aar')
     debugApi rootProject.ext.pandora
     releaseApi rootProject.ext.pandoraNoOp
+
+    api rootProject.ext.circleprogressbar
+
+    implementation files('libs/arcsoft_face.jar')
 }

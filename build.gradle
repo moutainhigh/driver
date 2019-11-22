@@ -109,5 +109,7 @@ ext {
 
     rxpermissions = 'com.github.tbruyelle:rxpermissions:0.10.2'
     eventbus = 'org.greenrobot:eventbus:3.1.1'
+
+    circleprogressbar = 'com.dinuscxj:circleprogressbar:1.3.0'
 }
 

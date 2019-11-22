@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:layout_marginLeft="30dp"
+    android:layout_marginRight="30dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+        <TextView
+            android:id="@+id/tv_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:textSize="16sp"
+            android:textColor="@color/colorBlue"
+            android:text="人脸识别对比中，请稍候.."/>
+
+        <com.dinuscxj.progressbar.CircleProgressBar
+            android:id="@+id/progress_bar"
+            app:style="solid_line"
+            app:progress_stroke_width="20dp"
+            app:line_width="20dp"
+            app:line_count="30"
+            app:progress_stroke_cap="round"
+            app:progress_shader="sweep"
+            app:progress_start_color="#27B197"
+            app:progress_end_color="#00A6D5"
+            app:progress_text_size="30sp"
+            app:progress_text_color="@color/colorBlue"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="@dimen/dp_40"/>
+
+    </LinearLayout>
+
+</LinearLayout>
