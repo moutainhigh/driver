@@ -14,9 +14,11 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.model.BaseHoleOptions;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
@@ -24,6 +26,7 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.Polygon;
+import com.amap.api.maps.model.PolygonHoleOptions;
 import com.amap.api.maps.model.PolygonOptions;
 import com.amap.api.services.core.AMapException;
 import com.amap.api.services.core.LatLonPoint;
@@ -48,6 +51,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -165,27 +170,53 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements
      * 添加多边形围栏并画图
      */
     private void addFenceAndDraw(Station station) {
-        List<LatLng> latLngs = new ArrayList<>();
         for (MapPositionModel mapPositionModel : station.coordinate) {
-            latLngs.clear();
-            String data = mapPositionModel.polygonPathJsonStr.substring(1, mapPositionModel.polygonPathJsonStr.length() - 1);
-            List<Double[]> dataList = new Gson().fromJson(data, new TypeToken<List<Double[]>>() {
+            List<List<LatLng>> totalList = new ArrayList<>();
+            List<List<Double[]>> dataList = new Gson().fromJson(mapPositionModel.polygonPathJsonStr, new TypeToken<List<List<Double[]>>>() {
             }.getType());
-            if (dataList.size() < 3) {
-                continue;
+            for (List<Double[]> doubles : dataList) {
+                List<LatLng> latLngs = new ArrayList<>();
+                for (Double[] aDouble : doubles) {
+                    LatLng latLng = new LatLng(aDouble[1], aDouble[0]);
+                    latLngs.add(latLng);
+                }
+                totalList.add(latLngs);
             }
-            for (Double[] doubles : dataList) {
-                LatLng latLng = new LatLng(doubles[1], doubles[0]);
-                latLngs.add(latLng);
-            }
-            PolygonOptions polygonOption = new PolygonOptions();
-            polygonOption.addAll(latLngs);
-            polygonOption
-                    .fillColor(Color.parseColor(mapPositionModel.color))
-//                    .fillColor(Color.parseColor("#33089A55"))
-                    .strokeWidth(2);
-            polygonMap.put(mapPositionModel, mAMap.addPolygon(polygonOption));
+            draw(totalList, mapPositionModel);
         }
+    }
+
+    private void draw(List<List<LatLng>> totalList, MapPositionModel mapPositionModel) {
+
+        Collections.sort(totalList, new Comparator<List<LatLng>>() {
+            @Override
+            public int compare(List<LatLng> o1, List<LatLng> o2) {
+                float first = AMapUtils.calculateArea(o1);
+                float end = AMapUtils.calculateArea(o2);
+                if (first < end) {
+                    return 1;
+                } else if (first > end) {
+                    return -1;
+                }
+                return 0;
+            }
+        });
+
+        PolygonOptions polygonOption = new PolygonOptions();
+        polygonOption.addAll(totalList.get(0));
+        polygonOption
+                .fillColor(Color.parseColor(mapPositionModel.color.replace("#", "#33")))
+                .strokeWidth(1);
+        List<BaseHoleOptions> holeList = new ArrayList<>();
+        totalList.remove(0);
+        for (List<LatLng> latLngs : totalList) {
+            PolygonHoleOptions polygonHoleOptions = new PolygonHoleOptions();
+            polygonHoleOptions.addAll(latLngs);
+            holeList.add(polygonHoleOptions);
+        }
+        polygonOption.setHoleOptions(holeList);
+
+        polygonMap.put(mapPositionModel, mAMap.addPolygon(polygonOption));
     }
 
     /**
@@ -279,23 +310,17 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements
     boolean isIn = false;
 
     private void checkIsIn(LatLng latLng) {
-        Log.e("SelectPlaceOnMapActivity", "checkisIn 1");
         if (polygonMap.size() == 0) {
             mConfirmPosBtn.setEnabled(false);
             return;
         }
-        Log.e("SelectPlaceOnMapActivity", "checkisIn 2    +" + polygonMap.size());
-
         for (Map.Entry<MapPositionModel, Polygon> mapPositionModelPolygonEntry : polygonMap.entrySet()) {
             isIn = mapPositionModelPolygonEntry.getValue().contains(latLng);
-            Log.e("SelectPlaceOnMapActivity", "checkisIn 3");
             if (isIn) {
-                Log.e("SelectPlaceOnMapActivity", "checkisIn 3.5");
                 mapPositionModel = mapPositionModelPolygonEntry.getKey();
                 break;
             }
         }
-        Log.e("SelectPlaceOnMapActivity", "checkisIn 4");
         checkButton();
     }
 
@@ -450,7 +475,6 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements
     private void addMarkersToMap() {
         //  目的地（target）         缩放级别（zoom）       方向（bearing）        倾斜角度（tilt）
         LatLng latLng = mAMap.getCameraPosition().target;
-        Log.e("hufeng/latLng", latLng.latitude + "/" + latLng.longitude);
         Point screenPosition = mAMap.getProjection().toScreenLocation(latLng);
         Marker screenMarker = mAMap.addMarker(new MarkerOptions().title("")
                 .anchor(0.5f, 1f)

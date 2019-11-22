@@ -207,7 +207,7 @@ public class CreateOrderActivity extends RxPayActivity {
                 ToastUtil.showMessage(CreateOrderActivity.this, "请先选择时段");
                 return;
             }
-            if (stationResult == null || stationResult.data.get(1) == null) {
+            if (stationResult == null || stationResult.data == null || stationResult.data.size() < 2) {
                 ToastUtil.showMessage(CreateOrderActivity.this, "未查询到上下车点信息");
                 return;
             }
