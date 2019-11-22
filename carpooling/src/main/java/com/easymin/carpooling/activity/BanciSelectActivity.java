@@ -241,6 +241,12 @@ public class BanciSelectActivity extends RxBaseActivity implements View.OnClickL
             }
             if (EmUtil.getEmployInfo().countNoSchedule > 0) {
                 TimePickerDialog timePickerDialog = new TimePickerDialog(this, lineOffsetBean.timeNo, lineOffsetBean.stopTimeNo, lineOffsetBean.spanNo);
+                timePickerDialog.setOnSelectListener(new TimePickerDialog.OnSelectListener() {
+                    @Override
+                    public void onSelect(String content) {
+                        tv_time_sort.setText(content.replaceFirst("-", "年").replaceFirst("-", "月"));
+                    }
+                });
                 timePickerDialog.show();
             } else {
                 BottomListDialog dialog = new BottomListDialog(this, lineBeans.get(position).timeSlotVoList)

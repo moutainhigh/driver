@@ -4,14 +4,11 @@ package com.easymin.carpooling.widget;
 import android.content.Context;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.easymi.component.widget.wheelview.OnWheelChangedListener;
-import com.easymi.component.widget.wheelview.OnWheelScrollListener;
 import com.easymi.component.widget.wheelview.WheelView;
 import com.easymi.component.widget.wheelview.adapter.AbstractWheelTextAdapter;
 import com.easymin.carpooling.R;
@@ -26,7 +23,7 @@ public class TimePickerDialog extends BottomSheetDialog {
     private WheelView dateWheelView;
     private WheelView HourWheelView;
     private WheelView MinuteWheelView;
-    private BottomListDialog.OnSelectListener onSelectListener;
+    private TimePickerDialog.OnSelectListener onSelectListener;
     private int offset;
     private long offsetInMills;
     String title;
@@ -70,10 +67,10 @@ public class TimePickerDialog extends BottomSheetDialog {
     private void getTime() {
         currentTime = System.currentTimeMillis();
 
-        calendar.setTimeInMillis(currentTime);
-        calendar.set(Calendar.HOUR_OF_DAY, 23);
-        calendar.set(Calendar.MINUTE, 59);
-        currentTime = calendar.getTimeInMillis();
+//        calendar.setTimeInMillis(currentTime);
+//        calendar.set(Calendar.HOUR_OF_DAY, 23);
+//        calendar.set(Calendar.MINUTE, 59);
+//        currentTime = calendar.getTimeInMillis();
 
         long firstLaunchTime = currentTime + offsetInMills;
 
@@ -224,17 +221,19 @@ public class TimePickerDialog extends BottomSheetDialog {
 
     private void ensure() {
         dismiss();
-        int index = dateWheelView.getCurrentItem();
+        String date = ((Adapter) dateWheelView.getViewAdapter()).datas.get(dateWheelView.getCurrentItem()).replace("(今天)", "");
+        String hour = ((Adapter) HourWheelView.getViewAdapter()).datas.get(HourWheelView.getCurrentItem());
+        String minute = ((Adapter) MinuteWheelView.getViewAdapter()).datas.get(MinuteWheelView.getCurrentItem());
         if (onSelectListener != null) {
-            onSelectListener.onSelect(index);
+            onSelectListener.onSelect(date +"日 "+ hour + minute);
         }
     }
 
     public interface OnSelectListener {
-        void onSelect(int index);
+        void onSelect(String content);
     }
 
-    public TimePickerDialog setOnSelectListener(BottomListDialog.OnSelectListener listener) {
+    public TimePickerDialog setOnSelectListener(TimePickerDialog.OnSelectListener listener) {
         this.onSelectListener = listener;
         return this;
     }
