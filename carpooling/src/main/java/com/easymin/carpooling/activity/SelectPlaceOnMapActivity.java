@@ -167,26 +167,24 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements
     private void addFenceAndDraw(Station station) {
         List<LatLng> latLngs = new ArrayList<>();
         for (MapPositionModel mapPositionModel : station.coordinate) {
-                latLngs.clear();
-                String data = mapPositionModel.polygonPathJsonStr.substring(1, mapPositionModel.polygonPathJsonStr.length() - 1);
-                Log.e("SelectPlaceOnMapActivity", "addFenceAndDraw " + data);
-                List<Double[]> dataList = new Gson().fromJson(data, new TypeToken<List<Double[]>>() {
-                }.getType());
-                if (dataList.size() < 3) {
-                    continue;
-                }
-                Log.e("SelectPlaceOnMapActivity", "addFenceAndDraw " + dataList.size());
-                for (Double[] doubles : dataList) {
-                    LatLng latLng = new LatLng(doubles[0], doubles[1]);
-                    latLngs.add(latLng);
-                }
-                PolygonOptions polygonOption = new PolygonOptions();
-                polygonOption.addAll(latLngs);
-                polygonOption
-                        .fillColor(Color.parseColor(mapPositionModel.color));
+            latLngs.clear();
+            String data = mapPositionModel.polygonPathJsonStr.substring(1, mapPositionModel.polygonPathJsonStr.length() - 1);
+            List<Double[]> dataList = new Gson().fromJson(data, new TypeToken<List<Double[]>>() {
+            }.getType());
+            if (dataList.size() < 3) {
+                continue;
+            }
+            for (Double[] doubles : dataList) {
+                LatLng latLng = new LatLng(doubles[1], doubles[0]);
+                latLngs.add(latLng);
+            }
+            PolygonOptions polygonOption = new PolygonOptions();
+            polygonOption.addAll(latLngs);
+            polygonOption
+                    .fillColor(Color.parseColor(mapPositionModel.color))
 //                    .fillColor(Color.parseColor("#33089A55"))
-//                    .strokeWidth(5);
-                polygonMap.put(mapPositionModel, mAMap.addPolygon(polygonOption));
+                    .strokeWidth(2);
+            polygonMap.put(mapPositionModel, mAMap.addPolygon(polygonOption));
         }
     }
 
@@ -397,9 +395,7 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements
             }
             polygonMap.clear();
             for (Station station : mMapPosList) {
-                if (mMapPosList.indexOf(station)==0) {
-                    addFenceAndDraw(station);
-                }
+                addFenceAndDraw(station);
             }
             checkIsIn(centerLatLng);
         });
