@@ -193,6 +193,8 @@ public class PincheOrder implements Serializable {
 
     public int model;
 
+    public String day;
+
     public PincheOrder() {
 
     }

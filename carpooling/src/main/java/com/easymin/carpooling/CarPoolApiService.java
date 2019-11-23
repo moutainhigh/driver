@@ -157,7 +157,9 @@ public interface CarPoolApiService {
     @GET("api/v1/carpool/passenger/order/price")
     Observable<PriceResult> getPrice(@Query("endStationId") long endStationId,
                                      @Query("lineId") long lineId,
-                                     @Query("startStationId") long startStationId);
+                                     @Query("startStationId") long startStationId,
+                                     @Query("startCoordinateId") long startCoordinateId,
+                                     @Query("endCoordinateId") long endCoordinateId);
 
     /**
      * 拼车下单接口
@@ -184,7 +186,13 @@ public interface CarPoolApiService {
                                             @Field("channelAlias") String channelAlias,
                                             @Field("timeSlotId") long timeSlotId,
                                             @Field("passengerInfos") String passengerInfos,
-                                            @Field("sorts") String sorts);
+                                            @Field("sorts") String sorts,
+                                            @Field("startCoordinateId") long startCoordinateId,
+                                            @Field("endCoordinateId") long endCoordinateId,
+                                            @Field("timeSlot") String timeSlot,
+                                            @Field("day") String day,
+                                            @Field("lineId")long lineId);
+
 
     /**
      * 指派订单
@@ -254,7 +262,7 @@ public interface CarPoolApiService {
     @GET("api/v1/carpool/driver/schedule/getStationByTimeSlotId")
     Observable<StationResult> qureyStationResult(@Query("timeSlotId") long timeSlotId);
 
-    @GET("api/v1/carpool/station/queryStations")
+    @GET("api/v1/carpool/noSchedule/queryStations")
     Observable<StationResult> queryStationByLineId(@Query("lineId") long lineId);
 
     /**
