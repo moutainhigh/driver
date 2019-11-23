@@ -572,8 +572,8 @@ public class CreateOrderActivity extends RxPayActivity {
                     } else {
                         carPoolCreateOrderTvEnd.setText(endSite.address);
                         setBtnEnable();
-                        if (currentModel == 1) {
-                            queryPrice(pcOrder.lineId, startSite.stationId, endSite.stationId);
+                        if (currentModel == 1 || currentModel == 3) {
+                            queryPrice(pcOrder.lineId, startSite.stationId, endSite.stationId, startSite.id, endSite.id);
                         }
                     }
                 } else {
@@ -633,8 +633,10 @@ public class CreateOrderActivity extends RxPayActivity {
             carPoolCreateOrderRv.setVisibility(View.GONE);
             carPoolCreateOrderTvNum.setText("" + currentNo);
             carPoolCreateOrderTvSub.setEnabled(false);
-            if (pcOrder.seats > currentNo) {
+            if (pcOrder != null && pcOrder.seats > currentNo) {
                 carPoolCreateOrderTvAdd.setEnabled(true);
+            } else {
+                carPoolCreateOrderTvAdd.setEnabled(false);
             }
             carPoolCreateOrderLvSeatSelect.setVisibility(View.GONE);
             carPoolCreateOrderLlCount.setVisibility(View.VISIBLE);
@@ -645,7 +647,7 @@ public class CreateOrderActivity extends RxPayActivity {
      * 设置按钮能否点击
      */
     private void setBtnEnable() {
-        if (currentModel == 1) {
+        if (currentModel == 1 || currentModel == 3) {
             if (pcOrder != null
                     && stationResult != null
                     && stationResult.data != null
@@ -768,9 +770,9 @@ public class CreateOrderActivity extends RxPayActivity {
      * @param startStationId
      * @param endStationId
      */
-    private void queryPrice(long lineId, long startStationId, long endStationId) {
+    private void queryPrice(long lineId, long startStationId, long endStationId, long startId, long endId) {
         Observable<PriceResult> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
-                .getPrice(endStationId, lineId, startStationId)
+                .getPrice(endStationId, lineId, startStationId, startId, endId)
                 .filter(new HttpResultFunc<>())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());
@@ -821,7 +823,9 @@ public class CreateOrderActivity extends RxPayActivity {
                             "driver",
                             pcOrder.timeSlotId,
                             currentModel == 1 ? "" : new Gson().toJson(adapter.getData()),
-                            currentModel == 1 ? "" : new Gson().toJson(chooseSeatList)
+                            currentModel == 1 ? "" : new Gson().toJson(chooseSeatList),
+                            startSite.id,
+                            endSite.id
                     )
                     .map(new HttpResultFunc2<>())
                     .observeOn(AndroidSchedulers.mainThread())
