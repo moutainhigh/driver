@@ -46,6 +46,7 @@ public class ScrollSchedulDialog extends BaseCenterDialog {
     public ScrollSchedulDialog(Context context,int flag) {
         super(context);
         datas = new ArrayList<>();
+        this.flag = flag;
     }
 
     public void setDatas(ArrayList<ScrollSchedul> list) {
