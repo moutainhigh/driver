@@ -13,9 +13,9 @@ import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.network.HttpResultFunc3;
 import com.easymi.component.network.MySubscriber;
-import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult2;
 import com.easymi.component.utils.EmUtil;
+import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusErrLayout;
 import com.easymi.component.widget.CusToolbar;
@@ -243,8 +243,16 @@ public class BanciSelectActivity extends RxBaseActivity implements View.OnClickL
                 TimePickerDialog timePickerDialog = new TimePickerDialog(this, lineOffsetBean.timeNo, lineOffsetBean.stopTimeNo, lineOffsetBean.spanNo);
                 timePickerDialog.setOnSelectListener(new TimePickerDialog.OnSelectListener() {
                     @Override
-                    public void onSelect(String content) {
-                        tv_time_sort.setText(content.replaceFirst("-", "年").replaceFirst("-", "月"));
+                    public void onSelect(long timestamp) {
+                        tv_time_sort.setText(TimeUtil.getTime("yyyy年MM月dd日 HH:mm", timestamp));
+                        selctTimeSort = new TimeSlotBean();
+                        selctTimeSort.lineName = lineOffsetBean.name;
+                        selctTimeSort.lineId = lineOffsetBean.id;
+                        selctTimeSort.model = lineOffsetBean.model;
+                        selctTimeSort.tickets = lineOffsetBean.limitTicketNo;
+                        selctTimeSort.timeSlot = TimeUtil.getTime("HH:mm", timestamp);
+                        selctTimeSort.day = TimeUtil.getTime("yyyy-MM-dd", timestamp);
+//                        Toast.makeText(BanciSelectActivity.this, selctTimeSort.timeSlot + "    " + selctTimeSort.day + "   ", Toast.LENGTH_SHORT).show();
                     }
                 });
                 timePickerDialog.show();
@@ -262,6 +270,7 @@ public class BanciSelectActivity extends RxBaseActivity implements View.OnClickL
                 ToastUtil.showMessage(this, "请选择线路");
                 return;
             }
+
             if (selctTimeSort == null) {
                 ToastUtil.showMessage(this, "请选择时段");
                 return;
@@ -281,7 +290,7 @@ public class BanciSelectActivity extends RxBaseActivity implements View.OnClickL
                 .map(new HttpResultFunc2<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MySubscriber<LineOffsetBean>(this, true, false, new NoErrSubscriberListener<LineOffsetBean>() {
+                .subscribe(new MySubscriber<LineOffsetBean>(this, true, false, new HaveErrSubscriberListener<LineOffsetBean>() {
                     @Override
                     public void onNext(LineOffsetBean o) {
                         lineOffsetBean = o;
@@ -290,6 +299,11 @@ public class BanciSelectActivity extends RxBaseActivity implements View.OnClickL
                         lineBean.lineName = o.name;
                         lineBeans.clear();
                         lineBeans.add(lineBean);
+                    }
+
+                    @Override
+                    public void onError(int code) {
+                        setViewStatus(true);
                     }
                 }));
     }
@@ -328,7 +342,7 @@ public class BanciSelectActivity extends RxBaseActivity implements View.OnClickL
 
                     @Override
                     public void onError(int code) {
-
+                        setViewStatus(true);
                     }
                 })));
     }

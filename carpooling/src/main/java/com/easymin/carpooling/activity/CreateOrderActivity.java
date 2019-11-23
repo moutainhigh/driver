@@ -276,12 +276,18 @@ public class CreateOrderActivity extends RxPayActivity {
                     if (goAction()) {
                         createOrder();
                     }
-                } else {
+                } else if (currentModel == 1) {
                     createOrder();
+                } else {
+                    createOtherOrder();
                 }
             }
         });
         setRecyclerView();
+    }
+
+    private void createOtherOrder() {
+
     }
 
     /**
@@ -525,9 +531,12 @@ public class CreateOrderActivity extends RxPayActivity {
                     currentModel = selctTimeSort.model;
                     pcOrder = pincheOrder;
                     initViewByPcOrder();
-                    queryStationByTime(pcOrder.timeSlotId);
                     getMaxSeats(null);
-
+                    if (currentModel == 3) {
+                        queryStationByLineId(selctTimeSort.lineId);
+                    } else {
+                        queryStationByTime(pcOrder.timeSlotId);
+                    }
                     carPoolCreateOrderTvLine.setText(selctTimeSort.lineName);
                 } else {
 
@@ -627,8 +636,10 @@ public class CreateOrderActivity extends RxPayActivity {
             carPoolCreateOrderRv.setVisibility(View.GONE);
             carPoolCreateOrderTvNum.setText("" + currentNo);
             carPoolCreateOrderTvSub.setEnabled(false);
-            if (pcOrder.seats > currentNo) {
+            if (pcOrder != null && pcOrder.seats > currentNo) {
                 carPoolCreateOrderTvAdd.setEnabled(true);
+            } else {
+                carPoolCreateOrderTvAdd.setEnabled(false);
             }
             carPoolCreateOrderLvSeatSelect.setVisibility(View.GONE);
             carPoolCreateOrderLlCount.setVisibility(View.VISIBLE);
@@ -715,6 +726,29 @@ public class CreateOrderActivity extends RxPayActivity {
                         setBtnEnable();
                     }
                 })));
+    }
+
+
+    private void queryStationByLineId(long lineId) {
+        ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
+                .queryStationByLineId(lineId)
+                .filter(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MySubscriber<StationResult>(this, true, false, new HaveErrSubscriberListener<StationResult>() {
+                    @Override
+                    public void onNext(StationResult stationResult) {
+                        CreateOrderActivity.this.stationResult = stationResult;
+                    }
+
+                    @Override
+                    public void onError(int code) {
+                        pcOrder = null;
+                        carPoolCreateOrderTvLine.setText("");
+                        initViewByPcOrder();
+                        setBtnEnable();
+                    }
+                }));
     }
 
 

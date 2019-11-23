@@ -254,6 +254,9 @@ public interface CarPoolApiService {
     @GET("api/v1/carpool/driver/schedule/getStationByTimeSlotId")
     Observable<StationResult> qureyStationResult(@Query("timeSlotId") long timeSlotId);
 
+    @GET("api/v1/carpool/station/queryStations")
+    Observable<StationResult> queryStationByLineId(@Query("lineId") long lineId);
+
     /**
      * 根据班次id或者不传班次id查询当前班次或者司机可补单的最大票数
      *

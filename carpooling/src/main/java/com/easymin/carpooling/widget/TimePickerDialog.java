@@ -40,6 +40,7 @@ public class TimePickerDialog extends BottomSheetDialog {
     private long todayMinTime;
 
     private long currentTime;
+    private int endMinute;
 
     public TimePickerDialog(Context context, String startTime, String endTime, int offset) {
         super(context);
@@ -68,8 +69,8 @@ public class TimePickerDialog extends BottomSheetDialog {
         currentTime = System.currentTimeMillis();
 
 //        calendar.setTimeInMillis(currentTime);
-//        calendar.set(Calendar.HOUR_OF_DAY, 23);
-//        calendar.set(Calendar.MINUTE, 59);
+//        calendar.set(Calendar.HOUR_OF_DAY, 0);
+//        calendar.set(Calendar.MINUTE, 1);
 //        currentTime = calendar.getTimeInMillis();
 
         long firstLaunchTime = currentTime + offsetInMills;
@@ -84,7 +85,8 @@ public class TimePickerDialog extends BottomSheetDialog {
 
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, endHour);
-        calendar.set(Calendar.MINUTE, Integer.parseInt(endTime.substring(endTime.length() - 2)));
+        endMinute = Integer.parseInt(endTime.substring(endTime.length() - 2));
+        calendar.set(Calendar.MINUTE, endMinute);
         long todayMaxTime = calendar.getTimeInMillis();
 
         if (todayMinTime > firstLaunchTime) {
@@ -158,11 +160,11 @@ public class TimePickerDialog extends BottomSheetDialog {
         if (isToday) {
             calendar.setTimeInMillis(todayMinTime);
             int minute = calendar.get(Calendar.MINUTE);
-            for (int i = minute; i < 60; i += offset) {
+            for (int i = minute; i < endMinute; i += offset) {
                 minutes.add(i + "分");
             }
         } else {
-            for (int i = 0; i < 60; i += offset) {
+            for (int i = 0; i < endMinute; i += offset) {
                 minutes.add(i + "分");
             }
         }
@@ -174,11 +176,11 @@ public class TimePickerDialog extends BottomSheetDialog {
         if (isToday) {
             calendar.setTimeInMillis(todayMinTime);
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
-            for (int i = hour; i < endHour; i++) {
+            for (int i = hour; i <= endHour; i++) {
                 hours.add(i + "点");
             }
         } else {
-            for (int i = startHour; i < endHour; i++) {
+            for (int i = startHour; i <= endHour; i++) {
                 hours.add(i + "点");
             }
         }
@@ -224,13 +226,20 @@ public class TimePickerDialog extends BottomSheetDialog {
         String date = ((Adapter) dateWheelView.getViewAdapter()).datas.get(dateWheelView.getCurrentItem()).replace("(今天)", "");
         String hour = ((Adapter) HourWheelView.getViewAdapter()).datas.get(HourWheelView.getCurrentItem());
         String minute = ((Adapter) MinuteWheelView.getViewAdapter()).datas.get(MinuteWheelView.getCurrentItem());
+
+        calendar.set(Calendar.YEAR, Integer.parseInt(date.substring(0, 4)));
+        calendar.set(Calendar.MONTH, Integer.parseInt(date.substring(5, 7)) - 1);
+        calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date.substring(date.length() - 2)));
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hour.replace("点", "")));
+        calendar.set(Calendar.MINUTE, Integer.parseInt(minute.replace("分", "")));
+
         if (onSelectListener != null) {
-            onSelectListener.onSelect(date +"日 "+ hour + minute);
+            onSelectListener.onSelect(calendar.getTimeInMillis());
         }
     }
 
     public interface OnSelectListener {
-        void onSelect(String content);
+        void onSelect(long timeStamp);
     }
 
     public TimePickerDialog setOnSelectListener(TimePickerDialog.OnSelectListener listener) {
