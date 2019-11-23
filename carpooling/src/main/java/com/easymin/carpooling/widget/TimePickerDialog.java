@@ -163,6 +163,9 @@ public class TimePickerDialog extends BottomSheetDialog {
             for (int i = minute; i < endMinute; i += offset) {
                 minutes.add(i + "分");
             }
+            if (minutes.size() == 0) {
+                return initMinutes(false);
+            }
         } else {
             for (int i = 0; i < endMinute; i += offset) {
                 minutes.add(i + "分");
@@ -178,6 +181,10 @@ public class TimePickerDialog extends BottomSheetDialog {
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
             for (int i = hour; i <= endHour; i++) {
                 hours.add(i + "点");
+            }
+            int minute = calendar.get(Calendar.MINUTE);
+            if (minute > endMinute) {
+                hours.remove(0);
             }
         } else {
             for (int i = startHour; i <= endHour; i++) {

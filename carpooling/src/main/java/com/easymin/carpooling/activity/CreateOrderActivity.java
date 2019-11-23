@@ -534,11 +534,18 @@ public class CreateOrderActivity extends RxPayActivity {
                     }
                     carPoolCreateOrderTvLine.setText(selctTimeSort.lineName);
                 } else {
-
                     currentModel = newPcOrder.model;
                     pcOrder = newPcOrder;
                     initViewByPcOrder();
-                    queryStation(pcOrder.id);
+                    if (currentModel == 3) {
+                        selctTimeSort = new TimeSlotBean();
+                        selctTimeSort.timeSlot = pcOrder.timeSlot;
+                        selctTimeSort.day = pcOrder.day;
+                        selctTimeSort.lineId = pcOrder.lineId;
+                        queryStationByLineId(pcOrder.lineId);
+                    } else {
+                        queryStation(pcOrder.id);
+                    }
                     getMaxSeats(pcOrder.id);
 
                     carPoolCreateOrderTvLine.setText(pcOrder.startStation + " 到 " + pcOrder.endStation);
