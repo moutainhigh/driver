@@ -254,7 +254,7 @@ public interface CarPoolApiService {
     @GET("api/v1/carpool/driver/schedule/getStationByTimeSlotId")
     Observable<StationResult> qureyStationResult(@Query("timeSlotId") long timeSlotId);
 
-    @GET("api/v1/carpool/station/queryStations")
+    @GET("api/v1/carpool/noSchedule/queryStations")
     Observable<StationResult> queryStationByLineId(@Query("lineId") long lineId);
 
     /**
