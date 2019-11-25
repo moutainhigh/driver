@@ -211,6 +211,9 @@ public class CreateOrderActivity extends RxPayActivity {
             intent.putExtra("select_place_type", 3);
             intent.putParcelableArrayListExtra("pos_list",
                     (ArrayList<? extends Parcelable>) stationResult.data);
+            if (startSite != null) {
+                intent.putExtra("startSequence", startSite.sequence);
+            }
             startActivityForResult(intent, 3);
         });
         carPoolCreateOrderEtPhone.setInputType(InputType.TYPE_NULL);

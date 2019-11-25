@@ -392,14 +392,24 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements
      */
     private void toCenter() {
         switch (getIntent().getIntExtra("select_place_type", -1)) {
-            // TODO: 2019-11-21 默认位置
             case 1:
-                centerLatLng = new LatLng(mMapPosList.get(0).latitude, mMapPosList.get(0).longitude);
-                mAMap.animateCamera(CameraUpdateFactory.newLatLngZoom(centerLatLng, 14));
+                for (Station station : mMapPosList) {
+                    if (station.onOff == 1 || station.onOff == 3) {
+                        centerLatLng = new LatLng(station.latitude, station.longitude);
+                        mAMap.animateCamera(CameraUpdateFactory.newLatLngZoom(centerLatLng, 14));
+                        break;
+                    }
+                }
                 break;
             case 3:
-                centerLatLng = new LatLng(mMapPosList.get(mMapPosList.size() - 1).latitude, mMapPosList.get(mMapPosList.size() - 1).longitude);
-                mAMap.animateCamera(CameraUpdateFactory.newLatLngZoom(centerLatLng, 14));
+                int startSequence = getIntent().getIntExtra("startSequence", -1);
+                for (Station station : mMapPosList) {
+                    if ((station.onOff == 2 || station.onOff == 3) && station.sequence > startSequence) {
+                        centerLatLng = new LatLng(station.latitude, station.longitude);
+                        mAMap.animateCamera(CameraUpdateFactory.newLatLngZoom(centerLatLng, 14));
+                        break;
+                    }
+                }
                 break;
             default:
                 break;
