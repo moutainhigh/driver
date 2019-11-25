@@ -68,8 +68,6 @@ public class BuildPushUtil {
         pushData.location.speed = emLoc.speed;
         pushData.location.locationType = emLoc.locationType;
         pushData.location.appKey = EmUtil.getAppKey();
-//        pushData.calc.darkCost = buildPushData.darkCost;
-//        pushData.calc.darkMileage = buildPushData.darkMileage;
         pushData.location.positionTime = System.currentTimeMillis() / 1000;
         pushData.location.accuracy = (float) emLoc.accuracy;
 
@@ -80,6 +78,8 @@ public class BuildPushUtil {
         pushData.location.altitude = emLoc.altitude;
         pushData.location.time = System.currentTimeMillis() / 1000;
         pushData.location.isOffline = emLoc.isOffline;
+
+        pushData.location.address = emLoc.address;
 
         List<PushDataOrder> orderList = new ArrayList<>();
 

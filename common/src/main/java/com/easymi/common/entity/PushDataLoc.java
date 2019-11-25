@@ -85,4 +85,9 @@ public class PushDataLoc {
 
     public boolean isOffline;
 
+    /**
+     * 当前中文地址
+     */
+    public String address;
+
 }

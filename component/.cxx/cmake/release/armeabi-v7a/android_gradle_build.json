@@ -1,0 +1,74 @@
+
+{
+	"buildFiles" : [ "/Users/hufeng/Desktop/v6-anddriver/component/CMakeLists.txt" ],
+	"cleanCommands" : 
+	[
+		"/Users/hufeng/Library/Android/sdk/cmake/3.6.4111459/bin/cmake --build /Users/hufeng/Desktop/v6-anddriver/component/.cxx/cmake/release/armeabi-v7a --target clean"
+	],
+	"cppFileExtensions" : [ "cpp" ],
+	"libraries" : 
+	{
+		"cat-Release-armeabi-v7a" : 
+		{
+			"abi" : "armeabi-v7a",
+			"artifactName" : "cat",
+			"buildCommand" : "/Users/hufeng/Library/Android/sdk/cmake/3.6.4111459/bin/cmake --build /Users/hufeng/Desktop/v6-anddriver/component/.cxx/cmake/release/armeabi-v7a --target cat",
+			"buildType" : "release",
+			"files" : 
+			[
+				
+				{
+					"flags" : "  --target=armv7-none-linux-androideabi16 --gcc-toolchain=/Users/hufeng/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64  -Dcat_EXPORTS  --sysroot /Users/hufeng/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mfpu=vfpv3-d16 -fno-addrsig -mthumb -Wa,--noexecstack -Wformat -Werror=format-security -stdlib=libc++  -Oz -DNDEBUG  -fPIC    -c ",
+					"src" : "/Users/hufeng/Desktop/v6-anddriver/component/src/main/cpp/cat-lib.cpp",
+					"workingDirectory" : "/Users/hufeng/Desktop/v6-anddriver/component/.cxx/cmake/release/armeabi-v7a"
+				}
+			],
+			"output" : "/Users/hufeng/Desktop/v6-anddriver/component/build/intermediates/cmake/release/obj/armeabi-v7a/libcat.so",
+			"toolchain" : "2397224709511177726"
+		},
+		"loader-Release-armeabi-v7a" : 
+		{
+			"abi" : "armeabi-v7a",
+			"artifactName" : "loader",
+			"buildCommand" : "/Users/hufeng/Library/Android/sdk/cmake/3.6.4111459/bin/cmake --build /Users/hufeng/Desktop/v6-anddriver/component/.cxx/cmake/release/armeabi-v7a --target loader",
+			"buildType" : "release",
+			"files" : 
+			[
+				
+				{
+					"flags" : "  --target=armv7-none-linux-androideabi16 --gcc-toolchain=/Users/hufeng/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64  -Dloader_EXPORTS  --sysroot /Users/hufeng/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mfpu=vfpv3-d16 -fno-addrsig -mthumb -Wa,--noexecstack -Wformat -Werror=format-security -stdlib=libc++  -Oz -DNDEBUG  -fPIC    -c ",
+					"src" : "/Users/hufeng/Desktop/v6-anddriver/component/src/main/cpp/loader-lib.cpp",
+					"workingDirectory" : "/Users/hufeng/Desktop/v6-anddriver/component/.cxx/cmake/release/armeabi-v7a"
+				}
+			],
+			"output" : "/Users/hufeng/Desktop/v6-anddriver/component/build/intermediates/cmake/release/obj/armeabi-v7a/libloader.so",
+			"toolchain" : "2397224709511177726"
+		},
+		"ps-Release-armeabi-v7a" : 
+		{
+			"abi" : "armeabi-v7a",
+			"artifactName" : "ps",
+			"buildCommand" : "/Users/hufeng/Library/Android/sdk/cmake/3.6.4111459/bin/cmake --build /Users/hufeng/Desktop/v6-anddriver/component/.cxx/cmake/release/armeabi-v7a --target ps",
+			"buildType" : "release",
+			"files" : 
+			[
+				
+				{
+					"flags" : "  --target=armv7-none-linux-androideabi16 --gcc-toolchain=/Users/hufeng/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64  -Dps_EXPORTS  --sysroot /Users/hufeng/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mfpu=vfpv3-d16 -fno-addrsig -mthumb -Wa,--noexecstack -Wformat -Werror=format-security -stdlib=libc++  -Oz -DNDEBUG  -fPIC    -c ",
+					"src" : "/Users/hufeng/Desktop/v6-anddriver/component/src/main/cpp/ps-lib.cpp",
+					"workingDirectory" : "/Users/hufeng/Desktop/v6-anddriver/component/.cxx/cmake/release/armeabi-v7a"
+				}
+			],
+			"output" : "/Users/hufeng/Desktop/v6-anddriver/component/build/intermediates/cmake/release/obj/armeabi-v7a/libps.so",
+			"toolchain" : "2397224709511177726"
+		}
+	},
+	"toolchains" : 
+	{
+		"2397224709511177726" : 
+		{
+			"cCompilerExecutable" : "/Users/hufeng/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang",
+			"cppCompilerExecutable" : "/Users/hufeng/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++"
+		}
+	}
+}

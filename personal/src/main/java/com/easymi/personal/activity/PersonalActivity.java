@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.easymi.common.CommApiService;
+import com.easymi.common.entity.ScrollSchedulEvent;
 import com.easymi.common.result.LoginResult;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
@@ -30,6 +31,8 @@ import com.easymi.component.utils.GlideCircleTransform;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.R;
+
+import org.greenrobot.eventbus.EventBus;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -277,4 +280,6 @@ public class PersonalActivity extends RxBaseActivity {
     public boolean isEnableSwipe() {
         return true;
     }
+
+
 }

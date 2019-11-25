@@ -39,6 +39,7 @@ import com.easymi.common.entity.ManualConfigBean;
 import com.easymi.common.entity.MqttReconnectEvent;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
+import com.easymi.common.entity.ScrollSchedulEvent;
 import com.easymi.common.mvp.order.OrderActivity;
 import com.easymi.common.push.CountEvent;
 import com.easymi.common.push.MqttManager;
@@ -183,7 +184,8 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
 
         onLineBtn.setOnClickListener(view -> {
             if (TextUtils.equals(EmUtil.getEmployInfo().serviceType,Config.CARPOOL) && EmUtil.getEmployInfo().countNoSchedule > 0){
-                presenter.queryPCLine(1);
+                /// 1 上线绑定班次
+                presenter.queryPCLine(1,onLineBtn);
             }else {
                 onLineBtn.setClickable(false);
                 onLineBtn.setStatus(LoadingButton.STATUS_LOADING);
@@ -478,7 +480,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         });
     }
 
-    @Override
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void showStatis(CountEvent countEvent) {
         if (countEvent == null) {
@@ -868,6 +870,13 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     @Override
     public void onRefreshOrder() {
         refreshData();
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void showScrollSchedul(ScrollSchedulEvent schedulEvent) {
+        // 2 下线帮定班次
+        presenter.queryPCLine(2,onLineBtn);
     }
 
 
