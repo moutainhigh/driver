@@ -1,0 +1,2 @@
+[1/2] Building CXX object CMakeFiles/cat.dir/src/main/cpp/cat-lib.cpp.o
+[2/2] Linking CXX shared library ../../../../build/intermediates/cmake/release/obj/armeabi-v7a/libcat.so

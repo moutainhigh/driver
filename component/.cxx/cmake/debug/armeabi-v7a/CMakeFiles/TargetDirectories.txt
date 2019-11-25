@@ -1,0 +1,5 @@
+/Users/hufeng/Desktop/v6-anddriver/component/.cxx/cmake/debug/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/hufeng/Desktop/v6-anddriver/component/.cxx/cmake/debug/armeabi-v7a/CMakeFiles/rebuild_cache.dir
+/Users/hufeng/Desktop/v6-anddriver/component/.cxx/cmake/debug/armeabi-v7a/CMakeFiles/cat.dir
+/Users/hufeng/Desktop/v6-anddriver/component/.cxx/cmake/debug/armeabi-v7a/CMakeFiles/ps.dir
+/Users/hufeng/Desktop/v6-anddriver/component/.cxx/cmake/debug/armeabi-v7a/CMakeFiles/loader.dir
