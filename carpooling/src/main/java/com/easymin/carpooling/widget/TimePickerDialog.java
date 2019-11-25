@@ -160,10 +160,11 @@ public class TimePickerDialog extends BottomSheetDialog {
         if (isToday) {
             calendar.setTimeInMillis(todayMinTime);
             int minute = calendar.get(Calendar.MINUTE);
-            for (int i = minute; i < endMinute; i += offset) {
-                minutes.add(i + "分");
-            }
-            if (minutes.size() == 0) {
+            if (minute<endMinute) {
+                for (int i = minute; i < endMinute; i += offset) {
+                    minutes.add(i + "分");
+                }
+            }else {
                 return initMinutes(false);
             }
         } else {
