@@ -683,9 +683,11 @@ public enum ErrCode {
     /**
      * 当前班次已经指派
      */
-    SCHEDULE_HAS_ASSIGN(40629,"当前班次已经指派"),
+    SCHEDULE_HAS_ASSIGN(40629, "当前班次已经指派"),
 
-    SEAT_INFO_ERROR(40601, "座位信息出错,请重新选择");
+    SEAT_INFO_ERROR(40601, "座位信息出错,请重新选择"),
+
+    PROMOTE_REPEAT_APPLY(40650, "该账号已经提交过申请，请不要重复申请");
 
     private int code;
     private String showMsg;

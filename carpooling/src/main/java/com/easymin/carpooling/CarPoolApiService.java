@@ -5,6 +5,7 @@ import com.easymi.component.result.EmResult;
 import com.easymi.component.result.EmResult2;
 import com.easymin.carpooling.entity.AllStation;
 import com.easymin.carpooling.entity.LineBean;
+import com.easymin.carpooling.entity.LineOffsetBean;
 import com.easymin.carpooling.entity.PincheOrder;
 import com.easymin.carpooling.entity.PriceResult;
 import com.easymin.carpooling.entity.StationResult;
@@ -156,7 +157,9 @@ public interface CarPoolApiService {
     @GET("api/v1/carpool/passenger/order/price")
     Observable<PriceResult> getPrice(@Query("endStationId") long endStationId,
                                      @Query("lineId") long lineId,
-                                     @Query("startStationId") long startStationId);
+                                     @Query("startStationId") long startStationId,
+                                     @Query("startCoordinateId") long startCoordinateId,
+                                     @Query("endCoordinateId") long endCoordinateId);
 
     /**
      * 拼车下单接口
@@ -183,7 +186,13 @@ public interface CarPoolApiService {
                                             @Field("channelAlias") String channelAlias,
                                             @Field("timeSlotId") long timeSlotId,
                                             @Field("passengerInfos") String passengerInfos,
-                                            @Field("sorts") String sorts);
+                                            @Field("sorts") String sorts,
+                                            @Field("startCoordinateId") long startCoordinateId,
+                                            @Field("endCoordinateId") long endCoordinateId,
+                                            @Field("timeSlot") String timeSlot,
+                                            @Field("day") String day,
+                                            @Field("lineId")long lineId);
+
 
     /**
      * 指派订单
@@ -232,12 +241,16 @@ public interface CarPoolApiService {
 
     /**
      * 查询司机可补单的线路及其班次
+     *
      * @param id
      * @param companyId
      * @return
      */
     @GET("api/v1/carpool/driver/schedule/getLineDriverSchedule")
     Observable<EmResult2<List<LineBean>>> getLineDriverSchedule(@Query("id") long id, @Query("companyId") long companyId);
+
+    @GET("api/v1/carpool/noSchedule/lineOffset")
+    Observable<EmResult2<LineOffsetBean>> getLineOffset(@Query("driverId") long driverId);
 
 
     /**
@@ -249,6 +262,9 @@ public interface CarPoolApiService {
     @GET("api/v1/carpool/driver/schedule/getStationByTimeSlotId")
     Observable<StationResult> qureyStationResult(@Query("timeSlotId") long timeSlotId);
 
+    @GET("api/v1/carpool/noSchedule/queryStations")
+    Observable<StationResult> queryStationByLineId(@Query("lineId") long lineId);
+
     /**
      * 根据班次id或者不传班次id查询当前班次或者司机可补单的最大票数
      *
@@ -256,5 +272,5 @@ public interface CarPoolApiService {
      * @return
      */
     @GET("api/v1/carpool/driver/schedule/getSeats")
-    Observable<EmResult2<Integer>> getSeats (@Query("scheduleId") Long scheduleId);
+    Observable<EmResult2<Integer>> getSeats(@Query("scheduleId") Long scheduleId);
 }

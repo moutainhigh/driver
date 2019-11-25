@@ -17,12 +17,14 @@ import com.amap.api.navi.AMapNaviView;
 import com.amap.api.navi.AMapNaviViewListener;
 import com.amap.api.navi.enums.AMapNaviRingType;
 import com.amap.api.navi.enums.NaviType;
+import com.amap.api.navi.model.AMapCalcRouteResult;
 import com.amap.api.navi.model.AMapLaneInfo;
 import com.amap.api.navi.model.AMapModelCross;
 import com.amap.api.navi.model.AMapNaviCameraInfo;
 import com.amap.api.navi.model.AMapNaviCross;
 import com.amap.api.navi.model.AMapNaviInfo;
 import com.amap.api.navi.model.AMapNaviLocation;
+import com.amap.api.navi.model.AMapNaviRouteNotifyData;
 import com.amap.api.navi.model.AMapNaviTrafficFacilityInfo;
 import com.amap.api.navi.model.AMapServiceAreaInfo;
 import com.amap.api.navi.model.AimLessModeCongestionInfo;
@@ -159,7 +161,6 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
         mAMapNavi = AMapNavi.getInstance(getApplicationContext());
         mAMapNavi.addAMapNaviListener(this);
         mAMapNavi.setUseInnerVoice(true);
-
     }
 
     @Override
@@ -416,6 +417,21 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
     }
 
     @Override
+    public void onCalculateRouteSuccess(AMapCalcRouteResult aMapCalcRouteResult) {
+
+    }
+
+    @Override
+    public void onCalculateRouteFailure(AMapCalcRouteResult aMapCalcRouteResult) {
+
+    }
+
+    @Override
+    public void onNaviRouteNotify(AMapNaviRouteNotifyData aMapNaviRouteNotifyData) {
+
+    }
+
+    @Override
     public void onNaviSetting() {
 
     }
@@ -460,10 +476,22 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     }
 
+    @Override
+    public void onMapTypeChanged(int i) {
+
+    }
+
+    @Override
+    public void onNaviViewShowMode(int i) {
+
+    }
+
+    @Override
     public void showLaneInfo(AMapLaneInfo info) {
 
     }
 
+    @Override
     public void updateIntervalCameraInfo(AMapNaviCameraInfo info1, AMapNaviCameraInfo info2, int i) {
 
     }

@@ -114,6 +114,10 @@ public class Employ {
     public int promoteApplyStatus;
 
     public String companyPhone;
+    /**
+     * 拼车无排班线路数量，null:非拼车模式，0:拼车普通模式，>0:拼车无排班模式
+     */
+    public Integer countNoSchedule;
 
 
     public void updateDriverCompanyId() {
@@ -154,8 +158,8 @@ public class Employ {
         values.put("isOpenPromote", isOpenPromote);
         values.put("promoteApplyStatus", promoteApplyStatus);
         values.put("companyPhone", companyPhone);
+        values.put("countNoSchedule", countNoSchedule);
         boolean flag = db.insert("t_driverinfo", null, encryptString(values)) != -1;
-        Log.e("Employ", "save+  " + flag);
         return flag;
     }
 
@@ -303,6 +307,7 @@ public class Employ {
         driverInfo.isOpenPromote = cursor.getInt(cursor.getColumnIndex("isOpenPromote"));
         driverInfo.promoteApplyStatus = cursor.getInt(cursor.getColumnIndex("promoteApplyStatus"));
         driverInfo.companyPhone = cursor.getString(cursor.getColumnIndex("companyPhone"));
+        driverInfo.countNoSchedule = cursor.getInt(cursor.getColumnIndex("countNoSchedule"));
         return decrptyString(driverInfo);
     }
 
@@ -336,9 +341,10 @@ public class Employ {
         values.put("promoteApplyStatus", promoteApplyStatus);
         values.put("companyPhone", companyPhone);
 
+        values.put("countNoSchedule", countNoSchedule);
+
         boolean flag = db.update("t_driverinfo", encryptString(values), " id = ? ",
                 new String[]{String.valueOf(id)}) == 1;
-        Log.e("Employ", "updateAll+  " + flag);
         return flag;
     }
 
@@ -372,6 +378,7 @@ public class Employ {
         employ.qrCodeUrl = AesUtil.aesDecrypt(AesUtil.AAAAA, employ.qrCodeUrl);
         employ.serviceTel = AesUtil.aesDecrypt(AesUtil.AAAAA, employ.serviceTel);
         employ.companyPhone = AesUtil.aesDecrypt(AesUtil.AAAAA, employ.companyPhone);
+
         return employ;
     }
 }

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="334dp"
     android:background="@color/white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="MissingDefaultResource">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="请选择需要查看的站点"
+            android:text="用车时段"
             android:textColor="@color/colorBlack"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -34,13 +36,25 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@color/white">
+        android:orientation="horizontal">
 
         <com.easymi.component.widget.wheelview.WheelView
-            android:id="@+id/wheelView"
-            android:layout_width="match_parent"
+            android:id="@+id/date"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="@color/white" />
+            android:layout_weight="1" />
+
+        <com.easymi.component.widget.wheelview.WheelView
+            android:id="@+id/hour"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <com.easymi.component.widget.wheelview.WheelView
+            android:id="@+id/minute"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
     </LinearLayout>
 
     <LinearLayout

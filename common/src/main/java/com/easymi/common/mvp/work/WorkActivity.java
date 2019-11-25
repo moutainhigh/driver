@@ -47,6 +47,7 @@ import com.easymi.common.receiver.CancelOrderReceiver;
 import com.easymi.common.receiver.EmployStatusChangeReceiver;
 import com.easymi.common.receiver.NoticeReceiver;
 import com.easymi.common.receiver.OrderRefreshReceiver;
+import com.easymi.common.widget.CommonDialog;
 import com.easymi.common.widget.NearInfoWindowAdapter;
 import com.easymi.component.Config;
 import com.easymi.component.EmployStatus;
@@ -181,17 +182,35 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         initRecycler();
 
         onLineBtn.setOnClickListener(view -> {
-            onLineBtn.setClickable(false);
-            onLineBtn.setStatus(LoadingButton.STATUS_LOADING);
-            presenter.online(onLineBtn);
+            if (TextUtils.equals(EmUtil.getEmployInfo().serviceType,Config.CARPOOL) && EmUtil.getEmployInfo().countNoSchedule > 0){
+                presenter.queryPCLine(1);
+            }else {
+                onLineBtn.setClickable(false);
+                onLineBtn.setStatus(LoadingButton.STATUS_LOADING);
+                presenter.online(onLineBtn);
+            }
         });
         workTvOffline.setOnClickListener(v -> {
             if (Config.IS_ENCRYPT && TextUtils.equals(Config.APP_KEY, "1HAcient1kLqfeX7DVTV0dklUkpGEnUC")) {
                 presenter.doLogOut();
             } else {
-                presenter.offline();
+                if (TextUtils.equals(EmUtil.getEmployInfo().serviceType,Config.CARPOOL) && EmUtil.getEmployInfo().countNoSchedule>0){
+                    new CommonDialog(this, R.layout.dialog_offline) {
+                        @Override
+                        public void initData(View view) {
+                            Button btn_cancel = view.findViewById(R.id.btn_cancel);
+                            Button btn_sure = view.findViewById(R.id.btn_sure);
+                            btn_cancel.setOnClickListener(v12 -> dismiss());
+                            btn_sure.setOnClickListener(v1 -> {
+                                presenter.queueOrOffline(null,2);
+                                dismiss();
+                            });
+                        }
+                    }.show();
+                }else {
+                    presenter.offline();
+                }
             }
-//            presenter.resetMqtt();
         });
         EmLoc emLoc = EmUtil.getLastLoc();
         if (emLoc != null) {
