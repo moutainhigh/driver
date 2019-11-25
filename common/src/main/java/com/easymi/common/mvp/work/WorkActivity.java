@@ -185,7 +185,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         onLineBtn.setOnClickListener(view -> {
             if (TextUtils.equals(EmUtil.getEmployInfo().serviceType,Config.CARPOOL) && EmUtil.getEmployInfo().countNoSchedule > 0){
                 /// 1 上线绑定班次
-                presenter.queryPCLine(1);
+                presenter.queryPCLine(1,onLineBtn);
             }else {
                 onLineBtn.setClickable(false);
                 onLineBtn.setStatus(LoadingButton.STATUS_LOADING);
@@ -876,6 +876,6 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void showScrollSchedul(ScrollSchedulEvent schedulEvent) {
         // 2 下线帮定班次
-        presenter.queryPCLine(2);
+        presenter.queryPCLine(2,onLineBtn);
     }
 }

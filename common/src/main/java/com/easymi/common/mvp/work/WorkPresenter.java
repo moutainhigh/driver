@@ -715,7 +715,7 @@ public class WorkPresenter implements WorkContract.Presenter {
     /**
      * 查询无排版报班线路展示
      */
-    public void queryPCLine(int flag){
+    public void queryPCLine(int flag,LoadingButton button){
         CommApiService api = ApiManager.getInstance().createApi(Config.HOST, CommApiService.class);
         Observable<ArrayList<ScrollSchedul>> observable = api
                 .queryPCLine()
@@ -723,8 +723,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        new RxManager().add(observable.subscribe(new MySubscriber<>(context, false,
-                true, list -> {
+        new RxManager().add(observable.subscribe(new MySubscriber<>(context, button, list -> {
                 getDriverDestance(list,flag);
         })));
     }

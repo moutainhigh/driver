@@ -61,7 +61,7 @@ public class ScrollSchedulAdapter extends RecyclerView.Adapter<ScrollSchedulAdap
             holder.iv_select.setImageResource(R.mipmap.icon_no_select);
         }
 
-        if (schedul.destance < 300){
+        if (schedul.destance < schedul.driverListeningDistance){
             holder.tv_schedul_name.setTextColor(mContext.getResources().getColor(R.color.color_222222));
             holder.tv_hint.setVisibility(View.GONE);
 
