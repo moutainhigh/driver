@@ -58,6 +58,7 @@ import com.google.gson.Gson;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -191,10 +192,19 @@ public class CreateOrderActivity extends RxPayActivity {
                 ToastUtil.showMessage(CreateOrderActivity.this, "未查询到上下车点信息");
                 return;
             }
+
+            List<Station> data = new ArrayList<>(stationResult.data);
+            Iterator<Station> iterator = data.iterator();
+            while (iterator.hasNext()) {
+                Station station = iterator.next();
+                if (station.onOff == 2) {
+                    iterator.remove();
+                }
+            }
             Intent intent = new Intent(CreateOrderActivity.this, SelectPlaceOnMapActivity.class);
             intent.putExtra("select_place_type", 1);
             intent.putParcelableArrayListExtra("pos_list",
-                    (ArrayList<? extends Parcelable>) stationResult.data);
+                    (ArrayList<? extends Parcelable>) data);
             startActivityForResult(intent, 1);
         });
 
@@ -209,11 +219,22 @@ public class CreateOrderActivity extends RxPayActivity {
             }
             Intent intent = new Intent(CreateOrderActivity.this, SelectPlaceOnMapActivity.class);
             intent.putExtra("select_place_type", 3);
-            intent.putParcelableArrayListExtra("pos_list",
-                    (ArrayList<? extends Parcelable>) stationResult.data);
+            List<Station> data = new ArrayList<>(stationResult.data);
             if (startSite != null) {
-                intent.putExtra("startSequence", startSite.sequence);
+                Iterator<Station> iterator = data.iterator();
+                while (iterator.hasNext()) {
+                    Station station = iterator.next();
+                    if (station.sequence <= startSite.sequence) {
+                        iterator.remove();
+                    } else if (station.id == startSite.id) {
+                        iterator.remove();
+                    } else if (station.onOff == 1) {
+                        iterator.remove();
+                    }
+                }
             }
+            intent.putParcelableArrayListExtra("pos_list",
+                    (ArrayList<? extends Parcelable>) data);
             startActivityForResult(intent, 3);
         });
         carPoolCreateOrderEtPhone.setInputType(InputType.TYPE_NULL);
@@ -869,7 +890,8 @@ public class CreateOrderActivity extends RxPayActivity {
                             endSite.id,
                             currentModel == 3 ? selctTimeSort.timeSlot : "",
                             currentModel == 3 ? selctTimeSort.day : "",
-                            currentModel == 3 ? selctTimeSort.lineId : 0
+                            currentModel == 3 ? selctTimeSort.lineId : 0,
+                            EmUtil.getEmployInfo().countNoSchedule > 0 ? 3 : null
                     )
                     .map(new HttpResultFunc2<>())
                     .observeOn(AndroidSchedulers.mainThread())
