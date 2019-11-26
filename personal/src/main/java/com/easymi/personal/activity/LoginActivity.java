@@ -301,26 +301,25 @@ public class LoginActivity extends RxBaseActivity {
 
         account = editAccount.getText().toString();
         password = editPsw.getText().toString();
-
-        Observable<LoginResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .getIsLogin(2, account)
-                .map(new HttpResultFunc2<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(new Func1<Boolean, Observable<LoginResult>>() {
-                    @Override
-                    public Observable<LoginResult> call(Boolean aBoolean) {
-                        if (!aBoolean) {
-                            return getLoginObservable(account, password);
-                        } else {
-                            showDialog();
-                            return Observable.error(new RuntimeException());
-                        }
-                    }
-                });
-
-        subscribeObservable(observable);
-//        subscribeObservable(getLoginObservable(account, password));
+//        Observable<LoginResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
+//                .getIsLogin(2, account)
+//                .map(new HttpResultFunc2<>())
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .flatMap(new Func1<Boolean, Observable<LoginResult>>() {
+//                    @Override
+//                    public Observable<LoginResult> call(Boolean aBoolean) {
+//                        if (!aBoolean) {
+//                            return getLoginObservable(account, password);
+//                        } else {
+//                            showDialog();
+//                            return Observable.error(new RuntimeException());
+//                        }
+//                    }
+//                });
+//
+//        subscribeObservable(observable);
+        subscribeObservable(getLoginObservable(account, password));
     }
 
     private void showDialog() {
