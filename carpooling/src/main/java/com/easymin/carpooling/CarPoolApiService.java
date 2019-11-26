@@ -191,7 +191,8 @@ public interface CarPoolApiService {
                                             @Field("endCoordinateId") long endCoordinateId,
                                             @Field("timeSlot") String timeSlot,
                                             @Field("day") String day,
-                                            @Field("lineId")long lineId);
+                                            @Field("lineId")long lineId,
+                                            @Field("model") Integer model);
 
 
     /**

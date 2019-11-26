@@ -391,29 +391,16 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements
      * 移动到中间位置
      */
     private void toCenter() {
-        switch (getIntent().getIntExtra("select_place_type", -1)) {
-            case 1:
-                for (Station station : mMapPosList) {
-                    if (station.onOff == 1 || station.onOff == 3) {
-                        centerLatLng = new LatLng(station.latitude, station.longitude);
-                        mAMap.animateCamera(CameraUpdateFactory.newLatLngZoom(centerLatLng, 14));
-                        break;
-                    }
-                }
-                break;
-            case 3:
-                int startSequence = getIntent().getIntExtra("startSequence", -1);
-                for (Station station : mMapPosList) {
-                    if ((station.onOff == 2 || station.onOff == 3) && station.sequence > startSequence) {
-                        centerLatLng = new LatLng(station.latitude, station.longitude);
-                        mAMap.animateCamera(CameraUpdateFactory.newLatLngZoom(centerLatLng, 14));
-                        break;
-                    }
-                }
-                break;
-            default:
-                break;
+        int startSequence = getIntent().getIntExtra("startSequence", -1);
+        Station station = mMapPosList.get(0);
+        if (station != null) {
+            centerLatLng = new LatLng(station.latitude, station.longitude);
+            mAMap.animateCamera(CameraUpdateFactory.newLatLngZoom(centerLatLng, 14));
+        } else {
+            ToastUtil.showMessage(this, "数据发生错误,请重试");
+            finish();
         }
+
         addMarkersToMap();
     }
 
