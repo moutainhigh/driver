@@ -79,6 +79,7 @@ import com.easymi.zhuanche.entity.ConsumerInfo;
 import com.easymi.zhuanche.entity.ZCOrder;
 import com.easymi.zhuanche.fragment.AcceptFragment;
 import com.easymi.zhuanche.fragment.ArriveStartFragment;
+import com.easymi.zhuanche.fragment.NoBeginFragment;
 import com.easymi.zhuanche.fragment.RunningFragment;
 import com.easymi.zhuanche.fragment.SettleFragmentDialog;
 import com.easymi.zhuanche.fragment.SlideArriveStartFragment;
@@ -366,6 +367,8 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void showTopView() {
+
+
         if (TextUtils.isEmpty(zcOrder.remark)) {
             tvMark.setText("无备注");
         } else {
@@ -484,9 +487,21 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         } else if (zcOrder.orderStatus == ZCOrderStatus.TAKE_ORDER) {
             if (zcOrder.isBookOrder == 1){
                 toolbar.setTitle(R.string.status_no_start);
+                NoBeginFragment noBeginFragment = new NoBeginFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("zcOrder", zcOrder);
+                noBeginFragment.setArguments(bundle);
+                noBeginFragment.setBridge(bridge);
+
+                FragmentManager manager = getSupportFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
+                transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+                transaction.replace(R.id.flow_frame, noBeginFragment);
+                transaction.commit();
+
             }else {
                 toolbar.setTitle(R.string.status_jie);
-            }
+
                 ToStartFragment toStartFragment = new ToStartFragment();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("zcOrder", zcOrder);
@@ -498,7 +513,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
                 transaction.replace(R.id.flow_frame, toStartFragment);
                 transaction.commit();
-
+            }
         } else if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
             toolbar.setTitle(R.string.status_to_start);
             if ((ZCSetting.findOne().goToCancel == 1)) {

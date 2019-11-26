@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.amap.api.maps.model.LatLng;
@@ -57,6 +58,8 @@ public class ZCGrabFragment extends Fragment {
 
     private TextView tv_isBookOrder;
 
+    private LinearLayout ll_destance;
+
     /**
      * 订单信息
      */
@@ -78,6 +81,8 @@ public class ZCGrabFragment extends Fragment {
         tvMark = view.findViewById(R.id.tvMark);
 
         tv_isBookOrder = view.findViewById(R.id.tv_isBookOrder);
+
+        ll_destance = view.findViewById(R.id.ll_destance);
 
         if (zcOrder != null) {
             Log.e(ZCGrabFragment.class.getName(), "showBase");
@@ -114,8 +119,10 @@ public class ZCGrabFragment extends Fragment {
 
         if (zcOrder.isBookOrder == 1){
             tv_isBookOrder.setVisibility(View.VISIBLE);
+            ll_destance.setVisibility(View.INVISIBLE);
         }else {
             tv_isBookOrder.setVisibility(View.GONE);
+            ll_destance.setVisibility(View.VISIBLE);
         }
 
         long today = TimeUtil.parseTime("yyyy-MM-dd", TimeUtil.getTime("yyyy-MM-dd", System.currentTimeMillis()));
