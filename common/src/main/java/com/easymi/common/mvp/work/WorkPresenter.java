@@ -61,6 +61,7 @@ import com.google.gson.Gson;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -759,6 +760,18 @@ public class WorkPresenter implements WorkContract.Presenter {
             Log.e("destance:",schedul.destance+"");
             schedul.select = false;
         }
+
+        //根据acceptSequence排序
+        Collections.sort(list, (o1, o2) -> {
+            if (o1.destance < o2.destance) {
+                return -1;
+            } else if (o1.destance > o2.destance) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+
         showDialog(list,flag);
     }
 
