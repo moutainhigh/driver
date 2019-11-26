@@ -482,18 +482,23 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.replace(R.id.flow_frame, acceptFragment);
             transaction.commit();
         } else if (zcOrder.orderStatus == ZCOrderStatus.TAKE_ORDER) {
-            toolbar.setTitle(R.string.status_jie);
-            ToStartFragment toStartFragment = new ToStartFragment();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("zcOrder", zcOrder);
-            toStartFragment.setArguments(bundle);
-            toStartFragment.setBridge(bridge);
+            if (zcOrder.isBookOrder == 1){
+                toolbar.setTitle(R.string.status_no_start);
+            }else {
+                toolbar.setTitle(R.string.status_jie);
+            }
+                ToStartFragment toStartFragment = new ToStartFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("zcOrder", zcOrder);
+                toStartFragment.setArguments(bundle);
+                toStartFragment.setBridge(bridge);
 
-            FragmentManager manager = getSupportFragmentManager();
-            FragmentTransaction transaction = manager.beginTransaction();
-            transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
-            transaction.replace(R.id.flow_frame, toStartFragment);
-            transaction.commit();
+                FragmentManager manager = getSupportFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
+                transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+                transaction.replace(R.id.flow_frame, toStartFragment);
+                transaction.commit();
+
         } else if (zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
             toolbar.setTitle(R.string.status_to_start);
             if ((ZCSetting.findOne().goToCancel == 1)) {

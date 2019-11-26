@@ -54,6 +54,9 @@ public class ZCGrabFragment extends Fragment {
     private TextView order_time;//预约时间 分秒
     private TextView order_dis;
     private TextView tvMark;
+
+    private TextView tv_isBookOrder;
+
     /**
      * 订单信息
      */
@@ -73,6 +76,8 @@ public class ZCGrabFragment extends Fragment {
         order_time = view.findViewById(R.id.order_time);
         order_dis = view.findViewById(R.id.order_dis);
         tvMark = view.findViewById(R.id.tvMark);
+
+        tv_isBookOrder = view.findViewById(R.id.tv_isBookOrder);
 
         if (zcOrder != null) {
             Log.e(ZCGrabFragment.class.getName(), "showBase");
@@ -106,6 +111,12 @@ public class ZCGrabFragment extends Fragment {
         }
 
         order_type.setText(zcOrder.getOrderType());
+
+        if (zcOrder.isBookOrder == 1){
+            tv_isBookOrder.setVisibility(View.VISIBLE);
+        }else {
+            tv_isBookOrder.setVisibility(View.GONE);
+        }
 
         long today = TimeUtil.parseTime("yyyy-MM-dd", TimeUtil.getTime("yyyy-MM-dd", System.currentTimeMillis()));
         long orderDay = TimeUtil.parseTime("yyyy-MM-dd", TimeUtil.getTime("yyyy-MM-dd", zcOrder.bookTime));

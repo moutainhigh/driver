@@ -98,6 +98,8 @@
 
     <string name="status_pai">已派单</string>
     <string name="status_jie">已接单</string>
+    <string name="status_no_start">行程未开始</string>
+
     <string name="status_to_start">前往预约地</string>
     <string name="status_arrive_start">等待上车</string>
     <string name="zc_status_to_end">执行中</string>
