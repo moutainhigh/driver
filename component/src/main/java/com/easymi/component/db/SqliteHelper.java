@@ -196,8 +196,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("companyPhone").append(" ").append("TEXT").append(",")
                 .append("isOpenPromote").append(" ").append("INTEGER").append(",")
                 .append("promoteApplyStatus").append(" ").append("INTEGER").append(",")
-                .append("countNoSchedule").append(" ").append("INTEGER").append(",")
-                .append("star").append(" ").append("LONG")
+                .append("countNoSchedule").append(" ").append("INTEGER")
                 .append(");");
         execCreateTableSQL(db);
     }
