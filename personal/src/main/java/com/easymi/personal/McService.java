@@ -609,4 +609,14 @@ public interface McService {
     @GET("api/v1/safe/face/config")
     Observable<FaceConfigResult> faceConfig();
 
+
+
+    @Headers(Config.TYPE_RSA)
+    @FormUrlEncoded
+    @POST("api/v1/resources/driver/password/retrieve")
+    Observable<EmResult> retrieve(@Field("phone") String phone,
+                                  @Field("password") String password,
+                                  @Field("smsCode") String smsCode,
+                                  @Field("random") String random);
+
 }

@@ -26,7 +26,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
 
@@ -235,62 +235,55 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginBottom="45dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:gravity="center"
-                android:visibility="visible">
-
+                android:layout_marginTop="@dimen/dp_10">
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:text="@string/login_new"
-                    android:textSize="@dimen/login_little_text_size"
-                    android:visibility="visible" />
-
-                <TextView
-                    android:id="@+id/login_register"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:text="@string/login_reg"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="@dimen/login_little_text_size"
-                    android:visibility="visible" />
-
-                <View
-                    android:layout_width="0.0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:visibility="gone" />
-
-                <TextView
+                    android:id="@+id/login_forget"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
                     android:text="@string/login_forget"
-                    android:textSize="@dimen/login_little_text_size"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/login_forget"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:text="@string/login_reset"
                     android:textColor="@color/colorAccent"
                     android:textSize="@dimen/login_little_text_size"
-                    android:visibility="gone" />
-
+                    android:visibility="visible" />
             </LinearLayout>
         </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="center_horizontal"
+        android:visibility="visible"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:text="@string/login_new"
+            android:textSize="@dimen/login_little_text_size"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/login_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:text="@string/login_reg"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/login_little_text_size"
+            android:visibility="visible" />
+
 
     </LinearLayout>
-
     <LinearLayout
         android:id="@+id/keyboardViewPlace"
         android:layout_width="match_parent"

@@ -3,6 +3,8 @@ package com.easymi.personal.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
@@ -13,7 +15,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.easymi.component.Config;
+import com.easymi.component.activity.WebActivity;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HaveErrSubscriberListener;
@@ -26,9 +30,14 @@ import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.PhoneUtil;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
+import com.easymi.component.widget.CusToolbar;
+import com.easymi.component.widget.LoadingButton;
 import com.easymi.component.widget.VerifyCodeView;
+import com.easymi.component.widget.keyboard.SafeKeyboard;
 import com.easymi.personal.McService;
 import com.easymi.personal.R;
+import com.easymi.personal.activity.register.RegisterAcitivty;
+import com.easymi.personal.activity.register.RegisterModel;
 import com.easymi.personal.result.PicCodeResult;
 
 import java.util.Timer;
@@ -48,30 +57,18 @@ import rx.schedulers.Schedulers;
  */
 
 public class ResetPswActivity extends RxBaseActivity {
-    @Override
-    public int getLayoutId() {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        return R.layout.activity_set_psw;
-    }
 
-    LinearLayout accountCon;
-    EditText editAccount;
-    Button confirmAccount;
 
-    LinearLayout pswCon;
-    EditText editPsw;
-    Button confirmPsw;
+    CusToolbar cus_toolbar;
+    EditText edt_phone;
+    EditText edt_auth_code;
+    TextView tv_get_code;
+    EditText edt_password;
+    ImageView eye;
+    LoadingButton btn_complete;
 
-    LinearLayout authCodeCon;
-    ImageView authImg;
-    TextView clickRefresh;
-    VerifyCodeView authInput;
-
-    LinearLayout secCodeCon;
-    TextView phoneNumber;
-    TextView timerText;
-    VerifyCodeView secInput;
+    EditText et_img_code;
+    ImageView iv_image_code;
 
     private String psw;
 
@@ -79,39 +76,117 @@ public class ResetPswActivity extends RxBaseActivity {
 
     private String phone;
 
+    /**
+     * 唯一标示符 用于获取图形验证码
+     */
+    private String randomNum;
+
+//    SafeKeyboard safeKeyboard;
+
+
+//    private void initKeyBoard() {
+//        LinearLayout keyboardContainer = findViewById(R.id.keyboardViewPlace);
+//
+//        safeKeyboard = new SafeKeyboard(this, keyboardContainer, edt_password);
+//        safeKeyboard.setDelDrawable(this.getResources().getDrawable(R.drawable.icon_del));
+//        safeKeyboard.setLowDrawable(this.getResources().getDrawable(R.drawable.icon_capital_default));
+//        safeKeyboard.setUpDrawable(this.getResources().getDrawable(R.drawable.icon_capital_selected));
+//    }
+
+    @Override
+    public void initToolBar() {
+        super.initToolBar();
+        cus_toolbar.setTitle("找回密码");
+        cus_toolbar.setLeftBack(v -> {
+           finish();
+        });
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_set_psw;
+    }
+
     @Override
     public void initViews(Bundle savedInstanceState) {
-        accountCon = findViewById(R.id.set_account_con);
-        editAccount = findViewById(R.id.edit_account);
-        confirmAccount = findViewById(R.id.confirm_account);
+        cus_toolbar = findViewById(R.id.cus_toolbar);
+        edt_phone = findViewById(R.id.edt_phone);
+        edt_auth_code = findViewById(R.id.edt_auth_code);
+        tv_get_code = findViewById(R.id.tv_get_code);
+        edt_password = findViewById(R.id.edt_password);
+        eye = findViewById(R.id.eye);
+        btn_complete = findViewById(R.id.btn_complete);
 
-        pswCon = findViewById(R.id.set_psw_con);
-        editPsw = findViewById(R.id.edit_psw);
-        confirmPsw = findViewById(R.id.confirm_psw);
+        et_img_code = findViewById(R.id.et_img_code);
+        iv_image_code = findViewById(R.id.iv_image_code);
 
-        authCodeCon = findViewById(R.id.edit_auth_code_code);
-        authImg = findViewById(R.id.auth_img);
-        clickRefresh = findViewById(R.id.click_refresh);
-        authInput = findViewById(R.id.auth_input);
 
-        secCodeCon = findViewById(R.id.edit_security_code_con);
-        timerText = findViewById(R.id.timer_text);
-        secInput = findViewById(R.id.sec_code_input);
-        phoneNumber = findViewById(R.id.phone_number);
+        initEye();
+        initEdit();
 
-        String flag = getIntent().getStringExtra("flag");
-        if (StringUtils.isNotBlank(flag) && flag.equals("doubleCheck")) {
-            accountCon.setVisibility(View.GONE);
-            authCodeCon.setVisibility(View.VISIBLE);
+        getImgCode();
 
-            phone = getIntent().getStringExtra("phone");
-            psw = getIntent().getStringExtra("psw");
+//        initKeyBoard();
 
-            getPicCode();
-        }
+        btn_complete.setEnabled(false);
 
-        confirmAccount.setEnabled(false);
-        editAccount.addTextChangedListener(new TextWatcher() {
+        tv_get_code.setOnClickListener(v -> {
+            if (!TextUtils.isEmpty(edt_phone.getText().toString()) && edt_phone.getText().toString().length() == 11 ){
+                if (!TextUtils.isEmpty(et_img_code.getText().toString()) && et_img_code.getText().toString().length() == 4){
+                    sendSms();
+                } else {
+                    ToastUtil.showMessage(this,"请输入4位图形验证码");
+                }
+            }else {
+                ToastUtil.showMessage(this,"请输入正确的电话号码");
+            }
+        });
+
+        btn_complete.setOnClickListener(v -> {
+            retrieve();
+        });
+    }
+
+    /**
+     * 获取图形验证码
+     */
+    public void getImgCode() {
+        randomNum = "" + System.currentTimeMillis() + (int) ((Math.random() * 9 + 1) * 100000);
+        Glide.with(this).load(Config.HOST + "api/v1/system/captcha/code/" + randomNum).into(iv_image_code);
+    }
+
+
+    /**
+     * 能否看密码
+     */
+    private boolean eyeOn = false;
+
+    /**
+     * 可视密码点击事件
+     */
+    private void initEye() {
+        eye.setOnClickListener(view -> {
+            if (eyeOn) {
+                eye.setImageResource(R.mipmap.ic_close_eye);
+                eyeOn = false;
+                edt_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            } else {
+                eye.setImageResource(R.mipmap.ic_open_eye);
+                eyeOn = true;
+                edt_password.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            }
+            String input = edt_password.getText().toString();
+            if (StringUtils.isNotBlank(input)) {
+                edt_password.setSelection(input.length());
+            }
+        });
+    }
+
+    /**
+     * 设置监听
+     */
+    private void initEdit() {
+        edt_phone.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -123,71 +198,119 @@ public class ResetPswActivity extends RxBaseActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-                if (StringUtils.isBlank(s.toString()) || s.toString().length() < 11) {
-                    confirmAccount.setEnabled(false);
-                    confirmAccount.setBackgroundDrawable(getResources().getDrawable(R.drawable.corners_button_press_bg));
+            public void afterTextChanged(Editable editable) {
+                if (null != editable && StringUtils.isNotBlank(editable.toString())) {
+                    if (StringUtils.isNotBlank(edt_auth_code.getText().toString())) {
+                        if (StringUtils.isNotBlank(edt_auth_code.getText().toString()) && StringUtils.isNotBlank(et_img_code.getText().toString())) {
+                            setLoginBtnEnable(true);
+                        } else {
+                            setLoginBtnEnable(false);
+                        }
+                    } else {
+                        setLoginBtnEnable(false);
+                    }
                 } else {
-                    confirmAccount.setEnabled(true);
-                    confirmAccount.setBackgroundDrawable(getResources().getDrawable(R.drawable.p_corners_button_bg));
+                    setLoginBtnEnable(false);
                 }
             }
         });
 
-        confirmPsw.setEnabled(false);
-        editPsw.addTextChangedListener(new TextWatcher() {
+        et_img_code.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-                if (StringUtils.isBlank(s.toString()) || s.toString().length() < 6 || s.toString().length() > 16) {
-                    confirmPsw.setEnabled(false);
-                    confirmPsw.setBackgroundDrawable(getResources().getDrawable(R.drawable.corners_button_press_bg));
+            public void afterTextChanged(Editable editable) {
+                if (null != editable && StringUtils.isNotBlank(editable.toString())) {
+                    if (StringUtils.isNotBlank(edt_auth_code.getText().toString())) {
+                        if (StringUtils.isNotBlank(edt_password.getText().toString()) && StringUtils.isNotBlank(edt_phone.getText().toString())) {
+                            setLoginBtnEnable(true);
+                        } else {
+                            setLoginBtnEnable(false);
+                        }
+                    } else {
+                        setLoginBtnEnable(false);
+                    }
                 } else {
-                    confirmPsw.setEnabled(true);
-                    confirmPsw.setBackgroundDrawable(getResources().getDrawable(R.drawable.p_corners_button_bg));
+                    setLoginBtnEnable(false);
                 }
             }
         });
 
-        confirmAccount.setOnClickListener(v -> {
-            phone = editAccount.getText().toString();
-            PhoneUtil.hideKeyboard(ResetPswActivity.this);
-            accountCon.setVisibility(View.GONE);
-            pswCon.setVisibility(View.VISIBLE);
+        edt_auth_code.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (null != editable && StringUtils.isNotBlank(editable.toString())) {
+                    if (StringUtils.isNotBlank(edt_phone.getText().toString())) {
+                        if (StringUtils.isNotBlank(edt_password.getText().toString()) && StringUtils.isNotBlank(et_img_code.getText().toString())) {
+                            setLoginBtnEnable(true);
+                        } else {
+                            setLoginBtnEnable(false);
+                        }
+                    } else {
+                        setLoginBtnEnable(false);
+                    }
+                } else {
+                    setLoginBtnEnable(false);
+                }
+            }
         });
 
-        confirmPsw.setOnClickListener(v -> {
-            psw = editPsw.getText().toString();
-            PhoneUtil.hideKeyboard(ResetPswActivity.this);
-            pswCon.setVisibility(View.GONE);
-            authCodeCon.setVisibility(View.VISIBLE);
+        edt_password.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            getPicCode();
-        });
+            }
 
-        clickRefresh.setOnClickListener(v -> {
-            getPicCode();
-        });
-        authInput.setOnCodeListener(code -> {
-            checkCode(code.toLowerCase(),"pic");
-        });
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-        timerText.setOnClickListener(v -> {
-            getSmsCode();
-        });
-        secInput.setOnCodeListener(code -> {
-            checkCode(code.toLowerCase(),"sms");
-        });
+            }
 
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (null != editable && StringUtils.isNotBlank(editable.toString())) {
+                    if (StringUtils.isNotBlank(edt_phone.getText().toString()) && StringUtils.isNotBlank(edt_auth_code.getText().toString()) && StringUtils.isNotBlank(et_img_code.getText().toString())) {
+                        setLoginBtnEnable(true);
+                    } else {
+                        setLoginBtnEnable(false);
+                    }
+                } else {
+                    setLoginBtnEnable(false);
+                }
+            }
+        });
+    }
+
+    /**
+     * 设置按钮是否可点击
+     *
+     * @param enable
+     */
+    private void setLoginBtnEnable(boolean enable) {
+        btn_complete.setEnabled(enable);
+        if (enable) {
+            btn_complete.setBackgroundDrawable(getResources().getDrawable(R.drawable.p_corners_button_bg));
+        } else {
+            btn_complete.setBackgroundDrawable(getResources().getDrawable(R.drawable.corners_button_press_bg));
+        }
     }
 
     /**
@@ -210,19 +333,13 @@ public class ResetPswActivity extends RxBaseActivity {
         })));
     }
 
-    /**
-     * 返回结束本页面
-     * @param view
-     */
-    public void backAction(View view) {
-        finish();
-    }
 
     /**
      * 定时器
      */
     private Timer timer;
     private TimerTask timerTask;
+
     /**
      * 验证码60秒倒计时
      */
@@ -232,7 +349,7 @@ public class ResetPswActivity extends RxBaseActivity {
      * 初始化倒计时
      */
     private void initSecView() {
-        phoneNumber.setText(phone);
+//        phoneNumber.setText(phone);
         if (null != timer) {
             timer.cancel();
             timer = null;
@@ -248,15 +365,15 @@ public class ResetPswActivity extends RxBaseActivity {
                 if (time > 0) {
                     time--;
                     runOnUiThread(() -> {
-                        timerText.setText(time + getString(R.string.reset_sec_resend));
-                        timerText.setClickable(false);
+                        tv_get_code.setText(time + getString(R.string.reset_sec_resend));
+                        tv_get_code.setClickable(false);
                     });
                 } else {
                     timer.cancel();
                     timerTask.cancel();
                     runOnUiThread(() -> {
-                        timerText.setText(R.string.reset_resend_code);
-                        timerText.setClickable(true);
+                        tv_get_code.setText(R.string.reset_resend_code);
+                        tv_get_code.setClickable(true);
                     });
                 }
             }
@@ -270,78 +387,34 @@ public class ResetPswActivity extends RxBaseActivity {
     }
 
     /**
-     * 双因子获取图形验证码
+     * 发送验证码
      */
-    private void getPicCode() {
-        Observable<PicCodeResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .picCode(phone, EmUtil.getAppKey())
-                .filter(new HttpResultFunc<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+    private void sendSms() {
+        Observable<EmResult> observable = RegisterModel.getSms(et_img_code.getText().toString(), edt_phone.getText().toString(), randomNum,
+                "PASSENGER_LOGIN_CODE", "2");
 
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this,
-                false,
-                false,
-                picCodeResult -> {
-                    String picCode = picCodeResult.picCode;
-
-                    authImg.setImageBitmap(CodeUtil.getInstance().createBitmap(picCode));
-                    authCode = CodeUtil.getInstance().getCode();
-                })));
-    }
-
-    /**
-     * 检查code
-     *
-     * @param code
-     * @param type code类型
-     */
-    private void checkCode(String code, String type) {
-        Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .checkCode(phone, code, type, EmUtil.getAppKey())
-                .filter(new HttpResultFunc<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, new HaveErrSubscriberListener<EmResult>() {
-            @Override
-            public void onNext(EmResult result) {
-                if (type.equals("pic")) {//图形验证码输入后
-                    secCodeCon.setVisibility(View.VISIBLE);
-                    authCodeCon.setVisibility(View.GONE);
-
-                    getSmsCode();
-                } else {
-                    Intent intent = new Intent(ResetPswActivity.this, LoginActivity.class);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
-            }
-
-            @Override
-            public void onError(int code) {
-                authInput = new VerifyCodeView(ResetPswActivity.this);
-                secInput = new VerifyCodeView(ResetPswActivity.this);
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, emResult -> {
+            if (emResult.getCode() == 1) {
+                ToastUtil.showMessage(this, getResources().getString(R.string.register_send_succed));
+                initSecView();
             }
         })));
     }
 
-    /**
-     * 获取短信验证码
-     */
-    private void getSmsCode() {
-        Observable<EmResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
-                .smsCode(phone, EmUtil.getAppKey(), "中国", EmUtil.getEmployInfo().companyId)
-                .filter(new HttpResultFunc<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
 
-        mRxManager.add(observable.subscribe(new MySubscriber<>(this,
-                false,
-                false,
-                result -> {
-                    initSecView();
-                    ToastUtil.showMessage(ResetPswActivity.this, getString(R.string.get_sms_suc));
-                })));
+    /**
+     * 重置密码
+     */
+    private void retrieve(){
+        Observable<EmResult> observable = RegisterModel.retrieve(edt_phone.getText().toString(),edt_password.getText().toString(), edt_auth_code.getText().toString(), randomNum);
+
+        mRxManager.add(observable.subscribe(new MySubscriber<>(this, false, false, emResult -> {
+            if (emResult.getCode() == 1) {
+                ToastUtil.showMessage(this, "密码重置成功");
+                finish();
+            }
+        })));
     }
+
+
 }

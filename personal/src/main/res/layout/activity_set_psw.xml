@@ -6,214 +6,202 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <ImageView
-        android:onClick="backAction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:padding="15dp"
-        android:src="@mipmap/ic_back" />
+    <com.easymi.component.widget.CusToolbar
+        android:id="@+id/cus_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 
     <LinearLayout
-        android:id="@+id/set_account_con"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="visible">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/reset_login_phone"
-            android:textColor="#232323"
-            android:textSize="25sp" />
-
-        <EditText
-            android:id="@+id/edit_account"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="phone"
-            android:layout_margin="30dp"
-            android:hint="@string/reset_please_11" />
-
-        <Button
-            android:id="@+id/confirm_account"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="30dp"
-            android:background="@drawable/corners_button_press_bg"
-            android:text="@string/reset_confirm"
-            android:textColor="@color/white" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/set_psw_con"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/reset_login_psw"
-            android:textColor="#232323"
-            android:textSize="25sp" />
-
-        <EditText
-            android:id="@+id/edit_psw"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="30dp"
-            android:inputType="textPassword"
-            android:hint="@string/reset_please_6" />
-
-        <Button
-            android:id="@+id/confirm_psw"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="30dp"
-            android:background="@drawable/corners_button_press_bg"
-            android:text="@string/reset_confirm"
-            android:textColor="@color/white" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/edit_auth_code_code"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/reset_edit_words"
-            android:textColor="#232323"
-            android:textSize="25sp" />
+        android:layout_height="50dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginRight="30dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/auth_img"
-            android:layout_width="140dp"
-            android:layout_height="60dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            android:background="#f4f4f4" />
-
-        <FrameLayout
-            android:layout_width="140dp"
+            android:layout_width="18dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
+            android:src="@mipmap/ic_regiter_phone">
 
-            <TextView
-                android:id="@+id/click_refresh"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:drawableLeft="@mipmap/ic_refresh"
-                android:gravity="right"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
-                android:text="@string/reset_refresh" />
-        </FrameLayout>
+        </ImageView>
 
-        <com.easymi.component.widget.VerifyCodeView
-            android:id="@+id/auth_input"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            verifycodeview:borderColor="#e8e8e8"
-            verifycodeview:borderRadius="1dp"
-            verifycodeview:borderSelectedColor="#ffcc00"
-            verifycodeview:borderWidth="1dp"
-            verifycodeview:boxBackground="#fff"
-            verifycodeview:boxNum="4"
-            verifycodeview:boxPadding="8dp"
-            verifycodeview:boxSpace="4dp"
-            verifycodeview:inputType="text"
-            verifycodeview:showCursor="true"
-            verifycodeview:textColor="#ff000000"
-            verifycodeview:textSize="32sp" />
+        <EditText
+            android:id="@+id/edt_phone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:background="@null"
+            android:hint="输入手机号"
+            android:inputType="number"
+            android:maxLength="11"
+            android:singleLine="true"
+            android:textColor="@color/color_333333"
+            android:textColorHint="@color/color_999999"
+            android:textSize="14sp" />
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:src="@color/colorLine" />
 
     <LinearLayout
-        android:id="@+id/edit_security_code_con"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:orientation="vertical">
+        android:layout_height="50dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <ImageView
+            android:layout_width="18dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/reset_edit_code"
-            android:textColor="#232323"
-            android:textSize="25sp" />
+            android:src="@mipmap/ic_img_code" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="30dp"
-            android:orientation="horizontal">
+        <EditText
+            android:id="@+id/et_img_code"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="@string/rg_iamge_code"
+            android:textColorHint="@color/color_999999"
+            android:layout_marginLeft="15dp"
+            android:textSize="14sp"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/reset_code_to_where"
-                android:textColor="#232323" />
-
-            <TextView
-                android:id="@+id/phone_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="18148140090"
-                android:textColor="#232323" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/timer_text"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:text="@string/reset_sec_resend" />
-
-        <View
-            android:layout_width="80dp"
-            android:layout_height="0.1dp"
-            android:layout_marginTop="2dp"
-            android:layout_gravity="center_horizontal"
-            android:background="#232323" />
-
-        <com.easymi.component.widget.VerifyCodeView
-            android:id="@+id/sec_code_input"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            verifycodeview:borderColor="#e8e8e8"
-            verifycodeview:borderRadius="1dp"
-            verifycodeview:borderSelectedColor="#ffcc00"
-            verifycodeview:borderWidth="1dp"
-            verifycodeview:boxBackground="#fff"
-            verifycodeview:boxNum="4"
-            verifycodeview:boxPadding="8dp"
-            verifycodeview:boxSpace="4dp"
-            verifycodeview:inputType="number"
-            verifycodeview:showCursor="true"
-            verifycodeview:textColor="#ff000000"
-            verifycodeview:textSize="32sp" />
+        <ImageView
+            android:id="@+id/iv_image_code"
+            android:layout_width="86dp"
+            android:layout_height="30dp"
+            android:scaleType="fitXY"/>
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:src="@color/colorLine" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_register_code">
+
+        </ImageView>
+
+        <EditText
+            android:id="@+id/edt_auth_code"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="短信验证码"
+            android:inputType="number"
+            android:maxLength="16"
+            android:singleLine="true"
+            android:textColor="@color/color_333333"
+            android:textColorHint="@color/color_999999"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_get_code"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/register_send_code"
+            android:textColor="@color/colorAccent"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:src="@color/colorLine" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_psw_icon">
+
+        </ImageView>
+
+        <EditText
+            android:id="@+id/edt_password"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="请输入新的登陆密码"
+            android:inputType="textPassword"
+            android:maxLength="16"
+            android:singleLine="true"
+            android:textColor="@color/color_333333"
+            android:textColorHint="@color/color_999999"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/eye"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="5dp"
+            android:src="@mipmap/ic_close_eye" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:src="@color/colorLine" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="12dp"
+        android:text="仅支持6-16位的字母、数字"
+        android:textColor="@color/color_999999"
+        android:textSize="13sp" />
+
+    <com.easymi.component.widget.LoadingButton
+        android:id="@+id/btn_complete"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/corners_button_press_bg"
+        android:gravity="center"
+        android:text="确认"
+        android:textColor="@color/white"
+        android:textSize="16sp"></com.easymi.component.widget.LoadingButton>
 
 
 </LinearLayout>
