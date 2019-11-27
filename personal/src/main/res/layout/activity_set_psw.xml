@@ -186,7 +186,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="12dp"
-        android:text="仅支持6-16位的字母、数字"
+        android:text="仅支持8-16位由大写字母、小写字母、数字、特殊字符组成的密码"
         android:textColor="@color/color_999999"
         android:textSize="13sp" />
 

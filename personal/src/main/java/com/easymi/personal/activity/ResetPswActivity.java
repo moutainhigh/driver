@@ -25,6 +25,7 @@ import com.easymi.component.network.HttpResultFunc;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.network.NoErrSubscriberListener;
 import com.easymi.component.result.EmResult;
+import com.easymi.component.utils.CheckPassword;
 import com.easymi.component.utils.CodeUtil;
 import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.PhoneUtil;
@@ -109,7 +110,6 @@ public class ResetPswActivity extends RxBaseActivity {
         et_img_code = findViewById(R.id.et_img_code);
         iv_image_code = findViewById(R.id.iv_image_code);
 
-
         initEye();
         initEdit();
 
@@ -144,8 +144,8 @@ public class ResetPswActivity extends RxBaseActivity {
                 ToastUtil.showMessage(this,"请输入正确的短信验证码");
                 return;
             }
-            if (edt_password.getText().toString().length() < 6){
-                ToastUtil.showMessage(this,"请输入6位及其以上的密码");
+            if (!CheckPassword.checkPasswordRule(edt_password.getText().toString())){
+                ToastUtil.showMessage(this,"请输入正确格式的密码");
                 return;
             }
             retrieve();
