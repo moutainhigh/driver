@@ -187,9 +187,7 @@ public class Employ {
     public static boolean exists(Long driverID) {
         SqliteHelper helper = SqliteHelper.getInstance();
         SQLiteDatabase db = helper.openSqliteDatabase();
-        Cursor cursor = db.rawQuery(
-                "select count(*) from t_driverinfo where id = ? ",
-                new String[]{String.valueOf(driverID)});
+        Cursor cursor = db.rawQuery("select count(*) from t_driverinfo where id = ? ", new String[]{String.valueOf(driverID)});
         boolean flag = false;
         try {
             if (cursor.moveToNext()) {

@@ -1,5 +1,7 @@
 package com.easymi.common.entity;
 
+import java.io.Serializable;
+
 /**
  * @Copyright (C), 2012-2019, Sichuan Xiaoka Technology Co., Ltd.
  * @FileName: ScrollSchedul
@@ -8,7 +10,7 @@ package com.easymi.common.entity;
  * @Description:
  * @History:
  */
-public class ScrollSchedul {
+public class ScrollSchedul implements Serializable {
 
     public long id;
 

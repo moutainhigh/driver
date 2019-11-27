@@ -35,6 +35,7 @@ import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.ErrCode;
 import com.easymi.component.network.HaveErrSubscriberListener;
 import com.easymi.component.network.HttpResultFunc;
+import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.utils.AlexStatusBarUtils;
 import com.easymi.component.utils.CsEditor;
@@ -58,6 +59,7 @@ import com.easymi.personal.result.LoginResult;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -299,7 +301,6 @@ public class LoginActivity extends RxBaseActivity {
 
         account = editAccount.getText().toString();
         password = editPsw.getText().toString();
-
 //        Observable<LoginResult> observable = ApiManager.getInstance().createApi(Config.HOST, McService.class)
 //                .getIsLogin(2, account)
 //                .map(new HttpResultFunc2<>())
