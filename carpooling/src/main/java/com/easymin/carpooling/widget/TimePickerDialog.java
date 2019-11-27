@@ -21,10 +21,9 @@ public class TimePickerDialog extends BottomSheetDialog {
 
     private View mView;
     private WheelView dateWheelView;
-    private WheelView HourWheelView;
-    private WheelView MinuteWheelView;
+    private WheelView hourWheelView;
+    private WheelView minuteWheelView;
     private TimePickerDialog.OnSelectListener onSelectListener;
-    private int offset;
     private long offsetInMills;
     String title;
     TextView tv_title;
@@ -34,13 +33,7 @@ public class TimePickerDialog extends BottomSheetDialog {
     private String endTime;
     private boolean containsToday;
 
-    private int startHour;
-    private int endHour;
-
-    private long todayMinTime;
-
     private long currentTime;
-    private int endMinute;
     private long endTimeStamp;
     private long startTimeStamp;
 
@@ -48,7 +41,6 @@ public class TimePickerDialog extends BottomSheetDialog {
         super(context);
         this.startTime = startTime;
         this.endTime = endTime;
-        this.offset = offset;
         this.offsetInMills = offset * 60 * 1000;
         initViews(context);
     }
@@ -75,10 +67,8 @@ public class TimePickerDialog extends BottomSheetDialog {
 //        calendar.set(Calendar.MINUTE, 1);
 //        currentTime = calendar.getTimeInMillis();
 
-        long firstLaunchTime = currentTime + offsetInMills;
-
-        startHour = Integer.parseInt(startTime.substring(0, 2));
-        endHour = Integer.parseInt(endTime.substring(0, 2));
+        int startHour = Integer.parseInt(startTime.substring(0, 2));
+        int endHour = Integer.parseInt(endTime.substring(0, 2));
 
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, startHour);
@@ -87,16 +77,11 @@ public class TimePickerDialog extends BottomSheetDialog {
 
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, endHour);
-        endMinute = Integer.parseInt(endTime.substring(endTime.length() - 2));
-        calendar.set(Calendar.MINUTE, endMinute);
+        calendar.set(Calendar.MINUTE, Integer.parseInt(endTime.substring(endTime.length() - 2)));
         endTimeStamp = calendar.getTimeInMillis();
 
-        if (startTimeStamp > firstLaunchTime) {
+        if (currentTime < endTimeStamp) {
             containsToday = true;
-            todayMinTime = startTimeStamp;
-        } else if (firstLaunchTime < endTimeStamp) {
-            containsToday = true;
-            todayMinTime = firstLaunchTime;
         } else {
             containsToday = false;
         }
@@ -112,29 +97,29 @@ public class TimePickerDialog extends BottomSheetDialog {
         tv_title = mView.findViewById(R.id.tv_title);
 
         dateWheelView = mView.findViewById(R.id.date);
-        HourWheelView = mView.findViewById(R.id.hour);
-        MinuteWheelView = mView.findViewById(R.id.minute);
+        hourWheelView = mView.findViewById(R.id.hour);
+        minuteWheelView = mView.findViewById(R.id.minute);
         dateWheelView.addChangingListener((wheel, oldValue, newValue) -> {
             if (containsToday) {
                 if (oldValue != 0 && newValue == 0) {
-                    changeData(initHour(true), HourWheelView);
+                    changeData(initHour(true), hourWheelView);
                 } else if (oldValue == 0 && newValue != 0) {
-                    changeData(initHour(false), HourWheelView);
+                    changeData(initHour(false), hourWheelView);
                 }
             }
         });
-        HourWheelView.addChangingListener(new OnWheelChangedListener() {
+        hourWheelView.addChangingListener(new OnWheelChangedListener() {
             @Override
             public void onChanged(WheelView wheel, int oldValue, int newValue) {
                 changeData(
                         initMinutes(containsToday && dateWheelView.getCurrentItem() == 0),
-                        MinuteWheelView);
+                        minuteWheelView);
             }
         });
 
         initAdapter(initDate(), dateWheelView);
-        initAdapter(initHour(containsToday), HourWheelView);
-        initAdapter(initMinutes(containsToday), MinuteWheelView);
+        initAdapter(initHour(containsToday), hourWheelView);
+        initAdapter(initMinutes(containsToday), minuteWheelView);
         setCancelable(true);
         setContentView(mView);
     }
@@ -152,15 +137,16 @@ public class TimePickerDialog extends BottomSheetDialog {
 
     private List<String> initMinutes(boolean isToday) {
         List<String> minutes = new ArrayList<>();
-        int hour = Integer.parseInt(((Adapter) HourWheelView.getViewAdapter()).datas.get(HourWheelView.getCurrentItem()).replace("点", ""));
-        long time = isToday ? todayMinTime : startTimeStamp;
+        int hour = Integer.parseInt(((Adapter) hourWheelView.getViewAdapter()).datas.get(hourWheelView.getCurrentItem()).replace("点", ""));
         String content;
-        for (long i = time; i <= endTimeStamp; i += offsetInMills) {
-            calendar.setTimeInMillis(i);
-            if (calendar.get(Calendar.HOUR_OF_DAY) == hour) {
-                content = calendar.get(Calendar.MINUTE) + "分";
-                if (!minutes.contains(content)) {
-                    minutes.add(content);
+        for (long i = startTimeStamp; i <= endTimeStamp; i += offsetInMills) {
+            if (!isToday || i >= currentTime) {
+                calendar.setTimeInMillis(i);
+                if (calendar.get(Calendar.HOUR_OF_DAY) == hour) {
+                    content = calendar.get(Calendar.MINUTE) + "分";
+                    if (!minutes.contains(content)) {
+                        minutes.add(content);
+                    }
                 }
             }
         }
@@ -169,13 +155,14 @@ public class TimePickerDialog extends BottomSheetDialog {
 
     private List<String> initHour(boolean isToday) {
         List<String> hours = new ArrayList<>();
-        long time = isToday ? todayMinTime : startTimeStamp;
         String content;
-        for (long i = time; i <= endTimeStamp; i += offsetInMills) {
-            calendar.setTimeInMillis(i);
-            content = calendar.get(Calendar.HOUR_OF_DAY) + "点";
-            if (!hours.contains(content)) {
-                hours.add(content);
+        for (long i = startTimeStamp; i <= endTimeStamp; i += offsetInMills) {
+            if (!isToday || i >= currentTime) {
+                calendar.setTimeInMillis(i);
+                content = calendar.get(Calendar.HOUR_OF_DAY) + "点";
+                if (!hours.contains(content)) {
+                    hours.add(content);
+                }
             }
         }
         return hours;
@@ -186,7 +173,7 @@ public class TimePickerDialog extends BottomSheetDialog {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < 30; i++) {
             if (containsToday) {
-                calendar.setTimeInMillis(todayMinTime);
+                calendar.setTimeInMillis(currentTime);
             } else {
                 calendar.setTimeInMillis(currentTime + 24 * 60 * 60 * 1000);
             }
@@ -218,8 +205,8 @@ public class TimePickerDialog extends BottomSheetDialog {
     private void ensure() {
         dismiss();
         String date = ((Adapter) dateWheelView.getViewAdapter()).datas.get(dateWheelView.getCurrentItem()).replace("(今天)", "");
-        String hour = ((Adapter) HourWheelView.getViewAdapter()).datas.get(HourWheelView.getCurrentItem());
-        String minute = ((Adapter) MinuteWheelView.getViewAdapter()).datas.get(MinuteWheelView.getCurrentItem());
+        String hour = ((Adapter) hourWheelView.getViewAdapter()).datas.get(hourWheelView.getCurrentItem());
+        String minute = ((Adapter) minuteWheelView.getViewAdapter()).datas.get(minuteWheelView.getCurrentItem());
 
         calendar.set(Calendar.YEAR, Integer.parseInt(date.substring(0, 4)));
         calendar.set(Calendar.MONTH, Integer.parseInt(date.substring(5, 7)) - 1);
