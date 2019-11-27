@@ -81,17 +81,6 @@ public class ResetPswActivity extends RxBaseActivity {
      */
     private String randomNum;
 
-//    SafeKeyboard safeKeyboard;
-
-
-//    private void initKeyBoard() {
-//        LinearLayout keyboardContainer = findViewById(R.id.keyboardViewPlace);
-//
-//        safeKeyboard = new SafeKeyboard(this, keyboardContainer, edt_password);
-//        safeKeyboard.setDelDrawable(this.getResources().getDrawable(R.drawable.icon_del));
-//        safeKeyboard.setLowDrawable(this.getResources().getDrawable(R.drawable.icon_capital_default));
-//        safeKeyboard.setUpDrawable(this.getResources().getDrawable(R.drawable.icon_capital_selected));
-//    }
 
     @Override
     public void initToolBar() {
@@ -143,6 +132,22 @@ public class ResetPswActivity extends RxBaseActivity {
         });
 
         btn_complete.setOnClickListener(v -> {
+            if (edt_phone.getText().toString().length() != 11){
+                ToastUtil.showMessage(this,"请输入正确的手机号");
+                return;
+            }
+            if (et_img_code.getText().toString().length() != 4){
+                ToastUtil.showMessage(this,"请输入正确的图形验证码");
+                return;
+            }
+            if (edt_auth_code.getText().toString().length() != 6){
+                ToastUtil.showMessage(this,"请输入正确的短信验证码");
+                return;
+            }
+            if (edt_password.getText().toString().length() < 6){
+                ToastUtil.showMessage(this,"请输入6位及其以上的密码");
+                return;
+            }
             retrieve();
         });
     }
@@ -312,27 +317,6 @@ public class ResetPswActivity extends RxBaseActivity {
             btn_complete.setBackgroundDrawable(getResources().getDrawable(R.drawable.corners_button_press_bg));
         }
     }
-
-    /**
-     * 重置密码
-     */
-    private void resetPsw() {
-        McService api = ApiManager.getInstance().createApi(Config.HOST, McService.class);
-        Observable<EmResult> observable = api
-                .changePsw(phone, psw, EmUtil.getAppKey())
-                .filter(new HttpResultFunc<>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        mRxManager.add(observable.subscribe(new MySubscriber<EmResult>(ResetPswActivity.this, true, true, new NoErrSubscriberListener<EmResult>() {
-            @Override
-            public void onNext(EmResult emResult) {
-                ToastUtil.showMessage(ResetPswActivity.this, getString(R.string.reset_change_suc));
-                ResetPswActivity.this.finish();
-            }
-        })));
-    }
-
 
     /**
      * 定时器
