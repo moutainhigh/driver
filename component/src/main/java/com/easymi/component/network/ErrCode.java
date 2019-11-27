@@ -591,21 +591,21 @@ public enum ErrCode {
     /**
      * 实名认证参数错误
      */
-    ID_CARD_PARAMETER_ERR(40704,"实名认证失败,请重新输入"),
+    ID_CARD_PARAMETER_ERR(40704, "实名认证失败,请重新输入"),
 
     /**
      * 实名认证失败,请重新输入
      */
-    ID_CARD_RECOGNITION_FAILURE_ERR(40705,"实名认证失败,请输入本人的真实姓名及真实身份证号码"),
+    ID_CARD_RECOGNITION_FAILURE_ERR(40705, "实名认证失败,请输入本人的真实姓名及真实身份证号码"),
 
     /**
      * 身份证扫描失败
      */
-    ID_CARD_SCAN_FAILED(40706,"身份证扫描失败"),
+    ID_CARD_SCAN_FAILED(40706, "身份证扫描失败"),
     /**
      * 当前身份证已认证
      */
-    CURRENT_ID_IS_AUTHENTICATED(40708,"信息已认证，请不要重复认证"),
+    CURRENT_ID_IS_AUTHENTICATED(40708, "信息已认证，请不要重复认证"),
 
     /**
      * 申请中
@@ -686,6 +686,8 @@ public enum ErrCode {
     SCHEDULE_HAS_ASSIGN(40629, "当前班次已经指派"),
 
     SEAT_INFO_ERROR(40601, "座位信息出错,请重新选择"),
+
+    NO_SCHEDULE_NO_TIME_SLOT(40636, "未选择无排班时段"),
 
     PROMOTE_REPEAT_APPLY(40650, "该账号已经提交过申请，请不要重复申请");
 
