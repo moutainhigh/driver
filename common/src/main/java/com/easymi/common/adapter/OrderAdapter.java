@@ -15,6 +15,7 @@ import com.easymi.common.util.DJStatus2Str;
 import com.easymi.component.BusOrderStatus;
 import com.easymi.component.Config;
 import com.easymi.component.GWOrderStatus;
+import com.easymi.component.ZCOrderStatus;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.TimeUtil;
 
@@ -80,7 +81,13 @@ public class OrderAdapter extends BaseMultiItemQuickAdapter<MultipleOrder, BaseV
                 baseViewHolder.setText(R.id.order_status, "" + BusOrderStatus.status2Str(baseOrder.scheduleStatus) + " >");
             } else if (TextUtils.equals(baseOrder.serviceType, Config.GOV)) {
                 baseViewHolder.setText(R.id.order_status, "" + GWOrderStatus.status2Str(baseOrder.status) + " >");
-            } else {
+            } else if (TextUtils.equals(baseOrder.serviceType, Config.ZHUANCHE)){
+                if (baseOrder.isBookOrder == 1 && baseOrder.status == ZCOrderStatus.TAKE_ORDER){
+                    baseViewHolder.setText(R.id.order_status, "未开始 >");
+                }else {
+                    baseViewHolder.setText(R.id.order_status, "" + DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status) + " >");
+                }
+            }else {
                 baseViewHolder.setText(R.id.order_status, "" + DJStatus2Str.int2Str(baseOrder.serviceType, baseOrder.status) + " >");
             }
 
