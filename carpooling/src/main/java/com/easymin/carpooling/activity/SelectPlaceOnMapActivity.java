@@ -230,6 +230,8 @@ public class SelectPlaceOnMapActivity extends RxBaseActivity implements
             mAMap.getUiSettings().setRotateGesturesEnabled(false);
             mAMap.getUiSettings().setTiltGesturesEnabled(false);//倾斜手势
             mAMap.getUiSettings().setLogoBottomMargin(-50);//隐藏logo
+            mAMap.getUiSettings().setGestureScaleByMapCenter(true);
+
 //            setUpMap();
             mGeocodeSearch = new GeocodeSearch(this);
             mGeocodeSearch.setOnGeocodeSearchListener(this);
