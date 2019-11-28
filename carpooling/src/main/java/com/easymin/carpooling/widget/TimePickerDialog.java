@@ -193,7 +193,7 @@ public class TimePickerDialog extends BottomSheetDialog {
 
     private void initAdapter(List<String> datas, WheelView wheelView) {
         TimePickerDialog.Adapter adapter = new TimePickerDialog.Adapter(datas, getContext());
-        adapter.setItemResource(R.layout.com_item_picker);
+        adapter.setItemResource(R.layout.item_carpool_time_picker);
         adapter.setItemTextResource(R.id.tvContent);
         wheelView.setCyclic(false);
         wheelView.setCurrentItem(0);
