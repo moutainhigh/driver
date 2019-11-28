@@ -250,7 +250,7 @@ public interface CarPoolApiService {
     @GET("api/v1/carpool/driver/schedule/getLineDriverSchedule")
     Observable<EmResult2<List<LineBean>>> getLineDriverSchedule(@Query("id") long id, @Query("companyId") long companyId);
 
-    @GET("api/v1/carpool/noSchedule/lineOffset")
+    @GET("api/v1/carpool/driver/noSchedule/lineOffset")
     Observable<EmResult2<LineOffsetBean>> getLineOffset(@Query("driverId") long driverId);
 
 
@@ -263,7 +263,7 @@ public interface CarPoolApiService {
     @GET("api/v1/carpool/driver/schedule/getStationByTimeSlotId")
     Observable<StationResult> qureyStationResult(@Query("timeSlotId") long timeSlotId);
 
-    @GET("api/v1/carpool/noSchedule/queryStations")
+    @GET("api/v1/carpool/driver/noSchedule/queryStations")
     Observable<StationResult> queryStationByLineId(@Query("lineId") long lineId);
 
     /**
