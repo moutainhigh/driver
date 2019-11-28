@@ -746,7 +746,15 @@ public class WorkPresenter implements WorkContract.Presenter {
                 .observeOn(AndroidSchedulers.mainThread());
 
         new RxManager().add(observable.subscribe(new MySubscriber<>(context, button, list -> {
-                getDriverDestance(list,flag);
+                if (list != null && list.size() != 0){
+                    getDriverDestance(list,flag);
+                }else {
+                    if (flag == 1){
+                        online(null);
+                    }else if (flag == 2){
+                        offline();
+                    }
+                }
         })));
     }
 
