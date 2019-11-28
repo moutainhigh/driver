@@ -10,7 +10,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Html;
 import android.text.TextUtils;
+
 import com.easymi.component.utils.Log;
+
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -67,6 +69,7 @@ import com.easymi.component.utils.EmUtil;
 import com.easymi.component.utils.MapUtil;
 import com.easymi.component.utils.SensorEventHelper;
 import com.easymi.component.utils.StringUtils;
+import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusBottomSheetDialog;
 import com.easymi.component.widget.CusToolbar;
@@ -96,7 +99,9 @@ import net.cachapa.expandablelayout.ExpandableLayout;
 import org.greenrobot.eventbus.EventBus;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -137,6 +142,15 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
     LinearLayout drawerFrame;
     TextView tvMark;
     ExpandableLayout expandableLayout;
+
+
+    LinearLayout ll_is_book;
+    LinearLayout ll_isnot_book;
+
+    TextView tv_book_time;
+    TextView tv_start_addrrs;
+    TextView tv_end_addrrs;
+
     /**
      * 顶部布局
      */
@@ -248,6 +262,12 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
         lin_time = findViewById(R.id.lin_time);
         tv_time = findViewById(R.id.tv_time);
         tv_time_hint = findViewById(R.id.tv_time_hint);
+
+        ll_is_book = findViewById(R.id.ll_is_book);
+        ll_isnot_book = findViewById(R.id.ll_isnot_book);
+        tv_book_time = findViewById(R.id.tv_book_time);
+        tv_start_addrrs = findViewById(R.id.tv_start_addrrs);
+        tv_end_addrrs = findViewById(R.id.tv_end_addrrs);
 
         mapView = findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
@@ -367,100 +387,110 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
 
     @Override
     public void showTopView() {
+        if (zcOrder.isBookOrder == 1 && zcOrder.orderStatus == ZCOrderStatus.TAKE_ORDER) {
+            ll_isnot_book.setVisibility(View.GONE);
+            ll_is_book.setVisibility(View.VISIBLE);
 
+            tv_book_time.setText(TimeUtil.getTime("YYYY年MM月dd日 HH:mm", zcOrder.bookTime * 1000) + "出发");
+            tv_start_addrrs.setText(zcOrder.getStartSite().addr);
+            tv_end_addrrs.setText(zcOrder.getEndSite().addr);
 
-        if (TextUtils.isEmpty(zcOrder.remark)) {
-            tvMark.setText("无备注");
         } else {
-            tvMark.setText(zcOrder.remark);
-        }
-        orderNumberText.setText(zcOrder.orderNo);
-        orderTypeText.setText(zcOrder.orderDetailType);
-        tagContainerLayout.removeAllTags();
-        if (StringUtils.isNotBlank(zcOrder.passengerTags)) {
-            if (zcOrder.passengerTags.contains(",")) {
-                String[] tags = zcOrder.passengerTags.split(",");
-                for (String tag : tags) {
-                    tagContainerLayout.addTag(tag);
-                }
+            ll_isnot_book.setVisibility(View.VISIBLE);
+            ll_is_book.setVisibility(View.GONE);
+            if (TextUtils.isEmpty(zcOrder.remark)) {
+                tvMark.setText("无备注");
             } else {
-                tagContainerLayout.addTag(zcOrder.passengerTags);
+                tvMark.setText(zcOrder.remark);
             }
-        }
-        drawerFrame.setOnClickListener(view -> {
-            if (expandableLayout.isExpanded()) {
-                expandableLayout.collapse();
-            } else {
-                expandableLayout.expand();
-            }
-        });
-
-        if (zcOrder.orderStatus == ZCOrderStatus.NEW_ORDER) {
-            lin_navi.setOnClickListener(view ->
-                    presenter.navi(new LatLng(getStartAddr().lat, getStartAddr().lng), getStartAddr().poi, orderId));
-            go_text.setText("去");
-            lin_time.setVisibility(View.GONE);
-            lin_navi.setVisibility(View.VISIBLE);
-        } else if (zcOrder.orderStatus == ZCOrderStatus.TAKE_ORDER
-                || zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
-            lin_navi.setOnClickListener(view ->
-                    presenter.navi(new LatLng(getStartAddr().lat, getStartAddr().lng), getStartAddr().poi, orderId));
-            go_text.setText("去");
-            lin_time.setVisibility(View.GONE);
-            lin_navi.setVisibility(View.VISIBLE);
-        } else if (zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER) {
-            go_text.setText("已到");
-            if ((ZCSetting.findOne().arriveCancel == 1)) {
-                lin_time.setVisibility(View.VISIBLE);
-                setWaitTime();
-            } else {
-                lin_time.setVisibility(View.GONE);
-            }
-        } else if (zcOrder.orderStatus == ZCOrderStatus.START_WAIT_ORDER) {
-            go_text.setText("已到");
-            if ((ZCSetting.findOne().arriveCancel == 1)) {
-                lin_time.setVisibility(View.VISIBLE);
-                setWaitTime();
-            } else {
-                lin_time.setVisibility(View.GONE);
-            }
-        } else {
-            if (XApp.getMyPreferences().getLong("" + zcOrder.orderId, 0) != 0) {
-                XApp.getEditor().remove("" + zcOrder);
-            }
-            go_text.setText("去");
-            lin_time.setVisibility(View.GONE);
-            lin_navi.setVisibility(View.VISIBLE);
-            lin_navi.setOnClickListener(view -> {
-                if (null != getEndAddr()) {
-                    presenter.navi(new LatLng(getEndAddr().lat, getEndAddr().lng), getEndAddr().poi, orderId);
+            orderNumberText.setText(zcOrder.orderNo);
+            orderTypeText.setText(zcOrder.orderDetailType);
+            tagContainerLayout.removeAllTags();
+            if (StringUtils.isNotBlank(zcOrder.passengerTags)) {
+                if (zcOrder.passengerTags.contains(",")) {
+                    String[] tags = zcOrder.passengerTags.split(",");
+                    for (String tag : tags) {
+                        tagContainerLayout.addTag(tag);
+                    }
                 } else {
-                    ToastUtil.showMessage(FlowActivity.this, getString(R.string.illegality_place));
+                    tagContainerLayout.addTag(zcOrder.passengerTags);
+                }
+            }
+            drawerFrame.setOnClickListener(view -> {
+                if (expandableLayout.isExpanded()) {
+                    expandableLayout.collapse();
+                } else {
+                    expandableLayout.expand();
                 }
             });
-        }
 
-        tagContainerLayout.setOnTagClickListener(new TagView.OnTagClickListener() {
-            @Override
-            public void onTagClick(int position, String text) {
-
+            if (zcOrder.orderStatus == ZCOrderStatus.NEW_ORDER) {
+                lin_navi.setOnClickListener(view ->
+                        presenter.navi(new LatLng(getStartAddr().lat, getStartAddr().lng), getStartAddr().poi, orderId));
+                go_text.setText("去");
+                lin_time.setVisibility(View.GONE);
+                lin_navi.setVisibility(View.VISIBLE);
+            } else if (zcOrder.orderStatus == ZCOrderStatus.TAKE_ORDER
+                    || zcOrder.orderStatus == ZCOrderStatus.GOTO_BOOKPALCE_ORDER) {
+                lin_navi.setOnClickListener(view ->
+                        presenter.navi(new LatLng(getStartAddr().lat, getStartAddr().lng), getStartAddr().poi, orderId));
+                go_text.setText("去");
+                lin_time.setVisibility(View.GONE);
+                lin_navi.setVisibility(View.VISIBLE);
+            } else if (zcOrder.orderStatus == ZCOrderStatus.ARRIVAL_BOOKPLACE_ORDER) {
+                go_text.setText("已到");
+                if ((ZCSetting.findOne().arriveCancel == 1)) {
+                    lin_time.setVisibility(View.VISIBLE);
+                    setWaitTime();
+                } else {
+                    lin_time.setVisibility(View.GONE);
+                }
+            } else if (zcOrder.orderStatus == ZCOrderStatus.START_WAIT_ORDER) {
+                go_text.setText("已到");
+                if ((ZCSetting.findOne().arriveCancel == 1)) {
+                    lin_time.setVisibility(View.VISIBLE);
+                    setWaitTime();
+                } else {
+                    lin_time.setVisibility(View.GONE);
+                }
+            } else {
+                if (XApp.getMyPreferences().getLong("" + zcOrder.orderId, 0) != 0) {
+                    XApp.getEditor().remove("" + zcOrder);
+                }
+                go_text.setText("去");
+                lin_time.setVisibility(View.GONE);
+                lin_navi.setVisibility(View.VISIBLE);
+                lin_navi.setOnClickListener(view -> {
+                    if (null != getEndAddr()) {
+                        presenter.navi(new LatLng(getEndAddr().lat, getEndAddr().lng), getEndAddr().poi, orderId);
+                    } else {
+                        ToastUtil.showMessage(FlowActivity.this, getString(R.string.illegality_place));
+                    }
+                });
             }
 
-            @Override
-            public void onTagLongClick(int position, String text) {
+            tagContainerLayout.setOnTagClickListener(new TagView.OnTagClickListener() {
+                @Override
+                public void onTagClick(int position, String text) {
 
+                }
+
+                @Override
+                public void onTagLongClick(int position, String text) {
+
+                }
+
+                @Override
+                public void onTagCrossClick(int position) {
+
+                }
+            });
+
+            if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
+                next_place.setText(zcOrder.getEndSite().addr);
+            } else {
+                next_place.setText(zcOrder.getStartSite().addr);
             }
-
-            @Override
-            public void onTagCrossClick(int position) {
-
-            }
-        });
-
-        if (zcOrder.orderStatus == ZCOrderStatus.GOTO_DESTINATION_ORDER) {
-            next_place.setText(zcOrder.getEndSite().addr);
-        } else {
-            next_place.setText(zcOrder.getStartSite().addr);
         }
     }
 
@@ -485,7 +515,16 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
             transaction.replace(R.id.flow_frame, acceptFragment);
             transaction.commit();
         } else if (zcOrder.orderStatus == ZCOrderStatus.TAKE_ORDER) {
-            if (zcOrder.isBookOrder == 1){
+            if ((ZCSetting.findOne().unStartCancel == 1)) {
+                toolbar.setRightText(R.string.cancel_order, v -> {
+                    Intent intent = new Intent(this, CancelNewActivity.class);
+                    startActivityForResult(intent, CANCEL_ORDER);
+                });
+            } else {
+                toolbar.setRightText("", null);
+            }
+
+            if (zcOrder.isBookOrder == 1) {
                 toolbar.setTitle(R.string.status_no_start);
                 NoBeginFragment noBeginFragment = new NoBeginFragment();
                 Bundle bundle = new Bundle();
@@ -499,7 +538,10 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 transaction.replace(R.id.flow_frame, noBeginFragment);
                 transaction.commit();
 
-            }else {
+            } else {
+
+                //////目前这个好像没有用了
+
                 toolbar.setTitle(R.string.status_jie);
 
                 ToStartFragment toStartFragment = new ToStartFragment();
@@ -1229,7 +1271,7 @@ public class FlowActivity extends RxBaseActivity implements FlowContract.View,
                 dialog.setOnMyClickListener((view, string) -> {
                     if (TextUtils.isEmpty(string)) {
                         ToastUtil.showMessage(FlowActivity.this, "请输入结算金额");
-                    } else if (Double.parseDouble(string) <1) {
+                    } else if (Double.parseDouble(string) < 1) {
                         ToastUtil.showMessage(FlowActivity.this, "请输入正确结算金额");
                     } else if (Double.parseDouble(string) > 10000) {
                         ToastUtil.showMessage(FlowActivity.this, "请输入正确结算金额");

@@ -345,6 +345,13 @@ public class CreateZCFragment extends RxLazyFragment implements CreateZCContract
     public void showTypeTab(ZCTypeResult result) {
         tabLayout.removeAllTabs();
         List<ZCType> zcTypes = result.data;
+
+        for (ZCType zcType: zcTypes) {
+            if (zcType.isBook == 1){
+                zcTypes.remove(zcType);
+            }
+        }
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

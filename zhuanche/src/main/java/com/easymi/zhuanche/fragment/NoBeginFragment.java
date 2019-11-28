@@ -29,7 +29,6 @@ import java.util.TimerTask;
 public class NoBeginFragment extends RxBaseFragment {
 
     CustomSlideToUnlockView slider;
-    LoadingButton to_start_btn;
     TextView time_count_down;
 
     /**
@@ -63,7 +62,6 @@ public class NoBeginFragment extends RxBaseFragment {
     @Override
     public void finishCreateView(Bundle state) {
         slider = $(R.id.slider);
-        to_start_btn = $(R.id.to_start_btn);
         time_count_down = $(R.id.time_count_down);
 
         initCountDown();
@@ -83,15 +81,6 @@ public class NoBeginFragment extends RxBaseFragment {
             }
         });
 
-        if ((ZCSetting.findOne().unStartCancel == 1)) {
-            to_start_btn.setVisibility(View.VISIBLE);
-            to_start_btn.setOnClickListener(v -> {
-                Intent intent = new Intent(getContext(), CancelNewActivity.class);
-                startActivityForResult(intent, FlowActivity.CANCEL_ORDER);
-            });
-        } else {
-            to_start_btn.setVisibility(View.GONE);
-        }
     }
 
 
@@ -109,7 +98,7 @@ public class NoBeginFragment extends RxBaseFragment {
     private void initCountDown() {
         cancelTimer();
         //剩余的秒钟数
-        bookLeftSec = (zcOrder.bookTime - System.currentTimeMillis()) / 1000;
+        bookLeftSec = (zcOrder.bookTime * 1000 - System.currentTimeMillis()) / 1000;
         if (bookLeftSec < 0) {
             bookLeftSec = 0;
         }

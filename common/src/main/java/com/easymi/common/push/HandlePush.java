@@ -362,6 +362,17 @@ public class HandlePush implements FeeChangeSubject, PassengerLocSubject {
             } else if (msg.equals("book_order")) {
                 XApp.getInstance().shake();
                 XApp.getInstance().syntheticVoice("你有公务用车订单需要执行");
+            }else if (msg.equals("book_order_driver_notice")){
+                //您好，您所接来自乘客#name#单号为#orderNo#的订单，距离乘客用车时间还剩#surplusTime#分钟，请提前做好准备。
+                XApp.getInstance().shake();
+                XApp.getInstance().syntheticVoice("您好，您所接来自乘客"
+                        +jb.optJSONObject("data").optString("name")
+                        +"单号为"
+                        +jb.optJSONObject("data").optString("orderNo")
+                        +"的订单，距离乘客用车时间还剩"
+                        +jb.optJSONObject("data").optInt("surplusTime")
+                        +"分钟，请提前做好准备"
+                    );
             }
         } catch (
                 JSONException e) {
