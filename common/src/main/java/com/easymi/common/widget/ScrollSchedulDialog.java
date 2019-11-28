@@ -98,9 +98,9 @@ public class ScrollSchedulDialog extends BaseCenterDialog {
             dismiss();
         });
 
-        if (flag == 2){
-            setCuntdownTime();
-        }
+//        if (flag == 2){
+//            setCuntdownTime();
+//        }
     }
 
     /**

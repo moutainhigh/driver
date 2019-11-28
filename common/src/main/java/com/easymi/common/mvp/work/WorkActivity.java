@@ -876,6 +876,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void showScrollSchedul(ScrollSchedulEvent schedulEvent) {
         // 2 下线帮定班次
+        presenter.queueOrOffline(null,2);
         presenter.queryPCLine(2,onLineBtn);
     }
 

@@ -732,7 +732,7 @@ public interface CommApiService {
      *
      * @return
      */
-    @GET("api/v1/carpool/noSchedule/line")
+    @GET("api/v1/carpool//driver/noSchedule/line")
     Observable<EmResult2<ArrayList<ScrollSchedul>>> queryPCLine();
 
     /**
@@ -740,6 +740,6 @@ public interface CommApiService {
      *
      * @return
      */
-    @GET("api/v1/carpool/noSchedule/queue")
+    @GET("api/v1/carpool/driver/noSchedule/queue")
     Observable<EmResult> queueOrOffline(@Query("lineId") Long lineId, @Query("isQueue") int isQueue);
 }
