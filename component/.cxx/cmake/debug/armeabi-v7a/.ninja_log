@@ -1,7 +1,0 @@
-# ninja log v5
-0	218	0	CMakeFiles/cat.dir/src/main/cpp/cat-lib.cpp.o	6fdd3c148eb87814
-219	319	0	../../../../build/intermediates/cmake/debug/obj/armeabi-v7a/libcat.so	602b3ac3379f5ac4
-0	464	0	CMakeFiles/loader.dir/src/main/cpp/loader-lib.cpp.o	780d53b2f6f6dd8a
-466	592	0	../../../../build/intermediates/cmake/debug/obj/armeabi-v7a/libloader.so	9e0a55983d17d6d7
-0	609	0	CMakeFiles/ps.dir/src/main/cpp/ps-lib.cpp.o	39ca3acfcd3a7533
-609	755	0	../../../../build/intermediates/cmake/debug/obj/armeabi-v7a/libps.so	839cf4b2ad1a0882
