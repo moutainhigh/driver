@@ -732,7 +732,7 @@ public interface CommApiService {
      *
      * @return
      */
-    @GET("api/v1/carpool//driver/noSchedule/line")
+    @GET("api/v1/carpool/driver/noSchedule/line")
     Observable<EmResult2<ArrayList<ScrollSchedul>>> queryPCLine();
 
     /**
