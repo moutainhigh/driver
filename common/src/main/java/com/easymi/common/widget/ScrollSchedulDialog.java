@@ -95,7 +95,6 @@ public class ScrollSchedulDialog extends BaseCenterDialog {
             if (getOnMyClickListener() != null){
                 getOnMyClickListener().onItemClick(v,"");
             }
-            dismiss();
         });
 
 //        if (flag == 2){
