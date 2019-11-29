@@ -6,13 +6,16 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.easymi.component.R;
 import com.easymi.component.widget.wheelview.adapter.WheelViewAdapter;
 
 import java.util.LinkedList;
@@ -87,6 +90,9 @@ public class WheelView extends View {
     private Paint centerRectPaint;
     private int lineColor = 0xFFC7C7C7;
     private float lineWidth = 3f;
+
+    private int COLOR_BLACK = ContextCompat.getColor(getContext(), R.color.colorBlack);
+    private int COLOR_DESC = ContextCompat.getColor(getContext(), R.color.colorDesc);
 
     /**
      * Constructor
@@ -269,6 +275,25 @@ public class WheelView extends View {
     protected void notifyChangingListeners(int oldValue, int newValue) {
         for (OnWheelChangedListener listener : changingListeners) {
             listener.onChanged(this, oldValue, newValue);
+        }
+        if (oldValue < 0 || newValue < 0 || itemsLayout == null)
+            return;
+
+        View oldView = itemsLayout.getChildAt(oldValue - firstItem);
+        View newView = itemsLayout.getChildAt(newValue - firstItem);
+
+        refreshTextStatus(oldView, oldValue);
+        refreshTextStatus(newView, newValue);
+    }
+
+    void refreshTextStatus(View view, int index) {
+        if (view instanceof TextView) {
+            TextView textView = (TextView) view;
+            if (index == currentItem) {
+                textView.setTextColor(COLOR_BLACK);
+            } else {
+                textView.setTextColor(COLOR_DESC);
+            }
         }
     }
 
@@ -854,6 +879,8 @@ public class WheelView extends View {
      */
     private boolean addViewItem(int index, boolean first) {
         View view = getItemView(index);
+        refreshTextStatus(view, index);
+
         if (view != null) {
             if (first) {
                 itemsLayout.addView(view, 0);

@@ -32,6 +32,7 @@ import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.easymi.common.R;
+import com.easymi.common.StatusSaveService;
 import com.easymi.common.activity.CreateActivity;
 import com.easymi.common.adapter.OrderAdapter;
 import com.easymi.common.entity.AnnAndNotice;
@@ -39,6 +40,7 @@ import com.easymi.common.entity.ManualConfigBean;
 import com.easymi.common.entity.MqttReconnectEvent;
 import com.easymi.common.entity.MultipleOrder;
 import com.easymi.common.entity.NearDriver;
+import com.easymi.common.entity.ScrollSchedulEvent;
 import com.easymi.common.mvp.order.OrderActivity;
 import com.easymi.common.push.CountEvent;
 import com.easymi.common.push.MqttManager;
@@ -47,6 +49,7 @@ import com.easymi.common.receiver.CancelOrderReceiver;
 import com.easymi.common.receiver.EmployStatusChangeReceiver;
 import com.easymi.common.receiver.NoticeReceiver;
 import com.easymi.common.receiver.OrderRefreshReceiver;
+import com.easymi.common.widget.CommonDialog;
 import com.easymi.common.widget.NearInfoWindowAdapter;
 import com.easymi.component.Config;
 import com.easymi.component.EmployStatus;
@@ -158,6 +161,15 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         return R.layout.activity_work;
     }
 
+
+    private void createStatusService(boolean isStart) {
+//        Intent intent = new Intent(this, StatusSaveService.class);
+//        intent.setPackage(getPackageName());
+//        intent.setAction(isStart ? StatusSaveService.START : StatusSaveService.END);
+//        startService(intent);
+    }
+
+
     @Override
     public void initViews(Bundle savedInstanceState) {
         EventBus.getDefault().register(this);
@@ -181,22 +193,42 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         initRecycler();
 
         onLineBtn.setOnClickListener(view -> {
-            onLineBtn.setClickable(false);
-            onLineBtn.setStatus(LoadingButton.STATUS_LOADING);
-            presenter.online(onLineBtn);
+            if (TextUtils.equals(EmUtil.getEmployInfo().serviceType, Config.CARPOOL) && EmUtil.getEmployInfo().countNoSchedule > 0) {
+                /// 1 上线绑定班次
+                presenter.queryPCLine(1, onLineBtn);
+            } else {
+                onLineBtn.setClickable(false);
+                onLineBtn.setStatus(LoadingButton.STATUS_LOADING);
+                presenter.online(onLineBtn);
+            }
         });
         workTvOffline.setOnClickListener(v -> {
             if (Config.IS_ENCRYPT && TextUtils.equals(Config.APP_KEY, "1HAcient1kLqfeX7DVTV0dklUkpGEnUC")) {
                 presenter.doLogOut();
             } else {
-                presenter.offline();
+                if (TextUtils.equals(EmUtil.getEmployInfo().serviceType, Config.CARPOOL) && EmUtil.getEmployInfo().countNoSchedule > 0) {
+                    new CommonDialog(this, R.layout.dialog_offline) {
+                        @Override
+                        public void initData(View view) {
+                            Button btn_cancel = view.findViewById(R.id.btn_cancel);
+                            Button btn_sure = view.findViewById(R.id.btn_sure);
+                            btn_cancel.setOnClickListener(v12 -> dismiss());
+                            btn_sure.setOnClickListener(v1 -> {
+                                presenter.queueOrOffline(null, 2);
+                                dismiss();
+                            });
+                        }
+                    }.show();
+                } else {
+                    presenter.offline();
+                }
             }
-//            presenter.resetMqtt();
         });
         EmLoc emLoc = EmUtil.getLastLoc();
         if (emLoc != null) {
             receiveLoc(emLoc);
         }
+        createStatusService(true);
     }
 
 
@@ -459,7 +491,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         });
     }
 
-    @Override
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void showStatis(CountEvent countEvent) {
         if (countEvent == null) {
@@ -518,7 +550,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
          */
         if (EmUtil.getEmployInfo().serviceType.equals(Config.ZHUANCHE)) {
             btCreate.setVisibility(View.VISIBLE);
-            if (Vehicle.exists(EmUtil.getEmployId()) && (Vehicle.findByEmployId(EmUtil.getEmployId()).isTaxiNormal == 1)){
+            if (Vehicle.exists(EmUtil.getEmployId()) && (Vehicle.findByEmployId(EmUtil.getEmployId()).isTaxiNormal == 1)) {
                 btCreate.setVisibility(View.GONE);
             }
         } else {
@@ -654,6 +686,7 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
         getRxManager().clear();
         MqttManager.release();
         mapView.onDestroy();
+        createStatusService(false);
         super.onDestroy();
     }
 
@@ -852,11 +885,19 @@ public class WorkActivity extends RxBaseActivity implements WorkContract.View,
     }
 
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void showScrollSchedul(ScrollSchedulEvent schedulEvent) {
+        // 2 下线帮定班次
+        presenter.queueOrOffline(null, 2);
+        presenter.queryPCLine(2, onLineBtn);
+    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK){
-            if (requestCode == 0x99){
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 0x99) {
                 presenter.online();
             }
         }

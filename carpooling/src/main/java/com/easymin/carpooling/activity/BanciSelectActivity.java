@@ -10,11 +10,12 @@ import com.easymi.component.Config;
 import com.easymi.component.base.RxBaseActivity;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.HaveErrSubscriberListener;
+import com.easymi.component.network.HttpResultFunc2;
 import com.easymi.component.network.HttpResultFunc3;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.result.EmResult2;
 import com.easymi.component.utils.EmUtil;
-import com.easymi.component.utils.Log;
+import com.easymi.component.utils.TimeUtil;
 import com.easymi.component.utils.ToastUtil;
 import com.easymi.component.widget.CusErrLayout;
 import com.easymi.component.widget.CusToolbar;
@@ -23,16 +24,15 @@ import com.easymin.carpooling.CarPoolApiService;
 import com.easymin.carpooling.R;
 import com.easymin.carpooling.adapter.BanciAdapter;
 import com.easymin.carpooling.entity.LineBean;
+import com.easymin.carpooling.entity.LineOffsetBean;
 import com.easymin.carpooling.entity.PincheOrder;
 import com.easymin.carpooling.entity.TimeSlotBean;
 import com.easymin.carpooling.widget.BottomListDialog;
+import com.easymin.carpooling.widget.TimePickerDialog;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -48,7 +48,6 @@ import rx.schedulers.Schedulers;
  */
 
 public class BanciSelectActivity extends RxBaseActivity implements View.OnClickListener {
-
     SwipeRecyclerView recyclerView;
 
     BanciAdapter adapter;
@@ -65,6 +64,7 @@ public class BanciSelectActivity extends RxBaseActivity implements View.OnClickL
 
 
     private List<PincheOrder> orders;
+    private LineOffsetBean lineOffsetBean;
 
     @Override
     public boolean isEnableSwipe() {
@@ -94,12 +94,7 @@ public class BanciSelectActivity extends RxBaseActivity implements View.OnClickL
         initRecycler();
         recyclerView.setRefreshing(true);
 
-        getLineDriverSchedule();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
+        getConfig();
     }
 
     /**
@@ -244,18 +239,38 @@ public class BanciSelectActivity extends RxBaseActivity implements View.OnClickL
                 ToastUtil.showMessage(this, "请先选择线路");
                 return;
             }
-            BottomListDialog dialog = new BottomListDialog(this, lineBeans.get(position).timeSlotVoList)
-                    .setOnSelectListener(index -> {
-                        selctTimeSort = lineBeans.get(position).timeSlotVoList.get(index);
-                        tv_time_sort.setText(selctTimeSort.day + " " + selctTimeSort.timeSlot + " 余票：" + (selctTimeSort.tickets == null ? "充足" : selctTimeSort.tickets));
-                    });
-            dialog.setTitle("用车时段");
-            dialog.show();
+            if (EmUtil.getEmployInfo().countNoSchedule > 0) {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(this, lineOffsetBean.timeNo, lineOffsetBean.stopTimeNo, lineOffsetBean.spanNo);
+                timePickerDialog.setOnSelectListener(new TimePickerDialog.OnSelectListener() {
+                    @Override
+                    public void onSelect(long timestamp) {
+                        tv_time_sort.setText(TimeUtil.getTime("yyyy年MM月dd日 HH:mm", timestamp));
+                        selctTimeSort = new TimeSlotBean();
+                        selctTimeSort.lineName = lineOffsetBean.name;
+                        selctTimeSort.lineId = lineOffsetBean.id;
+                        selctTimeSort.model = lineOffsetBean.model;
+                        selctTimeSort.tickets = lineOffsetBean.limitTicketNo;
+                        selctTimeSort.timeSlot = TimeUtil.getTime("HH:mm", timestamp);
+                        selctTimeSort.day = TimeUtil.getTime("yyyy-MM-dd", timestamp);
+//                        Toast.makeText(BanciSelectActivity.this, selctTimeSort.timeSlot + "    " + selctTimeSort.day + "   ", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                timePickerDialog.show();
+            } else {
+                BottomListDialog dialog = new BottomListDialog(this, lineBeans.get(position).timeSlotVoList)
+                        .setOnSelectListener(index -> {
+                            selctTimeSort = lineBeans.get(position).timeSlotVoList.get(index);
+                            tv_time_sort.setText(selctTimeSort.day + " " + selctTimeSort.timeSlot + " 余票：" + (selctTimeSort.tickets == null ? "充足" : selctTimeSort.tickets));
+                        });
+                dialog.setTitle("用车时段");
+                dialog.show();
+            }
         } else if (i == R.id.tv_sure) {
             if (position == -1) {
                 ToastUtil.showMessage(this, "请选择线路");
                 return;
             }
+
             if (selctTimeSort == null) {
                 ToastUtil.showMessage(this, "请选择时段");
                 return;
@@ -268,6 +283,42 @@ public class BanciSelectActivity extends RxBaseActivity implements View.OnClickL
         }
     }
 
+
+    private void getLineOffset() {
+        ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
+                .getLineOffset(EmUtil.getEmployId())
+                .map(new HttpResultFunc2<>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MySubscriber<LineOffsetBean>(this, true, false, new HaveErrSubscriberListener<LineOffsetBean>() {
+                    @Override
+                    public void onNext(LineOffsetBean o) {
+                        if (o != null){
+                            lineOffsetBean = o;
+                            setViewStatus(false);
+                            LineBean lineBean = new LineBean();
+                            lineBean.lineName = o.name;
+                            lineBeans.clear();
+                            lineBeans.add(lineBean);
+                        }else {
+                            setViewStatus(true);
+                        }
+                    }
+
+                    @Override
+                    public void onError(int code) {
+                        setViewStatus(true);
+                    }
+                }));
+    }
+
+    private void getConfig() {
+        if (EmUtil.getEmployInfo().countNoSchedule > 0) {
+            getLineOffset();
+        } else {
+            getLineDriverSchedule();
+        }
+    }
 
     /**
      * 查询专线订单
@@ -295,7 +346,7 @@ public class BanciSelectActivity extends RxBaseActivity implements View.OnClickL
 
                     @Override
                     public void onError(int code) {
-
+                        setViewStatus(true);
                     }
                 })));
     }
@@ -303,14 +354,15 @@ public class BanciSelectActivity extends RxBaseActivity implements View.OnClickL
 
     /**
      * 移除掉
+     *
      * @param list
      */
-    public void removeEmptyTickets(List<LineBean> list){
-        for (LineBean lineBean : list){
+    public void removeEmptyTickets(List<LineBean> list) {
+        for (LineBean lineBean : list) {
             Iterator iterator = lineBean.timeSlotVoList.iterator();
             while (iterator.hasNext()) {
                 TimeSlotBean timeSlotBean = (TimeSlotBean) iterator.next();
-                if (timeSlotBean.tickets != null && timeSlotBean.tickets == 0){
+                if (timeSlotBean.tickets != null && timeSlotBean.tickets == 0) {
                     iterator.remove();
                 }
             }
@@ -319,7 +371,7 @@ public class BanciSelectActivity extends RxBaseActivity implements View.OnClickL
         Iterator iterator = list.iterator();
         while (iterator.hasNext()) {
             LineBean lineBean = (LineBean) iterator.next();
-            if (lineBean.timeSlotVoList.size() == 0)  {
+            if (lineBean.timeSlotVoList.size() == 0) {
                 iterator.remove();
             }
         }
@@ -346,7 +398,6 @@ public class BanciSelectActivity extends RxBaseActivity implements View.OnClickL
             tv_time_sort.setHint("请选择时段");
             tv_time_sort.setHintTextColor(getResources().getColor(R.color.color_cccccc));
             tv_time_sort.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.mipmap.ic_right), null);
-
             tv_sure.setBackgroundResource(R.drawable.shape_btn_4dp_bg);
 
             tv_line_name.setOnClickListener(this);

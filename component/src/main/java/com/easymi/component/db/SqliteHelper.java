@@ -13,7 +13,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "data.db";
 
-    private static final int VERSION = 195;
+    private static final int VERSION = 198;
 
     private StringBuffer sqlBuf;
 
@@ -195,7 +195,8 @@ public class SqliteHelper extends SQLiteOpenHelper {
                 .append("star").append(" ").append("LONG").append(",")
                 .append("companyPhone").append(" ").append("TEXT").append(",")
                 .append("isOpenPromote").append(" ").append("INTEGER").append(",")
-                .append("promoteApplyStatus").append(" ").append("INTEGER")
+                .append("promoteApplyStatus").append(" ").append("INTEGER").append(",")
+                .append("countNoSchedule").append(" ").append("INTEGER")
                 .append(");");
         execCreateTableSQL(db);
     }
