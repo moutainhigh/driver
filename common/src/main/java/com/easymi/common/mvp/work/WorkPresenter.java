@@ -805,6 +805,7 @@ public class WorkPresenter implements WorkContract.Presenter {
                 }
             }else if (view1.getId() == R.id.btn_sure){
                 if (dialog.getSelectLineId() != 0){
+                    dialog.dismiss();
                     //上线
                     queueOrOffline(dialog.getSelectLineId(),1);
                 }else {
