@@ -1,6 +1,7 @@
 package com.easymi.common.push;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 
@@ -79,7 +80,7 @@ public class MqttManager implements LocObserver {
      */
     private MqttManager() {
         rxManager = new RxManager();
-        handler = new Handler(new Handler.Callback() {
+        handler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
                 if (msg.what == 0) {

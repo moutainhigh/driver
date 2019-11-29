@@ -41,13 +41,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import tech.linjiang.pandora.Pandora;
 import tech.linjiang.pandora.function.IFunc;
 
@@ -260,7 +253,6 @@ public class XApp extends MultiDexApplication {
         if (isInti) {
             return;
         }
-        Log.e("XApp", "initBaiduTTs");
         isInti = true;
         // 设置初始化参数
         // 此处可以改为 含有您业务逻辑的SpeechSynthesizerListener的实现类
@@ -309,7 +301,6 @@ public class XApp extends MultiDexApplication {
 
         InitConfig initConfig = new InitConfig(Config.TTS_APP_ID, Config.TTS_APP_KEY, Config.TTS_APP_SECRET, TtsMode.MIX, params, listener);
 
-        // 此处可以改为MySyntherizer 了解调用过程
         mSpeechSynthesizer = new NonBlockSyntherizer(this, initConfig);
 
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);

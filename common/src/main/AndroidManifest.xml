@@ -89,6 +89,15 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/ThemeSwipeBack" />
 
+        <service
+            android:name="com.easymi.common.StatusSaveService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.easymi.component.statusSaveServiceStart" />
+                <action android:name="com.easymi.component.statusSaveServiceEnd" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>
