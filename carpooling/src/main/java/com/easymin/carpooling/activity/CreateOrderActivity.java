@@ -197,7 +197,7 @@ public class CreateOrderActivity extends RxPayActivity {
             Iterator<Station> iterator = data.iterator();
             while (iterator.hasNext()) {
                 Station station = iterator.next();
-                if (station.onOff == 2) {
+                if (station.onOff == 3) {
                     iterator.remove();
                 }
             }
