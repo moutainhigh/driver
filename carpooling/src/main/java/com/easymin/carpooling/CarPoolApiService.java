@@ -159,7 +159,8 @@ public interface CarPoolApiService {
                                      @Query("lineId") long lineId,
                                      @Query("startStationId") long startStationId,
                                      @Query("startCoordinateId") long startCoordinateId,
-                                     @Query("endCoordinateId") long endCoordinateId);
+                                     @Query("endCoordinateId") long endCoordinateId,
+                                     @Query("sorts") String sorts);
 
     /**
      * 拼车下单接口

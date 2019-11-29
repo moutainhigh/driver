@@ -515,7 +515,14 @@ public class CreateOrderActivity extends RxPayActivity {
         } else {
             money = 0;
         }
-        this.carPoolCreateOrderTvMoney.setText(new DecimalFormat("######0.00").format(money));
+        if (currentModel == 2){
+//            double prise = data.getDoubleExtra("prise", 0);
+            this.carPoolCreateOrderTvMoney.setText(new DecimalFormat("######0.00").format(priceResult.data.money));
+            this.carPoolCreateOrderLlMoney.setVisibility(View.VISIBLE);
+        }else {
+            this.carPoolCreateOrderTvMoney.setText(new DecimalFormat("######0.00").format(money));
+        }
+
         if (money != 0) {
             carPoolCreateOrderLlMoney.setVisibility(View.VISIBLE);
         } else {
@@ -602,7 +609,7 @@ public class CreateOrderActivity extends RxPayActivity {
                         carPoolCreateOrderTvEnd.setText(endSite.address);
                         setBtnEnable();
                         if (currentModel == 1 || currentModel == 3) {
-                            queryPrice(pcOrder.lineId, startSite.stationId, endSite.stationId, startSite.id, endSite.id);
+                            queryPrice(pcOrder.lineId, startSite.stationId, endSite.stationId, startSite.id, endSite.id,null);
                         }
                     }
                 } else {
@@ -611,9 +618,9 @@ public class CreateOrderActivity extends RxPayActivity {
                 }
             } else if (requestCode == 0x20) {
                 if (data != null) {
-                    double prise = data.getDoubleExtra("prise", 0);
-                    carPoolCreateOrderTvMoney.setText(new DecimalFormat("######0.00").format(prise));
-                    carPoolCreateOrderLlMoney.setVisibility(View.VISIBLE);
+//                    double prise = data.getDoubleExtra("prise", 0);
+//                    carPoolCreateOrderTvMoney.setText(new DecimalFormat("######0.00").format(prise));
+//                    carPoolCreateOrderLlMoney.setVisibility(View.VISIBLE);
                     chooseSeatList = (ArrayList<SeatBean>) data.getSerializableExtra("data");
                     StringBuilder stringBuilder = new StringBuilder();
                     for (int i = 0; i < chooseSeatList.size(); i++) {
@@ -626,6 +633,9 @@ public class CreateOrderActivity extends RxPayActivity {
                     carPoolCreateOrderTvSeatSelect.setText(stringBuilder.toString());
                     carPoolCreateOrderTvSeatSelect.setSelected(true);
                     setBtnEnable();
+
+                    queryPrice(pcOrder.lineId, startSite.stationId, endSite.stationId, startSite.id, endSite.id,currentModel == 2 ? new Gson().toJson(chooseSeatList) : "");
+
                 }
             } else if (requestCode == 0x10) {
                 if (data != null) {
@@ -832,9 +842,9 @@ public class CreateOrderActivity extends RxPayActivity {
      * @param startStationId
      * @param endStationId
      */
-    private void queryPrice(long lineId, long startStationId, long endStationId, long startId, long endId) {
+    private void queryPrice(long lineId, long startStationId, long endStationId, long startId, long endId,String sorts) {
         Observable<PriceResult> observable = ApiManager.getInstance().createApi(Config.HOST, CarPoolApiService.class)
-                .getPrice(endStationId, lineId, startStationId, startId, endId)
+                .getPrice(endStationId, lineId, startStationId, startId, endId,sorts)
                 .filter(new HttpResultFunc<>())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io());
