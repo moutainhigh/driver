@@ -293,12 +293,16 @@ public class BanciSelectActivity extends RxBaseActivity implements View.OnClickL
                 .subscribe(new MySubscriber<LineOffsetBean>(this, true, false, new HaveErrSubscriberListener<LineOffsetBean>() {
                     @Override
                     public void onNext(LineOffsetBean o) {
-                        lineOffsetBean = o;
-                        setViewStatus(false);
-                        LineBean lineBean = new LineBean();
-                        lineBean.lineName = o.name;
-                        lineBeans.clear();
-                        lineBeans.add(lineBean);
+                        if (o != null){
+                            lineOffsetBean = o;
+                            setViewStatus(false);
+                            LineBean lineBean = new LineBean();
+                            lineBean.lineName = o.name;
+                            lineBeans.clear();
+                            lineBeans.add(lineBean);
+                        }else {
+                            setViewStatus(true);
+                        }
                     }
 
                     @Override
