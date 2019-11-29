@@ -799,8 +799,9 @@ public class WorkPresenter implements WorkContract.Presenter {
                 if (flag == 1){
                     dialog.dismiss();
                 }else if (flag == 2){
-                    //下线
-                    queueOrOffline(null,2);
+//                    //下线
+//                    queueOrOffline(null,2);
+                    dialog.dismiss();
                 }
             }else if (view1.getId() == R.id.btn_sure){
                 if (dialog.getSelectLineId() != 0){
