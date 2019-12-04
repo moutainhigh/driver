@@ -3,7 +3,6 @@ package com.easymi.component.activity;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,12 +17,14 @@ import com.amap.api.navi.AMapNaviView;
 import com.amap.api.navi.AMapNaviViewListener;
 import com.amap.api.navi.enums.AMapNaviRingType;
 import com.amap.api.navi.enums.NaviType;
+import com.amap.api.navi.model.AMapCalcRouteResult;
 import com.amap.api.navi.model.AMapLaneInfo;
 import com.amap.api.navi.model.AMapModelCross;
 import com.amap.api.navi.model.AMapNaviCameraInfo;
 import com.amap.api.navi.model.AMapNaviCross;
 import com.amap.api.navi.model.AMapNaviInfo;
 import com.amap.api.navi.model.AMapNaviLocation;
+import com.amap.api.navi.model.AMapNaviRouteNotifyData;
 import com.amap.api.navi.model.AMapNaviTrafficFacilityInfo;
 import com.amap.api.navi.model.AMapServiceAreaInfo;
 import com.amap.api.navi.model.AimLessModeCongestionInfo;
@@ -33,17 +34,14 @@ import com.amap.api.navi.model.NaviLatLng;
 import com.autonavi.tbt.TrafficFacilityInfo;
 import com.easymi.component.ComponentService;
 import com.easymi.component.Config;
-import com.easymi.component.DJOrderStatus;
 import com.easymi.component.R;
 import com.easymi.component.base.RxBaseActivity;
-import com.easymi.component.entity.DymOrder;
 import com.easymi.component.entity.PassengerLcResult;
 import com.easymi.component.entity.PassengerLocation;
 import com.easymi.component.network.ApiManager;
 import com.easymi.component.network.MySubscriber;
 import com.easymi.component.push.PushEvent;
 import com.easymi.component.utils.Log;
-import com.easymi.component.utils.StringUtils;
 import com.easymi.component.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -52,8 +50,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -165,7 +161,6 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
         mAMapNavi = AMapNavi.getInstance(getApplicationContext());
         mAMapNavi.addAMapNaviListener(this);
         mAMapNavi.setUseInnerVoice(true);
-
     }
 
     @Override
@@ -422,6 +417,21 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
     }
 
     @Override
+    public void onCalculateRouteSuccess(AMapCalcRouteResult aMapCalcRouteResult) {
+
+    }
+
+    @Override
+    public void onCalculateRouteFailure(AMapCalcRouteResult aMapCalcRouteResult) {
+
+    }
+
+    @Override
+    public void onNaviRouteNotify(AMapNaviRouteNotifyData aMapNaviRouteNotifyData) {
+
+    }
+
+    @Override
     public void onNaviSetting() {
 
     }
@@ -466,10 +476,22 @@ public class NaviActivity extends RxBaseActivity implements AMapNaviListener, AM
 
     }
 
+    @Override
+    public void onMapTypeChanged(int i) {
+
+    }
+
+    @Override
+    public void onNaviViewShowMode(int i) {
+
+    }
+
+    @Override
     public void showLaneInfo(AMapLaneInfo info) {
 
     }
 
+    @Override
     public void updateIntervalCameraInfo(AMapNaviCameraInfo info1, AMapNaviCameraInfo info2, int i) {
 
     }

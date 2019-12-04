@@ -58,7 +58,7 @@ task clean(type: Delete) {
 ext {
     supportLibraryVersion = '27.1.1'    //support库的版本
     compileSdkVersion = 27
-    minSdkVersion = 16
+    minSdkVersion = 15
     targetSdkVersion = 27
 
     pandora = "com.github.whataa:pandora:v2.0.4"

@@ -158,6 +158,7 @@ public class FlowModel implements FlowContract.Model {
         pushData.location.time = System.currentTimeMillis() / 1000;
         pushData.location.isOffline = emLoc.isOffline;
 
+        pushData.location.address = emLoc.address;
 
         //订单信息
         List<PushDataOrder> orderList = new ArrayList<>();

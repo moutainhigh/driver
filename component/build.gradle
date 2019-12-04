@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-
+apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
@@ -39,6 +39,13 @@ android {
     }
 }
 
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
     api rootProject.ext.appcompat
@@ -68,7 +75,8 @@ dependencies {
     api rootProject.ext.buglyNativecrashreport
     api rootProject.ext.rxpermissions
     api rootProject.ext.eventbus
-    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    api(name: 'alipaySdk-15.6.8-20191021122455-noUtdid', ext: 'aar')
     debugApi rootProject.ext.pandora
     releaseApi rootProject.ext.pandoraNoOp
 

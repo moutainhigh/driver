@@ -24,6 +24,7 @@ import java.util.List;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.http.Field;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
@@ -260,6 +261,20 @@ public class RegisterModel {
                         String.valueOf(request.netCarQualificationsStart),
                         String.valueOf(request.netCarQualificationsEnd),
                         practitionersPhoto)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 重置密码
+     * @param password
+     * @param phone
+     * @return
+     */
+    public static Observable<EmResult> retrieve(String password, String phone,String smsCode, String random) {
+        return ApiManager.getInstance().createApi(Config.HOST, McService.class)
+                .retrieve(password, phone, smsCode, random)
+                .filter(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

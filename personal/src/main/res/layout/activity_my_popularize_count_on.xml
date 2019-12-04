@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.MyPopularizeCountOnActivity">
+
+    <com.easymi.component.widget.CusToolbar
+        android:id="@+id/myPopularizeCountOnCtb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="45dp"
+        android:background="@color/colorBg"
+        android:paddingStart="12dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="12dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/corners_white_4dp"
+            android:paddingStart="24dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="24dp"
+            android:paddingBottom="16dp">
+
+            <TextView
+                android:id="@+id/myPopularizeCountOnCtbTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:text="结算金额"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/sizeContent" />
+
+            <TextView
+                android:id="@+id/myPopularizeCountOnCtbSymbol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/myPopularizeCountOnCtbTitle"
+                android:text="¥"
+                android:textColor="@color/colorBlack"
+                android:textSize="36sp" />
+
+            <EditText
+                android:id="@+id/myPopularizeCountOnEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/myPopularizeCountOnCtbTitle"
+                android:layout_toEndOf="@id/myPopularizeCountOnCtbSymbol"
+                android:background="@null"
+                android:inputType="number|numberDecimal"
+                android:maxLength="8"
+                android:paddingStart="12dp"
+                android:textSize="36sp" />
+
+            <View
+                android:id="@+id/myPopularizeCountOnLine"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/sizeLine"
+                android:layout_below="@id/myPopularizeCountOnEt"
+                android:layout_marginTop="4dp"
+                android:background="@color/colorLine" />
+
+            <TextView
+                android:id="@+id/myPopularizeCountOnTvCurrent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/myPopularizeCountOnLine"
+                android:paddingTop="6dp"
+                android:paddingBottom="56dp"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/sizeContent" />
+
+            <TextView
+                android:id="@+id/myPopularizeCountOnTvAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/myPopularizeCountOnLine"
+                android:layout_toEndOf="@id/myPopularizeCountOnTvCurrent"
+                android:paddingStart="12dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="56dp"
+                android:text="全部结算"
+                android:textColor="@color/colorBlue"
+                android:textSize="@dimen/sizeContent" />
+
+            <TextView
+                android:id="@+id/myPopularizeCountOnTvCountApply"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/sizeButtonHeight"
+                android:layout_below="@id/myPopularizeCountOnTvCurrent"
+                android:background="@drawable/cor4_solid_blue"
+                android:gravity="center"
+                android:text="申请结算"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sizeButton" />
+
+            <TextView
+                android:id="@+id/myPopularizeCountOnTvRecord"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/myPopularizeCountOnTvCountApply"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="8dp"
+                android:text="申请记录"
+                android:textColor="@color/colorBlue"
+                android:textSize="@dimen/sizeContent" />
+
+        </RelativeLayout>
+
+
+    </FrameLayout>
+
+</FrameLayout>

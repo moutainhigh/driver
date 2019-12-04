@@ -3,10 +3,13 @@ package com.easymin.carpooling.flowmvp.fragment;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.easymi.common.entity.ScrollSchedulEvent;
 import com.easymi.component.base.RxBaseFragment;
 import com.easymin.carpooling.R;
 import com.easymin.carpooling.StaticVal;
 import com.easymin.carpooling.flowmvp.ActFraCommBridge;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -74,6 +77,7 @@ public class FinishFragment extends RxBaseFragment {
                 time--;
                 if (time == 0) {
                     bridge.toOrderList();
+                    postCustomEvent();
                 }
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -84,7 +88,10 @@ public class FinishFragment extends RxBaseFragment {
             }
         };
         timer.schedule(timerTask, 1000, 1000);
-        back.setOnClickListener(view -> bridge.toOrderList());
+        back.setOnClickListener(view -> {
+            bridge.toOrderList();
+            postCustomEvent();
+        });
     }
 
     @Override
@@ -107,5 +114,13 @@ public class FinishFragment extends RxBaseFragment {
             timerTask.cancel();
             timerTask = null;
         }
+    }
+
+    /**
+     * 无排版班次结束事件
+     */
+    public void postCustomEvent(){
+        ScrollSchedulEvent event = new ScrollSchedulEvent();
+        EventBus.getDefault().post(event);
     }
 }

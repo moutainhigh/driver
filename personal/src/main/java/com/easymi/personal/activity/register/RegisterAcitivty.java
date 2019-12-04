@@ -88,7 +88,6 @@ public class RegisterAcitivty extends RxBaseActivity {
     private void initKeyBoard() {
         LinearLayout keyboardContainer = findViewById(R.id.keyboardViewPlace);
 
-
         safeKeyboard = new SafeKeyboard(
                 RegisterAcitivty.this,
                 keyboardContainer, et_password);

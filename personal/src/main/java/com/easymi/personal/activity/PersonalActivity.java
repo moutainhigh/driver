@@ -2,6 +2,7 @@ package com.easymi.personal.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.easymi.common.CommApiService;
+import com.easymi.common.entity.ScrollSchedulEvent;
 import com.easymi.common.result.LoginResult;
 import com.easymi.component.Config;
 import com.easymi.component.app.XApp;
@@ -29,6 +31,8 @@ import com.easymi.component.utils.GlideCircleTransform;
 import com.easymi.component.utils.StringUtils;
 import com.easymi.component.widget.CusToolbar;
 import com.easymi.personal.R;
+
+import org.greenrobot.eventbus.EventBus;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -68,6 +72,8 @@ public class PersonalActivity extends RxBaseActivity {
      * 我的名片
      */
     LinearLayout lin_card;
+    private LinearLayout personCenterLlPopularize;
+    private TextView personCenterTvPopularizeStatus;
 
     @Override
     public int getLayoutId() {
@@ -95,6 +101,9 @@ public class PersonalActivity extends RxBaseActivity {
         driverPhoto = findViewById(R.id.driver_photo);
 
         lin_card = findViewById(R.id.lin_card);
+
+        personCenterLlPopularize = findViewById(R.id.personCenterLlPopularize);
+        personCenterTvPopularizeStatus = findViewById(R.id.personCenterTvPopularizeStatus);
 
         Employ employ = EmUtil.getEmployInfo();
 
@@ -176,6 +185,33 @@ public class PersonalActivity extends RxBaseActivity {
                         .apply(options)
                         .into(driverPhoto);
             }
+
+            personCenterLlPopularize.setVisibility(employ.isOpenPromote == 1 ? View.VISIBLE : View.GONE);
+            personCenterLlPopularize.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(PersonalActivity.this,PopularizeActivity.class));
+                }
+            });
+            if (employ.promoteApplyStatus == 0) {
+                personCenterTvPopularizeStatus.setText("未申请");
+                personCenterTvPopularizeStatus.setTextColor(ContextCompat.getColor(this, R.color.colorDesc));
+            } else if (employ.promoteApplyStatus == 1) {
+                personCenterTvPopularizeStatus.setText("审核中");
+                personCenterTvPopularizeStatus.setTextColor(ContextCompat.getColor(this, R.color.colorYellow));
+            } else if (employ.promoteApplyStatus == 3) {
+                personCenterTvPopularizeStatus.setText("已通过");
+                personCenterTvPopularizeStatus.setTextColor(ContextCompat.getColor(this, R.color.colorBlack));
+            } else if (employ.promoteApplyStatus == 2) {
+                personCenterTvPopularizeStatus.setText("已驳回");
+                personCenterTvPopularizeStatus.setTextColor(ContextCompat.getColor(this, R.color.colorRed));
+            } else if (employ.promoteApplyStatus == 4) {
+                personCenterTvPopularizeStatus.setText("已停权");
+                personCenterTvPopularizeStatus.setTextColor(ContextCompat.getColor(this, R.color.colorDesc));
+            } else {
+                personCenterTvPopularizeStatus.setText("");
+            }
+
         }
     }
 
@@ -244,4 +280,6 @@ public class PersonalActivity extends RxBaseActivity {
     public boolean isEnableSwipe() {
         return true;
     }
+
+
 }
