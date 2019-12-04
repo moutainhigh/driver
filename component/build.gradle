@@ -47,7 +47,7 @@ repositories {
 
 
 dependencies {
-    api fileTree(include: ['*.jar'], dir: 'libs')
+    api fileTree(include: ['*.jar','*.aar'], dir: 'libs')
     api rootProject.ext.appcompat
     api rootProject.ext.multidex
     api rootProject.ext.design
@@ -76,7 +76,7 @@ dependencies {
     api rootProject.ext.rxpermissions
     api rootProject.ext.eventbus
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    api(name: 'alipaySdk-15.6.8-20191021122455-noUtdid', ext: 'aar')
+//    api(name: 'alipaySdk-15.6.8-20191021122455-noUtdid', ext: 'aar')
     debugApi rootProject.ext.pandora
     releaseApi rootProject.ext.pandoraNoOp
 
