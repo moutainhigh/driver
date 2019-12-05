@@ -2,6 +2,7 @@ package com.easymi.zhuanche.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
 
@@ -78,6 +79,7 @@ public class NoBeginFragment extends RxBaseFragment {
             public void onUnlocked() {
                 //前往预约地就是开始行程
                 bridge.doToStart(null);
+                resetView();
             }
         });
 
@@ -137,6 +139,9 @@ public class NoBeginFragment extends RxBaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         cancelTimer();
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
+        }
     }
 
 
@@ -193,4 +198,21 @@ public class NoBeginFragment extends RxBaseFragment {
         time_count_down.setText(sb.toString());
     }
 
+    /**
+     * 滑动重置handler
+     */
+    private Handler handler = new Handler();
+
+    /**
+     * 重置slider
+     */
+    private void resetView() {
+        slider.setVisibility(View.GONE);
+
+        handler.postDelayed(() -> {
+            slider.resetView();
+            slider.setVisibility(View.VISIBLE);
+        }, 1000);
+        //防止卡顿
+    }
 }
